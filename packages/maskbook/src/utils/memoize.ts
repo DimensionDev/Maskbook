@@ -9,10 +9,10 @@ import { memoize } from 'lodash-es'
 export function memoizePromise<T extends (...args: Args) => Promise<any>, Args extends any[]>(
     f: T,
     resolver: Args[1] extends undefined ? undefined | ((...args: Args) => unknown) : (...args: Args) => unknown,
-) {
-    if (resolver === undefined) resolver = ((<T>(x: T) => x) as unknown) as typeof resolver
+): T & { cache: Map<any, unknown> } {
+    if (resolver === undefined) resolver = (<T>(x: T) => x) as unknown as typeof resolver
     const memorizedFunction = memoize(
-        (async function (...args: Args) {
+        async function (...args: Args) {
             try {
                 // ? DO NOT remove "await" here
                 return await f(...args)
@@ -20,8 +20,8 @@ export function memoizePromise<T extends (...args: Args) => Promise<any>, Args e
                 memorizedFunction.cache.delete(resolver!(...args))
                 throw e
             }
-        } as unknown) as T,
+        } as unknown as T,
         resolver,
     )
-    return memorizedFunction
+    return memorizedFunction as any
 }

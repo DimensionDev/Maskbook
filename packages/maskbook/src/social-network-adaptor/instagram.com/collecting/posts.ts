@@ -1,11 +1,12 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import type { SocialNetworkUI } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
-import { PostInfo } from '../../../social-network/PostInfo'
-import { TypedMessage, makeTypedMessageImage, makeTypedMessageCompound } from '../../../protocols/typed-message'
+import { TypedMessage, makeTypedMessageImage, makeTypedMessageTuple } from '../../../protocols/typed-message'
 import { startWatch } from '../../../utils/watcher'
-import { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { ProfileIdentifier } from '@masknet/shared'
 import { instagramBase } from '../base'
+import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
+import { instagramShared } from '../shared'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     'main[role="main"] article[role="presentation"][tabindex="-1"]',
@@ -23,29 +24,26 @@ function collectPostsInstagramInner(
 ) {
     startWatch(
         new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
-            const info: PostInfo = new (class extends PostInfo {
-                commentsSelector = undefined
-                commentBoxSelector = undefined
-                get rootNode() {
-                    return node
-                }
-                rootNodeProxy = metadata
-                postContentNode =
-                    metadata.realCurrent!.querySelector<HTMLDivElement>('header+div+div') || metadata.realCurrent!
-            })()
+            const { subscriptions, ...info } = createRefsForCreatePostContext()
+            const postInfo = instagramShared.utils.createPostContext({
+                comments: undefined,
+                rootElement: metadata,
+                suggestedInjectionPoint:
+                    metadata.realCurrent!.querySelector<HTMLDivElement>('header+div+div') || metadata.realCurrent!,
+                ...subscriptions,
+            })
 
-            store.set(metadata, info)
+            store.set(metadata, postInfo)
             function collectPostInfo() {
                 const nextTypedMessage: TypedMessage[] = []
                 info.postBy.value = getPostBy(metadata)
                 info.postID.value = getPostID(metadata)
                 const img = node.querySelectorAll('img')[1]
                 if (img) {
-                    nextTypedMessage.push(makeTypedMessageImage(img.src, { height: img.height, width: img.width }))
+                    nextTypedMessage.push(makeTypedMessageImage(img.src, img))
                     info.postMetadataImages.add(img.src)
                 } else nextTypedMessage.push(makeTypedMessageImage(''))
-                info.postContent.value = ''
-                info.postMessage.value = makeTypedMessageCompound(nextTypedMessage)
+                info.postMessage.value = makeTypedMessageTuple(nextTypedMessage)
             }
             collectPostInfo()
             return {

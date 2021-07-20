@@ -1,19 +1,17 @@
-import { createStyles, makeStyles, Typography } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 import type { FC } from 'react'
-import { TokenIcon } from '../TokenIcon'
+import { TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
 import type { Transaction } from '../../../../plugins/Wallet/types'
 import { DebankTransactionDirection, ZerionTransactionDirection } from '../../../../plugins/Wallet/types'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: { display: 'flex', alignItems: 'center' },
-        direction: { marginLeft: theme.spacing(0.5), marginRight: theme.spacing(0.5) },
-        amount: { marginRight: theme.spacing(0.5) },
-        symbol: { marginRight: theme.spacing(0.5) },
-        receive: { color: '#00c087' },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: { display: 'flex', alignItems: 'center' },
+    direction: { marginLeft: theme.spacing(0.5), marginRight: theme.spacing(0.5) },
+    amount: { marginRight: theme.spacing(0.5) },
+    symbol: { marginRight: theme.spacing(0.5) },
+    receive: { color: '#00c087' },
+}))
 
 export const Record: FC<{ pair: Transaction['pairs'][number] }> = ({ pair }) => {
     const styles = useStyles()
@@ -23,7 +21,7 @@ export const Record: FC<{ pair: Transaction['pairs'][number] }> = ({ pair }) => 
             variant="body2"
             className={classNames(styles.root, { [styles.receive]: pair.direction === 'receive' })}
             title={pair.name}>
-            <TokenIcon address={pair.address} />
+            <TokenIcon address={pair.address} logoURI={pair.logoURI} />
             <span className={styles.direction}>
                 {pair.direction === DebankTransactionDirection.SEND || pair.direction === ZerionTransactionDirection.OUT
                     ? '-'

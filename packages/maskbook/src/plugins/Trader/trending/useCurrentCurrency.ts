@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
+import { useValueRef } from '@masknet/shared'
 import type { DataProvider, Currency, Settings } from '../types'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { getCurrentDataProviderGeneralSettings } from '../settings'
 import { PluginTraderRPC } from '../messages'
 
@@ -11,10 +11,11 @@ export function useCurrentCurrency(dataProvider: DataProvider) {
 
     // TODO:
     // support multiple crcurrencies
-    const { value: currencies = [], loading, error } = useAsync(
-        () => PluginTraderRPC.getLimitedCurrenies(dataProvider),
-        [dataProvider],
-    )
+    const {
+        value: currencies = [],
+        loading,
+        error,
+    } = useAsync(() => PluginTraderRPC.getLimitedCurrenies(dataProvider), [dataProvider])
 
     useEffect(() => {
         if (!currencies.length) return

@@ -1,16 +1,8 @@
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkWorker } from '.'
-import type { ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { definedSocialNetworkWorkers, SocialNetworkWorker } from '.'
+import type { ProfileIdentifier } from '@masknet/shared'
 
-export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker.DeferredDefinition>()
 export const definedSocialNetworkWorkersResolved = new Set<SocialNetworkWorker.Definition>()
-
-export function defineSocialNetworkWorker(worker: SocialNetworkWorker.DeferredDefinition) {
-    if (worker.notReadyForProduction) {
-        if (process.env.build === 'stable' && process.env.NODE_ENV === 'production') return
-    }
-    definedSocialNetworkWorkers.add(worker)
-}
 
 async function activateNetworkWorker(id: string): Promise<SocialNetworkWorker.Definition> {
     if (!isEnvironment(Environment.ManifestBackground)) {

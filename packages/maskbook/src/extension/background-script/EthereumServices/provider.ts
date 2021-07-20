@@ -1,8 +1,8 @@
 import { first } from 'lodash-es'
-import * as WalletConnect from './providers/WalletConnect'
+import * as Maskbook from './providers/Maskbook'
 import * as MetaMask from './providers/MetaMask'
-import { getWallets } from '../../../plugins/Wallet/services'
-import { ProviderType } from '../../../web3/types'
+import * as WalletConnect from './providers/WalletConnect'
+import * as CustomNetwork from './providers/CustomNetwork'
 
 //#region connect WalletConnect
 // step 1:
@@ -15,19 +15,39 @@ export async function createConnectionURI() {
 // If user confirmed the request we will receive the 'connect' event
 export async function connectWalletConnect() {
     const connector = await WalletConnect.createConnectorIfNeeded()
-    if (connector.connected) return connector.accounts[0]
-    const accounts = await WalletConnect.requestAccounts()
-    return accounts[0]
+    if (connector.connected)
+        return {
+            account: first(connector.accounts),
+            chainId: connector.chainId,
+        }
+    const { accounts, chainId } = await WalletConnect.requestAccounts()
+    return {
+        account: first(accounts),
+        chainId,
+    }
 }
 //#endregion
 
 export async function connectMetaMask() {
-    const accounts = await MetaMask.requestAccounts()
-    return accounts[0]
+    const { accounts, chainId } = await MetaMask.requestAccounts()
+    return {
+        account: first(accounts),
+        chainId,
+    }
 }
 
 export async function connectMaskbook() {
-    const wallets = await getWallets(ProviderType.Maskbook)
-    // return the first managed wallet
-    return first(wallets)
+    const { accounts, chainId } = await Maskbook.requestAccounts()
+    return {
+        account: first(accounts),
+        chainId,
+    }
+}
+
+export async function connectCustomNetwork() {
+    const { accounts, chainId } = await CustomNetwork.requestAccounts()
+    return {
+        account: first(accounts),
+        chainId,
+    }
 }

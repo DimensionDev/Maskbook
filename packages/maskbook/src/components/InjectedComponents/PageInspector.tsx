@@ -1,16 +1,13 @@
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@masknet/theme'
 import { useEffect } from 'react'
-import type { PluginConfig } from '../../plugins/types'
-import { PluginUI } from '../../plugins/PluginUI'
-import { MaskMessage } from '../../utils/messages'
 import Button from '@material-ui/core/Button'
 import Close from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
-import { useI18N } from '../../utils/i18n-next-ui'
+import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { useMatchXS, MaskMessage, useI18N } from '../../utils'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog'
-import { useMatchXS } from '../../utils/hooks/useMatchXS'
-import { ErrorBoundary } from '../shared/ErrorBoundary'
 
+const PluginRender = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => x.GlobalInjection)
 export interface PageInspectorProps {}
 export function PageInspector(props: PageInspectorProps) {
     const prompt = useSnackbar()
@@ -50,17 +47,7 @@ export function PageInspector(props: PageInspectorProps) {
     return (
         <>
             {JSX}
-            {[...PluginUI.values()].map((x) => (
-                <ErrorBoundary subject={`Plugin "${x.pluginName}"`} key={x.identifier}>
-                    <PluginPageInspectorForEach config={x} />
-                </ErrorBoundary>
-            ))}
+            <PluginRender />
         </>
     )
-}
-
-function PluginPageInspectorForEach({ config }: { config: PluginConfig }) {
-    const F = config.PageComponent
-    if (typeof F === 'function') return <F />
-    return null
 }

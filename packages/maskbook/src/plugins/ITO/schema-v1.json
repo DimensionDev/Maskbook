@@ -1,0 +1,181 @@
+{
+    "type": "object",
+    "additionalProperties": true,
+    "definitions": {
+        "token": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "chain_id": {
+                    "type": "number",
+                    "title": "chain_id"
+                },
+                "type": {
+                    "enum": [0, 1],
+                    "type": "number",
+                    "title": "type"
+                },
+                "address": {
+                    "description": "token address",
+                    "type": "string",
+                    "title": "address"
+                },
+                "name": {
+                    "description": "token name",
+                    "type": "string",
+                    "title": "name"
+                },
+                "symbol": {
+                    "description": "token symbol",
+                    "type": "string",
+                    "title": "symbol"
+                },
+                "decimals": {
+                    "description": "token decimal",
+                    "type": "number",
+                    "title": "decimals"
+                }
+            },
+            "required": ["chain_id", "type", "address", "decimals"],
+            "title": "token"
+        },
+        "trader": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "title": "address"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "name"
+                }
+            },
+            "required": ["address"],
+            "title": "trader"
+        }
+    },
+    "properties": {
+        "contract_address": {
+            "type": "string",
+            "title": "contract_address"
+        },
+        "pid": {
+            "type": "string",
+            "title": "pid"
+        },
+        "password": {
+            "type": "string",
+            "title": "password"
+        },
+        "message": {
+            "type": "string",
+            "title": "message"
+        },
+        "limit": {
+            "type": "string",
+            "title": "limit"
+        },
+        "total": {
+            "type": "string",
+            "title": "total"
+        },
+        "total_remaining": {
+            "type": "string",
+            "title": "total_remaining"
+        },
+        "chain_id": {
+            "type": "number",
+            "title": "chain_id"
+        },
+        "start_time": {
+            "type": "number",
+            "title": "start_time"
+        },
+        "end_time": {
+            "type": "number",
+            "title": "end_time"
+        },
+        "unlock_time": {
+            "type": "number",
+            "title": "unlock_time"
+        },
+        "qualification_address": {
+            "type": "string",
+            "title": "qualification_address"
+        },
+        "regions": {
+            "type": "string",
+            "title": "regions"
+        },
+        "creation_time": {
+            "type": "number",
+            "title": "creation_time"
+        },
+        "token": {
+            "$ref": "#/definitions/token"
+        },
+        "seller": {
+            "$ref": "#/definitions/trader"
+        },
+        "buyers": {
+            "type": "array",
+            "title": "buyers",
+            "description": "A list of exchange token buyer",
+            "additionalItems": true,
+            "items": {
+                "anyOf": [
+                    {
+                        "$ref": "#/definitions/trader"
+                    }
+                ]
+            }
+        },
+        "exchange_amounts": {
+            "type": "array",
+            "title": "exchange_amounts",
+            "description": "A list of exchange ratios",
+            "additionalItems": true,
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "title": "exchange_amount"
+                    }
+                ]
+            }
+        },
+        "exchange_tokens": {
+            "type": "array",
+            "title": "exchange_tokens",
+            "description": "A list of exchange tokens",
+            "additionalItems": true,
+            "items": {
+                "anyOf": [
+                    {
+                        "$ref": "#/definitions/token"
+                    }
+                ]
+            }
+        }
+    },
+    "required": [
+        "contract_address",
+        "pid",
+        "password",
+        "message",
+        "limit",
+        "total",
+        "total_remaining",
+        "chain_id",
+        "start_time",
+        "end_time",
+        "creation_time",
+        "token",
+        "seller",
+        "buyers",
+        "exchange_amounts",
+        "exchange_tokens"
+    ]
+}

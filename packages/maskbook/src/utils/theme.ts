@@ -1,17 +1,17 @@
-import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
-import { orange, green, red, blue, grey } from '@material-ui/core/colors'
-import type { Theme, ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
-import { merge, cloneDeep } from 'lodash-es'
-import { appearanceSettings, languageSettings } from '../settings/settings'
-import { Appearance, Language } from '../settings/types'
-import { useValueRef } from './hooks/useValueRef'
-import { useMemo, useRef } from 'react'
-import { zhTW, jaJP } from '@material-ui/core/locale/index'
-import { safeUnreachable } from './utils'
-import { or } from '../components/custom-ui-helper'
-import { activatedSocialNetworkUI } from '../social-network'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
+import { useValueRef } from '@masknet/shared'
+import { safeUnreachable } from '@dimensiondev/kit'
+import { Appearance, Language } from '@masknet/theme'
+import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@material-ui/core'
+import { blue, green, grey, orange, red } from '@material-ui/core/colors'
+import { jaJP, koKR, zhTW } from '@material-ui/core/locale/index'
+import { makeStyles } from '@material-ui/core/styles'
+import type { Theme, ThemeOptions } from '@material-ui/core/styles/createTheme'
+import { cloneDeep, merge } from 'lodash-es'
+import { useMemo, useRef } from 'react'
+import { or } from '../components/custom-ui-helper'
+import { appearanceSettings, languageSettings } from '../settings/settings'
+import { activatedSocialNetworkUI } from '../social-network'
 
 function getFontFamily(monospace?: boolean) {
     // We want to look native.
@@ -82,6 +82,12 @@ const darkThemePatch: Partial<ThemeOptions> = {
             paper: grey[900],
         },
     },
+    components: {
+        MuiPaper: {
+            // https://github.com/mui-org/material-ui/pull/25522
+            styleOverrides: { root: { backgroundImage: 'unset' } },
+        },
+    },
 }
 
 const baseTheme = (theme: 'dark' | 'light') => {
@@ -115,6 +121,8 @@ export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Lan
             return baseTheme
         case Language.ja:
             return unstable_createMuiStrictModeTheme(baseTheme, jaJP)
+        case Language.ko:
+            return unstable_createMuiStrictModeTheme(baseTheme, koKR)
         case Language.zh:
             return unstable_createMuiStrictModeTheme(baseTheme, zhTW)
         default:
@@ -122,20 +130,21 @@ export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Lan
             return baseTheme
     }
 }
-
-export function useMaskbookTheme(opt?: { appearance?: Appearance; language?: Language }) {
+// We're developing a new theme in the theme/ package
+export function useClassicMaskTheme(opt?: { appearance?: Appearance; language?: Language }) {
     const language = or(opt?.language, useValueRef(languageSettings))
     const appearance = or(opt?.appearance, useValueRef(appearanceSettings))
     const systemPreference = useMediaQuery('(prefers-color-scheme: dark)')
-    const paletteProvider = useRef(activatedSocialNetworkUI.customization.paletteMode?.current || new ValueRef('light'))
-        .current
+    const paletteProvider = useRef(
+        activatedSocialNetworkUI.customization.paletteMode?.current || new ValueRef('light'),
+    ).current
     const palette = useValueRef(paletteProvider)
     return useMemo(() => getMaskbookTheme({ appearance, language }), [language, appearance, systemPreference, palette])
 }
 
 export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
     const dark = theme.palette.mode === 'dark'
-    return createStyles({
+    return {
         error: {
             color: dark ? red[500] : red[900],
         },
@@ -145,12 +154,12 @@ export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
         info: {
             color: dark ? blue[500] : blue[800],
         },
-    })
+    }
 })
 
 export const useErrorStyles = makeStyles((theme) => {
     const dark = theme.palette.mode === 'dark'
-    return createStyles({
+    return {
         containedPrimary: {
             backgroundColor: dark ? red[500] : red[900],
             '&:hover': {
@@ -164,7 +173,7 @@ export const useErrorStyles = makeStyles((theme) => {
                 borderColor: dark ? red[900] : red[700],
             },
         },
-    })
+    }
 })
 export function extendsTheme(extend: (theme: Theme) => ThemeOptions) {
     return (theme: Theme) => merge(cloneDeep(theme), extend(theme))

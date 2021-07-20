@@ -1,11 +1,8 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { currentMaskbookChainIdSettings } from '../../../../settings/settings'
-import { getConstant } from '../../../../web3/helpers'
-import { CONSTANTS } from '../../../../web3/constants'
-
-// 5 is the length of weights
-const SEED = Math.floor(Math.random() * 5)
+import { ChainId, getChainRPC } from '@masknet/web3-shared'
+import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
+import { getWalletsCached } from '../wallet'
 
 //#region providers
 const providerPool = new Map<string, HttpProvider>()
@@ -34,23 +31,29 @@ export function createProvider(url: string) {
 
 //#region web3 instances
 const instancePool = new Map<string, Web3>()
+const SEED = Math.floor(Math.random() * 4)
 
 function createWeb3Instance(provider: HttpProvider) {
-    const web3 = instancePool.get(provider.host) ?? new Web3()
-    if (web3.currentProvider !== provider) web3.setProvider(provider)
-
-    // 24 confirmation blocks is not necessary
-    web3.eth.transactionConfirmationBlocks = 0
-    return web3
+    return (
+        instancePool.get(provider.host) ??
+        (() => {
+            const newInstance = new Web3(provider)
+            instancePool.set(provider.host, newInstance)
+            return newInstance
+        })()
+    )
 }
 
-export function createWeb3(chainId = currentMaskbookChainIdSettings.value, privKeys: string[] = [], url?: string) {
-    // get the provider url by weights if needed
-    if (!url) {
-        const urls = getConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST', chainId)
-        const weights = getConstant(CONSTANTS, 'PROVIDER_WEIGHT_LIST', chainId)
-        url = urls[weights[SEED]]
-    }
+export function createWeb3({
+    url = '',
+    chainId = currentChainIdSettings.value,
+    privKeys = [],
+}: {
+    url?: string
+    chainId?: ChainId
+    privKeys?: string[]
+} = {}) {
+    url = url || getChainRPC(chainId, SEED)
     const provider = createProvider(url)
     const web3 = createWeb3Instance(provider)
     if (privKeys.length) {
@@ -60,3 +63,12 @@ export function createWeb3(chainId = currentMaskbookChainIdSettings.value, privK
     return web3
 }
 //#endregion
+
+export async function requestAccounts() {
+    const wallets = getWalletsCached()
+    const accounts = wallets.filter((x) => x._private_key_ || x.mnemonic.length).map((y) => y.address)
+    return {
+        accounts,
+        chainId: currentChainIdSettings.value,
+    }
+}

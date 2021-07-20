@@ -1,38 +1,36 @@
 import classNames from 'classnames'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
-import { Table, TableBody, TableRow, TableCell, Typography, makeStyles, Theme, createStyles } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { unreachable } from '../../../utils/utils'
+import { makeStyles, Table, TableBody, TableCell, TableRow, Theme, Typography } from '@material-ui/core'
+import { unreachable } from '@dimensiondev/kit'
+import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 
-const useDatabasePreviewCardStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        table: {
-            borderCollapse: 'unset',
-        },
-        cell: {
-            border: 'none',
-            padding: '9px 0 !important',
-        },
-        label: {
-            verticalAlign: 'middle',
-            fontSize: 16,
-            fontWeight: 500,
-            lineHeight: 1.75,
-        },
-        icon: {
-            color: theme.palette.divider,
-            width: 20,
-            height: 20,
-            verticalAlign: 'middle',
-            marginLeft: 18,
-        },
-        iconChecked: {
-            color: theme.palette.success.main,
-        },
-    }),
-)
+const useDatabasePreviewCardStyles = makeStyles((theme: Theme) => ({
+    table: {
+        borderCollapse: 'unset',
+    },
+    cell: {
+        border: 'none',
+        padding: '9px 0 !important',
+    },
+    label: {
+        verticalAlign: 'middle',
+        fontSize: 16,
+        fontWeight: 500,
+        lineHeight: 1.75,
+    },
+    icon: {
+        color: theme.palette.divider,
+        width: 20,
+        height: 20,
+        verticalAlign: 'middle',
+        marginLeft: 18,
+    },
+    iconChecked: {
+        color: theme.palette.success.main,
+    },
+}))
 
 export enum DatabaseRecordType {
     Persona,

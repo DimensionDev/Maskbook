@@ -1,23 +1,10 @@
 // WARNING: Types with @public mark is exposed as public API to the native side,
 //  if you make an incompatible change in this file, it will break the API.
-import type { ChainId } from '../web3/types'
+import type { ChainId } from '@masknet/web3-shared'
 import type { SetupGuideStep } from '../components/InjectedComponents/SetupGuide'
-
-export enum Appearance {
-    default = 'default',
-    light = 'light',
-    dark = 'dark',
-}
-
-export interface ChainState {
+export interface ChainBlockNumber {
     chainId: ChainId
     blockNumber: number
-}
-
-export enum Language {
-    zh = 'zh',
-    en = 'en',
-    ja = 'ja',
 }
 
 export type SetupGuideCrossContextStatus = {

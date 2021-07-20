@@ -63,7 +63,7 @@ export function DebounceButton(_props: DebounceButtonProps) {
     )
 }
 
-interface ActionButtonProps extends PropsOf<typeof Button> {
+interface ActionButtonProps extends ButtonProps {
     width?: number | string
     loading?: boolean
     component?: keyof JSX.IntrinsicElements | React.ComponentType<any>
@@ -72,7 +72,7 @@ interface ActionButtonProps extends PropsOf<typeof Button> {
 export default function ActionButton<T extends React.ComponentType<any> = React.ComponentType<{}>>(
     props: ActionButtonProps & PropsOf<T>,
 ) {
-    const { width, loading, children, className, style, ...p } = props
+    const { width, loading, children, className, style, ...rest } = props
     return (
         <Button
             disableElevation
@@ -81,7 +81,8 @@ export default function ActionButton<T extends React.ComponentType<any> = React.
             className={'actionButton ' + className}
             style={{ width, ...style }}
             children={children}
-            {...p}></Button>
+            {...rest}
+        />
     )
 }
 

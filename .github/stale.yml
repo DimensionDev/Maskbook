@@ -1,6 +1,6 @@
 # https://github.com/probot/stale
 
-daysUntilStale: 90
+daysUntilStale: 60
 daysUntilClose: 7
 
 exemptLabels:
@@ -22,5 +22,3 @@ markComment: >
   for your contributions.
 
 limitPerRun: 30
-
-only: issues

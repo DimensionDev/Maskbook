@@ -1,36 +1,36 @@
-import { createStyles, Grid, makeStyles } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
-import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect } from 'react'
+import { useSnackbar } from '@masknet/theme'
+import { Grid, makeStyles } from '@material-ui/core'
+import {
+    ApproveStateType,
+    ERC20TokenDetailed,
+    formatBalance,
+    TransactionStateType,
+    useERC20TokenApproveCallback,
+} from '@masknet/web3-shared'
+import { unreachable } from '@dimensiondev/kit'
+import { useI18N } from '../../utils'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
-import { formatBalance } from '../../plugins/Wallet/formatter'
-import { useI18N } from '../../utils/i18n-next-ui'
-import { unreachable } from '../../utils/utils'
-import { ApproveStateType, useERC20TokenApproveCallback } from '../hooks/useERC20TokenApproveCallback'
-import { TransactionStateType } from '../hooks/useTransactionState'
-import type { ERC20TokenDetailed } from '../types'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        button: {
-            flexDirection: 'column',
-            position: 'relative',
-            marginTop: theme.spacing(1.5),
-        },
-        buttonLabel: {
-            display: 'block',
-            fontWeight: 'inherit',
-            marginTop: theme.spacing(-0.5),
-            marginBottom: theme.spacing(1),
-        },
-        buttonAmount: {
-            fontSize: 10,
-            fontWeight: 300,
-            bottom: theme.spacing(1),
-            position: 'absolute',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    button: {
+        flexDirection: 'column',
+        position: 'relative',
+        marginTop: theme.spacing(1.5),
+    },
+    buttonLabel: {
+        display: 'block',
+        fontWeight: 'inherit',
+        marginTop: theme.spacing(-0.5),
+        marginBottom: theme.spacing(1),
+    },
+    buttonAmount: {
+        fontSize: 10,
+        fontWeight: 300,
+        bottom: theme.spacing(1),
+        position: 'absolute',
+    },
+}))
 
 export interface EthereumERC20TokenApprovedBoundaryProps {
     amount: string
@@ -46,12 +46,8 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
-    const [
-        { type: approveStateType, allowance },
-        transactionState,
-        approveCallback,
-        resetApproveCallback,
-    ] = useERC20TokenApproveCallback(token?.address ?? '', amount, spender)
+    const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
+        useERC20TokenApproveCallback(token?.address ?? '', amount, spender)
 
     const onApprove = useCallback(
         async (useExact = false) => {
@@ -84,21 +80,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     variant="contained"
                     size="large"
                     onClick={resetApproveCallback}>
-                    Failed to load {token.symbol ?? token.name ?? 'Token'}.
-                </ActionButton>
-            </Grid>
-        )
-    if (approveStateType === ApproveStateType.INSUFFICIENT_BALANCE)
-        return (
-            <Grid container>
-                <ActionButton
-                    className={classes.button}
-                    key="insufficent_balance"
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    disabled>
-                    {`Insufficent ${token.symbol ?? token.name ?? 'Token'} Balance`}
+                    Failed to load {token.symbol ?? token.name ?? 'Token'}. Click to retry.
                 </ActionButton>
             </Grid>
         )
@@ -113,11 +95,9 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         size="large"
                         onClick={() => onApprove(true)}>
                         <span className={classes.buttonLabel}>{t('plugin_wallet_token_unlock')}</span>
-                        <span className={classes.buttonAmount}>{`${formatBalance(
-                            new BigNumber(amount),
-                            token.decimals,
-                            2,
-                        )} ${token?.symbol ?? 'Token'}`}</span>
+                        <span className={classes.buttonAmount}>{`${formatBalance(amount, token.decimals, 2)} ${
+                            token?.symbol ?? 'Token'
+                        }`}</span>
                     </ActionButton>
                 </Grid>
                 <Grid item xs={6}>
@@ -136,9 +116,10 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         return (
             <Grid container>
                 <ActionButton className={classes.button} fullWidth variant="contained" size="large" disabled>
-                    {`${approveStateType === ApproveStateType.PENDING ? 'Unlocking' : 'Updating'} ${
-                        token.symbol ?? 'Token'
-                    }…`}
+                    {approveStateType === ApproveStateType.PENDING
+                        ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
+                        : `Updating ${token.symbol}`}
+                    …
                 </ActionButton>
             </Grid>
         )

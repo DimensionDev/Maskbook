@@ -2,7 +2,7 @@ import type { WalletRecord } from '../../../../../plugins/Wallet/database/types'
 import type { BackupJSONFileLatest } from '../latest'
 import { keyToJWK, keyToAddr, JWKToKey } from '../../../SECP256k1-ETH'
 import type { PartialBy } from '../../../../type'
-import { isSameAddress } from '../../../../../web3/helpers'
+import { isSameAddress } from '@masknet/web3-shared'
 
 type WalletBackup = BackupJSONFileLatest['wallets'][0]
 

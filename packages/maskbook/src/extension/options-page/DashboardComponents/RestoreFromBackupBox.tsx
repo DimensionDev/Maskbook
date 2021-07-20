@@ -1,22 +1,21 @@
 import { useState, useRef, useEffect } from 'react'
 import { useDropArea } from 'react-use'
+import { makeStyles } from '@material-ui/core'
+import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { makeStyles, createStyles } from '@material-ui/core'
 import { RestoreBox } from './RestoreBox'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { blobToText } from '@dimensiondev/kit'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            border: `solid 1px ${theme.palette.divider}`,
-            height: 176,
-            borderRadius: 4,
-        },
-        file: {
-            display: 'none',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        border: `solid 1px ${theme.palette.divider}`,
+        height: 176,
+        borderRadius: 4,
+    },
+    file: {
+        display: 'none',
+    },
+}))
 
 export interface RestoreFromBackupBoxProps extends withClasses<never> {
     file: File | null
@@ -38,9 +37,7 @@ export function RestoreFromBackupBox(props: RestoreFromBackupBoxProps) {
     // invoke callback
     useEffect(() => {
         if (file) {
-            const fr = new FileReader()
-            fr.readAsText(file)
-            fr.addEventListener('loadend', () => props.onChange?.(file, fr.result as string))
+            blobToText(file).then((result) => props.onChange?.(file, result))
         }
     }, [file, props.onChange])
 

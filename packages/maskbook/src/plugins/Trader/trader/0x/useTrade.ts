@@ -1,10 +1,7 @@
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { FungibleTokenDetailed, isNative, useBlockNumber, useTokenConstants } from '@masknet/web3-shared'
 import { difference } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
-import { getEnumAsArray } from '../../../../utils/enum'
-import { CONSTANTS } from '../../../../web3/constants'
-import { useBlockNumber, useChainId } from '../../../../web3/hooks/useChainState'
-import { useConstant } from '../../../../web3/hooks/useConstant'
-import type { EtherTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy, ZrxTradePool } from '../../types'
@@ -15,12 +12,11 @@ export function useTrade(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed,
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
+    inputToken?: FungibleTokenDetailed,
+    outputToken?: FungibleTokenDetailed,
 ) {
-    const ETH_ADDRESS = useConstant(CONSTANTS, 'ETH_ADDRESS')
-    const chainId = useChainId()
-    const blockNumber = useBlockNumber(chainId)
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
+    const blockNumber = useBlockNumber()
 
     const slippage = useSlippageTolerance()
     const { pools } = useTradeProviderSettings()
@@ -29,8 +25,8 @@ export function useTrade(
         const isExactIn = strategy === TradeStrategy.ExactIn
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
-        const sellToken = inputToken.address === ETH_ADDRESS ? 'ETH' : inputToken.address
-        const buyToken = outputToken.address === ETH_ADDRESS ? 'ETH' : outputToken.address
+        const sellToken = isNative(inputToken.address) ? 'ETH' : inputToken.address
+        const buyToken = isNative(outputToken.address) ? 'ETH' : outputToken.address
         return PluginTraderRPC.swapQuote({
             sellToken,
             buyToken,
@@ -44,7 +40,7 @@ export function useTrade(
             affiliateAddress: ZRX_AFFILIATE_ADDRESS,
         })
     }, [
-        ETH_ADDRESS,
+        NATIVE_TOKEN_ADDRESS,
         strategy,
         inputAmount,
         outputAmount,

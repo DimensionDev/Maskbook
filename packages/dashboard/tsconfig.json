@@ -4,11 +4,16 @@
     "rootDir": "./",
     "outDir": "./dist/"
   },
-  "include": ["./src/", "./stories/", "./src/locales/*.json"],
+  "include": ["./src/", "./stories/", "./src/**/*.json"],
   "references": [
     { "path": "../theme/" },
     { "path": "../maskbook/" },
+    { "path": "../web3-shared/" },
     { "path": "../storybook-shared/" },
-    { "path": "../icons/" }
-  ]
+    { "path": "../icons/" },
+    { "path": "../plugin-infra" }
+  ],
+  "ts-node": {
+    "compilerOptions": { "module": "CommonJS" }
+  }
 }

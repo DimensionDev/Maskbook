@@ -1,6 +1,5 @@
 import type { ERC20TokenRecord } from '../Wallet/database/types'
-import type { EthereumTokenType, EthereumNetwork } from '../../web3/types'
-import type { Transaction } from 'web3-core'
+import type { EthereumTokenType, NativeTokenDetailed, ERC20TokenDetailed, ChainId } from '@masknet/web3-shared'
 
 /**
  * @see https://github.com/DimensionDev/Tessercube-iOS/wiki/Red-Packet-Data-Dictionary
@@ -9,10 +8,15 @@ import type { Transaction } from 'web3-core'
 export interface RedPacketRecord {
     /** The red packet ID */
     id: string
-    /** From url */
+    /** From twitter/facebook url */
     from: string
-    /** The JSON payload */
-    payload: RedPacketJSONPayload
+    password: string
+    contract_version: number
+    /** backward compatible V1 */
+    payload?: {
+        contract_version: number
+        password: string
+    }
 }
 
 export interface RedPacketRecordInDatabase extends RedPacketRecord {
@@ -27,110 +31,101 @@ export enum RedPacketStatus {
     refunded = 'refunded',
 }
 
+export enum DialogTabs {
+    create = 0,
+    past = 1,
+}
+
 export interface RedPacketAvailability {
     token_address: string
     balance: string
     total: string
     claimed: string
     expired: boolean
-    ifclaimed: boolean
+    claimed_amount?: string // V2
+    ifclaimed?: boolean // V1
 }
 
-export interface RedPacketJSONPayload {
-    contract_version: number
+interface RedPacketBasic {
     contract_address: string
     rpid: string
     password: string
     shares: number
+    is_random: boolean
+    total: string
+    creation_time: number
+    duration: number
+}
+
+export interface RedPacketJSONPayload extends RedPacketBasic {
     sender: {
         address: string
         name: string
         message: string
     }
-    is_random: boolean
-    total: string
-    creation_time: number
-    duration: number
-    network?: EthereumNetwork
-    token_type: EthereumTokenType.Ether | EthereumTokenType.ERC20
+    txid?: string
+    contract_version: number
+    network?: string
+    token_type: EthereumTokenType.Native | EthereumTokenType.ERC20
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }
 
-export namespace History {
-    export interface CreateInputLog {
-        $name: 'create_red_packet'
-        _hash: string
-        _number: string
-        _ifrandom: boolean
-        _duration: string
-        _seed: string
-        _message: string
-        _name: string
-        _token_type: string
-        _token_addr: string
-        _total_tokens: string
-    }
+export interface RedPacketRecordWithHistory {
+    history: RedPacketHistoryInMask
+    record: RedPacketRecord
+}
 
-    export interface CreateOutputLog {
-        $name: 'CreationSuccess'
+//#region TokenOutMask
+export type TokenOutMask = Omit<NativeTokenDetailed | ERC20TokenDetailed, 'chainId'> & {
+    chain_id: ChainId
+}
+//#endregion
+
+export interface RedPacketHistoryInMask {
+    rpid: string
+    contract_address: string
+    password: string
+    shares: number
+}
+export interface RedPacketSubgraphInMask extends RedPacketBasic {
+    message: string
+    name: string
+    txid: string
+    total_remaining: string
+    last_updated_time: number
+    chain_id: number
+    token: NativeTokenDetailed | ERC20TokenDetailed
+    creator: {
+        name: string
+        is_random: boolean
         total: string
-        id: string
-        creator: string
-        creation_time: string
-        token_address: string
-    }
-
-    export interface ClaimInputLog {
-        $name: 'claim'
-        id: string
-        password: string
-        _recipient: string
-        validation: string
-    }
-
-    export interface ClaimOutputLog {
-        $name: 'ClaimSuccess'
-        id: string
-        claimer: string
-        claimed_value: string
-        token_address: string
-    }
-
-    export interface RefundInputLog {
-        $name: 'refund'
-        id: string
-    }
-
-    export interface RefundOutputLog {
-        $name: 'RefundSuccess'
-        id: string
-        token_address: string
-        remaining_balance: string
-    }
-
-    export type Log =
-        | CreateInputLog
-        | CreateOutputLog
-        | ClaimInputLog
-        | ClaimOutputLog
-        | RefundInputLog
-        | RefundOutputLog
-
-    export interface RedPacketRecord {
-        id: string
-        status: 'refunded' | 'expired' | 'claimed' | 'empty' | null
-        availability: {
-            balance: string
-            claimed: boolean
-            claimedCount: number
-            expired: boolean
-            tokenAddress: string
-            totalCount: number
+        total_remaining: string
+        creation_time: number
+        last_updated_time: number
+        duration: number
+        chain_id: number
+        token: NativeTokenDetailed | ERC20TokenDetailed
+        creator: {
+            name: string
+            address: string
         }
-        transactions: {
-            timestamp: string
-            transaction: Transaction
-            records: Log[]
+        claimers: {
+            name: string
+            address: string
         }[]
+        address: string
     }
+    claimers: {
+        name: string
+        address: string
+    }[]
+}
+
+export interface RedPacketSubgraphOutMask extends Omit<RedPacketSubgraphInMask, 'token'> {
+    token: TokenOutMask
+}
+
+export interface RedPacketHistory extends RedPacketSubgraphInMask {
+    payload: RedPacketJSONPayload
+    contract_version: number
 }

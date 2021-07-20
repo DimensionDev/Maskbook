@@ -1,12 +1,11 @@
 import { useEffect } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import type { Persona } from '../../../database'
 import { MenuItem, Card, IconButton } from '@material-ui/core'
-import Services from '../../service'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
-import { useColorStyles } from '../../../utils/theme'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useColorStyles, useI18N, useMenu } from '../../../utils'
+import type { Persona } from '../../../database'
+import Services from '../../service'
 import ProfileBox from './ProfileBox'
 import type { ProfileIdentifier } from '../../../database/type'
 import { useModal } from '../DashboardDialogs/Base'
@@ -15,50 +14,38 @@ import {
     DashboardPersonaBackupDialog,
     DashboardPersonaDeleteConfirmDialog,
 } from '../DashboardDialogs/Persona'
-import { useMenu } from '../../../utils/hooks/useMenu'
 
 interface Props {
     persona: Persona
 }
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        card: {
-            width: 350,
-            flex: '0 0 auto',
-            marginRight: theme.spacing(6),
-            marginBottom: theme.spacing(5),
-            padding: theme.spacing(4, 3, 5, 3),
-            boxShadow:
-                theme.palette.mode === 'dark'
-                    ? 'none'
-                    : '0px 2px 4px rgba(96, 97, 112, 0.16), 0px 0px 1px rgba(40, 41, 61, 0.04)',
-
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-                marginRight: 0,
-            },
-        },
-        header: {
-            display: 'flex',
-            alignItems: 'center',
-            marginBottom: theme.spacing(3),
-        },
-        title: {
-            flex: '1 1 auto',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            wordBreak: 'break-all',
-            whiteSpace: 'nowrap',
-            fontWeight: 500,
-        },
-        menu: {
-            flex: '0 0 auto',
-            marginLeft: theme.spacing(1),
-            cursor: 'pointer',
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    card: {
+        padding: theme.spacing(4, 3, 5, 3),
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? 'none'
+                : '0px 2px 4px rgba(96, 97, 112, 0.16), 0px 0px 1px rgba(40, 41, 61, 0.04)',
+    },
+    header: {
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: theme.spacing(3),
+    },
+    title: {
+        flex: '1 1 auto',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        wordBreak: 'break-all',
+        whiteSpace: 'nowrap',
+        fontWeight: 500,
+    },
+    menu: {
+        flex: '0 0 auto',
+        marginLeft: theme.spacing(1),
+        cursor: 'pointer',
+    },
+}))
 
 export default function PersonaCard({ persona }: Props) {
     const { t } = useI18N()

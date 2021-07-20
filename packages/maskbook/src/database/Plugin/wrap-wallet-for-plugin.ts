@@ -7,7 +7,7 @@ type AllKeys = 0 | 1 | 2
 export type PluginReificatedWalletDB<
     Data,
     Index extends [IDBValidKey?, IDBValidKey?, IDBValidKey?],
-    Mode extends 'readonly' | 'readwrite'
+    Mode extends 'readonly' | 'readwrite',
 > = IDBPSafeTransaction<WalletDB<Data, Index>, ['ERC20Token', 'PluginStore', 'Wallet'], Mode>
 /** @deprecated Because with exotic wallet, it is impossible to keep consistency state with the wallet. */
 export function createPluginWalletAccess<Data, Index extends [IDBValidKey?, IDBValidKey?, IDBValidKey?]>(
@@ -38,7 +38,7 @@ export function createPluginWalletAccess<Data, Index extends [IDBValidKey?, IDBV
         function get(this: ROT, id: string) {
             return this.objectStore('PluginStore').get(`${pluginID}:${id}`).then(_unwrap)
         }
-        function put(this: ROT, data: Data) {
+        function put(this: RWT, data: Data) {
             return this.objectStore('PluginStore').put(_wrap(data))
         }
         function getAll(this: ROT) {
@@ -49,7 +49,7 @@ export function createPluginWalletAccess<Data, Index extends [IDBValidKey?, IDBV
             mode: Mode,
         ): Promise<T<Mode> & typeof extraMethods> {
             const t = createTransaction(await createWalletDBAccess(), mode)('ERC20Token', 'PluginStore', 'Wallet')
-            const origT = unwrap((t as any) as IDBPTransaction<any, any>)
+            const origT = unwrap(t as any as IDBPTransaction<any, any>)
             // @ts-ignore
             Object.entries(extraMethods).map(([k, v]) => (origT[k] = v.bind(t)))
             return t as any

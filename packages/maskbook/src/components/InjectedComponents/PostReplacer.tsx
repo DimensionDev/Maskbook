@@ -1,18 +1,23 @@
+import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import {
+    isTypedMessagePromise,
+    isTypedMessageTuple,
+    isWellKnownTypedMessages,
+    makeTypedMessageTuple,
+    useValueRef,
+} from '@masknet/shared'
+import { makeStyles } from '@material-ui/core'
 import { useEffect, useMemo } from 'react'
+import { Result } from 'ts-results'
+import { allPostReplacementSettings } from '../../settings/settings'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
-import { PluginUI } from '../../plugins/PluginUI'
-import { makeTypedMessageCompound, isTypedMessageSuspended, isTypedMessageKnown } from '../../protocols/typed-message'
-import { useValueRef } from '../../utils/hooks/useValueRef'
-import { allPostReplacementSettings } from '../../settings/settings'
-import { makeStyles, Theme } from '@material-ui/core'
-import { Result } from 'ts-results'
 
-const useStlyes = makeStyles((theme: Theme) => ({
+const useStlyes = makeStyles({
     root: {
         overflowWrap: 'break-word',
     },
-}))
+})
 
 export interface PostReplacerProps {
     zip?: () => void
@@ -21,24 +26,29 @@ export interface PostReplacerProps {
 
 export function PostReplacer(props: PostReplacerProps) {
     const classes = useStlyes()
-    const postMessage = usePostInfoDetails('postMessage')
-    const postPayload = usePostInfoDetails('postPayload')
+    const postMessage = usePostInfoDetails.postMessage()
+    const postPayload = usePostInfoDetails.postPayload()
     const allPostReplacement = useValueRef(allPostReplacementSettings)
 
-    const plugins = [...PluginUI.values()]
+    const plugins = useActivatedPluginsSNSAdaptor()
     const processedPostMessage = useMemo(
         () =>
-            plugins.reduce(
-                (x, plugin) => Result.wrap(() => plugin.messageProcessor?.(x) ?? x).unwrapOr(x),
-                postMessage,
-            ),
-        [plugins.map((x) => x.identifier).join(), postMessage],
+            plugins.reduce((x, plugin) => {
+                const result = Result.wrap(() => plugin.typedMessageTransformer?.(x) ?? x).unwrapOr(x)
+                if (isTypedMessageTuple(result)) return result
+                console.warn(
+                    '[TypedMessage] typedMessageTransformer that return a non TypedMessageTuple is not supported yet. This transform is ignored',
+                    result,
+                )
+                return x
+            }, postMessage),
+        [plugins.map((x) => x.ID).join(), postMessage],
     )
     const shouldReplacePost =
         // replace all posts
         allPostReplacement ||
         // replace posts which enhanced by plugins
-        processedPostMessage.items.some((x) => !isTypedMessageKnown(x)) ||
+        processedPostMessage.items.some((x) => !isWellKnownTypedMessages(x)) ||
         // replace posts which encrypted by Mask
         postPayload.ok
 
@@ -51,9 +61,7 @@ export function PostReplacer(props: PostReplacerProps) {
     return shouldReplacePost ? (
         <span className={classes.root}>
             <DefaultTypedMessageRenderer
-                message={makeTypedMessageCompound(
-                    processedPostMessage.items.filter((x) => !isTypedMessageSuspended(x)),
-                )}
+                message={makeTypedMessageTuple(processedPostMessage.items.filter((x) => !isTypedMessagePromise(x)))}
             />
         </span>
     ) : null

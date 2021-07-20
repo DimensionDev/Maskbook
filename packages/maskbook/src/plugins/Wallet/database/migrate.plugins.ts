@@ -1,8 +1,9 @@
 import { createTransaction } from '../../../database/helpers/openDB'
 import { RedPacketPluginID } from '../../RedPacket/constants'
-import { RedPacketDatabase } from '../../RedPacket/database'
+import { RedPacketDatabase } from '../../RedPacket/Worker/database'
 import type { RedPacketRecordInDatabase } from '../../RedPacket/types'
 import { createWalletDBAccess } from './Wallet.db'
+
 export async function migratePluginDatabase() {
     const ro_db = createTransaction(await createWalletDBAccess(), 'readonly')('PluginStore')
     const data = await ro_db.objectStore('PluginStore').getAll()

@@ -1,41 +1,37 @@
-import { Card, createStyles, Link, makeStyles } from '@material-ui/core'
+import { Card, Link, makeStyles } from '@material-ui/core'
+import { Wallet, useChainId, ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '@masknet/web3-shared'
 import { Image } from '../../../../components/shared/Image'
-import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
 import { resolveCollectibleLink } from '../../../../plugins/Wallet/pipes'
 import type { CollectibleProvider } from '../../../../plugins/Wallet/types'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
-import { useChainId } from '../../../../web3/hooks/useChainState'
-import type { ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '../../../../web3/types'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 4,
-            position: 'relative',
-            backgroundColor: theme.palette.background.paper,
-        },
-        icon: {
-            top: theme.spacing(1),
-            right: theme.spacing(1),
-            position: 'absolute',
-            zIndex: 1,
-            backgroundColor: `${theme.palette.background.paper} !important`,
-        },
-        placeholder: {
-            width: 64,
-            height: 64,
-            opacity: 0.1,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 4,
+        position: 'relative',
+        backgroundColor: theme.palette.background.paper,
+    },
+    icon: {
+        top: theme.spacing(1),
+        right: theme.spacing(1),
+        position: 'absolute',
+        zIndex: 1,
+        backgroundColor: `${theme.palette.background.paper} !important`,
+    },
+    placeholder: {
+        width: 64,
+        height: 64,
+        opacity: 0.1,
+    },
+}))
 
 export interface CollectibleCardProps {
     provider: CollectibleProvider
-    wallet: WalletRecord
+    wallet: Wallet
     token: ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed
 }
 

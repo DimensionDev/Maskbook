@@ -1,17 +1,15 @@
-import { Avatar, AvatarProps, createStyles, makeStyles } from '@material-ui/core'
-import { useBlockie } from '../hooks/useBlockie'
+import { useBlockie } from '@masknet/web3-shared'
+import { Avatar, AvatarProps, makeStyles } from '@material-ui/core'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        icon: {
-            width: 16,
-            height: 16,
-            backgroundColor: theme.palette.common.white,
-            margin: 0,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    icon: {
+        width: 16,
+        height: 16,
+        backgroundColor: theme.palette.common.white,
+        margin: 0,
+    },
+}))
 
 export interface EthereumBlockieProps extends withClasses<never> {
     name?: string

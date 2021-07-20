@@ -9,20 +9,8 @@ import {
     LOCALE_NAMES,
     readMessages,
     writeMessages,
+    findAllUnsyncedLocales,
 } from './utils'
-
-async function findAllUnsyncedLocales(locales = without(LOCALE_NAMES, 'en')) {
-    const names = keys(await readMessages('en'))
-    const record: Record<string, string[]> = {}
-    for (const name of locales) {
-        const nextKeys = keys(await readMessages(name))
-        const diffKeys = difference(names, nextKeys)
-        if (diffKeys.length) {
-            record[name] = diffKeys
-        }
-    }
-    return record
-}
 
 async function removeAllUnusedKeys(keys: string[], locales = LOCALE_NAMES) {
     for (const name of locales) {

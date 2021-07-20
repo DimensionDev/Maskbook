@@ -1,27 +1,12 @@
 import { Flags } from '../../../utils/flags'
 
 type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never
-export default function () {
-    const injectedScript = getInjectedScript()
-    const contentScripts: Array<{ code: string } | { file: string }> = []
-    const contentScriptReady = fetch('/generated__content__script.html')
-        .then((x) => x.text())
-        .then((html) => {
-            const parser = new DOMParser()
-            const root = parser.parseFromString(html, 'text/html')
-            root.querySelectorAll('script').forEach((script) => {
-                if (script.innerText) contentScripts.push({ code: script.innerText })
-                else if (script.src)
-                    contentScripts.push({ file: new URL(script.src, browser.runtime.getURL('')).pathname })
-            })
-        })
+export default function (signal: AbortSignal) {
+    const injectedScript = fetchInjectedScript()
+    const contentScripts = fetchInjectContentScript('/generated__content__script.html')
     async function onCommittedListener(arg: Args): Promise<void> {
         if (arg.url === 'about:blank') return
         if (!arg.url.startsWith('http')) return
-        if (process.env.NODE_ENV === 'development') {
-            if (arg.url.includes('localhost')) return
-            if (arg.url.includes('127.0.0.1')) return
-        }
         const contains = await browser.permissions.contains({ origins: [arg.url] })
         if (!contains) return
         /**
@@ -34,9 +19,9 @@ export default function () {
                     runAt: 'document_start',
                     frameId: arg.frameId,
                     // Refresh the injected script every time in the development mode.
-                    code: process.env.NODE_ENV === 'development' ? await getInjectedScript() : await injectedScript,
+                    code: process.env.NODE_ENV === 'development' ? await fetchInjectedScript() : await injectedScript,
                 })
-                .catch(IgnoreError(arg))
+                .catch(HandleError(arg))
         }
         if (Flags.requires_injected_script_run_directly) {
             browser.tabs.executeScript(arg.tabId, {
@@ -45,27 +30,38 @@ export default function () {
                 file: 'js/injected-script.js',
             })
         }
-        await contentScriptReady
-        // it's meaningless if one of the script failed to inject.
-        // so it's try-for not for-try
-        try {
-            for (const script of contentScripts) {
-                const option: browser.extensionTypes.InjectDetails = {
-                    runAt: 'document_idle',
-                    frameId: arg.frameId,
-                    ...script,
-                }
-                await browser.tabs.executeScript(arg.tabId, option)
-            }
-        } catch (e) {
-            IgnoreError(arg)(e)
-        }
+        contentScripts(arg.tabId, arg.frameId).catch(HandleError(arg))
     }
     browser.webNavigation.onCommitted.addListener(onCommittedListener)
-    return () => browser.webNavigation.onCommitted.removeListener(onCommittedListener)
+    signal.addEventListener('abort', () => browser.webNavigation.onCommitted.removeListener(onCommittedListener))
 }
 
-async function getInjectedScript() {
+function fetchInjectContentScript(entryHTML: string) {
+    const contentScripts: Array<{ code: string } | { file: string }> = []
+    const task = fetch(entryHTML)
+        .then((x) => x.text())
+        .then((html) => {
+            const parser = new DOMParser()
+            const root = parser.parseFromString(html, 'text/html')
+            for (const script of root.querySelectorAll('script')) {
+                if (script.innerText) contentScripts.push({ code: script.innerText })
+                else if (script.src)
+                    contentScripts.push({ file: new URL(script.src, browser.runtime.getURL('')).pathname })
+            }
+        })
+    return async (tabID: number, frameId: number | undefined) => {
+        await task
+        for (const script of contentScripts) {
+            const option: browser.extensionTypes.InjectDetails = {
+                runAt: 'document_idle',
+                frameId,
+                ...script,
+            }
+            await browser.tabs.executeScript(tabID, option)
+        }
+    }
+}
+async function fetchInjectedScript() {
     try {
         return `{
     const script = document.createElement('script')
@@ -79,7 +75,7 @@ async function getInjectedScript() {
         return `console.log('Injected script failed to load.')`
     }
 }
-function IgnoreError(arg: unknown): (reason: Error) => void {
+function HandleError(arg: unknown): (reason: Error) => void {
     return (e) => {
         const ignoredErrorMessages = ['non-structured-clonable data', 'No tab with id']
         if (ignoredErrorMessages.some((x) => e.message.includes(x))) {

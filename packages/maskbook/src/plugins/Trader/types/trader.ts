@@ -1,5 +1,5 @@
 import type BigNumber from 'bignumber.js'
-import type { ChainId, ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@masknet/web3-shared'
 
 export enum TradeProvider {
     UNISWAP,
@@ -8,6 +8,8 @@ export enum TradeProvider {
     SUSHISWAP,
     SASHIMISWAP,
     BALANCER,
+    QUICKSWAP,
+    PANCAKESWAP,
 }
 
 export enum WarningLevel {
@@ -26,12 +28,24 @@ export enum ZrxTradePool {
     Mesh = 'Mesh',
     Uniswap = 'Uniswap',
     UniswapV2 = 'Uniswap_V2',
+    UniswapV3 = 'Uniswap_V3',
     Eth2Dai = 'Eth2Dai',
     Kyber = 'Kyber',
     Curve = 'Curve',
+    CurveV2 = 'Curve_V2',
     LiquidityProvider = 'LiquidityProvider',
     MultiBridge = 'MultiBridge',
     Balancer = 'Balancer',
+    BalancerV2 = 'Balancer_V2',
+    Dodo = 'DODO',
+    DodoV2 = 'DODO_V2',
+    Linkswap = 'Linkswap',
+    Lido = 'Lido',
+    MakerPsm = 'MakerPsm',
+    KyberDMM = 'KyberDMM',
+    Smoothy = 'Smoothy',
+    Saddle = 'Saddle',
+    xSigma = 'xSigma',
     Cream = 'CREAM',
     Bancor = 'Bancor',
     MStable = 'mStable',
@@ -42,23 +56,20 @@ export enum ZrxTradePool {
     SnowSwap = 'SnowSwap',
     SushiSwap = 'SushiSwap',
     CryptoCom = 'CryptoCom',
-    Dodo = 'DODO',
 }
 
 export interface TradeComputed<T = unknown> {
     strategy: TradeStrategy
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed
+    inputToken?: FungibleTokenDetailed
+    outputToken?: FungibleTokenDetailed
     inputAmount: BigNumber
     outputAmount: BigNumber
-    nextMidPrice: BigNumber
     executionPrice: BigNumber
     priceImpact: BigNumber
     maximumSold: BigNumber
     minimumReceived: BigNumber
-    priceImpactWithoutFee: BigNumber
     fee: BigNumber
-    path?: (PartialRequired<EtherTokenDetailed, 'address'> | PartialRequired<ERC20TokenDetailed, 'address'>)[][]
+    path?: (PartialRequired<NativeTokenDetailed, 'address'> | PartialRequired<ERC20TokenDetailed, 'address'>)[][]
     trade_?: T
 }
 
@@ -73,10 +84,17 @@ export enum TokenPanelType {
 }
 
 export interface TradeContext {
+    TYPE: TradeProvider
+    IS_UNISWAP_LIKE: boolean
     GRAPH_API: string
     INIT_CODE_HASH: string
     ROUTER_CONTRACT_ADDRESS: string
     FACTORY_CONTRACT_ADDRESS: string
+    ADDITIONAL_TOKENS: {
+        [key in ChainId]?: {
+            [key: string]: ERC20TokenDetailed[]
+        }
+    }
     AGAINST_TOKENS: {
         [key in ChainId]: ERC20TokenDetailed[]
     }

@@ -1,4 +1,4 @@
-import { getChainId } from './chainState'
+import { EthereumAddress } from 'wallet.ts'
 import { getTransactionCount } from './network'
 
 class NonceManager {
@@ -28,7 +28,7 @@ class NonceManager {
             const run = async () => {
                 try {
                     this.lock()
-                    callback(null, await getTransactionCount(this.address, await getChainId(this.address)))
+                    callback(null, await getTransactionCount(this.address))
                 } catch (e) {
                     callback(e)
                 }
@@ -77,7 +77,8 @@ const cache = new Map<string, NonceManager>()
  * Get current available nonce, call commitNonce() after the transaction succeed
  * @param address the account address
  */
-export function getNonce(address: string) {
+export function getNonce(address_: string) {
+    const address = EthereumAddress.checksumAddress(address_)
     if (!cache.has(address)) cache.set(address, new NonceManager(address))
     return cache.get(address)!.getNonce()
 }
@@ -86,7 +87,8 @@ export function getNonce(address: string) {
  * Commit to a new nonce only call when transaction succeed
  * @param address the account address
  */
-export async function commitNonce(address: string) {
+export async function commitNonce(address_: string) {
+    const address = EthereumAddress.checksumAddress(address_)
     if (!cache.has(address)) cache.set(address, new NonceManager(address))
     return setNonce(address, (await cache.get(address)!.getNonce()) + 1)
 }
@@ -96,7 +98,8 @@ export async function commitNonce(address: string) {
  * @param address the account address
  * @param nonce the new nonce
  */
-export function setNonce(address: string, nonce: number) {
+export function setNonce(address_: string, nonce: number) {
+    const address = EthereumAddress.checksumAddress(address_)
     if (!cache.has(address)) cache.set(address, new NonceManager(address))
     return cache.get(address)!.setNonce(nonce)
 }
@@ -105,7 +108,8 @@ export function setNonce(address: string, nonce: number) {
  * Sync local nonce to remote one (depend on your current node)
  * @param address the account address
  */
-export function resetNonce(address: string) {
+export function resetNonce(address_: string) {
+    const address = EthereumAddress.checksumAddress(address_)
     if (!cache.has(address)) cache.set(address, new NonceManager(address))
     return cache.get(address)!.resetNonce()
 }

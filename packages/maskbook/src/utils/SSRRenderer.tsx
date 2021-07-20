@@ -1,5 +1,4 @@
 import ReactDOM from 'react-dom'
-import { StrictMode } from 'react'
 import { ErrorBoundary } from '../components/shared/ErrorBoundary'
 
 export async function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
@@ -10,11 +9,7 @@ export async function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
             document.body.appendChild(container)
         }
         const oldChildren = [...container.children]
-        ReactDOM.unstable_createRoot(container).render(
-            <StrictMode>
-                <ErrorBoundary>{jsx}</ErrorBoundary>
-            </StrictMode>,
-        )
+        ReactDOM.createRoot(container).render(<ErrorBoundary>{jsx}</ErrorBoundary>)
         oldChildren.forEach((x) => x.remove())
         if (process.env.NODE_ENV === 'development') {
             setTimeout(() => [...document.querySelectorAll('script')].forEach((x) => x.remove()), 200)
@@ -22,7 +17,7 @@ export async function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
         return ''
     } else {
         const Server = await import('react-dom/server')
-        const { ServerStyleSheets } = await import('@material-ui/core/styles')
+        const { ServerStyleSheets } = await import('@material-ui/styles')
         const sheets = new ServerStyleSheets()
         const html = Server.renderToString(sheets.collect(jsx))
         const styles = sheets.toString()

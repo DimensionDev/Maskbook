@@ -1,17 +1,20 @@
 import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { isETH } from '../../../web3/helpers'
+import {
+    Wallet,
+    isNative,
+    FungibleTokenDetailed,
+    useAccount,
+    useChainIdValid,
+    useChainIdMatched,
+    getChainIdFromName,
+} from '@masknet/web3-shared'
+import { useMenu, useI18N } from '../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogFT } from '../DashboardDialogs/Wallet'
-import { useMenu } from '../../../utils/hooks/useMenu'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { useChainIdValid } from '../../../web3/hooks/useChainState'
 
 const useStyles = makeStyles((theme) => ({
     more: {
@@ -21,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
 
 export interface ActionsBarFT_Props extends withClasses<'more'> {
     chain: 'eth' | string
-    wallet: WalletRecord
-    token: EtherTokenDetailed | ERC20TokenDetailed
+    wallet: Wallet
+    token: FungibleTokenDetailed
 }
 
 export function ActionsBarFT(props: ActionsBarFT_Props) {
@@ -33,39 +36,44 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
     const classes = useStylesExtends(useStyles(), props)
 
     const chainIdValid = useChainIdValid()
+    const chainIdMatched = useChainIdMatched(getChainIdFromName(chain))
 
     //#region remote controlled buy dialog
-    const [, setBuyDialogOpen] = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     //#endregion
 
-    const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogFT)
-    const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
-    const [menu, openMenu] = useMenu(
-        [
+    //#region items
+    const items = [
+        chain === 'eth' && chainIdMatched ? (
             <MenuItem
                 onClick={() => {
-                    setBuyDialogOpen({
+                    setBuyDialog({
                         open: true,
                         code: token.symbol ?? token.name,
                         address: account,
                     })
                 }}>
                 {t('buy')}
-            </MenuItem>,
+            </MenuItem>
+        ) : null,
+        chainIdMatched ? (
             <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ wallet, token })}>
                 {t('transfer')}
-            </MenuItem>,
-            <MenuItem
-                style={{ display: isETH(token.address) ? 'none' : 'initial' }}
-                onClick={() => openHideTokenConfirmDialog({ wallet, token })}>
-                {t('hide')}
-            </MenuItem>,
-        ].slice(chain === 'eth' ? 0 : 2),
-    )
+            </MenuItem>
+        ) : null,
+        !isNative(token.address) ? (
+            <MenuItem onClick={() => openHideTokenConfirmDialog({ wallet, token })}>{t('hide')}</MenuItem>
+        ) : null,
+    ].filter(Boolean)
+    //#endregion
+
+    const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogFT)
+    const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
+    const [menu, openMenu] = useMenu(items)
 
     return (
         <>
-            <IconButton className={classes.more} size="small" onClick={openMenu}>
+            <IconButton className={classes.more} size="small" disabled={!items.length} onClick={openMenu}>
                 <MoreHorizIcon />
             </IconButton>
             {menu}

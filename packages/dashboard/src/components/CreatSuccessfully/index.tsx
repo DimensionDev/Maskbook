@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Button, experimentalStyled as styled, Typography } from '@material-ui/core'
-import { SuccessIcon } from '@dimensiondev/icons'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { SuccessIcon } from '@masknet/icons'
+import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 export interface CreateSuccessfully {
     onUnlock(): void

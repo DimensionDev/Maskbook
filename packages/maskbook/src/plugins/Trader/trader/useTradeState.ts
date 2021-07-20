@@ -1,13 +1,13 @@
 import { useReducer } from 'react'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { TradeStrategy } from '../types'
 
 export interface TradeState {
     strategy: TradeStrategy
     inputAmount: string
     outputAmount: string
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed
+    inputToken?: FungibleTokenDetailed
+    outputToken?: FungibleTokenDetailed
     inputTokenBalance: string
     outputTokenBalance: string
 }
@@ -28,11 +28,11 @@ export type SwapAction =
       }
     | {
           type: TradeActionType.UPDATE_INPUT_TOKEN
-          token?: EtherTokenDetailed | ERC20TokenDetailed
+          token?: FungibleTokenDetailed
       }
     | {
           type: TradeActionType.UPDATE_OUTPUT_TOKEN
-          token?: EtherTokenDetailed | ERC20TokenDetailed
+          token?: FungibleTokenDetailed
       }
     | {
           type: TradeActionType.UPDATE_INPUT_AMOUNT
@@ -102,10 +102,7 @@ function reducer(state: TradeState, action: SwapAction): TradeState {
     }
 }
 
-export function useTradeState(
-    inputToken?: EtherTokenDetailed | ERC20TokenDetailed,
-    outputToken?: EtherTokenDetailed | ERC20TokenDetailed,
-) {
+export function useTradeState(inputToken?: FungibleTokenDetailed, outputToken?: FungibleTokenDetailed) {
     return useReducer(reducer, {
         strategy: TradeStrategy.ExactIn,
         inputAmount: '',

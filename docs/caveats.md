@@ -26,9 +26,12 @@ To develop Mask Network, you need to have ...
 
 ### Install
 
-`pnpm install`
+```bash
+pnpm install
+```
 
-If you encounter with error `EACCES: permission denied, open...'`, please run `chown -R $USER /pathToYourProject/Maskbook` to solve.
+If you encounter with error `EACCES: permission denied, open...'`,
+please run `chown -R $USER /pathToYourProject/Maskbook` to solve.
 
 ### Start the development server
 
@@ -55,7 +58,6 @@ it is an interactive CLI tool to help you to learn out how to compose the build 
 ### Hot Module Reload
 
 This project supports Hot Module Reload which fasten the development process.
-Every time you find HMR not working please open <https://localhost:8080> and ignore the HTTPs certificate error.
 
 To disable HMR, set an environment variable `NO_HMR` to _true_.
 
@@ -78,20 +80,17 @@ It's important to select the correct context when you're debugging,
 otherwise you cannot access all the global variables,
 _save as temp variables_ also fails.
 
-#### "WebSocket connection to 'ws://localhost:8097/' failed"
-
-You may see continuous growing errors saying
-
-```plain
-WebSocket connection to 'ws://localhost:8097/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
-```
-
-If that annoys you, you can filter thoes out with `-WebSocket` in the devtools message filter.
-
 #### Use React Devtools
 
-React devtools is also an browser extension so unfortunately it doesn't work with Mask Network out of the box.
-You need [the standalone version of React Devtools](https://github.com/facebook/react/tree/master/packages/react-devtools#:~:text=Chrome%20extension,instead)
+Run the following command to start the React Devtools. It doesn't work if you install it as a browser extension.
+
+> pnpx react-devtools
+
+Due to bug <https://github.com/facebook/react/issues/20377>, React Devtools is conflict with React Fast Refresh.
+
+Please use the following command, it will start the development process in profile mode, which disables React Fast Refresh and enables React Devtools.
+
+> pnpx dev profile
 
 ## Contribute your working
 
@@ -108,13 +107,23 @@ Please use [Conventional Commits](https://www.conventionalcommits.org) when comm
 npx husky install # on project root directory
 ```
 
-### Synchronize upstream
+### Using Git
 
-- <https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork>
-- <https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork>
+- [Using git rebase on the command line](https://docs.github.com/en/github/getting-started-with-github/using-git-rebase-on-the-command-line)
+- [Configuring a remote for a fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork)
+- [Syncing a fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork)
 
 ## Caveats for Library
 
 - `lodash`, List of unavailable functions.
   1. `_.chain` (not friendly to tree-shake).
   2. `_.template` (see [#1865](https://github.com/DimensionDev/Maskbook/issues/1865))
+- `crypto`, the Node.js built-in library cannot be used in the project. Please use Web Crypto API instead.
+
+## How to resolve merge conflicts in `pnpm-lock.yaml`?
+
+Do not try to pick either side of the lockfile.
+
+Drop both "ours" and "theirs" version (then the file will be in the base version).
+
+Then run `pnpm install` to up the lockfile to date.

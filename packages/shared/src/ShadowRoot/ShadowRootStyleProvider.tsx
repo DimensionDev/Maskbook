@@ -1,5 +1,5 @@
 import { create as createJSS, SheetsRegistry as JSSSheetsRegistry } from 'jss'
-import { jssPreset, StylesProvider as JSSStylesProvider, createGenerateClassName } from '@material-ui/core/styles'
+import { jssPreset, StylesProvider as JSSStylesProvider, createGenerateClassName } from '@material-ui/styles'
 import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
 import createEmotionCache, { EmotionCache } from '@emotion/cache'
 import { useMemo } from 'react'
@@ -146,3 +146,18 @@ function init({ shadow, onHeadCreate }: ShadowRootStyleProviderProps) {
     const generateClassName = createGenerateClassName({ seed: instanceID })
     return { jss, JSSRegistry, JSSSheetsManager, emotionCache, generateClassName }
 }
+
+// Note: By disabling usage of .cssRules which does not exists when the DOM is unattached
+// we can get rid of the race condition.
+// See https://github.com/DimensionDev/Maskbook/issues/2834 for details
+function patchJSSDomRenderer() {
+    const jss: any = createJSS()
+    const methods = jss.options.Renderer.prototype
+    methods.deploy = function () {
+        const { sheet } = this
+        this.element.textContent = `\n${sheet.toString()}\n`
+    }
+}
+try {
+    patchJSSDomRenderer()
+} catch {}

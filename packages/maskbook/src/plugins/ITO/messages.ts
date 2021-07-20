@@ -1,3 +1,4 @@
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { ITO_PluginID } from './constants'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
@@ -20,6 +21,10 @@ interface ITO_Message {
     rpc: unknown
 }
 
-if (module.hot) module.hot.accept()
-export const PluginITO_Messages = createPluginMessage<ITO_Message>(ITO_PluginID)
-export const PluginITO_RPC = createPluginRPC(ITO_PluginID, () => import('./services'), PluginITO_Messages.events.rpc)
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
+export const PluginITO_Messages: WebExtensionMessage<ITO_Message> = createPluginMessage<ITO_Message>(ITO_PluginID)
+export const PluginITO_RPC = createPluginRPC(
+    ITO_PluginID,
+    () => import('./Worker/services'),
+    PluginITO_Messages.events.rpc,
+)

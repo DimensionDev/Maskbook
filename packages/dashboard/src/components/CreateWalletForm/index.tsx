@@ -6,30 +6,27 @@ import {
     experimentalStyled as styled,
     Typography,
     makeStyles,
-    createStyles,
     FilledInput,
 } from '@material-ui/core'
 import { useCallback, useState } from 'react'
 import { useDashboardI18N } from '../../locales'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            // TODO: mobile
-            width: 380,
-            marginTop: theme.spacing(1.5),
-        },
-        input: {
-            paddingTop: theme.spacing(2),
-            paddingBottom: theme.spacing(2),
-        },
-        filled: {
-            display: 'flex',
-            paddingTop: theme.spacing(2),
-            paddingBottom: theme.spacing(2),
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        // TODO: mobile
+        width: 380,
+        marginTop: theme.spacing(1.5),
+    },
+    input: {
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
+    },
+    filled: {
+        display: 'flex',
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
+    },
+}))
 
 // TODO: actions, and icon may be an img url
 export interface CreateWalletFormProps {
@@ -45,7 +42,7 @@ export function CreateWalletForm(props: CreateWalletFormProps) {
 
     return (
         <Container>
-            <FormContainer>
+            <FormContainer variant="standard">
                 <Select
                     classes={{ filled: classes.filled }}
                     variant="filled"

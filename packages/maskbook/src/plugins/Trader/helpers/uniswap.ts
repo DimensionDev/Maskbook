@@ -1,104 +1,115 @@
+import JSBI from 'jsbi'
 import BigNumber from 'bignumber.js'
+import { Currency, Token, CurrencyAmount, TradeType, Percent, Price, Ether } from '@uniswap/sdk-core'
+import type { Trade } from '@uniswap/v2-sdk'
 import {
-    Token as UniswapToken,
-    ChainId as UniswapChainId,
-    Currency as UniswapCurrency,
-    CurrencyAmount as UniswapCurrencyAmount,
-    Percent as UniswapPercent,
-    Price as UniswapPrice,
-    JSBI,
-    TokenAmount,
-    ETHER,
-} from '@uniswap/sdk'
-import { WETH } from '../constants'
-import { ChainId, ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed } from '../../../web3/types'
-import { unreachable } from '../../../utils/utils'
-import { isETH } from '../../../web3/helpers'
-import { formatEthereumAddress } from '../../Wallet/formatter'
+    formatEthereumAddress,
+    pow10,
+    ChainId,
+    EthereumTokenType,
+    FungibleTokenDetailed,
+    isSameAddress,
+} from '@masknet/web3-shared'
+import { ONE_HUNDRED_PERCENT, WETH, ZERO_PERCENT } from '../constants'
 
-export function toUniswapChainId(chainId: ChainId): UniswapChainId {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return UniswapChainId.MAINNET
-        case ChainId.Ropsten:
-            return UniswapChainId.ROPSTEN
-        case ChainId.Rinkeby:
-            return UniswapChainId.RINKEBY
-        case ChainId.Kovan:
-            return UniswapChainId.KOVAN
-        case ChainId.Gorli:
-            return UniswapChainId.GÖRLI
-        default:
-            unreachable(chainId)
-    }
+export function toUniswapChainId(chainId: ChainId) {
+    return chainId as number
 }
 
 export function toUniswapPercent(numerator: number, denominator: number) {
-    return new UniswapPercent(JSBI.BigInt(numerator), JSBI.BigInt(denominator))
+    return new Percent(JSBI.BigInt(numerator), JSBI.BigInt(denominator))
 }
 
-export function toUniswapCurrency(chainId: ChainId, token: EtherTokenDetailed | ERC20TokenDetailed): UniswapCurrency {
-    if (isETH(token.address)) return ETHER
-    return toUniswapToken(chainId, token)
+export function toUniswapCurrency(chainId: ChainId, token?: FungibleTokenDetailed): Currency | undefined {
+    if (!token) return
+    const extendedEther = ExtendedEther.onChain(chainId)
+    const weth = toUniswapToken(chainId, WETH[chainId])
+    if (weth && isSameAddress(token.address, weth.address)) return weth
+    return token.type === EthereumTokenType.Native ? extendedEther : toUniswapToken(chainId, token)
 }
 
-export function toUniswapToken(chainId: ChainId, token: EtherTokenDetailed | ERC20TokenDetailed): UniswapToken {
-    if (isETH(token.address)) return toUniswapToken(chainId, WETH[chainId])
-    return new UniswapToken(
+export function toUniswapToken(chainId: ChainId, token: FungibleTokenDetailed) {
+    return new Token(
         toUniswapChainId(chainId),
         formatEthereumAddress(token.address),
-        token.decimals ?? 0,
+        token.decimals,
         token.symbol,
         token.name,
     )
 }
 
-export function toUniswapCurrencyAmount(
-    chainId: ChainId,
-    token: EtherTokenDetailed | ERC20TokenDetailed,
-    amount: string,
-) {
-    return isETH(token.address)
-        ? UniswapCurrencyAmount.ether(JSBI.BigInt(amount))
-        : new TokenAmount(toUniswapToken(chainId, token), JSBI.BigInt(amount))
+export function toUniswapCurrencyAmount(chainId: ChainId, token?: FungibleTokenDetailed, amount?: string) {
+    if (!token || !amount) return
+    const currency = toUniswapCurrency(chainId, token)
+    if (!currency) return
+    if (amount !== '0') return CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(amount))
+    return
 }
 
-export function uniswapChainIdTo(chainId: UniswapChainId) {
-    switch (chainId) {
-        case UniswapChainId.MAINNET:
-            return ChainId.Mainnet
-        case UniswapChainId.ROPSTEN:
-            return ChainId.Ropsten
-        case UniswapChainId.RINKEBY:
-            return ChainId.Rinkeby
-        case UniswapChainId.KOVAN:
-            return ChainId.Kovan
-        case UniswapChainId.GÖRLI:
-            return ChainId.Gorli
-        default:
-            unreachable(chainId)
-    }
+export function uniswapChainIdTo(chainId: number) {
+    return chainId as ChainId
 }
 
-export function uniswapPercentTo(percent: UniswapPercent) {
-    return new BigNumber(percent.numerator.toString()).dividedBy(new BigNumber(percent.denominator.toString()))
+export function uniswapPercentTo(percent: Percent) {
+    return new BigNumber(percent.toFixed(2)).dividedBy(100)
 }
 
-export function uniswapPriceTo(price: UniswapPrice) {
+export function uniswapPriceTo(price: Price<Currency, Currency>) {
     return new BigNumber(price.scalar.numerator.toString()).dividedBy(price.scalar.denominator.toString())
 }
 
-export function uniswapTokenTo(token: UniswapToken) {
+export function uniswapTokenTo(token: Token) {
     return {
-        type: token.name === 'ETH' ? EthereumTokenType.Ether : EthereumTokenType.ERC20,
+        type: ['eth', 'matic', 'bnb'].includes(token.name?.toLowerCase() ?? '')
+            ? EthereumTokenType.Native
+            : EthereumTokenType.ERC20,
         name: token.name,
         symbol: token.symbol,
         decimals: token.decimals,
         address: formatEthereumAddress(token.address),
         chainId: uniswapChainIdTo(token.chainId),
-    } as EtherTokenDetailed | ERC20TokenDetailed
+    } as FungibleTokenDetailed
 }
 
-export function uniswapCurrencyAmountTo(currencyAmount: UniswapCurrencyAmount) {
-    return new BigNumber(currencyAmount.raw.toString())
+export function uniswapCurrencyAmountTo(currencyAmount: CurrencyAmount<Currency>) {
+    return pow10(currencyAmount.currency.decimals).multipliedBy(currencyAmount.toFixed())
+}
+
+export function isTradeBetter(
+    tradeA?: Trade<Currency, Currency, TradeType> | null,
+    tradeB?: Trade<Currency, Currency, TradeType> | null,
+    minimumDelta: Percent = ZERO_PERCENT,
+): boolean | undefined {
+    if (tradeA && !tradeB) return false
+    if (tradeB && !tradeA) return true
+    if (!tradeA || !tradeB) return undefined
+
+    if (
+        tradeA.tradeType !== tradeB.tradeType ||
+        !tradeA.inputAmount.currency.equals(tradeB.inputAmount.currency) ||
+        !tradeB.outputAmount.currency.equals(tradeB.outputAmount.currency)
+    ) {
+        throw new Error('Comparing incomparable trades')
+    }
+
+    if (minimumDelta.equalTo(ZERO_PERCENT)) {
+        return tradeA.executionPrice.lessThan(tradeB.executionPrice)
+    } else {
+        return tradeA.executionPrice.asFraction
+            .multiply(minimumDelta.add(ONE_HUNDRED_PERCENT))
+            .lessThan(tradeB.executionPrice)
+    }
+}
+
+export class ExtendedEther extends Ether {
+    public get wrapped(): Token {
+        if (this.chainId in WETH) return toUniswapToken(this.chainId, WETH[this.chainId as ChainId])
+        throw new Error('Unsupported chain ID')
+    }
+
+    private static _cachedEther: { [chainId: number]: ExtendedEther } = {}
+
+    public static onChain(chainId: number): ExtendedEther {
+        return this._cachedEther[chainId] ?? (this._cachedEther[chainId] = new ExtendedEther(chainId))
+    }
 }

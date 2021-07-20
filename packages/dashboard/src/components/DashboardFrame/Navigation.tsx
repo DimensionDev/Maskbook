@@ -5,41 +5,72 @@ import {
     ListItemIcon,
     Collapse,
     Theme,
-    ListItemProps,
     useMediaQuery,
     experimentalStyled as styled,
     listItemClasses,
+    listItemIconClasses,
+    ListItemProps,
 } from '@material-ui/core'
 import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@material-ui/icons'
 import { useContext } from 'react'
-import { useRouteMatch } from 'react-router'
-import { Link, LinkProps } from 'react-router-dom'
-import { Routes } from '../../pages/routes'
+import { useMatch, useNavigate } from 'react-router'
 import { DashboardContext } from './context'
-import { MaskNotSquareIcon } from '@dimensiondev/icons'
+import { MaskNotSquareIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
+import { MaskColorVar } from '@masknet/theme'
+import { RoutePaths } from '../../type'
 
-function ListItemLinkUnStyled({ nested, ...props }: LinkProps & ListItemProps & { nested?: boolean; to: string }) {
-    return <MuiListItem button component={Link} selected={!!useRouteMatch(props.to)} {...props} />
+const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
+    const navigate = useNavigate()
+
+    return (
+        <MuiListItem
+            {...props}
+            selected={!!useMatch(to)}
+            onClick={(event) => {
+                navigate(to)
+                props.onClick?.(event)
+            }}
+        />
+    )
 }
 
-const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => ({
-    [`&.${listItemClasses.root}`]: {
-        paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
-    },
-    [`&.${listItemClasses.selected}`]: {
-        backgroundColor: 'transparent',
-        borderRight: '4px solid ' + (theme.palette.mode === 'light' ? theme.palette.action.selected : 'white'),
-    },
-}))
+const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
+    return {
+        [`&.${listItemClasses.root}`]: {
+            color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
+            paddingLeft: theme.spacing(2),
+            cursor: 'pointer',
+        },
+        [`&.${listItemClasses.selected}`]: {
+            color: MaskColorVar.textLink,
+            backgroundColor: 'transparent',
+            position: 'relative',
+            [`${listItemIconClasses.root}`]: {
+                color: MaskColorVar.textLink,
+            },
+            '&:after': {
+                content: '""',
+                display: 'inline-block',
+                width: 5,
+                height: 40,
+                boxShadow: '-2px 0px 10px 2px rgba(0, 56, 255, 0.15)',
+                borderRadius: 50,
+                background: MaskColorVar.textLink,
+                position: 'absolute',
+                right: 0,
+            },
+        },
+    }
+})
 
-const LogoItem = (styled(MuiListItem)(({ theme }) => ({
+const LogoItem = styled(MuiListItem)(({ theme }) => ({
     [`&.${listItemClasses.root}`]: {
         justifyContent: 'center',
         paddingLeft: theme.spacing(7),
         marginBottom: theme.spacing(3.5),
     },
-})) as any) as typeof MuiListItem
+})) as any as typeof MuiListItem
 
 const ListItem = styled(MuiListItem)(({ theme }) => ({
     [`&.${listItemClasses.selected}`]: {
@@ -62,39 +93,33 @@ export function Navigation({}: NavigationProps) {
                     <MaskNotSquareIcon />
                 </LogoItem>
             )}
-            <ListItemLink to={Routes.Personas}>
+            <ListItemLink to={RoutePaths.Personas}>
                 <ListItemIcon>
                     <Masks />
                 </ListItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
-            <ListItem button selected={!!useRouteMatch(Routes.Wallets)} onClick={toggleNavigationExpand}>
+            <ListItemLink
+                to={RoutePaths.Wallets}
+                selected={!!useMatch(RoutePaths.Wallets)}
+                onClick={toggleNavigationExpand}>
                 <ListItemIcon>
                     <AccountBalanceWallet />
                 </ListItemIcon>
                 <ListItemText>{t.wallets()}</ListItemText>
                 {expanded ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
+            </ListItemLink>
             <Collapse in={expanded}>
                 <List disablePadding>
-                    <ListItemLink nested to={Routes.WalletsTransfer}>
-                        <ListItemText primary={t.wallets_transfer()} />
+                    <ListItemLink to={RoutePaths.WalletsTransfer}>
+                        <ListItemText inset primary={t.wallets_transfer()} />
                     </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsSwap}>
-                        <ListItemText primary={t.wallets_swap()} />
-                    </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsRedPacket}>
-                        <ListItemText primary={t.wallets_red_packet()} />
-                    </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsSell}>
-                        <ListItemText primary={t.wallets_sell()} />
-                    </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsHistory}>
-                        <ListItemText primary={t.wallets_history()} />
+                    <ListItemLink to={RoutePaths.WalletsHistory}>
+                        <ListItemText inset primary={t.wallets_history()} />
                     </ListItemLink>
                 </List>
             </Collapse>
-            <ListItemLink to={Routes.Settings}>
+            <ListItemLink to={RoutePaths.Settings}>
                 <ListItemIcon>
                     <Settings />
                 </ListItemIcon>
@@ -102,15 +127,4 @@ export function Navigation({}: NavigationProps) {
             </ListItemLink>
         </List>
     )
-}
-
-export enum NavigationTarget {
-    Personas,
-    WalletsTransfer,
-    WalletsSwap,
-    Wallets,
-    WalletsRedPacket,
-    WalletsSell,
-    WalletsHistory,
-    Settings,
 }

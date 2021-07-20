@@ -38,18 +38,43 @@ export function setupPortalShadowRoot(
  * ))
  */
 export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX.Element) {
-    const [findMountingShadowRef, setRef] = useState<HTMLDivElement | null>(null)
-    const update = useUpdate()
-    const { root, container, style } = useSideEffectRef(() => {
+    const [findMountingShadowRef, setRef] = useState<HTMLSpanElement | null>(null)
+    const doms = useSideEffectRef(() => {
         const root = document.createElement('div')
         const container = root.appendChild(document.createElement('div'))
-        container.appendChild = bind(container.appendChild, container, update)
-        container.removeChild = bind(container.removeChild, container, update)
         const style = root.appendChild(document.createElement('style'))
         return { root, container, style }
     })
+    const { container } = doms
+
+    return (
+        <IsolatedRender {...doms} findMountingShadowRef={findMountingShadowRef}>
+            <span style={{ display: 'none' }} ref={(ref) => findMountingShadowRef !== ref && setRef(ref)} />
+            {renderer(container)}
+        </IsolatedRender>
+    )
+}
+
+/*
+Here is a strange problem that `useMemo` in the `useCurrentShadowRootStyles` will re-render every event loop _even_ findMountingShadowRef is the same.
+React is isolating their render process in the unit of components. Split it into another component solves the problem.
+(And now it no longer re-render every event loop).
+ */
+type IsolatedRenderProps = React.PropsWithChildren<{
+    root: HTMLElement
+    container: HTMLElement
+    style: HTMLStyleElement
+    findMountingShadowRef: HTMLSpanElement | null
+}>
+const IsolatedRender = ({ container, root, style, children, findMountingShadowRef }: IsolatedRenderProps) => {
+    const update = useUpdate()
     const css = useCurrentShadowRootStyles(findMountingShadowRef)
     const containerInUse = container.children.length !== 0
+
+    useEffect(() => {
+        container.appendChild = bind(container.appendChild, container, update)
+        container.removeChild = bind(container.removeChild, container, update)
+    }, [])
 
     useEffect(() => {
         if (!containerInUse) return root.remove()
@@ -62,23 +87,23 @@ export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX
         if (findMountingShadowRef && style.innerHTML !== css) style.innerHTML = css
     }, [style, css, findMountingShadowRef])
 
-    return <div ref={(ref) => findMountingShadowRef !== ref && setRef(ref)}>{renderer(container)}</div>
+    return children as any
 }
 
 export function createShadowRootForwardedComponent<
-    T extends { container?: Element | (() => Element | null) | null | undefined; open: boolean }
+    T extends { container?: Element | (() => Element | null) | null | undefined; open: boolean },
 >(Component: React.ComponentType<T>) {
-    return (forwardRef((props: T, ref) => {
+    return forwardRef((props: T, ref) => {
         return usePortalShadowRoot((container) => <Component container={container} {...props} ref={ref} />)
-    }) as any) as typeof Component
+    }) as any as typeof Component
 }
 
 export function createShadowRootForwardedPopperComponent<T extends { PopperProps?: Partial<PopperProps> }>(
     Component: React.ComponentType<T>,
 ) {
-    return (forwardRef((props: T, ref) => {
+    return forwardRef((props: T, ref) => {
         return usePortalShadowRoot((container) => <Component PopperProps={{ container }} {...props} ref={ref} />)
-    }) as any) as typeof Component
+    }) as any as typeof Component
 }
 
 /**

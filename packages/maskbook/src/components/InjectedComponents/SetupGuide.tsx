@@ -2,7 +2,6 @@ import { useMemo, useState, useEffect, useCallback } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import {
     makeStyles,
-    createStyles,
     Paper,
     Typography,
     TextField,
@@ -13,7 +12,7 @@ import {
     unstable_createMuiStrictModeTheme,
     IconButton,
     Box,
-    Hidden,
+    useMediaQuery,
 } from '@material-ui/core'
 import classNames from 'classnames'
 import { ArrowRight } from 'react-feather'
@@ -23,17 +22,14 @@ import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 import stringify from 'json-stable-stringify'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { noop } from 'lodash-es'
-import { useI18N } from '../../utils/i18n-next-ui'
+import { useValueRef } from '@masknet/shared'
+import { useI18N, MaskMessage, useMatchXS, extendsTheme } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
-import { MaskMessage } from '../../utils/messages'
-import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
 
-import { useMatchXS } from '../../utils/hooks/useMatchXS'
-import { extendsTheme } from '../../utils/theme'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { makeTypedMessageText } from '../../protocols/typed-message'
 
@@ -53,13 +49,6 @@ const wizardTheme = extendsTheme((theme: Theme) => ({
                 multiline: {
                     paddingTop: 10.5,
                     paddingBottom: 10.5,
-                },
-            },
-        },
-        MuiInputLabel: {
-            styleOverrides: {
-                outlined: {
-                    transform: 'translate(14px, 16px) scale(1)',
                 },
             },
         },
@@ -100,95 +89,93 @@ const wizardTheme = extendsTheme((theme: Theme) => ({
     },
 }))
 
-const useWizardDialogStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: '56px 20px 48px',
-            position: 'relative',
-            boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
-            border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
-            borderRadius: 12,
-            [theme.breakpoints.down('sm')]: {
-                padding: '35px 20px 16px',
-                position: 'fixed',
-                bottom: 0,
-                left: 0,
-                margin: 0,
-                alignSelf: 'center',
-                borderRadius: 0,
-                boxShadow: 'none',
-                border: `solid 1px ${theme.palette.divider}`,
-                width: '100%',
-            },
-            userSelect: 'none',
-            boxSizing: 'border-box',
-            width: 320,
-            overflow: 'hidden',
-        },
-        button: {
-            width: 200,
-            height: 40,
-            marginLeft: 0,
-            marginTop: 0,
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-                height: '45px !important',
-                marginTop: 20,
-                borderRadius: 0,
-            },
-            fontSize: 16,
-            wordBreak: 'keep-all',
-        },
-        back: {
-            color: theme.palette.text.primary,
-            position: 'absolute',
-            left: 10,
-            top: 10,
-        },
-        close: {
-            color: theme.palette.text.primary,
-            position: 'absolute',
-            right: 10,
-            top: 10,
-        },
-        primary: {
-            fontSize: 30,
-            fontWeight: 500,
-            lineHeight: '37px',
-        },
-        secondary: {
-            fontSize: 14,
-            fontWeight: 500,
-            lineHeight: 1.75,
-            marginTop: 2,
-        },
-        sandbox: {
-            marginTop: 16,
-        },
-        tip: {
-            fontSize: 16,
-            lineHeight: 1.75,
-            marginBottom: 24,
-        },
-        textButton: {
-            fontSize: 14,
-            marginTop: theme.spacing(1),
-            marginBottom: theme.spacing(-2),
-        },
-        header: {
-            marginBottom: 0,
-        },
-        content: {},
-        footer: {},
-        progress: {
-            left: 0,
-            right: 0,
+const useWizardDialogStyles = makeStyles((theme) => ({
+    root: {
+        padding: '56px 20px 48px',
+        position: 'relative',
+        boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
+        border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
+        borderRadius: 12,
+        [theme.breakpoints.down('sm')]: {
+            padding: '35px 20px 16px',
+            position: 'fixed',
             bottom: 0,
-            height: 8,
-            position: 'absolute',
+            left: 0,
+            margin: 0,
+            alignSelf: 'center',
+            borderRadius: 0,
+            boxShadow: 'none',
+            border: `solid 1px ${theme.palette.divider}`,
+            width: '100%',
         },
-    }),
-)
+        userSelect: 'none',
+        boxSizing: 'border-box',
+        width: 320,
+        overflow: 'hidden',
+    },
+    button: {
+        width: 200,
+        height: 40,
+        marginLeft: 0,
+        marginTop: 0,
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+            height: '45px !important',
+            marginTop: 20,
+            borderRadius: 0,
+        },
+        fontSize: 16,
+        wordBreak: 'keep-all',
+    },
+    back: {
+        color: theme.palette.text.primary,
+        position: 'absolute',
+        left: 10,
+        top: 10,
+    },
+    close: {
+        color: theme.palette.text.primary,
+        position: 'absolute',
+        right: 10,
+        top: 10,
+    },
+    primary: {
+        fontSize: 30,
+        fontWeight: 500,
+        lineHeight: '37px',
+    },
+    secondary: {
+        fontSize: 14,
+        fontWeight: 500,
+        lineHeight: 1.75,
+        marginTop: 2,
+    },
+    sandbox: {
+        marginTop: 16,
+    },
+    tip: {
+        fontSize: 16,
+        lineHeight: 1.75,
+        marginBottom: 24,
+    },
+    textButton: {
+        fontSize: 14,
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(-2),
+    },
+    header: {
+        marginBottom: 0,
+    },
+    content: {},
+    footer: {},
+    progress: {
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: 8,
+        position: 'absolute',
+    },
+}))
 
 const useStyles = makeStyles((theme: Theme) => {
     return {
@@ -221,7 +208,7 @@ interface ContentUIProps {
 function ContentUI(props: ContentUIProps) {
     const classes = useStyles(props)
     const xsMatch = useMatchXS()
-    const wizardClasses = useWizardDialogStyles()
+    const onlyXS = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
     switch (props.dialogType) {
         case SetupGuideStep.FindUsername:
             return (
@@ -234,14 +221,10 @@ function ContentUI(props: ContentUIProps) {
                             display: xsMatch ? 'flex' : 'block',
                         }}>
                         <main className={classes.content}>{props.content}</main>
-                        <Hidden only="xs">
-                            <div>{props.tip}</div>
-                        </Hidden>
+                        {onlyXS ? <div>{props.tip}</div> : null}
                         <footer className={classes.footer}>{props.footer}</footer>
                     </Box>
-                    <Hidden smUp>
-                        <div>{props.tip}</div>
-                    </Hidden>
+                    {!onlyXS ? <div>{props.tip}</div> : null}
                 </Box>
             )
 
@@ -275,6 +258,7 @@ function WizardDialog(props: WizardDialogProps) {
     const { t } = useI18N()
     const { title, dialogType, optional = false, completion, status, content, tip, footer, onBack, onClose } = props
     const classes = useWizardDialogStyles(props)
+    const onlyXS = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
 
     return (
         <ThemeProvider theme={wizardTheme}>
@@ -310,13 +294,14 @@ function WizardDialog(props: WizardDialogProps) {
                         ) : null}
                     </header>
                     <ContentUI dialogType={dialogType} content={content} tip={tip} footer={footer} />
-                    <Hidden only="xs">
+                    {onlyXS ? (
                         <LinearProgress
                             className={classes.progress}
                             color="secondary"
                             variant="determinate"
-                            value={completion}></LinearProgress>
-                    </Hidden>
+                            value={completion}
+                        />
+                    ) : null}
                     {onBack ? (
                         <IconButton className={classes.back} size="small" onClick={onBack}>
                             <ArrowBackIosOutlinedIcon cursor="pointer" />
@@ -335,25 +320,23 @@ function WizardDialog(props: WizardDialogProps) {
 //#endregion
 
 //#region find username
-const useFindUsernameStyles = makeStyles((theme) =>
-    createStyles({
-        input: {
-            marginTop: '45px !important',
-            marginBottom: 24,
+const useFindUsernameStyles = makeStyles((theme) => ({
+    input: {
+        marginTop: '45px !important',
+        marginBottom: 24,
+    },
+    inputFocus: {
+        '& svg': {
+            color: theme.palette.primary.main,
         },
-        inputFocus: {
-            '& svg': {
-                color: theme.palette.primary.main,
-            },
-        },
-        button: {
-            marginLeft: theme.spacing(1),
-        },
-        icon: {
-            color: 'inherit',
-        },
-    }),
-)
+    },
+    button: {
+        marginLeft: theme.spacing(1),
+    },
+    icon: {
+        color: 'inherit',
+    },
+}))
 
 interface FindUsernameProps extends Partial<WizardDialogProps> {
     username: string
@@ -375,6 +358,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
         e.preventDefault()
         onConnect()
     }
+    const xsOnly = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
 
     const onJump = useCallback(
         (ev: React.MouseEvent<SVGElement>) => {
@@ -400,7 +384,6 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                         <TextField
                             label={t('username')}
                             value={username}
-                            disabled={!username}
                             InputProps={{
                                 classes: {
                                     focused: findUsernameClasses.inputFocus,
@@ -413,16 +396,15 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                             }}
                             onChange={(e) => onUsernameChange(e.target.value)}
                             onKeyDown={onKeyDown}
-                            inputProps={{ 'data-testid': 'username_input' }}></TextField>
-                        {gotoProfilePageImpl ? (
-                            <Hidden only="xs">
-                                <IconButton
-                                    className={findUsernameClasses.button}
-                                    color={username ? 'primary' : 'default'}
-                                    disabled={!username}>
-                                    <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
-                                </IconButton>
-                            </Hidden>
+                            inputProps={{ 'data-testid': 'username_input' }}
+                        />
+                        {gotoProfilePageImpl && xsOnly ? (
+                            <IconButton
+                                className={findUsernameClasses.button}
+                                color={username ? 'primary' : 'default'}
+                                disabled={!username}>
+                                <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
+                            </IconButton>
                         ) : null}
                     </Box>
                 </form>
@@ -431,7 +413,8 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                 <Typography
                     className={classes.tip}
                     variant="body2"
-                    dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}></Typography>
+                    dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}
+                />
             }
             footer={
                 <ActionButtonPromise
@@ -451,24 +434,23 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     {t('confirm')}
                 </ActionButtonPromise>
             }
-            onClose={onClose}></WizardDialog>
+            onClose={onClose}
+        />
     )
 }
 //#endregion
 
 //#region say hello world
-const useSayHelloWorldStyles = makeStyles((theme) =>
-    createStyles({
-        primary: {
-            marginTop: 24,
-            marginBottom: 16,
-        },
-        secondary: {
-            color: theme.palette.text.secondary,
-            fontSize: 14,
-        },
-    }),
-)
+const useSayHelloWorldStyles = makeStyles((theme) => ({
+    primary: {
+        marginTop: 24,
+        marginBottom: 16,
+    },
+    secondary: {
+        color: theme.palette.text.secondary,
+        fontSize: 14,
+    },
+}))
 
 interface SayHelloWorldProps extends Partial<WizardDialogProps> {
     createStatus: boolean | 'undetermined'
@@ -480,6 +462,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
     const { t } = useI18N()
     const classes = useWizardDialogStyles()
     const sayHelloWorldClasses = useSayHelloWorldStyles()
+    const xsOnly = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
 
     return (
         <WizardDialog
@@ -514,7 +497,7 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                         failedOnClick="use executor"
                         data-testid="create_button"
                     />
-                    <Hidden only="xs">
+                    {xsOnly ? (
                         <ActionButton
                             className={classes.textButton}
                             color="inherit"
@@ -523,11 +506,12 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                             data-testid="skip_button">
                             {t('skip')}
                         </ActionButton>
-                    </Hidden>
+                    ) : null}
                 </>
             }
             onBack={onBack}
-            onClose={onClose}></WizardDialog>
+            onClose={onClose}
+        />
     )
 }
 //#endregion

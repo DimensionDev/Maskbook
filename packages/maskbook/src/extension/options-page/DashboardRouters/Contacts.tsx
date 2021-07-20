@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect } from 'react'
 import DashboardRouterContainer from './Container'
 import { TextField, IconButton, Typography } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import ClearIcon from '@material-ui/icons/Clear'
 import SearchIcon from '@material-ui/icons/Search'
 import AutoResize from 'react-virtualized-auto-sizer'
+import { useI18N } from '../../../utils'
 import { ContactLine } from '../DashboardComponents/ContactLine'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { FixedSizeList } from 'react-window'
 import { useAsyncFn, useMap } from 'react-use'
 import Services from '../../service'
@@ -15,29 +15,27 @@ import { last } from 'lodash-es'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardContactSearchDialog } from '../DashboardDialogs/Contact'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        title: {
-            margin: theme.spacing(3, 0),
-            color: theme.palette.text.secondary,
-            [theme.breakpoints.down('sm')]: {
-                margin: theme.spacing(2, 0),
-            },
+const useStyles = makeStyles((theme) => ({
+    title: {
+        margin: theme.spacing(3, 0),
+        color: theme.palette.text.secondary,
+        [theme.breakpoints.down('sm')]: {
+            margin: theme.spacing(2, 0),
         },
-        progress: {
-            width: '1.5em',
-            height: '1.5em',
-            marginRight: '0.75em',
+    },
+    progress: {
+        width: '1.5em',
+        height: '1.5em',
+        marginRight: '0.75em',
+    },
+    list: {
+        flex: 1,
+        [theme.breakpoints.down('sm')]: {
+            marginLeft: theme.spacing(-2),
+            marginRight: theme.spacing(-2),
         },
-        list: {
-            flex: 1,
-            [theme.breakpoints.down('sm')]: {
-                marginLeft: theme.spacing(-2),
-                marginRight: theme.spacing(-2),
-            },
-        },
-    }),
-)
+    },
+}))
 
 async function* queryProfilePaged(query: string | undefined, size = 20) {
     if (query === '') query = undefined

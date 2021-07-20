@@ -1,8 +1,8 @@
 import type { FullPersonaDBTransaction } from './Persona.db'
-import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
+import { ECKeyIdentifier, Identifier, PersonaIdentifier, ProfileIdentifier } from '../type'
 import type { IdentifierMap } from '../IdentifierMap'
 import { restorePrototype } from '../../utils/type'
-import { unreachable } from '../../utils/utils'
+import { unreachable } from '@dimensiondev/kit'
 
 type ReadwriteFullPersonaDBTransaction = FullPersonaDBTransaction<'readwrite'>
 

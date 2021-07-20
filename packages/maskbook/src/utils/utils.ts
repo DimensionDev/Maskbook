@@ -7,34 +7,7 @@ import type { CustomEvents } from '../extension/injected-script/CustomEvents'
 
 import { isNull, noop } from 'lodash-es'
 
-/**
- * Return a promise that resolved after `time` ms.
- * If `time` is `Infinity`, it will never resolve.
- * @param time - Time to sleep. In `ms`.
- */
-export function delay(time: number) {
-    return new Promise<void>((resolve) => (Number.isFinite(time) ? setTimeout(resolve, time) : void 0))
-}
-
-/**
- * Accept a promise and then set a timeout on it. After `time` ms, it will reject.
- * @param promise - The promise that you want to set time limit on.
- * @param time - Time before timeout. In `ms`.
- * @param rejectReason - When reject, show a reason. Defaults to `"timeout"`
- */
-export function timeout<T>(promise: PromiseLike<T>, time: number, rejectReason?: string): Promise<T> {
-    if (!Number.isFinite(time)) return (async () => promise)()
-    let timer: any
-    const race = Promise.race([
-        promise,
-        new Promise<T>((r, reject) => {
-            timer = setTimeout(() => reject(new Error(rejectReason ?? 'timeout')), time)
-        }),
-    ])
-    race.finally(() => clearTimeout(timer))
-    return race
-}
-
+export { timeout, delay } from '@masknet/shared'
 /**
  * Download given url return as Blob
  */
@@ -68,7 +41,7 @@ export function dispatchCustomEvents<T extends keyof CustomEvents>(
  * @param image
  */
 export async function pasteImageToActiveElements(image: File | Blob): Promise<void> {
-    const bytes = new Uint8Array(await image.arrayBuffer())
+    const bytes = new Uint8Array(await blobToArrayBuffer(image))
     dispatchCustomEvents(document.activeElement, 'paste', { type: 'image', value: Array.from(bytes) })
 }
 
@@ -90,13 +63,7 @@ export function selectElementContents(el: Node) {
 export function nopWithUnmount(..._args: unknown[]) {
     return noop
 }
-export function unreachable(val: never): never {
-    console.error('Unhandled value: ', val)
-    throw new Error('Unreachable case:' + val)
-}
-export function safeUnreachable(val: never) {
-    console.error('Unhandled value: ', val)
-}
+
 /**
  * index starts at one.
  */
@@ -106,9 +73,9 @@ export function regexMatch(str: string, regexp: RegExp, index: number | null = 1
     const r = str.match(regexp)
     if (isNull(r)) return null
     if (index === null) {
-        return (r as RegExpMatchArray) as any
+        return r as RegExpMatchArray as any
     }
-    return (r[index] as string) as any
+    return r[index] as string as any
 }
 
 /**
@@ -164,13 +131,16 @@ export function batchReplace(source: string, group: Array<[string | RegExp, stri
 export function pollingTask(
     task: () => Promise<boolean>,
     {
+        autoStart = true,
         delay = 30 * 1000,
     }: {
+        autoStart?: boolean
         delay?: number
     } = {},
 ) {
-    let canceled = false
+    let canceled = !autoStart
     let timer: NodeJS.Timeout
+
     const runTask = async () => {
         if (canceled) return
         let stop = false
@@ -179,15 +149,21 @@ export function pollingTask(
         } catch (e) {
             console.error(e)
         }
-        if (!stop) timer = setTimeout(runTask, delay)
+        if (!stop) resetTask()
     }
-    runTask()
+    const resetTask = () => {
+        canceled = false
+        clearTimeout(timer)
+        timer = setTimeout(runTask, delay)
+    }
+    const cancelTask = () => {
+        canceled = true
+    }
+
+    if (!canceled) runTask()
     return {
-        cancel: () => (canceled = true),
-        reset: () => {
-            clearTimeout(timer)
-            timer = setTimeout(runTask, delay)
-        },
+        reset: resetTask,
+        cancel: cancelTask,
     }
 }
 export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
@@ -199,11 +175,9 @@ export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
     return c
 }
 
-import anchorme from 'anchorme'
 import Services from '../extension/service'
-export function parseURL(string: string) {
-    return anchorme.list(string).map((x) => x.string)
-}
+import { blobToArrayBuffer } from '@dimensiondev/kit'
+export { parseURL } from '@masknet/shared'
 /**
  * !!!! Please use the Promise constructor if possible
  * If you don't understand https://groups.google.com/forum/#!topic/bluebird-js/mUiX2-vXW2s
@@ -236,5 +210,9 @@ export function assert(x: any, ...args: any): asserts x {
 }
 
 export function checkInputLengthExceed(name: string) {
-    return Array.from(name).length >= WALLET_OR_PERSONA_NAME_MAX_LEN
+    return name.length >= WALLET_OR_PERSONA_NAME_MAX_LEN
+}
+
+export function nonNullable<T>(x: undefined | null | T): x is T {
+    return x !== undefined && x !== null
 }

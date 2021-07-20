@@ -1,15 +1,21 @@
 import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
-import { ProviderType } from '../../web3/types'
+import { ChainId, ProviderType, NetworkType, GasNow } from '@masknet/web3-shared'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { CollectibleProvider, PortfolioProvider } from './types'
+import { isEqual } from 'lodash-es'
+import { connectGasNow } from './apis/gasnow'
+
+export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+selectedWalletAddress`, '', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
 
 /**
- * The address of the selected wallet
+ * The network type of the selected wallet
  */
-export const currentSelectedWalletAddressSettings = createGlobalSettings<string>(
-    `${PLUGIN_IDENTIFIER}+selectedWalletAddress`,
-    '',
+export const currentNetworkSettings = createGlobalSettings<NetworkType>(
+    `${PLUGIN_IDENTIFIER}+selectedWalletNetwork`,
+    NetworkType.Ethereum,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
@@ -18,7 +24,7 @@ export const currentSelectedWalletAddressSettings = createGlobalSettings<string>
 /**
  * The provider type of the selected wallet
  */
-export const currentSelectedWalletProviderSettings = createGlobalSettings<ProviderType>(
+export const currentProviderSettings = createGlobalSettings<ProviderType>(
     `${PLUGIN_IDENTIFIER}+selectedWalletProvider`,
     ProviderType.Maskbook,
     {
@@ -42,7 +48,7 @@ export const currentIsMetamaskLockedSettings = createGlobalSettings<boolean>(
  */
 export const currentPortfolioDataProviderSettings = createGlobalSettings<PortfolioProvider>(
     `${PLUGIN_IDENTIFIER}+portfolioProvider`,
-    PortfolioProvider.ZERION,
+    PortfolioProvider.DEBANK,
     {
         primary: () => i18n.t('plugin_wallet_settings_portfolio_data_source_primary'),
         secondary: () => i18n.t('plugin_wallet_settings_portfolio_data_source_secondary'),
@@ -60,3 +66,60 @@ export const currentCollectibleDataProviderSettings = createGlobalSettings<Colle
         secondary: () => i18n.t('plugin_wallet_settings_collectible_data_source_secondary'),
     },
 )
+
+/**
+ * Chain Id
+ */
+export const currentChainIdSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+chainId`, ChainId.Mainnet, {
+    primary: () => i18n.t('settings_choose_eth_network'),
+    secondary: () => 'This only affects the built-in wallet.',
+})
+
+/**
+ * Block number
+ */
+export const currentBlockNumberSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+blockNumber`, 0, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+/**
+ * Balance
+ */
+export const currentBalanceSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+balance`, '0', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+/**
+ * Nonce
+ */
+export const currentNonceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+nonce`, 0, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+/**
+ * Gas Price
+ */
+export const currentGasPriceSettings = createGlobalSettings<number>(
+    `${PLUGIN_IDENTIFIER}+gasPrice`,
+    0,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+    (a: number, b: number) => isEqual(a, b),
+)
+
+/**
+ * Gas Now
+ */
+export const currentGasNowSettings = createGlobalSettings<GasNow | null>(
+    `${PLUGIN_IDENTIFIER}+gasNow`,
+    null,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+    (a: GasNow | null, b: GasNow | null) => isEqual(a, b),
+)
+
+try {
+    connectGasNow()
+} catch {}

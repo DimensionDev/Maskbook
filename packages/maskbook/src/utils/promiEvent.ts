@@ -1,7 +1,7 @@
 import { EventIterator } from 'event-iterator'
 import PromiEvent from 'promievent'
 import type { PromiEvent as PromiEventW3, TransactionReceipt } from 'web3-core'
-import { TransactionEventType } from '../web3/types'
+import { TransactionEventType } from '@masknet/web3-shared'
 
 export enum StageType {
     TRANSACTION_HASH = 0,
@@ -81,14 +81,14 @@ export function promiEventToIterator<T extends string | TransactionReceipt>(
             })
             stopIfNeeded(StageType.TRANSACTION_HASH)
         })
-        ev.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+        ev.on(TransactionEventType.RECEIPT, (receipt) => {
             queue.push({
                 type: StageType.RECEIPT,
                 receipt,
             })
             stopIfNeeded(StageType.RECEIPT)
         })
-        ev.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+        ev.on(TransactionEventType.CONFIRMATION, (no, receipt) => {
             queue.push({
                 type: StageType.CONFIRMATION,
                 no,

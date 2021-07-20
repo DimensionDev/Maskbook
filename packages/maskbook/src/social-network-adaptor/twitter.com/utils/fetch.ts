@@ -12,7 +12,7 @@ import {
     isTypedMessageEmpty,
     isTypedMessageText,
     TypedMessageText,
-} from '../../../protocols/typed-message'
+} from '@masknet/shared'
 
 /**
  * @example
@@ -112,7 +112,10 @@ export const postIdParser = (node: HTMLElement) => {
                 node.closest('article > div')?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
             ),
         )
-        return idNode ? parseId(idNode.href) : parseId(location.href)
+        const isRetweet = !!node.querySelector('[data-testid=socialContext]')
+        const pid = idNode ? parseId(idNode.href) : parseId(location.href)
+        // You can't retweet a tweet or a retweet, but only cancel retweeting
+        return isRetweet ? `retweet:${pid}` : pid
     }
 }
 
@@ -124,8 +127,8 @@ export const postNameParser = (node: HTMLElement) => {
 
         // type 1:
         // normal tweet
-        const anchorElement = tweetElement.children[1]?.querySelector<HTMLAnchorElement>('a[data-focusable="true"]')
-        const nameInUniqueAnchorTweet = anchorElement ? serializeToText(anchorElement) : ''
+        const anchorElement = tweetElement.querySelectorAll<HTMLAnchorElement>('a[role="link"]')[1]
+        const nameInUniqueAnchorTweet = anchorElement?.innerText
 
         // type 2:
         const nameInDoubleAnchorsTweet = Array.from(
@@ -205,9 +208,11 @@ export const postContentMessageParser = (node: HTMLElement) => {
         } else if (node instanceof HTMLImageElement) {
             const image = node
             const src = image.getAttribute('src')
-            const matched = src?.match(/emoji\/v2\/svg\/([\d\w]+)\.svg/)
-            if (matched && matched[1])
-                return makeTypedMessageText(String.fromCodePoint(Number.parseInt(`0x${matched[1]}`, 16)))
+            const matched = src?.match(/emoji\/v2\/svg\/([\d\w\-]+)\.svg/)
+            if (matched && matched[1]) {
+                const codePoints = matched[1].split('-').map((x) => Number.parseInt(`0x${x}`, 16))
+                return makeTypedMessageText(String.fromCodePoint(...codePoints))
+            }
             return makeTypedMessageEmpty()
         } else if (node.childNodes.length) {
             const flattened = flattenDeep(Array.from(node.childNodes).map(make))

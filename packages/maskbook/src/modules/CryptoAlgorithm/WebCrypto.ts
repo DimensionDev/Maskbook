@@ -44,7 +44,7 @@ export const WebCryptoMethods: WebCryptoSupportedMethods = {
                 throw new TypeError('Expect PBKDF2UnknownKey to be a CryptoKey at runtime')
         const aes = await crypto.subtle.deriveKey(
             { name: 'PBKDF2', salt, iterations, hash },
-            (pbkdf as unknown) as CryptoKey,
+            pbkdf as unknown as CryptoKey,
             { name: aes_algr, length: aes_length },
             true,
             ['encrypt', 'decrypt'],
@@ -57,7 +57,7 @@ export const WebCryptoMethods: WebCryptoSupportedMethods = {
     async import_pbkdf2(seed) {
         const key = await crypto.subtle.importKey('raw', seed, 'PBKDF2', false, ['deriveBits', 'deriveKey'])
         // In the WebCrypto spec, it is not exportable. We choose CryptoKey as our PBKDF2UnknownKey
-        return ((key as CryptoKey) as unknown) as PBKDF2UnknownKey
+        return key as CryptoKey as unknown as PBKDF2UnknownKey
     },
     async aes_to_raw(aes, name: AESName = 'AES-GCM', length: 256 = 256) {
         const cryptoKey = await crypto.subtle.importKey('jwk', aes, { name, length } as AesKeyAlgorithm, true, [
@@ -69,6 +69,6 @@ export const WebCryptoMethods: WebCryptoSupportedMethods = {
         const cryptoKey = await crypto.subtle.importKey('raw', raw, { name, length } as AesKeyAlgorithm, true, [
             ...getKeyParameter('aes')[0],
         ])
-        return (((await crypto.subtle.exportKey('jwk', cryptoKey)) as JsonWebKey) as unknown) as AESJsonWebKey
+        return (await crypto.subtle.exportKey('jwk', cryptoKey)) as JsonWebKey as unknown as AESJsonWebKey
     },
 }

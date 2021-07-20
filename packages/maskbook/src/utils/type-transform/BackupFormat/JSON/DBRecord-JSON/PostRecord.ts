@@ -1,9 +1,9 @@
-import type { PostRecord, RecipientReason, RecipientDetail } from '../../../../../database/post'
+import type { PostRecord, RecipientDetail, RecipientReason } from '../../../../../database/post'
 import type { BackupJSONFileLatest } from '../latest'
 import type { RecipientReasonJSON } from '../version-2'
-import { Identifier, GroupIdentifier, PostIVIdentifier, ProfileIdentifier } from '../../../../../database/type'
+import { GroupIdentifier, Identifier, PostIVIdentifier, ProfileIdentifier } from '../../../../../database/type'
 import { IdentifierMap } from '../../../../../database/IdentifierMap'
-import { unreachable } from '../../../../utils'
+import { unreachable } from '@dimensiondev/kit'
 
 export function PostRecordToJSONFormat(post: PostRecord): BackupJSONFileLatest['posts'][0] {
     return {
@@ -12,15 +12,14 @@ export function PostRecordToJSONFormat(post: PostRecord): BackupJSONFileLatest['
         identifier: post.identifier.toText(),
         postBy: post.postBy.toText(),
         recipientGroups: post.recipientGroups.map((x) => x.toText()),
-        recipients: Array.from(post.recipients).map(([identifier, detail]): [
-            string,
-            { reason: RecipientReasonJSON[] },
-        ] => [
-            identifier.toText(),
-            {
-                reason: Array.from(detail.reason).map<RecipientReasonJSON>(RecipientReasonToJSON),
-            },
-        ]),
+        recipients: Array.from(post.recipients).map(
+            ([identifier, detail]): [string, { reason: RecipientReasonJSON[] }] => [
+                identifier.toText(),
+                {
+                    reason: Array.from(detail.reason).map<RecipientReasonJSON>(RecipientReasonToJSON),
+                },
+            ],
+        ),
     }
 }
 

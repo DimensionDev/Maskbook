@@ -1,8 +1,7 @@
+import { useI18N, I18NFunction, I18NStrings } from '../../../utils'
 import { PreDefinedVirtualGroupNames, GroupIdentifier } from '../../../database/type'
 import type { Group, Profile } from '../../../database'
 import { useFriendsList, useMyIdentities } from '../../DataSource/useActivatedUI'
-import type { I18NStrings } from '../../../utils/i18n-next'
-import { useI18N, I18NFunction } from '../../../utils/i18n-next-ui'
 
 function resolveSpecialGroupName(t: I18NFunction, group: Group, knownPeople: Profile[]): string {
     let owner: string = group.identifier.virtualGroupOwner || 'Unknown'

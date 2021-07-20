@@ -1,4 +1,4 @@
-import type { ChainId } from '../../../web3/types'
+import type { ChainId, TransactionStatusType } from '@masknet/web3-shared'
 
 export interface ERC20TokenRecord {
     /** contract address */
@@ -95,6 +95,24 @@ export interface PhraseRecord {
     updatedAt: Date
 }
 
+export interface TransactionRecord {
+    /** A hash labels a transaction uniquely */
+    hash: string
+    /** Status type of transaction: SUCCEED, FAILED or NOT_DEPEND */
+    status: TransactionStatusType
+}
+
+export interface TransactionChunkRecord {
+    /** The transaction owner's address */
+    address: string
+    /** The chain id of network */
+    chain_id: ChainId
+    /** A chunk of recent transactions */
+    transactions: TransactionRecord[]
+    createdAt: Date
+    updatedAt: Date
+}
+
 export interface ERC20TokenRecordInDatabase extends ERC20TokenRecord {}
 
 export interface ERC721TokenRecordInDatabase extends ERC721TokenRecord {
@@ -108,3 +126,7 @@ export interface ERC1155TokenRecordInDatabase extends ERC1155TokenRecord {
 export interface WalletRecordInDatabase extends WalletRecord {}
 
 export interface PhraseRecordInDatabase extends PhraseRecord {}
+
+export interface TransactionChunkRecordInDatabase extends TransactionChunkRecord {
+    record_id: string
+}

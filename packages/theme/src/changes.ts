@@ -4,7 +4,7 @@ export const Font: ThemeOptions = {
     typography: {
         // TODO: lang=JP? offer different font list for different lang target?
         // Firefox doesn't support "system-ui" so we need fallback
-        fontFamily: `system-ui, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Helvetica, Arial,
+        fontFamily: `PingFang SC, system-ui, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Helvetica, Arial,
         PingFang TC, Hiragino Sans TC, Source Han Sans TC, Noto Sans CJK TC, Microsoft JhengHei UI, Microsoft JhengHei, sans-serif;`,
     },
 }
@@ -14,6 +14,25 @@ export const Font: ThemeOptions = {
  */
 export const Breakpoints: ThemeOptions = {
     breakpoints: { values: { xs: 0, sm: 600, md: 960, lg: 1440, xl: 1920 } },
+}
+
+/**
+ * ? Paper shadow should follow Mask UI
+ */
+export const Shadows: ThemeOptions = {
+    components: {
+        MuiPaper: {
+            styleOverrides: {},
+            variants: [
+                {
+                    props: { variant: 'outlined' },
+                    style: {
+                        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.04)',
+                    },
+                },
+            ],
+        },
+    },
 }
 
 /**
@@ -66,7 +85,10 @@ export const BorderRadius: ThemeOptions = {
  * ? No auto text-transform will be applied in this theme
  */
 export const NoAutoTextTransform: ThemeOptions = {
-    components: { MuiButton: { styleOverrides: { root: { textTransform: 'none' } } } },
+    components: {
+        MuiButton: { styleOverrides: { root: { textTransform: 'initial' } } },
+        MuiTab: { styleOverrides: { root: { textTransform: 'initial' } } },
+    },
 }
 
 /**

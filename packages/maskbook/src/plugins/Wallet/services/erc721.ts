@@ -1,19 +1,22 @@
 import Fuse from 'fuse.js'
 import { EthereumAddress } from 'wallet.ts'
 import { omit } from 'lodash-es'
+import {
+    ERC721TokenAssetDetailed,
+    ERC721TokenDetailed,
+    formatEthereumAddress,
+    isSameAddress,
+} from '@masknet/web3-shared'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
-import { formatChecksumAddress } from '../formatter'
-import { WalletRecordIntoDB, ERC721TokenRecordIntoDB, getWalletByAddress, ERC721TokenRecordOutDB } from './helpers'
-import type { ERC721TokenAssetDetailed, ERC721TokenDetailed } from '../../../web3/types'
+import { ERC721TokenRecordIntoDB, ERC721TokenRecordOutDB, getWalletByAddress, WalletRecordIntoDB } from './helpers'
 import type { ERC721TokenRecord } from '../database/types'
-import { isSameAddress } from '../../../web3/helpers'
 import { queryTransactionPaged } from '../../../database/helpers/pagination'
 
 export async function getERC721Tokens() {
-    const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC721Token', 'Wallet')
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC721Token')
     return t.objectStore('ERC721Token').getAll()
 }
 
@@ -57,7 +60,7 @@ export async function addERC721Token(token: ERC721TokenAssetDetailed) {
 
 export async function removeERC721Token(token: PartialRequired<ERC721TokenDetailed, 'address'>) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC721Token', 'Wallet')
-    await t.objectStore('ERC721Token').delete(formatChecksumAddress(token.address))
+    await t.objectStore('ERC721Token').delete(formatEthereumAddress(token.address))
     WalletMessages.events.erc721TokensUpdated.sendToAll(undefined)
 }
 
@@ -66,10 +69,10 @@ export async function trustERC721Token(
     token: PartialRequired<ERC721TokenDetailed, 'address' | 'tokenId'>,
 ) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC721Token', 'Wallet')
-    const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
+    const wallet = await getWalletByAddress(t, formatEthereumAddress(address))
     assert(wallet)
     let updated = false
-    const key = `${formatChecksumAddress(token.address)}_${token.tokenId}`
+    const key = `${formatEthereumAddress(token.address)}_${token.tokenId}`
     if (!wallet.erc721_token_whitelist.has(key)) {
         wallet.erc721_token_whitelist.add(key)
         updated = true
@@ -89,10 +92,10 @@ export async function blockERC721Token(
     token: PartialRequired<ERC721TokenDetailed, 'address' | 'tokenId'>,
 ) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC721Token', 'Wallet')
-    const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
+    const wallet = await getWalletByAddress(t, formatEthereumAddress(address))
     assert(wallet)
     let updated = false
-    const key = `${formatChecksumAddress(token.address)}_${token.tokenId}`
+    const key = `${formatEthereumAddress(token.address)}_${token.tokenId}`
     if (wallet.erc721_token_whitelist.has(key)) {
         wallet.erc721_token_whitelist.delete(key)
         updated = true

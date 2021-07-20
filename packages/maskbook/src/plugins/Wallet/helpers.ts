@@ -6,9 +6,7 @@ import type {
     ERC1155TokenRecord,
     PhraseRecord,
 } from './database/types'
-import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from './settings'
-import { isSameAddress } from '../../web3/helpers'
-import { CurrencyType, ProviderType } from '../../web3/types'
+import { isSameAddress, CurrencyType } from '@masknet/web3-shared'
 import type { Asset } from './types'
 
 function serializeWalletRecord(record: WalletRecord) {
@@ -71,11 +69,6 @@ export function ERC1155TokenComparer(a: ERC1155TokenRecord | null, b: ERC1155Tok
 export function ERC1155TokenArrayComparer(a: ERC1155TokenRecord[], b: ERC1155TokenRecord[]) {
     if (a.length !== b.length) return false
     return a.every((token, index) => ERC1155TokenComparer(token, b[index]))
-}
-
-export function selectMaskbookWallet(wallet: WalletRecord) {
-    currentSelectedWalletAddressSettings.value = wallet.address
-    currentSelectedWalletProviderSettings.value = ProviderType.Maskbook
 }
 
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)

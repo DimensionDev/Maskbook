@@ -1,3 +1,5 @@
+import '../utils/debug/general'
+import '../utils/debug/ui'
 import Services from '../extension/service'
 import { untilDomLoaded } from '../utils/dom'
 import { Flags } from '../utils/flags'
@@ -7,14 +9,13 @@ import { managedStateCreator } from './utils'
 import { delay } from '../utils/utils'
 import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
-import { ECKeyIdentifier, Identifier } from '@dimensiondev/maskbook-shared'
+import { ECKeyIdentifier, Identifier } from '@masknet/shared'
 import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
+import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
+import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
+import { createPluginHost } from '../plugin-infra/host'
+import { definedSocialNetworkUIs } from './define'
 
-const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
-export const definedSocialNetworkUIs: ReadonlyMap<
-    string,
-    SocialNetworkUI.DeferredDefinition
-> = definedSocialNetworkUIsLocal
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     automation: {},
@@ -31,15 +32,14 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     injection: {},
     networkIdentifier: 'localhost',
     shouldActivate: () => false,
-    utils: {},
+    utils: { createPostContext: null! },
     notReadyForProduction: true,
+    declarativePermissions: { origins: [] },
 }
 export let globalUIState: Readonly<SocialNetworkUI.State> = {} as any
 
-export async function activateSocialNetworkUI(): Promise<void> {
+export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.DeferredDefinition): Promise<void> {
     assertNotEnvironment(Environment.ManifestBackground)
-    const ui_deferred = [...definedSocialNetworkUIs.values()].find((x) => x.shouldActivate(location))
-    if (!ui_deferred) return
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
     const ui = (activatedSocialNetworkUI = await loadSocialNetworkUI(ui_deferred.networkIdentifier))
@@ -48,14 +48,14 @@ export async function activateSocialNetworkUI(): Promise<void> {
 
     const abort = new AbortController()
     const { signal } = abort
-    if (module.hot) {
+    if (import.meta.webpackHot) {
         console.log('SNS adaptor HMR enabled.')
         ui_deferred.hotModuleReload?.(async (newDefinition) => {
             console.log('SNS adaptor updated. Uninstalling current adaptor.')
             abort.abort()
             await delay(200)
             definedSocialNetworkUIsResolved.set(ui_deferred.networkIdentifier, newDefinition)
-            activateSocialNetworkUI()
+            activateSocialNetworkUIInner(ui_deferred)
         })
     }
     await untilDomLoaded()
@@ -73,12 +73,13 @@ export async function activateSocialNetworkUI(): Promise<void> {
 
     ui.collecting.profilesCollector?.(signal)
     ui.injection.pageInspector?.(signal)
-    if (Flags.toolbar_enabled) ui.injection.toolbar?.(signal)
     if (Flags.toolbox_enabled) ui.injection.toolBoxInNavBar?.(signal)
     ui.injection.setupPrompt?.(signal)
     ui.injection.newPostComposition?.start?.(signal)
     ui.injection.searchResult?.(signal)
     ui.injection.userBadge?.(signal)
+
+    startPluginSNSAdaptor(getCurrentSNSNetwork(ui.networkIdentifier), createPluginHost(signal))
 
     function i18nOverwrite() {
         const i18n = ui.customization.i18nOverwrite || {}
@@ -155,16 +156,12 @@ export async function loadSocialNetworkUI(identifier: string): Promise<SocialNet
     if (!define) throw new Error('SNS adaptor not found')
     const ui = (await define.load()).default
     definedSocialNetworkUIsResolved.set(identifier, ui)
-    if (module.hot) {
+    if (import.meta.webpackHot) {
         define.hotModuleReload?.((ui) => definedSocialNetworkUIsResolved.set(identifier, ui))
     }
     return ui
 }
-
-export function defineSocialNetworkUI(UI: SocialNetworkUI.DeferredDefinition) {
-    if (UI.notReadyForProduction) {
-        if (process.env.build === 'stable' && process.env.NODE_ENV === 'production') return UI
-    }
-    definedSocialNetworkUIsLocal.set(UI.networkIdentifier, UI)
-    return UI
+export function loadSocialNetworkUISync(identifier: string): SocialNetworkUI.Definition | null {
+    if (definedSocialNetworkUIsResolved.has(identifier)) return definedSocialNetworkUIsResolved.get(identifier)!
+    return null
 }

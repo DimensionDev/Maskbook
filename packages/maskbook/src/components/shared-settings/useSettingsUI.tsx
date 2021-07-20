@@ -1,41 +1,38 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '../../utils/hooks/useValueRef'
-import { useMatchXS } from '../../utils/hooks/useMatchXS'
-import { texts } from '../../settings/createSettings'
+import { useValueRef } from '@masknet/shared'
+import { getEnumAsArray } from '@dimensiondev/kit'
 import {
     ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
-    Switch,
-    Select,
-    MenuItem,
-    makeStyles,
     ListItemIcon,
+    ListItemSecondaryAction,
+    ListItemText,
+    makeStyles,
+    MenuItem,
+    Select,
     SelectProps,
-    createStyles,
+    Switch,
 } from '@material-ui/core'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
+import { texts } from '../../settings/createSettings'
+import { useMatchXS } from '../../utils'
 import { useStylesExtends } from '../custom-ui-helper'
-import { getEnumAsArray } from '../../utils/enum'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        container: { listStyleType: 'none', width: '100%' },
-        secondaryAction: { paddingLeft: theme.spacing(2) },
-        listItemText: {
-            fontWeight: 500,
-        },
-        listItemIcon: {
-            marginLeft: 0,
-        },
-        listItemActionMobile: {
-            maxWidth: '60%',
-        },
-        arrowIcon: {
-            color: theme.palette.text.primary,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    container: { listStyleType: 'none', width: '100%' },
+    secondaryAction: { paddingLeft: theme.spacing(2) },
+    listItemText: {
+        fontWeight: 500,
+    },
+    listItemIcon: {
+        marginLeft: 0,
+    },
+    listItemActionMobile: {
+        maxWidth: '60%',
+    },
+    arrowIcon: {
+        color: theme.palette.text.primary,
+    },
+}))
 
 function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     const { value, primary, secondary } = props
@@ -80,7 +77,7 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
     const currentValue = useValueRef(value)
     switch (typeof currentValue) {
         case 'boolean': {
-            const ref = (value as unknown) as ValueRef<boolean>
+            const ref = value as unknown as ValueRef<boolean>
             const change = () => void (ref.value = !ref.value)
             const ui = <Switch color="primary" edge="end" checked={currentValue} onClick={change} />
             const { primary, secondary } = withDefaultText(props)
@@ -164,13 +161,14 @@ function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectP
         }
         ref.value = value
     }
+
     return (
         <Select
             fullWidth
             variant="outlined"
-            {...selectProps}
             value={useValueRef(ref)}
-            onChange={(event) => change(event.target.value)}>
+            onChange={(event) => change(event.target.value)}
+            {...selectProps}>
             {enum_.map(({ key, value }) => (
                 <MenuItem value={String(value)} key={String(key)}>
                     {getText?.(value) ?? String(key)}
@@ -179,6 +177,7 @@ function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectP
         </Select>
     )
 }
+
 type useEnumSettingsParams<Q extends object> = [
     ref: ValueRef<Q[keyof Q]>,
     enumObject: Q,

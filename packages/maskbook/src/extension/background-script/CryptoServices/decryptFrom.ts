@@ -48,7 +48,6 @@ type Success = {
     iv: string
     decryptedPayloadForImage: Payload
     content: TypedMessage
-    rawContent: string
     through: SuccessThrough[]
     internal: boolean
 }
@@ -63,24 +62,25 @@ export type DecryptionProgress = Progress
 type ReturnOfDecryptPostContentWithProgress = AsyncGenerator<Failure | Progress | DebugInfo, Success | Failure, void>
 
 const successDecryptionCache = new Map<string, Success>()
-const makeSuccessResultF = (
-    cacheKey: string,
-    iv: string,
-    decryptedPayloadForImage: Payload,
-    cryptoProvider: typeof cryptoProviderTable[keyof typeof cryptoProviderTable],
-) => (rawEncryptedContent: string, through: Success['through']): Success => {
-    const success: Success = {
-        rawContent: rawEncryptedContent,
-        through,
-        iv,
-        decryptedPayloadForImage,
-        content: cryptoProvider.typedMessageParse(rawEncryptedContent),
-        type: 'success',
-        internal: false,
+const makeSuccessResultF =
+    (
+        cacheKey: string,
+        iv: string,
+        decryptedPayloadForImage: Payload,
+        cryptoProvider: typeof cryptoProviderTable[keyof typeof cryptoProviderTable],
+    ) =>
+    (rawEncryptedContent: string, through: Success['through']): Success => {
+        const success: Success = {
+            through,
+            iv,
+            decryptedPayloadForImage,
+            content: cryptoProvider.typedMessageParse(rawEncryptedContent),
+            type: 'success',
+            internal: false,
+        }
+        successDecryptionCache.set(cacheKey, success)
+        return success
     }
-    successDecryptionCache.set(cacheKey, success)
-    return success
-}
 
 function makeProgress(
     progress: Exclude<Progress['progress'], 'intermediate_success' | 'iv_decrypted' | 'payload_decrypted'> | Success,

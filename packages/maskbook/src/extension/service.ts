@@ -9,7 +9,7 @@ import {
     EventBasedChannel,
 } from 'async-call-rpc/full'
 import { isEnvironment, Environment, WebExtensionMessage, MessageTarget } from '@dimensiondev/holoflows-kit'
-import { serializer } from '@dimensiondev/maskbook-shared'
+import { serializer } from '@masknet/shared'
 import { getLocalImplementation } from '../utils/getLocalImplementation'
 
 const SERVICE_HMR_EVENT = 'service-hmr'
@@ -32,12 +32,15 @@ export const Services = {
     Helper: add(() => import('./background-script/HelperService'), 'Helper'),
     Provider: add(() => import('./background-script/ProviderService'), 'Provider'),
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
+    SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
+    Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
+    ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
 }
 export default Services
 export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', true)
 
-if (module.hot && isEnvironment(Environment.ManifestBackground)) {
-    module.hot.accept(
+if (import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
+    import.meta.webpackHot.accept(
         [
             './background-script/CryptoService',
             './background-script/IdentityService',
@@ -47,6 +50,9 @@ if (module.hot && isEnvironment(Environment.ManifestBackground)) {
             './background-script/HelperService',
             './background-script/ProviderService',
             './background-script/EthereumService',
+            './background-script/SettingsService',
+            './background-script/ThirdPartyPlugin',
+            './background-script/SocialNetworkService',
             './service-generator',
         ],
         () => document.dispatchEvent(new Event(SERVICE_HMR_EVENT)),
@@ -66,7 +72,7 @@ function add<T>(impl: () => Promise<T>, key: string, generator = false): T {
     const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
     const load = () => getLocalImplementation(`Services.${key}`, impl, channel)
     const localImplementation = load()
-    isBackground && module.hot && document.addEventListener(SERVICE_HMR_EVENT, load)
+    isBackground && import.meta.webpackHot && document.addEventListener(SERVICE_HMR_EVENT, load)
     const service = RPC(localImplementation, {
         key,
         serializer,

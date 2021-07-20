@@ -10,11 +10,18 @@ import { exclusiveTasks } from '../content-script/tasks'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { saveAsFileFromBuffer } from './HelperService'
 import type { DashboardRoute } from '../options-page/Route'
-export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
+export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
 export * from './WelcomeServices/restoreBackup'
-import type { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
+import {
+    BackupJSONFileLatest,
+    getBackupPreviewInfo,
+    UpgradeBackupJSONFile,
+} from '../../utils/type-transform/BackupFormat/JSON/latest'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+import { decompressBackupFile, extraPermissions, requestPermissions } from '../../utils'
+import { v4 as uuid } from 'uuid'
+import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
 assertEnvironment(Environment.ManifestBackground)
 
 /**
@@ -81,9 +88,10 @@ async function createBackupInfo<T>(obj: T) {
     const string = typeof obj === 'string' ? obj : JSON.stringify(obj)
     const buffer = encodeText(string)
     const date = new Date()
-    const today = `${date.getFullYear()}-${(date.getMonth() + 1)
+    const today = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
+        .getDate()
         .toString()
-        .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
+        .padStart(2, '0')}`
     const fileName = `maskbook-keystore-backup-${today}.json`
     const mimeType = 'application/json'
     return { buffer, mimeType, fileName }
@@ -96,6 +104,33 @@ export async function openOptionsPage(route?: DashboardRoute, search?: string) {
 }
 
 export { createPersonaByMnemonic } from '../../database'
+
+export function parseBackupStr(str: string) {
+    const json = UpgradeBackupJSONFile(decompressBackupFile(str))
+    if (json) {
+        const info = getBackupPreviewInfo(json)
+        const id = uuid()
+        setUnconfirmedBackup(id, json)
+        return { info, id }
+    } else {
+        return null
+    }
+}
+
+export async function checkPermissionsAndRestore(id: string) {
+    const json = await getUnconfirmedBackup(id)
+    if (json) {
+        const permissions = await extraPermissions(json.grantedHostPermissions)
+        if (permissions.length) {
+            const granted = await requestPermissions(permissions)
+            if (!granted) return
+        }
+
+        await restoreBackup(json)
+    }
+}
+
+// permissions
 export function queryPermission(permission: browser.permissions.Permissions) {
     return browser.permissions.contains(permission)
 }

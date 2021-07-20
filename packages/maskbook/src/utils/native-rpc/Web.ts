@@ -1,9 +1,9 @@
 import type { WebviewAPIs } from './types'
 import Services from '../../extension/service'
-import { definedSocialNetworkWorkers } from '../../social-network/worker'
+import { definedSocialNetworkWorkers } from '../../social-network/define'
 import { launchPageSettings } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
-import { unreachable } from '../utils'
+import { unreachable } from '@dimensiondev/kit'
 
 export const WebviewAPI: WebviewAPIs = {
     web_echo: async (arg) => arg,

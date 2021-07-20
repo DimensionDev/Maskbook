@@ -1,4 +1,9 @@
-import type { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import { ProviderType } from '@masknet/web3-shared'
+import {
+    BackupJSONFileLatest,
+    BackupPreview,
+    getBackupPreviewInfo,
+} from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { queryPersonasDB, queryProfilesDB } from '../../../database/Persona/Persona.db'
 import { queryUserGroupsDatabase } from '../../../database/group'
 import { queryPostsDB } from '../../../database/post'
@@ -9,8 +14,8 @@ import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupForm
 import { ProfileIdentifier, PersonaIdentifier, Identifier } from '../../../database/type'
 import { getWallets } from '../../../plugins/Wallet/services'
 import { WalletRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
-import { ProviderType } from '../../../web3/types'
 
+export type { BackupPreview } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 export interface BackupOptions {
     noPosts: boolean
     noUserGroups: boolean
@@ -97,4 +102,9 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         const wallets_ = (await getWallets(ProviderType.Maskbook)).map(WalletRecordToJSONFormat)
         wallets.push(...wallets_)
     }
+}
+
+export async function generateBackupPreviewInfo(opts: Partial<BackupOptions> = {}): Promise<BackupPreview> {
+    const json = await generateBackupJSON(opts)
+    return getBackupPreviewInfo(json)
 }

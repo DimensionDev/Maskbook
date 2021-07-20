@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useInterval } from 'react-use'
-import { Appearance } from '../../../settings/types'
+import { Appearance } from '@masknet/theme'
 import { getMaskbookTheme } from '../../../utils/theme'
 import { isDarkTheme } from '../../../utils/theme-tools'
 export function useThemeFacebook() {

@@ -2,35 +2,35 @@ import { omit } from 'lodash-es'
 import type { IDBPSafeTransaction } from '../../../database/helpers/openDB'
 import type { WalletDB } from '../database/Wallet.db'
 import type {
-    WalletRecord,
+    ERC1155TokenRecord,
+    ERC1155TokenRecordInDatabase,
     ERC20TokenRecord,
-    WalletRecordInDatabase,
     ERC20TokenRecordInDatabase,
     ERC721TokenRecord,
     ERC721TokenRecordInDatabase,
-    ERC1155TokenRecord,
-    ERC1155TokenRecordInDatabase,
     PhraseRecord,
     PhraseRecordInDatabase,
+    TransactionChunkRecord,
+    TransactionChunkRecordInDatabase,
+    WalletRecord,
+    WalletRecordInDatabase,
 } from '../database/types'
-import { resolveChainId } from '../../../web3/pipes'
-import { formatChecksumAddress } from '../formatter'
-import { ChainId } from '../../../web3/types'
+import { ChainId, formatEthereumAddress, getChainIdFromName } from '@masknet/web3-shared'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
-    const record = await t.objectStore('Wallet').get(formatChecksumAddress(address))
+    const record = await t.objectStore('Wallet').get(formatEthereumAddress(address))
     return record ? WalletRecordOutDB(record) : null
 }
 
 export function WalletRecordIntoDB(x: WalletRecord) {
     const record = x as WalletRecordInDatabase
-    record.address = formatChecksumAddress(x.address)
+    record.address = formatEthereumAddress(x.address)
     return record
 }
 
 export function WalletRecordOutDB(x: WalletRecordInDatabase) {
     const record = x as WalletRecord
-    record.address = formatChecksumAddress(record.address)
+    record.address = formatEthereumAddress(record.address)
     record.erc20_token_whitelist = x.erc20_token_whitelist ?? new Set()
     record.erc20_token_blacklist = x.erc20_token_blacklist ?? new Set()
     record.erc721_token_whitelist = x.erc721_token_whitelist ?? new Set()
@@ -49,7 +49,7 @@ export function PhraseRecordOutDB(x: PhraseRecordInDatabase) {
 }
 
 export function ERC20TokenRecordIntoDB(x: ERC20TokenRecord) {
-    x.address = formatChecksumAddress(x.address)
+    x.address = formatEthereumAddress(x.address)
     return x as ERC20TokenRecordInDatabase
 }
 
@@ -58,9 +58,9 @@ export function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
     {
         // fix: network has been renamed to chainId
         const record_ = record as any
-        if (!record.chainId) record.chainId = resolveChainId(record_.network) ?? ChainId.Mainnet
+        if (!record.chainId) record.chainId = getChainIdFromName(record_.network) ?? ChainId.Mainnet
     }
-    record.address = formatChecksumAddress(record.address)
+    record.address = formatEthereumAddress(record.address)
     return record
 }
 
@@ -68,7 +68,7 @@ export function ERC721TokenRecordIntoDB(x: ERC721TokenRecord) {
     const record: ERC721TokenRecordInDatabase = {
         ...x,
         // NFT cannot be divided and store each token separately
-        record_id: `${formatChecksumAddress(x.address)}_${x.tokenId}`,
+        record_id: `${formatEthereumAddress(x.address)}_${x.tokenId}`,
     }
     return record
 }
@@ -82,12 +82,25 @@ export function ERC1155TokenRecordIntoDB(x: ERC1155TokenRecord) {
     const record: ERC1155TokenRecordInDatabase = {
         ...x,
         // NFT cannot be divided and store each token separately
-        record_id: `${formatChecksumAddress(x.address)}_${x.tokenId}`,
+        record_id: `${formatEthereumAddress(x.address)}_${x.tokenId}`,
     }
     return record
 }
 
 export function ERC1155TokenRecordOutDB(x: ERC1155TokenRecordInDatabase) {
     const record: ERC1155TokenRecord = omit(x, 'record_id')
+    return record
+}
+
+export function TransactionChunkRecordIntoDB(x: TransactionChunkRecord) {
+    const record: TransactionChunkRecordInDatabase = {
+        ...x,
+        record_id: `${x.chain_id}_${formatEthereumAddress(x.address)}`,
+    }
+    return record
+}
+
+export function TransactionChunkRecordOutDB(x: TransactionChunkRecordInDatabase) {
+    const record: TransactionChunkRecord = omit(x, 'record_id')
     return record
 }

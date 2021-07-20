@@ -1,14 +1,18 @@
-import type { Services as ServiceType } from '../../maskbook/dist/src/extension/service'
-import type { MaskMessage } from '../../maskbook/dist/src/utils/messages'
+// This file includes the API bridge to the Mask Network extension
+// In isolated mode, set up at ./initialization/isolated_bridge
+// In intergrated mode, set up at /packages/maskbook/src/extension/dashboard/index
+
+import type { Services as ServiceType } from '../../maskbook/dist/extension/service'
+import type { MaskMessage } from '../../maskbook/dist/utils/messages'
 export let Services: typeof ServiceType = null!
 export let Messages: typeof MaskMessage = null!
 export let PluginServices: PluginServices = null!
 export let PluginMessages: PluginMessages = null!
 export interface PluginServices {
-    Wallet: typeof import('../../maskbook/dist/src/plugins/Wallet/messages').WalletRPC
+    Wallet: typeof import('../../maskbook/dist/plugins/Wallet/messages').WalletRPC
 }
 export interface PluginMessages {
-    Wallet: typeof import('../../maskbook/dist/src/plugins/Wallet/messages').WalletMessages
+    Wallet: typeof import('../../maskbook/dist/plugins/Wallet/messages').WalletMessages
 }
 export function setService(x: typeof ServiceType) {
     Services = x

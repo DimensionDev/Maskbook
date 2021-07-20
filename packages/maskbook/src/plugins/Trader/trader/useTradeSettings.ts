@@ -1,4 +1,4 @@
-import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { useValueRef } from '@masknet/shared'
 import {
     currentTradeProviderSettings,
     getCurrentTradeProviderGeneralSettings,

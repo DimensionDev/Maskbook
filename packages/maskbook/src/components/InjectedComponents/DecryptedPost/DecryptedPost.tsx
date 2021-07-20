@@ -1,5 +1,8 @@
-import { useMemo, useState, useEffect, useReducer, Fragment } from 'react'
-import { delay, unreachable } from '../../../utils/utils'
+import { Fragment, useEffect, useMemo, useReducer, useState } from 'react'
+import { makeTypedMessageTuple, TypedMessageTuple } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
+
+import { delay } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
 import type { ProfileIdentifier } from '../../../database/type'
@@ -8,14 +11,12 @@ import type {
     FailureDecryption,
     SuccessDecryption,
 } from '../../../extension/background-script/CryptoServices/decryptFrom'
-import type { TypedMessage } from '../../../protocols/typed-message'
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
-import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwaiting'
-import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'
+import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
+import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
-import { usePostInfoDetails } from '../../DataSource/usePostInfo'
+import { usePostClaimedAuthor, usePostInfoDetails, usePostInfoSharedPublic } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { Err, Ok } from 'ts-results'
 import { or } from '../../custom-ui-helper'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 import type { Payload } from '../../../utils/type-transform/Payload'
@@ -49,7 +50,7 @@ function progressReducer(
 }
 
 export interface DecryptPostProps {
-    onDecrypted: (post: TypedMessage, raw: string) => void
+    onDecrypted: (post: TypedMessageTuple) => void
     whoAmI: ProfileIdentifier
     profiles: Profile[]
     alreadySelectedPreviously: Profile[]
@@ -63,15 +64,13 @@ export interface DecryptPostProps {
 }
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
-    const deconstructedPayload = usePostInfoDetails('postPayload')
-    const authorInPayload = deconstructedPayload
-        .andThen((x) => (x.version === -38 ? Ok(x.authorUserID) : Err.EMPTY))
-        .unwrapOr(undefined)
-    const current = usePostInfo()
-    const currentPostBy = usePostInfoDetails('postBy')
-    const decryptedPayloadForImage = usePostInfoDetails('decryptedPayloadForImage')
+    const deconstructedPayload = usePostInfoDetails.postPayload()
+    const authorInPayload = usePostClaimedAuthor()
+    const current = usePostInfo()!
+    const currentPostBy = usePostInfoDetails.postBy()
+    const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postBy = or(authorInPayload, currentPostBy)
-    const postMetadataImages = usePostInfoDetails('postMetadataImages')
+    const postMetadataImages = usePostInfoDetails.postMetadataImages()
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
     const Failed = props.failedComponent || DecryptPostFailed
@@ -98,9 +97,7 @@ export function DecryptPost(props: DecryptPostProps) {
     // pass 1:
     // decrypt post content and image attachments
     const decryptedPayloadForImageAlpha38 = decryptedPayloadForImage?.version === -38 ? decryptedPayloadForImage : null
-    const sharedPublic =
-        deconstructedPayload.andThen((x) => (x.version === -38 ? Ok(!!x.sharedPublic) : Err.EMPTY)).unwrapOr(false) ||
-        decryptedPayloadForImageAlpha38?.sharedPublic
+    const sharedPublic = usePostInfoSharedPublic() || decryptedPayloadForImageAlpha38?.sharedPublic
 
     useEffect(() => {
         const signal = new AbortController()
@@ -177,7 +174,7 @@ export function DecryptPost(props: DecryptPostProps) {
     const firstSucceedDecrypted = progress.find((p) => p.progress.type === 'success')
     useEffect(() => {
         if (firstSucceedDecrypted?.progress.type !== 'success') return
-        onDecrypted(firstSucceedDecrypted.progress.content, firstSucceedDecrypted.progress.rawContent)
+        onDecrypted(makeTypedMessageTuple([firstSucceedDecrypted.progress.content]))
     }, [firstSucceedDecrypted, onDecrypted])
     //#endregion
 

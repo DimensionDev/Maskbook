@@ -1,10 +1,9 @@
+import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import stringify from 'json-stable-stringify'
-import { createInternalSettings, createGlobalSettings } from '../../settings/createSettings'
-import { DataProvider, ZrxTradePool, TradeProvider } from './types'
-import { SLIPPAGE_TOLERANCE_DEFAULT, PLUGIN_IDENTIFIER } from './constants'
+import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
-import { unreachable } from '../../utils/utils'
-import { getEnumAsArray } from '../../utils/enum'
+import { PLUGIN_IDENTIFIER, SLIPPAGE_TOLERANCE_DEFAULT } from './constants'
+import { DataProvider, TradeProvider, ZrxTradePool } from './types'
 
 /**
  * The slippage tolerance of trader
@@ -18,9 +17,9 @@ export const currentSlippageTolerance = createGlobalSettings<number>(
 )
 
 /**
- * The default trending data provider
+ * The default data provider
  */
-export const currentTrendingDataProviderSettings = createGlobalSettings<DataProvider>(
+export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
     `${PLUGIN_IDENTIFIER}+dataProvider`,
     DataProvider.COIN_MARKET_CAP,
     {
@@ -55,6 +54,8 @@ const zrxSettings = createInternalSettings<string>(
 )
 const sushiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sushiswap`, '')
 const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sashimiswap`, '')
+const qucikswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
+const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+pancakeswap`, '')
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+balancer`, '')
 
 /**
@@ -70,6 +71,10 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return sushiswapSettings
         case TradeProvider.SASHIMISWAP:
             return sashimiswapSettings
+        case TradeProvider.QUICKSWAP:
+            return qucikswapSettings
+        case TradeProvider.PANCAKESWAP:
+            return pancakeswapSettings
         case TradeProvider.BALANCER:
             return balancerSettings
         default:

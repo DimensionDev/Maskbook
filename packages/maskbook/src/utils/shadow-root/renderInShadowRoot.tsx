@@ -1,16 +1,11 @@
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
-import { applyMaskColorVars } from '@dimensiondev/maskbook-theme'
+import { applyMaskColorVars } from '@masknet/theme'
 import { appearanceSettings } from '../../settings/settings'
 import { getMaskbookTheme } from '../theme'
-import {
-    createReactRootShadowedPartial,
-    disableJSSDisconnectedWarning,
-    setupPortalShadowRoot,
-} from '@dimensiondev/maskbook-shared'
+import { createReactRootShadowedPartial, disableJSSDisconnectedWarning, setupPortalShadowRoot } from '@masknet/shared'
 import { untilDomLoaded } from '../dom'
 import { Flags } from '../flags'
 import { MaskInShadow } from './MaskInShadow'
-export { useCurrentShadowRootStyles as useSheetsRegistryStyles } from '@dimensiondev/maskbook-shared'
 if (process.env.NODE_ENV === 'development') disableJSSDisconnectedWarning()
 
 const captureEvents: (keyof HTMLElementEventMap)[] = [
@@ -31,7 +26,8 @@ untilDomLoaded().then(() => {
     setupPortalShadowRoot({ mode: Flags.using_ShadowDOM_attach_mode }, captureEvents)
 })
 
-export const createReactRootShadowed = createReactRootShadowedPartial({
+// https://github.com/DimensionDev/Maskbook/issues/3265 with fast refresh or import order?
+const createReactRootShadowed_raw = createReactRootShadowedPartial({
     preventEventPropagationList: captureEvents,
     onHeadCreate(head) {
         const themeCSSVars = head.appendChild(document.createElement('style'))
@@ -50,3 +46,6 @@ export const createReactRootShadowed = createReactRootShadowedPartial({
         )
     },
 })
+export function createReactRootShadowed(...args: Parameters<typeof createReactRootShadowed_raw>) {
+    return createReactRootShadowed_raw(...args)
+}

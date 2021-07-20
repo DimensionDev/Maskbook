@@ -2,13 +2,13 @@
 const React = require('jsx-jsonml-devtools-renderer') as any
 import {
     TypedMessage,
-    TypedMessageCompound,
+    TypedMessageTuple,
     TypedMessageImage,
     TypedMessageText,
-    isTypedMessageCompound,
+    isTypedMessageTuple,
     isTypedMessageText,
     isTypedMessageImage,
-} from './types'
+} from '@masknet/shared'
 
 class TypedMessageFormatter {
     isTypedMessage(obj: unknown): obj is TypedMessage {
@@ -23,7 +23,7 @@ class TypedMessageFormatter {
         if (obj.type === 'empty') return false
         return true
     }
-    compound(obj: TypedMessageCompound) {
+    compound(obj: TypedMessageTuple) {
         return (
             <div style={{ maxWidth: '95vw', overflow: 'break-word' }}>
                 <ol>
@@ -61,7 +61,7 @@ class TypedMessageFormatter {
         return this.fields(obj)
     }
     body(obj: TypedMessage) {
-        if (isTypedMessageCompound(obj)) return this.compound(obj)
+        if (isTypedMessageTuple(obj)) return this.compound(obj)
         if (isTypedMessageText(obj)) return this.text(obj)
         if (isTypedMessageImage(obj)) return this.image(obj)
         return this.fields(obj)

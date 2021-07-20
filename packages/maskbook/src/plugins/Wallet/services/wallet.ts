@@ -1,23 +1,20 @@
 import * as bip39 from 'bip39'
-import { HDKey, EthereumAddress } from 'wallet.ts'
+import { EthereumAddress, HDKey } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import type { WalletRecord } from '../database/types'
 import { WalletMessages } from '../messages'
-import { buf2hex, hex2buf, assert } from '../../../utils/utils'
-import { ProviderType } from '../../../web3/types'
-import { resolveProviderName } from '../../../web3/pipes'
-import { formatChecksumAddress } from '../formatter'
+import { assert, buf2hex, hex2buf } from '../../../utils/utils'
+import { currySameAddress, formatEthereumAddress, ProviderType, resolveProviderName } from '@masknet/web3-shared'
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
-import { isSameAddress } from '../../../web3/helpers'
-import { currentSelectedWalletAddressSettings, currentSelectedWalletProviderSettings } from '../settings'
-import { selectMaskbookWallet } from '../helpers'
+import { currentAccountSettings, currentProviderSettings } from '../settings'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
+import { updateAccount } from './account'
 
 function sortWallet(a: WalletRecord, b: WalletRecord) {
-    const address = currentSelectedWalletAddressSettings.value
+    const address = currentAccountSettings.value
     if (a.address === address) return -1
     if (b.address === address) return 1
     if (a.updatedAt > b.updatedAt) return -1
@@ -33,9 +30,9 @@ export async function isEmptyWallets() {
     return count === 0
 }
 
-export async function getWallet(address: string = currentSelectedWalletAddressSettings.value) {
+export async function getWallet(address: string = currentAccountSettings.value) {
     const wallets = await getWallets()
-    return wallets.find((x) => isSameAddress(x.address, address))
+    return wallets.find(currySameAddress(address))
 }
 
 export async function getWallets(provider?: ProviderType) {
@@ -53,10 +50,8 @@ export async function getWallets(provider?: ProviderType) {
         )
     ).sort(sortWallet)
     if (provider === ProviderType.Maskbook) return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
-    if (provider === currentSelectedWalletProviderSettings.value) {
-        const address_ = currentSelectedWalletAddressSettings.value
-        return wallets.filter((x) => isSameAddress(x.address, address_))
-    }
+    if (provider === currentProviderSettings.value)
+        return wallets.filter(currySameAddress(currentAccountSettings.value))
     if (provider) return []
     return wallets
     async function makePrivateKey(record: WalletRecord) {
@@ -64,7 +59,7 @@ export async function getWallets(provider?: ProviderType) {
         if (!record._private_key_ && !record.mnemonic.length) return ''
         const { privateKey } = record._private_key_
             ? await recoverWalletFromPrivateKey(record._private_key_)
-            : await recoverWallet(record.mnemonic, record.passphrase)
+            : await recoverWalletFromMnemonicWords(record.mnemonic, record.passphrase, record.path)
         return `0x${buf2hex(privateKey)}`
     }
 }
@@ -78,7 +73,7 @@ export async function updateExoticWalletFromSource(
     for await (const cursor of walletStore) {
         const wallet = cursor.value
         {
-            if (updates.has(formatChecksumAddress(wallet.address))) {
+            if (updates.has(formatEthereumAddress(wallet.address))) {
                 await cursor.update(
                     WalletRecordIntoDB({
                         ...WalletRecordOutDB(cursor.value),
@@ -91,7 +86,7 @@ export async function updateExoticWalletFromSource(
         }
     }
     for (const address of updates.keys()) {
-        const wallet = await walletStore.get(formatChecksumAddress(address))
+        const wallet = await walletStore.get(formatEthereumAddress(address))
         if (wallet) continue
         await walletStore.put(
             WalletRecordIntoDB({
@@ -142,6 +137,7 @@ export function createMnemonicWords() {
 
 export async function importNewWallet(
     rec: PartialRequired<Omit<WalletRecord, 'id' | 'eth_balance' | 'createdAt' | 'updatedAt'>, 'name'>,
+    slient = false,
 ) {
     const { name, path, mnemonic = [], passphrase = '' } = rec
     const address = await getWalletAddress()
@@ -170,8 +166,13 @@ export async function importNewWallet(
         else if (!record_.mnemonic.length && !record_._private_key_)
             await t.objectStore('Wallet').put(WalletRecordIntoDB(record))
     }
-    WalletMessages.events.walletsUpdated.sendToAll(undefined)
-    selectMaskbookWallet(record)
+    if (!slient) {
+        WalletMessages.events.walletsUpdated.sendToAll(undefined)
+        await updateAccount({
+            account: record.address,
+            providerType: ProviderType.Maskbook,
+        })
+    }
     return address
     async function getWalletAddress() {
         if (rec.address) return rec.address
@@ -179,7 +180,7 @@ export async function importNewWallet(
             const recover = await recoverWalletFromPrivateKey(rec._private_key_)
             return recover.privateKeyValid ? recover.address : ''
         }
-        if (mnemonic.length) return (await recoverWallet(mnemonic, passphrase, path)).address
+        if (mnemonic.length) return (await recoverWalletFromMnemonicWords(mnemonic, passphrase, path)).address
         return
     }
 }
@@ -191,7 +192,7 @@ export async function importFirstWallet(rec: Parameters<typeof importNewWallet>[
 
 export async function renameWallet(address: string, name: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
-    const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
+    const wallet = await getWalletByAddress(t, formatEthereumAddress(address))
     assert(wallet)
     wallet.name = name
     wallet.updatedAt = new Date()
@@ -201,13 +202,13 @@ export async function renameWallet(address: string, name: string) {
 
 export async function removeWallet(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
-    const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
+    const wallet = await getWalletByAddress(t, formatEthereumAddress(address))
     if (!wallet) return
     await t.objectStore('Wallet').delete(wallet.address)
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
-export async function recoverWallet(
+export async function recoverWalletFromMnemonicWords(
     mnemonic: string[],
     passphrase: string,
     path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,

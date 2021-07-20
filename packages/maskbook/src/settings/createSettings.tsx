@@ -9,7 +9,7 @@ export interface SettingsTexts {
 }
 export const texts = new WeakMap<ValueRef<any>, SettingsTexts>()
 
-type InternalSettings<T> = ValueRef<T> & {
+export type InternalSettings<T> = ValueRef<T> & {
     readonly key: string
     readonly ready: boolean
     readonly readyPromise: Promise<T>
@@ -94,13 +94,12 @@ export function createGlobalSettings<T extends browser.storage.StorageValue>(
     return settings
 }
 
+export interface NetworkSettingsCache {
+    [networkKey: string]: ValueRef<string> & { ready: boolean; readyPromise: Promise<string> }
+}
+
 export function createNetworkSettings(settingsKey: string) {
-    const cached: {
-        [networkKey: string]: ValueRef<string> & {
-            ready: boolean
-            readyPromise: Promise<string>
-        }
-    } = {}
+    const cached: NetworkSettingsCache = {}
     MaskMessage.events.createNetworkSettingsReady.on((networkKey) => {
         if (!(networkKey in cached)) cached[networkKey] = createInternalSettings(`${networkKey}+${settingsKey}`, '')
     })

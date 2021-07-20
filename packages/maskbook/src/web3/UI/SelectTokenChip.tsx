@@ -1,13 +1,14 @@
 import classNames from 'classnames'
-import { makeStyles, Theme, createStyles, Chip, ChipProps, CircularProgress } from '@material-ui/core'
+import { makeStyles, Theme, Chip, ChipProps, CircularProgress } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ErrorIcon from '@material-ui/icons/Error'
 import { noop } from 'lodash-es'
-import { TokenIcon } from '../../extension/options-page/DashboardComponents/TokenIcon'
-import type { ERC20TokenDetailed, EtherTokenDetailed } from '../types'
+import { TokenIcon } from '@masknet/shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { useI18N } from '../../utils'
 
 const useStyles = makeStyles((theme: Theme) => {
-    return createStyles({
+    return {
         chip: {
             border: 'none',
             borderRadius: 8,
@@ -20,11 +21,11 @@ const useStyles = makeStyles((theme: Theme) => {
             color: theme.palette.text.primary,
             pointerEvents: 'none',
         },
-    })
+    }
 })
 
 export interface SelectTokenChipProps {
-    token?: EtherTokenDetailed | ERC20TokenDetailed | null
+    token?: FungibleTokenDetailed | null
     error?: Error
     loading?: boolean
     readonly?: boolean
@@ -32,6 +33,7 @@ export interface SelectTokenChipProps {
 }
 
 export function SelectTokenChip(props: SelectTokenChipProps) {
+    const { t } = useI18N()
     const { token, error, loading = false, readonly = false, ChipProps } = props
     const classes = useStyles()
 
@@ -47,13 +49,19 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
         )
     if (!token)
         return (
-            <Chip className={classes.chip} label="Select a token" size="small" clickable={!readonly} {...ChipProps} />
+            <Chip
+                className={classes.chip}
+                label={t('plugin_gitcoin_select_a_token')}
+                size="small"
+                clickable={!readonly}
+                {...ChipProps}
+            />
         )
     if (token && error)
         return (
             <Chip
                 className={classes.chip}
-                icon={<TokenIcon address={token.address} name={token.name} />}
+                icon={<TokenIcon address={token.address} name={token.name} logoURI={token.logoURI} />}
                 deleteIcon={<ErrorIcon className={classes.icon} />}
                 label={token.symbol}
                 color="default"
@@ -68,7 +76,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
     return (
         <Chip
             className={classes.chip}
-            icon={<TokenIcon address={token.address} name={token.name} />}
+            icon={<TokenIcon address={token.address} name={token.name} logoURI={token.logoURI} />}
             deleteIcon={readonly ? undefined : <ExpandMoreIcon className={classes.icon} />}
             color="default"
             size="small"

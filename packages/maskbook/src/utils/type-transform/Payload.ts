@@ -5,27 +5,14 @@ import { Result, Ok, Err } from 'ts-results'
 import { Identifier, ProfileIdentifier } from '../../database/type'
 import { decodeTextPayloadUI, encodeTextPayloadUI } from '../../social-network/utils/text-payload-ui'
 
-export type Payload = PayloadAlpha40_Or_Alpha39 | PayloadAlpha38
-export type PayloadLatest = PayloadAlpha38
-
-export interface PayloadAlpha40_Or_Alpha39 {
-    version: -40 | -39
-    ownersAESKeyEncrypted: string
-    iv: string
-    encryptedText: string
-    signature?: string
-}
-export interface PayloadAlpha38 {
-    version: -38
-    AESKeyEncrypted: string
-    iv: string
-    encryptedText: string
-    /** @deprecated but don't remove it cause it will break */
-    signature: string
-    authorPublicKey?: string
-    authorUserID?: ProfileIdentifier
-    sharedPublic?: boolean
-}
+import type { Payload, PayloadAlpha38 } from '@masknet/shared'
+export type {
+    Payload,
+    PayloadAlpha38,
+    PayloadAlpha40_Or_Alpha39,
+    PayloadLatest,
+    PayloadVersions as Versions,
+} from '@masknet/shared'
 
 /**
  * Detect if there is version -40, -39 or -38 payload
@@ -128,14 +115,4 @@ export function constructAlpha38(data: PayloadAlpha38, encoder?: Encoder) {
         userID.includes('|') ? undefined : btoa(userID),
     ]
     return encoder(`🎼4/4|${fields.join('|')}:||`)
-}
-
-/**
- * The string part is in the front of the payload.
- * The number part is used in the database.
- */
-export enum Versions {
-    '2/4' = -40,
-    '3/4' = -39,
-    '4/4' = -38,
 }

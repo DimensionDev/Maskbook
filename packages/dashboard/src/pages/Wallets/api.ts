@@ -1,7 +1,12 @@
-import { createGlobalState } from '@dimensiondev/maskbook-shared'
-import { PluginMessages, PluginServices } from '../../API'
+import { createGlobalState } from '@masknet/shared'
+import { Messages, Services } from '../../API'
 
-export const [useWallets, revalidateWallets, wallets] = createGlobalState(
-    PluginServices.Wallet.getWallets,
-    PluginMessages.Wallet.events.walletsUpdated.on,
+export const [useCurrentCollectibleDataProvider] = createGlobalState(
+    Services.Settings.getCurrentCollectibleDataProvider,
+    (x) => Messages.events.currentCollectibleDataProviderSettings.on(x),
+)
+
+export const [useCurrentSelectedWalletNetwork] = createGlobalState(
+    Services.Settings.getCurrentSelectedWalletNetwork,
+    (x) => Messages.events.currentNetworkSettings.on(x),
 )

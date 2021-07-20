@@ -1,6 +1,8 @@
-import { unreachable } from '../../../utils/utils'
-import { ChainId, ERC1155TokenDetailed, ERC721TokenDetailed } from '../../../web3/types'
-import { CollectibleProvider, PortfolioProvider } from '../types'
+import { safeUnreachable, unreachable } from '@dimensiondev/kit'
+import { NetworkType } from '@masknet/web3-shared'
+import { PortfolioProvider } from '../types'
+
+export { resolveCollectibleProviderLink, resolveCollectibleLink } from '@masknet/web3-shared'
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
     switch (provider) {
@@ -13,24 +15,16 @@ export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
     }
 }
 
-export function resolveCollectibleProviderLink(chainId: ChainId, provider: CollectibleProvider) {
-    switch (provider) {
-        case CollectibleProvider.OPENSEAN:
-            return `https://${chainId === ChainId.Rinkeby ? 'testnets' : ''}opensea.io/`
+export function resolveDebankChainName(network: NetworkType) {
+    switch (network) {
+        case NetworkType.Ethereum:
+            return 'eth'
+        case NetworkType.Binance:
+            return 'bsc'
+        case NetworkType.Polygon:
+            return 'matic'
         default:
-            unreachable(provider)
-    }
-}
-
-export function resolveCollectibleLink(
-    chainId: ChainId,
-    provider: CollectibleProvider,
-    token: ERC721TokenDetailed | ERC1155TokenDetailed,
-) {
-    switch (provider) {
-        case CollectibleProvider.OPENSEAN:
-            return `${resolveCollectibleProviderLink(chainId, provider)}/assets/${token.address}/${token.tokenId}`
-        default:
-            unreachable(provider)
+            safeUnreachable(network)
+            return ''
     }
 }

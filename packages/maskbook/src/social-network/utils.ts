@@ -1,6 +1,5 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { IdentifierMap, ProfileIdentifier } from '@dimensiondev/maskbook-shared'
-import { ObservableWeakMap } from '../utils/ObservableMapSet'
+import { IdentifierMap, ProfileIdentifier, ObservableWeakMap } from '@masknet/shared'
 import type { SocialNetworkUI } from './types'
 
 // By this pattern, I hope we can enforce all providers to use this pattern to init.
@@ -23,7 +22,8 @@ export function managedStateCreator(): SocialNetworkUI.ManagedState {
     return {}
 }
 export const creator = {
-    IdentityResolveProviderLastRecognized: (): SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['lastRecognized'] =>
-        new ValueRef({ identifier: ProfileIdentifier.unknown }),
+    IdentityResolveProviderLastRecognized:
+        (): SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['lastRecognized'] =>
+            new ValueRef({ identifier: ProfileIdentifier.unknown }),
     PostProviderStore: (): SocialNetworkUI.CollectingCapabilities.PostsProvider['posts'] => new ObservableWeakMap(),
 }

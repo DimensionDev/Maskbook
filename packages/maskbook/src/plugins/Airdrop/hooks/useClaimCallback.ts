@@ -1,16 +1,21 @@
-import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
-import type { Tx } from '@dimensiondev/contracts/types/types'
-import { addGasMargin } from '../../../web3/helpers'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { TransactionEventType } from '../../../web3/types'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
+import {
+    TransactionEventType,
+    TransactionStateType,
+    useAccount,
+    useGasPrice,
+    useNonce,
+    useTransactionState,
+} from '@masknet/web3-shared'
 import type { AirdropPacket } from '../apis'
 import { useAirdropContract } from '../contracts/useAirdropContract'
 
 export function useClaimCallback(packet?: AirdropPacket) {
     const account = useAccount()
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const AirdropContract = useAirdropContract()
 
     const [claimState, setClaimState] = useTransactionState()
@@ -25,17 +30,12 @@ export function useClaimCallback(packet?: AirdropPacket) {
 
         const { index, amount, proof } = packet
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setClaimState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const config: Tx = {
-            from: account,
-            to: AirdropContract.options.address,
-        }
-
-        // step 1: merkle proof
+        // merkle proof
         try {
             const { available } = await AirdropContract.methods.check(index, account, amount, proof).call({
                 from: account,
@@ -58,19 +58,26 @@ export function useClaimCallback(packet?: AirdropPacket) {
         // the claim amount will be set up later if the Merkle proof success
         const claimParams: Parameters<typeof AirdropContract['methods']['claim']> = [index, packet.amount, proof]
 
-        // step 2-1: estimate gas
-        const estimatedGas = await AirdropContract.methods
-            .claim(...claimParams)
-            .estimateGas(config)
-            .catch((error: Error) => {
-                setClaimState({
-                    type: TransactionStateType.FAILED,
-                    error,
+        // estimate gas and compose transaction
+        const config = {
+            from: account,
+            gas: await AirdropContract.methods
+                .claim(...claimParams)
+                .estimateGas({
+                    from: account,
                 })
-                throw error
-            })
+                .catch((error) => {
+                    setClaimState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    throw error
+                }),
+            gasPrice,
+            nonce,
+        }
 
-        // step 2-2: blocking
+        // send transaction
         return new Promise<void>((resolve, reject) => {
             const onSucceed = (no: number, receipt: TransactionReceipt) => {
                 setClaimState({
@@ -87,16 +94,14 @@ export function useClaimCallback(packet?: AirdropPacket) {
                 })
                 reject(error)
             }
-            const promiEvent = AirdropContract.methods.claim(...claimParams).send({
-                gas: addGasMargin(new BigNumber(estimatedGas)).toFixed(),
-                ...config,
-            })
+            const promiEvent = AirdropContract.methods.claim(...claimParams).send(config as NonPayableTx)
 
-            promiEvent.on(TransactionEventType.ERROR, onFailed)
-            promiEvent.on(TransactionEventType.CONFIRMATION, onSucceed)
-            promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => onSucceed(0, receipt))
+            promiEvent
+                .on(TransactionEventType.ERROR, onFailed)
+                .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
+                .on(TransactionEventType.CONFIRMATION, onSucceed)
         })
-    }, [AirdropContract, account, packet])
+    }, [nonce, gasPrice, AirdropContract, account, packet])
 
     const resetCallback = useCallback(() => {
         setClaimState({

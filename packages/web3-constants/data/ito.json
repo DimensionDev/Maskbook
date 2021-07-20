@@ -1,0 +1,79 @@
+{
+    "ITO_CONTRACT_ADDRESS": {
+        "Mainnet": "0xf110fec3075d7531141b6bf16b11604cb028a17b",
+        "Ropsten": "0x37c2f41085ff45f54652c359a7de4deb9d125bf2",
+        "Rinkeby": "0x7751b8c715d1Df74D181C86aE01801330211f370",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": ""
+    },
+    "MASK_ITO_CONTRACT_ADDRESS": {
+        "Mainnet": "0x86812da3A623ab9606976078588b80C315E55FA3",
+        "Ropsten": "0x0b0d7efb4a09d818e9dcd609246f10fc6286b8df",
+        "Rinkeby": "0x0aC41A27bA9F132D5687CAC986f5302Da6f5F9f6",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": ""
+    },
+    "ITO2_CONTRACT_ADDRESS": {
+        "Mainnet": "0xc2CFbF22d6Dc87D0eE18d38d73733524c109Ff46",
+        "Ropsten": "0xBD4c3Cf084B6F4d25430Ee5d44436e860Cc58Ee4",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "0x96c7D011cdFD467f551605f0f5Fce279F86F4186",
+        "BSCT": "0x981be454a930479d92C91a0092D204b64845A5D6",
+        "Matic": "0xF9F7C1496c21bC0180f4B64daBE0754ebFc8A8c0",
+        "Mumbai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B"
+    },
+    "ITO_BSC_POLYGON_CONTRACT_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
+        "BSCT": "0x981be454a930479d92C91a0092D204b64845A5D6",
+        "Matic": "0x981be454a930479d92C91a0092D204b64845A5D6",
+        "Mumbai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B"
+    },
+    "DEFAULT_QUALIFICATION_ADDRESS": {
+        "Mainnet": "0x81b6ae377e360dcad63611846a2516f4ba8c88ac",
+        "Ropsten": "0x050745919acaa000e5b116b2c499e6f4ed5ce5b6",
+        "Rinkeby": "0x88AA0AB3B7cDE263073e1cBa1D06473adeC1b38E",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "0x5B966f3a32Db9C180843bCb40267A66b73E4f022",
+        "BSCT": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
+        "Matic": "0x02Ea0720254F7fa4eca7d09A1b9C783F1020EbEF",
+        "Mumbai": "0x5B966f3a32Db9C180843bCb40267A66b73E4f022"
+    },
+    "DEFAULT_QUALIFICATION2_ADDRESS": {
+        "Mainnet": "0x4dC5f343Fe57E4fbDA1B454d125D396A3181272c",
+        "Ropsten": "0xd5e6434bde165062b3d9572DEFd6393c7B3E2902",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "0xAb7B1bE4233A04e5C43a810E75657ECED8E5463B",
+        "BSCT": "",
+        "Matic": "0x2cf91AD8C175305EBe6970Bd8f81231585EFbd77",
+        "Mumbai": ""
+    },
+    "SUBGRAPH_URL": {
+        "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-mainnet",
+        "Ropsten": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-bsc-mainnet",
+        "BSCT": "",
+        "Matic": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-polygon",
+        "Mumbai": ""
+    }
+}

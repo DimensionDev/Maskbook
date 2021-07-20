@@ -34,7 +34,13 @@ export function DecryptPostDeveloperMode() {
                 {chooseIdentity}
                 {/* {networkInput} */}
                 <FormControlLabel
-                    control={<Checkbox checked={postByMyself} onChange={(e, a) => setPostByMyself(a)} />}
+                    control={
+                        <Checkbox
+                            color="secondary"
+                            checked={postByMyself}
+                            onChange={(e) => setPostByMyself(e.target.checked)}
+                        />
+                    }
                     label="Post by myself"
                 />
                 {authorInput}

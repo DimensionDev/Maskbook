@@ -1,16 +1,14 @@
-import { useMemo, createElement } from 'react'
-import { ValueRef, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { unstable_createMuiStrictModeTheme, ThemeProvider, makeStyles, PaletteMode } from '@material-ui/core'
-import { useMaskbookTheme } from '../../../utils/theme'
-import type { SocialNetworkUI } from '../../../social-network'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
-import { toRGB, getBackgroundColor, fromRGB, shade, isDark, getForegroundColor } from '../../../utils/theme-tools'
-import { Appearance } from '../../../settings/types'
+import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
+import { useValueRef } from '@masknet/shared'
+import { Appearance } from '@masknet/theme'
+import { makeStyles, PaletteMode, ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core'
 import produce, { setAutoFreeze } from 'immer'
-import type { InjectedDialogClassKey } from '../../../components/shared/InjectedDialog'
-import type { StyleRules } from '@material-ui/core'
+import { createElement, useMemo } from 'react'
+import type { SocialNetworkUI } from '../../../social-network'
+import { useClassicMaskTheme } from '../../../utils/theme'
+import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme-tools'
 import { isMobileTwitter } from '../utils/isMobile'
+import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))
@@ -45,7 +43,7 @@ export function useThemeTwitterVariant() {
     const primaryColor = useValueRef(primaryColorRef)
     const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
-    const MaskbookTheme = useMaskbookTheme({
+    const MaskbookTheme = useClassicMaskTheme({
         appearance: isDark(fromRGB(backgroundColor)!) ? Appearance.dark : Appearance.light,
     })
     return useMemo(() => {
@@ -78,7 +76,7 @@ export function useThemeTwitterVariant() {
                         paddingLeft: 15,
                         paddingRight: 15,
                         boxShadow: 'none',
-                        [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                             '&': {
                                 height: '28px !important',
                                 minHeight: 'auto !important',
@@ -121,76 +119,72 @@ export function TwitterThemeProvider(props: Required<React.PropsWithChildren<{}>
     return createElement(ThemeProvider, { theme: useThemeTwitterVariant(), ...props })
 }
 
-export const useInjectedDialogClassesOverwriteTwitter = makeStyles((theme) =>
-    createStyles<InjectedDialogClassKey>({
-        root: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+export const useInjectedDialogClassesOverwriteTwitter = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            display: 'block !important',
+        },
+    },
+    container: {
+        alignItems: 'center',
+    },
+    paper: {
+        width: '600px !important',
+        maxWidth: 'none',
+        boxShadow: 'none',
+        backgroundImage: 'none',
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            '&': {
                 display: 'block !important',
+                borderRadius: '0 !important',
             },
         },
-        container: {
-            alignItems: 'center',
+    },
+    dialogTitle: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: '10px 15px',
+        borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#ccd6dd'}`,
+        '& > h2': {
+            display: 'inline-block',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
         },
-        paper: {
-            width: '600px !important',
-            boxShadow: 'none',
-            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
-                '&': {
-                    display: 'block !important',
-                    borderRadius: '0 !important',
-                },
-            },
-        },
-        dialogTitle: {
-            display: 'flex',
-            alignItems: 'center',
-            padding: '10px 15px',
-            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#ccd6dd'}`,
-            '& > h2': {
-                display: 'inline-block',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-            },
-            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
-                '&': {
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    maxWidth: 600,
-                    margin: '0 auto',
-                    padding: '7px 14px 6px 11px !important',
-                },
-            },
-        },
-        dialogContent: {
-            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            '&': {
                 display: 'flex',
-                flexDirection: 'column',
-                maxWidth: 600,
-                margin: '0 auto',
-                padding: '7px 14px 6px !important',
-            },
-        },
-        dialogActions: {
-            padding: '10px 15px',
-            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
-                display: 'flex',
-                flexDirection: 'column',
                 justifyContent: 'space-between',
                 maxWidth: 600,
                 margin: '0 auto',
-                padding: '7px 14px 6px !important',
+                padding: '7px 14px 6px 11px !important',
             },
         },
-        dialogBackdropRoot: {
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+    },
+    dialogContent: {
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            display: 'flex',
+            flexDirection: 'column',
+            maxWidth: 600,
+            margin: '0 auto',
+            padding: '7px 14px 6px !important',
         },
-    }),
-)
-
-function createStyles<ClassKey extends string>(styles: Partial<StyleRules<ClassKey, {}>>): StyleRules<ClassKey> {
-    return styles as any
-}
+    },
+    dialogActions: {
+        padding: '10px 15px',
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            maxWidth: 600,
+            margin: '0 auto',
+            padding: '7px 14px 6px !important',
+        },
+    },
+    dialogBackdropRoot: {
+        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+    },
+}))

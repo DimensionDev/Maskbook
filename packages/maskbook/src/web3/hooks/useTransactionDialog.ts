@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { EthereumMessages } from '../../plugins/Ethereum/messages'
-import { useRemoteControlledDialog } from '../../utils/hooks/useRemoteControlledDialog'
-import { TransactionState, TransactionStateType } from './useTransactionState'
+import { TransactionState, TransactionStateType } from '@masknet/web3-shared'
+import { WalletMessages } from '../../plugins/Wallet/messages'
+import { useRemoteControlledDialog } from '@masknet/shared'
 
 export function useTransactionDialog(
     transactionDialogEvent: {
@@ -13,19 +13,16 @@ export function useTransactionDialog(
     resetTransactionState: () => void,
 ) {
     // close the transaction dialog
-    const [_, setTransactionDialogOpen] = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            if (transactionState.type !== transactionStateType) return
-            resetTransactionState()
-        },
-    )
+    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, (ev) => {
+        if (ev.open) return
+        if (transactionState.type !== transactionStateType) return
+        resetTransactionState()
+    })
 
     // open the transation dialog
     useEffect(() => {
         if (transactionState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
+        setDialog({
             open: true,
             state: transactionState,
             ...transactionDialogEvent,

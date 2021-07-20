@@ -4,11 +4,11 @@ name: E2E
 # events but only for the master branch
 on:
   push:
-    # branches: [master, released]
+    # branches: [master, develop, released]
     branches-ignore:
       - '**'
   pull_request:
-    # branches: [master, released]
+    # branches: [master, develop, released]
     branches-ignore:
       - '**'
 
@@ -35,6 +35,11 @@ jobs:
       #       npm -v
 
       # @v2 requires too much configurations
+      - name: Get cache date
+        id: get-date
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
       - uses: actions/checkout@v1
 
       - uses: actions/cache@v2
@@ -43,6 +48,19 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-node-
+      - uses: actions/cache@v2
+        with:
+          path: "**/dist/"
+          key: ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          restore-keys: |
+            ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+            ${{ runner.os }}-tsc-${{ hashFiles('**/tsconfig.json') }}
+      - uses: actions/cache@v2
+        with:
+          path: ./packages/maskbook/node_modules/.cache/webpack/
+          key: ${{ runner.os }}-webpack-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          restore-keys: |
+            ${{ runner.os }}-webpack-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: sudo npm i -g pnpm
       - run: npm run ci
       # Install puppeteer requires download a browser when installing which is noisy. Let's move it to CI only

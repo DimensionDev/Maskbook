@@ -1,47 +1,49 @@
 import { useMemo } from 'react'
 import DashboardRouterContainer from './Container'
-import { Button, makeStyles, createStyles, ThemeProvider } from '@material-ui/core'
+import { Button, makeStyles, ThemeProvider } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import RestoreIcon from '@material-ui/icons/Restore'
+import { useI18N, extendsTheme } from '../../../utils'
 import PersonaCard from '../DashboardComponents/PersonaCard'
 import { DashboardPersonaCreateDialog, DashboardImportPersonaDialog } from '../DashboardDialogs/Persona'
 import { useModal } from '../DashboardDialogs/Base'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
-import { extendsTheme } from '../../../utils/theme'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        container: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'baseline',
-            overflow: 'auto',
-            paddingTop: theme.spacing(3),
+const useStyles = makeStyles((theme) => ({
+    container: {
+        alignItems: 'baseline',
+        padding: theme.spacing(3, 0),
 
-            // keep the shadow of the persona card
-            marginLeft: -4,
-            paddingLeft: 4,
-
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-            [theme.breakpoints.down('sm')]: {
-                margin: 0,
-                paddingLeft: 0,
-            },
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        databaseButton: {
-            paddingTop: 0,
-            paddingBottom: 0,
-            lineHeight: '24px',
+    },
+    personaList: {
+        margin: 0,
+        padding: 0,
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gridGap: theme.spacing(3),
+        [theme.breakpoints.down('sm')]: {
+            display: 'block',
         },
-        placeholder: {
-            flex: 1,
+    },
+    personaItem: {
+        listStyle: 'none',
+        [theme.breakpoints.down('sm')]: {
+            marginBottom: theme.spacing(2),
         },
-    }),
-)
+    },
+    databaseButton: {
+        paddingTop: 0,
+        paddingBottom: 0,
+        lineHeight: '24px',
+    },
+    placeholder: {
+        flex: 1,
+    },
+}))
 
 const personasTheme = extendsTheme((theme) => ({
     components: {
@@ -96,15 +98,19 @@ export default function DashboardPersonasRouter() {
             ]}>
             <ThemeProvider theme={personasTheme}>
                 <section className={classes.container}>
-                    {personas
-                        .sort((a, b) => {
-                            if (a.updatedAt > b.updatedAt) return -1
-                            if (a.updatedAt < b.updatedAt) return 1
-                            return 0
-                        })
-                        .map((persona) => (
-                            <PersonaCard key={persona.identifier.toText()} persona={persona} />
-                        ))}
+                    <ul className={classes.personaList}>
+                        {personas
+                            .sort((a, b) => {
+                                if (a.updatedAt > b.updatedAt) return -1
+                                if (a.updatedAt < b.updatedAt) return 1
+                                return 0
+                            })
+                            .map((persona) => (
+                                <li key={persona.identifier.toText()} className={classes.personaItem}>
+                                    <PersonaCard persona={persona} />
+                                </li>
+                            ))}
+                    </ul>
                 </section>
             </ThemeProvider>
             {createPersona}

@@ -1,10 +1,18 @@
-import { Avatar, ListItem, ListItemText, makeStyles, Theme, ListTypeMap, ListItemAvatar } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useStylesExtends } from '../../custom-ui-helper'
+import {
+    Avatar,
+    ListItem,
+    ListItemAvatar,
+    ListItemIcon,
+    ListItemText,
+    ListTypeMap,
+    makeStyles,
+    Theme,
+} from '@material-ui/core'
+import CheckIcon from '@material-ui/icons/Check'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { formatEthereumAddress } from '../../../plugins/Wallet/formatter'
-import { useBlockie } from '../../../web3/hooks/useBlockie'
+import { formatEthereumAddress, useBlockie, Wallet } from '@masknet/web3-shared'
+import { useI18N } from '../../../utils'
+import { useStylesExtends } from '../../custom-ui-helper'
 
 const useStyle = makeStyles((theme: Theme) => ({
     root: {
@@ -15,11 +23,16 @@ const useStyle = makeStyles((theme: Theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
-    icon: {},
+    icon: {
+        color: '#77E0B5',
+        minWidth: 26,
+        marginLeft: theme.spacing(1),
+    },
 }))
 
 export interface WalletInListProps extends withClasses<never> {
-    wallet: WalletRecord
+    wallet: Wallet
+    selected?: boolean
     disabled?: boolean
     onClick?: () => void
     ListItemProps?: Partial<DefaultComponentProps<ListTypeMap<{ button: true }, 'div'>>>
@@ -28,7 +41,7 @@ export interface WalletInListProps extends withClasses<never> {
 export function WalletInList(props: WalletInListProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyle(), props)
-    const { wallet, disabled, onClick, ListItemProps } = props
+    const { wallet, selected = false, disabled = false, onClick, ListItemProps } = props
     const blockie = useBlockie(wallet.address)
 
     return (
@@ -43,11 +56,16 @@ export function WalletInList(props: WalletInListProps) {
                     secondary: classes.overflow,
                 }}
                 primary={wallet.name}
-                secondary={formatEthereumAddress(wallet.address)}
+                secondary={formatEthereumAddress(wallet.address, 16)}
                 secondaryTypographyProps={{
                     component: 'div',
                 }}
             />
+            {selected ? (
+                <ListItemIcon className={classes.icon}>
+                    <CheckIcon fontSize="small" />
+                </ListItemIcon>
+            ) : null}
         </ListItem>
     )
 }

@@ -5,14 +5,15 @@ import type {
     PostIdentifier,
     ProfileIdentifier,
     ReadonlyIdentifierMap,
-} from '@dimensiondev/maskbook-shared'
+    ObservableWeakMap,
+} from '@masknet/shared'
 import type { PaletteMode, Theme } from '@material-ui/core'
 import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
-import type { TypedMessage } from '../protocols/typed-message'
 import type { PostInfo } from './PostInfo'
-import type { ObservableWeakMap } from '../utils/ObservableMapSet'
 import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
+import type { TypedMessage } from '../protocols/typed-message'
+import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
 
 // Don't define values in namespaces
 export namespace SocialNetwork {
@@ -25,7 +26,7 @@ export namespace SocialNetwork {
     }
 
     export interface Utils {
-        /** @returns the homepage url. e.g.: https://www.twitter.com/ */
+        /** @returns the homepage url. e.g.: https://twitter.com/ */
         getHomePage?(): string
         /** @returns post URL from PostIdentifier */
         getPostURL?(post: PostIdentifier<Identifier>): URL | null
@@ -37,6 +38,7 @@ export namespace SocialNetwork {
         textPayloadPostProcessor?: PayloadEncoding
         /** Given a text, return a URL that will allow user to share this text */
         getShareLinkURL?(text: string): URL
+        createPostContext: ReturnType<typeof createSNSAdaptorSpecializedPostContext>
     }
     export interface Shared {
         utils: Utils
@@ -48,7 +50,10 @@ export namespace SocialNetwork {
          * !!! THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier !!!
          */
         networkIdentifier: string
-
+        /**
+         * This field _will_ be overwritten by SocialNetworkUI.permessions
+         */
+        declarativePermissions: SocialNetworkUI.DeclarativePermission
         /** Should this UI content script activate? */
         shouldActivate(location: Location | URL): boolean
         /** This provider is not ready for production, Mask will not use it in production */
@@ -71,7 +76,7 @@ export namespace SocialNetworkUI {
     export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared {
         /** @returns the states */
         init(signal: AbortSignal): Readonly<AutonomousState> | Promise<Readonly<AutonomousState>>
-        permission: RuntimePermission
+        permission?: RuntimePermission
         injection: InjectingCapabilities.Define
         automation: AutomationCapabilities.Define
         collecting: CollectingCapabilities.Define
@@ -93,6 +98,9 @@ export namespace SocialNetworkUI {
         /** This function should request the related permission, e.g. `browser.permissions.request()` */
         request(): Promise<boolean>
     }
+    export interface DeclarativePermission {
+        origins: readonly string[]
+    }
     export namespace InjectingCapabilities {
         export interface Define {
             /** Inject the UI that used to open the composition UI */
@@ -101,8 +109,6 @@ export namespace SocialNetworkUI {
             enhancedPostRenderer?(signal: AbortSignal, current: PostInfo): void
             /** Display the additional content (decrypted, plugin, ...) below the post */
             postInspector?(signal: AbortSignal, current: PostInfo): void
-            /** Inject a toolbar that displayed on the top of the page */
-            toolbar?(signal: AbortSignal): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */
             toolBoxInNavBar?(signal: AbortSignal): void
             /** Inject the UI that used to notify if the user has not completely setup the current network. */
@@ -178,6 +184,8 @@ export namespace SocialNetworkUI {
             identityProvider?: IdentityResolveProvider
             /** Maintain all the posts up-to-date. */
             postsProvider?: PostsProvider
+            /** Get searched keyword */
+            getSearchedKeyword?(): string
             /** @deprecated Seems we don't use it anymore. */
             getPostContent?(): Promise<string>
             /** @deprecated Seems we don't use it anymore. */

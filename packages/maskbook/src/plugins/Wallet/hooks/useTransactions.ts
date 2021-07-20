@@ -1,38 +1,33 @@
+import { useValueRef } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
 import { useAsyncRetry } from 'react-use'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { WalletRPC } from '../messages'
 import { currentPortfolioDataProviderSettings } from '../settings'
-import { useEffect, useRef } from 'react'
 import { PortfolioProvider, Transaction } from '../types'
-import { unreachable } from '../../../utils/utils'
+import { useNetworkType } from '@masknet/web3-shared'
 
-export function useTransactions(address: string, page?: number) {
-    const values = useRef<Transaction[]>([])
+export function useTransactions(
+    address: string,
+    page?: number,
+): AsyncStateRetry<{ transactions: Transaction[]; hasNextPage: boolean }> {
     const provider = useValueRef(currentPortfolioDataProviderSettings)
-
-    useEffect(() => {
-        if (values.current.length) {
-            values.current = []
-        }
-    }, [address])
+    const network = useNetworkType()
 
     return useAsyncRetry(async () => {
-        if (!address) return []
-        if (page === 1) values.current = []
+        if (!address)
+            return {
+                transactions: [],
+                hasNextPage: false,
+            }
 
         switch (provider) {
             case PortfolioProvider.DEBANK:
-                const result = await WalletRPC.getTransactionList(address.toLowerCase(), provider, page)
-                values.current.push(...result)
-                break
+                return WalletRPC.getTransactionList(address.toLowerCase(), network, provider, page)
             case PortfolioProvider.ZERION:
-                const response = await WalletRPC.getTransactionList(address.toLowerCase(), provider, page)
-                values.current.push(...response)
-                break
+                return await WalletRPC.getTransactionList(address.toLowerCase(), network, provider, page)
             default:
                 unreachable(provider)
         }
-
-        return values.current
-    }, [address, provider, page])
+    }, [address, network, provider, page])
 }

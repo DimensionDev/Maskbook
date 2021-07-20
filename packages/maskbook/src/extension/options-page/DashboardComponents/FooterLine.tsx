@@ -1,26 +1,24 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import { Breadcrumbs, Theme, Typography, Link as MuiLink } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
 import { DashboardAboutDialog } from '../DashboardDialogs/About'
 import { useModal } from '../DashboardDialogs/Base'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        footerButtons: {
-            '& ol': {
-                justifyContent: 'center',
-            },
+const useStyles = makeStyles((theme: Theme) => ({
+    footerButtons: {
+        '& ol': {
+            justifyContent: 'center',
         },
-        footerButton: {
-            borderRadius: '0',
-            whiteSpace: 'nowrap',
-            '& > p': {
-                fontSize: 12,
-            },
+    },
+    footerLink: {
+        borderRadius: '0',
+        whiteSpace: 'nowrap',
+        '& > p': {
+            fontSize: 12,
         },
-    }),
-)
+    },
+}))
 
 type FooterLinkBaseProps = { title?: string }
 type FooterLinkLinkProps = FooterLinkBaseProps & { to: string }
@@ -40,13 +38,13 @@ const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
                 target="_blank"
                 rel="noopener noreferrer"
                 color="textPrimary"
-                className={classes.footerButton}>
+                className={classes.footerLink}>
                 {children}
             </MuiLink>
         )
     if ('to' in props)
         return (
-            <MuiLink underline="none" {...props} component={Link} color="textPrimary" className={classes.footerButton}>
+            <MuiLink underline="none" {...props} component={Link} color="textPrimary" className={classes.footerLink}>
                 {children}
             </MuiLink>
         )
@@ -57,7 +55,7 @@ const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
             component="a"
             style={{ cursor: 'pointer' }}
             color="textPrimary"
-            className={classes.footerButton}>
+            className={classes.footerLink}>
             {children}
         </MuiLink>
     )
@@ -70,7 +68,7 @@ export default function FooterLine() {
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
     const openVersionLink = (event: React.MouseEvent) => {
         // `MouseEvent.prototype.metaKey` on macOS (`Command` key), Windows (`Windows` key), Linux (`Super` key)
-        if (process.env.build === 'stable' && event.metaKey === false) {
+        if (process.env.build === 'stable' && !event.metaKey) {
             open(t('version_of_release', { tag: `v${version}` }))
         } else {
             open(t('version_of_hash', { hash: process.env.COMMIT_HASH }))
@@ -90,6 +88,7 @@ export default function FooterLine() {
                 </FooterLink>
                 <FooterLink href={t('dashboard_mobile_test_link')}>{t('dashboard_mobile_test')}</FooterLink>
                 <FooterLink href={t('dashboard_source_code_link')}>{t('dashboard_source_code')}</FooterLink>
+                <FooterLink href={t('dashboard_bounty_list_link')}>{t('dashboard_bounty_list')}</FooterLink>
                 <FooterLink href={t('privacy_policy_link')}>{t('privacy_policy')}</FooterLink>
             </Breadcrumbs>
             {aboutDialog}

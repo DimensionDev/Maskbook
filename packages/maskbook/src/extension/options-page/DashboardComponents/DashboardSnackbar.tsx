@@ -1,15 +1,13 @@
 import { forwardRef } from 'react'
-import { useSnackbar, SnackbarProvider } from 'notistack'
-import { makeStyles, createStyles, useTheme } from '@material-ui/core'
+import { useSnackbar, SnackbarProvider } from '@masknet/theme'
+import { makeStyles, useTheme } from '@material-ui/core'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            width: 795,
-            height: 48,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: 795,
+        height: 48,
+    },
+}))
 
 export interface DashboardSnackbarProps {
     key: string | number

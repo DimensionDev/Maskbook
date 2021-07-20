@@ -1,33 +1,31 @@
 import { useState, useEffect } from 'react'
-import { makeStyles, createStyles, Box, FormControl, Select, MenuItem, Button } from '@material-ui/core'
+import { makeStyles, Box, FormControl, Select, MenuItem, Button } from '@material-ui/core'
 import CropFreeIcon from '@material-ui/icons/CropFree'
 import { useModal } from '../DashboardDialogs/Base'
 import { QRCodeVideoScannerDialog } from '../DashboardDialogs/Setup'
-import { usePortalShadowRoot } from '@dimensiondev/maskbook-shared'
+import { usePortalShadowRoot } from '@masknet/shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useVideoDevices } from '../../../utils/hooks/useVideoDevices'
 import { nativeAPI } from '../../../utils/native-rpc'
 import { NativeQRScanner } from '../../../components/shared/qrcode'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            marginTop: theme.spacing(2),
-        },
-        formControl: {
-            flex: 1,
-        },
-        menuPaper: {
-            backgroundColor: theme.palette.background.paper,
-        },
-        button: {
-            width: 64,
-            minWidth: 'unset',
-            padding: 0,
-            marginLeft: 16,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        marginTop: theme.spacing(2),
+    },
+    formControl: {
+        flex: 1,
+    },
+    menuPaper: {
+        backgroundColor: theme.palette.background.paper,
+    },
+    button: {
+        width: 64,
+        minWidth: 'unset',
+        padding: 0,
+        marginLeft: 16,
+    },
+}))
 
 export interface RestoreFromQRCodeCameraBoxProps extends withClasses<never> {
     onScan?: (content: string) => void

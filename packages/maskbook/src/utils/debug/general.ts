@@ -1,9 +1,9 @@
 import BigNumber from 'bignumber.js'
-import * as shared from '@dimensiondev/maskbook-shared'
+import * as shared from '@masknet/shared'
 import * as kit from '@dimensiondev/holoflows-kit'
 
 // Run this file multiple times should be safe
-if (module.hot) module.hot.accept()
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
 //#region BigNumber to Number
 Object.defineProperty(BigNumber.prototype, '__debug__amount__', {

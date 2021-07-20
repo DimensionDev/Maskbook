@@ -22,6 +22,7 @@ import { decodeText, decodeArrayBuffer } from '../../utils/type-transform/String
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+import type { PersonaInformation, ProfileInformation } from '@masknet/shared'
 assertEnvironment(Environment.ManifestBackground)
 
 export { storeAvatar, queryAvatarDataURL } from '../../database'
@@ -85,6 +86,24 @@ export function queryMyPersonas(network?: string): Promise<Persona[]> {
               })
             : x,
     )
+}
+
+export async function queryOwnedPersonaInformation(): Promise<PersonaInformation[]> {
+    const personas = await queryPersonas(undefined, true)
+    const result: PersonaInformation[] = []
+    for (const persona of personas.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))) {
+        const map: ProfileInformation[] = []
+        result.push({
+            nickname: persona.nickname,
+            identifier: persona.identifier,
+            linkedProfiles: map,
+        })
+        for (const [profile] of persona.linkedProfiles) {
+            const nickname = (await queryProfile(profile)).nickname
+            map.push({ identifier: profile, nickname })
+        }
+    }
+    return result
 }
 export async function restoreFromObject(object: null | BackupJSONFileLatest): Promise<Persona | null> {
     if (!object) return null

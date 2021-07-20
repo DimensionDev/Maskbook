@@ -5,14 +5,10 @@ import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
 import { Link, useRouteMatch } from 'react-router-dom'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
-import { useModal } from '../DashboardDialogs/Base'
-import { DashboardFeedbackDialog } from '../DashboardDialogs/Feedback'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N, useMatchXS, extendsTheme } from '../../../utils'
 import Logo from './MaskbookLogo'
 import { Carousel } from './Carousel'
 import { makeNewBugIssueURL } from '../../debug-page/issue'
-import { useMatchXS } from '../../../utils/hooks/useMatchXS'
-import { extendsTheme } from '../../../utils/theme'
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -128,7 +124,11 @@ export default function Drawer(props: DrawerProps) {
     const xsMatched = useMatchXS()
 
     const { routers } = props
-    const [feedback, openFeedback] = useModal(DashboardFeedbackDialog)
+
+    const onFeedback = () => {
+        // see #3384
+        open('https://forms.gle/Tb26MEcE3kLar6CFA')
+    }
 
     const onDebugPage = (event: React.MouseEvent) => {
         if (event.shiftKey) {
@@ -148,10 +148,7 @@ export default function Drawer(props: DrawerProps) {
         <ThemeProvider theme={drawerTheme}>
             <nav className={classes.drawer}>
                 {xsMatched ? null : (
-                    <Box
-                        onClick={onDebugPage}
-                        className={classes.drawerHeader}
-                        style={{ backgroundColor: `var(--drawerBody)` }}>
+                    <Box onClick={onDebugPage} className={classes.drawerHeader}>
                         <Logo />
                     </Box>
                 )}
@@ -173,9 +170,7 @@ export default function Drawer(props: DrawerProps) {
                                             component={Link}
                                             to={item[1]}
                                             button>
-                                            <ListItemIcon
-                                                className={classes.drawerItemIcon}
-                                                children={item[2]}></ListItemIcon>
+                                            <ListItemIcon className={classes.drawerItemIcon} children={item[2]} />
                                             <ListItemText
                                                 className={classes.drawerItemText}
                                                 primary={item[0]}
@@ -195,7 +190,7 @@ export default function Drawer(props: DrawerProps) {
                                 <ListItem
                                     className={classNames(classes.drawerItem, classes.drawerFeedback)}
                                     button
-                                    onClick={openFeedback}>
+                                    onClick={onFeedback}>
                                     <ListItemIcon
                                         className={classes.drawerItemIcon}
                                         children={<SentimentSatisfiedOutlinedIcon fontSize="small" />}
@@ -213,7 +208,6 @@ export default function Drawer(props: DrawerProps) {
                                 </ListItem>
                                 {xsMatched ? <Divider /> : null}
                             </List>
-                            {feedback}
                         </>
                     )}
                 </Box>

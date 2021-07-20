@@ -1,9 +1,8 @@
-import stringify from 'json-stable-stringify'
-import { createGlobalSettings, createNetworkSettings } from './createSettings'
+import { createGlobalSettings, createNetworkSettings, NetworkSettingsCache } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
-import { ChainId } from '../web3/types'
-import { Appearance, Language, LaunchPage } from './types'
+import { LaunchPage } from './types'
+import { Appearance, Language } from '@masknet/theme'
 
 /**
  * Does the debug mode on
@@ -12,6 +11,7 @@ export const debugModeSetting = createGlobalSettings<boolean>('debugMode', false
     primary: () => i18n.t('settings_enable_debug'),
     secondary: () => i18n.t('settings_enable_debug_desc'),
 })
+
 /**
  * Never open a new tab in the background
  */
@@ -39,31 +39,6 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
 })
 //#endregion
 
-//#region chain state settings
-export const currentChainStateSettings = createGlobalSettings<string>('chain state', stringify([]), {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-//#endregion
-
-//#region provider chain id
-export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>('maskbook chain id', ChainId.Mainnet, {
-    primary: () => i18n.t('settings_choose_eth_network'),
-    secondary: () => 'This only affects the built-in wallet.',
-})
-
-export const currentMetaMaskChainIdSettings = createGlobalSettings<ChainId>('metamask chain id', ChainId.Mainnet, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
-export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>(
-    'walletconnect chain id',
-    ChainId.Mainnet,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
-//#endregion
-
 //#region language
 const lang: string = i18nNextInstance.language
 export const languageSettings = createGlobalSettings<Language>(
@@ -78,13 +53,27 @@ export const enableGroupSharingSettings = createGlobalSettings<boolean>('experim
     secondary: () => '(Unstable) Automatically share posts to a group',
 })
 
-export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
-export const currentSelectedIdentity = createNetworkSettings('currentSelectedIdentity')
+//#region network setting
 
-export const currentSetupGuideStatus = createNetworkSettings('currentSetupGuideStatus')
+/**
+ * Expected Usage：export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
+ *
+ * Work around the issue:
+ *      https://github.com/microsoft/TypeScript/issues/42873
+ *      https://github.com/microsoft/TypeScript/issues/30858
+ *
+ * References:
+ *      PluginGitcoinMessages: packages/maskbook/src/plugins/Gitcoin/messages.ts
+ *      PluginTraderMessages: packages/maskbook/src/plugins/Trader/messages.ts
+ *      PluginTransakMessages: packages/maskbook/src/plugins/Transak/messages.ts
+ */
+export const currentImagePayloadStatus: NetworkSettingsCache = createNetworkSettings('currentImagePayloadStatus')
+export const currentSelectedIdentity: NetworkSettingsCache = createNetworkSettings('currentSelectedIdentity')
+export const currentSetupGuideStatus: NetworkSettingsCache = createNetworkSettings('currentSetupGuideStatus')
 export const currentImportingBackup = createGlobalSettings<boolean>('importingBackup', false, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
+//#endregion
 
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard, {
     primary: () => i18n.t('settings_launch_page'),
@@ -94,6 +83,10 @@ export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage',
 export const newDashboardConnection = createGlobalSettings('beta-dashboard', false, {
     primary: () => 'Experimental: Allow isolated dashboard to connect',
     secondary: () => "WARNING: DON'T OPEN THIS UNLESS YOU KNOW WHAT YOU ARE DOING.",
+})
+
+export const currentPersonaIdentifier = createGlobalSettings<string>('currentPersonaIdentifier', '', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
 sideEffect.then(() => {

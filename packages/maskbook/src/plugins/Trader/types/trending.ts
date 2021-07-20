@@ -20,6 +20,13 @@ export interface Currency {
     description?: string
 }
 
+export interface Platform {
+    id: string | number
+    name: string
+    slug: string
+    symbol: string
+}
+
 export interface Coin {
     id: string
     name: string
@@ -38,7 +45,7 @@ export interface Coin {
     image_url?: string
     description?: string
     market_cap_rank?: number
-    eth_address?: string
+    contract_address?: string
     facebook_url?: string
     twitter_url?: string
     telegram_url?: string
@@ -79,6 +86,7 @@ export interface Trending {
     currency: Currency
     dataProvider: DataProvider
     coin: Coin
+    platform?: Platform
     market?: Market
     tickers: Ticker[]
     lastUpdated: string

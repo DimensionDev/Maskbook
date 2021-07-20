@@ -1,18 +1,23 @@
-import BigNumber from 'bignumber.js'
-import stringify from 'json-stable-stringify'
-import { omit, pick } from 'lodash-es'
 import { useCallback, useMemo, useState } from 'react'
+import stringify from 'json-stable-stringify'
+import { pick } from 'lodash-es'
 import type { TransactionConfig } from 'web3-core'
-import Services, { ServicesWithProgress } from '../../../../extension/service'
-import { StageType } from '../../../../utils/promiEvent'
-import { addGasMargin } from '../../../../web3/helpers'
-import { useAccount } from '../../../../web3/hooks/useAccount'
-import { useChainId } from '../../../../web3/hooks/useChainState'
-import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
-import { ChainId } from '../../../../web3/types'
+import {
+    ChainId,
+    TransactionState,
+    TransactionStateType,
+    useAccount,
+    useChainId,
+    useGasPrice,
+    useNonce,
+    useWeb3,
+} from '@masknet/web3-shared'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {
+    const web3 = useWeb3()
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const [tradeState, setTradeState] = useState<TransactionState>({
@@ -37,51 +42,44 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             return
         }
 
-        // pre-step: start waiting for provider to confirm tx
+        // start waiting for provider to confirm tx
         setTradeState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        try {
-            // step 1: estimate tx
-            const gasEstimated = await Services.Ethereum.estimateGas(omit(config, ['gas']), chainId)
-            const config_ = {
-                ...config,
-                gas: addGasMargin(new BigNumber(gasEstimated)).toFixed(),
-            }
-
-            // step 2: send tx
-            for await (const stage of ServicesWithProgress.sendTransaction(account, config_)) {
-                switch (stage.type) {
-                    case StageType.TRANSACTION_HASH:
-                        setTradeState({
-                            type: TransactionStateType.HASH,
-                            hash: stage.hash,
-                        })
-                        break
-                    case StageType.RECEIPT:
-                        setTradeState({
-                            type: TransactionStateType.HASH,
-                            hash: stage.receipt.transactionHash,
-                        })
-                        break
-                    case StageType.CONFIRMATION:
-                        setTradeState({
-                            type: TransactionStateType.HASH,
-                            hash: stage.receipt.transactionHash,
-                        })
-                        break
-                    default:
-                        return
-                }
-            }
-        } catch (error) {
-            setTradeState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
+        // compose transaction config
+        const config_ = {
+            ...config,
+            gas: await web3.eth.estimateGas(config).catch((error) => {
+                setTradeState({
+                    type: TransactionStateType.FAILED,
+                    error,
+                })
+                throw error
+            }),
+            gasPrice,
+            nonce,
         }
-    }, [account, chainId, stringify(config)])
+
+        // send transaction and wait for hash
+        return new Promise<string>((resolve, reject) => {
+            web3.eth.sendTransaction(config_, (error, hash) => {
+                if (error) {
+                    setTradeState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                } else {
+                    setTradeState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
+                }
+            })
+        })
+    }, [web3, nonce, gasPrice, account, chainId, stringify(config)])
 
     const resetCallback = useCallback(() => {
         setTradeState({

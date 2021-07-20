@@ -1,12 +1,12 @@
-import { DialogTitle, IconButton, Typography, Box, styled } from '@material-ui/core'
+import { DialogTitle, IconButton, Typography, Box, experimentalStyled as styled } from '@material-ui/core'
 import { Close, ArrowBack } from '@material-ui/icons'
 import { memo } from 'react'
 
 const Title = styled(DialogTitle)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
+    padding: `${theme.spacing(1)} ${theme.spacing(3)}`,
     // gap: theme.spacing(1), // ? Safari doesn't support it
-    '& > *:first-child': { marginRight: theme.spacing(1) },
 }))
 export interface MaskDialogTitleProps {
     children: string
@@ -16,7 +16,7 @@ export interface MaskDialogTitleProps {
 export const MaskDialogTitle = memo((props: MaskDialogTitleProps) => {
     const { children, onBack, onClose } = props
     const backButton = onBack ? (
-        <IconButton onClick={onBack} edge="start" color="inherit">
+        <IconButton onClick={onBack} edge="start" color="inherit" sx={{ marginRight: '8px' }}>
             <ArrowBack />
         </IconButton>
     ) : null

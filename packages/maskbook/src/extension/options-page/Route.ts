@@ -4,8 +4,8 @@ export enum DashboardRoute {
     Wallets = '/wallets',
     Contacts = '/contacts',
     Settings = '/settings',
+    Plugins = '/plugins',
     Setup = '/setup',
-    RequestPermission = '/request-permission',
 }
 
 export enum DashboardWalletRoute {

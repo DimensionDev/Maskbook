@@ -1,5 +1,5 @@
 import { ListItem, ListItemIcon, ListItemText, experimentalStyled as styled } from '@material-ui/core'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 
 export interface ConnectActionListItemProps {
     title: string

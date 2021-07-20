@@ -1,12 +1,13 @@
-import { useEffect } from 'react'
-import { Chip, makeStyles } from '@material-ui/core'
-import Lock from '@material-ui/icons/Lock'
-import Services from '../../extension/service'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '../../utils/hooks/useValueRef'
+import { useValueRef } from '@masknet/shared'
+import { Chip, makeStyles } from '@material-ui/core'
 import type { ChipProps } from '@material-ui/core/Chip'
-import { useStylesExtends } from '../custom-ui-helper'
+import Lock from '@material-ui/icons/Lock'
+import { useEffect } from 'react'
 import { useAsync } from 'react-use'
+import Services from '../../extension/service'
+import { extractTextFromTypedMessage } from '../../protocols/typed-message'
+import { useStylesExtends } from '../custom-ui-helper'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 
 const useStyle = makeStyles({
@@ -45,17 +46,18 @@ export interface PostCommentProps {
 export function PostComment(props: PostCommentProps) {
     const { failedComponent: Fail, waitingComponent: Wait, needZip } = props
     const comment = useValueRef(props.comment)
-    const decryptedPostContent = usePostInfoDetails('decryptedPostContentRaw')
-    const postPayload = usePostInfoDetails('postPayload')
-    const iv = usePostInfoDetails('iv')
+    const postContent = usePostInfoDetails.transformedPostContent()
+    const postPayload = usePostInfoDetails.postPayload()
+    const iv = usePostInfoDetails.iv()
     const postIV = postPayload.map((x) => x.iv).unwrapOr(iv)
 
     const dec = useAsync(async () => {
-        if (!postIV || !decryptedPostContent) throw new Error('Decrypt comment failed')
-        const result = await Services.Crypto.decryptComment(postIV, decryptedPostContent, comment)
+        const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
+        if (!postIV || !decryptedText) throw new Error('Decrypt comment failed')
+        const result = await Services.Crypto.decryptComment(postIV, decryptedText, comment)
         if (result === null) throw new Error('Decrypt result empty')
         return result
-    }, [postIV, decryptedPostContent, comment])
+    }, [postIV, postContent, comment])
 
     const Success = props.successComponent || PostCommentDecrypted
     useEffect(() => void (dec.value && needZip()), [dec.value, needZip])

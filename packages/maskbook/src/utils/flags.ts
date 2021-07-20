@@ -1,13 +1,12 @@
 export const is_iOSApp = process.env.target === 'safari' && process.env.architecture === 'app'
 export const isAndroidApp = process.env.architecture === 'app' && process.env.target === 'firefox'
+
 const appOnly = process.env.architecture === 'app'
-
 const devOnly = process.env.NODE_ENV === 'development'
-
 const webOnly = process.env.architecture === 'web' || devOnly
-
 const insiderOnly = process.env.build === 'insider' || devOnly
 const betaOrInsiderOnly = insiderOnly || process.env.build === 'beta'
+
 // TODO: In future, we can turn this object into a Proxy to receive flags from remote
 export const Flags = {
     __raw__: {
@@ -29,32 +28,24 @@ export const Flags = {
     support_eth_network_switch: betaOrInsiderOnly,
     //#region Experimental features
     image_payload_marked_as_beta: appOnly,
-    /** Prohibit the use of test networks in production */
-    wallet_network_strict_mode_enabled: process.env.NODE_ENV === 'production' && !betaOrInsiderOnly,
     transak_enabled: webOnly,
-    trader_enabled: true,
     trader_zrx_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
-    gitcoin_enabled: webOnly,
-    poll_enabled: webOnly,
-    election2020_enabled: webOnly,
-    election2020_composition_dialog_enabled: false,
-    COTM_enabled: webOnly,
-    COTM_composition_dialog_enabled: false,
-    mask_ito_enabled: betaOrInsiderOnly,
-    airdrop_enabled: webOnly,
-    airdrop_composition_dialog_enabled: false,
     metamask_support_enabled: webOnly,
-    toolbar_enabled: webOnly,
     toolbox_enabled: webOnly,
+    /** Prohibit the use of test networks in production */
+    wallet_allow_testnet: betaOrInsiderOnly || process.env.NODE_ENV !== 'production',
     wallet_mnemonic_words_backup_enabled: false,
     wallet_private_key_backup_enabled: true,
+    wallet_gas_price_dialog_enable: true,
     /* construct LBP for all ERC20 tokens */
     LBP_enabled: false,
     LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
+    plugin_switch_enabled: betaOrInsiderOnly,
     //#endregion
 
-    transactions_pagination: false,
+    bsc_enabled: true,
+    polygon_enabled: true,
 
     //#region Functionality missing / broken
     /**
@@ -64,6 +55,7 @@ export const Flags = {
     no_web_extension_dynamic_permission_request: is_iOSApp || process.env.target === 'E2E',
     has_no_WebRTC: process.env.target === 'safari' || !globalThis?.navigator?.permissions?.query,
     //#endregion
+    using_emoji_flag: true,
 } as const
 
 if (process.env.NODE_ENV === 'development') {

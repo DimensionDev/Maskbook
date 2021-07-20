@@ -1,87 +1,76 @@
-import {
-    Avatar,
-    createStyles,
-    IconButton,
-    Link,
-    makeStyles,
-    SvgIcon,
-    SvgIconProps,
-    Typography,
-} from '@material-ui/core'
+import { Avatar, IconButton, Link, makeStyles, SvgIcon, SvgIconProps, Typography } from '@material-ui/core'
 import FacebookIcon from '@material-ui/icons/Facebook'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import TelegramIcon from '@material-ui/icons/Telegram'
 import TwitterIcon from '@material-ui/icons/Twitter'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
 import { DashboardDialogCore, WrappedDialogProps } from './Base'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        wrapper: {
-            width: 580,
-            height: 660,
-            lineHeight: 1.75,
+const useStyles = makeStyles((theme) => ({
+    wrapper: {
+        width: 580,
+        height: 660,
+        lineHeight: 1.75,
+    },
+    header: {
+        height: 300,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        background: `url(${new URL('./AboutDialogBackground.png', import.meta.url)}) no-repeat center / cover`,
+    },
+    maskface: {
+        width: 120,
+        height: 120,
+        marginTop: 75,
+    },
+    masktext: {
+        height: 22,
+        marginTop: 20,
+        marginBottom: 20,
+    },
+    masknightly: {
+        height: 48,
+        marginTop: 20,
+        marginBottom: 12,
+    },
+    version: {
+        color: '#FFF',
+        fontSize: 12,
+        marginBottom: 20,
+    },
+    main: {
+        fontSize: 16,
+        textAlign: 'center',
+        margin: '24px 68px',
+    },
+    getInTouch: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginTop: 20,
+        marginBottom: 28,
+    },
+    icon: {
+        color: theme.palette.text.primary,
+    },
+    close: {
+        color: '#FFF',
+    },
+    brands: {
+        marginTop: theme.spacing(1),
+        '& > *': {
+            margin: theme.spacing(0, 1),
+            cursor: 'pointer',
         },
-        header: {
-            height: 300,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            background: `url(${new URL('./AboutDialogBackground.png', import.meta.url)}) no-repeat center / cover`,
-        },
-        maskface: {
-            width: 120,
-            height: 120,
-            marginTop: 75,
-        },
-        masktext: {
-            height: 22,
-            marginTop: 20,
-            marginBottom: 20,
-        },
-        masknightly: {
-            height: 48,
-            marginTop: 20,
-            marginBottom: 12,
-        },
-        version: {
-            color: '#FFF',
-            fontSize: 12,
-            marginBottom: 20,
-        },
-        main: {
-            fontSize: 16,
-            textAlign: 'center',
-            margin: '24px 68px',
-        },
-        getInTouch: {
-            fontSize: 16,
-            fontWeight: 'bold',
-            marginTop: 20,
-            marginBottom: 28,
-        },
-        icon: {
-            color: theme.palette.text.primary,
-        },
-        close: {
-            color: '#FFF',
-        },
-        brands: {
-            marginTop: theme.spacing(1),
-            '& > *': {
-                margin: theme.spacing(0, 1),
-                cursor: 'pointer',
-            },
-        },
-        footer: {
-            borderTop: `1px solid ${theme.palette.divider}`,
-            color: theme.palette.text.secondary,
-            fontSize: '0.77rem',
-            margin: theme.spacing(0, 2),
-            padding: theme.spacing(2, 2, 3, 6),
-        },
-    }),
-)
+    },
+    footer: {
+        borderTop: `1px solid ${theme.palette.divider}`,
+        color: theme.palette.text.secondary,
+        fontSize: '0.77rem',
+        margin: theme.spacing(0, 2),
+        padding: theme.spacing(2, 2, 3, 6),
+    },
+}))
 
 const DiscordIcon: React.FC<SvgIconProps> = (props) => (
     <SvgIcon {...props}>

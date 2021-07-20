@@ -1,8 +1,7 @@
+import { getTrendingConstants } from '@masknet/web3-shared'
 import stringify from 'json-stable-stringify'
-import { getConstant } from '../../../../web3/helpers'
-import { TRENDING_CONSTANTS } from '../../constants'
-import { getChainId } from '../../../../extension/background-script/EthereumService'
 import { chunk, first, flatten } from 'lodash-es'
+import { currentChainIdSettings } from '../../../Wallet/settings'
 
 const TokenFields = `
   fragment TokenFields on Token {
@@ -90,12 +89,10 @@ export type Bundle = {
 }
 
 async function fetchFromUniswapV2Subgraph<T>(query: string) {
-    const response = await fetch(getConstant(TRENDING_CONSTANTS, 'UNISWAP_V2_SUBGRAPH_URL', await getChainId()), {
+    const response = await fetch(getTrendingConstants(currentChainIdSettings.value).UNISWAP_V2_SUBGRAPH_URL, {
         method: 'POST',
         mode: 'cors',
-        body: stringify({
-            query,
-        }),
+        body: stringify({ query }),
     })
     const { data } = (await response.json()) as {
         data: T

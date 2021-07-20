@@ -1,47 +1,44 @@
-import { makeStyles, createStyles, Typography } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 import { DashboardDialogCore, WrappedDialogProps } from './Base'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { delay } from '../../../utils/utils'
+import { useI18N, delay } from '../../../utils'
 import { QRCodeVideoScanner } from '../DashboardComponents/QRCodeVideoScanner'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            position: 'relative',
-        },
-        wrapper: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            overflow: 'hidden',
-        },
-        title: {
-            fontSize: 20,
-            fontWeight: 500,
-            textAlign: 'center',
-            top: 32,
-            left: 0,
-            right: 0,
-            margin: 'auto',
-            position: 'absolute',
-        },
-        closeButton: {
-            margin: 'auto',
-            width: 28 * 1.2,
-            height: 28 * 1.2,
-            left: 0,
-            right: 0,
-            bottom: 42,
-            position: 'absolute',
-        },
-        closeIcon: {
-            color: theme.palette.common.white,
-            width: 28,
-            height: 28,
-        },
-    }),
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        position: 'relative',
+    },
+    wrapper: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        overflow: 'hidden',
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 500,
+        textAlign: 'center',
+        top: 32,
+        left: 0,
+        right: 0,
+        margin: 'auto',
+        position: 'absolute',
+    },
+    closeButton: {
+        margin: 'auto',
+        width: 28 * 1.2,
+        height: 28 * 1.2,
+        left: 0,
+        right: 0,
+        bottom: 42,
+        position: 'absolute',
+    },
+    closeIcon: {
+        color: theme.palette.common.white,
+        width: 28,
+        height: 28,
+    },
+}))
 
 interface QRCodeVideoScannerDialogProps {
     deviceId?: string

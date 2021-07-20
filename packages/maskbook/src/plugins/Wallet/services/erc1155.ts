@@ -2,9 +2,9 @@ import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
-import { formatChecksumAddress } from '../formatter'
-import { WalletRecordIntoDB, ERC1155TokenRecordIntoDB, getWalletByAddress } from './helpers'
-import type { ERC1155TokenDetailed } from '../../../web3/types'
+import type { ERC1155TokenDetailed } from '@masknet/web3-shared'
+import { formatEthereumAddress } from '@masknet/web3-shared'
+import { ERC1155TokenRecordIntoDB, getWalletByAddress, WalletRecordIntoDB } from './helpers'
 
 export async function getERC1155Tokens() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC1155Token', 'Wallet')
@@ -19,7 +19,7 @@ export async function addERC1155Token(token: ERC1155TokenDetailed) {
 
 export async function removeERC1155Token(token: PartialRequired<ERC1155TokenDetailed, 'address'>) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC1155Token', 'Wallet')
-    await t.objectStore('ERC1155Token').delete(formatChecksumAddress(token.address))
+    await t.objectStore('ERC1155Token').delete(formatEthereumAddress(token.address))
     WalletMessages.events.erc1155TokensUpdated.sendToAll(undefined)
 }
 
@@ -28,10 +28,10 @@ export async function trustERC1155Token(
     token: PartialRequired<ERC1155TokenDetailed, 'address' | 'tokenId'>,
 ) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC1155Token', 'Wallet')
-    const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
+    const wallet = await getWalletByAddress(t, formatEthereumAddress(address))
     assert(wallet)
     let updated = false
-    const key = `${formatChecksumAddress(token.address)}_${token.tokenId}`
+    const key = `${formatEthereumAddress(token.address)}_${token.tokenId}`
     if (!wallet.erc1155_token_whitelist.has(key)) {
         wallet.erc1155_token_whitelist.add(key)
         updated = true
@@ -51,10 +51,10 @@ export async function blockERC1155Token(
     token: PartialRequired<ERC1155TokenDetailed, 'address' | 'tokenId'>,
 ) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC1155Token', 'Wallet')
-    const wallet = await getWalletByAddress(t, formatChecksumAddress(address))
+    const wallet = await getWalletByAddress(t, formatEthereumAddress(address))
     assert(wallet)
     let updated = false
-    const key = `${formatChecksumAddress(token.address)}_${token.tokenId}`
+    const key = `${formatEthereumAddress(token.address)}_${token.tokenId}`
     if (wallet.erc1155_token_whitelist.has(key)) {
         wallet.erc1155_token_whitelist.delete(key)
         updated = true

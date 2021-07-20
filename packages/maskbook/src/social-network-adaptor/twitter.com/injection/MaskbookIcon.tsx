@@ -62,8 +62,8 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
             ),
         )
         .enableSingleMode()
-    ifUsingMaskbook(post.postBy.value).then(add, remove)
-    post.postBy.addListener((x) => ifUsingMaskbook(x).then(add, remove))
+    ifUsingMaskbook(post.postBy.getCurrentValue()).then(add, remove)
+    post.postBy.subscribe(() => ifUsingMaskbook(post.postBy.getCurrentValue()).then(add, remove))
     let remover = () => {}
     function add() {
         if (signal?.aborted) return

@@ -63,7 +63,10 @@ export function isDataMatchJSONSchema(data: any, jsonSchema: object) {
  * @param metadataReader A metadata reader (can be return value of createTypedMessageMetadataReader)
  */
 export function createRenderWithMetadata<T>(metadataReader: (meta: TypedMessage['meta']) => Result<T, void>) {
-    return (metadata: TypedMessage['meta'], render: (data: T) => React.ReactNode): React.ReactNode | null => {
+    return (
+        metadata: TypedMessage['meta'],
+        render: (data: T) => React.ReactElement | null,
+    ): React.ReactElement | null => {
         const message = metadataReader(metadata)
         if (message.ok) return render(message.val)
         return null

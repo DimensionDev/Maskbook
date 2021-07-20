@@ -17,6 +17,8 @@ commands:
 jobs:
   install_dependencies:
     executor: maskbook_node
+    environment:
+      WEB3_CONSTANTS_RPC: ${WEB3_CONSTANTS_RPC}
     steps:
       - checkout
       - restore_cache:
@@ -25,7 +27,7 @@ jobs:
             - v3-maskbook-cache-pnpm
       - run:
           name: Install Dependencies
-          command: npx pnpm install --frozen-lockfile --store-dir ~/.pnpm/
+          command: npx pnpm@6.4.0 install --frozen-lockfile --store-dir ~/.pnpm/
       - save_cache:
           name: Save NPM Package Cache
           key: v3-maskbook-cache-npm

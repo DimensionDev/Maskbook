@@ -1,13 +1,21 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDirs": ["./src/", "./abis/"],
-    "outDir": "./dist/"
+    "rootDir": "./src/",
+    "outDir": "./dist/",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./src/**/*.tsx", "./src/**/*.ts", "./src/**/*.json", "./abis/*.json"],
+  "include": ["./src/**/*.tsx", "./src/**/*.ts", "./src/**/*.json"],
   // ! Note: maskbook/ depends dashboard/ on source-code level
   // !       but dashboard/ depends maskbook/ on type level
   // !       do not add dashboard/ as a reference otherwise there is a circular dependency on the type level.
-  "references": [{ "path": "../shared/" }, { "path": "../theme/" }, { "path": "../icons/" }],
+  "references": [
+    { "path": "../shared" },
+    { "path": "../web3-shared" },
+    { "path": "../theme" },
+    { "path": "../icons" },
+    { "path": "../plugin-infra" },
+    { "path": "../external-plugin-previewer" }
+  ],
   "ts-node": { "transpileOnly": true, "compilerOptions": { "module": "CommonJS" } }
 }

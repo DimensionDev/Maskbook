@@ -1,4 +1,7 @@
 import { useState, ChangeEvent } from 'react'
+import { v4 as uuid } from 'uuid'
+import { useSnackbar } from '@masknet/theme'
+import classNames from 'classnames'
 import {
     Typography,
     Theme,
@@ -7,116 +10,115 @@ import {
     Checkbox,
     Link as MuiLink,
     makeStyles,
-    createStyles,
     ThemeProvider,
     InputBase,
     FormControlLabel,
 } from '@material-ui/core'
-import classNames from 'classnames'
-import DashboardRouterContainer from './Container'
+import { green } from '@material-ui/core/colors'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
 
+import {
+    useQueryParams,
+    useI18N,
+    extraPermissions,
+    delay,
+    Flags,
+    extendsTheme,
+    UpgradeBackupJSONFile,
+    BackupJSONFileLatest,
+    decompressBackupFile,
+    WALLET_OR_PERSONA_NAME_MAX_LEN,
+    checkInputLengthExceed,
+} from '../../../utils'
 import ActionButton from '../DashboardComponents/ActionButton'
-import { v4 as uuid } from 'uuid'
+import DashboardRouterContainer from './Container'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import Services from '../../service'
-import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useAsync } from 'react-use'
 import { Identifier, ECKeyIdentifier } from '../../../database/type'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { useMyPersonas, useMyUninitializedPersonas } from '../../../components/DataSource/useMyPersonas'
-import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
-import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
-import { extraPermissions } from '../../../utils/permissions'
-import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
-import { green } from '@material-ui/core/colors'
+import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { DashboardRoute } from '../Route'
-import { useSnackbar } from 'notistack'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { Persona } from '../../../database'
 import { RestoreFromQRCodeImageBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'
 import { RestoreFromBackupBox } from '../DashboardComponents/RestoreFromBackupBox'
 import { DatabaseRecordType, DatabasePreviewCard } from '../DashboardComponents/DatabasePreviewCard'
 import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQRCodeCameraBox'
-import { delay } from '../../../utils/utils'
 import { SetupStep } from '../SetupStep'
-import { Flags } from '../../../utils/flags'
-import { extendsTheme } from '../../../utils/theme'
 
 //#region setup form
-const useSetupFormStyles = makeStyles((theme) =>
-    createStyles({
-        wrapper: {
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
+const useSetupFormStyles = makeStyles((theme) => ({
+    wrapper: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    section: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    primary: {
+        textAlign: 'center',
+        fontWeight: 500,
+        fontSize: 39,
+        lineHeight: 1,
+        marginBottom: theme.spacing(2),
+        [theme.breakpoints.down('sm')]: {
+            fontSize: 18,
+            margin: theme.spacing(3, 0, 1),
         },
-        section: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-        },
-        primary: {
-            textAlign: 'center',
-            fontWeight: 500,
-            fontSize: 39,
-            lineHeight: 1,
+    },
+    secondary: {
+        textAlign: 'center',
+        fontSize: 20,
+        lineHeight: 1.5,
+        marginBottom: theme.spacing(5),
+        [theme.breakpoints.down('sm')]: {
+            fontSize: 14,
             marginBottom: theme.spacing(2),
-            [theme.breakpoints.down('sm')]: {
-                fontSize: 18,
-                margin: theme.spacing(3, 0, 1),
-            },
         },
-        secondary: {
-            textAlign: 'center',
-            fontSize: 20,
-            lineHeight: 1.5,
-            marginBottom: theme.spacing(5),
-            [theme.breakpoints.down('sm')]: {
-                fontSize: 14,
-                marginBottom: theme.spacing(2),
-            },
-        },
-        form: {
-            width: 368,
-            minHeight: 200,
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-            },
-        },
-        input: {
+    },
+    form: {
+        width: 368,
+        minHeight: 200,
+        [theme.breakpoints.down('sm')]: {
             width: '100%',
         },
-        or: {
-            marginTop: 28,
-            marginBottom: 10,
-            [theme.breakpoints.down('sm')]: {
-                margin: 0,
-            },
+    },
+    input: {
+        width: '100%',
+    },
+    or: {
+        marginTop: 28,
+        marginBottom: 10,
+        [theme.breakpoints.down('sm')]: {
+            margin: 0,
         },
-        button: {
-            width: 220,
-            height: 40,
-            marginBottom: 20,
+    },
+    button: {
+        width: 220,
+        height: 40,
+        marginBottom: 20,
+    },
+    restoreButton: {
+        marginTop: 44,
+    },
+    importButton: {
+        marginTop: 44,
+    },
+    doneButton: {
+        color: '#fff',
+        backgroundColor: green[500],
+        // extra 36 pixel eliminates the visual shaking when switch between pages
+        marginBottom: 20 + 36,
+        '&:hover': {
+            backgroundColor: green[700],
         },
-        restoreButton: {
-            marginTop: 44,
-        },
-        importButton: {
-            marginTop: 44,
-        },
-        doneButton: {
-            color: '#fff',
-            backgroundColor: green[500],
-            // extra 36 pixel eliminates the visual shaking when switch between pages
-            marginBottom: 20 + 36,
-            '&:hover': {
-                backgroundColor: green[700],
-            },
-        },
-    }),
-)
+    },
+}))
 
 interface SetupFormProps extends withClasses<never> {
     primary: string
@@ -151,25 +153,24 @@ function SetupForm(props: SetupFormProps) {
 //#endregion
 
 //#region consent data collection
-const useConsentDataCollectionStyles = makeStyles((theme) =>
-    createStyles({
-        form: {
-            color: theme.palette.text.primary,
-            fontSize: 16,
-            lineHeight: 1.75,
-            width: 660,
-            minHeight: 256,
-            marginTop: 78,
-        },
-        label: {
-            color: theme.palette.text.primary,
-            marginBottom: 32,
-        },
-        button: {
-            minWidth: 220,
-        },
-    }),
-)
+const useConsentDataCollectionStyles = makeStyles((theme) => ({
+    form: {
+        color: theme.palette.text.primary,
+        fontSize: 16,
+        lineHeight: 1.75,
+        maxWidth: 660,
+        width: '100%',
+        minHeight: 256,
+        marginTop: 78,
+    },
+    label: {
+        color: theme.palette.text.primary,
+        marginBottom: 32,
+    },
+    button: {
+        minWidth: 220,
+    },
+}))
 
 export function ConsentDataCollection() {
     const { t } = useI18N()
@@ -223,13 +224,11 @@ export function ConsentDataCollection() {
 //#endregion
 
 //#region create persona
-const userCreatePersonaStyles = makeStyles((theme) =>
-    createStyles({
-        form: {
-            minHeight: 130,
-        },
-    }),
-)
+const userCreatePersonaStyles = makeStyles((theme) => ({
+    form: {
+        minHeight: 130,
+    },
+}))
 
 export function CreatePersona() {
     const { t } = useI18N()
@@ -260,13 +259,23 @@ export function CreatePersona() {
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                                 e.preventDefault()
-                                createPersonaAndNext()
+                                if (!checkInputLengthExceed(name) && name.length > 0) {
+                                    createPersonaAndNext()
+                                }
                             }
                         }}
                         label={t('name')}
-                        helperText={' '}
+                        helperText={
+                            checkInputLengthExceed(name)
+                                ? t('input_length_exceed_prompt', {
+                                      name: t('persona_name').toLowerCase(),
+                                      length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                                  })
+                                : undefined
+                        }
                         inputProps={{
                             'data-testid': 'username_input',
+                            maxLength: WALLET_OR_PERSONA_NAME_MAX_LEN,
                         }}
                         variant="outlined"
                     />
@@ -278,7 +287,7 @@ export function CreatePersona() {
                         className={setupFormClasses.button}
                         variant="contained"
                         onClick={createPersonaAndNext}
-                        disabled={!name}
+                        disabled={!name || checkInputLengthExceed(name)}
                         data-testid="next_button">
                         {t('set_up_button_next')}
                     </ActionButton>
@@ -318,7 +327,11 @@ export function ConnectNetwork() {
     const initializedPersonas = useMyPersonas()
     const uninitializedPersonas = useMyUninitializedPersonas()
     const { identifier } = useQueryParams(['identifier'])
-    const { value = null, loading, error } = useAsync(async () => {
+    const {
+        value = null,
+        loading,
+        error,
+    } = useAsync(async () => {
         const persona = initializedPersonas.find((x) => x.identifier.toText() === identifier)
         // auto-finished by setup guide
         if (persona?.linkedProfiles.size) {
@@ -377,37 +390,35 @@ export function ConnectNetwork() {
 //#endregion
 
 //#region restore
-const useRestoreDatabaseStyle = makeStyles((theme) =>
-    createStyles({
-        file: {
-            display: 'none',
+const useRestoreDatabaseStyle = makeStyles((theme) => ({
+    file: {
+        display: 'none',
+    },
+    input: {
+        width: '100%',
+        boxSizing: 'border-box',
+        border: `solid 1px ${theme.palette.divider}`,
+        borderRadius: 4,
+        height: 176,
+        padding: theme.spacing(2, 3),
+        '& > textarea': {
+            overflow: 'auto !important',
+            height: '100% !important',
         },
-        input: {
-            width: '100%',
-            boxSizing: 'border-box',
-            border: `solid 1px ${theme.palette.divider}`,
-            borderRadius: 4,
-            height: 176,
-            padding: theme.spacing(2, 3),
-            '& > textarea': {
-                overflow: 'auto !important',
-                height: '100% !important',
-            },
-            [theme.breakpoints.down('sm')]: {
-                padding: theme.spacing(2),
-            },
+        [theme.breakpoints.down('sm')]: {
+            padding: theme.spacing(2),
         },
-        restoreTextWrapper: {
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-        },
-        restoreActionButton: {
-            alignSelf: 'flex-end',
-            marginTop: theme.spacing(1),
-        },
-    }),
-)
+    },
+    restoreTextWrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+    },
+    restoreActionButton: {
+        alignSelf: 'flex-end',
+        marginTop: theme.spacing(1),
+    },
+}))
 
 export function RestoreDatabase() {
     const { t } = useI18N()
@@ -489,7 +500,7 @@ export function RestoreDatabase() {
         <SetupForm
             primary={t('set_up_restore')}
             secondary={t('set_up_restore_hint')}
-            content={<AbstractTab {...tabProps}></AbstractTab>}
+            content={<AbstractTab {...tabProps} />}
             actions={
                 <>
                     <ActionButton
@@ -660,7 +671,7 @@ export function RestoreDatabaseAdvance() {
         <SetupForm
             primary={t('set_up_advance_restore')}
             secondary={t('set_up_advance_restore_hint')}
-            content={<AbstractTab {...tabProps}></AbstractTab>}
+            content={<AbstractTab {...tabProps} />}
             actions={
                 <>
                     <ActionButton
@@ -704,30 +715,28 @@ export function RestoreDatabaseAdvance() {
 //#endregion
 
 //#region restore database confirmation
-const useRestoreDatabaseConfirmationStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        databasePreviewCardTable: {
-            width: 432,
-            border: `solid 1px ${theme.palette.divider}`,
-            borderRadius: 4,
-            padding: 32,
-            marginTop: 0,
-            marginLeft: -32,
-            marginBottom: 38,
-            [theme.breakpoints.down('sm')]: {
-                width: '100%',
-                marginLeft: 0,
-            },
+const useRestoreDatabaseConfirmationStyles = makeStyles((theme: Theme) => ({
+    databasePreviewCardTable: {
+        width: 432,
+        border: `solid 1px ${theme.palette.divider}`,
+        borderRadius: 4,
+        padding: 32,
+        marginTop: 0,
+        marginLeft: -32,
+        marginBottom: 38,
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+            marginLeft: 0,
         },
-        databasePreviewCardLabel: {
-            fontSize: 18,
-        },
-        databasePreviewCardIcon: {
-            width: 18,
-            height: 18,
-        },
-    }),
-)
+    },
+    databasePreviewCardLabel: {
+        fontSize: 18,
+    },
+    databasePreviewCardIcon: {
+        width: 18,
+        height: 18,
+    },
+}))
 
 export function RestoreDatabaseConfirmation() {
     const { t } = useI18N()
@@ -842,13 +851,6 @@ const setupTheme = extendsTheme((theme) => ({
                 multiline: {
                     paddingTop: 14.5,
                     paddingBottom: 14.5,
-                },
-            },
-        },
-        MuiInputLabel: {
-            styleOverrides: {
-                outlined: {
-                    transform: 'translate(14px, 16px) scale(1)',
                 },
             },
         },

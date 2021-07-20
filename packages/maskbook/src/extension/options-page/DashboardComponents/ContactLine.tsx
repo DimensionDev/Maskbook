@@ -1,56 +1,51 @@
 import { Typography, IconButton, MenuItem, ListItem, ListItemTypeMap } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import type { Profile } from '../../../database'
-import { Avatar } from '../../../utils/components/Avatar'
+import { Avatar, useMenu, useI18N, useMatchXS } from '../../../utils'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardContactDialog, DashboardContactDeleteConfirmDialog } from '../DashboardDialogs/Contact'
-import { useMenu } from '../../../utils/hooks/useMenu'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
-import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        line: {
-            display: 'flex',
-            alignItems: 'center',
-            width: '100%',
-            padding: theme.spacing(2),
-            borderBottom: `1px solid ${theme.palette.divider}`,
+const useStyles = makeStyles((theme) => ({
+    line: {
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        padding: theme.spacing(2),
+        borderBottom: `1px solid ${theme.palette.divider}`,
+    },
+    avatar: {
+        width: '32px',
+        height: '32px',
+    },
+    user: {
+        color: theme.palette.text.primary,
+        fontWeight: 500,
+        margin: theme.spacing(0, 2),
+        flex: '0 1 auto',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+    },
+    provider: {
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(2),
+        [theme.breakpoints.down('sm')]: {
+            flex: 1,
         },
-        avatar: {
-            width: '32px',
-            height: '32px',
-        },
-        user: {
-            color: theme.palette.text.primary,
-            fontWeight: 500,
-            margin: theme.spacing(0, 2),
-            flex: '0 1 auto',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-        },
-        provider: {
-            color: theme.palette.text.secondary,
-            marginRight: theme.spacing(2),
-            [theme.breakpoints.down('sm')]: {
-                flex: 1,
-            },
-        },
-        fingerprint: {
-            color: theme.palette.text.secondary,
-            marginLeft: 'auto',
-            marginRight: 0,
-            fontFamily: 'var(--monospace)',
-        },
-        more: {
-            marginLeft: theme.spacing(1),
-            color: theme.palette.text.primary,
-        },
-    }),
-)
+    },
+    fingerprint: {
+        color: theme.palette.text.secondary,
+        marginLeft: 'auto',
+        marginRight: 0,
+        fontFamily: 'var(--monospace)',
+    },
+    more: {
+        marginLeft: theme.spacing(1),
+        color: theme.palette.text.primary,
+    },
+}))
 
 interface ContactLineProps extends Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>> {
     contact: Profile
