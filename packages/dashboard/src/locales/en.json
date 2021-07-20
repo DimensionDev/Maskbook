@@ -137,7 +137,7 @@
     "settings_change_passowrd_desc": "Change your backup password",
     "settings_change_passowrd_not_set": "You haven't set up a backup password",
     "settings_phone_number_title": "Phone Number",
-    "settings_phone_number_desc": "Please bind your phone Number",
+    "settings_phone_number_desc": "Please bind your phone number",
     "settings_log_out_title": "Log Out",
     "settings_log_out_desc": "Please make sure your data is backed up before you log out",
     "settings_log_out_tips": "The data of Mask Network is stored in your current browser. Please don’t delete Mask Network plugin randomly. Remember to back up your current data of Mask Network plugin in time before you log out.",
