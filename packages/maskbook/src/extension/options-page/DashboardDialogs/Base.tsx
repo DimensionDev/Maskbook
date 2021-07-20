@@ -263,7 +263,8 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
                         )}
                         color="textSecondary"
                         variant="body2"
-                        dangerouslySetInnerHTML={{ __html: secondary ?? '' }}></Typography>
+                        dangerouslySetInnerHTML={{ __html: secondary ?? '' }}
+                    />
                 </section>
                 {content ? <section className={classes.content}>{content}</section> : null}
                 {footer ? <section className={classes.footer}>{footer}</section> : null}

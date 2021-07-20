@@ -81,7 +81,7 @@ export const SearchableList = <T,>({
         <div className={classes.container}>
             <TextField
                 className={classes.textField}
-                placeholder={'Search'}
+                placeholder="Search"
                 autoFocus
                 fullWidth
                 InputProps={{

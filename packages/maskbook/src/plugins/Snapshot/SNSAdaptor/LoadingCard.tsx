@@ -26,7 +26,8 @@ export function LoadingCard(props: React.PropsWithChildren<{ title: string }>) {
                             animation="wave"
                             variant="rectangular"
                             width={i === 0 ? '80%' : '60%'}
-                            height={15}></Skeleton>
+                            height={15}
+                        />
                     ))}
                 </SnapshotCard>
             }>

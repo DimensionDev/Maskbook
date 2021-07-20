@@ -1,4 +1,4 @@
-export * from './brands'
-export * from './general'
-export * from './plugins'
 export { createIcon } from './utils'
+export * from './general'
+export * from './brands'
+export * from './plugins'

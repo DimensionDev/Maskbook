@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme: Theme) => ({
             justifyContent: 'center',
         },
     },
-    footerButton: {
+    footerLink: {
         borderRadius: '0',
         whiteSpace: 'nowrap',
         '& > p': {
@@ -38,13 +38,13 @@ const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
                 target="_blank"
                 rel="noopener noreferrer"
                 color="textPrimary"
-                className={classes.footerButton}>
+                className={classes.footerLink}>
                 {children}
             </MuiLink>
         )
     if ('to' in props)
         return (
-            <MuiLink underline="none" {...props} component={Link} color="textPrimary" className={classes.footerButton}>
+            <MuiLink underline="none" {...props} component={Link} color="textPrimary" className={classes.footerLink}>
                 {children}
             </MuiLink>
         )
@@ -55,7 +55,7 @@ const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
             component="a"
             style={{ cursor: 'pointer' }}
             color="textPrimary"
-            className={classes.footerButton}>
+            className={classes.footerLink}>
             {children}
         </MuiLink>
     )
@@ -68,7 +68,7 @@ export default function FooterLine() {
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
     const openVersionLink = (event: React.MouseEvent) => {
         // `MouseEvent.prototype.metaKey` on macOS (`Command` key), Windows (`Windows` key), Linux (`Super` key)
-        if (process.env.build === 'stable' && event.metaKey === false) {
+        if (process.env.build === 'stable' && !event.metaKey) {
             open(t('version_of_release', { tag: `v${version}` }))
         } else {
             open(t('version_of_hash', { hash: process.env.COMMIT_HASH }))

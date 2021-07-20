@@ -207,9 +207,9 @@ export function GasNowDialog() {
                                 </>
                             ) : (
                                 <>
-                                    <Skeleton animation="wave" variant="rectangular" height={15} width="80%"></Skeleton>
-                                    <Skeleton animation="wave" variant="rectangular" height={15} width="80%"></Skeleton>
-                                    <Skeleton animation="wave" variant="rectangular" height={12} width="40%"></Skeleton>
+                                    <Skeleton animation="wave" variant="rectangular" height={15} width="80%" />
+                                    <Skeleton animation="wave" variant="rectangular" height={15} width="80%" />
+                                    <Skeleton animation="wave" variant="rectangular" height={12} width="40%" />
                                 </>
                             )}
                         </ListItem>

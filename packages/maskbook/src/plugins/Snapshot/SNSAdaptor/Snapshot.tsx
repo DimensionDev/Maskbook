@@ -84,7 +84,8 @@ export function Snapshot() {
                             {identifier.space}
                         </Typography>
                     </Box>
-                }></CardHeader>
+                }
+            />
             <CardContent className={classes.content}>
                 <Tabs
                     className={classes.tabs}

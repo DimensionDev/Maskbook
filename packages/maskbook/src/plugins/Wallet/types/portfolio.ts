@@ -3,7 +3,7 @@ import type { DebankTransactionDirection } from './debank'
 
 export enum FilterTransactionType {
     ALL = 'all',
-    SENT = 'sent',
+    SEND = 'send',
     RECEIVE = 'receive',
 }
 
@@ -15,6 +15,7 @@ export interface TransactionPair {
     address: string
     direction: TransactionDirection
     amount: number
+    logoURI?: string
 }
 
 export type TransactionGasFee = {

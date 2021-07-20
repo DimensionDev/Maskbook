@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { useAccount } from '@masknet/web3-shared'
-import type { Qualification } from '@masknet/contracts/types/Qualification'
-import type { Qualification2 } from '@masknet/contracts/types/Qualification2'
+import type { Qualification } from '@masknet/web3-contracts/types/Qualification'
+import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2'
 import { useQualificationContract } from './useQualificationContract'
 
 export function useIfQualified(address: string, ito_address: string) {

@@ -30,7 +30,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     const isClaimed = availability.claimed_amount ? availability.claimed_amount !== '0' : availability.ifclaimed
     const isRefunded = isEmpty && Number.parseInt(availability.claimed, 10) < Number.parseInt(availability.total, 10)
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
-    const parsedChainId = payload.network ? getChainIdFromName(payload.network) : ChainId.Mainnet
+    const parsedChainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
     return {
         ...asyncResult,
         computed: {

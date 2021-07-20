@@ -1,5 +1,5 @@
-import AirdropABI from '@masknet/contracts/abis/Airdrop.json'
-import type { Airdrop } from '@masknet/contracts/types/Airdrop'
+import AirdropABI from '@masknet/web3-contracts/abis/Airdrop.json'
+import type { Airdrop } from '@masknet/web3-contracts/types/Airdrop'
 import { useAirdropConstants, useContract } from '@masknet/web3-shared'
 import type { AbiItem } from 'web3-utils'
 

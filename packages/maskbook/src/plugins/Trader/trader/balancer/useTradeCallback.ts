@@ -1,5 +1,5 @@
-import type { ExchangeProxy } from '@masknet/contracts/types/ExchangeProxy'
-import type { PayableTx } from '@masknet/contracts/types/types'
+import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
+import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
     TransactionEventType,

@@ -1,4 +1,5 @@
 {
+    "footer_bounty_list": "賞金列表",
     "wallets": "錢包",
     "personas": "Personas",
     "wallets_transfer": "轉賬",
@@ -46,6 +47,7 @@
     "personas_setup_connect_tips": "",
     "personas_setup_connect": "",
     "personas_name_maximum_tips": "",
+    "personas_rename_placeholder": "",
     "personas_confirm": "",
     "personas_cancel": "",
     "personas_delete_confirm_tips": "",

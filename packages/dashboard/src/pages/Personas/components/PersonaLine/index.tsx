@@ -48,17 +48,15 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(({ userId, o
             <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>
                 {userId}
             </Typography>
-            {
-                <Link
-                    component="button"
-                    variant="caption"
-                    onClick={(e: MouseEvent) => {
-                        e.stopPropagation()
-                        onDisconnect()
-                    }}>
-                    {t.personas_disconnect()}
-                </Link>
-            }
+            <Link
+                component="button"
+                variant="caption"
+                onClick={(e: MouseEvent) => {
+                    e.stopPropagation()
+                    onDisconnect()
+                }}>
+                {t.personas_disconnect()}
+            </Link>
         </Link>
     )
 })

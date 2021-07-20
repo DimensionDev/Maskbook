@@ -9,7 +9,6 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import {
     ChainId,
     currySameAddress,
-    ERC20TokenDetailed,
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
@@ -20,6 +19,9 @@ import {
     useChainId,
     useTokenBalance,
     ZERO,
+    useTokenDetailed,
+    isSameAddress,
+    useTokenConstants,
 } from '@masknet/web3-shared'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -117,15 +119,26 @@ export function SwapDialog(props: SwapDialogProps) {
 
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
-
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),
     )
-    const [swapToken, setSwapToken] = useState<FungibleTokenDetailed>(payload.exchange_tokens[0])
+    const { value: initToken } = useTokenDetailed(
+        isSameAddress(NATIVE_TOKEN_ADDRESS, payload.exchange_tokens[0].address)
+            ? EthereumTokenType.Native
+            : EthereumTokenType.ERC20,
+        payload.exchange_tokens[0].address,
+    )
+
+    const [swapToken, setSwapToken] = useState<FungibleTokenDetailed | undefined>(undefined)
+
+    useEffect(() => {
+        setSwapToken(initToken)
+    }, [JSON.stringify(initToken)])
 
     const [swapAmount, setSwapAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
     const [inputAmountForUI, setInputAmountForUI] = useState(
-        swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken.decimals),
+        swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken?.decimals),
     )
 
     //#region select token
@@ -165,7 +178,6 @@ export function SwapDialog(props: SwapDialogProps) {
             disableNativeToken: !exchangeTokens.some((x) => isNative(x.address)),
             disableSearchBar: true,
             FixedTokenListProps: {
-                tokens: exchangeTokens.filter((x) => !isNative(x.address)) as ERC20TokenDetailed[],
                 whitelist: exchangeTokens.map((x) => x.address),
             },
         })
@@ -178,7 +190,10 @@ export function SwapDialog(props: SwapDialogProps) {
     //#endregion
 
     //#region balance
-    const { value: tokenBalance = '0' } = useTokenBalance(swapToken.type, swapToken.address)
+    const { value: tokenBalance = '0' } = useTokenBalance(
+        swapToken ? swapToken.type : EthereumTokenType.Native,
+        swapToken ? swapToken.address : NATIVE_TOKEN_ADDRESS,
+    )
     //#endregion
 
     //#region maxAmount for TokenAmountPanel
@@ -197,7 +212,7 @@ export function SwapDialog(props: SwapDialogProps) {
     const [swapState, swapCallback, resetSwapCallback] = useSwapCallback(
         payload,
         swapAmount.toFixed(),
-        swapToken,
+        swapToken ? swapToken : { address: NATIVE_TOKEN_ADDRESS },
         qualificationInfo?.isQualificationHasLucky,
     )
     const onSwap = useCallback(async () => {
@@ -246,12 +261,12 @@ export function SwapDialog(props: SwapDialogProps) {
 
     const validationMessage = useMemo(() => {
         if (swapAmount.isEqualTo(0)) return t('plugin_ito_error_enter_amount')
-        if (swapAmount.isGreaterThan(tokenBalance)) return t('plugin_ito_error_balance', { symbol: swapToken.symbol })
+        if (swapAmount.isGreaterThan(tokenBalance)) return t('plugin_ito_error_balance', { symbol: swapToken?.symbol })
         if (tokenAmount.isGreaterThan(maxSwapAmount)) return t('plugin_ito_dialog_swap_exceed_wallet_limit')
         return ''
     }, [swapAmount, tokenBalance, maxSwapAmount, swapToken, ratio])
 
-    return (
+    return swapToken ? (
         <>
             <section className={classes.swapLimitWrap}>
                 <Typography variant="body1" className={classes.swapLimitText}>
@@ -275,8 +290,7 @@ export function SwapDialog(props: SwapDialogProps) {
             <Typography className={classes.exchangeText} variant="body1" color="textSecondary">
                 {t('plugin_ito_dialog_swap_exchange')}{' '}
                 <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals)}</span>{' '}
-                {token.symbol}
-                {'.'}
+                {token.symbol}.
             </Typography>
             <TokenAmountPanel
                 amount={inputAmountForUI}
@@ -330,5 +344,5 @@ export function SwapDialog(props: SwapDialogProps) {
                 </EthereumWalletConnectedBoundary>
             </section>
         </>
-    )
+    ) : null
 }

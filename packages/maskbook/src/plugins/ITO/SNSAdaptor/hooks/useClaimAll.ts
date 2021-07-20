@@ -7,6 +7,7 @@ import {
     useITOConstants,
     ChainId,
 } from '@masknet/web3-shared'
+import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
 import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'
 import { useITO_Contract } from './useITO_Contract'
 
@@ -35,17 +36,18 @@ export function useClaimAll(isMainnetOld = false) {
 
         const raws = await Promise.all(
             pools.map(async (value) => {
-                const availability = await ITO_Contract.methods.check_availability(value.pool.pid).call({
+                const availability = await (ITO_Contract as ITO2).methods.check_availability(value.pool.pid).call({
                     from: account,
                 })
-
                 return { availability, ...value }
             }),
         )
         const swappedTokens: SwappedToken[] = raws
             .filter(
                 (raw) =>
-                    raw.availability.swapped !== '0' && raw.pool.end_time < Number(raw.availability.unlock_time) * 1000,
+                    !raw.availability.claimed &&
+                    raw.availability.swapped !== '0' &&
+                    raw.pool.end_time < Number(raw.availability.unlock_time) * 1000,
             )
             .map((raw) => {
                 return {

@@ -1,47 +1,78 @@
-import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { ERC20TokenDetailed, EthereumTokenType } from '../types'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import { ERC20TokenDetailed, FungibleToken, ChainId, EthereumTokenType, FungibleTokenDetailed } from '../types'
 import { useChainId } from './useChainId'
-import { useSingleContractMultipleData } from './useMulticall'
-import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
-import { formatEthereumAddress } from '../utils'
+import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
+import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32'
+import { useERC20TokenContract, useERC20TokenContracts } from '../contracts/useERC20TokenContract'
+import { useERC20TokenBytes32Contract, useERC20TokenBytes32Contracts } from '../contracts/useERC20TokenBytes32Contract'
+import { parseStringOrBytes32, createERC20Token, createNativeToken } from '../utils'
+import { useMemo } from 'react'
 
 export function useERC20TokenDetailed(address: string, token?: Partial<ERC20TokenDetailed>) {
     const chainId = useChainId()
     const erc20TokenContract = useERC20TokenContract(address)
+    const erc20TokenBytes32Contract = useERC20TokenBytes32Contract(address)
 
-    // compose calls
-    const { names, callDatas } = useMemo(
-        () => ({
-            names: ['name', 'symbol', 'decimals'] as 'name'[],
-            callDatas: [[], [], []] as [][],
-        }),
-        [],
+    return useAsyncRetry(
+        async () => getERC20TokenDetailed(address, chainId, erc20TokenContract, erc20TokenBytes32Contract, token),
+        [chainId, token, erc20TokenContract, erc20TokenBytes32Contract, address],
     )
+}
 
-    // validate
-    const [results, calls, _, callback] = useSingleContractMultipleData(erc20TokenContract, names, callDatas)
-    const asyncResult = useAsyncRetry(() => callback(calls), [calls, callback])
+export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'address' | 'type'>[]) {
+    const chainId = useChainId()
+    const listOfAddress = useMemo(() => listOfToken.map((t) => t.address), [JSON.stringify(listOfToken)])
+    const erc20TokenContracts = useERC20TokenContracts(listOfAddress)
+    const erc20TokenBytes32Contracts = useERC20TokenBytes32Contracts(listOfAddress)
 
-    // compose
-    const token_ = useMemo(() => {
-        if (!erc20TokenContract) return
-        const [name, symbol, decimals] = results.map((x) => (x.error ? undefined : x.value))
-        // not a valid erc20 token
-        if (!name && !symbol && !decimals) return
-        return {
-            type: EthereumTokenType.ERC20,
-            address: formatEthereumAddress(address),
+    return useAsyncRetry<FungibleTokenDetailed[]>(
+        async () =>
+            Promise.all(
+                listOfToken.map(async (token, i) => {
+                    if (token.type === EthereumTokenType.Native) return createNativeToken(chainId)
+
+                    const erc20TokenContract = erc20TokenContracts[i]
+                    const erc20TokenBytes32Contract = erc20TokenBytes32Contracts[i]
+                    return getERC20TokenDetailed(
+                        token.address,
+                        chainId,
+                        erc20TokenContract,
+                        erc20TokenBytes32Contract,
+                        token as Partial<ERC20TokenDetailed>,
+                    )
+                }),
+            ),
+        [
             chainId,
-            name: name ?? token?.name ?? '',
-            symbol: symbol ?? token?.symbol ?? '',
-            decimals: decimals ? Number.parseInt(decimals, 10) : token?.decimals ?? 0,
-        } as ERC20TokenDetailed
-    }, [erc20TokenContract, address, chainId, results, token])
+            JSON.stringify(listOfToken),
+            JSON.stringify(erc20TokenContracts),
+            JSON.stringify(erc20TokenBytes32Contracts),
+        ],
+    )
+}
 
-    return {
-        ...asyncResult,
-        value: token_,
-    } as AsyncStateRetry<typeof token_>
+async function getERC20TokenDetailed(
+    address: string,
+    chainId: ChainId,
+    erc20TokenContract: ERC20 | null,
+    erc20TokenBytes32Contract: ERC20Bytes32 | null,
+    token?: Partial<ERC20TokenDetailed>,
+) {
+    const results = await Promise.allSettled([
+        token?.name ?? (await (erc20TokenContract?.methods.name().call() ?? '')),
+        token?.name ? '' : await (erc20TokenBytes32Contract?.methods.name().call() ?? ''),
+        token?.symbol ?? (await (erc20TokenContract?.methods.symbol().call() ?? '')),
+        token?.symbol ? '' : await (erc20TokenBytes32Contract?.methods.symbol().call() ?? ''),
+        token?.decimals ?? (await (erc20TokenContract?.methods.decimals().call() ?? '0')),
+    ])
+    const [name, nameBytes32, symbol, symbolBytes32, decimals] = results.map((result) =>
+        result.status === 'fulfilled' ? result.value : '',
+    ) as string[]
+    return createERC20Token(
+        chainId,
+        address,
+        typeof decimals === 'string' ? Number.parseInt(decimals) : decimals,
+        parseStringOrBytes32(name, nameBytes32, 'Unknown Token'),
+        parseStringOrBytes32(symbol, symbolBytes32, 'Unknown'),
+    )
 }

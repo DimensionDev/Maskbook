@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from 'react'
-import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from '@material-ui/core'
+import { useEffect, useState, useCallback, CSSProperties } from 'react'
+import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 import type { Profile, Group } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
@@ -7,6 +7,7 @@ import { ProfileOrGroupInList, ProfileOrGroupInListProps } from './PersonOrGroup
 import { ProfileOrGroupInChip, ProfileOrGroupInChipProps } from './PersonOrGroupInChip'
 import { ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import { useStylesExtends } from '../../custom-ui-helper'
+import { FixedSizeList } from 'react-window'
 
 type ProfileOrGroup = Group | Profile
 export interface SelectProfileAndGroupsUIProps<ServeType extends Group | Profile = Group | Profile>
@@ -87,6 +88,7 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
     )
     const showSelectAll = !hideSelectAll && listAfterSearch.length > 0 && typeof maxSelection === 'undefined'
     const showSelectNone = !hideSelectNone && selected.length > 0
+
     return (
         <div className={classes.root}>
             <Box
@@ -94,22 +96,36 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
                 sx={{
                     display: 'flex',
                 }}>
-                {frozenSelected.map((x) => FrozenChip(x, props.ProfileOrGroupInChipProps))}
-                {selected
-                    .filter((item) => !frozenSelected.includes(item as ServeType))
-                    .map((item) => (
-                        <ProfileOrGroupInChip
-                            disabled={disabled}
-                            key={item.identifier.toText()}
-                            item={item}
-                            onDelete={() =>
-                                onSetSelected(
-                                    selected.filter((x) => !x.identifier.equals(item.identifier)) as ServeType[],
-                                )
-                            }
-                            {...props.ProfileOrGroupInChipProps}
-                        />
-                    ))}
+                {frozenSelected.length === items.length || !listBeforeSearch.length ? (
+                    <Chip
+                        disabled={disabled}
+                        style={{ marginRight: 6, marginBottom: 6 }}
+                        color="primary"
+                        onDelete={frozenSelected.length !== items.length ? () => onSetSelected([]) : undefined}
+                        label={t('all_friends')}
+                    />
+                ) : (
+                    <>
+                        {frozenSelected.map((x) => FrozenChip(x, props.ProfileOrGroupInChipProps))}
+                        {selected
+                            .filter((item) => !frozenSelected.includes(item as ServeType))
+                            .map((item) => (
+                                <ProfileOrGroupInChip
+                                    disabled={disabled}
+                                    key={item.identifier.toText()}
+                                    item={item}
+                                    onDelete={() =>
+                                        onSetSelected(
+                                            selected.filter(
+                                                (x) => !x.identifier.equals(item.identifier),
+                                            ) as ServeType[],
+                                        )
+                                    }
+                                    {...props.ProfileOrGroupInChipProps}
+                                />
+                            ))}
+                    </>
+                )}
                 <InputBase
                     className={classes.input}
                     value={disabled ? '' : search}
@@ -140,12 +156,21 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
                             <ListItemText primary={t('no_search_result')} />
                         </ListItem>
                     )}
-                    {listAfterSearch.map(PeopleListItem)}
+                    <FixedSizeList
+                        itemSize={56}
+                        itemCount={listAfterSearch.length}
+                        overscanCount={5}
+                        width="100%"
+                        height={400}>
+                        {({ index, style }) =>
+                            listAfterSearch[index] ? PeopleListItem(listAfterSearch[index], style) : null
+                        }
+                    </FixedSizeList>
                 </List>
             </Box>
         </div>
     )
-    function PeopleListItem(item: ProfileOrGroup) {
+    function PeopleListItem(item: ProfileOrGroup, style: CSSProperties) {
         if (ignoreMyself && myself && item.identifier.equals(myself.identifier)) return null
         return (
             <ProfileOrGroupInList
@@ -163,6 +188,7 @@ export function SelectProfileAndGroupsUI<ServeType extends Group | Profile = Pro
                     else onSetSelected(selected.concat(item) as ServeType[])
                     setSearch('')
                 }}
+                ListItemProps={{ ...props.ProfileOrGroupInListProps?.ListItemProps, style }}
                 {...props.ProfileOrGroupInListProps}
             />
         )

@@ -48,7 +48,7 @@ export function TokenListItem({ data, onSelect }: MaskSearchableListItemProps<As
     const token = data.token
 
     if (!token) return null
-    const { address, name, symbol } = token
+    const { address, name, symbol, logoURI } = token
 
     const handleTokenSelect = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation()
@@ -58,7 +58,7 @@ export function TokenListItem({ data, onSelect }: MaskSearchableListItemProps<As
     return (
         <ListItem button className={classes.list} onClick={handleTokenSelect}>
             <ListItemIcon>
-                <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} />
+                <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURI={logoURI} />
             </ListItemIcon>
             <ListItemText classes={{ primary: classes.text }}>
                 <Typography className={classes.primary} color="textPrimary" component="span">
@@ -71,9 +71,9 @@ export function TokenListItem({ data, onSelect }: MaskSearchableListItemProps<As
                     ) : (
                         <Button
                             className={classes.importButton}
-                            color={'primary'}
+                            color="primary"
                             onClick={handleTokenSelect}
-                            size={'small'}>
+                            size="small">
                             Import
                         </Button>
                     )}

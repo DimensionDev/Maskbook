@@ -14,7 +14,7 @@ import { Card, Grid, IconButton, Link, makeStyles, Paper, Typography } from '@ma
 import LaunchIcon from '@material-ui/icons/Launch'
 import RepeatIcon from '@material-ui/icons/Repeat'
 import formatDateTime from 'date-fns/format'
-import { Fragment, useCallback, useState } from 'react'
+import { Fragment, useCallback, useState, useEffect } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { Flags, useI18N } from '../../../utils'
 import { TxFeeEstimation } from '../../../web3/UI/TxFeeEstimation'
@@ -109,10 +109,11 @@ export interface ConfirmDialogProps {
     poolSettings?: PoolSettings
     onDone: () => void
     onBack: () => void
+    onClose: () => void
 }
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
-    const { poolSettings, onDone, onBack } = props
+    const { poolSettings, onDone, onBack, onClose } = props
     const classes = useStyles()
     const { t } = useI18N()
     const chainId = useChainId()
@@ -122,6 +123,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
         poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION2_ADDRESS
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
     const fillParamsResult = useFillParams(poolSettings)
+
+    useEffect(() => {
+        if (poolSettings?.token?.chainId !== chainId) onClose()
+    }, [onClose, chainId, poolSettings])
 
     return (
         <Card elevation={0}>
@@ -203,7 +208,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     <Paper className={classes.data}>
                         <Typography>
                             <FormattedBalance
-                                value={poolSettings?.total}
+                                value={poolSettings?.limit}
                                 decimals={poolSettings?.token?.decimals}
                                 symbol={poolSettings?.token?.symbol}
                             />

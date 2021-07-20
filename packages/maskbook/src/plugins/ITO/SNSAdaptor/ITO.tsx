@@ -5,6 +5,7 @@ import {
     FungibleTokenDetailed,
     getChainDetailed,
     isSameAddress,
+    currySameAddress,
     isZero,
     pow10,
     resolveLinkOnExplorer,
@@ -185,7 +186,11 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 
     return (
         <>
-            <TokenIcon classes={{ icon: classes.tokenIcon }} address={exchangeToken.address} />
+            <TokenIcon
+                classes={{ icon: classes.tokenIcon }}
+                address={exchangeToken.address}
+                logoURI={exchangeToken.logoURI}
+            />
             <Typography component="span">
                 <strong>{price}</strong>{' '}
                 {isSameAddress(exchangeToken.address, NATIVE_TOKEN_ADDRESS)
@@ -218,7 +223,7 @@ export function ITO(props: ITO_Props) {
 
     const { pid, payload } = props
     const { regions: defaultRegions = '-' } = props.payload
-    const { token, total: payload_total, exchange_amounts, exchange_tokens, limit, end_time, message } = payload
+    const { token, total: payload_total, exchange_amounts, exchange_tokens, limit, message } = payload
 
     const { t } = useI18N()
     const sellerName =
@@ -237,6 +242,9 @@ export function ITO(props: ITO_Props) {
         error: errorAvailability,
         retry: retryAvailability,
     } = useAvailabilityComputed(payload)
+
+    const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime, endTime, qualificationAddress } =
+        availabilityComputed
     //#ednregion
 
     const total = new BigNumber(payload_total)
@@ -254,10 +262,8 @@ export function ITO(props: ITO_Props) {
         value: ifQualified = false,
         loading: loadingIfQualified,
         retry: retryIfQualified,
-    } = useIfQualified(payload.qualification_address, payload.contract_address)
+    } = useIfQualified(qualificationAddress, payload.contract_address)
     //#endregion
-
-    const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime } = availabilityComputed
 
     const isAccountSeller =
         payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
@@ -272,10 +278,9 @@ export function ITO(props: ITO_Props) {
     //#region buy info
     const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
-        (chainId === payload.chain_id &&
-            (payload.buyers.map((val) => val.address.toLowerCase()).includes(account.toLowerCase()) ||
-                tradeInfo?.buyInfo?.buyer.address.toLowerCase() === account.toLowerCase())) ||
-        new BigNumber(availability ? availability.swapped : 0).isGreaterThan(0)
+        chainId === payload.chain_id &&
+        (new BigNumber(availability ? availability.swapped : 0).isGreaterThan(0) || Boolean(availability?.claimed))
+
     const shareSuccessLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             t('plugin_ito_claim_success_share', {
@@ -374,7 +379,7 @@ export function ITO(props: ITO_Props) {
     )
 
     useEffect(() => {
-        const timeToExpired = end_time - Date.now()
+        const timeToExpired = endTime - Date.now()
         if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired)) return
 
         const timer = setTimeout(() => {
@@ -383,7 +388,7 @@ export function ITO(props: ITO_Props) {
         }, timeToExpired + TIME_WAIT_BLOCKCHAIN)
 
         return () => clearTimeout(timer)
-    }, [end_time, listOfStatus])
+    }, [endTime, listOfStatus])
 
     useEffect(() => {
         if (destructState.type === TransactionStateType.UNKNOWN) return
@@ -392,7 +397,7 @@ export function ITO(props: ITO_Props) {
             summary += ' ' + formatBalance(total_remaining, token.decimals) + ' ' + token.symbol
         }
         availability?.exchange_addrs.forEach((addr, i) => {
-            const token = exchange_tokens.find((t) => t.address.toLowerCase() === addr.toLowerCase())
+            const token = exchange_tokens.find(currySameAddress(addr))
             const comma = noRemain && i === 0 ? ' ' : ', '
             if (token) {
                 summary += comma + formatBalance(availability?.exchanged_tokens[i], token.decimals) + ' ' + token.symbol
@@ -465,10 +470,10 @@ export function ITO(props: ITO_Props) {
     const footerEndTime = useMemo(
         () => (
             <Typography variant="body1">
-                {t('plugin_ito_swap_end_date', { date: formatDateTime(end_time, 'yyyy-MM-dd HH:mm') })}
+                {t('plugin_ito_swap_end_date', { date: formatDateTime(endTime, 'yyyy-MM-dd HH:mm') })}
             </Typography>
         ),
-        [end_time, t],
+        [endTime, t],
     )
 
     const footerSwapInfo = useMemo(
@@ -544,10 +549,10 @@ export function ITO(props: ITO_Props) {
                                     price={formatBalance(
                                         new BigNumber(exchange_amounts[i * 2])
                                             .dividedBy(exchange_amounts[i * 2 + 1])
-                                            .multipliedBy(pow10(token.decimals - exchange_tokens[i].decimals))
-                                            .multipliedBy(pow10(exchange_tokens[i].decimals))
+                                            .multipliedBy(pow10(token.decimals - exchangeToken.decimals))
+                                            .multipliedBy(pow10(exchangeToken.decimals))
                                             .integerValue(),
-                                        exchange_tokens[i].decimals,
+                                        exchangeToken.decimals,
                                     )}
                                     token={token}
                                     exchangeToken={exchangeToken}
@@ -618,7 +623,7 @@ export function ITO(props: ITO_Props) {
                         {hasLockTime ? (
                             <Grid item xs={6}>
                                 {isUnlocked ? (
-                                    Number(availability?.swapped) > 0 ? (
+                                    !availability?.claimed ? (
                                         <ActionButton
                                             onClick={onClaimButtonClick}
                                             variant="contained"
@@ -712,7 +717,8 @@ export function ITO(props: ITO_Props) {
             </Box>
             <SwapGuide
                 status={claimDialogStatus}
-                payload={payload}
+                total_remaining={total_remaining}
+                payload={{ ...payload, qualification_address: qualificationAddress }}
                 shareSuccessLink={shareSuccessLink}
                 isBuyer={isBuyer}
                 exchangeTokens={exchange_tokens}

@@ -1,6 +1,6 @@
-import type { TypedMessage } from '@masknet/shared'
-import type { ChainId } from '@masknet/web3-shared'
+import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
 import type { Emitter } from '@servie/events'
+import type { Option, Result } from 'ts-results'
 
 export namespace Plugin {
     /**
@@ -67,7 +67,7 @@ export namespace Plugin.Shared {
          * Emoji icon of this plugin, used to display the plugin with a fancy shape.
          * @example "🎶"
          */
-        icon?: string
+        icon?: string | React.ReactNode
         /**
          * A brief description of this plugin.
          * @example { i18nKey: "description", fallback: "This plugin is going to replace every link in the page to https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
@@ -82,12 +82,24 @@ export namespace Plugin.Shared {
          * Configuration of what environment that this plugin expects to run in.
          */
         enableRequirement: EnableRequirement
+        /**
+         * Is this plugin marked as "experimental"?
+         *
+         * If the enableRequirement.target is not "stable", it will be treated as true.
+         *
+         * This does not affect if the plugin enable or not.
+         */
+        experimentalMark?: boolean
+        /** Configuration of how this plugin is managed by the Mask Network. */
+        management?: ManagementProperty
+        /** i18n resources of this plugin */
+        i18n?: I18NResource
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
      * which you should include the information above in those three parts.
      */
-    export interface DefinitionWithInit extends Definition {
+    export interface DefinitionDeferred extends Definition, Utilities {
         /**
          * This function is called when the plugin is initialized.
          *
@@ -96,6 +108,13 @@ export namespace Plugin.Shared {
          */
         init(signal: AbortSignal): void | Promise<void>
     }
+    export interface Utilities {
+        /**
+         * A pure function that convert a TypedMessage into another one
+         */
+        typedMessageTransformer?: TypedMessageTransformer
+    }
+    export type TypedMessageTransformer = (message: TypedMessageTuple) => TypedMessageTuple
     /** The publisher of the plugin */
     export interface Publisher {
         /** The name of the publisher */
@@ -115,11 +134,24 @@ export namespace Plugin.Shared {
         architecture: Record<'app' | 'web', boolean>
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
+        web3?: Web3EnableRequirement
+    }
+    export interface Web3EnableRequirement {
+        /** This flag indicates the plugin entry in the composition entry should be hidden if the current chain is invalid. */
+        compositionEntryRequiresChainIDValid?: boolean
+    }
+
+    export interface ManagementProperty {
+        /** This plugin should not displayed in the plugin management page. */
+        internal?: boolean
         /**
-         * undefined: The plugin manager will not take care of this plugin when the eth network changes
-         * @default undefined
+         * This plugin should not allow to be "disabled" in the plugin management page.
+         *
+         * This property is for the Wallet plugin. It's the core of almost all other plugins.
+         *
+         * It should be replaced by "dependency" management in the future (if there are more cases than the Wallet one).
          */
-        eth?: SupportedChainsDeclare
+        alwaysOn?: boolean
     }
     export interface SupportedNetworksDeclare {
         /**
@@ -129,28 +161,15 @@ export namespace Plugin.Shared {
         type: 'opt-in' | 'opt-out'
         networks: Partial<Record<CurrentSNSNetwork, boolean>>
     }
-    export interface SupportedChainsDeclare {
-        /**
-         * opt-in means the listed chains is supported.
-         * out-out means the listed chains is not supported.
-         */
-        type: 'opt-in' | 'opt-out'
-        chains: Partial<Record<ChainId, boolean>>
-    }
+    export type I18NLanguage = string
+    export type I18NKey = string
+    export type I18NValue = string
+    export type I18NResource = Record<I18NLanguage, Record<I18NKey, I18NValue>>
 }
-// TODO: This part is unused by the Mask but it is required to some plugins
-export namespace Plugin.Utils {
-    export interface Definition {
-        /**
-         * A pure function that convert a TypedMessage into another one
-         */
-        typedMessageTransformer: TypedMessageTransformer
-    }
-    export type TypedMessageTransformer = (message: TypedMessage) => TypedMessage
-}
+
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
-    export interface Definition extends Shared.DefinitionWithInit {
+    export interface Definition extends Shared.DefinitionDeferred {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
@@ -176,7 +195,7 @@ export namespace Plugin.SNSAdaptor {
          * A label that will be rendered in the CompositionDialog as a chip.
          * @example {fallback: "🧧 Red Packet"}
          */
-        label: I18NStringField | React.ReactNode
+        label: I18NFieldOrReactNode
         /** This callback will be called when the user clicked on the chip. */
         onClick(): void
     }
@@ -185,7 +204,7 @@ export namespace Plugin.SNSAdaptor {
          * A label that will be rendered in the CompositionDialog as a chip.
          * @example {fallback: "🧧 Red Packet"}
          */
-        label: I18NStringField | React.ReactNode
+        label: I18NFieldOrReactNode
         /** A React dialog component that receives `open` and `onClose`. The dialog will be opened when the chip clicked. */
         dialog: React.ComponentType<CompositionDialogEntry_DialogProps>
         /**
@@ -217,7 +236,7 @@ export namespace Plugin.SNSAdaptor {
 /** This part runs in the dashboard */
 export namespace Plugin.Dashboard {
     // As you can see we currently don't have so much use case for an API here.
-    export interface Definition extends Shared.DefinitionWithInit {
+    export interface Definition extends Shared.DefinitionDeferred {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
     }
@@ -225,8 +244,29 @@ export namespace Plugin.Dashboard {
 
 /** This part runs in the background page */
 export namespace Plugin.Worker {
-    // As you can see we currently don't have so much use case for an API here.
-    export interface Definition extends Shared.DefinitionWithInit {}
+    export interface Definition extends Shared.DefinitionDeferred {
+        /** TODO: this functionality has not be done yet. */
+        backup?: BackupHandler
+    }
+    export interface BackupHandler {
+        /**
+         * This function will be called when user try to generate a new backup.
+         * The return value will contribute to the backup file.
+         *
+         * If it returns a None, it will not contributes to the backup file.
+         *
+         * If it returns a Some<T>, T will be serialized by JSON.stringify and added into the backup file.
+         */
+        onBackup(): Promise<Option<unknown>>
+        /**
+         * This function will be called when the user try to restore a backup file,
+         * and there is some data associated with this plugin.
+         *
+         * @param data The serialized backup content previously returned by `onBackup`.
+         * You MUST treat the data as untrustful content because it can be modified by the user.
+         */
+        onRestore(data: unknown): Promise<Result<void, Error>>
+    }
 }
 
 // Helper types
@@ -262,13 +302,13 @@ export namespace Plugin {
     export type InjectUIReact<Props> = React.ComponentType<Props>
 }
 // TODO: Plugin i18n is not read today.
-// TODO: Add an entry for i18n JSON files, and provide hooks.
 export interface I18NStringField {
     /** The i18n key of the string content. */
     i18nKey?: string
     /** The fallback content to display if there is no i18n string found. */
     fallback: string
 }
+export type I18NFieldOrReactNode = I18NStringField | React.ReactNode
 
 /**
  * The current running SocialNetwork.
@@ -286,16 +326,12 @@ export enum CurrentSNSNetwork {
 // ---------------------------------------------------
 export namespace Plugin.__Host {
     export interface Host {
-        eth: EthStatusReporter
         enabled: EnabledStatusReporter
+        addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void
         signal?: AbortSignal
     }
-    export interface EthStatusReporter {
-        current(): ChainId
-        events: Emitter<{ change: [] }>
-    }
     export interface EnabledStatusReporter {
-        isEnabled(id: string): boolean
+        isEnabled(id: string): boolean | Promise<boolean>
         events: Emitter<{ enabled: [id: string]; disabled: [id: string] }>
     }
 }

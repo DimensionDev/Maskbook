@@ -29,6 +29,9 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { PluginPollRPC } from '../messages'
 
 const useNewPollStyles = makeStyles((theme) => ({
+    menuPaper: {
+        height: 200,
+    },
     line: {
         display: 'flex',
         margin: theme.spacing(1),
@@ -120,7 +123,10 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
         return usePortalShadowRoot((container) => (
             <Select
                 variant="standard"
-                MenuProps={{ container }}
+                MenuProps={{
+                    container,
+                    classes: { paper: classes.menuPaper },
+                }}
                 value={defaultIndex}
                 onChange={(e) => fn(e.target.value as number)}>
                 {options.map((item, index) => (
