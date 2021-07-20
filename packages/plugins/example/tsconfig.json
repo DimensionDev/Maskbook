@@ -4,9 +4,10 @@
     "rootDir": "./src/",
     "outDir": "./dist/",
     "stripInternal": true,
-    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+    "resolveJsonModule": true
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "./src/**/*.json"],
   "references": [{ "path": "../../plugin-infra" }],
   "ts-node": {
     "transpileOnly": true,
