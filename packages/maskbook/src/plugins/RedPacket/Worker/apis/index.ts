@@ -8,7 +8,6 @@ import {
 } from '@masknet/web3-shared'
 import stringify from 'json-stable-stringify'
 import { first, pick } from 'lodash-es'
-import { getChainId } from '../../../../extension/background-script/SettingsService'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 import type {
@@ -94,12 +93,10 @@ export async function getRedPacketTxid(rpid: string) {
         }
     }
     `)
-    const redPacket = first(data?.redPackets)
-    return redPacket?.txid
+    return first(data?.redPackets)?.txid
 }
 
 export async function getRedPacketHistory(address: string, chainId: ChainId) {
-    const { SUBGRAPH_URL } = getRedPacketConstants(await getChainId())
     const data = await fetchFromRedPacketSubgraph<{ redPackets: RedPacketSubgraphOutMask[] }>(`
     {
         redPackets (where: { creator: "${address.toLowerCase()}" }) {
