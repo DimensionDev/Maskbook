@@ -7,8 +7,7 @@ import type {
     Wallet,
 } from '@masknet/web3-shared'
 import type { FixedTokenListProps } from '../../extension/options-page/DashboardComponents/FixedTokenList'
-import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
-import { createPluginRPC } from '../utils/createPluginRPC'
+import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
 import { PLUGIN_IDENTIFIER } from './constants'
 
 export type TransactionDialogEvent =

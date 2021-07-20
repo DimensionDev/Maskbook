@@ -1,6 +1,5 @@
 import { ITO_PluginID } from './constants'
-import { createPluginMessage } from '@masknet/plugin-infra'
-import { createPluginRPC } from '../utils/createPluginRPC'
+import { createPluginMessage, createPluginRPC } from '@masknet/plugin-infra'
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 const PluginITO_Messages = createPluginMessage(ITO_PluginID)

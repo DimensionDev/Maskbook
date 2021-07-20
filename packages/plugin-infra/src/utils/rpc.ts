@@ -1,7 +1,6 @@
 import { Environment, isEnvironment, MessageTarget, UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { AsyncCall, AsyncCallLogLevel, AsyncGeneratorCall } from 'async-call-rpc/full'
-import { getLocalImplementation, getLocalImplementationExotic } from '../../utils/getLocalImplementation'
-import serialization from '../../utils/type-transform/Serialization'
+import { serializer, getLocalImplementation, getLocalImplementationExotic } from '@masknet/shared'
 const log: AsyncCallLogLevel = {
     beCalled: true,
     localError: true,
@@ -24,7 +23,7 @@ export function createPluginRPC<T extends object>(
             key,
             channel: message.bind(MessageTarget.Broadcast),
             preferLocalImplementation: isBackground,
-            serializer: serialization,
+            serializer,
             strict: {
                 methodNotFound: isBackground,
                 unknownMessage: true,
@@ -44,7 +43,7 @@ export function createPluginRPCGenerator<T extends object>(
     return AsyncGeneratorCall<T>(getLocalImplementation(`Plugin(${key})`, impl, message), {
         channel: message.bind(MessageTarget.Broadcast),
         preferLocalImplementation: isBackground,
-        serializer: serialization,
+        serializer,
         strict: {
             methodNotFound: isBackground,
             unknownMessage: true,

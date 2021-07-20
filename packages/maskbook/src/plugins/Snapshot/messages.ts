@@ -1,5 +1,4 @@
-import { createPluginMessage } from '@masknet/plugin-infra'
-import { createPluginRPC } from '../utils/createPluginRPC'
+import { createPluginMessage, createPluginRPC } from '@masknet/plugin-infra'
 import { SNAPSHOT_PLUGIN_ID } from './constants'
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()

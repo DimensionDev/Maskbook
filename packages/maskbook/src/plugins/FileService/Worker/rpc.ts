@@ -1,5 +1,4 @@
-import { createPluginMessage } from '@masknet/plugin-infra'
-import { createPluginRPC, createPluginRPCGenerator } from '../../utils/createPluginRPC'
+import { createPluginMessage, createPluginRPC, createPluginRPCGenerator } from '@masknet/plugin-infra'
 import { FileServicePluginID } from '../constants'
 
 import.meta.webpackHot?.accept()
