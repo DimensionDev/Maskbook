@@ -68,11 +68,11 @@ export function useDepositCallback(
 
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
-            const promisEvent = poolContract.methods.depositTo(account, amount, controlledToken, referrer).send({
+            const promiEvent = poolContract.methods.depositTo(account, amount, controlledToken, referrer).send({
                 gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
             })
-            promisEvent
+            promiEvent
                 .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     setDepositState({
                         type: TransactionStateType.HASH,

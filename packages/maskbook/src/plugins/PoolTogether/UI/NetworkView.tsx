@@ -27,7 +27,7 @@ export const NetworkView = (props: NetworkViewProps) => {
     const selectedNetwork = getNetworkTypeFromChainId(chainId)
     const chainDetail = getChainDetailed(chainId)
 
-    const color = getNetworkColor(chainDetail?.chainId ?? 1)
+    const color = getNetworkColor(chainDetail?.chainId ?? ChainId.Mainnet)
 
     return (
         <Typography variant="subtitle2" color={color} className={classes.root}>

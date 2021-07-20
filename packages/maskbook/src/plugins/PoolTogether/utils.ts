@@ -23,12 +23,13 @@ export const calculateNextPrize = (pool: Pool) => {
         (ONE_WEEK_SECONDS / Number.parseInt(pool.config.prizePeriodSeconds, 10))
 
     if (!Number.isNaN(rawPrize)) {
-        return `\$${rawPrize.toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+        return '$' + rawPrize.toLocaleString(undefined, { maximumFractionDigits: 0 })
     } else {
         const pirzeAmount = Number.parseFloat(pool.prize.amount)
-        return `${pirzeAmount.toLocaleString(undefined, {
+        const formattedPirzeAmount = pirzeAmount.toLocaleString(undefined, {
             maximumFractionDigits: pirzeAmount >= 10 ? 0 : 2,
-        })} ${pool.tokens.underlyingToken.symbol}`
+        })
+        return `${formattedPirzeAmount} ${pool.tokens.underlyingToken.symbol}`
     }
 }
 
@@ -45,6 +46,7 @@ export const getNetworkColor = (chainId: ChainId) => {
         case ChainId.Matic:
             return '#7b41da'
         // add more if needed
+        default:
+            return '#f1f1f1'
     }
-    return '#f1f1f1'
 }

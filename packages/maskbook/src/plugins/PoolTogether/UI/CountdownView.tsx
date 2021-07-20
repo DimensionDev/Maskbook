@@ -76,7 +76,7 @@ export const CountdownView = (props: CountdownProps) => {
     const textColor = secondsRemaining >= 86400 ? 'green-1' : secondsRemaining >= 3600 ? 'yellow-1' : 'red-1'
 
     interface DigitProps {
-        digit: Number | String
+        digit: number | string
     }
 
     const Digit = (props: DigitProps) => {
@@ -103,8 +103,8 @@ export const CountdownView = (props: CountdownProps) => {
     }
 
     interface DoubleDigitsProps {
-        leftDigit: Number | String
-        rightDigit: Number | String
+        leftDigit: number | string
+        rightDigit: number | string
         lable: string
     }
 
