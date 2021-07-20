@@ -48,71 +48,77 @@ const POOL_FIELDS = `
     }
 `
 
-export async function getTradeInfo(pid: string, trader: string) {
-    const response = await fetch(getITOConstants(currentChainIdSettings.value).SUBGRAPH_URL, {
+async function fetchFromMarketSubgraph<T>(query: string) {
+    const subgraphURL = getITOConstants(currentChainIdSettings.value).SUBGRAPH_URL
+    if (!subgraphURL) return null
+    const response = await fetch(subgraphURL, {
         method: 'POST',
         mode: 'cors',
-        body: stringify({
-            query: `
-            {
-                buyInfos (where: { pool: "${pid.toLowerCase()}", buyer: "${trader.toLowerCase()}" }) {
-                    buyer {
-                        ${TRADER_FIELDS}
-                    }
-                    token {
-                        ${TOKEN_FIELDS}
-                    }
-                    amount
-                    amount_sold
-                    amount_bought
-                }
-                sellInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" }) {
-                    seller {
-                        address
-                    }
-                    amount
-                }
-                destructInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" }) {
-                    seller {
-                        address
-                    }
-                    amount
-                }
-            }
-            `,
-        }),
+        body: stringify({ query }),
     })
     const { data } = (await response.json()) as {
-        data: {
-            buyInfos: {
-                buyer: {
-                    address: string
-                    name: string
-                }
-                token: JSON_PayloadOutMask['token']
-                amount: string
-                amount_sold: string
-                amount_bought: string
-            }[]
-            sellInfos: {
-                buyer: {
-                    address: string
-                    name: string
-                }
-                token: JSON_PayloadOutMask['token']
-                amount: string
-            }[]
-            destructInfos: {
-                buyer: {
-                    address: string
-                    name: string
-                }
-                token: JSON_PayloadOutMask['token']
-                amount: string
-            }[]
+        data: T
+    }
+    return data
+}
+
+export async function getTradeInfo(pid: string, trader: string) {
+    const data = await fetchFromMarketSubgraph<{
+        buyInfos: {
+            buyer: {
+                address: string
+                name: string
+            }
+            token: JSON_PayloadOutMask['token']
+            amount: string
+            amount_sold: string
+            amount_bought: string
+        }[]
+        sellInfos: {
+            buyer: {
+                address: string
+                name: string
+            }
+            token: JSON_PayloadOutMask['token']
+            amount: string
+        }[]
+        destructInfos: {
+            buyer: {
+                address: string
+                name: string
+            }
+            token: JSON_PayloadOutMask['token']
+            amount: string
+        }[]
+    }>(`
+    {
+        buyInfos (where: { pool: "${pid.toLowerCase()}", buyer: "${trader.toLowerCase()}" }) {
+            buyer {
+                ${TRADER_FIELDS}
+            }
+            token {
+                ${TOKEN_FIELDS}
+            }
+            amount
+            amount_sold
+            amount_bought
+        }
+        sellInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" }) {
+            seller {
+                address
+            }
+            amount
+        }
+        destructInfos (where: { pool: "${pid.toLowerCase()}", seller: "${trader.toLowerCase()}" }) {
+            seller {
+                address
+            }
+            amount
         }
     }
-    if (!data.buyInfos) throw new Error('Failed to load trade info.')
+    `)
+
+    if (!data?.buyInfos) throw new Error('Failed to load trade info.')
     return {
         buyInfo: first(data.buyInfos),
         sellInfo: first(data.sellInfos),
@@ -121,60 +127,42 @@ export async function getTradeInfo(pid: string, trader: string) {
 }
 
 export async function getPool(pid: string) {
-    const response = await fetch(getITOConstants(currentChainIdSettings.value).SUBGRAPH_URL, {
-        method: 'POST',
-        mode: 'cors',
-        body: stringify({
-            query: `
-            {
-                pool (id: "${pid.toLowerCase()}") {
-                    ${POOL_FIELDS}
-                }
-            }
-            `,
-        }),
-    })
-
-    const { data } = (await response.json()) as {
-        data: {
-            pool: JSON_PayloadOutMask | null
+    const data = await fetchFromMarketSubgraph<{
+        pool: JSON_PayloadOutMask | null
+    }>(`
+    {
+        pool (id: "${pid.toLowerCase()}") {
+            ${POOL_FIELDS}
         }
     }
+    `)
 
-    if (!data.pool) throw new Error('Failed to load payload.')
+    if (!data?.pool) throw new Error('Failed to load payload.')
     return payloadIntoMask(data.pool)
 }
 
 export async function getAllPoolsAsSeller(address: string, page: number) {
-    const response = await fetch(getITOConstants(currentChainIdSettings.value).SUBGRAPH_URL, {
-        method: 'POST',
-        mode: 'cors',
-        body: stringify({
-            query: `
-            {
-                sellInfos ( orderBy: timestamp, orderDirection: desc, first: 50, skip: ${
-                    page * 50
-                }, where: { seller: "${address.toLowerCase()}" }) {
-                    pool {
-                        ${POOL_FIELDS}
-                        exchange_in_volumes
-                        exchange_out_volumes
-                    }
-                }
+    const data = await fetchFromMarketSubgraph<{
+        sellInfos: {
+            pool: JSON_PayloadOutMask & {
+                exchange_in_volumes: string[]
+                exchange_out_volumes: string[]
             }
-            `,
-        }),
-    })
-    const { data } = (await response.json()) as {
-        data: {
-            sellInfos: {
-                pool: JSON_PayloadOutMask & {
-                    exchange_in_volumes: string[]
-                    exchange_out_volumes: string[]
-                }
-            }[]
+        }[]
+    }>(`
+    {
+        sellInfos ( orderBy: timestamp, orderDirection: desc, first: 50, skip: ${
+            page * 50
+        }, where: { seller: "${address.toLowerCase()}" }) {
+            pool {
+                ${POOL_FIELDS}
+                exchange_in_volumes
+                exchange_out_volumes
+            }
         }
     }
+    `)
+    if (!data?.sellInfos) return []
     return data.sellInfos.map((x) => {
         const pool = payloadIntoMask(omit(x.pool, ['exchange_in_volumes', 'exchange_out_volumes']))
         return {
@@ -186,41 +174,31 @@ export async function getAllPoolsAsSeller(address: string, page: number) {
 }
 
 export async function getAllPoolsAsBuyer(address: string) {
-    const response = await fetch(getITOConstants(currentChainIdSettings.value).SUBGRAPH_URL, {
-        method: 'POST',
-        mode: 'cors',
-        body: stringify({
-            query: `
-            {
-                buyInfos (where: { buyer: "${address.toLowerCase()}" }) {
-                    pool {
-                        ${POOL_FIELDS}
-                        exchange_in_volumes
-                        exchange_out_volumes
-                    }
-                }
+    const data = await fetchFromMarketSubgraph<{
+        buyInfos: {
+            pool: JSON_PayloadOutMask & {
+                exchange_in_volumes: string[]
+                exchange_out_volumes: string[]
             }
-            `,
-        }),
-    })
-    const { data } = (await response.json()) as {
-        data: {
-            buyInfos: {
-                pool: JSON_PayloadOutMask & {
-                    exchange_in_volumes: string[]
-                    exchange_out_volumes: string[]
-                }
-            }[]
+        }[]
+    }>(`
+    {
+        buyInfos (where: { buyer: "${address.toLowerCase()}" }) {
+            pool {
+                ${POOL_FIELDS}
+                exchange_in_volumes
+                exchange_out_volumes
+            }
         }
     }
-    return data
-        ? data.buyInfos.map((x) => {
-              const pool = payloadIntoMask(omit(x.pool, ['exchange_in_volumes', 'exchange_out_volumes']))
-              return {
-                  pool,
-                  exchange_in_volumes: x.pool.exchange_in_volumes,
-                  exchange_out_volumes: x.pool.exchange_out_volumes,
-              }
-          })
-        : []
+    `)
+    if (!data?.buyInfos) return []
+    return data.buyInfos.map((x) => {
+        const pool = payloadIntoMask(omit(x.pool, ['exchange_in_volumes', 'exchange_out_volumes']))
+        return {
+            pool,
+            exchange_in_volumes: x.pool.exchange_in_volumes,
+            exchange_out_volumes: x.pool.exchange_out_volumes,
+        }
+    })
 }

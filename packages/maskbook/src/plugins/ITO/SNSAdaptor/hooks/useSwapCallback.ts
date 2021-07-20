@@ -27,7 +27,7 @@ import type { JSON_PayloadInMask } from '../../types'
 export function useSwapCallback(
     payload: JSON_PayloadInMask,
     total: string,
-    token: PartialRequired<FungibleTokenDetailed, 'address'>,
+    token: Partial<FungibleTokenDetailed>,
     isQualificationHasLucky = false,
 ) {
     const { t } = useI18N()

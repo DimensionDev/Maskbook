@@ -19,7 +19,7 @@ function createContract<T extends BaseContract>(web3: Web3, address: string, ABI
  * @param address
  * @param ABI
  */
-export function useContract<T extends BaseContract>(address: string, ABI: AbiItem[]) {
+export function useContract<T extends BaseContract>(address: string = '', ABI: AbiItem[] = []) {
     const web3 = useWeb3()
     return useMemo(() => createContract<T>(web3, address, ABI), [web3, address, ABI])
 }

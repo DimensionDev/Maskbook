@@ -95,11 +95,12 @@ const useStyles = makeStyles((theme) => ({
 export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
     onNext: () => void
+    onClose: () => void
     origin?: PoolSettings
 }
 
 export function CreateForm(props: CreateFormProps) {
-    const { onChangePoolSettings, onNext, origin } = props
+    const { onChangePoolSettings, onNext, origin, onClose } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -190,7 +191,16 @@ export function CreateForm(props: CreateFormProps) {
     }, [advanceSettingData])
 
     useEffect(() => {
+        if (!ITO2_CONTRACT_ADDRESS || !DEFAULT_QUALIFICATION2_ADDRESS) onClose()
+    }, [ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS, onClose])
+
+    useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
+        const qualificationAddress_ =
+            qualification?.isQualification && advanceSettingData.contract
+                ? qualificationAddress
+                : DEFAULT_QUALIFICATION2_ADDRESS
+        if (!qualificationAddress_) return
         setTokenAndAmount(first)
         onChangePoolSettings({
             // this is the raw password which should be signed by the sender
@@ -202,10 +212,7 @@ export function CreateForm(props: CreateFormProps) {
             total: formatAmount(first?.amount || '0', first?.token?.decimals),
             exchangeAmounts: rest.map((item) => formatAmount(item.amount || '0', item?.token?.decimals)),
             exchangeTokens: rest.map((item) => item.token!),
-            qualificationAddress:
-                qualification?.isQualification && advanceSettingData.contract
-                    ? qualificationAddress
-                    : DEFAULT_QUALIFICATION2_ADDRESS,
+            qualificationAddress: qualificationAddress_,
             startTime,
             endTime,
             unlockTime: unlockTime > endTime && advanceSettingData.delayUnlocking ? unlockTime : undefined,
@@ -227,6 +234,7 @@ export function CreateForm(props: CreateFormProps) {
         qualificationAddress,
         account,
         onChangePoolSettings,
+        DEFAULT_QUALIFICATION2_ADDRESS,
     ])
 
     const validationMessage = useMemo(() => {

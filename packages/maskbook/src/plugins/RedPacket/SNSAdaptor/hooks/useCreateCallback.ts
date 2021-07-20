@@ -89,6 +89,9 @@ export function useCreateParams(redPacketSettings: Omit<RedPacketSettings, 'pass
         if (!redPacketSettings || !redPacketContract) return null
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
         const seed = Math.random().toString()
+        const tokenType = token!.type === EthereumTokenType.Native ? 0 : 1
+        const tokenAddress = token!.type === EthereumTokenType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
+        if (!tokenAddress) return null
 
         const paramsObj: paramsObjType = {
             password: FAKE_SIGN_PASSWORD,
@@ -98,8 +101,8 @@ export function useCreateParams(redPacketSettings: Omit<RedPacketSettings, 'pass
             seed: Web3Utils.sha3(seed)!,
             message,
             name,
-            tokenType: token!.type === EthereumTokenType.Native ? 0 : 1,
-            tokenAddress: token!.type === EthereumTokenType.Native ? NATIVE_TOKEN_ADDRESS : token!.address,
+            tokenType,
+            tokenAddress,
             total,
             token,
         }

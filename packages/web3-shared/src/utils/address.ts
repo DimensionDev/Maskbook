@@ -1,11 +1,13 @@
 import { getTokenConstants } from '../constants'
 
-export function isSameAddress(addrA: string, addrB: string) {
+export function isSameAddress(addrA: string = '', addrB: string = '') {
+    if (!addrA || !addrB) return false
     return addrA.toLowerCase() === addrB.toLowerCase()
 }
 
-export function currySameAddress(base: string) {
+export function currySameAddress(base?: string) {
     return (target: string | { address: string }) => {
+        if (!base) return false
         if (typeof target === 'string') {
             return isSameAddress(base, target)
         } else if (typeof target === 'object' && typeof target.address === 'string') {

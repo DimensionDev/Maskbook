@@ -8,15 +8,15 @@ import { useERC20TokenBytes32Contract, useERC20TokenBytes32Contracts } from '../
 import { parseStringOrBytes32, createERC20Token, createNativeToken } from '../utils'
 import { useMemo } from 'react'
 
-export function useERC20TokenDetailed(address: string, token?: Partial<ERC20TokenDetailed>) {
+export function useERC20TokenDetailed(address?: string, token?: Partial<ERC20TokenDetailed>) {
     const chainId = useChainId()
     const erc20TokenContract = useERC20TokenContract(address)
     const erc20TokenBytes32Contract = useERC20TokenBytes32Contract(address)
 
-    return useAsyncRetry(
-        async () => getERC20TokenDetailed(address, chainId, erc20TokenContract, erc20TokenBytes32Contract, token),
-        [chainId, token, erc20TokenContract, erc20TokenBytes32Contract, address],
-    )
+    return useAsyncRetry(async () => {
+        if (!address) return
+        return getERC20TokenDetailed(address, chainId, erc20TokenContract, erc20TokenBytes32Contract, token)
+    }, [chainId, token, erc20TokenContract, erc20TokenBytes32Contract, address])
 }
 
 export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'address' | 'type'>[]) {

@@ -5,7 +5,7 @@ import QualificationABI from '@masknet/web3-contracts/abis/Qualification.json'
 import Qualification2ABI from '@masknet/web3-contracts/abis/Qualification2.json'
 import { useContract, isSameAddress, useITOConstants } from '@masknet/web3-shared'
 
-export function useQualificationContract(address: string, ito_address: string) {
+export function useQualificationContract(address?: string, ito_address?: string) {
     const { ITO_CONTRACT_ADDRESS } = useITOConstants()
     const QLF_CONTRACT = useContract<Qualification>(address, QualificationABI as AbiItem[])
     const QLF2_CONTRACT = useContract<Qualification2>(address, Qualification2ABI as AbiItem[])

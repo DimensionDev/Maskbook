@@ -7,9 +7,11 @@ export interface Constants {
 }
 
 export function transform<T extends Constants>(constants: T, environment: Record<string, string> = {}) {
-    type Entries = { [key in keyof T]: T[key]['Mainnet'] }
-    return (chainId = ChainId.Mainnet) => {
-        const chainName = ChainId[chainId] as keyof typeof ChainId
+    type Entries = { [key in keyof T]?: T[key]['Mainnet'] }
+    return (chainId: number = ChainId.Mainnet) => {
+        const chainName = ChainId[chainId] as keyof typeof ChainId | undefined
+        // unknown chain id
+        if (!chainName) return Object.freeze({}) as Entries
         const entries = Object.keys(constants).map((name: keyof T) => {
             let value = constants[name][chainName]
             if (Array.isArray(value)) {
@@ -41,11 +43,11 @@ export function transformFromJSON<T extends Constants>(
     }
 }
 
-export function hookTransform<T>(getConstants: (chainId: ChainId) => T) {
-    return function useConstants(chainId?: ChainId) {
-        const current = useChainId()
-        const finalChain = chainId ?? current
-        return useMemo(() => getConstants(finalChain), [finalChain])
+export function hookTransform<T>(getConstants: (chainId: ChainId) => Partial<T>) {
+    return function useConstants(chainId?: number) {
+        const currentChainId = useChainId()
+        const finalChainId = chainId ?? currentChainId
+        return useMemo(() => getConstants(finalChainId), [finalChainId])
     }
 }
 

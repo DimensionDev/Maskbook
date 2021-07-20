@@ -9,9 +9,9 @@ export interface FormattedBalanceProps {
     symbol?: string
 }
 
-export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
-    const formatted = formatBalance(props.value, props.decimals, props.significant)
-    if (props.symbol) return <Fragment>{`${formatted} ${props.symbol}`}</Fragment>
+export const FormattedBalance: FC<FormattedBalanceProps> = ({ value, decimals, significant, symbol }) => {
+    const formatted = formatBalance(value, decimals, significant)
+    if (symbol) return <Fragment>{`${formatted} ${symbol}`}</Fragment>
     return <Fragment>{formatted}</Fragment>
 }
 
@@ -21,18 +21,19 @@ export interface FormattedCurrencyProps {
     value: BigNumber.Value
 }
 
-export const FormattedCurrency: FC<FormattedCurrencyProps> = (props) => {
-    const formatted = formatCurrency(props.value, props.sign)
-    if (props.symbol) return <Fragment>{`${formatted} ${props.symbol}`}</Fragment>
+export const FormattedCurrency: FC<FormattedCurrencyProps> = ({ value, sign, symbol }) => {
+    const formatted = formatCurrency(value, sign)
+    if (symbol) return <Fragment>{`${formatted} ${symbol}`}</Fragment>
     return <Fragment>{formatted}</Fragment>
 }
 
 interface FormattedEthereumAddressProps {
-    address: string
+    address?: string
     size?: number
 }
 
-export const FormattedAddress: FC<FormattedEthereumAddressProps> = (props) => {
-    const formatted = formatEthereumAddress(props.address, props.size)
+export const FormattedAddress: FC<FormattedEthereumAddressProps> = ({ address, size }) => {
+    if (!address) return null
+    const formatted = formatEthereumAddress(address, size)
     return <Fragment>{formatted}</Fragment>
 }
