@@ -22,7 +22,8 @@ export function injectPostInspectorFacebook(signal: AbortSignal, current: PostIn
     })(current, signal)
 }
 function zipPostLinkPreview(node: DOMProxy) {
-    const parentEle = node.current.parentElement!
+    const parentEle = node.current.parentElement
+    if (!parentEle) return
     if (isMobileFacebook) {
         const img =
             parentEle.querySelector('a[href*="maskbook.io"]') ||
