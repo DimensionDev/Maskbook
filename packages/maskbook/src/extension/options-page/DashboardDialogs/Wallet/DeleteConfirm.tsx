@@ -1,6 +1,5 @@
 import { Button } from '@material-ui/core'
 import { CreditCard as CreditCardIcon } from 'react-feather'
-import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'

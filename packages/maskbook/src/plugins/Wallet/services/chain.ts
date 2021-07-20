@@ -1,4 +1,4 @@
-import { ChainId, ProviderType } from '@masknet/web3-shared'
+import { ProviderType } from '@masknet/web3-shared'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
 import { pollingTask, startEffects } from '../../../utils'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
@@ -10,7 +10,6 @@ import {
     currentChainIdSettings,
     currentProviderSettings,
 } from '../settings'
-import { updateAccount } from './account'
 
 const beats: true[] = []
 
