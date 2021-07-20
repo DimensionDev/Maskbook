@@ -203,6 +203,7 @@ export enum EthereumMethodType {
     ETH_ESTIMATE_GAS = 'eth_estimateGas',
     ETH_SIGN = 'eth_sign',
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
+    ETH_GET_LOGS = 'eth_getLogs',
 }
 
 export enum TransactionEventType {
