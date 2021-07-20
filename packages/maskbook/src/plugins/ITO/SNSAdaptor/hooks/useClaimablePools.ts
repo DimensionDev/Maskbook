@@ -35,7 +35,7 @@ export function useClaimablePools(isMainnetOld = false) {
     const { value: poolsFromSubgraph = [], loading: loadingSubgraph } = useClaimablePoolsBySubgraph()
     const { value: poolsFromWeb3 = [], loading: loadingWeb3 } = useClaimablePoolsByWeb3()
     // One of them works is okay
-    const loading = loadingSubgraph && loadingWeb3
+    const loadingPool = loadingSubgraph && loadingWeb3
     const isPoolsFromWeb3Empty = poolsFromWeb3.length === 0
     const _pools = unionBy(poolsFromWeb3, poolsFromSubgraph, 'pid')
     //#endregion
@@ -51,7 +51,7 @@ export function useClaimablePools(isMainnetOld = false) {
     )
 
     // No need to fetch token details again since subgraph returns it.
-    const { value: tokens } = useFungibleTokensDetailed(_tokens)
+    const { value: tokens, loading: loadingTokens } = useFungibleTokensDetailed(_tokens)
     const pools = isPoolsFromWeb3Empty
         ? _pools
         : _pools.map((p, i) => {
@@ -62,6 +62,8 @@ export function useClaimablePools(isMainnetOld = false) {
               return p
           })
     //#endregion
+
+    const loading = loadingPool || loadingTokens
 
     return useAsyncRetry(async () => {
         const chainDetailed = getChainDetailed(chainId)
