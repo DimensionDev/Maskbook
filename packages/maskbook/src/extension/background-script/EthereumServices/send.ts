@@ -147,7 +147,9 @@ export async function INTERNAL_send(
                         body: JSON.stringify(payload),
                     })
                         .catch((error: Error) => callback(error))
-                        .then(async (res) => callback(null, (await res!.json()) as JsonRpcResponse))
+                        .then(async (res) => {
+                            if (res) callback(null, (await res.json()) as JsonRpcResponse)
+                        })
                 } else {
                     provider.send(payload, callback)
                 }

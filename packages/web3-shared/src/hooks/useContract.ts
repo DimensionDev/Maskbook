@@ -33,7 +33,7 @@ export function useContracts<T extends BaseContract>(listOfAddress: string[], AB
     const web3 = useWeb3()
     const contracts = useMemo(
         () => listOfAddress.map((address) => createContract<T>(web3, address, ABI)),
-        [web3, JSON.stringify(listOfAddress.sort()), ABI],
+        [web3, JSON.stringify(listOfAddress), ABI],
     )
     return contracts.filter(Boolean) as T[]
 }
