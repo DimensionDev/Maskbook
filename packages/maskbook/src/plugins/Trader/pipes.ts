@@ -95,8 +95,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return ''
         case TradeProvider.SUSHISWAP:
             if (networkType === NetworkType.Binance) return `https://analytics-bsc.sushi.com/pairs/${address}`
-            else if (networkType === NetworkType.Polygon) return `https://analytics-polygon.sushi.com/pairs/${address}`
-            else return `https://analytics.sushi.com/pairs/${address}`
+            if (networkType === NetworkType.Polygon) return `https://analytics-polygon.sushi.com/pairs/${address}`
+            return `https://analytics.sushi.com/pairs/${address}`
         case TradeProvider.SASHIMISWAP:
             return `https://info.sashimi.cool/pair/${address}`
         case TradeProvider.BALANCER:
