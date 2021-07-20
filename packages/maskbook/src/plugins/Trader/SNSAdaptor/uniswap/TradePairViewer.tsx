@@ -7,7 +7,7 @@ import { resolveTradePairLink } from '../../pipes'
 import type { TradeComputed, TradeProvider } from '../../types'
 import { TradeContext } from '../../trader/useTradeContext'
 import { getPairAddress } from '../../helpers'
-import { getNetworkTypeFromChainId, useChainId } from '@masknet/web3-shared'
+import { useNetworkType } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -36,8 +36,7 @@ export interface TradePairViewerProps {
 export function TradePairViewer(props: TradePairViewerProps) {
     const { trade, provider } = props
     const classes = useStyles()
-    const chainId = useChainId()
-    const networkType = getNetworkTypeFromChainId(chainId)
+    const networkType = useNetworkType()
 
     const context = useContext(TradeContext)
     const address = getPairAddress(
