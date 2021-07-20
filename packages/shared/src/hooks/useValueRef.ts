@@ -31,10 +31,17 @@ export function useValueRefDelayed<T>(ref: ValueRef<T>, latency = 500) {
 }
 
 export function SubscriptionFromValueRef<T>(ref: ValueRef<T>): Subscription<T> {
-    return {
+    return SubscriptionDebug({
         getCurrentValue: () => ref.value,
         subscribe: (sub) => ref.addListener(sub),
-    }
+    })
+}
+export function SubscriptionDebug<T>(x: Subscription<T>): Subscription<T> {
+    Object.defineProperty(x, '_value', {
+        configurable: true,
+        get: () => x.getCurrentValue(),
+    })
+    return x
 }
 
 export function ValueRefFromSubscription<T>(sub: Subscription<T>, eq?: (a: T, b: T) => boolean): ValueRef<T> {

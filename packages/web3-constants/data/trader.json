@@ -88,7 +88,7 @@
         "Mumbai": "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303"
     },
     "SASHIMISWAP_ROUTER_ADDRESS": {
-        "Mainnet": " 0x31db862df7be09718a860c46ab17ca57966e69ed",
+        "Mainnet": "0xe4fe6a45f354e845f954cddee6084603cedb9410",
         "Ropsten": "0xe4fe6a45f354e845f954cddee6084603cedb9410",
         "Rinkeby": "0xe4fe6a45f354e845f954cddee6084603cedb9410",
         "Kovan": "0xe4fe6a45f354e845f954cddee6084603cedb9410",

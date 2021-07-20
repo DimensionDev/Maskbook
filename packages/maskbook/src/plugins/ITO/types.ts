@@ -1,4 +1,4 @@
-import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@masknet/web3-shared'
+import type { ChainId, FungibleTokenDetailed } from '@masknet/web3-shared'
 
 export interface JSON_PayloadInMask {
     contract_address: string
@@ -10,7 +10,7 @@ export interface JSON_PayloadInMask {
     total_remaining: string
     seller: {
         address: string
-        name: string
+        name?: string
     }
     buyers: {
         address: string
@@ -39,7 +39,7 @@ export interface PoolSubgraph {
 }
 
 //#region TokenOutMask
-export type TokenOutMask = Omit<NativeTokenDetailed | ERC20TokenDetailed, 'chainId'> & {
+export type TokenOutMask = Omit<FungibleTokenDetailed, 'chainId'> & {
     chain_id: ChainId
 }
 //#endregion
@@ -47,6 +47,11 @@ export type TokenOutMask = Omit<NativeTokenDetailed | ERC20TokenDetailed, 'chain
 export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
     token: TokenOutMask
     exchange_tokens: TokenOutMask[]
+}
+
+export interface JSON_PayloadComposeMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
+    token: string
+    exchange_tokens: { address: string }[]
 }
 
 export enum ITO_Status {

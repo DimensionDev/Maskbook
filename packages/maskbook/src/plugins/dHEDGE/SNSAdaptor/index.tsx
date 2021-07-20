@@ -1,26 +1,18 @@
-import { PluginConfig, PluginStage, PluginScope } from '../types'
-import React, { Suspense, useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
+import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
+import { extractTextFromTypedMessage, parseURL } from '@masknet/shared'
 import { SnackbarContent } from '@material-ui/core'
-import { parseURL } from '../../utils/utils'
-import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
-import { extractTextFromTypedMessage } from '../../protocols/typed-message'
-import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
-import { DHEDGE_PLUGIN_ID } from './constants'
-import { usePoolUrlPattern, useIsPoolUrl } from './hooks/useUrl'
-import { PoolView } from './UI/PoolView'
-import { InvestDialog } from './UI/InvestDialog'
-import { DHEDGEIcon } from '../../resources/DHEDGEIcon'
-import { useFetchPool } from './hooks/usePool'
+import { base } from '../base'
+import { useIsPoolUrl, usePoolUrlPattern } from '../hooks/useUrl'
+import { useFetchPool } from '../hooks/usePool'
+import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import { PoolView } from '../UI/PoolView'
+import { InvestDialog } from '../UI/InvestDialog'
 
-export const DHedgePluginDefine: PluginConfig = {
-    id: DHEDGE_PLUGIN_ID,
-    pluginIcon: <DHEDGEIcon />,
-    pluginName: 'dHEDGE',
-    pluginDescription: 'Decentralized hedge funds on Ethereum.',
-    identifier: DHEDGE_PLUGIN_ID,
-    stage: PluginStage.Production,
-    scope: PluginScope.Public,
-    successDecryptionInspector: function Component(props): JSX.Element | null {
+const sns: Plugin.SNSAdaptor.Definition = {
+    ...base,
+    init(signal) {},
+    DecryptedInspector: function Component(props) {
         const isPoolUrl = useIsPoolUrl()
         const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
         const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isPoolUrl)
@@ -28,7 +20,7 @@ export const DHedgePluginDefine: PluginConfig = {
         if (!link) return null
         return <Renderer url={link} />
     },
-    postInspector: function Component(): JSX.Element | null {
+    PostInspector: function Component() {
         const isPoolUrl = useIsPoolUrl()
         const link = usePostInfoDetails
             .postMetadataMentionedLinks()
@@ -38,23 +30,16 @@ export const DHedgePluginDefine: PluginConfig = {
         if (!link) return null
         return <Renderer url={link} />
     },
-    PageComponent() {
+    GlobalInjection: function Component() {
         return (
             <>
-                <PoolView />
-                <InvestDialog />
-            </>
-        )
-    },
-    DashboardComponent() {
-        return (
-            <>
-                <PoolView />
                 <InvestDialog />
             </>
         )
     },
 }
+
+export default sns
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const DHEDGE_POOL_PATTERN = usePoolUrlPattern()

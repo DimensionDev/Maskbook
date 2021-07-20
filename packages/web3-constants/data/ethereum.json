@@ -1,21 +1,23 @@
 {
     "ERC20_TOKEN_LISTS": {
         "Mainnet": [
-            "http://tokens.1inch.eth.link/",
-            "http://defi.cmc.eth.link/",
-            "https://www.coingecko.com/tokens_list/uniswap/defi_100/v_0_0_0.json",
-            "https://gateway.ipfs.io/ipns/tokens.uniswap.org",
-            "http://tokenlist.dharma.eth.link",
-            "https://dimensiondev.github.io/Mask-Token-List/mask.json"
+            "https://api.1inch.exchange/v3.0/1/tokens",
+            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/1/tokens.json"
         ],
-        "Ropsten": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
-        "Rinkeby": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
+        "Ropsten": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/3/tokens.json"],
+        "Rinkeby": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/4/tokens.json"],
         "Kovan": ["https://irhonin.github.io/kovan-token-list/kovan-token-list.json"],
         "Gorli": [],
-        "BSC": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
+        "BSC": [
+            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/56/tokens.json",
+            "https://api.1inch.exchange/v3.0/56/tokens"
+        ],
         "BSCT": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
-        "Matic": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
-        "Mumbai": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"]
+        "Matic": [
+            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/137/tokens.json",
+            "https://api.1inch.exchange/v3.0/137/tokens"
+        ],
+        "Mumbai": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/80001/tokens.json"]
     },
     "BALANCE_CHECKER_ADDRESS": {
         "Mainnet": "0xb1F8e55c7f64D203C1400B9D8555d050F94aDF39",

@@ -1,12 +1,25 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { formatEthereumAddress, formatBalance } from '@masknet/web3-shared'
+import { ItoLabelIcon } from '../assets/ItoLabelIcon'
+import { makeStyles } from '@material-ui/core'
+import { formatEthereumAddress, formatBalance, useTokenDetailed, EthereumTokenType } from '@masknet/web3-shared'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
-import { ITO_MetaKey, MSG_DELIMITER } from '../constants'
-import type { JSON_PayloadOutMask } from '../types'
+import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
+import type { JSON_PayloadComposeMask } from '../types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { CompositionDialog } from './CompositionDialog'
+import { set } from 'lodash-es'
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    span: {
+        paddingLeft: theme.spacing(1),
+    },
+}))
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -16,22 +29,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!payload.ok) return null
         return (
             <MaskbookPluginWrapper pluginName="ITO">
-                <PostInspector payload={payloadIntoMask(payload.val)} />
+                <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
             </MaskbookPluginWrapper>
         )
     },
     CompositionDialogMetadataBadgeRender: new Map([
-        [
-            ITO_MetaKey,
-            (payload: JSON_PayloadOutMask) => {
-                const sellerName = payload.seller.name
-                    ? payload.seller.name
-                    : payload.message.split(MSG_DELIMITER)[0] ?? formatEthereumAddress(payload.seller.address, 4)
-                return `A ITO with ${formatBalance(payload.total, payload.token?.decimals)} $${
-                    payload.token?.symbol ?? payload.token?.name ?? 'Token'
-                } from ${sellerName}`
-            },
-        ],
+        [ITO_MetaKey_1, onAttached_ITO],
+        [ITO_MetaKey_2, onAttached_ITO],
     ]),
     CompositionDialogEntry: {
         dialog({ open, onClose }) {
@@ -39,6 +43,28 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
         label: { fallback: '🚀 ITO' },
     },
+}
+
+function onAttached_ITO(payload: JSON_PayloadComposeMask) {
+    return { text: <Badge payload={payload} /> }
+}
+interface BadgeProps {
+    payload: JSON_PayloadComposeMask
+}
+function Badge({ payload }: BadgeProps) {
+    const classes = useStyles()
+    const { value: tokenDetailed, loading: loadingToken } = useTokenDetailed(EthereumTokenType.ERC20, payload.token)
+    const balance = formatBalance(payload.total, tokenDetailed?.decimals)
+    const symbol = tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
+    const sellerName = payload.seller.name
+        ? payload.seller.name
+        : payload.message.split(MSG_DELIMITER)[0] ?? formatEthereumAddress(payload.seller.address, 4)
+    return loadingToken ? null : (
+        <div className={classes.root}>
+            <ItoLabelIcon size={14} />
+            <span className={classes.span}>{`A ITO with ${balance} $${symbol} from ${sellerName}`}</span>
+        </div>
+    )
 }
 
 export default sns

@@ -21,7 +21,7 @@ export const Record: FC<{ pair: Transaction['pairs'][number] }> = ({ pair }) => 
             variant="body2"
             className={classNames(styles.root, { [styles.receive]: pair.direction === 'receive' })}
             title={pair.name}>
-            <TokenIcon address={pair.address} />
+            <TokenIcon address={pair.address} logoURI={pair.logoURI} />
             <span className={styles.direction}>
                 {pair.direction === DebankTransactionDirection.SEND || pair.direction === ZerionTransactionDirection.OUT
                     ? '-'

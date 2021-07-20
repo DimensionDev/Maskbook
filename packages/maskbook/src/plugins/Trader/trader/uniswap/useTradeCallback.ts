@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
 import type { SwapParameters, Trade } from '@uniswap/v2-sdk'
-import type { RouterV2 } from '@masknet/contracts/types/RouterV2'
+import type { RouterV2 } from '@masknet/web3-contracts/types/RouterV2'
 import {
     addGasMargin,
     TransactionState,

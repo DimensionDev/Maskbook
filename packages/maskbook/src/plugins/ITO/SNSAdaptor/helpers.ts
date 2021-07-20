@@ -1,13 +1,22 @@
 import type BigNumber from 'bignumber.js'
 import { omit } from 'lodash-es'
+import type { TypedMessage } from '../../../protocols/typed-message'
 import { createTypedMessageMetadataReader, createRenderWithMetadata } from '../../../protocols/typed-message/metadata'
-import { ITO_MetaKey } from '../constants'
+import { ITO_MetaKey_1, ITO_MetaKey_2 } from '../constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from '../types'
-import schema from '../schema.json'
+import schemaV1 from '../schema-v1.json'
+import schemaV2 from '../schema-v2.json'
 import { FungibleTokenDetailed, isNative } from '@masknet/web3-shared'
+import type { Result } from 'ts-results'
 
-export const ITO_MetadataReader = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_MetaKey, schema)
+const reader_v1 = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_MetaKey_1, schemaV1)
+const reader_v2 = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_MetaKey_2, schemaV2)
 export const renderWithITO_Metadata = createRenderWithMetadata(ITO_MetadataReader)
+export function ITO_MetadataReader(meta: TypedMessage['meta']): Result<JSON_PayloadOutMask, void> {
+    const v2 = reader_v2(meta)
+    if (v2.ok) return v2
+    return reader_v1(meta)
+}
 
 /**
  * The greatest common divisor

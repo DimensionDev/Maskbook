@@ -76,13 +76,8 @@ export function CollectibleList(props: CollectibleListProps) {
             <Box className={classes.root}>
                 {new Array(4).fill(0).map((_, i) => (
                     <Box className={classes.card} display="flex" flexDirection="column" key={i}>
-                        <Skeleton animation="wave" variant="rectangular" width={160} height={220}></Skeleton>
-                        <Skeleton
-                            animation="wave"
-                            variant="text"
-                            width={160}
-                            height={20}
-                            style={{ marginTop: 4 }}></Skeleton>
+                        <Skeleton animation="wave" variant="rectangular" width={160} height={220} />
+                        <Skeleton animation="wave" variant="text" width={160} height={20} style={{ marginTop: 4 }} />
                     </Box>
                 ))}
             </Box>

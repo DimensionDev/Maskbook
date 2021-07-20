@@ -41,7 +41,8 @@ export function DashboardPersonaUnlinkConfirmDialog(props: WrappedDialogProps) {
                             {t('cancel')}
                         </Button>
                     </SpacedButtonGroup>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }

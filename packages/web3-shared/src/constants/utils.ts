@@ -6,15 +6,38 @@ export interface Constants {
     [K: string]: { [K in keyof typeof ChainId]: Primitive | Primitive[] }
 }
 
-export function transform<T extends Constants>(constants: T) {
+export function transform<T extends Constants>(constants: T, environment: Record<string, string> = {}) {
+    type Entries = { [key in keyof T]: T[key]['Mainnet'] }
     return (chainId = ChainId.Mainnet) => {
-        const table = {} as { [key in keyof T]: T[key]['Mainnet'] }
         const chainName = ChainId[chainId] as keyof typeof ChainId
-        for (const name in constants) {
-            const key = name as keyof T
-            table[key] = constants[key][chainName]
-        }
-        return Object.freeze(table)
+        const entries = Object.keys(constants).map((name: keyof T) => {
+            let value = constants[name][chainName]
+            if (Array.isArray(value)) {
+                value = value.map((item) => {
+                    if (typeof item === 'string') {
+                        return replaceAll(item, environment)
+                    }
+                    return item
+                })
+            } else if (typeof value === 'string') {
+                value = replaceAll(value, environment)
+            }
+            return [name, value] as [string, Primitive | Primitive[]]
+        })
+        return Object.freeze(Object.fromEntries(entries)) as Entries
+    }
+}
+
+export function transformFromJSON<T extends Constants>(
+    json: string,
+    fallbackConstants: T,
+    environment: Record<string, string> = {},
+) {
+    try {
+        const constants = JSON.parse(json) as T
+        return transform(constants, environment)
+    } catch (e) {
+        return transform(fallbackConstants, environment)
     }
 }
 
@@ -24,4 +47,8 @@ export function hookTransform<T>(getConstants: (chainId: ChainId) => T) {
         const finalChain = chainId ?? current
         return useMemo(() => getConstants(finalChain), [finalChain])
     }
+}
+
+function replaceAll(input: string, values: Record<string, string>) {
+    return input.replace(/\$\{([^}]+)\}/g, (match, p1) => values[p1] ?? match)
 }

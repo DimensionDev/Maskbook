@@ -92,18 +92,18 @@ interface ISetupActionCardProps {
 
 const SetupActionCard: React.FC<ISetupActionCardProps> = ({ icon, title, subtitle, action }) => {
     return (
-        <ActionCardContainer variant={'outlined'}>
+        <ActionCardContainer variant="outlined">
             <ActionCardIcon>{icon}</ActionCardIcon>
             <ActionCardContent>
-                <Typography variant={'body1'} paragraph>
+                <Typography variant="body1" paragraph>
                     {title}
                 </Typography>
-                <Typography variant={'body2'} paragraph>
+                <Typography variant="body2" paragraph>
                     {subtitle}
                 </Typography>
             </ActionCardContent>
             <ActionCardButton>
-                <Button size={'small'} variant={'contained'} color={action.type}>
+                <Button size="small" variant="contained" color={action.type}>
                     {action.text}
                 </Button>
             </ActionCardButton>

@@ -41,11 +41,11 @@ export const Web3Context: Web3ProviderType = {
     blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
     nonce: createSubscriptionFromSettings(currentNonceSettings),
     gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
-    wallets: createSubscriptionAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
+    wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
     providerType: createSubscriptionFromSettings(currentProviderSettings),
     networkType: createSubscriptionFromSettings(currentNetworkSettings),
-    erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
-    erc20TokensCount: createSubscriptionAsync(
+    erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
+    erc20TokensCount: createSubscriptionFromAsync(
         WalletRPC.getERC20TokensCount,
         0,
         WalletMessages.events.erc20TokensUpdated.on,
@@ -120,7 +120,7 @@ function createSubscriptionFromSettings<T>(settings: InternalSettings<T>): Subsc
         },
     }
 }
-function createSubscriptionAsync<T>(
+function createSubscriptionFromAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,
     onChange: (callback: () => void) => () => void,
@@ -149,7 +149,7 @@ function getEventTarget() {
     function trigger() {
         clearTimeout(timer)
         // delay to update state to ensure that all settings to be synced globally
-        timer = setTimeout(() => event.dispatchEvent(new Event(EVENT)), 500)
+        timer = setTimeout(() => event.dispatchEvent(new Event(EVENT)), 600)
     }
     function subscribe(f: () => void) {
         event.addEventListener(EVENT, f)

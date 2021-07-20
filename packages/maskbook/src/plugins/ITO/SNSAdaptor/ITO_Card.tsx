@@ -126,8 +126,9 @@ export function ITO_Card(props: ITO_CardProps) {
                         variant="rectangular"
                         height={25}
                         width="80%"
-                        style={{ marginBottom: 8 }}></Skeleton>
-                    <Skeleton animation="wave" variant="rectangular" height={28} width="40%"></Skeleton>
+                        style={{ marginBottom: 8 }}
+                    />
+                    <Skeleton animation="wave" variant="rectangular" height={28} width="40%" />
                 </Box>
             </Box>
         )

@@ -1,3 +1,4 @@
+import { EthereumAddress } from 'wallet.ts'
 import type { HttpProvider, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { addGasMargin, EthereumMethodType, ProviderType } from '@masknet/web3-shared'
@@ -5,11 +6,10 @@ import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { createWeb3 } from './web3'
 import * as WalletConnect from './providers/WalletConnect'
-import { currentAccountSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
 import { addRecentTransaction, getWallet } from '../../../plugins/Wallet/services'
 import { commitNonce, getNonce, resetNonce } from './nonce'
 import { getGasPrice } from './network'
-import { EthereumAddress } from 'wallet.ts'
+import { currentAccountSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
 
 /**
  * This API is only used internally. Please use requestSend instead in order to share the same payload id globally.
@@ -22,7 +22,7 @@ export async function INTERNAL_send(
 ) {
     if (process.env.NODE_ENV === 'development') {
         console.table(payload)
-        console.log(new Error().stack)
+        console.debug(new Error().stack)
     }
 
     const account = currentAccountSettings.value

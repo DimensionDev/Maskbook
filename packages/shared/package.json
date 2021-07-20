@@ -11,7 +11,7 @@
     "anchorme": "^2.1.2",
     "async-call-rpc": "^5.1.0",
     "bignumber.js": "^9.0.1",
-    "immer": "^9.0.2",
+    "immer": "^9.0.5",
     "lodash-es": "^4.17.21",
     "qrcode": "^1.4.4",
     "react-use": "^17.2.4",

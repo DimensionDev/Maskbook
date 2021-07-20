@@ -1,4 +1,11 @@
-import { ERC20TokenDetailed, EthereumTokenType, useAccount, useChainId, ZERO } from '@masknet/web3-shared'
+import {
+    ERC20TokenDetailed,
+    useAccount,
+    useChainId,
+    ZERO,
+    isSameAddress,
+    useTokenConstants,
+} from '@masknet/web3-shared'
 import { DialogContent, makeStyles } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
@@ -29,6 +36,7 @@ interface SwapGuideProps
         Omit<InjectedDialogProps, 'onClose'> {
     status: SwapStatus
     shareSuccessLink: string | undefined
+    total_remaining: BigNumber
     isBuyer: boolean
     retryPayload: () => void
     onClose: () => void
@@ -37,8 +45,20 @@ interface SwapGuideProps
 
 export function SwapGuide(props: SwapGuideProps) {
     const { t } = useI18N()
-    const { status, payload, exchangeTokens, isBuyer, open, retryPayload, shareSuccessLink, onUpdate, onClose } = props
+    const {
+        status,
+        payload,
+        exchangeTokens,
+        isBuyer,
+        open,
+        retryPayload,
+        shareSuccessLink,
+        total_remaining,
+        onUpdate,
+        onClose,
+    } = props
     const [isPending, startTransition] = useTransition()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const onCloseShareDialog = useCallback(() => {
         startTransition(() => {
             onClose()
@@ -46,10 +66,7 @@ export function SwapGuide(props: SwapGuideProps) {
         })
     }, [retryPayload, startTransition, onClose])
     const classes = useStyles()
-    const maxSwapAmount = useMemo(
-        () => BigNumber.min(payload.limit, payload.total_remaining),
-        [payload.limit, payload.total_remaining],
-    )
+    const maxSwapAmount = useMemo(() => BigNumber.min(payload.limit, total_remaining), [payload.limit, total_remaining])
     const initAmount = ZERO
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
     const [actualSwapAmount, setActualSwapAmount] = useState<BigNumber.Value>(0)
@@ -83,7 +100,7 @@ export function SwapGuide(props: SwapGuideProps) {
                                 <UnlockDialog
                                     tokens={
                                         payload.exchange_tokens.filter(
-                                            (x) => x.type === EthereumTokenType.ERC20,
+                                            (x) => !isSameAddress(NATIVE_TOKEN_ADDRESS, x.address),
                                         ) as ERC20TokenDetailed[]
                                     }
                                 />

@@ -1,10 +1,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import type { AbiOutput } from 'web3-utils'
-import type {
-    BaseContract,
-    NonPayableTransactionObject,
-    PayableTransactionObject,
-} from '@masknet/contracts/types/types'
+import type { UnboxTransactionObject } from '../types'
+import type { BaseContract } from '@masknet/web3-contracts/types/types'
 import { useMulticallContract } from '../contracts/useMulticallContract'
 import { decodeOutputString } from '../utils'
 import { useWeb3 } from './useWeb3'
@@ -78,12 +75,6 @@ export function useMulticallCallback() {
     return [multicallState, multicallCallback] as const
 }
 //#endregion
-
-type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
-    ? R
-    : T extends PayableTransactionObject<infer S>
-    ? S
-    : T
 
 //#region useMutlicallStateDecoded
 export function useMutlicallStateDecoded<

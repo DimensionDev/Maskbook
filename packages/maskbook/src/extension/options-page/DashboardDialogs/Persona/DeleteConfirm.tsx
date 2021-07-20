@@ -38,7 +38,8 @@ export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<Pe
                             {t('cancel')}
                         </Button>
                     </SpacedButtonGroup>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }

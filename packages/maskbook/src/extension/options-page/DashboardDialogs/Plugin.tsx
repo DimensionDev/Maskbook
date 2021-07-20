@@ -100,7 +100,8 @@ export function DashboardPluginDetailDialog({ ComponentProps, ...rest }: Wrapped
                     <DebounceButton type="submit" variant="contained" onClick={rest.onClose}>
                         {t('ok')}
                     </DebounceButton>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }

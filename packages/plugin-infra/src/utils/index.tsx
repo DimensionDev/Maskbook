@@ -7,7 +7,7 @@ type Raw<T> = Plugin.InjectUIRaw<T>
 export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType>(
     usePlugins: () => PluginDefinition[],
     pickInjector: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
-): React.ComponentType<PropsType> {
+): React.FunctionComponent<PropsType> {
     const picker = (plugin: PluginDefinition) => ({
         key: plugin.ID,
         name: plugin.name,
@@ -18,6 +18,7 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
             .map(picker)
             .filter((x) => x.ui)
             .map(({ key, name, ui }) => (
+                // TODO: i18n
                 <ErrorBoundary key={key} subject={`Plugin ` + name.fallback}>
                     <Main UI={ui!} data={props} />
                 </ErrorBoundary>

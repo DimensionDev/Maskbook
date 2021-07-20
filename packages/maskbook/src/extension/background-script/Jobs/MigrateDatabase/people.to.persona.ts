@@ -7,11 +7,10 @@ import {
     PersonRecordPublic,
     PersonRecordPublicPrivate,
 } from './_deprecated_people_db'
-import * as persona from '../Persona/Persona.db'
-import { ECKeyIdentifier, ECKeyIdentifierFromCryptoKey, ProfileIdentifier } from '../type'
-import { IdentifierMap } from '../IdentifierMap'
-import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
-import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
+import * as persona from '../../../../database/Persona/Persona.db'
+import { ECKeyIdentifier, ProfileIdentifier, IdentifierMap, AESJsonWebKey } from '@masknet/shared'
+import { ECKeyIdentifierFromCryptoKey } from '../../../../database/type'
+import { CryptoKeyToJsonWebKey } from '../../../../utils/type-transform/CryptoKey-JsonWebKey'
 
 export default async function migratePeopleToPersona() {
     const myIDs = await getMyIdentitiesDB()

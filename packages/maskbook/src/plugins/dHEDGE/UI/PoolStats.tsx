@@ -127,7 +127,8 @@ export function PoolStats(props: PoolStatsProps) {
                                 __html: expanded
                                     ? cleanDescription
                                     : cleanDescription.slice(0, POOL_DESCRIPTION_LIMIT).concat('...'),
-                            }}></span>
+                            }}
+                        />
                     </Typography>
                     {cleanDescription.length > POOL_DESCRIPTION_LIMIT ? (
                         <Typography variant="body2" color="primary" onClick={() => setExpanded(!expanded)}>

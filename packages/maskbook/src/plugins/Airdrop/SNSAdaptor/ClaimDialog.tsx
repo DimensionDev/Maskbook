@@ -41,7 +41,12 @@ function ClaimDialogUI(props: ClaimDialogUIProps) {
             <DialogContent className={classes.content}>
                 <Box className={classes.token}>
                     <Box display="flex" alignItems="center">
-                        <TokenIcon classes={{ icon: classes.icon }} name={token.name} address={token.address} />
+                        <TokenIcon
+                            classes={{ icon: classes.icon }}
+                            name={token.name}
+                            address={token.address}
+                            logoURI={token.logoURI}
+                        />
                         <Typography className={classes.symbol} color="textPrimary">
                             {token.symbol}
                         </Typography>

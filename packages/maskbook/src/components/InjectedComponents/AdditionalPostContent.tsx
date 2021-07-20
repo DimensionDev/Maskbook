@@ -54,7 +54,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             color={message ? 'textSecondary' : 'textPrimary'}
             gutterBottom
             className={classNames(classes.title)}>
-            <span className={classes.icon}>{ProgressJSX || <MaskbookIcon></MaskbookIcon>}</span>
+            <span className={classes.icon}>{ProgressJSX || <MaskbookIcon />}</span>
             <Box
                 sx={{
                     flex: 1,

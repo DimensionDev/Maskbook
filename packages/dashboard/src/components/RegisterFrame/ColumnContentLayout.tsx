@@ -67,7 +67,7 @@ export const ColumnContentLayout = memo(({ children }: ColumnContentLayoutProps)
     return (
         <Container>
             <Header>
-                <Button variant={'text'} onClick={handleGoBack}>
+                <Button variant="text" onClick={handleGoBack}>
                     Go Back
                 </Button>
             </Header>
@@ -75,7 +75,7 @@ export const ColumnContentLayout = memo(({ children }: ColumnContentLayoutProps)
             <Footer>
                 <TipContainer>
                     <InfoOutlined />
-                    <Typography variant={'body2'} paragraph>
+                    <Typography variant="body2" paragraph>
                         footer
                     </Typography>
                 </TipContainer>

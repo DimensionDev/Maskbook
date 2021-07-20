@@ -12,6 +12,7 @@ import {
     PostIdentifier,
     ProfileIdentifier,
     SubscriptionFromValueRef,
+    SubscriptionDebug as debug,
     TypedMessage,
     TypedMessageTuple,
 } from '@masknet/shared'
@@ -46,10 +47,10 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 opt.postMentionedLinksProvider?.getCurrentValue().forEach((link) => links.add(link))
             }),
         )
-        const linksSubscribe: Subscription<string[]> = {
+        const linksSubscribe: Subscription<string[]> = debug({
             getCurrentValue: () => [...links],
             subscribe: (sub) => links.event.on(ALL_EVENTS, sub),
-        }
+        })
         //#endregion
 
         //#region Parse payload
@@ -93,7 +94,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             commentBoxSelector: opt.comments?.commentBoxSelector,
             commentsSelector: opt.comments?.commentsSelector,
 
-            postIdentifier: {
+            postIdentifier: debug({
                 getCurrentValue: () => {
                     const by = opt.postBy.getCurrentValue()
                     const id = opt.postID.getCurrentValue()
@@ -105,13 +106,15 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                     const b = opt.postID.subscribe(sub)
                     return () => void [a(), b()]
                 },
-            },
+            }),
 
             postMentionedLinks: linksSubscribe,
-            postMetadataImages: opt.postImagesProvider || {
-                getCurrentValue: () => [],
-                subscribe: () => () => {},
-            },
+            postMetadataImages:
+                opt.postImagesProvider ||
+                debug({
+                    getCurrentValue: () => [],
+                    subscribe: () => () => {},
+                }),
             postMetadataMentionedLinks: linksSubscribe,
 
             postMessage: opt.rawMessage,
@@ -121,13 +124,13 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             postPayload: SubscriptionFromValueRef(postPayload),
             decryptedPayloadForImage: new ValueRef(null),
             iv: new ValueRef(null),
-            publicShared: {
+            publicShared: debug({
                 getCurrentValue: () =>
                     postPayload.value
                         .map((val) => val.version === -38 && val.sharedPublic)
                         .unwrapOr<undefined>(undefined),
                 subscribe: (sub) => postPayload.addListener(sub),
-            },
+            }),
         }
     }
 }
@@ -147,14 +150,14 @@ export function createRefsForCreatePostContext() {
         postID: SubscriptionFromValueRef(postID),
         url: SubscriptionFromValueRef(url),
         rawMessage: SubscriptionFromValueRef(postMessage),
-        postImagesProvider: {
+        postImagesProvider: debug({
             getCurrentValue: () => [...postMetadataImages],
             subscribe: (sub) => postMetadataImages.event.on(ALL_EVENTS, sub),
-        },
-        postMentionedLinksProvider: {
+        }),
+        postMentionedLinksProvider: debug({
             getCurrentValue: () => [...postMetadataMentionedLinks.values()],
             subscribe: (sub) => postMetadataMentionedLinks.event.on(ALL_EVENTS, sub),
-        },
+        }),
     }
     return {
         subscriptions,

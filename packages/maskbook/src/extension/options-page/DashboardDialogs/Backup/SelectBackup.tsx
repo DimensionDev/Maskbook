@@ -138,7 +138,7 @@ export function SelectBackup({ onConfirm }: SelectBackupProps) {
                             display: 'flex',
                             flexDirection: 'column',
                         }}>
-                        <AbstractTab {...tabProps}></AbstractTab>
+                        <AbstractTab {...tabProps} />
                     </Box>
                     <ActionButton
                         className={selectBackupClasses.button}

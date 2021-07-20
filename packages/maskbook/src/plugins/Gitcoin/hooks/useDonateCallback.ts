@@ -1,4 +1,4 @@
-import type { PayableTx } from '@masknet/contracts/types/types'
+import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,

@@ -27,7 +27,7 @@ export default function SignUp() {
     return (
         <div className={classes.root}>
             <div>
-                <Paper className={classes.card} variant={'outlined'}>
+                <Paper className={classes.card} variant="outlined">
                     <Typography>
                         <MaskNotSquareIcon />
                     </Typography>
@@ -36,7 +36,7 @@ export default function SignUp() {
                         Encrypt your posts & chats on social networks, allow only your friends to decrypt.
                     </Typography>
                     <div>
-                        <Card variant={'outlined'}>Creating a new account</Card>
+                        <Card variant="outlined">Creating a new account</Card>
                     </div>
                 </Paper>
                 <FooterLine />
