@@ -16,7 +16,7 @@ export interface ConfirmDialogProps extends React.PropsWithChildren<{}> {
     confirmDisabled?: boolean
     maxWidth?: false | 'sm' | 'xs' | 'md' | 'lg' | 'xl' | undefined
     onClose(): void
-    onConfirm(): void
+    onConfirm?(): void
 }
 
 export default function ConfirmDialog(props: ConfirmDialogProps) {
