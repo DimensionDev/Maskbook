@@ -46,12 +46,10 @@ export function useClaimablePoolsByWeb3() {
     return useAsyncRetry(async () => {
         const logs = flatten<Log>(
             await Promise.all(
-                queryParams.map(
-                    async (queryParam: PastLogsOptions) => await Services.Ethereum.getPastLogs(queryParam, chainId),
-                ),
+                queryParams.map((queryParam: PastLogsOptions) => Services.Ethereum.getPastLogs(queryParam, chainId)),
             ),
         )
-        const results = logs.reduce<ClaimablePool[]>((acc, log) => {
+        return logs.reduce<ClaimablePool[]>((acc, log) => {
             const data = web3.eth.abi.decodeParameters(SWAP_SUCCESS_TYPES, log.data) as {
                 claimed: boolean
                 to_address: string
@@ -65,6 +63,5 @@ export function useClaimablePoolsByWeb3() {
             }
             return acc
         }, [])
-        return results
     }, [account, address, chainId, JSON.stringify(queryParams)])
 }

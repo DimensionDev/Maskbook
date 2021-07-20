@@ -15,6 +15,7 @@ import { currentAccountSettings, currentProviderSettings } from '../../../plugin
  * This API is only used internally. Please use requestSend instead in order to share the same payload id globally.
  * @param payload
  * @param callback
+ * @param rpc
  */
 export async function INTERNAL_send(
     payload: JsonRpcPayload,
