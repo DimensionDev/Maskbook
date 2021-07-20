@@ -4,6 +4,7 @@ import PluginCard from '../DashboardComponents/PluginCard'
 
 import DashboardRouterContainer from './Container'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { usePluginI18NField } from '../../../plugin-infra/I18NFieldRender'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,6 +31,7 @@ export default function DashboardSettingsRouter() {
     const { t } = useI18N()
     const classes = useStyles()
     const plugins = useActivatedPluginsSNSAdaptor()
+    const field = usePluginI18NField()
 
     return (
         <DashboardRouterContainer title={t('plugins')}>
@@ -38,10 +40,10 @@ export default function DashboardSettingsRouter() {
                     <li className={classes.pluginItem} key={plugin.ID}>
                         <PluginCard
                             key={plugin.ID}
-                            name={plugin.name.fallback}
+                            name={field(plugin.ID, plugin.name)}
                             id={plugin.ID}
                             icon={plugin.icon}
-                            description={plugin.description?.fallback}
+                            description={plugin.description ? field(plugin.ID, plugin.description) : ''}
                         />
                     </li>
                 ))}

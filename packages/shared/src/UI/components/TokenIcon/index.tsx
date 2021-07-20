@@ -3,35 +3,31 @@ import {
     ChainId,
     currySameAddress,
     formatEthereumAddress,
+    getChainDetailed,
     getTokenConstants,
     isSameAddress,
     useBlockie,
-    useChainDetailed,
     useChainId,
     useTokenAssetBaseURLConstants,
 } from '@masknet/web3-shared'
-import { makeStyles, Avatar, Theme, AvatarProps } from '@material-ui/core'
+import { Avatar, AvatarProps, makeStyles, Theme } from '@material-ui/core'
 import { useImageFailOver } from '../../index'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
 
-//#region fix icon image
-function resolveTokenIconURLs(address: string, baseURIs: string[], chainId: ChainId, logoURI?: string) {
+function getFallbackIcons(address: string, baseURIs: string[]) {
     const checkSummedAddress = formatEthereumAddress(address)
 
-    if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
+    if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS ?? '', checkSummedAddress)) {
         return baseURIs.map((x) => `${x}/info/logo.png`)
     }
 
     const specialIcon = SPECIAL_ICON_LIST.find(currySameAddress(address))
-
     if (specialIcon) return [specialIcon.logo_url]
 
     // load from remote
-    const fullIconAssetURIs = baseURIs.map((x) => `${x}/assets/${checkSummedAddress}/logo.png`)
-    return logoURI ? [logoURI] : fullIconAssetURIs
+    return baseURIs.map((x) => `${x}/assets/${checkSummedAddress}/logo.png`)
 }
-//#endregion
 
 const useStyles = makeStyles((theme: Theme) => ({
     icon: {
@@ -44,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export interface TokenIconProps extends withClasses<never> {
     name?: string
-    logoURI?: string
+    logoURI?: string | string[]
     chainId?: ChainId
     address: string
     AvatarProps?: Partial<AvatarProps>
@@ -52,20 +48,29 @@ export interface TokenIconProps extends withClasses<never> {
 
 export function TokenIcon(props: TokenIconProps) {
     const { address, logoURI, name, chainId, AvatarProps, classes } = props
+    const _chainId = useChainId()
+    let _logoURI = logoURI
 
-    const chainId_ = useChainId()
-    const chainDetailed = useChainDetailed()
-    const tokenBlockie = useBlockie(address)
+    if (!logoURI && isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS ?? '', formatEthereumAddress(address))) {
+        const nativeToken = getChainDetailed(chainId ?? _chainId)
+        _logoURI = nativeToken?.nativeCurrency.logoURI
+    }
+
     const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId)
-    const tokenURIs = resolveTokenIconURLs(address, TOKEN_ASSET_BASE_URI, chainId ?? chainId_, logoURI)
-    const { value: logoURL, loading } = useImageFailOver(chainDetailed ? tokenURIs : [], '')
+    const fallbackLogos = getFallbackIcons(address, TOKEN_ASSET_BASE_URI ?? [])
+
+    const tokenBlockie = useBlockie(address)
+    const images = _logoURI
+        ? Array.isArray(_logoURI)
+            ? [..._logoURI, ...fallbackLogos]
+            : [_logoURI, ...fallbackLogos]
+        : fallbackLogos
+    const { value: trustedLogoURI, loading } = useImageFailOver(images, '')
 
     return (
         <TokenIconUI
-            logoURL={logoURL}
-            loading={loading}
+            logoURL={loading || trustedLogoURI ? trustedLogoURI : tokenBlockie}
             AvatarProps={AvatarProps}
-            tokenBlockie={tokenBlockie}
             classes={classes}
             name={name}
         />
@@ -74,21 +79,17 @@ export function TokenIcon(props: TokenIconProps) {
 
 export interface TokenIconUIProps extends withClasses<never> {
     logoURL?: string
-    loading: boolean
     AvatarProps?: Partial<AvatarProps>
-    tokenBlockie: string
     name?: string
 }
 
 export const TokenIconUI = memo<TokenIconUIProps>((props) => {
-    const { logoURL, loading, AvatarProps, tokenBlockie, name } = props
+    const { logoURL, AvatarProps, name } = props
     const classes = useStylesExtends(useStyles(), props)
 
     return (
-        <Avatar className={classes.icon} src={loading ? '' : logoURL} {...AvatarProps}>
-            <Avatar className={classes.icon} src={tokenBlockie}>
-                {name?.substr(0, 1).toLocaleUpperCase()}
-            </Avatar>
+        <Avatar className={classes.icon} src={logoURL} {...AvatarProps}>
+            {name?.substr(0, 1).toLocaleUpperCase()}
         </Avatar>
     )
 })
