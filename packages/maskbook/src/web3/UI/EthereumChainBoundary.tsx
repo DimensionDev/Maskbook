@@ -5,11 +5,11 @@ import {
     getChainDetailedCAIP,
     getChainName,
     getNetworkTypeFromChainId,
+    isChainIdValid,
     NetworkType,
     ProviderType,
     useAccount,
     useChainId,
-    useChainIdValid,
 } from '@masknet/web3-shared'
 import { useValueRef, delay } from '@masknet/shared'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
@@ -27,7 +27,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const { t } = useI18N()
     const account = useAccount()
     const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
     const providerType = useValueRef(currentProviderSettings)
 
     const expectedChainId = props.chainId
@@ -36,7 +35,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const actualNetwork = getChainName(acutalChainId)
 
     // if false then it will not guide the user to switch the network
-    const isAllowed = chainIdValid && !!account
+    const isAllowed = isChainIdValid(expectedChainId) && !!account
 
     const onSwitch = useCallback(async () => {
         // a short time loading makes the user fells better
