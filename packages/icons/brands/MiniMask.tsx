@@ -3,7 +3,7 @@ import { createPaletteAwareIcon } from '../utils'
 export const MiniMaskIcon = createPaletteAwareIcon(
     'MiniMask',
     <>
-        <g opacity="0.5" clipPath="url(#miniMask_clip0)">
+        <g clipPath="url(#miniMask_clip0)">
             <path
                 fillRule="evenodd"
                 clipRule="evenodd"
@@ -24,7 +24,7 @@ export const MiniMaskIcon = createPaletteAwareIcon(
         </defs>
     </>,
     <>
-        <g opacity="0.5" clipPath="url(#miniMask_clip0)">
+        <g clipPath="url(#miniMask_clip0)">
             <path
                 fillRule="evenodd"
                 clipRule="evenodd"

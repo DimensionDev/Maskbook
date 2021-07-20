@@ -1,6 +1,9 @@
 import type { ThirdPartyPopupContextIdentifier } from '../../plugins/External/popup-context'
 
 export enum DialogRoutes {
+    Root = '/',
+    Wallet = '/wallet',
+    Personas = '/personas',
     PermissionAwareRedirect = '/redirect',
     RequestPermission = '/request-permission',
     ThirdPartyRequestPermission = '/3rd-request-permission',

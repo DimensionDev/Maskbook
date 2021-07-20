@@ -141,6 +141,7 @@
     "browser_action_enter_dashboard": "進入儀錶板",
     "browser_action_connect_wallet": "連接錢包",
     "browser_action_setup_first_persona": "設定你的第一個角色",
+    "popups_initial_tips": "",
     "profiles": "設定檔",
     "posts": "貼文",
     "post_dialog__button": "完成",

@@ -141,6 +141,7 @@
     "browser_action_enter_dashboard": "Enter Dashboard",
     "browser_action_connect_wallet": "Connect Wallet",
     "browser_action_setup_first_persona": "Setup First Persona",
+    "popups_initial_tips": "Please sign in or sign up to use the {{type}}.",
     "profiles": "Profiles",
     "posts": "Posts",
     "post_dialog__button": "Finish",

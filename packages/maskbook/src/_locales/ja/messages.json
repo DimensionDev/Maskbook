@@ -141,6 +141,7 @@
     "browser_action_enter_dashboard": "ダッシュボードに入る",
     "browser_action_connect_wallet": "現在のウォレット",
     "browser_action_setup_first_persona": "最初のペルソナアカウントを作る",
+    "popups_initial_tips": "",
     "profiles": "プロフィール",
     "posts": "投稿",
     "post_dialog__button": "完了",

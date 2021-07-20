@@ -77,6 +77,10 @@ export function resolveChainColor(chainId: ChainId) {
             return 'rgb(246, 195, 67)'
         case ChainId.Gorli:
             return 'rgb(48, 153, 242)'
+        case ChainId.BSCT:
+            return 'rgb(240, 185, 10)'
+        case ChainId.Mumbai:
+            return 'rgb(130, 71, 229)'
         default:
             return 'rgb(214, 217, 220)'
     }
