@@ -8,7 +8,7 @@ import { useChainId, useTokenConstants } from '@masknet/web3-shared'
 export function useFetchPool(address: string) {
     const API_URL = useApiURL()
     return useAsyncRetry(async () => {
-        if (!API_URL) return
+        if (!address || !API_URL) return
         return PluginDHedgeRPC.fetchPool(address, API_URL)
     }, [address])
 }
@@ -16,16 +16,17 @@ export function useFetchPool(address: string) {
 export function useFetchPoolHistory(address: string, period: Period, sort = true) {
     const API_URL = useApiURL()
     return useAsyncRetry(async () => {
-        if (!API_URL) return
+        if (!address || !API_URL) return []
         return PluginDHedgeRPC.fetchPoolPerformance(address, period, API_URL, sort)
     }, [address, period, sort])
 }
 
-export function usePoolDepositAssets(pool: Pool) {
+export function usePoolDepositAssets(pool?: Pool) {
     const chainId = useChainId()
     const { sUSD_ADDRESS } = useTokenConstants()
-    const poolManagerContract = useDHedgePoolManagerContract(pool.managerLogicAddress)
+    const poolManagerContract = useDHedgePoolManagerContract(pool?.managerLogicAddress)
     return useAsyncRetry(async () => {
+        if (!pool) return
         if (pool.poolType === PoolType.v1) return sUSD_ADDRESS ? [sUSD_ADDRESS] : undefined
         if (!poolManagerContract) return
         return await poolManagerContract.methods.getDepositAssets().call()
