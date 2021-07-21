@@ -40,26 +40,14 @@ export type Deposit = ContractEventLog<{
 export type EarlyWithdrawal = ContractEventLog<{
     player: string
     amount: string
-    totalGamePrincipal: string
     0: string
     1: string
-    2: string
 }>
 export type FundsDepositedIntoExternalPool = ContractEventLog<{
     amount: string
     0: string
 }>
-export type FundsRedeemedFromExternalPool_uint256_uint256_uint256_uint256 = ContractEventLog<{
-    totalAmount: string
-    totalGamePrincipal: string
-    totalGameInterest: string
-    rewards: string
-    0: string
-    1: string
-    2: string
-    3: string
-}>
-export type FundsRedeemedFromExternalPool_uint256_uint256_uint256 = ContractEventLog<{
+export type FundsRedeemedFromExternalPool = ContractEventLog<{
     totalAmount: string
     totalGamePrincipal: string
     totalGameInterest: string
@@ -91,15 +79,7 @@ export type WinnersAnnouncement = ContractEventLog<{
     winners: string[]
     0: string[]
 }>
-export type Withdrawal_address_uint256_uint256 = ContractEventLog<{
-    player: string
-    amount: string
-    playerReward: string
-    0: string
-    1: string
-    2: string
-}>
-export type Withdrawal_address_uint256 = ContractEventLog<{
+export type Withdrawal = ContractEventLog<{
     player: string
     amount: string
     0: string
@@ -147,7 +127,7 @@ export interface GoodGhostingPolygon extends BaseContract {
 
         iterablePlayers(arg0: number | string | BN): NonPayableTransactionObject<string>
 
-        joinGame(index: number | string | BN, merkleProof: (string | number[])[]): NonPayableTransactionObject<void>
+        joinGame(): NonPayableTransactionObject<void>
 
         lastSegment(): NonPayableTransactionObject<string>
 
@@ -186,7 +166,7 @@ export interface GoodGhostingPolygon extends BaseContract {
 
         renounceOwnership(): NonPayableTransactionObject<void>
 
-        rewardsPerPlayer(): NonPayableTransactionObject<string>
+        router(): NonPayableTransactionObject<string>
 
         segmentDeposit(arg0: number | string | BN): NonPayableTransactionObject<string>
 
@@ -201,6 +181,8 @@ export interface GoodGhostingPolygon extends BaseContract {
         transferOwnership(newOwner: string): NonPayableTransactionObject<void>
 
         unpause(): NonPayableTransactionObject<void>
+
+        usdc(): NonPayableTransactionObject<string>
 
         winners(arg0: number | string | BN): NonPayableTransactionObject<string>
 
@@ -222,20 +204,10 @@ export interface GoodGhostingPolygon extends BaseContract {
             cb?: Callback<FundsDepositedIntoExternalPool>,
         ): EventEmitter
 
-        'FundsRedeemedFromExternalPool(uint256,uint256,uint256,uint256)'(
-            cb?: Callback<FundsRedeemedFromExternalPool_uint256_uint256_uint256_uint256>,
-        ): EventEmitter
-        'FundsRedeemedFromExternalPool(uint256,uint256,uint256,uint256)'(
+        FundsRedeemedFromExternalPool(cb?: Callback<FundsRedeemedFromExternalPool>): EventEmitter
+        FundsRedeemedFromExternalPool(
             options?: EventOptions,
-            cb?: Callback<FundsRedeemedFromExternalPool_uint256_uint256_uint256_uint256>,
-        ): EventEmitter
-
-        'FundsRedeemedFromExternalPool(uint256,uint256,uint256)'(
-            cb?: Callback<FundsRedeemedFromExternalPool_uint256_uint256_uint256>,
-        ): EventEmitter
-        'FundsRedeemedFromExternalPool(uint256,uint256,uint256)'(
-            options?: EventOptions,
-            cb?: Callback<FundsRedeemedFromExternalPool_uint256_uint256_uint256>,
+            cb?: Callback<FundsRedeemedFromExternalPool>,
         ): EventEmitter
 
         JoinedGame(cb?: Callback<JoinedGame>): EventEmitter
@@ -253,14 +225,8 @@ export interface GoodGhostingPolygon extends BaseContract {
         WinnersAnnouncement(cb?: Callback<WinnersAnnouncement>): EventEmitter
         WinnersAnnouncement(options?: EventOptions, cb?: Callback<WinnersAnnouncement>): EventEmitter
 
-        'Withdrawal(address,uint256,uint256)'(cb?: Callback<Withdrawal_address_uint256_uint256>): EventEmitter
-        'Withdrawal(address,uint256,uint256)'(
-            options?: EventOptions,
-            cb?: Callback<Withdrawal_address_uint256_uint256>,
-        ): EventEmitter
-
-        'Withdrawal(address,uint256)'(cb?: Callback<Withdrawal_address_uint256>): EventEmitter
-        'Withdrawal(address,uint256)'(options?: EventOptions, cb?: Callback<Withdrawal_address_uint256>): EventEmitter
+        Withdrawal(cb?: Callback<Withdrawal>): EventEmitter
+        Withdrawal(options?: EventOptions, cb?: Callback<Withdrawal>): EventEmitter
 
         allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
@@ -281,6 +247,13 @@ export interface GoodGhostingPolygon extends BaseContract {
         cb: Callback<FundsDepositedIntoExternalPool>,
     ): void
 
+    once(event: 'FundsRedeemedFromExternalPool', cb: Callback<FundsRedeemedFromExternalPool>): void
+    once(
+        event: 'FundsRedeemedFromExternalPool',
+        options: EventOptions,
+        cb: Callback<FundsRedeemedFromExternalPool>,
+    ): void
+
     once(event: 'JoinedGame', cb: Callback<JoinedGame>): void
     once(event: 'JoinedGame', options: EventOptions, cb: Callback<JoinedGame>): void
 
@@ -295,4 +268,7 @@ export interface GoodGhostingPolygon extends BaseContract {
 
     once(event: 'WinnersAnnouncement', cb: Callback<WinnersAnnouncement>): void
     once(event: 'WinnersAnnouncement', options: EventOptions, cb: Callback<WinnersAnnouncement>): void
+
+    once(event: 'Withdrawal', cb: Callback<Withdrawal>): void
+    once(event: 'Withdrawal', options: EventOptions, cb: Callback<Withdrawal>): void
 }

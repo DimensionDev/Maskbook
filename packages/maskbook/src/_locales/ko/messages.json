@@ -780,5 +780,7 @@
     "plugin_good_ghosting_next_event": "",
     "plugin_good_ghosting_game_end": "",
     "plugin_good_ghosting_game_over": "",
-    "plugin_good_ghosting_participants_withdraw": ""
+    "plugin_good_ghosting_participants_withdraw": "",
+    "plugin_good_ghosting_join_game": "",
+    "plugin_good_ghosting_make_deposit": ""
 }

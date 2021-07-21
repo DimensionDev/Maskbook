@@ -70,6 +70,7 @@ export function useGameInfo() {
             adaiTokenAddress: adaiToken,
             lendingPoolAddress: lendingPool,
             currentPlayer: player && player.addr !== ZERO_ADDRESS ? player : undefined,
+            refresh: asyncResult.retry,
         } as GoodGhostingInfo
     }, [results, contract])
 

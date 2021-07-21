@@ -780,5 +780,7 @@
     "plugin_good_ghosting_next_event": "Coming up next",
     "plugin_good_ghosting_game_end": "This game has ended",
     "plugin_good_ghosting_game_over": "Game Over",
-    "plugin_good_ghosting_participants_withdraw": "Participants can now withdraw their earnings!"
+    "plugin_good_ghosting_participants_withdraw": "Participants can now withdraw their earnings!",
+    "plugin_good_ghosting_join_game": "Join Game",
+    "plugin_good_ghosting_make_deposit": "Make Deposit"
 }

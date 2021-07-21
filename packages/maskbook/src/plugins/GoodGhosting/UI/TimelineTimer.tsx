@@ -6,6 +6,7 @@ import { useI18N } from '../../../utils'
 import { useTimeline } from '../hooks/useGameInfo'
 import type { GoodGhostingInfo } from '../types'
 import { isEndOfTimeline, getNextTimelineIndex } from '../utils'
+import { GameAction } from './GameAction'
 
 const useStyles = makeStyles((theme) => ({
     timer: {
@@ -59,6 +60,7 @@ export function TimelineTimer(props: TimelineTimerProps) {
                     ) : (
                         <Timer targetDate={nextTimelineEvent.date} updateTargetDate={updateTargetDate} />
                     )}
+                    <GameAction info={props.info} />
                 </div>
             </Grid>
         </Grid>

@@ -12,6 +12,7 @@ export interface GoodGhostingInfo {
     adaiTokenAddress: string
     lendingPoolAddress: string
     currentPlayer: Player | undefined
+    refresh: () => void
 }
 
 export interface Player {

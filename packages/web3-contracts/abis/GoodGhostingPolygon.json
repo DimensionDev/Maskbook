@@ -1,858 +1,808 @@
 [
     {
+        "type": "constructor",
+        "stateMutability": "nonpayable",
         "inputs": [
             {
-                "internalType": "contract IERC20",
+                "type": "address",
                 "name": "_inboundCurrency",
-                "type": "address"
+                "internalType": "contract IERC20"
             },
             {
-                "internalType": "contract ILendingPoolAddressesProvider",
+                "type": "address",
                 "name": "_lendingPoolAddressProvider",
-                "type": "address"
+                "internalType": "contract ILendingPoolAddressesProvider"
             },
             {
-                "internalType": "uint256",
+                "type": "uint256",
                 "name": "_segmentCount",
-                "type": "uint256"
+                "internalType": "uint256"
             },
             {
-                "internalType": "uint256",
+                "type": "uint256",
                 "name": "_segmentLength",
-                "type": "uint256"
+                "internalType": "uint256"
             },
             {
-                "internalType": "uint256",
+                "type": "uint256",
                 "name": "_segmentPayment",
-                "type": "uint256"
+                "internalType": "uint256"
             },
             {
-                "internalType": "uint256",
+                "type": "uint256",
                 "name": "_earlyWithdrawalFee",
-                "type": "uint256"
+                "internalType": "uint256"
             },
             {
-                "internalType": "uint256",
+                "type": "uint256",
                 "name": "_customFee",
-                "type": "uint256"
+                "internalType": "uint256"
             },
             {
-                "internalType": "address",
+                "type": "address",
                 "name": "_dataProvider",
-                "type": "address"
+                "internalType": "address"
             },
             {
-                "internalType": "bytes32",
+                "type": "bytes32",
                 "name": "merkleRoot_",
-                "type": "bytes32"
+                "internalType": "bytes32"
             },
             {
-                "internalType": "address",
+                "type": "address",
                 "name": "_incentiveController",
-                "type": "address"
+                "internalType": "address"
             },
             {
-                "internalType": "contract IERC20",
+                "type": "address",
+                "name": "_router",
+                "internalType": "contract IRouter"
+            },
+            {
+                "type": "address",
                 "name": "_matic",
-                "type": "address"
+                "internalType": "contract IERC20"
+            },
+            {
+                "type": "address",
+                "name": "_usdc",
+                "internalType": "contract IERC20"
             }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
+        ]
     },
     {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "admin",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "totalGameInterest",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "adminFeeAmount",
-                "type": "uint256"
-            }
-        ],
+        "type": "event",
         "name": "AdminWithdrawal",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
         "inputs": [
             {
-                "indexed": true,
+                "type": "address",
+                "name": "admin",
                 "internalType": "address",
-                "name": "player",
-                "type": "address"
+                "indexed": true
             },
             {
-                "indexed": true,
+                "type": "uint256",
+                "name": "totalGameInterest",
                 "internalType": "uint256",
-                "name": "segment",
-                "type": "uint256"
+                "indexed": false
             },
             {
-                "indexed": false,
+                "type": "uint256",
+                "name": "adminFeeAmount",
                 "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
+                "indexed": false
             }
         ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
         "name": "Deposit",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
         "inputs": [
             {
-                "indexed": true,
-                "internalType": "address",
+                "type": "address",
                 "name": "player",
-                "type": "address"
+                "internalType": "address",
+                "indexed": true
             },
             {
-                "indexed": false,
+                "type": "uint256",
+                "name": "segment",
                 "internalType": "uint256",
+                "indexed": true
+            },
+            {
+                "type": "uint256",
                 "name": "amount",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
                 "internalType": "uint256",
-                "name": "totalGamePrincipal",
-                "type": "uint256"
+                "indexed": false
             }
         ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
         "name": "EarlyWithdrawal",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
         "inputs": [
             {
-                "indexed": false,
-                "internalType": "uint256",
+                "type": "address",
+                "name": "player",
+                "internalType": "address",
+                "indexed": true
+            },
+            {
+                "type": "uint256",
                 "name": "amount",
-                "type": "uint256"
+                "internalType": "uint256",
+                "indexed": false
             }
         ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
         "name": "FundsDepositedIntoExternalPool",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
         "inputs": [
             {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "totalAmount",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "totalGamePrincipal",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "totalGameInterest",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "rewards",
-                "type": "uint256"
-            }
-        ],
-        "name": "FundsRedeemedFromExternalPool",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "totalAmount",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "totalGamePrincipal",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "totalGameInterest",
-                "type": "uint256"
-            }
-        ],
-        "name": "FundsRedeemedFromExternalPool",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "player",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
+                "type": "uint256",
                 "name": "amount",
-                "type": "uint256"
+                "internalType": "uint256",
+                "indexed": false
             }
         ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "FundsRedeemedFromExternalPool",
+        "inputs": [
+            {
+                "type": "uint256",
+                "name": "totalAmount",
+                "internalType": "uint256",
+                "indexed": false
+            },
+            {
+                "type": "uint256",
+                "name": "totalGamePrincipal",
+                "internalType": "uint256",
+                "indexed": false
+            },
+            {
+                "type": "uint256",
+                "name": "totalGameInterest",
+                "internalType": "uint256",
+                "indexed": false
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
         "name": "JoinedGame",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
         "inputs": [
             {
-                "indexed": true,
+                "type": "address",
+                "name": "player",
                 "internalType": "address",
-                "name": "previousOwner",
-                "type": "address"
+                "indexed": true
             },
             {
-                "indexed": true,
-                "internalType": "address",
-                "name": "newOwner",
-                "type": "address"
+                "type": "uint256",
+                "name": "amount",
+                "internalType": "uint256",
+                "indexed": false
             }
         ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
         "name": "OwnershipTransferred",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
         "inputs": [
             {
-                "indexed": false,
+                "type": "address",
+                "name": "previousOwner",
                 "internalType": "address",
-                "name": "account",
-                "type": "address"
+                "indexed": true
+            },
+            {
+                "type": "address",
+                "name": "newOwner",
+                "internalType": "address",
+                "indexed": true
             }
         ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
         "name": "Paused",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
         "inputs": [
             {
-                "indexed": false,
-                "internalType": "address",
+                "type": "address",
                 "name": "account",
-                "type": "address"
+                "internalType": "address",
+                "indexed": false
             }
         ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
         "name": "Unpaused",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
         "inputs": [
             {
-                "indexed": false,
-                "internalType": "address[]",
-                "name": "winners",
-                "type": "address[]"
-            }
-        ],
-        "name": "WinnersAnnouncement",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "player",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "playerReward",
-                "type": "uint256"
-            }
-        ],
-        "name": "Withdrawal",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "player",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "Withdrawal",
-        "type": "event"
-    },
-    {
-        "inputs": [],
-        "name": "adaiToken",
-        "outputs": [
-            {
-                "internalType": "contract AToken",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "adminFeeAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "adminFeeWithdraw",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "adminWithdraw",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "index",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address",
+                "type": "address",
                 "name": "account",
-                "type": "address"
-            },
-            {
-                "internalType": "bool",
-                "name": "isValid",
-                "type": "bool"
-            },
-            {
-                "internalType": "bytes32[]",
-                "name": "merkleProof",
-                "type": "bytes32[]"
+                "internalType": "address",
+                "indexed": false
             }
         ],
-        "name": "claim",
-        "outputs": [],
-        "stateMutability": "view",
-        "type": "function"
+        "anonymous": false
     },
     {
-        "inputs": [],
-        "name": "customFee",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "daiToken",
-        "outputs": [
-            {
-                "internalType": "contract IERC20",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "depositIntoExternalPool",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "earlyWithdraw",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "earlyWithdrawalFee",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "firstSegmentStart",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getCurrentSegment",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getNumberOfPlayers",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "incentiveController",
-        "outputs": [
-            {
-                "internalType": "contract IncentiveController",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "isGameCompleted",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
+        "type": "event",
+        "name": "WinnersAnnouncement",
         "inputs": [
             {
+                "type": "address[]",
+                "name": "winners",
+                "internalType": "address[]",
+                "indexed": false
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "Withdrawal",
+        "inputs": [
+            {
+                "type": "address",
+                "name": "player",
+                "internalType": "address",
+                "indexed": true
+            },
+            {
+                "type": "uint256",
+                "name": "amount",
                 "internalType": "uint256",
+                "indexed": false
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "address",
                 "name": "",
-                "type": "uint256"
+                "internalType": "contract AToken"
+            }
+        ],
+        "name": "adaiToken",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": "",
+                "internalType": "uint256"
+            }
+        ],
+        "name": "adminFeeAmount",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "outputs": [],
+        "name": "adminFeeWithdraw",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "bool",
+                "name": "",
+                "internalType": "bool"
+            }
+        ],
+        "name": "adminWithdraw",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [],
+        "name": "claim",
+        "inputs": [
+            {
+                "type": "uint256",
+                "name": "index",
+                "internalType": "uint256"
+            },
+            {
+                "type": "address",
+                "name": "account",
+                "internalType": "address"
+            },
+            {
+                "type": "bool",
+                "name": "isValid",
+                "internalType": "bool"
+            },
+            {
+                "type": "bytes32[]",
+                "name": "merkleProof",
+                "internalType": "bytes32[]"
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": "",
+                "internalType": "uint256"
+            }
+        ],
+        "name": "customFee",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "address",
+                "name": "",
+                "internalType": "contract IERC20"
+            }
+        ],
+        "name": "daiToken",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "outputs": [],
+        "name": "depositIntoExternalPool",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "outputs": [],
+        "name": "earlyWithdraw",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": "",
+                "internalType": "uint256"
+            }
+        ],
+        "name": "earlyWithdrawalFee",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": "",
+                "internalType": "uint256"
+            }
+        ],
+        "name": "firstSegmentStart",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": "",
+                "internalType": "uint256"
+            }
+        ],
+        "name": "getCurrentSegment",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": "",
+                "internalType": "uint256"
+            }
+        ],
+        "name": "getNumberOfPlayers",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "address",
+                "name": "",
+                "internalType": "contract IncentiveController"
+            }
+        ],
+        "name": "incentiveController",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "bool",
+                "name": "",
+                "internalType": "bool"
+            }
+        ],
+        "name": "isGameCompleted",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "address",
+                "name": "",
+                "internalType": "address"
             }
         ],
         "name": "iterablePlayers",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "index",
-                "type": "uint256"
+                "type": "uint256",
+                "name": "",
+                "internalType": "uint256"
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "outputs": [],
+        "name": "joinGame",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": "",
+                "internalType": "uint256"
+            }
+        ],
+        "name": "lastSegment",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "address",
+                "name": "",
+                "internalType": "contract ILendingPool"
+            }
+        ],
+        "name": "lendingPool",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "address",
+                "name": "",
+                "internalType": "contract ILendingPoolAddressesProvider"
+            }
+        ],
+        "name": "lendingPoolAddressProvider",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "outputs": [],
+        "name": "makeDeposit",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "address",
+                "name": "",
+                "internalType": "contract IERC20"
+            }
+        ],
+        "name": "matic",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "bytes32",
+                "name": "",
+                "internalType": "bytes32"
+            }
+        ],
+        "name": "merkleRoot",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "address",
+                "name": "",
+                "internalType": "address"
+            }
+        ],
+        "name": "owner",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "outputs": [],
+        "name": "pause",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "bool",
+                "name": "",
+                "internalType": "bool"
+            }
+        ],
+        "name": "paused",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "address",
+                "name": "addr",
+                "internalType": "address"
             },
             {
-                "internalType": "bytes32[]",
-                "name": "merkleProof",
-                "type": "bytes32[]"
-            }
-        ],
-        "name": "joinGame",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "lastSegment",
-        "outputs": [
+                "type": "bool",
+                "name": "withdrawn",
+                "internalType": "bool"
+            },
             {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "lendingPool",
-        "outputs": [
+                "type": "bool",
+                "name": "canRejoin",
+                "internalType": "bool"
+            },
             {
-                "internalType": "contract ILendingPool",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "lendingPoolAddressProvider",
-        "outputs": [
+                "type": "uint256",
+                "name": "mostRecentSegmentPaid",
+                "internalType": "uint256"
+            },
             {
-                "internalType": "contract ILendingPoolAddressesProvider",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "makeDeposit",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "matic",
-        "outputs": [
-            {
-                "internalType": "contract IERC20",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "merkleRoot",
-        "outputs": [
-            {
-                "internalType": "bytes32",
-                "name": "",
-                "type": "bytes32"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "owner",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "pause",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "paused",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
+                "type": "uint256",
+                "name": "amountPaid",
+                "internalType": "uint256"
             }
         ],
         "name": "players",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "addr",
-                "type": "address"
-            },
-            {
-                "internalType": "bool",
-                "name": "withdrawn",
-                "type": "bool"
-            },
-            {
-                "internalType": "bool",
-                "name": "canRejoin",
-                "type": "bool"
-            },
-            {
-                "internalType": "uint256",
-                "name": "mostRecentSegmentPaid",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "amountPaid",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "redeemFromExternalPool",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "redeemed",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "renounceOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "rewardsPerPlayer",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
-                "internalType": "uint256",
+                "type": "address",
                 "name": "",
-                "type": "uint256"
+                "internalType": "address"
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "outputs": [],
+        "name": "redeemFromExternalPool",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "bool",
+                "name": "",
+                "internalType": "bool"
+            }
+        ],
+        "name": "redeemed",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "outputs": [],
+        "name": "renounceOwnership",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "address",
+                "name": "",
+                "internalType": "contract IRouter"
+            }
+        ],
+        "name": "router",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": "",
+                "internalType": "uint256"
             }
         ],
         "name": "segmentDeposit",
-        "outputs": [
+        "inputs": [
             {
-                "internalType": "uint256",
+                "type": "uint256",
                 "name": "",
-                "type": "uint256"
+                "internalType": "uint256"
             }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        ]
     },
     {
-        "inputs": [],
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": "",
+                "internalType": "uint256"
+            }
+        ],
         "name": "segmentLength",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        "inputs": []
     },
     {
-        "inputs": [],
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": "",
+                "internalType": "uint256"
+            }
+        ],
         "name": "segmentPayment",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        "inputs": []
     },
     {
-        "inputs": [],
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": "",
+                "internalType": "uint256"
+            }
+        ],
         "name": "totalGameInterest",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        "inputs": []
     },
     {
-        "inputs": [],
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": "",
+                "internalType": "uint256"
+            }
+        ],
         "name": "totalGamePrincipal",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "outputs": [],
+        "name": "transferOwnership",
+        "inputs": [
+            {
+                "type": "address",
+                "name": "newOwner",
+                "internalType": "address"
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "outputs": [],
+        "name": "unpause",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
         "outputs": [
             {
-                "internalType": "uint256",
+                "type": "address",
                 "name": "",
-                "type": "uint256"
+                "internalType": "contract IERC20"
             }
         ],
+        "name": "usdc",
+        "inputs": []
+    },
+    {
+        "type": "function",
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
+        "outputs": [
             {
-                "internalType": "address",
-                "name": "newOwner",
-                "type": "address"
-            }
-        ],
-        "name": "transferOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "unpause",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
+                "type": "address",
                 "name": "",
-                "type": "uint256"
+                "internalType": "address"
             }
         ],
         "name": "winners",
-        "outputs": [
+        "inputs": [
             {
-                "internalType": "address",
+                "type": "uint256",
                 "name": "",
-                "type": "address"
+                "internalType": "uint256"
             }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        ]
     },
     {
-        "inputs": [],
-        "name": "withdraw",
-        "outputs": [],
+        "type": "function",
         "stateMutability": "nonpayable",
-        "type": "function"
+        "outputs": [],
+        "name": "withdraw",
+        "inputs": []
     }
 ]
