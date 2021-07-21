@@ -4,7 +4,7 @@ import { toHex } from 'web3-utils'
 // There's a getPastLogs block range limitation which differ from RPCs.
 //  So we need to split one large range request to multiple small ones.
 export function useGetPastLogsParams(
-    fromBlock: number,
+    fromBlock: number | undefined,
     currentBlock: number,
     maxBlockRange: number,
     params: Partial<PastLogsOptions>,
