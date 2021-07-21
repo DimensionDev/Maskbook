@@ -1,19 +1,13 @@
 import { RefreshIcon } from '@masknet/icons'
-import {
-    Card,
-    CardActions,
-    CardContent,
-    Link,
-    makeStyles,
-    Paper,
-    Tab,
-    Tabs,
-    Typography,
-} from '@material-ui/core'
+import { Card, CardActions, CardContent, Link, makeStyles, Paper, Tab, Tabs, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { Market } from '../types'
+
+import { MarketDescription } from './MarketDescription'
+import { MarketOdds } from './MarketOdds'
+import { MarketBuySell } from './MarketBuySell'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -108,6 +102,7 @@ export function MarketView(props: MarketViewProps) {
     const tabs = [
         <Tab className={classes.tab} key="description" label={t('plugin_augur_tab_description')} />,
         <Tab className={classes.tab} key="chart" label={t('plugin_augur_tab_chart')} />,
+        <Tab className={classes.tab} key="buysell" label={t('plugin_augur_tab_buysell')} />,
     ].filter(Boolean)
     //#endregion
 
@@ -118,13 +113,13 @@ export function MarketView(props: MarketViewProps) {
             </Typography>
         )
 
-    if (!market) {
-        return (
-            <Typography className={classes.message} color="textPrimary">
-                {t('plugin_augur_market_not_found')}
-            </Typography>
-        )
-    }
+    // if (!market) {
+    //     return (
+    //         <Typography className={classes.message} color="textPrimary">
+    //             {t('plugin_augur_market_not_found')}
+    //         </Typography>
+    //     )
+    // }
 
     if (error)
         return (
@@ -152,8 +147,9 @@ export function MarketView(props: MarketViewProps) {
                     {tabs}
                 </Tabs>
                 <Paper className={classes.body}>
-                    {/* {tabIndex === 0 ? <PoolStats pool={pool} /> : null}
-                    {tabIndex === 1 ? <PerformanceChart pool={pool} /> : null} */}
+                    {tabIndex === 0 ? <MarketDescription /> : null}
+                    {tabIndex === 1 ? <MarketOdds /> : null}
+                    {tabIndex === 2 ? <MarketBuySell /> : null}
                 </Paper>
             </CardContent>
             <CardActions className={classes.footer}>

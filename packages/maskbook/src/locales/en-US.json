@@ -955,5 +955,5 @@
     "plugin_augur_loading": "Loading",
     "plugin_augur_smt_wrong": "Something went wrong!",
     "plugin_augur_tab_description": "Description",
-    "plugin_augur_tab_chart": "Chart"
+    "plugin_augur_tab_buysell": "Buy / Sell"
 }
