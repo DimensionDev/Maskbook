@@ -17,9 +17,15 @@ interface TabPanelProps extends BoxProps {
 }
 
 export interface AbstractTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator'> {
-    tabs: (Omit<TabPanelProps, 'height' | 'minHeight'> & { cb?: () => void })[]
+    tabs: (Omit<TabPanelProps, 'height' | 'minHeight'> & {
+        cb?: () => void
+        disableFocusRipple?: boolean
+        disableRipple?: boolean
+    })[]
     state?: readonly [number, (next: number) => void]
     index?: number
+    disableFocusRipple?: boolean
+    disableRipple?: boolean
     margin?: true | 'top' | 'bottom'
     height?: number | string
     hasOnlyOneChild?: boolean
@@ -48,6 +54,8 @@ export default function AbstractTab(props: AbstractTabProps) {
                     {tabs.map((tab, i) => (
                         <Tab
                             className={classes.tab}
+                            disableFocusRipple={tab.disableFocusRipple}
+                            disableRipple={tab.disableRipple}
                             onClick={tab.cb}
                             label={tab.label}
                             key={i}

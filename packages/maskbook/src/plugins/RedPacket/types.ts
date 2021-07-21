@@ -5,6 +5,7 @@ import type { EthereumTokenType, NativeTokenDetailed, ERC20TokenDetailed, ChainI
  * @see https://github.com/DimensionDev/Tessercube-iOS/wiki/Red-Packet-Data-Dictionary
  */
 
+//#region erc20 red packet
 export interface RedPacketRecord {
     /** The red packet ID */
     id: string
@@ -29,11 +30,6 @@ export enum RedPacketStatus {
     expired = 'expired',
     empty = 'empty',
     refunded = 'refunded',
-}
-
-export enum DialogTabs {
-    create = 0,
-    past = 1,
 }
 
 export interface RedPacketAvailability {
@@ -128,4 +124,16 @@ export interface RedPacketSubgraphOutMask extends Omit<RedPacketSubgraphInMask, 
 export interface RedPacketHistory extends RedPacketSubgraphInMask {
     payload: RedPacketJSONPayload
     contract_version: number
+}
+//#endregion
+
+//#region nft red packet
+export interface RedPacketNftJSONPayload {
+    rpid: string
+}
+//#endregion
+
+export enum DialogTabs {
+    create = 0,
+    past = 1,
 }

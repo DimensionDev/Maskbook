@@ -1,5 +1,6 @@
 import type {
     FungibleTokenDetailed,
+    ERC721ContractDetailed,
     GasNow,
     NetworkType,
     ProviderType,
@@ -120,6 +121,16 @@ export type SelectTokenDialogEvent =
           token?: FungibleTokenDetailed
       }
 
+export type SelectNftContractDialogEvent = {
+    open: boolean
+    uuid: string
+
+    /**
+     * The selected detailed nft contract.
+     */
+    contract?: ERC721ContractDetailed
+}
+
 export interface WalletMessage {
     /**
      * Transaction dialog
@@ -175,6 +186,11 @@ export interface WalletMessage {
      * Select token dialog
      */
     selectTokenDialogUpdated: SelectTokenDialogEvent
+
+    /**
+     * Select nft contract dialog
+     */
+    selectNftContractDialogUpdated: SelectNftContractDialogEvent
 
     /**
      * WalletConnect QR Code dialog

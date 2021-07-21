@@ -9,6 +9,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         border: `1px solid ${getMaskColor(theme).border}`,
         alignItems: 'center',
+        boxSizing: 'border-box',
         padding: theme.spacing(1),
     },
     search: {

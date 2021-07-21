@@ -11,6 +11,7 @@ import {
     useEthereumConstants,
     useTrustedERC20Tokens,
 } from '@masknet/web3-shared'
+import { useI18N } from '../../../utils'
 import { Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
 import { useMemo, useState } from 'react'
@@ -33,6 +34,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     const account = useAccount()
     const chainId = useChainId()
     const trustedERC20Tokens = useTrustedERC20Tokens()
+    const { t } = useI18N()
 
     const {
         keyword,
@@ -99,10 +101,9 @@ export function FixedTokenList(props: FixedTokenListProps) {
     //#endregion
 
     if (erc20TokensDetailedLoading) return renderPlaceholder('Loading token lists...')
+    if (searchedTokenLoading) return renderPlaceholder(t('wallet_loading_token'))
     if (assetsLoading) return renderPlaceholder('Loading token assets...')
-    if (searchedTokenLoading) return renderPlaceholder('Loading token...')
-    if (!renderAssets.length)
-        return renderPlaceholder('No results or contract address does not meet the query criteria.')
+    if (!renderAssets.length) return renderPlaceholder(t('wallet_search_contract_no_result'))
 
     return (
         <FixedSizeList
