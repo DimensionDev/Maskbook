@@ -15,7 +15,6 @@ export function collectNodeText(node: HTMLElement | undefined, options: CollectN
                 if (result?.some) return result.val
                 const href = each.getAttribute('href')
                 return href || each.innerText
-                // return '\n' + (href.includes('l.facebook.com') ? new URL(href).searchParams.get('u') : each.innerText)
             }
             if (each instanceof HTMLImageElement) return each.alt
             if (each instanceof HTMLElement) return collectNodeText(each, options)
