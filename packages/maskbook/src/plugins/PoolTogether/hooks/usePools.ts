@@ -8,7 +8,7 @@ export function usePools() {
     return useAsyncRetry(() => PluginPooltogetherRPC.fetchPools(chainId), [chainId])
 }
 
-export function usePool(address: string, subgraphUrl: string, isCommunityPool: boolean) {
+export function usePool(address: string | undefined, subgraphUrl: string | undefined, isCommunityPool: boolean) {
     const poolContract = usePoolTogetherPoolContract(address)
     return useAsyncRetry(async () => {
         const pool = await PluginPooltogetherRPC.fetchPool(address, subgraphUrl)
