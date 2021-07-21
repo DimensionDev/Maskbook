@@ -1,4 +1,3 @@
-import '../gun-worker.patch'
 import Gun from 'gun/gun'
 import 'gun/sea'
 import 'gun/lib/radix'
