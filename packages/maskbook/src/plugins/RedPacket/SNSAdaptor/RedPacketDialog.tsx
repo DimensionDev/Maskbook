@@ -233,7 +233,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }
 
     const isCreating = step === CreateRedPacketPageStep.NewRedPacketPage
-
     const title = isCreating ? t('plugin_red_packet_display_name') : t('plugin_red_packet_details')
 
     return (
