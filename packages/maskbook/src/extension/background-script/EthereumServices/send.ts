@@ -15,10 +15,12 @@ import { currentAccountSettings, currentProviderSettings } from '../../../plugin
  * This API is only used internally. Please use requestSend instead in order to share the same payload id globally.
  * @param payload
  * @param callback
+ * @param rpc
  */
 export async function INTERNAL_send(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
+    rpc?: string,
 ) {
     if (process.env.NODE_ENV === 'development') {
         console.table(payload)
@@ -139,7 +141,18 @@ export async function INTERNAL_send(
                 await sendTransaction()
                 break
             default:
-                provider.send(payload, callback)
+                if (rpc) {
+                    fetch(rpc, {
+                        method: 'POST',
+                        body: JSON.stringify(payload),
+                    })
+                        .catch((error: Error) => callback(error))
+                        .then(async (res) => {
+                            if (res) callback(null, (await res.json()) as JsonRpcResponse)
+                        })
+                } else {
+                    provider.send(payload, callback)
+                }
                 break
         }
     } catch (error) {

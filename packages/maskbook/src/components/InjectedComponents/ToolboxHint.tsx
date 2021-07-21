@@ -6,6 +6,7 @@ import {
     resolveChainColor,
     useChainDetailed,
     useChainIdValid,
+    useWallet,
     formatEthereumAddress,
 } from '@masknet/web3-shared'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
@@ -121,6 +122,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
     const chainId = useChainId()
+    const selectedWallet = useWallet()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
 
@@ -132,6 +134,9 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Wallet
+    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
     const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
@@ -238,6 +243,8 @@ export function ToolboxHint(props: ToolboxHintProps) {
         },
     )
 
+    const isWalletValid = !!account && selectedWallet && chainIdValid
+
     return (
         <>
             <div className={classes.wrapper} onClick={openMenu}>
@@ -248,13 +255,9 @@ export function ToolboxHint(props: ToolboxHintProps) {
             </div>
             {menu}
 
-            <div className={classes.wrapper} onClick={openSelectWalletDialog}>
+            <div className={classes.wrapper} onClick={isWalletValid ? openWalletStatusDialog : openSelectWalletDialog}>
                 <div className={classes.button}>
-                    {account && chainIdValid ? (
-                        <WalletIcon />
-                    ) : (
-                        <WalletSharp classes={{ root: classes.icon }} size={24} />
-                    )}
+                    {isWalletValid ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} size={24} />}
 
                     <Typography className={classes.title}>
                         {account

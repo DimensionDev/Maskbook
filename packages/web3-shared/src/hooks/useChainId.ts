@@ -25,7 +25,7 @@ export function useChainIdValid(): boolean {
 export function useChainIdMatched(chainId?: ChainId) {
     const chainDetailed = useChainDetailed()
     if (!chainId) return false
-    return (chainDetailed?.chainId as ChainId) === chainId
+    return chainDetailed?.chainId === chainId
 }
 
 export const useChainIDAvailable = useChainId

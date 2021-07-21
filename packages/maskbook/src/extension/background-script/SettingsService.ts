@@ -6,6 +6,7 @@ import {
     currentPersonaIdentifier,
     languageSettings,
     disableOpenNewTabInBackgroundSettings,
+    currentPluginEnabledStatus,
 } from '../../settings/settings'
 import { currentDataProviderSettings } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
@@ -78,4 +79,7 @@ export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier |
 export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
     await currentPersonaIdentifier.readyPromise
     currentPersonaIdentifier.value = x.toText()
+}
+export async function isPluginEnabled(id: string) {
+    return currentPluginEnabledStatus['plugin:' + id].value
 }

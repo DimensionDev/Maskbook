@@ -8,6 +8,7 @@ import {
     useChainDetailed,
     useChainId,
     useChainIdValid,
+    useWallet,
     useNativeTokenBalance,
 } from '@masknet/web3-shared'
 import { Button, ButtonProps, makeStyles, Typography } from '@material-ui/core'
@@ -16,7 +17,6 @@ import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { WalletIcon } from '../../components/shared/WalletIcon'
-import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags, useI18N } from '../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -73,7 +73,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const onOpen = useCallback(() => {
-        if (account) openSelectWalletDialog()
+        if (account && selectedWallet) openSelectWalletDialog()
         else openSelectProviderDialog()
     }, [account, openSelectWalletDialog, openSelectProviderDialog])
 

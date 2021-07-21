@@ -18,7 +18,7 @@ import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
 function getFallbackIcons(address: string, baseURIs: string[]) {
     const checkSummedAddress = formatEthereumAddress(address)
 
-    if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS ?? '', checkSummedAddress)) {
+    if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
         return baseURIs.map((x) => `${x}/info/logo.png`)
     }
 
@@ -51,7 +51,7 @@ export function TokenIcon(props: TokenIconProps) {
     const _chainId = useChainId()
     let _logoURI = logoURI
 
-    if (!logoURI && isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS ?? '', formatEthereumAddress(address))) {
+    if (!logoURI && isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, formatEthereumAddress(address))) {
         const nativeToken = getChainDetailed(chainId ?? _chainId)
         _logoURI = nativeToken?.nativeCurrency.logoURI
     }

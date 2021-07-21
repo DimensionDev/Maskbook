@@ -31,10 +31,11 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
     const gasPrice = useGasPrice()
     const [donateState, setDonateState] = useTransactionState()
 
-    const donations = useMemo(() => {
+    const donations = useMemo((): [string, string, string][] => {
+        if (!address || !token) return []
+        if (!GITCOIN_ETH_ADDRESS || !GITCOIN_TIP_PERCENTAGE) return []
         const tipAmount = new BigNumber(GITCOIN_TIP_PERCENTAGE / 100).multipliedBy(amount)
         const grantAmount = new BigNumber(amount).minus(tipAmount)
-        if (!address || !token) return []
         return [
             [
                 token.type === EthereumTokenType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
@@ -46,7 +47,7 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
                 grantAmount.toFixed(), // amount
                 address, // dest
             ],
-        ] as [string, string, string][]
+        ]
     }, [address, amount, token])
 
     const donateCallback = useCallback(async () => {

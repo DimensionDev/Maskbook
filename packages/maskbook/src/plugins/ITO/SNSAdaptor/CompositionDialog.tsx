@@ -70,6 +70,9 @@ export function CompositionDialog(props: CompositionDialogProps) {
             // reset state
             resetFillCallback()
 
+            // no contract is available
+            if (!ITO2_CONTRACT_ADDRESS) return
+
             // the settings is not available
             if (!fillSettings?.token) return
 
@@ -164,12 +167,28 @@ export function CompositionDialog(props: CompositionDialogProps) {
         [account, chainId, props.onConfirm, state],
     )
 
+    const onClose = useCallback(() => {
+        const [, setValue] = state
+        setStep(ITOCreateFormPageStep.NewItoPage)
+        setPoolSettings(undefined)
+        setValue(DialogTabs.create)
+        // After close this tx dialog, it should set the gas price to zero
+        //  to let Metamask to determine the gas price for the further tx.
+        currentGasPriceSettings.value = 0
+        props.onClose()
+    }, [props, state, currentGasPriceSettings])
+
     const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: t('plugin_ito_create_new'),
                 children: usePortalShadowRoot(() => (
-                    <CreateForm onNext={onNext} origin={poolSettings} onChangePoolSettings={setPoolSettings} />
+                    <CreateForm
+                        onNext={onNext}
+                        onClose={onClose}
+                        origin={poolSettings}
+                        onChangePoolSettings={setPoolSettings}
+                    />
                 )),
                 sx: { p: 0 },
             },
@@ -183,17 +202,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
     }
     //#endregion
 
-    const onClose = useCallback(() => {
-        const [, setValue] = state
-        setStep(ITOCreateFormPageStep.NewItoPage)
-        setPoolSettings(undefined)
-        setValue(DialogTabs.create)
-        // After close this tx dialog, it should set the gas price to zero
-        //  to let Metamask to determine the gas price for the further tx.
-        currentGasPriceSettings.value = 0
-        props.onClose()
-    }, [props, state, currentGasPriceSettings])
-
     // open the transaction dialog
     useEffect(() => {
         if (!poolSettings?.token || fillState.type === TransactionStateType.UNKNOWN) return
@@ -206,6 +214,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
             }),
         })
     }, [fillState, poolSettings, setTransactionDialog])
+
+    useEffect(() => {
+        if (!ITO2_CONTRACT_ADDRESS) onClose()
+    }, [ITO2_CONTRACT_ADDRESS, onClose])
 
     return (
         <>

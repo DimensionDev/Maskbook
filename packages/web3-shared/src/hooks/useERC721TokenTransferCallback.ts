@@ -9,7 +9,7 @@ import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
 
-export function useERC721TokenTransferCallback(address: string, tokenId?: string, recipient?: string) {
+export function useERC721TokenTransferCallback(address?: string, tokenId?: string, recipient?: string) {
     const account = useAccount()
     const nonce = useNonce()
     const gasPrice = useGasPrice()
