@@ -6,6 +6,7 @@ import type {
     PastLogsOptions,
     Log,
 } from 'web3-core'
+import { first } from 'lodash-es'
 import { ChainId, EthereumChainDetailed, EthereumMethodType, getRPCConstants } from '@masknet/web3-shared'
 import { request } from './request'
 
@@ -100,12 +101,13 @@ export async function signTransaction(config: TransactionConfig) {
 
 export async function getPastLogs(config: PastLogsOptions, chainId: ChainId) {
     const { RPC } = getRPCConstants(chainId)
-    if (!RPC[0]) throw new Error('Unknown chain id.')
+    const provderURL = first(RPC)
+    if (!provderURL) throw new Error('Unknown chain id.')
     return request<Log[]>(
         {
             method: EthereumMethodType.ETH_GET_LOGS,
             params: [config],
         },
-        RPC[0],
+        provderURL,
     )
 }
