@@ -18,8 +18,8 @@ async function onAccountsChanged(accounts: string[]) {
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
     await updateAccount({
         account: first(accounts),
-        chainId: typeof provider?.chainId === 'string' ? Number.parseInt(provider.chainId, 16) : undefined,
         providerType: ProviderType.MetaMask,
+        chainId: typeof provider?.chainId === 'string' ? Number.parseInt(provider.chainId, 16) : undefined,
         networkType: undefined,
     })
 }
@@ -33,6 +33,7 @@ async function onChainIdChanged(id: string) {
     if (currentChainIdSettings.value === chainId) return
     await updateAccount({
         chainId,
+        networkType: undefined,
     })
 }
 
@@ -45,12 +46,7 @@ async function onError(error: string) {
 }
 
 export function createProvider() {
-    if (provider) {
-        provider.off('accountsChanged', onAccountsChanged)
-        provider.off('chainChanged', onChainIdChanged)
-        provider.off('error', onError)
-        provider.removeAllListeners()
-    }
+    if (provider) return provider
     provider = createMetaMaskProvider()
     if (!provider) throw new Error('Unable to create in page provider.')
     provider.on('accountsChanged', onAccountsChanged as (...args: unknown[]) => void)

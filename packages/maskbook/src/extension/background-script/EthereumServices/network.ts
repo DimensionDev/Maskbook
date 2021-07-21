@@ -6,8 +6,7 @@ import type {
     PastLogsOptions,
     Log,
 } from 'web3-core'
-import { first } from 'lodash-es'
-import { ChainId, EthereumChainDetailed, EthereumMethodType, getRPCConstants } from '@masknet/web3-shared'
+import { ChainId, EthereumChainDetailed, EthereumMethodType } from '@masknet/web3-shared'
 import { request } from './request'
 import type { SendOverrides } from './send'
 

@@ -1,4 +1,4 @@
-import { useContext, createContext } from 'react'
+import { useMemo, useContext, createContext } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
 import type { Web3ProviderType } from './type'
@@ -27,7 +27,7 @@ export function useWeb3State() {
     const networkType = useSubscription(_.networkType)
     const wallets = useSubscription(_.wallets)
     const chainId = useSubscription(_.chainId)
-    const chainDetailed = getChainDetailed(chainId)
+    const chainDetailed = useMemo(() => getChainDetailed(chainId), [chainId])
     const erc20Tokens = useSubscription(_.erc20Tokens)
     const erc20TokensCount = useSubscription(_.erc20TokensCount)
     const portfolioProvider = useSubscription(_.portfolioProvider)

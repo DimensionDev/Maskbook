@@ -48,9 +48,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     //#endregion
 
     const connectTo = useCallback(
-        async (providerType: ProviderType) => {
-            // unknown network type
+        async () => {
             if (!networkType) throw new Error('Unknown network type.')
+            if (!providerType) throw new Error('Unknown provider type.')
 
             // read the chain detailed from the built-in chain list
             const expectedChainId = getChainIdFromNetworkType(networkType)
@@ -123,15 +123,14 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             })
             return true as const
         },
-        [networkType],
+        [networkType, providerType],
     )
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
-        if (!providerType) throw new Error('Unknown provider type.')
 
         // connect to the specific provider
-        await connectTo(providerType)
+        await connectTo()
 
         // switch to the wallet status dialog
         closeDialog()

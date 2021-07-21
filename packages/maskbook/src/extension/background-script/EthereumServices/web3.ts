@@ -23,9 +23,7 @@ export function createWeb3({
                 chainId,
             })
         case ProviderType.CustomNetwork:
-            return WalletConnect.createWeb3({
-                chainId,
-            })
+            throw new Error('To be implemented.')
         default:
             unreachable(providerType)
     }

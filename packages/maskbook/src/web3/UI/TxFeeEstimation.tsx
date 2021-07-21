@@ -10,10 +10,10 @@ import {
     useGasPrice,
     GasNow,
     ChainId,
+    useAssets,
 } from '@masknet/web3-shared'
 import { useI18N } from '../../utils'
 import { Image } from '../../components/shared/Image'
-import { useAssets } from '../../plugins/Wallet/hooks/useAssets'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { currentGasNowSettings } from '../../plugins/Wallet/settings'
