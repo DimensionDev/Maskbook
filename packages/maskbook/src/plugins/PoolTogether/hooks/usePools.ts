@@ -11,6 +11,7 @@ export function usePools() {
 export function usePool(address: string | undefined, subgraphUrl: string | undefined, isCommunityPool: boolean) {
     const poolContract = usePoolTogetherPoolContract(address)
     return useAsyncRetry(async () => {
+        if (!address || !subgraphUrl) return undefined
         const pool = await PluginPooltogetherRPC.fetchPool(address, subgraphUrl)
         const awardBalance = await poolContract?.methods.awardBalance().call()
         if (pool) {
