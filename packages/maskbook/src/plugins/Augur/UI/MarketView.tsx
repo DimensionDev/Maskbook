@@ -101,7 +101,7 @@ export function MarketView(props: MarketViewProps) {
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
         <Tab className={classes.tab} key="description" label={t('plugin_augur_tab_description')} />,
-        <Tab className={classes.tab} key="chart" label={t('plugin_augur_tab_chart')} />,
+        <Tab className={classes.tab} key="chart" label={t('plugin_augur_tab_odds')} />,
         <Tab className={classes.tab} key="buysell" label={t('plugin_augur_tab_buysell')} />,
     ].filter(Boolean)
     //#endregion
