@@ -18,7 +18,6 @@ import RefreshIcon from '@material-ui/icons/Refresh'
 import { memo, useState } from 'react'
 import { some } from 'lodash-es'
 import { useSnackbar } from '@masknet/theme'
-import { useCreateIdentity } from '../../../hooks/useIndentity'
 
 const useStyles = makeStyles((theme) => ({
     refresh: {
@@ -34,7 +33,6 @@ enum CreateWalletStep {
 
 export const MnemonicRevealForm = memo(() => {
     const [step, setStep] = useState(CreateWalletStep.NameAndWords)
-    const [, createIdentity] = useCreateIdentity()
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar()
     const t = useDashboardI18N()
@@ -45,7 +43,7 @@ export const MnemonicRevealForm = memo(() => {
         if (words.join(' ') !== puzzleWords.join(' ')) {
             enqueueSnackbar(t.create_account_mnemonic_confirm_failed(), { variant: 'error' })
         } else {
-            await createIdentity(words.join(' '))
+            // await createIdentity(words.join(' '))
             navigate(`${SignUpRoutePath.PersonaCreate}`, {
                 replace: true,
                 state: { words: words },
@@ -69,14 +67,14 @@ export const MnemonicRevealForm = memo(() => {
                 {step === CreateWalletStep.NameAndWords && (
                     <div>
                         <div className={classes.refresh}>
-                            <Button variant={'text'} startIcon={<RefreshIcon />} onClick={refreshCallback}>
+                            <Button variant="text" startIcon={<RefreshIcon />} onClick={refreshCallback}>
                                 {t.refresh()}
                             </Button>
                         </div>
                         <MnemonicRevealLG words={words} />
                         <ButtonGroup>
-                            <Button color={'secondary'}>Back</Button>
-                            <Button color={'primary'} onClick={() => setStep(CreateWalletStep.Verify)}>
+                            <Button color="secondary">Back</Button>
+                            <Button color="primary" onClick={() => setStep(CreateWalletStep.Verify)}>
                                 Verify
                             </Button>
                         </ButtonGroup>
@@ -86,16 +84,16 @@ export const MnemonicRevealForm = memo(() => {
                     <div>
                         <DesktopMnemonicConfirm indexes={indexes} puzzleWords={puzzleWords} onChange={answerCallback} />
                         <ButtonGroup>
-                            <Button color={'secondary'} onClick={onBack}>
+                            <Button color="secondary" onClick={onBack}>
                                 Back
                             </Button>
-                            <Button color={'primary'} disabled={some(puzzleWords, (word) => !word)} onClick={onSubmit}>
+                            <Button color="primary" disabled={some(puzzleWords, (word) => !word)} onClick={onSubmit}>
                                 Confirm
                             </Button>
                         </ButtonGroup>
                     </div>
                 )}
-                <MaskAlert description={t.create_account_identity_warning()} type={'error'} />
+                <MaskAlert description={t.create_account_identity_warning()} type="error" />
             </Body>
             <Footer />
         </ColumnContentLayout>

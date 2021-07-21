@@ -1,37 +1,35 @@
 import * as bip39 from 'bip39'
-import { queryProfilesWithQuery, personaRecordToPersona, storeAvatar, queryProfile } from '../../database'
-import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
-import type { Profile, Persona } from '../../database/Persona/types'
+import { personaRecordToPersona, queryPersona, queryProfile, queryProfilesWithQuery, storeAvatar } from '../../database'
+import { ECKeyIdentifier, Identifier, PersonaIdentifier, ProfileIdentifier } from '../../database/type'
+import type { Persona, Profile } from '../../database/Persona/types'
 import {
-    queryPersonaDB,
-    deleteProfileDB,
-    queryPersonasDB,
-    queryProfilesDB,
-    createProfileDB,
     attachProfileDB,
+    consistentPersonaDBWriteAccess,
+    createOrUpdateProfileDB,
+    createProfileDB,
+    deleteProfileDB,
     LinkedProfileDetails,
     ProfileRecord,
-    createOrUpdateProfileDB,
-    consistentPersonaDBWriteAccess,
+    queryPersonaDB,
+    queryPersonasDB,
+    queryProfilesDB,
 } from '../../database/Persona/Persona.db'
-import { queryPersona } from '../../database'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
-import { decodeText, decodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
+import { decodeArrayBuffer, decodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { PersonaInformation, ProfileInformation } from '@masknet/shared'
 import { createInternalSettings, InternalSettings } from '../../settings/createSettings'
+
 assertEnvironment(Environment.ManifestBackground)
 
 export { storeAvatar, queryAvatarDataURL } from '../../database'
 
 //#region Profile
 export { queryProfile, queryProfilePaged } from '../../database'
-
-export { createIdentityByMnemonic, recoverIdentityByMnemonic, queryIdentityByKey } from '../../database'
 
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)

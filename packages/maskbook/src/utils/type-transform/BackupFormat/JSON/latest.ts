@@ -9,15 +9,9 @@ import { isBackupJSONFileVersion0 } from './version-0'
 import {
     BackupJSONFileVersion2,
     isBackupJSONFileVersion2,
-    patchNonBreakingUpgradeForBackupJSONFileVersion2,
     upgradeFromBackupJSONFileVersion1,
+    patchNonBreakingUpgradeForBackupJSONFileVersion2,
 } from './version-2'
-import type { BackupJSONFileVersion3 } from './version-3'
-import {
-    isBackupJSONFileVersion3,
-    patchNonBreakingUpgradeForBackupJSONFileVersion3,
-    upgradeFromBackupJSONFileVersion2,
-} from './version-3'
 
 export interface BackupPreview {
     email?: string
@@ -45,31 +39,7 @@ export function UpgradeBackupJSONFile(json: object, identity?: ProfileIdentifier
     return null
 }
 
-/**
- * Backup JSON file for v3.
- */
-export interface BackupJSONFileForV3 extends BackupJSONFileVersion3 {}
-export function UpgradeBackupJSONFileForV3(
-    json: object,
-    identity?: ProfileIdentifier,
-    identifier?: string,
-): BackupJSONFileVersion3 | null {
-    if (isBackupJSONFileVersion3(json)) return patchNonBreakingUpgradeForBackupJSONFileVersion3(json)
-    if (isBackupJSONFileVersion2(json) && identifier) return upgradeFromBackupJSONFileVersion2(json, identifier)
-    if (isBackupJSONFileVersion1(json) && identifier)
-        return upgradeFromBackupJSONFileVersion2(
-            upgradeFromBackupJSONFileVersion1(patchNonBreakingUpgradeForBackupJSONFileVersion1(json)),
-            identifier,
-        )
-    if (isBackupJSONFileVersion0(json) && identity && identifier) {
-        const upgraded = upgradeFromBackupJSONFileVersion0(json, identity)
-        if (upgraded === null) return null
-        return upgradeFromBackupJSONFileVersion2(upgradeFromBackupJSONFileVersion1(upgraded), identifier)
-    }
-    return null
-}
-
-export function getBackupPreviewInfo(json: BackupJSONFileVersion3): BackupPreview {
+export function getBackupPreviewInfo(json: BackupJSONFileLatest): BackupPreview {
     return {
         email: 'alice@example.com', // TODO: email
         personas: json.personas.length,

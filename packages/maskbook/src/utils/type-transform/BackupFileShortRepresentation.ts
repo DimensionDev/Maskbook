@@ -3,7 +3,6 @@ import { compressSecp256k1Key, decompressSecp256k1Key } from './SECP256k1-Compre
 import type { BackupJSONFileLatest } from './BackupFormat/JSON/latest'
 import type { ProfileRecord } from '../../database/Persona/Persona.db'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
-import type { BackupJSONFileVersion3 } from './BackupFormat/JSON/version-3'
 
 export type BackupJSONFileLatestShort = [
     string, // version, should be "1"
@@ -22,13 +21,6 @@ export type BackupJSONFileLatestShort = [
 ]
 
 export function sanitizeBackupFile(backup: BackupJSONFileLatest): BackupJSONFileLatest {
-    return {
-        ...backup,
-        grantedHostPermissions: backup.grantedHostPermissions.filter((url) => /^(http|<all_urls>)/.test(url)),
-    }
-}
-
-export function sanitizeBackupFileForV3(backup: BackupJSONFileVersion3): BackupJSONFileVersion3 {
     return {
         ...backup,
         grantedHostPermissions: backup.grantedHostPermissions.filter((url) => /^(http|<all_urls>)/.test(url)),
@@ -106,79 +98,6 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
             type: 'maskbook-backup',
         },
         grantedHostPermissions: grantedHostPermissions.split(';').filter(Boolean),
-        posts: [],
-        wallets: [],
-        userGroups: [],
-        personas: [
-            {
-                createdAt: 0,
-                updatedAt: 0,
-                privateKey: privateJWK,
-                publicKey: publicJWK,
-                identifier: ECID.toText(),
-                linkedProfiles: profileID ? [[profileID.toText(), { connectionConfirmState: 'confirmed' }]] : [],
-                nickname,
-                localKey: localKeyJWK,
-            },
-        ],
-        profiles: profileID
-            ? [
-                  {
-                      createdAt: 0,
-                      identifier: profileID.toText(),
-                      updatedAt: 0,
-                      linkedPersona: ECID.toText(),
-                      nickname: nickname,
-                      localKey: localKeyJWK,
-                  },
-              ]
-            : [],
-    })
-}
-
-export function decompressBackupFileForV3(short: string): BackupJSONFileVersion3 {
-    let compressed: string
-    try {
-        compressed = JSON.parse(short)
-        if (typeof compressed === 'object') return sanitizeBackupFileForV3(compressed)
-    } catch {
-        if (!short.includes('🤔')) throw new Error('This backup is not a compressed string')
-        compressed = short
-    }
-    const [version, network, userID, nickname, localKey, privateKey, grantedHostPermissions] = compressed.split(
-        '🤔',
-    ) as BackupJSONFileLatestShort
-
-    if (version !== '1') throw new Error(`QR Code cannot be shared between different version of Mask`)
-
-    const localKeyJWK = {
-        alg: 'A256GCM',
-        ext: true,
-        k: localKey,
-        key_ops: ['encrypt', 'decrypt'],
-        kty: 'oct',
-    } as AESJsonWebKey
-    const publicJWK = decompressSecp256k1Key(privateKey, 'public')
-    const privateJWK = decompressSecp256k1Key(privateKey, 'private')
-
-    const profileID = network && userID ? new ProfileIdentifier(network, userID) : undefined
-    const ECID = ECKeyIdentifierFromJsonWebKey(publicJWK)
-    return sanitizeBackupFileForV3({
-        _meta_: {
-            createdAt: 0,
-            maskbookVersion: browser.runtime.getManifest().version,
-            version: 3,
-            type: 'maskbook-backup',
-        },
-        grantedHostPermissions: grantedHostPermissions.split(';').filter(Boolean),
-        identity: {
-            privateKey: privateJWK,
-            publicKey: publicJWK,
-            identifier: ECID.toText(),
-            localKey: localKeyJWK,
-            createdAt: 0,
-            updatedAt: 0,
-        },
         posts: [],
         wallets: [],
         userGroups: [],

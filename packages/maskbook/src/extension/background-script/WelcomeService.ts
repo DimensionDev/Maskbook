@@ -1,30 +1,28 @@
-import { encodeText } from '@dimensiondev/kit'
-import { delay } from '@masknet/shared'
+import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
+import { delay } from '../../utils/utils'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey } from '../../database'
 import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Persona.db'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/shared'
-import { generateBackupJSON, BackupOptions } from './WelcomeServices/generateBackupJSON'
-import type { AESJsonWebKey } from '@masknet/shared'
+import type { PersonaIdentifier, ProfileIdentifier } from '../../database/type'
+import { BackupOptions, generateBackupJSON } from './WelcomeServices/generateBackupJSON'
+import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { saveAsFileFromBuffer } from './HelperService'
 import type { DashboardRoute } from '../options-page/Route'
-export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
-export * from './WelcomeServices/restoreBackup'
 import {
     BackupJSONFileLatest,
-    decompressBackupFileForV3,
     getBackupPreviewInfo,
-    UpgradeBackupJSONFileForV3,
-} from '../../utils'
+    UpgradeBackupJSONFile,
+} from '../../utils/type-transform/BackupFormat/JSON/latest'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { extraPermissions, requestPermissions } from '../../utils'
+import { decompressBackupFile, extraPermissions, requestPermissions } from '../../utils'
 import { v4 as uuid } from 'uuid'
 import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
-assertEnvironment(Environment.ManifestBackground)
 
-export type { BackupJSONFileLatest } from '../../utils'
+export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
+export * from './WelcomeServices/restoreBackup'
+assertEnvironment(Environment.ManifestBackground)
 
 /**
  * Recover new identity by a password and mnemonic words
@@ -107,14 +105,13 @@ export async function openOptionsPage(route?: DashboardRoute, search?: string) {
 }
 
 export { createPersonaByMnemonic } from '../../database'
-export { decompressBackupFile, decompressBackupFileForV3 } from '../../utils'
 
-export function parseBackupStr(str: string, identifier?: string) {
-    const json = UpgradeBackupJSONFileForV3(decompressBackupFileForV3(str), undefined, identifier)
+export function parseBackupStr(str: string) {
+    const json = UpgradeBackupJSONFile(decompressBackupFile(str))
     if (json) {
         const info = getBackupPreviewInfo(json)
         const id = uuid()
-        setUnconfirmedBackup(id, json as unknown as BackupJSONFileLatest)
+        setUnconfirmedBackup(id, json)
         return { info, id }
     } else {
         return null

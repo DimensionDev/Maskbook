@@ -61,35 +61,13 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
         if (!backupValue) return
         setRestoreStatus(RestoreStatus.Verifying)
 
-        const backupJson = await Services.Welcome.decompressBackupFileForV3(backupValue)
-        if (backupJson._meta_.version !== 3) {
-            setRestoreStatus(RestoreStatus.SelectIdentity)
-            setPersonas(
-                backupJson.personas
-                    .filter((persona) => persona.nickname)
-                    .map((persona) => {
-                        return {
-                            ...persona,
-                            linkedProfiles: persona.linkedProfiles.map((x) => {
-                                const profile = backupJson.profiles.find(
-                                    (profile) =>
-                                        profile.linkedPersona === persona.identifier && x[0] === profile.identifier,
-                                )!
-                                return {
-                                    identifier: profile.identifier,
-                                    nickname: profile.nickname,
-                                }
-                            }),
-                        }
-                    }),
-            )
-        }
+        // const backupJson = await Services.Welcome.de(backupValue)
     }, [backupValue])
 
     useAsync(async () => {
         if (!selectIdentifier) return
 
-        const backupInfo = await Services.Welcome.parseBackupStr(backupValue, selectIdentifier)
+        const backupInfo = await Services.Welcome.parseBackupStr(backupValue)
         if (backupInfo) {
             setJSON(backupInfo.info)
             setBackupId(backupInfo.id)

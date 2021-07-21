@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { MaskTextField } from '@masknet/theme'
 import {
@@ -15,23 +15,21 @@ import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
-import { useIdentity } from '../../../hooks/useIndentity'
 
 export const PersonaCreate = () => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const createPersona = useCreatePersonaV2()
     const [personaName, setPersonaName] = useState('')
-    const { loading, value: identity } = useIdentity()
 
-    useEffect(() => {
-        if (!loading && !identity) {
-            navigate(RoutePaths.SignUp)
-        }
-    }, [loading])
+    // useEffect(() => {
+    //     if (!loading && !identity) {
+    //         navigate(RoutePaths.SignUp)
+    //     }
+    // }, [loading])
 
     const handleNext = useSnackbarCallback({
-        executor: () => createPersona(identity?.mnemonic?.words ?? '', personaName),
+        executor: () => createPersona('', personaName),
         onSuccess: () => navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedial}`),
         onError: () => {
             navigate(`${RoutePaths.SignUp}`)
@@ -58,10 +56,10 @@ export const PersonaCreate = () => {
                         onChange={(e) => setPersonaName(e.currentTarget.value)}
                     />
                     <ButtonGroup>
-                        <Button color={'secondary'} onClick={() => navigate(-1)}>
+                        <Button color="secondary" onClick={() => navigate(-1)}>
                             Back
                         </Button>
-                        <Button color={'primary'} onClick={handleNext} disabled={!personaName}>
+                        <Button color="primary" onClick={handleNext} disabled={!personaName}>
                             Next
                         </Button>
                     </ButtonGroup>

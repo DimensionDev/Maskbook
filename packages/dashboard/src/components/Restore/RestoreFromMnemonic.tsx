@@ -1,10 +1,8 @@
 import { DesktopMnemonicConfirm } from '../Mnemonic'
-import { Services } from '../../API'
 import { useList } from 'react-use'
 import { Button, Container, makeStyles, Stack } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
 import { useNavigate } from 'react-router'
-import { RoutePaths } from '../../type'
 import { some } from 'lodash-es'
 import { MaskAlert } from '../MaskAlert'
 
@@ -16,17 +14,7 @@ export const RestoreFromMnemonic = () => {
     const navigate = useNavigate()
     const [values, { updateAt }] = useList(new Array(12).fill(''))
 
-    const handleSubmit = async () => {
-        try {
-            const identity = await Services.Identity.recoverIdentityByMnemonic(values.join(' '), '')
-            if (identity) {
-                Services.Identity.setCurrentIdentity(identity.identifier)
-                navigate(RoutePaths.Personas)
-            }
-        } catch (e) {
-            // todo: handle error
-        }
-    }
+    const handleSubmit = async () => {}
 
     return (
         <>
