@@ -10,6 +10,7 @@ import {
 import {
     currentAccountSettings,
     currentBalanceSettings,
+    currentEtherPriceSettings,
     currentBlockNumberSettings,
     currentChainIdSettings,
     currentCollectibleDataProviderSettings,
@@ -28,6 +29,7 @@ export function ToBeListened() {
         currentChainIdSettings,
         currentBalanceSettings,
         currentBlockNumberSettings,
+        currentEtherPriceSettings,
         currentTrendingDataProviderSettings: currentDataProviderSettings,
         disableOpenNewTabInBackgroundSettings,
         currentProviderSettings,

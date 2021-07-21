@@ -125,7 +125,7 @@ export const currentGasNowSettings = createGlobalSettings<GasNow | null>(
 /**
  * Ether Price in USD
  */
-export const currentEtherPriceSettings = createGlobalSettings<number | null>(`${PLUGIN_IDENTIFIER}+etherPriceUSD`, 0, {
+export const currentEtherPriceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+etherPriceUSD`, 0, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 

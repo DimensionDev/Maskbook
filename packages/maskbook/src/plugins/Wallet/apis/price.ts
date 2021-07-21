@@ -1,7 +1,6 @@
 import { pollingTask } from '../../../utils'
 import { currentEtherPriceSettings } from '../settings'
 
-const ETH_PRICE_API = `https://api.coingecko.com/api/v3/simple/price?ids=${token}&vs_currencies=${currency}`
 const ETH_PRICE_POLLING_DELAY = 30 /* seconds */ * 1000 /* milliseconds */
 
 interface PriceRecord {
@@ -13,7 +12,7 @@ interface TokenRecord {
 }
 
 async function fetchTokenPrice(token = 'ethereum', currency = 'USD') {
-    const response = await fetch(ETH_PRICE_API)
+    const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${token}&vs_currencies=${currency}`)
     const data = (await response.json()) as TokenRecord | null
     if (!data) return 0
     return data[token][currency] ?? 0
