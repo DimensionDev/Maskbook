@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
 import { useDashboardI18N } from '../../../locales'
 export interface BackupPreview {
-    identity?: string
     email?: string
     personas: number
     accounts: number
@@ -43,13 +42,8 @@ export default function BackupPreviewCard({ json }: Props) {
 
     const records = [
         {
-            name: t.settings_backup_preview_account(),
-            value: json.email,
-        },
-        {
             name: t.settings_backup_preview_personas(),
             value: json.personas,
-            sub: true,
         },
         {
             name: t.settings_backup_preview_associated_account(),

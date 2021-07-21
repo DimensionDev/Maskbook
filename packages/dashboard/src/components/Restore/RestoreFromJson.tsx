@@ -1,15 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
-import { useAsync, useDropArea } from 'react-use'
+import { useState } from 'react'
+import { useAsync } from 'react-use'
 import { Button, Container, makeStyles, Stack } from '@material-ui/core'
-import { RestoreBox } from './RestoreBox'
-import { blobToText } from '@dimensiondev/kit'
 import { useDashboardI18N } from '../../locales'
-import { EncryptedFileIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import { Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
-import { PersonaInfo, PersonaSelector } from './PersonaSelector'
 import { MaskAlert } from '../MaskAlert'
+import FileUpload from '../FileUpload'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
 
 enum RestoreStatus {
     WaitingInput,
-    SelectIdentity,
     Verifying,
     Verified,
 }
@@ -41,41 +37,22 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
     const [backupValue, setBackupValue] = useState('')
     const [backupId, setBackupId] = useState('')
     const [restoreStatus, setRestoreStatus] = useState(RestoreStatus.WaitingInput)
-    const [selectIdentifier, setSelectIdentifier] = useState('')
-    const [personas, setPersonas] = useState<PersonaInfo[]>([])
-    const inputRef = useRef<HTMLInputElement>(null)
-    const [file, setFile] = useState<File | null>(null)
-    const [bound, { over }] = useDropArea({
-        onFiles(files) {
-            setFile(files[0])
-        },
-    })
-
-    useEffect(() => {
-        if (file) {
-            blobToText(file).then((result) => setBackupValue(result))
-        }
-    }, [file])
 
     useAsync(async () => {
         if (!backupValue) return
+
         setRestoreStatus(RestoreStatus.Verifying)
-
-        // const backupJson = await Services.Welcome.de(backupValue)
-    }, [backupValue])
-
-    useAsync(async () => {
-        if (!selectIdentifier) return
-
         const backupInfo = await Services.Welcome.parseBackupStr(backupValue)
+
         if (backupInfo) {
             setJSON(backupInfo.info)
             setBackupId(backupInfo.id)
             setRestoreStatus(RestoreStatus.Verified)
         } else {
             setRestoreStatus(RestoreStatus.WaitingInput)
+            setBackupValue('')
         }
-    }, [selectIdentifier])
+    }, [backupValue])
 
     const restoreDB = async () => {
         await Services.Welcome.checkPermissionsAndRestore(backupId)
@@ -83,40 +60,15 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
 
     return (
         <>
-            {restoreStatus === RestoreStatus.Verifying && <div className={classes.root}>Verifying</div>}
-            {restoreStatus === RestoreStatus.SelectIdentity && (
-                <div className={classes.root}>
-                    <PersonaSelector
-                        personas={personas}
-                        onSubmit={(identifier: string) => setSelectIdentifier(identifier)}
-                    />
-                </div>
-            )}
-            {restoreStatus === RestoreStatus.WaitingInput && (
-                <Container sx={{ marginBottom: '57px' }}>
-                    <input
-                        className={classes.file}
-                        type="file"
-                        accept="application/json"
-                        ref={inputRef}
-                        onChange={({ currentTarget }: React.ChangeEvent<HTMLInputElement>) => {
-                            if (currentTarget.files) setFile(currentTarget.files.item(0))
-                        }}
-                        data-testid="file_input"
-                    />
-                    <RestoreBox
-                        file={file}
-                        entered={over}
-                        enterText={t.personas_rename()}
-                        leaveText={t.personas()}
-                        darkPlaceholderIcon={<EncryptedFileIcon />}
-                        lightPlaceholderIcon={<EncryptedFileIcon />}
-                        data-active={over}
-                        onClick={() => inputRef.current && inputRef.current.click()}
-                    />
-                </Container>
-            )}
-            {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
+            <Container sx={{ marginBottom: '57px' }}>
+                {restoreStatus === RestoreStatus.Verifying && <div className={classes.root}>Verifying</div>}
+                {restoreStatus === RestoreStatus.WaitingInput && (
+                    <Container sx={{ marginBottom: '57px' }}>
+                        <FileUpload onChange={(_, content) => content && setBackupValue(content)} readAsText />
+                    </Container>
+                )}
+                {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
+            </Container>
             <Stack direction="row" spacing={2}>
                 <Button sx={{ width: '224px' }} variant="rounded" color="secondary">
                     {t.wallets_import_wallet_cancel()}
