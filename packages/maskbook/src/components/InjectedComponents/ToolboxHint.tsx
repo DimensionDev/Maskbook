@@ -2,13 +2,13 @@ import { makeStyles, MenuItem, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import {
     useAccount,
-    useChainId,
-    resolveChainColor,
+    useChainColor,
     useChainDetailed,
     useChainIdValid,
     useWallet,
     formatEthereumAddress,
 } from '@masknet/web3-shared'
+import { useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet } from '@masknet/plugin-infra'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
@@ -29,6 +29,8 @@ import { useStylesExtends } from '../custom-ui-helper'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
 import { useI18N } from '../../utils'
+import { base as ITO_Plugin } from '../../plugins/ITO/base'
+import { base as RedPacket_Plugin } from '../../plugins/RedPacket/base'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -121,10 +123,11 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
-    const chainId = useChainId()
     const selectedWallet = useWallet()
+    const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
+    const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
@@ -197,7 +200,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                 <Image src={ToolIconURLs.encryptedmsg.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
             </MenuItem>,
-            chainIdValid ? (
+            operatingSupportedChainMapping[RedPacket_Plugin.ID] ? (
                 <MenuItem onClick={openRedPacket} className={classes.menuItem}>
                     <Image src={ToolIconURLs.redpacket.image} width={19} height={19} />
                     <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
@@ -207,7 +210,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                 <Image src={ToolIconURLs.files.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
             </MenuItem>,
-            chainIdValid ? (
+            operatingSupportedChainMapping[ITO_Plugin.ID] ? (
                 <MenuItem onClick={openITO} className={classes.menuItem}>
                     <Image src={ToolIconURLs.markets.image} width={19} height={19} />
                     <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
@@ -225,7 +228,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     <Typography className={classes.text}>{ToolIconURLs.swap.text}</Typography>
                 </MenuItem>
             ) : null,
-            chainIdValid ? (
+            operatingSupportedChainMapping[ITO_Plugin.ID] ? (
                 <MenuItem onClick={onClaimAllDialogOpen} className={classes.menuItem}>
                     <Image src={ToolIconURLs.claim.image} width={19} height={19} />
                     <Typography className={classes.text}>{ToolIconURLs.claim.text}</Typography>
@@ -269,7 +272,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                             <FiberManualRecordIcon
                                 className={classes.chainIcon}
                                 style={{
-                                    color: resolveChainColor(chainId),
+                                    color: chainColor,
                                 }}
                             />
                         ) : null}
