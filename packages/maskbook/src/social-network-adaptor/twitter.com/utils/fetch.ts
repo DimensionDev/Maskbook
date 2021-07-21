@@ -13,6 +13,7 @@ import {
     isTypedMessageText,
     TypedMessageText,
 } from '@masknet/shared'
+import { collectNodeText } from '../../../utils'
 
 /**
  * @example
@@ -128,7 +129,7 @@ export const postNameParser = (node: HTMLElement) => {
         // type 1:
         // normal tweet
         const anchorElement = tweetElement.querySelectorAll<HTMLAnchorElement>('a[role="link"]')[1]
-        const nameInUniqueAnchorTweet = anchorElement?.innerText
+        const nameInUniqueAnchorTweet = collectNodeText(anchorElement)
 
         // type 2:
         const nameInDoubleAnchorsTweet = Array.from(
