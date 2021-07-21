@@ -1,4 +1,4 @@
-import { useChainId } from './'
+import { useChainId } from './index'
 import { resolveChainColor } from '../pipes'
 
 export function useChainColor() {
