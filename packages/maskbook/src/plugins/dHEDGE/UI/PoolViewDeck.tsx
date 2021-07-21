@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface PoolDeckProps {
     pool: Pool
-    inputTokens: string[]
+    inputTokens: string[] | undefined
 }
 
 export function PoolViewDeck(props: PoolDeckProps) {
@@ -79,7 +79,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
     //#region the invest dialog
     const { setDialog: openInvestDialog } = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated)
     const onInvest = useCallback(() => {
-        if (!pool) return
+        if (!pool || !inputTokens) return
         openInvestDialog({
             open: true,
             pool: pool,

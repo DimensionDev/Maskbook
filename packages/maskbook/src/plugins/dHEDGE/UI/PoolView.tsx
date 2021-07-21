@@ -137,13 +137,12 @@ export function PoolView(props: PoolViewProps) {
                 {t('plugin_dhedge_loading')}
             </Typography>
         )
-    if (!pool) {
+    if (!pool)
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_dhedge_pool_not_found')}
             </Typography>
         )
-    }
     if (error || (errorAllowedTokens && currentChainId === pool.chainId))
         return (
             <Typography className={classes.message} color="textPrimary">
@@ -157,7 +156,7 @@ export function PoolView(props: PoolViewProps) {
 
     return (
         <Card className={classes.root} elevation={0}>
-            <CardHeader subheader={<PoolViewDeck pool={pool} inputTokens={allowedTokens ?? []} />} />
+            <CardHeader subheader={<PoolViewDeck pool={pool} inputTokens={allowedTokens} />} />
             <CardContent className={classes.content}>
                 <Tabs
                     className={classes.tabs}

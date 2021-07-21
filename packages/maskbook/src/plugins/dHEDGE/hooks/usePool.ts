@@ -26,7 +26,7 @@ export function usePoolDepositAssets(pool: Pool) {
     const { sUSD_ADDRESS } = useTokenConstants()
     const poolManagerContract = useDHedgePoolManagerContract(pool.managerLogicAddress)
     return useAsyncRetry(async () => {
-        if (pool.poolType === PoolType.v1) return [sUSD_ADDRESS]
+        if (pool.poolType === PoolType.v1) return sUSD_ADDRESS ? [sUSD_ADDRESS] : undefined
         if (!poolManagerContract) return
         return await poolManagerContract.methods.getDepositAssets().call()
     }, [pool, chainId])
