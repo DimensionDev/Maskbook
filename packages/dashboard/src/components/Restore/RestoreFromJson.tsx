@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAsync, useDropArea } from 'react-use'
-import { Button, makeStyles } from '@material-ui/core'
+import { Button, Container, makeStyles, Stack } from '@material-ui/core'
 import { RestoreBox } from './RestoreBox'
 import { blobToText } from '@dimensiondev/kit'
 import { useDashboardI18N } from '../../locales'
 import { EncryptedFileIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import { Services } from '../../API'
-import { ControlContainer } from './index'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { PersonaInfo, PersonaSelector } from './PersonaSelector'
 import { MaskAlert } from '../MaskAlert'
@@ -22,10 +21,6 @@ const useStyles = makeStyles((theme) => ({
     },
     file: {
         display: 'none',
-    },
-    alter: {
-        marginTop: theme.spacing(6),
-        width: '100%',
     },
 }))
 
@@ -113,12 +108,10 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
             {restoreStatus === RestoreStatus.Verifying && <div className={classes.root}>Verifying</div>}
             {restoreStatus === RestoreStatus.SelectIdentity && (
                 <div className={classes.root}>
-                    {
-                        <PersonaSelector
+                    <PersonaSelector
                             personas={personas}
                             onSubmit={(identifier: string) => setSelectIdentifier(identifier)}
                         />
-                    }
                 </div>
             )}
             {restoreStatus === RestoreStatus.WaitingInput && (
@@ -146,15 +139,22 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
                 </div>
             )}
             {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
-            <ControlContainer>
-                <Button color="secondary">{t.wallets_import_wallet_cancel()}</Button>
-                <Button color="primary" onClick={restoreDB} disabled={restoreStatus !== RestoreStatus.Verified}>
+            <Stack direction="row" spacing={2}>
+                <Button sx={{ width: '224px' }} variant="rounded" color="secondary">
+                    {t.wallets_import_wallet_cancel()}
+                </Button>
+                <Button
+                    sx={{ width: '224px' }}
+                    variant="rounded"
+                    color="primary"
+                    onClick={restoreDB}
+                    disabled={restoreStatus !== RestoreStatus.Verified}>
                     {t.wallets_import_wallet_import()}
                 </Button>
-            </ControlContainer>
-            <div className={classes.alter}>
+            </Stack>
+            <Container sx={{ marginTop: '35px' }}>
                 <MaskAlert description={t.sign_in_account_local_backup_warning()} />
-            </div>
+            </Container>
         </>
     )
 }

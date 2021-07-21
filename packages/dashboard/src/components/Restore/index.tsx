@@ -5,6 +5,7 @@ import { useDashboardI18N } from '../../locales'
 import { RestoreFromJson } from './RestoreFromJson'
 import { RestoreFromMnemonic } from './RestoreFromMnemonic'
 import { RestoreFromCloud } from './RestoreFromCloud'
+import { RestoreFromPrivateKey } from './RestoreFromPrivateKey'
 
 const Container = styled('div')`
     display: flex;
@@ -12,25 +13,6 @@ const Container = styled('div')`
     justify-content: center;
     align-items: center;
 `
-
-export const ControlContainer = styled('div')(
-    ({ theme }) => `
-    margin: 0 auto;
-    margin-top: ${theme.spacing(6)};
-    display: grid;
-    justify-content: center;
-    grid-template-columns: repeat(2, 180px);
-    gap: 24px;
-    max-width: 584px;
-`,
-)
-
-const AlertContainer = styled('div')(
-    ({ theme }) => `
-    width: 676px;
-    margin-top: ${theme.spacing(7)};
-`,
-)
 
 const useStyles = makeStyles((theme) => ({
     tabs: {
@@ -55,11 +37,13 @@ export const Restore = memo(() => {
         t.wallets_import_wallet_tabs(),
         {
             mnemonic: t.wallets_wallet_mnemonic(),
+            privateKey: t.wallets_wallet_private_key(),
             json: t.wallets_wallet_json_file(),
             cloud: t.cloud_backup(),
         },
         {
             mnemonic: <RestoreFromMnemonic />,
+            privateKey: <RestoreFromPrivateKey />,
             json: <RestoreFromJson />,
             cloud: <RestoreFromCloud />,
         },

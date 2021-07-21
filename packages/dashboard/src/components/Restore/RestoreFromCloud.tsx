@@ -1,14 +1,9 @@
 import { memo } from 'react'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
-import { experimentalStyled as styled } from '@material-ui/core/styles'
-import { makeStyles } from '@material-ui/core'
+import { Container, makeStyles } from '@material-ui/core'
 import { MaskAlert } from '../MaskAlert'
-import { Code } from './code'
-
-const Container = styled('div')`
-    width: 100%;
-`
+import { CodeValidation } from './CodeValidation'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,10 +16,6 @@ const useStyles = makeStyles((theme) => ({
     file: {
         display: 'none',
     },
-    alter: {
-        marginTop: theme.spacing(6),
-        width: '100%',
-    },
 }))
 
 export const RestoreFromCloud = memo(() => {
@@ -34,11 +25,11 @@ export const RestoreFromCloud = memo(() => {
     return (
         <>
             <Container>
-                <Code />
+                <CodeValidation />
             </Container>
-            <div className={classes.alter}>
+            <Container sx={{ marginTop: '35px' }}>
                 <MaskAlert description={t.sign_in_account_cloud_backup_warning()} />
-            </div>
+            </Container>
         </>
     )
 })

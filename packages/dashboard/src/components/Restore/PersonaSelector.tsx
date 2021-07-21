@@ -1,11 +1,10 @@
 import { memo, useState } from 'react'
 import { getMaskColor, MaskColorVar, MaskDialog } from '@masknet/theme'
-import { Button, makeStyles, Typography } from '@material-ui/core'
+import { Button, makeStyles, Stack, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { Check } from '@material-ui/icons'
 import styled from '@emotion/styled'
 import { MaskAlert } from '../MaskAlert'
-import { ControlContainer } from './index'
 import { useDashboardI18N } from '../../locales'
 
 const useStyles = makeStyles((theme) => ({
@@ -83,7 +82,7 @@ export const PersonaSelector = memo(({ personas, onSubmit }: PersonaSelectorProp
     const [isOpen, open] = useState(true)
 
     return (
-        <MaskDialog title={'Select Persona'} open={isOpen}>
+        <MaskDialog title="Select Persona" open={isOpen}>
             <div className={classes.root}>
                 {personas.map((persona, index) => {
                     return (
@@ -113,11 +112,9 @@ export const PersonaSelector = memo(({ personas, onSubmit }: PersonaSelectorProp
                     )
                 })}
                 <MaskAlert
-                    description={
-                        'As our new version of Dashboard optimized data structures, we need you to choose an old persona as your identity, which will be used to sign in and post encrypted messages.'
-                    }
+                    description="As our new version of Dashboard optimized data structures, we need you to choose an old persona as your identity, which will be used to sign in and post encrypted messages."
                 />
-                <ControlContainer>
+                <Stack direction="row" spacing={2}>
                     <Button color="secondary">{t.wallets_import_wallet_cancel()}</Button>
                     <Button
                         color="primary"
@@ -128,7 +125,7 @@ export const PersonaSelector = memo(({ personas, onSubmit }: PersonaSelectorProp
                         disabled={!selected}>
                         {t.wallets_import_wallet_import()}
                     </Button>
-                </ControlContainer>
+                </Stack>
             </div>
         </MaskDialog>
     )
