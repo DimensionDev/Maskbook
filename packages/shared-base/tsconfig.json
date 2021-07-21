@@ -3,12 +3,12 @@
   "compilerOptions": {
     "rootDir": "./src/",
     "outDir": "./dist/",
-    "stripInternal": true
+    "experimentalDecorators": true,
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./src/**/*"],
-  "references": [{ "path": "../shared" }],
+  "include": ["./src/**/*", "./src/**/*.json"],
+  "references": [],
   "ts-node": {
-    "transpileOnly": true,
     "compilerOptions": { "module": "CommonJS" }
   }
 }

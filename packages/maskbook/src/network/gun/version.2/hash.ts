@@ -2,11 +2,10 @@
 /**
  * @see https://github.com/DimensionDev/Maskbook/wiki/Data-structure-on-Gun-version-2
  */
+import type { EC_Public_JsonWebKey, ProfileIdentifier } from '@masknet/shared-base'
 import Gun from 'gun'
 import 'gun/sea'
-import type { ProfileIdentifier } from '../../../database/type'
 import { memoizePromise } from '../../../utils/memoize'
-import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 
 /**
  * @param version current payload version

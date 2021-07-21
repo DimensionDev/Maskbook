@@ -1,7 +1,7 @@
 import { gun2, SharedAESKeyGun2 } from '.'
 import { hashPostSalt, hashCryptoKey, hashCryptoKeyUnstable, calculatePostKeyPartition } from './hash'
 import type { PublishedAESKeyRecordV39OrV38 } from '../../../crypto/crypto-alpha-38'
-import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
+import type { EC_Public_JsonWebKey } from '@masknet/shared-base'
 import { EventIterator } from 'event-iterator'
 
 /**

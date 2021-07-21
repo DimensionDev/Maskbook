@@ -1,12 +1,11 @@
-import '../gun-worker.patch'
 import Gun from 'gun/gun'
 import 'gun/sea'
 import 'gun/lib/radix'
 import 'gun/lib/radisk'
 import 'gun/lib/store'
 import 'gun/lib/rindexed'
-import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 import { gunServers } from '../../gun-servers'
+import type { EC_Public_JsonWebKey } from '@masknet/shared-base'
 
 export * from './people'
 export * from './post'
