@@ -9,7 +9,6 @@ const useStyles = makeStyles((theme) => ({
     },
     label: {
         display: 'flex',
-        marginBottom: theme.spacing(1),
         fontFamily: 'PingFang SC',
         color: getMaskColor(theme).textPrimary,
         fontSize: 12,

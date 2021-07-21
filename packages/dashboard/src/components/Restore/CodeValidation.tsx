@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { Button, makeStyles, Stack } from '@material-ui/core'
+import { Button, makeStyles, Stack, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
 import { MaskTextField, PhoneNumberField, PhoneNumberFieldValue, SendingCodeField } from '@masknet/theme'
 
@@ -27,7 +27,9 @@ const Label = ({ mode, onModeChange }: LabelProps) => {
 
     return (
         <div className={classes.label}>
-            <div>{mode === Mode.email ? 'Email' : 'Phone Number'}</div>
+            <Typography variant="body2" sx={{ fontWeight: 'bolder' }} color="textPrimary">
+                {mode === Mode.email ? 'Email' : 'Phone Number'}
+            </Typography>
             {}
             {mode === Mode.email ? (
                 <Button size="small" variant="text" onClick={() => onModeChange(Mode.phone)}>
@@ -75,7 +77,7 @@ export const CodeValidation = memo(() => {
     const validCheck = () => {}
 
     return (
-        <div>
+        <>
             {step === Step.input &&
                 (mode === Mode.email ? (
                     <MaskTextField
@@ -98,9 +100,17 @@ export const CodeValidation = memo(() => {
                     />
                 ))}
             {step === Step.validation && (
-                <SendingCodeField label={<div>send to {value}</div>} onSend={onNext} onBlur={onNext} />
+                <SendingCodeField
+                    label={
+                        <Typography variant="body2" sx={{ fontWeight: 'bolder' }} color="textPrimary">
+                            Send to {value}
+                        </Typography>
+                    }
+                    onSend={onNext}
+                    onBlur={onNext}
+                />
             )}
-            <Stack direction="row" spacing={2}>
+            <Stack direction="row" spacing={2} justifyContent="center">
                 <Button sx={{ width: '224px' }} variant="rounded" color="secondary" onClick={onCancel}>
                     {t.cancel()}
                 </Button>
@@ -108,6 +118,6 @@ export const CodeValidation = memo(() => {
                     {t.next()}
                 </Button>
             </Stack>
-        </div>
+        </>
     )
 })

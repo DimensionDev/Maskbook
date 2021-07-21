@@ -109,13 +109,13 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
             {restoreStatus === RestoreStatus.SelectIdentity && (
                 <div className={classes.root}>
                     <PersonaSelector
-                            personas={personas}
-                            onSubmit={(identifier: string) => setSelectIdentifier(identifier)}
-                        />
+                        personas={personas}
+                        onSubmit={(identifier: string) => setSelectIdentifier(identifier)}
+                    />
                 </div>
             )}
             {restoreStatus === RestoreStatus.WaitingInput && (
-                <div className={classes.root} {...bound}>
+                <Container sx={{ marginBottom: '57px' }}>
                     <input
                         className={classes.file}
                         type="file"
@@ -136,7 +136,7 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
                         data-active={over}
                         onClick={() => inputRef.current && inputRef.current.click()}
                     />
-                </div>
+                </Container>
             )}
             {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
             <Stack direction="row" spacing={2}>

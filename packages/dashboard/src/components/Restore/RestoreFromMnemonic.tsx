@@ -30,7 +30,9 @@ export const RestoreFromMnemonic = () => {
 
     return (
         <>
-            <DesktopMnemonicConfirm onChange={(word, index) => updateAt(index, word)} puzzleWords={values} />
+            <Container sx={{ marginBottom: '57px' }}>
+                <DesktopMnemonicConfirm onChange={(word, index) => updateAt(index, word)} puzzleWords={values} />
+            </Container>
             <Stack direction="row" spacing={2}>
                 <Button sx={{ width: '224px' }} variant="rounded" color="secondary">
                     {t.wallets_import_wallet_cancel()}
