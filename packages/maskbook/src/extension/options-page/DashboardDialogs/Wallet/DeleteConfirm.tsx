@@ -14,12 +14,7 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
     const onConfirm = useSnackbarCallback(
         async () => {
             await WalletRPC.removeWallet(wallet.address)
-            await WalletRPC.updateAccount({
-                account: '', // delete account
-                chainId: ChainId.Mainnet,
-                networkType: NetworkType.Ethereum,
-                providerType: ProviderType.Maskbook,
-            })
+            await WalletRPC.resetAccount()
         },
         [wallet.address],
         props.onClose,

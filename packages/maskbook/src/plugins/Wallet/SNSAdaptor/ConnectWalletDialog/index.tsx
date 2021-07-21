@@ -15,7 +15,7 @@ import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { delay } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { WalletMessages } from '../../messages'
+import { WalletMessages, WalletRPC } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
 
@@ -92,27 +92,33 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             // connection failed
             if (!account || !networkType) throw new Error(`Failed to connect ${resolveProviderName(providerType)}.`)
 
-            // no need to switch the chain
-            if (chainId === Number.parseInt(chainDetailedCAIP.chainId)) return true
-
-            // request ethereum-compatiable network
-            try {
-                await Promise.race([
-                    (async () => {
-                        await delay(30 /* seconds */ * 1000 /* milliseconds */)
-                        throw new Error('Timeout!')
-                    })(),
-                    networkType === NetworkType.Ethereum
-                        ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet)
-                        : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account),
-                ])
-            } catch (e) {
-                throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
+            // need to switch chain
+            if (chainId !== Number.parseInt(chainDetailedCAIP.chainId, 16)) {
+                try {
+                    const overrides = {
+                        chainId,
+                        providerType,
+                    }
+                    await Promise.race([
+                        (async () => {
+                            await delay(30 /* seconds */ * 1000 /* milliseconds */)
+                            throw new Error('Timeout!')
+                        })(),
+                        networkType === NetworkType.Ethereum
+                            ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
+                            : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
+                    ])
+                } catch (e) {
+                    throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
+                }
             }
 
-            // wait for settings to be synced
-            await delay(1000)
-
+            // update account
+            await WalletRPC.updateAccount({
+                account,
+                providerType,
+                networkType,
+            })
             return true as const
         },
         [networkType],

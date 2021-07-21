@@ -4,13 +4,18 @@ import { first } from 'lodash-es'
 import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
 import { ChainId, ProviderType } from '@masknet/web3-shared'
 import { resetAccount, updateAccount } from '../../../../plugins/Wallet/services'
-import { currentIsMetamaskLockedSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
+import {
+    currentChainIdSettings,
+    currentIsMetamaskLockedSettings,
+    currentProviderSettings,
+} from '../../../../plugins/Wallet/settings'
 
 let provider: MetaMaskInpageProvider | null = null
 let web3: Web3 | null = null
 
 async function onAccountsChanged(accounts: string[]) {
     currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked()) && accounts.length === 0
+    if (currentProviderSettings.value !== ProviderType.MetaMask) return
     await updateAccount({
         account: first(accounts),
         chainId: typeof provider?.chainId === 'string' ? Number.parseInt(provider.chainId, 16) : undefined,
@@ -19,22 +24,23 @@ async function onAccountsChanged(accounts: string[]) {
 }
 
 async function onChainIdChanged(id: string) {
-    // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
-    const chainId_ = Number.parseInt(id, 16)
-    const chainId = chainId_ === 0 ? ChainId.Mainnet : chainId_
     currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked())
-    if (currentProviderSettings.value === ProviderType.MetaMask)
-        await updateAccount({
-            chainId,
-        })
+    if (currentProviderSettings.value !== ProviderType.MetaMask) return
+
+    // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
+    const chainId = Number.parseInt(id, 16) || ChainId.Mainnet
+    if (currentChainIdSettings.value === chainId) return
+    await updateAccount({
+        chainId,
+    })
 }
 
 async function onError(error: string) {
     if (typeof error !== 'string' || !/Lost Connection to MetaMask/i.test(error)) return
-    if (currentProviderSettings.value === ProviderType.MetaMask)
-        await resetAccount({
-            providerType: ProviderType.MetaMask,
-        })
+    if (currentProviderSettings.value !== ProviderType.MetaMask) return
+    await resetAccount({
+        providerType: ProviderType.MetaMask,
+    })
 }
 
 export function createProvider() {
