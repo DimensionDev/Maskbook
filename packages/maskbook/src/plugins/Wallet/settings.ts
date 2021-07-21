@@ -5,7 +5,7 @@ import { PLUGIN_IDENTIFIER } from './constants'
 import { CollectibleProvider, PortfolioProvider } from './types'
 import { isEqual } from 'lodash-es'
 import { connectGasNow } from './apis/gasnow'
-import { trackEtherPrice } from './apis/price'
+import { trackEtherPrice } from './apis/coingecko'
 import { startEffects } from '../../utils/side-effects'
 
 export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+selectedWalletAddress`, '', {
