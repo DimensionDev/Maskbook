@@ -97,7 +97,9 @@ function makeError(error: string | Error, internal: boolean = false): Failure {
  * Decrypt message from a user
  * @param post post
  * @param author Post by
+ * @param authorNetworkHint When the author is unknown, the decryption (to public) won't die
  * @param whoAmI My username
+ * @param publicShared Is this post public shared
  *
  * @description
  * The decrypt process:
@@ -126,16 +128,17 @@ function makeError(error: string | Error, internal: boolean = false): Failure {
 async function* decryptFromPayloadWithProgress_raw(
     post: Payload,
     author: ProfileIdentifier,
+    authorNetworkHint: string,
     whoAmI: ProfileIdentifier,
-    publicShared?: boolean,
+    publicShared: undefined | boolean,
 ): ReturnOfDecryptPostContentWithProgress {
     const cacheKey = stringify(post)
     if (successDecryptionCache.has(cacheKey)) return successDecryptionCache.get(cacheKey)!
     yield makeProgress('init')
 
-    const authorNetworkWorker = Result.wrap(() => getNetworkWorkerUninitialized(author.network)).andThen((x) =>
-        x ? Ok(x) : Err(new Error('Worker not found')),
-    )
+    const authorNetworkWorker = Result.wrap(() =>
+        getNetworkWorkerUninitialized(author.isUnknown ? authorNetworkHint : author.network),
+    ).andThen((x) => (x ? Ok(x) : Err(new Error('Worker not found'))))
     if (authorNetworkWorker.err) return makeError(authorNetworkWorker.val as Error)
 
     const data = post
@@ -157,12 +160,13 @@ async function* decryptFromPayloadWithProgress_raw(
         }
 
         // ? If the author's key is in the payload, store it.
-        if (data.version === -38 && data.authorPublicKey) {
+        if (data.version === -38 && data.authorPublicKey && !author.isUnknown) {
             await verifyOthersProve({ raw: data.authorPublicKey }, author).catch(console.error)
         }
         // ? Find author's public key.
         let authorPersona!: PersonaRecord
         for await (const _ of asyncIteratorWithResult(findAuthorPublicKey(author, !!cachedPostResult))) {
+            if (author.isUnknown) break
             if (!_.done) {
                 yield _.value
                 continue
@@ -306,6 +310,7 @@ async function* decryptFromPayloadWithProgress_raw(
 async function* decryptFromImageUrlWithProgress_raw(
     url: string,
     author: ProfileIdentifier,
+    authorNetworkHint: string,
     whoAmI: ProfileIdentifier,
     publicShared?: boolean,
 ): ReturnOfDecryptPostContentWithProgress {
@@ -320,20 +325,20 @@ async function* decryptFromImageUrlWithProgress_raw(
     if (worker.err) return makeError(worker.val as Error)
     const payload = deconstructPayload(post, await decodeTextPayloadWorker(author))
     if (payload.err) return makeError(payload.val)
-    return yield* decryptFromText(payload.val, author, whoAmI, publicShared)
+    return yield* decryptFromText(payload.val, author, authorNetworkHint, whoAmI, publicShared)
 }
 
 export const decryptFromText = memorizeAsyncGenerator(
     decryptFromPayloadWithProgress_raw,
-    (encrypted, author, whoAmI, publicShared = undefined) =>
-        JSON.stringify([encrypted, author.toText(), whoAmI.toText(), publicShared]),
+    (encrypted, author, authorNetworkHint, whoAmI, publicShared = undefined) =>
+        JSON.stringify([encrypted, author.toText(), authorNetworkHint, whoAmI.toText(), publicShared]),
     1000 * 30,
 )
 
 export const decryptFromImageUrl = memorizeAsyncGenerator(
     decryptFromImageUrlWithProgress_raw,
-    (url, author, whoAmI, publicShared = undefined) =>
-        JSON.stringify([url, author.toText(), whoAmI.toText(), publicShared]),
+    (url, author, authorNetworkHint, whoAmI, publicShared = undefined) =>
+        JSON.stringify([url, author.toText(), authorNetworkHint, whoAmI.toText(), publicShared]),
     1000 * 30,
 )
 
