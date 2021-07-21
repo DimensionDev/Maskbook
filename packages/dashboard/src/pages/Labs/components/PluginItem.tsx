@@ -10,7 +10,7 @@ import {
     experimentalStyled as styled,
     listItemTextClasses,
 } from '@material-ui/core'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode } from 'react'
 import SettingSwitch from '../../Settings/components/SettingSwitch'
 import { Twitter, Facebook, Explore } from './Actions'
 
@@ -56,30 +56,26 @@ const TextWrapper = styled<typeof ListItemText>(ListItemText)(({ theme }) => ({
 }))
 
 export interface PluginItemProps {
-    name: string
+    id: string
     title: string
     desc: string
     icon?: ReactNode
-    onSwitch: (name: string, checked: boolean) => void
-    onTwitter?: (name: string) => void
-    onFacebook?: (name: string) => void
-    onExplore?: (name: string) => void
-    onSetting?: (name: string) => void
+    enabled?: boolean
+    onSwitch: (id: string, checked: boolean) => void
+    onTwitter?: (id: string) => void
+    onFacebook?: (id: string) => void
+    onExplore?: (id: string) => void
+    onSetting?: (id: string) => void
 }
 
 export function PluginItemPlaceHodler() {
     const classes = useStyles()
-    return <Box className={classes.empty}></Box>
+    return <Box className={classes.empty} />
 }
 
 export default function PluginItem(props: PluginItemProps) {
-    const { name, title, desc, icon, onSwitch, onTwitter, onFacebook, onExplore, onSetting } = props
+    const { id, title, desc, icon, enabled, onSwitch, onTwitter, onFacebook, onExplore, onSetting } = props
     const classes = useStyles()
-    const [checked, setChecked] = useState(true)
-
-    useEffect(() => {
-        onSwitch(name, checked)
-    }, [checked])
 
     return (
         <Box className={classes.root}>
@@ -87,20 +83,24 @@ export default function PluginItem(props: PluginItemProps) {
                 <ListItemAvatar sx={{ alignSelf: 'flex-start', paddingTop: 1 }}>
                     <Avatar className={classes.avatar}>{icon}</Avatar>
                 </ListItemAvatar>
-                <TextWrapper primary={title} secondary={desc}></TextWrapper>
+                <TextWrapper primary={title} secondary={desc} />
                 {onSetting ? (
                     <Box className={classes.settings}>
-                        <SettingsIcon onClick={() => onSetting(name)} />
+                        <SettingsIcon onClick={() => onSetting(id)} />
                     </Box>
                 ) : null}
             </ListItem>
             <Box className={classes.actions}>
                 <Box sx={{ flex: 1 }}>
-                    {onTwitter ? <Twitter onClick={() => onTwitter(name)} /> : null}
-                    {onFacebook ? <Facebook onClick={() => onFacebook(name)} /> : null}
-                    {onExplore ? <Explore onClick={() => onExplore(name)} /> : null}
+                    {onTwitter ? <Twitter onClick={() => onTwitter(id)} /> : null}
+                    {onFacebook ? <Facebook onClick={() => onFacebook(id)} /> : null}
+                    {onExplore ? <Explore onClick={() => onExplore(id)} /> : null}
                 </Box>
-                <SettingSwitch size="small" defaultChecked onChange={(event) => setChecked(event.target.checked)} />
+                <SettingSwitch
+                    size="small"
+                    checked={enabled}
+                    onChange={(event) => onSwitch(id, event.target.checked)}
+                />
             </Box>
         </Box>
     )

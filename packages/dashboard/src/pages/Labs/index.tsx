@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { makeStyles, Box } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
 import PluginItem, { PluginItemPlaceHodler } from './components/PluginItem'
@@ -21,6 +21,8 @@ import SwapSettingDialog from './components/SwapSettingDialog'
 import { useAccount } from '@masknet/web3-shared'
 import { PluginMessages } from '../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
+import { Services } from '../../API'
+import { PLUGIN_IDS } from './constants'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,6 +43,19 @@ export default function Plugins() {
 
     const [openTrendSetting, setOpenTrendSetting] = useState(false)
     const [openSwapSetting, setOpenSwapSetting] = useState(false)
+    const [pluginStatus, setPluginStatus] = useState({
+        [PLUGIN_IDS.FILE_SERVICE]: true,
+        [PLUGIN_IDS.GITCOIN]: true,
+        [PLUGIN_IDS.DHEDGE]: true,
+        [PLUGIN_IDS.RED_PACKET]: true,
+        [PLUGIN_IDS.TRANSAK]: true,
+        [PLUGIN_IDS.COLLECTIBLES]: true,
+        [PLUGIN_IDS.SWAP]: true,
+        [PLUGIN_IDS.SNAPSHOT]: true,
+        [PLUGIN_IDS.MARKETS]: true,
+        [PLUGIN_IDS.VALUABLES]: true,
+        [PLUGIN_IDS.MARKET_TREND]: true,
+    })
 
     const account = useAccount()
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.events.buyTokenDialogUpdated)
@@ -53,124 +68,154 @@ export default function Plugins() {
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.events.swapDialogUpdated)
 
-    function onSwitch(name: string, checked: boolean) {
-        // TODO: sync setting
-        console.log(`switch ${name}`, checked)
+    async function onSwitch(id: string, checked: boolean) {
+        await Services.Settings.setPluginStatus(id, checked)
+        setPluginStatus({ ...pluginStatus, [id]: checked })
     }
 
-    function onTwitter(name: string) {
+    function onTwitter(id: string) {
         // TODO: open twitter
-        console.log('twitter', name)
+        console.log('twitter', id)
     }
 
-    function onFacebook(name: string) {
+    function onFacebook(id: string) {
         // TODO: open facebook
-        console.log('facebook', name)
+        console.log('facebook', id)
     }
 
-    function onExplore(name: string) {
-        if (name === 'transak') {
+    function onExplore(id: string) {
+        if (id === PLUGIN_IDS.TRANSAK) {
             openTransakDialog()
-        } else if (name === 'swap') {
+        } else if (id === PLUGIN_IDS.SWAP) {
             openSwapDialog()
         }
     }
 
-    function onSetting(name: string) {
-        if (name === 'marketTrend') {
+    function onSetting(id: string) {
+        if (id === PLUGIN_IDS.MARKET_TREND) {
             setOpenTrendSetting(true)
-        } else if (name === 'swap') {
+        } else if (id === PLUGIN_IDS.SWAP) {
             setOpenSwapSetting(true)
         }
     }
+
+    useEffect(() => {
+        Object.values(PLUGIN_IDS).forEach(async (id) => {
+            const enabled = await Services.Settings.isPluginEnabled(id)
+            console.log(id, enabled)
+            setPluginStatus((status) => ({ ...status, [id]: enabled }))
+        })
+    }, [])
 
     return (
         <PageFrame title={t.labs()}>
             <Box className={classes.root}>
                 <Box className={classes.list}>
                     <PluginItem
-                        name="fileService"
+                        id={PLUGIN_IDS.FILE_SERVICE}
                         title={t.labs_file_service()}
                         desc={t.labs_file_service_desc()}
                         icon={<FileServiceIcon />}
+                        enabled={pluginStatus[PLUGIN_IDS.FILE_SERVICE]}
                         onTwitter={onTwitter}
                         onFacebook={onFacebook}
-                        onSwitch={onSwitch}></PluginItem>
+                        onSwitch={onSwitch}
+                    />
                     <PluginItem
-                        name="markets"
+                        id={PLUGIN_IDS.MARKETS}
                         title={t.labs_markets()}
                         desc={t.labs_markets_desc()}
                         icon={<MarketsIcon />}
+                        enabled={pluginStatus[PLUGIN_IDS.MARKETS]}
                         onTwitter={onTwitter}
                         onFacebook={onFacebook}
-                        onSwitch={onSwitch}></PluginItem>
+                        onSwitch={onSwitch}
+                    />
                     <PluginItem
-                        name="redPacket"
+                        id={PLUGIN_IDS.RED_PACKET}
                         title={t.labs_red_packet()}
                         desc={t.labs_red_packet_desc()}
                         icon={<RedPacketIcon />}
+                        enabled={pluginStatus[PLUGIN_IDS.RED_PACKET]}
                         onTwitter={onTwitter}
                         onFacebook={onFacebook}
-                        onSwitch={onSwitch}></PluginItem>
+                        onSwitch={onSwitch}
+                    />
                 </Box>
                 <Box className={classes.list}>
                     <PluginItem
-                        name="swap"
+                        id={PLUGIN_IDS.SWAP}
                         title={t.labs_swap()}
                         desc={t.labs_swap_desc()}
+                        enabled={pluginStatus[PLUGIN_IDS.SWAP]}
                         onSwitch={onSwitch}
                         onExplore={onExplore}
                         onSetting={onSetting}
-                        icon={<SwapServiceIcon />}></PluginItem>
+                        icon={<SwapServiceIcon />}
+                    />
                     <PluginItem
-                        name="transak"
+                        id={PLUGIN_IDS.TRANSAK}
                         title={t.labs_transak()}
                         desc={t.labs_transak_desc()}
                         icon={<TransakIcon />}
+                        enabled={pluginStatus[PLUGIN_IDS.TRANSAK]}
                         onExplore={onExplore}
-                        onSwitch={onSwitch}></PluginItem>
+                        onSwitch={onSwitch}
+                    />
                     <PluginItemPlaceHodler />
                 </Box>
                 <Box className={classes.list}>
                     <PluginItem
-                        name="snapshot"
+                        id={PLUGIN_IDS.SNAPSHOT}
                         title={t.labs_snapshot()}
                         desc={t.labs_snapshot_desc()}
                         icon={<SnapshotIcon />}
-                        onSwitch={onSwitch}></PluginItem>
+                        enabled={pluginStatus[PLUGIN_IDS.SNAPSHOT]}
+                        onSwitch={onSwitch}
+                    />
                     <PluginItem
-                        name="marketTrend"
+                        id={PLUGIN_IDS.MARKET_TREND}
                         title={t.labs_market_trend()}
                         desc={t.labs_market_trend_desc()}
                         icon={<MarketTrendIcon />}
+                        enabled={pluginStatus[PLUGIN_IDS.MARKET_TREND]}
                         onSetting={onSetting}
-                        onSwitch={onSwitch}></PluginItem>
+                        onSwitch={onSwitch}
+                    />
                     <PluginItem
-                        name="collectibles"
+                        id={PLUGIN_IDS.COLLECTIBLES}
                         title={t.labs_collectibles()}
                         desc={t.labs_collectibles_desc()}
                         icon={<CollectiblesIcon />}
-                        onSwitch={onSwitch}></PluginItem>
+                        enabled={pluginStatus[PLUGIN_IDS.COLLECTIBLES]}
+                        onSwitch={onSwitch}
+                    />
                 </Box>
                 <Box className={classes.list}>
                     <PluginItem
-                        name="gitcoin"
+                        id={PLUGIN_IDS.GITCOIN}
                         title={t.labs_gitcoin()}
                         desc={t.labs_gitcoin_desc()}
                         icon={<GitcoinIcon />}
-                        onSwitch={onSwitch}></PluginItem>
+                        enabled={pluginStatus[PLUGIN_IDS.GITCOIN]}
+                        onSwitch={onSwitch}
+                    />
                     <PluginItem
-                        name="valuables"
+                        id={PLUGIN_IDS.VALUABLES}
                         title={t.labs_valuables()}
                         desc={t.labs_valuables_desc()}
                         icon={<ValuablesIcon />}
-                        onSwitch={onSwitch}></PluginItem>
+                        enabled={pluginStatus[PLUGIN_IDS.VALUABLES]}
+                        onSwitch={onSwitch}
+                    />
                     <PluginItem
-                        name="dhedge"
+                        id={PLUGIN_IDS.DHEDGE}
                         title={t.labs_dhedge()}
                         desc={t.labs_dhedge_desc()}
                         icon={<DhedgeIcon />}
-                        onSwitch={onSwitch}></PluginItem>
+                        enabled={pluginStatus[PLUGIN_IDS.DHEDGE]}
+                        onSwitch={onSwitch}
+                    />
                 </Box>
             </Box>
 

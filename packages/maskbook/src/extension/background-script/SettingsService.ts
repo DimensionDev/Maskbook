@@ -83,3 +83,6 @@ export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
 export async function isPluginEnabled(id: string) {
     return currentPluginEnabledStatus['plugin:' + id].value
 }
+export async function setPluginStatus(id: string, enabled: boolean) {
+    currentPluginEnabledStatus['plugin:' + id].value = enabled
+}
