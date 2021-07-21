@@ -9,7 +9,7 @@ export async function fetchPools(chainId: ChainId) {
     return (await response.json()) as Pool[]
 }
 
-export async function fetchPool(address: string, subgraphUrl: string) {
+export async function fetchPool(address?: string, subgraphUrl?: string) {
     if (!address || !subgraphUrl) return undefined
 
     const body = {
