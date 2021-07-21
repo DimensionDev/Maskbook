@@ -96,11 +96,13 @@ export default function PluginItem(props: PluginItemProps) {
                     {onFacebook ? <Facebook onClick={() => onFacebook(id)} /> : null}
                     {onExplore ? <Explore onClick={() => onExplore(id)} /> : null}
                 </Box>
-                <SettingSwitch
-                    size="small"
-                    checked={enabled}
-                    onChange={(event) => onSwitch(id, event.target.checked)}
-                />
+                {id ? (
+                    <SettingSwitch
+                        size="small"
+                        checked={enabled}
+                        onChange={(event) => onSwitch(id, event.target.checked)}
+                    />
+                ) : null}
             </Box>
         </Box>
     )
