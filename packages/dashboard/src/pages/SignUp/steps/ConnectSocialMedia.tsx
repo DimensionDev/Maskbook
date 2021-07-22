@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
     Body,
     ColumnContentLayout,
@@ -12,8 +13,7 @@ import { SetupActionCard } from '../../Setup'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 import { upperFirst } from 'lodash-es'
 import { FacebookIcon, InstagramIcon, TwitterIcon } from '@masknet/icons'
-import { Button } from '@material-ui/core'
-import { ButtonGroup } from '../../../components/RegisterFrame/ButtonGroup'
+import { Button, Stack } from '@material-ui/core'
 
 // icons maping
 const ICON_MAPPING = [
@@ -35,6 +35,12 @@ export const ConnectSocialMedia = () => {
     const t = useDashboardI18N()
     const { currentPersona, connectPersona } = PersonaContext.useContainer()
 
+    useEffect(() => {
+        if (currentPersona && currentPersona?.linkedProfiles.length > 0) {
+            navigate(RoutePaths.Personas, { replace: true })
+        }
+    }, [currentPersona])
+
     const handleConnect = (networkIdentifier: string) => {
         if (currentPersona) {
             connectPersona(currentPersona.identifier, networkIdentifier)
@@ -51,6 +57,11 @@ export const ConnectSocialMedia = () => {
             <Body>
                 <SignUpAccountLogo />
                 <div>
+                    <Stack direction="row" justifyContent="flex-end">
+                        <Button variant="text" onClick={() => {}}>
+                            {t.go_back()}
+                        </Button>
+                    </Stack>
                     {ICON_MAPPING.map((d) => (
                         <SetupActionCard
                             key={d.type}
@@ -58,30 +69,14 @@ export const ConnectSocialMedia = () => {
                             icon={d.icon}
                             action={{
                                 type: 'primary',
-                                text: t.create_account_connect_social_media_button(),
+                                text: t.connect(),
                                 handler: () => handleConnect(d.type),
                             }}
                         />
                     ))}
                 </div>
-                <ButtonGroup>
-                    <Button sx={{ width: '224px' }} variant="rounded" color="secondary" onClick={() => navigate(-1)}>
-                        Back
-                    </Button>
-                    <Button
-                        sx={{ width: '224px' }}
-                        variant="rounded"
-                        color="primary"
-                        onClick={() => navigate(RoutePaths.Personas)}>
-                        Skip
-                    </Button>
-                </ButtonGroup>
             </Body>
             <Footer />
         </ColumnContentLayout>
     )
-}
-
-function usePersonaContext(): [any, any] {
-    throw new Error('Function not implemented.')
 }
