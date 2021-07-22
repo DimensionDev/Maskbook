@@ -10,7 +10,7 @@ import {
     experimentalStyled as styled,
     listItemTextClasses,
 } from '@material-ui/core'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import SettingSwitch from '../../Settings/components/SettingSwitch'
 import { Twitter, Facebook, Explore } from './Actions'
 
