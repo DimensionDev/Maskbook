@@ -24,6 +24,8 @@ import {
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSaftyAlert } from './CoinSaftyAlert'
+import { currentPluginEnabledStatus } from '../../../../settings/settings'
+import { PLUGIN_IDENTIFIER as TRANSAK_PLUGIN_ID } from '../../../Transak/constants'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -130,6 +132,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     //#region buy
+    const transakPluginEnabled = currentPluginEnabledStatus['plugin:' + TRANSAK_PLUGIN_ID].value
     const account = useAccount()
     const isAllowanceCoin = useTransakAllowanceCoin(coin)
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
@@ -205,7 +208,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             </CoinMenu>
                         ) : null}
 
-                        {account && trending.coin.symbol && isAllowanceCoin && Flags.transak_enabled ? (
+                        {transakPluginEnabled &&
+                        account &&
+                        trending.coin.symbol &&
+                        isAllowanceCoin &&
+                        Flags.transak_enabled ? (
                             <Button
                                 className={classes.buy}
                                 startIcon={<MonetizationOnOutlinedIcon />}
