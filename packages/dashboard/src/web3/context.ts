@@ -29,6 +29,11 @@ export const Web3Context: Web3ProviderType = {
         0,
         Messages.events.currentBlockNumberSettings.on,
     ),
+    etherPrice: createSubscriptionFromAsync(
+        Services.Settings.getEtherPrice,
+        0,
+        Messages.events.currentEtherPriceSettings.on,
+    ),
     balance: createSubscriptionFromAsync(Services.Settings.getBalance, '0', Messages.events.currentBalanceSettings.on),
     blockNumber: createSubscriptionFromAsync(
         Services.Settings.getBlockNumber,
