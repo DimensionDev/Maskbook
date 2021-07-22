@@ -11,9 +11,9 @@ import { useDashboardI18N } from '../../../locales'
 import { SetupActionCard } from '../../Setup'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 import { upperFirst } from 'lodash-es'
-import { TwitterIcon, FacebookIcon, InstagramIcon } from '@masknet/icons'
-import { ButtonGroup } from '../components/ActionGroup'
+import { FacebookIcon, InstagramIcon, TwitterIcon } from '@masknet/icons'
 import { Button } from '@material-ui/core'
+import { ButtonGroup } from '../../../components/RegisterFrame/ButtonGroup'
 
 // icons maping
 const ICON_MAPPING = [
@@ -65,10 +65,14 @@ export const ConnectSocialMedia = () => {
                     ))}
                 </div>
                 <ButtonGroup>
-                    <Button color={'secondary'} onClick={() => navigate(-1)}>
+                    <Button sx={{ width: '224px' }} variant="rounded" color="secondary" onClick={() => navigate(-1)}>
                         Back
                     </Button>
-                    <Button color={'primary'} onClick={() => navigate(RoutePaths.Personas)}>
+                    <Button
+                        sx={{ width: '224px' }}
+                        variant="rounded"
+                        color="primary"
+                        onClick={() => navigate(RoutePaths.Personas)}>
                         Skip
                     </Button>
                 </ButtonGroup>

@@ -5,9 +5,9 @@ import { Convert } from 'pvtsutils'
 import { encodeArrayBuffer } from '../type-transform/String-ArrayBuffer'
 import type { PersonaRecord } from '../../database/Persona/Persona.db'
 import type {
-    JsonWebKeyPair,
-    EC_Public_JsonWebKey,
     EC_Private_JsonWebKey,
+    EC_Public_JsonWebKey,
+    JsonWebKeyPair,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 
@@ -59,6 +59,8 @@ export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(
         },
     }
 }
+
+export const validateMnemonic = bip39.validateMnemonic
 
 function HDKeyToJwk(hdk: wallet.HDKey): JsonWebKey {
     const jwk = decompressSecp256k1Key(encodeArrayBuffer(hdk.publicKey), 'public')

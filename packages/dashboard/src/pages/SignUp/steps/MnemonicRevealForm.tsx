@@ -10,7 +10,6 @@ import { RoutePaths } from '../../../type'
 import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { Button, makeStyles } from '@material-ui/core'
-import { ButtonGroup } from '../components/ActionGroup'
 import { useDashboardI18N } from '../../../locales'
 import { DesktopMnemonicConfirm, MnemonicRevealLG } from '../../../components/Mnemonic'
 import { SignUpRoutePath } from '../routePath'
@@ -18,6 +17,7 @@ import RefreshIcon from '@material-ui/icons/Refresh'
 import { memo, useState } from 'react'
 import { some } from 'lodash-es'
 import { useSnackbar } from '@masknet/theme'
+import { ButtonGroup } from '../../../components/RegisterFrame/ButtonGroup'
 
 const useStyles = makeStyles((theme) => ({
     refresh: {
@@ -43,10 +43,9 @@ export const MnemonicRevealForm = memo(() => {
         if (words.join(' ') !== puzzleWords.join(' ')) {
             enqueueSnackbar(t.create_account_mnemonic_confirm_failed(), { variant: 'error' })
         } else {
-            // await createIdentity(words.join(' '))
             navigate(`${SignUpRoutePath.PersonaCreate}`, {
                 replace: true,
-                state: { words: words },
+                state: { mnemonic: words },
             })
         }
     }
@@ -73,8 +72,10 @@ export const MnemonicRevealForm = memo(() => {
                         </div>
                         <MnemonicRevealLG words={words} />
                         <ButtonGroup>
-                            <Button color="secondary">Back</Button>
-                            <Button color="primary" onClick={() => setStep(CreateWalletStep.Verify)}>
+                            <Button variant="rounded" color="secondary">
+                                Back
+                            </Button>
+                            <Button variant="rounded" color="primary" onClick={() => setStep(CreateWalletStep.Verify)}>
                                 Verify
                             </Button>
                         </ButtonGroup>
@@ -84,10 +85,15 @@ export const MnemonicRevealForm = memo(() => {
                     <div>
                         <DesktopMnemonicConfirm indexes={indexes} puzzleWords={puzzleWords} onChange={answerCallback} />
                         <ButtonGroup>
-                            <Button color="secondary" onClick={onBack}>
+                            <Button variant="rounded" color="secondary" onClick={onBack}>
                                 Back
                             </Button>
-                            <Button color="primary" disabled={some(puzzleWords, (word) => !word)} onClick={onSubmit}>
+                            <Button
+                                sx={{ width: '224px' }}
+                                variant="rounded"
+                                color="primary"
+                                disabled={some(puzzleWords, (word) => !word)}
+                                onClick={onSubmit}>
                                 Confirm
                             </Button>
                         </ButtonGroup>

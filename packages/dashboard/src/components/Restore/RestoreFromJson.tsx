@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { useAsync } from 'react-use'
-import { Button, Container, makeStyles, Stack } from '@material-ui/core'
+import { Button, Container, makeStyles } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { MaskAlert } from '../MaskAlert'
 import FileUpload from '../FileUpload'
+import { ButtonGroup } from '../RegisterFrame/ButtonGroup'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -69,19 +70,18 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
                 )}
                 {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
             </Container>
-            <Stack direction="row" spacing={2}>
-                <Button sx={{ width: '224px' }} variant="rounded" color="secondary">
+            <ButtonGroup>
+                <Button variant="rounded" color="secondary">
                     {t.wallets_import_wallet_cancel()}
                 </Button>
                 <Button
-                    sx={{ width: '224px' }}
                     variant="rounded"
                     color="primary"
                     onClick={restoreDB}
                     disabled={restoreStatus !== RestoreStatus.Verified}>
                     {t.wallets_import_wallet_import()}
                 </Button>
-            </Stack>
+            </ButtonGroup>
             <Container sx={{ marginTop: '35px' }}>
                 <MaskAlert description={t.sign_in_account_local_backup_warning()} />
             </Container>

@@ -1,7 +1,8 @@
 import { memo, useState } from 'react'
-import { Button, makeStyles, Stack, Typography } from '@material-ui/core'
+import { Button, makeStyles, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
 import { MaskTextField, PhoneNumberField, PhoneNumberFieldValue, SendingCodeField } from '@masknet/theme'
+import { ButtonGroup } from '../RegisterFrame/ButtonGroup'
 
 enum Mode {
     email,
@@ -110,14 +111,14 @@ export const CodeValidation = memo(() => {
                     onBlur={onNext}
                 />
             )}
-            <Stack direction="row" spacing={2} justifyContent="center">
-                <Button sx={{ width: '224px' }} variant="rounded" color="secondary" onClick={onCancel}>
+            <ButtonGroup>
+                <Button variant="rounded" color="secondary" onClick={onCancel}>
                     {t.cancel()}
                 </Button>
-                <Button sx={{ width: '224px' }} variant="rounded" color="primary" onClick={onNext} disabled={!value}>
+                <Button variant="rounded" color="primary" onClick={onNext} disabled={!value}>
                     {t.next()}
                 </Button>
-            </Stack>
+            </ButtonGroup>
         </>
     )
 })

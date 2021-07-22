@@ -1,8 +1,9 @@
 import { memo } from 'react'
 import { MaskTextField } from '@masknet/theme'
-import { Button, Container, Stack } from '@material-ui/core'
+import { Button, Container } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
 import { MaskAlert } from '../MaskAlert'
+import { ButtonGroup } from '../RegisterFrame/ButtonGroup'
 
 export const RestoreFromPrivateKey = memo(() => {
     const t = useDashboardI18N()
@@ -16,14 +17,14 @@ export const RestoreFromPrivateKey = memo(() => {
                     placeholder={t.sign_in_account_private_key_placeholder()}
                 />
             </Container>
-            <Stack direction="row" spacing={2}>
-                <Button sx={{ width: '224px' }} variant="rounded" color="secondary">
+            <ButtonGroup>
+                <Button variant="rounded" color="secondary">
                     {t.cancel()}
                 </Button>
-                <Button sx={{ width: '224px' }} variant="rounded" color="primary">
+                <Button variant="rounded" color="primary">
                     {t.next()}
                 </Button>
-            </Stack>
+            </ButtonGroup>
             <Container sx={{ marginTop: '35px' }}>
                 <MaskAlert description={t.sign_in_account_private_key_warning()} />
             </Container>

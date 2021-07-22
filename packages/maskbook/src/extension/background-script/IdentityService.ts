@@ -26,6 +26,7 @@ import { createInternalSettings, InternalSettings } from '../../settings/createS
 
 assertEnvironment(Environment.ManifestBackground)
 
+export { validateMnemonic } from '../../utils/mnemonic-code'
 export { storeAvatar, queryAvatarDataURL } from '../../database'
 
 //#region Profile

@@ -12,10 +12,9 @@ export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) 
     return (
         <Grid container spacing={2}>
             {puzzleWords.map((word, i) => (
-                <Grid item xs={3}>
+                <Grid item xs={3} key={i}>
                     <TextField
                         sx={{ width: '100%' }}
-                        key={i}
                         label={i + 1 + '.'}
                         variant="filled"
                         size="small"

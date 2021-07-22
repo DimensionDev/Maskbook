@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router'
 import { MaskTextField } from '@masknet/theme'
 import {
     Body,
@@ -10,26 +10,30 @@ import {
 import { RoutePaths } from '../../../type'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { Button } from '@material-ui/core'
-import { ButtonGroup } from '../components/ActionGroup'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
+import { Services } from '../../../API'
+import { ButtonGroup } from '../../../components/RegisterFrame/ButtonGroup'
 
 export const PersonaCreate = () => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const createPersona = useCreatePersonaV2()
     const [personaName, setPersonaName] = useState('')
+    const {
+        state: { mnemonic },
+    } = useLocation() as { state: { mnemonic: string[] } }
 
-    // useEffect(() => {
-    //     if (!loading && !identity) {
-    //         navigate(RoutePaths.SignUp)
-    //     }
-    // }, [loading])
+    useEffect(() => {
+        if (!mnemonic || !Services.Identity.validateMnemonic(mnemonic.join(' '))) {
+            navigate(RoutePaths.SignUp, { replace: true })
+        }
+    }, [mnemonic])
 
     const handleNext = useSnackbarCallback({
-        executor: () => createPersona('', personaName),
+        executor: () => createPersona(mnemonic.join(' '), personaName),
         onSuccess: () => navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedial}`),
         onError: () => {
             navigate(`${RoutePaths.SignUp}`)
@@ -56,10 +60,10 @@ export const PersonaCreate = () => {
                         onChange={(e) => setPersonaName(e.currentTarget.value)}
                     />
                     <ButtonGroup>
-                        <Button color="secondary" onClick={() => navigate(-1)}>
+                        <Button variant="rounded" color="secondary" onClick={() => navigate(-1)}>
                             Back
                         </Button>
-                        <Button color="primary" onClick={handleNext} disabled={!personaName}>
+                        <Button variant="rounded" color="primary" onClick={handleNext} disabled={!personaName}>
                             Next
                         </Button>
                     </ButtonGroup>
