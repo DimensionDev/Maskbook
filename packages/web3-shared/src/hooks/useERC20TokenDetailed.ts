@@ -68,11 +68,11 @@ async function getERC20TokenDetailed(
     token?: Partial<ERC20TokenDetailed>,
 ) {
     const results = await Promise.allSettled([
-        token?.name ?? (await (erc20TokenContract?.methods.name().call() ?? '')),
-        token?.name ? '' : await (erc20TokenBytes32Contract?.methods.name().call() ?? ''),
-        token?.symbol ?? (await (erc20TokenContract?.methods.symbol().call() ?? '')),
-        token?.symbol ? '' : await (erc20TokenBytes32Contract?.methods.symbol().call() ?? ''),
-        token?.decimals ?? (await (erc20TokenContract?.methods.decimals().call() ?? '0')),
+        token?.name ?? (await erc20TokenContract?.methods.name().call()) ?? '',
+        token?.name ? '' : (await erc20TokenBytes32Contract?.methods.name().call()) ?? '',
+        token?.symbol ?? (await erc20TokenContract?.methods.symbol().call()) ?? '',
+        token?.symbol ? '' : (await erc20TokenBytes32Contract?.methods.symbol().call()) ?? '',
+        token?.decimals ?? (await erc20TokenContract?.methods.decimals().call()) ?? '0',
     ])
     const [name, nameBytes32, symbol, symbolBytes32, decimals] = results.map((result) =>
         result.status === 'fulfilled' ? result.value : '',
