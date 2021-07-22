@@ -18,6 +18,7 @@ import { MaskMessage } from '../../utils/messages'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { FileServicePluginID } from '../../plugins/FileService/constants'
+import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
 import { useControlledDialog } from '../../plugins/Collectible/SNSAdaptor/useControlledDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
@@ -28,6 +29,7 @@ import { useStylesExtends } from '../custom-ui-helper'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
 import { useI18N } from '../../utils'
+import { currentPluginEnabledStatus } from '../../settings/settings'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -138,6 +140,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Red packet
+    const redPacketPluginEnabled = currentPluginEnabledStatus['plugin:' + RedPacketPluginID].value
     const openRedPacket = useCallback(() => {
         openEncryptedMessage()
         setTimeout(() => {
@@ -147,6 +150,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region File Service
+    const fileServicePluginEnabled = currentPluginEnabledStatus['plugin:' + FileServicePluginID].value
     const openFileService = useCallback(() => {
         openEncryptedMessage()
         setTimeout(() => {
@@ -156,6 +160,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region ITO
+    const itoPluginEnabled = currentPluginEnabledStatus['plugin:' + ITO_PluginID].value
     const openITO = useCallback(() => {
         openEncryptedMessage()
         setTimeout(() => {
@@ -165,6 +170,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Buy currency
+    const transakPluginEnabled = currentPluginEnabledStatus['plugin:' + TransakPluginID].value
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     const openBuyCurrency = useCallback(() => {
         setBuyDialog({
@@ -192,23 +198,25 @@ export function ToolboxHint(props: ToolboxHintProps) {
                 <Image src={ToolIconURLs.encryptedmsg.image} width={19} height={19} />
                 <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
             </MenuItem>,
-            chainIdValid ? (
+            chainIdValid && redPacketPluginEnabled ? (
                 <MenuItem onClick={openRedPacket} className={classes.menuItem}>
                     <Image src={ToolIconURLs.redpacket.image} width={19} height={19} />
                     <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
                 </MenuItem>
             ) : null,
-            <MenuItem onClick={openFileService} className={classes.menuItem}>
-                <Image src={ToolIconURLs.files.image} width={19} height={19} />
-                <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
-            </MenuItem>,
-            chainIdValid ? (
+            fileServicePluginEnabled ? (
+                <MenuItem onClick={openFileService} className={classes.menuItem}>
+                    <Image src={ToolIconURLs.files.image} width={19} height={19} />
+                    <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
+                </MenuItem>
+            ) : null,
+            chainIdValid && itoPluginEnabled ? (
                 <MenuItem onClick={openITO} className={classes.menuItem}>
                     <Image src={ToolIconURLs.markets.image} width={19} height={19} />
                     <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
                 </MenuItem>
             ) : null,
-            account && Flags.transak_enabled ? (
+            account && Flags.transak_enabled && transakPluginEnabled ? (
                 <MenuItem onClick={openBuyCurrency} className={classes.menuItem}>
                     <Image src={ToolIconURLs.token.image} width={19} height={19} />
                     <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
