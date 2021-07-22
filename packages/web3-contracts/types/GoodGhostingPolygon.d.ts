@@ -40,20 +40,20 @@ export type Deposit = ContractEventLog<{
 export type EarlyWithdrawal = ContractEventLog<{
     player: string
     amount: string
+    totalGamePrincipal: string
     0: string
     1: string
-}>
-export type FundsDepositedIntoExternalPool = ContractEventLog<{
-    amount: string
-    0: string
+    2: string
 }>
 export type FundsRedeemedFromExternalPool = ContractEventLog<{
     totalAmount: string
     totalGamePrincipal: string
     totalGameInterest: string
+    rewards: string
     0: string
     1: string
     2: string
+    3: string
 }>
 export type JoinedGame = ContractEventLog<{
     player: string
@@ -82,71 +82,129 @@ export type WinnersAnnouncement = ContractEventLog<{
 export type Withdrawal = ContractEventLog<{
     player: string
     amount: string
+    playerReward: string
     0: string
     1: string
+    2: string
 }>
 
 export interface GoodGhostingPolygon extends BaseContract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions): GoodGhostingPolygon
     clone(): GoodGhostingPolygon
     methods: {
+        /**
+         * Address of the interest bearing token received when funds are transferred to the external pool
+         */
         adaiToken(): NonPayableTransactionObject<string>
 
+        /**
+         * performance fee amount allocated to the admin
+         */
         adminFeeAmount(): NonPayableTransactionObject<string>
 
-        adminFeeWithdraw(): NonPayableTransactionObject<void>
-
+        /**
+         * controls if admin withdrew or not the performance fee.
+         */
         adminWithdraw(): NonPayableTransactionObject<boolean>
 
-        claim(
-            index: number | string | BN,
-            account: string,
-            isValid: boolean,
-            merkleProof: (string | number[])[],
-        ): NonPayableTransactionObject<void>
-
+        /**
+         * The performance admin fee (percentage)
+         */
         customFee(): NonPayableTransactionObject<string>
 
+        /**
+         * Address of the token used for depositing into the game by players (DAI)
+         */
         daiToken(): NonPayableTransactionObject<string>
 
-        depositIntoExternalPool(): NonPayableTransactionObject<void>
-
+        /**
+         * Cannot be called after the game is completed.
+         * Allows a player to withdraws funds before the game ends. An early withdrawl fee is charged.
+         */
         earlyWithdraw(): NonPayableTransactionObject<void>
 
+        /**
+         * The early withdrawal fee (percentage)
+         */
         earlyWithdrawalFee(): NonPayableTransactionObject<string>
 
+        /**
+         * When the game started (deployed timestamp)
+         */
         firstSegmentStart(): NonPayableTransactionObject<string>
 
+        /**
+         * Calculates the current segment of the game.
+         */
         getCurrentSegment(): NonPayableTransactionObject<string>
 
+        /**
+         * gets the number of players in the game
+         */
         getNumberOfPlayers(): NonPayableTransactionObject<string>
 
         incentiveController(): NonPayableTransactionObject<string>
 
+        /**
+         * Checks if the game is completed or not.
+         */
         isGameCompleted(): NonPayableTransactionObject<boolean>
 
+        /**
+         * controls the amount deposited in each segment that was not yet transferred to the external underlying poollist of players
+         */
         iterablePlayers(arg0: number | string | BN): NonPayableTransactionObject<string>
 
+        /**
+         * Allows a player to join the game
+         */
         joinGame(): NonPayableTransactionObject<void>
 
+        /**
+         * The number of segments in the game (segment count)
+         */
         lastSegment(): NonPayableTransactionObject<string>
 
+        /**
+         * Lending pool address
+         */
         lendingPool(): NonPayableTransactionObject<string>
 
+        /**
+         * Which Aave instance we use to swap DAI to interest bearing aDAI
+         */
         lendingPoolAddressProvider(): NonPayableTransactionObject<string>
 
+        /**
+         * Allows players to make deposits for the game segments, after joining the game.
+         */
         makeDeposit(): NonPayableTransactionObject<void>
 
         matic(): NonPayableTransactionObject<string>
 
-        merkleRoot(): NonPayableTransactionObject<string>
+        /**
+         * Defines the max quantity of players allowed in the game
+         */
+        maxPlayersCount(): NonPayableTransactionObject<string>
 
+        /**
+         * Returns the address of the current owner.
+         */
         owner(): NonPayableTransactionObject<string>
 
+        /**
+         * pauses the game. This function can be called only by the contract's admin.
+         */
         pause(): NonPayableTransactionObject<void>
 
+        /**
+         * Returns true if the contract is paused, and false otherwise.
+         */
         paused(): NonPayableTransactionObject<boolean>
 
+        /**
+         * Stores info about the players in the game
+         */
         players(arg0: string): NonPayableTransactionObject<{
             addr: string
             withdrawn: boolean
@@ -160,33 +218,69 @@ export interface GoodGhostingPolygon extends BaseContract {
             4: string
         }>
 
-        redeemFromExternalPool(): NonPayableTransactionObject<void>
-
+        /**
+         * Controls if tokens were redeemed or not from the pool
+         */
         redeemed(): NonPayableTransactionObject<boolean>
 
+        /**
+         * Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.
+         */
         renounceOwnership(): NonPayableTransactionObject<void>
 
-        router(): NonPayableTransactionObject<string>
+        rewardsPerPlayer(): NonPayableTransactionObject<string>
 
-        segmentDeposit(arg0: number | string | BN): NonPayableTransactionObject<string>
-
+        /**
+         * The time duration (in seconds) of each segment
+         */
         segmentLength(): NonPayableTransactionObject<string>
 
+        /**
+         * The amount to be paid on each segment
+         */
         segmentPayment(): NonPayableTransactionObject<string>
 
+        /**
+         * Stores the total amount of net interest received in the game.
+         */
         totalGameInterest(): NonPayableTransactionObject<string>
 
+        /**
+         * total principal amount
+         */
         totalGamePrincipal(): NonPayableTransactionObject<string>
 
+        /**
+         * Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.
+         */
         transferOwnership(newOwner: string): NonPayableTransactionObject<void>
 
+        /**
+         * unpauses the game. This function can be called only by the contract's admin.
+         */
         unpause(): NonPayableTransactionObject<void>
 
-        usdc(): NonPayableTransactionObject<string>
-
+        /**
+         * list of winners
+         */
         winners(arg0: number | string | BN): NonPayableTransactionObject<string>
 
+        /**
+         * Cannot be called before the game ends.
+         * Allows the admin to withdraw the performance fee, if applicable. This function can be called only by the contract's admin.
+         */
+        adminFeeWithdraw(): NonPayableTransactionObject<void>
+
+        /**
+         * Allows player to withdraw their funds after the game ends with no loss (fee). Winners get a share of the interest earned.
+         */
         withdraw(): NonPayableTransactionObject<void>
+
+        /**
+         * Can only be called after the game is completed.
+         * Redeems funds from the external pool and updates the internal accounting controls related to the game stats.
+         */
+        redeemFromExternalPool(): NonPayableTransactionObject<void>
     }
     events: {
         AdminWithdrawal(cb?: Callback<AdminWithdrawal>): EventEmitter
@@ -197,12 +291,6 @@ export interface GoodGhostingPolygon extends BaseContract {
 
         EarlyWithdrawal(cb?: Callback<EarlyWithdrawal>): EventEmitter
         EarlyWithdrawal(options?: EventOptions, cb?: Callback<EarlyWithdrawal>): EventEmitter
-
-        FundsDepositedIntoExternalPool(cb?: Callback<FundsDepositedIntoExternalPool>): EventEmitter
-        FundsDepositedIntoExternalPool(
-            options?: EventOptions,
-            cb?: Callback<FundsDepositedIntoExternalPool>,
-        ): EventEmitter
 
         FundsRedeemedFromExternalPool(cb?: Callback<FundsRedeemedFromExternalPool>): EventEmitter
         FundsRedeemedFromExternalPool(
@@ -239,13 +327,6 @@ export interface GoodGhostingPolygon extends BaseContract {
 
     once(event: 'EarlyWithdrawal', cb: Callback<EarlyWithdrawal>): void
     once(event: 'EarlyWithdrawal', options: EventOptions, cb: Callback<EarlyWithdrawal>): void
-
-    once(event: 'FundsDepositedIntoExternalPool', cb: Callback<FundsDepositedIntoExternalPool>): void
-    once(
-        event: 'FundsDepositedIntoExternalPool',
-        options: EventOptions,
-        cb: Callback<FundsDepositedIntoExternalPool>,
-    ): void
 
     once(event: 'FundsRedeemedFromExternalPool', cb: Callback<FundsRedeemedFromExternalPool>): void
     once(

@@ -17,13 +17,12 @@ export function usePoolData(info: GoodGhostingInfo) {
     const chainId = useChainId()
 
     const asyncResult = useAsyncRetry(async () => {
-        if (!contract || !lendingPoolContract || !adaiContract || !incentivesContract) return
+        if (!contract || !lendingPoolContract || !adaiContract || !incentivesContract) return {}
 
-        const [reward, currentDeposits, totalAdai, reserveData] = await Promise.all([
+        const [reward, totalAdai, reserveData] = await Promise.all([
             incentivesContract.methods
                 .getRewardsBalance([info.adaiTokenAddress], GOOD_GHOSTING_CONTRACT_ADDRESS)
                 .call(),
-            contract.methods.segmentDeposit(info.currentSegment).call(),
             adaiContract.methods.balanceOf(GOOD_GHOSTING_CONTRACT_ADDRESS).call(),
             lendingPoolContract.methods.getReserveData(DAI[chainId].address).call(),
         ])
@@ -31,9 +30,7 @@ export function usePoolData(info: GoodGhostingInfo) {
         const rawADaiAPY = new BigNumber((reserveData as any).currentLiquidityRate)
         const poolAPY = rawADaiAPY.dividedBy(10 ** 27).multipliedBy(100)
 
-        const poolEarnings = new BigNumber(totalAdai).minus(
-            new BigNumber(info.totalGamePrincipal).minus(new BigNumber(currentDeposits)),
-        )
+        const poolEarnings = new BigNumber(totalAdai).minus(new BigNumber(info.totalGamePrincipal))
 
         return {
             reward,

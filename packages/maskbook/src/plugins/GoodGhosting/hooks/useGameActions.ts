@@ -1,28 +1,27 @@
-import { useAccount } from '@masknet/web3-shared'
+import { useAccount, useGasPrice } from '@masknet/web3-shared'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
 import type { GoodGhostingInfo } from '../types'
-import { DAI } from '../constants'
-import { useChainId, useERC20TokenContract, useGoodGhostingConstants } from '@masknet/web3-shared'
 import { getPlayerStatus, PlayerStatus } from '../utils'
 
 export function useJoinGame(info: GoodGhostingInfo) {
-    const { GOOD_GHOSTING_CONTRACT_ADDRESS } = useGoodGhostingConstants()
-    const chainId = useChainId()
-    const daiContract = useERC20TokenContract(DAI[chainId].address)
     const account = useAccount()
     const contract = useGoodGhostingContract()
-
+    const gasPrice = useGasPrice()
     const canJoinGame = !info.currentPlayer && info.currentSegment === 0
 
     return {
         canJoinGame,
         joinGame: async () => {
-            if (contract && daiContract) {
-                await daiContract.methods.approve(GOOD_GHOSTING_CONTRACT_ADDRESS, info.segmentPayment).send({
-                    from: account,
-                })
+            if (contract) {
+                const gasEstimate = await contract.methods
+                    .joinGame()
+                    .estimateGas({
+                        from: account,
+                    })
+                    .catch(() => gasPrice)
                 await contract.methods.joinGame().send({
                     from: account,
+                    gasPrice: gasEstimate,
                 })
             }
         },
@@ -30,11 +29,9 @@ export function useJoinGame(info: GoodGhostingInfo) {
 }
 
 export function useMakeDeposit(info: GoodGhostingInfo) {
-    const { GOOD_GHOSTING_CONTRACT_ADDRESS } = useGoodGhostingConstants()
-    const chainId = useChainId()
-    const daiContract = useERC20TokenContract(DAI[chainId].address)
     const account = useAccount()
     const contract = useGoodGhostingContract()
+    const gasPrice = useGasPrice()
 
     const status = getPlayerStatus(info.currentSegment, info.currentPlayer)
     const canMakeDeposit =
@@ -46,12 +43,16 @@ export function useMakeDeposit(info: GoodGhostingInfo) {
     return {
         canMakeDeposit,
         makeDeposit: async () => {
-            if (contract && daiContract) {
-                await daiContract.methods.approve(GOOD_GHOSTING_CONTRACT_ADDRESS, info.segmentPayment).send({
-                    from: account,
-                })
+            if (contract) {
+                const gasEstimate = await contract.methods
+                    .makeDeposit()
+                    .estimateGas({
+                        from: account,
+                    })
+                    .catch(() => gasPrice)
                 await contract.methods.makeDeposit().send({
                     from: account,
+                    gasPrice: gasEstimate,
                 })
             }
         },
@@ -61,6 +62,7 @@ export function useMakeDeposit(info: GoodGhostingInfo) {
 export function useWithdraw(info: GoodGhostingInfo) {
     const account = useAccount()
     const contract = useGoodGhostingContract()
+    const gasPrice = useGasPrice()
 
     const canWithdraw =
         info.currentPlayer &&
@@ -72,8 +74,15 @@ export function useWithdraw(info: GoodGhostingInfo) {
         canWithdraw,
         withdraw: async () => {
             if (contract) {
+                const gasEstimate = await contract.methods
+                    .withdraw()
+                    .estimateGas({
+                        from: account,
+                    })
+                    .catch(() => gasPrice)
                 await contract.methods.withdraw().send({
                     from: account,
+                    gasPrice: gasEstimate,
                 })
             }
         },

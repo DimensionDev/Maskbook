@@ -125,16 +125,16 @@ export function GameStatsView(props: GameStatsViewProps) {
 
             <div className={classes.circularDataSection}>
                 <Grid className={classes.infoRow} container justifyContent="center">
-                    <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
+                    <Grid className={classes.circularDataWrapper} item xs={6}>
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={t('plugin_good_ghosting_pool_apy')}
                                 title={financialData.poolAPY.toFixed(1)}
-                                subtitle={'%'}
+                                subtitle="%"
                             />
                         </div>
                     </Grid>
-                    <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
+                    <Grid className={classes.circularDataWrapper} item xs={6}>
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={t('plugin_good_ghosting_pool_earnings')}
@@ -147,7 +147,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                     </Grid>
                 </Grid>
                 <Grid className={classes.infoRow} container justifyContent="center">
-                    <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
+                    <Grid className={classes.circularDataWrapper} item xs={6}>
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={t('plugin_good_ghosting_extra_rewards')}
@@ -158,7 +158,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                             />
                         </div>
                     </Grid>
-                    <Grid className={classes.circularDataWrapper} item xs={6} spacing={1}>
+                    <Grid className={classes.circularDataWrapper} item xs={6}>
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={t('plugin_good_ghosting_total_saved')}
