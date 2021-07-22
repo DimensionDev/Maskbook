@@ -15,8 +15,7 @@ import {
 import React, { useState } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { usePoolDepositAssets } from '../hooks/usePool'
-import type { Pool } from '../types'
+import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool'
 import { PerformanceChart } from './PerformanceChart'
 import { PoolStats } from './PoolStats'
 import { PoolViewDeck } from './PoolViewDeck'
@@ -101,20 +100,18 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface PoolViewProps {
-    pool: Pool
-    loading: Boolean
-    error?: Error
-    retry: () => void
+    address?: string
 }
 
 export function PoolView(props: PoolViewProps) {
-    const { pool, loading, error, retry } = props
-
     const { t } = useI18N()
     const classes = useStyles()
     const currentChainId = useChainId()
 
     //#region allowed tokens
+    const { value: pool, error, loading, retry } = useFetchPool(props.address ?? '')
+
+    //#region susd token
     const {
         value: allowedTokens,
         loading: loadingAllowedTokens,
