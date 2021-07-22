@@ -13,7 +13,7 @@ export const RestoreFromPrivateKey = memo(() => {
                     sx={{ width: '100%' }}
                     multiline
                     rows={8}
-                    defaultValue={t.sign_in_account_private_key_placeholder()}
+                    placeholder={t.sign_in_account_private_key_placeholder()}
                 />
             </Container>
             <Stack direction="row" spacing={2}>
