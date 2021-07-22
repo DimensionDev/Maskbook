@@ -9,13 +9,21 @@ import {
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { RoutePaths } from '../../../type'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { Button } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
 import { Services } from '../../../API'
 import { ButtonGroup } from '../../../components/RegisterFrame/ButtonGroup'
+
+const Label = ({ value }: { value: string }) => (
+    <Typography
+        variant="body2"
+        sx={{ marginBottom: '8px', fontWeight: 'bolder', color: (theme) => theme.palette.primary.main }}>
+        {value}
+    </Typography>
+)
 
 export const PersonaCreate = () => {
     const t = useDashboardI18N()
@@ -54,7 +62,7 @@ export const PersonaCreate = () => {
                 <div>
                     <MaskTextField
                         required
-                        label="Name"
+                        label={<Label value={t.personas()} />}
                         variant="filled"
                         InputProps={{ disableUnderline: true }}
                         onChange={(e) => setPersonaName(e.currentTarget.value)}
