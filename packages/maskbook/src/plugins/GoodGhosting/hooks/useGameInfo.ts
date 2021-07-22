@@ -12,10 +12,12 @@ export function useGameContractAddress() {
     const { GOOD_GHOSTING_CONTRACT_ADDRESS_FILE } = useGoodGhostingConstants()
 
     const asyncResult = useAsyncRetry(async (): Promise<{ contractAddress?: string }> => {
+        if (!GOOD_GHOSTING_CONTRACT_ADDRESS_FILE) return {}
+
         const response = await fetch(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
         const data = await response.text()
         return data ? JSON.parse(data) : {}
-    }, [])
+    }, [GOOD_GHOSTING_CONTRACT_ADDRESS_FILE])
 
     return asyncResult
 }
