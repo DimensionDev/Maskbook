@@ -1,4 +1,4 @@
-import { useChainId, useERC20TokenContract, useGoodGhostingConstants } from '@masknet/web3-shared'
+import { useChainId, useERC20TokenContract } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
@@ -9,21 +9,18 @@ import { useGoodGhostingIncentiveContract } from '../contracts/useGoodGhostingIn
 import type { GoodGhostingInfo, LendingPoolData } from '../types'
 
 export function usePoolData(info: GoodGhostingInfo) {
-    const contract = useGoodGhostingContract()
+    const contract = useGoodGhostingContract(info.contractAddress)
     const lendingPoolContract = useAaveLendingPoolContract(info.lendingPoolAddress)
     const adaiContract = useERC20TokenContract(info.adaiTokenAddress)
     const incentivesContract = useGoodGhostingIncentiveContract()
-    const { GOOD_GHOSTING_CONTRACT_ADDRESS } = useGoodGhostingConstants()
     const chainId = useChainId()
 
     const asyncResult = useAsyncRetry(async () => {
         if (!contract || !lendingPoolContract || !adaiContract || !incentivesContract) return {}
 
         const [reward, totalAdai, reserveData] = await Promise.all([
-            incentivesContract.methods
-                .getRewardsBalance([info.adaiTokenAddress], GOOD_GHOSTING_CONTRACT_ADDRESS)
-                .call(),
-            adaiContract.methods.balanceOf(GOOD_GHOSTING_CONTRACT_ADDRESS).call(),
+            incentivesContract.methods.getRewardsBalance([info.adaiTokenAddress], info.contractAddress).call(),
+            adaiContract.methods.balanceOf(info.contractAddress).call(),
             lendingPoolContract.methods.getReserveData(DAI[chainId].address).call(),
         ])
 

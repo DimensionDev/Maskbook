@@ -1,4 +1,4 @@
-import { formatBalance, useChainId, useERC20TokenDetailed, useGoodGhostingConstants } from '@masknet/web3-shared'
+import { formatBalance, useChainId, useERC20TokenDetailed } from '@masknet/web3-shared'
 import { Button, makeStyles, Typography } from '@material-ui/core'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'
@@ -20,7 +20,6 @@ interface GameActionProps {
 }
 
 export function GameAction(props: GameActionProps) {
-    const { GOOD_GHOSTING_CONTRACT_ADDRESS } = useGoodGhostingConstants()
     const chainId = useChainId()
     const gameToken = useGameToken()
 

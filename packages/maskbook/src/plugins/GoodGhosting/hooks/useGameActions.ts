@@ -5,7 +5,7 @@ import { getPlayerStatus, PlayerStatus } from '../utils'
 
 export function useJoinGame(info: GoodGhostingInfo) {
     const account = useAccount()
-    const contract = useGoodGhostingContract()
+    const contract = useGoodGhostingContract(info.contractAddress)
     const gasPrice = useGasPrice()
     const canJoinGame = !info.currentPlayer && info.currentSegment === 0
 
@@ -30,7 +30,7 @@ export function useJoinGame(info: GoodGhostingInfo) {
 
 export function useMakeDeposit(info: GoodGhostingInfo) {
     const account = useAccount()
-    const contract = useGoodGhostingContract()
+    const contract = useGoodGhostingContract(info.contractAddress)
     const gasPrice = useGasPrice()
 
     const status = getPlayerStatus(info.currentSegment, info.currentPlayer)
@@ -61,7 +61,7 @@ export function useMakeDeposit(info: GoodGhostingInfo) {
 
 export function useWithdraw(info: GoodGhostingInfo) {
     const account = useAccount()
-    const contract = useGoodGhostingContract()
+    const contract = useGoodGhostingContract(info.contractAddress)
     const gasPrice = useGasPrice()
 
     const canWithdraw =

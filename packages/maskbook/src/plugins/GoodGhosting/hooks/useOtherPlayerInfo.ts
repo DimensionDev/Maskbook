@@ -3,19 +3,19 @@ import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
-import type { Player } from '../types'
+import type { GoodGhostingInfo, Player } from '../types'
 
-export function useOtherPlayerInfo(numberOfPlayers: number) {
-    const contract = useGoodGhostingContract()
+export function useOtherPlayerInfo(info: GoodGhostingInfo) {
+    const contract = useGoodGhostingContract(info.contractAddress)
 
     const { addressNames, addressCallDatas } = useMemo(
         () => ({
-            addressNames: Array(numberOfPlayers).fill('iterablePlayers'),
-            addressCallDatas: Array(numberOfPlayers)
+            addressNames: Array(info.numberOfPlayers).fill('iterablePlayers'),
+            addressCallDatas: Array(info.numberOfPlayers)
                 .fill('')
                 .map((_, i) => [i]),
         }),
-        [numberOfPlayers],
+        [info],
     )
 
     const [addressResults, addressCalls, _, addressCallback] = useSingleContractMultipleData(

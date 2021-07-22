@@ -1,6 +1,7 @@
 import type BigNumber from 'bignumber.js'
 
 export interface GoodGhostingInfo {
+    contractAddress: string
     segmentPayment: string
     firstSegmentStart: number
     currentSegment: number

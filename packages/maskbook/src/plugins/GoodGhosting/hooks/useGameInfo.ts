@@ -1,4 +1,4 @@
-import { useAccount, useSingleContractMultipleData } from '@masknet/web3-shared'
+import { useAccount, useGoodGhostingConstants, useSingleContractMultipleData } from '@masknet/web3-shared'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
@@ -8,8 +8,20 @@ import { ZERO_ADDRESS } from '../constants'
 import { useI18N } from '../../../utils'
 import { addSeconds } from 'date-fns'
 
-export function useGameInfo() {
-    const contract = useGoodGhostingContract()
+export function useGameContractAddress() {
+    const { GOOD_GHOSTING_CONTRACT_ADDRESS_FILE } = useGoodGhostingConstants()
+
+    const asyncResult = useAsyncRetry(async (): Promise<{ contractAddress?: string }> => {
+        const response = await fetch(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
+        const data = await response.text()
+        return data ? JSON.parse(data) : {}
+    }, [])
+
+    return asyncResult
+}
+
+export function useGameInfo(contractAddress: string) {
+    const contract = useGoodGhostingContract(contractAddress)
     const account = useAccount()
     const { names, callDatas } = useMemo(() => {
         const names = [
@@ -59,6 +71,7 @@ export function useGameInfo() {
         const player = currentPlayer as any as Player
 
         return {
+            contractAddress,
             segmentPayment,
             firstSegmentStart: Number.parseInt(firstSegmentStart, 10),
             currentSegment: Number.parseInt(currentSegment, 10),

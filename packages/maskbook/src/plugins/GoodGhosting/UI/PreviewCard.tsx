@@ -5,7 +5,7 @@ import { TimelineView } from './TimelineView'
 import { GameStatsView } from './GameStatsView'
 import { OtherPlayersView } from './OtherPlayersView'
 import { PersonalView } from './PersonalView'
-import { useGameInfo } from '../hooks/useGameInfo'
+import { useGameContractAddress, useGameInfo } from '../hooks/useGameInfo'
 import type { GoodGhostingInfo } from '../types'
 import { usePoolData } from '../hooks/usePoolData'
 import { useOtherPlayerInfo } from '../hooks/useOtherPlayerInfo'
@@ -29,8 +29,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-interface PreviewCardProps {}
-
 enum GoodGhostingTab {
     Game = 'Game',
     Timeline = 'Timeline',
@@ -38,12 +36,40 @@ enum GoodGhostingTab {
     Everyone = 'Everyone',
 }
 
+interface PreviewCardProps {}
+
 export function PreviewCard(props: PreviewCardProps) {
-    const { value: info, error, loading, retry } = useGameInfo()
+    const { value: addressInfo, error, loading, retry } = useGameContractAddress()
 
     if (loading) {
         return <Typography color="textPrimary">Loading...</Typography>
-    } else if (error || !info) {
+    }
+
+    if (error || !addressInfo?.contractAddress) {
+        return (
+            <Box display="flex" flexDirection="column" alignItems="center">
+                <Typography color="textPrimary">Something went wrong.</Typography>
+                <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
+                    Retry
+                </Button>
+            </Box>
+        )
+    }
+    return <PreviewCardWithGameAddress contracAddress={addressInfo.contractAddress} />
+}
+
+interface PreviewCardWithGameAddressProps {
+    contracAddress: string
+}
+
+export function PreviewCardWithGameAddress(props: PreviewCardWithGameAddressProps) {
+    const { value: info, error, loading, retry } = useGameInfo(props.contracAddress)
+
+    if (loading) {
+        return <Typography color="textPrimary">Loading...</Typography>
+    }
+
+    if (error || !info) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
                 <Typography color="textPrimary">Something went wrong.</Typography>
@@ -66,7 +92,7 @@ function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
     const [activeTab, setActiveTab] = useState(GoodGhostingTab.Game)
 
     const finDataResult = usePoolData(props.info)
-    const otherPlayerResult = useOtherPlayerInfo(props.info.numberOfPlayers)
+    const otherPlayerResult = useOtherPlayerInfo(props.info)
 
     const tabs = [GoodGhostingTab.Game, GoodGhostingTab.Timeline, GoodGhostingTab.Everyone]
     if (props.info.currentPlayer) tabs.push(GoodGhostingTab.Personal)

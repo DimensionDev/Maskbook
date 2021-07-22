@@ -1,7 +1,7 @@
 import { Box, Button, DialogContent, DialogActions, makeStyles } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { ERC20TokenDetailed, useGoodGhostingConstants } from '@masknet/web3-shared'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 import type { GoodGhostingInfo } from '../types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 
@@ -37,7 +37,6 @@ interface GameActionDialogProps {
 
 export function GameActionDialog(props: GameActionDialogProps) {
     const { open, onAction, onClose, bodyText, actionText, token, info, needsApprove } = props
-    const { GOOD_GHOSTING_CONTRACT_ADDRESS } = useGoodGhostingConstants()
     const classes = useStyles()
 
     let action = (
@@ -50,7 +49,7 @@ export function GameActionDialog(props: GameActionDialogProps) {
         action = (
             <EthereumERC20TokenApprovedBoundary
                 amount={info.segmentPayment}
-                spender={GOOD_GHOSTING_CONTRACT_ADDRESS}
+                spender={props.info.contractAddress}
                 token={token}>
                 {action}
             </EthereumERC20TokenApprovedBoundary>
