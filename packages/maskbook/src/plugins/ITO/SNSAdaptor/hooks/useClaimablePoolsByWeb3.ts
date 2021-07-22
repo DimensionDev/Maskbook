@@ -46,9 +46,11 @@ export function useClaimablePoolsByWeb3() {
     return useAsyncRetry(async () => {
         const logs = flatten<Log>(
             await Promise.all(
-                queryParams.map((queryParam: PastLogsOptions) => Services.Ethereum.getPastLogs(queryParam, {
-                    chainId,
-                })),
+                queryParams.map((queryParam: PastLogsOptions) =>
+                    Services.Ethereum.getPastLogs(queryParam, {
+                        chainId,
+                    }),
+                ),
             ),
         )
         return logs.reduce<ClaimablePool[]>((acc, log) => {

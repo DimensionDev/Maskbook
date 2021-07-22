@@ -6,7 +6,8 @@ export async function fetchPools(chainId: ChainId) {
     // See https://github.com/pooltogether/pooltogether-api-monorepo for API documention
     const url = new URL(`/pools/${chainId}.json`, API_URL)
     const response = await fetch(url.toString(), {})
-    return (await response.json()) as Pool[]
+    const data = (await response.json()) as Pool[] | null
+    return data ?? []
 }
 
 export async function fetchPool(address?: string, subgraphUrl?: string) {

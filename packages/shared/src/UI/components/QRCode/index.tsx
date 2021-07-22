@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Typography } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 import { blue } from '@material-ui/core/colors'
-import { SessionStorageCache } from '../../../utils'
+import { SessionStorageCache } from '@masknet/shared-base'
 
 interface QRProps {
     text: string

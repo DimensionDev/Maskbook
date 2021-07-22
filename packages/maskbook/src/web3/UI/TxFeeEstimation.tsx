@@ -4,13 +4,12 @@ import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
 import {
     formatBalance,
     formatWeiToGwei,
-    EthereumTokenType,
     getChainDetailed,
     useChainId,
     useGasPrice,
     GasNow,
     ChainId,
-    useAssets,
+    useEtherPrice,
 } from '@masknet/web3-shared'
 import { useI18N } from '../../utils'
 import { Image } from '../../components/shared/Image'
@@ -53,9 +52,7 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
         [type, _gasPrice, gasNow],
     )
 
-    const { value: detailedTokens } = useAssets([])
-    const nativeToken = detailedTokens.find((t) => t.token.type === EthereumTokenType.Native)
-    const usdRate = nativeToken?.price?.usd
+    const etherPrice = useEtherPrice()
     return chainId === ChainId.Mainnet && gas ? (
         <>
             <Grid item xs={6}>
@@ -71,9 +68,9 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
                                 fee: formatBalance(gasPrice.times(gas), 9, 5),
                                 symbol: chainDetailed?.nativeCurrency.symbol,
                             })}
-                            {usdRate
+                            {etherPrice
                                 ? t('plugin_gas_fee_as_usd', {
-                                      usd: formatBalance(gasPrice.times(gas).times(usdRate), 9, 2),
+                                      usd: formatBalance(gasPrice.times(gas).times(etherPrice), 9, 2),
                                   })
                                 : ''}
                         </Typography>

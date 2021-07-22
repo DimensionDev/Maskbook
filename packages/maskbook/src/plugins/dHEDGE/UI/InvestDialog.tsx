@@ -58,6 +58,7 @@ export function InvestDialog() {
     const [id] = useState(uuid())
     const [pool, setPool] = useState<Pool>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
+    const [allowedTokens, setAllowedTokens] = useState<string[]>()
 
     // context
     const account = useAccount()
@@ -66,10 +67,13 @@ export function InvestDialog() {
     const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated, (ev) => {
         if (ev.open) {
             setPool(ev.pool)
-            setToken(ev.token)
+            setAllowedTokens(ev.tokens)
         }
     })
     const onClose = useCallback(() => {
+        setPool(undefined)
+        setAllowedTokens([])
+        setToken(undefined)
         closeDialog()
     }, [closeDialog])
     //#endregion
@@ -86,17 +90,15 @@ export function InvestDialog() {
         ),
     )
     const onSelectTokenChipClick = useCallback(() => {
-        if (!token) return
         setSelectTokenDialogOpen({
             open: true,
             uuid: id,
             disableNativeToken: true,
             FixedTokenListProps: {
-                selectedTokens: [token.address],
-                whitelist: [token.address],
+                whitelist: allowedTokens,
             },
         })
-    }, [id, token?.address])
+    }, [id, token?.address, allowedTokens])
     //#endregion
 
     //#region amount
@@ -110,11 +112,7 @@ export function InvestDialog() {
     //#endregion
 
     //#region blocking
-    const [investState, investCallback, resetInvestCallback] = useInvestCallback(
-        pool?.address ?? '',
-        amount.toFixed(),
-        token,
-    )
+    const [investState, investCallback, resetInvestCallback] = useInvestCallback(pool, amount.toFixed(), token)
     //#endregion
 
     //#region Swap
@@ -203,8 +201,7 @@ export function InvestDialog() {
     }, [account, amount.toFixed(), token, tokenBalance])
     //#endregion
 
-    if (!token || !pool) return null
-
+    if (!pool) return null
     return (
         <div className={classes.root}>
             <InjectedDialog open={open} onClose={onClose} title={pool.name} maxWidth="xs">
@@ -231,7 +228,7 @@ export function InvestDialog() {
                             onClick={openSwap}
                             variant="contained"
                             loading={loadingTokenBalance}>
-                            {t('plugin_dhedge_buy_token', { symbol: token.symbol })}
+                            {t('plugin_dhedge_buy_token', { symbol: token?.symbol })}
                         </ActionButton>
                     ) : (
                         <EthereumWalletConnectedBoundary>

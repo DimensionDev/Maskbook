@@ -1,4 +1,5 @@
 import type { Fund, PerformanceHistory, Period, Pool } from '../types'
+import { getChainIdFromCode } from '../utils'
 
 export async function fetchPool(address: string, url: string) {
     let body = {
@@ -6,12 +7,15 @@ export async function fetchPool(address: string, url: string) {
             fund(address: $fundAddress) {
                 address
                 name
+                blockchainCode
                 managerName
                 managerAddress
+                managerLogicAddress
                 poolDetails
                 riskFactor
                 totalValue
                 performance
+                poolType
                 balanceOfManager
                 totalSupply
             }
@@ -25,7 +29,7 @@ export async function fetchPool(address: string, url: string) {
         credentials: 'omit',
     })
     const res = (await response.json())?.data as Fund
-    return res.fund as Pool
+    return { ...res.fund, chainId: getChainIdFromCode(res.fund.blockchainCode) } as Pool
 }
 
 export async function fetchPoolPerformance(address: string, period: Period, url: string, sort = true) {

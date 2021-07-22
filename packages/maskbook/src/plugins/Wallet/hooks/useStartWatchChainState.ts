@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { pollingTask } from '../../../utils'
+import { pollingTask } from '@masknet/shared'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 import { WalletRPC } from '../messages'
 

@@ -19,7 +19,7 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { Asset, useTrustedERC20Tokens } from '@masknet/web3-shared'
+import type { Asset } from '@masknet/web3-shared'
 import {
     CurrencyType,
     currySameAddress,
@@ -34,10 +34,12 @@ import {
     Wallet,
 } from '@masknet/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon, useValueRef } from '@masknet/shared'
 import { useI18N, useMatchXS } from '../../../utils'
 import { ActionsBarFT } from './ActionsBarFT'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
+import { currentEtherPriceSettings } from '../../../plugins/Wallet/settings'
+import { useTrustedERC721TokensFromDB } from '../../../plugins/Wallet/hooks/useERC721Tokens'
 
 const useStyles = makeStyles<
     Theme,
@@ -101,6 +103,12 @@ function ViewDetailed(props: ViewDetailedProps) {
 
     const stableTokens = useStableTokensDebank()
     const chainDetailed = useChainDetailed()
+
+    const etherPrice = useValueRef(currentEtherPriceSettings)
+
+    console.log({
+        etherPrice,
+    })
 
     if (!chainDetailed) return null
 
@@ -198,7 +206,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         ...(isMobile ? [] : ['']),
     ] as const
 
-    const erc20Tokens = useTrustedERC20Tokens()
+    const erc20Tokens = useTrustedERC721TokensFromDB()
     const {
         value: detailedTokens,
         error: detailedTokensError,

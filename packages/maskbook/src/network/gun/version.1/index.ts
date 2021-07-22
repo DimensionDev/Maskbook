@@ -1,5 +1,4 @@
 /* eslint import/no-deprecated: 0 */
-import '../gun-worker.patch'
 import Gun from 'gun'
 import 'gun/lib/then'
 import type { PublishedAESKey } from '../../../crypto/crypto-alpha-40'

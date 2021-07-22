@@ -1,6 +1,7 @@
 import { ProviderType } from '@masknet/web3-shared'
+import { pollingTask } from '@masknet/shared'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
-import { pollingTask, startEffects } from '../../../utils'
+import { startEffects } from '../../../utils'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 import { getWallet } from './wallet'
 import {
