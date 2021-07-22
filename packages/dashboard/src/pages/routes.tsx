@@ -2,6 +2,7 @@ import { Route, Routes, Navigate } from 'react-router'
 import React, { lazy, Suspense } from 'react'
 import { DashboardFrame } from '../components/DashboardFrame'
 import { RoutePaths } from '../type'
+import NotLoginGuardRoute from '../GuardRoute'
 const Wallets = lazy(() => import('./Wallets'))
 const Setup = lazy(() => import('./Setup'))
 const SignUp = lazy(() => import('./SignUp'))
@@ -16,10 +17,10 @@ export function Pages() {
     return (
         <Suspense fallback="loading...">
             <Routes>
-                <Route path={RoutePaths.Welcome} element={<Welcome />} />
+                <NotLoginGuardRoute path={RoutePaths.Welcome} element={<Welcome />} redirectTo={RoutePaths.Personas} />
                 <Route path={RoutePaths.Setup} element={<Setup />} />
                 <Route path={`${RoutePaths.SignUp}/*`} element={<SignUp />} />
-                <Route path={RoutePaths.Login} element={<Login />} />
+                <NotLoginGuardRoute path={RoutePaths.Login} element={<Login />} redirectTo={RoutePaths.Personas} />
                 <Route path={RoutePaths.PrivacyPolicy} element={<PrivacyPolicy />} />
                 <Route path={RoutePaths.Personas} element={frame(<Personas />)} />
                 <Route path={`${RoutePaths.Wallets}/*`} element={frame(<Wallets />)} />
