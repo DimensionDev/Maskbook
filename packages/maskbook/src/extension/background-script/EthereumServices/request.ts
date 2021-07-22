@@ -4,7 +4,7 @@ import { INTERNAL_send } from './send'
 
 let id = 0
 
-export async function request<T extends unknown>(requestArguments: RequestArguments) {
+export async function request<T extends unknown>(requestArguments: RequestArguments, rpc?: string) {
     return new Promise<T>((resolve, reject) => {
         id++
         INTERNAL_send(
@@ -18,6 +18,7 @@ export async function request<T extends unknown>(requestArguments: RequestArgume
                 if (error || response?.error) reject(error ?? response?.error)
                 else resolve(response?.result)
             },
+            rpc,
         )
     })
 }

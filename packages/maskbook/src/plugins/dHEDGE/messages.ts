@@ -1,4 +1,3 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
@@ -9,7 +8,7 @@ type InvestDialogUpdated =
     | {
           open: true
           pool: Pool
-          token: FungibleTokenDetailed
+          tokens: string[]
       }
     | {
           open: false

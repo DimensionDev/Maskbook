@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect } from 'react'
-import { useChainIdValid } from '@masknet/web3-shared'
 import {
     makeStyles,
     InputBase,
@@ -14,7 +13,12 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
-import { I18NStringField, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import {
+    I18NStringField,
+    Plugin,
+    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
+} from '@masknet/plugin-infra'
 import { useValueRef } from '@masknet/shared'
 import { CompositionEvent, MaskMessage, useI18N, Flags } from '../../utils'
 import { isMinds } from '../../social-network-adaptor/minds.com/base'
@@ -457,15 +461,13 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
 }
 
 function PluginRenderer() {
-    const chainIdValid = useChainIdValid()
     const pluginField = usePluginI18NField()
+    const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
     const result = useActivatedPluginsSNSAdaptor().map((plugin) =>
         Result.wrap(() => {
             const entry = plugin.CompositionDialogEntry
             const unstable = plugin.enableRequirement.target !== 'stable'
-            const requireChainValid = Boolean(plugin.enableRequirement.web3?.compositionEntryRequiresChainIDValid)
-            if (!entry || (!chainIdValid && requireChainValid)) return null
-
+            if (!entry || !operatingSupportedChainMapping[plugin.ID]) return null
             return (
                 <ErrorBoundary subject={`Plugin "${pluginField(plugin.ID, plugin.name)}"`} key={plugin.ID}>
                     {'onClick' in entry ? (

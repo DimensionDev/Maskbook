@@ -1,15 +1,20 @@
 import { useAsyncRetry } from 'react-use'
+import { unionBy } from 'lodash-es'
 import {
     getChainDetailed,
     useAccount,
     useChainId,
     FungibleTokenDetailed,
+    useFungibleTokensDetailed,
+    FungibleToken,
     useITOConstants,
     ChainId,
 } from '@masknet/web3-shared'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
-import { useAllPoolsAsBuyer } from './useAllPoolsAsBuyer'
+import { useClaimablePoolsByWeb3 } from './useClaimablePoolsByWeb3'
+import { useClaimablePoolsBySubgraph } from './useClaimablePoolsBySubgraph'
 import { useITO_Contract } from './useITO_Contract'
+import { useMemo } from 'react'
 
 export interface SwappedToken {
     pids: string[]
@@ -19,13 +24,46 @@ export interface SwappedToken {
     unlockTime: Date
 }
 
-export function useClaimAll(isMainnetOld = false) {
+export function useClaimablePools(isMainnetOld = false) {
     const account = useAccount()
     const chainId = useChainId()
     const { ITO_CONTRACT_ADDRESS } = useITOConstants()
     // Todo: Remove the code after the period that old ITO is being used and continues to be used for a while
     const { contract: ITO_Contract } = useITO_Contract(isMainnetOld ? ITO_CONTRACT_ADDRESS : undefined)
-    const { value: pools = [], loading } = useAllPoolsAsBuyer(account)
+
+    //#region fetch claimable pool
+    const { value: poolsFromSubgraph = [], loading: loadingSubgraph } = useClaimablePoolsBySubgraph()
+    const { value: poolsFromWeb3 = [], loading: loadingWeb3 } = useClaimablePoolsByWeb3()
+    // One of them works is okay
+    const loadingPool = loadingSubgraph && loadingWeb3
+    const isPoolsFromWeb3Empty = poolsFromWeb3.length === 0
+    const _pools = unionBy(poolsFromWeb3, poolsFromSubgraph, 'pid')
+    //#endregion
+
+    //#region fetch list of token detail
+    const _tokens = useMemo(
+        () =>
+            _pools.reduce<Pick<FungibleToken, 'address' | 'type'>[]>((acc, cur) => {
+                if (acc.every((p) => p.address !== cur.token.address)) acc.push(cur.token)
+                return acc
+            }, []),
+        [JSON.stringify(_pools)],
+    )
+
+    // No need to fetch token details again since subgraph returns it.
+    const { value: tokens, loading: loadingTokens } = useFungibleTokensDetailed(_tokens)
+    const pools = isPoolsFromWeb3Empty
+        ? _pools
+        : _pools.map((p, i) => {
+              if (tokens) {
+                  const token = tokens.find((t) => t.address === p.token.address)
+                  if (token) return { ...p, token }
+              }
+              return p
+          })
+    //#endregion
+
+    const loading = loadingPool || loadingTokens
 
     return useAsyncRetry(async () => {
         const chainDetailed = getChainDetailed(chainId)
@@ -36,7 +74,7 @@ export function useClaimAll(isMainnetOld = false) {
 
         const raws = await Promise.all(
             pools.map(async (value) => {
-                const availability = await (ITO_Contract as ITO2).methods.check_availability(value.pool.pid).call({
+                const availability = await (ITO_Contract as ITO2).methods.check_availability(value.pid).call({
                     from: account,
                 })
                 return { availability, ...value }
@@ -47,13 +85,13 @@ export function useClaimAll(isMainnetOld = false) {
                 (raw) =>
                     !raw.availability.claimed &&
                     raw.availability.swapped !== '0' &&
-                    raw.pool.end_time < Number(raw.availability.unlock_time) * 1000,
+                    Number(raw.availability.end_time) * 1000 < Number(raw.availability.unlock_time) * 1000,
             )
             .map((raw) => {
                 return {
-                    pids: [raw.pool.pid],
+                    pids: [raw.pid],
                     amount: Number(raw.availability.swapped),
-                    token: raw.pool.token,
+                    token: raw.token,
                     isClaimable: raw.availability.unlocked,
                     unlockTime: new Date(Number(raw.availability.unlock_time) * 1000),
                 }
@@ -75,8 +113,9 @@ export function useClaimAll(isMainnetOld = false) {
                 return acc
             }, [])
             .sort((a, b) => b.unlockTime.getTime() - a.unlockTime.getTime())
+
         return swappedTokens
-    }, [pools, account, chainId, loading])
+    }, [JSON.stringify(pools), account, chainId, loading])
 }
 
 function checkUnlockTimeEqual(cur: SwappedToken) {

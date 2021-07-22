@@ -1,4 +1,17 @@
 //#region dhedge types
+
+import type { ChainId } from '@masknet/web3-shared'
+
+export enum PoolType {
+    v1 = 'V1.0',
+    v2 = 'V2.0',
+}
+
+export enum BlockchainCode {
+    ethereum = 'ETH',
+    polygon = 'POLYGON',
+}
+
 export interface Pool {
     address: string
     name: string
@@ -10,6 +23,10 @@ export interface Pool {
     performance: string
     balanceOfManager: string
     totalSupply: string
+    blockchainCode: BlockchainCode
+    chainId: ChainId
+    poolType: PoolType
+    managerLogicAddress: string
 }
 
 export interface Fund {

@@ -1,5 +1,13 @@
-import type { SignedTransaction, Transaction, TransactionConfig, TransactionReceipt } from 'web3-core'
-import { ChainId, EthereumChainDetailed, EthereumMethodType } from '@masknet/web3-shared'
+import type {
+    SignedTransaction,
+    Transaction,
+    TransactionConfig,
+    TransactionReceipt,
+    PastLogsOptions,
+    Log,
+} from 'web3-core'
+import { first } from 'lodash-es'
+import { ChainId, EthereumChainDetailed, EthereumMethodType, getRPCConstants } from '@masknet/web3-shared'
 import { request } from './request'
 
 export async function getGasPrice() {
@@ -89,4 +97,17 @@ export async function signTransaction(config: TransactionConfig) {
         method: EthereumMethodType.ETH_SIGN_TRANSACTION,
         params: [config],
     })
+}
+
+export async function getPastLogs(config: PastLogsOptions, chainId: ChainId) {
+    const { RPC } = getRPCConstants(chainId)
+    const provderURL = first(RPC)
+    if (!provderURL) throw new Error('Unknown chain id.')
+    return request<Log[]>(
+        {
+            method: EthereumMethodType.ETH_GET_LOGS,
+            params: [config],
+        },
+        provderURL,
+    )
 }

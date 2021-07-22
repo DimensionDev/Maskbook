@@ -1,6 +1,6 @@
 import type BigNumber from 'bignumber.js'
 import { Currency, DataProvider, TradeProvider, WarningLevel, ZrxTradePool } from './types'
-import { unreachable } from '@dimensiondev/kit'
+import { safeUnreachable, unreachable } from '@dimensiondev/kit'
 import {
     BIPS_BASE,
     PRICE_IMPACT_HIGH,
@@ -9,6 +9,7 @@ import {
     PRICE_IMPACT_NON_EXPERT_BLOCKED,
     PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN,
 } from './constants'
+import { NetworkType } from '@masknet/web3-shared'
 
 export function resolveCurrencyName(currency: Currency) {
     return [
@@ -86,20 +87,30 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider) {
     }
 }
 
-export function resolveTradePairLink(tradeProvider: TradeProvider, address: string) {
+export function resolveTradePairLink(tradeProvider: TradeProvider, address: string, networkType: NetworkType) {
     switch (tradeProvider) {
         case TradeProvider.UNISWAP:
             return `https://v2.info.uniswap.org/pair/${address}`
         case TradeProvider.ZRX:
             return ''
         case TradeProvider.SUSHISWAP:
-            return `https://analytics.sushiswap.fi/pairs/${address}`
+            switch (networkType) {
+                case NetworkType.Ethereum:
+                    return `https://analytics.sushi.com/pairs/${address}`
+                case NetworkType.Binance:
+                    return `https://analytics-bsc.sushi.com/pairs/${address}`
+                case NetworkType.Polygon:
+                    return `https://analytics-polygon.sushi.com/pairs/${address}`
+                default:
+                    safeUnreachable(networkType)
+                    return ''
+            }
         case TradeProvider.SASHIMISWAP:
             return `https://info.sashimi.cool/pair/${address}`
         case TradeProvider.BALANCER:
             return `https://pools.balancer.exchange/#/pool/${address}/`
         case TradeProvider.QUICKSWAP:
-            return `https://info.quickswap.exchange/pair${address}`
+            return `https://info.quickswap.exchange/pair/${address}`
         case TradeProvider.PANCAKESWAP:
             return `https://pancakeswap.info/pool/${address}`
         default:

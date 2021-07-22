@@ -1,4 +1,5 @@
 import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
+import type { ChainId } from '@masknet/web3-shared'
 import type { Emitter } from '@servie/events'
 import type { Option, Result } from 'ts-results'
 
@@ -137,8 +138,8 @@ export namespace Plugin.Shared {
         web3?: Web3EnableRequirement
     }
     export interface Web3EnableRequirement {
-        /** This flag indicates the plugin entry in the composition entry should be hidden if the current chain is invalid. */
-        compositionEntryRequiresChainIDValid?: boolean
+        /** Plugin can declare what chain it supports. When the current chain is not supported, the composition entry will be hidden. */
+        operatingSupportedChains?: ChainId[]
     }
 
     export interface ManagementProperty {

@@ -34,11 +34,12 @@ import {
     Wallet,
 } from '@masknet/web3-shared'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon, useValueRef } from '@masknet/shared'
 import { useI18N, useMatchXS } from '../../../utils'
 import { ActionsBarFT } from './ActionsBarFT'
 import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
+import { currentEtherPriceSettings } from '../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles<
     Theme,
@@ -102,6 +103,12 @@ function ViewDetailed(props: ViewDetailedProps) {
 
     const stableTokens = useStableTokensDebank()
     const chainDetailed = useChainDetailed()
+
+    const etherPrice = useValueRef(currentEtherPriceSettings)
+
+    console.log({
+        etherPrice,
+    })
 
     if (!chainDetailed) return null
 

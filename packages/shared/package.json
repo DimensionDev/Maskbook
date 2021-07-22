@@ -6,20 +6,14 @@
     "@dimensiondev/holoflows-kit": "=0.8.0-20210429202414-74fb9a1",
     "@dimensiondev/kit": "=0.0.0-20210630045432-e05621c",
     "@masknet/theme": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
     "@masknet/web3-shared": "workspace:*",
-    "@servie/events": "^3.0.0",
     "anchorme": "^2.1.2",
-    "async-call-rpc": "^5.1.0",
     "bignumber.js": "^9.0.1",
-    "immer": "^9.0.5",
     "lodash-es": "^4.17.21",
     "qrcode": "^1.4.4",
     "react-use": "^17.2.4",
-    "ts-results": "^3.3.0",
-    "typeson": "^6.1.0",
-    "typeson-registry": "^1.0.0-alpha.38",
     "use-subscription": "^1.5.1",
-    "uuid": "^8.3.2",
-    "wallet.ts": "^1.0.1"
+    "uuid": "^8.3.2"
   }
 }
