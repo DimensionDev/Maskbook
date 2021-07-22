@@ -13,11 +13,9 @@ import {
     Typography,
 } from '@material-ui/core'
 import React, { useState } from 'react'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool'
-import type { Pool } from '../types'
 import { PerformanceChart } from './PerformanceChart'
 import { PoolStats } from './PoolStats'
 import { PoolViewDeck } from './PoolViewDeck'

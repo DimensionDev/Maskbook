@@ -11,15 +11,17 @@ import { ChainId, getDHedgeConstants } from '@masknet/web3-shared'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { escapeRegExp } from 'lodash-es'
 
-function createLinkRegExp(chainId: ChainId, link: string) {
+function createMatchLink(chainId: ChainId) {
     const BASE_URL = getDHedgeConstants(chainId).BASE_URL ?? ''
+    if (!BASE_URL) return
     return new RegExp(`${escapeRegExp(BASE_URL)}/pool/(\\w+)`)
 }
 
 function getPoolFromLink(link: string) {
     return getEnumAsArray(ChainId)
         .map(({ value: chainId }) => {
-            const [, address] = link.match(createLinkRegExp(chainId, link)) ?? []
+            const matchLink = createMatchLink(chainId)
+            const [, address] = matchLink ? link.match(matchLink) ?? [] : []
             return {
                 link,
                 address,
