@@ -3,7 +3,7 @@ import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } f
 import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Appearance, Language } from '@masknet/theme'
 import { getEnumAsObject } from '@masknet/shared'
-import { getChainName, ChainId, ProviderType, useAccount } from '@masknet/web3-shared'
+import { getChainName, ChainId, ProviderType, useAccount, PortfolioProvider } from '@masknet/web3-shared'
 
 import { useMatchXS, extendsTheme, useI18N, Flags, useValueRef } from '../../../utils'
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
@@ -36,7 +36,6 @@ import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialo
 import { currentDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
 import { resolveDataProviderName, resolveTradeProviderName } from '../../../plugins/Trader/pipes'
 import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
-import { PortfolioProvider } from '../../../plugins/Wallet/types'
 import {
     currentPortfolioDataProviderSettings,
     currentChainIdSettings,

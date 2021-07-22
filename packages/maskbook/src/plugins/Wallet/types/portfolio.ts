@@ -33,6 +33,3 @@ export interface Transaction {
     gasFee: TransactionGasFee | undefined
     transactionType: string
 }
-
-export { PortfolioProvider, CollectibleProvider } from '@masknet/web3-shared'
-export type { Asset } from '@masknet/web3-shared'
