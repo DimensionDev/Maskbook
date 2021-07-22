@@ -1,12 +1,12 @@
-import { useURLConstants } from '@masknet/web3-shared'
+import { useDHedgeConstants } from '@masknet/web3-shared'
 import { escapeRegExp } from 'lodash-es'
 
 export function useBaseUrl() {
-    return useURLConstants().BASE_URL
+    return useDHedgeConstants().BASE_URL
 }
 
 export function useApiURL() {
-    return useURLConstants().API_URL
+    return useDHedgeConstants().API_URL
 }
 
 export function usePoolURL(address: string) {
