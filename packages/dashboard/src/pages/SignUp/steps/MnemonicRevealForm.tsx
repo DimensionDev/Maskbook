@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../type'
 import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { Button, makeStyles } from '@material-ui/core'
+import { Button, Stack } from '@material-ui/core'
 import { useDashboardI18N } from '../../../locales'
 import { DesktopMnemonicConfirm, MnemonicRevealLG } from '../../../components/Mnemonic'
 import { SignUpRoutePath } from '../routePath'
@@ -18,13 +18,6 @@ import { memo, useState } from 'react'
 import { some } from 'lodash-es'
 import { useSnackbar } from '@masknet/theme'
 import { ButtonGroup } from '../../../components/RegisterFrame/ButtonGroup'
-
-const useStyles = makeStyles((theme) => ({
-    refresh: {
-        paddingBottom: 32,
-        textAlign: 'right',
-    },
-}))
 
 enum CreateWalletStep {
     NameAndWords = 0,
@@ -36,7 +29,6 @@ export const MnemonicRevealForm = memo(() => {
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar()
     const t = useDashboardI18N()
-    const classes = useStyles()
     const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
 
     const onSubmit = async () => {
@@ -65,11 +57,14 @@ export const MnemonicRevealForm = memo(() => {
                 <SignUpAccountLogo />
                 {step === CreateWalletStep.NameAndWords && (
                     <div>
-                        <div className={classes.refresh}>
+                        <Stack
+                            direction="row"
+                            justifyContent="flex-end"
+                            sx={{ marginBottom: (theme) => theme.spacing(4) }}>
                             <Button variant="text" startIcon={<RefreshIcon />} onClick={refreshCallback}>
                                 {t.refresh()}
                             </Button>
-                        </div>
+                        </Stack>
                         <MnemonicRevealLG words={words} />
                         <ButtonGroup>
                             <Button variant="rounded" color="secondary">

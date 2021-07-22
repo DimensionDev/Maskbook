@@ -57,7 +57,7 @@ export const ConnectSocialMedia = () => {
             <Body>
                 <SignUpAccountLogo />
                 <div>
-                    <Stack direction="row" justifyContent="flex-end">
+                    <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(4) }}>
                         <Button variant="text" onClick={() => {}}>
                             {t.go_back()}
                         </Button>
