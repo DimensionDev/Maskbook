@@ -5,7 +5,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { WalletRPC } from '../messages'
 import { currentPortfolioDataProviderSettings } from '../settings'
 import { PortfolioProvider, Transaction } from '../types'
-import { getNetworkTypeFromChainId, useChainId, useNetworkType } from '@masknet/web3-shared'
+import { getNetworkTypeFromChainId, useChainId } from '@masknet/web3-shared'
 
 export function useTransactions(
     address: string,
