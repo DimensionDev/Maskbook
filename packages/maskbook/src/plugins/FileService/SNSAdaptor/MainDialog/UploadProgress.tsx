@@ -1,6 +1,6 @@
-import { memo } from 'react'
-import { experimentalStyled as styled, Typography, LinearProgress, makeStyles, Link } from '@material-ui/core'
 import { formatFileSize } from '@dimensiondev/kit'
+import { experimentalStyled as styled, LinearProgress, Link, makeStyles, Typography } from '@material-ui/core'
+import { memo } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     file: {},

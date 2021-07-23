@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
 export interface FilePathProps {
     name: string
 }
+
 export const FilePath = memo<FilePathProps>(({ name }) => {
     const classes = useStyles()
     return (

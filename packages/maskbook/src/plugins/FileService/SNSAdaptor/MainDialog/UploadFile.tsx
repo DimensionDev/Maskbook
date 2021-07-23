@@ -1,14 +1,14 @@
 import { formatFileSize } from '@dimensiondev/kit'
+import { UploadFileIcon } from '@masknet/icons'
 import { useSnackbar } from '@masknet/theme'
-import { Button, makeStyles, Typography, experimentalStyled as styled } from '@material-ui/core'
+import { Button, experimentalStyled as styled, makeStyles, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { memo, useCallback, useState } from 'react'
 import { useDropArea } from 'react-use'
 import { useI18N } from '../../../../utils'
-import { ArweaveCheckButtons } from './Arweave'
-import { UploadFileIcon } from '@masknet/icons'
-import { UploadFilesList } from './FileList'
 import { MAX_FILE_SIZE } from '../../constants'
+import { ArweaveCheckButtons } from './Arweave'
+import { UploadFilesList } from './FileList'
 
 const useUploadFileStyles = makeStyles((theme) => ({
     root: {

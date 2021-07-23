@@ -1,20 +1,17 @@
 import { DialogContent } from '@material-ui/core'
-import { useCallback } from 'react'
-import { useI18N } from '../../../utils'
+import type { FC } from 'react'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
+import { useI18N } from '../../../utils'
+import { FilePath } from './MainDialog/FileName'
 import { UploadFilePage } from './MainDialog/UploadFilePage'
 import { UploadFileProgress } from './MainDialog/UploadProgress'
-import { FilePath } from './MainDialog/FileName'
 
 export interface FileServiceDialogNewProps extends InjectedDialogProps {
     onClose: () => void
 }
 
-export const FileServiceDialogNew: React.FC<FileServiceDialogNewProps> = ({ open, onClose }) => {
+export const FileServiceDialogNew: FC<FileServiceDialogNewProps> = ({ open, onClose }) => {
     const { t } = useI18N()
-
-    const onInsert = useCallback(() => {}, [])
-
     return (
         <InjectedDialog title={t('plugin_file_service_display_name')} open={open} onClose={onClose}>
             <DialogContent>

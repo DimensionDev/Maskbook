@@ -1,9 +1,10 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { Checkbox, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core'
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { memo, useEffect, useState } from 'react'
 import { FileIcon } from './File'
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
-const useStyles = makeStyles((theme) => ({
+
+const useStyles = makeStyles(() => ({
     icon: {
         alignItems: 'center',
     },
@@ -15,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     },
     text: {},
 }))
+
 export interface UploadFilesListProps {
     files: File[]
     onChange: (files: File[]) => void
