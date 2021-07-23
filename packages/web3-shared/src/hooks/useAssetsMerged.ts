@@ -16,14 +16,7 @@ export function useAssetsMerged(...listOfTokens: Asset[][]) {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     if (!NATIVE_TOKEN_ADDRESS) return []
     return uniqBy(
-        [
-            {
-                token: createNativeToken(chainId),
-                chain: chainDetailed?.chain.toLowerCase() ?? 'unknown',
-                balance: '0',
-            },
-            ...listOfTokens.flatMap((x) => x),
-        ],
+        listOfTokens.flatMap((x) => x),
         (x) => `${x.chain}_${formatEthereumAddress(x.token.address)}`,
     ).sort((a, z) => {
         // the tokens with the current chain id goes first
