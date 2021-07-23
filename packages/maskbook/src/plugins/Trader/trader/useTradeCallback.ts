@@ -54,7 +54,9 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
 
     // handle trades by various provider
     switch (provider) {
-        case TradeProvider.UNISWAP:
+        case TradeProvider.UNISWAP_V2:
+            return uniswap
+        case TradeProvider.UNISWAP_V3:
             return uniswap
         case TradeProvider.SUSHISWAP:
             return sushiswap

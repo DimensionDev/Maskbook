@@ -71,7 +71,7 @@ export function Trader(props: TraderProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const context = useContext(TradeContext)
-    const provider = context?.TYPE ?? TradeProvider.UNISWAP
+    const provider = context?.TYPE ?? TradeProvider.UNISWAP_V2
 
     //#region trade state
     const {

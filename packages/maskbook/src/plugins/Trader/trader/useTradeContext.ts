@@ -25,10 +25,22 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                 return {
                     TYPE: tradeProvider,
                     IS_UNISWAP_LIKE: true,
-                    GRAPH_API: getTraderConstants(chainId).UNISWAP_THEGRAPH,
-                    INIT_CODE_HASH: getTraderConstants(chainId).UNISWAP_INIT_CODE_HASH,
-                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_ROUTER_ADDRESS,
-                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_FACTORY_ADDRESS,
+                    GRAPH_API: getTraderConstants(chainId).UNISWAP_V2_THEGRAPH,
+                    INIT_CODE_HASH: getTraderConstants(chainId).UNISWAP_V2_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_V2_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_V2_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: UNISWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: UNISWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.UNISWAP_V3:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_LIKE: true,
+                    GRAPH_API: getTraderConstants(chainId).UNISWAP_V2_THEGRAPH,
+                    INIT_CODE_HASH: getTraderConstants(chainId).UNISWAP_V2_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_V2_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_V2_FACTORY_ADDRESS,
                     AGAINST_TOKENS: UNISWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: UNISWAP_CUSTOM_BASES,

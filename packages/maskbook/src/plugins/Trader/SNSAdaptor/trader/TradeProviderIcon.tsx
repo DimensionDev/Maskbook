@@ -25,7 +25,9 @@ export interface TradeProviderIconProps {
 export function TradeProviderIcon(props: TradeProviderIconProps) {
     const classes = useStyles()
     switch (props.provider) {
-        case TradeProvider.UNISWAP:
+        case TradeProvider.UNISWAP_V2:
+            return <UniswapIcon classes={{ root: classes.icon }} />
+        case TradeProvider.UNISWAP_V3:
             return <UniswapIcon classes={{ root: classes.icon }} />
         case TradeProvider.ZRX:
             return <ZRXIcon classes={{ root: classes.icon }} />

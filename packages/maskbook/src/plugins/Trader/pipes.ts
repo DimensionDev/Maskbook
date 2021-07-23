@@ -49,6 +49,8 @@ export function resolveTradeProviderName(tradeProvider: TradeProvider) {
     switch (tradeProvider) {
         case TradeProvider.UNISWAP_V2:
             return 'Uniswap V2'
+        case TradeProvider.UNISWAP_V3:
+            return 'Uniswap V3'
         case TradeProvider.ZRX:
             return '0x'
         case TradeProvider.SUSHISWAP:
@@ -70,6 +72,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider) {
     switch (tradeProvider) {
         case TradeProvider.UNISWAP_V2:
             return 'https://app.uniswap.org/#/swap?use=V2'
+        case TradeProvider.UNISWAP_V3:
+            return 'https://app.uniswap.org/#/swap?use=V3'
         case TradeProvider.ZRX:
             return 'https://0x.org/'
         case TradeProvider.SUSHISWAP:
@@ -89,8 +93,10 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider) {
 
 export function resolveTradePairLink(tradeProvider: TradeProvider, address: string, networkType: NetworkType) {
     switch (tradeProvider) {
-        case TradeProvider.UNISWAP:
+        case TradeProvider.UNISWAP_V2:
             return `https://v2.info.uniswap.org/pair/${address}`
+        case TradeProvider.UNISWAP_V3:
+            return `https://info.uniswap.org/pair/${address}`
         case TradeProvider.ZRX:
             return ''
         case TradeProvider.SUSHISWAP:

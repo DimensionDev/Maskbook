@@ -85,7 +85,8 @@ export function useTradeComputed(
         }
 
     switch (provider) {
-        case TradeProvider.UNISWAP:
+        case TradeProvider.UNISWAP_V2:
+        case TradeProvider.UNISWAP_V3:
         case TradeProvider.SUSHISWAP:
         case TradeProvider.SASHIMISWAP:
         case TradeProvider.QUICKSWAP:

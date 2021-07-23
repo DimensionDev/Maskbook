@@ -5,7 +5,7 @@ import { TradeProvider } from '../types'
 
 export function useCurrentTradeProvider(availableTradeProviders: TradeProvider[]) {
     const [tradeProvider, setTradeProvider] = useState(
-        availableTradeProviders.length ? availableTradeProviders[0] : TradeProvider.UNISWAP,
+        availableTradeProviders.length ? availableTradeProviders[0] : TradeProvider.UNISWAP_V2,
     )
     const currentTradeProvider = useValueRef(currentTradeProviderSettings)
 

@@ -10,6 +10,7 @@ export async function getAvailableTraderProviders(type?: TagType, keyword?: stri
         case NetworkType.Ethereum:
             return [
                 TradeProvider.UNISWAP_V2,
+                TradeProvider.UNISWAP_V3,
                 TradeProvider.SUSHISWAP,
                 TradeProvider.SASHIMISWAP,
                 TradeProvider.ZRX,

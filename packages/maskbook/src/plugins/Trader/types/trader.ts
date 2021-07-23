@@ -3,6 +3,7 @@ import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDet
 
 export enum TradeProvider {
     UNISWAP_V2,
+    UNISWAP_V3,
     ZRX, // 0x
     // ONE_INCH,
     SUSHISWAP,

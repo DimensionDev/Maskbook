@@ -4,6 +4,6 @@ import { useContract, useTraderConstants } from '@masknet/web3-shared'
 import type { AbiItem } from 'web3-utils'
 
 export function useRouterV2Contract() {
-    const { UNISWAP_ROUTER_ADDRESS } = useTraderConstants()
-    return useContract<RouterV2>(UNISWAP_ROUTER_ADDRESS, RouterV2ABI as AbiItem[])
+    const { UNISWAP_V2_ROUTER_ADDRESS } = useTraderConstants()
+    return useContract<RouterV2>(UNISWAP_V2_ROUTER_ADDRESS, RouterV2ABI as AbiItem[])
 }

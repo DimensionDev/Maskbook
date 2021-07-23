@@ -485,6 +485,7 @@
     "plugin_trader_settings_trade_provider_primary": "교환 네트워크 선택",
     "plugin_trader_settings_trade_provider_secondary": "서로 다른 교환 네트워크에서 암호화폐 교환하기",
     "plugin_trader_slipage_tolerance": "슬리피지 톨러런스:",
+    "plugin_trader_single_hop_only": "",
     "plugin_trader_swap_settings": "스왑 설정",
     "plugin_poll_display_name": "플러그인: 투표",
     "plugin_poll_question_hint": "질문하기",

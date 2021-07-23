@@ -53,6 +53,7 @@
     "@ungap/promise-all-settled": "^1.1.2",
     "@uniswap/sdk-core": "^3.0.0",
     "@uniswap/v2-sdk": "^3.0.0",
+    "@uniswap/v3-sdk": "^3.1.0",
     "@walletconnect/client": "^1.2.2",
     "anchorme": "^2.1.2",
     "arweave": "^1.10.13",

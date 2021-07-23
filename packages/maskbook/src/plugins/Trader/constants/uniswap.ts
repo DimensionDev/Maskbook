@@ -1,7 +1,6 @@
 import JSBI from 'jsbi'
 import { ChainId, ERC20TokenDetailed } from '@masknet/web3-shared'
 import { Percent } from '@uniswap/sdk-core'
-import { INIT_CODE_HASH } from '@uniswap/v2-sdk'
 import { AMPL, DAI, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WETH, WETH_ONLY } from './trader'
 
 /**
@@ -25,10 +24,6 @@ export const UNISWAP_BASE_AGAINST_TOKENS: {
     [ChainId.Mainnet]: [WETH, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Mainnet]),
     [ChainId.Rinkeby]: [WETH, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),
 }
-
-export const THEGRAPH_UNISWAP_V2 = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2'
-
-export const UNISWAP_INIT_CODE_HASH = INIT_CODE_HASH
 
 export const MAX_HOP = 3
 
