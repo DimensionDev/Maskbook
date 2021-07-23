@@ -1,6 +1,4 @@
-import type { NetworkType } from '@masknet/web3-shared'
 import io from 'socket.io-client'
-import { resolveZerionAssetsScopeName } from '../pipes'
 import type {
     SocketRequestBody,
     SocketNameSpace,
