@@ -28,7 +28,7 @@ export async function writeMessages(name: string, messages: unknown) {
 
 export async function findAllUsedKeys() {
     const usedKeys: string[] = []
-    for await (const file of walk(SOURCE_PATH)) {
+    for await (const file of walk(SOURCE_PATH, /\.(tsx?)$/)) {
         usedKeys.push(...getUsedKeys(await fs.readFile(file, 'utf-8')))
     }
     return uniq(usedKeys)

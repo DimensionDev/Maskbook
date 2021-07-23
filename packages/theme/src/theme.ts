@@ -6,7 +6,7 @@ import type { PaletteOptions } from '@material-ui/core/styles/createPalette'
 import { DarkColor, LightColor, Color } from './constants'
 
 import { createMakeStyles } from 'tss-react'
-export const makeStyles = createMakeStyles({ useTheme })
+export const makeStyles = createMakeStyles({ useTheme }).makeStyles
 
 const color = (mode: PaletteMode, color: Color): PaletteOptions => ({
     mode,

@@ -1,14 +1,16 @@
 /// <reference path="./custom-ui.d.ts" />
 // Priority: classes from props > configHooks > defaultStyles
 export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
-    defaultStyles: Record<InternalKeys, string>,
+    defaultStyles: { classes: Record<InternalKeys, string> } | Record<InternalKeys, string>,
     props: withClasses<OverwrittenKeys>,
     useConfigHooks?: () => Partial<Record<OverwrittenKeys, string>>,
 ): Record<InternalKeys, string> & Partial<Record<OverwrittenKeys, string>> {
     // Note: this is a React hooks
     const configOverwrite = useConfigHooks?.()
     const propsOverwrite = props.classes
-    return mergeClasses<any>(defaultStyles, configOverwrite, propsOverwrite) as any
+    // TODO: remove Record<InternalKeys, string> in defaultStyles after old makeStyles removed.
+    const result = 'classes' in defaultStyles ? defaultStyles.classes : defaultStyles
+    return mergeClasses<any>(result, configOverwrite, propsOverwrite) as any
 }
 
 export function mergeClasses<T extends string>(
