@@ -36,7 +36,6 @@
     "@material-ui/lab": "5.0.0-alpha.34",
     "@material-ui/styles": "5.0.0-alpha.33",
     "@material-ui/system": "5.0.0-alpha.34",
-    "@uniswap/v3-sdk": "3.2.1",
     "@types/react": "^17.0.14",
     "@types/react-dom": "^17.0.9",
     "i18next": "^20.3.2",
