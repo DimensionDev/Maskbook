@@ -20,3 +20,14 @@ export enum MarketTrendProvider {
     COIN_MARKET_CAP,
     UNISWAP_INFO,
 }
+
+export enum TradeProvider {
+    UNISWAP,
+    ZRX, // 0x
+    // ONE_INCH,
+    SUSHISWAP,
+    SASHIMISWAP,
+    BALANCER,
+    QUICKSWAP,
+    PANCAKESWAP,
+}

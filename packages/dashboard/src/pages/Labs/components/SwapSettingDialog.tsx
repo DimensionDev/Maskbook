@@ -1,7 +1,13 @@
 import { MaskDialog } from '@masknet/theme'
 import { DialogContent } from '@material-ui/core'
-import { useState } from 'react'
+import { Services } from '../../../API'
 import { useDashboardI18N } from '../../../locales'
+import { TradeProvider } from '../../../type'
+import {
+    useBscNetworkTradeProvider,
+    useEthNetworkTradeProvider,
+    usePolygonNetworkTradeProvider,
+} from '../../Settings/api'
 
 import SettingItem from './SettingItem'
 
@@ -11,31 +17,50 @@ export interface SettingDialogProps {
 }
 export default function SwapSettingDialog({ open, onClose }: SettingDialogProps) {
     const ethOptions = [
-        { label: 'UniSwap', value: 0 },
-        { label: 'SushiSwap', value: 1 },
-        { label: 'Ox', value: 2 },
+        { label: 'UniSwap V2', value: TradeProvider.UNISWAP },
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+        { label: 'SashimiSwap', value: TradeProvider.SASHIMISWAP },
+        { label: 'Ox', value: TradeProvider.ZRX },
+        { label: 'Balancer', value: TradeProvider.BALANCER },
     ]
 
     const t = useDashboardI18N()
 
-    // TODO: save setting
-    const [ethValue, setEthValue] = useState(0)
+    const ethNetworkTradeProvider = useEthNetworkTradeProvider()
+    const polygonNetworkTradeProvider = usePolygonNetworkTradeProvider()
+    const bscNetworkTradeProvider = useBscNetworkTradeProvider()
 
-    const polygonOptions = [{ label: 'QuickSwap', value: 0 }]
+    const polygonOptions = [
+        { label: 'QuickSwap', value: TradeProvider.QUICKSWAP },
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+    ]
 
-    const bscOptions = [{ label: 'PancakeSwap', value: 0 }]
+    const bscOptions = [
+        { label: 'PancakeSwap', value: TradeProvider.PANCAKESWAP },
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+    ]
 
     return (
         <MaskDialog title={t.labs_settings_swap()} open={open} onClose={onClose}>
             <DialogContent sx={{ padding: '16px 40px 24px' }}>
                 <SettingItem
                     legend={t.labs_settings_swap_eth()}
-                    value={ethValue}
+                    value={ethNetworkTradeProvider}
                     options={ethOptions}
-                    onChange={(value) => setEthValue(+value)}
+                    onChange={(value) => Services.Settings.setEthNetworkTradeProvider(+value)}
                 />
-                <SettingItem legend={t.labs_settings_swap_polygon()} value={0} options={polygonOptions} />
-                <SettingItem legend={t.labs_settings_swap_bsc()} value={0} options={bscOptions} />
+                <SettingItem
+                    legend={t.labs_settings_swap_polygon()}
+                    value={polygonNetworkTradeProvider}
+                    options={polygonOptions}
+                    onChange={(value) => Services.Settings.setPolygonNetworkTradeProvider(+value)}
+                />
+                <SettingItem
+                    legend={t.labs_settings_swap_bsc()}
+                    value={bscNetworkTradeProvider}
+                    options={bscOptions}
+                    onChange={(value) => Services.Settings.setBscNetworkTradeProvider(+value)}
+                />
             </DialogContent>
         </MaskDialog>
     )
