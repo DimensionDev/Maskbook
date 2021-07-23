@@ -10,7 +10,6 @@ import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage'
 import { gotoProfilePageTwitter } from './automation/gotoProfilePage'
 import { IdentityProviderTwitter } from './collecting/identity'
 import { PostProviderTwitter } from './collecting/post'
-import { profilesCollectorTwitter } from './collecting/profiles'
 import {
     PaletteModeProviderTwitter,
     useInjectedDialogClassesOverwriteTwitter,
@@ -52,7 +51,6 @@ const twitterUI: SocialNetworkUI.Definition = {
     collecting: {
         identityProvider: IdentityProviderTwitter,
         postsProvider: PostProviderTwitter,
-        profilesCollector: profilesCollectorTwitter,
         getSearchedKeyword: getSearchedKeywordAtTwitter,
     },
     customization: {

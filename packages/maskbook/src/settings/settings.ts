@@ -36,11 +36,6 @@ export const languageSettings = createGlobalSettings<Language>(
 )
 //#endregion
 
-export const enableGroupSharingSettings = createGlobalSettings<boolean>('experimental/group-sharing@sept2020', false, {
-    primary: () => 'Experimental: Enable group sharing',
-    secondary: () => '(Unstable) Automatically share posts to a group',
-})
-
 //#region network setting
 
 /**

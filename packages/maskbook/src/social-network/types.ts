@@ -178,8 +178,6 @@ export namespace SocialNetworkUI {
     }
     export namespace CollectingCapabilities {
         export interface Define {
-            /** Collect all profiles seen on the network */
-            profilesCollector?(signal: AbortSignal): void
             /** Resolve the information of who am I on the current network. */
             identityProvider?: IdentityResolveProvider
             /** Maintain all the posts up-to-date. */

@@ -14,7 +14,6 @@ import { injectPostCommentsDefault } from '../../social-network/defaults/inject/
 import { pasteToCommentBoxFacebook } from './automation/pasteToCommentBoxFacebook'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/inject/CommentBox'
 import { injectPostInspectorFacebook } from './injection/PostInspector'
-import { profilesCollectorFacebook } from './collecting/profiles'
 import { PostProviderFacebook } from './collecting/posts'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
@@ -57,7 +56,6 @@ const facebookUI: SocialNetworkUI.Definition = {
         },
     },
     collecting: {
-        profilesCollector: profilesCollectorFacebook,
         identityProvider: IdentityProviderFacebook,
         postsProvider: PostProviderFacebook,
     },

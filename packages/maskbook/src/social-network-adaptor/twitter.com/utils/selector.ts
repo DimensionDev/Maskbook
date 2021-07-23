@@ -61,15 +61,6 @@ export const floatingBioCardSelector = () =>
     querySelector<HTMLSpanElement>(
         `[style~="left:"] a[role=link] > div:first-child > div:first-child > div:first-child[dir="auto"]`,
     )
-export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
-    querySelector<HTMLDivElement, SingleMode>(
-        [
-            '.profile', // legacy twitter
-            'a[href*="header_photo"] ~ div', // new twitter
-            'div[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div ~ div', // new twitter without header photo
-        ].join(),
-        singleMode,
-    )
 
 export const postsImageSelector = (node: HTMLElement) =>
     new LiveSelector([node]).querySelectorAll<HTMLElement>(

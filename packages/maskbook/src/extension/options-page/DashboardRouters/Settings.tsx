@@ -12,7 +12,6 @@ import {
     languageSettings,
     allPostReplacementSettings,
     appearanceSettings,
-    enableGroupSharingSettings,
     launchPageSettings,
     newDashboardConnection,
 } from '../../../settings/settings'
@@ -24,7 +23,6 @@ import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined'
-import ShareIcon from '@material-ui/icons/ShareOutlined'
 import FlipToFrontIcon from '@material-ui/icons/FlipToFront'
 import PaletteIcon from '@material-ui/icons/Palette'
 import LanguageIcon from '@material-ui/icons/Language'
@@ -279,11 +277,6 @@ export default function DashboardSettingsRouter() {
                                     classes={listStyle}
                                     icon={<FlipToFrontIcon />}
                                     value={allPostReplacementSettings}
-                                />
-                                <SettingsUI
-                                    classes={listStyle}
-                                    icon={<ShareIcon />}
-                                    value={enableGroupSharingSettings}
                                 />
                                 {process.env.NODE_ENV === 'development' || process.env.build !== 'stable' ? (
                                     <SettingsUI

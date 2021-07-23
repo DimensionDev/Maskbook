@@ -114,18 +114,10 @@ export class ProfileIdentifier extends Identifier {
         return new ProfileIdentifier(network, userId)
     }
 }
-export enum PreDefinedVirtualGroupNames {
-    friends = '_default_friends_group_',
-    followers = '_followers_group_',
-    following = '_following_group_',
-}
 @serialize('GroupIdentifier')
 export class GroupIdentifier extends Identifier {
     static getFriendsGroupIdentifier(who: ProfileIdentifier, groupId: string) {
         return new GroupIdentifier(who.network, who.userId, groupId)
-    }
-    static getDefaultFriendsGroupIdentifier(who: ProfileIdentifier) {
-        return new GroupIdentifier(who.network, who.userId, PreDefinedVirtualGroupNames.friends)
     }
     constructor(
         public readonly network: string,

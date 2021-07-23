@@ -2,8 +2,7 @@ import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
 import { defaultTo, flattenDeep } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
-import { ProfileIdentifier } from '../../../database/type'
-import { twitterUrl, canonifyImgUrl } from './url'
+import { canonifyImgUrl } from './url'
 import {
     makeTypedMessageText,
     makeTypedMessageAnchor,
@@ -58,47 +57,6 @@ const serializeToText = (node: ChildNode): string => {
 
 const isMobilePost = (node: HTMLElement) => {
     return node.classList.contains('tweet') ?? node.classList.contains('main-tweet')
-}
-
-export const bioCardParser = (cardNode: HTMLDivElement) => {
-    if (cardNode.classList.contains('profile')) {
-        const avatarElement = cardNode.querySelector<HTMLImageElement>('.avatar img')
-        const { name, handle } = parseNameArea(
-            [
-                notNullable(cardNode.querySelector<HTMLTableCellElement>('.user-info .fullname')).innerText,
-                notNullable(cardNode.querySelector<HTMLTableCellElement>('.user-info .screen-name')).innerText,
-            ].join('@'),
-        )
-        const bio = notNullable(cardNode.querySelector('.details') as HTMLTableCellElement).innerText
-        const isFollower = !!cardNode.querySelector<HTMLSpanElement>('.follows-you')
-        const isFollowing =
-            notNullable(cardNode.querySelector<HTMLFormElement>('.profile-actions form')).action.indexOf('unfollow') >
-            -1
-        return {
-            avatar: avatarElement ? avatarElement.src : undefined,
-            name,
-            handle,
-            identifier: new ProfileIdentifier(twitterUrl.hostIdentifier, handle),
-            bio,
-            isFollower,
-            isFollowing,
-        }
-    } else {
-        const avatarElement = cardNode.querySelector<HTMLImageElement>('img')
-        const { name, handle } = parseNameArea(notNullable(cardNode.children[1] as HTMLDivElement).innerText)
-        const bio = notNullable(cardNode.children[2] as HTMLDivElement).innerHTML
-        const isFollower = !!nthChild(cardNode, 1, 0, 0, 1, 1, 0)
-        const isFollowing = !!cardNode.querySelector('[data-testid*="unfollow"]')
-        return {
-            avatar: avatarElement ? avatarElement.src : undefined,
-            name,
-            handle,
-            identifier: new ProfileIdentifier(twitterUrl.hostIdentifier, handle),
-            bio,
-            isFollower,
-            isFollowing,
-        }
-    }
 }
 
 export const postIdParser = (node: HTMLElement) => {
