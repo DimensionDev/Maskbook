@@ -150,7 +150,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
             if (snackbarKeyRef.current) {
                 snackbar.closeSnackbar(snackbarKeyRef.current)
             }
-            snackbarKeyRef.current = snackbar.enqueueSnackbar('Create a Red Packet', {
+            snackbarKeyRef.current = snackbar.enqueueSnackbar(t('plugin_red_packet_create'), {
                 variant: options.variant,
                 persist: options.persist ?? true,
                 content: (key, title) => {
@@ -191,7 +191,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
         try {
             showSnackbar({
                 processing: true,
-                message: 'Comfirm this transaction in your  wallet',
+                message: t('plugin_red_packet_confirm_in_wallet'),
             })
             signedPassword = await Services.Ethereum.personalSign(Web3Utils.sha3(paramsObj.message) ?? '', account)
         } catch (error) {
@@ -241,7 +241,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
                 transactionLinkRef.current = resolveTransactionLinkOnExplorer(token.chainId, hash)
                 showSnackbar({
                     processing: true,
-                    message: 'Transaction Submitted',
+                    message: t('plugin_red_packet_transaction_submitted'),
                     link: transactionLinkRef.current,
                 })
             })
@@ -255,7 +255,10 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
                 showSnackbar({
                     persist: false,
                     variant: 'success',
-                    message: `Sent ${value}${token.symbol}  success`,
+                    message: t('plugin_red_packet_success', {
+                        value,
+                        symbol: token.symbol,
+                    }),
                     link: transactionLinkRef.current,
                 })
             })
@@ -269,7 +272,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
                 })
                 showSnackbar({
                     processing: true,
-                    message: 'Transaction Submitted',
+                    message: t('plugin_red_packet_transaction_submitted'),
                     link: transactionLinkRef.current,
                 })
                 resolve()
@@ -283,7 +286,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
                 reject(error)
                 showSnackbar({
                     variant: 'error',
-                    message: 'Transation rejected',
+                    message: t('plugin_red_packet_transaction_rejected'),
                     link: transactionLinkRef.current,
                 })
             })
