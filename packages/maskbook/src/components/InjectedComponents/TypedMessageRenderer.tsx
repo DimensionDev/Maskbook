@@ -1,5 +1,6 @@
 import { Fragment, memo, createElement } from 'react'
-import { Typography, Link, makeStyles } from '@material-ui/core'
+import { Typography, Link } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import anchorme from 'anchorme'
 import classNames from 'classnames'
 import {
@@ -19,7 +20,6 @@ import { useAsync } from 'react-use'
 import { getRendererOfTypedMessage } from '../../protocols/typed-message'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { PayloadReplacer } from './PayloadReplacer'
-
 interface MetadataRendererProps {
     metadata: TypedMessage['meta']
     message: TypedMessage
@@ -37,14 +37,12 @@ export interface TypedMessageRendererProps<T extends TypedMessage> {
         after?: React.ComponentType<MetadataRendererProps>
     }
 }
-
 export const DefaultTypedMessageRenderer = memo(function DefaultTypedMessageRenderer(
     props: TypedMessageRendererProps<TypedMessage>,
 ) {
     const Renderer = getRendererOfTypedMessage(props.message)[0]?.component || DefaultTypedMessageUnknownRenderer
     return <Renderer {...props} message={props.message} />
 })
-
 export const DefaultTypedMessageTextRenderer = memo(function DefaultTypedMessageTextRenderer(
     props: TypedMessageRendererProps<TypedMessageText>,
 ) {
@@ -66,7 +64,6 @@ registerTypedMessageRenderer('text', {
     id: 'maskbook.text',
     priority: 0,
 })
-
 export const DefaultTypedMessageAnchorRenderer = memo(function DefaultTypedMessageAnchorRenderer(
     props: TypedMessageRendererProps<TypedMessageAnchor>,
 ) {
@@ -91,7 +88,6 @@ registerTypedMessageRenderer('x-anchor', {
     id: 'maskbook.anchor',
     priority: 0,
 })
-
 export const DefaultTypedMessageImageRenderer = memo(function DefaultTypedMessageImageRenderer(
     props: TypedMessageRendererProps<TypedMessageImage>,
 ) {
@@ -108,7 +104,6 @@ registerTypedMessageRenderer('image', {
     id: 'maskbook.image',
     priority: 0,
 })
-
 export const DefaultTypedMessageTupleRenderer = memo(function DefaultTypedMessageTupleRenderer(
     props: TypedMessageRendererProps<TypedMessageTuple>,
 ) {
@@ -136,7 +131,6 @@ registerTypedMessageRenderer('tuple', {
     id: 'maskbook.compound',
     priority: 0,
 })
-
 export const DefaultTypedMessageEmptyRenderer = memo(function DefaultTypedMessageEmptyRenderer(
     props: TypedMessageRendererProps<TypedMessageEmpty>,
 ) {
@@ -147,7 +141,6 @@ registerTypedMessageRenderer('empty', {
     id: 'maskbook.empty',
     priority: 0,
 })
-
 export const DefaultTypedMessageUnknownRenderer = memo(function DefaultTypedMessageUnknownRenderer(
     props: TypedMessageRendererProps<TypedMessageUnknown>,
 ) {
@@ -158,13 +151,11 @@ registerTypedMessageRenderer('unknown', {
     id: 'maskbook.unknown',
     priority: 0,
 })
-
 export const DefaultTypedMessageSuspendedRenderer = memo(function DefaultTypedMessageSuspendedRenderer(
     props: TypedMessageRendererProps<TypedMessagePromise>,
 ) {
     const { promise } = props.message
     const { loading, error, value } = useAsync(() => promise, [promise])
-
     return renderWithMetadata(
         props,
         loading ? (
@@ -181,11 +172,9 @@ registerTypedMessageRenderer('promise', {
     id: 'maskbook.suspended',
     priority: 0,
 })
-
 function DefaultMetadataRender() {
     return null
 }
-
 function renderWithMetadata(props: TypedMessageRendererProps<TypedMessage>, jsx: React.ReactNode) {
     const Before = props.metadataRenderer?.before || DefaultMetadataRender
     const After = props.metadataRenderer?.after || DefaultMetadataRender
@@ -199,31 +188,26 @@ function renderWithMetadata(props: TypedMessageRendererProps<TypedMessage>, jsx:
         </>
     )
 }
-
 const RenderText = memo(function RenderText(props: { text: string; allowTextEnlarge: boolean }) {
     return createElement(Fragment, {}, ...parseText(props.text, props.allowTextEnlarge))
 })
-
 interface ParseTextProps {
     text: string
     fontSize: number
 }
-
 interface ParseTextLinkProps extends ParseTextProps {
     link: string
 }
-
-const useStyle = makeStyles((theme) => ({
+const useStyle = makeStyles<number>()((theme, fontSize) => ({
     link: {
         color: theme.palette.primary.main,
     },
     text: {
-        fontSize: (fontSize) => Number(fontSize) + 'rem',
+        fontSize: Number(fontSize) + 'rem',
     },
 }))
-
 const ParseTextLink = memo(function ParseTextLink({ link, text, fontSize }: ParseTextLinkProps) {
-    const classes = useStyle(fontSize)
+    const { classes } = useStyle(fontSize)
     return (
         <Link
             className={classNames(classes.text, classes.link)}
@@ -235,12 +219,10 @@ const ParseTextLink = memo(function ParseTextLink({ link, text, fontSize }: Pars
         </Link>
     )
 })
-
 const ParseText = memo(function ParseText({ text, fontSize }: ParseTextProps) {
-    const classes = useStyle(fontSize)
+    const { classes } = useStyle(fontSize)
     return <span className={classes.text}>{text}</span>
 })
-
 function parseText(string: string, allowTextEnlarge: boolean) {
     const links = anchorme.list(string)
     let current = string
@@ -250,7 +232,6 @@ function parseText(string: string, allowTextEnlarge: boolean) {
             : allowTextEnlarge && Array.from(current).length < 85
             ? 1.2
             : 1
-
     const result = []
     while (current.length) {
         const search1 = current.indexOf('\n')

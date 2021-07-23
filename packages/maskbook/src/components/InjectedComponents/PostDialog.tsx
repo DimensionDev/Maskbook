@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
 import {
-    makeStyles,
     InputBase,
     Button,
     Typography,
@@ -13,6 +12,7 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     I18NStringField,
     Plugin,
@@ -46,8 +46,7 @@ import { editActivatedPostMetadata, globalTypedMessageMetadata } from '../../pro
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { SteganographyTextPayload } from './SteganographyTextPayload'
 import { PluginI18NFieldRender, usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
-
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     MUIInputRoot: {
         minHeight: 108,
         flexDirection: 'column',
@@ -65,7 +64,6 @@ const useStyles = makeStyles({
         zIndex: 1,
     },
 })
-
 export interface PostDialogUIProps extends withClasses<never> {
     open: boolean
     onlyMyself: boolean
@@ -88,32 +86,27 @@ export interface PostDialogUIProps extends withClasses<never> {
     DialogProps?: Partial<DialogProps>
     SelectRecipientsUIProps?: Partial<SelectRecipientsUIProps>
 }
-
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
     const isDebug = useValueRef(debugModeSetting)
     const [showPostMetadata, setShowPostMetadata] = useState(false)
     const [clipboardReadPermissionGranted, setClipboardReadPermissionGranted] = useState<boolean | undefined>(undefined)
-
     useEffect(() => {
         Services.Helper.queryPermission({ permissions: ['clipboardRead'] }).then((granted) => {
             setClipboardReadPermissionGranted(granted)
         })
     }, [])
-
     const requestClipboardPermission = useCallback(async () => {
         const granted = await Services.Helper.requestBrowserPermission({ permissions: ['clipboardRead'] })
         setClipboardReadPermissionGranted(Boolean(granted))
     }, [])
-
     const onPostContentChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
         const newText = e.target.value
         const msg = props.postContent
         if (isTypedMessageText(msg)) props.onPostContentChanged(makeTypedMessageText(newText, msg.meta))
         else throw new Error('Not impled yet')
     }
-
     if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
     return (
         <InjectedDialog open={props.open} onClose={props.onCloseButtonClicked} title={t('post_dialog__title')}>
@@ -223,7 +216,6 @@ export function PostDialogUI(props: PostDialogUIProps) {
         </InjectedDialog>
     )
 }
-
 export interface PostDialogProps extends Omit<Partial<PostDialogUIProps>, 'open'> {
     open?: [boolean, (next: boolean) => void]
     reason?: 'timeline' | 'popup'
@@ -238,7 +230,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     const textOnly = networkSupport?.text === true && networkSupport.image === false
     const imageOnly = networkSupport?.image === true && networkSupport.text === false
     const imagePayloadButtonForzen = textOnly || imageOnly
-
     const { t, i18n } = useI18N()
     const [onlyMyselfLocal, setOnlyMyself] = useState(false)
     const onlyMyself = props.onlyMyself ?? onlyMyselfLocal
@@ -246,7 +237,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     const shareToEveryone = props.shareToEveryone ?? shareToEveryoneLocal
     const typedMessageMetadata = or(props.typedMessageMetadata, useValueRef(globalTypedMessageMetadata))
     const [open, setOpen] = or(props.open, useState<boolean>(false)) as NonNullable<PostDialogProps['open']>
-
     //#region TypedMessage
     const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessageText('', typedMessageMetadata))
     useEffect(() => {
@@ -282,11 +272,9 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     !!shareToEveryone,
                 )
                 const activeUI = activatedSocialNetworkUI
-
                 const redPacketPreText = isTwitter(activeUI)
                     ? t('additional_post_box__encrypted_post_pre_red_packet_twitter', { encrypted })
                     : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted })
-
                 // TODO: move into the plugin system
                 const redPacketMetadata = RedPacketMetadataReader(typedMessageMetadata)
                 if (imagePayloadEnabled || imageOnly) {
@@ -298,7 +286,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                         redPacketMetadata.val.token_type === EthereumTokenType.ERC20
                     const isDai = isErc20 && redPacketMetadata.ok && isDAI(redPacketMetadata.val.token?.address ?? '')
                     const isOkb = isErc20 && redPacketMetadata.ok && isOKB(redPacketMetadata.val.token?.address ?? '')
-
                     const relatedText = redPacketMetadata.ok
                         ? redPacketPreText.replace(encrypted, '')
                         : t('additional_post_box__steganography_post_pre', {
@@ -317,7 +304,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     })
                 } else {
                     const text = t('additional_post_box__encrypted_post_pre', { encrypted })
-
                     activeUI.automation.nativeCompositionDialog?.appendText?.(
                         redPacketMetadata.ok ? redPacketPreText : text,
                         {
@@ -363,7 +349,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
             if (options?.shareToEveryOne) setShareToEveryone(true)
         })
     }, [identities.length, props_reason, setOpen])
-
     const onOnlyMyselfChanged = or(
         props.onOnlyMyselfChanged,
         useCallback((checked: boolean) => {
@@ -379,12 +364,10 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
         }, []),
     )
     //#endregion
-
     //#region Red Packet
     // TODO: move into the plugin system
     const hasRedPacket = RedPacketMetadataReader(postBoxContent.meta).ok
     const mustSelectShareToEveryone = hasRedPacket && !shareToEveryone
-
     useEffect(() => {
         if (mustSelectShareToEveryone) onShareToEveryoneChanged(true)
     }, [mustSelectShareToEveryone, onShareToEveryoneChanged])
@@ -394,7 +377,6 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
         if (text.ok && text.val.length > 560) return false
         return onlyMyself || shareToEveryoneLocal ? text.val : currentShareTarget.length && text
     })()
-
     return (
         <PostDialogUI
             shareToEveryone={shareToEveryoneLocal}
@@ -419,7 +401,14 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
         />
     )
 }
-export function CharLimitIndicator({ value, max, ...props }: CircularProgressProps & { value: number; max: number }) {
+export function CharLimitIndicator({
+    value,
+    max,
+    ...props
+}: CircularProgressProps & {
+    value: number
+    max: number
+}) {
     const displayLabel = max - value < 40
     const normalized = Math.min((value / max) * 100, 100)
     const style = { transitionProperty: 'transform,width,height,color' } as React.CSSProperties
@@ -459,7 +448,6 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
         </Box>
     )
 }
-
 function PluginRenderer() {
     const pluginField = usePluginI18NField()
     const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
@@ -492,7 +480,6 @@ function BadgeRenderer({ meta }: { meta: TypedMessage['meta'] }) {
                 return plugins.map((plugin) => {
                     const render = plugin.CompositionDialogMetadataBadgeRender
                     if (!render) return null
-
                     if (typeof render === 'function') {
                         if (process.env.NODE_ENV === 'development') {
                             // crash early in dev
@@ -537,7 +524,14 @@ function normalizeBadgeDescriptor(
         </MetaBadge>
     )
 }
-function MetaBadge({ title, children, meta: key }: React.PropsWithChildren<{ title: React.ReactChild; meta: string }>) {
+function MetaBadge({
+    title,
+    children,
+    meta: key,
+}: React.PropsWithChildren<{
+    title: React.ReactChild
+    meta: string
+}>) {
     return (
         <Box sx={{ marginRight: 1, marginTop: 1, display: 'inline-block' }}>
             <Tooltip title={title}>
@@ -548,10 +542,12 @@ function MetaBadge({ title, children, meta: key }: React.PropsWithChildren<{ tit
         </Box>
     )
 }
-
-type ExtraPluginProps = { unstable: boolean; id: string }
+type ExtraPluginProps = {
+    unstable: boolean
+    id: string
+}
 function PluginKindCustom(props: Plugin.SNSAdaptor.CompositionDialogEntryCustom & ExtraPluginProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { id, label, onClick, unstable } = props
     useActivatePluginCompositionEntryEvent(id, onClick)
     return (
@@ -566,9 +562,8 @@ function PluginKindCustom(props: Plugin.SNSAdaptor.CompositionDialogEntryCustom 
         />
     )
 }
-
 function PluginKindDialog(props: Plugin.SNSAdaptor.CompositionDialogEntryDialog & ExtraPluginProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { dialog: Dialog, id, label, unstable, keepMounted } = props
     const [open, setOpen] = useState(false)
     const opener = useCallback(() => setOpen(true), [])

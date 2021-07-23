@@ -6,30 +6,26 @@ import {
     makeTypedMessageTuple,
     useValueRef,
 } from '@masknet/shared'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { Result } from 'ts-results'
 import { allPostReplacementSettings } from '../../settings/settings'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
-
-const useStlyes = makeStyles({
+const useStyles = makeStyles()({
     root: {
         overflowWrap: 'break-word',
     },
 })
-
 export interface PostReplacerProps {
     zip?: () => void
     unzip?: () => void
 }
-
 export function PostReplacer(props: PostReplacerProps) {
-    const classes = useStlyes()
+    const { classes } = useStyles()
     const postMessage = usePostInfoDetails.postMessage()
     const postPayload = usePostInfoDetails.postPayload()
     const allPostReplacement = useValueRef(allPostReplacementSettings)
-
     const plugins = useActivatedPluginsSNSAdaptor()
     const processedPostMessage = useMemo(
         () =>
@@ -51,13 +47,11 @@ export function PostReplacer(props: PostReplacerProps) {
         processedPostMessage.items.some((x) => !isWellKnownTypedMessages(x)) ||
         // replace posts which encrypted by Mask
         postPayload.ok
-
     // zip/unzip original post
     useEffect(() => {
         if (shouldReplacePost) props.zip?.()
         else props.unzip?.()
     }, [shouldReplacePost])
-
     return shouldReplacePost ? (
         <span className={classes.root}>
             <DefaultTypedMessageRenderer

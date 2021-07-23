@@ -1,4 +1,5 @@
-import { makeStyles, MenuItem, Typography } from '@material-ui/core'
+import { MenuItem, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import {
     useAccount,
@@ -31,8 +32,7 @@ import { WalletIcon } from '../shared/WalletIcon'
 import { useI18N } from '../../utils'
 import { base as ITO_Plugin } from '../../plugins/ITO/base'
 import { base as RedPacket_Plugin } from '../../plugins/RedPacket/base'
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     paper: {
         borderRadius: 4,
         transform: 'translateY(-150px) !important',
@@ -47,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: 0,
         paddingBottom: 0,
     },
-
     wrapper: {
         display: 'flex',
         alignItems: 'center',
@@ -117,7 +116,6 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(0.5),
     },
 }))
-
 interface ToolboxHintProps extends withClasses<never> {}
 export function ToolboxHint(props: ToolboxHintProps) {
     const { t } = useI18N()
@@ -128,14 +126,12 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
     const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
-
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
         () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'timeline', open: true }),
         [],
     )
     //#endregion
-
     //#region Wallet
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
@@ -144,7 +140,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
     //#endregion
-
     //#region Red packet
     const openRedPacket = useCallback(() => {
         openEncryptedMessage()
@@ -153,7 +148,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
         })
     }, [openEncryptedMessage])
     //#endregion
-
     //#region File Service
     const openFileService = useCallback(() => {
         openEncryptedMessage()
@@ -162,7 +156,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
         })
     }, [openEncryptedMessage])
     //#endregion
-
     //#region ITO
     const openITO = useCallback(() => {
         openEncryptedMessage()
@@ -171,7 +164,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
         })
     }, [openEncryptedMessage])
     //#endregion
-
     //#region Buy currency
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
     const openBuyCurrency = useCallback(() => {
@@ -181,11 +173,9 @@ export function ToolboxHint(props: ToolboxHintProps) {
         })
     }, [])
     //#endregion
-
     //#region Swap
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
     //#endregion
-
     //#region Claim All ITO
     const {
         open: isClaimAllDialogOpen,
@@ -193,7 +183,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
         onClose: onClaimAllDialogClose,
     } = useControlledDialog()
     //#endregion
-
     const [menu, openMenu] = useMenu(
         [
             <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
@@ -245,9 +234,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
             },
         },
     )
-
     const isWalletValid = !!account && selectedWallet && chainIdValid
-
     return (
         <>
             <div className={classes.wrapper} onClick={openMenu}>

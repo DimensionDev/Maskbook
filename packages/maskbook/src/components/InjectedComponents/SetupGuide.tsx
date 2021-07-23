@@ -1,11 +1,9 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import {
-    makeStyles,
     Paper,
     Typography,
     TextField,
-    Theme,
     ThemeProvider,
     InputAdornment,
     LinearProgress,
@@ -13,7 +11,9 @@ import {
     IconButton,
     Box,
     useMediaQuery,
+    Theme,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { ArrowRight } from 'react-feather'
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
@@ -29,10 +29,8 @@ import { currentSetupGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
-
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { makeTypedMessageText } from '../../protocols/typed-message'
-
 export enum SetupGuideStep {
     FindUsername = 'find-username',
     SayHelloWorld = 'say-hello-world',
@@ -88,8 +86,7 @@ const wizardTheme = extendsTheme((theme: Theme) => ({
         },
     },
 }))
-
-const useWizardDialogStyles = makeStyles((theme) => ({
+const useWizardDialogStyles = makeStyles()((theme) => ({
     root: {
         padding: '56px 20px 48px',
         position: 'relative',
@@ -176,37 +173,32 @@ const useWizardDialogStyles = makeStyles((theme) => ({
         position: 'absolute',
     },
 }))
-
-const useStyles = makeStyles((theme: Theme) => {
-    return {
-        root: {
-            alignItems: 'center',
-        },
-        content: {
-            marginRight: 16,
-        },
-        footer: {
-            marginLeft: 0,
-            marginTop: 0,
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'column',
-        },
-        tip: {},
-    }
+const useStyles = makeStyles()({
+    root: {
+        alignItems: 'center',
+    },
+    content: {
+        marginRight: 16,
+    },
+    footer: {
+        marginLeft: 0,
+        marginTop: 0,
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+    },
+    tip: {},
 })
-
 interface ContentUIProps {
     dialogType: SetupGuideStep
     content?: React.ReactNode
     footer?: React.ReactNode
     tip?: React.ReactNode
 }
-
 function ContentUI(props: ContentUIProps) {
-    const classes = useStyles(props)
+    const { classes } = useStyles()
     const xsMatch = useMatchXS()
     const onlyXS = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
     switch (props.dialogType) {
@@ -227,7 +219,6 @@ function ContentUI(props: ContentUIProps) {
                     {!onlyXS ? <div>{props.tip}</div> : null}
                 </Box>
             )
-
         case SetupGuideStep.SayHelloWorld:
             return (
                 <Box>
@@ -240,7 +231,6 @@ function ContentUI(props: ContentUIProps) {
             return null
     }
 }
-
 interface WizardDialogProps {
     title: string
     dialogType: SetupGuideStep
@@ -253,13 +243,11 @@ interface WizardDialogProps {
     onBack?: () => void
     onClose?: () => void
 }
-
 function WizardDialog(props: WizardDialogProps) {
     const { t } = useI18N()
     const { title, dialogType, optional = false, completion, status, content, tip, footer, onBack, onClose } = props
-    const classes = useWizardDialogStyles(props)
+    const { classes } = useWizardDialogStyles()
     const onlyXS = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
-
     return (
         <ThemeProvider theme={wizardTheme}>
             <ThemeProvider
@@ -318,9 +306,8 @@ function WizardDialog(props: WizardDialogProps) {
     )
 }
 //#endregion
-
 //#region find username
-const useFindUsernameStyles = makeStyles((theme) => ({
+const useFindUsernameStyles = makeStyles()((theme) => ({
     input: {
         marginTop: '45px !important',
         marginBottom: 24,
@@ -337,21 +324,18 @@ const useFindUsernameStyles = makeStyles((theme) => ({
         color: 'inherit',
     },
 }))
-
 interface FindUsernameProps extends Partial<WizardDialogProps> {
     username: string
     onUsernameChange?: (username: string) => void
     onConnect: () => Promise<void>
     onDone?: () => void
 }
-
 function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange = noop }: FindUsernameProps) {
     const { t } = useI18N()
     const ui = activatedSocialNetworkUI
     const gotoProfilePageImpl = ui.automation.redirect?.profilePage
-
-    const classes = useWizardDialogStyles()
-    const findUsernameClasses = useFindUsernameStyles()
+    const { classes } = useWizardDialogStyles()
+    const { classes: findUsernameClasses } = useFindUsernameStyles()
     const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
         e.stopPropagation()
         if (e.key !== 'Enter') return
@@ -359,7 +343,6 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
         onConnect()
     }
     const xsOnly = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
-
     const onJump = useCallback(
         (ev: React.MouseEvent<SVGElement>) => {
             ev.preventDefault()
@@ -439,9 +422,8 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
     )
 }
 //#endregion
-
 //#region say hello world
-const useSayHelloWorldStyles = makeStyles((theme) => ({
+const useSayHelloWorldStyles = makeStyles()((theme) => ({
     primary: {
         marginTop: 24,
         marginBottom: 16,
@@ -451,19 +433,16 @@ const useSayHelloWorldStyles = makeStyles((theme) => ({
         fontSize: 14,
     },
 }))
-
 interface SayHelloWorldProps extends Partial<WizardDialogProps> {
     createStatus: boolean | 'undetermined'
     onSkip?: () => void
     onCreate: () => Promise<void>
 }
-
 function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayHelloWorldProps) {
     const { t } = useI18N()
-    const classes = useWizardDialogStyles()
-    const sayHelloWorldClasses = useSayHelloWorldStyles()
+    const { classes } = useWizardDialogStyles()
+    const { classes: sayHelloWorldClasses } = useSayHelloWorldStyles()
     const xsOnly = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
-
     return (
         <WizardDialog
             completion={100}
@@ -515,19 +494,16 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
     )
 }
 //#endregion
-
 //#region setup guide ui
 interface SetupGuideUIProps {
     persona: PersonaIdentifier
     onClose?: () => void
 }
-
 function SetupGuideUI(props: SetupGuideUIProps) {
     const { t } = useI18N()
     const { persona } = props
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
     const ui = activatedSocialNetworkUI
-
     //#region parse setup status
     const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
     const lastState_ = useValueRef(lastStateRef)
@@ -544,7 +520,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         else if (step === SetupGuideStep.SayHelloWorld && !lastState.username) setStep(SetupGuideStep.FindUsername)
     }, [step, setStep, lastState])
     //#endregion
-
     //#region setup username
     const lastRecognized = useLastRecognizedIdentity()
     const getUsername = () =>
@@ -558,13 +533,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         [username],
     )
     //#endregion
-
     //#region create post status
     const [createStatus, setCreateStatus] = useState<boolean | 'undetermined'>('undetermined')
     //#endregion
-
     const copyToClipboard = useCopyToClipboard()[1]
-
     const onNext = async () => {
         switch (step) {
             case SetupGuideStep.FindUsername:
@@ -591,7 +563,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 const username_ = getUsername()
                 currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.FindUsername,
-                    username: '', // ensure staying find-username page
+                    username: '',
                     persona: persona.toText(),
                 } as SetupGuideCrossContextStatus)
                 const connected = new ProfileIdentifier(ui.networkIdentifier, username_)
@@ -605,7 +577,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         await Services.Identity.attachProfile(new ProfileIdentifier(ui.networkIdentifier, username), persona, {
             connectionConfirmState: 'confirmed',
         })
-
         // auto-finish the setup process
         const persona_ = await Services.Identity.queryPersona(
             Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap(),
@@ -625,7 +596,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         currentSetupGuideStatus[ui.networkIdentifier].value = ''
         props.onClose?.()
     }
-
     switch (step) {
         case SetupGuideStep.FindUsername:
             return (
@@ -653,9 +623,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }
 }
 //#endregion
-
 //#region setup guide
-const useSetupGuideStyles = makeStyles((theme: Theme) => ({
+const useSetupGuideStyles = makeStyles()((theme) => ({
     root: {
         position: 'fixed',
         zIndex: 9999,
@@ -665,9 +634,8 @@ const useSetupGuideStyles = makeStyles((theme: Theme) => ({
     },
 }))
 export interface SetupGuideProps extends SetupGuideUIProps {}
-
 export function SetupGuide(props: SetupGuideProps) {
-    const classes = useSetupGuideStyles()
+    const { classes } = useSetupGuideStyles()
     return (
         <div className={classes.root}>
             <SetupGuideUI {...props} />
