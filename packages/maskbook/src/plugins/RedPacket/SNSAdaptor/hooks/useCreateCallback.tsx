@@ -145,7 +145,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
     const transactionLinkRef = useRef<string>('')
 
     const snackbarKeyRef = useRef<string | number>()
-    const enqueueSnackbar = useCallback(
+    const showSnackbar = useCallback(
         (options: Partial<CustomSnackbarContentProps & { persist: boolean }>) => {
             if (snackbarKeyRef.current) {
                 snackbar.closeSnackbar(snackbarKeyRef.current)
@@ -189,7 +189,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
         // error: unable to sign password
         let signedPassword = ''
         try {
-            enqueueSnackbar({
+            showSnackbar({
                 processing: true,
                 message: 'Comfirm this transaction in your  wallet',
             })
@@ -239,7 +239,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
                     hash,
                 })
                 transactionLinkRef.current = resolveTransactionLinkOnExplorer(token.chainId, hash)
-                enqueueSnackbar({
+                showSnackbar({
                     processing: true,
                     message: 'Transaction Submitted',
                     link: transactionLinkRef.current,
@@ -252,7 +252,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
                     no: 0,
                     receipt,
                 })
-                enqueueSnackbar({
+                showSnackbar({
                     persist: false,
                     variant: 'success',
                     message: `Sent ${value}${token.symbol}  success`,
@@ -267,7 +267,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
                     no,
                     receipt,
                 })
-                enqueueSnackbar({
+                showSnackbar({
                     processing: true,
                     message: 'Transaction Submitted',
                     link: transactionLinkRef.current,
@@ -281,7 +281,7 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
                     error,
                 })
                 reject(error)
-                enqueueSnackbar({
+                showSnackbar({
                     variant: 'error',
                     message: 'Transation rejected',
                     link: transactionLinkRef.current,

@@ -13,7 +13,7 @@ import {
 import { Box, Card, makeStyles, Skeleton, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { useCallback, useEffect, useMemo } from 'react'
-import { Loading } from '@masknet/icons'
+import { LoadingIcon } from '@masknet/icons'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -321,7 +321,7 @@ const SpinningIcon = () => {
     const classes = useStyles()
     return (
         <span className={classes.spinning}>
-            <Loading />
+            <LoadingIcon />
         </span>
     )
 }

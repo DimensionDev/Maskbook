@@ -12,11 +12,10 @@ import { makeStyles, IconButton, Link, Typography } from '@material-ui/core'
 import classnames from 'classnames'
 import LaunchIcon from '@material-ui/icons/Launch'
 import CloseIcon from '@material-ui/icons/Close'
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty'
-import ErrorIcon from '@material-ui/icons/Error'
 import WarningIcon from '@material-ui/icons/Warning'
 import InfoIcon from '@material-ui/icons/Info'
 import DoneIcon from '@material-ui/icons/Done'
+import { LoadingIcon, RiskIcon } from '@masknet/icons'
 import { MaskColorVar } from '../../constants'
 
 export { SnackbarProvider, useSnackbar } from 'notistack'
@@ -57,10 +56,18 @@ const useStyles = makeStyles((theme) => ({
         color: MaskColorVar.lightestBackground,
     },
     warning: {
-        background: MaskColorVar.warning,
         color: MaskColorVar.lightestBackground,
     },
     icon: {},
+    spinning: {
+        display: 'flex',
+        animation: '$spinning 2s infinite linear',
+    },
+    '@keyframes spinning': {
+        to: {
+            transform: 'rotate(360deg)',
+        },
+    },
     action: {
         marginLeft: 'auto',
         width: 50,
@@ -89,8 +96,7 @@ const useStyles = makeStyles((theme) => ({
             color: MaskColorVar.lightestBackground,
         },
         '&$warning': {
-            background: MaskColorVar.warning,
-            color: MaskColorVar.lightestBackground,
+            color: MaskColorVar.textPrimary,
         },
     },
     texts: {
@@ -121,25 +127,26 @@ export interface CustomSnackbarContentProps {
     variant?: VariantType
     link?: string
 }
-const IconMap: Record<VariantType, typeof InfoIcon> = {
-    default: InfoIcon,
-    success: DoneIcon,
-    error: ErrorIcon,
-    warning: WarningIcon,
-    info: InfoIcon,
+const IconMap: Record<VariantType, React.ReactNode> = {
+    default: <InfoIcon color="inherit" />,
+    success: <DoneIcon color="inherit" />,
+    error: <RiskIcon />,
+    warning: (
+        <span style={{ color: MaskColorVar.warning }}>
+            <WarningIcon />
+        </span>
+    ),
+    info: <InfoIcon color="inherit" />,
 }
 
 export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarContentProps>((props, ref) => {
     const classes = useStyles()
     const snackbar = useSnackbar()
-    let VariantIcon = props.processing ? HourglassEmptyIcon : props.variant ? IconMap[props.variant] : null
+    const loadingIcon = <LoadingIcon color="inherit" className={classes.spinning} />
+    let variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
     return (
         <SnackbarContent ref={ref} className={classnames(classes.content, classes[props.variant!])}>
-            {VariantIcon && (
-                <div className={classes.icon}>
-                    <VariantIcon color="inherit" />
-                </div>
-            )}
+            {variantIcon && <div className={classes.icon}>{variantIcon}</div>}
             <div className={classes.texts}>
                 <Typography className={classes.title} variant="h2">
                     {props.title}
