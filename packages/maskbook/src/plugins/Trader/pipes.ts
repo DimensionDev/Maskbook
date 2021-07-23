@@ -101,6 +101,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                     return `https://analytics-bsc.sushi.com/pairs/${address}`
                 case NetworkType.Polygon:
                     return `https://analytics-polygon.sushi.com/pairs/${address}`
+                case NetworkType.Arbitrum:
+                    return ''
                 default:
                     safeUnreachable(networkType)
                     return ''
