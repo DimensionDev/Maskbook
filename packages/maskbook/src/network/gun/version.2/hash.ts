@@ -6,6 +6,8 @@ import type { EC_Public_JsonWebKey } from '@masknet/shared-base'
 import Gun from 'gun'
 import 'gun/sea'
 import { memoizePromise } from '../../../utils/memoize'
+import { jwkToArrayBuffer } from '../../../utils/jwk'
+import { concatArrayBuffer, encodeArrayBuffer, encodeText } from '@dimensiondev/kit/src/buffer'
 
 /**
  * @param version current payload version
@@ -60,3 +62,25 @@ export const hashCryptoKey = memoizePromise(async function (key: EC_Public_JsonW
     const hash = (await Gun.SEA.work(jwk.x! + jwk.y!, hashPair))!
     return hash.substring(0, N)
 }, undefined)
+
+export const hashRPID = memoizePromise(async function (rpID: string) {
+    return crypto.subtle.digest('SHA-256', encodeText(rpID))
+}, undefined)
+
+export const hashJwk = memoizePromise(
+    async function (key: JsonWebKey) {
+        return crypto.subtle.digest('SHA-256', await jwkToArrayBuffer(key))
+    },
+    ({ alg = '', crv = '', x = '', y = '', d = '' }) => alg + crv + x + y + d,
+)
+
+export const hashCredentialID = memoizePromise(
+    async function (key: EC_Public_JsonWebKey, rpID: string) {
+        const rpIDHash = await hashRPID(rpID)
+        const jwkHash = await hashJwk(key)
+        const buffer = await concatArrayBuffer(jwkHash, rpIDHash)
+        return encodeArrayBuffer(buffer)
+    },
+    // hash and encode to buffer are to expensive
+    ({ alg = '', crv = '', x = '', y = '', d = '' }, rpID) => alg + crv + x + y + d + rpID,
+)

@@ -7,6 +7,7 @@ export {
     ECKeyIdentifier,
     GroupIdentifier,
     Identifier,
+    CredentialIdentifier,
     PersonaIdentifier,
     PostIVIdentifier,
     PostIdentifier,

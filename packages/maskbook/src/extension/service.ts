@@ -33,6 +33,7 @@ export const Services = {
     SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
     Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
     ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
+    WebAuthn: add(() => import('./background-script/WebAuthnServer'), 'WebAuthn'),
 }
 export default Services
 export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', true)
@@ -50,6 +51,7 @@ if (import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
             './background-script/SettingsService',
             './background-script/ThirdPartyPlugin',
             './background-script/SocialNetworkService',
+            './background-script/WebAuthnServer',
             './service-generator',
         ],
         () => document.dispatchEvent(new Event(SERVICE_HMR_EVENT)),

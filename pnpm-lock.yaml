@@ -198,6 +198,7 @@ importers:
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/holoflows-kit': '=0.9.0-20210726055325-dfbe7fd'
       '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
+      '@dimensiondev/mask-webauthn': '=0.0.1-20210728063824-43d184a'
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/stego-js': '=0.11.1-20201027083223-8ab41be'
       '@dimensiondev/webextension-shim': 0.0.3-20210708053012-57a254d
@@ -360,6 +361,7 @@ importers:
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd_webextension-polyfill@0.8.0
       '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
+      '@dimensiondev/mask-webauthn': 0.0.1-20210728063824-43d184a
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@ethersproject/abi': 5.4.0
@@ -610,6 +612,7 @@ importers:
 
   packages/shared-base:
     specifiers:
+      '@dimensiondev/kit': ^0.0.0-20210712114527-dc8eac6
       '@material-ui/core': ../empty
       '@material-ui/icons': ../empty
       '@material-ui/lab': ../empty
@@ -625,6 +628,7 @@ importers:
       typeson: ^6.1.0
       typeson-registry: ^1.0.0-alpha.38
     dependencies:
+      '@dimensiondev/kit': 0.0.0-20210712114527-dc8eac6
       '@material-ui/core': link:../empty
       '@material-ui/icons': link:../empty
       '@material-ui/lab': link:../empty
@@ -3394,6 +3398,19 @@ packages:
 
   /@dimensiondev/kit/0.0.0-20210630045432-e05621c:
     resolution: {integrity: sha512-RRghCa0HR3NRgGDb3fw6VpvAgCEYs8nFk8M10xXubbXQUgcwp7UVQStI3cm7mV7PTGC1lsaAv2YLTqIQB8w9YA==, tarball: download/@dimensiondev/kit/0.0.0-20210630045432-e05621c/6d03398c21a05c6d7d2e7ffd4b8d5cc435cc9217fd2ddd485c0d08538af1485e}
+    dev: false
+
+  /@dimensiondev/kit/0.0.0-20210712114527-dc8eac6:
+    resolution: {integrity: sha512-WOJx25U1nzsQshfTnZBWx36tbPFEBuzEkfyLFpjkJAslyyenjSqJjBzrNXVlq2WdvSGZTB809iJ7+CIaauMK7w==, tarball: download/@dimensiondev/kit/0.0.0-20210712114527-dc8eac6/288a871d07e75fe2b084e06339896a8c19e23c4685f5dde3e8e7d312c9e75580}
+    dev: false
+
+  /@dimensiondev/mask-webauthn/0.0.1-20210728063824-43d184a:
+    resolution: {integrity: sha512-YU/S+DnBDy8h3izphg+m26i70DXuFFcu0AcLjqlXhptmFOJi9LMVCfMITYTvVegTMAsS+iyQS8QaKZgvlUFzmA==, tarball: download/@dimensiondev/mask-webauthn/0.0.1-20210728063824-43d184a/fd4c89bbf7a429328c59825618fe95fe6f86785cc91c09387f6678192bf7acf0}
+    dependencies:
+      btoa: 1.2.1
+      buffer: 6.0.3
+      cbor-redux: 0.3.1
+      tslib: 2.3.0
     dev: false
 
   /@dimensiondev/metamask-extension-provider/3.0.6-20210519045409-1835d4d:
@@ -10160,6 +10177,12 @@ packages:
       node-int64: 0.4.0
     dev: true
 
+  /btoa/1.2.1:
+    resolution: {integrity: sha512-SB4/MIGlsiVkMcHmT+pSmIPoNDoHg+7cMzmt3Uxt628MTz2487DKSqK/fuhFBrkuqrYv5UCEnACpF4dTFNKc/g==}
+    engines: {node: '>= 0.4.0'}
+    hasBin: true
+    dev: false
+
   /buffer-alloc-unsafe/1.1.0:
     resolution: {integrity: sha512-TEM2iMIEQdJ2yjPJoSIsldnleVaAk1oW3DBVUykyOLsEsFmEc9kn+SFFPz+gl54KQNxlDnAwCXosOS9Okx2xAg==}
     dev: false
@@ -10439,6 +10462,10 @@ packages:
 
   /caseless/0.12.0:
     resolution: {integrity: sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=}
+
+  /cbor-redux/0.3.1:
+    resolution: {integrity: sha512-gUKg3J5Lewk7IkQurhrEVPQ3UvZp2e7knK/y7UAuf+RTu7zspOGvmv05ZbXlDkk0nW1EGLEJ2zy+JEksg6n7lQ==}
+    dev: false
 
   /ccount/1.1.0:
     resolution: {integrity: sha512-vlNK021QdI7PNeiUh/lKkC/mNHHfV0m/Ad5JoI0TYtlBnJAslM/JIkm/tGC88bkLIwO6OQ5uV6ztS6kVAtCDlg==}
