@@ -23,6 +23,7 @@ export function useWeb3State() {
     const blockNumber = useSubscription(_.blockNumber)
     const nonce = useSubscription(_.nonce)
     const gasPrice = useSubscription(_.gasPrice)
+    const etherPrice = useSubscription(_.etherPrice)
     const providerType = useSubscription(_.providerType)
     const networkType = useSubscription(_.networkType)
     const wallets = useSubscription(_.wallets)
@@ -36,6 +37,7 @@ export function useWeb3State() {
         account,
         nonce,
         gasPrice,
+        etherPrice,
         balance,
         blockNumber,
         providerType,

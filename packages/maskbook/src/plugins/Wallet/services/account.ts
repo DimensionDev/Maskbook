@@ -22,10 +22,10 @@ export async function updateAccount(
 ) {
     if (!options?.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
     if (options?.chainId && !options?.networkType) options.networkType = getNetworkTypeFromChainId(options.chainId)
-    if (options?.account) currentAccountSettings.value = options?.account
-    if (options?.chainId) currentChainIdSettings.value = options?.chainId
-    if (options?.providerType) currentProviderSettings.value = options?.providerType
-    if (options?.networkType) currentNetworkSettings.value = options?.networkType
+    if (options?.account !== undefined) currentAccountSettings.value = options.account
+    if (options?.chainId) currentChainIdSettings.value = options.chainId
+    if (options?.providerType) currentProviderSettings.value = options.providerType
+    if (options?.networkType) currentNetworkSettings.value = options.networkType
 }
 
 export async function resetAccount() {

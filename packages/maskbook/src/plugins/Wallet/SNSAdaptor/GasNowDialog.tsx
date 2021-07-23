@@ -1,5 +1,5 @@
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
-import { EthereumTokenType, formatWeiToGwei, GasNow } from '@masknet/web3-shared'
+import { formatWeiToGwei, GasNow, useEtherPrice } from '@masknet/web3-shared'
 import { DialogContent, List, ListItem, makeStyles, Skeleton, TextField, Theme, Typography } from '@material-ui/core'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import BigNumber from 'bignumber.js'
@@ -9,7 +9,6 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { useAssets } from '../hooks/useAssets'
 import { currentGasNowSettings, currentGasPriceSettings } from '../settings'
 import { WalletMessages } from '../../Wallet/messages'
 
@@ -103,10 +102,8 @@ export function GasNowDialog() {
             : t('plugin_gas_now_dialog_min', { time: '>10' })
         : ''
     const { open, closeDialog, setDialog } = useRemoteControlledDialog(WalletMessages.events.gasPriceDialogUpdated)
-    const { value: detailedTokens } = useAssets([])
     const [select, setSelect] = useState(gasNow ? 1 : 2)
-    const nativeToken = detailedTokens.find((t) => t.token.type === EthereumTokenType.Native)
-    const usdRate = nativeToken?.price?.usd
+    const etherPrice = useEtherPrice()
     const options = useMemo(
         () => [
             {
@@ -190,12 +187,12 @@ export function GasNowDialog() {
                                                 })}
                                             </Typography>
                                         )}
-                                        {usdRate ? (
+                                        {etherPrice ? (
                                             <Typography className={classes.estimate}>
                                                 {t('plugin_gas_now_dialog_usd', {
                                                     usd: new BigNumber(option.gasPrice)
                                                         .div(10 ** 18)
-                                                        .times(usdRate)
+                                                        .times(etherPrice)
                                                         .toPrecision(3),
                                                 })}
                                             </Typography>

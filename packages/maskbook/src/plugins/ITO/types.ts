@@ -38,6 +38,11 @@ export interface PoolSubgraph {
     exchange_out_volumes: string[]
 }
 
+export interface ClaimablePool {
+    pid: string
+    token: FungibleTokenDetailed
+}
+
 //#region TokenOutMask
 export type TokenOutMask = Omit<FungibleTokenDetailed, 'chainId'> & {
     chain_id: ChainId

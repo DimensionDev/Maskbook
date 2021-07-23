@@ -1,4 +1,4 @@
-import type { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import { gun2, PersonOnGun2 as ProfileOnGun2 } from '.'
 import { hashProfileIdentifier } from './hash'
 import { EventIterator } from 'event-iterator'
