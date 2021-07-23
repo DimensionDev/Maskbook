@@ -21,7 +21,7 @@ export function useTradeContext(tradeProvider: TradeProvider) {
     const chainId = useChainId()
     return useMemo(() => {
         switch (tradeProvider) {
-            case TradeProvider.UNISWAP:
+            case TradeProvider.UNISWAP_V2:
                 return {
                     TYPE: tradeProvider,
                     IS_UNISWAP_LIKE: true,

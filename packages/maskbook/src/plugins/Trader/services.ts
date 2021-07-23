@@ -12,7 +12,7 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
     switch (networkType) {
         case NetworkType.Ethereum:
             if ([TradeProvider.PANCAKESWAP, TradeProvider.QUICKSWAP].includes(currentTradeProviderSettings.value))
-                currentTradeProviderSettings.value = TradeProvider.UNISWAP
+                currentTradeProviderSettings.value = TradeProvider.UNISWAP_V2
             break
         case NetworkType.Binance:
             currentTradeProviderSettings.value = TradeProvider.PANCAKESWAP

@@ -33,7 +33,7 @@ export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
  */
 export const currentTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_IDENTIFIER}+tradeProvider`,
-    TradeProvider.UNISWAP,
+    TradeProvider.UNISWAP_V2,
     {
         primary: () => i18n.t('plugin_trader_settings_trade_provider_primary'),
         secondary: () => i18n.t('plugin_trader_settings_trade_provider_secondary'),
@@ -63,7 +63,7 @@ const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tr
  */
 export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvider) {
     switch (tradeProvider) {
-        case TradeProvider.UNISWAP:
+        case TradeProvider.UNISWAP_V2:
             return uniswapSettings
         case TradeProvider.ZRX:
             return zrxSettings
