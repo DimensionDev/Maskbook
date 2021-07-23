@@ -3,7 +3,7 @@ import { promises as fs, readdirSync } from 'fs'
 import { difference, keys, uniq, without } from 'lodash'
 import { resolve, relative } from 'path'
 import { getUsedKeys } from './ast'
-import { ROOT_PATH, PKG_PATH } from '../utils'
+import { ROOT_PATH, PKG_PATH, walk } from '../utils'
 
 const SOURCE_PATH = resolve(PKG_PATH, 'maskbook', 'src')
 export const LOCALE_PATH = resolve(SOURCE_PATH, '_locales')
@@ -49,15 +49,4 @@ export async function findAllUnsyncedLocales(locales = without(LOCALE_NAMES, 'en
         }
     }
     return record
-}
-
-async function* walk(dir: string): AsyncIterableIterator<string> {
-    for await (const dirent of await fs.opendir(dir)) {
-        const entry = resolve(dir, dirent.name)
-        if (dirent.isDirectory()) {
-            yield* walk(entry)
-        } else if (dirent.isFile() && /\.(tsx?)$/.test(entry)) {
-            yield entry
-        }
-    }
 }
