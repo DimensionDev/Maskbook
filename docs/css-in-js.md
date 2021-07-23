@@ -31,16 +31,15 @@ const useStyle = makeStyles((theme) => ({
 }))
 ```
 
-### ✅ &#9888; You can use `makeStyles` in the project
+### ✅ Use `makeStyles` from `@masknet/theme` package in the project
 
-Reason: This is the recommend way of writing way in @material-ui 4.
+This is the recommended way.
 
-&#9888; In @material-ui 5 there is [an RFC](https://github.com/mui-org/material-ui/issues/26571)
-about to add `makeStyles` API back and migrate to based on emotion.
-Even if this RFC doesn't land, there is a community solution called [tss-react](https://github.com/garronej/tss-react)
-that we can migrate to. Therefore it's safe to continue use the `makeStyles` API.
+### &#9888; Use `makeStyles` from `@material-ui/core` package in the project
 
-#### Change style of MUI components
+This is deprecated. Migration in process.
+
+### Change style of MUI components
 
 ✅ DO
 
@@ -48,7 +47,7 @@ that we can migrate to. Therefore it's safe to continue use the `makeStyles` API
 <Button classes={{ disabled: classes.disabled }} />
 ```
 
-## Guides on the `styled` style (let's call it `styled component`)
+## Guides on the `styled component`
 
 ```js
 const Title = style.div`
@@ -56,13 +55,11 @@ const Title = style.div`
 `
 ```
 
-### ✅ You can use `styled component` in the project
+### ✅ &#9888; You can use `styled component` in the project
 
-Reason: Good DX (Note: you may want to install editor plugins for styled-components).
+#### &#9888; You may want to use "object style" when it involves dynamic styles
 
-### &#9888; You may want to use "object style" when it involves dynamic styles
-
-Reason: _Potential_ performance lost.
+Not suggested: _Potential_ performance lost.
 
 Not enforcement because it is not confirmed.
 
@@ -84,7 +81,7 @@ const Title = style(Typography)(({ theme }) => {
 
 ```js
 const Title = style.div`
-    & .Mui-selected { display: flex; }
+    & .Mui-Button-root { display: flex; }
 `
 ```
 
@@ -92,28 +89,19 @@ DO NOT do this.
 
 Reason: Not type-checked. Easy to get things wrong.
 
-### &#9888; Calculated selector to the deeper elements of the library
+### 🚫 Selector used in the styled component
 
-&#9888; Not recommended. Please perfer to use `makeStyles` in this case.
-
-&#9888; Caution: Please aware of CSS selector.
-You may want `& > .${selected}` or `&.${selected}` in most cases instead of `& .${selected}`.
+Please use `makeStyles` in this case.
 
 ```js
-import { buttonClasses } from '@material-ui/core'
-// Way 1
-const Button1 = style(Button)`
-    &[disabled] {}
-`
-// way 2 (if applicable)
-const Button2 = style(Button)`
-    &.${buttonClasses.disabled} {}
+const Dialog1 = style(Dialog)`
+    & > .Mui-Some-Mui-Selector {}
 `
 ```
 
 ### ✅ `components` or `*Component` style
 
-Overwriting styles in this way is good.
+Overwriting styles in this way is acceptable.
 
 ```js
 const MyExample = styled(Example)`

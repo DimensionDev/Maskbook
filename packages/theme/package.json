@@ -20,7 +20,8 @@
     "lodash-es": "^4.17.20",
     "notistack": "1.0.6-next.1",
     "react-window": "^1.8.6",
-    "tinycolor2": "^1.4.2"
+    "tinycolor2": "^1.4.2",
+    "tss-react": "^0.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
