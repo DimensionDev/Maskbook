@@ -14,6 +14,7 @@ import type {
     EC_Private_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import type { PersonaWithPrivateKey } from './types'
 /**
  * Database structure:
  *
@@ -188,7 +189,7 @@ export async function queryPersonasDB(
     return records
 }
 
-export type PersonaRecordWithPrivateKey = PersonaRecord & Required<Pick<PersonaRecord, 'privateKey'>>
+export type PersonaRecordWithPrivateKey = PersonaWithPrivateKey
 /**
  * Query many Personas.
  */
