@@ -236,8 +236,6 @@
     "set_up_qr_scanner_fail": "QR コードのスキャンに失敗しました。",
     "set_up_backup_fail": "バックアップに失敗しました。",
     "settings": "設定",
-    "settings_ancient_post_compatibility_mode": "エンシェントポスト互換モード",
-    "settings_ancient_post_compatibility_mode_desc": "過去の投稿（2020年1月以前に作成）を復号する必要がある場合に有効にします。",
     "settings_enable_debug": "デバッグモード",
     "settings_enable_debug_desc": "デバッグのための追加情報を参照してください。",
     "settings_appearance": "テーマ",

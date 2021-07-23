@@ -186,10 +186,6 @@ export namespace SocialNetworkUI {
             postsProvider?: PostsProvider
             /** Get searched keyword */
             getSearchedKeyword?(): string
-            /** @deprecated Seems we don't use it anymore. */
-            getPostContent?(): Promise<string>
-            /** @deprecated Seems we don't use it anymore. */
-            getProfile?(): Promise<ProfileUI>
         }
         export type ProfileUI = { bioContent: string }
         export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar'>
@@ -302,30 +298,5 @@ export namespace SocialNetworkWorker {
     export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared, WorkerBase {
         tasks: Tasks
     }
-    export interface Tasks {
-        /**
-         * This function should fetch the given post by `fetch`, `AutomatedTabTask` or anything
-         * @deprecated
-         * @pseudoCode
-         * fetchPostContent(post) {
-         *      let tab = get_tab_with_same_origin_and_not_pinned()
-         *      if (!isUndefined(tab)) {
-         *          // tab available, let them to fetch.
-         *          // this process should not visible to user.
-         *          return tasks(tab).fetch(url)
-         *      }
-         *
-         *      // no tab available for now, call foreground to do so.
-         *      return tasks(getPostURL(post)).getPostContent()
-         * }
-         * @param postIdentifier The post id
-         */
-        fetchPostContent?(postIdentifier: PostIdentifier<ProfileIdentifier>): Promise<string>
-        /**
-         * This function should fetch the given post by `fetch`, `AutomatedTabTask` or anything
-         * @param identifier The post id
-         * @deprecated
-         */
-        fetchProfile?(identifier: ProfileIdentifier): Promise<SocialNetworkUI.CollectingCapabilities.ProfileUI>
-    }
+    export interface Tasks {}
 }

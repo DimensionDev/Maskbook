@@ -165,30 +165,6 @@ export const postAvatarParser = (node: HTMLElement) => {
     }
 }
 
-export const postContentParser = (node: HTMLElement) => {
-    if (isMobilePost(node)) {
-        const containerNode = node.querySelector('.tweet-text > div')
-        if (!containerNode) return ''
-        return Array.from(containerNode.childNodes)
-            .map((node) => {
-                if (node.nodeType === Node.TEXT_NODE) return node.nodeValue
-                if (node.nodeName === 'A') return (node as HTMLAnchorElement).getAttribute('title')
-                return ''
-            })
-            .join(',')
-    } else {
-        const select = <T extends HTMLElement>(selectors: string) => {
-            const lang = node.parentElement!.querySelector<HTMLDivElement>('[lang]')
-            return lang ? Array.from(lang.querySelectorAll<T>(selectors)) : []
-        }
-        const sto = [
-            ...select<HTMLAnchorElement>('a').map((x) => x.textContent),
-            ...select<HTMLSpanElement>('span').map((x) => x.innerText),
-        ]
-        return sto.filter(Boolean).join(' ')
-    }
-}
-
 export const postContentMessageParser = (node: HTMLElement) => {
     function resolve(content: string) {
         if (content.startsWith('@')) return 'user'

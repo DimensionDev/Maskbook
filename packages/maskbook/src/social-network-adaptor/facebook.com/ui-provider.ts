@@ -3,8 +3,6 @@ import { stateCreator } from '../../social-network/utils'
 import { facebookBase } from './base'
 import { facebookShared } from './shared'
 import { getProfilePageUrlAtFacebook } from './utils/parse-username'
-import { getPostContentFacebook } from './collecting/getPostContent'
-import { getProfileFacebook } from './collecting/getProfile'
 import { taskOpenComposeBoxFacebook } from './automation/openComposeBox'
 import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposition'
 import { IdentityProviderFacebook } from './collecting/identity'
@@ -59,8 +57,6 @@ const facebookUI: SocialNetworkUI.Definition = {
         },
     },
     collecting: {
-        getPostContent: getPostContentFacebook,
-        getProfile: getProfileFacebook,
         profilesCollector: profilesCollectorFacebook,
         identityProvider: IdentityProviderFacebook,
         postsProvider: PostProviderFacebook,

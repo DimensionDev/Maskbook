@@ -71,14 +71,6 @@ export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = 
         singleMode,
     )
 
-export const postsSelector = () =>
-    querySelectorAll(
-        [
-            '#main_content .timeline .tweet', // legacy twitter
-            '[data-testid="tweet"]', // new twitter
-        ].join(),
-    )
-
 export const postsImageSelector = (node: HTMLElement) =>
     new LiveSelector([node]).querySelectorAll<HTMLElement>(
         [

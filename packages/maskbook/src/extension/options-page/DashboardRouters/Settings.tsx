@@ -9,7 +9,6 @@ import { useMatchXS, extendsTheme, useI18N, Flags, useValueRef } from '../../../
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
 import {
     debugModeSetting,
-    disableOpenNewTabInBackgroundSettings,
     languageSettings,
     allPostReplacementSettings,
     appearanceSettings,
@@ -27,7 +26,6 @@ import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined'
 import ShareIcon from '@material-ui/icons/ShareOutlined'
 import FlipToFrontIcon from '@material-ui/icons/FlipToFront'
-import TabIcon from '@material-ui/icons/Tab'
 import PaletteIcon from '@material-ui/icons/Palette'
 import LanguageIcon from '@material-ui/icons/Language'
 import WifiIcon from '@material-ui/icons/Wifi'
@@ -272,11 +270,6 @@ export default function DashboardSettingsRouter() {
                         </Typography>
                         <Card elevation={0}>
                             <List className={classes.list} disablePadding>
-                                <SettingsUI
-                                    classes={listStyle}
-                                    icon={<TabIcon />}
-                                    value={disableOpenNewTabInBackgroundSettings}
-                                />
                                 <SettingsUI
                                     classes={listStyle}
                                     icon={<MemoryOutlinedIcon />}

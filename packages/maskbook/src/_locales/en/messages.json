@@ -236,8 +236,6 @@
     "set_up_qr_scanner_fail": "Fail to scan QR code",
     "set_up_backup_fail": "Backup Failed",
     "settings": "Settings",
-    "settings_ancient_post_compatibility_mode": "Ancient Post Compatibility Mode",
-    "settings_ancient_post_compatibility_mode_desc": "Enable if you need to decrypt ancient posts (created before Jan 2020).",
     "settings_enable_debug": "Debug Mode",
     "settings_enable_debug_desc": "See additional information for debugging.",
     "settings_appearance": "Appearance",

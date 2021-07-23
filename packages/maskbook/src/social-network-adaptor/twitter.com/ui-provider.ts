@@ -8,8 +8,6 @@ import { openComposeBoxTwitter } from './automation/openComposeBox'
 import { pasteTextToCompositionTwitter } from './automation/pasteTextToComposition'
 import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage'
 import { gotoProfilePageTwitter } from './automation/gotoProfilePage'
-import { getPostContentTwitter } from './collecting/getPostContent'
-import { getProfileTwitter } from './collecting/getProfile'
 import { IdentityProviderTwitter } from './collecting/identity'
 import { PostProviderTwitter } from './collecting/post'
 import { profilesCollectorTwitter } from './collecting/profiles'
@@ -52,8 +50,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         },
     },
     collecting: {
-        getPostContent: getPostContentTwitter,
-        getProfile: getProfileTwitter,
         identityProvider: IdentityProviderTwitter,
         postsProvider: PostProviderTwitter,
         profilesCollector: profilesCollectorTwitter,

@@ -13,18 +13,6 @@ export const debugModeSetting = createGlobalSettings<boolean>('debugMode', false
 })
 
 /**
- * Never open a new tab in the background
- */
-export const disableOpenNewTabInBackgroundSettings = createGlobalSettings<boolean>(
-    'disable automated tab task open new tab',
-    true,
-    {
-        primary: () => i18n.t('settings_ancient_post_compatibility_mode'),
-        secondary: () => i18n.t('settings_ancient_post_compatibility_mode_desc'),
-    },
-)
-
-/**
  * Whether if create substitute post for all posts
  */
 export const allPostReplacementSettings = createGlobalSettings<boolean>('post replacement all', false, {

@@ -236,8 +236,6 @@
     "set_up_qr_scanner_fail": "QR 코드 스캔 실패",
     "set_up_backup_fail": "백업 실패",
     "settings": "설정",
-    "settings_ancient_post_compatibility_mode": "오래된 게시물 호환성 모드",
-    "settings_ancient_post_compatibility_mode_desc": "오래된 게시물(2020 1월 전에 만든 것) 해독 가능",
     "settings_enable_debug": "디버그 모드",
     "settings_enable_debug_desc": "디버깅에 대한 추가 정보 보기",
     "settings_appearance": "화면",

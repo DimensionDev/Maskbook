@@ -7,15 +7,13 @@ import 'gun/lib/rindexed'
 import { gunServers } from '../../gun-servers'
 import type { EC_Public_JsonWebKey } from '@masknet/shared-base'
 
-export * from './people'
 export * from './post'
 
-export type PersonOnGun2 =
-    | {
-          /** @deprecated if you want to use it, cast it to string. */
-          provePostId?: unknown
-      }
-    | undefined
+export type PersonOnGun2 = {
+    /** @deprecated if you want to use it, cast it to string. */
+    //   provePostId?: unknown
+    __notInGunButABrand__DO_NOT_USE_THIS__?: never
+}
 export type SharedAESKeyGun2 = {
     encryptedKey: string
     salt: string
