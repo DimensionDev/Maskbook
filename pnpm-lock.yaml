@@ -363,6 +363,7 @@ importers:
       next-tick: ^1.0.0
       opensea-js: ^1.1.11
       openzeppelin-solidity: ^3.2.0
+      patch-package: ../../patches/patch-package-6.4.7.tgz
       promievent: ^0.1.4
       pvtsutils: ^1.0.14
       qrcode: ^1.4.4
@@ -584,6 +585,11 @@ importers:
       jest-puppeteer: 5.0.4
       jest-webextension-mock: 3.7.17
       openzeppelin-solidity: 3.4.1
+<<<<<<< HEAD
+=======
+      patch-package: file:patches/patch-package-6.4.7.tgz
+      react-dev-utils: 11.0.4
+>>>>>>> db4a69a8b... chore: patch-package
       react-devtools-core: 4.13.5
       react-refresh: 0.10.0
 <<<<<<< HEAD
