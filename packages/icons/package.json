@@ -9,9 +9,6 @@
     "start": "snowpack dev",
     "build": "node --es-module-specifier-resolution=node ./dist/utils/ssr.js"
   },
-  "dependencies": {
-    "@masknet/theme": "workspace:*"
-  },
   "devDependencies": {
     "snowpack": "^3.8.1"
   }
