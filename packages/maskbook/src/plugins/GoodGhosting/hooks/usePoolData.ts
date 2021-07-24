@@ -27,7 +27,9 @@ export function usePoolData(info: GoodGhostingInfo) {
         const rawADaiAPY = new BigNumber((reserveData as any).currentLiquidityRate)
         const poolAPY = rawADaiAPY.dividedBy(10 ** 27).multipliedBy(100)
 
-        const poolEarnings = new BigNumber(totalAdai).minus(new BigNumber(info.totalGamePrincipal))
+        const poolEarnings = info.gameHasEnded
+            ? info.totalGameInterest
+            : new BigNumber(totalAdai).minus(new BigNumber(info.totalGamePrincipal))
 
         return {
             reward,

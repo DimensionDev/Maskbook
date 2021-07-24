@@ -39,7 +39,7 @@ export function PersonalView(props: PersonalViewProps) {
     const { canEarlyWithdraw, earlyWithdraw } = useEarlyWithdraw(props.info)
     const [buttonEnabled, setButtonEnabled] = useState(true)
 
-    const status = useGetStatus(props.info.currentSegment, props.info.currentPlayer)
+    const status = useGetStatus(props.info, props.info.currentPlayer)
 
     if (!props.info.currentPlayer) {
         return (
@@ -131,10 +131,10 @@ export function PersonalView(props: PersonalViewProps) {
     )
 }
 
-function useGetStatus(currentSegment: number, player?: Player) {
+function useGetStatus(info: GoodGhostingInfo, player?: Player) {
     const { t } = useI18N()
 
-    switch (getPlayerStatus(currentSegment, player)) {
+    switch (getPlayerStatus(info, player)) {
         case PlayerStatus.Winning:
             return t('plugin_good_ghosting_status_winning')
         case PlayerStatus.Waiting:

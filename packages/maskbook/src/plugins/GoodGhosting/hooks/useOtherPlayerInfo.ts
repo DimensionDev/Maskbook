@@ -15,7 +15,7 @@ export function useOtherPlayerInfo(info: GoodGhostingInfo) {
                 .fill('')
                 .map((_, i) => [i]),
         }),
-        [info],
+        [info.numberOfPlayers],
     )
 
     const [addressResults, addressCalls, _, addressCallback] = useSingleContractMultipleData(

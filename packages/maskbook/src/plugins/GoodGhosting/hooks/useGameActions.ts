@@ -33,7 +33,7 @@ export function useMakeDeposit(info: GoodGhostingInfo) {
     const contract = useGoodGhostingContract(info.contractAddress)
     const gasPrice = useGasPrice()
 
-    const status = getPlayerStatus(info.currentSegment, info.currentPlayer)
+    const status = getPlayerStatus(info, info.currentPlayer)
     const canMakeDeposit =
         info.currentPlayer &&
         info.currentSegment > 0 &&
@@ -44,15 +44,13 @@ export function useMakeDeposit(info: GoodGhostingInfo) {
         canMakeDeposit,
         makeDeposit: async () => {
             if (contract) {
-                const gasEstimate = await contract.methods
-                    .makeDeposit()
-                    .estimateGas({
-                        from: account,
-                    })
-                    .catch(() => gasPrice)
+                const gasEstimate = await contract.methods.makeDeposit().estimateGas({
+                    from: account,
+                })
                 await contract.methods.makeDeposit().send({
                     from: account,
-                    gasPrice: gasEstimate,
+                    gas: gasEstimate,
+                    gasPrice,
                 })
             }
         },
@@ -70,15 +68,13 @@ export function useWithdraw(info: GoodGhostingInfo) {
         canWithdraw,
         withdraw: async () => {
             if (contract) {
-                const gasEstimate = await contract.methods
-                    .withdraw()
-                    .estimateGas({
-                        from: account,
-                    })
-                    .catch(() => gasPrice)
+                const gasEstimate = await contract.methods.withdraw().estimateGas({
+                    from: account,
+                })
                 await contract.methods.withdraw().send({
                     from: account,
-                    gasPrice: gasEstimate,
+                    gas: gasEstimate,
+                    gasPrice,
                 })
             }
         },
@@ -97,15 +93,13 @@ export function useEarlyWithdraw(info: GoodGhostingInfo) {
         canEarlyWithdraw,
         earlyWithdraw: async () => {
             if (contract) {
-                const gasEstimate = await contract.methods
-                    .earlyWithdraw()
-                    .estimateGas({
-                        from: account,
-                    })
-                    .catch(() => gasPrice)
+                const gasEstimate = await contract.methods.earlyWithdraw().estimateGas({
+                    from: account,
+                })
                 await contract.methods.earlyWithdraw().send({
                     from: account,
-                    gasPrice: gasEstimate,
+                    gas: gasEstimate,
+                    gasPrice,
                 })
             }
         },

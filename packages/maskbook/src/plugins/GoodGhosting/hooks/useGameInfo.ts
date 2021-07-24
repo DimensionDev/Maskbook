@@ -78,7 +78,7 @@ export function useGameInfo(contractAddress: string) {
             contractAddress,
             segmentPayment,
             firstSegmentStart: Number.parseInt(firstSegmentStart, 10),
-            currentSegment: Math.min(Number.parseInt(currentSegment, 10), Number.parseInt(lastSegment, 10)),
+            currentSegment: Number.parseInt(currentSegment, 10),
             lastSegment: Number.parseInt(lastSegment, 10),
             segmentLength: Number.parseInt(segmentLength, 10),
             numberOfPlayers: Number.parseInt(numberOfPlayers, 10),
@@ -88,6 +88,7 @@ export function useGameInfo(contractAddress: string) {
             lendingPoolAddress: lendingPool,
             earlyWithdrawalFee,
             currentPlayer: player && player.addr !== ZERO_ADDRESS ? player : undefined,
+            gameHasEnded: Number.parseInt(currentSegment, 10) >= Number.parseInt(lastSegment, 10),
             refresh: asyncResult.retry,
         } as GoodGhostingInfo
     }, [results, contract])

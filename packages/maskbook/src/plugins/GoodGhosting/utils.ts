@@ -1,5 +1,5 @@
 import { isBefore } from 'date-fns'
-import type { Player, PlayerStandings, TimelineEvent } from './types'
+import type { GoodGhostingInfo, Player, PlayerStandings, TimelineEvent } from './types'
 
 export enum PlayerStatus {
     Winning = 'winning',
@@ -9,14 +9,15 @@ export enum PlayerStatus {
     Unknown = 'unknown',
 }
 
-export function getPlayerStatus(currentSegment: number, player?: Player): PlayerStatus {
+export function getPlayerStatus(info: GoodGhostingInfo, player?: Player): PlayerStatus {
     if (!player) return PlayerStatus.Unknown
     const mostRecentSegmentPaid = Number.parseInt(player.mostRecentSegmentPaid)
 
+    if (mostRecentSegmentPaid === info.currentSegment || mostRecentSegmentPaid === info.lastSegment - 1)
+        return PlayerStatus.Winning
     if (player.withdrawn) return PlayerStatus.Dropout
-    if (mostRecentSegmentPaid < currentSegment - 1) return PlayerStatus.Ghost
-    if (mostRecentSegmentPaid === currentSegment - 1) return PlayerStatus.Waiting
-    if (mostRecentSegmentPaid === currentSegment) return PlayerStatus.Winning
+    if (mostRecentSegmentPaid < info.currentSegment - 1) return PlayerStatus.Ghost
+    if (mostRecentSegmentPaid === info.currentSegment - 1) return PlayerStatus.Waiting
     return PlayerStatus.Unknown
 }
 
@@ -34,7 +35,7 @@ export function isEndOfTimeline(timelineIndex: number, timeline: TimelineEvent[]
     return timelineIndex === timeline.length - 1 && isBefore(timeline[timelineIndex].date, new Date())
 }
 
-export function getPlayerStandings(players: Player[], currentSegment: number) {
+export function getPlayerStandings(players: Player[], info: GoodGhostingInfo) {
     let playerStandings: PlayerStandings = {
         winning: 0,
         waiting: 0,
@@ -43,7 +44,7 @@ export function getPlayerStandings(players: Player[], currentSegment: number) {
     }
 
     players.forEach((player, i) => {
-        const playerStatus = getPlayerStatus(currentSegment, player)
+        const playerStatus = getPlayerStatus(info, player)
 
         if (playerStatus === PlayerStatus.Dropout) playerStandings.dropouts += 1
         else if (playerStatus === PlayerStatus.Ghost) playerStandings.ghosts += 1

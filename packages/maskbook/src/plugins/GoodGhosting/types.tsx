@@ -14,6 +14,7 @@ export interface GoodGhostingInfo {
     lendingPoolAddress: string
     earlyWithdrawalFee: string
     currentPlayer: Player | undefined
+    gameHasEnded: boolean
     refresh: () => void
 }
 
