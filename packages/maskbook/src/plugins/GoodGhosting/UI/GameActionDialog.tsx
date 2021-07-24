@@ -1,16 +1,13 @@
-import { Box, Button, DialogContent, DialogActions, makeStyles } from '@material-ui/core'
+import { Box, Button, DialogContent, DialogActions, makeStyles, Typography } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import type { ERC20TokenDetailed } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, formatBalance } from '@masknet/web3-shared'
 import type { GoodGhostingInfo } from '../types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { useI18N } from '../../../utils'
+import { useGameToken } from '../hooks/usePoolData'
 
 const useStyles = makeStyles((theme) => ({
-    card: {
-        padding: 0,
-        border: `solid 1px ${theme.palette.divider}`,
-        margin: `${theme.spacing(2)} auto`,
-    },
     content: {
         width: '100%',
         display: 'flex',
@@ -22,10 +19,15 @@ const useStyles = makeStyles((theme) => ({
         minHeight: 39,
         margin: `${theme.spacing(1)} auto`,
     },
+    actionText: {
+        textAlign: 'center',
+        marginBottom: theme.spacing(5),
+    },
 }))
 
 interface GameActionDialogProps {
     open: boolean
+    titleText: string
     bodyText: string
     actionText: string
     onAction: () => void
@@ -36,8 +38,10 @@ interface GameActionDialogProps {
 }
 
 export function GameActionDialog(props: GameActionDialogProps) {
-    const { open, onAction, onClose, bodyText, actionText, token, info, needsApprove } = props
+    const { open, onAction, onClose, bodyText, titleText, actionText, token, info, needsApprove } = props
     const classes = useStyles()
+    const gameToken = useGameToken()
+    const { t } = useI18N()
 
     let action = (
         <Button classes={{ root: classes.button }} color="primary" variant="contained" fullWidth onClick={onAction}>
@@ -49,7 +53,7 @@ export function GameActionDialog(props: GameActionDialogProps) {
         action = (
             <EthereumERC20TokenApprovedBoundary
                 amount={info.segmentPayment}
-                spender={props.info.contractAddress}
+                spender={info.contractAddress}
                 token={token}>
                 {action}
             </EthereumERC20TokenApprovedBoundary>
@@ -57,9 +61,26 @@ export function GameActionDialog(props: GameActionDialogProps) {
     }
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title=" ">
+        <InjectedDialog open={open} onClose={onClose} title={titleText}>
             <DialogContent>
-                <Box>{bodyText}</Box>
+                <Box>
+                    <div className={classes.actionText}>
+                        <Typography variant="h6" color="textPrimary">
+                            {bodyText}
+                        </Typography>
+                    </div>
+
+                    <Typography variant="h6" color="textSecondary">
+                        {t('plugin_good_ghosting_rules')}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary">
+                        {t('plugin_good_ghosting_game_rules', {
+                            amount: formatBalance(info.segmentPayment, gameToken.decimals),
+                            token: gameToken.symbol,
+                            roundCount: info.lastSegment,
+                        })}
+                    </Typography>
+                </Box>
             </DialogContent>
             <DialogActions>
                 <EthereumWalletConnectedBoundary>{action}</EthereumWalletConnectedBoundary>

@@ -91,7 +91,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" color="textSecondary">
-                            {props.info.currentSegment + 1} / {props.info.lastSegment}
+                            {Math.min(props.info.currentSegment + 1, props.info.lastSegment)} / {props.info.lastSegment}
                         </Typography>
                     </Grid>
                 </Grid>

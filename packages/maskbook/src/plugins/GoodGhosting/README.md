@@ -8,6 +8,10 @@ This plugin displays data from the [Good Ghosting](https://goodghosting.com/) ga
 - [x] View timeline of the game
 - [x] View personal data if logged in user is part of the game
 - [x] View standings of other players in the game
+- [x] Join game
+- [x] Make Deposit
+- [x] Withdraw winning
+- [x] Withdraw early
 
 ## Related projects
 

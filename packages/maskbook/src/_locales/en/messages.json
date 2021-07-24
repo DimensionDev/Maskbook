@@ -776,16 +776,18 @@
     "plugin_good_ghosting_deposits": "Deposits made",
     "plugin_good_ghosting_total_deposited": "Total deposited",
     "plugin_good_ghosting_address": "Address",
-    "plugin_good_ghosting_not_a_participant": "Looks like you're not a participant in this game",
+    "plugin_good_ghosting_not_a_participant": "Looks like you're not a participant in this game.",
     "plugin_good_ghosting_next_event": "Coming up next",
     "plugin_good_ghosting_game_end": "This game has ended",
     "plugin_good_ghosting_game_over": "Game Over",
     "plugin_good_ghosting_participants_withdraw": "Participants can now withdraw their earnings!",
     "plugin_good_ghosting_join_game": "Join Game",
     "plugin_good_ghosting_make_deposit": "Make Deposit",
-    "plugin_good_ghosting_join_help_text": "Join this savings game! To win, you need to deposit money into the savings pool every round, prior to the round's deadline. Deposit {{segmentPayment}} {{token}} every round for {{roundCount}} rounds to win the game. If other players miss depositing in a round and become ghosts, their earnings will go to you.",
-    "plugin_good_ghosting_deposit_help_text": "Deposit {{segmentPayment}} {{token}} for this round and continue to be a winner",
-    "plugin_good_ghosting_withdraw_help_text": "Withdraw your earnings",
+    "plugin_good_ghosting_join_help_text": "Deposit your first {{amount}} {{token}} and join this savings pool. To win, you need to deposit money into the savings pool every round, prior to the round's deadline.",
+    "plugin_good_ghosting_deposit_help_text": "Deposit {{segmentPayment}} {{token}} for this round and continue to be a winner.",
+    "plugin_good_ghosting_withdraw_help_text": "The game has ended! You can now withdraw your deposits, along with any earnings that you won.",
     "plugin_good_ghosting_leave_game": "Leave Game",
-    "plugin_good_ghosting_early_withdraw_info": "If you wish to do withdraw from an ongoing game, you may be charged a small fee of {{amount}} {{token}} to compensate the remaining players in the savings pool"
+    "plugin_good_ghosting_early_withdraw_info": "If you wish to do withdraw from an ongoing game, you may be charged a small fee of {{amount}} {{token}} to compensate the remaining players in the savings pool.",
+    "plugin_good_ghosting_rules": "Rules",
+    "plugin_good_ghosting_game_rules": "Deposit {{amount}} {{token}} every round for {{roundCount}} rounds to win the game. If other players miss depositing in a round and become ghosts, their earnings will go to you."
 }

@@ -63,9 +63,8 @@ export function GameAction(props: GameActionProps) {
                 action: joinGame,
                 text: t('plugin_good_ghosting_join_game'),
                 helpText: t('plugin_good_ghosting_join_help_text', {
-                    segmentPayment: formatBalance(props.info.segmentPayment, gameToken.decimals),
+                    amount: formatBalance(props.info.segmentPayment, gameToken.decimals),
                     token: gameToken.symbol,
-                    roundCount: props.info.lastSegment,
                 }),
             }
         } else if (canMakeDeposit) {
@@ -95,6 +94,7 @@ export function GameAction(props: GameActionProps) {
                 <GameActionDialog
                     open={openDialog}
                     actionText={buttonMethod.text}
+                    titleText={buttonMethod.text}
                     bodyText={buttonMethod.helpText}
                     onAction={() => buttonAction(buttonMethod.action)}
                     onClose={() => setOpenDialog(false)}

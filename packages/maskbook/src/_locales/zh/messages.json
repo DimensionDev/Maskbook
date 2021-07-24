@@ -787,5 +787,7 @@
     "plugin_good_ghosting_deposit_help_text": "",
     "plugin_good_ghosting_withdraw_help_text": "",
     "plugin_good_ghosting_leave_game": "",
-    "plugin_good_ghosting_early_withdraw_info": ""
+    "plugin_good_ghosting_early_withdraw_info": "",
+    "plugin_good_ghosting_rules": "",
+    "plugin_good_ghosting_game_rules": ""
 }
