@@ -37,7 +37,7 @@ export function useMakeDeposit(info: GoodGhostingInfo) {
     const canMakeDeposit =
         info.currentPlayer &&
         info.currentSegment > 0 &&
-        info.currentSegment < info.lastSegment - 1 &&
+        info.currentSegment < info.lastSegment &&
         status === PlayerStatus.Waiting
 
     return {
