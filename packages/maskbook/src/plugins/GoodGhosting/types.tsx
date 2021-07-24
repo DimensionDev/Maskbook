@@ -12,6 +12,7 @@ export interface GoodGhostingInfo {
     totalGamePrincipal: string
     adaiTokenAddress: string
     lendingPoolAddress: string
+    earlyWithdrawalFee: string
     currentPlayer: Player | undefined
     refresh: () => void
 }

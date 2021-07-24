@@ -37,6 +37,7 @@ export function useGameInfo(contractAddress: string) {
             'totalGamePrincipal',
             'adaiToken',
             'lendingPool',
+            'earlyWithdrawalFee',
         ] as any
         return {
             names: [...names, 'players'],
@@ -62,6 +63,7 @@ export function useGameInfo(contractAddress: string) {
             totalGamePrincipal,
             adaiToken,
             lendingPool,
+            earlyWithdrawalFee,
             currentPlayer,
         ] = results.map((x) => {
             if (x.error) failedToGetInfo = true
@@ -76,7 +78,7 @@ export function useGameInfo(contractAddress: string) {
             contractAddress,
             segmentPayment,
             firstSegmentStart: Number.parseInt(firstSegmentStart, 10),
-            currentSegment: Number.parseInt(currentSegment, 10),
+            currentSegment: Math.min(Number.parseInt(currentSegment, 10), Number.parseInt(lastSegment, 10)),
             lastSegment: Number.parseInt(lastSegment, 10),
             segmentLength: Number.parseInt(segmentLength, 10),
             numberOfPlayers: Number.parseInt(numberOfPlayers, 10),
@@ -84,6 +86,7 @@ export function useGameInfo(contractAddress: string) {
             totalGamePrincipal,
             adaiTokenAddress: adaiToken,
             lendingPoolAddress: lendingPool,
+            earlyWithdrawalFee,
             currentPlayer: player && player.addr !== ZERO_ADDRESS ? player : undefined,
             refresh: asyncResult.retry,
         } as GoodGhostingInfo

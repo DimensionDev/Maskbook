@@ -64,11 +64,7 @@ export function useWithdraw(info: GoodGhostingInfo) {
     const contract = useGoodGhostingContract(info.contractAddress)
     const gasPrice = useGasPrice()
 
-    const canWithdraw =
-        info.currentPlayer &&
-        Number.parseInt(info.currentPlayer.mostRecentSegmentPaid, 0) === info.lastSegment - 1 &&
-        !info.currentPlayer.withdrawn &&
-        info.currentSegment >= info.lastSegment
+    const canWithdraw = info.currentPlayer && !info.currentPlayer.withdrawn && info.currentSegment >= info.lastSegment
 
     return {
         canWithdraw,
@@ -81,6 +77,33 @@ export function useWithdraw(info: GoodGhostingInfo) {
                     })
                     .catch(() => gasPrice)
                 await contract.methods.withdraw().send({
+                    from: account,
+                    gasPrice: gasEstimate,
+                })
+            }
+        },
+    }
+}
+
+export function useEarlyWithdraw(info: GoodGhostingInfo) {
+    const account = useAccount()
+    const contract = useGoodGhostingContract(info.contractAddress)
+    const gasPrice = useGasPrice()
+
+    const canEarlyWithdraw =
+        info.currentPlayer && !info.currentPlayer.withdrawn && info.currentSegment < info.lastSegment
+
+    return {
+        canEarlyWithdraw,
+        earlyWithdraw: async () => {
+            if (contract) {
+                const gasEstimate = await contract.methods
+                    .earlyWithdraw()
+                    .estimateGas({
+                        from: account,
+                    })
+                    .catch(() => gasPrice)
+                await contract.methods.earlyWithdraw().send({
                     from: account,
                     gasPrice: gasEstimate,
                 })

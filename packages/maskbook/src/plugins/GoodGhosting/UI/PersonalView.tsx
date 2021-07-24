@@ -1,6 +1,8 @@
 import { formatBalance, formatEthereumAddress } from '@masknet/web3-shared'
-import { makeStyles, Grid, Typography } from '@material-ui/core'
+import { makeStyles, Grid, Typography, Button } from '@material-ui/core'
+import { useState } from 'react'
 import { useI18N } from '../../../utils'
+import { useEarlyWithdraw } from '../hooks/useGameActions'
 import { useGameToken } from '../hooks/usePoolData'
 import type { GoodGhostingInfo, Player } from '../types'
 import { getPlayerStatus, PlayerStatus } from '../utils'
@@ -20,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '100px',
         margin: 'auto',
     },
+    withdraw: {
+        marginTop: theme.spacing(5),
+        textAlign: 'center',
+    },
 }))
 
 interface PersonalViewProps {
@@ -30,6 +36,8 @@ export function PersonalView(props: PersonalViewProps) {
     const classes = useStyles()
     const { t } = useI18N()
     const gameToken = useGameToken()
+    const { canEarlyWithdraw, earlyWithdraw } = useEarlyWithdraw(props.info)
+    const [buttonEnabled, setButtonEnabled] = useState(true)
 
     const status = useGetStatus(props.info.currentSegment, props.info.currentPlayer)
 
@@ -39,6 +47,16 @@ export function PersonalView(props: PersonalViewProps) {
                 {t('plugin_good_ghosting_not_a_participant')}
             </Typography>
         )
+    }
+
+    const withdraw = async () => {
+        setButtonEnabled(false)
+        try {
+            await earlyWithdraw()
+        } catch (error) {
+        } finally {
+            setButtonEnabled(true)
+        }
     }
 
     return (
@@ -96,6 +114,19 @@ export function PersonalView(props: PersonalViewProps) {
                     </Grid>
                 </Grid>
             </Grid>
+            {canEarlyWithdraw && (
+                <div className={classes.withdraw}>
+                    <Typography variant="subtitle2" color="textSecondary">
+                        {t('plugin_good_ghosting_early_withdraw_info', {
+                            amount: formatBalance(props.info.earlyWithdrawalFee, gameToken.decimals),
+                            token: gameToken.symbol,
+                        })}
+                    </Typography>
+                    <Button color="primary" disabled={!buttonEnabled} onClick={() => withdraw()}>
+                        {t('plugin_good_ghosting_leave_game')}
+                    </Button>
+                </div>
+            )}
         </>
     )
 }
