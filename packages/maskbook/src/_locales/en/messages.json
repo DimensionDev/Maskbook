@@ -787,7 +787,7 @@
     "plugin_good_ghosting_deposit_help_text": "Deposit {{segmentPayment}} {{token}} for this round and continue to be a winner.",
     "plugin_good_ghosting_withdraw_help_text": "The game has ended! You can now withdraw your deposits, along with any earnings that you won.",
     "plugin_good_ghosting_leave_game": "Leave Game",
-    "plugin_good_ghosting_early_withdraw_info": "If you wish to do withdraw from an ongoing game, you may be charged a small fee of {{amount}} {{token}} to compensate the remaining players in the savings pool.",
+    "plugin_good_ghosting_early_withdraw_info": "If you wish to withdraw from an ongoing game, you may be charged a small fee of {{amount}} {{token}} to compensate the remaining players in the savings pool.",
     "plugin_good_ghosting_rules": "Rules",
     "plugin_good_ghosting_game_rules": "Deposit {{amount}} {{token}} every round for {{roundCount}} rounds to win the game. If other players miss depositing in a round and become ghosts, their earnings will go to you."
 }

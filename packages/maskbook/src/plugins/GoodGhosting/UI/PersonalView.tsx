@@ -6,6 +6,7 @@ import { useEarlyWithdraw } from '../hooks/useGameActions'
 import { useGameToken } from '../hooks/usePoolData'
 import type { GoodGhostingInfo, Player } from '../types'
 import { getPlayerStatus, PlayerStatus } from '../utils'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) => ({
     infoRow: {
@@ -58,6 +59,10 @@ export function PersonalView(props: PersonalViewProps) {
             setButtonEnabled(true)
         }
     }
+
+    const earlyWithdrawalFee = new BigNumber(props.info.currentPlayer.amountPaid)
+        .multipliedBy(props.info.earlyWithdrawalFee)
+        .dividedBy(100)
 
     return (
         <>
@@ -118,7 +123,7 @@ export function PersonalView(props: PersonalViewProps) {
                 <div className={classes.withdraw}>
                     <Typography variant="subtitle2" color="textSecondary">
                         {t('plugin_good_ghosting_early_withdraw_info', {
-                            amount: formatBalance(props.info.earlyWithdrawalFee, gameToken.decimals),
+                            amount: formatBalance(earlyWithdrawalFee, gameToken.decimals),
                             token: gameToken.symbol,
                         })}
                     </Typography>

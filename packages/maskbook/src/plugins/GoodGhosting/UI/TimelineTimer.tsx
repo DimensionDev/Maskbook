@@ -37,7 +37,7 @@ export function TimelineTimer(props: TimelineTimerProps) {
 
     const nextTimelineEvent = timeline[timelineIndex]
 
-    const updateTargetDate = () => {
+    const onUpdateTargetDate = () => {
         const index = getNextTimelineIndex(timeline)
         setTimelineIndex(index)
         setIsLastEvent(isEndOfTimeline(timelineIndex, timeline))
@@ -58,7 +58,7 @@ export function TimelineTimer(props: TimelineTimerProps) {
                             {t('plugin_good_ghosting_participants_withdraw')}
                         </Typography>
                     ) : (
-                        <Timer targetDate={nextTimelineEvent.date} updateTargetDate={updateTargetDate} />
+                        <Timer targetDate={nextTimelineEvent.date} onUpdateTargetDate={onUpdateTargetDate} />
                     )}
                     <GameAction info={props.info} />
                 </div>
@@ -69,7 +69,7 @@ export function TimelineTimer(props: TimelineTimerProps) {
 
 interface TimerProps {
     targetDate: Date
-    updateTargetDate: () => void
+    onUpdateTargetDate: () => void
 }
 
 function Timer(props: TimerProps) {
@@ -80,7 +80,7 @@ function Timer(props: TimerProps) {
 
             if (isBefore(props.targetDate, now)) {
                 clearInterval(timerId)
-                props.updateTargetDate()
+                props.onUpdateTargetDate()
             } else {
                 const duration = intervalToDuration({
                     start: now,
