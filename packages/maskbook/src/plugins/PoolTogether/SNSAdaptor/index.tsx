@@ -7,6 +7,8 @@ import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { DepositDialog } from '../UI/DepositDialog'
 import { URL_PATTERN } from '../constants'
 import { PoolTogetherView } from '../UI/PoolTogetherView'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainId } from '@masknet/web3-shared'
 
 const isPoolTogetherUrl = (url: string) => URL_PATTERN.test(url)
 
@@ -44,7 +46,11 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     return (
         <MaskbookPluginWrapper pluginName="PoolTogether">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <PoolTogetherView />
+                <EthereumChainBoundary
+                    chainId={ChainId.Mainnet}
+                    isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}>
+                    <PoolTogetherView />
+                </EthereumChainBoundary>
             </Suspense>
         </MaskbookPluginWrapper>
     )
