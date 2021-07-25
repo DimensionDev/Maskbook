@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { ForwardedRef, forwardRef } from 'react'
 import { formHelperTextClasses, makeStyles, TextField, TextFieldProps } from '@material-ui/core'
 import { getMaskColor } from '../../constants'
 
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 type MaskTextFieldProps = Exclude<TextFieldProps, 'variant'>
 
-export const MaskTextField = memo((props: MaskTextFieldProps) => {
+export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: ForwardedRef<any>) => {
     const { label, ...rest } = props
     const classes = useStyles()
 
@@ -43,6 +43,7 @@ export const MaskTextField = memo((props: MaskTextFieldProps) => {
         <div className={classes.root}>
             {label && <label className={classes.label}>{label}</label>}
             <TextField
+                ref={ref}
                 {...rest}
                 classes={{ root: classes.field }}
                 variant="standard"
