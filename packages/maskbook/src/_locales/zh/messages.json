@@ -365,6 +365,8 @@
     "plugin_wallet_switch_network": "",
     "plugin_wallet_switch_network_under_going": "",
     "plugin_wallet_not_availabe_on": "",
+    "plugin_wallet_connect_wallet": "",
+    "plugin_wallet_connect_wallet_tip": "",
     "plugin_wallet_settings_portfolio_data_source_primary": "投資組合資料來源",
     "plugin_wallet_settings_portfolio_data_source_secondary": "選擇投資組合資料來源。",
     "plugin_wallet_settings_collectible_data_source_primary": "收藏品資料來源",
