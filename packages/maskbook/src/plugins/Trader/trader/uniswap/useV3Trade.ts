@@ -36,12 +36,16 @@ export function useV3BestTradeExactIn(
         )
     }, [amountIn, routes])
 
-    const [quotesResults, , state] = useSingleContractMultipleData(quoter, ['quoteExactInput'], quoteExactInInputs)
+    const [quotesResults, , quotesState] = useSingleContractMultipleData(
+        quoter,
+        ['quoteExactInput'],
+        quoteExactInInputs,
+    )
 
     console.log('DEBUG: v3 best trade exact in')
     console.log({
         quotesResults,
-        state,
+        state: quotesState,
     })
 
     return useMemo(() => {
@@ -52,7 +56,14 @@ export function useV3BestTradeExactIn(
             }
         }
 
-        if (routesLoading || state.type === MulticalStateType.PENDING) {
+        // if (routesLoading || quotesResults.some(({ loading }) => loading)) {
+        //     return {
+        //       state: V3TradeState.LOADING,
+        //       trade: null,
+        //     }
+        //   }
+
+        if (routesLoading || quotesState.type === MulticalStateType.PENDING) {
             return {
                 state: V3TradeState.LOADING,
                 trade: null,
@@ -127,7 +138,11 @@ export function useV3BestTradeExactOut(
         )
     }, [amountOut, routes])
 
-    const [quotesResults, , state] = useSingleContractMultipleData(quoter, ['quoteExactOutput'], quoteExactOutInputs)
+    const [quotesResults, , quotesState] = useSingleContractMultipleData(
+        quoter,
+        ['quoteExactOutput'],
+        quoteExactOutInputs,
+    )
 
     return useMemo(() => {
         if (!amountOut || !currencyIn || quotesResults.some(({ error }) => !!error)) {
@@ -137,7 +152,7 @@ export function useV3BestTradeExactOut(
             }
         }
 
-        if (routesLoading || state.type === MulticalStateType.PENDING) {
+        if (routesLoading || quotesState.type === MulticalStateType.PENDING) {
             return {
                 state: V3TradeState.LOADING,
                 trade: null,
