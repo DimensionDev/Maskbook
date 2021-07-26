@@ -6,7 +6,7 @@
   "types": "./dist/",
   "scripts": {},
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "=0.8.0-20210429202414-74fb9a1",
+    "@dimensiondev/holoflows-kit": "^0.9.0-20210726055325-dfbe7fd",
     "@masknet/shared": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared": "workspace:*",

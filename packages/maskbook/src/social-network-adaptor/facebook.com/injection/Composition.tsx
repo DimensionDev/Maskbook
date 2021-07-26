@@ -14,9 +14,7 @@ if (isMobileFacebook) {
         .querySelector('[role="dialog"] form')
         .querySelectorAll('[role="button"][tabindex="0"], [role="button"][tabindex="-1"]')
         .map((x) => x.parentElement)
-        // TODO: should be nth(-1), see https://github.com/DimensionDev/Holoflows-Kit/issues/270
-        .reverse()
-        .nth(2)
+        .at(-1)
         .map((x) => x.parentElement)
 }
 
