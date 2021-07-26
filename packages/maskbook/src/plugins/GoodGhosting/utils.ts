@@ -13,11 +13,11 @@ export function getPlayerStatus(info: GoodGhostingInfo, player?: Player): Player
     if (!player) return PlayerStatus.Unknown
     const mostRecentSegmentPaid = Number.parseInt(player.mostRecentSegmentPaid)
 
-    if (mostRecentSegmentPaid === info.currentSegment || mostRecentSegmentPaid === info.lastSegment - 1)
-        return PlayerStatus.Winning
+    if (mostRecentSegmentPaid === info.lastSegment - 1) return PlayerStatus.Winning
     if (player.withdrawn) return PlayerStatus.Dropout
     if (mostRecentSegmentPaid < info.currentSegment - 1) return PlayerStatus.Ghost
     if (mostRecentSegmentPaid === info.currentSegment - 1) return PlayerStatus.Waiting
+    if (mostRecentSegmentPaid === info.currentSegment) return PlayerStatus.Winning
     return PlayerStatus.Unknown
 }
 
