@@ -3,8 +3,11 @@ import { Alert, Box, Button, makeStyles, TextField, Typography } from '@material
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useNavigate } from 'react-router'
+import { RoutePaths } from '../../../../type'
+import { MaskColorVar } from '@masknet/theme'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     container: {
         padding: '120px 18%',
         display: 'flex',
@@ -24,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     label: {
         fontSize: 12,
         lineHeight: '16px',
-        color: '#1C68F3',
+        color: MaskColorVar.blue,
     },
     input: {
         width: '100%',
@@ -58,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
 export const CreateWalletForm = memo(() => {
     const [open, setOpen] = useState(true)
     const classes = useStyles()
+    const navigate = useNavigate()
 
     const schema = useMemo(() => {
         return zod
@@ -113,6 +117,7 @@ export const CreateWalletForm = memo(() => {
 
     const {
         control,
+        handleSubmit,
         formState: { errors },
     } = useForm<zod.infer<typeof schema>>({
         mode: 'onChange',
@@ -121,6 +126,10 @@ export const CreateWalletForm = memo(() => {
             name: '',
             password: '',
         },
+    })
+
+    const onSubmit = handleSubmit(() => {
+        navigate(RoutePaths.CreateMaskWalletMnemonic)
     })
 
     return (
@@ -152,6 +161,7 @@ export const CreateWalletForm = memo(() => {
                         render={({ field }) => (
                             <TextField
                                 {...field}
+                                type="password"
                                 variant="filled"
                                 placeholder="Payment Password"
                                 error={!!errors.password?.message}
@@ -165,13 +175,18 @@ export const CreateWalletForm = memo(() => {
                     <Controller
                         render={({ field }) => (
                             <TextField
+                                {...field}
+                                error={!!errors.confirm?.message}
+                                helperText={errors.confirm?.message}
+                                type="password"
                                 variant="filled"
                                 placeholder="Re-enter the payment password"
                                 className={classes.input}
                                 InputProps={{ disableUnderline: true }}
                             />
                         )}
-                        name={}
+                        name="confirm"
+                        control={control}
                     />
                 </Box>
                 <Typography className={classes.tips}>
@@ -182,7 +197,9 @@ export const CreateWalletForm = memo(() => {
                     <Button color="secondary" className={classes.button}>
                         Cancel
                     </Button>
-                    <Button className={classes.button}>Next</Button>
+                    <Button className={classes.button} onClick={onSubmit}>
+                        Next
+                    </Button>
                 </Box>
                 {open ? (
                     <Alert severity="error" onClose={() => setOpen(false)} className={classes.alert}>

@@ -12,7 +12,8 @@ export enum RoutePaths {
     WalletsSell = '/wallets/sell',
     WalletsHistory = '/wallets/history',
     CreateMaskWallet = '/create-mask-wallet',
-    CreateMaskWalletName = '/create-mask-wallet/name',
+    CreateMaskWalletForm = '/create-mask-wallet/form',
+    CreateMaskWalletMnemonic = '/create-mask-wallet/mnemonic',
     Settings = '/settings',
     Plugins = '/plugins',
 }
