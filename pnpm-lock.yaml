@@ -113,7 +113,7 @@ importers:
   packages/dashboard:
     specifiers:
       '@babel/core': ^7.14.6
-      '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
+      '@dimensiondev/holoflows-kit': '=0.9.0-20210726055325-dfbe7fd'
       '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
       '@hookform/resolvers': ^2.6.0
       '@masknet/icons': workspace:*
@@ -152,7 +152,7 @@ importers:
       wallet.ts: ^1.0.1
       zod: ^3.5.1
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1
+      '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd
       '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
       '@hookform/resolvers': 2.6.1_react-hook-form@7.11.1
       '@masknet/icons': link:../icons
@@ -217,7 +217,7 @@ importers:
     specifiers:
       '@balancer-labs/sor': ^1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
-      '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
+      '@dimensiondev/holoflows-kit': '=0.9.0-20210726055325-dfbe7fd'
       '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/stego-js': '=0.11.1-20201027083223-8ab41be'
@@ -377,7 +377,7 @@ importers:
     dependencies:
       '@balancer-labs/sor': 1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
-      '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1_webextension-polyfill@0.8.0
+      '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd_webextension-polyfill@0.8.0
       '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
@@ -538,7 +538,7 @@ importers:
 
   packages/plugin-infra:
     specifiers:
-      '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
+      '@dimensiondev/holoflows-kit': '=0.9.0-20210726055325-dfbe7fd'
       '@masknet/shared': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared': workspace:*
@@ -547,7 +547,7 @@ importers:
       ts-results: ^3.3.0
       use-subscription: ^1.5.1
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1
+      '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd
       '@masknet/shared': link:../shared
       '@masknet/theme': link:../theme
       '@masknet/web3-shared': link:../web3-shared
@@ -564,7 +564,7 @@ importers:
 
   packages/shared:
     specifiers:
-      '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
+      '@dimensiondev/holoflows-kit': '=0.9.0-20210726055325-dfbe7fd'
       '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
@@ -577,7 +577,7 @@ importers:
       use-subscription: ^1.5.1
       uuid: ^8.3.2
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1
+      '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd
       '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
@@ -739,7 +739,7 @@ packages:
       bintrees: 1.0.2
       bn.js: 4.12.0
       compare-versions: 3.6.0
-      ethereumjs-abi: 0.6.6
+      ethereumjs-abi: 0.6.8
       ethereumjs-blockstream: 2.0.7
       ethereumjs-util: 5.2.1
       find-versions: 2.0.0
@@ -4372,31 +4372,27 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/holoflows-kit/0.8.0-20210429202414-74fb9a1:
-    resolution: {integrity: sha512-KkrelGIh426YENN8uMxdgNlr2DGGEeFkZYoh8AsbW8+5YOufeINmMLFXwB2PKdmISeJEkP5wi6d3cFsHF+E9kg==, tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210429202414-74fb9a1/7d17e1f8587a91b31c2a6c84d951aeda1b19ef849c06896ecce1c8de075cd739}
+  /@dimensiondev/holoflows-kit/0.9.0-20210726055325-dfbe7fd:
+    resolution: {integrity: sha512-FgSky+dtoP4pfTgXl1RnN0WSu+ozYB7xCf2sxO58ReO09II5ulxAF+bxcBNdiiVC8WmSEU0tCQMOlljFZPVMxw==, tarball: download/@dimensiondev/holoflows-kit/0.9.0-20210726055325-dfbe7fd/c3d610130032d2c77f2b0c51dc3f7ef804d9234c200cad33f631a043e7b0d01c}
     peerDependencies:
       webextension-polyfill: '*'
     dependencies:
       '@servie/events': 1.0.0
-      async-call-rpc: 4.2.1
       event-iterator: 2.0.0
       jsx-jsonml-devtools-renderer: 1.4.3
       lodash-es: 4.17.21
-      memorize-decorator: 0.2.4
       tslib: 2.3.0
     dev: false
 
-  /@dimensiondev/holoflows-kit/0.8.0-20210429202414-74fb9a1_webextension-polyfill@0.8.0:
-    resolution: {integrity: sha512-KkrelGIh426YENN8uMxdgNlr2DGGEeFkZYoh8AsbW8+5YOufeINmMLFXwB2PKdmISeJEkP5wi6d3cFsHF+E9kg==, tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210429202414-74fb9a1/7d17e1f8587a91b31c2a6c84d951aeda1b19ef849c06896ecce1c8de075cd739}
+  /@dimensiondev/holoflows-kit/0.9.0-20210726055325-dfbe7fd_webextension-polyfill@0.8.0:
+    resolution: {integrity: sha512-FgSky+dtoP4pfTgXl1RnN0WSu+ozYB7xCf2sxO58ReO09II5ulxAF+bxcBNdiiVC8WmSEU0tCQMOlljFZPVMxw==, tarball: download/@dimensiondev/holoflows-kit/0.9.0-20210726055325-dfbe7fd/c3d610130032d2c77f2b0c51dc3f7ef804d9234c200cad33f631a043e7b0d01c}
     peerDependencies:
       webextension-polyfill: '*'
     dependencies:
       '@servie/events': 1.0.0
-      async-call-rpc: 4.2.1
       event-iterator: 2.0.0
       jsx-jsonml-devtools-renderer: 1.4.3
       lodash-es: 4.17.21
-      memorize-decorator: 0.2.4
       tslib: 2.3.0
       webextension-polyfill: 0.8.0
     dev: false
@@ -4758,7 +4754,7 @@ packages:
     resolution: {integrity: sha512-9gU2H+/yK1j2eVMdzm6xvHSnMxk8waIHQGYCZg5uvAyH0rsAzxkModzBSpbAkAuhKFEovC2S9hM4nPuLym8IZw==}
     dependencies:
       '@ethersproject/address': 5.4.0
-      '@ethersproject/bignumber': 5.4.0
+      '@ethersproject/bignumber': 5.4.1
       '@ethersproject/bytes': 5.4.0
       '@ethersproject/constants': 5.4.0
       '@ethersproject/hash': 5.4.0
@@ -4816,6 +4812,13 @@ packages:
       '@ethersproject/logger': 5.4.0
       bn.js: 4.12.0
 
+  /@ethersproject/bignumber/5.4.1:
+    resolution: {integrity: sha512-fJhdxqoQNuDOk6epfM7yD6J8Pol4NUCy1vkaGAkuujZm0+lNow//MKu1hLhRiYV4BsOHyBv5/lsTjF+7hWwhJg==}
+    dependencies:
+      '@ethersproject/bytes': 5.4.0
+      '@ethersproject/logger': 5.4.0
+      bn.js: 4.12.0
+
   /@ethersproject/bytes/5.4.0:
     resolution: {integrity: sha512-H60ceqgTHbhzOj4uRc/83SCN9d+BSUnOkrr2intevqdtEMO1JFVZ1XL84OEZV+QjV36OaZYxtnt4lGmxcGsPfA==}
     dependencies:
@@ -4846,7 +4849,7 @@ packages:
     dependencies:
       '@ethersproject/abstract-signer': 5.4.0
       '@ethersproject/address': 5.4.0
-      '@ethersproject/bignumber': 5.4.0
+      '@ethersproject/bignumber': 5.4.1
       '@ethersproject/bytes': 5.4.0
       '@ethersproject/keccak256': 5.4.0
       '@ethersproject/logger': 5.4.0
@@ -4907,6 +4910,33 @@ packages:
       '@ethersproject/address': 5.4.0
       '@ethersproject/basex': 5.4.0
       '@ethersproject/bignumber': 5.4.0
+      '@ethersproject/bytes': 5.4.0
+      '@ethersproject/constants': 5.4.0
+      '@ethersproject/hash': 5.4.0
+      '@ethersproject/logger': 5.4.0
+      '@ethersproject/networks': 5.4.1
+      '@ethersproject/properties': 5.4.0
+      '@ethersproject/random': 5.4.0
+      '@ethersproject/rlp': 5.4.0
+      '@ethersproject/sha2': 5.4.0
+      '@ethersproject/strings': 5.4.0
+      '@ethersproject/transactions': 5.4.0
+      '@ethersproject/web': 5.4.0
+      bech32: 1.1.4
+      ws: 7.4.6
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: false
+
+  /@ethersproject/providers/5.4.2:
+    resolution: {integrity: sha512-Qr8Am8hlj2gL9HwNymhFlYd52MQVVEBLoDwPxhv4ASeyNpaoRiUAQnNEuE6SnEQtiwYkpLrQtSALNLUSeyuvjA==}
+    dependencies:
+      '@ethersproject/abstract-provider': 5.4.0
+      '@ethersproject/abstract-signer': 5.4.0
+      '@ethersproject/address': 5.4.0
+      '@ethersproject/basex': 5.4.0
+      '@ethersproject/bignumber': 5.4.1
       '@ethersproject/bytes': 5.4.0
       '@ethersproject/constants': 5.4.0
       '@ethersproject/hash': 5.4.0
@@ -7873,7 +7903,7 @@ packages:
   /@types/bn.js/5.1.0:
     resolution: {integrity: sha512-QSSVYj7pYFN49kW77o2s9xTCwZ8F2xLbjLLSEVh8D2F4JUhZtPAGOFLTD+ffqksBx/u4cE/KImFjyhqCjn/LIA==}
     dependencies:
-      '@types/node': 16.4.1
+      '@types/node': 16.4.3
     dev: false
 
   /@types/body-parser/1.19.1:
@@ -8422,6 +8452,10 @@ packages:
   /@types/node/16.4.1:
     resolution: {integrity: sha512-UW7cbLqf/Wu5XH2RKKY1cHwUNLicIDRLMraYKz+HHAerJ0ZffUEk+fMnd8qU2JaS6cAy0r8tsaf7yqHASf/Y0Q==}
 
+  /@types/node/16.4.3:
+    resolution: {integrity: sha512-GKM4FLMkWDc0sfx7tXqPWkM6NBow1kge0fgQh0bOnlqo4iT1kvTvMEKE0c1RtUGnbLlGRXiAA8SumE//90uKAg==}
+    dev: false
+
   /@types/node/8.10.66:
     resolution: {integrity: sha512-tktOkFUA4kXx2hhhrB8bIFb5TbwzS4uOhKEmwiD+NoiL0qtP2OQ9mFldbgD4dV1djrlBYP6eBuQZiWjuHUpqFw==}
     dev: false
@@ -8451,7 +8485,7 @@ packages:
   /@types/pbkdf2/3.1.0:
     resolution: {integrity: sha512-Cf63Rv7jCQ0LaL8tNXmEyqTHuIJxRdlS5vMh1mj5voN4+QFhVZnlZruezqpWYDiJ8UTzhP0VmeLXCmBk66YrMQ==}
     dependencies:
-      '@types/node': 16.4.1
+      '@types/node': 16.4.3
     dev: false
 
   /@types/prettier/2.3.2:
@@ -8600,7 +8634,7 @@ packages:
   /@types/secp256k1/4.0.3:
     resolution: {integrity: sha512-Da66lEIFeIz9ltsdMZcpQvmrmmoqrfju8pm1BH8WbYjZSwUgCwXLb9C+9XYogwBITnbsSaMdVPb2ekf7TV+03w==}
     dependencies:
-      '@types/node': 16.4.1
+      '@types/node': 16.4.3
     dev: false
 
   /@types/serve-static/1.13.10:
@@ -9895,6 +9929,7 @@ packages:
 
   /async-call-rpc/4.2.1:
     resolution: {integrity: sha512-MRtUVp1eFKRLLPE+frvTUXnhcDnTM1altJg0dcSnlJ9AaodvZOv6b9/+kE8wGNlT33uRn0fYXZODY1XmZZQ6IQ==}
+    dev: true
 
   /async-call-rpc/5.1.0:
     resolution: {integrity: sha512-Z5fMp8Z96NfDXmFXDQJhGNA5PsgXxCqEcP4pp8HB9ciBLigKbwOdM9I+wSY8ATE7nRj+PnUcnq5FSokqKB/TLw==}
@@ -11118,8 +11153,8 @@ packages:
     resolution: {integrity: sha512-WHVocJYavUwVgVViC0ORikPHQquXwVh939TaelZ4WDqpWgTX/FsGhl/+P4qBUAGcRvtOgDgC+xftNWWp2RUTAQ==}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001246
-      electron-to-chromium: 1.3.785
+      caniuse-lite: 1.0.30001247
+      electron-to-chromium: 1.3.786
     dev: false
 
   /browserslist/4.14.2:
@@ -11436,6 +11471,11 @@ packages:
 
   /caniuse-lite/1.0.30001246:
     resolution: {integrity: sha512-Tc+ff0Co/nFNbLOrziBXmMVtpt9S2c2Y+Z9Nk9Khj09J+0zR9ejvIW5qkZAErCbOrVODCx/MN+GpB5FNBs5GFA==}
+    dev: true
+
+  /caniuse-lite/1.0.30001247:
+    resolution: {integrity: sha512-4rS7co+7+AoOSPRPOPUt5/GdaqZc0EsUpWk66ofE3HJTAajUK2Ss2VwoNzVN69ghg8lYYlh0an0Iy4LIHHo9UQ==}
+    dev: false
 
   /capture-exit/2.0.0:
     resolution: {integrity: sha512-PiT/hQmTonHhl/HFGN+Lx3JJUznrVYJ3+AQsnthneZbvW7x+f08Tk7yLJTLEOUvBTbduLeeBkxEaYXUOUrRq6g==}
@@ -12773,7 +12813,7 @@ packages:
     dependencies:
       is-arguments: 1.1.0
       is-date-object: 1.0.4
-      is-regex: 1.0.5
+      is-regex: 1.1.3
       object-is: 1.1.5
       object-keys: 1.1.1
       regexp.prototype.flags: 1.3.1
@@ -13245,6 +13285,11 @@ packages:
 
   /electron-to-chromium/1.3.785:
     resolution: {integrity: sha512-WmCgAeURsMFiyoJ646eUaJQ7GNfvMRLXo+GamUyKVNEM4MqTAsXyC0f38JEB4N3BtbD0tlAKozGP5E2T9K3YGg==}
+    dev: true
+
+  /electron-to-chromium/1.3.786:
+    resolution: {integrity: sha512-AmvbLBj3hepRk8v/DHrFF8gINxOFfDbrn6Ts3PcK46/FBdQb5OMmpamSpZQXSkfi77FfBzYtQtAk+00LCLYMVw==}
+    dev: false
 
   /element-resize-detector/1.2.3:
     resolution: {integrity: sha512-+dhNzUgLpq9ol5tyhoG7YLoXL3ssjfFW+0gpszXPwRU6NjGr1fVHMEAF8fVzIiRJq57Nre0RFeIjJwI8Nh2NmQ==}
@@ -14126,11 +14171,11 @@ packages:
       setimmediate: 1.0.5
     dev: false
 
-  /ethereumjs-abi/0.6.6:
-    resolution: {integrity: sha512-w8KubDsA/+OAuqtIR9RGsMcoZ5nhM8vxwjJAJvEIY+clhxA3BHoLG3+ClYQaQhD0n3mlDt3U5rBrmSVJvI3c8A==}
+  /ethereumjs-abi/0.6.8:
+    resolution: {integrity: sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==}
     dependencies:
       bn.js: 4.12.0
-      ethereumjs-util: 5.2.1
+      ethereumjs-util: 6.2.1
     dev: false
 
   /ethereumjs-account/2.0.5:
@@ -16763,6 +16808,7 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       has: 1.0.3
+    dev: false
 
   /is-regex/1.1.3:
     resolution: {integrity: sha512-qSVXFz28HM7y+IWX6vLCsexdlvzT1PJNFSBuaQLQ5o0IEw8UDYW6/2+eCMVyIsbM8CNLX2a/QWmSpyxYEHY7CQ==}
@@ -18943,12 +18989,6 @@ packages:
       map-or-similar: 1.5.0
     dev: true
 
-  /memorize-decorator/0.2.4:
-    resolution: {integrity: sha512-njm1PXESxZoFtYq3wPbkuQVuP0M27wtZ+94rD9AV7o1w4qnPx43gmocMePeof1Lr6Fe8ko2WWqBkaIDEhWSvqA==}
-    dependencies:
-      multikey-map: 0.2.1
-    dev: false
-
   /memory-fs/0.4.1:
     resolution: {integrity: sha1-OpoguEYlI+RHz7x+i7gO1me/xVI=}
     dependencies:
@@ -19260,10 +19300,6 @@ packages:
       through2: 2.0.5
     dev: true
 
-  /mixed-map/0.1.2:
-    resolution: {integrity: sha512-ZdPeXAL5AZCkNBETgXLm4EOHFpXtPEXrqmd6YBvatyY24x3f/i2nYSVw/F3gk78TxX5/ogm+yAxFrS713ZhsFg==}
-    dev: false
-
   /mixin-deep/1.3.2:
     resolution: {integrity: sha512-WRoDn//mXBiJ1H40rqa3vH0toePwSsGb45iInWlTySa+Uu4k3tYUSxa2v1KqAiLtvlrSzaExqS1gtk96A9zvEA==}
     engines: {node: '>=0.10.0'}
@@ -19445,12 +19481,6 @@ packages:
       multibase: 4.0.4
       uint8arrays: 2.1.7
       varint: 5.0.2
-    dev: false
-
-  /multikey-map/0.2.1:
-    resolution: {integrity: sha512-vr3a9N6Lwpoo9i+cbQoUXmraoW9ReM2t62iSX33jF9lo/PhU4c5lpo1FWbJg90Qa9tBfgyPTMd5Iz7yaSG8r0g==}
-    dependencies:
-      mixed-map: 0.1.2
     dev: false
 
   /mute-stdout/1.0.1:
@@ -26933,11 +26963,11 @@ packages:
       '@ensdomains/content-hash': 2.5.6
       '@ethersproject/abi': 5.4.0
       '@ethersproject/address': 5.4.0
-      '@ethersproject/bignumber': 5.4.0
+      '@ethersproject/bignumber': 5.4.1
       '@ethersproject/bytes': 5.4.0
       '@ethersproject/contracts': 5.4.0
       '@ethersproject/hash': 5.4.0
-      '@ethersproject/providers': 5.4.1
+      '@ethersproject/providers': 5.4.2
       '@ethersproject/solidity': 5.4.0
       '@ethersproject/strings': 5.4.0
       '@ethersproject/units': 5.4.0
