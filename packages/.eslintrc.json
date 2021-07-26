@@ -39,7 +39,7 @@
             {
                 "types": {
                     "bigint": "BigInt not supported until Safari 15.",
-                    "Bigint": "BigInt not supported until Safari 15."
+                    "BigInt": "BigInt not supported until Safari 15."
                 },
                 "extendDefaults": false
             }
