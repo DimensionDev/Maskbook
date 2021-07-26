@@ -15,7 +15,7 @@ import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { delay } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { WalletMessages } from '../../messages'
+import { WalletMessages, WalletRPC } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
 
@@ -47,83 +47,87 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     )
     //#endregion
 
-    const connectTo = useCallback(
-        async (providerType: ProviderType) => {
-            // unknown network type
-            if (!networkType) throw new Error('Unknown network type.')
+    const connectTo = useCallback(async () => {
+        if (!networkType) throw new Error('Unknown network type.')
+        if (!providerType) throw new Error('Unknown provider type.')
 
-            // read the chain detailed from the built-in chain list
-            const chainDetailedCAIP = getChainDetailedCAIP(getChainIdFromNetworkType(networkType))
-            if (!chainDetailedCAIP) throw new Error('Unknown network type.')
+        // read the chain detailed from the built-in chain list
+        const expectedChainId = getChainIdFromNetworkType(networkType)
+        const chainDetailedCAIP = getChainDetailedCAIP(expectedChainId)
+        if (!chainDetailedCAIP) throw new Error('Unknown network type.')
 
-            // a short time loading makes the user fells better
-            await delay(1000)
+        // a short time loading makes the user fells better
+        await delay(1000)
 
-            let account: string | undefined
-            let chainId: ChainId | undefined
+        let account: string | undefined
+        let chainId: ChainId | undefined
 
-            switch (providerType) {
-                case ProviderType.Maskbook:
-                    throw new Error('Not necessary!')
-                case ProviderType.MetaMask:
-                    ;({ account, chainId } = await Services.Ethereum.connectMetaMask())
-                    break
-                case ProviderType.WalletConnect:
-                    // create wallet connect QR code URI
-                    const uri = await Services.Ethereum.createConnectionURI()
-                    if (!uri) throw new Error('Failed to create connection URI.')
+        switch (providerType) {
+            case ProviderType.Maskbook:
+                throw new Error('Not necessary!')
+            case ProviderType.MetaMask:
+                ;({ account, chainId } = await Services.Ethereum.connectMetaMask())
+                break
+            case ProviderType.WalletConnect:
+                // create wallet connect QR code URI
+                const uri = await Services.Ethereum.createConnectionURI()
+                if (!uri) throw new Error('Failed to create connection URI.')
 
-                    // open the QR code dialog
-                    setWalletConnectDialog({
-                        open: true,
-                        uri,
-                    })
+                // open the QR code dialog
+                setWalletConnectDialog({
+                    open: true,
+                    uri,
+                })
 
-                    // wait for walletconnect to be connected
-                    ;({ account, chainId } = await Services.Ethereum.connectWalletConnect())
-                    break
-                case ProviderType.CustomNetwork:
-                    throw new Error('To be implemented.')
-                default:
-                    safeUnreachable(providerType)
-                    break
-            }
+                // wait for walletconnect to be connected
+                ;({ account, chainId } = await Services.Ethereum.connectWalletConnect())
+                break
+            case ProviderType.CustomNetwork:
+                throw new Error('To be implemented.')
+            default:
+                safeUnreachable(providerType)
+                break
+        }
 
-            // connection failed
-            if (!account || !networkType) throw new Error(`Failed to connect ${resolveProviderName(providerType)}.`)
+        // connection failed
+        if (!account || !networkType) throw new Error(`Failed to connect ${resolveProviderName(providerType)}.`)
 
-            // no need to switch the chain
-            if (chainId === Number.parseInt(chainDetailedCAIP.chainId)) return true
-
-            // request ethereum-compatiable network
+        // need to switch chain
+        if (chainId !== expectedChainId) {
             try {
+                const overrides = {
+                    chainId: expectedChainId,
+                    providerType,
+                }
                 await Promise.race([
                     (async () => {
                         await delay(30 /* seconds */ * 1000 /* milliseconds */)
                         throw new Error('Timeout!')
                     })(),
                     networkType === NetworkType.Ethereum
-                        ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet)
-                        : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account),
+                        ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
+                        : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
                 ])
             } catch (e) {
                 throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
             }
+        }
 
-            // wait for settings to be synced
-            await delay(1000)
-
-            return true as const
-        },
-        [networkType],
-    )
+        // update account
+        await WalletRPC.updateAccount({
+            account,
+            chainId: expectedChainId,
+            providerType,
+            networkType,
+        })
+        return true as const
+    }, [networkType, providerType])
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
-        if (!providerType) throw new Error('Unknown provider type.')
 
         // connect to the specific provider
-        await connectTo(providerType)
+        await connectTo()
 
         // switch to the wallet status dialog
         closeDialog()
