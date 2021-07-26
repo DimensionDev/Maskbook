@@ -1,8 +1,9 @@
 import { loadImage } from '@dimensiondev/kit'
 import { useRef, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
-export function useQRCodeImageScan(image: React.MutableRefObject<HTMLImageElement | null>) {
+export function useQRCodeImageScan(image: React.MutableRefObject<HTMLImageElement | null>): AsyncState<string> {
     const scanner = useRef(new BarcodeDetector({ formats: ['qr_code'] }))
     const [source, setSource] = useState('')
 
