@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import addDate from 'date-fns/add'
-import { usePortalShadowRoot } from '@masknet/shared'
+import { usePortalShadowRoot } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'

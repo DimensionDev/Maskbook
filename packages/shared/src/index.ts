@@ -1,4 +1,3 @@
-export * from './ShadowRoot'
 export * from './hooks'
 export * from './wallet'
 export * from './UI'

@@ -198,11 +198,11 @@ importers:
 
   packages/external-plugin-previewer:
     specifiers:
-      '@masknet/shared': workspace:*
+      '@masknet/theme': workspace:*
       ef.js: ^0.13.10
       snowpack: ^3.8.3
     dependencies:
-      '@masknet/shared': link:../shared
+      '@masknet/theme': link:../theme
       ef.js: 0.13.10
     devDependencies:
       snowpack: 3.8.3
