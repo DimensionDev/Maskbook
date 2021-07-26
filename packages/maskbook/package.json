@@ -167,7 +167,8 @@
     "webpack-dev-server": "^3.11.0",
     "webpack-extension-manifest-plugin": "^0.7.0",
     "webpack-notifier": "^1.12.0",
-    "webpack-target-webextension": "^0.4.3"
+    "webpack-target-webextension": "^0.4.3",
+    "webpackbar": "^5.0.0-3"
   },
   "typeCoverage": {
     "cache": true,

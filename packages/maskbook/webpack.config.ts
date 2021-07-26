@@ -15,6 +15,7 @@ import type { Configuration as DevServerConfiguration } from 'webpack-dev-server
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import ReactRefreshTypeScriptTransformer from 'react-refresh-typescript'
 import NotifierPlugin from 'webpack-notifier'
+import WebpackBarPlugin from 'webpackbar'
 //#endregion
 //#region Other plugins
 import CopyPlugin from 'copy-webpack-plugin'
@@ -164,6 +165,7 @@ function config(opts: {
                 ...getGitInfo(target.isReproducibleBuild),
                 ...target.runtimeEnv,
             }),
+            new WebpackBarPlugin({}),
             new EnvironmentPlugin({ NODE_ENV: mode, NODE_DEBUG: false, STORYBOOK: false }),
             new DefinePlugin({
                 'process.browser': 'true',
