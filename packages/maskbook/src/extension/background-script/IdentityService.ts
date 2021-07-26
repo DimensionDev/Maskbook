@@ -1,6 +1,12 @@
 import * as bip39 from 'bip39'
 import { personaRecordToPersona, queryPersona, queryProfile, queryProfilesWithQuery, storeAvatar } from '../../database'
-import { ECKeyIdentifier, Identifier, PersonaIdentifier, ProfileIdentifier } from '../../database/type'
+import {
+    ECKeyIdentifier,
+    ECKeyIdentifierFromJsonWebKey,
+    Identifier,
+    PersonaIdentifier,
+    ProfileIdentifier,
+} from '../../database/type'
 import type { Persona, Profile } from '../../database/Persona/types'
 import {
     attachProfileDB,
@@ -23,6 +29,7 @@ import { decompressBackupFile } from '../../utils/type-transform/BackupFileShort
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { PersonaInformation, ProfileInformation } from '@masknet/shared'
 import { createInternalSettings, InternalSettings } from '../../settings/createSettings'
+import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -77,6 +84,12 @@ export {
     queryPersonaByPrivateKey,
     queryPrivateKey,
 } from '../../database'
+
+export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
+    const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
+    const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey, 'private')
+    return queryPersona(identifier)
+}
 export async function queryPersonas(identifier?: PersonaIdentifier, requirePrivateKey = false): Promise<Persona[]> {
     if (typeof identifier === 'undefined')
         return (await queryPersonasDB((k) => (requirePrivateKey ? !!k.privateKey : true))).map(personaRecordToPersona)
