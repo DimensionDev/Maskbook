@@ -1,6 +1,7 @@
 import { makeStyles, Grid, Typography } from '@material-ui/core'
 import type { GoodGhostingInfo } from '../types'
-import { format as formatDateTime, isBefore } from 'date-fns'
+import formatDateTime from 'date-fns/format'
+import isBefore from 'date-fns/isBefore'
 import classNames from 'classnames'
 import { useTimeline } from '../hooks/useGameInfo'
 
@@ -86,7 +87,7 @@ export function TimelineView(props: TimelineViewProps) {
     return (
         <div className={classes.timelineWrapper}>
             <Grid container className={classes.timeline}>
-                <Grid item className={classes.timelinePadding}></Grid>
+                <Grid item className={classes.timelinePadding} />
                 {timeline.map((timelineEvent, index) => (
                     <Grid item className={classes.timelineCells} key={`timeline-${timelineEvent.date.toString()}`}>
                         <div className={classes.timelineEvent}>
@@ -100,14 +101,16 @@ export function TimelineView(props: TimelineViewProps) {
                                 className={classNames(
                                     classes.verticalLine,
                                     index % 2 === 0 ? classes.tallVeritcalLine : classes.shortVeritcalLine,
-                                )}></div>
+                                )}
+                            />
                             <div
                                 className={classNames(
                                     classes.circleIndicator,
                                     isBefore(new Date(), timelineEvent.date)
                                         ? classes.circleIndicatorFilled
                                         : classes.circleIndicatorEmpty,
-                                )}></div>
+                                )}
+                            />
                         </div>
                         <div className={classes.eventText}>
                             {index === timeline.length - 1 && (
@@ -125,7 +128,7 @@ export function TimelineView(props: TimelineViewProps) {
                         </div>
                     </Grid>
                 ))}
-                <Grid item className={classes.timelinePadding}></Grid>
+                <Grid item className={classes.timelinePadding} />
             </Grid>
         </div>
     )

@@ -45,10 +45,10 @@ export function GameAction(props: GameActionProps) {
     const buttonAction = async (action: () => Promise<void>) => {
         setButtonEnabled(false)
         setOpenDialog(false)
+        setErrorMessage('')
         try {
             await action()
             props.info.refresh()
-            setErrorMessage('')
         } catch (error) {
             setErrorMessage(t('error_unknown'))
         } finally {

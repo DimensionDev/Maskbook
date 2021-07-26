@@ -1,12 +1,12 @@
 import { formatBalance } from '@masknet/web3-shared'
 import { makeStyles, Grid, Typography, Box, Button } from '@material-ui/core'
-import { addSeconds, differenceInDays, formatDuration } from 'date-fns/esm'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import type { GoodGhostingInfo, LendingPoolData } from '../types'
 import { CircularDataDisplay } from './CircularDataDisplay'
 import BigNumber from 'bignumber.js'
 import { useGameToken, useRewardToken } from '../hooks/usePoolData'
 import { useI18N } from '../../../utils'
+import { getReadableInterval } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
     infoRow: {
@@ -54,17 +54,6 @@ export function GameStatsView(props: GameStatsViewProps) {
         )
     }
 
-    const getReadableInterval = (roundLength: number) => {
-        const baseDate = new Date(0)
-        const dateAfterDuration = addSeconds(baseDate, roundLength)
-        const dayDifference = differenceInDays(dateAfterDuration, baseDate)
-        const weeks = Math.floor(dayDifference / 7)
-        const days = Math.floor(dayDifference - weeks * 7)
-        return formatDuration({
-            weeks,
-            days,
-        })
-    }
     const gameLengthFormatted = getReadableInterval(props.info.segmentLength * (props.info.lastSegment + 1))
     const segmentLengthFormatted = getReadableInterval(props.info.segmentLength)
 

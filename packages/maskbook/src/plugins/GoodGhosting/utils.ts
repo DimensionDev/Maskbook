@@ -1,5 +1,8 @@
-import { isBefore } from 'date-fns'
 import type { GoodGhostingInfo, Player, PlayerStandings, TimelineEvent } from './types'
+import addSeconds from 'date-fns/addSeconds'
+import differenceInDays from 'date-fns/differenceInDays'
+import formatDuration from 'date-fns/formatDuration'
+import isBefore from 'date-fns/isBefore'
 
 export enum PlayerStatus {
     Winning = 'winning',
@@ -53,4 +56,16 @@ export function getPlayerStandings(players: Player[], info: GoodGhostingInfo) {
     })
 
     return playerStandings
+}
+
+export function getReadableInterval(roundLength: number) {
+    const baseDate = new Date(0)
+    const dateAfterDuration = addSeconds(baseDate, roundLength)
+    const dayDifference = differenceInDays(dateAfterDuration, baseDate)
+    const weeks = Math.floor(dayDifference / 7)
+    const days = Math.floor(dayDifference - weeks * 7)
+    return formatDuration({
+        weeks,
+        days,
+    })
 }

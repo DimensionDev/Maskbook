@@ -6,7 +6,7 @@ import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
 import type { GoodGhostingInfo, Player, TimelineEvent } from '../types'
 import { ZERO_ADDRESS } from '../constants'
 import { useI18N } from '../../../utils'
-import { addSeconds } from 'date-fns'
+import addSeconds from 'date-fns/addSeconds'
 
 export function useGameContractAddress() {
     const { GOOD_GHOSTING_CONTRACT_ADDRESS_FILE } = useGoodGhostingConstants()

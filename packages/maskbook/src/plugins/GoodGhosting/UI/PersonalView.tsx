@@ -39,8 +39,9 @@ export function PersonalView(props: PersonalViewProps) {
     const gameToken = useGameToken()
     const { canEarlyWithdraw, earlyWithdraw } = useEarlyWithdraw(props.info)
     const [buttonEnabled, setButtonEnabled] = useState(true)
+    const [errorMessage, setErrorMessage] = useState('')
 
-    const status = useGetStatus(props.info, props.info.currentPlayer)
+    const status = usePlayerStatusMessage(props.info, props.info.currentPlayer)
 
     if (!props.info.currentPlayer) {
         return (
@@ -52,9 +53,11 @@ export function PersonalView(props: PersonalViewProps) {
 
     const withdraw = async () => {
         setButtonEnabled(false)
+        setErrorMessage('')
         try {
             await earlyWithdraw()
         } catch (error) {
+            setErrorMessage(t('error_unknown'))
         } finally {
             setButtonEnabled(true)
         }
@@ -130,13 +133,16 @@ export function PersonalView(props: PersonalViewProps) {
                     <Button color="primary" disabled={!buttonEnabled} onClick={() => withdraw()}>
                         {t('plugin_good_ghosting_leave_game')}
                     </Button>
+                    <Typography variant="body1" color="warning">
+                        {errorMessage}
+                    </Typography>
                 </div>
             )}
         </>
     )
 }
 
-function useGetStatus(info: GoodGhostingInfo, player?: Player) {
+function usePlayerStatusMessage(info: GoodGhostingInfo, player?: Player) {
     const { t } = useI18N()
 
     switch (getPlayerStatus(info, player)) {

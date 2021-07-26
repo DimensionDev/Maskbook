@@ -1,5 +1,6 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
-import { intervalToDuration, isBefore } from 'date-fns'
+import isBefore from 'date-fns/isBefore'
+import intervalToDuration from 'date-fns/intervalToDuration'
 import { formatDuration } from 'date-fns/esm'
 import { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
