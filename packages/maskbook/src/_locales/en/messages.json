@@ -412,7 +412,7 @@
     "plugin_red_packet_history_claimed": "Claimed: <strong>{{claimedShares}}/{{shares}}</strong> Share",
     "plugin_red_packet_history_split_mode": "Split Mode: {{mode}}",
     "plugin_red_packet_history_send": "Send",
-    "plugin_red_packet_confirm_in_wallet": "Comfirm this transaction in your wallet.",
+    "plugin_red_packet_confirm_in_wallet": "Confirm this transaction in your wallet.",
     "plugin_red_packet_transaction_submitted": "Transaction Submitted.",
     "plugin_red_packet_transaction_rejected": "Transation rejected.",
     "plugin_red_packet_success": "Sent {{value}}{{symbol}} success.",
