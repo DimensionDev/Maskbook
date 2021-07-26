@@ -10,8 +10,6 @@ import { PersonaRecordFromJSONFormat } from '../../../utils/type-transform/Backu
 import { ProfileRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
 import { createOrUpdatePostDB } from '../../../database/post'
-import { GroupRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
-import { createOrUpdateUserGroupDatabase } from '../../../database/group'
 import { i18n } from '../../../utils/i18n-next'
 import { currentImportingBackup } from '../../../settings/settings'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
@@ -58,11 +56,6 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
 
         for (const x of data.posts) {
             await createOrUpdatePostDB(PostRecordFromJSONFormat(x), 'append')
-        }
-
-        for (const x of data.userGroups) {
-            const rec = GroupRecordFromJSONFormat(x)
-            await createOrUpdateUserGroupDatabase(rec, 'append')
         }
     } finally {
         currentImportingBackup.value = false

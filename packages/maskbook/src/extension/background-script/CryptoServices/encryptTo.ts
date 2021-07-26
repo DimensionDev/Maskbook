@@ -3,7 +3,7 @@ import { GunAPI as Gun2 } from '../../../network/gun'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
 import { queryPrivateKey, queryLocalKey } from '../../../database'
-import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier } from '../../../database/type'
+import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { createPostDB } from '../../../database/post'
@@ -34,7 +34,7 @@ const OthersAESKeyEncryptedMap = new Map<
  */
 export async function encryptTo(
     content: TypedMessage,
-    to: (ProfileIdentifier | GroupIdentifier)[],
+    to: ProfileIdentifier[],
     whoAmI: ProfileIdentifier,
     publicShared: boolean,
 ): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
@@ -83,7 +83,6 @@ export async function encryptTo(
         postCryptoKey: postAESKey,
         recipients: recipients,
         foundAt: new Date(),
-        recipientGroups: to.filter((x) => x instanceof GroupIdentifier) as GroupIdentifier[],
     })
 
     const postAESKeyToken = encodeArrayBuffer(iv)

@@ -7,7 +7,6 @@ import { i18n } from '../../../utils/i18n-next'
 import { queryPersonaRecord, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
-import { addPerson } from './addPerson'
 import { getNetworkWorker, getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { cryptoProviderTable } from './cryptoProviderTable'
 import type { PersonaRecord } from '../../../database/Persona/Persona.db'
@@ -23,7 +22,6 @@ import stringify from 'json-stable-stringify'
 import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
 import { MaskMessage } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
-import { calculatePostKeyPartition } from '../../../network/gun/version.2/hash'
 import { Err, Ok, Result } from 'ts-results'
 import { decodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
 
@@ -189,7 +187,9 @@ async function* decryptFromPayloadWithProgress_raw(
         try {
             if (version === -40) throw ''
             const gunNetworkHint = networkWorker!.gunNetworkHint
-            const { keyHash, postHash } = await calculatePostKeyPartition(version, iv, minePublic, gunNetworkHint)
+            const { keyHash, postHash } = await (
+                await import('../../../network/gun/version.2/hash')
+            ).calculatePostKeyPartition(version, iv, minePublic, gunNetworkHint)
             yield { type: 'debug', debug: 'debug_finding_hash', hash: [postHash, keyHash] }
         } catch {}
         if (cachedPostResult) return makeSuccessResult(cachedPostResult, ['post_key_cached'])
@@ -359,22 +359,11 @@ async function* findAuthorPublicKey(
         if (iterations < maxIteration) yield makeProgress('finding_person_public_key')
         else return 'out of chance' as const
 
-        author = await addPerson(by).catch(() => null)
+        author = await queryPersonaRecord(by).catch(() => null)
 
         if (!author?.publicKey) {
             if (hasCache) return 'use cache' as const
             const abort = new AbortController()
-            const gunPromise = (async () => {
-                const subscription = Gun2Subscribe.subscribeProfileFromGun2(by)
-                const undo = () => subscription.return?.(void 0)
-                abort.signal.addEventListener('abort', undo)
-                GunWorker?.onTerminated(undo)
-                for await (const data of subscription) {
-                    const provePostID = String(data?.provePostId || '')
-                    if (provePostID.length > 0) return
-                }
-                throw new Error()
-            })()
             const databasePromise = new Promise<void>((resolve, reject) => {
                 abort.signal.addEventListener('abort', () => {
                     undo()
@@ -391,7 +380,7 @@ async function* findAuthorPublicKey(
                     }
                 })
             })
-            await Promise.race([gunPromise, databasePromise])
+            await Promise.race([databasePromise])
                 .then(() => abort.abort())
                 .catch(() => null)
         }

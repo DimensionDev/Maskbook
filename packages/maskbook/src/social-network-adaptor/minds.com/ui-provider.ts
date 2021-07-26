@@ -47,7 +47,6 @@ const mindsUI: SocialNetworkUI.Definition = {
     collecting: {
         identityProvider: IdentityProviderMinds,
         postsProvider: PostProviderMinds,
-        profilesCollector: undefined,
         getSearchedKeyword: getSearchedKeywordAtMinds,
     },
     customization: {

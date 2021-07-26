@@ -26,7 +26,6 @@ const log: AsyncCallOptions['log'] = {
 export const Services = {
     Crypto: add(() => import('./background-script/CryptoService'), 'Crypto'),
     Identity: add(() => import('./background-script/IdentityService'), 'Identity'),
-    UserGroup: add(() => import('./background-script/UserGroupService'), 'UserGroup'),
     Welcome: add(() => import('./background-script/WelcomeService'), 'Welcome'),
     Steganography: add(() => import('./background-script/SteganographyService'), 'Steganography'),
     Helper: add(() => import('./background-script/HelperService'), 'Helper'),
@@ -44,7 +43,6 @@ if (import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
         [
             './background-script/CryptoService',
             './background-script/IdentityService',
-            './background-script/UserGroupService',
             './background-script/WelcomeService',
             './background-script/SteganographyService',
             './background-script/HelperService',

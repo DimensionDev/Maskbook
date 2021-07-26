@@ -1,4 +1,3 @@
-import * as AutoShareToFriends from './AutoShareToFriends'
 import * as IsolatedDashboardBridge from './IsolatedDashboardBridge'
 import * as InjectContentScripts from './InjectContentScripts'
 import * as NewInstalled from './NewInstalled'
@@ -10,7 +9,6 @@ type CancelableJob = { default: (signal: AbortSignal) => void }
 const CancelableJobs: CancelableJob[] = [
     InjectContentScripts,
     NewInstalled,
-    AutoShareToFriends,
     IsolatedDashboardBridge,
     PluginWorker,
     SettingListeners,
