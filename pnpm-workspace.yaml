@@ -1,9 +1,11 @@
 # If you need to speedup webpack build, please also add the new package builds into
 # webpack config.resolve.alias
 packages:
+  - 'packages/empty'
   - 'packages/cli'
   - 'packages/dashboard'
   - 'packages/maskbook'
+  - 'packages/shared-base'
   - 'packages/shared'
   - 'packages/web3-constants'
   - 'packages/web3-contracts'

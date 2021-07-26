@@ -3,9 +3,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import type { Profile } from '../../database'
 import { List, Accordion, AccordionSummary } from '@material-ui/core'
-import { ProfileOrGroupInList, ProfileOrGroupInListProps } from './SelectPeopleAndGroups'
+import { ProfileInList } from './SelectProfileUI'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { ProfileIdentifier } from '../../database/type'
 import { currentSelectedIdentity } from '../../settings/settings'
 import { useStylesExtends } from '../custom-ui-helper'
@@ -55,20 +55,10 @@ const useAccordionSummaryStyle = makeStyles({
 })
 
 export interface ChooseIdentityProps extends withClasses<never> {
-    /**
-     * Current selected identity
-     * @defaultValue the global selected identity
-     */
-    current?: Profile
     /** All available identities
      * @defaultValue `useMyIdentities()`
      */
     identities: readonly Profile[]
-    /** When user change the identity
-     *  @defaultValue will change the global selected identity
-     */
-    onChangeIdentity?(person: Profile): void
-    PersonOrGroupInListProps?: ProfileOrGroupInListProps
 }
 /**
  * Choose the current using identity.
@@ -93,25 +83,24 @@ export function ChooseIdentity(props: ChooseIdentityProps) {
                 <AccordionSummary
                     classes={expansionPanelSummaryClasses}
                     expandIcon={identities.length > 1 ? <ExpandMoreIcon /> : null}>
-                    <ProfileOrGroupInList
+                    <ProfileInList
                         item={current}
                         ListItemProps={{ dense: true, classes: { root: classes.listItemRoot } }}
-                        {...props.PersonOrGroupInListProps}
                     />
                 </AccordionSummary>
                 {identities.length ? (
                     <List classes={{ root: classes.list }}>
-                        {identities.map((person) =>
-                            person.identifier.equals(current.identifier) ? null : (
-                                <ProfileOrGroupInList
-                                    key={person.identifier.toText()}
-                                    item={person}
+                        {identities.map((profile) =>
+                            profile.identifier.equals(current.identifier) ? null : (
+                                <ProfileInList
+                                    key={profile.identifier.toText()}
+                                    item={profile}
                                     ListItemProps={{ dense: true, classes: { root: classes.listItemRoot } }}
                                     onClick={() => {
                                         setExpanded(false)
-                                        currentSelectedIdentity[ui.networkIdentifier].value = person.identifier.toText()
+                                        currentSelectedIdentity[ui.networkIdentifier].value =
+                                            profile.identifier.toText()
                                     }}
-                                    {...props.PersonOrGroupInListProps}
                                 />
                             ),
                         )}
@@ -120,19 +109,4 @@ export function ChooseIdentity(props: ChooseIdentityProps) {
             </Accordion>
         </div>
     )
-}
-
-/**
- * This hook allows use <ChooseIdentity /> in a isolated scope without providing
- * verbose information.
- */
-export function useIsolatedChooseIdentity(): readonly [Profile | null, React.ReactNode] {
-    const all = useMyIdentities()
-    const whoami = useCurrentIdentity()
-    const [current, setCurrent] = useState<Profile>()
-    const selected = current || whoami || undefined
-    return [
-        selected || null,
-        <ChooseIdentity current={selected} identities={all} onChangeIdentity={setCurrent} />,
-    ] as const
 }

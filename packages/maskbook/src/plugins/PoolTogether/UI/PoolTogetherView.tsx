@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
     },
     message: {
+        color: theme.palette.text.primary,
         textAlign: 'center',
     },
     refresh: {
@@ -160,11 +161,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     }
 
     if (pools.length === 0) {
-        return (
-            <Typography className={classes.message} color={DarkColor.textPrimary}>
-                {t('plugin_pooltogether_no_pool')}
-            </Typography>
-        )
+        return <Typography className={classes.message}>{t('plugin_pooltogether_no_pool')}</Typography>
     }
 
     return (

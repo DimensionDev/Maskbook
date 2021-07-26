@@ -17,7 +17,6 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
     useEffect(() => {
         Services.Welcome.generateBackupJSON({
             noPosts: true,
-            noUserGroups: true,
             filter: { type: 'persona', wanted: [persona.identifier] },
         }).then((file) => {
             setBase64Value(encodeArrayBuffer(encodeText(JSON.stringify(file))))

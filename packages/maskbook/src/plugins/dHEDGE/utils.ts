@@ -1,4 +1,6 @@
+import { ChainId } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
+import { BlockchainCode } from './types'
 
 const ONE_THOUSAND = 1000
 const ONE_MILLION = ONE_THOUSAND * 1000
@@ -42,4 +44,13 @@ export function formatAmountPostfix(input: BigNumber.Value) {
 
     const fixedAmount = amount.isLessThanOrEqualTo(10) ? amount.toFixed(2) : amount.toFixed(1)
     return `${fixedAmount.replace(/\.0$/, '')}${postfix}`
+}
+
+export function getChainIdFromCode(blockChainCode: BlockchainCode) {
+    switch (blockChainCode) {
+        case BlockchainCode.ethereum:
+            return ChainId.Mainnet
+        case BlockchainCode.polygon:
+            return ChainId.Matic
+    }
 }

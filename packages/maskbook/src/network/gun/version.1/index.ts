@@ -1,5 +1,4 @@
 /* eslint import/no-deprecated: 0 */
-import '../gun-worker.patch'
 import Gun from 'gun'
 import 'gun/lib/then'
 import type { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
@@ -14,13 +13,13 @@ import { gun2 } from '../version.2'
  */
 interface ApplicationStateInGunVersion1 {
     maskbook: {
-        users: {
-            // User ID
-            [userID: string]: {
-                /** @deprecated if you want to read it, cast it to string */
-                provePostId: never
-            }
-        }
+        // This section is no longer used but we leave the type here to avoid future collisions
+        // users: {
+        //     [userID: string]: {
+        //         /** @deprecated if you want to read it, cast it to string */
+        //         provePostId: never
+        //     }
+        // }
         posts: {
             // Post salt
             [salt: string]: {

@@ -12,6 +12,7 @@ import {
 import * as DeBankAPI from '../apis/debank'
 import * as ZerionApi from '../apis/zerion'
 import { NetworkType, pow10 } from '@masknet/web3-shared'
+import { resolveDebankChainName } from '../pipes'
 
 export async function getTransactionList(
     address: string,
@@ -23,7 +24,7 @@ export async function getTransactionList(
     hasNextPage: boolean
 }> {
     if (provider === PortfolioProvider.DEBANK) {
-        const { data, error_code } = await DeBankAPI.getTransactionList(address, network)
+        const { data, error_code } = await DeBankAPI.getTransactionList(address, resolveDebankChainName(network))
         if (error_code !== 0) throw new Error('Fail to load transactions.')
         return {
             transactions: fromDeBank(data),
