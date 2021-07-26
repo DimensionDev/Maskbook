@@ -86,10 +86,10 @@ export enum TokenPanelType {
 export interface TradeContext {
     TYPE: TradeProvider
     IS_UNISWAP_LIKE: boolean
-    GRAPH_API: string
-    INIT_CODE_HASH: string
-    ROUTER_CONTRACT_ADDRESS: string
-    FACTORY_CONTRACT_ADDRESS: string
+    GRAPH_API?: string
+    INIT_CODE_HASH?: string
+    ROUTER_CONTRACT_ADDRESS?: string
+    FACTORY_CONTRACT_ADDRESS?: string
     ADDITIONAL_TOKENS: {
         [key in ChainId]?: {
             [key: string]: ERC20TokenDetailed[]

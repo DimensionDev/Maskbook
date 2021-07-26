@@ -1,10 +1,10 @@
 /// <reference path="./global.d.ts" />
 import { openDB, DBSchema } from 'idb/with-async-ittr-cjs'
-import { Identifier, ProfileIdentifier, GroupIdentifier } from './type'
+import { Identifier, ProfileIdentifier } from './type'
 import { createDBAccess, IDBPSafeTransaction, createTransaction } from './helpers/openDB'
 
 //#region Schema
-type IdentityWithAvatar = ProfileIdentifier | GroupIdentifier
+type IdentityWithAvatar = ProfileIdentifier
 export type AvatarRecord = ArrayBuffer
 interface AvatarMetadataRecord {
     identifier: string
@@ -29,8 +29,8 @@ const db = createDBAccess(() => {
     return openDB<AvatarDBSchema>('maskbook-avatar-cache', 1, {
         upgrade(db, oldVersion, newVersion, transaction) {
             // Out line keys
-            const avatarStore = db.createObjectStore('avatars')
-            const metadataStore = db.createObjectStore('metadata', { keyPath: 'identifier' })
+            db.createObjectStore('avatars')
+            db.createObjectStore('metadata', { keyPath: 'identifier' })
         },
     })
 })
@@ -102,7 +102,7 @@ export async function queryAvatarOutdatedDB(
  * defaults to 7 days for lastUpdateTime
  */
 export async function isAvatarOutdatedDB(
-    identifier: ProfileIdentifier | GroupIdentifier,
+    identifier: ProfileIdentifier,
     attribute: 'lastUpdateTime' | 'lastAccessTime',
     deadline: Date = new Date(Date.now() - 1000 * 60 * 60 * 24 * (attribute === 'lastAccessTime' ? 30 : 7)),
 ): Promise<boolean> {

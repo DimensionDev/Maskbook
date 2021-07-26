@@ -36,7 +36,6 @@ export enum DatabaseRecordType {
     Persona,
     Profile,
     Post,
-    Group,
     Wallet,
 }
 
@@ -62,8 +61,6 @@ export function DatabasePreviewCard(props: DatabasePreviewCardProps) {
                 return t('profiles')
             case DatabaseRecordType.Post:
                 return t('posts')
-            case DatabaseRecordType.Group:
-                return t('groups')
             case DatabaseRecordType.Wallet:
                 return t('wallets')
             default:

@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import { useInterval } from 'react-use'
 import { compact } from 'lodash-es'
 import { useChainId, useITOConstants } from '@masknet/web3-shared'
 import { JSON_PayloadInMask, ITO_Status } from '../../types'
@@ -19,10 +17,6 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
         payload.contract_address,
     )
     asyncResult.loading = loadingITO || loadingQual
-    //#region ticker
-    const [_, setTicker] = useState(0)
-    useInterval(() => setTicker((x) => x + 1), 1000)
-    //#endregion
 
     if (!availability)
         return {

@@ -14,7 +14,6 @@ import type { Configuration as DevServerConfiguration } from 'webpack-dev-server
 //#region Development plugins
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import ReactRefreshTypeScriptTransformer from 'react-refresh-typescript'
-import WatchMissingModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin'
 import NotifierPlugin from 'webpack-notifier'
 //#endregion
 //#region Other plugins
@@ -47,6 +46,9 @@ function EnvironmentPluginNoCache(def: Record<string, any>) {
         )
     }
     return new DefinePlugin(next)
+}
+const watchOptions = {
+    ignored: /\bnode_modules\b/,
 }
 
 function config(opts: {
@@ -97,6 +99,7 @@ function config(opts: {
                 // By aliasing them to the original position, we can speed up the compile because there is no need to wait tsc build them to the dist folder.
                 '@masknet/dashboard': require.resolve('../dashboard/src/entry.tsx'),
                 '@masknet/shared': require.resolve('../shared/src/index.ts'),
+                '@masknet/shared-base': require.resolve('../shared-base/src/index.ts'),
                 '@masknet/theme/constants': require.resolve('../theme/src/constants.ts'),
                 '@masknet/theme': require.resolve('../theme/src/theme.ts'),
                 '@masknet/icons': require.resolve('../icons/index.ts'),
@@ -156,7 +159,6 @@ function config(opts: {
                 Buffer: ['buffer', 'Buffer'],
                 'process.nextTick': 'next-tick',
             }),
-            new WatchMissingModulesPlugin(path.resolve('node_modules')),
             // Note: In development mode gitInfo will share across cache (and get inaccurate result). I (@Jack-Works) think this is a valuable trade-off.
             (mode === 'development' ? EnvironmentPluginCache : EnvironmentPluginNoCache)({
                 ...getGitInfo(target.isReproducibleBuild),
@@ -232,6 +234,7 @@ function config(opts: {
                 'Access-Control-Allow-Origin': '*',
             },
             transportMode: 'ws',
+            watchOptions,
         } as DevServerConfiguration,
     }
     if (isProfile) {
@@ -323,7 +326,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     // @ts-ignore
     delete injectedScript.devServer
     // TODO: multiple config seems doesn't work well therefore we start the watch mode webpack compiler manually, ignore the build message currently
-    webpack(injectedScript, () => {}).watch({}, () => {})
+    webpack(injectedScript).watch(watchOptions, () => {})
     return main
 
     function withReactDevTools(...x: string[]) {

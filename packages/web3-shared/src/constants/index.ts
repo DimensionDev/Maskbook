@@ -7,8 +7,9 @@ import RedPacket from '@masknet/web3-constants/data/red-packet.json'
 import Token from '@masknet/web3-constants/data/token.json'
 import Trader from '@masknet/web3-constants/data/trader.json'
 import Trending from '@masknet/web3-constants/data/trending.json'
-import URL from '@masknet/web3-constants/data/url.json'
+import DHEDGE from '@masknet/web3-constants/data/dhedge.json'
 import RPC from '@masknet/web3-constants/data/rpc.json'
+import PoolTogether from '@masknet/web3-constants/data/pooltogether.json'
 import TokenAssetBaseURL from '@masknet/web3-constants/data/token-asset-base-url.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
@@ -39,11 +40,17 @@ export const useTraderConstants = hookTransform(getTraderConstants)
 export const getTrendingConstants = transform(Trending)
 export const useTrendingConstants = hookTransform(getTrendingConstants)
 
-export const getURLConstants = transform(URL)
-export const useURLConstants = hookTransform(getURLConstants)
+export const getDHedgeConstants = transform(DHEDGE)
+export const useDHedgeConstants = hookTransform(getDHedgeConstants)
 
 export const getRPCConstants = transformFromJSON(process.env.WEB3_CONSTANTS_RPC ?? '', RPC)
 export const useRPCConstants = hookTransform(getRPCConstants)
 
 export const getTokenAssetBaseURLConstants = transform(TokenAssetBaseURL)
 export const useTokenAssetBaseURLConstants = hookTransform(getTokenAssetBaseURLConstants)
+
+export const getPoolTogetherConstants = transform(PoolTogether)
+export const usePoolTogetherConstants = hookTransform(getPoolTogetherConstants)
+
+// for estimate gas
+export const FAKE_SIGN_PASSWORD = '0x75466cc969717b172b14253aaeebdc958f2b5037a852c1337650ed4978242dd9'

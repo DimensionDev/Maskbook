@@ -87,7 +87,7 @@ export interface ERC20TokenDetailed extends ERC20Token {
     name?: string
     symbol?: string
     decimals: number
-    logoURI?: string
+    logoURI?: string[]
 }
 //#endregion
 
@@ -203,6 +203,7 @@ export enum EthereumMethodType {
     ETH_ESTIMATE_GAS = 'eth_estimateGas',
     ETH_SIGN = 'eth_sign',
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
+    ETH_GET_LOGS = 'eth_getLogs',
 }
 
 export enum TransactionEventType {
@@ -248,7 +249,7 @@ export interface Asset {
     value?: {
         [key in CurrencyType]: string
     }
-    logoURL?: string
+    logoURI?: string
 }
 
 export enum PortfolioProvider {

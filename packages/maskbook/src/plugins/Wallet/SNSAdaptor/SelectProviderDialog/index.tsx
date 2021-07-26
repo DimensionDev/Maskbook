@@ -188,19 +188,15 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     // create a new wallet
                     if (isEnvironment(Environment.ManifestOptions))
                         history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
-                    else {
-                        openCreateImportDialog()
-                    }
+                    else openCreateImportDialog()
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:
                     if (
-                        account &&
-                        providerType === selectedProviderType &&
-                        getChainIdFromNetworkType(undeterminedNetworkType) === chainId
+                        !account ||
+                        providerType !== selectedProviderType ||
+                        getChainIdFromNetworkType(undeterminedNetworkType) !== chainId
                     ) {
-                        openWalletStatusDialog()
-                    } else {
                         setConnectWalletDialog({
                             open: true,
                             providerType,

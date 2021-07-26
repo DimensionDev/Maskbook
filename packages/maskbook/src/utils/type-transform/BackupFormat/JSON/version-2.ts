@@ -1,7 +1,7 @@
 /* eslint-disable import/no-deprecated */
 import type { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
 import type { BackupJSONFileVersion1 } from './version-1'
-import { ProfileIdentifier, GroupIdentifier, ECKeyIdentifierFromJsonWebKey } from '../../../../database/type'
+import { ProfileIdentifier, ECKeyIdentifierFromJsonWebKey } from '../../../../database/type'
 import type {
     AESJsonWebKey,
     EC_Public_JsonWebKey,
@@ -53,18 +53,15 @@ export interface BackupJSONFileVersion2 {
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
     }>
-    userGroups: Array<{
-        groupName: string
-        identifier: string // GroupIdentifier.toText()
-        members: string[] // Array<ProfileIdentifier.toText()>
-        banned?: string[] // Array<ProfileIdentifier.toText()>
-    }>
+    /** @deprecated */
+    userGroups: never[]
     posts: Array<{
         postBy: string // ProfileIdentifier.toText()
         identifier: string // PostIVIdentifier.toText()
         postCryptoKey?: AESJsonWebKey
         recipients: [/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }][]
-        recipientGroups: string[] // Array<GroupIdentifier.toText()>
+        /** @deprecated */
+        recipientGroups: never[] // Array<GroupIdentifier.toText()>
         foundAt: number // Unix timestamp
     }>
     wallets: Array<{
@@ -93,7 +90,6 @@ export function isBackupJSONFileVersion2(obj: object): obj is BackupJSONFileVers
 export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1): BackupJSONFileVersion2 {
     const personas: BackupJSONFileVersion2['personas'] = []
     const profiles: BackupJSONFileVersion2['profiles'] = []
-    const userGroups: BackupJSONFileVersion2['userGroups'] = []
 
     function addPersona(record: Omit<typeof personas[0], 'createdAt' | 'updatedAt'>) {
         const prev = personas.find((x) => x.identifier === record.identifier)
@@ -108,19 +104,6 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
         if (prev) {
             Object.assign(prev, record)
         } else profiles.push({ ...record, updatedAt: 0, createdAt: 0 })
-    }
-
-    function addProfileToGroup(
-        member: ProfileIdentifier,
-        detail: NonNullable<NonNullable<BackupJSONFileVersion1['people']>[0]['groups']>[0],
-    ) {
-        const groupId = new GroupIdentifier(detail.network, detail.virtualGroupOwner, detail.groupID).toText()
-        const prev = userGroups.find((x) => x.identifier === groupId)
-        if (prev) {
-            prev.members.push(member.toText())
-        } else {
-            userGroups.push({ groupName: '', identifier: groupId, members: [] })
-        }
     }
 
     for (const x of json.whoami) {
@@ -156,12 +139,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
             publicKey: x.publicKey,
             nickname: x.nickname,
         })
-        x.groups?.forEach((y) => addProfileToGroup(profile, y))
     }
-
-    userGroups.forEach((x) => {
-        x.members = Array.from(new Set(x.members))
-    })
 
     return {
         _meta_: {
@@ -174,7 +152,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
         wallets: [],
         personas,
         profiles,
-        userGroups,
+        userGroups: [],
         grantedHostPermissions: json.grantedHostPermissions,
     }
 }

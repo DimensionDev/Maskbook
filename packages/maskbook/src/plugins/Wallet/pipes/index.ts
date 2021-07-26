@@ -28,3 +28,17 @@ export function resolveDebankChainName(network: NetworkType) {
             return ''
     }
 }
+
+export function resolveZerionAssetsScopeName(network: NetworkType) {
+    switch (network) {
+        case NetworkType.Ethereum:
+            return 'assets'
+        case NetworkType.Binance:
+            return 'bsc-assets'
+        case NetworkType.Polygon:
+            return 'polygon-assets'
+        default:
+            safeUnreachable(network)
+            return ''
+    }
+}

@@ -19,6 +19,7 @@ export interface Web3ProviderType {
     account: Subscription<string>
     nonce: Subscription<number>
     gasPrice: Subscription<number>
+    etherPrice: Subscription<number>
     chainId: Subscription<ChainId>
     balance: Subscription<string>
     blockNumber: Subscription<number>

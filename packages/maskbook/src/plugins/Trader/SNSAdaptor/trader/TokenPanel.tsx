@@ -43,7 +43,12 @@ export function TokenPanel(props: TokenPanelProps) {
                 alignItems: 'center',
             }}>
             <Typography className={classes.primary} component="div">
-                <TokenIcon classes={{ icon: classes.icon }} address={token.address} name={token.name} />
+                <TokenIcon
+                    classes={{ icon: classes.icon }}
+                    address={token.address}
+                    name={token.name}
+                    logoURI={token.logoURI}
+                />
                 <span className={classes.amount}>{formatBalance(amount, token.decimals)}</span>
             </Typography>
             <Typography className={classes.symbol}>{token.symbol}</Typography>

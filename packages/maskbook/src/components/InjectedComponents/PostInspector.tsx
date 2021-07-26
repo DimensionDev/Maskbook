@@ -28,8 +28,6 @@ export function PostInspector(_props: PostInspectorProps) {
     const postImages = usePostInfoDetails.postMetadataImages()
     const provePost = useMemo(() => publicKeyUIDecoder(postContent), [postContent, publicKeyUIDecoder])
 
-    if (postBy.isUnknown) return <slot />
-
     if (encryptedPost.ok || postImages.length) {
         needZip()
         return withAdditionalContent(<DecryptPost onDecrypted={onDecrypted} currentIdentity={currentIdentity} />)
@@ -42,6 +40,9 @@ export function PostInspector(_props: PostInspectorProps) {
         return (
             <>
                 {slotPosition !== 'after' && slot}
+                {process.env.NODE_ENV === 'development' && postBy.isUnknown ? (
+                    <h2 style={{ background: 'red', color: 'white' }}>Please fix me. Post author is $unknown</h2>
+                ) : null}
                 {x}
                 <PluginHooksRenderer />
                 {slotPosition !== 'before' && slot}

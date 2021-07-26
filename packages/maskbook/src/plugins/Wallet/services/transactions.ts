@@ -12,6 +12,7 @@ import {
 import * as DeBankAPI from '../apis/debank'
 import * as ZerionApi from '../apis/zerion'
 import { NetworkType, pow10 } from '@masknet/web3-shared'
+import { resolveDebankChainName } from '../pipes'
 
 export async function getTransactionList(
     address: string,
@@ -23,7 +24,7 @@ export async function getTransactionList(
     hasNextPage: boolean
 }> {
     if (provider === PortfolioProvider.DEBANK) {
-        const { data, error_code } = await DeBankAPI.getTransactionList(address, network)
+        const { data, error_code } = await DeBankAPI.getTransactionList(address, resolveDebankChainName(network))
         if (error_code !== 0) throw new Error('Fail to load transactions.')
         return {
             transactions: fromDeBank(data),
@@ -50,11 +51,11 @@ export async function getTransactionList(
 
 function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['data']) {
     return history_list
-        .filter((transaction) => transaction.tx?.name ?? transaction.cate_id)
+        .filter((transaction) => transaction.tx?.name || transaction.cate_id)
         .filter(({ cate_id }) => cate_id !== 'approve')
         .map((transaction) => {
             let type = transaction.tx?.name
-            if (isNil(type) && !isNil(transaction.cate_id)) {
+            if (!type && !isNil(transaction.cate_id)) {
                 type = cate_dict[transaction.cate_id].en
             } else if (type === '') {
                 type = 'contract interaction'
@@ -66,24 +67,22 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['da
                 toAddress: transaction.other_addr,
                 failed: transaction.tx?.status === 0,
                 pairs: [
-                    ...transaction.sends
-                        .filter(({ token_id }) => token_dict[token_id].is_verified)
-                        .map(({ amount, token_id }) => ({
-                            name: token_dict[token_id].name,
-                            symbol: token_dict[token_id].optimized_symbol,
-                            address: token_id,
-                            direction: DebankTransactionDirection.SEND,
-                            amount,
-                        })),
-                    ...transaction.receives
-                        .filter(({ token_id }) => token_dict[token_id].is_verified)
-                        .map(({ amount, token_id }) => ({
-                            name: token_dict[token_id].name,
-                            symbol: token_dict[token_id].optimized_symbol,
-                            address: token_id,
-                            direction: DebankTransactionDirection.RECEIVE,
-                            amount,
-                        })),
+                    ...transaction.sends.map(({ amount, token_id }) => ({
+                        name: token_dict[token_id].name,
+                        symbol: token_dict[token_id].optimized_symbol,
+                        address: token_id,
+                        direction: DebankTransactionDirection.SEND,
+                        amount,
+                        logoURI: token_dict[token_id].logo_url,
+                    })),
+                    ...transaction.receives.map(({ amount, token_id }) => ({
+                        name: token_dict[token_id].name,
+                        symbol: token_dict[token_id].optimized_symbol,
+                        address: token_id,
+                        direction: DebankTransactionDirection.RECEIVE,
+                        amount,
+                        logoURI: token_dict[token_id].logo_url,
+                    })),
                 ],
                 gasFee: transaction.tx
                     ? { eth: transaction.tx.eth_gas_fee, usd: transaction.tx.usd_gas_fee }
@@ -114,6 +113,7 @@ function fromZerion(data: ZerionTransactionItem[]) {
                             address: asset.asset_code,
                             direction,
                             amount: Number(new BigNumber(value).dividedBy(pow10(asset.decimals)).toString()),
+                            logoURI: asset.icon_url,
                         }
                     }) ?? [],
                 gasFee: {

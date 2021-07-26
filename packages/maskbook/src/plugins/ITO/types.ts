@@ -38,6 +38,11 @@ export interface PoolSubgraph {
     exchange_out_volumes: string[]
 }
 
+export interface ClaimablePool {
+    pid: string
+    token: FungibleTokenDetailed
+}
+
 //#region TokenOutMask
 export type TokenOutMask = Omit<FungibleTokenDetailed, 'chainId'> & {
     chain_id: ChainId
@@ -47,6 +52,11 @@ export type TokenOutMask = Omit<FungibleTokenDetailed, 'chainId'> & {
 export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
     token: TokenOutMask
     exchange_tokens: TokenOutMask[]
+}
+
+export interface JSON_PayloadComposeMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
+    token: string
+    exchange_tokens: { address: string }[]
 }
 
 export enum ITO_Status {

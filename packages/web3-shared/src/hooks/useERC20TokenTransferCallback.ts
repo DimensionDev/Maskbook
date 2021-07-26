@@ -9,7 +9,7 @@ import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
 import { isGreaterThan, isZero } from '../utils'
 
-export function useERC20TokenTransferCallback(address: string, amount?: string, recipient?: string) {
+export function useERC20TokenTransferCallback(address?: string, amount?: string, recipient?: string) {
     const nonce = useNonce()
     const gasPrice = useGasPrice()
     const account = useAccount()

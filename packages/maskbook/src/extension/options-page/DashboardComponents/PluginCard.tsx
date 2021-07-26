@@ -7,11 +7,14 @@ import { Flags, useI18N } from '../../../utils'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardPluginDetailDialog } from '../DashboardDialogs/Plugin'
 
-interface Props {
+export interface PluginCardProps {
     id: string
     name: string
     icon: React.ReactNode
     description?: string
+    enabled: boolean
+    onSwitch(): void
+    canDisable: boolean
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -77,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export default function PluginCard({ id, name, icon, description }: Props) {
+export default function PluginCard({ id, name, icon, description, enabled, onSwitch, canDisable }: PluginCardProps) {
     const { t } = useI18N()
     const classes = useStyles()
     const [pluginDetail, openPluginDetail] = useModal(DashboardPluginDetailDialog, {
@@ -115,12 +118,14 @@ export default function PluginCard({ id, name, icon, description }: Props) {
                 <Button variant="outlined" size="small" onClick={openPluginDetail}>
                     {t('details')}
                 </Button>
-                {Flags.plugin_switch_enabled ? (
+                {Flags.plugin_switch_enabled && canDisable ? (
                     <Switch
                         className={classes.switch}
                         color="primary"
                         size="small"
-                        inputProps={{ 'aria-label': t('eanble_or_disable_plugin') }}
+                        inputProps={{ 'aria-label': t('enable_or_disable_plugin') }}
+                        checked={enabled}
+                        onChange={() => onSwitch()}
                     />
                 ) : null}
             </div>
