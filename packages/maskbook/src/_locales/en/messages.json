@@ -366,7 +366,7 @@
     "plugin_wallet_switch_network_under_going": "Switching to {{network}}…",
     "plugin_wallet_not_availabe_on": "Not available on {{network}}.",
     "plugin_wallet_connect_wallet": "Connect Wallet",
-    "plugin_wallet_connect_wallet_tip": "Please connect to a wallet.",
+    "plugin_wallet_connect_wallet_tip": "No wallet found.",
     "plugin_wallet_settings_portfolio_data_source_primary": "Portfolio Data Source",
     "plugin_wallet_settings_portfolio_data_source_secondary": "Select the source of portfolio data.",
     "plugin_wallet_settings_collectible_data_source_primary": "Collectible Data Source",
