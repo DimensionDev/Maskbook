@@ -38,12 +38,12 @@
     "@material-ui/system": "5.0.0-alpha.34",
     "@types/react": "^17.0.14",
     "@types/react-dom": "^17.0.9",
-    "i18next": "^20.3.2",
+    "i18next": "^20.3.4",
     "idb": "5.0.8",
     "jss": "10.5.1",
     "react": "=18.0.0-alpha-aecb3b6d1",
     "react-dom": "=18.0.0-alpha-aecb3b6d1",
-    "react-i18next": "^11.11.1"
+    "react-i18next": "^11.11.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
@@ -53,7 +53,7 @@
     "@magic-works/i18n-codegen": "^0.0.6",
     "@masknet/cli": "workspace:*",
     "@nice-labs/git-rev": "^3.5.0",
-    "eslint": "^7.30.0",
+    "eslint": "^7.31.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-lodash": "^7.1.0",
@@ -62,8 +62,8 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-unused-imports": "^1.1.2",
     "esm": "^3.2.25",
-    "husky": "^6.0.0",
-    "lint-staged": "^11.0.0",
+    "husky": "^7.0.1",
+    "lint-staged": "^11.1.0",
     "npm-run-all": "^4.1.5",
     "only-allow": "^1.0.0",
     "prettier": "^2.3.2",
@@ -74,11 +74,5 @@
   "engines": {
     "node": ">=14.4.0",
     "pnpm": ">=6"
-  },
-  "pnpm": {
-    "overrides": {
-      "react": "=18.0.0-alpha-aecb3b6d1",
-      "react-dom": "=18.0.0-alpha-aecb3b6d1"
-    }
   }
 }

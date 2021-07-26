@@ -2,7 +2,7 @@
 import type { i18n } from 'i18next'
 import { initReactI18next, useTranslation as useTranslation_, UseTranslationOptions } from 'react-i18next'
 import type { TOptions } from 'i18next'
-import { useMemo, useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useUpdate } from 'react-use'
 import type en from '../_locales/en/messages.json'
 import i18nNextInstance from './i18n-next'
@@ -10,12 +10,8 @@ import { languageSettings } from '../settings/settings'
 
 i18nNextInstance.use(initReactI18next)
 
-// const test = {
-//     my_test: 'string',
-// } as const
 type Namespaces = {
     default: typeof en
-    // test: typeof test
 }
 
 export type I18NFunction<TInterpolationMap extends object = typeof en> = <TKeys extends keyof TInterpolationMap>(
@@ -54,10 +50,3 @@ export function useI18N<NS extends keyof Namespaces = 'default'>(
 languageSettings.addListener((next) => {
     i18nNextInstance.changeLanguage(next)
 })
-
-export function useIntlListFormat() {
-    const formatter = useMemo(() => {
-        return new Intl.ListFormat({ type: 'conjunction' })
-    }, [])
-    return useCallback((list: string[]) => formatter.format(list), [formatter])
-}

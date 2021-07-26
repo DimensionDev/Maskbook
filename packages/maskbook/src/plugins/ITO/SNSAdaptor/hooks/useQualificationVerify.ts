@@ -10,7 +10,7 @@ import {
 import { useAccount, useERC165 } from '@masknet/web3-shared'
 import { useQualificationContract } from './useQualificationContract'
 
-export function useQualificationVerify(address: string, ito_address: string) {
+export function useQualificationVerify(address: string, ito_address?: string) {
     const account = useAccount()
     const { contract: qualificationContract, version } = useQualificationContract(address, ito_address)
     const { value: isQualificationHasLucky, loading: loadingQualificationHasLucky } = useERC165<

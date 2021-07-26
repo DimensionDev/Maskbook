@@ -23,7 +23,7 @@ export enum ApproveStateType {
     FAILED,
 }
 
-export function useERC20TokenApproveCallback(address: string, amount?: string, spender?: string) {
+export function useERC20TokenApproveCallback(address?: string, amount?: string, spender?: string) {
     const account = useAccount()
     const nonce = useNonce()
     const gasPrice = useGasPrice()

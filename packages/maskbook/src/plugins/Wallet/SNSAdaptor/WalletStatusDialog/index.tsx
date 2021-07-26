@@ -1,18 +1,22 @@
-import { useCallback } from 'react'
-import { Copy, ExternalLink, Edit3 } from 'react-feather'
-import { useCopyToClipboard } from 'react-use'
-import classNames from 'classnames'
-import ErrorIcon from '@material-ui/icons/Error'
-import { FormattedAddress, useValueRef } from '@masknet/shared'
-import { ProviderType, resolveAddressLinkOnExplorer, useChainId, useChainIdValid } from '@masknet/web3-shared'
+import { FormattedAddress, useRemoteControlledDialog, useValueRef } from '@masknet/shared'
+import {
+    ProviderType,
+    resolveAddressLinkOnExplorer,
+    useChainId,
+    useChainIdValid,
+    useWallet,
+} from '@masknet/web3-shared'
 import { Button, DialogActions, DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
+import ErrorIcon from '@material-ui/icons/Error'
+import classNames from 'classnames'
+import { useCallback } from 'react'
+import { Copy, Edit3, ExternalLink } from 'react-feather'
+import { useCopyToClipboard } from 'react-use'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletIcon } from '../../../../components/shared/WalletIcon'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import Services from '../../../../extension/service'
 import { useI18N } from '../../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { useWallet } from '../../hooks/useWallet'
 import { WalletMessages } from '../../messages'
 import { currentProviderSettings } from '../../settings'
 import { RecentTransactionList } from './RecentTransactionList'
