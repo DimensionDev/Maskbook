@@ -145,18 +145,21 @@ const MASK_ADDRESS = getTokenConstants().MASK_ADDRESS
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
 export const getBalanceValue = (asset: Asset) => parseFloat(formatBalance(asset.balance, asset.token.decimals))
 
-export const sortToken = (a: FungibleTokenDetailed, b: FungibleTokenDetailed) => {
+export const sortToken = (a: FungibleTokenDetailed, b: FungibleTokenDetailed, isMaskBoost: boolean = false) => {
     // The native token goes first
     if (a.type === EthereumTokenType.Native) return -1
     if (b.type === EthereumTokenType.Native) return 1
 
     // The mask token second
-    if (isSameAddress(a.address, MASK_ADDRESS ?? '')) return -1
-    if (isSameAddress(b.address, MASK_ADDRESS ?? '')) return 1
+    if (isMaskBoost) {
+        if (isSameAddress(a.address, MASK_ADDRESS ?? '')) return -1
+        if (isSameAddress(b.address, MASK_ADDRESS ?? '')) return 1
+    }
+
     return 0
 }
 
-export const sortAssert = (a: Asset, b: Asset, chainId: ChainId) => {
+export const sortAssert = (a: Asset, b: Asset, chainId: ChainId, isMaskBoost: boolean = false) => {
     // The tokens with the current chain id goes first
     if (a.chain !== b.chain) {
         if (getChainIdFromName(a.chain) === chainId) return -1
@@ -164,7 +167,7 @@ export const sortAssert = (a: Asset, b: Asset, chainId: ChainId) => {
     }
 
     // token sort
-    const tokenDifference = sortToken(a.token, b.token)
+    const tokenDifference = sortToken(a.token, b.token, isMaskBoost)
     if (tokenDifference !== 0) return tokenDifference
 
     // Token with high usd value estimation has priority

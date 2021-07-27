@@ -69,7 +69,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
 
     const renderAssets =
         loadingAssetsError || !account || loadingAssets
-            ? renderTokens.sort(sortToken).map((token) => ({ token: token, balance: null }))
+            ? renderTokens.sort((a, b) => sortToken(a, b, true)).map((token) => ({ token: token, balance: null }))
             : assets
 
     //#region UI helpers

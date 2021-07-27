@@ -37,7 +37,7 @@ export function useAssetsByTokenList(tokens: FungibleTokenDetailed[]) {
             }
             return asset
         })
-        .sort((a, b) => sortAssert(a, b, chainId))
+        .sort((a, b) => sortAssert(a, b, chainId, true))
 
     return {
         value: assetsDetailed,
