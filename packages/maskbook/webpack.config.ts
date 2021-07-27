@@ -215,6 +215,15 @@ function config(opts: {
             },
         },
         output: {
+            environment: {
+                arrowFunction: true,
+                const: true,
+                destructuring: true,
+                forOf: true,
+                module: false,
+                bigIntLiteral: false,
+                dynamicImport: !target.iOS,
+            },
             path: dist,
             filename: 'js/[name].js',
             // In some cases webpack will emit files starts with "_" which is reserved in web extension.
