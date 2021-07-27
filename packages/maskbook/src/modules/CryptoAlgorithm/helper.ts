@@ -11,7 +11,7 @@ export function derive_AES_GCM_256_Key_From_PBKDF2(
 }
 
 export function derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(priv: EC_Private_JsonWebKey, pub: EC_Public_JsonWebKey) {
-    return CryptoWorker.derive_aes_from_ecdh_k256(priv, pub, 'AES-GCM', 256)
+    return CryptoWorker.derive_aes_from_ecdh_k256(priv, pub)
 }
 
 export async function split_ec_k256_keypair_into_pub_priv(

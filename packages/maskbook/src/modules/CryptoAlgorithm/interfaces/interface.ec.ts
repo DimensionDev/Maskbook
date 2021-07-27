@@ -1,5 +1,4 @@
 import type { ShaName } from './interface'
-import type { AESName } from './interface.aes'
 import type { JsonWebKeyPair, EC_Public_JsonWebKey, EC_Private_JsonWebKey, AESJsonWebKey } from './utils'
 type GenerateKeyPair = () => PromiseLike<JsonWebKeyPair<EC_Public_JsonWebKey, EC_Private_JsonWebKey>>
 // type Sign = (ecdsa_key: EC_Private_JsonWebKey, hash: ShaName, message: ArrayBuffer) => PromiseLike<ArrayBuffer>
@@ -9,12 +8,7 @@ type Verify = (
     msg: ArrayBuffer,
     signature: ArrayBuffer,
 ) => PromiseLike<boolean>
-type DeriveAES = (
-    priv: EC_Private_JsonWebKey,
-    pub: EC_Public_JsonWebKey,
-    aes?: AESName,
-    length?: 256,
-) => PromiseLike<AESJsonWebKey>
+type DeriveAES = (priv: EC_Private_JsonWebKey, pub: EC_Public_JsonWebKey) => PromiseLike<AESJsonWebKey>
 export interface ECMethods {
     generate_ec_k256_pair: GenerateKeyPair
     // generate_ec_p256_pair: GenerateKeyPair
