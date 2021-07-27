@@ -283,7 +283,7 @@ export function PoolInList(props: PoolInListProps) {
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 <FormattedBalance
                                                     value={exchange_in_volumes[index]}
-                                                    decimals={pool.token.decimals}
+                                                    decimals={token.decimals}
                                                     significant={6}
                                                     symbol={token.symbol}
                                                 />
