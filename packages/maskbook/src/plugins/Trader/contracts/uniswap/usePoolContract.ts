@@ -1,5 +1,5 @@
-import PoolStateV3ABI from '@masknet/contracts/abis/PoolStateV3.json'
-import type { PoolStateV3 } from '@masknet/contracts/types/PoolStateV3'
+import PoolStateV3ABI from '@masknet/web3-contracts/abis/PoolStateV3.json'
+import type { PoolStateV3 } from '@masknet/web3-contracts/types/PoolStateV3'
 import { useContract, useContracts } from '@masknet/web3-shared'
 import type { AbiItem } from 'web3-utils'
 

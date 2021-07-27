@@ -41,15 +41,18 @@ export function usePools(
             })
         })
     }, [chainId, transformed, UNISWAP_V3_FACTORY_ADDRESS])
+
     const poolContracts = usePoolContracts(poolAddresses)
+
+    const [slot0s, , slot0sState] = useMutlipleContractSingleData(poolContracts, ['slot0'], [])
+    const [liquidities, , liquiditiesState] = useMutlipleContractSingleData(poolContracts, ['liquidity'], [])
 
     console.log({
         poolAddresses,
         poolContracts,
+        slot0s,
+        liquidities,
     })
-
-    const [slot0s, , slot0sState] = useMutlipleContractSingleData(poolContracts, ['slot0'], [])
-    const [liquidities, , liquiditiesState] = useMutlipleContractSingleData(poolContracts, ['liquidity'], [])
 
     return useMemo(() => {
         return poolKeys.map((_key, index) => {
@@ -65,6 +68,7 @@ export function usePools(
             if (slot0Loading || liquiditiesLoading) return [PoolState.LOADING, null]
 
             if (!slot0 || !liquidity) return [PoolState.NOT_EXISTS, null]
+
             if (new BigNumber(slot0.sqrtPriceX96 ?? '0').isZero()) return [PoolState.NOT_EXISTS, null]
 
             try {
