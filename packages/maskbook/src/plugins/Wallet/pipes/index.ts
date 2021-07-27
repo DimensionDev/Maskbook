@@ -39,6 +39,8 @@ export function resolveZerionAssetsScopeName(network: NetworkType) {
             return 'bsc-assets'
         case NetworkType.Polygon:
             return 'polygon-assets'
+        case NetworkType.Arbitrum:
+            return ''
         default:
             safeUnreachable(network)
             return ''

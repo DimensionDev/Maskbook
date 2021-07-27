@@ -1,7 +1,7 @@
 import type { Asset } from '../types'
 import { useChainId } from './useChainId'
 import { uniqBy } from 'lodash-es'
-import { createNativeToken, formatEthereumAddress, getChainIdFromName, getTokenUSDValue, isSameAddress } from '../utils'
+import { formatEthereumAddress, getChainIdFromName, getTokenUSDValue, isSameAddress } from '../utils'
 import { useTokenConstants } from '../constants'
 import { useChainDetailed } from './useChainDetailed'
 
