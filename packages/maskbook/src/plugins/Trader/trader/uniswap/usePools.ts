@@ -4,6 +4,7 @@ import { computePoolAddress, Pool, FeeAmount } from '@uniswap/v3-sdk'
 import type { Token, Currency } from '@uniswap/sdk-core'
 import { MulticalStateType, useChainId, useMutlipleContractSingleData, useTraderConstants } from '@masknet/web3-shared'
 import { usePoolContracts } from '../../contracts/uniswap/usePoolContract'
+import { useAsyncRetry } from 'react-use'
 
 export enum PoolState {
     LOADING,
@@ -44,12 +45,23 @@ export function usePools(
 
     const poolContracts = usePoolContracts(poolAddresses)
 
-    const [slot0s, , slot0sState] = useMutlipleContractSingleData(poolContracts, new Array(poolContracts.length).fill('slot0'), [])
-    const [liquidities, , liquiditiesState] = useMutlipleContractSingleData(poolContracts, new Array(poolContracts.length).fill('liquidity'), [])
+    const [slot0s, slot0sCalls, slot0sState, slot0sCallback] = useMutlipleContractSingleData(
+        poolContracts,
+        new Array(poolContracts.length).fill('slot0'),
+        [],
+    )
+    const [liquidities, liquiditiesCalls, liquiditiesState, liquiditiesCallback] = useMutlipleContractSingleData(
+        poolContracts,
+        new Array(poolContracts.length).fill('liquidity'),
+        [],
+    )
 
+    useAsyncRetry(() => slot0sCallback(slot0sCalls), [poolContracts])
+    useAsyncRetry(() => liquiditiesCallback(liquiditiesCalls), [poolContracts])
+
+    console.log('DEBUG: v3 pools')
     console.log({
         poolAddresses,
-        poolContracts,
         slot0s,
         liquidities,
     })

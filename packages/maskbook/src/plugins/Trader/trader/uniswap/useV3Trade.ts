@@ -5,6 +5,7 @@ import { encodeRouteToPath, Route, Trade } from '@uniswap/v3-sdk'
 import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract'
 import { useAllV3Routes } from './useAllV3Routes'
 import { MulticalStateType, useSingleContractMultipleData } from '@masknet/web3-shared'
+import { useAsyncRetry } from 'react-use'
 
 export enum V3TradeState {
     LOADING,
@@ -23,8 +24,13 @@ export function useV3BestTradeExactIn(
     amountIn?: CurrencyAmount<Currency>,
     currencyOut?: Currency,
 ): { state: V3TradeState; trade: Trade<Currency, Currency, TradeType.EXACT_INPUT> | null } {
-    const quoter = useQuoterContract()
+    const quoterContract = useQuoterContract()
     const { routes, loading: routesLoading } = useAllV3Routes(amountIn?.currency, currencyOut)
+
+    console.log('DEBUG: v3 routes')
+    console.log({
+        routes,
+    })
 
     const quoteExactInInputs = useMemo(() => {
         return routes.map(
@@ -36,17 +42,12 @@ export function useV3BestTradeExactIn(
         )
     }, [amountIn, routes])
 
-    const [quotesResults, , quotesState] = useSingleContractMultipleData(
-        quoter,
-        ['quoteExactInput'],
+    const [quotesResults, quotesCalls, quotesState, quotesCallback] = useSingleContractMultipleData(
+        quoterContract,
+        new Array(quoteExactInInputs.length).fill('quoteExactInput'),
         quoteExactInInputs,
     )
-
-    console.log('DEBUG: v3 best trade exact in')
-    console.log({
-        quotesResults,
-        state: quotesState,
-    })
+    useAsyncRetry(() => quotesCallback(quotesCalls), [quoterContract, quoteExactInInputs.map((x) => x.join()).join()])
 
     return useMemo(() => {
         if (!amountIn || !currencyOut) {
@@ -125,7 +126,7 @@ export function useV3BestTradeExactOut(
     currencyIn?: Currency,
     amountOut?: CurrencyAmount<Currency>,
 ): { state: V3TradeState; trade: Trade<Currency, Currency, TradeType.EXACT_OUTPUT> | null } {
-    const quoter = useQuoterContract()
+    const quoterContract = useQuoterContract()
     const { routes, loading: routesLoading } = useAllV3Routes(currencyIn, amountOut?.currency)
 
     const quoteExactOutInputs = useMemo(() => {
@@ -138,11 +139,12 @@ export function useV3BestTradeExactOut(
         )
     }, [amountOut, routes])
 
-    const [quotesResults, , quotesState] = useSingleContractMultipleData(
-        quoter,
-        ['quoteExactOutput'],
+    const [quotesResults, quotesCalls, quotesState, quotesCallback] = useSingleContractMultipleData(
+        quoterContract,
+        new Array(quoteExactOutInputs.length).fill('quoteExactOutput'),
         quoteExactOutInputs,
     )
+    useAsyncRetry(() => quotesCallback(quotesCalls), [quoterContract, quoteExactOutInputs.map((x) => x.join()).join()])
 
     return useMemo(() => {
         if (!amountOut || !currencyIn || quotesResults.some(({ error }) => !!error)) {
