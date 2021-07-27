@@ -71,6 +71,7 @@ export async function vote(props: voteProps) {
     PollGun
         // @ts-ignore
         .get(poll.key)
+        // @ts-ignore
         .get('results')
         .on((item) => {
             // @ts-ignore
@@ -86,6 +87,7 @@ export async function vote(props: voteProps) {
     PollGun
         // @ts-ignore
         .get(poll.key)
+        // @ts-ignore
         .get('results')
         // @ts-ignore
         .put(newResults)
@@ -107,6 +109,7 @@ export async function getPollByKey(props: { key: string }) {
     PollGun
         // @ts-ignore
         .get(props.key)
+        // @ts-ignore
         .on((data: PollGunDB) => {
             poll = {
                 ...poll,
@@ -119,6 +122,7 @@ export async function getPollByKey(props: { key: string }) {
                 PollGun
                     // @ts-ignore
                     .get(props.key)
+                    // @ts-ignore
                     .get('options')
                     .on((options) => {
                         // @ts-ignore
@@ -130,6 +134,7 @@ export async function getPollByKey(props: { key: string }) {
                 PollGun
                     // @ts-ignore
                     .get(props.key)
+                    // @ts-ignore
                     .get('results')
                     .on((results) => {
                         // @ts-ignore

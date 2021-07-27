@@ -13,7 +13,7 @@ import { Box, CircularProgress, makeStyles, TextField, Typography } from '@mater
 import CheckIcon from '@material-ui/icons/Check'
 import UnCheckIcon from '@material-ui/icons/Close'
 import classNames from 'classnames'
-import { format as formatDateTime } from 'date-fns'
+import formatDateTime from 'date-fns/format'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'

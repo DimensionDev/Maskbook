@@ -1,4 +1,4 @@
 {
   "extends": "../../tsconfig.json",
-  "references": [{ "path": "./example/" }]
+  "references": [{ "path": "./example/" }, { "path": "./Wallet/" }]
 }

@@ -13,7 +13,6 @@ import type { Configuration as DevServerConfiguration } from 'webpack-dev-server
 
 //#region Development plugins
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
-import ReactRefreshTypeScriptTransformer from 'react-refresh-typescript'
 import NotifierPlugin from 'webpack-notifier'
 //#endregion
 //#region Other plugins
@@ -88,8 +87,8 @@ function config(opts: {
         resolve: {
             extensions: ['.js', '.ts', '.tsx'],
             alias: {
-                'async-call-rpc$': 'async-call-rpc/full',
-                lodash: 'lodash-es',
+                'async-call-rpc$': require.resolve('async-call-rpc/full'),
+                lodash: require.resolve('lodash-es'),
                 // Strange...
                 '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
                 // It's a node impl for xhr which is unnecessary
@@ -105,6 +104,7 @@ function config(opts: {
                 '@masknet/icons': require.resolve('../icons/index.ts'),
                 '@masknet/plugin-infra': require.resolve('../plugin-infra/src/index.ts'),
                 '@masknet/plugin-example': require.resolve('../plugins/example/src/index.ts'),
+                '@masknet/plugin-wallet': require.resolve('../plugins/Wallet/src/index.ts'),
                 '@masknet/external-plugin-previewer': require.resolve('../external-plugin-previewer/src/index.tsx'),
                 '@masknet/web3-shared': require.resolve('../web3-shared/src/index.ts'),
             },
@@ -132,18 +132,30 @@ function config(opts: {
                     parser: { worker: ['OnDemandWorker', '...'] },
                     // Compile all ts files in the workspace
                     include: src('../'),
-                    loader: require.resolve('ts-loader'),
+                    loader: require.resolve('swc-loader'),
                     options: {
-                        transpileOnly: true,
-                        compilerOptions: {
-                            importsNotUsedAsValues: 'remove',
-                            jsx: mode === 'production' ? 'react-jsx' : 'react-jsxdev',
+                        jsc: {
+                            parser: {
+                                syntax: 'typescript',
+                                dynamicImport: true,
+                                tsx: true,
+                                importAssertions: true,
+                            },
+                            target: 'es2019',
+                            externalHelpers: true,
+                            transform: {
+                                react: {
+                                    runtime: 'automatic',
+                                    useBuiltins: true,
+                                    development: disableReactHMR ? false : mode === 'development',
+                                    refresh: {
+                                        refreshReg: '$RefreshReg$',
+                                        refreshSig: '$RefreshSig$',
+                                        emitFullSignatures: true,
+                                    },
+                                },
+                            },
                         },
-                        getCustomTransformers: () => ({
-                            before: [!disableHMR && !disableReactHMR && ReactRefreshTypeScriptTransformer()].filter(
-                                Boolean,
-                            ),
-                        }),
                     },
                 },
             ],

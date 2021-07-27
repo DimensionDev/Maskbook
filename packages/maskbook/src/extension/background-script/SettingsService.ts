@@ -5,7 +5,6 @@ import {
     appearanceSettings,
     currentPersonaIdentifier,
     languageSettings,
-    disableOpenNewTabInBackgroundSettings,
     currentPluginEnabledStatus,
 } from '../../settings/settings'
 import { currentDataProviderSettings } from '../../plugins/Trader/settings'
@@ -43,10 +42,6 @@ export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSetting
 export const [getEtherPrice, setEtherPrice] = create(currentEtherPriceSettings)
 export const [getGasNow, setGasNow] = create(currentGasNowSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
-export const [getAncientPostsCompatibiltyMode, setAncientPostsCompatibiltyMode] = create(
-    disableOpenNewTabInBackgroundSettings,
-)
-
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 
 export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(currentNetworkSettings)

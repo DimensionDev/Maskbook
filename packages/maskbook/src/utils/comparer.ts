@@ -1,4 +1,4 @@
-import type { Group, Profile, Persona } from '../database'
+import type { Profile, Persona } from '../database'
 
 export function PersonaComparer(a: Persona, b: Persona): boolean {
     if (a.createdAt.getTime() !== b.createdAt.getTime()) return false
@@ -30,20 +30,6 @@ export function ProfileArrayComparer(a: Profile[], b: Profile[]) {
             if (!PersonaComparer(person.linkedPersona, target.linkedPersona)) return false
         }
         if (person.nickname !== target.nickname) return false
-        return true
-    })
-}
-
-export function GroupArrayComparer(a: Group[], b: Group[]) {
-    if (a.length !== b.length) return false
-    return a.every((group, index) => {
-        const target = b[index]
-        if (!group.identifier.equals(target.identifier)) return false
-        if (group.avatar !== target.avatar) return false
-        if (group.banned !== target.banned) return false
-        if (group.groupName !== target.groupName) return false
-        if (group.members.length !== target.members.length) return false
-        if (!group.members.every((person, index) => target.members[index].equals(person))) return false
         return true
     })
 }

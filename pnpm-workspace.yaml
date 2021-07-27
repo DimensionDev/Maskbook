@@ -15,4 +15,5 @@ packages:
   - 'packages/icons'
   - 'packages/plugin-infra'
   - 'packages/plugins/example'
+  - 'packages/plugins/Wallet'
   - 'packages/external-plugin-previewer'
