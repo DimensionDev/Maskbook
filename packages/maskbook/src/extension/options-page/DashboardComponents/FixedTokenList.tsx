@@ -1,14 +1,12 @@
 import {
     currySameAddress,
-    EthereumTokenType,
     FungibleTokenDetailed,
-    isSameAddress,
+    sortToken,
     TokenListsState,
     useAccount,
-    useAssetsFromChain,
+    useAssetsByTokenList,
     useERC20TokensDetailedFromTokenLists,
     useEthereumConstants,
-    useTokenConstants,
 } from '@masknet/web3-shared'
 import { makeStyles, Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
@@ -17,7 +15,6 @@ import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { TokenInList } from './TokenInList'
 import { EthereumAddress } from 'wallet.ts'
-import { Asset, formatBalance } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     list: {},
@@ -32,10 +29,6 @@ export interface FixedTokenListProps extends withClasses<never> {
     selectedTokens?: string[]
     onSelect?(token: FungibleTokenDetailed | null): void
     FixedSizeListProps?: Partial<FixedSizeListProps>
-}
-
-function formatAssetBalance(asset: Asset) {
-    return parseFloat(formatBalance(asset.balance, asset.token.decimals))
 }
 
 export function FixedTokenList(props: FixedTokenListProps) {
@@ -54,7 +47,6 @@ export function FixedTokenList(props: FixedTokenListProps) {
 
     const [address, setAddress] = useState('')
     const { ERC20_TOKEN_LISTS } = useEthereumConstants()
-    const { MASK_ADDRESS } = useTokenConstants()
 
     const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(
         ERC20_TOKEN_LISTS,
@@ -67,36 +59,18 @@ export function FixedTokenList(props: FixedTokenListProps) {
             (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
     )
 
-    const commonTokenSort = (a: FungibleTokenDetailed, b: FungibleTokenDetailed) => {
-        if (a.type === EthereumTokenType.Native) return -1
-        if (b.type === EthereumTokenType.Native) return 1
-        if (isSameAddress(a.address, MASK_ADDRESS ?? '')) return -1
-        if (isSameAddress(b.address, MASK_ADDRESS ?? '')) return 1
-        return 0
-    }
-
     const renderTokens = uniqBy([...tokens, ...filteredTokens], (x) => x.address.toLowerCase())
 
     const {
         loading: loadingAssets,
         value: assets,
-        error,
-    } = useAssetsFromChain(renderTokens.filter((x) => EthereumAddress.isValid(x.address)))
+        error: loadingAssetsError,
+    } = useAssetsByTokenList(renderTokens.filter((x) => EthereumAddress.isValid(x.address)))
 
     const renderAssets =
-        error || !account || loadingAssets
-            ? renderTokens.sort(commonTokenSort).map((token) => ({ token: token, balance: null }))
-            : assets.sort((a, b) => {
-                  const tokenOrder = commonTokenSort(a.token, b.token)
-                  if (tokenOrder !== 0) return tokenOrder
-                  // Order by balance
-                  if (formatAssetBalance(a) > formatAssetBalance(b)) return -1
-                  if (formatAssetBalance(a) < formatAssetBalance(b)) return 1
-                  // Order by symbol
-                  if (a.token.symbol! < b.token.symbol!) return -1
-                  if (a.token.symbol! > b.token.symbol!) return 1
-                  return 0
-              })
+        loadingAssetsError || !account || loadingAssets
+            ? renderTokens.sort(sortToken).map((token) => ({ token: token, balance: null }))
+            : assets
 
     //#region UI helpers
     const renderPlaceholder = (message: string) => (
