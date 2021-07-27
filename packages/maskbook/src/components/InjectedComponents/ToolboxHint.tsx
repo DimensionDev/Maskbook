@@ -20,6 +20,7 @@ import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { FileServicePluginID } from '../../plugins/FileService/constants'
 import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
+import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
 import { useControlledDialog } from '../../plugins/Collectible/SNSAdaptor/useControlledDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
@@ -189,6 +190,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Swap
+    const swapPluginEnabled = currentPluginEnabledStatus['plugin:' + TraderPluginID].value
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
     //#endregion
 
@@ -230,7 +232,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
                 </MenuItem>
             ) : null,
-            chainIdValid ? (
+            chainIdValid && swapPluginEnabled ? (
                 <MenuItem onClick={openSwapDialog} className={classes.menuItem}>
                     <Image src={ToolIconURLs.swap.image} width={19} height={19} />
                     <Typography className={classes.text}>{ToolIconURLs.swap.text}</Typography>

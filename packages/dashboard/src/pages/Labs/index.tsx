@@ -147,7 +147,7 @@ export default function Plugins() {
                         id={PLUGIN_IDS.SWAP}
                         title={t.labs_swap()}
                         desc={t.labs_swap_desc()}
-                        enabled={pluginStatus[PLUGIN_IDS.SWAP]}
+                        enabled={pluginStatus[PLUGIN_IDS.MARKET_TREND]}
                         onSwitch={onSwitch}
                         onExplore={onExplore}
                         onSetting={onSetting}

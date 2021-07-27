@@ -91,11 +91,13 @@ export default function PluginItem(props: PluginItemProps) {
                 ) : null}
             </ListItem>
             <Box className={classes.actions}>
-                <Box sx={{ flex: 1 }}>
-                    {onTwitter ? <Twitter onClick={() => onTwitter(id)} /> : null}
-                    {onFacebook ? <Facebook onClick={() => onFacebook(id)} /> : null}
-                    {onExplore ? <Explore onClick={() => onExplore(id)} /> : null}
-                </Box>
+                {enabled ? (
+                    <Box sx={{ flex: 1 }}>
+                        {onTwitter ? <Twitter onClick={() => onTwitter(id)} /> : null}
+                        {onFacebook ? <Facebook onClick={() => onFacebook(id)} /> : null}
+                        {onExplore ? <Explore onClick={() => onExplore(id)} /> : null}
+                    </Box>
+                ) : null}
                 {id ? (
                     <SettingSwitch
                         size="small"
