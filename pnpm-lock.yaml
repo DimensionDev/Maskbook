@@ -113,7 +113,7 @@ importers:
   packages/dashboard:
     specifiers:
       '@babel/core': ^7.14.6
-      '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
+      '@dimensiondev/holoflows-kit': '=0.9.0-20210726055325-dfbe7fd'
       '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
       '@hookform/resolvers': ^2.6.0
       '@masknet/icons': workspace:*
@@ -152,7 +152,7 @@ importers:
       wallet.ts: ^1.0.1
       zod: ^3.5.1
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1
+      '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd
       '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
       '@hookform/resolvers': 2.6.1_react-hook-form@7.11.1
       '@masknet/icons': link:../icons
@@ -217,7 +217,7 @@ importers:
     specifiers:
       '@balancer-labs/sor': ^1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
-      '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
+      '@dimensiondev/holoflows-kit': '=0.9.0-20210726055325-dfbe7fd'
       '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/stego-js': '=0.11.1-20201027083223-8ab41be'
@@ -245,6 +245,7 @@ importers:
       '@servie/events': ^3.0.0
       '@sinonjs/text-encoding': ^0.7.1
       '@snapshot-labs/snapshot.js': github:snapshot-labs/snapshot.js#f32bf0f5b4a27a23b0db3c6fdaced1abab25f55a
+      '@swc/core': ^1.2.62
       '@testing-library/react-hooks': ^7.0.1
       '@types/bn.js': ^4.11.6
       '@types/d3': 5.16.4
@@ -348,9 +349,9 @@ importers:
       source-map-loader: ^3.0.0
       stream-browserify: ^3.0.0
       stream-http: ^2.8.3
+      swc-loader: ^0.1.14
       tiny-secp256k1: ^1.1.5
       ts-jest: 27.0.4
-      ts-loader: ^9.2.3
       ts-results: ^3.3.0
       type-coverage: ^2.18.0
       unstated-next: ^1.1.0
@@ -378,7 +379,7 @@ importers:
     dependencies:
       '@balancer-labs/sor': 1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
-      '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1_webextension-polyfill@0.8.0
+      '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd_webextension-polyfill@0.8.0
       '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
@@ -491,7 +492,8 @@ importers:
       '@dimensiondev/webextension-shim': 0.0.3-20210708053012-57a254d
       '@pmmmwh/react-refresh-webpack-plugin': 0.5.0-rc.2_0cb17a392999b7da0b5f4263f37b1695
       '@sinonjs/text-encoding': 0.7.1
-      '@testing-library/react-hooks': 7.0.1_react-test-renderer@17.0.2
+      '@swc/core': 1.2.63
+      '@testing-library/react-hooks': 7.0.1_1959de3a9153879cff3acd96b46ed70f
       '@types/enzyme': 3.10.9
       '@types/enzyme-adapter-react-16': 1.0.6
       '@types/expect-puppeteer': 4.4.6
@@ -527,9 +529,9 @@ importers:
       react-test-renderer: 17.0.2
       rimraf: 3.0.2
       source-map-loader: 3.0.0_webpack@5.46.0
-      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
-      ts-loader: 9.2.3_webpack@5.46.0
-      type-coverage: 2.18.0
+      swc-loader: 0.1.14_webpack@5.46.0
+      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      type-coverage: 2.18.0_typescript@4.3.5
       webpack: 5.46.0_webpack-cli@4.7.2
       webpack-cli: 4.7.2_d46d1c9a5e33a01c3500802a2e542ae0
       webpack-dev-server: 3.11.2_webpack-cli@4.7.2+webpack@5.46.0
@@ -540,7 +542,7 @@ importers:
 
   packages/plugin-infra:
     specifiers:
-      '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
+      '@dimensiondev/holoflows-kit': '=0.9.0-20210726055325-dfbe7fd'
       '@masknet/shared': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared': workspace:*
@@ -549,7 +551,7 @@ importers:
       ts-results: ^3.3.0
       use-subscription: ^1.5.1
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1
+      '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd
       '@masknet/shared': link:../shared
       '@masknet/theme': link:../theme
       '@masknet/web3-shared': link:../web3-shared
@@ -566,7 +568,7 @@ importers:
 
   packages/shared:
     specifiers:
-      '@dimensiondev/holoflows-kit': '=0.8.0-20210429202414-74fb9a1'
+      '@dimensiondev/holoflows-kit': '=0.9.0-20210726055325-dfbe7fd'
       '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
@@ -579,7 +581,7 @@ importers:
       use-subscription: ^1.5.1
       uuid: ^8.3.2
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.8.0-20210429202414-74fb9a1
+      '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd
       '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
@@ -635,6 +637,7 @@ importers:
   packages/theme:
     specifiers:
       '@babel/core': ^7.14.6
+      '@masknet/icons': workspace:*
       '@masknet/storybook-shared': workspace:*
       '@storybook/addon-actions': ^6.3.5
       '@storybook/addon-essentials': ^6.3.5
@@ -653,6 +656,7 @@ importers:
       storybook-addon-matrix: ^1.6.0
       tinycolor2: ^1.4.2
     dependencies:
+      '@masknet/icons': link:../icons
       '@masknet/storybook-shared': link:../storybook-shared
       classnames: 2.3.1
       fuse.js: 6.4.6
@@ -741,7 +745,7 @@ packages:
       bintrees: 1.0.2
       bn.js: 4.12.0
       compare-versions: 3.6.0
-      ethereumjs-abi: 0.6.6
+      ethereumjs-abi: 0.6.8
       ethereumjs-blockstream: 2.0.7
       ethereumjs-util: 5.2.1
       find-versions: 2.0.0
@@ -4374,31 +4378,27 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/holoflows-kit/0.8.0-20210429202414-74fb9a1:
-    resolution: {integrity: sha512-KkrelGIh426YENN8uMxdgNlr2DGGEeFkZYoh8AsbW8+5YOufeINmMLFXwB2PKdmISeJEkP5wi6d3cFsHF+E9kg==, tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210429202414-74fb9a1/7d17e1f8587a91b31c2a6c84d951aeda1b19ef849c06896ecce1c8de075cd739}
+  /@dimensiondev/holoflows-kit/0.9.0-20210726055325-dfbe7fd:
+    resolution: {integrity: sha512-FgSky+dtoP4pfTgXl1RnN0WSu+ozYB7xCf2sxO58ReO09II5ulxAF+bxcBNdiiVC8WmSEU0tCQMOlljFZPVMxw==, tarball: download/@dimensiondev/holoflows-kit/0.9.0-20210726055325-dfbe7fd/c3d610130032d2c77f2b0c51dc3f7ef804d9234c200cad33f631a043e7b0d01c}
     peerDependencies:
       webextension-polyfill: '*'
     dependencies:
       '@servie/events': 1.0.0
-      async-call-rpc: 4.2.1
       event-iterator: 2.0.0
       jsx-jsonml-devtools-renderer: 1.4.3
       lodash-es: 4.17.21
-      memorize-decorator: 0.2.4
       tslib: 2.3.0
     dev: false
 
-  /@dimensiondev/holoflows-kit/0.8.0-20210429202414-74fb9a1_webextension-polyfill@0.8.0:
-    resolution: {integrity: sha512-KkrelGIh426YENN8uMxdgNlr2DGGEeFkZYoh8AsbW8+5YOufeINmMLFXwB2PKdmISeJEkP5wi6d3cFsHF+E9kg==, tarball: download/@dimensiondev/holoflows-kit/0.8.0-20210429202414-74fb9a1/7d17e1f8587a91b31c2a6c84d951aeda1b19ef849c06896ecce1c8de075cd739}
+  /@dimensiondev/holoflows-kit/0.9.0-20210726055325-dfbe7fd_webextension-polyfill@0.8.0:
+    resolution: {integrity: sha512-FgSky+dtoP4pfTgXl1RnN0WSu+ozYB7xCf2sxO58ReO09II5ulxAF+bxcBNdiiVC8WmSEU0tCQMOlljFZPVMxw==, tarball: download/@dimensiondev/holoflows-kit/0.9.0-20210726055325-dfbe7fd/c3d610130032d2c77f2b0c51dc3f7ef804d9234c200cad33f631a043e7b0d01c}
     peerDependencies:
       webextension-polyfill: '*'
     dependencies:
       '@servie/events': 1.0.0
-      async-call-rpc: 4.2.1
       event-iterator: 2.0.0
       jsx-jsonml-devtools-renderer: 1.4.3
       lodash-es: 4.17.21
-      memorize-decorator: 0.2.4
       tslib: 2.3.0
       webextension-polyfill: 0.8.0
     dev: false
@@ -5786,9 +5786,20 @@ packages:
     resolution: {integrity: sha512-eMk0b9ReBbV23xXU693TAIrLyeO5iTgBZGSJfpqriG8UkYvr/hC9u9pyMlAakDNHWmbhMZCDs6KQO0jzKD8OTw==}
     dev: false
 
+  /@napi-rs/triples/1.0.2:
+    resolution: {integrity: sha512-EL3SiX43m9poFSnhDx4d4fn9SSaqyO2rHsCNhETi9bWPmjXK3uPJ0QpPFtx39FEdHcz1vJmsiW41kqc0AgvtzQ==}
+    dev: true
+
   /@nice-labs/git-rev/3.5.0:
     resolution: {integrity: sha512-Ea0kEEqm3Du1JfNL6SiUHyO9BwctA+eY9GFHYxegb8S0rjaXMUGFWo99ONfPBkN3wjpG0z9sw96x+jLGePraEw==}
     engines: {node: '>= 11'}
+    dev: true
+
+  /@node-rs/helper/1.2.0:
+    resolution: {integrity: sha512-pzIFIS0POyqWVqdcF0NQO2DjnO1IeI1UN/hENCZMW3o/ndEpTmZLRVhoXGSHjjzoQaEuHwzj79BnYUXI3syv8w==}
+    dependencies:
+      '@napi-rs/triples': 1.0.2
+      tslib: 2.3.0
     dev: true
 
   /@nodelib/fs.scandir/2.1.5:
@@ -7799,6 +7810,122 @@ packages:
     dependencies:
       '@styled-system/core': 5.1.2
       '@styled-system/css': 5.1.5
+    dev: true
+
+  /@swc/core-android-arm64/1.2.63:
+    resolution: {integrity: sha512-3Q43hlq4C2EX1jcFex0OsFNjT742fYgnPfNnWDtSeOXZz5D2e1pIpjSXfZZtOE3ZIvXlIAb1d99yw8fBQ5uSpA==}
+    engines: {node: '>=10'}
+    cpu: [arm64]
+    os: [android]
+    dev: true
+    optional: true
+
+  /@swc/core-darwin-arm64/1.2.63:
+    resolution: {integrity: sha512-6wN8Ur65ugCIZJiHOPav73IyPTUxmn/+7MqSwx0jB+80dp8PqEdj32AQOMtvvj/Ts1lXg023CLC7kXDsbOYYjw==}
+    engines: {node: '>=10'}
+    cpu: [arm64]
+    os: [darwin]
+    dev: true
+    optional: true
+
+  /@swc/core-darwin-x64/1.2.63:
+    resolution: {integrity: sha512-xGSPmOMU28U0t9rNHilaD3nN9xoP772lUhtM9U8By4tKk4ZJcjMjL79XtoMflbKP3HhYU+qeyTnsDG3STaCYwg==}
+    engines: {node: '>=10'}
+    cpu: [x64]
+    os: [darwin]
+    dev: true
+    optional: true
+
+  /@swc/core-freebsd-x64/1.2.63:
+    resolution: {integrity: sha512-gil07mAooVket0GmjuCHrpLjxmxaMFpKRLWHMKWZ1uwK6o9IC8b7c9II60O/5kbjFnhX1KMx078N4oZphhydjQ==}
+    engines: {node: '>=10'}
+    cpu: [x64]
+    os: [freebsd]
+    dev: true
+    optional: true
+
+  /@swc/core-linux-arm-gnueabihf/1.2.63:
+    resolution: {integrity: sha512-KgpIKQRxLQoXgzafx0t+HKuz9sF6D51eboFEvGkqyXCSuybu6mD+BIU2A25fHiS3LJrFCmKAkJjTvffzFN1Olw==}
+    engines: {node: '>=10'}
+    cpu: [arm]
+    os: [linux]
+    dev: true
+    optional: true
+
+  /@swc/core-linux-arm64-gnu/1.2.63:
+    resolution: {integrity: sha512-dHVNAiQaQw/6ysUgQttsg0+3ElN6Puv9TboNH+FudJoNYecmZjfiPIZQi8S2VxzrUqpcg/jOWSsnUOTaDx7GlQ==}
+    engines: {node: '>=10'}
+    cpu: [arm64]
+    os: [linux]
+    dev: true
+    optional: true
+
+  /@swc/core-linux-arm64-musl/1.2.63:
+    resolution: {integrity: sha512-ZfOKCZi/HvhVfus52QLVUT4ckSEnYKoMx7IKvHj4Vqij59JzeU3XscsD0Pkx8DJKzs5ZJikukFJqOuexryLZfw==}
+    engines: {node: '>=10'}
+    cpu: [arm64]
+    os: [linux]
+    dev: true
+    optional: true
+
+  /@swc/core-linux-x64-gnu/1.2.63:
+    resolution: {integrity: sha512-ht+UTpMDo8lGJHatA/YkQwkR6lbqv11GbKaGu76vG1g8lPmppDeQtdA7UL659LdrbfHxCKm8FT9pEgPR837fxQ==}
+    engines: {node: '>=10'}
+    cpu: [x64]
+    os: [linux]
+    dev: true
+    optional: true
+
+  /@swc/core-linux-x64-musl/1.2.63:
+    resolution: {integrity: sha512-bQXjfJ0z1aBgfrNtNFbPxmjCYbVOdDthcR19L6rwMo4g0M91YYUSpA7xQ4P6pT/m8y1rsau87t9ZoE/C5I3qxA==}
+    engines: {node: '>=10'}
+    cpu: [x64]
+    os: [linux]
+    dev: true
+    optional: true
+
+  /@swc/core-win32-arm64-msvc/1.2.63:
+    resolution: {integrity: sha512-hjXBDYxlDqI8ybRQnJSlWiDUOtRc7FJw0ypkfb54NfGagzBubxzXUrVfZJcG6wLmR5ub0fINb2aX/7F86e2UMg==}
+    engines: {node: '>=10'}
+    cpu: [arm64]
+    os: [win32]
+    dev: true
+    optional: true
+
+  /@swc/core-win32-ia32-msvc/1.2.63:
+    resolution: {integrity: sha512-++QMBZQ4N12DkMie6YPRWENnxgsR3oosGWnMb/lwGhuYk82YCeOBjoItgqrGxL4KBq7y3+uR135OPf7r2sCJcA==}
+    engines: {node: '>=10'}
+    cpu: [ia32]
+    os: [win32]
+    dev: true
+    optional: true
+
+  /@swc/core-win32-x64-msvc/1.2.63:
+    resolution: {integrity: sha512-SzpMh2c47BPSTuWWtiJhiCHrmHWEubMbmf1MWW8eVnK+oDZJuk86LYxuLRm0vHZellgX9UehSMfc0uzJTwvb5w==}
+    engines: {node: '>=10'}
+    cpu: [x64]
+    os: [win32]
+    dev: true
+    optional: true
+
+  /@swc/core/1.2.63:
+    resolution: {integrity: sha512-jjpYsgPHBcAa9rAxEDRPlRxoXlVfhCopDvScyJeFutF1EE+q4ZVc4Qj4bSRRRMGZIPrznpFX7+zFDP46QfgCnQ==}
+    engines: {node: '>=10'}
+    dependencies:
+      '@node-rs/helper': 1.2.0
+    optionalDependencies:
+      '@swc/core-android-arm64': 1.2.63
+      '@swc/core-darwin-arm64': 1.2.63
+      '@swc/core-darwin-x64': 1.2.63
+      '@swc/core-freebsd-x64': 1.2.63
+      '@swc/core-linux-arm-gnueabihf': 1.2.63
+      '@swc/core-linux-arm64-gnu': 1.2.63
+      '@swc/core-linux-arm64-musl': 1.2.63
+      '@swc/core-linux-x64-gnu': 1.2.63
+      '@swc/core-linux-x64-musl': 1.2.63
+      '@swc/core-win32-arm64-msvc': 1.2.63
+      '@swc/core-win32-ia32-msvc': 1.2.63
+      '@swc/core-win32-x64-msvc': 1.2.63
     dev: true
 
   /@szmarczak/http-timer/1.1.2:
@@ -9925,6 +10052,7 @@ packages:
 
   /async-call-rpc/4.2.1:
     resolution: {integrity: sha512-MRtUVp1eFKRLLPE+frvTUXnhcDnTM1altJg0dcSnlJ9AaodvZOv6b9/+kE8wGNlT33uRn0fYXZODY1XmZZQ6IQ==}
+    dev: true
 
   /async-call-rpc/5.1.0:
     resolution: {integrity: sha512-Z5fMp8Z96NfDXmFXDQJhGNA5PsgXxCqEcP4pp8HB9ciBLigKbwOdM9I+wSY8ATE7nRj+PnUcnq5FSokqKB/TLw==}
@@ -12812,7 +12940,7 @@ packages:
     dependencies:
       is-arguments: 1.1.0
       is-date-object: 1.0.4
-      is-regex: 1.0.5
+      is-regex: 1.1.3
       object-is: 1.1.5
       object-keys: 1.1.1
       regexp.prototype.flags: 1.3.1
@@ -14166,11 +14294,11 @@ packages:
       setimmediate: 1.0.5
     dev: false
 
-  /ethereumjs-abi/0.6.6:
-    resolution: {integrity: sha512-w8KubDsA/+OAuqtIR9RGsMcoZ5nhM8vxwjJAJvEIY+clhxA3BHoLG3+ClYQaQhD0n3mlDt3U5rBrmSVJvI3c8A==}
+  /ethereumjs-abi/0.6.8:
+    resolution: {integrity: sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==}
     dependencies:
       bn.js: 4.12.0
-      ethereumjs-util: 5.2.1
+      ethereumjs-util: 6.2.1
     dev: false
 
   /ethereumjs-account/2.0.5:
@@ -16790,6 +16918,7 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       has: 1.0.3
+    dev: false
 
   /is-regex/1.1.3:
     resolution: {integrity: sha512-qSVXFz28HM7y+IWX6vLCsexdlvzT1PJNFSBuaQLQ5o0IEw8UDYW6/2+eCMVyIsbM8CNLX2a/QWmSpyxYEHY7CQ==}
@@ -18969,12 +19098,6 @@ packages:
       map-or-similar: 1.5.0
     dev: true
 
-  /memorize-decorator/0.2.4:
-    resolution: {integrity: sha512-njm1PXESxZoFtYq3wPbkuQVuP0M27wtZ+94rD9AV7o1w4qnPx43gmocMePeof1Lr6Fe8ko2WWqBkaIDEhWSvqA==}
-    dependencies:
-      multikey-map: 0.2.1
-    dev: false
-
   /memory-fs/0.4.1:
     resolution: {integrity: sha1-OpoguEYlI+RHz7x+i7gO1me/xVI=}
     dependencies:
@@ -19285,10 +19408,6 @@ packages:
       through2: 2.0.5
     dev: true
 
-  /mixed-map/0.1.2:
-    resolution: {integrity: sha512-ZdPeXAL5AZCkNBETgXLm4EOHFpXtPEXrqmd6YBvatyY24x3f/i2nYSVw/F3gk78TxX5/ogm+yAxFrS713ZhsFg==}
-    dev: false
-
   /mixin-deep/1.3.2:
     resolution: {integrity: sha512-WRoDn//mXBiJ1H40rqa3vH0toePwSsGb45iInWlTySa+Uu4k3tYUSxa2v1KqAiLtvlrSzaExqS1gtk96A9zvEA==}
     engines: {node: '>=0.10.0'}
@@ -19470,12 +19589,6 @@ packages:
       multibase: 4.0.4
       uint8arrays: 2.1.7
       varint: 5.0.2
-    dev: false
-
-  /multikey-map/0.2.1:
-    resolution: {integrity: sha512-vr3a9N6Lwpoo9i+cbQoUXmraoW9ReM2t62iSX33jF9lo/PhU4c5lpo1FWbJg90Qa9tBfgyPTMd5Iz7yaSG8r0g==}
-    dependencies:
-      mixed-map: 0.1.2
     dev: false
 
   /mute-stdout/1.0.1:
@@ -23841,6 +23954,16 @@ packages:
       xhr-request: 1.1.0
     dev: false
 
+  /swc-loader/0.1.14_webpack@5.46.0:
+    resolution: {integrity: sha512-JNSnwWj2EK5tbSWHELcYe8sJVQEHoezLYZRwRTW6HcelsLgsy+i4V1HFW8x1tcfZLvWyyTyompeVUuwpVudtTQ==}
+    peerDependencies:
+      webpack: '>=2'
+    dependencies:
+      '@swc/core': 1.2.63
+      loader-utils: 2.0.0
+      webpack: 5.46.0_webpack-cli@4.7.2
+    dev: true
+
   /symbol-observable/1.2.0:
     resolution: {integrity: sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==}
     engines: {node: '>=0.10.0'}
@@ -24381,20 +24504,6 @@ packages:
       mkdirp: 1.0.4
       semver: 7.3.5
       yargs-parser: 20.2.9
-    dev: true
-
-  /ts-loader/9.2.3_webpack@5.46.0:
-    resolution: {integrity: sha512-sEyWiU3JMHBL55CIeC4iqJQadI0U70A5af0kvgbNLHVNz2ACztQg0j/9x10bjjIht8WfFYLKfn4L6tkZ+pu+8Q==}
-    engines: {node: '>=12.0.0'}
-    peerDependencies:
-      typescript: '*'
-      webpack: ^5.0.0
-    dependencies:
-      chalk: 4.1.1
-      enhanced-resolve: 5.8.2
-      micromatch: 4.0.4
-      semver: 7.3.5
-      webpack: 5.46.0_webpack-cli@4.7.2
     dev: true
 
   /ts-node/10.1.0_typescript@4.3.5:
