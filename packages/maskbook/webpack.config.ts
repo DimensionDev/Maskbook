@@ -89,7 +89,6 @@ function config(opts: {
             alias: {
                 'async-call-rpc$': require.resolve('async-call-rpc/full'),
                 lodash: require.resolve('lodash-es'),
-                'date-fns': require.resolve('date-fns/esm'),
                 // Strange...
                 '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
                 // It's a node impl for xhr which is unnecessary
