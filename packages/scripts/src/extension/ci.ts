@@ -12,7 +12,8 @@ export const ciBuild = series(
     codegen,
     // The base version need to be build in serial in order to prepare webpack cache.
     buildBaseVersion,
-    parallel(
+    // If we build parallel on CI, it will be slower eventually
+    (process.env.CI ? series : parallel)(
         // zip base version to zip
         zipTo(BUILD_PATH, 'Maskbook.base.zip'),
         // Chrome version is the same with base version
