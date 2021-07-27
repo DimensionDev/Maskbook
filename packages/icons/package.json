@@ -10,6 +10,6 @@
     "build": "node --es-module-specifier-resolution=node ./dist/utils/ssr.js"
   },
   "devDependencies": {
-    "snowpack": "^3.8.1"
+    "snowpack": "^3.8.3"
   }
 }

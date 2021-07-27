@@ -8,6 +8,7 @@ import {
     isChainIdValid,
     NetworkType,
     ProviderType,
+    resolveNetworkName,
     useAccount,
     useChainId,
 } from '@masknet/web3-shared'
@@ -21,6 +22,7 @@ import { WalletRPC } from '../../plugins/Wallet/messages'
 export interface EthereumChainBoundaryProps {
     chainId: ChainId
     children?: React.ReactNode
+    isValidChainId?: (actualChainId: ChainId, expectedChainId: ChainId) => boolean
 }
 
 export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
@@ -31,8 +33,8 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     const expectedChainId = props.chainId
     const expectedNetwork = getChainName(expectedChainId)
-    const acutalChainId = chainId
-    const actualNetwork = getChainName(acutalChainId)
+    const actualChainId = chainId
+    const actualNetwork = getChainName(actualChainId)
 
     // if false then it will not guide the user to switch the network
     const isAllowed = isChainIdValid(expectedChainId) && !!account
@@ -58,12 +60,32 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         // request ethereum-compatiable network
         const networkType = getNetworkTypeFromChainId(expectedChainId)
         if (!networkType) return
-        if (networkType === NetworkType.Ethereum) await Services.Ethereum.switchEthereumChain(expectedChainId)
-        else await Services.Ethereum.addEthereumChain(chainDetailedCAIP, account)
+        try {
+            const overrides = {
+                chainId: expectedChainId,
+                providerType,
+            }
+            await Promise.race([
+                (async () => {
+                    await delay(30 /* seconds */ * 1000 /* milliseconds */)
+                    throw new Error('Timeout!')
+                })(),
+                networkType === NetworkType.Ethereum
+                    ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
+                    : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
+            ])
+        } catch (e) {
+            throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
+        }
     }, [account, isAllowed, providerType, expectedChainId])
 
-    // matched
-    if (acutalChainId === expectedChainId) return <>{props.children}</>
+    // is the actual chain id matched with the expected one?
+    const isMatched = actualChainId === expectedChainId
+
+    // is the actual chain id a valid one even if it does not match with the expected one?
+    const isValid = props?.isValidChainId?.(actualChainId, expectedChainId) ?? false
+
+    if (isMatched || isValid) return <>{props.children}</>
 
     if (!isAllowed)
         return (

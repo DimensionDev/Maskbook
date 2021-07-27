@@ -42,6 +42,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
             closeDialog()
             await WalletRPC.updateAccount({
                 account: address,
+                chainId: undefined,
                 providerType: ProviderType.Maskbook,
                 networkType,
             })

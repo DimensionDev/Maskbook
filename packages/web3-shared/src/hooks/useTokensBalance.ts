@@ -11,6 +11,7 @@ import { useChainId } from './useChainId'
 export function useTokensBalance(listOfAddress: string[]) {
     const chainId = useChainId()
     const account = useAccount()
+    const chainId = useChainId()
     const balanceCheckerContract = useBalanceCheckerContract()
 
     return useAsyncRetry(async () => {
