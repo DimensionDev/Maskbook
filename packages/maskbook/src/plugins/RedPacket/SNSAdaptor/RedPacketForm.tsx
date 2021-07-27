@@ -1,3 +1,4 @@
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import {
     EthereumTokenType,
     formatBalance,
@@ -20,16 +21,21 @@ import { v4 as uuid } from 'uuid'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
-import type { RedPacketJSONPayload } from '../types'
-import type { RedPacketSettings } from './hooks/useCreateCallback'
+import { RedPacketSettings } from './hooks/useCreateCallback'
+
+// seconds of 1 day
+const duration = 60 * 60 * 24
 
 const useStyles = makeStyles()((theme) => ({
+    field: {
+        display: 'flex',
+        margin: theme.spacing(1),
+    },
     line: {
         display: 'flex',
         margin: theme.spacing(1),
@@ -56,10 +62,23 @@ const useStyles = makeStyles()((theme) => ({
     inputShrinkLabel: {
         transform: 'translate(17px, -3px) scale(0.75) !important',
     },
+    label: {
+        textAlign: 'left',
+        color: theme.palette.text.secondary,
+    },
+    gasEstimation: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        cursor: 'pointer',
+        '& > p': {
+            marginRight: 5,
+            color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
+        },
+    },
 }))
 
 export interface RedPacketFormProps extends withClasses<never> {
-    onCreate?(payload: RedPacketJSONPayload): void
     SelectMenuProps?: Partial<MenuProps>
     onChange(settings: RedPacketSettings): void
     origin?: RedPacketSettings
@@ -129,7 +148,10 @@ export function RedPacketForm(props: RedPacketFormProps) {
             : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
     )
     const amount = new BigNumber(rawAmount ?? '0').multipliedBy(pow10(token?.decimals ?? 0))
-    const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares ?? '0')
+    const totalAmount = useMemo(
+        () => (isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares ?? '0')),
+        [amount, shares],
+    )
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
@@ -149,33 +171,40 @@ export function RedPacketForm(props: RedPacketFormProps) {
         return ''
     }, [account, amount, totalAmount, shares, token, tokenBalance])
 
-    const onClick = useCallback(() => {
-        const { address: publicKey, privateKey } = web3.eth.accounts.create()
-        onChange({
-            publicKey,
-            privateKey,
-            duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
+    const creatingParams = useMemo(
+        () => ({
+            duration,
             isRandom: Boolean(isRandom),
             name: senderName,
             message: message || t('plugin_red_packet_best_wishes'),
             shares: shares || 0,
             token: token ? (omit(token, ['logoURI']) as FungibleTokenDetailed) : undefined,
             total: totalAmount.toFixed(),
+        }),
+        [isRandom, senderName, message, t('plugin_red_packet_best_wishes'), shares, token, totalAmount],
+    )
+
+    const onClick = useCallback(() => {
+        const { address: publicKey, privateKey } = web3.eth.accounts.create()
+        onChange({
+            publicKey,
+            privateKey,
+            ...creatingParams,
         })
         onNext()
-    }, [onChange, totalAmount, token, shares, senderName, isRandom])
+    }, [creatingParams, onChange, onNext])
 
     if (!token) return null
     return (
         <>
-            <div className={classes.line}>
+            <div className={classes.field}>
                 <FormControl className={classes.input} variant="outlined">
                     <InputLabel className={classes.selectShrinkLabel}>{t('plugin_red_packet_split_mode')}</InputLabel>
                     <Select
                         value={isRandom ? 1 : 0}
                         onChange={(e) => {
                             // foolproof, reset amount since the meaning of amount changed:
-                            //  'total amount' <=> 'amount per share'
+                            // 'total amount' <=> 'amount per share'
                             setRawAmount('0')
                             setIsRandom(e.target.value as number)
                         }}
@@ -213,7 +242,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     onChange={onShareChange}
                 />
             </div>
-            <div className={classes.line}>
+            <div className={classes.field}>
                 <TokenAmountPanel
                     classes={{ root: classes.input }}
                     label={isRandom ? 'Total Amount' : t('plugin_red_packet_amount_per_share')}
@@ -230,7 +259,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     }}
                 />
             </div>
-            <div className={classes.line}>
+            <div className={classes.field}>
                 <TextField
                     className={classes.input}
                     onChange={(e) => setMessage(e.target.value)}

@@ -2,10 +2,9 @@ import {
     ChainId,
     formatBalance,
     getChainIdFromName,
-    isDAI,
-    isOKB,
     resolveNetworkName,
     TransactionStateType,
+    TransactionState,
     useAccount,
     useChainIdValid,
     useFungibleTokenDetailed,
@@ -15,7 +14,8 @@ import {
 import { Box, Card, Skeleton, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
+import { LoadingIcon } from '@masknet/icons'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -33,15 +33,17 @@ import { RedPacketStatus } from '../types'
 const useStyles = makeStyles()((theme) => ({
     root: {
         borderRadius: theme.spacing(1),
-        padding: theme.spacing(2),
+        padding: theme.spacing(3),
         background: '#DB0632',
         position: 'relative',
         display: 'flex',
         color: theme.palette.common.white,
         flexDirection: 'column',
         justifyContent: 'space-between',
-        height: 136,
+        height: 335,
         boxSizing: 'border-box',
+        backgroundImage: `url(${new URL('./cover.png', import.meta.url)})`,
+        backgroundSize: 'cover',
     },
     header: {
         display: 'flex',
@@ -53,22 +55,29 @@ const useStyles = makeStyles()((theme) => ({
         flex: 1,
         flexDirection: 'column',
         alignItems: 'flex-start',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
     },
     footer: {
         paddingTop: theme.spacing(2),
+        width: '100%',
         display: 'flex',
+        gap: theme.spacing(2),
         justifyContent: 'center',
     },
     from: {
-        flex: '1',
-        textAlign: 'left',
+        position: 'absolute',
+        fontSize: '14px',
+        right: '26px',
+        bottom: '20px',
     },
     label: {
         borderRadius: theme.spacing(1),
         padding: theme.spacing(0.2, 1),
         background: 'rgba(0, 0, 0, 0.2)',
         textTransform: 'capitalize',
+        position: 'absolute',
+        right: 18,
+        top: 27,
     },
     words: {
         color: '#FAF2BF',
@@ -80,23 +89,14 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         color: theme.palette.common.white,
     },
-    packet: {
-        top: 40,
-        right: -10,
-        width: 90,
-        height: 90,
-        position: 'absolute',
-        backgroundAttachment: 'local',
-        backgroundPosition: 'center',
-        backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat',
-        backgroundImage: `url(${new URL('./present-default.png', import.meta.url)})`,
+    spinning: {
+        display: 'flex',
+        animation: '$spinning 2s infinite linear',
     },
-    dai: {
-        backgroundImage: `url(${new URL('./present-dai.png', import.meta.url)})`,
-    },
-    okb: {
-        backgroundImage: `url(${new URL('./present-okb.png', import.meta.url)})`,
+    '@keyframes spinning': {
+        to: {
+            transform: 'rotate(360deg)',
+        },
     },
     text: {
         padding: theme.spacing(0.5, 2),
@@ -105,9 +105,6 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         justifyContent: 'space-between',
         boxSizing: 'border-box',
-    },
-    dimmer: {
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
     },
     cursor: {
         cursor: 'pointer',
@@ -144,7 +141,6 @@ export function RedPacket(props: RedPacketProps) {
     // context
     const web3 = useWeb3()
     const account = useAccount()
-    const chainIdValid = useChainIdValid()
     const networkType = useNetworkType()
 
     //#region token detailed
@@ -159,23 +155,15 @@ export function RedPacket(props: RedPacketProps) {
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
 
-    //#region remote controlled select provider dialog
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
-    //#endregion
-
     //#region remote controlled transaction dialog
     const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            canClaim
-                ? t('plugin_red_packet_share_message', {
-                      sender: payload.sender.name,
-                      payload: postLink,
-                      network: resolveNetworkName(networkType),
-                  }).trim()
-                : '',
+            t('plugin_red_packet_share_message', {
+                sender: payload.sender.name,
+                payload: postLink,
+                network: resolveNetworkName(networkType),
+            }).trim(),
         )
         .toString()
 
@@ -194,7 +182,6 @@ export function RedPacket(props: RedPacketProps) {
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
-        (ev) => undefined,
     )
 
     // open the transaction dialog
@@ -228,6 +215,36 @@ export function RedPacket(props: RedPacketProps) {
         if (canClaim) await claimCallback()
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
+
+    const subtle = useMemo(() => {
+        if (!availability || !token) return ''
+
+        if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
+            return t('plugin_red_packet_description_refund', {
+                balance: formatBalance(availability.balance, token.decimals),
+                symbol: token.symbol,
+            })
+        if (listOfStatus.includes(RedPacketStatus.claimed))
+            return t(
+                'plugin_red_packet_description_claimed',
+                (availability as RedPacketAvailability).claimed_amount
+                    ? {
+                          amount: formatBalance((availability as RedPacketAvailability).claimed_amount, token.decimals),
+                          symbol: token.symbol,
+                      }
+                    : { amount: '', symbol: '' },
+            )
+        if (listOfStatus.includes(RedPacketStatus.refunded)) return t('plugin_red_packet_description_refunded')
+        if (listOfStatus.includes(RedPacketStatus.expired)) return t('plugin_red_packet_description_expired')
+        if (listOfStatus.includes(RedPacketStatus.empty)) return t('plugin_red_packet_description_empty')
+        if (!payload.password) return t('plugin_red_packet_description_broken')
+        return t('plugin_red_packet_description_failover', {
+            total: formatBalance(payload.total, token.decimals),
+            symbol: token.symbol,
+            name: payload.sender.name ?? '-',
+            shares: payload.shares ?? '-',
+        })
+    }, [availability, token, listOfStatus, payload, t])
 
     // the red packet can fetch without account
     if (!availability || !token)
@@ -263,9 +280,6 @@ export function RedPacket(props: RedPacketProps) {
         <EthereumChainBoundary chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}>
             <Card className={classNames(classes.root)} component="article" elevation={0}>
                 <div className={classes.header}>
-                    <Typography className={classes.from} variant="body1" color="inherit">
-                        {t('plugin_red_packet_from', { name: payload.sender.name ?? '-' })}
-                    </Typography>
                     {/* it might be fontSize: 12 on twitter based on theme? */}
                     {canFetch && listOfStatus.length ? (
                         <Typography className={classes.label} variant="body2">
@@ -277,87 +291,98 @@ export function RedPacket(props: RedPacketProps) {
                     <Typography className={classes.words} variant="h6">
                         {payload.sender.message}
                     </Typography>
-                    <Typography variant="body2">
-                        {(() => {
-                            if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
-                                return t('plugin_red_packet_description_refund', {
-                                    balance: formatBalance(availability.balance, token.decimals),
-                                    symbol: token.symbol,
-                                })
-                            if (listOfStatus.includes(RedPacketStatus.claimed))
-                                return t(
-                                    'plugin_red_packet_description_claimed',
-                                    (availability as RedPacketAvailability).claimed_amount
-                                        ? {
-                                              amount: formatBalance(
-                                                  (availability as RedPacketAvailability).claimed_amount,
-                                                  token.decimals,
-                                              ),
-                                              symbol: token.symbol,
-                                          }
-                                        : { amount: '', symbol: '' },
-                                )
-                            if (listOfStatus.includes(RedPacketStatus.refunded))
-                                return t('plugin_red_packet_description_refunded')
-                            if (listOfStatus.includes(RedPacketStatus.expired))
-                                return t('plugin_red_packet_description_expired')
-                            if (listOfStatus.includes(RedPacketStatus.empty))
-                                return t('plugin_red_packet_description_empty')
-                            if (!payload.password) return t('plugin_red_packet_description_broken')
-                            return t('plugin_red_packet_description_failover', {
-                                total: formatBalance(payload.total, token.decimals),
-                                symbol: token.symbol,
-                                name: payload.sender.name ?? '-',
-                                shares: payload.shares ?? '-',
-                            })
-                        })()}
+                    <Typography variant="body2">{subtle}</Typography>
+                    <Typography className={classes.from} variant="body1" color="inherit">
+                        {t('plugin_red_packet_from', { name: payload.sender.name ?? '-' })}
                     </Typography>
                 </div>
-                <div
-                    className={classNames(classes.packet, {
-                        [classes.dai]: token?.name === 'DAI' || isDAI(token?.address ?? ''),
-                        [classes.okb]: token?.name === 'OKB' || isOKB(token?.address ?? ''),
-                    })}
-                />
-                <div
-                    className={classNames(classes.loader, {
-                        [classes.dimmer]: !canClaim && !canRefund,
-                    })}
-                />
             </Card>
-            {canClaim || canRefund ? (
-                <EthereumWalletConnectedBoundary>
-                    <Box className={classes.footer}>
-                        {!account ? (
-                            <ActionButton variant="contained" size="large" onClick={openSelectProviderDialog}>
-                                {t('plugin_wallet_connect_a_wallet')}
-                            </ActionButton>
-                        ) : !chainIdValid ? (
-                            <ActionButton disabled variant="contained" size="large">
-                                {t('plugin_wallet_invalid_network')}
-                            </ActionButton>
-                        ) : (
-                            <ActionButton
-                                disabled={
-                                    claimState.type === TransactionStateType.HASH ||
-                                    refundState.type === TransactionStateType.HASH
-                                }
-                                variant="contained"
-                                size="large"
-                                onClick={onClaimOrRefund}>
-                                {canClaim
-                                    ? claimState.type === TransactionStateType.HASH
-                                        ? t('plugin_red_packet_claiming')
-                                        : t('plugin_red_packet_claim')
-                                    : refundState.type === TransactionStateType.HASH
-                                    ? t('plugin_red_packet_refunding')
-                                    : t('plugin_red_packet_refund')}
-                            </ActionButton>
-                        )}
-                    </Box>
-                </EthereumWalletConnectedBoundary>
-            ) : null}
+            <OperationFooter
+                account={account}
+                canClaim={canClaim}
+                canRefund={canRefund}
+                claimState={claimState}
+                refundState={refundState}
+                shareLink={shareLink}
+                onClaimOrRefund={onClaimOrRefund}
+            />
         </EthereumChainBoundary>
+    )
+}
+
+interface OperationFooterProps {
+    account: string
+    canClaim: boolean
+    canRefund: boolean
+    claimState: TransactionState
+    refundState: TransactionState
+    shareLink?: string
+    onClaimOrRefund: () => void
+}
+
+const SpinningIcon = () => {
+    const { classes } = useStyles()
+    return (
+        <span className={classes.spinning}>
+            <LoadingIcon />
+        </span>
+    )
+}
+
+function OperationFooter({
+    account,
+    canClaim,
+    canRefund,
+    claimState,
+    refundState,
+    shareLink,
+    onClaimOrRefund,
+}: OperationFooterProps) {
+    const { classes } = useStyles()
+    const { t } = useI18N()
+    const chainIdValid = useChainIdValid()
+
+    //#region remote controlled select provider dialog
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
+    //#endregion
+
+    const handleShare = () => {
+        window.open(shareLink, '_blank', 'noopener noreferrer')
+    }
+
+    const canClaimOrRefund = canClaim || canRefund
+    const claimingOrRefunding =
+        claimState.type === TransactionStateType.HASH || refundState.type === TransactionStateType.HASH
+
+    return (
+        <EthereumWalletConnectedBoundary>
+            <Box className={classes.footer}>
+                <ActionButton variant="contained" fullWidth={!canClaimOrRefund} onClick={handleShare}>
+                    {t('share')}
+                </ActionButton>
+                {canClaimOrRefund &&
+                    (!account ? (
+                        <ActionButton variant="contained" onClick={openSelectProviderDialog}>
+                            {t('plugin_wallet_connect_a_wallet')}
+                        </ActionButton>
+                    ) : !chainIdValid ? (
+                        <ActionButton disabled variant="contained">
+                            {t('plugin_wallet_invalid_network')}
+                        </ActionButton>
+                    ) : (
+                        <ActionButton
+                            disabled={claimingOrRefunding}
+                            style={{ cursor: claimingOrRefunding ? 'wait' : 'default' }}
+                            variant="contained"
+                            onClick={onClaimOrRefund}
+                            endIcon={claimingOrRefunding ? <SpinningIcon /> : null}>
+                            {canClaim ? t('plugin_red_packet_open') : t('plugin_red_packet_refund')}
+                        </ActionButton>
+                    ))}
+            </Box>
+        </EthereumWalletConnectedBoundary>
     )
 }
 
