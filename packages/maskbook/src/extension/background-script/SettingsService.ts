@@ -52,9 +52,6 @@ export const [getPolygonNetworkTradeProvider, setPolygonNetworkTradeProvider] = 
     polygonNetworkTradeProviderSettings,
 )
 export const [getBscNetworkTradeProvider, setBscNetworkTradeProvider] = create(bscNetworkTradeProviderSettings)
-export const [getAncientPostsCompatibiltyMode, setAncientPostsCompatibiltyMode] = create(
-    disableOpenNewTabInBackgroundSettings,
-)
 
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 

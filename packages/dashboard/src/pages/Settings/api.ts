@@ -9,11 +9,6 @@ export const [useTrendingDataSource] = createGlobalState(Services.Settings.getTr
     Messages.events.currentTrendingDataProviderSettings.on(x),
 )
 
-export const [useAncientPostsCompatibilityMode] = createGlobalState(
-    Services.Settings.getAncientPostsCompatibiltyMode,
-    (x) => Messages.events.disableOpenNewTabInBackgroundSettings.on(x),
-)
-
 export const [useEthNetworkTradeProvider] = createGlobalState(Services.Settings.getEthNetworkTradeProvider, (x) =>
     Messages.events.ethNetworkTradeProviderSettings.on(x),
 )
