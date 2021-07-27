@@ -635,6 +635,7 @@ importers:
   packages/theme:
     specifiers:
       '@babel/core': ^7.14.6
+      '@masknet/icons': workspace:*
       '@masknet/storybook-shared': workspace:*
       '@storybook/addon-actions': ^6.3.5
       '@storybook/addon-essentials': ^6.3.5
@@ -653,6 +654,7 @@ importers:
       storybook-addon-matrix: ^1.6.0
       tinycolor2: ^1.4.2
     dependencies:
+      '@masknet/icons': link:../icons
       '@masknet/storybook-shared': link:../storybook-shared
       classnames: 2.3.1
       fuse.js: 6.4.6
