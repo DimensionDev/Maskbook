@@ -1,4 +1,3 @@
-#!/usr/bin/env ts-node
 /* eslint-disable no-restricted-imports */
 import { difference, isEmpty, isNil, keys, omit, pick, toPairs, without } from 'lodash'
 import {
@@ -11,6 +10,8 @@ import {
     writeMessages,
     findAllUnsyncedLocales,
 } from './utils'
+import yargs, { Argv } from 'yargs'
+import { getArgv, task } from '../utils'
 
 async function removeAllUnusedKeys(keys: string[], locales = LOCALE_NAMES) {
     for (const name of locales) {
@@ -47,7 +48,7 @@ async function syncKeys(locales = without(LOCALE_NAMES, 'en')) {
 async function diagnosis() {
     const unusedKeys = await findAllUnusedKeys()
     if (unusedKeys.length) {
-        const message = 'Run `npx locale-kit --remove-unused-keys` to solve this problem'
+        const message = 'Run `npx gulp locale-kit --remove-unused-keys` to solve this problem'
         for (const locale of LOCALE_NAMES) {
             const filePath = getLocaleRelativePath(getMessagePath(locale))
             console.log(`::warning file=${filePath}::${message}`)
@@ -62,7 +63,7 @@ async function diagnosis() {
     }
     const unsyncedLocales = await findAllUnsyncedLocales()
     if (!isEmpty(unsyncedLocales)) {
-        const message = 'Run `npx locale-kit --sync-keys` to solve this problem'
+        const message = 'Run `npx gulp locale-kit --sync-keys` to solve this problem'
         for (const [locale, names] of toPairs(unsyncedLocales)) {
             const filePath = getLocaleRelativePath(getMessagePath(locale))
             console.log(`::warning file=${filePath}::${message}`)
@@ -73,23 +74,32 @@ async function diagnosis() {
     }
 }
 
-async function main() {
-    if (process.argv.includes('--remove-unused-keys')) {
+export async function localeKit() {
+    const argv = getArgv<Args>()
+    if (process.env.CI) return diagnosis()
+
+    if (argv.removeUnusedKeys) {
         await removeAllUnusedKeys(await findAllUnusedKeys())
         console.log('Unused keys removed')
     }
-    if (process.argv.includes('--set-missing-keys')) {
+    if (argv.setMissingKeys) {
         await setMissingKeys()
         console.log('Set missing keys')
     }
-    if (process.argv.includes('--sync-keys')) {
+    if (argv.syncKeys) {
         await syncKeys()
         console.log('Synced keys')
     }
+    return
 }
 
-if (process.env.CI) {
-    diagnosis()
-} else {
-    main()
+task(localeKit, 'locale-kit', 'Run locale kit.', {
+    '--remove-unused-keys': 'to remove unused keys',
+    '--set-missing-keys': 'to set missing keys',
+    '--sync-keys': 'to sync keys',
+})
+type Args = {
+    removeUnusedKeys: boolean
+    setMissingKeys: boolean
+    syncKeys: boolean
 }

@@ -7,5 +7,5 @@
     },
     "transpileOnly": true
   },
-  "include": ["build", "locale-kit"]
+  "include": ["src"]
 }
