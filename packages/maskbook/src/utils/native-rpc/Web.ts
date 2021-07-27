@@ -29,4 +29,39 @@ export const WebviewAPI: WebviewAPIs = {
             })
         return stringify(connectedPersonas)
     },
+    app_isPluginEnabled: async (id: string) => {
+        return await Services.Settings.isPluginEnabled(id)
+    },
+    app_setPluginStatus: async (id: string, enabled: boolean) => {
+        await Services.Settings.setPluginStatus(id, enabled)
+    },
+    setting_getNetworkTraderProvider: async (network) => {
+        switch (network) {
+            case 'eth':
+                return await Services.Settings.getEthNetworkTradeProvider()
+            case 'bsc':
+                return await Services.Settings.getBscNetworkTradeProvider()
+            case 'polygon':
+                return await Services.Settings.getPolygonNetworkTradeProvider()
+        }
+    },
+    setting_setNetworkTraderProvider: async (network, provider) => {
+        switch (network) {
+            case 'eth':
+                await Services.Settings.setEthNetworkTradeProvider(provider)
+                break
+            case 'bsc':
+                await Services.Settings.setBscNetworkTradeProvider(provider)
+                break
+            case 'polygon':
+                await Services.Settings.setPolygonNetworkTradeProvider(provider)
+                break
+        }
+    },
+    settings_getTrendingDataSource: async () => {
+        return await Services.Settings.getTrendingDataSource()
+    },
+    settings_setTrendingDataSource: async (provider) => {
+        await Services.Settings.setTrendingDataSource(provider)
+    },
 }

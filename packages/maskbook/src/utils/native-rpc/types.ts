@@ -1,3 +1,4 @@
+import type { DataProvider, TradeProvider } from '../../plugins/Trader/types'
 import type { LaunchPage } from '../../settings/types'
 /**
  * JSON RPC calls that can be called from the native side.
@@ -9,6 +10,12 @@ export interface WebviewAPIs {
     /** Definition of LaunchPage see https://github.com/DimensionDev/Maskbook/blob/master/packages/maskbook/src/settings/types.ts */
     getSettings(key: 'launchPageSettings'): Promise<LaunchPage>
     getConnectedPersonas(): Promise<string>
+    app_isPluginEnabled(id: string): Promise<boolean>
+    app_setPluginStatus(id: string, enabled: boolean): void
+    setting_getNetworkTraderProvider(network: 'eth' | 'bsc' | 'polygon'): Promise<TradeProvider>
+    setting_setNetworkTraderProvider(network: 'eth' | 'bsc' | 'polygon', provider: TradeProvider): void
+    settings_getTrendingDataSource(): Promise<DataProvider>
+    settings_setTrendingDataSource(provider: DataProvider): void
 }
 export interface SharedNativeAPIs {}
 /**
