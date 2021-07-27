@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
-import { Box, Typography } from '@material-ui/core'
+import { Box, Typography, Theme } from '@material-ui/core'
+import type { SxProps } from '@material-ui/system'
 import {
     ChainId,
     getChainDetailedCAIP,
@@ -22,6 +23,8 @@ import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 
 export interface EthereumChainBoundaryProps {
     chainId: ChainId
+    noSwitchNetworkTip?: boolean
+    switchButtonStyle?: SxProps<Theme>
     children?: React.ReactNode
     isValidChainId?: (actualChainId: ChainId, expectedChainId: ChainId) => boolean
 }
@@ -33,10 +36,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const allowTestnet = useAllowTestnet()
     const providerType = useValueRef(currentProviderSettings)
 
+    const { noSwitchNetworkTip = false } = props
     const expectedChainId = props.chainId
-    const expectedNetwork = getChainName(expectedChainId)
+    const expectedNetwork = expectedChainId === ChainId.BSC ? 'BSC' : getChainName(expectedChainId)
     const actualChainId = chainId
-    const actualNetwork = getChainName(actualChainId)
+    const actualNetwork = actualChainId === ChainId.BSC ? 'BSC' : getChainName(actualChainId)
 
     // if false then it will not guide the user to switch the network
     const isAllowed = isChainIdValid(expectedChainId, allowTestnet) && !!account
@@ -124,18 +128,20 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     return (
         <Box display="flex" flexDirection="column" alignItems="center" sx={{ paddingTop: 1, paddingBottom: 1 }}>
-            <Typography color="textPrimary">
-                <span>
-                    {t('plugin_wallet_not_availabe_on', {
-                        network: actualNetwork,
-                    })}
-                </span>
-            </Typography>
+            {!noSwitchNetworkTip ? (
+                <Typography color="textPrimary">
+                    <span>
+                        {t('plugin_wallet_not_availabe_on', {
+                            network: actualNetwork,
+                        })}
+                    </span>
+                </Typography>
+            ) : null}
             {isAllowed ? (
                 <ActionButtonPromise
                     variant="contained"
                     size="small"
-                    sx={{ marginTop: 1.5 }}
+                    sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
                     init={t('plugin_wallet_switch_network', {
                         network: expectedNetwork,
                     })}

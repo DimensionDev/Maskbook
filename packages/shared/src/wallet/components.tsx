@@ -1,17 +1,33 @@
 import type { BigNumber } from 'bignumber.js'
 import { FC, Fragment } from 'react'
+import { makeStyles } from '@material-ui/core'
+import classNames from 'classnames'
 import { formatBalance, formatCurrency, formatEthereumAddress } from '@masknet/web3-shared'
 
-export interface FormattedBalanceProps {
+const useStyles = makeStyles((theme) => ({
+    balance: {
+        marginRight: theme.spacing(0.5),
+    },
+}))
+
+export interface FormattedBalanceProps extends withClasses<'balance' | 'symbol'> {
     value: BigNumber.Value | undefined
     decimals?: number
     significant?: number
     symbol?: string
 }
 
-export const FormattedBalance: FC<FormattedBalanceProps> = ({ value, decimals, significant, symbol }) => {
+export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
+    const { value, decimals, significant, symbol, classes } = props
     const formatted = formatBalance(value, decimals, significant)
-    if (symbol) return <Fragment>{`${formatted} ${symbol}`}</Fragment>
+    const ordinaryClasses = useStyles()
+    if (symbol)
+        return (
+            <Fragment>
+                <span className={classNames(ordinaryClasses.balance, classes?.balance)}>{formatted}</span>
+                <span className={classes?.symbol}>{symbol}</span>
+            </Fragment>
+        )
     return <Fragment>{formatted}</Fragment>
 }
 

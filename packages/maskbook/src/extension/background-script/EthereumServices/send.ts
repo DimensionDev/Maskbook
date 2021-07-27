@@ -20,6 +20,7 @@ export interface SendOverrides {
     chainId?: ChainId
     account?: string
     providerType?: ProviderType
+    rpc?: string
 }
 
 /**
@@ -35,6 +36,7 @@ export async function INTERNAL_send(
         chainId = currentChainIdSettings.value,
         account = currentAccountSettings.value,
         providerType = currentProviderSettings.value,
+        rpc,
     }: SendOverrides = {},
 ) {
     if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
@@ -156,7 +158,18 @@ export async function INTERNAL_send(
                 await sendTransaction()
                 break
             default:
-                provider.send(payload, callback)
+                if (rpc) {
+                    fetch(rpc, {
+                        method: 'POST',
+                        body: JSON.stringify(payload),
+                    })
+                        .catch((error: Error) => callback(error))
+                        .then(async (res) => {
+                            if (res) callback(null, (await res.json()) as JsonRpcResponse)
+                        })
+                } else {
+                    provider.send(payload, callback)
+                }
                 break
         }
     } catch (error) {

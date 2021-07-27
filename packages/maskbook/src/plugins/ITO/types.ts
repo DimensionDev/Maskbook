@@ -83,3 +83,18 @@ export enum DialogTabs {
     create = 0,
     past = 1,
 }
+
+export interface Availability {
+    exchange_addrs: string[]
+    remaining: number
+    started: boolean
+    expired: boolean
+    unlocked: boolean
+    unlock_time: string
+    swapped: string
+    exchanged_tokens: string[]
+    claimed?: boolean
+    start_time?: string
+    end_time?: string
+    qualification_addr?: string
+}

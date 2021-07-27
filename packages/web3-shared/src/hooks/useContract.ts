@@ -29,8 +29,9 @@ export function useContract<T extends BaseContract>(address: string = '', ABI: A
  * @param listOfAddress
  * @param ABI
  */
-export function useContracts<T extends BaseContract>(listOfAddress: string[], ABI: AbiItem[]) {
+export function useContracts<T extends BaseContract>(listOfAddress: string[], ABI: AbiItem[], rpc?: string) {
     const web3 = useWeb3()
+    if (rpc) web3.setProvider(rpc)
     const contracts = useMemo(
         () => listOfAddress.map((address) => createContract<T>(web3, address, ABI)),
         [web3, JSON.stringify(listOfAddress), ABI],
