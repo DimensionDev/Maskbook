@@ -12,7 +12,15 @@ import { TokenPanelType, TradeComputed, TradeProvider, TradeStrategy, WarningLev
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { EthereumTokenType, formatPercentage, FungibleTokenDetailed, isLessThan, pow10 } from '@masknet/web3-shared'
+import {
+    EthereumTokenType,
+    formatPercentage,
+    FungibleTokenDetailed,
+    isLessThan,
+    isSameAddress,
+    pow10,
+    useTokenConstants,
+} from '@masknet/web3-shared'
 import { currentSlippageTolerance } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { isNativeTokenWrapper, toBips } from '../../helpers'
@@ -100,6 +108,7 @@ export function TradeForm(props: TradeFormProps) {
         onSwap,
     } = props
     const classes = useStylesExtends(useStyles(), props)
+    const { MASK_ADDRESS } = useTokenConstants()
 
     //#region approve token
     const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(trade, inputToken)
@@ -115,6 +124,23 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region form controls
+    // Work around the issue: https://github.com/DimensionDev/Maskbook/issues/3736
+    // Will be removed after Debank update mask token on BSC
+    const fixMaskToken = (token?: FungibleTokenDetailed): FungibleTokenDetailed | undefined => {
+        if (!token) return token
+        if (isSameAddress(token.address, MASK_ADDRESS)) {
+            return {
+                ...token,
+                ...{
+                    logoURI: [
+                        'https://raw.githubusercontent.com/DimensionDev/Maskbook-Website/master/img/MB--CircleCanvas--WhiteOverBlue.svg',
+                    ],
+                },
+            } as FungibleTokenDetailed
+        }
+        return token
+    }
+
     const isExactIn = strategy === TradeStrategy.ExactIn
     const inputTokenTradeAmount = new BigNumber(inputAmount || '0').multipliedBy(pow10(inputToken?.decimals ?? 0))
     const outputTokenTradeAmount = new BigNumber(outputAmount || '0').multipliedBy(pow10(outputToken?.decimals ?? 0))
@@ -134,7 +160,7 @@ export function TradeForm(props: TradeFormProps) {
                     label={inputPanelLabel}
                     amount={inputAmount}
                     balance={inputTokenBalanceAmount.toFixed()}
-                    token={inputToken}
+                    token={fixMaskToken(inputToken)}
                     onAmountChange={onInputAmountChange}
                     TextFieldProps={{
                         disabled: !inputToken,
@@ -162,7 +188,7 @@ export function TradeForm(props: TradeFormProps) {
                     label={outputPanelLabel}
                     amount={outputAmount}
                     balance={outputTokenBalanceAmount.toFixed()}
-                    token={outputToken}
+                    token={fixMaskToken(outputToken)}
                     onAmountChange={onOutputAmountChange}
                     MaxChipProps={{ style: { display: 'none' } }}
                     TextFieldProps={{
