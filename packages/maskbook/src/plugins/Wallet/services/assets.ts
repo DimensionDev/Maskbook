@@ -87,7 +87,9 @@ export async function getAssetsList(
     switch (provider) {
         case PortfolioProvider.ZERION:
             if (network !== NetworkType.Ethereum) return []
-            const { meta, payload } = await ZerionAPI.getAssetsList(address, resolveZerionAssetsScopeName(network))
+            const scope = resolveZerionAssetsScopeName(network)
+            if (!scope) return []
+            const { meta, payload } = await ZerionAPI.getAssetsList(address, scope)
             if (meta.status !== 'ok') throw new Error('Fail to load assets.')
             // skip NFT assets
             const assetsList = values(payload.assets).filter((x) => x.asset.is_displayable && x.asset.icon_url)
