@@ -47,7 +47,7 @@ Plugins defined at `packages/plugins/*` and compatible with the isolated dashboa
 - Plugin definition: `packages/plugin-infra/src/types.ts`
 - Database: `createPluginDatabase` in `packages/maskbook/src/database/Plugin/wrap-plugin-database.ts`
 - Message emitter: `createPluginMessage` in `packages/plugin-infra/src/utils/message.ts`
-- RPC: `createPluginRPC` in `packages/maskbook/src/plugins/utils/createPluginRPC.ts`
+- RPC: `createPluginRPC` in `packages/plugin-infra/src/utils/rpc.ts`
 - Metadata reader: `createTypedMessageMetadataReader` in `packages/maskbook/src/protocols/typed-message/metadata.ts`
 - React renderer with metadata reader: `createRenderWithMetadata` in `packages/maskbook/src/protocols/typed-message/metadata.ts`
 
