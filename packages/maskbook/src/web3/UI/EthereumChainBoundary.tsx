@@ -10,14 +10,15 @@ import {
     ProviderType,
     resolveNetworkName,
     useAccount,
+    useAllowTestnet,
     useChainId,
 } from '@masknet/web3-shared'
-import { useValueRef, delay } from '@masknet/shared'
-import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
+import { useValueRef, delay, useRemoteControlledDialog } from '@masknet/shared'
+import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import Services from '../../extension/service'
 import { useI18N } from '../../utils'
-import { WalletRPC } from '../../plugins/Wallet/messages'
+import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 
 export interface EthereumChainBoundaryProps {
     chainId: ChainId
@@ -29,6 +30,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const { t } = useI18N()
     const account = useAccount()
     const chainId = useChainId()
+    const allowTestnet = useAllowTestnet()
     const providerType = useValueRef(currentProviderSettings)
 
     const expectedChainId = props.chainId
@@ -37,7 +39,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const actualNetwork = getChainName(actualChainId)
 
     // if false then it will not guide the user to switch the network
-    const isAllowed = isChainIdValid(expectedChainId) && !!account
+    const isAllowed = isChainIdValid(expectedChainId, allowTestnet) && !!account
 
     const onSwitch = useCallback(async () => {
         // a short time loading makes the user fells better
@@ -79,6 +81,10 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         }
     }, [account, isAllowed, providerType, expectedChainId])
 
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
+
     // is the actual chain id matched with the expected one?
     const isMatched = actualChainId === expectedChainId
 
@@ -86,6 +92,22 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const isValid = props?.isValidChainId?.(actualChainId, expectedChainId) ?? false
 
     if (isMatched || isValid) return <>{props.children}</>
+
+    if (!account)
+        return (
+            <Box display="flex" flexDirection="column" alignItems="center" sx={{ paddingTop: 1, paddingBottom: 1 }}>
+                <Typography color="textPrimary">
+                    <span>{t('plugin_wallet_connect_wallet_tip')}</span>
+                </Typography>
+                <ActionButton
+                    variant="contained"
+                    size="small"
+                    sx={{ marginTop: 1.5 }}
+                    onClick={openSelectProviderDialog}>
+                    {t('plugin_wallet_connect_wallet')}
+                </ActionButton>
+            </Box>
+        )
 
     if (!isAllowed)
         return (

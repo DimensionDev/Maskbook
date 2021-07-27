@@ -355,6 +355,8 @@
     "plugin_wallet_switch_network": "",
     "plugin_wallet_switch_network_under_going": "",
     "plugin_wallet_not_availabe_on": "",
+    "plugin_wallet_connect_wallet": "",
+    "plugin_wallet_connect_wallet_tip": "",
     "plugin_wallet_settings_portfolio_data_source_primary": "포트폴리오 데이터 소스",
     "plugin_wallet_settings_portfolio_data_source_secondary": "포트폴리오 데이터 소스 선택",
     "plugin_wallet_settings_collectible_data_source_primary": "수집품 데이터 소스",

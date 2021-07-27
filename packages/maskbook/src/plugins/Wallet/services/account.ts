@@ -51,14 +51,9 @@ export async function resetAccount(
         providerType?: ProviderType
     } = {},
 ) {
-    const {
-        account = '',
-        chainId = ChainId.Mainnet,
-        networkType = NetworkType.Ethereum,
-        providerType = ProviderType.Maskbook,
-    } = options
+    const { account = '', chainId, networkType, providerType } = options
     currentAccountSettings.value = account
-    currentChainIdSettings.value = chainId
-    currentNetworkSettings.value = networkType
-    currentProviderSettings.value = providerType
+    if (chainId) currentChainIdSettings.value = chainId
+    if (networkType) currentNetworkSettings.value = networkType
+    if (providerType) currentProviderSettings.value = providerType
 }
