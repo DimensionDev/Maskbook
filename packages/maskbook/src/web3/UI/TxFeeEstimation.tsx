@@ -35,7 +35,7 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
     const chainId = useChainId()
     const chainDetailed = getChainDetailed(chainId)
 
-    const { setDialog: setGasPriceDialog } = useRemoteControlledDialog(
+    const { openDialog: openGasPriceDialog } = useRemoteControlledDialog(
         WalletMessages.events.gasPriceDialogUpdated,
         useCallback(
             (ev) => {
@@ -61,7 +61,7 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
             </Grid>
             <Grid item xs={6}>
                 <Paper className={classes.data}>
-                    <div className={classes.gasEstimation} onClick={() => setGasPriceDialog({ open: true })}>
+                    <div className={classes.gasEstimation} onClick={openGasPriceDialog}>
                         <Typography>
                             {t('plugin_gas_now_dialog_gas_fee', {
                                 fee: formatBalance(gasPrice.times(gas), 9, 5),

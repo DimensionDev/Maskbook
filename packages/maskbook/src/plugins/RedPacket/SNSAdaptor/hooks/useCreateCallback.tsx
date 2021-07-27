@@ -7,6 +7,7 @@ import {
     TransactionEventType,
     TransactionState,
     TransactionStateType,
+    resolveTransactionLinkOnExplorer,
     useAccount,
     useChainId,
     useGasPrice,
@@ -14,13 +15,15 @@ import {
     useTokenConstants,
     useTransactionState,
 } from '@masknet/web3-shared'
+import { useSnackbar, CustomSnackbarContentProps, CustomSnackbarContent } from '@masknet/theme'
 import { omit } from 'lodash-es'
 import { useAsync } from 'react-use'
 import BigNumber from 'bignumber.js'
-import { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
+import { useI18N } from '../../../../utils'
 
 export interface RedPacketSettings {
     publicKey: string
@@ -80,9 +83,9 @@ function checkParams(
 }
 
 export function useCreateParams(redPacketSettings: RedPacketSettings | undefined, version: number) {
+    const account = useAccount()
     const redPacketContract = useRedPacketContract(version)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const account = useAccount()
     return useAsync(async () => {
         if (!redPacketSettings || !redPacketContract) return null
         const { duration, isRandom, message, name, shares, total, token, publicKey } = redPacketSettings
@@ -125,6 +128,7 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
 }
 
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number) {
+    const { t } = useI18N()
     const nonce = useNonce()
     const gasPrice = useGasPrice()
     const account = useAccount()
@@ -133,6 +137,28 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
     const paramResult = useCreateParams(redPacketSettings, version)
+    const snackbar = useSnackbar()
+    const transactionLinkRef = useRef<string>('')
+
+    const snackbarKeyRef = useRef<string | number>()
+    const showSnackbar = useCallback(
+        (options: Partial<CustomSnackbarContentProps & { persist: boolean }>) => {
+            if (snackbarKeyRef.current) {
+                snackbar.closeSnackbar(snackbarKeyRef.current)
+            }
+            snackbarKeyRef.current = snackbar.enqueueSnackbar(t('plugin_red_packet_create'), {
+                variant: options.variant,
+                persist: options.persist ?? true,
+                content: (key, title) => {
+                    return <CustomSnackbarContent id={key} title={title} {...options} />
+                },
+            })
+            return () => {
+                snackbar.closeSnackbar(snackbarKeyRef.current)
+            }
+        },
+        [snackbar],
+    )
 
     const createCallback = useCallback(async () => {
         const { token } = redPacketSettings
@@ -175,10 +201,16 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = redPacketContract.methods.create_red_packet(...params).send(config as PayableTx)
-            promiEvent.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
+            promiEvent.once(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
                 setCreateState({
                     type: TransactionStateType.WAIT_FOR_CONFIRMING,
                     hash,
+                })
+                transactionLinkRef.current = resolveTransactionLinkOnExplorer(token.chainId, hash)
+                showSnackbar({
+                    processing: true,
+                    message: t('plugin_red_packet_transaction_submitted'),
+                    link: transactionLinkRef.current,
                 })
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
@@ -187,6 +219,15 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     no: 0,
                     receipt,
                 })
+                showSnackbar({
+                    persist: false,
+                    variant: 'success',
+                    message: t('plugin_red_packet_success', {
+                        value,
+                        symbol: token.symbol,
+                    }),
+                    link: transactionLinkRef.current,
+                })
             })
 
             promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
@@ -194,6 +235,11 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     type: TransactionStateType.CONFIRMED,
                     no,
                     receipt,
+                })
+                showSnackbar({
+                    processing: true,
+                    message: t('plugin_red_packet_transaction_submitted'),
+                    link: transactionLinkRef.current,
                 })
                 resolve()
             })
@@ -204,6 +250,11 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     error,
                 })
                 reject(error)
+                showSnackbar({
+                    variant: 'error',
+                    message: t('plugin_red_packet_transaction_rejected'),
+                    link: transactionLinkRef.current,
+                })
             })
         })
     }, [nonce, gasPrice, account, redPacketContract, redPacketSettings, chainId, paramResult])

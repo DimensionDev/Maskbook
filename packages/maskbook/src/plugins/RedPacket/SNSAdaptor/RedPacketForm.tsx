@@ -7,7 +7,6 @@ import {
     pow10,
     useAccount,
     useNativeTokenDetailed,
-    useNetworkType,
     useRedPacketConstants,
     useTokenBalance,
     useWeb3,
@@ -26,8 +25,8 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
-import type { RedPacketJSONPayload } from '../types'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
+
 
 const useStyles = makeStyles((theme) => ({
     line: {
@@ -59,7 +58,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export interface RedPacketFormProps extends withClasses<never> {
-    onCreate?(payload: RedPacketJSONPayload): void
     SelectMenuProps?: Partial<MenuProps>
     onChange(settings: RedPacketSettings): void
     origin?: RedPacketSettings
@@ -73,7 +71,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
     // context
     const web3 = useWeb3()
     const account = useAccount()
-    const networkType = useNetworkType()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
     //#region select token
@@ -130,7 +127,10 @@ export function RedPacketForm(props: RedPacketFormProps) {
             : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
     )
     const amount = new BigNumber(rawAmount ?? '0').multipliedBy(pow10(token?.decimals ?? 0))
-    const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares ?? '0')
+    const totalAmount = useMemo(
+        () => (isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares ?? '0')),
+        [amount, shares],
+    )
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
@@ -163,10 +163,12 @@ export function RedPacketForm(props: RedPacketFormProps) {
             token: token ? (omit(token, ['logoURI']) as FungibleTokenDetailed) : undefined,
             total: totalAmount.toFixed(),
         })
-        onNext()
-    }, [onChange, totalAmount, token, shares, senderName, isRandom])
+    },
+        [isRandom, senderName, message, shares, token, totalAmount],
+    )
 
     if (!token) return null
+
     return (
         <>
             <div className={classes.line}>
