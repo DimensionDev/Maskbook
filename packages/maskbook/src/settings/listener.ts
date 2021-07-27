@@ -4,7 +4,6 @@ import {
     appearanceSettings,
     languageSettings,
     debugModeSetting,
-    disableOpenNewTabInBackgroundSettings,
     currentPersonaIdentifier,
 } from './settings'
 import {
@@ -36,7 +35,6 @@ export function ToBeListened() {
         currentBlockNumberSettings,
         currentEtherPriceSettings,
         currentTrendingDataProviderSettings: currentDataProviderSettings,
-        disableOpenNewTabInBackgroundSettings,
         currentProviderSettings,
         currentNetworkSettings,
         currentAccountSettings,

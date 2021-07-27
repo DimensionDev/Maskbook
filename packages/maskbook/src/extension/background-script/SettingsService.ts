@@ -5,7 +5,6 @@ import {
     appearanceSettings,
     currentPersonaIdentifier,
     languageSettings,
-    disableOpenNewTabInBackgroundSettings,
     currentPluginEnabledStatus,
 } from '../../settings/settings'
 import {

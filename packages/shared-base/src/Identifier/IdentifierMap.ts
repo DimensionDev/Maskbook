@@ -8,7 +8,6 @@ import { immerable } from 'immer'
  * Because Identifier is not a value-type record so to make it behave like a value-type,
  * please use this class instead of Map<Identifier, T>.
  */
-@serialize('IdentifierMap')
 export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<IdentifierType, T> {
     [immerable] = true
     /**
@@ -101,6 +100,7 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
         return this.entries()
     }
 }
+serialize('IdentifierMap')(IdentifierMap)
 IdentifierMap.prototype[Symbol.toStringTag] = 'IdentifierMap'
 
 export type ReadonlyIdentifierMap<IdentifierType extends Identifier, T> = ReadonlyMap<IdentifierType, T> & {

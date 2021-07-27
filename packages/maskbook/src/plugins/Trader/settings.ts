@@ -21,7 +21,7 @@ export const currentSlippageTolerance = createGlobalSettings<number>(
  */
 export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
     `${PLUGIN_IDENTIFIER}+dataProvider`,
-    DataProvider.COIN_MARKET_CAP,
+    DataProvider.COIN_GECKO,
     {
         primary: () => i18n.t('plugin_trader_settings_data_source_primary'),
         secondary: () => i18n.t('plugin_trader_settings_data_source_secondary'),
