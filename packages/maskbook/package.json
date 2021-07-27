@@ -112,6 +112,7 @@
     "stream-http": "^2.8.3",
     "tiny-secp256k1": "^1.1.5",
     "ts-results": "^3.3.0",
+    "tss-react": "^0.9.3",
     "unstated-next": "^1.1.0",
     "urlcat": "^2.0.4",
     "use-subscription": "^1.5.1",

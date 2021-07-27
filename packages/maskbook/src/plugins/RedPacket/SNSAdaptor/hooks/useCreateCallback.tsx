@@ -1,9 +1,11 @@
+import { useCustomSnackbar } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
     isLessThan,
+    resolveTransactionLinkOnExplorer,
     TransactionEventType,
     TransactionState,
     TransactionStateType,
@@ -12,12 +14,13 @@ import {
     useTokenConstants,
     useTransactionState,
 } from '@masknet/web3-shared'
-import { omit } from 'lodash-es'
-import { useAsync } from 'react-use'
 import BigNumber from 'bignumber.js'
-import { useCallback, useState } from 'react'
+import { omit } from 'lodash-es'
+import React, { useCallback, useRef, useState } from 'react'
+import { useAsync } from 'react-use'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useRedPacketContract } from './useRedPacketContract'
 
 export interface RedPacketSettings {
@@ -125,10 +128,13 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number) {
     const account = useAccount()
     const chainId = useChainId()
+    const { t } = useI18N()
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
     const paramResult = useCreateParams(redPacketSettings, version)
+
+    const { showSnackbar } = useCustomSnackbar()
 
     const createCallback = useCallback(async () => {
         const { token } = redPacketSettings
@@ -151,6 +157,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         }
 
         if (!checkParams(paramsObj, setCreateState)) return
+
         setCreateSettings(redPacketSettings)
 
         // pre-step: start waiting for provider to confirm tx
@@ -169,10 +176,13 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = redPacketContract.methods.create_red_packet(...params).send(config as PayableTx)
-            promiEvent.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
+            promiEvent.once(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
                 setCreateState({
                     type: TransactionStateType.WAIT_FOR_CONFIRMING,
                     hash,
+                })
+                showSnackbar(t('plugin_red_packet_transaction_submitted'), {
+                    processing: true,
                 })
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
@@ -181,6 +191,17 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     no: 0,
                     receipt,
                 })
+                showSnackbar(
+                    t('plugin_red_packet_success', {
+                        value,
+                        symbol: token.symbol,
+                    }),
+                    {
+                        persist: false,
+                        variant: 'success',
+                        message: <a href="https://link"> TODO: link</a>,
+                    },
+                )
             })
 
             promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
@@ -189,15 +210,23 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     no,
                     receipt,
                 })
+                showSnackbar(t('plugin_red_packet_transaction_submitted'), {
+                    processing: true,
+                    message: <a href="https://link"> TODO: link</a>,
+                })
                 resolve()
             })
 
-            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
+            promiEvent.once(TransactionEventType.ERROR, (error: Error) => {
                 setCreateState({
                     type: TransactionStateType.FAILED,
                     error,
                 })
                 reject(error)
+                showSnackbar(t('plugin_red_packet_transaction_rejected'), {
+                    variant: 'error',
+                    message: <a href="https://link"> TODO: link</a>,
+                })
             })
         })
     }, [account, redPacketContract, redPacketSettings, chainId, paramResult])

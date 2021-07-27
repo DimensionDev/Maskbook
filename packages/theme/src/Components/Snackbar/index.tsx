@@ -169,7 +169,6 @@ export interface CustomSnackbarContentProps {
     icon?: React.ReactNode
     processing?: boolean
     variant?: VariantType
-    link?: string
     action?: SnackbarAction
 }
 const IconMap: Record<VariantType, React.ReactNode> = {
@@ -260,6 +259,7 @@ export function useCustomSnackbar() {
             return enqueueSnackbar(text, {
                 variant: options.variant,
                 content: (key, title) => {
+                    debugger
                     return (
                         <CustomSnackbarContent
                             variant={variant ?? 'default'}
