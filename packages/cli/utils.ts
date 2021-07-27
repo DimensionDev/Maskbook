@@ -17,7 +17,10 @@ export function run(cwd = ROOT_PATH, cmd: string, ...args: string[]) {
     if (error) {
         console.error(error)
     }
-    process.exit(status!)
+    if (status === null || status === 0) {
+        return
+    }
+    process.exit(status)
 }
 
 export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
