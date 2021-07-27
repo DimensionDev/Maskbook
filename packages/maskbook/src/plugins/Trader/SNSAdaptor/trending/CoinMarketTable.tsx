@@ -80,11 +80,11 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                     <TableRow>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
                             <TableCell className={classes.cell} align="center">
-                                <FormattedCurrency sign="$" symbol="USD" value={trending.market?.market_cap ?? 0} />
+                                <FormattedCurrency symbol="USD" value={trending.market?.market_cap ?? 0} />
                             </TableCell>
                         ) : null}
                         <TableCell className={classes.cell} align="center">
-                            <FormattedCurrency sign="$" symbol="USD" value={trending.market?.total_volume ?? 0} />
+                            <FormattedCurrency symbol="USD" value={trending.market?.total_volume ?? 0} />
                         </TableCell>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
                             <>
