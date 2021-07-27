@@ -64,7 +64,7 @@ export function InvestDialog() {
     const account = useAccount()
 
     //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated, (ev) => {
+    const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated, (ev) => {
         if (ev.open) {
             setPool(ev.pool)
             setAllowedTokens(ev.tokens)
@@ -117,7 +117,7 @@ export function InvestDialog() {
 
     //#region Swap
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
-        PluginTraderMessages.events.swapDialogUpdated,
+        PluginTraderMessages.swapDialogUpdated,
         useCallback(
             (ev) => {
                 if (!ev.open) {

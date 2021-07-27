@@ -132,7 +132,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     //#region buy
     const account = useAccount()
     const isAllowanceCoin = useTransakAllowanceCoin(coin)
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({

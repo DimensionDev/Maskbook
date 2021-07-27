@@ -198,11 +198,11 @@ importers:
 
   packages/external-plugin-previewer:
     specifiers:
-      '@masknet/shared': workspace:*
+      '@masknet/theme': workspace:*
       ef.js: ^0.13.10
       snowpack: ^3.8.3
     dependencies:
-      '@masknet/shared': link:../shared
+      '@masknet/theme': link:../theme
       ef.js: 0.13.10
     devDependencies:
       snowpack: 3.8.3
@@ -233,6 +233,7 @@ importers:
       '@masknet/icons': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-infra': workspace:*
+      '@masknet/plugin-wallet': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
@@ -393,6 +394,7 @@ importers:
       '@masknet/icons': link:../icons
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/plugin-wallet': link:../plugins/Wallet
       '@masknet/shared': link:../shared
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
@@ -546,6 +548,7 @@ importers:
       '@masknet/web3-shared': workspace:*
       '@servie/events': ^3.0.0
       '@types/use-subscription': ^1.0.0
+      async-call-rpc: ^5.1.0
       ts-results: ^3.3.0
       use-subscription: ^1.5.1
     dependencies:
@@ -555,8 +558,17 @@ importers:
       '@masknet/web3-shared': link:../web3-shared
       '@servie/events': 3.0.0
       '@types/use-subscription': 1.0.0
+      async-call-rpc: 5.1.0
       ts-results: 3.3.0
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
+
+  packages/plugins/Wallet:
+    specifiers:
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/web3-shared': workspace:*
+    dependencies:
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/web3-shared': link:../../web3-shared
 
   packages/plugins/example:
     specifiers:

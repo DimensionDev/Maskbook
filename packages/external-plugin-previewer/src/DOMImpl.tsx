@@ -1,7 +1,7 @@
 import { setDOMImpl } from 'ef.js'
 import type {} from 'react/next'
 import type {} from 'react-dom/next'
-import { createReactRootShadowedPartial, ReactRootShadowed } from '@masknet/shared'
+import { createReactRootShadowedPartial, ReactRootShadowed } from '@masknet/theme'
 import * as Components from './Components'
 
 const createReactRootShadowed = createReactRootShadowedPartial({

@@ -1,7 +1,6 @@
 import { useRef, useEffect, forwardRef, useState } from 'react'
 import { useCurrentShadowRootStyles } from './index'
 import type { PopperProps } from '@material-ui/core'
-import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 
 /**
  * ! Do not export !
@@ -110,7 +109,7 @@ export function createShadowRootForwardedPopperComponent<T extends { PopperProps
  * ! Do not export !
  */
 function PortalShadowRoot(): Element {
-    if (isEnvironment(Environment.ExtensionProtocol)) return document.body
+    if (location.protocol.includes('extension')) return document.body
     if (globalThis.location.hostname === 'localhost') return document.body
     if (!mountingPoint) throw new TypeError('Please call setupPortalShadowRoot first')
     return mountingPoint

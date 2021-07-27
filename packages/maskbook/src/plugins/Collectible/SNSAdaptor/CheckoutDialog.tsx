@@ -92,7 +92,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         }
     }, [asset?.value, account, enqueueSnackbar])
 
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
     const validationMessage = useMemo(() => {
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')
