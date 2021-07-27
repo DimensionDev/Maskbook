@@ -4,6 +4,7 @@ const Container = styled('div')`
     display: inline-grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 24px 28px;
+    width: 100%;
     & > * {
         min-width: 60px;
         min-height: 28px;

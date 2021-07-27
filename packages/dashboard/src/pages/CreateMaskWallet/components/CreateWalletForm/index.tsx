@@ -125,11 +125,17 @@ export const CreateWalletForm = memo(() => {
         defaultValues: {
             name: '',
             password: '',
+            confirm: '',
         },
     })
 
-    const onSubmit = handleSubmit(() => {
-        navigate(RoutePaths.CreateMaskWalletMnemonic)
+    const onSubmit = handleSubmit((data) => {
+        const params = new URLSearchParams()
+        params.set('name', data.name)
+        navigate({
+            pathname: RoutePaths.CreateMaskWalletMnemonic,
+            search: `?${params.toString()}`,
+        })
     })
 
     return (
@@ -143,7 +149,7 @@ export const CreateWalletForm = memo(() => {
                             <TextField
                                 {...field}
                                 error={!!errors.name?.message}
-                                helperText={errors.password?.message}
+                                helperText={errors.name?.message}
                                 variant="filled"
                                 placeholder="Enter 1-12 characters"
                                 className={classes.input}

@@ -1,5 +1,5 @@
 import { TextField, experimentalStyled as styled } from '@material-ui/core'
-import { useRef, memo } from 'react'
+import { memo } from 'react'
 
 const Container = styled('div')({
     display: 'inline-grid',
@@ -10,25 +10,26 @@ const Container = styled('div')({
         height: 48,
     },
 })
-const a12 = [...Array(12).keys()]
+
 export interface DesktopMnemonicConfirmProps {
-    onChange(mnemonics: (string | undefined)[]): void
+    words: string[]
+    indexes: number[]
+    onUpdateAnswerWords: (word: string, index: number) => void
 }
-export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) => {
-    const value = useRef<Readonly<Record<string, string>>>({ length: 12 as any })
+export const DesktopMnemonicConfirm = memo<DesktopMnemonicConfirmProps>(({ words, indexes, onUpdateAnswerWords }) => {
     return (
         <Container>
-            {a12.map((i) => (
+            {words.map((word, index) => (
                 <TextField
-                    key={i}
-                    label={i + 1 + '.'}
-                    variant="filled"
+                    key={index}
                     size="small"
-                    onChange={(e) => {
-                        value.current = { ...value.current, [i]: e.currentTarget.value }
-                        props.onChange(Array.from(value.current as any))
-                    }}
-                />
+                    value={word}
+                    autoFocus={indexes.sort((a, z) => a - z).indexOf(index) === 0}
+                    disabled={!indexes.includes(index)}
+                    variant="filled"
+                    onChange={(ev) => onUpdateAnswerWords(ev.target.value, indexes.indexOf(index))}>
+                    word
+                </TextField>
             ))}
         </Container>
     )
