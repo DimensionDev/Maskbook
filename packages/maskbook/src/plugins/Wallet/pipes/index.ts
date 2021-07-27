@@ -42,3 +42,17 @@ export function resolveZerionAssetsScopeName(network: NetworkType) {
             return ''
     }
 }
+
+export function resolveZerionTransactionsScopeName(network: NetworkType) {
+    switch (network) {
+        case NetworkType.Ethereum:
+            return 'transactions'
+        case NetworkType.Binance:
+            return ''
+        case NetworkType.Polygon:
+            return ''
+        default:
+            safeUnreachable(network)
+            return ''
+    }
+}
