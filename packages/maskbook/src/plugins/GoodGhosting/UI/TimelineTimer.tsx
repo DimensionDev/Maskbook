@@ -1,7 +1,7 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
 import isBefore from 'date-fns/isBefore'
 import intervalToDuration from 'date-fns/intervalToDuration'
-import { formatDuration } from 'date-fns/esm'
+import formatDuration from 'date-fns/formatDuration'
 import { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { useTimeline } from '../hooks/useGameInfo'

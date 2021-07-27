@@ -21,9 +21,9 @@ export interface GoodGhostingInfo {
 export interface Player {
     addr: string
     amountPaid: string
-    canRejoin: Boolean
+    canRejoin: boolean
     mostRecentSegmentPaid: string
-    withdrawn: Boolean
+    withdrawn: boolean
 }
 
 export interface PlayerStandings {
