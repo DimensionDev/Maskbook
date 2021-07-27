@@ -17,6 +17,7 @@ import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { TokenInList } from './TokenInList'
 import { EthereumAddress } from 'wallet.ts'
+import { Asset, formatBalance } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     list: {},
@@ -31,6 +32,10 @@ export interface FixedTokenListProps extends withClasses<never> {
     selectedTokens?: string[]
     onSelect?(token: FungibleTokenDetailed | null): void
     FixedSizeListProps?: Partial<FixedSizeListProps>
+}
+
+function formatAssetBalance(asset: Asset) {
+    return parseFloat(formatBalance(asset.balance, asset.token.decimals))
 }
 
 export function FixedTokenList(props: FixedTokenListProps) {
@@ -84,8 +89,12 @@ export function FixedTokenList(props: FixedTokenListProps) {
             : assets.sort((a, b) => {
                   const tokenOrder = commonTokenSort(a.token, b.token)
                   if (tokenOrder !== 0) return tokenOrder
-                  if (a.balance > b.balance) return -1
-                  if (a.balance < b.balance) return 1
+                  // Order by balance
+                  if (formatAssetBalance(a) > formatAssetBalance(b)) return -1
+                  if (formatAssetBalance(a) < formatAssetBalance(b)) return 1
+                  // Order by symbol
+                  if (a.token.symbol! < b.token.symbol!) return -1
+                  if (a.token.symbol! > b.token.symbol!) return 1
                   return 0
               })
 
