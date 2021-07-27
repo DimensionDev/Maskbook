@@ -44,8 +44,8 @@ export function usePools(
 
     const poolContracts = usePoolContracts(poolAddresses)
 
-    const [slot0s, , slot0sState] = useMutlipleContractSingleData(poolContracts, ['slot0'], [])
-    const [liquidities, , liquiditiesState] = useMutlipleContractSingleData(poolContracts, ['liquidity'], [])
+    const [slot0s, , slot0sState] = useMutlipleContractSingleData(poolContracts, new Array(poolContracts.length).fill('slot0'), [])
+    const [liquidities, , liquiditiesState] = useMutlipleContractSingleData(poolContracts, new Array(poolContracts.length).fill('liquidity'), [])
 
     console.log({
         poolAddresses,
@@ -59,8 +59,8 @@ export function usePools(
             const [token0, token1, fee] = transformed[index] ?? []
             if (!token0 || !token1 || !fee) return [PoolState.INVALID, null]
 
-            const { value: slot0, error: slot0Error } = slot0s[index]
-            const { value: liquidity, error: liquidityError } = liquidities[index]
+            const { value: slot0, error: slot0Error } = slot0s[index] ?? {}
+            const { value: liquidity, error: liquidityError } = liquidities[index] ?? {}
             const slot0Loading = slot0sState.type === MulticalStateType.PENDING
             const liquiditiesLoading = liquiditiesState.type === MulticalStateType.PENDING
 
