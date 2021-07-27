@@ -53,7 +53,7 @@
     "@types/uuid": "^8.3.1",
     "@uniswap/sdk-core": "^3.0.0",
     "@uniswap/v2-sdk": "^3.0.0",
-    "@uniswap/v3-sdk": "^3.2.1",
+    "@uniswap/v3-sdk": "3.2.1",
     "@walletconnect/client": "^1.2.2",
     "anchorme": "^2.1.2",
     "arweave": "^1.10.13",
