@@ -1,6 +1,10 @@
 import { memo } from 'react'
-import { makeStyles, Box, Button } from '@material-ui/core'
+import { makeStyles, Box, Button, Typography } from '@material-ui/core'
 import { useEnter } from '../../hook/useEnter'
+import { useRouteMatch } from 'react-router-dom'
+import { DialogRoutes } from '../../index'
+import { MasksIcon, MaskWalletIcon } from '@masknet/icons'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -26,14 +30,32 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-export const InitialPlaceholder = memo(({ children }) => {
+export const InitialPlaceholder = memo(() => {
+    const { t } = useI18N()
     const classes = useStyles()
-
+    const matchWallet = useRouteMatch(DialogRoutes.Wallet)
     const onEnter = useEnter()
 
     return (
         <Box className={classes.container}>
-            <Box className={classes.placeholder}>{children}</Box>
+            <Box className={classes.placeholder}>
+                <Box
+                    style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: 24,
+                        marginBottom: 10,
+                        backgroundColor: '#F7F9FA',
+                        fontSize: 48,
+                    }}>
+                    {matchWallet ? <MaskWalletIcon fontSize="inherit" /> : <MasksIcon fontSize="inherit" />}
+                </Box>
+                <Typography style={{ fontSize: 14 }}>
+                    {t('popups_initial_tips', {
+                        type: matchWallet ? 'wallet' : 'personas',
+                    })}
+                </Typography>
+            </Box>
             <Button variant="contained" color="primary" className={classes.button} onClick={onEnter}>
                 Enter Dashboard
             </Button>

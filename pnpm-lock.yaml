@@ -208,6 +208,7 @@ importers:
       '@ethersproject/providers': ^5.0.9
       '@ethersproject/solidity': ^5.0.4
       '@ethersproject/strings': ^5.1.0
+      '@hookform/resolvers': 2.6.0
       '@masknet/dashboard': workspace:*
       '@masknet/external-plugin-previewer': workspace:*
       '@masknet/icons': workspace:*
@@ -314,6 +315,7 @@ importers:
       react-draggable: ^4.4.3
       react-feather: ^2.0.9
       react-highlight-words: ^0.17.0
+      react-hook-form: 7.10.1
       react-middle-ellipsis: ^1.2.1
       react-refresh: ^0.10.0
       react-refresh-typescript: ^2.0.2
@@ -356,6 +358,7 @@ importers:
       webpack-notifier: ^1.12.0
       webpack-target-webextension: ^0.4.3
       z-schema: ^5.0.1
+      zod: 3.5.1
     dependencies:
       '@balancer-labs/sor': 1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
@@ -370,6 +373,7 @@ importers:
       '@ethersproject/providers': 5.4.2
       '@ethersproject/solidity': 5.4.0
       '@ethersproject/strings': 5.4.0
+      '@hookform/resolvers': 2.6.0_react-hook-form@7.10.1
       '@masknet/dashboard': link:../dashboard
       '@masknet/external-plugin-previewer': link:../external-plugin-previewer
       '@masknet/icons': link:../icons
@@ -442,6 +446,7 @@ importers:
       react-draggable: 4.4.3
       react-feather: 2.0.9_react@18.0.0-alpha-aecb3b6d1
       react-highlight-words: 0.17.0_react@18.0.0-alpha-aecb3b6d1
+      react-hook-form: 7.10.1_react@18.0.0-alpha-aecb3b6d1
       react-middle-ellipsis: 1.2.1_f991c289939c8299bed5e4a6a5a79a62
       react-router: 5.2.0_react@18.0.0-alpha-aecb3b6d1
       react-router-dom: 5.2.0_react@18.0.0-alpha-aecb3b6d1
@@ -470,6 +475,7 @@ importers:
       webcrypto-liner: 1.2.4
       webextension-polyfill: 0.8.0
       z-schema: 5.0.1
+      zod: 3.5.1
     devDependencies:
       '@dimensiondev/webextension-shim': 0.0.3-20210708053012-57a254d_typescript@4.3.5
       '@pmmmwh/react-refresh-webpack-plugin': 0.5.0-rc.2_0cb17a392999b7da0b5f4263f37b1695
@@ -4006,6 +4012,14 @@ packages:
     dependencies:
       '@hapi/hoek': 9.2.0
     dev: true
+
+  /@hookform/resolvers/2.6.0_react-hook-form@7.10.1:
+    resolution: {integrity: sha512-1Pbxjc4HEzATEcRsyDfkEQR/3OWaQwbemW9HTTYH+ZiLF2mzafl5Pn++65gwNnJSGzXUp5LIq3Nz2+Cz4m2U8A==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.10.1_react@18.0.0-alpha-aecb3b6d1
+    dev: false
 
   /@hookform/resolvers/2.6.1_react-hook-form@7.12.0:
     resolution: {integrity: sha512-7tml6bUUzdkk7tYb5LBk4i6ctV/1Rs4U5qVxrNBXZd8ZhxvsELI0TyYrnCK0XSlCo8Htlat8TOzxSZcKWOH5KQ==}
@@ -13841,18 +13855,6 @@ packages:
       debug:
         optional: true
 
-  /follow-redirects/1.14.1_debug@4.3.2:
-    resolution: {integrity: sha512-HWqDgT7ZEkqRzBvc2s64vSZ/hfOceEol3ac/7tKwzuvEyWx3/4UegXh5oBOIotkGsObyk3xznnSRVADBgWSQVg==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dependencies:
-      debug: 4.3.2_supports-color@6.1.0
-    dev: true
-
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
     dependencies:
@@ -15062,7 +15064,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.14.1_debug@4.3.2
+      follow-redirects: 1.14.1
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -20348,6 +20350,14 @@ packages:
       highlight-words-core: 1.2.2
       memoize-one: 4.0.3
       prop-types: 15.7.2
+      react: 18.0.0-alpha-aecb3b6d1
+    dev: false
+
+  /react-hook-form/7.10.1_react@18.0.0-alpha-aecb3b6d1:
+    resolution: {integrity: sha512-YRSkOZ0DJKjJ+PuCB6caFbFSbz6I4JQcGXVb/OeEIVE3YuXXYYJ/YQwodRy8HsZ5WA+DryoThWIeZZzPd5f9lQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17
+    dependencies:
       react: 18.0.0-alpha-aecb3b6d1
     dev: false
 

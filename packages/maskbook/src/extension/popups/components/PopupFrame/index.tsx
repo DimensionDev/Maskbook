@@ -4,6 +4,8 @@ import { MiniMaskIcon } from '@masknet/icons'
 import { NavLink } from 'react-router-dom'
 import { DialogRoutes } from '../../index'
 import { useI18N } from '../../../../utils'
+import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
+import { InitialPlaceholder } from '../InitialPlaceholder'
 
 const GlobalCss = withStyles({
     '@global': {
@@ -22,7 +24,6 @@ const GlobalCss = withStyles({
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        contain: 'strict',
         minHeight: 380,
         display: 'flex',
         flexDirection: 'column',
@@ -66,7 +67,7 @@ export interface PopupFrameProps extends React.PropsWithChildren<{}> {}
 export const PopupFrame = memo<PopupFrameProps>((props) => {
     const { t } = useI18N()
     const classes = useStyles()
-
+    const personas = useMyPersonas()
     return (
         <>
             <GlobalCss />
@@ -88,7 +89,9 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                         </NavLink>
                     </Box>
                 </Box>
-                <Box className={classes.container}>{props.children}</Box>
+                <Box className={classes.container}>
+                    {personas.length === 0 ? <InitialPlaceholder /> : props.children}
+                </Box>
             </Paper>
         </>
     )

@@ -3,7 +3,7 @@ import type {} from 'react-dom/next'
 import '../../social-network-adaptor/browser-action'
 import { status } from '../../setup.ui'
 import { lazy, Suspense } from 'react'
-import { HashRouter, Redirect, Route, Switch } from 'react-router-dom'
+import { HashRouter, Route, Switch, Redirect } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import { MaskUIRoot } from '../../UIRoot'
 import { PopupFrame } from './components/PopupFrame'
@@ -31,7 +31,7 @@ export function Dialogs() {
             <HashRouter>
                 <Suspense fallback="">
                     <Switch>
-                        <Route path={DialogRoutes.Wallet} children={frame(<Wallet />)} exact />
+                        <Route path={DialogRoutes.Wallet} children={frame(<Wallet />)} />
                         <Route path={DialogRoutes.Personas} children={frame(<Personas />)} exact />
                         <Route path={DialogRoutes.RequestPermission} exact children={<RequestPermissionPage />} />
                         <Route

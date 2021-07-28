@@ -1,7 +1,14 @@
 import { memo, useCallback } from 'react'
 import { Box, makeStyles, MenuItem, Typography } from '@material-ui/core'
 import { Flags } from '../../../../../../utils'
-import { ChainId, getChainIdFromNetworkType, getChainName, NetworkType, resolveNetworkName } from '@masknet/web3-shared'
+import {
+    ChainId,
+    getChainIdFromNetworkType,
+    getChainName,
+    getChainShortName,
+    NetworkType,
+    resolveNetworkName,
+} from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../../../../../plugins/Wallet/settings'
 import { useMenu, useValueRef } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'
@@ -68,7 +75,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentChainId,
         ...(Flags.support_eth_network_switch
             ? getEnumAsArray(ChainId).map(({ value: chainId }) => {
                   return (
-                      <MenuItem onClick={() => onChainChange(chainId)}>
+                      <MenuItem key={chainId} onClick={() => onChainChange(chainId)}>
                           <ChainIcon chainId={chainId} />
                           <Typography className={classes.networkName}>{getChainName(chainId)}</Typography>
                       </MenuItem>
@@ -93,7 +100,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentChainId,
                     <div className={classes.iconWrapper}>
                         <ChainIcon chainId={currentChainId} />
                     </div>
-                    <Typography className={classes.title}>{getChainName(currentChainId)}</Typography>
+                    <Typography className={classes.title}>{getChainShortName(currentChainId)}</Typography>
                 </div>
                 <ArrowDownRound className={classes.arrow} />
             </Box>

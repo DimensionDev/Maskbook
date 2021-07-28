@@ -1,27 +1,25 @@
-import { InitialPlaceholder } from '../../components/InitialPlaceholder'
-import { Typography, Box } from '@material-ui/core'
-import { MaskWalletIcon } from '@masknet/icons'
-import { useI18N } from '../../../../utils'
 import { WalletStartUp } from './components/StartUp'
-import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
+import { useWallets } from '@masknet/web3-shared'
+import { Route, Switch } from 'react-router-dom'
+import { DialogRoutes } from '../../index'
+import { ImportWallet } from './components/ImportWallet'
+import { useHistory } from 'react-router'
+import { useEffect } from 'react'
 
 export default function Wallet() {
-    const { t } = useI18N()
-    const personas = useMyPersonas()
+    const history = useHistory()
+    const wallets = useWallets()
+
+    useEffect(() => {
+        if (wallets.length) history.push(DialogRoutes.ImportWallet)
+    }, [wallets])
 
     //TODO: replace to sign state
-    return personas.length === 0 ? (
-        <InitialPlaceholder>
-            <Box style={{ width: 48, height: 48, borderRadius: 24, marginBottom: 10, backgroundColor: '#F7F9FA' }}>
-                <MaskWalletIcon sx={{ fontSize: 48 }} />
-            </Box>
-            <Typography style={{ fontSize: 14 }}>
-                {t('popups_initial_tips', {
-                    type: 'wallet',
-                })}
-            </Typography>
-        </InitialPlaceholder>
-    ) : (
+    return wallets.length === 0 ? (
         <WalletStartUp />
+    ) : (
+        <Switch>
+            <Route path={DialogRoutes.ImportWallet} children={<ImportWallet />} />
+        </Switch>
     )
 }

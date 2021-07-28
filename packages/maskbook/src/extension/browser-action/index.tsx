@@ -1,6 +1,6 @@
 import '../../social-network-adaptor/browser-action'
 import { status } from '../../setup.ui'
 import { SSRRenderer } from '../../utils/SSRRenderer'
-import { Dialogs } from '../popups/render'
+import { BrowserActionRoot } from './UI'
 
-status.then(() => SSRRenderer(<Dialogs />))
+status.then(() => SSRRenderer(<BrowserActionRoot />))
