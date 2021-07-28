@@ -623,6 +623,7 @@ importers:
       immer: ^9.0.5
       lodash-es: ^4.17.21
       react: ../empty
+      regenerator-runtime: '*'
       ts-results: ^3.3.0
       typeson: ^6.1.0
       typeson-registry: ^1.0.0-alpha.38
@@ -638,6 +639,7 @@ importers:
       immer: 9.0.5
       lodash-es: 4.17.21
       react: link:../empty
+      regenerator-runtime: 0.13.9
       ts-results: 3.3.0
       typeson: 6.1.0
       typeson-registry: 1.0.0-alpha.39

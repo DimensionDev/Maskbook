@@ -30,7 +30,7 @@ export type ExtensionBuildArgs = Partial<ReturnType<typeof parseArgs>['argv']>
 function webpack(mode: 'dev' | 'build', args: ExtensionBuildArgs = parseArgs().argv) {
     const command = [
         'webpack',
-        mode === 'dev' ? 'serve' : '--no-stats',
+        mode === 'dev' ? 'serve' : undefined,
         '--mode',
         mode === 'dev' ? 'development' : 'production',
         args.progress && '--progress',
