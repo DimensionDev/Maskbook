@@ -47,15 +47,12 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
     })
 
     //#region remote controlled buy token dialog
-    const { open, closeDialog } = useRemoteControlledDialog(
-        PluginTransakMessages.events.buyTokenDialogUpdated,
-        (ev) => {
-            if (ev.open) {
-                setCode(ev.code ?? 'ETH')
-                setAddress(ev.address)
-            }
-        },
-    )
+    const { open, closeDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated, (ev) => {
+        if (ev.open) {
+            setCode(ev.code ?? 'ETH')
+            setAddress(ev.address)
+        }
+    })
     //#endregion
 
     return (

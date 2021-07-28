@@ -3,7 +3,7 @@ import { makeStyles, Box, FormControl, Select, MenuItem, Button } from '@materia
 import CropFreeIcon from '@material-ui/icons/CropFree'
 import { useModal } from '../DashboardDialogs/Base'
 import { QRCodeVideoScannerDialog } from '../DashboardDialogs/Setup'
-import { usePortalShadowRoot } from '@masknet/shared'
+import { usePortalShadowRoot } from '@masknet/theme'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useVideoDevices } from '../../../utils/hooks/useVideoDevices'
 import { nativeAPI } from '../../../utils/native-rpc'

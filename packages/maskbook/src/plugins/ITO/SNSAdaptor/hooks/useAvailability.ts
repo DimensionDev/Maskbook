@@ -1,18 +1,16 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '@masknet/web3-shared'
-import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
-import { useITO_Contract } from './useITO_Contract'
+import { useAccount, useITOConstants, useChainId, isSameAddress } from '@masknet/web3-shared'
+import { checkAvailability } from '../../Worker/apis/checkAvailability'
 
-export function useAvailability(id?: string, contract_address?: string) {
+export function useAvailability(id: string, contract_address: string) {
     const account = useAccount()
-    const { contract: ITO_Contract } = useITO_Contract(contract_address)
+    const chainId = useChainId()
+
+    const { ITO_CONTRACT_ADDRESS } = useITOConstants()
+    const isV1 = isSameAddress(contract_address ?? '', ITO_CONTRACT_ADDRESS)
 
     return useAsyncRetry(async () => {
-        if (!id) return null
-        if (!ITO_Contract) return null
-        return (ITO_Contract as ITO2).methods.check_availability(id).call({
-            // check availability is ok w/o account
-            from: account,
-        })
-    }, [id, account, ITO_Contract])
+        if (!id || !contract_address) return null
+        return checkAvailability(id, account, contract_address, chainId, isV1)
+    }, [id, account])
 }

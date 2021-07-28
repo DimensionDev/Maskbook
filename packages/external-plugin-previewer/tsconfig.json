@@ -6,6 +6,7 @@
     "stripInternal": true
   },
   "include": ["./src/**/*"],
+  "references": [{ "path": "../theme" }],
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": { "module": "CommonJS" }

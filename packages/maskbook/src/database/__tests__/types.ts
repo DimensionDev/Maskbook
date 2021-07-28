@@ -5,7 +5,6 @@ import {
     PostIVIdentifier,
     PostIdentifier,
     ProfileIdentifier,
-    PreDefinedVirtualGroupNames,
     ECKeyIdentifierFromJsonWebKey,
 } from '../type'
 import type { EC_Public_JsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
@@ -64,8 +63,8 @@ test('ECKeyIdentifier', async () => {
 })
 
 test('GroupIdentifier', () => {
-    const virtualG = new GroupIdentifier('facebook.com', 'owner', PreDefinedVirtualGroupNames.friends)
-    const realG = new GroupIdentifier('facebook.com', null, PreDefinedVirtualGroupNames.followers)
+    const virtualG = new GroupIdentifier('facebook.com', 'owner', '_default_friends_group_')
+    const realG = new GroupIdentifier('facebook.com', null, '_followers_group_')
 
     expect(virtualG.toText()).toBe('group:facebook.com/owner/_default_friends_group_')
     expect(virtualG.groupID).toBe('_default_friends_group_')
@@ -86,12 +85,6 @@ test('GroupIdentifier', () => {
     expect(() => new GroupIdentifier('facebook.com', 'owner', '/')).toThrowError()
 })
 
-test('Stable PreDefinedVirtualGroupNames', () => {
-    expect(PreDefinedVirtualGroupNames.followers).toBe('_followers_group_')
-    expect(PreDefinedVirtualGroupNames.following).toBe('_following_group_')
-    expect(PreDefinedVirtualGroupNames.friends).toBe('_default_friends_group_')
-})
-
 test('Static Identifier method', () => {
     const normal = new ProfileIdentifier('facebook.com', 'user_id')
     const normal2 = new ProfileIdentifier('facebook.com', 'user_id2')
@@ -106,8 +99,8 @@ test('Static Identifier method', () => {
     )
     expect(Identifier.IdentifiersToString([normal, normal2])).toBe(Identifier.IdentifiersToString([normal2, normal]))
 
-    const virtualG = new GroupIdentifier('facebook.com', 'owner', PreDefinedVirtualGroupNames.friends)
-    const realG = new GroupIdentifier('facebook.com', null, PreDefinedVirtualGroupNames.followers)
+    const virtualG = new GroupIdentifier('facebook.com', 'owner', '_default_friends_group_')
+    const realG = new GroupIdentifier('facebook.com', null, '_followers_group_')
 
     expect(virtualG.equals(realG)).toBe(false)
     expect(virtualG.equals(virtualG)).toBe(true)

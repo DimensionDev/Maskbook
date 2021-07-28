@@ -4,10 +4,10 @@ import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { useERC721TokenBalance } from './useERC721TokenBalance'
 import { useNativeTokenBalance } from './useNativeTokenBalance'
 
-export function useTokenBalance(type: EthereumTokenType, address: string) {
+export function useTokenBalance(type: EthereumTokenType, address?: string) {
     const r1 = useNativeTokenBalance()
-    const r2 = useERC20TokenBalance(type === EthereumTokenType.ERC20 ? address : '')
-    const r3 = useERC721TokenBalance(type === EthereumTokenType.ERC721 ? address : '')
+    const r2 = useERC20TokenBalance(type === EthereumTokenType.ERC20 ? address : undefined)
+    const r3 = useERC721TokenBalance(type === EthereumTokenType.ERC721 ? address : undefined)
     const type_ = type
     switch (type_) {
         case EthereumTokenType.Native:

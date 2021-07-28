@@ -1,10 +1,18 @@
 import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
-import { ChainId, ProviderType, NetworkType, GasNow } from '@masknet/web3-shared'
+import {
+    ChainId,
+    ProviderType,
+    PortfolioProvider,
+    CollectibleProvider,
+    NetworkType,
+    GasNow,
+} from '@masknet/web3-shared'
 import { PLUGIN_IDENTIFIER } from './constants'
-import { CollectibleProvider, PortfolioProvider } from './types'
 import { isEqual } from 'lodash-es'
 import { connectGasNow } from './apis/gasnow'
+import { trackEtherPrice } from './apis/coingecko'
+import { startEffects } from '../../utils/side-effects'
 
 export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+selectedWalletAddress`, '', {
     primary: () => 'DO NOT DISPLAY IT IN UI',
@@ -120,6 +128,14 @@ export const currentGasNowSettings = createGlobalSettings<GasNow | null>(
     (a: GasNow | null, b: GasNow | null) => isEqual(a, b),
 )
 
-try {
-    connectGasNow()
-} catch {}
+/**
+ * Ether Price in USD
+ */
+export const currentEtherPriceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+etherPriceUSD`, 0, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+const effect = startEffects(import.meta.webpackHot)
+
+effect(() => connectGasNow())
+effect(() => trackEtherPrice())

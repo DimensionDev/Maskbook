@@ -69,7 +69,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region remote controlled dialog
     const { open, closeDialog: closeDonationDialog } = useRemoteControlledDialog(
-        PluginGitcoinMessages.events.donationDialogUpdated,
+        PluginGitcoinMessages.donationDialogUpdated,
         (ev) => {
             if (!ev.open) return
             setTitle(ev.title)

@@ -8,8 +8,8 @@ import { useSingleContractMultipleData } from './useMulticall'
 
 export function useERC721TokenIdsOfOwner(token?: ERC721Token) {
     const account = useAccount()
-    const asyncResultOfBalanceOf = useERC721TokenBalance(token?.address ?? '')
-    const erc721Contract = useERC721TokenContract(token?.address ?? '')
+    const asyncResultOfBalanceOf = useERC721TokenBalance(token?.address)
+    const erc721Contract = useERC721TokenContract(token?.address)
     const { names, callDatas } = useMemo(() => {
         const balanceOf = asyncResultOfBalanceOf.value ?? '0'
         return {

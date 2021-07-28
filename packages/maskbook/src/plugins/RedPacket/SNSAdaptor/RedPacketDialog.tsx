@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { DialogContent } from '@material-ui/core'
-import { usePortalShadowRoot, useRemoteControlledDialog } from '@masknet/shared'
+import { usePortalShadowRoot } from '@masknet/theme'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { RedPacketJSONPayload, DialogTabs, RedPacketRecord } from '../types'
@@ -103,8 +104,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     useEffect(() => {
         if (createState.type !== TransactionStateType.UNKNOWN) return
-        payload.current.contract_address =
+        const contractAddress =
             networkType === NetworkType.Ethereum ? HAPPY_RED_PACKET_ADDRESS_V2 : HAPPY_RED_PACKET_ADDRESS_V3
+        if (!contractAddress) {
+            onClose()
+            return
+        }
+        payload.current.contract_address = contractAddress
         payload.current.contract_version = networkType === NetworkType.Ethereum ? 2 : 3
         payload.current.network = getChainName(chainId)
     }, [chainId, networkType, createState])

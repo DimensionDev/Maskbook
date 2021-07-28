@@ -1,7 +1,7 @@
 import { EthereumAddress } from 'wallet.ts'
 import type { HttpProvider, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { addGasMargin, EthereumMethodType, ProviderType } from '@masknet/web3-shared'
+import { addGasMargin, ChainId, EthereumMethodType, ProviderType } from '@masknet/web3-shared'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { createWeb3 } from './web3'
@@ -9,27 +9,46 @@ import * as WalletConnect from './providers/WalletConnect'
 import { addRecentTransaction, getWallet } from '../../../plugins/Wallet/services'
 import { commitNonce, getNonce, resetNonce } from './nonce'
 import { getGasPrice } from './network'
-import { currentAccountSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
+import {
+    currentAccountSettings,
+    currentChainIdSettings,
+    currentProviderSettings,
+} from '../../../plugins/Wallet/settings'
+import { debugModeSetting } from '../../../settings/settings'
+
+export interface SendOverrides {
+    chainId?: ChainId
+    account?: string
+    providerType?: ProviderType
+    rpc?: string
+}
 
 /**
  * This API is only used internally. Please use requestSend instead in order to share the same payload id globally.
  * @param payload
  * @param callback
+ * @param rpc
  */
 export async function INTERNAL_send(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
+    {
+        chainId = currentChainIdSettings.value,
+        account = currentAccountSettings.value,
+        providerType = currentProviderSettings.value,
+        rpc,
+    }: SendOverrides = {},
 ) {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
         console.table(payload)
         console.debug(new Error().stack)
     }
 
-    const account = currentAccountSettings.value
-    const providerType = currentProviderSettings.value
     const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null
     const web3 = createWeb3({
+        chainId,
         privKeys: wallet?._private_key_ ? [wallet._private_key_] : [],
+        providerType,
     })
     const provider = web3.currentProvider as HttpProvider | undefined
 
@@ -139,7 +158,18 @@ export async function INTERNAL_send(
                 await sendTransaction()
                 break
             default:
-                provider.send(payload, callback)
+                if (rpc) {
+                    fetch(rpc, {
+                        method: 'POST',
+                        body: JSON.stringify(payload),
+                    })
+                        .catch((error: Error) => callback(error))
+                        .then(async (res) => {
+                            if (res) callback(null, (await res.json()) as JsonRpcResponse)
+                        })
+                } else {
+                    provider.send(payload, callback)
+                }
                 break
         }
     } catch (error) {

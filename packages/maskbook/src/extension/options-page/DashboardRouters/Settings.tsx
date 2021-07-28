@@ -3,17 +3,15 @@ import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } f
 import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Appearance, Language } from '@masknet/theme'
 import { getEnumAsObject } from '@masknet/shared'
-import { getChainName, ChainId, ProviderType, useAccount } from '@masknet/web3-shared'
+import { getChainName, ChainId, ProviderType, useAccount, PortfolioProvider } from '@masknet/web3-shared'
 
 import { useMatchXS, extendsTheme, useI18N, Flags, useValueRef } from '../../../utils'
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
 import {
     debugModeSetting,
-    disableOpenNewTabInBackgroundSettings,
     languageSettings,
     allPostReplacementSettings,
     appearanceSettings,
-    enableGroupSharingSettings,
     launchPageSettings,
     newDashboardConnection,
 } from '../../../settings/settings'
@@ -25,9 +23,7 @@ import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined'
-import ShareIcon from '@material-ui/icons/ShareOutlined'
 import FlipToFrontIcon from '@material-ui/icons/FlipToFront'
-import TabIcon from '@material-ui/icons/Tab'
 import PaletteIcon from '@material-ui/icons/Palette'
 import LanguageIcon from '@material-ui/icons/Language'
 import WifiIcon from '@material-ui/icons/Wifi'
@@ -40,7 +36,6 @@ import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialo
 import { currentDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
 import { resolveDataProviderName, resolveTradeProviderName } from '../../../plugins/Trader/pipes'
 import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
-import { PortfolioProvider } from '../../../plugins/Wallet/types'
 import {
     currentPortfolioDataProviderSettings,
     currentChainIdSettings,
@@ -274,11 +269,6 @@ export default function DashboardSettingsRouter() {
                             <List className={classes.list} disablePadding>
                                 <SettingsUI
                                     classes={listStyle}
-                                    icon={<TabIcon />}
-                                    value={disableOpenNewTabInBackgroundSettings}
-                                />
-                                <SettingsUI
-                                    classes={listStyle}
                                     icon={<MemoryOutlinedIcon />}
                                     value={debugModeSetting}
                                 />
@@ -286,11 +276,6 @@ export default function DashboardSettingsRouter() {
                                     classes={listStyle}
                                     icon={<FlipToFrontIcon />}
                                     value={allPostReplacementSettings}
-                                />
-                                <SettingsUI
-                                    classes={listStyle}
-                                    icon={<ShareIcon />}
-                                    value={enableGroupSharingSettings}
                                 />
                                 {process.env.NODE_ENV === 'development' || process.env.build !== 'stable' ? (
                                     <SettingsUI
