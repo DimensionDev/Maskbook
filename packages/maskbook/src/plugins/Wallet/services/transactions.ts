@@ -1,18 +1,17 @@
-import { isNil } from 'lodash-es'
+import { NetworkType, pow10, PortfolioProvider } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
+import { isNil } from 'lodash-es'
+import * as DeBankAPI from '../apis/debank'
+import * as ZerionApi from '../apis/zerion'
+import { resolveDebankChainName, resolveZerionTransactionsScopeName } from '../pipes'
 import {
     DebankTransactionDirection,
     HistoryResponse,
-    PortfolioProvider,
     Transaction,
     ZerionRBDTransactionType,
     ZerionTransactionItem,
     ZerionTransactionStatus,
 } from '../types'
-import * as DeBankAPI from '../apis/debank'
-import * as ZerionApi from '../apis/zerion'
-import { NetworkType, pow10 } from '@masknet/web3-shared'
-import { resolveDebankChainName, resolveZerionTransactionsScopeName } from '../pipes'
 
 export async function getTransactionList(
     address: string,

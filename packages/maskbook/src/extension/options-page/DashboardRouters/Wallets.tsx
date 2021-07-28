@@ -3,6 +3,7 @@ import { Button } from '@material-ui/core'
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
+import { useWallet } from '@masknet/web3-shared'
 import { useI18N, useQueryParams, Flags, extendsTheme } from '../../../utils'
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
@@ -11,7 +12,6 @@ import {
     DashboardWalletAddERC20TokenDialog,
     DashboardWalletErrorDialog,
 } from '../DashboardDialogs/Wallet'
-import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 

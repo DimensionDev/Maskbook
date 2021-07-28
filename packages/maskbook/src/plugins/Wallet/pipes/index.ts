@@ -1,8 +1,5 @@
 import { safeUnreachable, unreachable } from '@dimensiondev/kit'
-import { NetworkType } from '@masknet/web3-shared'
-import { PortfolioProvider } from '../types'
-
-export { resolveCollectibleProviderLink, resolveCollectibleLink } from '@masknet/web3-shared'
+import { NetworkType, PortfolioProvider } from '@masknet/web3-shared'
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
     switch (provider) {
