@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'
 import { useAvailableTraderProviders } from '../../trending/useAvailableTraderProviders'
 import { useSearchedKeyword } from '../../trending/useSearchedKeyword'

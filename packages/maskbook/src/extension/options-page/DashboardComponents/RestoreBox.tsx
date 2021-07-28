@@ -1,6 +1,6 @@
 import { makeStyles, useTheme } from '@material-ui/core'
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import ActionButton from './ActionButton'
 
 const useStyle = makeStyles((theme) => ({

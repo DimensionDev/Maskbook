@@ -1,5 +1,5 @@
 import { Card, makeStyles } from '@material-ui/core'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isTwitter as isTwitterF } from '../../../../social-network-adaptor/twitter.com/base'
 

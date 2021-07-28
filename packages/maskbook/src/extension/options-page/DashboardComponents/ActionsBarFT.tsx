@@ -10,8 +10,7 @@ import {
     getChainIdFromName,
 } from '@masknet/web3-shared'
 import { useMenu, useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogFT } from '../DashboardDialogs/Wallet'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
