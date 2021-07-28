@@ -19,7 +19,7 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import type { Asset } from '@masknet/web3-shared'
+import { Asset, useTrustedERC20Tokens } from '@masknet/web3-shared'
 import {
     CurrencyType,
     currySameAddress,
@@ -37,7 +37,6 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { useI18N, useMatchXS } from '../../../utils'
 import { ActionsBarFT } from './ActionsBarFT'
-import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
 
 const useStyles = makeStyles<
@@ -199,7 +198,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         ...(isMobile ? [] : ['']),
     ] as const
 
-    const erc20Tokens = useTrustedERC20TokensFromDB()
+    const erc20Tokens = useTrustedERC20Tokens()
     const {
         value: detailedTokens,
         error: detailedTokensError,

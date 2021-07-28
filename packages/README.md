@@ -20,15 +20,11 @@
 
 ## Tools
 
-- [cli](cli)
+- [cli](scripts)
 
   Because our project is using TypeScript project reference and code generation, to make the build process work normally, those process must run before any other commands.
 
   This package provides two command to wrap the other commands.
-
-- [locale-kit](locale-kit)
-
-  Tools to maintaining i18n files in the project
 
 - [netlify](netlify)
 

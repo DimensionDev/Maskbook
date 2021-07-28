@@ -1,7 +1,4 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { createPluginMessage } from '../utils/createPluginMessage'
-import { createPluginRPC } from '../utils/createPluginRPC'
+import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
 import { DHEDGE_PLUGIN_ID } from './constants'
 import type { Pool } from './types'
 
@@ -9,7 +6,7 @@ type InvestDialogUpdated =
     | {
           open: true
           pool: Pool
-          token: FungibleTokenDetailed
+          tokens: string[]
       }
     | {
           open: false
@@ -24,10 +21,5 @@ interface DHedgeMessages {
     rpc: unknown
 }
 
-export const PluginDHedgeMessages: WebExtensionMessage<DHedgeMessages> =
-    createPluginMessage<DHedgeMessages>(DHEDGE_PLUGIN_ID)
-export const PluginDHedgeRPC = createPluginRPC(
-    DHEDGE_PLUGIN_ID,
-    () => import('./services'),
-    PluginDHedgeMessages.events.rpc,
-)
+export const PluginDHedgeMessages: PluginMessageEmitter<DHedgeMessages> = createPluginMessage(DHEDGE_PLUGIN_ID)
+export const PluginDHedgeRPC = createPluginRPC(DHEDGE_PLUGIN_ID, () => import('./services'), PluginDHedgeMessages.rpc)

@@ -12,6 +12,7 @@ import { useMemo, useRef } from 'react'
 import { or } from '../components/custom-ui-helper'
 import { appearanceSettings, languageSettings } from '../settings/settings'
 import { activatedSocialNetworkUI } from '../social-network'
+import './theme-global.d'
 
 function getFontFamily(monospace?: boolean) {
     // We want to look native.
@@ -177,10 +178,4 @@ export const useErrorStyles = makeStyles((theme) => {
 })
 export function extendsTheme(extend: (theme: Theme) => ThemeOptions) {
     return (theme: Theme) => merge(cloneDeep(theme), extend(theme))
-}
-
-declare module '@material-ui/core/styles/createPalette.d' {
-    export interface TypeText {
-        hint: string
-    }
 }

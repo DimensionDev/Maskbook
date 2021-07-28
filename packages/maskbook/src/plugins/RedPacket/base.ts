@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { ChainId } from '@masknet/web3-shared'
 import { RedPacketPluginID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
@@ -15,7 +16,7 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
         web3: {
-            compositionEntryRequiresChainIDValid: true,
+            operatingSupportedChains: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
         },
     },
 }

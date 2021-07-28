@@ -62,7 +62,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const { pools } = useTradeProviderSettings(provider)
 
     //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated)
+    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
     //#endregion
 
     const onReset = useCallback(() => {

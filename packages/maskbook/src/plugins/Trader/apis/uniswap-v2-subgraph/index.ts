@@ -89,7 +89,9 @@ export type Bundle = {
 }
 
 async function fetchFromUniswapV2Subgraph<T>(query: string) {
-    const response = await fetch(getTrendingConstants(currentChainIdSettings.value).UNISWAP_V2_SUBGRAPH_URL, {
+    const subgraphURL = getTrendingConstants(currentChainIdSettings.value).UNISWAP_V2_SUBGRAPH_URL
+    if (!subgraphURL) return null
+    const response = await fetch(subgraphURL, {
         method: 'POST',
         mode: 'cors',
         body: stringify({ query }),
@@ -105,7 +107,7 @@ async function fetchFromUniswapV2Subgraph<T>(query: string) {
  * @param blockNumber if don't give, will return latest price
  */
 export async function fetchEtherPriceByBlockNumber(blockNumber?: string) {
-    const response = await fetchFromUniswapV2Subgraph<{
+    const data = await fetchFromUniswapV2Subgraph<{
         bundles: Bundle[]
     }>(`
         query bundles {
@@ -114,7 +116,8 @@ export async function fetchEtherPriceByBlockNumber(blockNumber?: string) {
             }
         }
     `)
-    return first(response.bundles)?.ethPrice
+    if (!data?.bundles) return
+    return first(data.bundles)?.ethPrice
 }
 
 /**
@@ -129,7 +132,7 @@ export async function fetchEtherPricesByBlockNumbers(blockNumbers: (string | und
             }
         `
     })
-    const response = await fetchFromUniswapV2Subgraph<{
+    const data = await fetchFromUniswapV2Subgraph<{
         [key: string]: Bundle
     }>(`
         query bundles {
@@ -138,11 +141,11 @@ export async function fetchEtherPricesByBlockNumbers(blockNumbers: (string | und
     `)
 
     let result: { [key: string]: number | undefined } = {}
+    if (!data) return result
 
-    Object.keys(response).map((key) => {
-        result[key] = response[key]?.ethPrice
+    Object.keys(data).map((key) => {
+        result[key] = data[key]?.ethPrice
     })
-
     return result
 }
 
@@ -155,7 +158,7 @@ export async function fetchTokensByKeyword(keyword: string) {
     // so cased keywords will be added too
     const listOfKeywords = [keyword, keyword.toLowerCase(), keyword.toUpperCase()]
 
-    const response = await fetchFromUniswapV2Subgraph<{
+    const data = await fetchFromUniswapV2Subgraph<{
         tokens: {
             id: string
             name: string
@@ -172,7 +175,7 @@ export async function fetchTokensByKeyword(keyword: string) {
             }
         }
     `)
-    return response.tokens
+    return data?.tokens ?? []
 }
 
 /**
@@ -180,7 +183,7 @@ export async function fetchTokensByKeyword(keyword: string) {
  */
 export async function fetchTokenDayData(address: string, date: Date) {
     const utcTimestamp = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
-    const response = await fetchFromUniswapV2Subgraph<{
+    const data = await fetchFromUniswapV2Subgraph<{
         data: {
             tokenDayData: {
                 id: string
@@ -209,7 +212,7 @@ export async function fetchTokenDayData(address: string, date: Date) {
             }
         }
     `)
-    return first(response.data.tokenDayData)
+    return first(data?.data.tokenDayData)
 }
 
 /**
@@ -218,7 +221,7 @@ export async function fetchTokenDayData(address: string, date: Date) {
  * @param blockNumber
  */
 export async function fetchTokenData(address: string, blockNumber?: string) {
-    const response = await fetchFromUniswapV2Subgraph<{
+    const data = await fetchFromUniswapV2Subgraph<{
         tokens: Token[]
         pairs0: Pair[]
         pairs1: Pair[]
@@ -239,8 +242,8 @@ export async function fetchTokenData(address: string, blockNumber?: string) {
     `)
 
     return {
-        token: first(response?.tokens),
-        allPairs: response?.pairs0?.concat(response.pairs1),
+        token: first(data?.tokens),
+        allPairs: data?.pairs0?.concat(data.pairs1) ?? [],
     }
 }
 
@@ -249,7 +252,7 @@ export async function fetchTokenData(address: string, blockNumber?: string) {
  * @param pairList
  */
 export async function fetchPairsBulk(pairList: string[]) {
-    const response = await fetchFromUniswapV2Subgraph<{
+    const data = await fetchFromUniswapV2Subgraph<{
         pairs: Pair[]
     }>(
         `
@@ -264,7 +267,7 @@ export async function fetchPairsBulk(pairList: string[]) {
         `,
     )
 
-    return response.pairs
+    return data?.pairs ?? []
 }
 
 /**
@@ -273,7 +276,7 @@ export async function fetchPairsBulk(pairList: string[]) {
  * @param blockNumber
  */
 export async function fetchPairsHistoricalBulk(pairs: string[], blockNumber?: string) {
-    const response = await fetchFromUniswapV2Subgraph<{
+    const data = await fetchFromUniswapV2Subgraph<{
         pairs: Pair[]
     }>(`
             ${PairFields}
@@ -286,7 +289,7 @@ export async function fetchPairsHistoricalBulk(pairs: string[], blockNumber?: st
             }
     `)
 
-    return response.pairs
+    return data?.pairs ?? []
 }
 
 /**
@@ -295,7 +298,7 @@ export async function fetchPairsHistoricalBulk(pairs: string[], blockNumber?: st
  * @param blockNumber
  */
 export async function fetchPairData(pairAddress: string, blockNumber?: string) {
-    const response = await fetchFromUniswapV2Subgraph<{
+    const data = await fetchFromUniswapV2Subgraph<{
         pairs: Pair[]
     }>(`
          ${PairFields}
@@ -306,7 +309,7 @@ export async function fetchPairData(pairAddress: string, blockNumber?: string) {
         }
     `)
 
-    return first(response.pairs)
+    return first(data?.pairs)
 }
 
 /**
@@ -323,7 +326,7 @@ export async function fetchPricesByBlocks(
     // avoiding request entity too large
     const chunkBlocks = chunk(blocks, skipCount)
 
-    const response = await Promise.all(
+    const data = await Promise.all(
         chunkBlocks.map(async (chunk) => {
             const queries = chunk.map(
                 (block) => `
@@ -352,7 +355,7 @@ export async function fetchPricesByBlocks(
     )
 
     return flatten(
-        response.map((result) => {
+        data.map((result) => {
             if (result) {
                 const keys = Object.keys(result).filter((key) => key.substring(0, 1) === 't')
                 return keys.map((x) => {

@@ -4,12 +4,12 @@ import {
     appearanceSettings,
     languageSettings,
     debugModeSetting,
-    disableOpenNewTabInBackgroundSettings,
     currentPersonaIdentifier,
 } from './settings'
 import {
     currentAccountSettings,
     currentBalanceSettings,
+    currentEtherPriceSettings,
     currentBlockNumberSettings,
     currentChainIdSettings,
     currentCollectibleDataProviderSettings,
@@ -28,8 +28,8 @@ export function ToBeListened() {
         currentChainIdSettings,
         currentBalanceSettings,
         currentBlockNumberSettings,
+        currentEtherPriceSettings,
         currentTrendingDataProviderSettings: currentDataProviderSettings,
-        disableOpenNewTabInBackgroundSettings,
         currentProviderSettings,
         currentNetworkSettings,
         currentAccountSettings,

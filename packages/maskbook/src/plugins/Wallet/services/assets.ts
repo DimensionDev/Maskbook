@@ -20,6 +20,7 @@ import { EthereumAddress } from 'wallet.ts'
 import * as DebankAPI from '../apis/debank'
 import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
+import { resolveZerionAssetsScopeName } from '../pipes'
 import { Asset, BalanceRecord, CollectibleProvider, PortfolioProvider, ZerionAddressAsset } from '../types'
 
 export async function getAssetsListNFT(
@@ -86,13 +87,15 @@ export async function getAssetsList(
     switch (provider) {
         case PortfolioProvider.ZERION:
             if (network !== NetworkType.Ethereum) return []
-            const { meta, payload } = await ZerionAPI.getAssetsList(address)
+            const scope = resolveZerionAssetsScopeName(network)
+            if (!scope) return []
+            const { meta, payload } = await ZerionAPI.getAssetsList(address, scope)
             if (meta.status !== 'ok') throw new Error('Fail to load assets.')
             // skip NFT assets
             const assetsList = values(payload.assets).filter((x) => x.asset.is_displayable && x.asset.icon_url)
             return formatAssetsFromZerion(assetsList)
         case PortfolioProvider.DEBANK:
-            const { data = [], error_code } = await DebankAPI.getAssetsList(address, network)
+            const { data = [], error_code } = await DebankAPI.getAssetsList(address)
             if (error_code === 0) return formatAssetsFromDebank(data)
             return []
         default:

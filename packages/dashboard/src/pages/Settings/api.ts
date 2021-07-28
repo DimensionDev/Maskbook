@@ -8,8 +8,3 @@ export const [useLanguage] = createGlobalState(Services.Settings.getLanguage, (x
 export const [useTrendingDataSource] = createGlobalState(Services.Settings.getTrendingDataSource, (x) =>
     Messages.events.currentTrendingDataProviderSettings.on(x),
 )
-
-export const [useAncientPostsCompatibilityMode] = createGlobalState(
-    Services.Settings.getAncientPostsCompatibiltyMode,
-    (x) => Messages.events.disableOpenNewTabInBackgroundSettings.on(x),
-)

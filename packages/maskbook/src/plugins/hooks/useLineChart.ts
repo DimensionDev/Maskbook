@@ -14,7 +14,6 @@ export function useLineChart(
     const { top, right, bottom, left, width, height } = dimension
     const contentWidth = width - left - right
     const contentHeight = height - top - bottom
-    console.log(color)
     useEffect(() => {
         if (!svgRef.current) return
 
@@ -119,17 +118,26 @@ export function useLineChart(
             }
         }
 
+        const hide = () => tooltip.call(callout, null)
+
         // add tooltip
-        d3.select(svgRef.current).on('mousemove', function (event) {
-            const bisect = (mx: any) => {
+        d3.select(svgRef.current).on('mousemove', function () {
+            const mx = d3.mouse(this)[0]
+            if (mx < left || mx > left + contentWidth) {
+                // mouse not in the content view
+                hide()
+                return
+            }
+            const fixedX = mx - left
+            const bisect = (mx: number) => {
                 const date = x.invert(mx)
                 const index = d3.bisector<{ date: Date; value: number }, Date>((d) => d.date).left(data, date, 1)
                 return data[index]
             }
 
-            const { date, value } = bisect(d3.mouse(this)[0])
+            const { date, value } = bisect(fixedX)
 
-            tooltip.attr('transform', `translate(${Number(x(date)) - 18},${y(value)})`).call(
+            tooltip.attr('transform', `translate(${Number(x(date))},${y(value)})`).call(
                 callout,
                 `${formatTooltip(value)}
                 ${date.toLocaleString('en', {
@@ -141,6 +149,6 @@ export function useLineChart(
             )
         })
 
-        d3.select(svgRef.current).on('mouseleave', () => tooltip.call(callout, null))
+        d3.select(svgRef.current).on('mouseleave', hide)
     }, [svgRef, data.length, stringify(dimension), tickFormat, formatTooltip])
 }

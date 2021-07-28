@@ -13,7 +13,6 @@ import type { Configuration as DevServerConfiguration } from 'webpack-dev-server
 
 //#region Development plugins
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
-import ReactRefreshTypeScriptTransformer from 'react-refresh-typescript'
 import NotifierPlugin from 'webpack-notifier'
 //#endregion
 //#region Other plugins
@@ -61,6 +60,7 @@ function config(opts: {
     disableReactHMR?: boolean
     hmrPort?: number
     noEval?: boolean
+    readonlyCache?: boolean
 }) {
     // https://github.com/facebook/react/issues/20377 React-devtools conflicts with react-refresh
     const disableReactHMR = opts.isProfile || opts.disableReactHMR
@@ -88,8 +88,8 @@ function config(opts: {
         resolve: {
             extensions: ['.js', '.ts', '.tsx'],
             alias: {
-                'async-call-rpc$': 'async-call-rpc/full',
-                lodash: 'lodash-es',
+                'async-call-rpc$': require.resolve('async-call-rpc/full'),
+                lodash: require.resolve('lodash-es'),
                 // Strange...
                 '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
                 // It's a node impl for xhr which is unnecessary
@@ -99,11 +99,13 @@ function config(opts: {
                 // By aliasing them to the original position, we can speed up the compile because there is no need to wait tsc build them to the dist folder.
                 '@masknet/dashboard': require.resolve('../dashboard/src/entry.tsx'),
                 '@masknet/shared': require.resolve('../shared/src/index.ts'),
+                '@masknet/shared-base': require.resolve('../shared-base/src/index.ts'),
                 '@masknet/theme/constants': require.resolve('../theme/src/constants.ts'),
                 '@masknet/theme': require.resolve('../theme/src/theme.ts'),
                 '@masknet/icons': require.resolve('../icons/index.ts'),
                 '@masknet/plugin-infra': require.resolve('../plugin-infra/src/index.ts'),
                 '@masknet/plugin-example': require.resolve('../plugins/example/src/index.ts'),
+                '@masknet/plugin-wallet': require.resolve('../plugins/Wallet/src/index.ts'),
                 '@masknet/external-plugin-previewer': require.resolve('../external-plugin-previewer/src/index.tsx'),
                 '@masknet/web3-shared': require.resolve('../web3-shared/src/index.ts'),
             },
@@ -131,18 +133,30 @@ function config(opts: {
                     parser: { worker: ['OnDemandWorker', '...'] },
                     // Compile all ts files in the workspace
                     include: src('../'),
-                    loader: require.resolve('ts-loader'),
+                    loader: require.resolve('swc-loader'),
                     options: {
-                        transpileOnly: true,
-                        compilerOptions: {
-                            importsNotUsedAsValues: 'remove',
-                            jsx: mode === 'production' ? 'react-jsx' : 'react-jsxdev',
+                        jsc: {
+                            parser: {
+                                syntax: 'typescript',
+                                dynamicImport: true,
+                                tsx: true,
+                                importAssertions: true,
+                            },
+                            target: 'es2019',
+                            externalHelpers: true,
+                            transform: {
+                                react: {
+                                    runtime: 'automatic',
+                                    useBuiltins: true,
+                                    development: disableReactHMR ? false : mode === 'development',
+                                    refresh: {
+                                        refreshReg: '$RefreshReg$',
+                                        refreshSig: '$RefreshSig$',
+                                        emitFullSignatures: true,
+                                    },
+                                },
+                            },
                         },
-                        getCustomTransformers: () => ({
-                            before: [!disableHMR && !disableReactHMR && ReactRefreshTypeScriptTransformer()].filter(
-                                Boolean,
-                            ),
-                        }),
                     },
                 },
             ],
@@ -172,6 +186,8 @@ function config(opts: {
                 'process.stderr': '/* stdin */ null',
             }),
             ...getHotModuleReloadPlugin(),
+            // https://github.com/webpack/webpack/issues/13581
+            opts.readonlyCache && new ReadonlyCachePlugin(),
         ].filter(nonNullable),
         optimization: {
             minimize: false,
@@ -254,15 +270,25 @@ function nonNullable<T>(x: T | false | undefined | null): x is T {
     return Boolean(x)
 }
 
-export default async function (cli_env: Record<string, boolean> = {}, argv: { mode?: 'production' | 'development' }) {
+type Argv = {
+    mode?: 'production' | 'development'
+    outputPath?: string
+}
+
+export default async function (cli_env: Record<string, boolean> = {}, argv: Argv) {
     const target = getCompilationInfo(cli_env)
     const mode: 'production' | 'development' = argv.mode ?? 'production'
-    const dist = mode === 'production' ? root('./build') : root('./dist')
-    if (mode === 'production') await promisify(rimraf)(root('./build'))
+    const defaultDist = mode === 'production' ? root('./build') : root('./dist')
+    const dist = argv.outputPath
+        ? path.isAbsolute(argv.outputPath)
+            ? argv.outputPath
+            : root(argv.outputPath)
+        : defaultDist
+    if (mode === 'production') await promisify(rimraf)(dist)
     const disableHMR = Boolean(process.env.NO_HMR)
     const isManifestV3 = target.runtimeEnv.manifest === 3
 
-    const shared = { mode, target, dist, isProfile: target.isProfile }
+    const shared = { mode, target, dist, isProfile: target.isProfile, readonlyCache: target.readonlyCache }
     const main = config({ ...shared, disableHMR, name: 'main' })
     const manifestV3 = config({ ...shared, disableHMR: true, name: 'background-worker', hmrPort: 35938 })
     const injectedScript = config({
@@ -399,6 +425,7 @@ function getCompilationInfo(argv: any) {
     let resolution: 'desktop' | 'mobile' = 'desktop'
     let build: 'stable' | 'beta' | 'insider' = 'stable'
     let manifest: 2 | 3 = 2
+    let readonlyCache = !!argv.readonlyCache
 
     //#region Manifest V3
     if (argv['manifest-v3']) {
@@ -447,6 +474,7 @@ function getCompilationInfo(argv: any) {
         FirefoxEngine: preset === 'firefox' || preset === 'android',
         // ! We cannot upload different version for Firefox desktop and Firefox Android, so they must emit same output.
         Firefox: preset === 'firefox',
+        readonlyCache,
     }
 }
 
@@ -503,3 +531,17 @@ promises.readdir(path.join(__dirname, '../../dist')).then(
     },
     () => {},
 )
+
+class ReadonlyCachePlugin {
+    apply(compiler: webpack.Compiler) {
+        compiler.cache.hooks.store.intercept({
+            register: (tapInfo) => {
+                return {
+                    name: ReadonlyCachePlugin.name,
+                    type: tapInfo.type,
+                    fn: function preventCacheStore() {},
+                }
+            },
+        })
+    }
+}

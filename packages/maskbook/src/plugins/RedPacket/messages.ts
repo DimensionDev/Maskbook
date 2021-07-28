@@ -1,17 +1,6 @@
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { RedPacketPluginID } from './constants'
-import { createPluginMessage } from '../utils/createPluginMessage'
-import { createPluginRPC } from '../utils/createPluginRPC'
+import { createPluginMessage, createPluginRPC } from '@masknet/plugin-infra'
 
-export interface RedPacketMessages {
-    redPacketUpdated: void
-    _: unknown
-}
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const RedPacketMessage: WebExtensionMessage<RedPacketMessages> =
-    createPluginMessage<RedPacketMessages>(RedPacketPluginID)
-export const RedPacketRPC = createPluginRPC(
-    RedPacketPluginID,
-    () => import('./Worker/services'),
-    RedPacketMessage.events._,
-)
+const RedPacketMessage = createPluginMessage(RedPacketPluginID)
+export const RedPacketRPC = createPluginRPC(RedPacketPluginID, () => import('./Worker/services'), RedPacketMessage.rpc)
