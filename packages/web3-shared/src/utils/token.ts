@@ -140,7 +140,7 @@ export function parseStringOrBytes32(
 }
 
 //#region asset sort
-const MASK_ADDRESS = getTokenConstants().MASK_ADDRESS
+const { MASK_ADDRESS } = getTokenConstants()
 
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
 export const getBalanceValue = (asset: Asset) => parseFloat(formatBalance(asset.balance, asset.token.decimals))
