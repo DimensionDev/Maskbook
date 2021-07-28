@@ -251,6 +251,7 @@ function config(opts: {
             transportMode: 'ws',
             watchOptions,
         } as DevServerConfiguration,
+        stats: mode === 'development' ? undefined : 'errors-only',
     }
     if (isProfile) {
         config.resolve!.alias!['react-dom$'] = 'react-dom/profiling'
