@@ -106,15 +106,15 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
             [...activatedPluginsWorker]
                 // generate backup
                 .map(async (plugin) => {
-                    const f = plugin.backup?.onBackup
-                    if (!f) return
+                    const backupCreator = plugin.backup?.onBackup
+                    if (!backupCreator) return
 
                     async function backupPlugin() {
-                        const object = await timeout(f!(), 3000)
-                        if (object.none) return
+                        const result = await timeout(backupCreator!(), 3000)
+                        if (result.none) return
                         // We limit the plugin contributed backups must be simple objects.
                         // We may allow plugin to store binary if we're moving to binary backup format like messagepack.
-                        plugins[plugin.ID] = object.map(JSON.stringify).map(JSON.parse).val
+                        plugins[plugin.ID] = result.map(JSON.stringify).map(JSON.parse).val
                     }
                     if (process.env.NODE_ENV === 'development') return backupPlugin()
                     return backupPlugin().catch((e) =>
