@@ -3,6 +3,14 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "import": "./dist/components.js"
+    }
+  },
   "dependencies": {
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/web3-shared": "workspace:*"

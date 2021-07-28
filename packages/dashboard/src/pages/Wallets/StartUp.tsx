@@ -1,6 +1,6 @@
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { Route, Routes, useNavigate } from 'react-router'
-import { WalletCreationChooseUI } from '../../../../maskbook/src/plugins/Wallet/SNSAdaptor/CreateImportChooseDialog'
+import { WalletCreationChooseUI } from '@masknet/plugin-wallet/components'
 import { CreateWallet } from './CreateWallet'
 import { ImportWallet } from './ImportWallet'
 

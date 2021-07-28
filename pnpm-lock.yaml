@@ -98,6 +98,7 @@ importers:
       '@masknet/icons': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-infra': workspace:*
+      '@masknet/plugin-wallet': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/storybook-shared': workspace:*
       '@masknet/theme': workspace:*
@@ -137,6 +138,7 @@ importers:
       '@masknet/icons': link:../icons
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/plugin-wallet': link:../plugins/Wallet
       '@masknet/shared': link:../shared
       '@masknet/storybook-shared': link:../storybook-shared
       '@masknet/theme': link:../theme
