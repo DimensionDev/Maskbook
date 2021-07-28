@@ -12,6 +12,7 @@ import {
     useRedPacketConstants,
     useTokenBalance,
 } from '@masknet/web3-shared'
+import { omit } from 'lodash-es'
 import { FormControl, InputLabel, makeStyles, MenuItem, MenuProps, Select, TextField } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
@@ -158,7 +159,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
             name: senderName,
             message: message || t('plugin_red_packet_best_wishes'),
             shares: shares || 0,
-            token,
+            token: token ? (omit(token, ['logoURI']) as FungibleTokenDetailed) : undefined,
             total: totalAmount.toFixed(),
         })
         onNext()
