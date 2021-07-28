@@ -28,7 +28,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm install
-      - run: npx locale-kit
+      - run: npx gulp locale-kit
   type-check:
     runs-on: ubuntu-20.04
     steps:
@@ -58,7 +58,7 @@ jobs:
             ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
             ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}
       - run: npx pnpm install
-      - run: npx build -- echo "Check tsc"
+      - run: npx gulp codegen
   eslint:
     runs-on: ubuntu-20.04
     needs: [prettier, locale-kit, type-check]

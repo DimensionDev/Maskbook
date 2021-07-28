@@ -2,11 +2,10 @@
 import { promises as fs, readdirSync } from 'fs'
 import { difference, keys, uniq, without } from 'lodash'
 import { resolve, relative } from 'path'
+import { EXTENSION_SOURCE, ROOT_PATH } from '../utils'
 import { getUsedKeys } from './ast'
-import { ROOT_PATH, PKG_PATH } from '../utils'
 
-const SOURCE_PATH = resolve(PKG_PATH, 'maskbook', 'src')
-export const LOCALE_PATH = resolve(SOURCE_PATH, '_locales')
+export const LOCALE_PATH = resolve(EXTENSION_SOURCE, '_locales')
 // only allow ISO 639-1 two-letter code for locale directory name
 export const LOCALE_NAMES = readdirSync(LOCALE_PATH).filter((name) => /^[a-z]{2}$/.test(name))
 
@@ -28,7 +27,7 @@ export async function writeMessages(name: string, messages: unknown) {
 
 export async function findAllUsedKeys() {
     const usedKeys: string[] = []
-    for await (const file of walk(SOURCE_PATH)) {
+    for await (const file of walk(EXTENSION_SOURCE)) {
         usedKeys.push(...getUsedKeys(await fs.readFile(file, 'utf-8')))
     }
     return uniq(usedKeys)
