@@ -732,7 +732,7 @@
     "plugin_pooltogether_apr": "Earn {{apr}}% APR in {{token}}",
     "plugin_pooltogether_view_pool": "View pool",
     "plugin_pooltogether_prize": "{{period}} Prize",
-    "plugin_pooltogether_share": "I just deposit {{amount}} {{cashTag}}{{symbol}} into the {{pool}}, can I win the lottery this week?\nFollow @PoolTogether_ and @realMaskbook (mask.io) to deposit in PoolTogether's pools.\n#pooltogether #mask_io",
+    "plugin_pooltogether_share": "I just deposit {{amount}} {{cashTag}}{{symbol}} into the {{pool}}, can I win the lottery this week?\nFollow @PoolTogether_ and @realMaskbook (mask.io) to deposit in PoolTogether's pools.\n#pooltogether #mask_io\n{{payload}}",
     "plugin_pooltogether_buy": "GET {{symbol}}",
     "plugin_pooltogether_enter_an_amount": "Enter an amount",
     "plugin_pooltogether_insufficient_balance": "Insufficient {{symbol}} balance",
