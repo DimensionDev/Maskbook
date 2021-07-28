@@ -1,8 +1,6 @@
 import type { FC } from 'react'
-import { Box, Card, makeStyles, TextField, Typography } from '@material-ui/core'
-import classNames from 'classnames'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../../../utils'
+import { Box, Card, makeStyles, TextField, Typography, Button } from '@material-ui/core'
+import { useI18N } from '../../locales'
 
 const useStyles = makeStyles((theme) => ({
     bottom: {
@@ -52,15 +50,15 @@ export const StepVerify: FC<StepVerifyProps> = ({
     onSubmit,
 }) => {
     const classes = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     return (
         <Box>
-            <Typography className={classes.description}>{t('plugin_wallet_setup_description_verify')}</Typography>
+            <Typography className={classes.description}>{t.wallet_setup_description_verify()}</Typography>
 
-            <Card className={classNames(classes.card, classes.cardTextfield)} elevation={0}>
+            <Card className={[classes.card, classes.cardTextfield].join(' ')} elevation={0}>
                 {puzzleWords.map((word, i) => (
                     <TextField
-                        className={classNames(classes.word, classes.wordTextfield)}
+                        className={[classes.word, classes.wordTextfield].join(' ')}
                         key={i}
                         size="small"
                         value={word}
@@ -73,7 +71,7 @@ export const StepVerify: FC<StepVerifyProps> = ({
                 ))}
             </Card>
             <Box className={classes.bottom}>
-                <ActionButton
+                <Button
                     fullWidth
                     color="primary"
                     variant="text"
@@ -81,11 +79,11 @@ export const StepVerify: FC<StepVerifyProps> = ({
                     style={{
                         marginRight: 16,
                     }}>
-                    {t('plugin_wallet_setup_back')}
-                </ActionButton>
-                <ActionButton variant="contained" fullWidth disabled={!wordsMatched} onClick={onSubmit}>
-                    {t('plugin_wallet_setup_verify')}
-                </ActionButton>
+                    {t.wallet_setup_back()}
+                </Button>
+                <Button variant="contained" fullWidth disabled={!wordsMatched} onClick={onSubmit}>
+                    {t.wallet_setup_verify()}
+                </Button>
             </Box>
         </Box>
     )

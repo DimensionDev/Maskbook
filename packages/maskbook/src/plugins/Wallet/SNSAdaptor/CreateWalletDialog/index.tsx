@@ -1,19 +1,10 @@
-import { useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import { DialogContent, makeStyles } from '@material-ui/core'
 import { useI18N } from '../../../../utils'
-import { useRemoteControlledDialog, delay, useSnackbarCallback } from '@masknet/shared'
+import { useRemoteControlledDialog, delay } from '@masknet/shared'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../constants'
-
-import { StepNameAndWords } from './StepNameAndWords'
-import { StepVerify } from './StepVerify'
-import { useMnemonicWordsPuzzle } from '@masknet/web3-shared'
-
-enum CreateWalletStep {
-    NameAndWords = 0,
-    Verify,
-}
+import { CreateWalletUI } from '@masknet/plugin-wallet/components'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -71,70 +62,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-interface CreateWalletUIProps {
-    onCreated: () => void
-}
-
-export function CreateWalletUI({ onCreated }: CreateWalletUIProps) {
-    const [name, setName] = useState('')
-    const [step, setStep] = useState(CreateWalletStep.NameAndWords)
-    const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
-
-    const backToNameAndWords = useCallback(() => {
-        setStep(CreateWalletStep.NameAndWords)
-        resetCallback()
-    }, [resetCallback])
-
-    const goVerify = useCallback(() => {
-        setStep(CreateWalletStep.Verify)
-    }, [])
-
-    const onSuccess = useCallback(() => {
-        resetCallback()
-        onCreated()
-    }, [resetCallback, onCreated])
-
-    const onSubmit = useSnackbarCallback(
-        async () => {
-            await WalletRPC.importNewWallet({
-                name,
-                path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-                mnemonic: words,
-                passphrase: '',
-            })
-            await WalletRPC.addPhrase({
-                path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
-                mnemonic: words,
-                passphrase: '',
-            })
-        },
-        [words, name],
-        onSuccess,
-    )
-
-    if (step === CreateWalletStep.NameAndWords) {
-        return (
-            <StepNameAndWords
-                name={name}
-                words={words}
-                onNameChange={setName}
-                onRefreshWords={refreshCallback}
-                onSubmit={goVerify}
-            />
-        )
-    }
-    return (
-        <StepVerify
-            wordsMatched={words.join(' ') === puzzleWords.join(' ')}
-            puzzleWords={puzzleWords}
-            indexes={indexes}
-            onUpdateAnswerWords={answerCallback}
-            onBack={backToNameAndWords}
-            onSubmit={onSubmit}
-        />
-    )
-}
-
 export function CreateWalletDialog() {
     const { t } = useI18N()
     const classes = useStyles()
@@ -150,7 +77,7 @@ export function CreateWalletDialog() {
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_setup_title_create')} maxWidth="sm">
             <DialogContent className={classes.content}>
-                <CreateWalletUI onCreated={onClose} />
+                <CreateWalletUI onCreated={onClose} createNewWallet={WalletRPC.importNewWalletDashboard} />
             </DialogContent>
         </InjectedDialog>
     )

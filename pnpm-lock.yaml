@@ -548,9 +548,11 @@ importers:
   packages/plugins/Wallet:
     specifiers:
       '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
       '@masknet/web3-shared': workspace:*
     dependencies:
       '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
       '@masknet/web3-shared': link:../../web3-shared
 
   packages/plugins/example:

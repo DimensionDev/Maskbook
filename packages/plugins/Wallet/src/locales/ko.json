@@ -1,3 +1,8 @@
 {
-    "wallet_setup_create": "만들기"
+    "wallet_setup_create": "만들기",
+    "input_length_exceed_prompt": "{{name}}의 길이가 {{length}}를 초과하면 안 됩니다.",
+    "wallet_name": "월렛 이름",
+    "wallet_setup_description_verify": "정확한지 확인하기 위해 빈 phrase를 각각 채워주세요.",
+    "wallet_setup_verify": "확인",
+    "wallet_setup_back": "뒤로"
 }

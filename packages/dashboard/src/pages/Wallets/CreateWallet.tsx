@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
-import { CreateWalletUI } from '../../../../maskbook/src/plugins/Wallet/SNSAdaptor/CreateWalletDialog'
+import { CreateWalletUI } from '@masknet/plugin-wallet/components'
+import { PluginServices } from '../../API'
 
 const Container = styled('div')`
     width: 528px;
@@ -13,6 +14,7 @@ export function CreateWallet() {
                 onCreated={() => {
                     navigate(`/wallets`)
                 }}
+                createNewWallet={PluginServices.Wallet.importNewWalletDashboard}
             />
         </Container>
     )

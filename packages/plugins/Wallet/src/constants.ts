@@ -16,3 +16,4 @@ export enum JSON_RPC_ErrorCode {
 }
 
 export const UPDATE_CHAIN_STATE_DELAY = 30 /* seconds */ * 1000 /* milliseconds */
+export const WALLET_NAME_MAX_LEN = 24

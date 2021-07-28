@@ -8,7 +8,7 @@
     "resolveJsonModule": true
   },
   "include": ["./src/**/*", "./src/**/*.json"],
-  "references": [{ "path": "../../plugin-infra" }, { "path": "../../web3-shared" }],
+  "references": [{ "path": "../../plugin-infra" }, { "path": "../../web3-shared" }, { "path": "../../shared" }],
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": { "module": "CommonJS" }

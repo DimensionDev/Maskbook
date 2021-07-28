@@ -1,3 +1,8 @@
 {
-    "wallet_setup_create": "作成"
+    "wallet_setup_create": "作成",
+    "input_length_exceed_prompt": "{{name}}の長さは{{length}}より短くしてください。",
+    "wallet_name": "ウォレット名",
+    "wallet_setup_description_verify": "空のフレーズ欄を順番に埋めてください。",
+    "wallet_setup_verify": "認証",
+    "wallet_setup_back": "戻る"
 }

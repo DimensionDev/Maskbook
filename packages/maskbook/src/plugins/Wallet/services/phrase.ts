@@ -7,6 +7,8 @@ import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { PhraseRecordIntoDB, PhraseRecordOutDB } from './helpers'
 import * as wallet from './wallet'
+import type { NewWallet } from '@masknet/plugin-wallet/components'
+import { importNewWallet } from './wallet'
 
 export async function getPhrases() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Phrase')
@@ -112,3 +114,10 @@ export async function deriveWalletFromPhrase(
     throw new Error('Derive too many times.')
 }
 //#endregion
+
+// Need a better name.
+export async function importNewWalletDashboard(wallet: NewWallet) {
+    const { mnemonic, name, passphrase, phrasePath, walletPath } = wallet
+    await importNewWallet({ name, passphrase, mnemonic, path: walletPath })
+    await addPhrase({ path: phrasePath, mnemonic, passphrase })
+}

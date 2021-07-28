@@ -12,9 +12,8 @@ import {
     Typography,
 } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
-import classNames from 'classnames'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { WALLET_OR_PERSONA_NAME_MAX_LEN, checkInputLengthExceed, useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
+import { WALLET_NAME_MAX_LEN } from '../..'
 
 const useStyles = makeStyles((theme) => ({
     top: {
@@ -82,7 +81,7 @@ export const StepNameAndWords: FC<StepStepNameAndWordsProps> = ({
 }) => {
     const classes = useStyles()
     const theme = useTheme()
-    const { t } = useI18N()
+    const t = useI18N()
     const [confirmed, setConfirmed] = useState(false)
     return (
         <Box>
@@ -90,16 +89,16 @@ export const StepNameAndWords: FC<StepStepNameAndWordsProps> = ({
                 <TextField
                     className={classes.input}
                     helperText={
-                        checkInputLengthExceed(name)
-                            ? t('input_length_exceed_prompt', {
-                                  name: t('wallet_name').toLowerCase(),
-                                  length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                        name.length > WALLET_NAME_MAX_LEN
+                            ? t.input_length_exceed_prompt({
+                                  name: t.wallet_name().toLowerCase(),
+                                  length: String(WALLET_NAME_MAX_LEN),
                               })
                             : undefined
                     }
                     required
                     autoFocus
-                    label={t('wallet_name')}
+                    label={t.wallet_name()}
                     value={name}
                     onChange={(e) => onNameChange(e.target.value)}
                     variant="outlined"
@@ -107,15 +106,15 @@ export const StepNameAndWords: FC<StepStepNameAndWordsProps> = ({
                 <Box className={classes.top}>
                     <Typography variant="body1">Mnemonic</Typography>
                     <Button startIcon={<RefreshIcon />} onClick={onRefreshWords}>
-                        {t('refresh')}
+                        {t.refresh_mnemonic()}
                     </Button>
                 </Box>
                 <Card
-                    className={classNames(classes.card, classes.cardButton)}
+                    className={[classes.card, classes.cardButton].join(' ')}
                     elevation={0}
                     variant={theme.palette.mode === 'dark' ? 'outlined' : 'elevation'}>
                     {words.map((word, i) => (
-                        <Button className={classNames(classes.word, classes.wordButton)} key={i} variant="text">
+                        <Button className={[classes.word, classes.wordButton].join('  ')} key={i} variant="text">
                             {word}
                         </Button>
                     ))}
@@ -143,9 +142,9 @@ export const StepNameAndWords: FC<StepStepNameAndWordsProps> = ({
                 }
             />
             <Box className={classes.bottom}>
-                <ActionButton variant="contained" fullWidth disabled={!name || !confirmed} onClick={onSubmit}>
-                    {t('plugin_wallet_setup_create')}
-                </ActionButton>
+                <Button variant="contained" fullWidth disabled={!name || !confirmed} onClick={onSubmit}>
+                    {t.wallet_setup_create()}
+                </Button>
             </Box>
             <Box className={classes.warning}>
                 <Alert severity="info" color="warning">

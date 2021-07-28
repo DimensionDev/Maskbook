@@ -4,5 +4,11 @@
     "wallet_setup_create": "Create",
     "wallet_setup_import": "Import",
     "import_wallet": "Import the Wallet",
-    "import_wallet_description": "Mask network supports Private Key, and Mnemonic words."
+    "import_wallet_description": "Mask network supports Private Key, and Mnemonic words.",
+    "refresh_mnemonic": "Refresh",
+    "input_length_exceed_prompt": "The length of {{name}} should be less than {{length}}.",
+    "wallet_name": "Wallet Name",
+    "wallet_setup_description_verify": "Please fill each empty phrase in order to make sure it is correct.",
+    "wallet_setup_verify": "Verify",
+    "wallet_setup_back": "Back"
 }
