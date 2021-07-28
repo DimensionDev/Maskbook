@@ -1,7 +1,7 @@
 import {
     currySameAddress,
     FungibleTokenDetailed,
-    sortToken,
+    makeSortTokenFn,
     TokenListsState,
     useAccount,
     useAssetsByTokenList,
@@ -69,7 +69,9 @@ export function FixedTokenList(props: FixedTokenListProps) {
 
     const renderAssets =
         loadingAssetsError || !account || loadingAssets
-            ? renderTokens.sort((a, b) => sortToken(a, b, true)).map((token) => ({ token: token, balance: null }))
+            ? renderTokens
+                  .sort(makeSortTokenFn({ isMaskBoost: true }))
+                  .map((token) => ({ token: token, balance: null }))
             : assets
 
     //#region UI helpers

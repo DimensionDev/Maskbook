@@ -1,7 +1,7 @@
 import type { Asset } from '../types'
 import { useChainId } from './useChainId'
 import { uniqBy } from 'lodash-es'
-import { formatEthereumAddress, sortAssert } from '../utils'
+import { formatEthereumAddress, makeSortAssertFn } from '../utils'
 import { useTokenConstants } from '../constants'
 
 /**
@@ -16,5 +16,5 @@ export function useAssetsMerged(...listOfTokens: Asset[][]) {
     return uniqBy(
         listOfTokens.flatMap((x) => x),
         (x) => `${x.chain}_${formatEthereumAddress(x.token.address)}`,
-    ).sort((a, z) => sortAssert(a, z, chainId))
+    ).sort(makeSortAssertFn(chainId))
 }

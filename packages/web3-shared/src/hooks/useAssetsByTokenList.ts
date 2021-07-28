@@ -2,7 +2,7 @@ import type { FungibleTokenDetailed } from '../types'
 import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsFromProvider } from './useAssetsFromProvider'
 import { useCallback } from 'react'
-import { isSameAddress, sortAssert } from '../utils'
+import { isSameAddress, makeSortAssertFn } from '../utils'
 import { useChainId } from './useChainId'
 
 export function useAssetsByTokenList(tokens: FungibleTokenDetailed[]) {
@@ -37,7 +37,7 @@ export function useAssetsByTokenList(tokens: FungibleTokenDetailed[]) {
             }
             return asset
         })
-        .sort((a, b) => sortAssert(a, b, chainId, true))
+        .sort(makeSortAssertFn(chainId, { isMaskBoost: true }))
 
     return {
         value: assetsDetailed,
