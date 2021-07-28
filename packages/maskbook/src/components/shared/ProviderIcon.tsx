@@ -3,7 +3,7 @@ import { MetaMaskIcon } from '../../resources/MetaMaskIcon'
 import { WalletConnectIcon } from '../../resources/WalletConnectIcon'
 import { makeStyles, Theme } from '@material-ui/core'
 import { ProviderType } from '@masknet/web3-shared'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles((theme: Theme) => ({
     icon: {

@@ -3,9 +3,8 @@ import classNames from 'classnames'
 import { Typography, Link, Checkbox, makeStyles, FormControlLabel } from '@material-ui/core'
 import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon } from '@masknet/shared'
+import { TokenIcon, useStylesExtends } from '@masknet/shared'
 import {
     resolveLinkOnExplorer,
     FungibleTokenDetailed,

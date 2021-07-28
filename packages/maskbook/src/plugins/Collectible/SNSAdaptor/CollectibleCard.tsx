@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { Card } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => {

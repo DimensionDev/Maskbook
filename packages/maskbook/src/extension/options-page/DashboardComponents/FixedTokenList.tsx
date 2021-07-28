@@ -14,7 +14,7 @@ import { makeStyles, Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
 import { useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { TokenInList } from './TokenInList'
 import { EthereumAddress } from 'wallet.ts'
 
