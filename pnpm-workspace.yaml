@@ -2,7 +2,7 @@
 # webpack config.resolve.alias
 packages:
   - 'packages/empty'
-  - 'packages/cli'
+  - 'packages/scripts'
   - 'packages/dashboard'
   - 'packages/maskbook'
   - 'packages/shared-base'

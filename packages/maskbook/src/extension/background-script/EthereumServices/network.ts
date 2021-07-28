@@ -138,11 +138,15 @@ export async function signTransaction(config: TransactionConfig, overrides?: Sen
 }
 
 export async function getPastLogs(config: PastLogsOptions, overrides?: SendOverrides) {
-    return request<Log[]>(
-        {
-            method: EthereumMethodType.ETH_GET_LOGS,
-            params: [config],
-        },
-        overrides,
+    return new Promise<Log[]>((resolve, reject) =>
+        request<Log[]>(
+            {
+                method: EthereumMethodType.ETH_GET_LOGS,
+                params: [config],
+            },
+            overrides,
+        )
+            .then((result) => resolve(result))
+            .catch(() => resolve([])),
     )
 }

@@ -60,6 +60,7 @@ function config(opts: {
     disableReactHMR?: boolean
     hmrPort?: number
     noEval?: boolean
+    readonlyCache?: boolean
 }) {
     // https://github.com/facebook/react/issues/20377 React-devtools conflicts with react-refresh
     const disableReactHMR = opts.isProfile || opts.disableReactHMR
@@ -185,6 +186,8 @@ function config(opts: {
                 'process.stderr': '/* stdin */ null',
             }),
             ...getHotModuleReloadPlugin(),
+            // https://github.com/webpack/webpack/issues/13581
+            opts.readonlyCache && new ReadonlyCachePlugin(),
         ].filter(nonNullable),
         optimization: {
             minimize: false,
@@ -276,15 +279,25 @@ function nonNullable<T>(x: T | false | undefined | null): x is T {
     return Boolean(x)
 }
 
-export default async function (cli_env: Record<string, boolean> = {}, argv: { mode?: 'production' | 'development' }) {
+type Argv = {
+    mode?: 'production' | 'development'
+    outputPath?: string
+}
+
+export default async function (cli_env: Record<string, boolean> = {}, argv: Argv) {
     const target = getCompilationInfo(cli_env)
     const mode: 'production' | 'development' = argv.mode ?? 'production'
-    const dist = mode === 'production' ? root('./build') : root('./dist')
-    if (mode === 'production') await promisify(rimraf)(root('./build'))
+    const defaultDist = mode === 'production' ? root('./build') : root('./dist')
+    const dist = argv.outputPath
+        ? path.isAbsolute(argv.outputPath)
+            ? argv.outputPath
+            : root(argv.outputPath)
+        : defaultDist
+    if (mode === 'production') await promisify(rimraf)(dist)
     const disableHMR = Boolean(process.env.NO_HMR)
     const isManifestV3 = target.runtimeEnv.manifest === 3
 
-    const shared = { mode, target, dist, isProfile: target.isProfile }
+    const shared = { mode, target, dist, isProfile: target.isProfile, readonlyCache: target.readonlyCache }
     const main = config({ ...shared, disableHMR, name: 'main' })
     const manifestV3 = config({ ...shared, disableHMR: true, name: 'background-worker', hmrPort: 35938 })
     const injectedScript = config({
@@ -421,6 +434,7 @@ function getCompilationInfo(argv: any) {
     let resolution: 'desktop' | 'mobile' = 'desktop'
     let build: 'stable' | 'beta' | 'insider' = 'stable'
     let manifest: 2 | 3 = 2
+    let readonlyCache = !!argv.readonlyCache
 
     //#region Manifest V3
     if (argv['manifest-v3']) {
@@ -469,6 +483,7 @@ function getCompilationInfo(argv: any) {
         FirefoxEngine: preset === 'firefox' || preset === 'android',
         // ! We cannot upload different version for Firefox desktop and Firefox Android, so they must emit same output.
         Firefox: preset === 'firefox',
+        readonlyCache,
     }
 }
 
@@ -525,3 +540,17 @@ promises.readdir(path.join(__dirname, '../../dist')).then(
     },
     () => {},
 )
+
+class ReadonlyCachePlugin {
+    apply(compiler: webpack.Compiler) {
+        compiler.cache.hooks.store.intercept({
+            register: (tapInfo) => {
+                return {
+                    name: ReadonlyCachePlugin.name,
+                    type: tapInfo.type,
+                    fn: function preventCacheStore() {},
+                }
+            },
+        })
+    }
+}

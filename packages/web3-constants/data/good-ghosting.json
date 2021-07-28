@@ -1,0 +1,24 @@
+{
+    "GOOD_GHOSTING_CONTRACT_ADDRESS_FILE": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "https://raw.githubusercontent.com/Good-Ghosting/mask-plugin-integration/master/games.json",
+        "Mumbai": ""
+    },
+    "GOOD_GHOSTING_INCENTIVES_CONTRACT_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "0x357D51124f59836DeD84c8a1730D72B749d8BC23",
+        "Mumbai": ""
+    }
+}

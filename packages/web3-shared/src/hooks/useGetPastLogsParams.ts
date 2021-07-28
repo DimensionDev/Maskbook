@@ -9,7 +9,7 @@ export function useGetPastLogsParams(
     maxBlockRange: number,
     params: Partial<PastLogsOptions>,
 ) {
-    if (!fromBlock) return []
+    if (!fromBlock || fromBlock > currentBlock) return []
     let count = 1
     let queryParams = []
     while (fromBlock + count * maxBlockRange < currentBlock) {

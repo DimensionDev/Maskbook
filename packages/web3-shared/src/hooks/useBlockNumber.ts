@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useWeb3StateContext } from '../context'
 
 /**
- * Get the current block number
+ * Get the current block number of current chain
  */
 export function useBlockNumber() {
     return useWeb3StateContext().blockNumber

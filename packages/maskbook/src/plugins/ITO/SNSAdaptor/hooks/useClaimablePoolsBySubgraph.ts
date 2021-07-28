@@ -1,13 +1,12 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount, useChainId } from '@masknet/web3-shared'
+import { useAccount, ChainId } from '@masknet/web3-shared'
 import type { ClaimablePool } from '../../types'
 import { PluginITO_RPC } from '../../messages'
 
-export function useClaimablePoolsBySubgraph() {
+export function useClaimablePoolsBySubgraph(chainId: ChainId) {
     const account = useAccount()
-    const chainId = useChainId()
     return useAsyncRetry<ClaimablePool[]>(async () => {
-        const results = await PluginITO_RPC.getAllPoolsAsBuyer(account)
+        const results = await PluginITO_RPC.getAllPoolsAsBuyer(account, chainId)
         return results.map((r) => r.pool)
     }, [account, chainId])
 }
