@@ -4,4 +4,9 @@ declare global {
             rounded: true
         }
     }
+    module '@material-ui/core/Paper' {
+        interface PaperPropsVariantOverrides {
+            background: true
+        }
+    }
 }

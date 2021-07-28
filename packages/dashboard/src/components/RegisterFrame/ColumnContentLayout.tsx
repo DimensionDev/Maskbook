@@ -1,7 +1,9 @@
 import { SignUpAccountIcon } from '@masknet/icons'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { getMaskColor } from '@masknet/theme'
 
-export const ColumnContentLayout = styled('div')`
+export const ColumnContentLayout = styled('div')(
+    ({ theme }) => `
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -9,7 +11,9 @@ export const ColumnContentLayout = styled('div')`
     height: 100%;
     align-items: center;
     justify-content: center;
-`
+    background:  ${getMaskColor(theme).lightBackground}
+`,
+)
 
 export const Body = styled('div')(
     ({ theme }) => `

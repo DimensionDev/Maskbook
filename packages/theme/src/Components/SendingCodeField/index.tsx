@@ -1,6 +1,6 @@
 import { Box, makeStyles } from '@material-ui/core'
 import type { ReactNode } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MaskTextField } from '../TextField'
 import { CountdownButton } from '../CountdownButton'
 
@@ -14,11 +14,12 @@ const useStyles = makeStyles({
 
 export interface SendingCodeFieldProps {
     label?: ReactNode
-    onSend(): void
     buttonWording?: string
     errorMessage?: string
-    onBlur(code: string): void
     disabled?: boolean
+    onBlur?(code: string): void
+    onChange?(code: string): void
+    onSend?(): void
 }
 export const SendingCodeField = ({
     onSend,
@@ -27,9 +28,14 @@ export const SendingCodeField = ({
     errorMessage,
     onBlur,
     disabled = false,
+    onChange,
 }: SendingCodeFieldProps) => {
     const classes = useStyles()
     const [code, setCode] = useState<string>('')
+
+    useEffect(() => {
+        onChange && onChange(code)
+    }, [code])
 
     return (
         <div>
@@ -43,7 +49,7 @@ export const SendingCodeField = ({
                             onChange={(event) => setCode(event.target.value)}
                             error={!!errorMessage}
                             helperText={errorMessage}
-                            onBlur={() => onBlur(code)}
+                            onBlur={() => onBlur && onBlur(code)}
                             disabled={disabled}
                         />
                     </div>

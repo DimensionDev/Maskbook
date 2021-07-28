@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { MaskTextField } from '@masknet/theme'
-import { Button, Container } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
 import { MaskAlert } from '../MaskAlert'
 import { ButtonGroup } from '../RegisterFrame/ButtonGroup'
@@ -50,7 +50,7 @@ export const RestoreFromPrivateKey = memo(() => {
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Container>
+                <Box>
                     <Controller
                         control={control}
                         render={({ field }) => (
@@ -66,7 +66,7 @@ export const RestoreFromPrivateKey = memo(() => {
                         )}
                         name="privateKey"
                     />
-                </Container>
+                </Box>
                 <ButtonGroup>
                     <Button variant="rounded" color="secondary">
                         {t.cancel()}
@@ -75,9 +75,9 @@ export const RestoreFromPrivateKey = memo(() => {
                         {t.next()}
                     </Button>
                 </ButtonGroup>
-                <Container sx={{ marginTop: '35px' }}>
+                <Box sx={{ marginTop: '35px' }}>
                     <MaskAlert description={t.sign_in_account_private_key_warning()} />
-                </Container>
+                </Box>
             </form>
         </>
     )

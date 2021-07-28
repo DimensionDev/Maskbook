@@ -1,5 +1,5 @@
 import { ForwardedRef, forwardRef } from 'react'
-import { formHelperTextClasses, makeStyles, TextField, TextFieldProps } from '@material-ui/core'
+import { Box, formHelperTextClasses, makeStyles, TextField, TextFieldProps, Typography } from '@material-ui/core'
 import { getMaskColor } from '../../constants'
 
 const useStyles = makeStyles((theme) => ({
@@ -8,11 +8,9 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(4),
     },
     label: {
-        display: 'flex',
-        fontFamily: 'PingFang SC',
-        color: getMaskColor(theme).textPrimary,
         fontSize: 12,
         lineHeight: '16px',
+        fontWeight: 'bolder',
     },
     field: {
         width: '100%',
@@ -40,8 +38,13 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
     const classes = useStyles()
 
     return (
-        <div className={classes.root}>
-            {label && <label className={classes.label}>{label}</label>}
+        <Box sx={{ mb: 4 }}>
+            {label && typeof label === 'string' && (
+                <Typography sx={{ mb: 1 }} variant="body2" className={classes.label}>
+                    {label}
+                </Typography>
+            )}
+            {label && typeof label !== 'string' && label}
             <TextField
                 ref={ref}
                 {...rest}
@@ -49,6 +52,6 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 variant="standard"
                 InputProps={{ disableUnderline: true, className: classes.input }}
             />
-        </div>
+        </Box>
     )
 })

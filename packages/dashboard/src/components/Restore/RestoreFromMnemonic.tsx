@@ -1,6 +1,6 @@
 import { DesktopMnemonicConfirm } from '../Mnemonic'
 import { useList } from 'react-use'
-import { Button, Container, makeStyles, Typography } from '@material-ui/core'
+import { Box, Button, makeStyles, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
 import { some } from 'lodash-es'
 import { MaskAlert } from '../MaskAlert'
@@ -46,7 +46,7 @@ export const RestoreFromMnemonic = () => {
 
     return (
         <>
-            <Container sx={{ marginBottom: '57px' }}>
+            <Box sx={{ marginBottom: '57px' }}>
                 <DesktopMnemonicConfirm
                     onChange={(word, index) => {
                         updateAt(index, word)
@@ -59,7 +59,7 @@ export const RestoreFromMnemonic = () => {
                         {error}
                     </Typography>
                 )}
-            </Container>
+            </Box>
             <ButtonGroup>
                 <Button variant="rounded" color="secondary">
                     {t.wallets_import_wallet_cancel()}
@@ -72,9 +72,9 @@ export const RestoreFromMnemonic = () => {
                     {t.wallets_import_wallet_import()}
                 </Button>
             </ButtonGroup>
-            <Container sx={{ marginTop: '35px' }}>
+            <Box sx={{ marginTop: '35px' }}>
                 <MaskAlert description={t.sign_in_account_identity_warning()} />
-            </Container>
+            </Box>
         </>
     )
 }

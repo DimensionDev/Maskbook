@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { experimentalStyled as styled, makeStyles } from '@material-ui/core'
+import { makeStyles, Stack } from '@material-ui/core'
 import { useTabs } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { RestoreFromJson } from './RestoreFromJson'
@@ -7,24 +7,17 @@ import { RestoreFromMnemonic } from './RestoreFromMnemonic'
 import { RestoreFromCloud } from './RestoreFromCloud'
 import { RestoreFromPrivateKey } from './RestoreFromPrivateKey'
 
-const Container = styled('div')`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-`
-
 const useStyles = makeStyles((theme) => ({
     tabs: {
-        width: 582,
-        justifyContent: 'center',
+        width: '100%',
+        display: 'flex',
+        marginBottom: theme.spacing(3),
     },
     panels: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         padding: 0,
-        marginTop: theme.spacing(3),
         width: '100%',
     },
 }))
@@ -53,5 +46,9 @@ export const Restore = memo(() => {
             buttonTabGroupClasses: { root: classes.tabs },
         },
     )
-    return <Container>{tabs}</Container>
+    return (
+        <Stack justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
+            {tabs}
+        </Stack>
+    )
 })

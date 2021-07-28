@@ -156,6 +156,14 @@ export const Card: Theme = (mode, colors) => ({
                         border: `1px solid ${colors.lineLight}`,
                     },
                 },
+                {
+                    props: { variant: 'background' },
+                    style: {
+                        padding: 8,
+                        border: 'none',
+                        background: mode === 'dark' ? colors.lightBackground : colors.normalBackground,
+                    },
+                },
             ],
         },
     },

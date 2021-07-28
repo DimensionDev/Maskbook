@@ -1,73 +1,75 @@
 import { memo, useState } from 'react'
-import { Button, makeStyles, Typography } from '@material-ui/core'
+import { Box, Button, Card, Stack, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
 import { MaskTextField, PhoneNumberField, PhoneNumberFieldValue, SendingCodeField } from '@masknet/theme'
 import { ButtonGroup } from '../RegisterFrame/ButtonGroup'
-
-enum Mode {
-    email,
-    phone,
-}
+import { fetchDownloadLink, sendCode } from '../../pages/Settings/api'
+import { BackupInfo } from './BackupInfo'
+import { useAsyncFn } from 'react-use'
 
 interface LabelProps {
-    onModeChange(mode: Mode): void
-    mode: Mode
+    onModeChange(mode: AccountValidationType): void
+    mode: AccountValidationType
 }
 
-const useStyles = makeStyles((theme) => ({
-    label: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
-    },
-}))
-
 const Label = ({ mode, onModeChange }: LabelProps) => {
-    const classes = useStyles()
-
     return (
-        <div className={classes.label}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="body2" sx={{ fontWeight: 'bolder' }} color="textPrimary">
-                {mode === Mode.email ? 'Email' : 'Phone Number'}
+                {mode === 'email' ? 'Email' : 'Phone Number'}
             </Typography>
-            {}
-            {mode === Mode.email ? (
-                <Button size="small" variant="text" onClick={() => onModeChange(Mode.phone)}>
+            {mode === 'email' ? (
+                <Button size="small" variant="text" onClick={() => onModeChange('phone')}>
                     Recovery with Mobile
                 </Button>
             ) : (
-                <Button size="small" variant="text" onClick={() => onModeChange(Mode.email)}>
+                <Button size="small" variant="text" onClick={() => onModeChange('email')}>
                     Recovery with Email
                 </Button>
             )}
-        </div>
+        </Stack>
     )
 }
 
 interface CodeValidationProps {
-    onNext(mode: Mode): void
-    mode: Mode
+    onNext(mode: AccountValidationType): void
+    mode: AccountValidationType
 }
 
 enum Step {
     input,
     validation,
+    fetchingBackupInfo,
+    confirm,
+}
+
+const getAccountValue = (value: string | PhoneNumberFieldValue) => {
+    return typeof value === 'string' ? (value as string) : ((value.country + value.phone) as string)
 }
 
 export const CodeValidation = memo(() => {
     const t = useDashboardI18N()
     const [step, setStep] = useState<Step>(Step.input)
-    const [mode, setMode] = useState<Mode>(Mode.email)
+    const [code, setCode] = useState('')
+    const [mode, setMode] = useState<AccountValidationType>('email')
     const [value, setValue] = useState<string | PhoneNumberFieldValue>('')
 
-    const onNext = () => {
+    const [{ loading: fetchingBackupInfo, error: fetchBackupInfoError, value: backupInfo }, fetchDownloadLinkFn] =
+        useAsyncFn(async () => {
+            return fetchDownloadLink({ code, account: getAccountValue(value), type: mode })
+        }, [value, mode, code])
+
+    const [{ error: sendCodeError }, handleSendCodeFn] = useAsyncFn(async () => {
+        return sendCode({ account: getAccountValue(value), type: mode })
+    }, [value, mode])
+
+    const onNext = async () => {
         if (step === Step.input) {
-            // send
             setStep(Step.validation)
         }
         if (step === Step.validation) {
-            // sendCode
+            // validate code in number
+            await fetchDownloadLinkFn()
         }
     }
 
@@ -80,7 +82,7 @@ export const CodeValidation = memo(() => {
     return (
         <>
             {step === Step.input &&
-                (mode === Mode.email ? (
+                (mode === 'email' ? (
                     <MaskTextField
                         label={<Label onModeChange={setMode} mode={mode} />}
                         fullWidth
@@ -107,9 +109,30 @@ export const CodeValidation = memo(() => {
                             Send to {value}
                         </Typography>
                     }
-                    onSend={onNext}
-                    onBlur={onNext}
+                    onChange={(c) => setCode(c)}
+                    // todo : message
+                    errorMessage={
+                        (sendCodeError && sendCodeError.message) ||
+                        (fetchBackupInfoError && fetchBackupInfoError.message)
+                    }
+                    onSend={handleSendCodeFn}
                 />
+            )}
+            {step === Step.confirm && backupInfo && (
+                <Box>
+                    <BackupInfo info={backupInfo} />
+                    <Box sx={{ mt: 4 }}>
+                        <MaskTextField label="Backup Password" type="password" />
+                    </Box>
+                </Box>
+            )}
+            {fetchingBackupInfo && (
+                // todo: add loading icon
+                <Card variant="background">
+                    <Stack justifyContent="center" alignItems="center" sx={{ minHeight: 140 }}>
+                        Loading
+                    </Stack>
+                </Card>
             )}
             <ButtonGroup>
                 <Button variant="rounded" color="secondary" onClick={onCancel}>
