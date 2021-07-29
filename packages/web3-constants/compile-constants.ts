@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
-import { run } from '../cli/utils'
+import { shell } from '@masknet/cli'
 
 const DATA_PATH = path.join(__dirname, 'data')
 
@@ -8,7 +8,7 @@ const chainNames = ['Mainnet', 'Ropsten', 'Rinkeby', 'Kovan', 'Gorli', 'BSC', 'B
 
 async function main() {
     // format files
-    run(DATA_PATH, 'npx', 'prettier', '--write', '*')
+    shell`${DATA_PATH}, 'npx', 'prettier', '--write', '*'`
 
     // fix constants
     for (const file of await fs.readdir(DATA_PATH)) {
