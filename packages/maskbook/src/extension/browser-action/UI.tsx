@@ -1,16 +1,21 @@
-import { useCallback, memo } from 'react'
-import { noop } from 'lodash-es'
-import { useAsyncRetry } from 'react-use'
-import { makeStyles, Theme, withStyles } from '@material-ui/core/styles'
-import { Button, Paper, Typography, Box } from '@material-ui/core'
-import { useI18N, delay, Flags } from '../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { WalletMessages } from '../../plugins/Wallet/messages'
-import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { MaskUIRoot } from '../../UIRoot'
-import { useMyIdentities } from '../../components/DataSource/useActivatedUI'
-import { hasSNSAdaptorPermission, requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
+import { memo, useCallback } from "react";
+import { noop } from "lodash-es";
+import { useAsyncRetry } from "react-use";
+import { makeStyles, Theme, withStyles } from "@material-ui/core/styles";
+import { Box, Button, Paper, Typography } from "@material-ui/core";
+import { delay, Flags, useI18N } from "../../utils";
+import { useRemoteControlledDialog } from "@masknet/shared";
+import { WalletMessages } from "../../plugins/Wallet/messages";
+import { ChooseIdentity } from "../../components/shared/ChooseIdentity";
+import { activatedSocialNetworkUI } from "../../social-network";
+import { MaskUIRoot } from "../../UIRoot";
+import { useMyIdentities } from "../../components/DataSource/useActivatedUI";
+import {
+    hasSNSAdaptorPermission,
+    requestSNSAdaptorPermission
+} from "../../social-network/utils/permissions";
+import { ThirdPartyPluginPermission } from "../background-script/ThirdPartyPlugin/types";
+import Services from "../service";
 
 const GlobalCss = withStyles({
     '@global': {
@@ -76,6 +81,32 @@ function BrowserActionUI() {
         hasSNSAdaptorPermission.bind(null, ui),
     )
 
+    const {
+        value: {
+            origin,
+            hasPermission: thirdPartyHasPermission
+        } = {
+            origin: null,
+            hasPermission: true
+        }
+    } = useAsyncRetry<{ origin: string | null, hasPermission: boolean }>(async () => {
+        return new Promise(resolve => {
+            chrome.tabs.query({ active: true, currentWindow: true}, async (tab)=>{
+                const activeTab = tab[0]
+                const url = new URL('./', activeTab.url!)
+                const request = url.origin + '/*'
+                const baseURL = url.href
+                const hasPermission = await browser.permissions.contains({origins:[request]})
+
+                // todo: query permission instead of grantPermission
+                await Services.ThirdPartyPlugin.grantPermission(baseURL,
+                    [ThirdPartyPluginPermission.SDKEnabled])
+                console.log(request, hasPermission)
+                resolve({ origin: request, hasPermission })
+            })
+        })
+    })
+
     const onEnter = useCallback((event: React.MouseEvent) => {
         if (event.shiftKey) {
             browser.tabs.create({
@@ -110,11 +141,41 @@ function BrowserActionUI() {
                 : new URL('./MB--ComboCircle--Nightly.svg', import.meta.url)
         return <img className={classes.logo} src={src.toString()} />
     })
-
+    // issue: third party query doesn't work on third party website
+    // issue: identities is empty when current page is not SNS website
     return (
         <Paper className={classes.container} elevation={0}>
             {ui.networkIdentifier === 'localhost' || identities.length === 0 ? <Trademark /> : null}
+            {!thirdPartyHasPermission && origin ? (<>
+                <Box
+                    className={classes.header}
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                    }}>
+                    <Typography className={classes.title}>{t('browser_action_notifications')}</Typography>
+                </Box>
+                <Typography className={classes.description} color="textSecondary" variant="body2">
+                    {t('browser_action_notifications_description', {
+                        sns: ui.networkIdentifier,
+                    })}
+                </Typography>
 
+                <Box
+                    sx={{
+                        display: 'flex',
+                    }}>
+                    <Button
+                        className={classes.button}
+                        variant="text"
+                        onClick={() => {
+                            if (Flags.no_web_extension_dynamic_permission_request) return
+                            browser.permissions.request({ origins: [origin] })
+                        }}>
+                        {t('browser_action_request_permission')}
+                    </Button>
+                </Box>
+            </>) : null}
             {hasPermission === false && identities.length !== 0 ? (
                 <>
                     <Box

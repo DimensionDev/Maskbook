@@ -33,3 +33,8 @@ export async function setPayload(payload: Record<string, unknown>, options: { ad
         appendText: options.additionText,
     })
 }
+
+export async function loginWithMask(...args: any[]) {
+    // todo
+    console.log(args)
+}
