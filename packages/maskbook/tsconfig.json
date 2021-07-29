@@ -16,6 +16,7 @@
     { "path": "../theme" },
     { "path": "../icons" },
     { "path": "../plugin-infra" },
+    { "path": "../plugins/Wallet" },
     { "path": "../external-plugin-previewer" }
   ],
   "ts-node": { "transpileOnly": true, "compilerOptions": { "module": "CommonJS" } }

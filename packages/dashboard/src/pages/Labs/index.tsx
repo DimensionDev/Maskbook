@@ -58,7 +58,7 @@ export default function Plugins() {
     })
 
     const account = useAccount()
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.events.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
     const openTransakDialog = useCallback(() => {
         setBuyDialog({
             open: true,
@@ -66,7 +66,7 @@ export default function Plugins() {
         })
     }, [])
 
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.events.swapDialogUpdated)
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     async function onSwitch(id: string, checked: boolean) {
         await Services.Settings.setPluginStatus(id, checked)

@@ -1,20 +1,19 @@
 import { useAsyncRetry } from 'react-use'
-import { flatten } from 'lodash-es'
+import { flatten, first } from 'lodash-es'
 import { sha3 } from 'web3-utils'
 import type { PastLogsOptions, Log } from 'web3-core'
 import {
     useWeb3,
     useAccount,
     useITOConstants,
-    useChainId,
-    useBlockNumber,
     FungibleTokenDetailed,
     EthereumTokenType,
     useGetPastLogsParams,
     ChainId,
+    getRPCConstants,
 } from '@masknet/web3-shared'
 import type { ClaimablePool } from '../../types'
-import { useMemo } from 'react'
+import { useBlockNumberOfChain } from './useBlockNumberOfChain'
 import Services from '../../../../extension/service'
 
 const SWAP_SUCCESS_TOPIC = sha3('SwapSuccess(bytes32,address,address,address,uint256,uint256,uint128,bool)')
@@ -27,28 +26,31 @@ const SWAP_SUCCESS_TYPES = [
     { type: 'bool', name: 'claimed' },
 ]
 
-export function useClaimablePoolsByWeb3() {
+export function useClaimablePoolsByWeb3(chainId: ChainId) {
     const web3 = useWeb3()
     const account = useAccount()
-    const chainId = useChainId()
-    const currentBlock = useBlockNumber()
-    const fixedCurrentBlock = useMemo(() => currentBlock, [])
-    const { ITO2_CONTRACT_CREATION_BLOCK_HEIGHT: fromBlock, ITO2_CONTRACT_ADDRESS: address } = useITOConstants()
+    const currentBlock = useBlockNumberOfChain(chainId)
+    const { ITO2_CONTRACT_CREATION_BLOCK_HEIGHT: fromBlock, ITO2_CONTRACT_ADDRESS: address } = useITOConstants(chainId)
 
     // https://github.com/binance-chain/bsc/issues/113
     // getPastLogs block range limitations on BSC is only 5000, which is absurd. Sometimes 4500 also fails.
     const maxBlockRange = chainId === ChainId.BSC ? 4500 : 10000
-    const queryParams = useGetPastLogsParams(fromBlock, fixedCurrentBlock, maxBlockRange, {
+    const queryParams = useGetPastLogsParams(fromBlock, currentBlock, maxBlockRange, {
         address,
         topics: [SWAP_SUCCESS_TOPIC],
     })
 
+    const { RPC } = getRPCConstants(chainId)
+    const provderURL = first(RPC)
+    if (!provderURL) throw new Error('Unknown chain id.')
     return useAsyncRetry(async () => {
+        if (!currentBlock) return []
         const logs = flatten<Log>(
             await Promise.all(
                 queryParams.map((queryParam: PastLogsOptions) =>
                     Services.Ethereum.getPastLogs(queryParam, {
                         chainId,
+                        rpc: provderURL,
                     }),
                 ),
             ),
@@ -67,5 +69,5 @@ export function useClaimablePoolsByWeb3() {
             }
             return acc
         }, [])
-    }, [account, address, chainId, JSON.stringify(queryParams)])
+    }, [account, address, chainId, JSON.stringify(queryParams), currentBlock, provderURL])
 }

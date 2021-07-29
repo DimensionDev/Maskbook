@@ -1,13 +1,13 @@
 import { unreachable, safeUnreachable } from '@dimensiondev/kit'
 import {
     ChainId,
-    CollectibleProvider,
     ERC20Token,
     ERC721Token,
     NativeToken,
     NetworkType,
     NonFungibleTokenDetailed,
     ProviderType,
+    CollectibleProvider,
 } from '../types'
 import { getChainDetailed } from '../utils'
 

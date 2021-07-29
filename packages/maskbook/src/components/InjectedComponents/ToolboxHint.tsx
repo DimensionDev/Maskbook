@@ -22,12 +22,11 @@ import { FileServicePluginID } from '../../plugins/FileService/constants'
 import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
 import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
 import { useControlledDialog } from '../../plugins/Collectible/SNSAdaptor/useControlledDialog'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags } from '../../utils/flags'
-import { useStylesExtends } from '../custom-ui-helper'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
 import { useI18N } from '../../utils'
@@ -181,7 +180,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     //#region Buy currency
     const transakPluginEnabled = currentPluginEnabledStatus['plugin:' + TransakPluginID].value
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
     const openBuyCurrency = useCallback(() => {
         setBuyDialog({
             open: true,
@@ -192,7 +191,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     //#region Swap
     const swapPluginEnabled = currentPluginEnabledStatus['plugin:' + TraderPluginID].value
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     //#endregion
 
     //#region Claim All ITO

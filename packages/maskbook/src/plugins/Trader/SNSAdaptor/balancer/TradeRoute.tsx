@@ -13,7 +13,7 @@ import {
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { formatPercentage } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import type { SwapResponse, TradeComputed } from '../../types'
 import { TradeRouteHop } from './TradeRouteHop'
 

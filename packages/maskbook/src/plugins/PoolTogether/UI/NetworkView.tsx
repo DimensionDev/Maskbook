@@ -1,6 +1,6 @@
 import { ChainId, getChainDetailed, getNetworkTypeFromChainId } from '@masknet/web3-shared'
 import { makeStyles, Typography } from '@material-ui/core'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { NetworkIcon } from '../../../components/shared/NetworkIcon'
 import { getNetworkColor } from '../utils'
 

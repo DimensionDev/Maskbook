@@ -1,6 +1,6 @@
 import React from 'react'
 import { t } from 'ef.js'
-import { setupPortalShadowRoot } from '@masknet/shared'
+import { setupPortalShadowRoot } from '@masknet/theme'
 setupPortalShadowRoot({ mode: 'open' }, [])
 
 Object.assign(globalThis, { React })

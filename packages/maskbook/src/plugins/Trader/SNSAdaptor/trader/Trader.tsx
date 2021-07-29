@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/v2-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
 
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import {
     ChainId,
     createERC20Token,
@@ -17,7 +16,7 @@ import {
     useChainIdValid,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { TradeForm } from './TradeForm'
 import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
 import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'

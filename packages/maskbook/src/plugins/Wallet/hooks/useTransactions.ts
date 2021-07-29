@@ -1,11 +1,11 @@
 import { useValueRef } from '@masknet/shared'
+import { getNetworkTypeFromChainId, useChainId, PortfolioProvider } from '@masknet/web3-shared'
 import { unreachable } from '@dimensiondev/kit'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { WalletRPC } from '../messages'
 import { currentPortfolioDataProviderSettings } from '../settings'
-import { PortfolioProvider, Transaction } from '../types'
-import { getNetworkTypeFromChainId, useChainId } from '@masknet/web3-shared'
+import type { Transaction } from '../types'
 
 export function useTransactions(
     address: string,

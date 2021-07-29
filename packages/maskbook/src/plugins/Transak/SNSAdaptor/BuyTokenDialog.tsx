@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { DialogContent, IconButton, makeStyles } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { PluginTransakMessages } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useTransakURL } from '../hooks/useTransakURL'
@@ -47,15 +46,12 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
     })
 
     //#region remote controlled buy token dialog
-    const { open, closeDialog } = useRemoteControlledDialog(
-        PluginTransakMessages.events.buyTokenDialogUpdated,
-        (ev) => {
-            if (ev.open) {
-                setCode(ev.code ?? 'ETH')
-                setAddress(ev.address)
-            }
-        },
-    )
+    const { open, closeDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated, (ev) => {
+        if (ev.open) {
+            setCode(ev.code ?? 'ETH')
+            setAddress(ev.address)
+        }
+    })
     //#endregion
 
     return (

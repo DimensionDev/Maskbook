@@ -13,6 +13,7 @@ import { DialogContent, Grid, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
+import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -90,15 +91,12 @@ export function DepositDialog() {
     const account = useAccount()
 
     //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(
-        PluginPoolTogetherMessages.events.DepositDialogUpdated,
-        (ev) => {
-            if (ev.open) {
-                setPool(ev.pool)
-                setToken(ev.token)
-            }
-        },
-    )
+    const { open, closeDialog } = useRemoteControlledDialog(PluginPoolTogetherMessages.DepositDialogUpdated, (ev) => {
+        if (ev.open) {
+            setPool(ev.pool)
+            setToken(ev.token)
+        }
+    })
     const onClose = useCallback(() => {
         closeDialog()
     }, [closeDialog])
@@ -163,7 +161,7 @@ export function DepositDialog() {
 
     //#region Swap
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
-        PluginTraderMessages.events.swapDialogUpdated,
+        PluginTraderMessages.swapDialogUpdated,
         useCallback(
             (ev) => {
                 if (!ev.open) {
@@ -192,6 +190,7 @@ export function DepositDialog() {
 
     //#region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+    const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             token
@@ -200,6 +199,7 @@ export function DepositDialog() {
                       cashTag: cashTag,
                       symbol: token.symbol,
                       pool: pool?.name ?? `${pool?.tokens.underlyingToken.symbol} Pool`,
+                      payload: postLink,
                   })
                 : '',
         )
