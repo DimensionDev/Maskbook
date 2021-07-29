@@ -1,7 +1,6 @@
 import { createPublicKeyAuthenticator } from '@dimensiondev/mask-webauthn/backend'
 import type { PersonaWithPrivateKey } from '../../database'
 import { queryPersonasWithPrivateKey } from '../../database/Persona/Persona.db'
-import { concatArrayBuffer } from '@dimensiondev/kit/src/buffer'
 import { CryptoWorker } from '../../modules/workers'
 import type { EC_Private_JsonWebKey, EC_Public_JsonWebKey, JsonWebKeyPair } from '@masknet/shared-base'
 import { cryptoKeyToPublic, encodeText, isSameArrayBuffer, jwkToArrayBuffer } from '../../utils'
@@ -13,6 +12,7 @@ import {
     searchCredentialOnGlobalRegistry,
     searchKeyOnGlobalRegistry,
 } from '../../network/gun/version.2/webAuthn'
+import { concatArrayBuffer } from '@dimensiondev/kit'
 
 // implementation details
 // !!!!!!!! Please let @yisiliu review this algorithm before implementing it !!!!!!!!

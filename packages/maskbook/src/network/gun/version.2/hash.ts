@@ -7,7 +7,7 @@ import Gun from 'gun'
 import 'gun/sea'
 import { memoizePromise } from '../../../utils/memoize'
 import { jwkToArrayBuffer } from '../../../utils/jwk'
-import { concatArrayBuffer, encodeArrayBuffer, encodeText } from '@dimensiondev/kit/src/buffer'
+import { concatArrayBuffer, encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 
 /**
  * @param version current payload version
