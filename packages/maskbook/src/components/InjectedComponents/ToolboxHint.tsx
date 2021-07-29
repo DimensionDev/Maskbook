@@ -34,6 +34,7 @@ import { useI18N } from '../../utils'
 import { currentPluginEnabledStatus } from '../../settings/settings'
 import { base as ITO_Plugin } from '../../plugins/ITO/base'
 import { base as RedPacket_Plugin } from '../../plugins/RedPacket/base'
+import Services from '../../extension/service'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -257,6 +258,26 @@ export function ToolboxHint(props: ToolboxHintProps) {
     )
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
+
+    const pluginAutoOpenCheck = async () => {
+        const pluginId = await Services.Storage.getStorage('openPlugin')
+        if (pluginId) {
+            switch (pluginId) {
+                case FileServicePluginID:
+                    openFileService()
+                    break
+                case ITO_PluginID:
+                    openITO()
+                    break
+                case RedPacketPluginID:
+                    openRedPacket()
+                    break
+            }
+            Services.Storage.setStorage('openPlugin', null)
+        }
+    }
+
+    setTimeout(pluginAutoOpenCheck, 2000)
 
     return (
         <>

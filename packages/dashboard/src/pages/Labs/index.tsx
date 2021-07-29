@@ -73,14 +73,14 @@ export default function Plugins() {
         setPluginStatus({ ...pluginStatus, [id]: checked })
     }
 
-    function onTwitter(id: string) {
-        // TODO: open twitter
-        console.log('twitter', id)
+    async function onTwitter(id: string) {
+        await Services.Storage.setStorage('openPlugin', id)
+        window.open('https://www.twitter.com/home', '_blank')
     }
 
-    function onFacebook(id: string) {
-        // TODO: open facebook
-        console.log('facebook', id)
+    async function onFacebook(id: string) {
+        await Services.Storage.setStorage('openPlugin', id)
+        window.open('https://www.facebook.com', '_blank')
     }
 
     function onExplore(id: string) {
@@ -102,7 +102,6 @@ export default function Plugins() {
     useEffect(() => {
         Object.values(PLUGIN_IDS).forEach(async (id) => {
             const enabled = await Services.Settings.isPluginEnabled(id)
-            console.log(id, enabled)
             setPluginStatus((status) => ({ ...status, [id]: enabled }))
         })
     }, [])

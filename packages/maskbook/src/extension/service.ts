@@ -34,6 +34,7 @@ export const Services = {
     SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
     Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
     ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
+    Storage: add(() => import('./background-script/StorageService'), 'Storage'),
 }
 export default Services
 export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', true)
