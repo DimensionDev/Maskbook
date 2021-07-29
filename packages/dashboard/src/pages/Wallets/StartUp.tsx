@@ -1,6 +1,6 @@
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { Route, Routes, useNavigate } from 'react-router'
-import { WalletCreationChooseUI } from '@masknet/plugin-wallet/components'
+import { WalletWelcome_ImportOrCreate } from '@masknet/plugin-wallet/components'
 import { CreateWallet } from './CreateWallet'
 import { ImportWallet } from './ImportWallet'
 
@@ -30,7 +30,7 @@ export function StartUp() {
             <Routes>
                 <Route path={CreateWalletRoutes.Choose}>
                     <ChooseOptions>
-                        <WalletCreationChooseUI
+                        <WalletWelcome_ImportOrCreate
                             onCreateClick={() => {
                                 navigate(`/wallets${CreateWalletRoutes.Create}`)
                             }}

@@ -3,7 +3,7 @@ import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../messages'
-import { WalletCreationChooseUI } from '@masknet/plugin-wallet/components'
+import { WalletWelcome_ImportOrCreate } from '@masknet/plugin-wallet/components'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -38,7 +38,7 @@ export function CreateImportChooseDialog() {
     return (
         <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_wallet_create_import_choose')} maxWidth="sm">
             <DialogContent className={classes.content}>
-                <WalletCreationChooseUI onCreateClick={toCreateWallet} onImportClick={toImportWallet} />
+                <WalletWelcome_ImportOrCreate onCreateClick={toCreateWallet} onImportClick={toImportWallet} />
             </DialogContent>
         </InjectedDialog>
     )

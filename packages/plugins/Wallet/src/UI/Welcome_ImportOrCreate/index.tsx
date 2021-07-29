@@ -37,12 +37,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface WalletCreationChooseUIProps {
+export interface WalletWelcome_ImportOrCreateProps {
     onCreateClick: () => void
     onImportClick: () => void
 }
 
-export function WalletCreationChooseUI(props: WalletCreationChooseUIProps) {
+export function WalletWelcome_ImportOrCreate(props: WalletWelcome_ImportOrCreateProps) {
     const { onCreateClick, onImportClick } = props
     const t = useI18N()
     const classes = useStyles()

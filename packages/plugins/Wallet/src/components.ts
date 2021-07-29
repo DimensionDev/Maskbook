@@ -1,2 +1,2 @@
-export * from './UI/CreateImportChooseDialog'
+export * from './UI/Welcome_ImportOrCreate'
 export * from './UI/CreateWallet'
