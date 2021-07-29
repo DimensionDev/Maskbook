@@ -58,6 +58,18 @@ export interface VerifyCodeBody extends SendCodeBody {
     code: string
 }
 
+export const fetchBackupValue = (downloadLink: string) => {
+    return fetch(downloadLink, {
+        method: 'GET',
+    }).then(async (res) => {
+        const text = await res.text()
+        if (!res.ok) {
+            return Promise.reject(text)
+        }
+        return text
+    })
+}
+
 export const fetchDownloadLink = (body: VerifyCodeBody) => {
     return fetch(DOWNLOAD_LINK_URL, {
         method: 'POST',
@@ -68,6 +80,9 @@ export const fetchDownloadLink = (body: VerifyCodeBody) => {
         }),
     }).then<BackupFileInfo>(async (res) => {
         const json = await res.json()
+        if (!res.ok) {
+            return Promise.reject(json)
+        }
         return {
             downloadURL: json.download_url,
             size: json.size,

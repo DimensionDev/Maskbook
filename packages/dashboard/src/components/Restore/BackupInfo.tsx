@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import type { BackupFileInfo } from '../../pages/Settings/type'
 import { Box, Card, Grid, Stack, Typography } from '@material-ui/core'
 
 interface BackupInfoProps {

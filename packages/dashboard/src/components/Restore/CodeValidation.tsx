@@ -31,26 +31,25 @@ const Label = ({ mode, onModeChange }: LabelProps) => {
     )
 }
 
-interface CodeValidationProps {
-    onNext(mode: AccountValidationType): void
-    mode: AccountValidationType
-}
-
 enum Step {
     input,
     validation,
-    fetchingBackupInfo,
     confirm,
+}
+
+interface CodeValidationProps {
+    onRestore(downloadLink: string, password: string): void
 }
 
 const getAccountValue = (value: string | PhoneNumberFieldValue) => {
     return typeof value === 'string' ? (value as string) : ((value.country + value.phone) as string)
 }
 
-export const CodeValidation = memo(() => {
+export const CodeValidation = memo(({ onRestore }: CodeValidationProps) => {
     const t = useDashboardI18N()
     const [step, setStep] = useState<Step>(Step.input)
     const [code, setCode] = useState('')
+    const [password, setPassword] = useState('')
     const [mode, setMode] = useState<AccountValidationType>('email')
     const [value, setValue] = useState<string | PhoneNumberFieldValue>('')
 
@@ -71,13 +70,28 @@ export const CodeValidation = memo(() => {
             // validate code in number
             await fetchDownloadLinkFn()
         }
+        if (step === Step.confirm) {
+            if (!backupInfo) return
+            onRestore(backupInfo?.downloadURL, password)
+        }
     }
 
     const onCancel = () => {
         setStep(Step.input)
     }
 
-    const validCheck = () => {}
+    const isDisableNext = () => {
+        switch (step) {
+            case Step.confirm:
+                return !password
+            case Step.input:
+                return !value
+            case Step.validation:
+                return !!fetchBackupInfoError || !!sendCodeError || !code
+            default:
+                return false
+        }
+    }
 
     return (
         <>
@@ -88,7 +102,6 @@ export const CodeValidation = memo(() => {
                         fullWidth
                         value={value}
                         onChange={(event) => setValue(event.target.value)}
-                        onBlur={validCheck}
                         type="email"
                         variant="outlined"
                     />
@@ -99,7 +112,6 @@ export const CodeValidation = memo(() => {
                             country: '+1',
                             phone: '',
                         }}
-                        onBlur={validCheck}
                     />
                 ))}
             {step === Step.validation && (
@@ -138,7 +150,7 @@ export const CodeValidation = memo(() => {
                 <Button variant="rounded" color="secondary" onClick={onCancel}>
                     {t.cancel()}
                 </Button>
-                <Button variant="rounded" color="primary" onClick={onNext} disabled={!value}>
+                <Button variant="rounded" color="primary" onClick={onNext} disabled={isDisableNext()}>
                     {t.next()}
                 </Button>
             </ButtonGroup>

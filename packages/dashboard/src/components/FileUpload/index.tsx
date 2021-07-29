@@ -1,5 +1,5 @@
 import { MaskColorVar } from '@masknet/theme'
-import { makeStyles, Typography } from '@material-ui/core'
+import { Card, makeStyles, Typography } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import { File as FileIcon } from '@masknet/icons'
 import { blobToText } from '@dimensiondev/kit'
@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         position: 'relative',
         height: '100%',
-        background: MaskColorVar.secondaryBackground,
+        // background: MaskColorVar.secondaryBackground,
         borderRadius: 8,
     },
     container: {
@@ -59,12 +59,12 @@ export default function FileUpload({ width, height, readAsText, onChange }: File
         }
     }, [file, readAsText, onChange])
     return (
-        <div className={classes.root} style={{ width, height }}>
+        <Card variant="background" className={classes.root} style={{ width, height }}>
             <div className={classes.container}>
                 <FileIcon />
                 <Typography className={classes.text}>Please click or drag the file to here</Typography>
             </div>
             <input type="file" className={classes.file} onChange={handleChange} />
-        </div>
+        </Card>
     )
 }

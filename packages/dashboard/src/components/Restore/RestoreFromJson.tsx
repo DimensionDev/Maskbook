@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAsync } from 'react-use'
-import { Box, Button, Container, makeStyles } from '@material-ui/core'
+import { Box, Button, Card, makeStyles } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { Services } from '../../API'
@@ -61,12 +61,12 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
 
     return (
         <>
-            <Box sx={{ marginBottom: '57px' }}>
+            <Box sx={{ width: '100%' }}>
                 {restoreStatus === RestoreStatus.Verifying && <div className={classes.root}>Verifying</div>}
                 {restoreStatus === RestoreStatus.WaitingInput && (
-                    <Container sx={{ marginBottom: '57px' }}>
+                    <Card variant="background" sx={{ marginBottom: '57px' }}>
                         <FileUpload onChange={(_, content) => content && setBackupValue(content)} readAsText />
-                    </Container>
+                    </Card>
                 )}
                 {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
             </Box>
@@ -82,7 +82,7 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
                     {t.wallets_import_wallet_import()}
                 </Button>
             </ButtonGroup>
-            <Box sx={{ marginTop: '35px' }}>
+            <Box sx={{ marginTop: '35px', width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_local_backup_warning()} />
             </Box>
         </>
