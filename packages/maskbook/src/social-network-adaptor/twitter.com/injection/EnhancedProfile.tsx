@@ -2,7 +2,9 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 import { useCallback, useState } from 'react'
+import { useWallet } from '@masknet/web3-shared'
 import { createReactRootShadowed, startWatch } from '../../../utils'
+import { CollectibleList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import {
     searchProfileActiveTabLabelSelector,
     searchProfileActiveTabSelector,
@@ -126,5 +128,9 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
 export interface EnhancedProfilePageProps {}
 
 export function EnhancedProfileaPage(props: EnhancedProfilePageProps) {
-    return <div>NFTs Image List</div>
+    const selectedWallet = useWallet()
+    if (!selectedWallet) {
+        return null
+    }
+    return <CollectibleList wallet={selectedWallet} readonly />
 }

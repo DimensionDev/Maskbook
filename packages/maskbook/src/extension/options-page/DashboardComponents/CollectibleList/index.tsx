@@ -46,14 +46,16 @@ const useStyles = makeStyles((theme) => ({
 
 export interface CollectibleListProps {
     wallet: Wallet
+    owner?: string
+    readonly?: boolean
 }
 
-export function CollectibleList(props: CollectibleListProps) {
-    const { wallet } = props
+export function CollectibleList({ wallet, owner, readonly }: CollectibleListProps) {
     const { t } = useI18N()
 
     const classes = useStyles()
-    const account = useAccount()
+    const defaultAcount = useAccount()
+    const account = owner ?? defaultAcount
 
     const [page, setPage] = useState(0)
     const provider = useValueRef(currentCollectibleDataProviderSettings)
@@ -90,17 +92,19 @@ export function CollectibleList(props: CollectibleListProps) {
             </Box>
         )
 
-    const dataSource = collectibles.filter((x) => {
-        const key = `${formatEthereumAddress(x.address)}_${x.tokenId}`
-        switch (x.type) {
-            case EthereumTokenType.ERC721:
-                return wallet.erc721_token_blacklist ? !wallet.erc721_token_blacklist.has(key) : true
-            case EthereumTokenType.ERC1155:
-                return wallet.erc1155_token_blacklist ? !wallet.erc1155_token_blacklist.has(key) : true
-            default:
-                return false
-        }
-    })
+    const dataSource = owner
+        ? collectibles
+        : collectibles.filter((x) => {
+              const key = `${formatEthereumAddress(x.address)}_${x.tokenId}`
+              switch (x.type) {
+                  case EthereumTokenType.ERC721:
+                      return wallet.erc721_token_blacklist ? !wallet.erc721_token_blacklist.has(key) : true
+                  case EthereumTokenType.ERC1155:
+                      return wallet.erc1155_token_blacklist ? !wallet.erc1155_token_blacklist.has(key) : true
+                  default:
+                      return false
+              }
+          })
 
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
@@ -128,7 +132,7 @@ export function CollectibleList(props: CollectibleListProps) {
                     <Box className={classes.root}>
                         {dataSource.map((x) => (
                             <div className={classes.card} key={x.tokenId}>
-                                <CollectibleCard token={x} provider={provider} wallet={wallet} />
+                                <CollectibleCard token={x} provider={provider} wallet={wallet} readonly={readonly} />
                                 <div className={classes.description}>
                                     <Typography className={classes.name} color="textSecondary" variant="body2">
                                         {x.asset?.name ?? x.name}
