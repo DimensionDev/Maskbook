@@ -12,8 +12,7 @@
     "build": "build",
     "build-e2e": "env target=E2E build --preset E2E",
     "build-ios": "build --preset iOS",
-    "lint": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache --fix",
-    "lint:ci": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache",
+    "lint": "eslint -c packages/.eslint.json packages --ext .ts,.tsx,.js --cache --fix",
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
@@ -23,7 +22,7 @@
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
-    "packages/**/*.{ts,tsx,js,jsx}": "eslint -c packages/.eslintrc.json --fix",
+    "packages/**/*.{ts,tsx,js,jsx}": "cd packages && eslint --cache --fix",
     "packages/maskbook/**/*": "gulp locale-kit --sync-keys --remove-unused-keys"
   },
   "dependencies": {

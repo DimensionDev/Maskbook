@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
     "noEmit": true
-  },
-  "include": ["./packages/"]
+  }
 }

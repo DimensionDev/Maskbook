@@ -1,6 +1,8 @@
 /* eslint-disable no-restricted-imports */
 import { difference, isEmpty, isNil, keys, omit, pick, toPairs, without } from 'lodash'
+import { getArgv, task } from '../utils'
 import {
+    findAllUnsyncedLocales,
     findAllUnusedKeys,
     findAllUsedKeys,
     getLocaleRelativePath,
@@ -8,10 +10,7 @@ import {
     LOCALE_NAMES,
     readMessages,
     writeMessages,
-    findAllUnsyncedLocales,
 } from './utils'
-import yargs, { Argv } from 'yargs'
-import { getArgv, task } from '../utils'
 
 async function removeAllUnusedKeys(keys: string[], locales = LOCALE_NAMES) {
     for (const name of locales) {
