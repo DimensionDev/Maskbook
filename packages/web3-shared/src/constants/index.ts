@@ -58,3 +58,4 @@ export const useGoodGhostingConstants = hookTransform(getGoodGhostingConstants)
 
 // for estimate gas
 export const FAKE_SIGN_PASSWORD = '0x75466cc969717b172b14253aaeebdc958f2b5037a852c1337650ed4978242dd9'
+export const FAKE_PUBLIC_KEY = '0xb8CE9ab6943e0eCED004cDe8e3bBed6568B2Fa01'

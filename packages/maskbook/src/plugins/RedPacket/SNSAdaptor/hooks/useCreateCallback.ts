@@ -1,4 +1,4 @@
-import type { HappyRedPacketV2 } from '@masknet/web3-contracts/types/HappyRedPacketV2'
+import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
@@ -13,7 +13,7 @@ import {
     useNonce,
     useTokenConstants,
     useTransactionState,
-    FAKE_SIGN_PASSWORD,
+    FAKE_PUBLIC_KEY,
 } from '@masknet/web3-shared'
 import { omit } from 'lodash-es'
 import { useAsync } from 'react-use'
@@ -21,12 +21,11 @@ import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
-import Services from '../../../../extension/service'
-import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useRedPacketContract } from './useRedPacketContract'
 
 export interface RedPacketSettings {
-    password: string
+    publicKey: string
+    privateKey: string
     shares: number
     duration: number
     isRandom: boolean
@@ -37,7 +36,7 @@ export interface RedPacketSettings {
 }
 
 type paramsObjType = {
-    password: string
+    publicKey: string
     shares: number
     isRandom: boolean
     duration: number
@@ -94,7 +93,7 @@ export function useCreateParams(redPacketSettings: Omit<RedPacketSettings, 'pass
         if (!tokenAddress) return null
 
         const paramsObj: paramsObjType = {
-            password: FAKE_SIGN_PASSWORD,
+            publicKey: FAKE_PUBLIC_KEY,
             shares,
             isRandom,
             duration,
@@ -110,13 +109,13 @@ export function useCreateParams(redPacketSettings: Omit<RedPacketSettings, 'pass
         if (!checkParams(paramsObj)) return null
 
         const params = Object.values(omit(paramsObj, ['token'])) as Parameters<
-            HappyRedPacketV2['methods']['create_red_packet']
+            HappyRedPacketV4['methods']['create_red_packet']
         >
 
         let gasError = null as Error | null
         const value = new BigNumber(paramsObj.token?.type === EthereumTokenType.Native ? total : '0').toFixed()
 
-        const gas = (await redPacketContract.methods
+        const gas = (await (redPacketContract as HappyRedPacketV4).methods
             .create_red_packet(...params)
             .estimateGas({
                 from: account,
@@ -125,16 +124,16 @@ export function useCreateParams(redPacketSettings: Omit<RedPacketSettings, 'pass
             .catch((err: Error) => {
                 gasError = err
             })) as number | undefined
+
         return { gas, params, paramsObj, gasError }
     }, [redPacketSettings, account, redPacketContract]).value
 }
 
-export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'password'>, version: number) {
+export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number) {
     const nonce = useNonce()
     const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
-    const { t } = useI18N()
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
@@ -161,36 +160,12 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
         }
 
         if (!checkParams(paramsObj, setCreateState)) return
-
-        // error: unable to sign password
-        let signedPassword = ''
-        try {
-            signedPassword = await Services.Ethereum.personalSign(Web3Utils.sha3(paramsObj.message) ?? '', account)
-        } catch (error) {
-            setCreateState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
-            return
-        }
-        if (!signedPassword) {
-            setCreateState({
-                type: TransactionStateType.FAILED,
-                error: new Error(t('plugin_wallet_fail_to_sign')),
-            })
-            return
-        }
-
-        // it's trick, the password starts with '0x' would cause wrong password tx fail, so trim it.
-        signedPassword = signedPassword.slice(2)
-        setCreateSettings({ ...redPacketSettings, password: signedPassword })
+        setCreateSettings(redPacketSettings)
 
         // pre-step: start waiting for provider to confirm tx
         setCreateState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
-
-        params[0] = Web3Utils.sha3(signedPassword)!
 
         // estimate gas and compose transaction
         const value = new BigNumber(token.type === EthereumTokenType.Native ? paramsObj.total : '0').toFixed()
@@ -212,7 +187,6 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
                 })
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                setCreateSettings({ ...redPacketSettings, password: signedPassword })
                 setCreateState({
                     type: TransactionStateType.CONFIRMED,
                     no: 0,
@@ -221,7 +195,6 @@ export function useCreateCallback(redPacketSettings: Omit<RedPacketSettings, 'pa
             })
 
             promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                setCreateSettings({ ...redPacketSettings, password: signedPassword })
                 setCreateState({
                     type: TransactionStateType.CONFIRMED,
                     no,

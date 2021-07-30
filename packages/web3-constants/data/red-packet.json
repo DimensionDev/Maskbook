@@ -32,6 +32,17 @@
         "Matic": "0x913975af2bb8a6be4100d7dc5e9765b77f6a5d6c",
         "Mumbai": "0x0061E06c9f640a03C4981f43762d2AE5e03873c5"
     },
+    "HAPPY_RED_PACKET_ADDRESS_V4": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "0x27a9B0cF923942e0bb601f82155a08Af16D3204f",
+        "Mumbai": ""
+    },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mainnet",
         "Ropsten": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-ropsten",
