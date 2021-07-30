@@ -15,6 +15,24 @@ const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
+//#region "Enhanced Profile"
+export const searchProfileSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[aria-label="Profile timelines"][role="navigation"]')
+export const searchProfileTabListSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[role="tablist"][data-testid="ScrollSnap-List"] > :last-child')
+export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] [role="region"] [aria-label]')
+export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
+export const searchProfileActiveTabSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[role="tablist"] [role="tab"][aria-selected="true"]')
+export const searchProfileActiveTabStatusLineSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[role="tablist"] [role="tab"][aria-selected="true"] > div > div')
+export const searchProfileActiveTabLabelSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[role="tablist"] [role="tab"][aria-selected="true"] > div')
+
+//#endregion
+
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
 
 export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
