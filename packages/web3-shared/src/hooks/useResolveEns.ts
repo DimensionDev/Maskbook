@@ -1,15 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
 import { useWeb3 } from './useWeb3'
 
 export function useResolveEns(name: string) {
     const web3 = useWeb3()
-    const [address, setAddress] = useState('')
 
-    useEffect(() => {
-        web3.eth.ens.getAddress(name, (_: Error, value: string) => {
-            setAddress(value)
-        })
+    return useAsyncRetry(async () => {
+        return await web3.eth.ens.getAddress(name)
     }, [name])
-
-    return address
 }
