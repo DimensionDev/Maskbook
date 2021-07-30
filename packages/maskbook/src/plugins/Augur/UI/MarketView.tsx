@@ -1,10 +1,22 @@
 import { RefreshIcon } from '@masknet/icons'
-import { Card, CardActions, CardContent, Link, makeStyles, Paper, Tab, Tabs, Typography } from '@material-ui/core'
+import {
+    Card,
+    CardHeader,
+    CardActions,
+    CardContent,
+    Link,
+    makeStyles,
+    Paper,
+    Tab,
+    Tabs,
+    Typography,
+} from '@material-ui/core'
 import React, { useState } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { Market } from '../types'
 
+import { MarketViewDeck } from './MarketViewDeck'
 import { MarketDescription } from './MarketDescription'
 import { MarketOdds } from './MarketOdds'
 import { MarketBuySell } from './MarketBuySell'
@@ -131,6 +143,7 @@ export function MarketView(props: MarketViewProps) {
 
     return (
         <Card className={classes.root} elevation={0}>
+            <CardHeader subheader={<MarketViewDeck />} />
             <CardContent className={classes.content}>
                 <Tabs
                     className={classes.tabs}

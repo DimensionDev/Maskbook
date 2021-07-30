@@ -1,4 +1,6 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const MarketDescription = () => {
     const classes = useStyles()
+    const { t } = useI18N()
 
     return (
         <div className={classes.root}>
@@ -37,7 +40,7 @@ export const MarketDescription = () => {
                 <Grid item container direction="column" justifyContent="center">
                     <Grid item>
                         <Typography variant="body2" color="textSecondary" align="center">
-                            24hr Volume
+                            <Trans i18nKey="plugin_augur_24hr_volume" />
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -49,7 +52,7 @@ export const MarketDescription = () => {
                 <Grid item container direction="column" justifyContent="center">
                     <Grid item>
                         <Typography variant="body2" color="textSecondary" align="center">
-                            Total Volume
+                            <Trans i18nKey="plugin_augur_total_volume" />
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -61,7 +64,7 @@ export const MarketDescription = () => {
                 <Grid item container direction="column" justifyContent="center">
                     <Grid item>
                         <Typography variant="body2" color="textSecondary" align="center">
-                            Liquidity
+                            <Trans i18nKey="plugin_augur_liquidity" />
                         </Typography>
                     </Grid>
                     <Grid item>
