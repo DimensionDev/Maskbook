@@ -1,11 +1,13 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles } from '@material-ui/core'
+import { MaskColorVar } from '@masknet/theme'
+import { useWallet } from '@masknet/web3-shared'
+import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
 import { useCallback, useState } from 'react'
-import { useWallet } from '@masknet/web3-shared'
-import { createReactRootShadowed, startWatch } from '../../../utils'
 import { CollectibleList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
+import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
+    searchForegroundColorSelector,
     searchProfileActiveTabLabelSelector,
     searchProfileActiveTabSelector,
     searchProfileActiveTabStatusLineSelector,
@@ -13,7 +15,9 @@ import {
     searchProfileTabListLastChildSelector,
     searchProfileTabListSelector,
     searchProfileTabPageSelector,
+    searchProfileTabSelector,
 } from '../utils/selector'
+import Color from 'color'
 
 function injectEnhancedProfileTab(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
@@ -38,10 +42,13 @@ export function injectEnhancedProfile(signal: AbortSignal) {
     injectEnhancedProfilePageState(signal)
 }
 
-const useEnhancedProfileStyles = makeStyles((theme) => ({
+const useEnhancedProfileStyles = makeStyles<
+    Theme,
+    { color: string; font: string; fontSize: string; padding: string; activeColor: string }
+>((theme) => ({
     tab: {
         '&:hover': {
-            backgroundColor: 'rgba(29, 161, 242, 0.1)',
+            backgroundColor: (props) => new Color(props.activeColor).alpha(0.1).toString(),
             cursor: 'pointer',
         },
     },
@@ -51,12 +58,17 @@ const useEnhancedProfileStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
-        padding: theme.spacing(2),
+        padding: (props) => props.padding,
         fontWeight: 700,
-        color: 'rgb(83, 100, 113)',
+        color: (props) => props.color,
+        font: (props) => props.font,
+        fontSize: (props) => props.fontSize,
+        '&:hover': {
+            color: (props) => props.activeColor,
+        },
     },
     hot: {
-        color: 'rgb(29, 161, 242)',
+        color: (props) => props.activeColor,
     },
     active: {
         dispaly: 'inline-flex',
@@ -66,13 +78,23 @@ const useEnhancedProfileStyles = makeStyles((theme) => ({
         minWidth: 56,
         alignSelf: 'center',
         height: 4,
-        backgroundColor: 'rgb(29, 161, 242)',
+        backgroundColor: (props) => props.activeColor,
     },
 }))
 export interface EnhancedProfileTabProps {}
 
 export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
-    const classes = useEnhancedProfileStyles()
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+    const style = window.getComputedStyle(eleTab)
+    const eleForegroundColorStyle = searchForegroundColorSelector().evaluate()
+    const foregroundColorStyle = window.getComputedStyle(eleForegroundColorStyle as Element)
+    const classes = useEnhancedProfileStyles({
+        color: style.color,
+        font: style.font,
+        fontSize: style.fontSize,
+        padding: style.paddingBottom,
+        activeColor: foregroundColorStyle.borderColor,
+    })
     const [active, setActive] = useState(false)
 
     const onOpen = () => setActive(false)
@@ -82,6 +104,9 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
     })
 
     const onClick = useCallback(() => {
+        const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+        const style = window.getComputedStyle(eleTab)
+
         const eleEmpty = searchProfileEmptySelector().evaluate()
         if (eleEmpty) eleEmpty.style.display = 'none'
 
@@ -92,10 +117,11 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
         if (line) line.style.display = 'none'
 
         const label = searchProfileActiveTabLabelSelector().evaluate()
-        if (label) label.style.color = 'rgb(83, 100, 113)'
+        if (label) label.style.color = style.color
 
         const tab = searchProfileActiveTabSelector().evaluate()
         if (tab) {
+            tab.setAttribute('aria-selected', 'false')
             tab.addEventListener(
                 'click',
                 () => {
@@ -105,7 +131,7 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
                     if (label) label.style.color = ''
 
                     setActive(false)
-                    console.log('tab')
+                    tab.setAttribute('aria-selected', 'true')
                 },
                 { once: true },
             )

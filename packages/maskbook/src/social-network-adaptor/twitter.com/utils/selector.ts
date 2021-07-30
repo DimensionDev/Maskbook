@@ -26,12 +26,16 @@ export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
 export const searchProfileActiveTabSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="tablist"] [role="tab"][aria-selected="true"]')
+export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[role="tablist"] [role="tab"][aria-selected="false"]')
 export const searchProfileActiveTabStatusLineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="tablist"] [role="tab"][aria-selected="true"] > div > div')
 export const searchProfileActiveTabLabelSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="tablist"] [role="tab"][aria-selected="true"] > div')
 export const searchProfileTabListSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="tablist"][data-testid="ScrollSnap-List"]')
+export const searchForegroundColorSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] [href="/i/flow/setup_profile"][role="link"]')
 //#endregion
 
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
