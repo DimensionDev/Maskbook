@@ -1,5 +1,5 @@
 import { Box, makeStyles, Theme, ButtonProps, BoxProps } from '@material-ui/core'
-import { useStylesExtends } from '../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { EthereumAccountButton } from './EthereumAccountButton'
 
 const useStyles = makeStyles((theme: Theme) => ({

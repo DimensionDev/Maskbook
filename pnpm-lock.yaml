@@ -318,7 +318,6 @@ importers:
       react-highlight-words: ^0.17.0
       react-middle-ellipsis: ^1.2.1
       react-refresh: ^0.10.0
-      react-refresh-typescript: ^2.0.2
       react-router: ^5.2.0
       react-router-dom: ^5.2.0
       react-test-renderer: ^17.0.1
@@ -356,7 +355,7 @@ importers:
       webpack-dev-server: ^3.11.0
       webpack-extension-manifest-plugin: ^0.7.0
       webpack-notifier: ^1.12.0
-      webpack-target-webextension: ^0.4.3
+      webpack-target-webextension: ^0.4.4
       z-schema: ^5.0.1
     dependencies:
       '@balancer-labs/sor': 1.0.0
@@ -509,7 +508,6 @@ importers:
       openzeppelin-solidity: 3.4.1
       react-devtools-core: 4.14.0
       react-refresh: 0.10.0
-      react-refresh-typescript: 2.0.2_07d643ea690a1c588819a69f1ef8f0ab
       react-test-renderer: 17.0.2_react@18.0.0-alpha-aecb3b6d1
       rimraf: 3.0.2
       source-map-loader: 3.0.0_webpack@5.46.0
@@ -20490,16 +20488,6 @@ packages:
       react: 18.0.0-alpha-aecb3b6d1
       react-fast-compare: 3.2.0
       warning: 4.0.3
-    dev: true
-
-  /react-refresh-typescript/2.0.2_07d643ea690a1c588819a69f1ef8f0ab:
-    resolution: {integrity: sha512-Gevwf67IgOFZW2ub/tZ8gmcXawWnhMuoFjCW85v4LcOzMgD2PMrH2zkr3sie2Y2bvLp/7tpRdhbG0yshxlJYHw==}
-    peerDependencies:
-      react-refresh: 0.10.x
-      typescript: ^4
-    dependencies:
-      react-refresh: 0.10.0
-      typescript: 4.3.5
     dev: true
 
   /react-refresh/0.10.0:

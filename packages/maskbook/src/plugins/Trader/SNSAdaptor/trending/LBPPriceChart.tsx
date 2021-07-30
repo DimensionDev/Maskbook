@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
 import { makeStyles, Theme } from '@material-ui/core'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { usePriceLineChart } from '../../../hooks/usePriceLineChart'
 import type { Currency } from '../../types'
 

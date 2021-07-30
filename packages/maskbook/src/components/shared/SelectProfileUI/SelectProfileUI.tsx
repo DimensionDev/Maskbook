@@ -4,7 +4,7 @@ import { useI18N } from '../../../utils'
 import type { Profile } from '../../../database'
 import { ProfileInList } from './ProfileInList'
 import { ProfileInChip } from './ProfileInChip'
-import { useStylesExtends } from '../../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { FixedSizeList } from 'react-window'
 
 export interface SelectProfileUIProps extends withClasses<'root'> {

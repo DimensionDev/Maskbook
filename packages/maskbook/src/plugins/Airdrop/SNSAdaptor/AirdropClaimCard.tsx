@@ -2,11 +2,10 @@ import { Box, ClickAwayListener, makeStyles, Skeleton, Tooltip, Typography } fro
 import { Info as InfoIcon } from '@material-ui/icons'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useState } from 'react'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { AirdropIcon } from '../../../resources/AirdropIcon'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import {
     ERC20TokenDetailed,
     formatPercentage,

@@ -116,15 +116,17 @@ export async function addEthereumChain(
 }
 
 export async function switchEthereumChain(chainId: ChainId, overrides?: SendOverrides) {
-    return request<boolean>({
-        method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
-        params: [
-            {
-                chainId: `0x${chainId.toString(16)}`,
-            },
-        ],
+    return request<boolean>(
+        {
+            method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
+            params: [
+                {
+                    chainId: `0x${chainId.toString(16)}`,
+                },
+            ],
+        },
         overrides,
-    })
+    )
 }
 
 export async function signTransaction(config: TransactionConfig, overrides?: SendOverrides) {
