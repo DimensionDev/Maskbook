@@ -3,7 +3,6 @@ import { codegen, codegenWatch } from '.'
 import { getArgv, shell, task } from '../utils'
 import { series, parallel, TaskFunction, TaskFunctionCallback } from 'gulp'
 import { extension, extensionWatch } from '../extension'
-import type Undertaker from 'undertaker'
 
 function run(webpack: TaskFunction, cb: TaskFunctionCallback) {
     const args = getArgv()
@@ -13,11 +12,8 @@ function run(webpack: TaskFunction, cb: TaskFunctionCallback) {
     return shell.cwd(cwd)`${cmd}`
 }
 
-export const codegenGuardWatch: Undertaker.TaskFunction = series(
-    codegen,
-    parallel(codegenWatch, run.bind(null, extensionWatch)),
-)
-export const codegenGuard: Undertaker.TaskFunction = series(codegen, run.bind(null, extension))
+export const codegenGuardWatch = series(codegen, parallel(codegenWatch, run.bind(null, extensionWatch)))
+export const codegenGuard = series(codegen, run.bind(null, extension))
 
 task(codegenGuard, 'build', 'Run the following command after codegen completes', {
     '-c=[command]': 'e.g. npx gulp build-with -S -c="echo hi"',
