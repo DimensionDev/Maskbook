@@ -1,5 +1,4 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { MaskColorVar } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-shared'
 import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
@@ -44,13 +43,14 @@ export function injectEnhancedProfile(signal: AbortSignal) {
 
 const useEnhancedProfileStyles = makeStyles<
     Theme,
-    { color: string; font: string; fontSize: string; padding: string; activeColor: string }
+    { color: string; font: string; fontSize: string; padding: string; height: string; activeColor: string }
 >((theme) => ({
     tab: {
         '&:hover': {
             backgroundColor: (props) => new Color(props.activeColor).alpha(0.1).toString(),
             cursor: 'pointer',
         },
+        height: (props) => props.height,
     },
     button: {
         display: 'flex',
@@ -93,7 +93,8 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
         font: style.font,
         fontSize: style.fontSize,
         padding: style.paddingBottom,
-        activeColor: foregroundColorStyle.borderColor,
+        height: style.height,
+        activeColor: foregroundColorStyle.color,
     })
     const [active, setActive] = useState(false)
 
