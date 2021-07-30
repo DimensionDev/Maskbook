@@ -16,13 +16,7 @@ const useStyles = makeStyles((theme) => ({
 export const Transfer = memo(() => {
     const classes = useStyles()
 
-    const tabs = useTabs(
-        'Tokens',
-        { token: 'Token' },
-        {
-            token: <></>,
-        },
-    )
+    const tabs = useTabs('Tokens', { token: { label: 'Tokens', panel: <></> } })
 
     return (
         <ContentContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>

@@ -68,24 +68,22 @@ export const ImportWallet = memo(() => {
     const tabs = useTabs(
         t.wallets_import_wallet_tabs(),
         {
-            mnemonic: t.wallets_wallet_mnemonic(),
-            json: t.wallets_wallet_json_file(),
-            privateKey: t.wallets_wallet_private_key(),
-        },
-        {
-            mnemonic: <DesktopMnemonicConfirm onChange={() => {}} />,
-            json: 'TBD',
-            privateKey: (
-                <>
-                    <PrivateKeyInput />
-                    <PasswordInput placeholder={t.wallets_import_wallet_password_placeholder()} />
-                </>
-            ),
+            mnemonic: { label: t.wallets_wallet_mnemonic(), panel: <DesktopMnemonicConfirm onChange={() => {}} /> },
+            json: { label: t.wallets_wallet_json_file(), panel: 'TBD' },
+            privateKey: {
+                label: t.wallets_wallet_private_key(),
+                panel: (
+                    <>
+                        <PrivateKeyInput />
+                        <PasswordInput placeholder={t.wallets_import_wallet_password_placeholder()} />
+                    </>
+                ),
+            },
         },
         {
             variant: 'buttonGroup',
-            tabPanelClasses: { root: classes.panels },
-            buttonTabGroupClasses: { root: classes.tabs },
+            tabPanelProps: { classes: { root: classes.panels } },
+            buttonTabGroupProps: { classes: { root: classes.tabs } },
         },
     )
     return (

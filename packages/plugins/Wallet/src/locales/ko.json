@@ -4,5 +4,7 @@
     "wallet_name": "월렛 이름",
     "wallet_setup_description_verify": "정확한지 확인하기 위해 빈 phrase를 각각 채워주세요.",
     "wallet_setup_verify": "확인",
+    "mnemonic_words": "니모닉 단어",
+    "private_key": "개인 키",
     "wallet_setup_back": "뒤로"
 }

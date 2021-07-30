@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react'
 import { StepNameAndWords } from './StepNameAndWords'
 import { StepVerify } from './StepVerify'
 import { useMnemonicWordsPuzzle } from '@masknet/web3-shared'
-import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../..'
 import { useSnackbarCallback } from '@masknet/shared'
 
 enum CreateWalletStep {
@@ -12,17 +11,8 @@ enum CreateWalletStep {
 
 export interface CreateWalletUIProps {
     onCreated: () => void
-    createNewWallet: (wallet: NewWallet) => Promise<void>
+    createNewWallet: (name: string, mnemonic: string[]) => Promise<void>
 }
-
-export interface NewWallet {
-    name: string
-    walletPath: string
-    phrasePath: string
-    mnemonic: string[]
-    passphrase: string
-}
-
 export function CreateWalletUI({ onCreated, createNewWallet }: CreateWalletUIProps) {
     const [name, setName] = useState('')
     const [step, setStep] = useState(CreateWalletStep.NameAndWords)
@@ -42,19 +32,7 @@ export function CreateWalletUI({ onCreated, createNewWallet }: CreateWalletUIPro
         onCreated()
     }, [resetCallback, onCreated])
 
-    const onSubmit = useSnackbarCallback(
-        () => {
-            return createNewWallet({
-                name,
-                phrasePath: HD_PATH_WITHOUT_INDEX_ETHEREUM,
-                walletPath: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-                mnemonic: words,
-                passphrase: '',
-            })
-        },
-        [words, name],
-        onSuccess,
-    )
+    const onSubmit = useSnackbarCallback(() => createNewWallet(name, words), [words, name], onSuccess)
 
     if (step === CreateWalletStep.NameAndWords) {
         return (

@@ -1,6 +1,4 @@
-import type { FC } from 'react'
 import { Card, makeStyles, TextField } from '@material-ui/core'
-import classNames from 'classnames'
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -12,10 +10,6 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-evenly',
         borderRadius: 0,
     },
-    cardButton: {
-        padding: theme.spacing(1, 2, 3),
-        backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : theme.palette.grey[50],
-    },
     cardTextfield: {
         justifyContent: 'space-between',
     },
@@ -25,20 +19,17 @@ const useStyles = makeStyles((theme) => ({
         whiteSpace: 'nowrap',
         marginTop: theme.spacing(2),
     },
-    wordButton: {
-        backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : theme.palette.common.white,
-    },
     wordTextfield: {
         width: 110,
     },
 }))
 
 interface MnemonicTabProps {
-    words: string[]
+    words: readonly string[]
     onChange: (words: string[]) => void
 }
 
-export const MnemonicTab: FC<MnemonicTabProps> = ({ words, onChange }) => {
+export function MnemonicTab({ words, onChange }: MnemonicTabProps) {
     const classes = useStyles()
 
     const handleChange = (newWord: string, index: number) => {
@@ -49,10 +40,10 @@ export const MnemonicTab: FC<MnemonicTabProps> = ({ words, onChange }) => {
     }
 
     return (
-        <Card className={classNames(classes.card, classes.cardTextfield)} elevation={0}>
+        <Card className={[classes.card, classes.cardTextfield].join(' ')} elevation={0}>
             {words.map((word, i) => (
                 <TextField
-                    className={classNames(classes.word, classes.wordTextfield)}
+                    className={[classes.word, classes.wordTextfield].join(' ')}
                     placeholder={String(i + 1)}
                     key={i}
                     size="small"

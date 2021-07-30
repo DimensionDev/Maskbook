@@ -4,5 +4,7 @@
     "wallet_name": "錢包名稱",
     "wallet_setup_description_verify": "請填入每個空格，以確保它是正確的。",
     "wallet_setup_verify": "驗證",
+    "mnemonic_words": "助記詞",
+    "private_key": "密鑰",
     "wallet_setup_back": "上一步"
 }

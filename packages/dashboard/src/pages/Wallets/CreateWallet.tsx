@@ -14,7 +14,7 @@ export function CreateWallet() {
                 onCreated={() => {
                     navigate(`/wallets`)
                 }}
-                createNewWallet={PluginServices.Wallet.importNewWalletDashboard}
+                createNewWallet={PluginServices.Wallet.importWalletByMnemonic}
             />
         </Container>
     )

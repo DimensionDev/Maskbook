@@ -4,5 +4,6 @@
     "wallet_name": "ウォレット名",
     "wallet_setup_description_verify": "空のフレーズ欄を順番に埋めてください。",
     "wallet_setup_verify": "認証",
+    "mnemonic_words": "パスフレーズ",
     "wallet_setup_back": "戻る"
 }

@@ -77,7 +77,7 @@ export function CreateWalletDialog() {
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_setup_title_create')} maxWidth="sm">
             <DialogContent className={classes.content}>
-                <CreateWalletUI onCreated={onClose} createNewWallet={WalletRPC.importNewWalletDashboard} />
+                <CreateWalletUI onCreated={onClose} createNewWallet={WalletRPC.importWalletByMnemonic} />
             </DialogContent>
         </InjectedDialog>
     )

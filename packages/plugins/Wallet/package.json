@@ -14,6 +14,8 @@
   "dependencies": {
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared": "workspace:*",
-    "@masknet/web3-shared": "workspace:*"
+    "@masknet/theme": "workspace:*",
+    "@masknet/web3-shared": "workspace:*",
+    "react-use": "^17.2.4"
   }
 }

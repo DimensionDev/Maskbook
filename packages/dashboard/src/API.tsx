@@ -12,7 +12,7 @@ export interface PluginServices {
     Wallet: typeof import('../../maskbook/dist/plugins/Wallet/messages').WalletRPC
 }
 export interface PluginMessages {
-    Wallet: typeof import('../../maskbook/dist/plugins/Wallet/messages').WalletMessages
+    Wallet: typeof import('@masknet/plugin-wallet').WalletMessages
 }
 export function setService(x: typeof ServiceType) {
     Services = x

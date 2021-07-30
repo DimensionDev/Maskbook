@@ -10,5 +10,12 @@
     "wallet_name": "Wallet Name",
     "wallet_setup_description_verify": "Please fill each empty phrase in order to make sure it is correct.",
     "wallet_setup_verify": "Verify",
+    "wallet_import_private_key_invalid_warning": "The Private key is incorrect",
+    "wallet_import_private_key_placeholder": "Input your private key",
+    "mnemonic_words": "Mnemonic Words",
+    "private_key": "Private Key",
+    "wallet_name_placeholder": "Enter 1-12 characters",
+    "import_wallet_previous": "Previous",
+    "import_wallet_import": "Import",
     "wallet_setup_back": "Back"
 }

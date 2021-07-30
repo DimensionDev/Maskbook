@@ -7,7 +7,6 @@ import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { PhraseRecordIntoDB, PhraseRecordOutDB } from './helpers'
 import * as wallet from './wallet'
-import type { NewWallet } from '@masknet/plugin-wallet/components'
 import { importNewWallet } from './wallet'
 
 export async function getPhrases() {
@@ -116,8 +115,31 @@ export async function deriveWalletFromPhrase(
 //#endregion
 
 // Need a better name.
-export async function importNewWalletDashboard(wallet: NewWallet) {
-    const { mnemonic, name, passphrase, phrasePath, walletPath } = wallet
-    await importNewWallet({ name, passphrase, mnemonic, path: walletPath })
-    await addPhrase({ path: phrasePath, mnemonic, passphrase })
+export async function importWalletByPrivateKey(name: string, privateKey: string) {
+    const { address, privateKeyValid } = await wallet.recoverWalletFromPrivateKey(privateKey)
+    if (!privateKeyValid) return
+    await importNewWallet({
+        name,
+        address,
+        _private_key_: privateKey,
+    })
+}
+export async function importWalletByMnemonic(name: string, mnemonic: readonly string[]) {
+    await importNewWallet({
+        name,
+        path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+        mnemonic: [...mnemonic],
+        passphrase: '',
+    })
+    try {
+        await addPhrase({
+            path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
+            mnemonic: [...mnemonic],
+            passphrase: '',
+        })
+    } catch (err) {
+        if (err.message !== 'Add exists phrase.') {
+            throw err
+        }
+    }
 }

@@ -242,10 +242,14 @@ export async function recoverWalletFromPrivateKey(privateKey: string) {
         privateKeyInHex: privateKey.startsWith('0x') ? privateKey : `0x${privateKey}`,
         mnemonic: [],
     }
-    function privateKeyVerify(key: string) {
-        if (!/[0-9a-f]{64}/i.test(key)) return false
-        const k = new BigNumber(key, 16)
-        const n = new BigNumber('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141', 16)
-        return !k.isZero() && k.isLessThan(n)
-    }
+}
+function privateKeyVerify(key: string) {
+    if (!/[0-9a-f]{64}/i.test(key)) return false
+    const k = new BigNumber(key, 16)
+    const n = new BigNumber('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141', 16)
+    return !k.isZero() && k.isLessThan(n)
+}
+export async function isPrivateKeyValid(privateKey: string) {
+    const privateKey_ = privateKey.replace(/^0x/, '') // strip 0x
+    return privateKeyVerify(privateKey_)
 }

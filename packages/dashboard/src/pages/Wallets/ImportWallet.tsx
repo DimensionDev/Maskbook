@@ -1,17 +1,9 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { Button } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
 import { useSnackbarCallback } from '@masknet/shared'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
-import {
-    ImportWalletUI,
-    RecoverResult,
-    importWallet,
-    TabIndexMap,
-    TabIndex,
-    BLANK_WORDS,
-} from '../../../../maskbook/src/plugins/Wallet/SNSAdaptor/ImportWalletDialog'
+import { ImportWalletUI } from '@masknet/plugin-wallet/components'
+import { PluginServices } from '../../API'
 
 const Container = styled('div')`
     width: 528px;
@@ -20,40 +12,21 @@ const Container = styled('div')`
     background-color: ${MaskColorVar.primaryBackground};
 `
 export function ImportWallet() {
-    const [name, setName] = useState('')
-    const [words, setWords] = useState<string[]>(BLANK_WORDS)
-    const [walletFromPrivateKey, setWalletFromPrivateKey] = useState<Partial<RecoverResult>>({})
     const navigate = useNavigate()
-    const tabState = useState(0)
-    const importMode = TabIndexMap[tabState[0] as TabIndex]
 
-    const handleImport = useSnackbarCallback(
-        async () => {
-            await importWallet({
-                mode: importMode,
-                name,
-                words,
-                privateKey: walletFromPrivateKey,
-            })
-        },
-        [importMode, name, words, walletFromPrivateKey.privateKeyValid, walletFromPrivateKey.privateKey],
-        () => {
-            navigate('/wallets')
-        },
-    )
+    const importByMnemonic = useSnackbarCallback(PluginServices.Wallet.importWalletByMnemonic, [], () => {
+        navigate('/wallets')
+    })
+    const importByPrivateKey = useSnackbarCallback(PluginServices.Wallet.importWalletByPrivateKey, [], () => {
+        navigate('/wallets')
+    })
     return (
         <Container>
             <ImportWalletUI
-                name={name}
-                onNameChange={setName}
-                words={words}
-                onWordsChange={setWords}
-                onRecover={setWalletFromPrivateKey}
-                tabState={tabState}
+                isPrivateKeyValid={PluginServices.Wallet.isPrivateKeyValid}
+                onImportMnemonic={importByMnemonic}
+                onImportPrivateKey={importByPrivateKey}
             />
-            <Button onClick={handleImport} fullWidth>
-                Import
-            </Button>
         </Container>
     )
 }

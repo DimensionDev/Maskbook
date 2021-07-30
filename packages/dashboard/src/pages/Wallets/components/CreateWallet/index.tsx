@@ -86,26 +86,24 @@ export const CreateWallet = memo(() => {
     const tabs = useTabs(
         t.wallets_create_wallet_tabs(),
         {
-            mnemonic: t.wallets_wallet_mnemonic(),
-            json: t.wallets_wallet_json_file(),
-            privateKey: t.wallets_wallet_private_key(),
+            mnemonic: {
+                label: t.wallets_wallet_mnemonic(),
+                panel: (
+                    <>
+                        <Refresh>
+                            <RefreshIcon />
+                            <Typography>{t.wallets_create_wallet_refresh()}</Typography>
+                        </Refresh>
+                        <MnemonicGeneratorContainer>
+                            <MnemonicReveal words={[...Array(12).keys()].map((i) => String(i))} />
+                        </MnemonicGeneratorContainer>
+                    </>
+                ),
+            },
+            json: { label: t.wallets_wallet_json_file(), panel: 'TODO' },
+            privateKey: { label: t.wallets_wallet_private_key(), panel: <PrivateKeyInput /> },
         },
-        {
-            mnemonic: (
-                <>
-                    <Refresh>
-                        <RefreshIcon />
-                        <Typography>{t.wallets_create_wallet_refresh()}</Typography>
-                    </Refresh>
-                    <MnemonicGeneratorContainer>
-                        <MnemonicReveal words={[...Array(12).keys()].map((i) => String(i))} />
-                    </MnemonicGeneratorContainer>
-                </>
-            ),
-            json: 'TODO: ',
-            privateKey: <PrivateKeyInput />,
-        },
-        { variant: 'buttonGroup', tabPanelClasses: useTabPanelStyles() },
+        { variant: 'buttonGroup', tabPanelProps: { classes: useTabPanelStyles() } },
     )
     return (
         <Container>
