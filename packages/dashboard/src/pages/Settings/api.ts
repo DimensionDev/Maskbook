@@ -29,76 +29,102 @@ export const [useAncientPostsCompatibilityMode] = createGlobalState(
 )
 
 const API_HOST = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com'
-const SEND_CODE_URL = `${API_HOST}/api/v1/backup/send_code`
-const VERIFY_CODE_URL = `${API_HOST}/api/v1/backup`
-const DOWNLOAD_LINK_URL = `${API_HOST}/api/v1/backup/download`
+const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 
-interface SendCodeBody {
+interface BackupBaseRequest {
     account: string
     type: AccountValidationType
 }
 
-export const sendCode = ({ account, type }: SendCodeBody) => {
-    return fetch(SEND_CODE_URL, {
+interface SendCodeRequest extends BackupBaseRequest {}
+
+export interface VerifyCodeRequest extends BackupBaseRequest {
+    code: string
+}
+
+interface UploadLinkRequest extends BackupBaseRequest {
+    code: string
+    abstract: string
+}
+
+export const sendCode = ({ account, type }: SendCodeRequest) => {
+    return fetchBackupInstance('v1/backup/send_code', {
         method: 'POST',
         body: JSON.stringify({
             account,
             account_type: type,
         }),
-    }).then(async (res) => {
-        // todo: align error handler
-        if (!res.ok) {
-            return Promise.reject(await res.json())
-        }
-        return await res.json()
     })
 }
 
-export interface VerifyCodeBody extends SendCodeBody {
-    code: string
+const withErrorMiddleware = (res: Response) => {
+    if (!res.ok) {
+        return Promise.reject(res)
+    }
+    return Promise.resolve(res)
 }
 
-export const fetchBackupValue = (downloadLink: string) => {
-    return fetch(downloadLink, {
-        method: 'GET',
-    }).then(async (res) => {
-        const text = await res.text()
-        if (!res.ok) {
-            return Promise.reject(text)
-        }
-        return text
-    })
-}
+const fetchBase = (
+    input: RequestInfo,
+    init?: RequestInit,
+    handler: (res: Response) => Promise<any> = (res) => res.json(),
+) => fetch(input, init).then(withErrorMiddleware).then(handler)
 
-export const fetchDownloadLink = (body: VerifyCodeBody) => {
-    return fetch(DOWNLOAD_LINK_URL, {
+const fetchBaseInstance = (baseURL: string) => (input: RequestInfo, init?: RequestInit) =>
+    fetchBase(`${baseURL}/${input}`, init)
+
+const fetchBackupInstance = fetchBaseInstance(BASE_RUL)
+
+export const fetchUploadLink = ({ code, account, abstract, type }: UploadLinkRequest) => {
+    return fetchBackupInstance('v1/backup/upload', {
         method: 'POST',
         body: JSON.stringify({
-            code: body.code,
-            account_type: body.type,
-            account: body.account,
+            code,
+            account_type: type,
+            account,
+            abstract,
         }),
-    }).then<BackupFileInfo>(async (res) => {
-        const json = await res.json()
-        if (!res.ok) {
-            return Promise.reject(json)
-        }
+    }).then<string>((res) => res.upload_url)
+}
+
+export const fetchDownloadLink = ({ account, code, type }: VerifyCodeRequest) => {
+    return fetchBackupInstance('v1/backup/download', {
+        method: 'POST',
+        body: JSON.stringify({
+            code,
+            account_type: type,
+            account,
+        }),
+    }).then<BackupFileInfo>(({ abstract, download_url, size, uploaded_at }) => {
         return {
-            downloadURL: json.download_url,
-            size: json.size,
-            uploadedAt: json.uploaded_at,
-            abstract: json.abstract,
+            downloadURL: download_url,
+            size: size,
+            uploadedAt: uploaded_at,
+            abstract: abstract,
         }
     })
 }
 
-export const verifyCode = ({ account, type, code }: VerifyCodeBody) => {
-    return fetch(VERIFY_CODE_URL, {
+export const verifyCode = ({ account, type, code }: VerifyCodeRequest) => {
+    return fetchBackupInstance('v1/backup', {
         method: 'PUT',
         body: JSON.stringify({
             account,
             account_type: type,
             code,
         }),
-    }).then((res) => res.json())
+    })
+}
+
+export const fetchBackupValue = (downloadLink: string) => {
+    return fetchBase(downloadLink, { method: 'GET' }, (res) => res.text())
+}
+
+export const uploadBackupValue = (uploadLink: string, content: string) => {
+    return fetch(uploadLink, {
+        method: 'PUT',
+        // mode: 'no-cors',
+        headers: new Headers({ 'content-type': 'text/plain' }),
+        body: content,
+    })
 }

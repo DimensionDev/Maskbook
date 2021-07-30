@@ -38,29 +38,29 @@ enum Step {
 }
 
 interface CodeValidationProps {
-    onRestore(downloadLink: string, password: string): void
+    onValidated(downloadLink: string, account: string, password: string): void
 }
 
 const getAccountValue = (value: string | PhoneNumberFieldValue) => {
     return typeof value === 'string' ? (value as string) : ((value.country + value.phone) as string)
 }
 
-export const CodeValidation = memo(({ onRestore }: CodeValidationProps) => {
+export const CodeValidation = memo(({ onValidated }: CodeValidationProps) => {
     const t = useDashboardI18N()
     const [step, setStep] = useState<Step>(Step.input)
     const [code, setCode] = useState('')
     const [password, setPassword] = useState('')
     const [mode, setMode] = useState<AccountValidationType>('email')
-    const [value, setValue] = useState<string | PhoneNumberFieldValue>('')
+    const [account, setAccount] = useState<string | PhoneNumberFieldValue>('')
 
     const [{ loading: fetchingBackupInfo, error: fetchBackupInfoError, value: backupInfo }, fetchDownloadLinkFn] =
         useAsyncFn(async () => {
-            return fetchDownloadLink({ code, account: getAccountValue(value), type: mode })
-        }, [value, mode, code])
+            return fetchDownloadLink({ code, account: getAccountValue(account), type: mode })
+        }, [account, mode, code])
 
     const [{ error: sendCodeError }, handleSendCodeFn] = useAsyncFn(async () => {
-        return sendCode({ account: getAccountValue(value), type: mode })
-    }, [value, mode])
+        return sendCode({ account: getAccountValue(account), type: mode })
+    }, [account, mode])
 
     const onNext = async () => {
         if (step === Step.input) {
@@ -69,10 +69,11 @@ export const CodeValidation = memo(({ onRestore }: CodeValidationProps) => {
         if (step === Step.validation) {
             // validate code in number
             await fetchDownloadLinkFn()
+            setStep(Step.confirm)
         }
         if (step === Step.confirm) {
-            if (!backupInfo) return
-            onRestore(backupInfo?.downloadURL, password)
+            if (!backupInfo || !password) return
+            onValidated(backupInfo?.downloadURL, getAccountValue(account), password)
         }
     }
 
@@ -85,7 +86,7 @@ export const CodeValidation = memo(({ onRestore }: CodeValidationProps) => {
             case Step.confirm:
                 return !password
             case Step.input:
-                return !value
+                return !account
             case Step.validation:
                 return !!fetchBackupInfoError || !!sendCodeError || !code
             default:
@@ -100,8 +101,8 @@ export const CodeValidation = memo(({ onRestore }: CodeValidationProps) => {
                     <MaskTextField
                         label={<Label onModeChange={setMode} mode={mode} />}
                         fullWidth
-                        value={value}
-                        onChange={(event) => setValue(event.target.value)}
+                        value={account}
+                        onChange={(event) => setAccount(event.target.value)}
                         type="email"
                         variant="outlined"
                     />
@@ -118,7 +119,7 @@ export const CodeValidation = memo(({ onRestore }: CodeValidationProps) => {
                 <SendingCodeField
                     label={
                         <Typography variant="body2" sx={{ fontWeight: 'bolder' }} color="textPrimary">
-                            Send to {value}
+                            Send to {account}
                         </Typography>
                     }
                     onChange={(c) => setCode(c)}
@@ -134,7 +135,11 @@ export const CodeValidation = memo(({ onRestore }: CodeValidationProps) => {
                 <Box>
                     <BackupInfo info={backupInfo} />
                     <Box sx={{ mt: 4 }}>
-                        <MaskTextField label="Backup Password" type="password" />
+                        <MaskTextField
+                            label="Backup Password"
+                            type="password"
+                            onChange={(e) => setPassword(e.currentTarget.value)}
+                        />
                     </Box>
                 </Box>
             )}

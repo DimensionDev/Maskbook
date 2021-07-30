@@ -1,5 +1,7 @@
 import { memo } from 'react'
 import { Box, Card, Grid, Stack, Typography } from '@material-ui/core'
+import formatDateTime from 'date-fns/format'
+import fromUnixTime from 'date-fns/fromUnixTime'
 
 interface BackupInfoProps {
     info: BackupFileInfo
@@ -18,7 +20,9 @@ export const BackupInfo = memo(({ info }: BackupInfoProps) => {
                 <Grid item xs={10}>
                     <Stack spacing={1}>
                         <Typography variant="body2">{info.abstract}</Typography>
-                        <Typography variant="body2">{info.uploadedAt}</Typography>
+                        <Typography variant="body2">
+                            {formatDateTime(fromUnixTime(info.uploadedAt), 'yyyy-MM-dd HH:mm')}
+                        </Typography>
                     </Stack>
                 </Grid>
                 <Grid item xs={2}>

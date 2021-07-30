@@ -1,7 +1,7 @@
 interface BackupFileInfo {
     downloadURL: string
     size: number
-    uploadedAt: string
+    uploadedAt: number
     abstract: string
 }
 
