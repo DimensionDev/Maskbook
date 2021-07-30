@@ -35,6 +35,9 @@ export async function setPayload(payload: Record<string, unknown>, options: { ad
 }
 
 export async function loginWithMask(...args: any[]) {
-    // todo
-    console.log(args)
+    return Services.WebAuthn.get(...args)
+}
+
+export async function createWithMask(...args: any[]) {
+    return Services.WebAuthn.create(...args)
 }
