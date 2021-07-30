@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import { runTypeChain, glob } from 'typechain'
-import { run } from '../cli/utils'
+import { run } from './utils'
 
 const ABIS_PATH = path.join(__dirname, 'abis')
 const GENERATED_PATH = path.join(__dirname, 'types')
