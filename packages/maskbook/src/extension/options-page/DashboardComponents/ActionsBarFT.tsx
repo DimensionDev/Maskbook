@@ -43,7 +43,7 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
 
     //#region items
     const items = [
-        chain === 'eth' && chainIdMatched ? (
+        chainIdMatched ? (
             <MenuItem
                 onClick={() => {
                     setBuyDialog({
