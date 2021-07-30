@@ -18,7 +18,7 @@ const querySelectorAll = <T extends E>(selector: string) => {
 //#region "Enhanced Profile"
 export const searchProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label="Profile timelines"][role="navigation"]')
-export const searchProfileTabListSelector: () => LiveSelector<E, true> = () =>
+export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="tablist"][data-testid="ScrollSnap-List"] > :last-child')
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [role="region"] [aria-label]')
@@ -30,7 +30,8 @@ export const searchProfileActiveTabStatusLineSelector: () => LiveSelector<E, tru
     querySelector<E>('[role="tablist"] [role="tab"][aria-selected="true"] > div > div')
 export const searchProfileActiveTabLabelSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="tablist"] [role="tab"][aria-selected="true"] > div')
-
+export const searchProfileTabListSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[role="tablist"][data-testid="ScrollSnap-List"]')
 //#endregion
 
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')

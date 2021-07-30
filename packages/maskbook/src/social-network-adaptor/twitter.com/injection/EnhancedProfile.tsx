@@ -1,5 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@material-ui/core'
+import classNames from 'classnames'
 import { useCallback, useState } from 'react'
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
@@ -7,12 +8,13 @@ import {
     searchProfileActiveTabSelector,
     searchProfileActiveTabStatusLineSelector,
     searchProfileEmptySelector,
+    searchProfileTabListLastChildSelector,
     searchProfileTabListSelector,
     searchProfileTabPageSelector,
 } from '../utils/selector'
 
 function injectEnhancedProfileTab(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchProfileTabListSelector())
+    const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfileTab />)
 }
@@ -51,6 +53,9 @@ const useEnhancedProfileStyles = makeStyles((theme) => ({
         fontWeight: 700,
         color: 'rgb(83, 100, 113)',
     },
+    hot: {
+        color: 'rgb(29, 161, 242)',
+    },
     active: {
         dispaly: 'inline-flex',
         borderRadius: 99999,
@@ -67,6 +72,13 @@ export interface EnhancedProfileTabProps {}
 export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
     const classes = useEnhancedProfileStyles()
     const [active, setActive] = useState(false)
+
+    const onOpen = () => setActive(false)
+    const tabList = searchProfileTabListSelector().evaluate()?.querySelectorAll('div')
+    tabList?.forEach((v, i) => {
+        v.addEventListener('click', onOpen, { once: true })
+    })
+
     const onClick = useCallback(() => {
         const eleEmpty = searchProfileEmptySelector().evaluate()
         if (eleEmpty) eleEmpty.style.display = 'none'
@@ -88,21 +100,21 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
                     if (eleEmpty) eleEmpty.style.display = 'flex'
                     if (ele) ele.style.display = 'flex'
                     if (line) line.style.display = 'inline-flex'
-                    if (label) label.style.color = 'unset'
+                    if (label) label.style.color = ''
 
                     setActive(false)
+                    console.log('tab')
                 },
                 { once: true },
             )
         }
-        console.log(tab)
 
         setActive(true)
     }, [active])
     return (
         <>
             <div key="nfts" className={classes.tab}>
-                <div className={classes.button} onClick={onClick}>
+                <div className={classNames(classes.button, active ? classes.hot : '')} onClick={onClick}>
                     NFTs
                     {active ? <div className={classes.active} /> : null}
                 </div>
