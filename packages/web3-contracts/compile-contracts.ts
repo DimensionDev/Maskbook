@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import { runTypeChain, glob } from 'typechain'
-import { shell } from '@masknet/cli'
+import { run } from './utils'
 
 const ABIS_PATH = path.join(__dirname, 'abis')
 const GENERATED_PATH = path.join(__dirname, 'types')
@@ -35,11 +35,11 @@ async function main() {
     ])
 
     // format code
-    shell`${GENERATED_PATH}, 'npx', 'prettier', '--write', '*'`
+    run(GENERATED_PATH, 'npx', 'prettier', '--write', '*')
 
     // add to git stage
-    shell`${ABIS_PATH}, 'git', 'add', '.'`
-    shell`${GENERATED_PATH}, 'git', 'add', '.'`
+    run(ABIS_PATH, 'git', 'add', '.')
+    run(GENERATED_PATH, 'git', 'add', '.')
 }
 
 main()
