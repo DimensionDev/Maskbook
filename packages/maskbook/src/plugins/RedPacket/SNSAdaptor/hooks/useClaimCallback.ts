@@ -18,7 +18,6 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
     const gasPrice = useGasPrice()
     const [claimState, setClaimState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
-    console.log('useClaimCallback')
     const claimCallback = useCallback(async () => {
         if (!redPacketContract || !id || !password) {
             setClaimState({
