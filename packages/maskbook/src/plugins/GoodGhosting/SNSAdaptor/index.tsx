@@ -33,7 +33,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
 }
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
-    const [id = ''] = props.url.match(/\d+/) ?? []
+    let [id = ''] = props.url.match(/pools\/([a-zA-Z0-9_ ]+)/) ?? []
+    if (id) {
+        id = id.replace('pools/', '')
+    }
+
     return (
         <MaskbookPluginWrapper pluginName="GoodGhosting">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
