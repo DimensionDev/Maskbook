@@ -174,9 +174,9 @@
                 "type": "bytes32"
             },
             {
-                "internalType": "string",
+                "internalType": "bytes",
                 "name": "signedMsg",
-                "type": "string"
+                "type": "bytes"
             },
             {
                 "internalType": "address payable",

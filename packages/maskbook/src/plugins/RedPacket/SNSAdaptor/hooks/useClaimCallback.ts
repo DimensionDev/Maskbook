@@ -53,7 +53,6 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                     from,
                 })
                 .catch((error) => {
-                    console.log(error)
                     setClaimState({
                         type: TransactionStateType.FAILED,
                         error,

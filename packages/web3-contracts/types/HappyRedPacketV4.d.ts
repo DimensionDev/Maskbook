@@ -81,7 +81,11 @@ export interface HappyRedPacketV4 extends BaseContract {
             5: string
         }>
 
-        claim(id: string | number[], signedMsg: string, recipient: string): NonPayableTransactionObject<string>
+        claim(
+            id: string | number[],
+            signedMsg: string | number[],
+            recipient: string,
+        ): NonPayableTransactionObject<string>
 
         create_red_packet(
             _public_key: string,

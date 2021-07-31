@@ -13,7 +13,6 @@ import {
     useNonce,
     useTokenConstants,
     useTransactionState,
-    FAKE_PUBLIC_KEY,
 } from '@masknet/web3-shared'
 import { omit } from 'lodash-es'
 import { useAsync } from 'react-use'
@@ -80,20 +79,20 @@ function checkParams(
     return true
 }
 
-export function useCreateParams(redPacketSettings: Omit<RedPacketSettings, 'password'> | undefined, version: number) {
+export function useCreateParams(redPacketSettings: RedPacketSettings | undefined, version: number) {
     const redPacketContract = useRedPacketContract(version)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const account = useAccount()
     return useAsync(async () => {
         if (!redPacketSettings || !redPacketContract) return null
-        const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
+        const { duration, isRandom, message, name, shares, total, token, publicKey } = redPacketSettings
         const seed = Math.random().toString()
         const tokenType = token!.type === EthereumTokenType.Native ? 0 : 1
         const tokenAddress = token!.type === EthereumTokenType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
         if (!tokenAddress) return null
 
         const paramsObj: paramsObjType = {
-            publicKey: FAKE_PUBLIC_KEY,
+            publicKey,
             shares,
             isRandom,
             duration,

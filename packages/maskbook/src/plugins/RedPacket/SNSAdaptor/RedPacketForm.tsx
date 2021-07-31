@@ -155,7 +155,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
 
     const onClick = useCallback(() => {
         const { address: publicKey, privateKey } = web3.eth.accounts.create()
-        console.log({ publicKey, privateKey })
         onChange({
             publicKey,
             privateKey,
