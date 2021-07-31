@@ -29,6 +29,20 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: theme.spacing(3),
         paddingRight: theme.spacing(3),
     },
+    predictions: {
+        gridGap: '.5rem',
+        marginBottom: theme.spacing(1),
+        '& > .MuiGrid-item': {
+            cursor: 'pointer',
+            padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
+            border: `solid .0625rem ${theme.palette.divider}`,
+            borderRadius: '.5rem',
+        },
+    },
+    selected: {
+        border: 'solid .0625rem #05b169',
+        backgroundColor: 'rgba(5,177,105,.15)',
+    },
 }))
 
 const AugurSwitch = withStyles((theme) => ({
@@ -108,8 +122,14 @@ const AugurSwitch = withStyles((theme) => ({
 export const MarketBuySell = () => {
     const classes = useStyles()
     const [buySell, setBuySell] = useState(false)
-    const handleChange = () => {
+    const [selected, setSelected] = useState(1)
+
+    const handleChangeBuySell = () => {
         setBuySell(!buySell)
+    }
+
+    const handleSelect = (item: number) => {
+        setSelected(item)
     }
 
     return (
@@ -125,7 +145,7 @@ export const MarketBuySell = () => {
                     className={`${classes.head} ${classes.spacing}`}>
                     <Grid item>
                         <Typography variant="h6" color="textPrimary">
-                            <AugurSwitch checked={buySell} onChange={handleChange} name="buySell" />
+                            <AugurSwitch checked={buySell} onChange={handleChangeBuySell} name="buySell" />
                         </Typography>
                     </Grid>
                     <Grid item container direction="column" alignItems="flex-end">
@@ -141,8 +161,36 @@ export const MarketBuySell = () => {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item container className={classes.spacing}>
-                    Predictions
+                <Grid item container direction="column" className={`${classes.spacing} ${classes.predictions}`}>
+                    <Grid
+                        item
+                        container
+                        justifyContent="space-between"
+                        className={selected === 1 ? classes.selected : undefined}
+                        onClick={() => handleSelect(1)}>
+                        <Typography variant="body2">Team1</Typography>
+                        <Typography variant="body2">$0.49</Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        container
+                        justifyContent="space-between"
+                        className={selected === 2 ? classes.selected : undefined}
+                        onClick={() => handleSelect(2)}>
+                        <Typography variant="body2">Team2</Typography>
+                        <Typography variant="body2">$0.49</Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        container
+                        justifyContent="space-between"
+                        className={selected === 0 ? classes.selected : undefined}
+                        onClick={() => handleSelect(0)}>
+                        <Typography variant="body2">
+                            <Trans i18nKey="plugin_augur_no_contest" />
+                        </Typography>
+                        <Typography variant="body2">$0.02</Typography>
+                    </Grid>
                 </Grid>
             </Grid>
         </div>
