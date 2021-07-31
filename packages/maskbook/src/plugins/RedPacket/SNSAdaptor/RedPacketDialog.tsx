@@ -21,7 +21,6 @@ import {
     useChainId,
     useNetworkType,
     useRedPacketConstants,
-    useWeb3,
 } from '@masknet/web3-shared'
 import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
@@ -43,7 +42,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
     const chainId = useChainId()
     const account = useAccount()
-    const web3 = useWeb3()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
     const state = useState(DialogTabs.create)
