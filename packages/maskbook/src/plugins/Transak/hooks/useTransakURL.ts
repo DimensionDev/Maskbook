@@ -5,7 +5,7 @@ import { TRANSAK_API_KEY_PRODUCTION, TRANSAK_API_KEY_STAGING } from '../constant
 import { formatEthereumAddress } from '@masknet/web3-shared'
 import type { TransakConfig } from '../types'
 
-const ENV = {
+const HOST_MAP = {
     production: 'https://global.transak.com',
     development: 'https://staging-global.transak.com',
     test: 'https://development-global.transak.com',
@@ -38,5 +38,5 @@ export function useTransakURL(config?: Partial<TransakConfig>) {
         Object.entries(config_).forEach(([key, value = '']) => params.append(key, String(value)))
         return params.toString()
     }, [theme.palette.primary.main, stringify(config)])
-    return `${ENV[process.env.NODE_ENV]}?${search}`
+    return `${HOST_MAP[process.env.NODE_ENV]}?${search}`
 }
