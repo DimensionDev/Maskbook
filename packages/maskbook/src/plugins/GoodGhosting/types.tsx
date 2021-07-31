@@ -12,6 +12,7 @@ interface GoodGhostingBaseInfo {
     lastSegment: number
     segmentLength: number
     numberOfPlayers: number
+    maxPlayersCount: number
     totalGameInterest: string
     totalGamePrincipal: string
     adaiTokenAddress: string

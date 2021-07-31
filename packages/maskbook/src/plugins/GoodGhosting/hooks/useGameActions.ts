@@ -7,7 +7,10 @@ export function useJoinGame(info: GoodGhostingInfo) {
     const account = useAccount()
     const contract = useGoodGhostingContract(info.contractAddress)
     const gasPrice = useGasPrice()
-    const canJoinGame = (!info.currentPlayer || info.currentPlayer.canRejoin) && info.currentSegment === 0
+    const canJoinGame =
+        (!info.currentPlayer || info.currentPlayer.canRejoin) &&
+        info.currentSegment === 0 &&
+        info.numberOfPlayers <= info.maxPlayersCount
 
     return {
         canJoinGame,
