@@ -101,6 +101,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface PoolViewProps {
     address?: string
+    link: string
 }
 
 export function PoolView(props: PoolViewProps) {
@@ -153,7 +154,7 @@ export function PoolView(props: PoolViewProps) {
 
     return (
         <Card className={classes.root} elevation={0}>
-            <CardHeader subheader={<PoolViewDeck pool={pool} inputTokens={allowedTokens} />} />
+            <CardHeader subheader={<PoolViewDeck pool={pool} inputTokens={allowedTokens} link={props.link} />} />
             <CardContent className={classes.content}>
                 <Tabs
                     className={classes.tabs}

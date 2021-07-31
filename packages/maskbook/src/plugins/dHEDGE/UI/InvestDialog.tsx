@@ -150,7 +150,7 @@ export function InvestDialog() {
         .getShareLinkURL?.(
             token
                 ? [
-                      `I just invested ${formatBalance(amount, 6)} ${cashTag}${token.symbol} in ${
+                      `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${
                           pool?.name
                       }. Follow @realMaskbook (mask.io) to invest dHEDGE pools.`,
                       '#mask_io',

@@ -6,9 +6,9 @@ import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useAvatar } from '../hooks/useManager'
-import { usePoolURL } from '../hooks/useUrl'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,17 +55,17 @@ const useStyles = makeStyles((theme) => ({
 interface PoolDeckProps {
     pool: Pool
     inputTokens: string[] | undefined
+    link: string
 }
 
 export function PoolViewDeck(props: PoolDeckProps) {
-    const { pool, inputTokens } = props
+    const { pool, inputTokens, link } = props
 
     const classes = useStyles()
     const { t } = useI18N()
 
     const blockie = useAvatar(pool.managerAddress)
     const chainId = useChainId()
-    const poolUrl = usePoolURL(pool.address)
 
     //#region manager share
     const managerShare = new BigNumber(pool.balanceOfManager)
@@ -90,13 +90,13 @@ export function PoolViewDeck(props: PoolDeckProps) {
     return (
         <Grid container className={classes.meta} direction="row">
             <Grid item alignSelf="center" xs={2}>
-                <Link target="_blank" rel="noopener noreferrer" href={poolUrl}>
+                <Link target="_blank" rel="noopener noreferrer" href={link}>
                     <Avatar src={blockie} className={classes.avatar} />
                 </Link>
             </Grid>
             <Grid item xs={6}>
                 <div className={classes.title}>
-                    <Link color="primary" target="_blank" rel="noopener noreferrer" href={poolUrl}>
+                    <Link color="primary" target="_blank" rel="noopener noreferrer" href={link}>
                         <Typography variant="h6">{pool.name.toUpperCase()}</Typography>
                     </Link>
                 </div>
@@ -136,9 +136,11 @@ export function PoolViewDeck(props: PoolDeckProps) {
                 </Grid>
             </Grid>
             <Grid item alignSelf="right" xs={4} textAlign="center">
-                <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
-                    {t('plugin_dhedge_invest')}
-                </Button>
+                <EthereumChainBoundary chainId={pool.chainId}>
+                    <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
+                        {t('plugin_dhedge_invest')}
+                    </Button>
+                </EthereumChainBoundary>
             </Grid>
         </Grid>
     )
