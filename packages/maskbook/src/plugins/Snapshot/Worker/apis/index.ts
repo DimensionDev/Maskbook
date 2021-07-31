@@ -1,9 +1,10 @@
 import ss from '@snapshot-labs/snapshot.js'
 import type { VoteItemList, Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess } from '../../types'
 import Services from '../../../../extension/service'
+import { resolveIPFSLink } from '@masknet/web3-shared'
 
 export async function fetchProposal(id: string) {
-    const response = await fetch(`https://ipfs.io/ipfs/${id}`, {
+    const response = await fetch(resolveIPFSLink(id), {
         method: 'GET',
     })
     const network = await fetchProposalNetwork(id)
