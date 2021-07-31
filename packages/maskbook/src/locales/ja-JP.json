@@ -699,5 +699,6 @@
     "plugin_augur_tab_buysell": "",
     "plugin_augur_24hr_volume": "",
     "plugin_augur_total_volume": "",
-    "plugin_augur_liquidity": ""
+    "plugin_augur_liquidity": "",
+    "plugin_augur_fee": ""
 }
