@@ -4,7 +4,8 @@ import { usePortalShadowRoot } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { RedPacketJSONPayload, DialogTabs } from '../types'
+import { RedPacketJSONPayload, DialogTabs, RedPacketRecord } from '../types'
+import { RedPacketRPC } from '../messages'
 import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { RedPacketMetaKey } from '../constants'
 import { RedPacketForm } from './RedPacketForm'
@@ -65,9 +66,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 if (payload.contract_version === 1) {
                     alert('Unable to share a red packet without a password. But you can still withdraw the red packet.')
                     payload.password = prompt('Please enter the password of the red packet:', '') ?? ''
-                }
-
-                if (payload.contract_version > 1) {
+                } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
                     payload.password = await Services.Ethereum.personalSign(
                         Web3Utils.sha3(payload.sender.message) ?? '',
@@ -166,6 +165,21 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     // open the transaction dialog
     useEffect(() => {
         if (!createSettings?.token || createState.type === TransactionStateType.UNKNOWN) return
+
+        // storing the created red packet in DB, it helps retrieve red packet password later
+        // save to the database early, otherwise red-packet would lose when close the tx dialog or
+        //  web page before create successfully.
+        if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING) {
+            payload.current.txid = createState.hash
+            const record: RedPacketRecord = {
+                id: createState.hash!,
+                from: '',
+                password: createSettings!.privateKey,
+                contract_version,
+            }
+            RedPacketRPC.discoverRedPacket(record)
+        }
+
         setTransactionDialog({
             open: true,
             state: createState,
