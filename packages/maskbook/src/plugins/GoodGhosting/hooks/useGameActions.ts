@@ -62,7 +62,7 @@ export function useWithdraw(info: GoodGhostingInfo) {
     const contract = useGoodGhostingContract(info.contractAddress)
     const gasPrice = useGasPrice()
 
-    const canWithdraw = info.currentPlayer && !info.currentPlayer.withdrawn && info.currentSegment >= info.lastSegment
+    const canWithdraw = info.currentPlayer && !info.currentPlayer.withdrawn && info.gameHasEnded
 
     return {
         canWithdraw,

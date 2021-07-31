@@ -92,7 +92,7 @@ export function useGameInfo(gameData: GameMetaData) {
             lendingPoolAddress: lendingPool,
             earlyWithdrawalFee,
             currentPlayer: player && player.addr !== ZERO_ADDRESS ? player : undefined,
-            gameHasEnded: Number.parseInt(currentSegment, 10) >= Number.parseInt(lastSegment, 10),
+            gameHasEnded: Number.parseInt(currentSegment, 10) > Number.parseInt(lastSegment, 10),
             refresh: asyncResult.retry,
         } as GoodGhostingInfo
     }, [results, contract])
