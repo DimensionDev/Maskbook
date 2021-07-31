@@ -33,11 +33,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
 }
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
+    const [id = ''] = props.url.match(/\d+/) ?? []
     return (
         <MaskbookPluginWrapper pluginName="GoodGhosting">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary chainId={ChainId.Matic}>
-                    <PreviewCard />
+                    <PreviewCard id={id} />
                 </EthereumChainBoundary>
             </Suspense>
         </MaskbookPluginWrapper>

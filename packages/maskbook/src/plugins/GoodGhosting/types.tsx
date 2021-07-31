@@ -1,7 +1,11 @@
 import type BigNumber from 'bignumber.js'
 
-export interface GoodGhostingInfo {
+export interface GameMetaData {
     contractAddress: string
+    gameName?: string
+}
+
+interface GoodGhostingBaseInfo {
     segmentPayment: string
     firstSegmentStart: number
     currentSegment: number
@@ -17,6 +21,8 @@ export interface GoodGhostingInfo {
     gameHasEnded: boolean
     refresh: () => void
 }
+
+export interface GoodGhostingInfo extends GoodGhostingBaseInfo, GameMetaData {}
 
 export interface Player {
     addr: string
