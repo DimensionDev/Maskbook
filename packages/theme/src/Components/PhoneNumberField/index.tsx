@@ -24,6 +24,7 @@ export interface PhoneNumberFieldProps {
     error?: boolean
     value: PhoneNumberFieldValue
     onBlur?(value: PhoneNumberFieldValue): void
+    onChange?(value: PhoneNumberFieldValue): void
 }
 
 // todo: remove regex, 123123d
@@ -36,6 +37,7 @@ export const PhoneNumberField = ({
     onBlur,
     countryPlaceholder = '+1',
     phoneErrorMessage = 'The phone number is incorrect.',
+    onChange,
 }: PhoneNumberFieldProps) => {
     const classes = useStyles()
     const [phone, setPhone] = useState<string>(value.phone)
@@ -45,7 +47,16 @@ export const PhoneNumberField = ({
     const handleCountryCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value
         const prefix = /^\+/.test(inputValue) ? '' : '+'
+
         setCountryCode(prefix + inputValue)
+        onChange && onChange({ country: inputValue, phone: phone })
+    }
+
+    const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const inputValue = event.target.value
+
+        setPhone(inputValue)
+        onChange && onChange({ country: countryCode, phone: inputValue })
     }
 
     const validCheck = () => {
@@ -79,7 +90,7 @@ export const PhoneNumberField = ({
                     <MaskTextField
                         fullWidth
                         value={phone}
-                        onChange={(event) => setPhone(event.target.value)}
+                        onChange={handlePhoneChange}
                         onBlur={validCheck}
                         type="text"
                         error={invalidPhone || error}

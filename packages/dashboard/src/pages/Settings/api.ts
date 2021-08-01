@@ -47,6 +47,27 @@ interface UploadLinkRequest extends BackupBaseRequest {
     abstract: string
 }
 
+const withErrorMiddleware =
+    <T>(handler: (res: Response) => Promise<T>) =>
+    async (res: Response) => {
+        const result = await handler(res)
+        if (!res.ok) {
+            return Promise.reject<T>(result)
+        }
+        return Promise.resolve<T>(result)
+    }
+
+const fetchBase = <T = any>(
+    input: RequestInfo,
+    init?: RequestInit,
+    handler: (res: Response) => Promise<T> = (res) => res.json(),
+) => fetch(input, init).then(withErrorMiddleware<T>(handler))
+
+const fetchBaseInstance = (baseURL: string) => (input: RequestInfo, init?: RequestInit) =>
+    fetchBase(`${baseURL}/${input}`, init)
+
+const fetchBackupInstance = fetchBaseInstance(BASE_RUL)
+
 export const sendCode = ({ account, type }: SendCodeRequest) => {
     return fetchBackupInstance('v1/backup/send_code', {
         method: 'POST',
@@ -56,24 +77,6 @@ export const sendCode = ({ account, type }: SendCodeRequest) => {
         }),
     })
 }
-
-const withErrorMiddleware = (res: Response) => {
-    if (!res.ok) {
-        return Promise.reject(res)
-    }
-    return Promise.resolve(res)
-}
-
-const fetchBase = (
-    input: RequestInfo,
-    init?: RequestInit,
-    handler: (res: Response) => Promise<any> = (res) => res.json(),
-) => fetch(input, init).then(withErrorMiddleware).then(handler)
-
-const fetchBaseInstance = (baseURL: string) => (input: RequestInfo, init?: RequestInit) =>
-    fetchBase(`${baseURL}/${input}`, init)
-
-const fetchBackupInstance = fetchBaseInstance(BASE_RUL)
 
 export const fetchUploadLink = ({ code, account, abstract, type }: UploadLinkRequest) => {
     return fetchBackupInstance('v1/backup/upload', {
@@ -117,7 +120,7 @@ export const verifyCode = ({ account, type, code }: VerifyCodeRequest) => {
 }
 
 export const fetchBackupValue = (downloadLink: string) => {
-    return fetchBase(downloadLink, { method: 'GET' }, (res) => res.text())
+    return fetchBase<string>(downloadLink, { method: 'GET' }, (res) => res.text())
 }
 
 export const uploadBackupValue = (uploadLink: string, content: string) => {

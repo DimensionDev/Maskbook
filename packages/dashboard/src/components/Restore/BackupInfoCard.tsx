@@ -7,7 +7,7 @@ interface BackupInfoProps {
     info: BackupFileInfo
 }
 
-export const BackupInfo = memo(({ info }: BackupInfoProps) => {
+export const BackupInfoCard = memo(({ info }: BackupInfoProps) => {
     return (
         <Card variant="background">
             <Grid
