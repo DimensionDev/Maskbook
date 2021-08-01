@@ -6,6 +6,7 @@ import { SendingCodeField } from '@masknet/theme'
 import { Button, Typography } from '@material-ui/core'
 import { ButtonGroup } from '../../RegisterFrame/ButtonGroup'
 import type { CommonProps } from '../../stepper'
+import { ValidationCodeStep } from './Commont'
 
 interface ValidationAccountProps extends CommonProps {
     account: string
@@ -23,7 +24,7 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
     const handleNext = async () => {
         const backupInfo = await onNext(account, type, code)
         if (backupInfo) {
-            toStep('confirm', { backupInfo: backupInfo, account: account })
+            toStep(ValidationCodeStep.ConfirmBackupInfo, { backupInfo: backupInfo, account: account })
         }
     }
 
@@ -31,7 +32,7 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
         <>
             <SendingCodeField
                 label={
-                    <Typography variant="body2" sx={{ fontWeight: 'bolder' }} color="textPrimary">
+                    <Typography variant="body2" sx={{ fontWeight: 'bolder' }} lineHeight="30px" color="textPrimary">
                         Send to {account}
                     </Typography>
                 }
@@ -41,13 +42,10 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
                 onSend={handleSendCodeFn}
             />
             <ButtonGroup>
-                <Button
-                    variant="rounded"
-                    color="secondary"
-                    onClick={() => toStep('inputEmail', { account: account, type: 'phone' })}>
+                <Button variant="rounded" color="secondary" onClick={() => toStep(ValidationCodeStep.EmailInput)}>
                     {t.cancel()}
                 </Button>
-                <Button variant="rounded" color="primary" onClick={handleNext} disabled={!account}>
+                <Button variant="rounded" color="primary" onClick={handleNext} disabled={!account || !code}>
                     {t.next()}
                 </Button>
             </ButtonGroup>

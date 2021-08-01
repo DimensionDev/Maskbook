@@ -5,6 +5,7 @@ import { BackupInfoCard } from '../BackupInfoCard'
 import { MaskTextField } from '@masknet/theme'
 import { ButtonGroup } from '../../RegisterFrame/ButtonGroup'
 import type { CommonProps } from '../../stepper'
+import { ValidationCodeStep } from './Commont'
 
 interface ConfirmBackupInfoProps extends CommonProps {
     backupInfo: any
@@ -12,7 +13,7 @@ interface ConfirmBackupInfoProps extends CommonProps {
     onNext(downloadLink: string, account: string, password: string): Promise<string>
 }
 
-export const ConfirmBackupInfo = ({ backupInfo, onNext, account }: ConfirmBackupInfoProps) => {
+export const ConfirmBackupInfo = ({ backupInfo, onNext, account, toStep }: ConfirmBackupInfoProps) => {
     const t = useDashboardI18N()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
@@ -39,7 +40,7 @@ export const ConfirmBackupInfo = ({ backupInfo, onNext, account }: ConfirmBackup
                 </Box>
             </Box>
             <ButtonGroup>
-                <Button variant="rounded" color="secondary" onClick={() => {}}>
+                <Button variant="rounded" color="secondary" onClick={() => toStep(ValidationCodeStep.EmailInput)}>
                     {t.cancel()}
                 </Button>
                 <Button variant="rounded" color="primary" onClick={handleNext}>

@@ -1,16 +1,8 @@
-import { Box, makeStyles } from '@material-ui/core'
+import { Box, Stack } from '@material-ui/core'
 import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { MaskTextField } from '../TextField'
 import { CountdownButton } from '../CountdownButton'
-
-const useStyles = makeStyles({
-    container: {},
-    field: {
-        paddingRight: '10px',
-        flex: 1,
-    },
-})
 
 export interface SendingCodeFieldProps {
     label?: ReactNode
@@ -30,7 +22,6 @@ export const SendingCodeField = ({
     disabled = false,
     onChange,
 }: SendingCodeFieldProps) => {
-    const classes = useStyles()
     const [code, setCode] = useState<string>('')
 
     useEffect(() => {
@@ -38,11 +29,11 @@ export const SendingCodeField = ({
     }, [code])
 
     return (
-        <div>
-            <div>{label}</div>
-            <div className={classes.container}>
-                <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
-                    <div className={classes.field}>
+        <Box>
+            <Box>{label}</Box>
+            <Box>
+                <Stack alignItems="center" direction="row" spacing={1}>
+                    <Box flex={1}>
                         <MaskTextField
                             size="small"
                             value={code}
@@ -52,7 +43,7 @@ export const SendingCodeField = ({
                             onBlur={() => onBlur && onBlur(code)}
                             disabled={disabled}
                         />
-                    </div>
+                    </Box>
                     <CountdownButton
                         size="medium"
                         sx={{ height: '40px', width: '100px' }}
@@ -60,8 +51,8 @@ export const SendingCodeField = ({
                         disabled={disabled}>
                         {buttonWording}
                     </CountdownButton>
-                </Box>
-            </div>
-        </div>
+                </Stack>
+            </Box>
+        </Box>
     )
 }

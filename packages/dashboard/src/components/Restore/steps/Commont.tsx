@@ -5,6 +5,14 @@ interface LabelProps {
     mode: AccountValidationType
 }
 
+export enum ValidationCodeStep {
+    EmailInput = 'EmailInput',
+    PhoneInput = 'PhoneInput',
+    AccountValidation = 'AccountValidation',
+    ConfirmBackupInfo = 'ConfirmBackupInfo',
+    BackupInfoLoading = 'BackupInfoLoading',
+}
+
 export const Label = ({ mode, onModeChange }: LabelProps) => {
     return (
         <Stack direction="row" justifyContent="space-between" alignItems="center">

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { MaskTextField } from '@masknet/theme'
 import { ButtonGroup } from '../../RegisterFrame/ButtonGroup'
 import { Button } from '@material-ui/core'
-import { Label } from './Commont'
+import { Label, ValidationCodeStep } from './Commont'
 import type { CommonProps } from '../../stepper'
 
 export const EmailField = ({ toStep }: CommonProps) => {
@@ -12,7 +12,7 @@ export const EmailField = ({ toStep }: CommonProps) => {
     return (
         <>
             <MaskTextField
-                label={<Label onModeChange={() => toStep('inputPhone')} mode="email" />}
+                label={<Label onModeChange={() => toStep(ValidationCodeStep.PhoneInput)} mode="email" />}
                 fullWidth
                 value={account}
                 onChange={(event) => setAccount(event.target.value)}
@@ -26,7 +26,7 @@ export const EmailField = ({ toStep }: CommonProps) => {
                 <Button
                     variant="rounded"
                     color="primary"
-                    onClick={() => toStep('validation', { account: account, type: 'email' })}
+                    onClick={() => toStep(ValidationCodeStep.AccountValidation, { account: account, type: 'email' })}
                     disabled={!account}>
                     {t.next()}
                 </Button>

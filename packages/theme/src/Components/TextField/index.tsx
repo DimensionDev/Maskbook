@@ -5,7 +5,7 @@ import { getMaskColor } from '../../constants'
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-        marginBottom: theme.spacing(4),
+        // marginBottom: theme.spacing(4),
     },
     label: {
         fontSize: 12,
@@ -38,7 +38,7 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
     const classes = useStyles()
 
     return (
-        <Box sx={{ mb: 4 }}>
+        <Box>
             {label && typeof label === 'string' && (
                 <Typography sx={{ mb: 1 }} variant="body2" className={classes.label}>
                     {label}

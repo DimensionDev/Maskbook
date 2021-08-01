@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { PhoneNumberField } from '@masknet/theme'
 import { ButtonGroup } from '../../RegisterFrame/ButtonGroup'
 import { Button } from '@material-ui/core'
-import { Label } from './Commont'
+import { Label, ValidationCodeStep } from './Commont'
 import type { CommonProps } from '../../stepper'
 
 export const PhoneField = ({ toStep }: CommonProps) => {
@@ -13,7 +13,7 @@ export const PhoneField = ({ toStep }: CommonProps) => {
     return (
         <>
             <PhoneNumberField
-                label={<Label onModeChange={() => toStep('inputEmail')} mode="phone" />}
+                label={<Label onModeChange={() => toStep(ValidationCodeStep.EmailInput)} mode="phone" />}
                 onChange={({ country, phone }) => setAccount(country + phone)}
                 value={{
                     country: '+1',
@@ -27,7 +27,7 @@ export const PhoneField = ({ toStep }: CommonProps) => {
                 <Button
                     variant="rounded"
                     color="primary"
-                    onClick={() => toStep('validation', { account: account, type: 'phone' })}
+                    onClick={() => toStep(ValidationCodeStep.AccountValidation, { account: account, type: 'phone' })}
                     disabled={!account}>
                     {t.next()}
                 </Button>
