@@ -1,5 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { useWallet } from '@masknet/web3-shared'
+import { useWallet, useResolveEns } from '@masknet/web3-shared'
 import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -168,10 +168,11 @@ export interface EnhancedProfilePageProps {}
 export function EnhancedProfileaPage() {
     const selectedWallet = useWallet()
     const profileEthereumName = useEthereumName()
+    const resolvedAddress = useResolveEns(profileEthereumName).value
     if (!selectedWallet) {
         return null
     }
-    return <CollectibleList wallet={selectedWallet} owner={profileEthereumName} readonly />
+    return <CollectibleList wallet={selectedWallet} owner={resolvedAddress} readonly />
 }
 
 const ENS_RE = /\w+\.eth/
