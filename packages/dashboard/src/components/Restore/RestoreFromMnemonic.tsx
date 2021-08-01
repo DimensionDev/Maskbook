@@ -61,8 +61,11 @@ export const RestoreFromMnemonic = () => {
                 )}
             </Box>
             <ButtonGroup>
-                <Button variant="rounded" color="secondary">
-                    {t.wallets_import_wallet_cancel()}
+                <Button
+                    variant="rounded"
+                    color="secondary"
+                    onClick={() => navigate(RoutePaths.Setup, { replace: true })}>
+                    {t.back()}
                 </Button>
                 <Button
                     variant="rounded"

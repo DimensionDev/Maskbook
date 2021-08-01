@@ -29,6 +29,10 @@ const ICON_MAPPING = [
         type: 'instagram.com',
         icon: <InstagramIcon />,
     },
+    {
+        type: 'minds.com',
+        icon: <InstagramIcon />,
+    },
 ]
 export const ConnectSocialMedia = () => {
     const navigate = useNavigate()
@@ -52,7 +56,7 @@ export const ConnectSocialMedia = () => {
             <Header
                 title={t.create_account_connect_social_media_title()}
                 subtitle={t.create_account_persona_subtitle()}
-                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.SignIn) }}
+                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.Setup) }}
             />
             <Body>
                 <SignUpAccountLogo />

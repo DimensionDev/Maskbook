@@ -28,7 +28,7 @@ export const BackupInfoCard = memo(({ info }: BackupInfoProps) => {
                 <Grid item xs={2}>
                     <Box>
                         <Typography align="right" variant="body2">
-                            {info.size}K
+                            {Math.ceil(info.size / 1024)}K
                         </Typography>
                     </Box>
                 </Grid>

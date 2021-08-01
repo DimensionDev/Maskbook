@@ -69,10 +69,10 @@ export const PersonaCreate = () => {
                     />
                     <ButtonGroup>
                         <Button variant="rounded" color="secondary" onClick={() => navigate(-1)}>
-                            Back
+                            {t.back()}
                         </Button>
                         <Button variant="rounded" color="primary" onClick={handleNext} disabled={!personaName}>
-                            Next
+                            {t.next()}
                         </Button>
                     </ButtonGroup>
                 </div>

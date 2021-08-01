@@ -20,7 +20,7 @@ import { useSnackbar } from '@masknet/theme'
 import { ButtonGroup } from '../../../components/RegisterFrame/ButtonGroup'
 
 enum CreateWalletStep {
-    NameAndWords = 0,
+    NameAndWords,
     Verify,
 }
 
@@ -67,11 +67,14 @@ export const MnemonicRevealForm = memo(() => {
                         </Stack>
                         <MnemonicRevealLG words={words} />
                         <ButtonGroup>
-                            <Button variant="rounded" color="secondary">
-                                Back
+                            <Button
+                                variant="rounded"
+                                color="secondary"
+                                onClick={() => navigate(RoutePaths.Setup, { replace: true })}>
+                                {t.back()}
                             </Button>
                             <Button variant="rounded" color="primary" onClick={() => setStep(CreateWalletStep.Verify)}>
-                                Verify
+                                {t.verify()}
                             </Button>
                         </ButtonGroup>
                     </div>
@@ -81,7 +84,7 @@ export const MnemonicRevealForm = memo(() => {
                         <DesktopMnemonicConfirm indexes={indexes} puzzleWords={puzzleWords} onChange={answerCallback} />
                         <ButtonGroup>
                             <Button variant="rounded" color="secondary" onClick={onBack}>
-                                Back
+                                {t.back()}
                             </Button>
                             <Button
                                 sx={{ width: '224px' }}
@@ -89,7 +92,7 @@ export const MnemonicRevealForm = memo(() => {
                                 color="primary"
                                 disabled={some(puzzleWords, (word) => !word)}
                                 onClick={onSubmit}>
-                                Confirm
+                                {t.confirm()}
                             </Button>
                         </ButtonGroup>
                     </div>
