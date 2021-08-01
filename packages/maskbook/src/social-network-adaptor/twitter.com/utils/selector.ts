@@ -36,6 +36,15 @@ export const searchProfileTabListSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="tablist"][data-testid="ScrollSnap-List"]')
 export const searchForegroundColorSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [aria-label="Back"][role="button"] > div')
+export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
+    querySelector<HTMLDivElement, SingleMode>(
+        [
+            '.profile', // legacy twitter
+            'a[href*="header_photo"] ~ div', // new twitter
+            'div[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div ~ div', // new twitter without header photo
+        ].join(),
+        singleMode,
+    )
 //#endregion
 
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
@@ -73,6 +82,8 @@ export const postEditorToolbarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="toolBar"] > div > *:last-child')
 
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
+
+export const bioDescriptionSelector = () => querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
 
 export const bioPageUserNickNameSelector = () =>
     querySelector<HTMLDivElement>('[data-testid="UserDescription"]')

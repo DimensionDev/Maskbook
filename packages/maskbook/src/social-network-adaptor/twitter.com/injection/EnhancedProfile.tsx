@@ -2,7 +2,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { useWallet } from '@masknet/web3-shared'
 import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { CollectibleList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
@@ -15,7 +15,9 @@ import {
     searchProfileTabListSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
+    bioCardSelector,
 } from '../utils/selector'
+import { getNickname, getTwitterId, getBioDescription } from '../utils/user'
 import Color from 'color'
 
 function injectEnhancedProfileTab(signal: AbortSignal) {
@@ -83,11 +85,15 @@ const useEnhancedProfileStyles = makeStyles<
 }))
 export interface EnhancedProfileTabProps {}
 
+const EMPTY_STYLE = {} as CSSStyleDeclaration
+
 export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
-    const style = window.getComputedStyle(eleTab)
+    const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
     const eleForegroundColorStyle = searchForegroundColorSelector().evaluate()
-    const foregroundColorStyle = window.getComputedStyle(eleForegroundColorStyle as Element)
+    const foregroundColorStyle = eleForegroundColorStyle
+        ? window.getComputedStyle(eleForegroundColorStyle)
+        : EMPTY_STYLE
     const classes = useEnhancedProfileStyles({
         color: style.color,
         font: style.font,
@@ -100,12 +106,14 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
 
     const onOpen = () => setActive(false)
     const tabList = searchProfileTabListSelector().evaluate()?.querySelectorAll('div')
-    tabList?.forEach((v, i) => {
+    tabList?.forEach((v) => {
         v.addEventListener('click', onOpen, { once: true })
     })
 
     const onClick = useCallback(() => {
         const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+        if (!eleTab) return
+
         const style = window.getComputedStyle(eleTab)
 
         const eleEmpty = searchProfileEmptySelector().evaluate()
@@ -140,6 +148,9 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
 
         setActive(true)
     }, [active])
+
+    if (!eleTab) return null
+
     return (
         <>
             <div key="nfts" className={classes.tab}>
@@ -154,10 +165,38 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
 
 export interface EnhancedProfilePageProps {}
 
-export function EnhancedProfileaPage(props: EnhancedProfilePageProps) {
+export function EnhancedProfileaPage() {
     const selectedWallet = useWallet()
+    const profileEthereumName = useEthereumName()
     if (!selectedWallet) {
         return null
     }
-    return <CollectibleList wallet={selectedWallet} readonly />
+    return <CollectibleList wallet={selectedWallet} owner={profileEthereumName} readonly />
+}
+
+const ENS_RE = /\w+\.eth/
+const ENS_RE_FULL = /^\w+\.eth$/
+
+function useEthereumName() {
+    const [ethereumName, setEthereumName] = useState('')
+    const nickname = getNickname()
+    const twitterId = getTwitterId()
+    const bioDescription = getBioDescription()
+
+    useEffect(() => {
+        const matched = bioDescription.match(ENS_RE)
+        if (matched) {
+            setEthereumName(matched[0])
+        }
+    }, [bioDescription])
+    const name = useMemo(() => {
+        if (ethereumName) return ethereumName
+
+        if (ENS_RE_FULL.test(nickname)) {
+            return nickname
+        }
+        return `${twitterId}.eth`
+    }, [ethereumName, nickname, twitterId])
+
+    return name
 }
