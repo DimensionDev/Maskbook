@@ -42,18 +42,18 @@ export function typedMessageParse(x: string) {
 //#region Backup
 async function getBackupKey(password: string, account: string) {
     const pbkdf2 = await CryptoWorker.import_pbkdf2(encodeText(password + account))
-    return await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText(account))
+    return await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText(account + password))
 }
 
 export async function encryptBackup(password: string, account: string, message: string) {
     const aesKey = await getBackupKey(password, account)
-    const { content } = await encryptWithAES({ content: message, aesKey, iv: encodeText(account) })
+    const { content } = await encryptWithAES({ content: message, aesKey, iv: encodeText(account + password) })
     return encodeArrayBuffer(content)
 }
 
 export async function decryptBackup(password: string, account: string, message: string) {
     const aesKey = await getBackupKey(password, account)
-    const buffer = await decryptWithAES({ encrypted: message as string, aesKey, iv: encodeText(account) })
+    const buffer = await decryptWithAES({ encrypted: message as string, aesKey, iv: encodeText(account + password) })
 
     return decodeText(buffer)
 }

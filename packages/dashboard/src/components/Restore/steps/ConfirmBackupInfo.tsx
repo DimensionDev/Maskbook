@@ -10,7 +10,7 @@ import { ValidationCodeStep } from './Commont'
 interface ConfirmBackupInfoProps extends CommonProps {
     backupInfo: BackupFileInfo
     account: string
-    onNext(downloadLink: string, account: string, password: string): Promise<string>
+    onNext(downloadLink: string, account: string, password: string): Promise<string | null>
 }
 
 export const ConfirmBackupInfo = ({ backupInfo, onNext, account, toStep }: ConfirmBackupInfoProps) => {

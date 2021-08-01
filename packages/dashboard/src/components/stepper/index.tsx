@@ -1,7 +1,7 @@
 import type { ReactElement, ReactNode } from 'react'
 import React, { Children, cloneElement, isValidElement, useEffect, useState } from 'react'
 import { useMap } from 'react-use'
-import { makeStyles } from '@material-ui/core'
+import { Box, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
     hidden: {
@@ -27,6 +27,10 @@ export const Step = ({ children, toStep, params }: StepProps) => {
 
 interface StepperProps {
     defaultStep: string
+    step?: {
+        name: string
+        params?: any
+    }
     transition?: {
         render: ReactNode
         trigger: boolean
@@ -34,8 +38,8 @@ interface StepperProps {
     children: ReactElement[]
 }
 export const Stepper = (props: StepperProps) => {
+    const { defaultStep, transition, step } = props
     const classes = useStyles()
-    const { defaultStep, transition } = props
     const [currentStep, setCurrentStep] = useState(defaultStep)
     const [currentTransition, setCurrentTransition] = useState(transition?.render)
 
@@ -48,7 +52,10 @@ export const Stepper = (props: StepperProps) => {
     }
 
     useEffect(() => {
-        if (!transition) return
+        if (!transition) {
+            setCurrentTransition(null)
+            return
+        }
         if (transition.trigger) {
             setCurrentTransition(transition.render)
         } else {
@@ -60,21 +67,24 @@ export const Stepper = (props: StepperProps) => {
         Children.forEach(props.children, (child: ReactElement<StepProps>) => {
             if (isValidElement(child)) {
                 const name = child.props.name
-                setSteps(name, cloneElement(child, { toStep }))
+                setSteps(name, child)
             }
         })
     }, [])
 
-    useEffect(() => {}, [currentStep])
+    useEffect(() => {
+        if (!step) return
+        toStep(step.name, step.params)
+    }, [step])
 
     return (
         <>
             <>{currentTransition}</>
             <>
                 {steps[currentStep] ? (
-                    <div className={currentTransition ? classes.hidden : ''}>
-                        {cloneElement(steps[currentStep], { params: stepParams[currentStep] })}
-                    </div>
+                    <Box className={currentTransition ? classes.hidden : ''} width="100%">
+                        {cloneElement(steps[currentStep], { toStep, params: stepParams[currentStep] })}
+                    </Box>
                 ) : null}
             </>
         </>

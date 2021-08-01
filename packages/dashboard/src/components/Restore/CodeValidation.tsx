@@ -5,12 +5,12 @@ import { Step, Stepper } from '../stepper'
 import { ConfirmBackupInfo } from './steps/ConfirmBackupInfo'
 import { EmailField } from './steps/EmailField'
 import { PhoneField } from './steps/PhoneField'
-import { BackupInfoLoading } from './steps/BackupInfoLoading'
+import { LoadingCard } from './steps/LoadingCard'
 import { ValidationAccount } from './steps/ValidationAccount'
 import { ValidationCodeStep } from './steps/Commont'
 
 interface CodeValidationProps {
-    onValidated(downloadLink: string, account: string, password: string): Promise<string>
+    onValidated(downloadLink: string, account: string, password: string): Promise<string | null>
 }
 
 export const CodeValidation = memo(({ onValidated }: CodeValidationProps) => {
@@ -24,7 +24,7 @@ export const CodeValidation = memo(({ onValidated }: CodeValidationProps) => {
     return (
         <Stepper
             defaultStep={ValidationCodeStep.EmailInput}
-            transition={{ render: <BackupInfoLoading />, trigger: fetchingBackupInfo }}>
+            transition={{ render: <LoadingCard />, trigger: fetchingBackupInfo }}>
             <Step name={ValidationCodeStep.EmailInput}>{(toStep) => <EmailField toStep={toStep} />}</Step>
             <Step name={ValidationCodeStep.PhoneInput}>{(toStep) => <PhoneField toStep={toStep} />}</Step>
             <Step name={ValidationCodeStep.AccountValidation}>
