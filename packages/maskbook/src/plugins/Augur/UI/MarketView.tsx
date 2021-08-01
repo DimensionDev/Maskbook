@@ -18,7 +18,6 @@ import type { Market } from '../types'
 
 import { MarketViewDeck } from './MarketViewDeck'
 import { MarketDescription } from './MarketDescription'
-import { MarketOdds } from './MarketOdds'
 import { MarketBuySell } from './MarketBuySell'
 
 const useStyles = makeStyles((theme) => ({
@@ -113,7 +112,6 @@ export function MarketView(props: MarketViewProps) {
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
         <Tab className={classes.tab} key="description" label={t('plugin_augur_tab_description')} />,
-        <Tab className={classes.tab} key="chart" label={t('plugin_augur_tab_odds')} />,
         <Tab className={classes.tab} key="buysell" label={t('plugin_augur_tab_buysell')} />,
     ].filter(Boolean)
     //#endregion
@@ -161,8 +159,7 @@ export function MarketView(props: MarketViewProps) {
                 </Tabs>
                 <Paper className={classes.body}>
                     {tabIndex === 0 ? <MarketDescription /> : null}
-                    {tabIndex === 1 ? <MarketOdds /> : null}
-                    {tabIndex === 2 ? <MarketBuySell /> : null}
+                    {tabIndex === 1 ? <MarketBuySell /> : null}
                 </Paper>
             </CardContent>
             <CardActions className={classes.footer}>
