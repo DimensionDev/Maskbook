@@ -23,7 +23,7 @@ import { IdentifierMap } from '../IdentifierMap'
 import { queryAvatarDataURL } from '../helpers/avatar'
 import {
     generate_ECDH_256k1_KeyPair_ByMnemonicWord,
-    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
+    generate_ECDH_256k1_KeyPair_ByMnemonicWord_V2,
 } from '../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import type {
@@ -188,8 +188,10 @@ export async function createPersonaByMnemonic(
 }
 
 export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: string | undefined, password: string) {
-    // todo: remove used property
-    const { key, mnemonicRecord: mnemonic } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWord, password)
+    const { key, mnemonicRecord: mnemonic } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord_V2(
+        mnemonicWord,
+        password,
+    )
     const { privateKey, publicKey } = key
     const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
     return createPersonaByJsonWebKey({

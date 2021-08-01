@@ -55,8 +55,8 @@ export const RestoreBlueIcon = createIcon(
                 width="24"
                 height="19"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB">
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                colorInterpolationFilters="sRGB">
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feGaussianBlur in="BackgroundImage" stdDeviation="2" />
                 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
                 <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
@@ -68,8 +68,8 @@ export const RestoreBlueIcon = createIcon(
                 width="22"
                 height="15"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB">
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                colorInterpolationFilters="sRGB">
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feGaussianBlur in="BackgroundImage" stdDeviation="1.5" />
                 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
                 <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />

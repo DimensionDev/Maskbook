@@ -2,12 +2,14 @@ import { useState } from 'react'
 import { useAsync } from 'react-use'
 import { Box, Button, Card, makeStyles } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
-import { MaskColorVar } from '@masknet/theme'
+import { MaskColorVar, useSnackbar } from '@masknet/theme'
 import { Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { MaskAlert } from '../MaskAlert'
 import FileUpload from '../FileUpload'
 import { ButtonGroup } from '../RegisterFrame/ButtonGroup'
+import { useNavigate } from 'react-router'
+import { RoutePaths } from '../../type'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,6 +35,8 @@ export interface RestoreFromJsonProps {}
 export function RestoreFromJson(props: RestoreFromJsonProps) {
     const t = useDashboardI18N()
     const classes = useStyles()
+    const navigate = useNavigate()
+    const { enqueueSnackbar } = useSnackbar()
 
     const [json, setJSON] = useState<any | null>(null)
     const [backupValue, setBackupValue] = useState('')
@@ -56,7 +60,21 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
     }, [backupValue])
 
     const restoreDB = async () => {
-        await Services.Welcome.checkPermissionsAndRestore(backupId)
+        try {
+            await Services.Welcome.checkPermissionsAndRestore(backupId)
+            navigate(RoutePaths.Personas, { replace: true })
+        } catch (_) {
+            enqueueSnackbar('Restore backup failed, Please try again', { variant: 'error' })
+        }
+    }
+
+    const handleCancel = () => {
+        if (restoreStatus !== RestoreStatus.WaitingInput) {
+            setRestoreStatus(RestoreStatus.WaitingInput)
+            setBackupValue('')
+        } else {
+            navigate(-1)
+        }
     }
 
     return (
@@ -71,7 +89,7 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
                 {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
             </Box>
             <ButtonGroup>
-                <Button variant="rounded" color="secondary">
+                <Button variant="rounded" color="secondary" onClick={handleCancel}>
                     {t.wallets_import_wallet_cancel()}
                 </Button>
                 <Button

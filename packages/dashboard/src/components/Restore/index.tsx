@@ -24,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const Restore = memo(() => {
-    const classes = useStyles()
     const t = useDashboardI18N()
+    const classes = useStyles()
     const [currentTab, setCurrentTab] = useState('mnemonic')
     const onTabChange = (tabName: string) => setCurrentTab(tabName)
 
