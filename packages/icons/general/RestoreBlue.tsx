@@ -1,7 +1,7 @@
 import { createIcon } from '../utils'
 
 export const RestoreBlueIcon = createIcon(
-    'SignUpAccount',
+    'RestoreBlue',
     <>
         <g filter="url(#filter0_b)">
             <path
