@@ -4,6 +4,7 @@ export enum DialogRoutes {
     Root = '/',
     Wallet = '/wallet',
     ImportWallet = '/wallet/import',
+    AddDeriveWallet = '/wallet/addDerive',
     Personas = '/personas',
     PermissionAwareRedirect = '/redirect',
     RequestPermission = '/request-permission',

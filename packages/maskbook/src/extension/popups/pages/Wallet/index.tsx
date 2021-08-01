@@ -3,23 +3,17 @@ import { useWallets } from '@masknet/web3-shared'
 import { Route, Switch } from 'react-router-dom'
 import { DialogRoutes } from '../../index'
 import { ImportWallet } from './components/ImportWallet'
-import { useHistory } from 'react-router'
-import { useEffect } from 'react'
+import { AddDeriveWallet } from './components/AddDeriveWallet'
 
 export default function Wallet() {
-    const history = useHistory()
     const wallets = useWallets()
 
-    useEffect(() => {
-        if (wallets.length) history.push(DialogRoutes.ImportWallet)
-    }, [wallets])
-
-    //TODO: replace to sign state
     return wallets.length === 0 ? (
         <WalletStartUp />
     ) : (
         <Switch>
-            <Route path={DialogRoutes.ImportWallet} children={<ImportWallet />} />
+            <Route path={DialogRoutes.ImportWallet} children={<ImportWallet />} exact />
+            <Route path={DialogRoutes.AddDeriveWallet} children={<AddDeriveWallet />} exact />
         </Switch>
     )
 }

@@ -1,9 +1,14 @@
-import { memo, useMemo } from 'react'
-import { makeStyles, Tab, Tabs, TextField, Typography } from '@material-ui/core'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { Button, makeStyles, Tab, Tabs, TextField, Typography } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NetworkSelector } from '../NetworkSelector'
+import { useI18N } from '../../../../../../utils'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { TabContext, TabPanel } from '@material-ui/lab'
+import { useHistory } from 'react-router-dom'
+import { DialogRoutes } from '../../../../index'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -33,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         marginTop: 10,
     },
+    textFieldInput: {
+        backgroundColor: '#F7F9FA',
+    },
     input: {
         padding: '11px 9px',
         fontSize: 12,
@@ -58,10 +66,42 @@ const useStyles = makeStyles((theme) => ({
     indicator: {
         display: 'none',
     },
+    selected: {
+        backgroundColor: '#ffffff',
+    },
+    tabPanel: {
+        padding: '16px 0 0 0',
+    },
+    multiline: {
+        width: '100%',
+    },
+    multilineInput: {
+        padding: 6,
+        backgroundColor: '#F7F9FA',
+    },
+    textArea: {
+        padding: 0,
+        fontSize: 12,
+    },
+    button: {
+        marginTop: 20,
+        padding: '9px 10px',
+        borderRadius: 20,
+    },
 }))
 
+enum ImportWalletTab {
+    Mnemonic = 'Mnemonic',
+    JsonFile = 'Json File',
+    PrivateKey = 'Private Key',
+}
+
 export const ImportWallet = memo(() => {
+    const { t } = useI18N()
+    const history = useHistory()
     const classes = useStyles()
+    const [currentTab, setCurrentTab] = useState(ImportWalletTab.Mnemonic)
+    const [mnemonic, setMnemonic] = useState('')
 
     const schema = useMemo(() => {
         return zod
@@ -117,8 +157,7 @@ export const ImportWallet = memo(() => {
 
     const {
         control,
-        handleSubmit,
-        formState: { errors },
+        formState: { errors, isValid },
     } = useForm<zod.infer<typeof schema>>({
         mode: 'onChange',
         resolver: zodResolver(schema),
@@ -128,6 +167,22 @@ export const ImportWallet = memo(() => {
             confirm: '',
         },
     })
+
+    const onSubmit = useCallback(() => {
+        switch (currentTab) {
+            case ImportWalletTab.Mnemonic:
+                const params = new URLSearchParams()
+                params.set('mnemonic', mnemonic)
+                history.push({
+                    pathname: DialogRoutes.AddDeriveWallet,
+                    search: `?${params.toString()}`,
+                })
+                break
+            default:
+                break
+        }
+    }, [mnemonic, currentTab])
+
     return (
         <div className={classes.container}>
             <div className={classes.header}>
@@ -147,7 +202,7 @@ export const ImportWallet = memo(() => {
                                 placeholder="Enter 1-12 characters"
                                 className={classes.textField}
                                 inputProps={{ className: classes.input }}
-                                InputProps={{ disableUnderline: true }}
+                                InputProps={{ disableUnderline: true, classes: { root: classes.textFieldInput } }}
                             />
                         )}
                         control={control}
@@ -168,7 +223,7 @@ export const ImportWallet = memo(() => {
                                 helperText={errors.password?.message}
                                 className={classes.textField}
                                 inputProps={{ className: classes.input }}
-                                InputProps={{ disableUnderline: true }}
+                                InputProps={{ disableUnderline: true, classes: { root: classes.textFieldInput } }}
                             />
                         )}
                         name="password"
@@ -184,7 +239,7 @@ export const ImportWallet = memo(() => {
                                 placeholder="Re-enter the payment password"
                                 className={classes.textField}
                                 inputProps={{ className: classes.input }}
-                                InputProps={{ disableUnderline: true }}
+                                InputProps={{ disableUnderline: true, classes: { root: classes.textFieldInput } }}
                             />
                         )}
                         name="confirm"
@@ -196,11 +251,39 @@ export const ImportWallet = memo(() => {
                     characters with a length of 8-20 characters.
                 </Typography>
             </form>
-            <Tabs value={0} variant="fullWidth" className={classes.tabs} classes={{ indicator: classes.indicator }}>
-                <Tab label="Mnemonic" value={0} className={classes.tab} />
-                <Tab label="Json File" value={1} className={classes.tab} />
-                <Tab label="Private Key" value={2} className={classes.tab} />
-            </Tabs>
+            <TabContext value={currentTab}>
+                <Tabs
+                    value={currentTab}
+                    variant="fullWidth"
+                    className={classes.tabs}
+                    classes={{ indicator: classes.indicator }}
+                    onChange={(event, tab) => setCurrentTab(tab)}>
+                    {getEnumAsArray(ImportWalletTab).map(({ key, value }) => (
+                        <Tab label={key} value={value} classes={{ root: classes.tab, selected: classes.selected }} />
+                    ))}
+                </Tabs>
+                <TabPanel value={ImportWalletTab.Mnemonic} className={classes.tabPanel}>
+                    <TextField
+                        variant="filled"
+                        multiline
+                        value={mnemonic}
+                        onChange={(e) => setMnemonic(e.target.value)}
+                        rows={4}
+                        placeholder="Please enter 12 mnemonic words separated by spaces"
+                        InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
+                        className={classes.multiline}
+                        inputProps={{ className: classes.textArea }}
+                    />
+                </TabPanel>
+            </TabContext>
+            <Button
+                variant="contained"
+                fullWidth
+                className={classes.button}
+                disabled={!isValid || !mnemonic}
+                onClick={onSubmit}>
+                Import
+            </Button>
         </div>
     )
 })
