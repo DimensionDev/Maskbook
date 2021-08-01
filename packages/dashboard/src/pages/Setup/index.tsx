@@ -148,7 +148,7 @@ const Setup = () => {
                         action={{
                             type: 'secondary',
                             text: t.setup_page_create_restore_button(),
-                            handler: () => navigate(RoutePaths.Login),
+                            handler: () => navigate(RoutePaths.SignIn),
                         }}
                     />
                 </ActionCards>

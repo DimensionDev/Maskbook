@@ -51,7 +51,7 @@ export const MnemonicRevealForm = memo(() => {
         <ColumnContentLayout>
             <Header
                 title={t.create_account_identity_title()}
-                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.Login) }}
+                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.SignIn) }}
             />
             <Body>
                 <SignUpAccountLogo />

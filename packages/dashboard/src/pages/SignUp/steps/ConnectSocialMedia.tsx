@@ -52,7 +52,7 @@ export const ConnectSocialMedia = () => {
             <Header
                 title={t.create_account_connect_social_media_title()}
                 subtitle={t.create_account_persona_subtitle()}
-                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.Login) }}
+                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.SignIn) }}
             />
             <Body>
                 <SignUpAccountLogo />

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
 import { Restore } from '../../components/Restore'
 
-export default function Login() {
+export default function SignIn() {
     const t = useDashboardI18N()
     const navigate = useNavigate()
 

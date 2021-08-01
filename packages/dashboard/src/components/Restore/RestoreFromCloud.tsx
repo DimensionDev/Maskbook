@@ -9,6 +9,8 @@ import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard
 import { ButtonGroup } from '../RegisterFrame/ButtonGroup'
 import { useSnackbar } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
+import { useNavigate } from 'react-router'
+import { RoutePaths } from '../../type'
 
 enum RestoreStatus {
     validation,
@@ -18,6 +20,7 @@ enum RestoreStatus {
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
+    const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar()
     const [backupJson, setBackupJson] = useState<any | null>(null)
     const [restoreStatus, setRestoreStatus] = useState(RestoreStatus.validation)
@@ -52,7 +55,6 @@ export const RestoreFromCloud = memo(() => {
         try {
             const backupValue = await fetchBackupValueFn(downloadLink)
             const backupText = await decryptBackupFn(account, password, backupValue)
-            console.log(backupText)
             const backupInfo = await Services.Welcome.parseBackupStr(backupText)
 
             if (backupInfo) {
@@ -69,7 +71,12 @@ export const RestoreFromCloud = memo(() => {
     }
 
     const onRestore = async () => {
-        await Services.Welcome.checkPermissionsAndRestore(backupId)
+        try {
+            await Services.Welcome.checkPermissionsAndRestore(backupId)
+            navigate(RoutePaths.Personas, { replace: true })
+        } catch (e) {
+            enqueueSnackbar('Backup failed', { variant: 'error' })
+        }
     }
 
     // todo: refactor multi step
@@ -82,7 +89,7 @@ export const RestoreFromCloud = memo(() => {
             )}
             {restoreStatus === RestoreStatus.preview && !decryptingBackup && !fetchingBackupValue && (
                 <>
-                    <Box>
+                    <Box sx={{ width: '100%' }}>
                         <BackupPreviewCard json={backupJson} />
                     </Box>
                     <ButtonGroup>

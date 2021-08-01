@@ -14,6 +14,7 @@ const Container = styled('div')(
 const LeftSide = styled('div')(
     ({ theme }) => `
     width: 30%;
+    max-width: 500px;
     padding: 40px;
     background: ${theme.palette.primary.main};
 `,

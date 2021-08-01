@@ -6,7 +6,7 @@ import NotLoginGuardRoute from '../GuardRoute'
 const Wallets = lazy(() => import('./Wallets'))
 const Setup = lazy(() => import('./Setup'))
 const SignUp = lazy(() => import('./SignUp'))
-const Login = lazy(() => import('./Login'))
+const SignIn = lazy(() => import('./SignIn'))
 const PrivacyPolicy = lazy(() => import('./PrivacyPolicy'))
 const Welcome = lazy(() => import('./Welcome'))
 const Personas = lazy(() => import('./Personas'))
@@ -20,7 +20,7 @@ export function Pages() {
                 <NotLoginGuardRoute path={RoutePaths.Welcome} element={<Welcome />} redirectTo={RoutePaths.Personas} />
                 <Route path={RoutePaths.Setup} element={<Setup />} />
                 <Route path={`${RoutePaths.SignUp}/*`} element={<SignUp />} />
-                <NotLoginGuardRoute path={RoutePaths.Login} element={<Login />} redirectTo={RoutePaths.Personas} />
+                <NotLoginGuardRoute path={RoutePaths.SignIn} element={<SignIn />} redirectTo={RoutePaths.Personas} />
                 <Route path={RoutePaths.PrivacyPolicy} element={<PrivacyPolicy />} />
                 <Route path={RoutePaths.Personas} element={frame(<Personas />)} />
                 <Route path={`${RoutePaths.Wallets}/*`} element={frame(<Wallets />)} />
