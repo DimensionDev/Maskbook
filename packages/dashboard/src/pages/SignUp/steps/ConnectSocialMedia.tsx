@@ -56,13 +56,13 @@ export const ConnectSocialMedia = () => {
             <Header
                 title={t.create_account_connect_social_media_title()}
                 subtitle={t.create_account_persona_subtitle()}
-                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.Setup) }}
+                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.SignIn) }}
             />
             <Body>
                 <SignUpAccountLogo />
                 <div>
                     <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(4) }}>
-                        <Button variant="text" onClick={() => {}}>
+                        <Button variant="text" onClick={() => navigate(RoutePaths.Setup)}>
                             {t.go_back()}
                         </Button>
                     </Stack>

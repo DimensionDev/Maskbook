@@ -25,11 +25,12 @@ enum CreateWalletStep {
 }
 
 export const MnemonicRevealForm = memo(() => {
-    const [step, setStep] = useState(CreateWalletStep.NameAndWords)
+    const t = useDashboardI18N()
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar()
-    const t = useDashboardI18N()
     const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
+
+    const [step, setStep] = useState(CreateWalletStep.NameAndWords)
 
     const onSubmit = async () => {
         if (words.join(' ') !== puzzleWords.join(' ')) {
@@ -56,7 +57,7 @@ export const MnemonicRevealForm = memo(() => {
             <Body>
                 <SignUpAccountLogo />
                 {step === CreateWalletStep.NameAndWords && (
-                    <div>
+                    <>
                         <Stack
                             direction="row"
                             justifyContent="flex-end"
@@ -77,10 +78,10 @@ export const MnemonicRevealForm = memo(() => {
                                 {t.verify()}
                             </Button>
                         </ButtonGroup>
-                    </div>
+                    </>
                 )}
                 {step === CreateWalletStep.Verify && (
-                    <div>
+                    <>
                         <DesktopMnemonicConfirm indexes={indexes} puzzleWords={puzzleWords} onChange={answerCallback} />
                         <ButtonGroup>
                             <Button variant="rounded" color="secondary" onClick={onBack}>
@@ -95,7 +96,7 @@ export const MnemonicRevealForm = memo(() => {
                                 {t.confirm()}
                             </Button>
                         </ButtonGroup>
-                    </div>
+                    </>
                 )}
                 <MaskAlert description={t.create_account_identity_warning()} type="error" />
             </Body>

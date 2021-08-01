@@ -9,7 +9,7 @@ import {
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { RoutePaths } from '../../../type'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { Button, Typography } from '@material-ui/core'
+import { Box, Button, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
 import { useSnackbarCallback } from '@masknet/shared'
@@ -29,10 +29,11 @@ export const PersonaCreate = () => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const createPersona = useCreatePersonaV2()
-    const [personaName, setPersonaName] = useState('')
     const {
         state: { mnemonic },
     } = useLocation() as { state: { mnemonic: string[] } }
+
+    const [personaName, setPersonaName] = useState('')
 
     useEffect(() => {
         if (!mnemonic || !Services.Identity.validateMnemonic(mnemonic.join(' '))) {
@@ -40,12 +41,10 @@ export const PersonaCreate = () => {
         }
     }, [mnemonic])
 
-    const handleNext = useSnackbarCallback({
+    const handleCreatePersona = useSnackbarCallback({
         executor: () => createPersona(mnemonic.join(' '), personaName),
         onSuccess: () => navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedial}`),
-        onError: () => {
-            navigate(`${RoutePaths.SignUp}`)
-        },
+        onError: () => navigate(`${RoutePaths.SignUp}`),
         successText: t.create_account_persona_successfully(),
         deps: [],
     })
@@ -59,7 +58,7 @@ export const PersonaCreate = () => {
             />
             <Body>
                 <SignUpAccountLogo />
-                <div>
+                <Box>
                     <MaskTextField
                         required
                         label={<Label value={t.personas()} />}
@@ -71,11 +70,11 @@ export const PersonaCreate = () => {
                         <Button variant="rounded" color="secondary" onClick={() => navigate(-1)}>
                             {t.back()}
                         </Button>
-                        <Button variant="rounded" color="primary" onClick={handleNext} disabled={!personaName}>
+                        <Button variant="rounded" color="primary" onClick={handleCreatePersona} disabled={!personaName}>
                             {t.next()}
                         </Button>
                     </ButtonGroup>
-                </div>
+                </Box>
             </Body>
             <Footer />
         </ColumnContentLayout>
