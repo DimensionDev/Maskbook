@@ -46,7 +46,7 @@ export const RestoreFromMnemonic = () => {
 
     return (
         <>
-            <Box sx={{ marginBottom: '57px' }}>
+            <Box>
                 <DesktopMnemonicConfirm
                     onChange={(word, index) => {
                         updateAt(index, word)

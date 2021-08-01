@@ -64,7 +64,7 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
             <Box sx={{ width: '100%' }}>
                 {restoreStatus === RestoreStatus.Verifying && <div className={classes.root}>Verifying</div>}
                 {restoreStatus === RestoreStatus.WaitingInput && (
-                    <Card variant="background" sx={{ marginBottom: '57px' }}>
+                    <Card variant="background" sx={{ height: '144px' }}>
                         <FileUpload onChange={(_, content) => content && setBackupValue(content)} readAsText />
                     </Card>
                 )}

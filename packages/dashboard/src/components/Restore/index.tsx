@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { makeStyles, Stack } from '@material-ui/core'
 import { useTabs } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
@@ -6,6 +6,7 @@ import { RestoreFromJson } from './RestoreFromJson'
 import { RestoreFromMnemonic } from './RestoreFromMnemonic'
 import { RestoreFromCloud } from './RestoreFromCloud'
 import { RestoreFromPrivateKey } from './RestoreFromPrivateKey'
+import { RestoreBlueLogo, SignUpAccountLogo } from '../RegisterFrame/ColumnContentLayout'
 
 const useStyles = makeStyles((theme) => ({
     tabs: {
@@ -25,6 +26,8 @@ const useStyles = makeStyles((theme) => ({
 export const Restore = memo(() => {
     const classes = useStyles()
     const t = useDashboardI18N()
+    const [currentTab, setCurrentTab] = useState('mnemonic')
+    const onTabChange = (tabName: string) => setCurrentTab(tabName)
 
     const tabs = useTabs(
         t.wallets_import_wallet_tabs(),
@@ -44,11 +47,15 @@ export const Restore = memo(() => {
             variant: 'buttonGroup',
             tabPanelClasses: { root: classes.panels },
             buttonTabGroupClasses: { root: classes.tabs },
+            onTabChange,
         },
     )
     return (
-        <Stack justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
-            {tabs}
-        </Stack>
+        <>
+            {['mnemonic', 'privateKey'].includes(currentTab) ? <SignUpAccountLogo /> : <RestoreBlueLogo />}
+            <Stack justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
+                {tabs}
+            </Stack>
+        </>
     )
 })

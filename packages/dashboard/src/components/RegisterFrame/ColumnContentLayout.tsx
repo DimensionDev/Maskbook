@@ -1,4 +1,4 @@
-import { SignUpAccountIcon } from '@masknet/icons'
+import { RestoreIcon, RestoreBlueIcon, SignUpAccountIcon } from '@masknet/icons'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { getMaskColor } from '@masknet/theme'
 
@@ -33,18 +33,22 @@ export const SignUpAccountLogo = styled(SignUpAccountIcon)(
     ({ theme }) => `
     width: 100%;
     height: 96px;
-    margin-bottom: 100px;
+    margin-bottom: ${theme.spacing(10)};
 `,
 )
 
-// interface ColumnContentLayoutProps extends React.PropsWithChildren<{}>, HeaderUIProps {}
+export const RestoreBlueLogo = styled(RestoreBlueIcon)(
+    ({ theme }) => `
+    width: 100%;
+    height: 96px;
+    margin-bottom: ${theme.spacing(10)};
+`,
+)
 
-// export const ColumnContentLayout = memo(({ title, action, children }: ColumnContentLayoutProps) => {
-//     return (
-//         <Container>
-//             <Header title={title} action={action} />
-//             <Body>{children}</Body>
-//             <Footer></Footer>
-//         </Container>
-//     )
-// })
+export const RestoreLogo = styled(RestoreIcon)(
+    ({ theme }) => `
+    width: 100%;
+    height: 96px;
+    margin-bottom: ${theme.spacing(10)};
+`,
+)
