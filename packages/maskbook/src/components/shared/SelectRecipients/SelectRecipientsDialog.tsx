@@ -11,7 +11,7 @@ import {
     DialogActions,
 } from '@material-ui/core'
 import { useI18N } from '../../../utils'
-import { useStylesExtends } from '../../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { ProfileInList } from './ProfileInList'
 import type { Profile } from '../../../database'
 import { InjectedDialog } from '../InjectedDialog'

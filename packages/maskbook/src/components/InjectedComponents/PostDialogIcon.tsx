@@ -1,5 +1,5 @@
 import { makeStyles, SvgIconClassKey } from '@material-ui/core'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
 
 const useStyles = makeStyles(() => ({

@@ -4,7 +4,7 @@ import { Button, CircularProgress, DialogActions, DialogContent } from '@materia
 import { useI18N } from '../../utils'
 import { SelectProfileUI } from '../shared/SelectProfileUI'
 import type { Profile } from '../../database'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { InjectedDialog } from '../shared/InjectedDialog'
 
 export interface SelectProfileDialogProps extends withClasses<never> {

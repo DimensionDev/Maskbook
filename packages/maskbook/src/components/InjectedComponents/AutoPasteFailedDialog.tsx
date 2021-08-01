@@ -15,7 +15,7 @@ import {
     Link,
     Button,
 } from '@material-ui/core'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { Image } from '../shared/Image'
 import { useSnackbar } from '@masknet/theme'
 import { DraggableDiv } from '../shared/DraggableDiv'

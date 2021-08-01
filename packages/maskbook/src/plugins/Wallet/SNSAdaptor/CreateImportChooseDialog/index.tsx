@@ -1,9 +1,8 @@
 import { Box, Button, DialogContent, makeStyles, Typography } from '@material-ui/core'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { Image } from '../../../../components/shared/Image'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { WalletMessages } from '../../messages'
 
 const useStyles = makeStyles((theme) => ({

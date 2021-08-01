@@ -15,7 +15,7 @@ import {
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { texts } from '../../settings/createSettings'
 import { useMatchXS } from '../../utils'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     container: { listStyleType: 'none', width: '100%' },
