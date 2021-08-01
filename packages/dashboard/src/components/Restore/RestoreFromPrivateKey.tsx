@@ -49,36 +49,38 @@ export const RestoreFromPrivateKey = memo(() => {
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <Box>
-                    <Controller
-                        control={control}
-                        render={({ field }) => (
-                            <MaskTextField
-                                {...field}
-                                sx={{ width: '100%' }}
-                                multiline
-                                rows={8}
-                                helperText={errors.privateKey?.message}
-                                error={!!errors.privateKey}
-                                placeholder={t.sign_in_account_private_key_placeholder()}
-                            />
-                        )}
-                        name="privateKey"
-                    />
-                </Box>
-                <ButtonGroup>
-                    <Button variant="rounded" color="secondary">
-                        {t.cancel()}
-                    </Button>
-                    <Button variant="rounded" color="primary" type="submit">
-                        {t.next()}
-                    </Button>
-                </ButtonGroup>
-                <Box sx={{ marginTop: '35px' }}>
-                    <MaskAlert description={t.sign_in_account_private_key_warning()} />
-                </Box>
-            </form>
+            <Box sx={{ width: '100%' }}>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Box>
+                        <Controller
+                            control={control}
+                            render={({ field }) => (
+                                <MaskTextField
+                                    {...field}
+                                    sx={{ width: '100%' }}
+                                    multiline
+                                    rows={8}
+                                    helperText={errors.privateKey?.message}
+                                    error={!!errors.privateKey}
+                                    placeholder={t.sign_in_account_private_key_placeholder()}
+                                />
+                            )}
+                            name="privateKey"
+                        />
+                    </Box>
+                    <ButtonGroup>
+                        <Button variant="rounded" color="secondary">
+                            {t.cancel()}
+                        </Button>
+                        <Button variant="rounded" color="primary" type="submit">
+                            {t.next()}
+                        </Button>
+                    </ButtonGroup>
+                </form>
+            </Box>
+            <Box sx={{ marginTop: '35px' }}>
+                <MaskAlert description={t.sign_in_account_private_key_warning()} />
+            </Box>
         </>
     )
 })
