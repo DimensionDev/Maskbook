@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 import { MaskColorVar } from '@masknet/theme'
+import { checkUppercase, checkLowercase, checkNumber } from '@masknet/shared'
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -75,7 +76,7 @@ export const CreateWalletForm = memo(() => {
                         (data) =>
                             Array.from(data).some((char) => {
                                 const code = char.charCodeAt(0)
-                                return code >= String('A').charCodeAt(0) && code <= String('Z').charCodeAt(0)
+                                return checkUppercase(code)
                             }),
                         'Must contain an uppercase character',
                     )
@@ -83,7 +84,7 @@ export const CreateWalletForm = memo(() => {
                         (data) =>
                             Array.from(data).some((char) => {
                                 const code = char.charCodeAt(0)
-                                return code >= String('a').charCodeAt(0) && code <= String('z').charCodeAt(0)
+                                return checkLowercase(code)
                             }),
                         'Must contain a lowercase character',
                     )
@@ -91,7 +92,7 @@ export const CreateWalletForm = memo(() => {
                         (data) =>
                             Array.from(data).some((char) => {
                                 const code = char.charCodeAt(0)
-                                return code >= String('0').charCodeAt(0) && code <= String('9').charCodeAt(0)
+                                return checkNumber(code)
                             }),
                         'Must contain a number',
                     )
@@ -99,11 +100,7 @@ export const CreateWalletForm = memo(() => {
                         (data) =>
                             Array.from(data).some((char) => {
                                 const code = char.charCodeAt(0)
-                                return !(
-                                    (code >= String('a').charCodeAt(0) && code <= String('z').charCodeAt(0)) ||
-                                    (code >= String('A').charCodeAt(0) && code <= String('Z').charCodeAt(0)) ||
-                                    (code >= String('0').charCodeAt(0) && code <= String('9').charCodeAt(0))
-                                )
+                                return !(checkUppercase(code) || checkLowercase(code) || checkNumber(code))
                             }),
                         'Must contain a special character',
                     ),
