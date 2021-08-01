@@ -32,7 +32,7 @@ export const SendingCodeField = ({
         <Box>
             <Box>{label}</Box>
             <Box>
-                <Stack alignItems="center" direction="row" spacing={1}>
+                <Stack alignItems="flex-start" direction="row" spacing={1}>
                     <Box flex={1}>
                         <MaskTextField
                             size="small"

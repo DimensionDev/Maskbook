@@ -10,7 +10,6 @@ export enum ValidationCodeStep {
     PhoneInput = 'PhoneInput',
     AccountValidation = 'AccountValidation',
     ConfirmBackupInfo = 'ConfirmBackupInfo',
-    BackupInfoLoading = 'BackupInfoLoading',
 }
 
 export const Label = ({ mode, onModeChange }: LabelProps) => {

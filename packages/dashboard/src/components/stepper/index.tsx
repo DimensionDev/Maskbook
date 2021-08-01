@@ -1,7 +1,14 @@
 import type { ReactElement, ReactNode } from 'react'
 import React, { Children, cloneElement, isValidElement, useEffect, useState } from 'react'
-import { Box } from '@material-ui/core'
 import { useMap } from 'react-use'
+import { makeStyles } from '@material-ui/core'
+
+const useStyles = makeStyles((theme) => ({
+    hidden: {
+        position: 'absolute',
+        left: 10000,
+    },
+}))
 
 export interface CommonProps {
     toStep: (stepName: string, params?: any) => void
@@ -19,30 +26,35 @@ export const Step = ({ children, toStep, params }: StepProps) => {
 }
 
 interface StepperProps {
-    default: string
-    stepContext?: {
-        step: string
-        params?: string
+    defaultStep: string
+    transition?: {
+        render: ReactNode
+        trigger: boolean
     }
     children: ReactElement[]
 }
 export const Stepper = (props: StepperProps) => {
-    const [currentStep, setCurrentStep] = useState(props.default)
+    const classes = useStyles()
+    const { defaultStep, transition } = props
+    const [currentStep, setCurrentStep] = useState(defaultStep)
+    const [currentTransition, setCurrentTransition] = useState(transition?.render)
+
     const [steps, { set: setSteps }] = useMap<{ [key: string]: ReactElement }>()
     const [stepParams, { set: setParam }] = useMap<{ [key: string]: any }>()
-
-    useEffect(() => {
-        if (!props.stepContext) return
-
-        const { step, params } = props.stepContext
-        setCurrentStep(step)
-        setParam(step, params)
-    }, [props.stepContext])
 
     const toStep = (stepName: string, params: any) => {
         setCurrentStep(stepName)
         setParam(stepName, params)
     }
+
+    useEffect(() => {
+        if (!transition) return
+        if (transition.trigger) {
+            setCurrentTransition(transition.render)
+        } else {
+            setCurrentTransition(null)
+        }
+    }, [transition])
 
     useEffect(() => {
         Children.forEach(props.children, (child: ReactElement<StepProps>) => {
@@ -56,6 +68,15 @@ export const Stepper = (props: StepperProps) => {
     useEffect(() => {}, [currentStep])
 
     return (
-        <Box>{steps[currentStep] ? cloneElement(steps[currentStep], { params: stepParams[currentStep] }) : null}</Box>
+        <>
+            <>{currentTransition}</>
+            <>
+                {steps[currentStep] ? (
+                    <div className={currentTransition ? classes.hidden : ''}>
+                        {cloneElement(steps[currentStep], { params: stepParams[currentStep] })}
+                    </div>
+                ) : null}
+            </>
+        </>
     )
 }

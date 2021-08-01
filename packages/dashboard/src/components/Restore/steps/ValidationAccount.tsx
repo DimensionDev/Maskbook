@@ -11,20 +11,26 @@ import { ValidationCodeStep } from './Commont'
 interface ValidationAccountProps extends CommonProps {
     account: string
     type: AccountValidationType
-    onNext(account: string, type: AccountValidationType, code: string): Promise<any>
+    onNext(account: string, type: AccountValidationType, code: string): Promise<BackupFileInfo | { message: string }>
 }
 
 export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationAccountProps) => {
     const t = useDashboardI18N()
     const [code, setCode] = useState('')
+    const [error, setError] = useState('')
+
     const [{ error: sendCodeError }, handleSendCodeFn] = useAsyncFn(async () => {
         return sendCode({ account: account, type: type })
-    }, [account])
+    }, [account, type])
 
     const handleNext = async () => {
         const backupInfo = await onNext(account, type, code)
-        if (backupInfo) {
+
+        if ((backupInfo as BackupFileInfo).downloadURL) {
+            setError('')
             toStep(ValidationCodeStep.ConfirmBackupInfo, { backupInfo: backupInfo, account: account })
+        } else {
+            setError((backupInfo as { message: string }).message)
         }
     }
 
@@ -37,8 +43,8 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
                     </Typography>
                 }
                 onChange={(c) => setCode(c)}
-                // todo : message
-                errorMessage={sendCodeError && sendCodeError.message}
+                // todo : handle message in front end
+                errorMessage={(sendCodeError && sendCodeError.message) || error}
                 onSend={handleSendCodeFn}
             />
             <ButtonGroup>

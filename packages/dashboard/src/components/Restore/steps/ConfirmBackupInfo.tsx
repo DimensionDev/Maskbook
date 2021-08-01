@@ -8,7 +8,7 @@ import type { CommonProps } from '../../stepper'
 import { ValidationCodeStep } from './Commont'
 
 interface ConfirmBackupInfoProps extends CommonProps {
-    backupInfo: any
+    backupInfo: BackupFileInfo
     account: string
     onNext(downloadLink: string, account: string, password: string): Promise<string>
 }

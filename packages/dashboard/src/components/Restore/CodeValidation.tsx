@@ -14,20 +14,17 @@ interface CodeValidationProps {
 }
 
 export const CodeValidation = memo(({ onValidated }: CodeValidationProps) => {
-    const [{ loading: fetchingBackupInfo, error: fetchBackupInfoError, value: backupInfo }, fetchDownloadLinkFn] =
-        useAsyncFn(async (account: string, type: AccountValidationType, code: string) => {
+    const [{ loading: fetchingBackupInfo }, fetchDownloadLinkFn] = useAsyncFn(
+        async (account: string, type: AccountValidationType, code: string) => {
             return fetchDownloadLink({ code, account, type })
-        }, [])
-
-    const getCurrentStepContext = () => {
-        if (fetchingBackupInfo) return { step: ValidationCodeStep.BackupInfoLoading }
-        if (fetchBackupInfoError) return { step: ValidationCodeStep.AccountValidation }
-
-        return undefined
-    }
+        },
+        [],
+    )
 
     return (
-        <Stepper default={ValidationCodeStep.EmailInput} stepContext={getCurrentStepContext()}>
+        <Stepper
+            defaultStep={ValidationCodeStep.EmailInput}
+            transition={{ render: <BackupInfoLoading />, trigger: fetchingBackupInfo }}>
             <Step name={ValidationCodeStep.EmailInput}>{(toStep) => <EmailField toStep={toStep} />}</Step>
             <Step name={ValidationCodeStep.PhoneInput}>{(toStep) => <PhoneField toStep={toStep} />}</Step>
             <Step name={ValidationCodeStep.AccountValidation}>
@@ -35,7 +32,6 @@ export const CodeValidation = memo(({ onValidated }: CodeValidationProps) => {
                     <ValidationAccount toStep={toStep} account={account} type={type} onNext={fetchDownloadLinkFn} />
                 )}
             </Step>
-            <Step name={ValidationCodeStep.BackupInfoLoading}>{() => <BackupInfoLoading />}</Step>
             <Step name={ValidationCodeStep.ConfirmBackupInfo}>
                 {(toStep, { backupInfo, account }) => (
                     <ConfirmBackupInfo toStep={toStep} backupInfo={backupInfo} account={account} onNext={onValidated} />
