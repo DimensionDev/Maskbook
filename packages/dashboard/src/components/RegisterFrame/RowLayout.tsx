@@ -1,6 +1,7 @@
 import { MaskBannerIcon } from '@masknet/icons'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { memo } from 'react'
+import { LightColor } from '@masknet/theme/constants'
 
 const Container = styled('div')(
     ({ theme }) => `
@@ -23,7 +24,7 @@ const LeftSide = styled('div')(
 const RightContent = styled('div')(
     ({ theme }) => `
     width: 70%;
-    background: ${theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.common};
+    background: ${theme.palette.mode === 'dark' ? LightColor.textPrimary : theme.palette.common};
 `,
 )
 
