@@ -328,7 +328,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
             popups: withBrowserPolyfill(src('./src/extension/popups/render.tsx')),
         }
         if (isManifestV3) delete main.entry['background-script']
-        if (mode === 'production') delete main.entry['dashboard-next']
+        // if (mode === 'production') delete main.entry['dashboard-next']
         for (const entry in main.entry) {
             main.entry[entry] = iOSWebExtensionShimHack(...toArray(main.entry[entry] as any))
         }
