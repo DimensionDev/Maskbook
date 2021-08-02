@@ -94,10 +94,7 @@ export function createGlobalSettings<T extends browser.storage.StorageValue>(
     return settings
 }
 
-// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-export interface NetworkSettings<T> {
-    [networkKey: string]: ValueRef<T> & { ready: boolean; readyPromise: Promise<T> }
-}
+export type NetworkSettings<T> = Record<string, ValueRef<T> & { ready: boolean; readyPromise: Promise<T> }>
 
 export function createNetworkSettings<T extends browser.storage.StorageValue>(settingsKey: string, defaultValue: T) {
     const cached: NetworkSettings<T> = {}
