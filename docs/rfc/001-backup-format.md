@@ -5,6 +5,7 @@
 - Based-zip64 format (compression level: archive)
 - Based-zip64 standard file encryption
 - Structured tree structure
+- Integrity check
 
 ## General design
 
@@ -16,7 +17,7 @@ files.json # file hash list with manifest* and README.txt
 
 # the backup metadata
 manifest.json
-  - version = 3?
+  - version = 1
   - created at
   - build info
   - maskbook version
@@ -27,7 +28,6 @@ manifest.json
 manifest-[persona-pubkey-hash].signed
 
 permissions.json # original backup file "grantedHostPermissions" field.
-user-groups.json # original backup file "userGroups" field.
 posts.json       # original backup file "posts" field.
 profiles.json    # original backup file "profiles" field.
 personas.json    # original backup file "personas" field.
