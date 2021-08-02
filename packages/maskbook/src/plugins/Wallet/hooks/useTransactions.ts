@@ -25,9 +25,8 @@ export function useTransactions(
 
         switch (provider) {
             case PortfolioProvider.DEBANK:
-                return WalletRPC.getTransactionList(address.toLowerCase(), network, provider, page)
             case PortfolioProvider.ZERION:
-                return await WalletRPC.getTransactionList(address.toLowerCase(), network, provider, page)
+                return WalletRPC.getTransactionList(address.toLowerCase(), network, provider, page)
             default:
                 unreachable(provider)
         }

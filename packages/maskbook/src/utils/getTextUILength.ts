@@ -5,7 +5,7 @@ export function getTextUILength(text: string) {
 export function sliceTextByUILength(text: string, len: number) {
     const arr = Array.from(text)
     let currentText = ''
-    for (let i = 0, currentLen = 0; currentLen < len && arr[i]; currentLen += getCharUILength(arr[i]), i++) {
+    for (let i = 0, currentLen = 0; currentLen < len && arr[i]; currentLen += getCharUILength(arr[i]), i += 1) {
         currentText += arr[i]
     }
     return currentText

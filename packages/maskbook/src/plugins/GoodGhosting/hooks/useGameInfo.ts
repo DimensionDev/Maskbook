@@ -147,7 +147,7 @@ export function useTimeline(info: GoodGhostingInfo) {
         if (!startTime || !roundDuration || !numberOfRounds) return []
         const initialDate = new Date(startTime * 1000)
         const rounds: TimelineEvent[] = []
-        for (let i = 0; i <= numberOfRounds; i++) {
+        for (let i = 0; i <= numberOfRounds; i += 1) {
             rounds.push({
                 date: addSeconds(initialDate, roundDuration * i),
                 ...getTimelineEvent(i, numberOfRounds),

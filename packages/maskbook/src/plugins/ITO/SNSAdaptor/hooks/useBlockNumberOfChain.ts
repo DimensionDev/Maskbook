@@ -11,13 +11,7 @@ export function useBlockNumberOfChain(chainId: ChainId) {
     const provderURL = first(RPC)
     if (!provderURL) throw new Error('Unknown chain id.')
     const { value } = useAsync(
-        async () =>
-            await Services.Ethereum.request<string>(
-                {
-                    method: EthereumMethodType.ETH_BLOCK_NUMBER,
-                },
-                { rpc: provderURL },
-            ),
+        () => Services.Ethereum.request<string>({ method: EthereumMethodType.ETH_BLOCK_NUMBER }, { rpc: provderURL }),
         [provderURL],
     )
     return value ? parseInt(value) : 0
