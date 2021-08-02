@@ -134,7 +134,7 @@ export function GasNowDialog() {
     }, [customGasToWei, options, select])
 
     const onConfrim = useCallback(() => {
-        currentGasPriceSettings.value = select == 2 ? customGasToWei.toNumber() : options[select].gasPrice
+        currentGasPriceSettings.value = select === 2 ? customGasToWei.toNumber() : options[select].gasPrice
         const type = options[select].type as keyof GasNow
         setDialog({ open: false, type })
     }, [customGasToWei, options, select, setDialog])
@@ -163,7 +163,7 @@ export function GasNowDialog() {
                             {gasNow || i === 2 ? (
                                 <>
                                     <div>
-                                        {i == 2 ? (
+                                        {i === 2 ? (
                                             <div className={classes.gweiBox}>
                                                 <TextField
                                                     className={classes.customInput}
@@ -199,7 +199,7 @@ export function GasNowDialog() {
                                         ) : null}
                                     </div>
                                     <Typography color="textPrimary">
-                                        {i == 2 ? customEstimateTime : option.time}
+                                        {i === 2 ? customEstimateTime : option.time}
                                     </Typography>
                                 </>
                             ) : (

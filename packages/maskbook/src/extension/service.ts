@@ -63,7 +63,7 @@ if (import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
  * @param generator Is the service is a generator?
  */
 function add<T>(impl: () => Promise<T>, key: string, generator = false): T {
-    let channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(MessageTarget.Broadcast)
+    const channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(MessageTarget.Broadcast)
 
     const isBackground = isEnvironment(Environment.ManifestBackground)
     const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any

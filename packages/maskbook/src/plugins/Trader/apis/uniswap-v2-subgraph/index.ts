@@ -140,7 +140,7 @@ export async function fetchEtherPricesByBlockNumbers(blockNumbers: (string | und
         }
     `)
 
-    let result: { [key: string]: number | undefined } = {}
+    const result: { [key: string]: number | undefined } = {}
     if (!data) return result
 
     Object.keys(data).map((key) => {
@@ -343,9 +343,7 @@ export async function fetchPricesByBlocks(
             `,
             )
 
-            return await fetchFromUniswapV2Subgraph<{
-                [key: string]: { ethPrice?: string; derivedETH?: string }
-            }>(`
+            return fetchFromUniswapV2Subgraph<Record<string, { ethPrice?: string; derivedETH?: string }>>(`
                 query blocks {
                     ${queries}
                     ${blockQueries}
