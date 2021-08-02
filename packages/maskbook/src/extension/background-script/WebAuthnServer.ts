@@ -153,7 +153,7 @@ export const { get, create } = createPublicKeyAuthenticator({
                     keyBuffer,
                     { name: 'ECDH', namedCurve: 'P-256' },
                     true,
-                    [],
+                    ['encrypt', 'decrypt', 'sign', 'verify'],
                 )
                 const publicKey = await cryptoKeyToPublic(privateKey)
                 return {
