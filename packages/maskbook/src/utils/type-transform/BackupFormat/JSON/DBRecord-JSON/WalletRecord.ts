@@ -30,7 +30,7 @@ export function WalletRecordToJSONFormat(wallet: WalletRecord): WalletBackup {
             backup.publicKey = keyToJWK(wallet_._public_key_, 'public')
         if (wallet_._private_key_ && isSameAddress(keyToAddr(wallet_._private_key_, 'private'), wallet.address))
             backup.privateKey = keyToJWK(wallet_._private_key_, 'private')
-    } catch (e) {
+    } catch (e: unknown) {
         console.error(e)
     }
     return backup as WalletBackup

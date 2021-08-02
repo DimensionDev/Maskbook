@@ -171,11 +171,11 @@ export interface WalletMessage {
      */
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
 
-    walletsUpdated: void
-    phrasesUpdated: void
-    erc20TokensUpdated: void
-    erc721TokensUpdated: void
-    erc1155TokensUpdated: void
+    walletsUpdated: undefined
+    phrasesUpdated: undefined
+    erc20TokensUpdated: undefined
+    erc721TokensUpdated: undefined
+    erc1155TokensUpdated: undefined
     rpc: unknown
 }
 

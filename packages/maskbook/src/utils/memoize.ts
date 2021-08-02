@@ -16,7 +16,7 @@ export function memoizePromise<T extends (...args: Args) => Promise<any>, Args e
             try {
                 // ? DO NOT remove "await" here
                 return await f(...args)
-            } catch (e) {
+            } catch (e: unknown) {
                 memorizedFunction.cache.delete(resolver!(...args))
                 throw e
             }

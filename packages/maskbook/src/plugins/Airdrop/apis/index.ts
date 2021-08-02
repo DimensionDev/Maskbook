@@ -15,7 +15,8 @@ export async function getMaskAirdropPacket(address: string) {
         })
 
         return (await response.json()) as AirdropPacket
-    } catch (e) {
+    } catch {
+        // ignore
         return
     }
 }

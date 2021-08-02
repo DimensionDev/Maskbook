@@ -89,11 +89,10 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                 waitForHighestBid: true,
                 paymentTokenAddress: token.value.address, // english auction must be erc20 token
             })
-        } catch (e) {
-            enqueueSnackbar(e.message, {
-                variant: 'error',
-                preventDuplicate: true,
-            })
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                enqueueSnackbar(e.message, { variant: 'error', preventDuplicate: true })
+            }
             throw e
         }
     }, [asset?.value, token, amount, account, reservePrice, expirationDateTime, enqueueSnackbar])

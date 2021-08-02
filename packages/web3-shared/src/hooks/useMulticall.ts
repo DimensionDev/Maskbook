@@ -20,20 +20,10 @@ export enum MulticalStateType {
 }
 
 export type MulticalState =
-    | {
-          type: MulticalStateType.UNKNOWN
-      }
-    | {
-          type: MulticalStateType.PENDING
-      }
-    | {
-          type: MulticalStateType.SUCCEED
-          results: string[]
-      }
-    | {
-          type: MulticalStateType.FAILED
-          error: Error
-      }
+    | { type: MulticalStateType.UNKNOWN }
+    | { type: MulticalStateType.PENDING }
+    | { type: MulticalStateType.SUCCEED; results: string[] }
+    | { type: MulticalStateType.FAILED; error: Error }
 
 /**
  * The basic hook for fetching data from the Multicall contract
@@ -63,11 +53,13 @@ export function useMulticallCallback() {
                     type: MulticalStateType.SUCCEED,
                     results: returnData,
                 })
-            } catch (error) {
-                setMulticallState({
-                    type: MulticalStateType.FAILED,
-                    error,
-                })
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    setMulticallState({
+                        type: MulticalStateType.FAILED,
+                        error,
+                    })
+                }
             }
         },
         [multicallContract],
@@ -96,12 +88,8 @@ export function useMutlicallStateDecoded<
                     error: null,
                     value: decodeOutputString(web3, outputs, raw) as R,
                 }
-            } catch (error) {
-                return {
-                    raw,
-                    error: error as Error,
-                    value: null,
-                }
+            } catch (error: unknown) {
+                return { raw, error, value: null }
             }
         })
     }, [web3, contracts.map((x) => x.options.address).join(','), names.join(''), state])

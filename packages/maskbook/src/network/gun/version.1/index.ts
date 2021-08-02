@@ -42,7 +42,7 @@ export const gun1 = (gun2 as any as ReturnType<typeof typeHelper>).get('maskbook
  */
 export async function queryVersion1PostAESKey(salt: string, myUsername: string) {
     const result = await gun1.get('posts').get(salt).get(myUsername).then!()
-    if (result && result.encryptedKey && result.salt) return result
+    if (result?.encryptedKey && result.salt) return result
     return undefined
 }
 export async function getVersion1PostByHash(postSalt: string) {

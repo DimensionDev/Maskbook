@@ -128,9 +128,9 @@ export function iteratorToPromiEvent(
     },
     processor: (stage: Stage) => Stage,
 ) {
-    let resolve_: Function | undefined = undefined
-    let reject_: Function | undefined = undefined
-    const PE = new PromiEvent<TransactionReceipt>(async (resolve, reject) => {
+    let resolve_: ((value: TransactionReceipt) => void) | undefined = undefined
+    let reject_: ((reason: unknown) => void) | undefined = undefined
+    const PE = new PromiEvent<TransactionReceipt>((resolve, reject) => {
         resolve_ = resolve
         reject_ = reject
     })
@@ -153,7 +153,7 @@ export function iteratorToPromiEvent(
                         break
                 }
             }
-        } catch (e) {
+        } catch (e: unknown) {
             PE.emit(TransactionEventType.ERROR, e)
             reject_?.(e)
         }

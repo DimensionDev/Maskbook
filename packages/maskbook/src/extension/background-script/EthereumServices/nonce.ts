@@ -29,8 +29,10 @@ class NonceManager {
                 try {
                     this.lock()
                     callback(null, await getTransactionCount(this.address))
-                } catch (e) {
-                    callback(e)
+                } catch (e: unknown) {
+                    if (e instanceof Error) {
+                        callback(e)
+                    }
                 }
             }
             if (this.locked) this.tasks.push(run)

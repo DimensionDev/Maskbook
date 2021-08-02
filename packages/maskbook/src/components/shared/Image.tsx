@@ -163,12 +163,12 @@ async function toImage(arr: ImageBitmapSource): Promise<CanvasImageSource> {
         // Safari route
         return new Promise<CanvasImageSource>((resolve, reject) => {
             const img = document.createElement('img')
-            img.addEventListener('load', function () {
-                resolve(this)
+            img.addEventListener('load', () => {
+                resolve(img)
                 URL.revokeObjectURL(img.src)
             })
-            img.addEventListener('error', (e) => {
-                reject(e)
+            img.addEventListener('error', ({ error }) => {
+                reject(error)
                 URL.revokeObjectURL(img.src)
             })
             // TODO: this might be blocked by CSP

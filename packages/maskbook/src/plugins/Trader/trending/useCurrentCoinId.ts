@@ -11,7 +11,7 @@ export function usePreferredCoinId(keyword: string, dataProvider: DataProvider) 
         try {
             const parsedSettings = JSON.parse(settings) as Record<string, string>
             return parsedSettings[keyword_] ?? ''
-        } catch (e) {
+        } catch {
             return ''
         }
     }, [keyword_, settings])

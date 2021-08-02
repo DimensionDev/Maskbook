@@ -38,7 +38,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
         return true
     })
     const listAfterSearch = listBeforeSearch.filter((x) => {
-        if (frozenSelected && frozenSelected.find((y) => x.identifier.equals(y.identifier))) return false
+        if (frozenSelected.find((y) => x.identifier.equals(y.identifier))) return false
         if (search === '') return true
         return (
             !!x.identifier.userId.toLowerCase().match(search.toLowerCase()) ||

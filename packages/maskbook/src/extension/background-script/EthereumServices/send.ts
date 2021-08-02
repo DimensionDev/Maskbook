@@ -172,8 +172,10 @@ export async function INTERNAL_send(
                 }
                 break
         }
-    } catch (error) {
-        callback(error)
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            callback(error)
+        }
     }
 }
 

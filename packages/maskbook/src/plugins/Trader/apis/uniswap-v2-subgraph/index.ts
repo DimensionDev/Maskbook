@@ -353,7 +353,7 @@ export async function fetchPricesByBlocks(
     return flatten(
         data.map((result) => {
             if (result) {
-                const keys = Object.keys(result).filter((key) => key.substring(0, 1) === 't')
+                const keys = Object.keys(result).filter((key) => key.startsWith('t'))
                 return keys.map((x) => {
                     const timestamp = x.split('t')[1]
 

@@ -36,9 +36,8 @@ export function GameAction(props: GameActionProps) {
     const {
         value: tokenDetailed,
         loading: loadingToken,
-        retry: retryToken,
         error: errorToken,
-    } = useERC20TokenDetailed(DAI[chainId].address)
+    } = useERC20TokenDetailed(DAI[chainId]?.address)
 
     if (loadingToken || errorToken) return <></>
 
@@ -49,7 +48,7 @@ export function GameAction(props: GameActionProps) {
         try {
             await action()
             props.info.refresh()
-        } catch (error) {
+        } catch {
             setErrorMessage(t('error_unknown'))
         } finally {
             setButtonEnabled(true)
@@ -63,8 +62,8 @@ export function GameAction(props: GameActionProps) {
                 action: joinGame,
                 text: t('plugin_good_ghosting_join_game'),
                 helpText: t('plugin_good_ghosting_join_help_text', {
-                    amount: formatBalance(props.info.segmentPayment, gameToken.decimals),
-                    token: gameToken.symbol,
+                    amount: formatBalance(props.info.segmentPayment, gameToken?.decimals),
+                    token: gameToken?.symbol,
                 }),
             }
         } else if (canMakeDeposit) {
@@ -73,8 +72,8 @@ export function GameAction(props: GameActionProps) {
                 action: makeDeposit,
                 text: t('plugin_good_ghosting_make_deposit'),
                 helpText: t('plugin_good_ghosting_deposit_help_text', {
-                    segmentPayment: formatBalance(props.info.segmentPayment, gameToken.decimals),
-                    token: gameToken.symbol,
+                    segmentPayment: formatBalance(props.info.segmentPayment, gameToken?.decimals),
+                    token: gameToken?.symbol,
                 }),
             }
         } else if (canWithdraw) {

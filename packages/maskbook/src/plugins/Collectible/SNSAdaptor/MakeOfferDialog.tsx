@@ -100,11 +100,10 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                 expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
                 paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
             })
-        } catch (e) {
-            enqueueSnackbar(e.message, {
-                variant: 'error',
-                preventDuplicate: true,
-            })
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                enqueueSnackbar(e.message, { variant: 'error', preventDuplicate: true })
+            }
             throw e
         }
     }, [asset?.value, token, account, amount, expirationDateTime, isAuction, enqueueSnackbar])
