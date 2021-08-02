@@ -7,9 +7,7 @@ export enum CurrencyType {
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 
-export interface Web3Constants {
-    [K: string]: { [K in ChainId]: Primitive | Primitive[] }
-}
+export type Web3Constants = Record<string, { [K in ChainId]: Primitive | Primitive[] }>
 
 // Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
 export enum ChainId {
@@ -133,9 +131,7 @@ export interface ERC1155TokenAssetDetailed extends ERC1155TokenDetailed {
         decimals?: string
         description?: string
         image?: string
-        properties?: {
-            [key: string]: string | any[] | { [key: string]: any }
-        }
+        properties?: Record<string, string | any[] | Record<string, any>>
     }
 }
 //#endregion

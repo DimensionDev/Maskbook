@@ -33,9 +33,7 @@ interface TokenList {
 }
 
 interface TokenObject {
-    tokens: {
-        [key: string]: Token
-    }
+    tokens: Record<string, Token>
 }
 
 const fetchTokenList = memoizePromise(
