@@ -3,7 +3,6 @@ import { connectToDevTools } from 'react-devtools-core/backend'
 
 try {
     connectToDevTools({ useHttps: false })
-    // eslint-disable-next-line @typescript-eslint/no-implicit-any-catch
-} catch (e) {
+} catch {
     // ignore
 }
