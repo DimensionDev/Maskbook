@@ -1,10 +1,4 @@
-import {
-    formatBalance,
-    resolveTokenLinkOnExplorer,
-    useChainId,
-    useNetworkType,
-    NetworkType,
-} from '@masknet/web3-shared'
+import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared'
 import { Grid, Link, makeStyles, Paper, Typography } from '@material-ui/core'
 import { isNative } from 'lodash-es'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -65,7 +59,7 @@ export interface ConfirmRedPacketFormProps {
     onBack: () => void
     onCreate: () => void
     onClose: () => void
-    settings?: Omit<RedPacketSettings, 'password'>
+    settings?: RedPacketSettings
 }
 
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
@@ -73,9 +67,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const { onBack, settings, onCreate, onClose } = props
     const classes = useStyles()
     const chainId = useChainId()
-    const networkType = useNetworkType()
-    const contract_version = networkType === NetworkType.Ethereum ? 2 : 3
-    const paramsResult = useCreateParams(settings, contract_version)
+    const paramsResult = useCreateParams(settings, 4)
 
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()

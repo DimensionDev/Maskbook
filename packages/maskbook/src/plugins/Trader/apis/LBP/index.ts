@@ -53,11 +53,7 @@ export async function fetchLBP_PoolTokenPrices(poolId: string, address: string, 
         }
     `,
     )
-    const data = await fetchFromBalancerPoolSubgraph<{
-        [key: string]: {
-            price: string
-        }[]
-    }>(`
+    const data = await fetchFromBalancerPoolSubgraph<Record<string, { price: string }[]>>(`
         query tokenPrices {
             ${queries.join('\n')}
         }
@@ -69,6 +65,12 @@ export async function fetchLBP_PoolTokenPrices(poolId: string, address: string, 
             blockNumber: x.slice(1),
         }))
         .sort((a, z) => Number.parseInt(a.blockNumber) - Number.parseInt(z.blockNumber))
+}
+
+interface LBPPoolToken {
+    address: string
+    balance: string
+    denormWeight: string
 }
 
 export async function fetchLBP_PoolTokens(poolId: string, blockNumbers: string[]) {
@@ -89,15 +91,8 @@ export async function fetchLBP_PoolTokens(poolId: string, blockNumbers: string[]
             }
         }`,
     )
-    const data = await fetchFromBalancerPoolSubgraph<{
-        [key: string]: {
-            tokens: {
-                address: string
-                balance: string
-                denormWeight: string
-            }[]
-        }
-    }>(`
+
+    const data = await fetchFromBalancerPoolSubgraph<Record<string, { tokens: LBPPoolToken[] }>>(`
         query poolTokens {
             ${queries.join('\n')}
         }
