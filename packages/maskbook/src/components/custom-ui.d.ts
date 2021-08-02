@@ -6,8 +6,4 @@ type PartialRequired<T, RequiredKeys extends keyof T> = Partial<T> & Pick<T, Req
 
 type PropsOf<T> = T extends React.ComponentType<infer U> ? U : never
 
-type EnumRecord<T extends number | string, U> = {
-    [K in T]: U
-}
-
 type UnboxPromise<T> = T extends Promise<infer R> ? R : never

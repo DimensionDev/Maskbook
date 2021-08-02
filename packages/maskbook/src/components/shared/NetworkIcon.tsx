@@ -15,7 +15,7 @@ export interface NetworkIconProps extends withClasses<'icon'> {
     networkType?: NetworkType
 }
 
-const icons: EnumRecord<NetworkType, string> = {
+const icons: Record<NetworkType, string> = {
     [NetworkType.Ethereum]: new URL('../../resources/wallet-network-icon/ethereum.png', import.meta.url).toString(),
     [NetworkType.Binance]: new URL('../../resources/wallet-network-icon/binance.png', import.meta.url).toString(),
     [NetworkType.Polygon]: new URL('../../resources/wallet-network-icon/polygon.png', import.meta.url).toString(),
