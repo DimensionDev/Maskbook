@@ -52,6 +52,8 @@ export function resolveZerionTransactionsScopeName(network: NetworkType) {
             return ''
         case NetworkType.Polygon:
             return ''
+        case NetworkType.Arbitrum:
+            return ''
         default:
             safeUnreachable(network)
             return ''
