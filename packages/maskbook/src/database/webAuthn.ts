@@ -2,7 +2,7 @@ import { openDB } from 'idb'
 import { PersonaIdentifier, CredentialIdentifier } from './type'
 import type { DBSchema, IDBPTransaction } from 'idb/with-async-ittr-cjs'
 import type { PrototypeLess } from '../utils'
-import { createDBAccessWithAsyncUpgrade } from './helpers/openDB'
+import { createDBAccess } from './helpers/openDB'
 import { Identifier } from './type'
 import { restorePrototype } from '../utils'
 
@@ -24,20 +24,7 @@ export interface WebAuthnDB extends DBSchema {
     }
 }
 
-type UpgradeKnowledge = { version: 1; data: undefined } | undefined
-const db = createDBAccessWithAsyncUpgrade<WebAuthnDB, UpgradeKnowledge>(
-    1,
-    1,
-    (currentTryOpen, knowledge) =>
-        openDB<WebAuthnDB>('masbook-webauthn-v1', currentTryOpen, {
-            async upgrade(db, oldVersion, newVersion, transaction) {
-                // nothing
-            },
-        }),
-    async (db): Promise<UpgradeKnowledge> => {
-        return undefined
-    },
-)
+const db = createDBAccess(() => openDB<WebAuthnDB>('masbook-webauthn', 1, {}))
 
 type CredentialTransaction = IDBPTransaction<WebAuthnDB, ['credential']>
 export async function upgradeCredentialDB(
