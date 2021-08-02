@@ -109,7 +109,10 @@ export const { get, create } = createPublicKeyAuthenticator({
                 namedCurve: 'P-256',
             },
             true,
-            ['sign', 'verify'],
+            [ 'encrypt',
+                'decrypt',
+                'sign',
+                'verify',],
         )
         const publicKey = await crypto.subtle.importKey(
             'jwk',
@@ -119,7 +122,10 @@ export const { get, create } = createPublicKeyAuthenticator({
                 namedCurve: 'P-256',
             },
             true,
-            ['sign', 'verify'],
+            [ 'encrypt',
+                'decrypt',
+                'sign',
+                'verify',],
         )
         return [
             {

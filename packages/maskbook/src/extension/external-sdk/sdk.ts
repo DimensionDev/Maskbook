@@ -33,11 +33,3 @@ export async function setPayload(payload: Record<string, unknown>, options: { ad
         appendText: options.additionText,
     })
 }
-
-export async function loginWithMask(...args: any[]) {
-    return Services.WebAuthn.get(...args)
-}
-
-export async function createWithMask(...args: any[]) {
-    return Services.WebAuthn.create(...args)
-}

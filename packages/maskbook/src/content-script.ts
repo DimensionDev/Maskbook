@@ -4,7 +4,9 @@ import './setup.ui'
 
 // The scope should be the ./ of the web page
 const currentLocation = new URL('./', location.href).href
+console.log('currentLocation', currentLocation)
 Services.ThirdPartyPlugin.isSDKEnabled(currentLocation).then((result) => {
+    console.log('should import external-sdk:', result)
     result && import('./extension/external-sdk')
 })
 
