@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { useInterval } from 'react-use'
 import { ONE_SECOND } from '../constants'
 import { DarkColor } from '@masknet/theme/constants'

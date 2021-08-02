@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
-import { FormattedBalance } from '@masknet/shared'
+import { FormattedBalance, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import {
     formatEthereumAddress,
     useAccount,
@@ -14,11 +14,9 @@ import { Button, ButtonProps, makeStyles, Typography } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-import { useStylesExtends } from '../../components/custom-ui-helper'
 import { WalletIcon } from '../../components/shared/WalletIcon'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags, useI18N } from '../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => {
     return {

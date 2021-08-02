@@ -183,9 +183,9 @@ export function PoolView(props: PoolProps) {
     useEffect(() => {
         setPrize(calculateNextPrize(pool))
         setPeriod(
-            prizePeriodSeconds == ONE_DAY_SECONDS
+            prizePeriodSeconds === ONE_DAY_SECONDS
                 ? 'Daily'
-                : prizePeriodSeconds == ONE_WEEK_SECONDS
+                : prizePeriodSeconds === ONE_WEEK_SECONDS
                 ? 'Weekly'
                 : 'Custom Period',
         )

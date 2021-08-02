@@ -6,7 +6,7 @@ import LinkOffIcon from '@material-ui/icons/LinkOff'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 
 import { useI18N, Flags } from '../../../utils'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { facebookDomain } from '../../../social-network-adaptor/facebook.com/utils/isMobile'
 import { twitterDomain } from '../../../social-network-adaptor/twitter.com/utils/isMobile'
 

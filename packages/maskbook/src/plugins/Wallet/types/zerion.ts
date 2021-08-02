@@ -5,18 +5,12 @@ export type SocketNameSpace = {
 
 export type SocketRequestBody = {
     scope: string[]
-    payload: {
-        [key: string]: any
-    }
+    payload: Record<string, any>
 }
 
 export interface SocketResponseBody {
-    meta: {
-        status: string
-    }
-    payload: {
-        [key: string]: any
-    }
+    meta: { status: string }
+    payload: Record<string, any>
 }
 
 export enum ZerionRBDTransactionType {
@@ -127,8 +121,6 @@ export interface ZerionAssetResponseBody extends SocketResponseBody {
         status: string
     }
     payload: {
-        assets: {
-            [key: string]: ZerionAddressAsset
-        }
+        assets: Record<string, ZerionAddressAsset>
     }
 }

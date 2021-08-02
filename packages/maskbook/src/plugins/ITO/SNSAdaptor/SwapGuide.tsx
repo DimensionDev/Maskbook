@@ -73,7 +73,7 @@ export function SwapGuide(props: SwapGuideProps) {
     const chainId = useChainId()
     const account = useAccount()
 
-    const SwapTitle: EnumRecord<SwapStatus, string> = {
+    const SwapTitle: Record<SwapStatus, string> = {
         [SwapStatus.Remind]: t('plugin_ito_dialog_swap_reminder_title'),
         [SwapStatus.Unlock]: t('plugin_ito_dialog_swap_unlock_title'),
         [SwapStatus.Swap]: t('plugin_ito_dialog_swap_title', { token: payload.token.symbol }),

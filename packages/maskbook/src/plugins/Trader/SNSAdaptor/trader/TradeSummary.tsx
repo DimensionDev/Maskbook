@@ -11,10 +11,9 @@ import {
     Typography,
 } from '@material-ui/core'
 import LoopIcon from '@material-ui/icons/Loop'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
-import { formatBalance, formatPercentage, isGreaterThan, pow10 } from '@masknet/web3-shared'
+import { formatBalance, formatPercentage, isGreaterThan, pow10, FungibleTokenDetailed } from '@masknet/web3-shared'
 import { ONE_BIPS } from '../../constants'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { SwapQuoteResponse, TradeComputed, TradeProvider, TradeStrategy } from '../../types'
 import { resolveUniswapWarningLevel, resolveUniswapWarningLevelColor, resolveZrxTradePoolName } from '../../pipes'
 import { TradeContext } from '../../trader/useTradeContext'

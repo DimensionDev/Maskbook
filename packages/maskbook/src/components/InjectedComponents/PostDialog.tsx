@@ -19,10 +19,9 @@ import {
     useActivatedPluginsSNSAdaptor,
     useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
 } from '@masknet/plugin-infra'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef, or } from '@masknet/shared'
 import { CompositionEvent, MaskMessage, useI18N, Flags } from '../../utils'
 import { isMinds } from '../../social-network-adaptor/minds.com/base'
-import { or } from '../custom-ui-helper'
 import type { Profile } from '../../database'
 import { useFriendsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { currentImagePayloadStatus, debugModeSetting } from '../../settings/settings'
