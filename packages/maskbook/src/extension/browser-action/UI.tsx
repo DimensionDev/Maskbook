@@ -82,7 +82,7 @@ function BrowserActionUI() {
                 active: true,
                 url: browser.runtime.getURL('/debug.html'),
             })
-        } else if (process.env.NODE_ENV === 'development' && event.ctrlKey) {
+        } else if (Flags.v2_enabled) {
             browser.tabs.create({
                 active: true,
                 url: browser.runtime.getURL('/next.html'),
