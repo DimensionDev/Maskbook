@@ -1,0 +1,765 @@
+[
+    {
+        "inputs": [
+            {
+                "internalType": "contract BFactory",
+                "name": "_bFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_fee",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "marketFactory",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "marketId",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "recipient",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "int256",
+                "name": "collateral",
+                "type": "int256"
+            },
+            {
+                "indexed": false,
+                "internalType": "int256",
+                "name": "lpTokens",
+                "type": "int256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256[]",
+                "name": "sharesReturned",
+                "type": "uint256[]"
+            }
+        ],
+        "name": "LiquidityChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "pool",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "marketFactory",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "marketId",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "creator",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "lpTokenRecipient",
+                "type": "address"
+            }
+        ],
+        "name": "PoolCreated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "marketFactory",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "marketId",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "outcome",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "int256",
+                "name": "collateral",
+                "type": "int256"
+            },
+            {
+                "indexed": false,
+                "internalType": "int256",
+                "name": "shares",
+                "type": "int256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+            }
+        ],
+        "name": "SharesSwapped",
+        "type": "event"
+    },
+    {
+        "inputs": [],
+        "name": "BONE",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "BPOW_PRECISION",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "EXIT_FEE",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "INIT_POOL_SUPPLY",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MAX_BOUND_TOKENS",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MAX_BPOW_BASE",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MAX_FEE",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MAX_IN_RATIO",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MAX_OUT_RATIO",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MAX_TOTAL_WEIGHT",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MAX_WEIGHT",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MIN_BALANCE",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MIN_BOUND_TOKENS",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MIN_BPOW_BASE",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MIN_FEE",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MIN_WEIGHT",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract AbstractMarketFactory",
+                "name": "_marketFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_marketId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_collateralIn",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_minLPTokensOut",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "_lpTokenRecipient",
+                "type": "address"
+            }
+        ],
+        "name": "addLiquidity",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "_poolAmountOut",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "_balances",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "bFactory",
+        "outputs": [
+            {
+                "internalType": "contract BFactory",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract AbstractMarketFactory",
+                "name": "_marketFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_marketId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_outcome",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_collateralIn",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_minTokensOut",
+                "type": "uint256"
+            }
+        ],
+        "name": "buy",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract AbstractMarketFactory",
+                "name": "_marketFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_marketId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_initialLiquidity",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "_weights",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "address",
+                "name": "_lpTokenRecipient",
+                "type": "address"
+            }
+        ],
+        "name": "createPool",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getColor",
+        "outputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract AbstractMarketFactory",
+                "name": "_marketFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_marketId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getPool",
+        "outputs": [
+            {
+                "internalType": "contract BPool",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract AbstractMarketFactory",
+                "name": "_marketFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_marketId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getPoolBalances",
+        "outputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract AbstractMarketFactory",
+                "name": "_marketFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_marketId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "whom",
+                "type": "address"
+            }
+        ],
+        "name": "getPoolTokenBalance",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract AbstractMarketFactory",
+                "name": "_marketFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_marketId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getPoolWeights",
+        "outputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract AbstractMarketFactory",
+                "name": "_marketFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_marketId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getSwapFee",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "pools",
+        "outputs": [
+            {
+                "internalType": "contract BPool",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract AbstractMarketFactory",
+                "name": "_marketFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_marketId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_lpTokensIn",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_minCollateralOut",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "_collateralRecipient",
+                "type": "address"
+            }
+        ],
+        "name": "removeLiquidity",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "_collateralOut",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "_balances",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract AbstractMarketFactory",
+                "name": "_marketFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_marketId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_outcome",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "_shareTokensIn",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_minSetsOut",
+                "type": "uint256"
+            }
+        ],
+        "name": "sellForCollateral",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract AbstractMarketFactory",
+                "name": "_marketFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_marketId",
+                "type": "uint256"
+            }
+        ],
+        "name": "tokenRatios",
+        "outputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]

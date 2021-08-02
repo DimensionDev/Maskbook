@@ -14,11 +14,11 @@ import {
 import React, { useState } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import type { Market } from '../types'
 
 import { MarketViewDeck } from './MarketViewDeck'
 import { MarketDescription } from './MarketDescription'
 import { MarketBuySell } from './MarketBuySell'
+import { useFetchMarket } from '../hooks/useMarket'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -96,14 +96,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface MarketViewProps {
-    market?: Market
-    loading?: Boolean
-    error?: Error
-    retry?: () => void
+    address: string
+    id: string
+    link: string
 }
 
 export function MarketView(props: MarketViewProps) {
-    const { market, loading, error, retry } = props
+    const { address, id, link } = props
 
     const { t } = useI18N()
     const classes = useStyles()
@@ -116,20 +115,14 @@ export function MarketView(props: MarketViewProps) {
     ].filter(Boolean)
     //#endregion
 
+    const { value: market, loading, error, retry } = useFetchMarket(address, id, link)
+
     if (loading)
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_augur_loading')}
             </Typography>
         )
-
-    // if (!market) {
-    //     return (
-    //         <Typography className={classes.message} color="textPrimary">
-    //             {t('plugin_augur_market_not_found')}
-    //         </Typography>
-    //     )
-    // }
 
     if (error)
         return (
@@ -139,9 +132,17 @@ export function MarketView(props: MarketViewProps) {
             </Typography>
         )
 
+    if (!market) {
+        return (
+            <Typography className={classes.message} color="textPrimary">
+                {t('plugin_augur_market_not_found')}
+            </Typography>
+        )
+    }
+
     return (
         <Card className={classes.root} elevation={0}>
-            <CardHeader subheader={<MarketViewDeck />} />
+            <CardHeader subheader={<MarketViewDeck market={market} />} />
             <CardContent className={classes.content}>
                 <Tabs
                     className={classes.tabs}
@@ -158,8 +159,8 @@ export function MarketView(props: MarketViewProps) {
                     {tabs}
                 </Tabs>
                 <Paper className={classes.body}>
-                    {tabIndex === 0 ? <MarketDescription /> : null}
-                    {tabIndex === 1 ? <MarketBuySell /> : null}
+                    {tabIndex === 0 ? <MarketDescription market={market} /> : null}
+                    {tabIndex === 1 ? <MarketBuySell market={market} /> : null}
                 </Paper>
             </CardContent>
             <CardActions className={classes.footer}>
@@ -176,7 +177,7 @@ export function MarketView(props: MarketViewProps) {
                     </Link>
                 </Typography>
                 <Typography className={classes.footnote} variant="subtitle2">
-                    <span>Supported by</span>
+                    <span>{t('plugin_supported_by')}</span>
                     <Link
                         className={classes.footLink}
                         target="_blank"

@@ -103,7 +103,7 @@ export const TradeFooter: FC<TradeFooterProps> = (props) => {
             ) : null}
             {showTradeProviderIcon ? (
                 <div className={classes.footMenu}>
-                    <Typography className={classes.footnote}>Supported by</Typography>
+                    <Typography className={classes.footnote}>{t('plugin_supported_by')}</Typography>
                     <FootnoteMenu
                         options={tradeProviders.map((x) => ({
                             name: (

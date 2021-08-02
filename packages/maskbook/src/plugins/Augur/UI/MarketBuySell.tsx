@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { makeStyles, Typography, Grid, Switch, SwitchClassKey, SwitchProps, withStyles } from '@material-ui/core'
 import { Trans } from 'react-i18next'
+import type { Market } from '../types'
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
     focusVisible?: string
@@ -119,18 +120,16 @@ const AugurSwitch = withStyles((theme) => ({
     )
 })
 
-export const MarketBuySell = () => {
+interface MarketBuySellProps {
+    market: Market
+}
+
+export const MarketBuySell = (props: MarketBuySellProps) => {
+    const { market } = props
+
     const classes = useStyles()
     const [buySell, setBuySell] = useState(false)
-    const [selected, setSelected] = useState(1)
-
-    const handleChangeBuySell = () => {
-        setBuySell(!buySell)
-    }
-
-    const handleSelect = (item: number) => {
-        setSelected(item)
-    }
+    const [selected, setSelected] = useState(market.outcomes[0].shareToken)
 
     return (
         <div className={`${classes.root} ${classes.spacing}`}>
@@ -145,7 +144,7 @@ export const MarketBuySell = () => {
                     className={`${classes.head} ${classes.spacing}`}>
                     <Grid item>
                         <Typography variant="h6" color="textPrimary">
-                            <AugurSwitch checked={buySell} onChange={handleChangeBuySell} name="buySell" />
+                            <AugurSwitch checked={buySell} onChange={() => setBuySell(!buySell)} name="buySell" />
                         </Typography>
                     </Grid>
                     <Grid item container direction="column" alignItems="flex-end">
@@ -162,35 +161,21 @@ export const MarketBuySell = () => {
                     </Grid>
                 </Grid>
                 <Grid item container direction="column" className={`${classes.spacing} ${classes.predictions}`}>
-                    <Grid
-                        item
-                        container
-                        justifyContent="space-between"
-                        className={selected === 1 ? classes.selected : undefined}
-                        onClick={() => handleSelect(1)}>
-                        <Typography variant="body2">Team1</Typography>
-                        <Typography variant="body2">$0.49</Typography>
-                    </Grid>
-                    <Grid
-                        item
-                        container
-                        justifyContent="space-between"
-                        className={selected === 2 ? classes.selected : undefined}
-                        onClick={() => handleSelect(2)}>
-                        <Typography variant="body2">Team2</Typography>
-                        <Typography variant="body2">$0.49</Typography>
-                    </Grid>
-                    <Grid
-                        item
-                        container
-                        justifyContent="space-between"
-                        className={selected === 0 ? classes.selected : undefined}
-                        onClick={() => handleSelect(0)}>
-                        <Typography variant="body2">
-                            <Trans i18nKey="plugin_augur_no_contest" />
-                        </Typography>
-                        <Typography variant="body2">$0.02</Typography>
-                    </Grid>
+                    {market.outcomes
+                        .sort((x, y) => y.id - x.id)
+                        .map((outcome) => {
+                            return (
+                                <Grid
+                                    item
+                                    container
+                                    justifyContent="space-between"
+                                    className={selected === outcome.shareToken ? classes.selected : undefined}
+                                    onClick={() => setSelected(outcome.shareToken)}>
+                                    <Typography variant="body2">{outcome.name}</Typography>
+                                    <Typography variant="body2">$0.49</Typography>
+                                </Grid>
+                            )
+                        })}
                 </Grid>
             </Grid>
         </div>

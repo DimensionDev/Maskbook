@@ -347,7 +347,11 @@
     "relative_time_seconds_ago": "{{seconds}} seconds ago",
     "relative_time_years_ago": "{{years}} years ago",
     "plugin_powered_by": "Powered by",
+<<<<<<< HEAD
     "plugin_wallet_collections": "Collections",
+=======
+    "plugin_supported_by": "Supported by",
+>>>>>>> feat: implemented fetch sport market
     "plugin_wallet_select_a_token": "Select a Token",
     "plugin_wallet_select_a_nft_contract": "Select an NFT Contract",
     "plugin_wallet_select_a_nft_owner": "Select an NFT Contract Owner",
@@ -953,12 +957,12 @@
     "nft_avatar": "NFT Avatar",
     "nft_owner_check_info": "This NFT does not belong to you!",
     "plugin_augur_loading": "Loading",
+    "plugin_augur_market_not_found": "Market not Found!",
     "plugin_augur_smt_wrong": "Something went wrong!",
     "plugin_augur_tab_description": "Description",
     "plugin_augur_tab_buysell": "Buy / Sell",
     "plugin_augur_24hr_volume": "24hr Volume",
     "plugin_augur_total_volume": "Total Volume",
     "plugin_augur_liquidity": "Liquidity",
-    "plugin_augur_fee": "Fee",
-    "plugin_augur_no_contest": "No Contest"
+    "plugin_augur_fee": "Fee"
 }

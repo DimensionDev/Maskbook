@@ -1,6 +1,8 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { Trans } from 'react-i18next'
+import type { Market } from '../types'
+import { getResolutionRules } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,7 +32,12 @@ const useStyles = makeStyles((theme) => ({
     marketDetails: {},
 }))
 
-export const MarketDescription = () => {
+interface MarketDescriptionProps {
+    market: Market
+}
+
+export const MarketDescription = (props: MarketDescriptionProps) => {
+    const { market } = props
     const classes = useStyles()
     const { t } = useI18N()
 
@@ -78,6 +85,9 @@ export const MarketDescription = () => {
             <div className={classes.marketDetails}>
                 <Typography variant="h6" color="textPrimary">
                     Market Details
+                </Typography>
+                <Typography variant="subtitle2" color="textPrimary">
+                    {getResolutionRules(market).join(' ')}
                 </Typography>
             </div>
         </div>

@@ -3,30 +3,47 @@ import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared'
 import { SnackbarContent } from '@material-ui/core'
 import { base } from '../base'
-import { useIsMarketUrl, useMarketUrlPattern } from '../hooks/useUrl'
+import { useIsMarketUrl } from '../hooks/useUrl'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { MarketView } from '../UI/MarketView'
+import { BASE_URL } from '../constants'
+import { escapeRegExp } from 'lodash-es'
+
+function createMatchLink() {
+    return new RegExp(`${escapeRegExp(BASE_URL.concat('/#!/market?id='))}([x0-9A-Fa-f]+)-([0-9]+)$`)
+}
+
+function getMarketFromLink(link: string) {
+    const matchLink = createMatchLink()
+    const [, address, id] = matchLink ? link.match(matchLink) ?? [] : []
+    return {
+        link,
+        address,
+        id,
+    }
+}
+
+function getMarketFromLinks(links: string[]) {
+    return links.map(getMarketFromLink).find(Boolean)
+}
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector: function Component(props) {
-        const isMarketUrl = useIsMarketUrl()
         const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isMarketUrl)
+        const links = useMemo(() => parseURL(text.val || ''), [text.val])
+        const market = getMarketFromLinks(links)
         if (!text.ok) return null
-        if (!link) return null
-        return <Renderer url={link} />
+        if (!market?.address || !market.id) return null
+        return <Renderer link={market.link} address={market.address} id={market.id} />
     },
     PostInspector: function Component() {
         const isMarketUrl = useIsMarketUrl()
-        const link = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isMarketUrl)
-
-        if (!link) return null
-        return <Renderer url={link} />
+        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+        const market = getMarketFromLinks(links)
+        if (!market?.address || !market.id) return null
+        return <Renderer link={market.link} address={market.address} id={market.id} />
     },
     GlobalInjection: function Component() {
         return <></>
@@ -35,19 +52,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
 export default sns
 
-function Renderer(props: React.PropsWithChildren<{ url: string }>) {
-    const AUGUR_MARKET_PATTERN = useMarketUrlPattern()
-    const address = props.url.match(AUGUR_MARKET_PATTERN) || []
-
-    // //#region fetch market
-    // const { value: pool, error, loading, retry } = useFetchPool(address[1])
-    // if (!pool) return null
-    // //#endregion
-
+function Renderer(props: React.PropsWithChildren<{ link: string; address: string; id: string }>) {
     return (
         <MaskbookPluginWrapper pluginName="Augur">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <MarketView market={undefined} loading={false} error={undefined} retry={() => {}} />
+                <MarketView link={props.link} address={props.address} id={props.id} />
             </Suspense>
         </MaskbookPluginWrapper>
     )
