@@ -12,8 +12,8 @@ type Verify = (
 type DeriveAES = (
     priv: EC_Private_JsonWebKey,
     pub: EC_Public_JsonWebKey,
-    aes?: AESName,
-    length?: 256,
+    aes: AESName,
+    length: 256,
 ) => PromiseLike<AESJsonWebKey>
 export interface ECMethods {
     generate_ec_k256_pair: GenerateKeyPair

@@ -13,6 +13,7 @@ import {
     searchKeyOnGlobalRegistry,
 } from '../../network/gun/version.2/webAuthn'
 import { concatArrayBuffer } from '@dimensiondev/kit'
+import { derive_AES_GCM_256_Key_From_ECDH_256k1_Keys } from "../../modules/CryptoAlgorithm/helper";
 
 // implementation details
 // !!!!!!!! Please let @yisiliu review this algorithm before implementing it !!!!!!!!
@@ -70,7 +71,7 @@ async function createNewKey(): Promise<
     ]
 > {
     const { publicKey, privateKey } = await CryptoWorker.generate_ec_k256_pair()
-    const secretKey = await CryptoWorker.derive_aes_from_ecdh_k256(privateKey, publicKey)
+    const secretKey = await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(privateKey, publicKey)
     const iv = crypto.getRandomValues(new Uint8Array(16))
     const message = await jwkToArrayBuffer(privateKey)
     const encrypted = await CryptoWorker.encrypt_aes_gcm(secretKey, iv, message)
@@ -137,7 +138,7 @@ export const { get, create } = createPublicKeyAuthenticator({
     },
     async getKeyPairByKeyWrap(rpID: string, candidateCredentialIDs: ArrayBuffer[]) {
         const persona = await selectPersona()
-        const secretKey = await CryptoWorker.derive_aes_from_ecdh_k256(persona.privateKey, persona.publicKey).then(
+        const secretKey = await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(persona.privateKey, persona.publicKey).then(
             (key) => crypto.subtle.importKey('jwk', key, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']),
         )
         const credentialID = await searchCredentialOnGlobalRegistry(persona.publicKey, rpID)
@@ -172,7 +173,7 @@ export const { get, create } = createPublicKeyAuthenticator({
     },
     async createKeyPairByKeyWrap(rpID: string, excludeCredentialIDs: ArrayBuffer[]) {
         const persona = await selectPersona()
-        const secretKey = await CryptoWorker.derive_aes_from_ecdh_k256(persona.privateKey, persona.publicKey).then(
+        const secretKey = await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(persona.privateKey, persona.publicKey).then(
             (key) => crypto.subtle.importKey('jwk', key, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']),
         )
         const excludes = await searchCredentialOnGlobalRegistry(persona.publicKey, rpID).then((buffers) =>
