@@ -54,7 +54,7 @@ async function selectPersona(): Promise<PersonaWithPrivateKey> {
     return personas[0]
 }
 
-async function calculateKeyID(jwk: EC_Private_JsonWebKey, rpID: string) {
+async function calculateKeyID(jwk: EC_Private_JsonWebKey, rpID: string): Promise<ArrayBuffer> {
     const privateKeyBuffer = await jwkToArrayBuffer(jwk)
     const payloadBuffer = encodeText(rpID)
     const buffer = await concatArrayBuffer(privateKeyBuffer, payloadBuffer)
