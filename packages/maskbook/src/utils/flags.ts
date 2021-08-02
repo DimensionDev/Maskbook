@@ -4,6 +4,7 @@ export const isAndroidApp = process.env.architecture === 'app' && process.env.ta
 const appOnly = process.env.architecture === 'app'
 const devOnly = process.env.NODE_ENV === 'development'
 const webOnly = process.env.architecture === 'web' || devOnly
+const betaOnly = process.env.build === 'beta'
 const insiderOnly = process.env.build === 'insider' || devOnly
 const betaOrInsiderOnly = insiderOnly || process.env.build === 'beta'
 
@@ -13,6 +14,8 @@ export const Flags = {
         target: process.env.target,
         architecture: process.env.architecture,
     },
+    /** The Mask Network v2 main switch. */
+    v2_enabled: betaOrInsiderOnly,
     /** There is no "tabs" to navigate to. We must be careful with this. */
     has_no_browser_tab_ui: appOnly,
     has_no_connected_user_link: appOnly,
