@@ -22,12 +22,10 @@ export type SharedAESKeyGun2 = {
     ephemeralKeySign?: string
 }
 
-// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 export interface PostOnGun2 {
     [cutNBitsFromFront_hash_ReceiversPublicKey: string]: SharedAESKeyGun2[]
 }
 
-// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 export interface ApplicationStateInGunVersion2 {
     [sha512_base64_ProfileIdentifier_OR_sha512_base64_PostSalt: string]: PersonOnGun2 | PostOnGun2
 }

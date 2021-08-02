@@ -3,12 +3,10 @@ import { currentEtherPriceSettings } from '../settings'
 
 const ETH_PRICE_POLLING_DELAY = 30 /* seconds */ * 1000 /* milliseconds */
 
-// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 interface PriceRecord {
     [currency: string]: number
 }
 
-// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 interface TokenRecord {
     [token: string]: PriceRecord
 }

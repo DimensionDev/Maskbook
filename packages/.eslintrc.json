@@ -24,6 +24,6 @@
         "unused-imports/no-unused-imports-ts": "warn",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/no-for-in-array": "error",
-        "@typescript-eslint/consistent-indexed-object-style": ["error", "record"]
+        "@typescript-eslint/consistent-indexed-object-style": ["off", "record"]
     }
 }

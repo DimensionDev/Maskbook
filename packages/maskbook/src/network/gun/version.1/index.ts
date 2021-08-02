@@ -20,10 +20,8 @@ interface ApplicationStateInGunVersion1 {
         //         provePostId: never
         //     }
         // }
-        // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
         posts: {
             // Post salt
-            // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
             [salt: string]: {
                 // ! This will leak post targets. (But keys are safe)
                 [receiversUsername: string]: PublishedAESKey
