@@ -2,6 +2,9 @@ import { serialize } from '../serializer'
 import { Result, Ok, Err } from 'ts-results'
 import { encodeArrayBuffer, decodeArrayBuffer } from '@dimensiondev/kit'
 
+/**
+ * @internal symbol that used to construct this type from the Identifier
+ */
 const $fromString = Symbol()
 /**
  * This type only refers to the stringified Identifier
