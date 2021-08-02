@@ -7,7 +7,7 @@ import { __validateRemoteContext } from './sdk/context'
 
 /** Version of this SDK */
 export async function version() {
-    return 1
+    return 2
 }
 export { __assertLocalContext, __validateRemoteContext } from './sdk/context'
 export async function getProfile() {

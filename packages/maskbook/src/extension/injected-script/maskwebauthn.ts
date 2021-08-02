@@ -23,8 +23,8 @@ const server = AsyncCall<{
 async function init() {
     await untilStart()
     const currentVersion = await server.version()
-    if (currentVersion < 1) {
-        console.error('incorrect version')
+    if (currentVersion < 2) {
+        throw new Error('not support mask webauthn')
     }
     return server
     function untilStart() {
