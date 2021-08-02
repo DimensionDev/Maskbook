@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    env:
+      WEB3_CONSTANTS_RPC: ${{ secrets.WEB3_CONSTANTS_RPC }}
     steps:
       - name: Get cache date
         id: get-date
@@ -41,7 +43,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-webpack-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: npx pnpm install
-      - run: npx build-ci
+      - run: npx gulp build-ci
       - name: Upload `Maskbook.base.zip`
         uses: actions/upload-artifact@v2
         with:

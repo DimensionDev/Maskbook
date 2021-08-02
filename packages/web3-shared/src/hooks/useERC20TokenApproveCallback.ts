@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { once } from 'lodash-es'
-import type { NonPayableTx } from '@masknet/contracts/types/types'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { TransactionEventType } from '../types'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { useNonce } from './useNonce'
@@ -10,7 +10,7 @@ import { useGasPrice } from './useGasPrice'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
-import { isLessThan } from '@masknet/shared'
+import { isLessThan } from '../utils'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
@@ -23,7 +23,7 @@ export enum ApproveStateType {
     FAILED,
 }
 
-export function useERC20TokenApproveCallback(address: string, amount?: string, spender?: string) {
+export function useERC20TokenApproveCallback(address?: string, amount?: string, spender?: string) {
     const account = useAccount()
     const nonce = useNonce()
     const gasPrice = useGasPrice()

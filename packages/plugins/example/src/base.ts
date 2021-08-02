@@ -1,4 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import en from './locales/en.json'
+import zh from './locales/zh.json'
 
 export const base: Plugin.Shared.Definition = {
     ID: 'io.mask.example',
@@ -11,4 +13,5 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'insider',
     },
+    i18n: { en, zh },
 }

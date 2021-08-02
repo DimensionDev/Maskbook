@@ -32,7 +32,7 @@ export function RequestPermission(props: RequestPermissionProps) {
                     <List dense subheader={<ListSubheader>Sites</ListSubheader>}>
                         {origins?.map((x) => (
                             <ListItem key={x}>
-                                <ListItemText primary={x}></ListItemText>
+                                <ListItemText primary={x} />
                             </ListItem>
                         ))}
                     </List>
@@ -41,7 +41,7 @@ export function RequestPermission(props: RequestPermissionProps) {
                     <List dense subheader={<ListSubheader>Permissions</ListSubheader>}>
                         {permissions?.map((x) => (
                             <ListItem key={x}>
-                                <ListItemText primary={x}></ListItemText>
+                                <ListItemText primary={x} />
                             </ListItem>
                         ))}
                     </List>

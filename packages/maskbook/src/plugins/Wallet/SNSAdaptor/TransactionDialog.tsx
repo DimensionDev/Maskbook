@@ -17,8 +17,8 @@ import {
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { useRemoteControlledDialog, useI18N } from '../../../utils'
+import { useI18N } from '../../../utils'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { JSON_RPC_ErrorCode } from '../constants'

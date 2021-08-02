@@ -1,5 +1,5 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef, useStylesExtends } from '@masknet/shared'
 import { Chip, makeStyles } from '@material-ui/core'
 import type { ChipProps } from '@material-ui/core/Chip'
 import Lock from '@material-ui/icons/Lock'
@@ -7,7 +7,6 @@ import { useEffect } from 'react'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { extractTextFromTypedMessage } from '../../protocols/typed-message'
-import { useStylesExtends } from '../custom-ui-helper'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 
 const useStyle = makeStyles({

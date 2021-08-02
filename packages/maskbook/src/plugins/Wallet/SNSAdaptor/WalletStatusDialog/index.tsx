@@ -1,17 +1,22 @@
-import { useCallback } from 'react'
-import { Copy, ExternalLink, Edit3 } from 'react-feather'
-import { useCopyToClipboard } from 'react-use'
-import classNames from 'classnames'
-import ErrorIcon from '@material-ui/icons/Error'
-import { FormattedAddress, useValueRef } from '@masknet/shared'
-import { ProviderType, resolveAddressLinkOnExplorer, useChainId, useChainIdValid } from '@masknet/web3-shared'
+import { FormattedAddress, useRemoteControlledDialog, useValueRef } from '@masknet/shared'
+import {
+    ProviderType,
+    resolveAddressLinkOnExplorer,
+    useChainId,
+    useChainIdValid,
+    useWallet,
+} from '@masknet/web3-shared'
 import { Button, DialogActions, DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
+import ErrorIcon from '@material-ui/icons/Error'
+import classNames from 'classnames'
+import { useCallback } from 'react'
+import { Copy, Edit3, ExternalLink } from 'react-feather'
+import { useCopyToClipboard } from 'react-use'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletIcon } from '../../../../components/shared/WalletIcon'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import Services from '../../../../extension/service'
-import { useI18N, useRemoteControlledDialog } from '../../../../utils'
-import { useWallet } from '../../hooks/useWallet'
+import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { currentProviderSettings } from '../../settings'
 import { RecentTransactionList } from './RecentTransactionList'
@@ -148,7 +153,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
         <InjectedDialog title={t('wallet_status_title')} open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
                 <section className={classes.currentAccount}>
-                    <WalletIcon size={48} badgeSize={18}></WalletIcon>
+                    <WalletIcon size={48} badgeSize={18} />
                     <div className={classes.accountInfo}>
                         <div className={classes.infoRow}>
                             <Typography className={classes.accountName}>{selectedWallet.name}</Typography>
@@ -178,7 +183,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                             </Link>
                             <Link
                                 className={classes.link}
-                                href={`${resolveAddressLinkOnExplorer(chainId, selectedWallet.address)}`}
+                                href={resolveAddressLinkOnExplorer(chainId, selectedWallet.address)}
                                 target="_blank"
                                 title={t('plugin_wallet_view_on_explorer')}
                                 rel="noopener noreferrer">

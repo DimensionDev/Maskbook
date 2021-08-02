@@ -1,4 +1,4 @@
-import { createGlobalSettings, createNetworkSettings } from './createSettings'
+import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { LaunchPage } from './types'
@@ -11,17 +11,6 @@ export const debugModeSetting = createGlobalSettings<boolean>('debugMode', false
     primary: () => i18n.t('settings_enable_debug'),
     secondary: () => i18n.t('settings_enable_debug_desc'),
 })
-/**
- * Never open a new tab in the background
- */
-export const disableOpenNewTabInBackgroundSettings = createGlobalSettings<boolean>(
-    'disable automated tab task open new tab',
-    true,
-    {
-        primary: () => i18n.t('settings_ancient_post_compatibility_mode'),
-        secondary: () => i18n.t('settings_ancient_post_compatibility_mode_desc'),
-    },
-)
 
 /**
  * Whether if create substitute post for all posts
@@ -47,17 +36,30 @@ export const languageSettings = createGlobalSettings<Language>(
 )
 //#endregion
 
-export const enableGroupSharingSettings = createGlobalSettings<boolean>('experimental/group-sharing@sept2020', false, {
-    primary: () => 'Experimental: Enable group sharing',
-    secondary: () => '(Unstable) Automatically share posts to a group',
-})
+//#region network setting
 
-export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
-export const currentSelectedIdentity = createNetworkSettings('currentSelectedIdentity')
-export const currentSetupGuideStatus = createNetworkSettings('currentSetupGuideStatus')
+/**
+ * Expected Usage：export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
+ *
+ * Work around the issue:
+ *      https://github.com/microsoft/TypeScript/issues/42873
+ *      https://github.com/microsoft/TypeScript/issues/30858
+ *
+ * References:
+ *      PluginGitcoinMessages: packages/maskbook/src/plugins/Gitcoin/messages.ts
+ *      PluginTraderMessages: packages/maskbook/src/plugins/Trader/messages.ts
+ *      PluginTransakMessages: packages/maskbook/src/plugins/Transak/messages.ts
+ */
+export const currentImagePayloadStatus: NetworkSettings<string> = createNetworkSettings('currentImagePayloadStatus', '')
+export const currentSelectedIdentity: NetworkSettings<string> = createNetworkSettings('currentSelectedIdentity', '')
+export const currentSetupGuideStatus: NetworkSettings<string> = createNetworkSettings('currentSetupGuideStatus', '')
+// This is a misuse of concept "NetworkSettings" as "namespaced settings"
+// The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884
+export const currentPluginEnabledStatus: NetworkSettings<boolean> = createNetworkSettings('pluginsEnabled', true)
 export const currentImportingBackup = createGlobalSettings<boolean>('importingBackup', false, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
+//#endregion
 
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard, {
     primary: () => i18n.t('settings_launch_page'),

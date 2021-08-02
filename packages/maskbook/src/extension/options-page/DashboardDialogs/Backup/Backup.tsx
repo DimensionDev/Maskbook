@@ -24,7 +24,6 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
         { type: DatabaseRecordType.Persona, length: value?.personas.length ?? 0, checked: false },
         { type: DatabaseRecordType.Profile, length: value?.profiles.length ?? 0, checked: false },
         { type: DatabaseRecordType.Post, length: value?.posts.length ?? 0, checked: false },
-        { type: DatabaseRecordType.Group, length: value?.userGroups.length ?? 0, checked: false },
         { type: DatabaseRecordType.Wallet, length: value?.wallets.length ?? 0, checked: false },
     ]
 
@@ -84,7 +83,8 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
                             </ActionButton>
                         )}
                     </Box>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }

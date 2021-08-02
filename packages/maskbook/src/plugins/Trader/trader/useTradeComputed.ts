@@ -1,16 +1,17 @@
 import { useContext } from 'react'
 import BigNumber from 'bignumber.js'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { pow10 } from '@masknet/web3-shared'
 import { TradeProvider, TradeStrategy } from '../types'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
-import { useV2Trade as useUniswapTrade } from './uniswap/useV2Trade'
+import { useTrade as useUniswapTrade } from './uniswap/useTrade'
 import { useV2TradeComputed as useUniswapTradeComputed } from './uniswap/useV2TradeComputed'
 import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
 import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
 import { useTrade as useZrxTrade } from './0x/useTrade'
 import { useTrade as useBalancerTrade } from './balancer/useTrade'
-import { pow10, unreachable } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
 import { TradeContext } from './useTradeContext'
 
 export function useTradeComputed(
@@ -85,25 +86,9 @@ export function useTradeComputed(
 
     switch (provider) {
         case TradeProvider.UNISWAP:
-            return {
-                ...uniswap_,
-                value: uniswap,
-            }
         case TradeProvider.SUSHISWAP:
-            return {
-                ...uniswap_,
-                value: uniswap,
-            }
         case TradeProvider.SASHIMISWAP:
-            return {
-                ...uniswap_,
-                value: uniswap,
-            }
         case TradeProvider.QUICKSWAP:
-            return {
-                ...uniswap_,
-                value: uniswap,
-            }
         case TradeProvider.PANCAKESWAP:
             return {
                 ...uniswap_,

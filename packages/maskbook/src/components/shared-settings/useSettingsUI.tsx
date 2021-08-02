@@ -1,5 +1,6 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef, getEnumAsArray } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared'
+import { getEnumAsArray } from '@dimensiondev/kit'
 import {
     ListItem,
     ListItemIcon,
@@ -14,7 +15,7 @@ import {
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { texts } from '../../settings/createSettings'
 import { useMatchXS } from '../../utils'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     container: { listStyleType: 'none', width: '100%' },
@@ -165,9 +166,9 @@ function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectP
         <Select
             fullWidth
             variant="outlined"
-            {...selectProps}
             value={useValueRef(ref)}
-            onChange={(event) => change(event.target.value)}>
+            onChange={(event) => change(event.target.value)}
+            {...selectProps}>
             {enum_.map(({ key, value }) => (
                 <MenuItem value={String(value)} key={String(key)}>
                     {getText?.(value) ?? String(key)}
@@ -176,6 +177,7 @@ function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectP
         </Select>
     )
 }
+
 type useEnumSettingsParams<Q extends object> = [
     ref: ValueRef<Q[keyof Q]>,
     enumObject: Q,

@@ -1,5 +1,4 @@
-import { createPluginMessage } from '../../utils/createPluginMessage'
-import { createPluginRPC, createPluginRPCGenerator } from '../../utils/createPluginRPC'
+import { createPluginMessage, createPluginRPC, createPluginRPCGenerator } from '@masknet/plugin-infra'
 import { FileServicePluginID } from '../constants'
 
 import.meta.webpackHot?.accept()
@@ -9,11 +8,11 @@ const PluginFileServiceMessage = createPluginMessage<{ _: unknown; _2: unknown }
 export const PluginFileServiceRPC = createPluginRPC(
     FileServicePluginID,
     () => import('./service'),
-    PluginFileServiceMessage.events._,
+    PluginFileServiceMessage._,
 )
 
 export const PluginFileServiceRPCGenerator = createPluginRPCGenerator(
     FileServicePluginID,
     () => import('./service').then(({ upload }) => ({ upload })),
-    PluginFileServiceMessage.events._2,
+    PluginFileServiceMessage._2,
 )

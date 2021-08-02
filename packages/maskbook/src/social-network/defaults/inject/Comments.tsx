@@ -6,7 +6,7 @@ import { PostComment, PostCommentProps } from '../../../components/InjectedCompo
 import { makeStyles } from '@material-ui/core'
 import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-es'
-import { collectNodeText } from '../../../social-network-adaptor/facebook.com/collecting/posts'
+import { collectNodeText } from '../../../utils'
 import { startWatch } from '../../../utils/watcher'
 
 interface injectPostCommentsDefaultConfig {

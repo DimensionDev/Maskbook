@@ -3,8 +3,6 @@ import { stateCreator } from '../../social-network/utils'
 import { facebookBase } from './base'
 import { facebookShared } from './shared'
 import { getProfilePageUrlAtFacebook } from './utils/parse-username'
-import { getPostContentFacebook } from './collecting/getPostContent'
-import { getProfileFacebook } from './collecting/getProfile'
 import { taskOpenComposeBoxFacebook } from './automation/openComposeBox'
 import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposition'
 import { IdentityProviderFacebook } from './collecting/identity'
@@ -16,14 +14,14 @@ import { injectPostCommentsDefault } from '../../social-network/defaults/inject/
 import { pasteToCommentBoxFacebook } from './automation/pasteToCommentBoxFacebook'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/inject/CommentBox'
 import { injectPostInspectorFacebook } from './injection/PostInspector'
-import { profilesCollectorFacebook } from './collecting/profiles'
 import { PostProviderFacebook } from './collecting/posts'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
 import { currentSelectedIdentity } from '../../settings/settings'
-import { ProfileIdentifier, unreachable } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
+import { ProfileIdentifier } from '@masknet/shared'
 import { globalUIState } from '../../social-network'
 
 const facebookUI: SocialNetworkUI.Definition = {
@@ -58,9 +56,6 @@ const facebookUI: SocialNetworkUI.Definition = {
         },
     },
     collecting: {
-        getPostContent: getPostContentFacebook,
-        getProfile: getProfileFacebook,
-        profilesCollector: profilesCollectorFacebook,
         identityProvider: IdentityProviderFacebook,
         postsProvider: PostProviderFacebook,
     },
@@ -85,7 +80,6 @@ const facebookUI: SocialNetworkUI.Definition = {
             },
         },
         // Not supported yet
-        toolbar: undefined,
         enhancedPostRenderer: undefined,
         userBadge: undefined,
         searchResult: undefined,

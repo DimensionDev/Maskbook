@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { base } from '../base'
+import { base } from '@masknet/plugin-wallet'
 import { SelectTokenDialog } from '../SNSAdaptor/SelectTokenDialog'
 import { GasNowDialog } from '../SNSAdaptor/GasNowDialog'
 import { CreateWalletDialog } from '../SNSAdaptor/CreateWalletDialog'
@@ -12,11 +12,13 @@ import { WalletStatusDialog } from '../SNSAdaptor/WalletStatusDialog'
 import { WalletRenameWalletDialog } from '../SNSAdaptor/RenameWalletDialog'
 import { TransactionDialog } from '../SNSAdaptor/TransactionDialog'
 import { ConnectWalletDialog } from '../SNSAdaptor/ConnectWalletDialog'
+import { useStartWatchChainState } from '../hooks/useStartWatchChainState'
 
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
     init(signal) {},
     GlobalInjection: function Component() {
+        useStartWatchChainState()
         return (
             <>
                 <TransactionDialog />

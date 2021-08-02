@@ -1,23 +1,22 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
-import { formatEthereumAddress, FormattedBalance } from '@masknet/shared'
+import { FormattedBalance, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import {
-    resolveChainColor,
+    formatEthereumAddress,
     useAccount,
+    useChainColor,
     useChainDetailed,
-    useChainId,
     useChainIdValid,
+    useWallet,
     useNativeTokenBalance,
 } from '@masknet/web3-shared'
 import { Button, ButtonProps, makeStyles, Typography } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-import { useStylesExtends } from '../../components/custom-ui-helper'
 import { WalletIcon } from '../../components/shared/WalletIcon'
-import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { Flags, useI18N, useRemoteControlledDialog } from '../../utils'
+import { Flags, useI18N } from '../../utils'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -57,7 +56,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
-    const chainId = useChainId()
+    const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
     const { value: balance = '0' } = useNativeTokenBalance()
@@ -71,7 +70,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const onOpen = useCallback(() => {
-        if (account) openSelectWalletDialog()
+        if (account && selectedWallet) openSelectWalletDialog()
         else openSelectProviderDialog()
     }, [account, openSelectWalletDialog, openSelectProviderDialog])
 
@@ -106,7 +105,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
                     <FiberManualRecordIcon
                         className={classes.chainIcon}
                         style={{
-                            color: resolveChainColor(chainId),
+                            color: chainColor,
                         }}
                     />
                 ) : null}

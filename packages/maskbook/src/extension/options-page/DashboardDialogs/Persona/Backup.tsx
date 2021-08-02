@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { User } from 'react-feather'
 import { useI18N, compressBackupFile, encodeArrayBuffer, encodeText } from '../../../../utils'
-import { QRCode } from '@masknet/theme'
+import { QRCode } from '@masknet/shared'
 import Services from '../../../service'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import ShowcaseBox from '../../DashboardComponents/ShowcaseBox'
@@ -17,7 +17,6 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
     useEffect(() => {
         Services.Welcome.generateBackupJSON({
             noPosts: true,
-            noUserGroups: true,
             filter: { type: 'persona', wanted: [persona.identifier] },
         }).then((file) => {
             setBase64Value(encodeArrayBuffer(encodeText(JSON.stringify(file))))
@@ -67,7 +66,8 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
                 iconColor="#5FDD97"
                 primary={t('backup_persona')}
                 secondary={t('dashboard_backup_persona_hint')}
-                content={<AbstractTab {...tabProps}></AbstractTab>}></DashboardDialogWrapper>
+                content={<AbstractTab {...tabProps} />}
+            />
         </DashboardDialogCore>
     )
 }

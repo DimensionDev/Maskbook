@@ -1,0 +1,21 @@
+{
+  "name": "@masknet/cli",
+  "private": true,
+  "bin": {
+    "build": "./src/bin/build.ts",
+    "dev": "./src/bin/dev.ts"
+  },
+  "dependencies": {
+    "gulp-zip": "^5.1.0",
+    "lodash": "^4.17.21",
+    "proper-lockfile": "^4.1.1",
+    "yargs": "^17.0.1"
+  },
+  "devDependencies": {
+    "@types/gulp": "^4.0.9",
+    "@types/inquirer": "^7.3.3",
+    "@types/lodash": "^4.14.171",
+    "@types/proper-lockfile": "^4.1.2",
+    "ts-node": "^10.1.0"
+  }
+}

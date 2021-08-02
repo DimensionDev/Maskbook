@@ -71,9 +71,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.collecting.postsProvider?.start(signal)
     startPostListener()
 
-    ui.collecting.profilesCollector?.(signal)
     ui.injection.pageInspector?.(signal)
-    if (Flags.toolbar_enabled) ui.injection.toolbar?.(signal)
     if (Flags.toolbox_enabled) ui.injection.toolBoxInNavBar?.(signal)
     ui.injection.setupPrompt?.(signal)
     ui.injection.newPostComposition?.start?.(signal)

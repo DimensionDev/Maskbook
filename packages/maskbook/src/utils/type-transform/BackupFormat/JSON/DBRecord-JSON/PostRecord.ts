@@ -1,9 +1,9 @@
-import type { PostRecord, RecipientReason, RecipientDetail } from '../../../../../database/post'
+import type { PostRecord, RecipientDetail, RecipientReason } from '../../../../../database/post'
 import type { BackupJSONFileLatest } from '../latest'
 import type { RecipientReasonJSON } from '../version-2'
-import { Identifier, GroupIdentifier, PostIVIdentifier, ProfileIdentifier } from '../../../../../database/type'
+import { GroupIdentifier, Identifier, PostIVIdentifier, ProfileIdentifier } from '../../../../../database/type'
 import { IdentifierMap } from '../../../../../database/IdentifierMap'
-import { unreachable } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
 
 export function PostRecordToJSONFormat(post: PostRecord): BackupJSONFileLatest['posts'][0] {
     return {
@@ -11,7 +11,7 @@ export function PostRecordToJSONFormat(post: PostRecord): BackupJSONFileLatest['
         foundAt: post.foundAt.getTime(),
         identifier: post.identifier.toText(),
         postBy: post.postBy.toText(),
-        recipientGroups: post.recipientGroups.map((x) => x.toText()),
+        recipientGroups: [],
         recipients: Array.from(post.recipients).map(
             ([identifier, detail]): [string, { reason: RecipientReasonJSON[] }] => [
                 identifier.toText(),
@@ -29,7 +29,6 @@ export function PostRecordFromJSONFormat(post: BackupJSONFileLatest['posts'][0])
         foundAt: new Date(post.foundAt),
         identifier: Identifier.fromString(post.identifier, PostIVIdentifier).unwrap(),
         postBy: Identifier.fromString(post.postBy, ProfileIdentifier).unwrap(),
-        recipientGroups: post.recipientGroups.map((x) => Identifier.fromString(x, GroupIdentifier).unwrap()),
         recipients: new IdentifierMap<ProfileIdentifier, RecipientDetail>(
             new Map<string, RecipientDetail>(
                 post.recipients.map(([x, y]) => [

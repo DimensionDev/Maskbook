@@ -2,17 +2,16 @@ import { useRef } from 'react'
 import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Appearance, Language } from '@masknet/theme'
-import { getChainName, ChainId, ProviderType, useAccount } from '@masknet/web3-shared'
+import { getEnumAsObject } from '@masknet/shared'
+import { getChainName, ChainId, ProviderType, useAccount, PortfolioProvider } from '@masknet/web3-shared'
 
 import { useMatchXS, extendsTheme, useI18N, Flags, useValueRef } from '../../../utils'
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
 import {
     debugModeSetting,
-    disableOpenNewTabInBackgroundSettings,
     languageSettings,
     allPostReplacementSettings,
     appearanceSettings,
-    enableGroupSharingSettings,
     launchPageSettings,
     newDashboardConnection,
 } from '../../../settings/settings'
@@ -24,9 +23,7 @@ import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined'
-import ShareIcon from '@material-ui/icons/ShareOutlined'
 import FlipToFrontIcon from '@material-ui/icons/FlipToFront'
-import TabIcon from '@material-ui/icons/Tab'
 import PaletteIcon from '@material-ui/icons/Palette'
 import LanguageIcon from '@material-ui/icons/Language'
 import WifiIcon from '@material-ui/icons/Wifi'
@@ -36,20 +33,19 @@ import NewIcon from '@material-ui/icons/NewReleases'
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../DashboardDialogs/Backup'
-import { currentTrendingDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
-import {
-    resolveDataProviderName as resolveTraderDataProviderName,
-    resolveTradeProviderName,
-} from '../../../plugins/Trader/pipes'
-import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
+import { currentDataProviderSettings, currentTradeProviderSettings } from '../../../plugins/Trader/settings'
+import { resolveDataProviderName, resolveTradeProviderName } from '../../../plugins/Trader/pipes'
 import { resolvePortfolioDataProviderName } from '../../../plugins/Wallet/pipes'
-import { PortfolioProvider } from '../../../plugins/Wallet/types'
 import {
     currentPortfolioDataProviderSettings,
     currentChainIdSettings,
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
 import { useAvailableTraderProviders } from '../../../plugins/Trader/trending/useAvailableTraderProviders'
+import { useAvailableDataProviders } from '../../../plugins/Trader/trending/useAvailableDataProviders'
+import { useCurrentTradeProvider } from '../../../plugins/Trader/trending/useCurrentTradeProvider'
+import { useCurrentDataProvider } from '../../../plugins/Trader/trending/useCurrentDataProvider'
+import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -170,7 +166,12 @@ export default function DashboardSettingsRouter() {
         listItemIcon: classes.listItemIcon,
     }
 
+    //#region the trader plugin
+    const { value: dataProviders = [] } = useAvailableDataProviders()
     const { value: tradeProviders = [] } = useAvailableTraderProviders()
+    const dataProvider = useCurrentDataProvider(dataProviders)
+    const tradeProvider = useCurrentTradeProvider(tradeProviders)
+    //#endregion
 
     return (
         <DashboardRouterContainer title={t('settings')}>
@@ -219,29 +220,27 @@ export default function DashboardSettingsRouter() {
                                 {tradeProviders.length ? (
                                     <SettingsUIEnum
                                         classes={listStyle}
-                                        enumObject={tradeProviders.reduce(
-                                            (accumulator, x) => {
-                                                accumulator[TradeProvider[x]] = x
-                                                return accumulator
-                                            },
-                                            {} as {
-                                                [key: string]: TradeProvider
-                                            },
-                                        )}
+                                        enumObject={getEnumAsObject(tradeProviders, (v) => TradeProvider[v])}
                                         getText={resolveTradeProviderName}
-                                        icon={<SwapHorizIcon />}
+                                        icon={<TrendingUpIcon />}
                                         value={currentTradeProviderSettings}
+                                        SelectProps={{
+                                            value: tradeProvider,
+                                        }}
                                     />
                                 ) : null}
-
-                                {/* TODO: A singe 'Plugins' tab should be added for listing plugin bio and settings. */}
-                                <SettingsUIEnum
-                                    classes={listStyle}
-                                    enumObject={DataProvider}
-                                    getText={resolveTraderDataProviderName}
-                                    icon={<TrendingUpIcon />}
-                                    value={currentTrendingDataProviderSettings}
-                                />
+                                {dataProviders.length ? (
+                                    <SettingsUIEnum
+                                        classes={listStyle}
+                                        enumObject={getEnumAsObject(dataProviders, (v) => DataProvider[v])}
+                                        getText={resolveDataProviderName}
+                                        icon={<SwapHorizIcon />}
+                                        value={currentDataProviderSettings}
+                                        SelectProps={{
+                                            value: dataProvider,
+                                        }}
+                                    />
+                                ) : null}
                                 <SettingsUIEnum
                                     classes={listStyle}
                                     enumObject={PortfolioProvider}
@@ -270,11 +269,6 @@ export default function DashboardSettingsRouter() {
                             <List className={classes.list} disablePadding>
                                 <SettingsUI
                                     classes={listStyle}
-                                    icon={<TabIcon />}
-                                    value={disableOpenNewTabInBackgroundSettings}
-                                />
-                                <SettingsUI
-                                    classes={listStyle}
                                     icon={<MemoryOutlinedIcon />}
                                     value={debugModeSetting}
                                 />
@@ -282,11 +276,6 @@ export default function DashboardSettingsRouter() {
                                     classes={listStyle}
                                     icon={<FlipToFrontIcon />}
                                     value={allPostReplacementSettings}
-                                />
-                                <SettingsUI
-                                    classes={listStyle}
-                                    icon={<ShareIcon />}
-                                    value={enableGroupSharingSettings}
                                 />
                                 {process.env.NODE_ENV === 'development' || process.env.build !== 'stable' ? (
                                     <SettingsUI

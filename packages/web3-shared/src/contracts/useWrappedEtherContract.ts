@@ -1,5 +1,5 @@
-import WETH_ABI from '@masknet/contracts/abis/WETH.json'
-import type { WETH } from '@masknet/contracts/types/WETH'
+import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
+import type { WETH } from '@masknet/web3-contracts/types/WETH'
 import type { AbiItem } from 'web3-utils'
 import { useTokenConstants } from '../constants'
 import { useContract } from '../hooks/useContract'

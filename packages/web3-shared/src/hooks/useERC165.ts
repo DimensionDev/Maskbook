@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { BaseContract } from '@masknet/contracts/types/types'
+import type { BaseContract } from '@masknet/web3-contracts/types/types'
 import { useAccount } from './useAccount'
 
 export const ERC165_INTERFACE_ID = '0x01ffc9a7'

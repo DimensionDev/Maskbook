@@ -1,6 +1,6 @@
 import type BigNumber from 'bignumber.js'
 import { Currency, DataProvider, TradeProvider, WarningLevel, ZrxTradePool } from './types'
-import { unreachable } from '@masknet/shared'
+import { safeUnreachable, unreachable } from '@dimensiondev/kit'
 import {
     BIPS_BASE,
     PRICE_IMPACT_HIGH,
@@ -9,6 +9,7 @@ import {
     PRICE_IMPACT_NON_EXPERT_BLOCKED,
     PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN,
 } from './constants'
+import { NetworkType } from '@masknet/web3-shared'
 
 export function resolveCurrencyName(currency: Currency) {
     return [
@@ -86,20 +87,30 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider) {
     }
 }
 
-export function resolveTradePairLink(tradeProvider: TradeProvider, address: string) {
+export function resolveTradePairLink(tradeProvider: TradeProvider, address: string, networkType: NetworkType) {
     switch (tradeProvider) {
         case TradeProvider.UNISWAP:
-            return `https://info.uniswap.org/pair/${address}`
+            return `https://v2.info.uniswap.org/pair/${address}`
         case TradeProvider.ZRX:
             return ''
         case TradeProvider.SUSHISWAP:
-            return `https://analytics.sushiswap.fi/pairs/${address}`
+            switch (networkType) {
+                case NetworkType.Ethereum:
+                    return `https://analytics.sushi.com/pairs/${address}`
+                case NetworkType.Binance:
+                    return `https://analytics-bsc.sushi.com/pairs/${address}`
+                case NetworkType.Polygon:
+                    return `https://analytics-polygon.sushi.com/pairs/${address}`
+                default:
+                    safeUnreachable(networkType)
+                    return ''
+            }
         case TradeProvider.SASHIMISWAP:
             return `https://info.sashimi.cool/pair/${address}`
         case TradeProvider.BALANCER:
             return `https://pools.balancer.exchange/#/pool/${address}/`
         case TradeProvider.QUICKSWAP:
-            return `https://info.quickswap.exchange/pair${address}`
+            return `https://info.quickswap.exchange/pair/${address}`
         case TradeProvider.PANCAKESWAP:
             return `https://pancakeswap.info/pool/${address}`
         default:
@@ -139,27 +150,40 @@ export function resolveUniswapWarningLevelColor(warningLevel?: WarningLevel) {
 export function resolveZrxTradePoolName(swapSource: ZrxTradePool) {
     const SWAP_SOURCE_NAME_MAP: EnumRecord<ZrxTradePool, string> = {
         [ZrxTradePool.ZRX]: 'ZRX',
-        [ZrxTradePool.Native]: 'Native',
-        [ZrxTradePool.Mesh]: 'Mesh',
         [ZrxTradePool.Uniswap]: 'Uniswap',
         [ZrxTradePool.UniswapV2]: 'Uniswap V2',
         [ZrxTradePool.Eth2Dai]: 'Eth2Dai',
         [ZrxTradePool.Kyber]: 'Kyber',
         [ZrxTradePool.Curve]: 'Curve',
-        [ZrxTradePool.LiquidityProvider]: 'LiquidityProvider',
-        [ZrxTradePool.MultiBridge]: 'MultiBridge',
         [ZrxTradePool.Balancer]: 'Balancer',
-        [ZrxTradePool.Cream]: 'CREAM',
+        [ZrxTradePool.BalancerV2]: 'BalancerV2',
         [ZrxTradePool.Bancor]: 'Bancor',
         [ZrxTradePool.MStable]: 'mStable',
         [ZrxTradePool.Mooniswap]: 'Mooniswap',
-        [ZrxTradePool.MultiHop]: 'MultiHop',
-        [ZrxTradePool.Shell]: 'Shell',
         [ZrxTradePool.Swerve]: 'Swerve',
         [ZrxTradePool.SnowSwap]: 'SnowSwap',
         [ZrxTradePool.SushiSwap]: 'SushiSwap',
+        [ZrxTradePool.Shell]: 'Shell',
+        [ZrxTradePool.MultiHop]: 'MultiHop',
         [ZrxTradePool.Dodo]: 'DODO',
+        [ZrxTradePool.DodoV2]: 'DODO V2',
+        [ZrxTradePool.Cream]: 'CREAM',
+        [ZrxTradePool.LiquidityProvider]: 'LiquidityProvider',
         [ZrxTradePool.CryptoCom]: 'CryptoCom',
+        [ZrxTradePool.Linkswap]: 'Linkswap',
+        [ZrxTradePool.Lido]: 'Lido',
+        [ZrxTradePool.MakerPsm]: 'MakerPsm',
+        [ZrxTradePool.KyberDMM]: 'KyberDMM',
+        [ZrxTradePool.Smoothy]: 'Smoothy',
+        [ZrxTradePool.Saddle]: 'Saddle',
+        [ZrxTradePool.xSigma]: 'xSigma',
+        [ZrxTradePool.UniswapV3]: 'Uniswap V3',
+        [ZrxTradePool.CurveV2]: 'Curve_V2',
+
+        // unseen in the response
+        [ZrxTradePool.Native]: 'Native',
+        [ZrxTradePool.Mesh]: 'Mesh',
+        [ZrxTradePool.MultiBridge]: 'MultiBridge',
     }
-    return SWAP_SOURCE_NAME_MAP[swapSource]
+    return SWAP_SOURCE_NAME_MAP[swapSource] ?? 'Unknwn'
 }

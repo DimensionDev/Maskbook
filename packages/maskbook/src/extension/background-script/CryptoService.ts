@@ -7,4 +7,9 @@ export { appendShareTarget } from './CryptoServices/appendShareTarget'
 export { getSharedListOfPost } from './CryptoServices/getSharedListOfPost'
 export { verifyOthersProve } from './CryptoServices/verifyOthersProve'
 export { getMyProveBio } from './CryptoServices/getMyProveBio'
-export { debugShowAllPossibleHashForPost } from './CryptoServices/debugShowAllPossibleHashForPost'
+
+import type { debugShowAllPossibleHashForPost as orig } from './CryptoServices/debugShowAllPossibleHashForPost'
+// This module requires lazy loading otherwise it will load gun
+export async function debugShowAllPossibleHashForPost(...args: Parameters<typeof orig>) {
+    return (await import('./CryptoServices/debugShowAllPossibleHashForPost')).debugShowAllPossibleHashForPost(...args)
+}

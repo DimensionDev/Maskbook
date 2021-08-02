@@ -41,7 +41,7 @@ export function dispatchCustomEvents<T extends keyof CustomEvents>(
  * @param image
  */
 export async function pasteImageToActiveElements(image: File | Blob): Promise<void> {
-    const bytes = new Uint8Array(await image.arrayBuffer())
+    const bytes = new Uint8Array(await blobToArrayBuffer(image))
     dispatchCustomEvents(document.activeElement, 'paste', { type: 'image', value: Array.from(bytes) })
 }
 
@@ -128,35 +128,6 @@ export function batchReplace(source: string, group: Array<[string | RegExp, stri
     return storage
 }
 
-export function pollingTask(
-    task: () => Promise<boolean>,
-    {
-        delay = 30 * 1000,
-    }: {
-        delay?: number
-    } = {},
-) {
-    let canceled = false
-    let timer: NodeJS.Timeout
-    const runTask = async () => {
-        if (canceled) return
-        let stop = false
-        try {
-            stop = await task()
-        } catch (e) {
-            console.error(e)
-        }
-        if (!stop) timer = setTimeout(runTask, delay)
-    }
-    runTask()
-    return {
-        cancel: () => (canceled = true),
-        reset: () => {
-            clearTimeout(timer)
-            timer = setTimeout(runTask, delay)
-        },
-    }
-}
 export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
     const x = new Uint8Array(a)
     const y = new Uint8Array(b)
@@ -167,6 +138,7 @@ export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
 }
 
 import Services from '../extension/service'
+import { blobToArrayBuffer } from '@dimensiondev/kit'
 export { parseURL } from '@masknet/shared'
 /**
  * !!!! Please use the Promise constructor if possible

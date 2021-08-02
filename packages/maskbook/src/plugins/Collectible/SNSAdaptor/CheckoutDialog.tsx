@@ -16,7 +16,8 @@ import { Trans } from 'react-i18next'
 import { useAccount } from '@masknet/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
-import { useI18N, useRemoteControlledDialog } from '../../../utils'
+import { useI18N } from '../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
@@ -91,7 +92,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         }
     }, [asset?.value, account, enqueueSnackbar])
 
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
     const validationMessage = useMemo(() => {
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')

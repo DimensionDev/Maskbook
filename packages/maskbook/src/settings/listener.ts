@@ -4,12 +4,12 @@ import {
     appearanceSettings,
     languageSettings,
     debugModeSetting,
-    disableOpenNewTabInBackgroundSettings,
     currentPersonaIdentifier,
 } from './settings'
 import {
     currentAccountSettings,
     currentBalanceSettings,
+    currentEtherPriceSettings,
     currentBlockNumberSettings,
     currentChainIdSettings,
     currentCollectibleDataProviderSettings,
@@ -17,7 +17,7 @@ import {
     currentPortfolioDataProviderSettings,
     currentProviderSettings,
 } from '../plugins/Wallet/settings'
-import { currentTrendingDataProviderSettings } from '../plugins/Trader/settings'
+import { currentDataProviderSettings } from '../plugins/Trader/settings'
 
 export function ToBeListened() {
     return {
@@ -28,8 +28,8 @@ export function ToBeListened() {
         currentChainIdSettings,
         currentBalanceSettings,
         currentBlockNumberSettings,
-        currentTrendingDataProviderSettings,
-        disableOpenNewTabInBackgroundSettings,
+        currentEtherPriceSettings,
+        currentTrendingDataProviderSettings: currentDataProviderSettings,
         currentProviderSettings,
         currentNetworkSettings,
         currentAccountSettings,

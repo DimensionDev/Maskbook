@@ -2,14 +2,20 @@ import { Box, ClickAwayListener, makeStyles, Skeleton, Tooltip, Typography } fro
 import { Info as InfoIcon } from '@material-ui/icons'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useState } from 'react'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { AirdropIcon } from '../../../resources/AirdropIcon'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { useAccount, TransactionStateType, ERC20TokenDetailed, useChainId } from '@masknet/web3-shared'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import {
+    ERC20TokenDetailed,
+    formatPercentage,
+    isZero,
+    pow10,
+    TransactionStateType,
+    useAccount,
+    useChainId,
+} from '@masknet/web3-shared'
 import { WalletMessages } from '../../Wallet/messages'
-import { formatPercentage, isZero, pow10 } from '@masknet/shared'
 import { useAirdropPacket } from '../hooks/useAirdropPacket'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
@@ -170,8 +176,9 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                         variant="rectangular"
                         height={25}
                         width="80%"
-                        style={{ marginBottom: 8 }}></Skeleton>
-                    <Skeleton animation="wave" variant="rectangular" height={28} width="40%"></Skeleton>
+                        style={{ marginBottom: 8 }}
+                    />
+                    <Skeleton animation="wave" variant="rectangular" height={28} width="40%" />
                 </Box>
             </Box>
         )

@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { ChainId, getChainDetailed } from '@masknet/web3-shared'
+import { ChainId, getChainRPC } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
 import { getWalletsCached } from '../wallet'
 
@@ -53,14 +53,7 @@ export function createWeb3({
     chainId?: ChainId
     privKeys?: string[]
 } = {}) {
-    // get the provider url by weights if needed
-    if (!url) {
-        const chainDetailed = getChainDetailed(chainId)
-        if (!chainDetailed) throw new Error('Unknown chain id.')
-        const urls = chainDetailed.rpc
-        const weights = chainDetailed.rpcWeights
-        url = urls[weights[SEED]]
-    }
+    url = url || getChainRPC(chainId, SEED)
     const provider = createProvider(url)
     const web3 = createWeb3Instance(provider)
     if (privKeys.length) {

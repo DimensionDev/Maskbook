@@ -3,7 +3,9 @@ import stringify from 'json-stable-stringify'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 
 async function fetchFromBalancerPoolSubgraph<T>(query: string) {
-    const response = await fetch(getLBPConstants(currentChainIdSettings.value).BALANCER_POOLS_SUBGRAPH_URL, {
+    const subgraphURL = getLBPConstants(currentChainIdSettings.value).BALANCER_POOLS_SUBGRAPH_URL
+    if (!subgraphURL) return null
+    const response = await fetch(subgraphURL, {
         method: 'POST',
         mode: 'cors',
         body: stringify({ query }),
@@ -15,7 +17,7 @@ async function fetchFromBalancerPoolSubgraph<T>(query: string) {
 }
 
 export async function fetchLBP_PoolsByTokenAddress(address: string) {
-    const response = await fetchFromBalancerPoolSubgraph<{
+    const data = await fetchFromBalancerPoolSubgraph<{
         pools: {
             id: string
             createTime: number
@@ -34,9 +36,8 @@ export async function fetchLBP_PoolsByTokenAddress(address: string) {
           createTime
         }
     }`)
-    const { pools } = response
-    if (!pools) throw new Error('Failed to load pools.')
-    return pools
+    if (!data?.pools) throw new Error('Failed to load pools.')
+    return data.pools
 }
 
 export async function fetchLBP_PoolTokenPrices(poolId: string, address: string, blockNumbers: string[]) {
@@ -52,7 +53,7 @@ export async function fetchLBP_PoolTokenPrices(poolId: string, address: string, 
         }
     `,
     )
-    const response = await fetchFromBalancerPoolSubgraph<{
+    const data = await fetchFromBalancerPoolSubgraph<{
         [key: string]: {
             price: string
         }[]
@@ -61,9 +62,10 @@ export async function fetchLBP_PoolTokenPrices(poolId: string, address: string, 
             ${queries.join('\n')}
         }
     `)
-    return Object.keys(response)
+    if (!data) return []
+    return Object.keys(data)
         .map((x) => ({
-            price: response[x][0]?.price ?? '0',
+            price: data[x][0]?.price ?? '0',
             blockNumber: x.slice(1),
         }))
         .sort((a, z) => Number.parseInt(a.blockNumber) - Number.parseInt(z.blockNumber))
@@ -87,7 +89,7 @@ export async function fetchLBP_PoolTokens(poolId: string, blockNumbers: string[]
             }
         }`,
     )
-    const response = await fetchFromBalancerPoolSubgraph<{
+    const data = await fetchFromBalancerPoolSubgraph<{
         [key: string]: {
             tokens: {
                 address: string
@@ -100,8 +102,9 @@ export async function fetchLBP_PoolTokens(poolId: string, blockNumbers: string[]
             ${queries.join('\n')}
         }
     `)
-    return Object.keys(response).map((x) => ({
-        tokens: response[x].tokens,
+    if (!data) return []
+    return Object.keys(data).map((x) => ({
+        tokens: data[x].tokens,
         blockNumber: x.slice(1),
     }))
 }

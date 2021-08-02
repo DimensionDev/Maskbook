@@ -2,9 +2,9 @@ import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
-import { formatEthereumAddress } from '@masknet/shared'
-import { WalletRecordIntoDB, ERC1155TokenRecordIntoDB, getWalletByAddress } from './helpers'
 import type { ERC1155TokenDetailed } from '@masknet/web3-shared'
+import { formatEthereumAddress } from '@masknet/web3-shared'
+import { ERC1155TokenRecordIntoDB, getWalletByAddress, WalletRecordIntoDB } from './helpers'
 
 export async function getERC1155Tokens() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC1155Token', 'Wallet')

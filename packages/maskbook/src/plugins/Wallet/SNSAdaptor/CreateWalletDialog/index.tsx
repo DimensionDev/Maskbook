@@ -1,15 +1,14 @@
 import { useState, useCallback } from 'react'
 import { DialogContent, makeStyles } from '@material-ui/core'
-import { delay, useRemoteControlledDialog, useI18N } from '../../../../utils'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useI18N } from '../../../../utils'
+import { useRemoteControlledDialog, delay, useSnackbarCallback } from '@masknet/shared'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
-import { useMnemonicWordsPuzzle } from '../../hooks/useMnemonicWordsPuzzle'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../constants'
 
 import { StepNameAndWords } from './StepNameAndWords'
 import { StepVerify } from './StepVerify'
+import { useMnemonicWordsPuzzle } from '@masknet/web3-shared'
 
 enum CreateWalletStep {
     NameAndWords = 0,
@@ -72,11 +71,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface CreateWalletDialogProps extends withClasses<never> {}
-
-export function CreateWalletDialog(props: CreateWalletDialogProps) {
+export function CreateWalletDialog() {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const classes = useStyles()
 
     const [step, setStep] = useState(CreateWalletStep.NameAndWords)
     const [name, setName] = useState('')

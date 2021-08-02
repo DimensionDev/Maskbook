@@ -5,9 +5,9 @@ import {
     appearanceSettings,
     currentPersonaIdentifier,
     languageSettings,
-    disableOpenNewTabInBackgroundSettings,
+    currentPluginEnabledStatus,
 } from '../../settings/settings'
-import { currentTrendingDataProviderSettings } from '../../plugins/Trader/settings'
+import { currentDataProviderSettings } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
     currentBalanceSettings,
@@ -19,6 +19,7 @@ import {
     currentChainIdSettings,
     currentPortfolioDataProviderSettings,
     currentGasNowSettings,
+    currentEtherPriceSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
 
@@ -38,12 +39,9 @@ export const [getLanguage, setLanguage] = create(languageSettings)
 export const [getChainId, setChainId] = create(currentChainIdSettings)
 export const [getBalance, setBalance] = create(currentBalanceSettings)
 export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
+export const [getEtherPrice, setEtherPrice] = create(currentEtherPriceSettings)
 export const [getGasNow, setGasNow] = create(currentGasNowSettings)
-export const [getTrendingDataSource, setTrendingDataSource] = create(currentTrendingDataProviderSettings)
-export const [getAncientPostsCompatibiltyMode, setAncientPostsCompatibiltyMode] = create(
-    disableOpenNewTabInBackgroundSettings,
-)
-
+export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 
 export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(currentNetworkSettings)
@@ -78,4 +76,7 @@ export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier |
 export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
     await currentPersonaIdentifier.readyPromise
     currentPersonaIdentifier.value = x.toText()
+}
+export async function isPluginEnabled(id: string) {
+    return currentPluginEnabledStatus['plugin:' + id].value
 }

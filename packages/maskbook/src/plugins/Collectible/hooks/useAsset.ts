@@ -1,4 +1,4 @@
-import { unreachable } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
 import {
     currySameAddress,
     EthereumTokenType,

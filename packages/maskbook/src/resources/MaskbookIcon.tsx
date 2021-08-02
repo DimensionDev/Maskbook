@@ -37,9 +37,9 @@ const WalletSharpSVG = ({ size = 20 }: { size?: number }) => (
         strokeLinecap="round"
         strokeLinejoin="round"
         className="feather feather-alert-circle">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="8" x2="12" y2="14"></line>
-        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="14" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
     </svg>
 )
 

@@ -9,7 +9,6 @@ import { useI18N } from '../../../utils'
 
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from './Base'
 import { DebounceButton } from '../DashboardComponents/ActionButton'
-import type { PluginConfig } from '../../../plugins/types'
 
 const useStyles = makeStyles((theme) => ({
     logo: {
@@ -39,7 +38,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface PluginProps {
-    plugin: PluginConfig
+    id?: string
+    description?: string
+    icon?: React.ReactNode
+    name?: string
 }
 
 //#region persona create dialog
@@ -50,30 +52,29 @@ export function DashboardPluginDetailDialog({ ComponentProps, ...rest }: Wrapped
     const theme = useTheme()
 
     const metaFields = useMemo(() => {
-        const plugin = ComponentProps?.plugin
-        if (!plugin) {
+        if (!ComponentProps?.id || !ComponentProps?.name) {
             return []
         }
         return [
             {
                 field: 'id',
-                value: plugin.id,
+                value: ComponentProps.id,
                 icon: <FingerprintIcon />,
             },
             {
                 field: 'description',
-                value: plugin.pluginDescription,
+                value: ComponentProps.description,
                 icon: <DescriptionIcon />,
             },
         ]
-    }, [ComponentProps?.plugin])
+    }, [ComponentProps?.id, ComponentProps?.description, ComponentProps?.name])
 
     return (
         <DashboardDialogCore fullScreen={false} {...rest}>
             <DashboardDialogWrapper
-                icon={<span className={classes.logo}>{ComponentProps?.plugin.pluginIcon}</span>}
-                primary={ComponentProps?.plugin.pluginName ?? '-'}
-                secondary={' '}
+                icon={<span className={classes.logo}>{ComponentProps?.icon}</span>}
+                primary={ComponentProps?.name ?? '-'}
+                secondary=" "
                 content={
                     <Paper className={classes.section} component="section" elevation={0}>
                         <Card elevation={0}>
@@ -99,7 +100,8 @@ export function DashboardPluginDetailDialog({ ComponentProps, ...rest }: Wrapped
                     <DebounceButton type="submit" variant="contained" onClick={rest.onClose}>
                         {t('ok')}
                     </DebounceButton>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }

@@ -109,8 +109,6 @@ export namespace SocialNetworkUI {
             enhancedPostRenderer?(signal: AbortSignal, current: PostInfo): void
             /** Display the additional content (decrypted, plugin, ...) below the post */
             postInspector?(signal: AbortSignal, current: PostInfo): void
-            /** Inject a toolbar that displayed on the top of the page */
-            toolbar?(signal: AbortSignal): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */
             toolBoxInNavBar?(signal: AbortSignal): void
             /** Inject the UI that used to notify if the user has not completely setup the current network. */
@@ -180,18 +178,12 @@ export namespace SocialNetworkUI {
     }
     export namespace CollectingCapabilities {
         export interface Define {
-            /** Collect all profiles seen on the network */
-            profilesCollector?(signal: AbortSignal): void
             /** Resolve the information of who am I on the current network. */
             identityProvider?: IdentityResolveProvider
             /** Maintain all the posts up-to-date. */
             postsProvider?: PostsProvider
             /** Get searched keyword */
             getSearchedKeyword?(): string
-            /** @deprecated Seems we don't use it anymore. */
-            getPostContent?(): Promise<string>
-            /** @deprecated Seems we don't use it anymore. */
-            getProfile?(): Promise<ProfileUI>
         }
         export type ProfileUI = { bioContent: string }
         export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar'>
@@ -304,30 +296,5 @@ export namespace SocialNetworkWorker {
     export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared, WorkerBase {
         tasks: Tasks
     }
-    export interface Tasks {
-        /**
-         * This function should fetch the given post by `fetch`, `AutomatedTabTask` or anything
-         * @deprecated
-         * @pseudoCode
-         * fetchPostContent(post) {
-         *      let tab = get_tab_with_same_origin_and_not_pinned()
-         *      if (!isUndefined(tab)) {
-         *          // tab available, let them to fetch.
-         *          // this process should not visible to user.
-         *          return tasks(tab).fetch(url)
-         *      }
-         *
-         *      // no tab available for now, call foreground to do so.
-         *      return tasks(getPostURL(post)).getPostContent()
-         * }
-         * @param postIdentifier The post id
-         */
-        fetchPostContent?(postIdentifier: PostIdentifier<ProfileIdentifier>): Promise<string>
-        /**
-         * This function should fetch the given post by `fetch`, `AutomatedTabTask` or anything
-         * @param identifier The post id
-         * @deprecated
-         */
-        fetchProfile?(identifier: ProfileIdentifier): Promise<SocialNetworkUI.CollectingCapabilities.ProfileUI>
-    }
+    export interface Tasks {}
 }

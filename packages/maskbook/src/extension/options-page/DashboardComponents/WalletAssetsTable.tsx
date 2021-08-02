@@ -19,24 +19,24 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { Asset, useTrustedERC20Tokens } from '@masknet/web3-shared'
 import {
     CurrencyType,
-    EthereumTokenType,
-    Wallet,
-    useStableTokensDebank,
-    useChainDetailed,
-    getChainIdFromName,
     currySameAddress,
+    EthereumTokenType,
+    formatBalance,
+    formatCurrency,
+    getChainIdFromName,
+    isGreaterThan,
+    useAssets,
+    useChainDetailed,
+    useStableTokensDebank,
+    Wallet,
 } from '@masknet/web3-shared'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { formatBalance, formatCurrency, FormattedCurrency, isGreaterThan } from '@masknet/shared'
-import { useMatchXS, useI18N } from '../../../utils'
-import { TokenIcon } from './TokenIcon'
+import { FormattedCurrency, TokenIcon, useStylesExtends } from '@masknet/shared'
+import { useI18N, useMatchXS } from '../../../utils'
 import { ActionsBarFT } from './ActionsBarFT'
-import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
-import type { Asset } from '../../../plugins/Wallet/types'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
-import { useAssets } from '../../../plugins/Wallet/hooks/useAssets'
 
 const useStyles = makeStyles<
     Theme,
@@ -83,6 +83,7 @@ const useStyles = makeStyles<
         display: 'flex',
         justifyContent: 'center',
         marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
     },
 }))
 
@@ -113,10 +114,11 @@ function ViewDetailed(props: ViewDetailedProps) {
                         classes={{ icon: classes.coin }}
                         name={asset.token.name}
                         address={asset.token.address}
+                        logoURI={asset.token.logoURI}
                         chainId={getChainIdFromName(asset.chain)}
                     />
                     <Typography className={classes.name}>{asset.token.symbol}</Typography>
-                    {asset.chain !== chainDetailed.chain.toLowerCase() ? (
+                    {asset.chain.toLowerCase() !== chainDetailed.chain.toLowerCase() ? (
                         <Chip className={classes.chain} label={asset.chain} size="small" />
                     ) : null}
                 </Box>,
@@ -195,7 +197,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         ...(isMobile ? [] : ['']),
     ] as const
 
-    const erc20Tokens = useTrustedERC20TokensFromDB()
+    const erc20Tokens = useTrustedERC20Tokens()
     const {
         value: detailedTokens,
         error: detailedTokensError,
@@ -255,39 +257,19 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                             ? new Array(3).fill(0).map((_, i) => (
                                   <TableRow className={classes.cell} key={i}>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                   </TableRow>
                               ))

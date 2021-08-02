@@ -9,6 +9,8 @@ This plugin fetch and show [dHEDGE](https://dhedge.org) pools data and allow use
 - [x] Draw pool chart
 - [x] Buy sUSD
 - [x] Investment
+- [x] Multi Chain
+- [x] V2 Pools
 
 ## Related projects
 
@@ -17,7 +19,9 @@ This plugin fetch and show [dHEDGE](https://dhedge.org) pools data and allow use
 ## Related discussion
 
 - <https://github.com/dhedge/dhedge-docs/issues/1>
+- <https://github.com/dhedge/dhedge-docs/issues/3>
 
 ## Pull requests
 
 - <https://github.com/DimensionDev/Maskbook/pull/3119>
+- TBD

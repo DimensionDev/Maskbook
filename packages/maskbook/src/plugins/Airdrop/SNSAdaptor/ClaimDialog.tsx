@@ -1,7 +1,6 @@
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
 import { DialogContent, Box, Theme, makeStyles, DialogActions, Button, Typography } from '@material-ui/core'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { TokenIcon } from '../../../extension/options-page/DashboardComponents/TokenIcon'
+import { TokenIcon, useStylesExtends } from '@masknet/shared'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -41,7 +40,12 @@ function ClaimDialogUI(props: ClaimDialogUIProps) {
             <DialogContent className={classes.content}>
                 <Box className={classes.token}>
                     <Box display="flex" alignItems="center">
-                        <TokenIcon classes={{ icon: classes.icon }} name={token.name} address={token.address} />
+                        <TokenIcon
+                            classes={{ icon: classes.icon }}
+                            name={token.name}
+                            address={token.address}
+                            logoURI={token.logoURI}
+                        />
                         <Typography className={classes.symbol} color="textPrimary">
                             {token.symbol}
                         </Typography>

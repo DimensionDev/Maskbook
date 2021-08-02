@@ -3,7 +3,7 @@ addReviewers: true
 addAssignees: false
 
 reviewers:
-  - DimensionDev/dev-maskbook
+  - Dev-Maskbook
 
 numberOfReviewers: 0
 

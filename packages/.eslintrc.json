@@ -7,18 +7,38 @@
         "project": "./tsconfig.eslint.json"
     },
     "extends": ["plugin:import/typescript"],
-    "plugins": ["@typescript-eslint", "unused-imports", "lodash", "import", "react-hooks"],
+    "plugins": ["@typescript-eslint", "unused-imports", "lodash", "import", "react-hooks", "react"],
     "rules": {
         "import/no-deprecated": "warn",
         "no-restricted-imports": [
             "error",
-            { "paths": [{ "name": "lodash", "message": "Please use lodash-es instead." }] }
+            {
+                "paths": [
+                    { "name": "lodash", "message": "Please use lodash-es instead." },
+                    { "name": "date-fns", "message": "Please use date-fns/{submodule} instead." },
+                    { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." }
+                ]
+            }
         ],
         "react-hooks/exhaustive-deps": "off",
         "react-hooks/rules-of-hooks": "error",
         "lodash/import-scope": ["error", "member"],
         "unused-imports/no-unused-imports-ts": "warn",
         "@typescript-eslint/await-thenable": "error",
-        "@typescript-eslint/no-for-in-array": "error"
+        "@typescript-eslint/no-for-in-array": "error",
+        "react/jsx-curly-brace-presence": [
+            "warn",
+            {
+                "props": "never",
+                "children": "never"
+            }
+        ],
+        "react/self-closing-comp": [
+            "warn",
+            {
+                "component": true,
+                "html": true
+            }
+        ]
     }
 }

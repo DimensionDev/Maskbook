@@ -1,30 +1,34 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
     Box,
-    makeStyles,
-    Theme,
     DialogContent,
     ImageList,
     ImageListItem,
     List,
     ListItem,
+    makeStyles,
+    Theme,
     Typography,
 } from '@material-ui/core'
-import { unreachable, useValueRef } from '@masknet/shared'
+import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
-import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { useWallets, useAccount, getChainIdFromNetworkType, ProviderType, NetworkType } from '@masknet/web3-shared'
+import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
+import {
+    getChainIdFromNetworkType,
+    NetworkType,
+    ProviderType,
+    useAccount,
+    useChainId,
+    useWallets,
+} from '@masknet/web3-shared'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
-import { useChainId } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { Provider } from '../Provider'
 import { MetaMaskIcon } from '../../../../resources/MetaMaskIcon'
 import { MaskbookIcon } from '../../../../resources/MaskbookIcon'
 import { WalletConnectIcon } from '../../../../resources/WalletConnectIcon'
-import Services from '../../../../extension/service'
-import { useRemoteControlledDialog } from '../../../../utils/hooks/useRemoteControlledDialog'
 import { WalletMessages } from '../../messages'
 import { DashboardRoute } from '../../../../extension/options-page/Route'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
@@ -135,6 +139,12 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     )
     //#endregion
 
+    //#region create or import wallet dialog
+    const { openDialog: openCreateImportDialog } = useRemoteControlledDialog(
+        WalletMessages.events.createImportWalletDialogUpdated,
+    )
+    //#endregion
+
     //#region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
@@ -176,17 +186,15 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     // create a new wallet
                     if (isEnvironment(Environment.ManifestOptions))
                         history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
-                    else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
+                    else openCreateImportDialog()
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:
                     if (
-                        account &&
-                        providerType === selectedProviderType &&
-                        getChainIdFromNetworkType(undeterminedNetworkType) === chainId
+                        !account ||
+                        providerType !== selectedProviderType ||
+                        getChainIdFromNetworkType(undeterminedNetworkType) !== chainId
                     ) {
-                        openWalletStatusDialog()
-                    } else {
                         setConnectWalletDialog({
                             open: true,
                             providerType,
@@ -241,7 +249,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                 </Box>
                 <Box className={classes.step}>
                     <Typography className={classes.stepTitle} variant="h2" component="h2">
-                        {`${Flags.bsc_enabled ? '2. ' : ''}Choose Wallet`}
+                        2. Choose Wallet
                     </Typography>
                     <ImageList
                         className={classnames(classes.stepContent, classes.grid)}

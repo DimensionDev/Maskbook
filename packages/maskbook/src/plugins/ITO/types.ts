@@ -1,4 +1,4 @@
-import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@masknet/web3-shared'
+import type { ChainId, FungibleTokenDetailed } from '@masknet/web3-shared'
 
 export interface JSON_PayloadInMask {
     contract_address: string
@@ -10,7 +10,7 @@ export interface JSON_PayloadInMask {
     total_remaining: string
     seller: {
         address: string
-        name: string
+        name?: string
     }
     buyers: {
         address: string
@@ -32,8 +32,19 @@ export interface JSON_PayloadInMask {
     test_nums?: number[]
 }
 
+export interface PoolSubgraph {
+    pool: JSON_PayloadInMask
+    exchange_in_volumes: string[]
+    exchange_out_volumes: string[]
+}
+
+export interface ClaimablePool {
+    pid: string
+    token: FungibleTokenDetailed
+}
+
 //#region TokenOutMask
-export type TokenOutMask = Omit<NativeTokenDetailed | ERC20TokenDetailed, 'chainId'> & {
+export type TokenOutMask = Omit<FungibleTokenDetailed, 'chainId'> & {
     chain_id: ChainId
 }
 //#endregion
@@ -41,6 +52,11 @@ export type TokenOutMask = Omit<NativeTokenDetailed | ERC20TokenDetailed, 'chain
 export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
     token: TokenOutMask
     exchange_tokens: TokenOutMask[]
+}
+
+export interface JSON_PayloadComposeMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
+    token: string
+    exchange_tokens: { address: string }[]
 }
 
 export enum ITO_Status {
@@ -66,4 +82,19 @@ export interface PoolRecordInDatabase extends PoolRecord {
 export enum DialogTabs {
     create = 0,
     past = 1,
+}
+
+export interface Availability {
+    exchange_addrs: string[]
+    remaining: number
+    started: boolean
+    expired: boolean
+    unlocked: boolean
+    unlock_time: string
+    swapped: string
+    exchanged_tokens: string[]
+    claimed?: boolean
+    start_time?: string
+    end_time?: string
+    qualification_addr?: string
 }

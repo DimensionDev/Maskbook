@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
-import type { NonPayableTx, PayableTx } from '@masknet/contracts/types/types'
+import type { NonPayableTx, PayableTx } from '@masknet/web3-contracts/types/types'
 import { useNativeTokenWrapperContract } from '../contracts/useWrappedEtherContract'
 import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
 import { TransactionEventType } from '../types'
-import { isLessThan, isZero } from '@masknet/shared'
+import { isLessThan, isZero } from '../utils'
 
 export function useNativeTokenWrapperCallback() {
     const nonce = useNonce()

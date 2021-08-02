@@ -6,7 +6,7 @@ import { injectPageInspectorDefault } from '../../social-network/defaults/inject
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
 import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
-import { unreachable } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
 import { pasteImageToCompositionMinds } from './automation/AttachImageToComposition'
 import { gotoNewsFeedPageMinds } from './automation/gotoNewsFeedPage'
 import { gotoProfilePageMinds } from './automation/gotoProfilePage'
@@ -47,7 +47,6 @@ const mindsUI: SocialNetworkUI.Definition = {
     collecting: {
         identityProvider: IdentityProviderMinds,
         postsProvider: PostProviderMinds,
-        profilesCollector: undefined,
         getSearchedKeyword: getSearchedKeywordAtMinds,
     },
     customization: {
@@ -85,7 +84,6 @@ const mindsUI: SocialNetworkUI.Definition = {
             commentInspector: injectCommentBoxAtMinds(),
         },
         // NOT SUPPORTED YET
-        toolbar: undefined,
         userBadge: undefined,
     },
     configuration: {

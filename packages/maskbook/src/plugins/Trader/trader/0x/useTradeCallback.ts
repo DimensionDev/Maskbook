@@ -49,6 +49,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
 
         // compose transaction config
         const config_ = {
+            ...config,
             gas: await web3.eth.estimateGas(config).catch((error) => {
                 setTradeState({
                     type: TransactionStateType.FAILED,

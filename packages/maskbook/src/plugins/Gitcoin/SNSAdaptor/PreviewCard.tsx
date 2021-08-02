@@ -2,7 +2,8 @@ import { useCallback } from 'react'
 import { makeStyles, Box, Card, Typography, Button, Grid, Avatar } from '@material-ui/core'
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
-import { useI18N, useRemoteControlledDialog } from '../../../utils'
+import { useI18N } from '../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useGrant } from '../hooks/useGrant'
 import { PluginGitcoinMessages } from '../messages'
 
@@ -76,9 +77,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const { value: grant, error, loading, retry } = useGrant(props.id)
 
     //#region the donation dialog
-    const { setDialog: setDonationDialog } = useRemoteControlledDialog(
-        PluginGitcoinMessages.events.donationDialogUpdated,
-    )
+    const { setDialog: setDonationDialog } = useRemoteControlledDialog(PluginGitcoinMessages.donationDialogUpdated)
     const onDonate = useCallback(() => {
         if (!grant) return
         setDonationDialog({

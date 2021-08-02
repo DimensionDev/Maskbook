@@ -81,7 +81,8 @@ export default function ActionButton<T extends React.ComponentType<any> = React.
             className={'actionButton ' + className}
             style={{ width, ...style }}
             children={children}
-            {...rest}></Button>
+            {...rest}
+        />
     )
 }
 

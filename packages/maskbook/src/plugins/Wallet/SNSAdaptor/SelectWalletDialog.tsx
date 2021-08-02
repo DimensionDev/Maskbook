@@ -2,19 +2,13 @@ import { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { ProviderType, useWallets, useWallet, NetworkType, getChainIdFromNetworkType } from '@masknet/web3-shared'
-import { delay, useI18N, useRemoteControlledDialog } from '../../../utils'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { WalletMessages } from '../messages'
+import { ProviderType, useWallets, useWallet, NetworkType } from '@masknet/web3-shared'
+import { delay, useI18N } from '../../../utils'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { WalletMessages, WalletRPC } from '../messages'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import Services from '../../../extension/service'
 import { DashboardRoute } from '../../../extension/options-page/Route'
-import {
-    currentChainIdSettings,
-    currentAccountSettings,
-    currentNetworkSettings,
-    currentProviderSettings,
-} from '../settings'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useState } from 'react'
 
@@ -43,14 +37,14 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     //#endregion
 
     const onSelect = useCallback(
-        (address: string) => {
+        async (address: string) => {
             closeDialog()
-            currentAccountSettings.value = address
-            currentProviderSettings.value = ProviderType.Maskbook
-            if (networkType) {
-                currentChainIdSettings.value = getChainIdFromNetworkType(networkType)
-                currentNetworkSettings.value = networkType
-            }
+            await WalletRPC.updateAccount({
+                account: address,
+                chainId: undefined,
+                providerType: ProviderType.Maskbook,
+                networkType,
+            })
         },
         [networkType, closeDialog],
     )

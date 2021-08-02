@@ -2,16 +2,21 @@ import { Button, makeStyles, TextField } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { formatBalance, formatEthereumAddress, isGreaterThan, isZero, pow10 } from '@masknet/shared'
 import {
-    Wallet,
+    EthereumTokenType,
+    formatBalance,
+    formatEthereumAddress,
+    FungibleTokenDetailed,
+    isGreaterThan,
+    isZero,
+    pow10,
+    TransactionStateType,
     useTokenBalance,
     useTokenTransferCallback,
-    TransactionStateType,
-    FungibleTokenDetailed,
-    EthereumTokenType,
+    Wallet,
 } from '@masknet/web3-shared'
-import { useRemoteControlledDialog, useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 

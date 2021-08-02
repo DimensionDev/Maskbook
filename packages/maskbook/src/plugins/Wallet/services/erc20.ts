@@ -4,10 +4,9 @@ import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
-import { formatEthereumAddress } from '@masknet/shared'
-import { WalletRecordIntoDB, ERC20TokenRecordIntoDB, getWalletByAddress } from './helpers'
+import { ERC20TokenRecordIntoDB, getWalletByAddress, WalletRecordIntoDB } from './helpers'
 import type { ERC20TokenRecord } from '../database/types'
-import { ERC20TokenDetailed, isSameAddress } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared'
 import { queryTransactionPaged } from '../../../database/helpers/pagination'
 
 export async function getERC20TokensCount() {

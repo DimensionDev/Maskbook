@@ -1,8 +1,8 @@
-import { useContext, createContext } from 'react'
+import { useMemo, useContext, createContext } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
 import type { Web3ProviderType } from './type'
-import { getChainDetailed } from '../utils'
+import { getChainDetailed, isChainIdValid } from '../utils'
 
 export type { Web3ProviderType } from './type'
 
@@ -23,11 +23,12 @@ export function useWeb3State() {
     const blockNumber = useSubscription(_.blockNumber)
     const nonce = useSubscription(_.nonce)
     const gasPrice = useSubscription(_.gasPrice)
+    const etherPrice = useSubscription(_.etherPrice)
     const providerType = useSubscription(_.providerType)
     const networkType = useSubscription(_.networkType)
     const wallets = useSubscription(_.wallets)
     const chainId = useSubscription(_.chainId)
-    const chainDetailed = getChainDetailed(chainId)
+    const chainDetailed = useMemo(() => getChainDetailed(chainId), [chainId])
     const erc20Tokens = useSubscription(_.erc20Tokens)
     const erc20TokensCount = useSubscription(_.erc20TokensCount)
     const portfolioProvider = useSubscription(_.portfolioProvider)
@@ -36,6 +37,7 @@ export function useWeb3State() {
         account,
         nonce,
         gasPrice,
+        etherPrice,
         balance,
         blockNumber,
         providerType,
@@ -46,7 +48,7 @@ export function useWeb3State() {
         erc20Tokens,
         erc20TokensCount,
         portfolioProvider,
-        chainIdValid: !account || allowTestnet || chainDetailed?.network === 'mainnet',
+        chainIdValid: !account || isChainIdValid(chainId, allowTestnet),
     }
 }
 

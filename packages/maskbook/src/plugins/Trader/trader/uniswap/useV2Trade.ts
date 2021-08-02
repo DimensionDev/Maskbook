@@ -1,89 +1,87 @@
 import { useMemo } from 'react'
-import { Trade, Pair } from '@uniswap/sdk'
-import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
-import { useChainId } from '@masknet/web3-shared'
-import { TradeStrategy } from '../../types'
+import { Trade } from '@uniswap/v2-sdk'
+import type { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
+import { isTradeBetter } from '../../helpers'
 import { useAllCommonPairs } from './useAllCommonPairs'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
-import { MAX_HOP } from '../../constants'
-import { isGreaterThan, isZero } from '@masknet/shared'
+import { BETTER_TRADE_LESS_HOPS_THRESHOLD, MAX_HOP } from '../../constants'
 
-export function useV2Trade(
-    strategy: TradeStrategy = TradeStrategy.ExactIn,
-    inputAmount: string,
-    outputAmount: string,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
+export function useV2BestTradeExactIn(
+    currencyAmountIn?: CurrencyAmount<Currency>,
+    currencyOut?: Currency,
+    { maxHops = MAX_HOP } = {},
 ) {
-    const isExactIn = strategy === TradeStrategy.ExactIn
-    const isTradable = !isZero(inputAmount) || !isZero(outputAmount)
-    const { value: pairs, ...asyncResult } = useAllCommonPairs(inputToken, outputToken)
-    const bestTradeExactIn = useBestTradeExactIn(inputAmount, inputToken, outputToken, pairs)
-    const bestTradeExactOut = useBestTradeExactOut(outputAmount, inputToken, outputToken, pairs)
+    const { value: allowedPairs = [], ...asyncResult } = useAllCommonPairs(currencyAmountIn?.currency, currencyOut)
 
-    if (
-        !isTradable ||
-        !inputToken ||
-        !outputToken ||
-        (inputAmount === '0' && isExactIn) ||
-        (outputAmount === '0' && !isExactIn)
-    )
-        return {
-            ...asyncResult,
-            error: void 0,
-            loading: false,
-            value: null,
+    const bestTrade = useMemo(() => {
+        if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {
+            if (maxHops === 1) {
+                return (
+                    Trade.bestTradeExactIn(allowedPairs, currencyAmountIn, currencyOut, {
+                        maxHops: 1,
+                        maxNumResults: 1,
+                    })[0] ?? null
+                )
+            }
+            // search through trades with varying hops, find best trade out of them
+            let bestTradeSoFar: Trade<Currency, Currency, TradeType.EXACT_INPUT> | null = null
+            for (let i = 1; i <= maxHops; i++) {
+                const currentTrade: Trade<Currency, Currency, TradeType.EXACT_INPUT> | null =
+                    Trade.bestTradeExactIn(allowedPairs, currencyAmountIn, currencyOut, {
+                        maxHops: i,
+                        maxNumResults: 1,
+                    })[0] ?? null
+                // if current trade is best yet, save it
+                if (isTradeBetter(bestTradeSoFar, currentTrade, BETTER_TRADE_LESS_HOPS_THRESHOLD)) {
+                    bestTradeSoFar = currentTrade
+                }
+            }
+            return bestTradeSoFar
         }
+        return null
+    }, [allowedPairs, currencyAmountIn, currencyOut, maxHops])
+
     return {
         ...asyncResult,
-        value: isExactIn ? bestTradeExactIn : bestTradeExactOut,
+        value: bestTrade,
     }
 }
 
-export function useBestTradeExactIn(
-    amount: string,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
-    pairs: Pair[] = [],
+export function useV2BestTradeExactOut(
+    currencyIn?: Currency,
+    currencyAmountOut?: CurrencyAmount<Currency>,
+    { maxHops = MAX_HOP } = {},
 ) {
-    const chainId = useChainId()
-    return useMemo(() => {
-        if (isGreaterThan(amount, '0') && inputToken && outputToken && pairs.length > 0)
-            return (
-                Trade.bestTradeExactIn(
-                    pairs,
-                    toUniswapCurrencyAmount(chainId, inputToken, amount),
-                    toUniswapCurrency(chainId, outputToken),
-                    {
-                        maxHops: MAX_HOP,
-                        maxNumResults: 1,
-                    },
-                )[0] ?? null
-            )
-        return null
-    }, [pairs, amount, chainId, inputToken?.address, outputToken?.address])
-}
+    const { value: allowedPairs = [], ...asyncResult } = useAllCommonPairs(currencyIn, currencyAmountOut?.currency)
 
-export function useBestTradeExactOut(
-    amount: string,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
-    pairs: Pair[] = [],
-) {
-    const chainId = useChainId()
-    return useMemo(() => {
-        if (isGreaterThan(amount, '0') && inputToken && outputToken && pairs.length > 0)
-            return (
-                Trade.bestTradeExactOut(
-                    pairs,
-                    toUniswapCurrency(chainId, inputToken),
-                    toUniswapCurrencyAmount(chainId, outputToken, amount),
-                    {
-                        maxHops: MAX_HOP,
+    const bestTrade = useMemo(() => {
+        if (currencyIn && currencyAmountOut && allowedPairs.length > 0) {
+            if (maxHops === 1) {
+                return (
+                    Trade.bestTradeExactOut(allowedPairs, currencyIn, currencyAmountOut, {
+                        maxHops: 1,
                         maxNumResults: 1,
-                    },
-                )[0] ?? null
-            )
+                    })[0] ?? null
+                )
+            }
+            // search through trades with varying hops, find best trade out of them
+            let bestTradeSoFar: Trade<Currency, Currency, TradeType.EXACT_OUTPUT> | null = null
+            for (let i = 1; i <= maxHops; i++) {
+                const currentTrade =
+                    Trade.bestTradeExactOut(allowedPairs, currencyIn, currencyAmountOut, {
+                        maxHops: i,
+                        maxNumResults: 1,
+                    })[0] ?? null
+                if (isTradeBetter(bestTradeSoFar, currentTrade, BETTER_TRADE_LESS_HOPS_THRESHOLD)) {
+                    bestTradeSoFar = currentTrade
+                }
+            }
+            return bestTradeSoFar
+        }
         return null
-    }, [pairs, amount, chainId, inputToken?.address, outputToken?.address])
+    }, [currencyIn, currencyAmountOut, allowedPairs, maxHops])
+
+    return {
+        ...asyncResult,
+        value: bestTrade,
+    }
 }

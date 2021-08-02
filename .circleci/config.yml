@@ -17,6 +17,8 @@ commands:
 jobs:
   install_dependencies:
     executor: maskbook_node
+    environment:
+      WEB3_CONSTANTS_RPC: ${WEB3_CONSTANTS_RPC}
     steps:
       - checkout
       - restore_cache:
@@ -40,11 +42,8 @@ jobs:
     steps:
       - restore_workspace
       - run:
-          name: Install zip
-          command: sudo apt-get install zip
-      - run:
           name: Build Maskbook
-          command: npx build-ci
+          command: npx gulp build-ci
       - store_artifacts:
           path: Maskbook.base.zip
           destination: /Maskbook.base.zip
