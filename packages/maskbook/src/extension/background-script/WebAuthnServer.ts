@@ -15,6 +15,8 @@ import {
 import { concatArrayBuffer } from '@dimensiondev/kit'
 import { derive_AES_GCM_256_Key_From_ECDH_256k1_Keys } from '../../modules/CryptoAlgorithm/helper'
 
+const keyUsages: KeyUsage[] = ['encrypt', 'decrypt', 'verify', 'sign']
+
 // implementation details
 // !!!!!!!! Please let @yisiliu review this algorithm before implementing it !!!!!!!!
 // 1. let _selectedPersona_ to be await selectPersona()
@@ -110,7 +112,7 @@ export const { get, create } = createPublicKeyAuthenticator({
                 namedCurve: 'P-256',
             },
             true,
-            ['encrypt', 'decrypt', 'sign', 'verify'],
+            keyUsages,
         )
         const publicKey = await crypto.subtle.importKey(
             'jwk',
@@ -120,7 +122,7 @@ export const { get, create } = createPublicKeyAuthenticator({
                 namedCurve: 'P-256',
             },
             true,
-            ['encrypt', 'decrypt', 'sign', 'verify'],
+            keyUsages,
         )
         return [
             {
@@ -153,7 +155,7 @@ export const { get, create } = createPublicKeyAuthenticator({
                     keyBuffer,
                     { name: 'ECDH', namedCurve: 'P-256' },
                     true,
-                    ['encrypt', 'decrypt', 'sign', 'verify'],
+                    keyUsages,
                 )
                 const publicKey = await cryptoKeyToPublic(privateKey)
                 return {
@@ -185,7 +187,7 @@ export const { get, create } = createPublicKeyAuthenticator({
             keys.privateKey,
             { name: 'ECDH', namedCurve: 'P-256' },
             true,
-            [],
+            keyUsages,
         )
         const publicKey = await cryptoKeyToPublic(privateKey)
         return [
