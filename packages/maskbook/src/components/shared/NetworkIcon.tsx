@@ -2,7 +2,6 @@ import { Image } from './Image'
 import { makeStyles } from '@material-ui/core'
 import { NetworkType } from '@masknet/web3-shared'
 import { useStylesExtends } from '@masknet/shared'
-import { safeUnreachable } from '@dimensiondev/kit'
 
 const useStyles = makeStyles(() => ({
     icon: {
@@ -16,10 +15,12 @@ export interface NetworkIconProps extends withClasses<'icon'> {
     networkType?: NetworkType
 }
 
-const EthereumIcon = new URL('../../resources/wallet-network-icon/ethereum.png', import.meta.url).toString()
-const BinanceIcon = new URL('../../resources/wallet-network-icon/binance.png', import.meta.url).toString()
-const PolygonIcon = new URL('../../resources/wallet-network-icon/polygon.png', import.meta.url).toString()
-const AribitrumIcon = new URL('../../resources/wallet-network-icon/arbitrum.png', import.meta.url).toString()
+const icons: EnumRecord<NetworkType, string> = {
+    [NetworkType.Ethereum]: new URL('../../resources/wallet-network-icon/ethereum.png', import.meta.url).toString(),
+    [NetworkType.Binance]: new URL('../../resources/wallet-network-icon/binance.png', import.meta.url).toString(),
+    [NetworkType.Polygon]: new URL('../../resources/wallet-network-icon/polygon.png', import.meta.url).toString(),
+    [NetworkType.Arbitrum]: new URL('../../resources/wallet-network-icon/arbitrum.png', import.meta.url).toString(),
+}
 
 export function NetworkIcon(props: NetworkIconProps) {
     const { size = 48, networkType } = props
@@ -27,17 +28,7 @@ export function NetworkIcon(props: NetworkIconProps) {
 
     if (!networkType) return null
 
-    switch (networkType) {
-        case NetworkType.Ethereum:
-            return <Image height={size} width={size} src={EthereumIcon} className={classes.icon} />
-        case NetworkType.Binance:
-            return <Image height={size} width={size} src={BinanceIcon} className={classes.icon} />
-        case NetworkType.Polygon:
-            return <Image height={size} width={size} src={PolygonIcon} className={classes.icon} />
-        case NetworkType.Arbitrum:
-            return <Image height={size} width={size} src={AribitrumIcon} className={classes.icon} />
-        default:
-            safeUnreachable(networkType)
-            return null
-    }
+    return icons[networkType] ? (
+        <Image height={size} width={size} src={icons[networkType]} className={classes.icon} />
+    ) : null
 }
