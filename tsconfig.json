@@ -81,8 +81,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "useDefineForClassFields": true,
-    "stripInternal": true,
-    "useUnknownInCatchVariables": true
+    "stripInternal": true
   },
   "files": [],
   "ts-node": {
