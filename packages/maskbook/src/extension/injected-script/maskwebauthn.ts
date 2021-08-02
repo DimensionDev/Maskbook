@@ -26,6 +26,8 @@ async function init() {
     if (currentVersion < 2) {
         throw new Error('not support mask webauthn')
     }
+    console.log('masklogin support!')
+    console.log('see `globalThis.masklogin`')
     return server
     function untilStart() {
         if (document.querySelector('html')?.getAttribute('data-mask-sdk-ready')) {
@@ -52,7 +54,7 @@ const { get, create } = createCredentialsContainer({
     },
 })
 
-Object.defineProperty(globalThis, 'maskwebauthn', {
+Object.defineProperty(globalThis, 'masklogin', {
     value: Object.freeze({
         create,
         get,
