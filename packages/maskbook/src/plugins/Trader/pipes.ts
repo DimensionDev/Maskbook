@@ -101,6 +101,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                     return `https://analytics-bsc.sushi.com/pairs/${address}`
                 case NetworkType.Polygon:
                     return `https://analytics-polygon.sushi.com/pairs/${address}`
+                case NetworkType.Arbitrum:
+                    return ''
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -137,7 +139,7 @@ export function resolveUniswapWarningLevel(priceImpact: BigNumber) {
 }
 
 export function resolveUniswapWarningLevelColor(warningLevel?: WarningLevel) {
-    const COLOR_MAP: EnumRecord<WarningLevel, string> = {
+    const COLOR_MAP: Record<WarningLevel, string> = {
         [WarningLevel.LOW]: 'inherit',
         [WarningLevel.MEDIUM]: '#f3841e',
         [WarningLevel.HIGH]: '#f3841e',
@@ -148,7 +150,7 @@ export function resolveUniswapWarningLevelColor(warningLevel?: WarningLevel) {
 }
 
 export function resolveZrxTradePoolName(swapSource: ZrxTradePool) {
-    const SWAP_SOURCE_NAME_MAP: EnumRecord<ZrxTradePool, string> = {
+    const SWAP_SOURCE_NAME_MAP: Record<ZrxTradePool, string> = {
         [ZrxTradePool.ZRX]: 'ZRX',
         [ZrxTradePool.Uniswap]: 'Uniswap',
         [ZrxTradePool.UniswapV2]: 'Uniswap V2',

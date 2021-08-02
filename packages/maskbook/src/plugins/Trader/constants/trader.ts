@@ -55,6 +55,8 @@ export const WETH_ONLY: ERC20AgainstToken = {
     [ChainId.BSCT]: [WETH[ChainId.BSCT]],
     [ChainId.Matic]: [WETH[ChainId.Matic]],
     [ChainId.Mumbai]: [WETH[ChainId.Mumbai]],
+    [ChainId.Arbitrum]: [],
+    [ChainId.Arbitrum_Rinkeby]: [],
 }
 
 export const BIPS_BASE = new BigNumber(10000)

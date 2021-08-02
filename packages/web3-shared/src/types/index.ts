@@ -24,6 +24,10 @@ export enum ChainId {
     // Matic
     Matic = 137,
     Mumbai = 80001,
+
+    // Arbitrum
+    Arbitrum = 42161,
+    Arbitrum_Rinkeby = 421611,
 }
 
 export enum ProviderType {
@@ -37,6 +41,7 @@ export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
     Polygon = 'Polygon',
+    Arbitrum = 'Arbitrum',
 }
 
 export interface Wallet {
