@@ -13,7 +13,7 @@ import {
     searchKeyOnGlobalRegistry,
 } from '../../network/gun/version.2/webAuthn'
 import { concatArrayBuffer } from '@dimensiondev/kit'
-import { derive_AES_GCM_256_Key_From_ECDH_256k1_Keys } from "../../modules/CryptoAlgorithm/helper";
+import { derive_AES_GCM_256_Key_From_ECDH_256k1_Keys } from '../../modules/CryptoAlgorithm/helper'
 
 // implementation details
 // !!!!!!!! Please let @yisiliu review this algorithm before implementing it !!!!!!!!
@@ -110,10 +110,7 @@ export const { get, create } = createPublicKeyAuthenticator({
                 namedCurve: 'P-256',
             },
             true,
-            [ 'encrypt',
-                'decrypt',
-                'sign',
-                'verify',],
+            ['encrypt', 'decrypt', 'sign', 'verify'],
         )
         const publicKey = await crypto.subtle.importKey(
             'jwk',
@@ -123,10 +120,7 @@ export const { get, create } = createPublicKeyAuthenticator({
                 namedCurve: 'P-256',
             },
             true,
-            [ 'encrypt',
-                'decrypt',
-                'sign',
-                'verify',],
+            ['encrypt', 'decrypt', 'sign', 'verify'],
         )
         return [
             {
