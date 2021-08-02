@@ -131,8 +131,8 @@ export function PersonalView(props: PersonalViewProps) {
                 <div className={classes.withdraw}>
                     <Typography variant="subtitle2" color="textSecondary">
                         {t('plugin_good_ghosting_early_withdraw_info', {
-                            amount: formatBalance(earlyWithdrawalFee, gameToken?.decimals),
-                            token: gameToken?.symbol,
+                            amount: formatBalance(earlyWithdrawalFee, gameToken.decimals),
+                            token: gameToken.symbol,
                         })}
                     </Typography>
                     <Button color="primary" disabled={!buttonEnabled} onClick={() => withdraw()}>
