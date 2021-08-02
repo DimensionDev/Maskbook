@@ -16,3 +16,4 @@ export const NAMING_LINE = {
 export const NO_CONTEST = 'No Contest'
 export const NO_CONTEST_TIE = 'Tie/No Contest'
 export const AWAY_TEAM_OUTCOME = 1
+export const POOL_DESCRIPTION_LIMIT = 210

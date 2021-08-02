@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { Grid, makeStyles, Typography } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { Trans } from 'react-i18next'
 import type { Market } from '../types'
 import { getResolutionRules } from '../utils'
+
+import { POOL_DESCRIPTION_LIMIT } from '../constants'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,7 +31,11 @@ const useStyles = makeStyles((theme) => ({
             },
         },
     },
-    marketDetails: {},
+    marketDetails: {
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+        maxWidth: '100%',
+    },
 }))
 
 interface MarketDescriptionProps {
@@ -39,7 +45,9 @@ interface MarketDescriptionProps {
 export const MarketDescription = (props: MarketDescriptionProps) => {
     const { market } = props
     const classes = useStyles()
-    const { t } = useI18N()
+
+    const cleanDescription = getResolutionRules(market).join(' ')
+    const [expanded, setExpanded] = useState(cleanDescription.length < POOL_DESCRIPTION_LIMIT)
 
     return (
         <div className={classes.root}>
@@ -82,14 +90,36 @@ export const MarketDescription = (props: MarketDescriptionProps) => {
                 </Grid>
             </Grid>
 
-            <div className={classes.marketDetails}>
-                <Typography variant="h6" color="textPrimary">
-                    Market Details
-                </Typography>
-                <Typography variant="subtitle2" color="textPrimary">
-                    {getResolutionRules(market).join(' ')}
-                </Typography>
-            </div>
+            {cleanDescription ? (
+                <div className={classes.marketDetails}>
+                    <Typography variant="h6" color="textPrimary">
+                        <Trans i18nKey="plugin_augur_market_details" />
+                    </Typography>
+                    <Typography variant="subtitle2" color="textSecondary">
+                        {/* {getResolutionRules(market).join(' ')} */}
+                        <span
+                            dangerouslySetInnerHTML={{
+                                __html: expanded
+                                    ? cleanDescription
+                                    : cleanDescription.slice(0, POOL_DESCRIPTION_LIMIT).concat('...'),
+                            }}
+                        />
+                    </Typography>
+                    {cleanDescription.length > POOL_DESCRIPTION_LIMIT ? (
+                        <Typography
+                            variant="body2"
+                            color="primary"
+                            onClick={() => setExpanded(!expanded)}
+                            style={{ cursor: 'pointer' }}>
+                            {expanded ? (
+                                <Trans i18nKey="plugin_dhedge_see_less" />
+                            ) : (
+                                <Trans i18nKey="plugin_dhedge_see_more" />
+                            )}
+                        </Typography>
+                    ) : null}
+                </div>
+            ) : null}
         </div>
     )
 }

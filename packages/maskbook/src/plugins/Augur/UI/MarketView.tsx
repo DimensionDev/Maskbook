@@ -177,7 +177,7 @@ export function MarketView(props: MarketViewProps) {
                     </Link>
                 </Typography>
                 <Typography className={classes.footnote} variant="subtitle2">
-                    <span>{t('plugin_supported_by')}</span>
+                    <span>{t('plugin_supported_by')}&nbsp;</span>
                     <Link
                         className={classes.footLink}
                         target="_blank"

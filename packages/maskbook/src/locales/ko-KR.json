@@ -336,6 +336,7 @@
     "relative_time_years_ago": "{{years}} 년 전",
     "plugin_powered_by": "기술 지원",
     "plugin_wallet_collections": "컬렉션",
+    "plugin_supported_by": "",
     "plugin_wallet_select_a_token": "토큰을 선택하기",
     "plugin_wallet_select_a_nft_contract": "NFT 컨트렉트를 선택하세요.",
     "plugin_wallet_select_a_nft_owner": "NFT 컨트렉트 소유자를 선택하세요.",
@@ -910,14 +911,14 @@
     "popups_backup_password": "백업 비밀번호",
     "popups_rename_error_tip": "최대 길이는 {{length}} 자입니다.",
     "nft_button_set_avatar": "NFT 아바타 설정",
-    "plugin_augur_market_not_found": "",
     "plugin_augur_loading": "",
+    "plugin_augur_market_not_found": "",
     "plugin_augur_smt_wrong": "",
     "plugin_augur_tab_description": "",
     "plugin_augur_tab_buysell": "",
     "plugin_augur_24hr_volume": "",
     "plugin_augur_total_volume": "",
     "plugin_augur_liquidity": "",
-    "plugin_augur_fee": "",
-    "plugin_augur_no_contest": ""
+    "plugin_augur_market_details": "",
+    "plugin_augur_fee": ""
 }
