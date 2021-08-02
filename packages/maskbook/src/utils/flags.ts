@@ -4,7 +4,6 @@ export const isAndroidApp = process.env.architecture === 'app' && process.env.ta
 const appOnly = process.env.architecture === 'app'
 const devOnly = process.env.NODE_ENV === 'development'
 const webOnly = process.env.architecture === 'web' || devOnly
-const betaOnly = process.env.build === 'beta'
 const insiderOnly = process.env.build === 'insider' || devOnly
 const betaOrInsiderOnly = insiderOnly || process.env.build === 'beta'
 
