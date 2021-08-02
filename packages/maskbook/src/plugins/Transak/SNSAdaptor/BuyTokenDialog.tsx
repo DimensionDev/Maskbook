@@ -1,11 +1,10 @@
-import { useState } from 'react'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { DialogContent, IconButton, makeStyles } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
-import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
-import { PluginTransakMessages } from '../messages'
+import { useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useTransakURL } from '../hooks/useTransakURL'
+import { PluginTransakMessages } from '../messages'
 
 const useStyles = makeStyles((theme) => ({
     dialogPaper: {
@@ -35,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 export interface BuyTokenDialogProps extends withClasses<never | 'root'> {}
 
 export function BuyTokenDialog(props: BuyTokenDialogProps) {
-    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const [code, setCode] = useState('ETH')
