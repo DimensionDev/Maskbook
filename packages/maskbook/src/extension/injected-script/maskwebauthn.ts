@@ -18,6 +18,8 @@ const channel = {
 
 const server = AsyncCall<{
     version: () => number
+    maskWebAuthnGet: (...args: any[]) => any
+    maskWebAuthnCreate: (...args: any[]) => any
 }>({}, { channel, serializer: JSONSerialization() })
 
 async function init() {
@@ -42,13 +44,13 @@ const rpc = init()
 const { get, create } = createCredentialsContainer({
     publicKeyAuthenticator: {
         create(...args: any[]) {
-            return init().then((server) => {
-                // server.create(...args)
+            return rpc.then((server) => {
+                return server.maskWebAuthnGet(...args)
             })
         },
         get(...args: any[]) {
-            return init().then((server) => {
-                // server.get(...args)
+            return rpc.then((server) => {
+                return server.maskWebAuthnCreate(...args)
             })
         },
     },
