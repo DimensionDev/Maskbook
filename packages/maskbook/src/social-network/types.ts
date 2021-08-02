@@ -241,9 +241,18 @@ export namespace SocialNetworkUI {
             classes?: () => Props extends withClasses<infer T> ? Partial<Record<T, string>> : never
             props?: (props: Props) => Props
         }
-        export type I18NOverwrite = Record<string, I18NOverwriteNamespace>;
-        export type I18NOverwriteNamespace = Record<string, I18NOverwriteNamespaceString>;
-        export type I18NOverwriteNamespaceString = Record<string, string>;
+        // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+        export interface I18NOverwrite {
+            [namespace: string]: I18NOverwriteNamespace
+        }
+        // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+        export interface I18NOverwriteNamespace {
+            [i18nKey: string]: I18NOverwriteNamespaceString
+        }
+        // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+        export interface I18NOverwriteNamespaceString {
+            [overwritingLanguage: string]: string
+        }
     }
     export namespace Configuration {
         export interface Define {
