@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'grid',
         flexWrap: 'wrap',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
         gridGap: theme.spacing(1),
     },
     container: {
