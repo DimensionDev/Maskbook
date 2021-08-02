@@ -302,9 +302,8 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             getHTMLPlugin({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
             getHTMLPlugin({ chunks: ['debug'], filename: 'debug.html' }),
             getHTMLPlugin({ chunks: ['popups'], filename: 'popups.html' }),
+            getHTMLPlugin({ chunks: ['dashboard-next'], filename: 'next.html' }),
         ) // generate pages for each entry
-        if (mode === 'development')
-            main.plugins!.push(getHTMLPlugin({ chunks: ['dashboard-next'], filename: 'next.html' }))
         if (!isManifestV3)
             main.plugins!.push(getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }))
     }
