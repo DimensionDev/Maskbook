@@ -4,7 +4,6 @@ import {
     FungibleTokenDetailed,
     isGreaterThan,
     isZero,
-    NetworkType,
     pow10,
     useAccount,
     useNativeTokenDetailed,
@@ -75,9 +74,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const web3 = useWeb3()
     const account = useAccount()
     const networkType = useNetworkType()
-    const { HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } = useRedPacketConstants()
-    const contract_address =
-        networkType === NetworkType.Ethereum ? HAPPY_RED_PACKET_ADDRESS_V2 : HAPPY_RED_PACKET_ADDRESS_V3
+    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
     //#region select token
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
@@ -246,7 +243,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 <EthereumERC20TokenApprovedBoundary
                     amount={totalAmount.toFixed()}
                     token={token?.type === EthereumTokenType.ERC20 ? token : undefined}
-                    spender={contract_address}>
+                    spender={HAPPY_RED_PACKET_ADDRESS_V4}>
                     <ActionButton
                         variant="contained"
                         size="large"
