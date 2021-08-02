@@ -9,8 +9,4 @@ const { status, error } = spawnSync('npx', ['gulp', 'locale-kit', '--sync-keys',
 if (error) {
     console.error(error)
 }
-if (status === null || status === 0) {
-    process.exit(0)
-} else {
-    process.exit(status)
-}
+process.exit(status === null || status === 0 ? 0 : status)
