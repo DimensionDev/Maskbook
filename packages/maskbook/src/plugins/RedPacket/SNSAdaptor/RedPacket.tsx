@@ -10,6 +10,7 @@ import {
     useChainIdValid,
     useTokenDetailed,
     useNetworkType,
+    useWeb3,
 } from '@masknet/web3-shared'
 import { Box, Card, makeStyles, Skeleton, Typography } from '@material-ui/core'
 import classNames from 'classnames'
@@ -141,6 +142,7 @@ export function RedPacket(props: RedPacketProps) {
     const classes = useStyles()
 
     // context
+    const web3 = useWeb3()
     const account = useAccount()
     const chainIdValid = useChainIdValid()
     const networkType = useNetworkType()
@@ -176,11 +178,12 @@ export function RedPacket(props: RedPacketProps) {
                 : '',
         )
         .toString()
+
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
         payload.contract_version,
         account,
         payload.rpid,
-        payload.password,
+        web3.eth.accounts.sign(account, payload.password).signature,
     )
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
         payload.contract_version,
