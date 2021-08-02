@@ -205,7 +205,7 @@ async function* decryptFromPayloadWithProgress_raw(
             const b = decryptAsAuthor(whoAmI, minePublic)
             // ! Don't remove the await
             return await a.catch(() => b)
-        } catch (e: unknown) {
+        } catch (e) {
             lastError = e
         }
 
@@ -235,7 +235,7 @@ async function* decryptFromPayloadWithProgress_raw(
         try {
             // ! Do not remove the await here.
             return await decryptWith(aesKeyEncrypted)
-        } catch (e: unknown) {
+        } catch (e) {
             if (e instanceof Error && e.message === i18n.t('service_not_share_target')) {
                 console.debug(e)
                 // TODO: Replace this error with:
@@ -261,7 +261,7 @@ async function* decryptFromPayloadWithProgress_raw(
             console.log('New key received, trying', aes)
             try {
                 return await decryptWith(aes)
-            } catch (e: unknown) {
+            } catch (e) {
                 console.debug(e)
             }
         }

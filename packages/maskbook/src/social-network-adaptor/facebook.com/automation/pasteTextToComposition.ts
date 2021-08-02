@@ -23,7 +23,7 @@ async function openPostDialogFacebook() {
                 notActivated.evaluate()[0].click()
                 await timeout(new MutationObserverWatcher(activated), 2000)
                 await delay(1000)
-            } catch (e: unknown) {
+            } catch (e) {
                 clickFailed(e)
             }
         } else {
@@ -37,7 +37,7 @@ async function openPostDialogFacebook() {
                 dom2.click()
                 await timeout(new MutationObserverWatcher(activated), 1000)
                 if (!dialog.evaluate()[0]) throw new Error('Click not working')
-            } catch (error: unknown) {
+            } catch (error) {
                 clickFailed(error)
             }
             console.log('Awaiting dialog')
@@ -92,7 +92,7 @@ export async function pasteTextToCompositionFacebook(
         // Prevent Custom Paste failed, this will cause service not available to user.
         if (!element.innerText.includes(text) || ('value' in element && !element.value.includes(text)))
             copyFailed('Not detected')
-    } catch (error: unknown) {
+    } catch (error) {
         copyFailed(error)
     }
     scrollBack()

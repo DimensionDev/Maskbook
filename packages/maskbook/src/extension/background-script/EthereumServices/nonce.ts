@@ -29,7 +29,7 @@ class NonceManager {
                 try {
                     this.lock()
                     callback(null, await getTransactionCount(this.address))
-                } catch (e: unknown) {
+                } catch (e) {
                     if (e instanceof Error) {
                         callback(e)
                     }

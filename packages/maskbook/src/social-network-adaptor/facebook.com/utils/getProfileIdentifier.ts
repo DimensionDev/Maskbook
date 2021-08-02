@@ -58,7 +58,7 @@ export function getProfileIdentifierAtFacebook(
             }
         }
         return unknown
-    } catch (e: unknown) {
+    } catch (e) {
         console.error(e)
     }
     return unknown

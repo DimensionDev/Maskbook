@@ -56,7 +56,7 @@ export const serializer: Serialization = {
     deserialization(to: string) {
         try {
             return typeson.revive(to)
-        } catch (e: unknown) {
+        } catch (e) {
             console.error(e)
         }
         return {}

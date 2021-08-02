@@ -100,7 +100,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                 expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
                 paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
             })
-        } catch (e: unknown) {
+        } catch (e) {
             if (e instanceof Error) {
                 enqueueSnackbar(e.message, { variant: 'error', preventDuplicate: true })
             }

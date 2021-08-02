@@ -56,7 +56,7 @@ function dispatchEventRaw<T extends Event>(target: Node | Document | null, event
             if (capture) continue
             try {
                 f(event)
-            } catch (e: unknown) {
+            } catch (e) {
                 error(e)
             }
         }

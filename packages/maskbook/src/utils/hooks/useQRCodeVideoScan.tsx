@@ -46,7 +46,7 @@ export function useQRCodeVideoScan(
                     }
                     video.current.srcObject = media
                     video.current.play()
-                } catch (e: unknown) {
+                } catch (e) {
                     console.error(e)
                     stop()
                 }
@@ -77,7 +77,7 @@ export function useQRCodeVideoScan(
             try {
                 const [result] = await scanner.current.detect(video.current)
                 if (result) onResult?.(result.rawValue)
-            } catch (e: unknown) {
+            } catch (e) {
                 errorTimes.current += 1
             } finally {
                 lastScanning.current = false

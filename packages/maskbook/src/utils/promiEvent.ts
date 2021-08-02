@@ -153,7 +153,7 @@ export function iteratorToPromiEvent(
                         break
                 }
             }
-        } catch (e: unknown) {
+        } catch (e) {
             PE.emit(TransactionEventType.ERROR, e)
             reject_?.(e)
         }

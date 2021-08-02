@@ -89,7 +89,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                 waitForHighestBid: true,
                 paymentTokenAddress: token.value.address, // english auction must be erc20 token
             })
-        } catch (e: unknown) {
+        } catch (e) {
             if (e instanceof Error) {
                 enqueueSnackbar(e.message, { variant: 'error', preventDuplicate: true })
             }

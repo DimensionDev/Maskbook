@@ -53,7 +53,7 @@ export function useMulticallCallback() {
                     type: MulticalStateType.SUCCEED,
                     results: returnData,
                 })
-            } catch (error: unknown) {
+            } catch (error) {
                 if (error instanceof Error) {
                     setMulticallState({
                         type: MulticalStateType.FAILED,
@@ -88,7 +88,7 @@ export function useMutlicallStateDecoded<
                     error: null,
                     value: decodeOutputString(web3, outputs, raw) as R,
                 }
-            } catch (error: unknown) {
+            } catch (error) {
                 return { raw, error, value: null }
             }
         })

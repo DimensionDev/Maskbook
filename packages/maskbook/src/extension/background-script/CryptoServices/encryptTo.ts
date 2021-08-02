@@ -73,7 +73,7 @@ export async function encryptTo(
     try {
         const publicKey = (await queryPersonaByProfileDB(whoAmI))?.publicKey
         if (publicKey) payload.authorPublicKey = compressSecp256k1Key(publicKey, 'public')
-    } catch (e: unknown) {
+    } catch (e) {
         // ignore
     }
 

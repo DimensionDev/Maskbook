@@ -106,7 +106,7 @@ export function useCheckCallback() {
                     claimable: available && isGreaterThan(claimable, 0) && !isEnd ? claimable : '0',
                     ratio: new BigNumber(claimable).dividedBy(amount),
                 })
-            } catch (error: unknown) {
+            } catch (error) {
                 if (!(error instanceof Error)) {
                     return
                 }

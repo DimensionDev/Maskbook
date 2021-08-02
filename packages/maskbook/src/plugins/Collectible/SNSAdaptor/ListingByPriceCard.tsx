@@ -125,7 +125,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 expirationTime: endingPriceChecked ? toUnixTimestamp(expirationTime) : undefined,
                 buyerAddress: privacyChecked ? buyerAddress : undefined,
             })
-        } catch (e: unknown) {
+        } catch (e) {
             if (e instanceof Error) {
                 enqueueSnackbar(e.message, { variant: 'error', preventDuplicate: true })
             }

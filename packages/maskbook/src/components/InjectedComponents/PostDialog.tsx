@@ -497,7 +497,7 @@ function BadgeRenderer({ meta }: { meta: TypedMessage['meta'] }) {
                         }
                         try {
                             return normalizeBadgeDescriptor(key, plugin, render(key, value), i18n)
-                        } catch (e: unknown) {
+                        } catch (e) {
                             console.error(e)
                             return null
                         }
@@ -510,7 +510,7 @@ function BadgeRenderer({ meta }: { meta: TypedMessage['meta'] }) {
                         }
                         try {
                             return normalizeBadgeDescriptor(key, plugin, f(value), i18n)
-                        } catch (e: unknown) {
+                        } catch (e) {
                             console.error(e)
                             return null
                         }

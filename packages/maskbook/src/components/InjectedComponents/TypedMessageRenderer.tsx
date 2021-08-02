@@ -114,7 +114,7 @@ export const DefaultTypedMessageTupleRenderer = memo(function DefaultTypedMessag
 ) {
     try {
         JSON.stringify(props.message.items)
-    } catch (e: unknown) {
+    } catch (e) {
         if (e instanceof Error && e.message.includes('circular structure')) {
             return (
                 <Typography>
