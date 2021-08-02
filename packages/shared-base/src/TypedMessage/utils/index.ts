@@ -10,8 +10,8 @@ import { eq } from 'lodash-es'
 import { Err, Ok, Result } from 'ts-results'
 
 export function isSerializableTypedMessage(x: TypedMessage): x is SerializableTypedMessages {
-    if ((<SerializableTypedMessage<number>>x).serializable) return true
-    const y = <NonSerializableWithToJSONTypedMessage>x
+    if ((x as SerializableTypedMessage<number>).serializable) return true
+    const y = x as NonSerializableWithToJSONTypedMessage
     if (y.serializable === false && y.toJSON) return true
     return false
 }

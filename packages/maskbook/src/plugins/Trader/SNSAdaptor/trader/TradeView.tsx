@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { Trader, TraderProps } from './Trader'
 
 const useStyles = makeStyles((theme) => {

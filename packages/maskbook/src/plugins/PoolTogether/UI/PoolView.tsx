@@ -183,9 +183,9 @@ export function PoolView(props: PoolProps) {
     useEffect(() => {
         setPrize(calculateNextPrize(pool))
         setPeriod(
-            prizePeriodSeconds == ONE_DAY_SECONDS
+            prizePeriodSeconds === ONE_DAY_SECONDS
                 ? 'Daily'
-                : prizePeriodSeconds == ONE_WEEK_SECONDS
+                : prizePeriodSeconds === ONE_WEEK_SECONDS
                 ? 'Weekly'
                 : 'Custom Period',
         )
@@ -193,9 +193,7 @@ export function PoolView(props: PoolProps) {
     //#endregion
 
     //#region the deposit dialog
-    const { setDialog: openDepositDialog } = useRemoteControlledDialog(
-        PluginPoolTogetherMessages.events.DepositDialogUpdated,
-    )
+    const { setDialog: openDepositDialog } = useRemoteControlledDialog(PluginPoolTogetherMessages.DepositDialogUpdated)
 
     const onDeposit = useCallback(() => {
         if (!pool || !token) return

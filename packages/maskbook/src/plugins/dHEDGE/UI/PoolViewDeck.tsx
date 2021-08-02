@@ -76,7 +76,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
     //#endregion
 
     //#region the invest dialog
-    const { setDialog: openInvestDialog } = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated)
+    const { setDialog: openInvestDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated)
     const onInvest = useCallback(() => {
         if (!pool || !inputTokens) return
         openInvestDialog({

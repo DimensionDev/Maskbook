@@ -10,8 +10,7 @@ import {
     getChainIdFromName,
 } from '@masknet/web3-shared'
 import { useMenu, useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogFT } from '../DashboardDialogs/Wallet'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
@@ -39,12 +38,12 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
     const chainIdMatched = useChainIdMatched(getChainIdFromName(chain))
 
     //#region remote controlled buy dialog
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
     //#endregion
 
     //#region items
     const items = [
-        chain === 'eth' && chainIdMatched ? (
+        chainIdMatched ? (
             <MenuItem
                 onClick={() => {
                     setBuyDialog({

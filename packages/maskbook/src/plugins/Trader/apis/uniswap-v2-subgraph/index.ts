@@ -124,7 +124,7 @@ export async function fetchEtherPriceByBlockNumber(blockNumber?: string) {
  * Fetch Ether price of list of blocks
  * @param blockNumbers
  */
-export async function fetchEtherPricesByBlockNumbers(blockNumbers: (string | undefined)[]) {
+export async function fetchEtherPricesByBlockNumbers(blockNumbers: Array<string | undefined>) {
     const queries = blockNumbers.map((x) => {
         return `
             b${x}: bundle(id: "1", ${x ? `block: { number: ${x} }` : ''}) {
@@ -132,15 +132,13 @@ export async function fetchEtherPricesByBlockNumbers(blockNumbers: (string | und
             }
         `
     })
-    const data = await fetchFromUniswapV2Subgraph<{
-        [key: string]: Bundle
-    }>(`
+    const data = await fetchFromUniswapV2Subgraph<Record<string, Bundle>>(`
         query bundles {
             ${queries.join('\n')}
         }
     `)
 
-    let result: { [key: string]: number | undefined } = {}
+    const result: Record<string, number | undefined> = {}
     if (!data) return result
 
     Object.keys(data).map((key) => {
@@ -343,9 +341,7 @@ export async function fetchPricesByBlocks(
             `,
             )
 
-            return await fetchFromUniswapV2Subgraph<{
-                [key: string]: { ethPrice?: string; derivedETH?: string }
-            }>(`
+            return fetchFromUniswapV2Subgraph<Record<string, { ethPrice?: string; derivedETH?: string }>>(`
                 query blocks {
                     ${queries}
                     ${blockQueries}

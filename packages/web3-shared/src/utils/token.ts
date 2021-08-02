@@ -11,9 +11,12 @@ import {
     ERC20TokenDetailed,
     ERC721TokenAssetDetailed,
     EthereumTokenType,
+    FungibleTokenDetailed,
     NativeTokenDetailed,
 } from '../types'
-import { getChainDetailed } from './chainDetailed'
+import { getChainDetailed, getChainIdFromName } from './chainDetailed'
+import { formatBalance } from './formatter'
+import { isSameAddress } from './address'
 
 export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     const chainDetailed = getChainDetailed(chainId)
@@ -136,4 +139,53 @@ export function parseStringOrBytes32(
         : defaultValue
 }
 
+//#region asset sort
+const { MASK_ADDRESS } = getTokenConstants()
+
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
+export const getBalanceValue = (asset: Asset) => parseFloat(formatBalance(asset.balance, asset.token.decimals))
+
+export const makeSortTokenFn =
+    (options = { isMaskBoost: false }) =>
+    (a: FungibleTokenDetailed, b: FungibleTokenDetailed) => {
+        // The native token goes first
+        if (a.type === EthereumTokenType.Native) return -1
+        if (b.type === EthereumTokenType.Native) return 1
+
+        // The mask token second
+        if (options.isMaskBoost) {
+            if (isSameAddress(a.address, MASK_ADDRESS ?? '')) return -1
+            if (isSameAddress(b.address, MASK_ADDRESS ?? '')) return 1
+        }
+
+        return 0
+    }
+
+export const makeSortAssertFn =
+    (chainId: ChainId, options = { isMaskBoost: false }) =>
+    (a: Asset, b: Asset) => {
+        // The tokens with the current chain id goes first
+        if (a.chain !== b.chain) {
+            if (getChainIdFromName(a.chain) === chainId) return -1
+            if (getChainIdFromName(b.chain) === chainId) return 1
+        }
+
+        // token sort
+        const tokenDifference = makeSortTokenFn({ isMaskBoost: options.isMaskBoost })(a.token, b.token)
+        if (tokenDifference !== 0) return tokenDifference
+
+        // Token with high usd value estimation has priority
+        const valueDifference = getTokenUSDValue(b) - getTokenUSDValue(a)
+        if (valueDifference !== 0) return valueDifference
+
+        // Token with big balance has priority
+        if (getBalanceValue(a) > getBalanceValue(b)) return -1
+        if (getBalanceValue(a) < getBalanceValue(b)) return 1
+
+        // Sorted by alphabet
+        if (a.balance > b.balance) return -1
+        if (a.balance < b.balance) return 1
+
+        return 0
+    }
+//#endregion

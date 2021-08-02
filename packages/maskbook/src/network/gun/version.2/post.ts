@@ -54,6 +54,7 @@ export async function* subscribePostKeysOnGun2(
                     // @ts-ignore
                     .get(keyHash)
                     .map()
+                    // @ts-ignore
                     .on((data: SharedAESKeyGun2) => {
                         // @ts-ignore
                         const { _, ...data2 } = Object.assign({}, data)

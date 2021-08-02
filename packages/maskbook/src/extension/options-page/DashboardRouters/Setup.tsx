@@ -39,7 +39,7 @@ import { Identifier, ECKeyIdentifier } from '../../../database/type'
 import { useMyPersonas, useMyUninitializedPersonas } from '../../../components/DataSource/useMyPersonas'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { DashboardRoute } from '../Route'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import type { Persona } from '../../../database'
 import { RestoreFromQRCodeImageBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'
 import { RestoreFromBackupBox } from '../DashboardComponents/RestoreFromBackupBox'
@@ -743,7 +743,7 @@ export function RestoreDatabaseConfirmation() {
     const classes = useSetupFormStyles()
     const restoreDatabaseConfirmationClasses = useRestoreDatabaseConfirmationStyles()
     const history = useHistory<unknown>()
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { uuid } = useQueryParams(['uuid'])
     const [imported, setImported] = useState<boolean | 'loading'>(false)
@@ -753,13 +753,11 @@ export function RestoreDatabaseConfirmation() {
     const personas = backup?.personas.length ?? 0
     const profiles = backup?.profiles.length ?? 0
     const posts = backup?.posts.length ?? 0
-    const contacts = backup?.userGroups.length ?? 0
     const wallets = backup?.wallets.length ?? 0
     const records = [
         { type: DatabaseRecordType.Persona, length: personas, checked: imported === true },
         { type: DatabaseRecordType.Profile, length: profiles, checked: imported === true },
         { type: DatabaseRecordType.Post, length: posts, checked: imported === true },
-        { type: DatabaseRecordType.Group, length: contacts, checked: imported === true },
         { type: DatabaseRecordType.Wallet, length: wallets, checked: imported === true },
     ]
 

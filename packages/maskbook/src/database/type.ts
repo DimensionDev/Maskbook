@@ -10,7 +10,6 @@ export {
     PersonaIdentifier,
     PostIVIdentifier,
     PostIdentifier,
-    PreDefinedVirtualGroupNames,
     ProfileIdentifier,
 } from '@masknet/shared'
 export function ECKeyIdentifierFromJsonWebKey(key: EC_JsonWebKey) {

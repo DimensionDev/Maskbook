@@ -19,7 +19,7 @@ export function TraderDialog() {
     const chainIdValid = useChainIdValid()
     const [traderProps, setTraderProps] = useState<TraderProps>()
 
-    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated, (ev) => {
+    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated, (ev) => {
         if (ev?.traderProps) setTraderProps(ev.traderProps)
     })
 

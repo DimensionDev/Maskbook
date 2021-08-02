@@ -53,7 +53,7 @@
         "editor.defaultFormatter": "redhat.vscode-yaml"
     },
     "[markdown]": {
-        "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.wordWrap": "on",
         "editor.quickSuggestions": true
     }

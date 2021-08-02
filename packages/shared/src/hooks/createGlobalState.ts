@@ -1,3 +1,4 @@
+import type {} from 'react/next'
 import {
     unstable_createMutableSource as createMutableSource,
     unstable_useMutableSource as useMutableSource,
@@ -35,12 +36,12 @@ export function createGlobalState<T>(f: () => Promise<T>, subscribe: (callback: 
         return f()
             .then(
                 (val) => {
-                    data.version++
+                    data.version += 1
                     data.data = val
                     data.error = undefined
                 },
                 (err) => {
-                    data.version++
+                    data.version += 1
                     data.error = err
                 },
             )

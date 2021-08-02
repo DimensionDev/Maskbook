@@ -12,7 +12,7 @@ import CheckIcon from '@material-ui/icons/Check'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import { formatEthereumAddress, useBlockie, Wallet } from '@masknet/web3-shared'
 import { useI18N } from '../../../utils'
-import { useStylesExtends } from '../../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 
 const useStyle = makeStyles((theme: Theme) => ({
     root: {

@@ -1,5 +1,5 @@
 import { makeStyles, Typography, Card, ButtonBase, ButtonBaseProps } from '@material-ui/core'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {

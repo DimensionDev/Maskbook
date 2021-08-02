@@ -3,6 +3,8 @@ import { ERC20TokenDetailed, FungibleToken, ChainId, EthereumTokenType, Fungible
 import { useChainId } from './useChainId'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32'
+import { getRPCConstants } from '../constants'
+import { first } from 'lodash-es'
 import { useERC20TokenContract, useERC20TokenContracts } from '../contracts/useERC20TokenContract'
 import { useERC20TokenBytes32Contract, useERC20TokenBytes32Contracts } from '../contracts/useERC20TokenBytes32Contract'
 import { parseStringOrBytes32, createERC20Token, createNativeToken } from '../utils'
@@ -19,11 +21,16 @@ export function useERC20TokenDetailed(address?: string, token?: Partial<ERC20Tok
     }, [chainId, token, erc20TokenContract, erc20TokenBytes32Contract, address])
 }
 
-export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'address' | 'type'>[]) {
-    const chainId = useChainId()
+export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'address' | 'type'>[], _chainId?: ChainId) {
+    const currentChainId = useChainId()
+    const chainId = _chainId ? _chainId : currentChainId
+    const { RPC } = getRPCConstants(chainId)
+    const provderURL = first(RPC)
+    if (!provderURL) throw new Error('Unknown chain id.')
     const listOfAddress = useMemo(() => listOfToken.map((t) => t.address), [JSON.stringify(listOfToken)])
-    const erc20TokenContracts = useERC20TokenContracts(listOfAddress)
-    const erc20TokenBytes32Contracts = useERC20TokenBytes32Contracts(listOfAddress)
+
+    const erc20TokenContracts = useERC20TokenContracts(listOfAddress, provderURL)
+    const erc20TokenBytes32Contracts = useERC20TokenBytes32Contracts(listOfAddress, provderURL)
 
     return useAsyncRetry<FungibleTokenDetailed[]>(
         async () =>

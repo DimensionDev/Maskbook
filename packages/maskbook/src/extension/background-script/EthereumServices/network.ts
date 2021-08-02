@@ -116,15 +116,17 @@ export async function addEthereumChain(
 }
 
 export async function switchEthereumChain(chainId: ChainId, overrides?: SendOverrides) {
-    return request<boolean>({
-        method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
-        params: [
-            {
-                chainId: `0x${chainId.toString(16)}`,
-            },
-        ],
+    return request<boolean>(
+        {
+            method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
+            params: [
+                {
+                    chainId: `0x${chainId.toString(16)}`,
+                },
+            ],
+        },
         overrides,
-    })
+    )
 }
 
 export async function signTransaction(config: TransactionConfig, overrides?: SendOverrides) {
@@ -138,11 +140,15 @@ export async function signTransaction(config: TransactionConfig, overrides?: Sen
 }
 
 export async function getPastLogs(config: PastLogsOptions, overrides?: SendOverrides) {
-    return request<Log[]>(
-        {
-            method: EthereumMethodType.ETH_GET_LOGS,
-            params: [config],
-        },
-        overrides,
+    return new Promise<Log[]>((resolve, reject) =>
+        request<Log[]>(
+            {
+                method: EthereumMethodType.ETH_GET_LOGS,
+                params: [config],
+            },
+            overrides,
+        )
+            .then((result) => resolve(result))
+            .catch(() => resolve([])),
     )
 }

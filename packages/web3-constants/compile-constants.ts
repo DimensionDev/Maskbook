@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
-import { run } from '../cli/utils'
+import { run } from '../web3-contracts/utils'
 
 const DATA_PATH = path.join(__dirname, 'data')
 

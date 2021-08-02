@@ -1,18 +1,17 @@
-import { isNil } from 'lodash-es'
+import { NetworkType, pow10, PortfolioProvider } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
+import { isNil } from 'lodash-es'
+import * as DeBankAPI from '../apis/debank'
+import * as ZerionApi from '../apis/zerion'
+import { resolveDebankChainName, resolveZerionTransactionsScopeName } from '../pipes'
 import {
     DebankTransactionDirection,
     HistoryResponse,
-    PortfolioProvider,
     Transaction,
     ZerionRBDTransactionType,
     ZerionTransactionItem,
     ZerionTransactionStatus,
 } from '../types'
-import * as DeBankAPI from '../apis/debank'
-import * as ZerionApi from '../apis/zerion'
-import { NetworkType, pow10 } from '@masknet/web3-shared'
-import { resolveDebankChainName } from '../pipes'
 
 export async function getTransactionList(
     address: string,
@@ -24,19 +23,26 @@ export async function getTransactionList(
     hasNextPage: boolean
 }> {
     if (provider === PortfolioProvider.DEBANK) {
-        const { data, error_code } = await DeBankAPI.getTransactionList(address, resolveDebankChainName(network))
+        const name = resolveDebankChainName(network)
+        if (!name)
+            return {
+                transactions: [],
+                hasNextPage: false,
+            }
+        const { data, error_code } = await DeBankAPI.getTransactionList(address, name)
         if (error_code !== 0) throw new Error('Fail to load transactions.')
         return {
             transactions: fromDeBank(data),
             hasNextPage: false,
         }
     } else if (provider === PortfolioProvider.ZERION) {
-        if (network !== NetworkType.Ethereum)
+        const scope = resolveZerionTransactionsScopeName(network)
+        if (!scope)
             return {
                 transactions: [],
                 hasNextPage: false,
             }
-        const { payload, meta } = await ZerionApi.getTransactionList(address, page)
+        const { payload, meta } = await ZerionApi.getTransactionList(address, scope, page)
         if (meta.status !== 'ok') throw new Error('Fail to load transactions.')
         return {
             transactions: fromZerion(payload.transactions),

@@ -8,6 +8,6 @@ export async function getTransactionList(address: string, chain: string) {
 }
 
 export async function getAssetsList(address: string) {
-    const response = await fetch(`${DEBANK_API}/token/balance_list?user_addr=${address.toLowerCase()}`)
+    const response = await fetch(`${DEBANK_API}/token/balance_list?is_all=true&user_addr=${address.toLowerCase()}`)
     return (await response.json()) as BalanceListResponse
 }

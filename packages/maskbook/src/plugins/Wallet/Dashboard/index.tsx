@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { base } from '../base'
+import { base } from '@masknet/plugin-wallet'
 import { SelectTokenDialog } from '../SNSAdaptor/SelectTokenDialog'
 import { GasNowDialog } from '../SNSAdaptor/GasNowDialog'
 import { CreateWalletDialog } from '../SNSAdaptor/CreateWalletDialog'

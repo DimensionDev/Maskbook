@@ -28,7 +28,6 @@ export function usePoolDepositAssets(pool?: Pool) {
     return useAsyncRetry(async () => {
         if (!pool) return
         if (pool.poolType === PoolType.v1) return sUSD_ADDRESS ? [sUSD_ADDRESS] : undefined
-        if (!poolManagerContract) return
-        return await poolManagerContract.methods.getDepositAssets().call()
+        return poolManagerContract?.methods.getDepositAssets().call()
     }, [pool, chainId])
 }
