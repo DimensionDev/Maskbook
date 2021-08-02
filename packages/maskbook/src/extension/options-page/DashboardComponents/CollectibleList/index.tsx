@@ -13,14 +13,19 @@ export const CollectibleContext = createContext<{
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: 'flex',
+        display: 'grid',
         flexWrap: 'wrap',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+        gridGap: theme.spacing(1),
     },
     container: {
         height: 'calc(100% - 52px)',
         overflow: 'auto',
     },
     card: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         position: 'relative',
         padding: theme.spacing(1),
     },
