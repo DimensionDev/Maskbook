@@ -2,7 +2,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { useWallet, useResolveEns } from '@masknet/web3-shared'
 import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback } from 'react'
 import { CollectibleList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
@@ -16,7 +16,7 @@ import {
     searchProfileTabPageSelector,
     searchProfileTabSelector,
 } from '../utils/selector'
-import { getNickname, getTwitterId, getBioDescription } from '../utils/user'
+import { useEthereumName } from './useEthereumName'
 import Color from 'color'
 
 function injectEnhancedProfileTab(signal: AbortSignal) {
@@ -172,31 +172,4 @@ export function EnhancedProfileaPage() {
         return null
     }
     return <CollectibleList wallet={selectedWallet} owner={resolvedAddress} readonly />
-}
-
-const ENS_RE = /\w+\.eth/
-const ENS_RE_FULL = /^\w+\.eth$/
-
-function useEthereumName() {
-    const [ethereumName, setEthereumName] = useState('')
-    const nickname = getNickname()
-    const twitterId = getTwitterId()
-    const bioDescription = getBioDescription()
-
-    useEffect(() => {
-        const matched = bioDescription.match(ENS_RE)
-        if (matched) {
-            setEthereumName(matched[0])
-        }
-    }, [bioDescription])
-    const name = useMemo(() => {
-        if (ethereumName) return ethereumName
-
-        if (ENS_RE_FULL.test(nickname)) {
-            return nickname
-        }
-        return `${twitterId}.eth`
-    }, [ethereumName, nickname, twitterId])
-
-    return name
 }
