@@ -3,19 +3,19 @@ import { Percent } from '@uniswap/sdk-core'
 import { INIT_CODE_HASH } from '@uniswap/v2-sdk'
 import JSBI from 'jsbi'
 import { AMPL, DAI, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WETH, WETH_ONLY } from './trader'
-import type { AgainstToken, CustomizedBase } from './types'
+import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
  * Some tokens can only be swapped via certain pairs,
  * so we override the list of bases that are considered for these tokens.
  */
-export const UNISWAP_CUSTOM_BASES: CustomizedBase = {
+export const UNISWAP_CUSTOM_BASES: ERC20TokenCustomizedBase = {
     [ChainId.Mainnet]: {
         [AMPL[ChainId.Mainnet].address]: [DAI, WETH].map((x) => x[ChainId.Mainnet]),
     },
 }
 
-export const UNISWAP_BASE_AGAINST_TOKENS: AgainstToken = {
+export const UNISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WETH_ONLY,
     [ChainId.Mainnet]: [WETH, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Mainnet]),
     [ChainId.Rinkeby]: [WETH, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),

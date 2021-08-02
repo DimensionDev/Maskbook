@@ -5,10 +5,10 @@ export interface ERC20TokenTable {
     [tokenAddress: string]: ERC20TokenDetailed[]
 }
 
-export type CustomizedBase = {
+export type ERC20TokenCustomizedBase = {
     readonly [chainId in ChainId]?: ERC20TokenTable
 }
 
-export type AgainstToken = {
+export type ERC20AgainstToken = {
     readonly [chainId in ChainId]: ERC20TokenDetailed[]
 }
