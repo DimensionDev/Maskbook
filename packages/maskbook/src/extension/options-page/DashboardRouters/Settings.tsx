@@ -183,7 +183,7 @@ export default function DashboardSettingsRouter() {
                         </Typography>
                         <Card elevation={0}>
                             <List className={classes.list} disablePadding>
-                                {process.env.NODE_ENV === 'development' && (
+                                {Flags.v2_enabled && (
                                     <ListItem button onClick={() => (location.href = '/next.html')}>
                                         <ListItemIcon children={<NewIcon />} />
                                         <ListItemText
