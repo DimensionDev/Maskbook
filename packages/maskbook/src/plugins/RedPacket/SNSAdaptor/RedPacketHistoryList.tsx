@@ -28,7 +28,7 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     const classes = useStyles()
     const account = useAccount()
     const chainId = useChainId()
-    const { value: historys, loading, retry } = useRedPacketHistory(account, chainId)
+    const { value: histories, loading, retry } = useRedPacketHistory(account, chainId)
 
     useEffect(() => {
         retry()
@@ -44,13 +44,13 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
 
     return (
         <div className={classes.root}>
-            {!historys || historys.length === 0 ? (
+            {!histories || histories.length === 0 ? (
                 <Typography className={classes.placeholder} color="textSecondary">
                     No Data
                 </Typography>
             ) : (
                 <List>
-                    {historys.map((history) => (
+                    {histories.map((history) => (
                         <div key={history.rpid}>
                             <RedPacketInHistoryList history={history} onSelect={onSelect} onClose={onClose} />
                         </div>

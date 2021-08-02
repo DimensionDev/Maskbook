@@ -2,10 +2,9 @@ import { ChangeEvent, useCallback, useMemo } from 'react'
 import { Box, Chip, ChipProps, InputProps, makeStyles, TextField, TextFieldProps, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
-import { FormattedBalance } from '@masknet/shared'
+import { FormattedBalance, useStylesExtends } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { formatBalance } from '@masknet/web3-shared'
-import { useStylesExtends } from '../../components/custom-ui-helper'
 import { useI18N } from '../../utils'
 
 const MIN_AMOUNT_LENGTH = 1

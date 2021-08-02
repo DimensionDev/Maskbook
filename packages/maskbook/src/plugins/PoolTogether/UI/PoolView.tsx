@@ -193,9 +193,7 @@ export function PoolView(props: PoolProps) {
     //#endregion
 
     //#region the deposit dialog
-    const { setDialog: openDepositDialog } = useRemoteControlledDialog(
-        PluginPoolTogetherMessages.events.DepositDialogUpdated,
-    )
+    const { setDialog: openDepositDialog } = useRemoteControlledDialog(PluginPoolTogetherMessages.DepositDialogUpdated)
 
     const onDeposit = useCallback(() => {
         if (!pool || !token) return

@@ -8,7 +8,7 @@
     "start": "dev -- snowpack dev"
   },
   "dependencies": {
-    "@masknet/shared": "workspace:*",
+    "@masknet/theme": "workspace:*",
     "ef.js": "^0.13.10"
   },
   "devDependencies": {

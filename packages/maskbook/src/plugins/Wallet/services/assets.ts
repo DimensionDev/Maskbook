@@ -1,5 +1,6 @@
 import { unreachable } from '@dimensiondev/kit'
 import {
+    Asset,
     ChainId,
     createERC1155Token,
     createERC20Token,
@@ -13,6 +14,8 @@ import {
     isChainIdMainnet,
     NetworkType,
     pow10,
+    CollectibleProvider,
+    PortfolioProvider,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-es'
@@ -21,7 +24,7 @@ import * as DebankAPI from '../apis/debank'
 import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
 import { resolveZerionAssetsScopeName } from '../pipes'
-import { Asset, BalanceRecord, CollectibleProvider, PortfolioProvider, ZerionAddressAsset } from '../types'
+import type { BalanceRecord, ZerionAddressAsset } from '../types'
 
 export async function getAssetsListNFT(
     address: string,
@@ -87,7 +90,9 @@ export async function getAssetsList(
     switch (provider) {
         case PortfolioProvider.ZERION:
             if (network !== NetworkType.Ethereum) return []
-            const { meta, payload } = await ZerionAPI.getAssetsList(address, resolveZerionAssetsScopeName(network))
+            const scope = resolveZerionAssetsScopeName(network)
+            if (!scope) return []
+            const { meta, payload } = await ZerionAPI.getAssetsList(address, scope)
             if (meta.status !== 'ok') throw new Error('Fail to load assets.')
             // skip NFT assets
             const assetsList = values(payload.assets).filter((x) => x.asset.is_displayable && x.asset.icon_url)

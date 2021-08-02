@@ -4,7 +4,7 @@ import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostCont
 import { useShareMenu } from '../SelectPeopleDialog'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from '@material-ui/core'
-import { useStylesExtends } from '../../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import type { ProfileIdentifier } from '../../../database/type'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'

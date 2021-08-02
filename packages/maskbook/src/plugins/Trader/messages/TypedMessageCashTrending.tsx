@@ -45,7 +45,7 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
                 const dataProviders = await PluginTraderRPC.getAvailableDataProviders(type, name)
                 const tradeProviders = await PluginTraderRPC.getAvailableTraderProviders(type, name)
                 if (!dataProviders.length) return
-                PluginTraderMessages.events.cashTagObserved.sendToLocal({
+                PluginTraderMessages.cashTagObserved.sendToLocal({
                     name,
                     type,
                     element,

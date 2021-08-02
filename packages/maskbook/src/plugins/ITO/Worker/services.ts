@@ -1,8 +1,7 @@
 import type { JSON_PayloadInMask, PoolRecord } from '../types'
-import { PluginITO_Messages } from '../messages'
 import * as subgraph from './apis'
 import * as database from './database'
-import { getChainDetailed } from '@masknet/web3-shared'
+import { getChainDetailed, ChainId } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../Wallet/settings'
 
 export async function getTradeInfo(pid: string, trader: string) {
@@ -36,11 +35,10 @@ export async function getAllPoolsAsSeller(address: string, page: number) {
         .filter((x) => x.pool.chain_id === chainId)
 }
 
-export async function getAllPoolsAsBuyer(address: string) {
-    const chainId = currentChainIdSettings.value
+export async function getAllPoolsAsBuyer(address: string, chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) return []
-    const pools = await subgraph.getAllPoolsAsBuyer(address)
+    const pools = await subgraph.getAllPoolsAsBuyer(address, chainId)
     return pools.filter((x) => x.pool.chain_id === chainId)
 }
 
@@ -59,5 +57,4 @@ export async function discoverPool(from: string, payload: JSON_PayloadInMask) {
         },
     }
     await database.addPoolIntoDB(record)
-    PluginITO_Messages.events.poolUpdated.sendToAll(undefined)
 }

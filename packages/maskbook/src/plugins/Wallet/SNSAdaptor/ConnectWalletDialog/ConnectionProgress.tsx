@@ -3,7 +3,7 @@ import { resolveProviderName, ProviderType } from '@masknet/web3-shared'
 import { ProviderIcon } from '../../../../components/shared/ProviderIcon'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 const useStyles = makeStyles((theme) => ({

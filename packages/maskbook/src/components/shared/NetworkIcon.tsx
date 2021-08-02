@@ -1,7 +1,7 @@
 import { Image } from './Image'
 import { makeStyles } from '@material-ui/core'
 import { NetworkType } from '@masknet/web3-shared'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles(() => ({
     icon: {

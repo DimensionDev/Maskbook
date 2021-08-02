@@ -1,5 +1,4 @@
 import type { RedPacketRecord } from '../types'
-import { RedPacketMessage } from '../messages'
 import * as database from './database'
 import type { ChainId } from '@masknet/web3-shared'
 import * as subgraph from './apis'
@@ -11,7 +10,6 @@ export async function discoverRedPacket(record: RedPacketRecord) {
         record.id = txid
     }
     database.addRedPacket(record)
-    RedPacketMessage.events.redPacketUpdated.sendToAll(undefined)
 }
 
 export async function getRedPacketHistoryWithPassword(address: string, chainId: ChainId) {

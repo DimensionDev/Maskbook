@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useReducer, useState } from 'react'
+import { makeTypedMessageTuple, TypedMessageTuple, or } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
-import { makeTypedMessageTuple, TypedMessageTuple } from '@masknet/shared'
 
 import { ServicesWithProgress } from '../../../extension/service'
 import type { ProfileIdentifier } from '../../../database/type'
@@ -15,7 +15,6 @@ import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
 import { usePostClaimedAuthor, usePostInfoDetails, usePostInfoSharedPublic } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { or } from '../../custom-ui-helper'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 import type { Payload } from '../../../utils/type-transform/Payload'
 

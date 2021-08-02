@@ -12,7 +12,13 @@
         "import/no-deprecated": "warn",
         "no-restricted-imports": [
             "error",
-            { "paths": [{ "name": "lodash", "message": "Please use lodash-es instead." }] }
+            {
+                "paths": [
+                    { "name": "lodash", "message": "Please use lodash-es instead." },
+                    { "name": "date-fns", "message": "Please use date-fns/{submodule} instead." },
+                    { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." }
+                ]
+            }
         ],
         "react-hooks/exhaustive-deps": "off",
         "react-hooks/rules-of-hooks": "error",
@@ -32,23 +38,6 @@
             {
                 "component": true,
                 "html": true
-            }
-        ],
-        "@typescript-eslint/ban-types": [
-            "error",
-            {
-                "types": {
-                    "bigint": "BigInt not supported until Safari 15.",
-                    "BigInt": "BigInt not supported until Safari 15."
-                },
-                "extendDefaults": false
-            }
-        ],
-        "no-restricted-syntax": [
-            "error",
-            {
-                "selector": "Literal[raw=/n$/]",
-                "message": "BigInt not supported until Safari 15."
             }
         ]
     }

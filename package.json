@@ -1,18 +1,17 @@
 {
   "name": "maskbook",
-  "version": "1.34.1",
+  "version": "1.35.0",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "dev",
-    "start-e2e": "env target=E2E dev",
-    "ts": "dev --daemon",
+    "start-e2e": "env target=E2E dev --preset E2E",
+    "ts": "gulp codegen-watch",
+    "codegen": "gulp codegen-watch",
     "go": "dev --help",
     "build": "build",
-    "build-e2e": "env target=E2E build",
-    "build-ios": "run-s build:ios:webpack build:ios:ext:prebuilt",
-    "build:ios:ext:prebuilt": "webextensiom-shim-prebuilt",
-    "build:ios:webpack": "build iOS",
+    "build-e2e": "env target=E2E build --preset E2E",
+    "build-ios": "build --preset iOS",
     "lint": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache --fix",
     "lint:ci": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache",
     "test": "jest --verbose --watch",
@@ -25,7 +24,7 @@
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
     "packages/**/*.{ts,tsx,js,jsx}": "eslint -c packages/.eslintrc.json --fix",
-    "packages/maskbook/**/*": "locale-kit --sync-keys --remove-unused-keys"
+    "packages/maskbook/**/*": "gulp locale-kit --sync-keys --remove-unused-keys"
   },
   "dependencies": {
     "@emotion/cache": "^11.4.0",
@@ -62,6 +61,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-unused-imports": "^1.1.2",
     "esm": "^3.2.25",
+    "gulp": "^4.0.2",
     "husky": "^7.0.1",
     "lint-staged": "^11.1.0",
     "npm-run-all": "^4.1.5",

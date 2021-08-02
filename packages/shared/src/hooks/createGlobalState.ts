@@ -1,3 +1,4 @@
+import type {} from 'react/next'
 import {
     unstable_createMutableSource as createMutableSource,
     unstable_useMutableSource as useMutableSource,

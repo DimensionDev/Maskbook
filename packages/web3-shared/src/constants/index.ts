@@ -11,6 +11,7 @@ import DHEDGE from '@masknet/web3-constants/data/dhedge.json'
 import RPC from '@masknet/web3-constants/data/rpc.json'
 import PoolTogether from '@masknet/web3-constants/data/pooltogether.json'
 import TokenAssetBaseURL from '@masknet/web3-constants/data/token-asset-base-url.json'
+import GoodGhosting from '@masknet/web3-constants/data/good-ghosting.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
 export const getAirdropConstants = transform(Airdrop)
@@ -51,6 +52,9 @@ export const useTokenAssetBaseURLConstants = hookTransform(getTokenAssetBaseURLC
 
 export const getPoolTogetherConstants = transform(PoolTogether)
 export const usePoolTogetherConstants = hookTransform(getPoolTogetherConstants)
+
+export const getGoodGhostingConstants = transform(GoodGhosting)
+export const useGoodGhostingConstants = hookTransform(getGoodGhostingConstants)
 
 // for estimate gas
 export const FAKE_SIGN_PASSWORD = '0x75466cc969717b172b14253aaeebdc958f2b5037a852c1337650ed4978242dd9'

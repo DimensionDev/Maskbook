@@ -3,7 +3,7 @@ import { useDropArea } from 'react-use'
 import { makeStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 import { RestoreBox } from './RestoreBox'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { QRCodeImageScanner } from './QRCodeImageScanner'
 import { blobToDataURL } from '@dimensiondev/kit'
 

@@ -50,9 +50,9 @@ function subscribeFromZerion(socketNamespace: SocketNameSpace, requestBody: Sock
     })
 }
 
-export async function getTransactionList(address: string, page?: number) {
+export async function getTransactionList(address: string, scope: string, page?: number) {
     return (await subscribeFromZerion(addressSocket, {
-        scope: ['transactions'],
+        scope: [scope],
         payload: {
             address,
             currency: 'usd',
