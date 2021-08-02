@@ -1,26 +1,21 @@
-import JSBI from 'jsbi'
-import { ChainId, ERC20TokenDetailed } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared'
 import { Percent } from '@uniswap/sdk-core'
 import { INIT_CODE_HASH } from '@uniswap/v2-sdk'
+import JSBI from 'jsbi'
 import { AMPL, DAI, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WETH, WETH_ONLY } from './trader'
+import type { AgainstToken, CustomizedBase } from './types'
 
 /**
  * Some tokens can only be swapped via certain pairs,
  * so we override the list of bases that are considered for these tokens.
  */
-export const UNISWAP_CUSTOM_BASES: {
-    readonly [chainId in ChainId]?: {
-        [tokenAddress: string]: ERC20TokenDetailed[]
-    }
-} = {
+export const UNISWAP_CUSTOM_BASES: CustomizedBase = {
     [ChainId.Mainnet]: {
         [AMPL[ChainId.Mainnet].address]: [DAI, WETH].map((x) => x[ChainId.Mainnet]),
     },
 }
 
-export const UNISWAP_BASE_AGAINST_TOKENS: {
-    readonly [chainId in ChainId]: ERC20TokenDetailed[]
-} = {
+export const UNISWAP_BASE_AGAINST_TOKENS: AgainstToken = {
     ...WETH_ONLY,
     [ChainId.Mainnet]: [WETH, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Mainnet]),
     [ChainId.Rinkeby]: [WETH, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),

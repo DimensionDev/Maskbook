@@ -3,13 +3,9 @@ import { currentEtherPriceSettings } from '../settings'
 
 const ETH_PRICE_POLLING_DELAY = 30 /* seconds */ * 1000 /* milliseconds */
 
-interface PriceRecord {
-    [currency: string]: number
-}
+type PriceRecord = Record<string, number>;
 
-interface TokenRecord {
-    [token: string]: PriceRecord
-}
+type TokenRecord = Record<string, PriceRecord>;
 
 async function fetchTokenPrice(token = 'ethereum', currency = 'usd') {
     const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${token}&vs_currencies=${currency}`)

@@ -79,6 +79,7 @@ export function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency) {
                         Boolean(result[0] === PairState.EXISTS && result[1]),
                     )
                     // filter out duplicated pairs
+                    // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
                     .reduce<{ [pairAddress: string]: Pair }>((memo, [, current]) => {
                         memo[current.liquidityToken.address] = memo[current.liquidityToken.address] ?? current
                         return memo

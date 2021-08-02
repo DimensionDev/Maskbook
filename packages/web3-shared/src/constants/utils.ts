@@ -2,9 +2,7 @@ import { useMemo } from 'react'
 import { useChainId } from '../hooks'
 import { ChainId, Primitive } from '../types'
 
-export interface Constants {
-    [K: string]: { [K in keyof typeof ChainId]: Primitive | Primitive[] }
-}
+export type Constants = Record<string, { [K in keyof typeof ChainId]: Primitive | Primitive[] }>;
 
 export function transform<T extends Constants>(constants: T, environment: Record<string, string> = {}) {
     type Entries = { [key in keyof T]?: T[key]['Mainnet'] }

@@ -72,9 +72,7 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[], skipCo
                 `
             })
 
-            return fetchFromEthereumBlocksSubgraph<{
-                [key: string]: Block[]
-            }>(`
+            return fetchFromEthereumBlocksSubgraph<Record<string, Block[]>>(`
                 query blocks {
                     ${queries}
                 }
@@ -114,15 +112,13 @@ export async function fetchBlockNumbersObjectByTimestamps(timestamps: number[]) 
         `
     })
 
-    const data = await fetchFromEthereumBlocksSubgraph<{
-        [key: string]: Block[]
-    }>(`
+    const data = await fetchFromEthereumBlocksSubgraph<Record<string, Block[]>>(`
         query blocks {
             ${queries}
         }
     `)
 
-    const result: { [key: string]: string | undefined } = {}
+    const result: Record<string, string | undefined> = {}
     if (!data) return result
 
     Object.keys(data).map((key) => {
