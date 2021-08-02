@@ -313,9 +313,7 @@ export async function getBulkPairData(pairList: string[]) {
 
     const oneDayResult = await fetchPairsHistoricalBulk(pairList, oneDayBlock)
 
-    const oneDayData = oneDayResult.reduce<{
-        [key: string]: Data
-    }>((obj, cur) => ({ ...obj, [cur.id]: cur }), {})
+    const oneDayData = oneDayResult.reduce<Record<string, Data>>((obj, cur) => ({ ...obj, [cur.id]: cur }), {})
 
     const pairsData = await Promise.all(
         current &&
@@ -346,12 +344,10 @@ export async function getBulkPairData(pairList: string[]) {
             }),
     )
 
-    return pairsData.reduce<{
-        [key: string]: Data & {
-            oneDayVolumeUSD: number
-            oneDayVolumeUntracked: number
-        }
-    }>((obj, cur) => ({ ...obj, [cur.id]: cur }), {})
+    return pairsData.reduce<Record<string, Data & { oneDayVolumeUSD: number; oneDayVolumeUntracked: number }>>(
+        (obj, cur) => ({ ...obj, [cur.id]: cur }),
+        {},
+    )
 }
 
 export async function getPriceStats(

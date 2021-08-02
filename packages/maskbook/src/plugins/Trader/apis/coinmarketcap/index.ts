@@ -164,9 +164,8 @@ export async function getCoinInfo(id: string) {
         cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
     })
     const response = (await response_.json()) as {
-        data: {
-            [id: string]: CoinInfo
-        }
+        /** id, coin-info pair */
+        data: Record<string, CoinInfo>
         status: Status
     }
     return {
