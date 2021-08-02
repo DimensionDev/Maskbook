@@ -43,7 +43,7 @@ function render() {
                         <IconPreview icons={General} title="General" />
                     </main>
                     <main id="plugins">
-                        <IconPreview icons={Plugins} title="Glugins" />
+                        <IconPreview icons={Plugins} title="Plugins" />
                     </main>
                 </body>
             </html>,
