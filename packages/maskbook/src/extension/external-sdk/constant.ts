@@ -1,5 +1,12 @@
 import type { ThirdPartyPopupContextIdentifier } from '../../plugins/External/popup-context'
 
+export type MaskEvents = 'mask-start' | 'mask-in' | 'mask-out'
+export enum MaskEvent {
+    Start = 'mask-start',
+    In = 'mask-in',
+    Out = 'mask-out',
+}
+
 export const currentPopupContext = new URL(location.href).searchParams.get(
     'mask_context',
 ) as ThirdPartyPopupContextIdentifier | null
