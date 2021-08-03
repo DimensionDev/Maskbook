@@ -23,8 +23,8 @@ async function openPostDialogFacebook() {
                 notActivated.evaluate()[0].click()
                 await timeout(new MutationObserverWatcher(activated), 2000)
                 await delay(1000)
-            } catch (e) {
-                clickFailed(e)
+            } catch (error) {
+                clickFailed(error)
             }
         } else {
             try {
@@ -47,10 +47,12 @@ async function openPostDialogFacebook() {
     try {
         await timeout(new MutationObserverWatcher(isMobileFacebook ? activated : dialog), 2000)
         console.log('Dialog appeared')
-    } catch {}
+    } catch {
+        // ignore
+    }
     function clickFailed(error: unknown) {
         console.warn(error)
-        if (!dialog.evaluate()[0]) alert('请点击输入框')
+        if (!dialog.evaluate()[0]) alert('Click the input box, please.')
     }
 }
 

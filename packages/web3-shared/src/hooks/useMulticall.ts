@@ -89,6 +89,9 @@ export function useMutlicallStateDecoded<
                     value: decodeOutputString(web3, outputs, raw) as R,
                 }
             } catch (error) {
+                if (!(error instanceof Error)) {
+                    error = new Error(String(error))
+                }
                 return { raw, error, value: null }
             }
         })
