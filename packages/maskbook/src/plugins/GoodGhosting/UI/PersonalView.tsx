@@ -7,6 +7,7 @@ import { useGameToken } from '../hooks/usePoolData'
 import type { GoodGhostingInfo, Player } from '../types'
 import { getPlayerStatus, PlayerStatus } from '../utils'
 import BigNumber from 'bignumber.js'
+import { FormattedBalance } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     infoRow: {
@@ -56,7 +57,7 @@ export function PersonalView(props: PersonalViewProps) {
         setErrorMessage('')
         try {
             await earlyWithdraw()
-        } catch (error) {
+        } catch {
             setErrorMessage(t('error_unknown'))
         } finally {
             setButtonEnabled(true)
@@ -90,7 +91,11 @@ export function PersonalView(props: PersonalViewProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" color="textSecondary">
-                            {formatBalance(props.info.currentPlayer.amountPaid, gameToken.decimals)} {gameToken.symbol}
+                            <FormattedBalance
+                                value={props.info.currentPlayer.amountPaid}
+                                decimals={gameToken.decimals}
+                                symbol={gameToken.symbol}
+                            />
                         </Typography>
                     </Grid>
                 </Grid>

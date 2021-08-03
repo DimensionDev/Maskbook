@@ -92,16 +92,12 @@ export interface TradeContext {
     ROUTER_CONTRACT_ADDRESS?: string
     FACTORY_CONTRACT_ADDRESS?: string
     ADDITIONAL_TOKENS: {
-        [key in ChainId]?: {
-            [key: string]: ERC20TokenDetailed[]
-        }
+        [key in ChainId]?: Record<string, ERC20TokenDetailed[]>
     }
     AGAINST_TOKENS: {
         [key in ChainId]: ERC20TokenDetailed[]
     }
     CUSTOM_TOKENS: {
-        [key in ChainId]?: {
-            [key: string]: ERC20TokenDetailed[]
-        }
+        [key in ChainId]?: Record<string, ERC20TokenDetailed[]>
     }
 }

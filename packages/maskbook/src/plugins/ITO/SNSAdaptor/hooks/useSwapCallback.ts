@@ -110,7 +110,7 @@ export function useSwapCallback(
                 })
                 return
             }
-        } catch (e) {
+        } catch {
             setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Failed to read qualification.'),
@@ -139,7 +139,7 @@ export function useSwapCallback(
                 })
                 return
             }
-        } catch (e) {
+        } catch {
             setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Failed to check availability.'),

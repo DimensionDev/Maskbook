@@ -121,10 +121,10 @@ function formatAssetsFromDebank(data: BalanceRecord[]) {
                         : createERC20Token(chainId, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
                 balance: new BigNumber(y.balance).toFixed(),
                 price: {
-                    [CurrencyType.USD]: new BigNumber(y.price).toFixed(),
+                    [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
                 },
                 value: {
-                    [CurrencyType.USD]: new BigNumber(y.price)
+                    [CurrencyType.USD]: new BigNumber(y.price ?? 0)
                         .multipliedBy(new BigNumber(y.balance).dividedBy(pow10(y.decimals)))
                         .toFixed(),
                 },

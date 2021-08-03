@@ -25,9 +25,9 @@ export interface BalanceChecker extends BaseContract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions): BalanceChecker
     clone(): BalanceChecker
     methods: {
-        tokenBalance(user: string, token: string): NonPayableTransactionObject<string>
-
         balances(users: string[], tokens: string[]): NonPayableTransactionObject<string[]>
+
+        tokenBalance(user: string, token: string): NonPayableTransactionObject<string>
     }
     events: {
         allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter

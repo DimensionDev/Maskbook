@@ -84,10 +84,12 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                 recipientAddress: account,
             })
         } catch (e) {
-            enqueueSnackbar(e.message, {
-                variant: 'error',
-                preventDuplicate: true,
-            })
+            if (e instanceof Error) {
+                enqueueSnackbar(e.message, {
+                    variant: 'error',
+                    preventDuplicate: true,
+                })
+            }
             throw e
         }
     }, [asset?.value, account, enqueueSnackbar])

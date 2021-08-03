@@ -14,12 +14,14 @@ export type PersonOnGun2 = {
     //   provePostId?: unknown
     __notInGunButABrand__DO_NOT_USE_THIS__?: never
 }
+
 export type SharedAESKeyGun2 = {
     encryptedKey: string
     salt: string
     ephemeralKey?: EC_Public_JsonWebKey
     ephemeralKeySign?: string
 }
+
 export interface PostOnGun2 {
     [cutNBitsFromFront_hash_ReceiversPublicKey: string]: SharedAESKeyGun2[]
 }

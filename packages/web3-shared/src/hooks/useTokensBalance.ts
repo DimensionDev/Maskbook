@@ -9,8 +9,8 @@ import { useChainId } from './useChainId'
  * @param listOfAddress
  */
 export function useTokensBalance(listOfAddress: string[]) {
-    const account = useAccount()
     const chainId = useChainId()
+    const account = useAccount()
     const balanceCheckerContract = useBalanceCheckerContract()
 
     return useAsyncRetry(async () => {

@@ -61,7 +61,7 @@ export function RestoreFromBackupBox(props: RestoreFromBackupBoxProps) {
                 darkPlaceholderImageURL={new URL('./RestoreFromBackupBox-dark.png', import.meta.url).toString()}
                 lightPlaceholderImageURL={new URL('./RestoreFromBackupBox-light.png', import.meta.url).toString()}
                 data-active={over}
-                onClick={() => inputRef.current && inputRef.current.click()}
+                onClick={() => inputRef.current?.click()}
             />
         </div>
     )

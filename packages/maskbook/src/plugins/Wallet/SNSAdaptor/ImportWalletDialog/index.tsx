@@ -113,7 +113,7 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
                             passphrase: '',
                         })
                     } catch (err) {
-                        if (err.message !== 'Add exists phrase.') {
+                        if (err instanceof Error && err.message !== 'Add exists phrase.') {
                             throw err
                         }
                     }

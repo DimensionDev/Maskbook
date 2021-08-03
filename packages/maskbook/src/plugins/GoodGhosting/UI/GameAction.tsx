@@ -36,9 +36,8 @@ export function GameAction(props: GameActionProps) {
     const {
         value: tokenDetailed,
         loading: loadingToken,
-        retry: retryToken,
         error: errorToken,
-    } = useERC20TokenDetailed(DAI[chainId].address)
+    } = useERC20TokenDetailed(DAI[chainId]?.address)
 
     if (loadingToken || errorToken) return <></>
 
@@ -49,7 +48,7 @@ export function GameAction(props: GameActionProps) {
         try {
             await action()
             props.info.refresh()
-        } catch (error) {
+        } catch {
             setErrorMessage(t('error_unknown'))
         } finally {
             setButtonEnabled(true)
