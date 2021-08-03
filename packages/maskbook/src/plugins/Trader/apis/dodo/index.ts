@@ -26,14 +26,14 @@ export async function swapRoute(request: SwapRouteRequest) {
     }
 
     const response = await fetch(`${DODO_BASE_URL}/dodoapi/getdodoroute?${params.toString()}`)
-    const response_: SwapRouteResponse = await response.json()
+    const payload: SwapRouteResponse = await response.json()
 
-    const errorResponse = response_ as SwapRouteErrorResponse
-    if (errorResponse.code || errorResponse.status !== 200) throw new Error(errorResponse?.data ?? 'Unknown Error')
+    if (payload.status !== 200) {
+        throw new Error(payload.data ?? 'Unknown Error')
+    }
 
-    const successResponse = response_ as SwapRouteSuccessResponse
     return {
-        ...successResponse.data,
+        ...payload.data,
         fromAmount: new BigNumber(request.fromAmount).dividedBy(pow10(request.fromToken.decimals ?? 0)).toNumber(),
         value: request.isNativeSellToken ? request.fromAmount : '0',
     } as SwapRouteData
