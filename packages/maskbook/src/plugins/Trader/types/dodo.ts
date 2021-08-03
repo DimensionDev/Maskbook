@@ -11,9 +11,18 @@ export interface SwapRouteRequest {
     chainId: number
 }
 
-export interface SwapRouteResponse {
+export type SwapRouteResponse = SwapRouteSuccessResponse | SwapRouteErrorResponse
+
+export interface SwapRouteSuccessResponse {
+    code: 200
     status: number
     data: SwapRouteData
+}
+
+export interface SwapRouteErrorResponse {
+    code: number
+    status: number
+    data: string | undefined
 }
 
 export interface SwapRouteData {
@@ -29,10 +38,4 @@ export interface SwapRouteData {
     useSource: string
     fromAmount: number
     value: string
-}
-
-export interface SwapRouteErrorResponse {
-    code?: number
-    status?: number
-    data: string
 }
