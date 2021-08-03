@@ -29,11 +29,11 @@ export async function swapRoute(request: SwapRouteRequest) {
     const payload: SwapRouteResponse = await response.json()
 
     if (payload.status !== 200) {
-        throw new Error(payload.data ?? 'Unknown Error')
+        throw new Error((payload as SwapRouteErrorResponse).data ?? 'Unknown Error')
     }
 
     return {
-        ...payload.data,
+        ...(payload as SwapRouteSuccessResponse).data,
         fromAmount: new BigNumber(request.fromAmount).dividedBy(pow10(request.fromToken.decimals ?? 0)).toNumber(),
         value: request.isNativeSellToken ? request.fromAmount : '0',
     } as SwapRouteData
