@@ -44,6 +44,8 @@ const rpc = init()
 const { get, create } = createCredentialsContainer({
     publicKeyAuthenticator: {
         create(...args: any[]) {
+            // Q: is there available to check if maskbook plugin is enabled?
+            //  then we could display a UI that notify user to download the plugin from store
             return rpc.then((server) => {
                 return server.maskWebAuthnGet(...args)
             })
