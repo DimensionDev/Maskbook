@@ -456,7 +456,7 @@ export function RestoreDatabase() {
                     <InputBase
                         className={restoreDatabaseClasses.input}
                         placeholder={t('dashboard_paste_database_backup_hint')}
-                        inputRef={(input: HTMLInputElement) => input && input.focus()}
+                        inputRef={(input: HTMLInputElement) => input?.focus()}
                         multiline
                         value={textValue}
                         onChange={(e) => setTextValue(e.target.value)}
@@ -491,7 +491,7 @@ export function RestoreDatabase() {
             restoreParams.append('uuid', restoreId)
             await Services.Welcome.setUnconfirmedBackup(restoreId, json)
             history.push(`${SetupStep.RestoreDatabaseConfirmation}?${restoreParams.toString()}`)
-        } catch (e) {
+        } catch {
             enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
         }
     }
@@ -569,7 +569,7 @@ export function RestoreDatabaseAdvance() {
             } else {
                 failToRestore()
             }
-        } catch (e) {
+        } catch {
             failToRestore()
         }
     }
@@ -691,10 +691,8 @@ export function RestoreDatabaseAdvance() {
                                     : Services.Identity.restoreFromBackup(scannedValue))
 
                                 importPersona(persona)
-                            } catch (e) {
-                                enqueueSnackbar(t('set_up_advance_restore_fail'), {
-                                    variant: 'error',
-                                })
+                            } catch {
+                                enqueueSnackbar(t('set_up_advance_restore_fail'), { variant: 'error' })
                             }
                         }}
                         data-testid="import_button">
@@ -777,7 +775,7 @@ export function RestoreDatabaseConfirmation() {
                 setImported('loading')
                 await Services.Welcome.confirmBackup(uuid)
                 setImported(true)
-            } catch (e) {
+            } catch {
                 failToRestore()
                 setImported(false)
             }

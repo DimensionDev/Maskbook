@@ -16,5 +16,7 @@ export function disableJSSDisconnectedWarning() {
                 return { cssRules: [], insertRule() {} }
             },
         })
-    } catch (e) {}
+    } catch {
+        // ignore
+    }
 }

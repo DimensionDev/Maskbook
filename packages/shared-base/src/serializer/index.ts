@@ -58,7 +58,7 @@ export const serializer: Serialization = {
             return typeson.revive(to)
         } catch (e) {
             console.error(e)
-            return {}
         }
+        return {}
     },
 }

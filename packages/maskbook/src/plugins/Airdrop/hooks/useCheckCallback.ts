@@ -24,13 +24,8 @@ export type CheckState =
           ratio: BigNumber
           claimable: string
       }
-    | {
-          type: CheckStateType.UNKNOWN | CheckStateType.CLAIMED | CheckStateType.PENDING
-      }
-    | {
-          type: CheckStateType.FAILED
-          error: Error
-      }
+    | { type: CheckStateType.UNKNOWN | CheckStateType.CLAIMED | CheckStateType.PENDING }
+    | { type: CheckStateType.FAILED; error: Error }
 
 export function useCheckCallback() {
     const airdropContract = useAirdropContract()
@@ -112,16 +107,14 @@ export function useCheckCallback() {
                     ratio: new BigNumber(claimable).dividedBy(amount),
                 })
             } catch (error) {
-                if (error.message.includes('Already Claimed')) {
-                    setCheckState({
-                        type: CheckStateType.CLAIMED,
-                    })
+                if (!(error instanceof Error)) {
                     return
                 }
-                setCheckState({
-                    type: CheckStateType.FAILED,
-                    error,
-                })
+                if (error.message.includes('Already Claimed')) {
+                    setCheckState({ type: CheckStateType.CLAIMED })
+                } else {
+                    setCheckState({ type: CheckStateType.FAILED, error })
+                }
             }
         },
         [airdropContract],

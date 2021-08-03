@@ -96,7 +96,9 @@ export function createERC20Tokens(
     symbol: string | ((chainId: ChainId) => string),
     decimals: number | ((chainId: ChainId) => number),
 ) {
-    return getEnumAsArray(ChainId).reduce((accumulator, { value: chainId }) => {
+    type Table = { [chainId in ChainId]: ERC20TokenDetailed }
+    const base = {} as Table
+    return getEnumAsArray(ChainId).reduce<Table>((accumulator, { value: chainId }) => {
         const evaludator: <T>(f: T | ((chainId: ChainId) => T)) => T = (f) =>
             typeof f === 'function' ? (f as any)(chainId) : f
 
@@ -109,7 +111,7 @@ export function createERC20Tokens(
             decimals: evaludator(decimals),
         }
         return accumulator
-    }, {} as { [chainId in ChainId]: ERC20TokenDetailed })
+    }, base)
 }
 //#endregion
 
