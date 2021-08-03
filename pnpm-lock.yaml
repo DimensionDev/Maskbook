@@ -216,6 +216,20 @@ importers:
   packages/empty:
     specifiers: {}
 
+  packages/encryption:
+    specifiers:
+      '@dimensiondev/kit': ^0.0.0-20210712114527-dc8eac6
+      '@masknet/shared-base': workspace:*
+      pvtsutils: ^1.2.0
+      tiny-secp256k1: ^2.0.0
+      ts-results: ^3.3.0
+    dependencies:
+      '@dimensiondev/kit': 0.0.0-20210712114527-dc8eac6
+      '@masknet/shared-base': link:../shared-base
+      pvtsutils: 1.2.0
+      tiny-secp256k1: 2.0.0
+      ts-results: 3.3.0
+
   packages/external-plugin-previewer:
     specifiers:
       '@masknet/theme': workspace:*
@@ -3699,6 +3713,10 @@ packages:
       lodash-es: 4.17.21
       tslib: 2.3.0
       webextension-polyfill: 0.8.0
+    dev: false
+
+  /@dimensiondev/kit/0.0.0-20210712114527-dc8eac6:
+    resolution: {integrity: sha512-WOJx25U1nzsQshfTnZBWx36tbPFEBuzEkfyLFpjkJAslyyenjSqJjBzrNXVlq2WdvSGZTB809iJ7+CIaauMK7w==, tarball: download/@dimensiondev/kit/0.0.0-20210712114527-dc8eac6/288a871d07e75fe2b084e06339896a8c19e23c4685f5dde3e8e7d312c9e75580}
     dev: false
 
   /@dimensiondev/kit/0.0.0-20210913111737-84c17d7_232258e21ac91124b22d5d75c0f3d6e9:
@@ -19946,6 +19964,12 @@ packages:
       tslib: 2.3.0
     dev: false
 
+  /pvtsutils/1.2.0:
+    resolution: {integrity: sha512-IDefMJEQl7HX0FP2hIKJFnAR11klP1js2ixCrOaMhe3kXFK6RQ2ABUCuwWaaD4ib0hSbh2fGTICvWJJhDfNecA==}
+    dependencies:
+      tslib: 2.3.0
+    dev: false
+
   /pvutils/1.0.17:
     resolution: {integrity: sha512-wLHYUQxWaXVQvKnwIDWFVKDJku9XDCvyhhxoq8dc5MFdIlRenyPI9eSfEtcvgHgD7FlvCyGAlWgOzRnZD99GZQ==}
     engines: {node: '>=6.0.0'}
@@ -22674,6 +22698,11 @@ packages:
       create-hmac: 1.1.7
       elliptic: 6.5.4
       nan: 2.14.2
+    dev: false
+
+  /tiny-secp256k1/2.0.0:
+    resolution: {integrity: sha512-fL2GZvXKbsXI3cV+uOpEThSiljKwyXOtmGCEh09j+eysTVdPwgei3yogM8BiXMwxDTlMZjQLYpiJLb1gO0vstw==}
+    engines: {node: '>=14.0.0'}
     dev: false
 
   /tiny-warning/1.0.3:

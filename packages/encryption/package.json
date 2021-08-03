@@ -4,6 +4,11 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "@dimensiondev/kit": "^0.0.0-20210712114527-dc8eac6",
+    "@masknet/shared-base": "workspace:*",
+    "pvtsutils": "^1.2.0",
+    "tiny-secp256k1": "^2.0.0",
+    "ts-results": "^3.3.0"
+  }
 }
