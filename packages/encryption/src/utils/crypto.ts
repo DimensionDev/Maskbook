@@ -14,15 +14,16 @@ export function importAESFromJWK(key: JsonWebKey, kind: AESKeyParameterEnum) {
 }
 importAESFromJWK.AES_GCM_256 = (x: JsonWebKey) => importAESFromJWK(x, AESKeyParameterEnum.AES_GCM_256)
 
-export function importAsymmetryKeyFromJWK(key: JsonWebKey, kind: PublicKeyAlgorithmEnum) {
+export function importAsymmetryKeyFromJsonWebKeyOrSPKI(key: JsonWebKey | ArrayBuffer, kind: PublicKeyAlgorithmEnum) {
     return Result.wrapAsync(() => {
+        const k = key instanceof ArrayBuffer ? 'spki' : 'jwk'
         if (kind === PublicKeyAlgorithmEnum.secp256k1) {
-            return crypto.subtle.importKey('jwk', key, { name: 'ECDH', namedCurve: 'K-256' }, true, [
+            return crypto.subtle.importKey(k, key, { name: 'ECDH', namedCurve: 'K-256' }, true, [
                 'deriveKey',
                 'deriveBits',
             ])
         } else if (kind === PublicKeyAlgorithmEnum.secp256p1) {
-            return crypto.subtle.importKey('jwk', key, { name: 'ECDH', namedCurve: 'P-256' }, true, [
+            return crypto.subtle.importKey(k, key, { name: 'ECDH', namedCurve: 'P-256' }, true, [
                 'deriveKey',
                 'deriveBits',
             ])

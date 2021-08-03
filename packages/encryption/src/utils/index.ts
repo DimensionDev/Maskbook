@@ -1,7 +1,7 @@
 import { ExceptionKinds, Exception } from '../types'
 import { Result } from 'ts-results'
 import { encodeArrayBuffer, decodeArrayBuffer, encodeText, decodeText } from '@dimensiondev/kit'
-
+import { decode as decodeMessagePack, encode as _encodeMessagePack } from '@msgpack/msgpack'
 export * from './crypto'
 
 const firstArgString = (e: unknown) => typeof e !== 'string'
@@ -11,6 +11,10 @@ export const decodeArrayBufferF = wrap(decodeArrayBuffer as (x: string) => Array
 export const encodeTextF = wrap(encodeText, firstArgString)
 export const decodeTextF = wrap(decodeText, firstArgArrayBuffer)
 export const JSONParseF = wrap(JSON.parse, firstArgString)
+export const decodeMessagePackF = wrap(decodeMessagePack, firstArgArrayBuffer)
+export function encodeMessagePack(x: unknown) {
+    return _encodeMessagePack(x)
+}
 
 function wrap<P extends any[], T>(f: (...args: P) => T, valid: (...args: P) => boolean) {
     return <E extends ExceptionKinds>(invalidE: E, throwsE: E) =>

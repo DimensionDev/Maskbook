@@ -23,7 +23,7 @@ export async function parse40(payload: string): PayloadParserResult {
     //#region Normalization
     const encryption: PayloadParseResult.EndToEndEncryption = {
         type: 'E2E',
-        ephemeralPublicKey: [],
+        ephemeralPublicKey: {},
         iv: decodeArrayBuffer(iv).andThen(ensureIVLength16),
         ownersAESKeyEncrypted: decodeArrayBuffer(ownersAESKeyEncrypted),
     }

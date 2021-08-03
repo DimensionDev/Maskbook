@@ -1,5 +1,5 @@
 import { Result, Option, Ok, None, Some } from 'ts-results'
-import { Exception, ExceptionKinds } from './Exception'
+import type { Exception, ExceptionKinds } from './Exception'
 export * from './Exception'
 export type DecodeExceptions = ExceptionKinds.DecodeFailed | ExceptionKinds.InvalidPayload
 export type OptionalResult<T, E extends ExceptionKinds> = Result<Option<T>, Exception<E>>
@@ -8,7 +8,8 @@ export const OptionalResult = {
         return Ok(Some(x))
     },
     None: Ok(None) as OptionalResult<any, any>,
-    Err<E extends ExceptionKinds>(reason: E, cause: unknown) {
-        return new Exception(reason, cause).toErr()
+    fromResult<T, E extends ExceptionKinds>(x: Result<T, Exception<E>>): OptionalResult<T, E> {
+        if (x.err) return x
+        return Ok(Some(x.val))
     },
 }

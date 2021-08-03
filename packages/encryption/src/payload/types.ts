@@ -6,10 +6,15 @@ import type { DecodeExceptions, Exception, ExceptionKinds, OptionalResult } from
 
 /** A parse result, that try to preserve as many info as possible. */
 export declare namespace PayloadParseResult {
-    type OptionalField<T, E extends ExceptionKinds = DecodeExceptions> = OptionalResult<T, DecodeExceptions | E>
-    type RequiredField<T, E extends ExceptionKinds = DecodeExceptions> = Result<T, Exception<DecodeExceptions | E>>
-    type DecodeErr = Exception<DecodeExceptions>
-    export type CryptoKeyErr = DecodeExceptions | ExceptionKinds.UnknownEnumMember | ExceptionKinds.InvalidCryptoKey
+    export type OptionalField<T, E extends ExceptionKinds = DecodeExceptions> = OptionalResult<T, DecodeExceptions | E>
+    export type RequiredField<T, E extends ExceptionKinds = DecodeExceptions> = Result<
+        T,
+        Exception<DecodeExceptions | E>
+    >
+    export type CryptoKeyException =
+        | DecodeExceptions
+        | ExceptionKinds.UnsupportedAlgorithm
+        | ExceptionKinds.InvalidCryptoKey
     export interface Payload {
         /**
          * Version starts from -42 but -42 and -41 are dropped.
@@ -25,7 +30,7 @@ export declare namespace PayloadParseResult {
         /**
          * The claimed public key of author.
          */
-        authorPublicKey: OptionalField<AsymmetryCryptoKey, CryptoKeyErr>
+        authorPublicKey: OptionalField<AsymmetryCryptoKey, CryptoKeyException>
         /** The encryption method this payload used. */
         encryption: RequiredField<PublicEncryption | EndToEndEncryption>
         /** The encrypted content. */
@@ -36,7 +41,7 @@ export declare namespace PayloadParseResult {
      */
     export interface PublicEncryption {
         type: 'public'
-        AESKey: RequiredField<AESKey, CryptoKeyErr>
+        AESKey: RequiredField<AESKey, CryptoKeyException>
         iv: RequiredField<ArrayBuffer>
     }
     /**
@@ -46,7 +51,7 @@ export declare namespace PayloadParseResult {
         type: 'E2E'
         ownersAESKeyEncrypted: RequiredField<ArrayBuffer>
         iv: RequiredField<ArrayBuffer>
-        ephemeralPublicKey: readonly RequiredField<AsymmetryCryptoKey, CryptoKeyErr>[]
+        ephemeralPublicKey: Record<string, RequiredField<AsymmetryCryptoKey, CryptoKeyException>>
     }
 }
 /** Well formed payload that can be encoded into the latest version */

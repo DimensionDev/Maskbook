@@ -10,6 +10,7 @@ export enum ExceptionKinds {
     /** The payload contains an invalid CryptoKey */
     InvalidCryptoKey,
     DecryptFailed,
+    UnsupportedAlgorithm,
 }
 
 export class Exception<T extends ExceptionKinds> extends Error {

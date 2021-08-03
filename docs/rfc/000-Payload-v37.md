@@ -112,7 +112,7 @@ When it is `PublicKeyAlgorithmEnum`, it represents a well-known asymmetric algor
 
 When it is `String`, it represents a asymmetric algorithm that not covered in this specification.
 
-The implementation MUST fail if the algorithm is not supported.
+The implementation MUST NOT fail if the algorithm is not supported.
 
 #### `authorPublicKey` field
 
@@ -128,7 +128,7 @@ This field represents how this payload is encrypted. There are two types of encr
 
 ```typescript
 type Encryption = PublicEncrypted | PeerToPeerEncrypted
-enum EncryptionKind = {
+enum EncryptionKind {
   Public = 0,
   PeerToPeer = 1,
 }

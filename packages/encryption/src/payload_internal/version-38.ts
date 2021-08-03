@@ -17,7 +17,7 @@ import {
     encodeTextF,
     ensureIVLength16,
     importAESFromJWK,
-    importAsymmetryKeyFromJWK,
+    importAsymmetryKeyFromJsonWebKeyOrSPKI,
     JSONParseF,
 } from '../utils'
 import { Convert } from 'pvtsutils'
@@ -28,7 +28,7 @@ const encodeText = encodeTextF(ExceptionKinds.InvalidPayload, ExceptionKinds.Dec
 const decodeArrayBuffer = decodeArrayBufferF(ExceptionKinds.InvalidPayload, ExceptionKinds.DecodeFailed)
 const decodeText = decodeTextF(ExceptionKinds.InvalidPayload, ExceptionKinds.DecodeFailed)
 const JSONParse = JSONParseF(ExceptionKinds.InvalidPayload, ExceptionKinds.DecodeFailed)
-const importEC = Exception.withErr(importAsymmetryKeyFromJWK, ExceptionKinds.InvalidCryptoKey)
+const importEC = Exception.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, ExceptionKinds.InvalidCryptoKey)
 
 // ? Version 38:🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?|authorIdentifier?:||
 export async function parse38(payload: string): PayloadParserResult {
@@ -53,7 +53,7 @@ export async function parse38(payload: string): PayloadParserResult {
         : {
               type: 'E2E',
               iv: raw_iv,
-              ephemeralPublicKey: [],
+              ephemeralPublicKey: {},
               ownersAESKeyEncrypted: raw_aes,
           }
     const normalized: PayloadParseResult.Payload = {
@@ -136,7 +136,7 @@ async function getPublicSharedAESKey(
 
 async function decodeECDHKey(
     compressedPublic: string,
-): Promise<OptionalResult<AsymmetryCryptoKey, PayloadParseResult.CryptoKeyErr>> {
+): Promise<OptionalResult<AsymmetryCryptoKey, PayloadParseResult.CryptoKeyException>> {
     const key = decodeArrayBuffer(compressedPublic).andThen(decompressK256Point)
 
     if (key.err) return key
