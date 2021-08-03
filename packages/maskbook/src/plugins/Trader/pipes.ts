@@ -61,6 +61,8 @@ export function resolveTradeProviderName(tradeProvider: TradeProvider) {
             return 'QuickSwap'
         case TradeProvider.PANCAKESWAP:
             return 'PancakeSwap'
+        case TradeProvider.DODO:
+            return 'DODO'
         default:
             unreachable(tradeProvider)
     }
@@ -82,6 +84,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider) {
             return 'https://quickswap.exchange/'
         case TradeProvider.PANCAKESWAP:
             return 'https://exchange.pancakeswap.finance/#/swap'
+        case TradeProvider.DODO:
+            return 'https://app.dodoex.io'
         default:
             unreachable(tradeProvider)
     }
@@ -113,6 +117,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://info.quickswap.exchange/pair/${address}`
         case TradeProvider.PANCAKESWAP:
             return `https://pancakeswap.info/pool/${address}`
+        case TradeProvider.DODO:
+            return `https://app.dodoex.io/pool/list/${address}`
         default:
             unreachable(tradeProvider)
     }
