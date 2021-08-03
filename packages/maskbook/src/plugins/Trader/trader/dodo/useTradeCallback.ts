@@ -11,9 +11,9 @@ import {
     useNonce,
     useWeb3,
 } from '@masknet/web3-shared'
-import type { SwapRouteResponse, TradeComputed } from '../../types'
+import type { SwapRouteSuccessResponse, TradeComputed } from '../../types'
 
-export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteResponse> | null) {
+export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessResponse> | null) {
     const web3 = useWeb3()
     const nonce = useNonce()
     const gasPrice = useGasPrice()
