@@ -101,10 +101,9 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                 paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
             })
         } catch (e) {
-            enqueueSnackbar(e.message, {
-                variant: 'error',
-                preventDuplicate: true,
-            })
+            if (e instanceof Error) {
+                enqueueSnackbar(e.message, { variant: 'error', preventDuplicate: true })
+            }
             throw e
         }
     }, [asset?.value, token, account, amount, expirationDateTime, isAuction, enqueueSnackbar])

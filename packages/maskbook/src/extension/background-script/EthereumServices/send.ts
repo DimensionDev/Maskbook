@@ -172,7 +172,7 @@ export async function INTERNAL_send(
                 }
                 break
         }
-    } catch (error) {
+    } catch (error: any) {
         callback(error)
     }
 }

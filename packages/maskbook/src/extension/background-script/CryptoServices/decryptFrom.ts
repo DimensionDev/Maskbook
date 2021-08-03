@@ -236,7 +236,7 @@ async function* decryptFromPayloadWithProgress_raw(
             // ! Do not remove the await here.
             return await decryptWith(aesKeyEncrypted)
         } catch (e) {
-            if (e.message === i18n.t('service_not_share_target')) {
+            if (e instanceof Error && e.message === i18n.t('service_not_share_target')) {
                 console.debug(e)
                 // TODO: Replace this error with:
                 // You do not have the necessary private key to decrypt this message.
@@ -319,7 +319,7 @@ async function* decryptFromImageUrlWithProgress_raw(
     const post = await decodeImageUrl(url, {
         pass: author.toText(),
     })
-    if (post.indexOf('🎼') !== 0 && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
+    if (!post.startsWith('🎼') && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
         return makeError(i18n.t('service_decode_image_payload_failed'), true)
     const worker = await Result.wrapAsync(() => getNetworkWorker(author))
     if (worker.err) return makeError(worker.val as Error)
@@ -385,7 +385,7 @@ async function* findAuthorPublicKey(
                 .catch(() => null)
         }
     }
-    if (author && author.publicKey) return author
+    if (author?.publicKey) return author
     return 'out of chance'
 }
 
@@ -405,7 +405,7 @@ async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
             'append',
         )
     }
-    if (cachedKey && cachedKey.postCryptoKey) {
+    if (cachedKey?.postCryptoKey) {
         try {
             const result = decodeText(
                 await cryptoProvider.decryptWithAES({

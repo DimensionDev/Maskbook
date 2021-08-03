@@ -88,7 +88,7 @@ export function RestoreFromQRCodeImageBox(props: RestoreFromQRCodeImageBoxProps)
                 darkPlaceholderImageURL={new URL('./RestoreFromQRCodeImageBox-dark.png', import.meta.url).toString()}
                 lightPlaceholderImageURL={new URL('./RestoreFromQRCodeImageBox-light.png', import.meta.url).toString()}
                 data-active={over}
-                onClick={() => inputRef.current && inputRef.current.click()}>
+                onClick={() => inputRef.current?.click()}>
                 {file ? <QRCodeImageScanner src={dataURL} onScan={onScan} onError={onError} /> : null}
             </RestoreBox>
         </div>

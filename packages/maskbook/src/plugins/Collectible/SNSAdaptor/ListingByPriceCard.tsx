@@ -126,10 +126,9 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 buyerAddress: privacyChecked ? buyerAddress : undefined,
             })
         } catch (e) {
-            enqueueSnackbar(e.message, {
-                variant: 'error',
-                preventDuplicate: true,
-            })
+            if (e instanceof Error) {
+                enqueueSnackbar(e.message, { variant: 'error', preventDuplicate: true })
+            }
             throw e
         }
     }, [

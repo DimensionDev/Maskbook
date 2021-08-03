@@ -14,7 +14,7 @@ class MutexStorage<T extends browser.storage.StorageValue> {
         if (!this.locked) this.tasks.shift()?.()
     }
     public async getStorage(key: string) {
-        return new Promise<T | void>(async (resolve, reject) => {
+        return new Promise<T | undefined>(async (resolve, reject) => {
             const callback = (e: Error | null, storage?: T) => {
                 if (e) reject(e)
                 else resolve(storage)
@@ -26,8 +26,8 @@ class MutexStorage<T extends browser.storage.StorageValue> {
                     this.lock()
                     const stored = await browser.storage.local.get(key)
                     callback(null, (stored ?? {})[key] as T)
-                } catch (e) {
-                    callback(e)
+                } catch (error: any) {
+                    callback(error)
                 }
             }
             if (this.locked) this.tasks.push(run)
@@ -48,7 +48,9 @@ class MutexStorage<T extends browser.storage.StorageValue> {
                     await browser.storage.local.set({ [key]: value })
                     callback(null)
                 } catch (e) {
-                    callback(e)
+                    if (e instanceof Error) {
+                        callback(e)
+                    }
                 }
             }
             if (this.locked) this.tasks.push(run)
@@ -59,7 +61,7 @@ class MutexStorage<T extends browser.storage.StorageValue> {
 
 const storage = new MutexStorage<browser.storage.StorageValue>()
 
-export async function getStorage<T extends browser.storage.StorageValue>(key: string): Promise<T | void> {
+export async function getStorage<T extends browser.storage.StorageValue>(key: string): Promise<T | undefined> {
     if (typeof browser === 'undefined' || !browser.storage) return
     const value = await storage.getStorage(key)
     return value as T

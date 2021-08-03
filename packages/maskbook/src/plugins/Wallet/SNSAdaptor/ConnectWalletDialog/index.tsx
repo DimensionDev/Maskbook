@@ -107,7 +107,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                         ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
                         : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
                 ])
-            } catch (e) {
+            } catch {
                 throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
             }
         }
