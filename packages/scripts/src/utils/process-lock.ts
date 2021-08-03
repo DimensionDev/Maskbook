@@ -10,7 +10,7 @@ export async function getProcessLock(lockName: string) {
             try {
                 Lock.lockSync(__filename, { lockfilePath, update: 200 })
                 return
-            } catch (error) {
+            } catch {
                 // ignore
             }
         }

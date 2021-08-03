@@ -107,24 +107,20 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
 
         if (!checkParams(paramsObj)) return null
 
-        const params = Object.values(omit(paramsObj, ['token'])) as Parameters<
-            HappyRedPacketV4['methods']['create_red_packet']
-        >
+        type MethodParameters = Parameters<HappyRedPacketV4['methods']['create_red_packet']>
+        const params = Object.values(omit(paramsObj, ['token'])) as MethodParameters
 
         let gasError = null as Error | null
         const value = new BigNumber(paramsObj.token?.type === EthereumTokenType.Native ? total : '0').toFixed()
 
-        const gas = (await (redPacketContract as HappyRedPacketV4).methods
+        const gas = await (redPacketContract as HappyRedPacketV4).methods
             .create_red_packet(...params)
-            .estimateGas({
-                from: account,
-                value,
+            .estimateGas({ from: account, value })
+            .catch((error: Error) => {
+                gasError = error
             })
-            .catch((err: Error) => {
-                gasError = err
-            })) as number | undefined
 
-        return { gas, params, paramsObj, gasError }
+        return { gas: gas as number | undefined, params, paramsObj, gasError }
     }, [redPacketSettings, account, redPacketContract]).value
 }
 

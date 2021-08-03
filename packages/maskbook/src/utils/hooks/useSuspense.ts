@@ -11,7 +11,7 @@ export function useSuspense<T, U extends Array<any>>(
     if (!rec) {
         const p = Suspender(...args)
             .then((val) => void cache.set(id, [1, val]))
-            .catch((e) => void cache.set(id, [2, e]))
+            .catch((error) => void cache.set(id, [2, error]))
         cache.set(id, [0, p])
         throw p
     }
