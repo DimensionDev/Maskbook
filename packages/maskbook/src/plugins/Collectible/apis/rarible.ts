@@ -15,6 +15,7 @@ import type {
 import { toRaribleImage } from '../helpers'
 import { resolveRaribleUserNetwork } from '../pipes'
 import { currentChainIdSettings } from '../../Wallet/settings'
+import urlcat from 'urlcat'
 
 async function createRaribleApi() {
     const chainId = currentChainIdSettings.value
@@ -25,7 +26,7 @@ async function createRaribleApi() {
 
 async function fetchFromRarible<T>(subPath: string, config = {} as RequestInit) {
     const response = await (
-        await fetch(`${await createRaribleApi()}${subPath}`, {
+        await fetch(urlcat(await createRaribleApi(), subPath), {
             cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : undefined,
             mode: 'cors',
             ...config,
