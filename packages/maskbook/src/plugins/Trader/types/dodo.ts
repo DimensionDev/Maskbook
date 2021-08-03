@@ -14,8 +14,8 @@ export interface SwapRouteRequest {
 export type SwapRouteResponse = SwapRouteSuccessResponse | SwapRouteErrorResponse
 
 export interface SwapRouteSuccessResponse {
-    code: 200
-    status: number
+    code: number
+    status: 200
     data: SwapRouteData
 }
 
