@@ -11,6 +11,7 @@ import { activatedSocialNetworkUI } from '../../social-network'
 import { MaskUIRoot } from '../../UIRoot'
 import { useMyIdentities } from '../../components/DataSource/useActivatedUI'
 import { hasSNSAdaptorPermission, requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
+import { ThirdPartyPluginPermission } from '../background-script/ThirdPartyPlugin/types'
 import Services from '../service'
 
 const GlobalCss = withStyles({
@@ -92,7 +93,7 @@ function BrowserActionUI() {
                 const hasPermission = await browser.permissions.contains({ origins: [request] })
 
                 // todo: query permission instead of grantPermission
-                await Services.ThirdPartyPlugin.openPluginPopup(baseURL)
+                await Services.ThirdPartyPlugin.grantPermission(baseURL, [ThirdPartyPluginPermission.SDKEnabled])
                 console.log(request, hasPermission)
                 resolve({ origin: request, hasPermission })
             })
@@ -138,6 +139,38 @@ function BrowserActionUI() {
     return (
         <Paper className={classes.container} elevation={0}>
             {ui.networkIdentifier === 'localhost' || identities.length === 0 ? <Trademark /> : null}
+            {!thirdPartyHasPermission && origin ? (
+                <>
+                    <Box
+                        className={classes.header}
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}>
+                        <Typography className={classes.title}>{t('browser_action_notifications')}</Typography>
+                    </Box>
+                    <Typography className={classes.description} color="textSecondary" variant="body2">
+                        {t('browser_action_notifications_description', {
+                            sns: ui.networkIdentifier,
+                        })}
+                    </Typography>
+
+                    <Box
+                        sx={{
+                            display: 'flex',
+                        }}>
+                        <Button
+                            className={classes.button}
+                            variant="text"
+                            onClick={() => {
+                                if (Flags.no_web_extension_dynamic_permission_request) return
+                                browser.permissions.request({ origins: [origin] })
+                            }}>
+                            {t('browser_action_request_permission')}
+                        </Button>
+                    </Box>
+                </>
+            ) : null}
             {hasPermission === false && identities.length !== 0 ? (
                 <>
                     <Box
