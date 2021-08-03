@@ -26,10 +26,8 @@ class MutexStorage<T extends browser.storage.StorageValue> {
                     this.lock()
                     const stored = await browser.storage.local.get(key)
                     callback(null, (stored ?? {})[key] as T)
-                } catch (e) {
-                    if (e instanceof Error) {
-                        callback(e)
-                    }
+                } catch (error: any) {
+                    callback(error)
                 }
             }
             if (this.locked) this.tasks.push(run)

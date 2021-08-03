@@ -15,10 +15,8 @@ export function MaskExternalPluginPreviewRenderer({ pluginBase, payload, script,
             const instance = new RemoteContent({ $data: { payload } })
             instance.$mount({ target: dom })
             return () => instance.$destroy()
-        } catch (e) {
-            if (e instanceof Error) {
-                onError?.(e)
-            }
+        } catch (error: any) {
+            onError?.(error)
         }
         return
     }, [dom, onError, payload, template, pluginBase])

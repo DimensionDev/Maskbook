@@ -75,23 +75,22 @@ export function useMutlicallStateDecoded<
     R extends UnboxTransactionObject<ReturnType<T['methods'][K]>>,
 >(contracts: T[], names: K[], state: MulticalState) {
     const web3 = useWeb3()
+    type Result = { raw: string } & ({ error: any; value: null } | { error: null; value: R })
     return useMemo(() => {
         if (state.type !== MulticalStateType.SUCCEED) return []
         if (contracts.length !== state.results.length) return []
-        return state.results.map((raw, i) => {
-            const outputs: AbiOutput[] =
-                contracts[i].options.jsonInterface.find((x) => x.type === 'function' && x.name === names[i])?.outputs ??
-                []
+        return state.results.map((raw, index): Result => {
+            // the ignore formatter for better reading
+            // prettier-ignore
+            const outputs: AbiOutput[] = (
+                contracts[index].options.jsonInterface
+                    .find(({ type, name }) => type === 'function' && name === names[index])
+                    ?.outputs ?? []
+            )
             try {
-                return {
-                    raw,
-                    error: null,
-                    value: decodeOutputString(web3, outputs, raw) as R,
-                }
-            } catch (error) {
-                if (!(error instanceof Error)) {
-                    error = new Error(String(error))
-                }
+                const value = decodeOutputString(web3, outputs, raw) as R
+                return { raw, error: null, value }
+            } catch (error: any) {
                 return { raw, error, value: null }
             }
         })
