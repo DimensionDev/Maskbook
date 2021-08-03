@@ -31,20 +31,27 @@ export const WebviewAPI: WebviewAPIs = {
         return stringify(connectedPersonas)
     },
     app_isPluginEnabled: async (id: string) => {
-        return await Services.Settings.isPluginEnabled(id)
+        const endabled = await Services.Settings.isPluginEnabled(id)
+        return endabled
     },
     app_setPluginStatus: async (id: string, enabled: boolean) => {
         await Services.Settings.setPluginStatus(id, enabled)
     },
     setting_getNetworkTraderProvider: async (network) => {
+        let provider
         switch (network) {
             case NetworkType.Ethereum:
-                return await Services.Settings.getEthNetworkTradeProvider()
+                provider = await Services.Settings.getEthNetworkTradeProvider()
+                break
             case NetworkType.Binance:
-                return await Services.Settings.getBscNetworkTradeProvider()
+                provider = await Services.Settings.getBscNetworkTradeProvider()
+                break
             case NetworkType.Polygon:
-                return await Services.Settings.getPolygonNetworkTradeProvider()
+                provider = await Services.Settings.getPolygonNetworkTradeProvider()
+                break
         }
+
+        return provider
     },
     setting_setNetworkTraderProvider: async (network, provider) => {
         switch (network) {
@@ -60,7 +67,8 @@ export const WebviewAPI: WebviewAPIs = {
         }
     },
     settings_getTrendingDataSource: async () => {
-        return await Services.Settings.getTrendingDataSource()
+        const source = await Services.Settings.getTrendingDataSource()
+        return source
     },
     settings_setTrendingDataSource: async (provider) => {
         await Services.Settings.setTrendingDataSource(provider)

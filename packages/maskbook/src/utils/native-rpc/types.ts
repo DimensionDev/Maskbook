@@ -13,7 +13,7 @@ export interface WebviewAPIs {
     getConnectedPersonas(): Promise<string>
     app_isPluginEnabled(id: string): Promise<boolean>
     app_setPluginStatus(id: string, enabled: boolean): void
-    setting_getNetworkTraderProvider(network: NetworkType): Promise<TradeProvider>
+    setting_getNetworkTraderProvider(network: NetworkType): Promise<TradeProvider | undefined>
     setting_setNetworkTraderProvider(network: NetworkType, provider: TradeProvider): void
     settings_getTrendingDataSource(): Promise<DataProvider>
     settings_setTrendingDataSource(provider: DataProvider): void
