@@ -14,7 +14,7 @@ export enum PlayerStatus {
 
 export function getPlayerStatus(info: GoodGhostingInfo, player?: Player): PlayerStatus {
     if (!player) return PlayerStatus.Unknown
-    const mostRecentSegmentPaid = Number.parseInt(player.mostRecentSegmentPaid)
+    const mostRecentSegmentPaid = Number.parseInt(player.mostRecentSegmentPaid, 10)
 
     if (mostRecentSegmentPaid === info.lastSegment - 1) return PlayerStatus.Winning
     if (player.withdrawn) return PlayerStatus.Dropout

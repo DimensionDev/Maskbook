@@ -30,7 +30,7 @@ function decodeResult(data: string, isV1: boolean) {
 
     return {
         exchange_addrs: results[0],
-        remaining: parseInt(parse(results[1]).hex),
+        remaining: Number.parseInt(parse(results[1]).hex, 10),
         started: results[2],
         expired: results[3],
         unlocked: results[4],
@@ -53,5 +53,5 @@ function parse(x: any) {
 }
 
 function parseHexToInt(x: any) {
-    return parseInt(parse(x).hex).toString()
+    return Number.parseInt(parse(x).hex, 10).toString()
 }
