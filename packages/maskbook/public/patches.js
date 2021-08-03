@@ -77,7 +77,9 @@ globalThis.regeneratorRuntime = undefined
     }
     try {
         fix()
-    } catch (e) {}
+    } catch {
+        // ignore
+    }
 }
 // As the return value of the executeScript
 undefined

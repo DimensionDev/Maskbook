@@ -70,8 +70,8 @@ async function fetchInjectedScript() {
         .then(JSON.stringify)}
     document.documentElement.appendChild(script)
 }`
-    } catch (e) {
-        console.error(e)
+    } catch (error) {
+        console.error(error)
         return `console.log('Injected script failed to load.')`
     }
 }

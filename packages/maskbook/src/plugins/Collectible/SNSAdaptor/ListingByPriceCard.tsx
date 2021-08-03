@@ -125,11 +125,11 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 expirationTime: endingPriceChecked ? toUnixTimestamp(expirationTime) : undefined,
                 buyerAddress: privacyChecked ? buyerAddress : undefined,
             })
-        } catch (e) {
-            if (e instanceof Error) {
-                enqueueSnackbar(e.message, { variant: 'error', preventDuplicate: true })
+        } catch (error) {
+            if (error instanceof Error) {
+                enqueueSnackbar(error.message, { variant: 'error', preventDuplicate: true })
             }
-            throw e
+            throw error
         }
     }, [
         asset?.value,
