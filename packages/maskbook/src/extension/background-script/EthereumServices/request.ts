@@ -6,7 +6,7 @@ let id = 0
 
 export async function request<T extends unknown>(requestArguments: RequestArguments, overrides?: SendOverrides) {
     return new Promise<T>((resolve, reject) => {
-        id++
+        id += 1
         INTERNAL_send(
             {
                 jsonrpc: '2.0',
@@ -27,7 +27,7 @@ export async function requestSend(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
 ) {
-    id++
+    id += 1
     await INTERNAL_send(
         {
             ...payload,

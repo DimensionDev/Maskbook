@@ -29,6 +29,11 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_GECKO
             break
+        case NetworkType.Arbitrum:
+            currentTradeProviderSettings.value = TradeProvider.UNISWAP
+            if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
+                currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
+            break
         default:
             unreachable(networkType)
     }

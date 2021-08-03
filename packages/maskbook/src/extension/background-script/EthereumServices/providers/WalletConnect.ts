@@ -13,13 +13,11 @@ let connector: WalletConnect | null = null
  * Create a new connector and destroy the previous one if exists
  */
 export async function createConnector() {
-    // disconnect previous connector if exists
-    if (connector?.connected) await connector.killSession()
-    connector = null
+    if (connector?.connected) return connector
 
     // create a new connector
     connector = new WalletConnect({
-        bridge: 'https://bridge.walletconnect.org',
+        bridge: 'https://uniswap.bridge.walletconnect.org',
         clientMeta: {
             name: 'Mask Netowrk',
             description: 'Mask Network',

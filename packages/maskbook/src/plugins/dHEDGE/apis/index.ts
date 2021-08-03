@@ -2,7 +2,7 @@ import type { Fund, PerformanceHistory, Period, Pool } from '../types'
 import { getChainIdFromCode } from '../utils'
 
 export async function fetchPool(address: string, url: string) {
-    let body = {
+    const body = {
         query: `query Fund($fundAddress: String!) {
             fund(address: $fundAddress) {
                 address
@@ -33,7 +33,7 @@ export async function fetchPool(address: string, url: string) {
 }
 
 export async function fetchPoolPerformance(address: string, period: Period, url: string, sort = true) {
-    let body = {
+    const body = {
         query: `query PerformanceHistory($fundAddress: String!, $period: String!) {
             performanceHistory(address: $fundAddress, period: $period) {
                 history {
