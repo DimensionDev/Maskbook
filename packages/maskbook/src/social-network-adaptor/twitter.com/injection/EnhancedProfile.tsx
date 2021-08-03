@@ -2,7 +2,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { useWallet, useResolveEns } from '@masknet/web3-shared'
 import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { CollectibleList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
