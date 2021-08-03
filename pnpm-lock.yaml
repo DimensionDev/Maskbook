@@ -198,7 +198,7 @@ importers:
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/holoflows-kit': '=0.9.0-20210726055325-dfbe7fd'
       '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
-      '@dimensiondev/mask-webauthn': '=0.0.1-20210730104704-590d1e0'
+      '@dimensiondev/mask-webauthn': '=0.0.1-20210803064628-1e565d1'
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/stego-js': '=0.11.1-20201027083223-8ab41be'
       '@dimensiondev/webextension-shim': 0.0.3-20210708053012-57a254d
@@ -361,7 +361,7 @@ importers:
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd_webextension-polyfill@0.8.0
       '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
-      '@dimensiondev/mask-webauthn': 0.0.1-20210730104704-590d1e0
+      '@dimensiondev/mask-webauthn': 0.0.1-20210803064628-1e565d1
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@ethersproject/abi': 5.4.0
@@ -3400,8 +3400,8 @@ packages:
     resolution: {integrity: sha512-RRghCa0HR3NRgGDb3fw6VpvAgCEYs8nFk8M10xXubbXQUgcwp7UVQStI3cm7mV7PTGC1lsaAv2YLTqIQB8w9YA==, tarball: download/@dimensiondev/kit/0.0.0-20210630045432-e05621c/6d03398c21a05c6d7d2e7ffd4b8d5cc435cc9217fd2ddd485c0d08538af1485e}
     dev: false
 
-  /@dimensiondev/mask-webauthn/0.0.1-20210730104704-590d1e0:
-    resolution: {integrity: sha512-0KhgTXlRrtv9+MU4TQWWzbxUlAaMGSt+ggpR+55qULRc08A/cMnAzyYPeOboZSWgqPwYSAWW7WwvfS+03WNkZQ==, tarball: download/@dimensiondev/mask-webauthn/0.0.1-20210730104704-590d1e0/22985f9f9e75d4abcddd6689dc817beb4bde46982988fe1920e46c632a144d68}
+  /@dimensiondev/mask-webauthn/0.0.1-20210803064628-1e565d1:
+    resolution: {integrity: sha512-fbvmV+K6rY3YeTKIdQbKnVR39Di04eKdaM0hY1amxrY3YfHFYjtzuXtb2kaeuS5unhPRGfYjIdvNhPh1Rq20iA==, tarball: download/@dimensiondev/mask-webauthn/0.0.1-20210803064628-1e565d1/644ba56e4fa94e1122a4d78a829b05e024059fc36533e18d89b948ac53e8b18d}
     dependencies:
       btoa: 1.2.1
       buffer: 6.0.3
@@ -7552,7 +7552,7 @@ packages:
   /@types/pbkdf2/3.1.0:
     resolution: {integrity: sha512-Cf63Rv7jCQ0LaL8tNXmEyqTHuIJxRdlS5vMh1mj5voN4+QFhVZnlZruezqpWYDiJ8UTzhP0VmeLXCmBk66YrMQ==}
     dependencies:
-      '@types/node': 16.4.3
+      '@types/node': 16.4.10
     dev: false
 
   /@types/prettier/2.3.2:
@@ -7701,7 +7701,7 @@ packages:
   /@types/secp256k1/4.0.3:
     resolution: {integrity: sha512-Da66lEIFeIz9ltsdMZcpQvmrmmoqrfju8pm1BH8WbYjZSwUgCwXLb9C+9XYogwBITnbsSaMdVPb2ekf7TV+03w==}
     dependencies:
-      '@types/node': 16.4.3
+      '@types/node': 16.4.10
     dev: false
 
   /@types/serve-static/1.13.10:
