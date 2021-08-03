@@ -4,6 +4,7 @@ import { definedSocialNetworkWorkers } from '../../social-network/define'
 import { launchPageSettings } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
 import { unreachable } from '@dimensiondev/kit'
+import { NetworkType } from '@masknet/web3-shared'
 
 export const WebviewAPI: WebviewAPIs = {
     web_echo: async (arg) => arg,
@@ -37,23 +38,23 @@ export const WebviewAPI: WebviewAPIs = {
     },
     setting_getNetworkTraderProvider: async (network) => {
         switch (network) {
-            case 'eth':
+            case NetworkType.Ethereum:
                 return await Services.Settings.getEthNetworkTradeProvider()
-            case 'bsc':
+            case NetworkType.Binance:
                 return await Services.Settings.getBscNetworkTradeProvider()
-            case 'polygon':
+            case NetworkType.Polygon:
                 return await Services.Settings.getPolygonNetworkTradeProvider()
         }
     },
     setting_setNetworkTraderProvider: async (network, provider) => {
         switch (network) {
-            case 'eth':
+            case NetworkType.Ethereum:
                 await Services.Settings.setEthNetworkTradeProvider(provider)
                 break
-            case 'bsc':
+            case NetworkType.Binance:
                 await Services.Settings.setBscNetworkTradeProvider(provider)
                 break
-            case 'polygon':
+            case NetworkType.Polygon:
                 await Services.Settings.setPolygonNetworkTradeProvider(provider)
                 break
         }

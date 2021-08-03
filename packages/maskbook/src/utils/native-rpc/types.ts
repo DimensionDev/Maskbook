@@ -1,3 +1,4 @@
+import type { NetworkType } from '@masknet/web3-shared'
 import type { DataProvider, TradeProvider } from '../../plugins/Trader/types'
 import type { LaunchPage } from '../../settings/types'
 /**
@@ -12,8 +13,8 @@ export interface WebviewAPIs {
     getConnectedPersonas(): Promise<string>
     app_isPluginEnabled(id: string): Promise<boolean>
     app_setPluginStatus(id: string, enabled: boolean): void
-    setting_getNetworkTraderProvider(network: 'eth' | 'bsc' | 'polygon'): Promise<TradeProvider>
-    setting_setNetworkTraderProvider(network: 'eth' | 'bsc' | 'polygon', provider: TradeProvider): void
+    setting_getNetworkTraderProvider(network: NetworkType): Promise<TradeProvider>
+    setting_setNetworkTraderProvider(network: NetworkType, provider: TradeProvider): void
     settings_getTrendingDataSource(): Promise<DataProvider>
     settings_setTrendingDataSource(provider: DataProvider): void
 }
