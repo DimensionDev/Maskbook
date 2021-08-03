@@ -1,15 +1,12 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { useWallet, useResolveEns } from '@masknet/web3-shared'
+import { useResolveEns, useWallet } from '@masknet/web3-shared'
 import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
-import { useCallback, useState } from 'react'
-import { CollectibleList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
+import { useState } from 'react'
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
     searchForegroundColorSelector,
-    searchProfileActiveTabLabelSelector,
     searchProfileActiveTabSelector,
-    searchProfileActiveTabStatusLineSelector,
     searchProfileEmptySelector,
     searchProfileTabListLastChildSelector,
     searchProfileTabListSelector,
@@ -18,7 +15,10 @@ import {
 } from '../utils/selector'
 import { useEthereumName } from './useEthereumName'
 import Color from 'color'
+import EventEmitter from 'events'
+import { CollectibleList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 
+const Event = new EventEmitter()
 function injectEnhancedProfileTab(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
     startWatch(watcher, signal)
@@ -86,6 +86,37 @@ export interface EnhancedProfileTabProps {}
 
 const EMPTY_STYLE = {} as CSSStyleDeclaration
 
+function clearStatus() {
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+    if (!eleTab) return
+    const style = window.getComputedStyle(eleTab)
+    const tabList = searchProfileTabListSelector().evaluate()
+    tabList.map((v) => {
+        const _v = v.querySelector('div') as HTMLDivElement
+        _v.style.color = style.color
+        const line = v.querySelector('div > div') as HTMLDivElement
+        line.style.display = 'none'
+    })
+}
+
+const bind = (cb: () => void) => {
+    const elePage = searchProfileTabPageSelector().evaluate()
+    const tabList = searchProfileTabListSelector().evaluate()
+    tabList.map((v) => {
+        const line = v.querySelector('div > div') as HTMLDivElement
+        const _v = v.querySelector('div')
+        _v?.addEventListener(
+            'click',
+            () => {
+                cb()
+                if (elePage) elePage.style.display = ''
+                if (line) line.style.display = ''
+            },
+            { once: true },
+        )
+    })
+}
+
 export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
@@ -101,64 +132,49 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
         height: style.height,
         activeColor: foregroundColorStyle.color,
     })
+
     const [active, setActive] = useState(false)
 
-    const onOpen = () => setActive(false)
-    const tabList = searchProfileTabListSelector().evaluate()?.querySelectorAll('div')
-    tabList?.forEach((v) => {
-        v.addEventListener('click', onOpen, { once: true })
+    bind(() => {
+        setActive(false)
+        Event.emit('event', false)
     })
 
-    const onClick = useCallback(() => {
-        const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
-        if (!eleTab) return
-
-        const style = window.getComputedStyle(eleTab)
-
+    const onClick = () => {
         const eleEmpty = searchProfileEmptySelector().evaluate()
         if (eleEmpty) eleEmpty.style.display = 'none'
 
-        const ele = searchProfileTabPageSelector().evaluate()
-        if (ele) ele.style.display = 'none'
-
-        const line = searchProfileActiveTabStatusLineSelector().evaluate()
-        if (line) line.style.display = 'none'
-
-        const label = searchProfileActiveTabLabelSelector().evaluate()
-        if (label) label.style.color = style.color
+        const elePage = searchProfileTabPageSelector().evaluate()
+        if (elePage) elePage.style.display = 'none'
 
         const tab = searchProfileActiveTabSelector().evaluate()
         if (tab) {
-            tab.setAttribute('aria-selected', 'false')
             tab.addEventListener(
                 'click',
                 () => {
-                    if (eleEmpty) eleEmpty.style.display = 'flex'
-                    if (ele) ele.style.display = 'flex'
-                    if (line) line.style.display = 'inline-flex'
-                    if (label) label.style.color = ''
+                    if (eleEmpty) eleEmpty.style.display = ''
+                    if (elePage) elePage.style.display = ''
 
                     setActive(false)
-                    tab.setAttribute('aria-selected', 'true')
                 },
                 { once: true },
             )
         }
 
+        Event.emit('event', true)
         setActive(true)
-    }, [active])
+        clearStatus()
+    }
 
     if (!eleTab) return null
 
     return (
-        <>
-            <div key="nfts" className={classes.tab}>
-                <div className={classNames(classes.button, active ? classes.hot : '')} onClick={onClick}>
-                    NFTs
-                    {active ? <div className={classes.active} /> : null}
-                </div>
+        <div key="nfts" className={classes.tab}>
+            <div className={classNames(classes.button, active ? classes.hot : '')} onClick={onClick}>
+                NFTs
+                {active ? <div className={classes.active} /> : null}
             </div>
-        </>
+        </div>
     )
 }
 
@@ -167,9 +183,15 @@ export interface EnhancedProfilePageProps {}
 export function EnhancedProfileaPage() {
     const selectedWallet = useWallet()
     const profileEthereumName = useEthereumName()
+    const [show, setShow] = useState(false)
+    Event.once('event', (show: boolean) => {
+        setShow(show)
+    })
+
     const resolvedAddress = useResolveEns(profileEthereumName).value
     if (!selectedWallet) {
         return null
     }
-    return <CollectibleList wallet={selectedWallet} owner={resolvedAddress} readonly />
+
+    return <>{show ? <CollectibleList wallet={selectedWallet} owner={resolvedAddress} readonly /> : null}</>
 }
