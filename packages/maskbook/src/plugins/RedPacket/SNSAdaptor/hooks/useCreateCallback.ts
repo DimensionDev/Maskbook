@@ -63,7 +63,7 @@ function checkParams(
     if (paramsObj.shares <= 0) {
         setCreateState?.({
             type: TransactionStateType.FAILED,
-            error: Error('At least 1 person should be able to claim the red packet.'),
+            error: new Error('At least 1 person should be able to claim the red packet.'),
         })
         return false
     }
@@ -71,7 +71,7 @@ function checkParams(
     if (paramsObj.tokenType !== EthereumTokenType.Native && paramsObj.tokenType !== EthereumTokenType.ERC20) {
         setCreateState?.({
             type: TransactionStateType.FAILED,
-            error: Error('Token not supported'),
+            error: new Error('Token not supported'),
         })
         return false
     }
