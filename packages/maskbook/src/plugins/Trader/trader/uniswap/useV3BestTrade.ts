@@ -6,6 +6,7 @@ import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract'
 import { useAllV3Routes } from './useAllV3Routes'
 import { MulticalStateType, useSingleContractMultipleData } from '@masknet/web3-shared'
 import { useAsyncRetry } from 'react-use'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export enum V3TradeState {
     LOADING,
@@ -23,15 +24,9 @@ export enum V3TradeState {
 export function useV3BestTradeExactIn(
     amountIn?: CurrencyAmount<Currency>,
     currencyOut?: Currency,
-): { state: V3TradeState; trade: Trade<Currency, Currency, TradeType.EXACT_INPUT> | null } {
+): AsyncStateRetry<Trade<Currency, Currency, TradeType.EXACT_INPUT> | null> {
     const quoterContract = useQuoterContract()
     const { routes, loading: routesLoading } = useAllV3Routes(amountIn?.currency, currencyOut)
-
-    console.log('DEBUG: v3 routes')
-    console.log({
-        routes,
-    })
-
     const quoteExactInInputs = useMemo(() => {
         return routes.map(
             (route) =>
@@ -47,27 +42,23 @@ export function useV3BestTradeExactIn(
         new Array(quoteExactInInputs.length).fill('quoteExactInput'),
         quoteExactInInputs,
     )
-    useAsyncRetry(() => quotesCallback(quotesCalls), [quoterContract, quoteExactInInputs.map((x) => x.join()).join()])
-
-    return useMemo(() => {
+    const asyncResult = useAsyncRetry(
+        () => quotesCallback(quotesCalls),
+        [quoterContract, quotesCalls.map((x) => x.join()).join()],
+    )
+    const asyncBestTrade = useMemo(() => {
         if (!amountIn || !currencyOut) {
             return {
-                state: V3TradeState.INVALID,
-                trade: null,
+                value: undefined,
+                loading: false,
+                error: new Error('Invalid trade info.'),
             }
         }
-
-        // if (routesLoading || quotesResults.some(({ loading }) => loading)) {
-        //     return {
-        //       state: V3TradeState.LOADING,
-        //       trade: null,
-        //     }
-        //   }
-
         if (routesLoading || quotesState.type === MulticalStateType.PENDING) {
             return {
-                state: V3TradeState.LOADING,
-                trade: null,
+                value: undefined,
+                loading: true,
+                error: undefined,
             }
         }
 
@@ -97,24 +88,28 @@ export function useV3BestTradeExactIn(
 
         if (!bestRoute || !amountOut) {
             return {
-                state: V3TradeState.NO_ROUTE_FOUND,
-                trade: null,
+                value: undefined,
+                loading: false,
+                error: new Error('No route found.'),
             }
         }
 
-        // const isSyncing = quotesResults.some(({ syncing }) => syncing)
-
         return {
-            // state: isSyncing ? V3TradeState.SYNCING : V3TradeState.VALID,
-            state: V3TradeState.VALID,
-            trade: Trade.createUncheckedTrade({
+            value: Trade.createUncheckedTrade({
                 route: bestRoute,
                 tradeType: TradeType.EXACT_INPUT,
                 inputAmount: amountIn,
                 outputAmount: CurrencyAmount.fromRawAmount(currencyOut, amountOut),
             }),
+            loading: false,
+            error: undefined,
         }
     }, [amountIn, currencyOut, quotesResults, routes, routesLoading])
+
+    return {
+        ...asyncBestTrade,
+        retry: asyncResult.retry,
+    }
 }
 
 /**
@@ -125,10 +120,9 @@ export function useV3BestTradeExactIn(
 export function useV3BestTradeExactOut(
     currencyIn?: Currency,
     amountOut?: CurrencyAmount<Currency>,
-): { state: V3TradeState; trade: Trade<Currency, Currency, TradeType.EXACT_OUTPUT> | null } {
-    const quoterContract = useQuoterContract()
+): AsyncStateRetry<Trade<Currency, Currency, TradeType.EXACT_OUTPUT> | null> {
     const { routes, loading: routesLoading } = useAllV3Routes(currencyIn, amountOut?.currency)
-
+    const quoterContract = useQuoterContract()
     const quoteExactOutInputs = useMemo(() => {
         return routes.map(
             (route) =>
@@ -144,20 +138,24 @@ export function useV3BestTradeExactOut(
         new Array(quoteExactOutInputs.length).fill('quoteExactOutput'),
         quoteExactOutInputs,
     )
-    useAsyncRetry(() => quotesCallback(quotesCalls), [quoterContract, quoteExactOutInputs.map((x) => x.join()).join()])
-
-    return useMemo(() => {
+    const asyncResult = useAsyncRetry(
+        () => quotesCallback(quotesCalls),
+        [quotesCallback, quotesCalls.map((x) => x.join()).join()],
+    )
+    const asyncBestTrade = useMemo(() => {
         if (!amountOut || !currencyIn || quotesResults.some(({ error }) => !!error)) {
             return {
-                state: V3TradeState.INVALID,
-                trade: null,
+                value: undefined,
+                loading: false,
+                error: new Error('Invalid trade info.'),
             }
         }
 
         if (routesLoading || quotesState.type === MulticalStateType.PENDING) {
             return {
-                state: V3TradeState.LOADING,
-                trade: null,
+                value: undefined,
+                loading: true,
+                error: undefined,
             }
         }
 
@@ -187,19 +185,26 @@ export function useV3BestTradeExactOut(
 
         if (!bestRoute || !amountIn) {
             return {
-                state: V3TradeState.NO_ROUTE_FOUND,
-                trade: null,
+                value: undefined,
+                loading: false,
+                error: new Error('No route found.'),
             }
         }
 
         return {
-            state: V3TradeState.VALID,
-            trade: Trade.createUncheckedTrade({
+            value: Trade.createUncheckedTrade({
                 route: bestRoute,
                 tradeType: TradeType.EXACT_OUTPUT,
                 inputAmount: CurrencyAmount.fromRawAmount(currencyIn, amountIn),
                 outputAmount: amountOut,
             }),
+            loading: false,
+            error: undefined,
         }
     }, [amountOut, currencyIn, quotesResults, routes, routesLoading])
+
+    return {
+        ...asyncBestTrade,
+        retry: asyncResult.retry,
+    }
 }

@@ -69,5 +69,5 @@ export function useAllV3Routes(
             singleHopOnly ? 1 : 2,
         )
         return { loading: false, routes }
-    }, [chainId, currencyIn, currencyOut, pools, poolsLoading, singleHopOnly])
+    }, [chainId, currencyIn?.wrapped.address, currencyOut?.wrapped.address, pools, poolsLoading, singleHopOnly])
 }

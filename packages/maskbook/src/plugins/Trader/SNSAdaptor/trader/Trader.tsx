@@ -312,7 +312,7 @@ export function Trader(props: TraderProps) {
                         inputToken={inputToken}
                         outputToken={outputToken}
                     />
-                    {context?.IS_UNISWAP_LIKE ? (
+                    {context?.IS_UNISWAP_V2_LIKE ? (
                         <UniswapTradeRoute classes={{ root: classes.router }} trade={tradeComputed} />
                     ) : null}
                     {[TradeProvider.BALANCER].includes(provider) ? (
@@ -321,7 +321,7 @@ export function Trader(props: TraderProps) {
                             trade={tradeComputed as TradeComputed<SwapResponse>}
                         />
                     ) : null}
-                    {context?.IS_UNISWAP_LIKE ? (
+                    {context?.IS_UNISWAP_V2_LIKE ? (
                         <TradePairViewer
                             trade={tradeComputed as TradeComputed<Trade<Currency, Currency, TradeType>>}
                             provider={provider}

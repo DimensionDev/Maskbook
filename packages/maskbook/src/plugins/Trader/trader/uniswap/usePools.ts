@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
+import { useAsyncRetry } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { computePoolAddress, Pool, FeeAmount } from '@uniswap/v3-sdk'
 import type { Token, Currency } from '@uniswap/sdk-core'
 import { MulticalStateType, useChainId, useMutlipleContractSingleData, useTraderConstants } from '@masknet/web3-shared'
 import { usePoolContracts } from '../../contracts/uniswap/usePoolContract'
-import { useAsyncRetry } from 'react-use'
 
 export enum PoolState {
     LOADING,
@@ -31,7 +31,7 @@ export function usePools(
         })
     }, [chainId, poolKeys])
 
-    const poolAddresses: string[] = useMemo(() => {
+    const poolAddresses = useMemo(() => {
         return transformed.map((value) => {
             if (!UNISWAP_V3_FACTORY_ADDRESS || !value) return ''
             return computePoolAddress({
@@ -56,15 +56,8 @@ export function usePools(
         [],
     )
 
-    useAsyncRetry(() => slot0sCallback(slot0sCalls), [poolContracts])
-    useAsyncRetry(() => liquiditiesCallback(liquiditiesCalls), [poolContracts])
-
-    console.log('DEBUG: v3 pools')
-    console.log({
-        poolAddresses,
-        slot0s,
-        liquidities,
-    })
+    useAsyncRetry(() => slot0sCallback(slot0sCalls), [slot0sCallback, slot0sCalls])
+    useAsyncRetry(() => liquiditiesCallback(liquiditiesCalls), [liquiditiesCallback, liquiditiesCalls])
 
     return useMemo(() => {
         return poolKeys.map((_key, index) => {

@@ -1,4 +1,5 @@
 import JSBI from 'jsbi'
+import { memoize } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { Currency, Token, CurrencyAmount, TradeType, Percent, Price, Ether } from '@uniswap/sdk-core'
 import type { Trade } from '@uniswap/v2-sdk'
@@ -103,7 +104,7 @@ export function isTradeBetter(
 
 export class ExtendedEther extends Ether {
     public get wrapped(): Token {
-        if (this.chainId in WETH) return toUniswapToken(this.chainId, WETH[this.chainId as ChainId])
+        if (this.chainId in WETH) return ExtendedEther.wrapEther(this.chainId)
         throw new Error('Unsupported chain ID')
     }
 
@@ -112,4 +113,6 @@ export class ExtendedEther extends Ether {
     public static onChain(chainId: number): ExtendedEther {
         return this._cachedEther[chainId] ?? (this._cachedEther[chainId] = new ExtendedEther(chainId))
     }
+
+    public static wrapEther = memoize((chainId: ChainId) => toUniswapToken(chainId, WETH[chainId]))
 }

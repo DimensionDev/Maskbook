@@ -222,7 +222,7 @@ export function TradeSummary(props: TradeSummaryProps) {
             <List className={classes.list} component="ul">
                 {[
                     ...records,
-                    ...(context?.IS_UNISWAP_LIKE ? uniswapRecords : []),
+                    ...(context?.IS_UNISWAP_V2_LIKE ? uniswapRecords : []),
                     ...(provider === TradeProvider.BALANCER ? balancerRecords : []),
                     ...(provider === TradeProvider.ZRX ? zrxRecords : []),
                 ].map((record) =>
