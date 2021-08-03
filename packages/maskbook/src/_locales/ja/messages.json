@@ -296,6 +296,7 @@
     "wallet_import_keystore_password_label": "",
     "wallet_import_keystore_password_placeholder": "",
     "wallet_risk_warning_dialog_title": "",
+    "wallet_risk_warning_no_select_wallet": "",
     "wallet_risk_warning_content": "",
     "input_length_exceed_prompt": "{{name}}の長さは{{length}}より短くしてください。",
     "relative_time_days_ago": "{{days}}日前",

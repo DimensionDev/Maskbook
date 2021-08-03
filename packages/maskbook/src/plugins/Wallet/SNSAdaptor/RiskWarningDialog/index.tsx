@@ -3,10 +3,12 @@ import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../../utils'
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import classNames from 'classnames'
 import { MaskColorVar, useSnackbar } from '@masknet/theme'
-import { useWallet } from '@masknet/web3-shared'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
+import { WalletMessages } from '../../messages'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import type { Wallet } from '@masknet/web3-shared'
+import classnames from 'classnames'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -49,30 +51,36 @@ const useStyles = makeStyles((theme) => ({
         },
     },
 }))
-export interface WalletRiskWarningDialogProps {
-    open: boolean
-    onClose: () => void
-    onConfirm: () => void
-}
 
-export function WalletRiskWarningDialog(props: WalletRiskWarningDialogProps) {
+export function WalletRiskWarningDialog() {
     const { t } = useI18N()
     const classes = useStyles()
-    const wallet = useWallet()
-    const { onConfirm, onClose, open } = props
+    const [wallet, setWallet] = useState<Wallet | undefined>(undefined)
     const { enqueueSnackbar } = useSnackbar()
+    const { open, setDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletRiskWarningDialogUpdated,
+        (ev) => {
+            if (ev.open) {
+                setWallet(ev.wallet)
+            }
+        },
+    )
+
+    const onClose = useCallback(() => {
+        setDialog({ open: false, type: 'cancel' })
+    }, [setDialog])
 
     const onClick = useCallback(() => {
         if (!wallet?.address) {
-            enqueueSnackbar('Not select wallet yet.', {
+            enqueueSnackbar(t('wallet_risk_warning_no_select_wallet'), {
                 variant: 'error',
                 preventDuplicate: true,
             })
             return
         }
+        setDialog({ open: false, type: 'confirm' })
+    }, [enqueueSnackbar, wallet?.address, setDialog])
 
-        onConfirm()
-    }, [enqueueSnackbar, onConfirm, wallet?.address])
     return (
         <InjectedDialog title={t('wallet_risk_warning_dialog_title')} open={open} onClose={onClose}>
             <DialogContent>
@@ -102,7 +110,7 @@ export function WalletRiskWarningDialog(props: WalletRiskWarningDialogProps) {
             </DialogContent>
             <DialogActions className={classes.buttons}>
                 <ActionButton
-                    className={classNames(classes.button, classes.cancel)}
+                    className={classnames(classes.button, classes.cancel)}
                     fullWidth
                     variant="text"
                     color="inherit"
