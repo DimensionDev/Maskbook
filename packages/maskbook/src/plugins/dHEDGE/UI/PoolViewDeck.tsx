@@ -8,7 +8,6 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useAvatar } from '../hooks/useManager'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -72,7 +71,6 @@ export function PoolViewDeck(props: PoolDeckProps) {
         .dividedBy(pool.totalSupply)
         .multipliedBy(100)
         .integerValue(BigNumber.ROUND_UP)
-
     //#endregion
 
     //#region the invest dialog
@@ -84,7 +82,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
             pool: pool,
             tokens: inputTokens,
         })
-    }, [pool, openInvestDialog])
+    }, [pool, inputTokens, openInvestDialog])
     //#endregion
 
     return (
@@ -122,25 +120,27 @@ export function PoolViewDeck(props: PoolDeckProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body2" color="textSecondary" className={classes.text}>
-                            <Trans
-                                i18nKey="plugin_dhedge_manager_share"
-                                components={{
-                                    share: <span />,
-                                }}
-                                values={{
-                                    managerShare: managerShare,
-                                }}
-                            />
+                            {managerShare.isLessThanOrEqualTo(50) ? (
+                                <Trans
+                                    i18nKey="plugin_dhedge_manager_share"
+                                    components={{
+                                        share: <span />,
+                                    }}
+                                    values={{
+                                        managerShare: managerShare,
+                                    }}
+                                />
+                            ) : (
+                                t('plugin_dhedge_manager_share_more_than_50')
+                            )}
                         </Typography>
                     </Grid>
                 </Grid>
             </Grid>
             <Grid item alignSelf="right" xs={4} textAlign="center">
-                <EthereumChainBoundary chainId={pool.chainId}>
-                    <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
-                        {t('plugin_dhedge_invest')}
-                    </Button>
-                </EthereumChainBoundary>
+                <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
+                    {t('plugin_dhedge_invest')}
+                </Button>
             </Grid>
         </Grid>
     )

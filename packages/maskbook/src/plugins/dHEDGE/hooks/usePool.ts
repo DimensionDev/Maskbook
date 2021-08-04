@@ -27,5 +27,5 @@ export function usePoolDepositAssets(pool?: Pool) {
         if (!pool) return
         if (pool.poolType === PoolType.v1) return sUSD_ADDRESS ? [sUSD_ADDRESS] : undefined
         return poolManagerContract?.methods.getDepositAssets().call()
-    }, [pool, chainId])
+    }, [pool, chainId, sUSD_ADDRESS, poolManagerContract])
 }
