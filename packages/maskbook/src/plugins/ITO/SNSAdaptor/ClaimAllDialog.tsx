@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { flatten, uniq } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
-import { getMaskColor, useSnackbar, VariantType } from '@masknet/theme'
+import { getMaskColor, useSnackbar, VariantType, SnackbarProvider } from '@masknet/theme'
 import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles, DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@material-ui/core'
 import {
@@ -15,6 +15,7 @@ import {
 import classNames from 'classnames'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../../../utils'
+import { NftAirdropCard } from './NftAirdropCard'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useClaimablePools, SwappedToken } from './hooks/useClaimablePools'
 import { WalletMessages } from '../../Wallet/messages'
@@ -22,7 +23,7 @@ import { useClaimCallback } from './hooks/useClaimCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
@@ -153,6 +154,9 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         height: 350,
     },
+    emptyContentWrapperNoHeight: {
+        height: 30,
+    },
     lockIcon: {
         width: 22,
         height: 22,
@@ -173,6 +177,12 @@ const useStyles = makeStyles((theme) => ({
     tokenSymbol: {
         color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
     },
+    snackbarSuccess: {
+        backgroundColor: '#77E0B5',
+    },
+    snackbarError: {
+        backgroundColor: '#FF5555',
+    },
 }))
 
 interface ClaimAllDialogProps {
@@ -183,6 +193,7 @@ interface ClaimAllDialogProps {
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
+    const DialogRef = useRef<HTMLDivElement>(null)
     const currentChainId = useChainId()
     const [chainId, setChainId] = useState(
         [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].includes(currentChainId) ? currentChainId : ChainId.Mainnet,
@@ -322,55 +333,72 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         hasOnlyOneChild: true,
     }
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_dialog_title')}>
-            <DialogContent className={classes.wrapper}>
-                <AbstractTab {...tabProps} />
-                <div className={classes.contentWrapper}>
-                    {loading || loadingOld || initLoading || !swappedTokens || !swappedTokensOld ? (
-                        <div className={classes.emptyContentWrapper}>
-                            <CircularProgress size={24} />
-                        </div>
-                    ) : swappedTokens.length > 0 || swappedTokensOld.length > 0 ? (
-                        <>
-                            {swappedTokensOld.length > 0 ? (
-                                <div className={classes.content}>
-                                    {swappedTokens.length > 0 && swappedTokensOld.length > 0 ? (
-                                        <Typography color="textPrimary" className={classes.contentTitle}>
-                                            {t('plugin_ito_claim_all_old_contract')}
-                                        </Typography>
-                                    ) : null}
-                                    <Content
-                                        chainId={chainId}
-                                        onClaimButtonClick={onClaimButtonClickOld}
-                                        swappedTokens={swappedTokensOld}
-                                        claimablePids={claimablePidsOld}
-                                    />
+        <SnackbarProvider
+            domRoot={DialogRef.current as HTMLElement}
+            classes={{
+                variantSuccess: classes.snackbarSuccess,
+                variantError: classes.snackbarError,
+            }}>
+            <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_dialog_title')}>
+                <DialogContent className={classes.wrapper}>
+                    <AbstractTab {...tabProps} />
+                    <div className={classes.contentWrapper} ref={DialogRef}>
+                        {chainId === ChainId.Matic || chainId === ChainId.Mumbai ? <NftAirdropCard /> : null}
+
+                        <div>
+                            {loading || loadingOld || initLoading || !swappedTokens || !swappedTokensOld ? (
+                                <div className={classes.emptyContentWrapper}>
+                                    <CircularProgress size={24} />
                                 </div>
-                            ) : null}
-                            {swappedTokens.length > 0 ? (
-                                <div className={classes.content}>
-                                    {swappedTokens.length > 0 && swappedTokensOld.length > 0 ? (
-                                        <Typography color="textPrimary" className={classes.contentTitle}>
-                                            {t('plugin_ito_claim_all_new_contract')}
-                                        </Typography>
+                            ) : swappedTokens.length > 0 || swappedTokensOld.length > 0 ? (
+                                <>
+                                    {swappedTokensOld.length > 0 ? (
+                                        <div className={classes.content}>
+                                            {swappedTokens.length > 0 && swappedTokensOld.length > 0 ? (
+                                                <Typography color="textPrimary" className={classes.contentTitle}>
+                                                    {t('plugin_ito_claim_all_old_contract')}
+                                                </Typography>
+                                            ) : null}
+                                            <Content
+                                                chainId={chainId}
+                                                onClaimButtonClick={onClaimButtonClickOld}
+                                                swappedTokens={swappedTokensOld}
+                                                claimablePids={claimablePidsOld}
+                                            />
+                                        </div>
                                     ) : null}
-                                    <Content
-                                        chainId={chainId}
-                                        onClaimButtonClick={onClaimButtonClick}
-                                        swappedTokens={swappedTokens}
-                                        claimablePids={claimablePids}
-                                    />
+                                    {swappedTokens.length > 0 ? (
+                                        <div className={classes.content}>
+                                            {swappedTokens.length > 0 && swappedTokensOld.length > 0 ? (
+                                                <Typography color="textPrimary" className={classes.contentTitle}>
+                                                    {t('plugin_ito_claim_all_new_contract')}
+                                                </Typography>
+                                            ) : null}
+                                            <Content
+                                                chainId={chainId}
+                                                onClaimButtonClick={onClaimButtonClick}
+                                                swappedTokens={swappedTokens}
+                                                claimablePids={claimablePids}
+                                            />
+                                        </div>
+                                    ) : null}
+                                </>
+                            ) : (
+                                <div
+                                    className={classNames(
+                                        classes.emptyContentWrapper,
+                                        currentChainId === ChainId.Mumbai && chainId === ChainId.Matic
+                                            ? classes.emptyContentWrapperNoHeight
+                                            : '',
+                                    )}>
+                                    <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
                                 </div>
-                            ) : null}
-                        </>
-                    ) : (
-                        <div className={classes.emptyContentWrapper}>
-                            <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
+                            )}
                         </div>
-                    )}
-                </div>
-            </DialogContent>
-        </InjectedDialog>
+                    </div>
+                </DialogContent>
+            </InjectedDialog>
+        </SnackbarProvider>
     )
 }
 

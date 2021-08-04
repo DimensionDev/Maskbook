@@ -1,0 +1,28 @@
+{
+    "CONTRACT_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "0x1e82cFbcF7292DEf91a2A5736265555883FF0289",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
+    },
+    "SUBGRAPH_URL": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "https://graphigo.stg.galaxy.eco/query",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
+    }
+}
