@@ -25,18 +25,18 @@ export async function checkAvailability(pid: string, from: string, to: string, c
     return decodeResult(data, isV1)
 }
 
-function decodeResult(data: string, isV1: boolean) {
+function decodeResult(data: string, isV1: boolean): Availability {
     const results = (isV1 ? interFaceV1 : interFaceV2).decodeFunctionResult('check_availability', data)
 
     return {
         exchange_addrs: results[0],
-        remaining: Number.parseInt(parse(results[1]).hex, 10),
+        remaining: +parseHexToInt(results[1]),
         started: results[2],
         expired: results[3],
         unlocked: results[4],
         unlock_time: parseHexToInt(results[5]),
         swapped: parseHexToInt(results[6]),
-        exchanged_tokens: parse(results[7]).map((r: any) => parseHexToInt(r)),
+        exchanged_tokens: parse(results[7]).map(parseHexToInt),
         ...(isV1
             ? {}
             : {
@@ -45,13 +45,13 @@ function decodeResult(data: string, isV1: boolean) {
                   end_time: parseHexToInt(results[10]),
                   qualification_addr: results[11],
               }),
-    } as Availability
+    }
 }
 
-function parse(x: any) {
-    return JSON.parse(JSON.stringify(x))
+function parse(input: any) {
+    return JSON.parse(JSON.stringify(input))
 }
 
-function parseHexToInt(x: any) {
-    return Number.parseInt(parse(x).hex, 10).toString()
+function parseHexToInt(input: any) {
+    return Number.parseInt(parse(input).hex, 16).toString()
 }
