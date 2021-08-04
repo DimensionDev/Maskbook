@@ -22,7 +22,7 @@ export function useEthereumName() {
         if (ENS_RE_FULL.test(nickname)) {
             return nickname
         }
-        return `${twitterId}.eth`
+        return twitterId ? `${twitterId}.eth` : ''
     }, [ethereumName, nickname, twitterId])
 
     return name
