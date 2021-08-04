@@ -3,7 +3,13 @@ export * from './apis'
 import { unreachable } from '@dimensiondev/kit'
 import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../Wallet/settings'
-import { currentTradeProviderSettings, currentDataProviderSettings } from './settings'
+import {
+    currentTradeProviderSettings,
+    currentDataProviderSettings,
+    ethNetworkTradeProviderSettings,
+    bscNetworkTradeProviderSettings,
+    polygonNetworkTradeProviderSettings,
+} from './settings'
 import { DataProvider, TradeProvider } from './types'
 
 currentChainIdSettings.addListener((chainId: ChainId) => {
@@ -11,18 +17,17 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
     if (!networkType) return
     switch (networkType) {
         case NetworkType.Ethereum:
-            if ([TradeProvider.PANCAKESWAP, TradeProvider.QUICKSWAP].includes(currentTradeProviderSettings.value))
-                currentTradeProviderSettings.value = TradeProvider.UNISWAP
+            currentTradeProviderSettings.value = ethNetworkTradeProviderSettings.value
             break
         case NetworkType.Binance:
-            currentTradeProviderSettings.value = TradeProvider.PANCAKESWAP
+            currentTradeProviderSettings.value = bscNetworkTradeProviderSettings.value
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
-                currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
+                currentDataProviderSettings.value = DataProvider.COIN_GECKO
             break
         case NetworkType.Polygon:
-            currentTradeProviderSettings.value = TradeProvider.QUICKSWAP
+            currentTradeProviderSettings.value = polygonNetworkTradeProviderSettings.value
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
-                currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
+                currentDataProviderSettings.value = DataProvider.COIN_GECKO
             break
         case NetworkType.Arbitrum:
             currentTradeProviderSettings.value = TradeProvider.UNISWAP
@@ -31,5 +36,23 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
             break
         default:
             unreachable(networkType)
+    }
+})
+
+currentTradeProviderSettings.addListener((tradeProvier: TradeProvider) => {
+    const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
+    if (!networkType) return
+    switch (networkType) {
+        case NetworkType.Ethereum:
+            ethNetworkTradeProviderSettings.value = tradeProvier
+            break
+        case NetworkType.Binance:
+            bscNetworkTradeProviderSettings.value = tradeProvier
+            break
+        case NetworkType.Polygon:
+            polygonNetworkTradeProviderSettings.value = tradeProvier
+            break
+        default:
+            break
     }
 })

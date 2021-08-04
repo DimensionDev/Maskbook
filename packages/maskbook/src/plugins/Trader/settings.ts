@@ -40,6 +40,24 @@ export const currentTradeProviderSettings = createGlobalSettings<TradeProvider>(
     },
 )
 
+export const ethNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+eth+tradeProvider`,
+    TradeProvider.UNISWAP,
+    { primary: () => '' },
+)
+
+export const polygonNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+polygon+tradeProvider`,
+    TradeProvider.QUICKSWAP,
+    { primary: () => '' },
+)
+
+export const bscNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+bsc+tradeProvider`,
+    TradeProvider.PANCAKESWAP,
+    { primary: () => '' },
+)
+
 //#region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]

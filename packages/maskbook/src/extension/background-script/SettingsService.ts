@@ -7,7 +7,12 @@ import {
     languageSettings,
     currentPluginEnabledStatus,
 } from '../../settings/settings'
-import { currentDataProviderSettings } from '../../plugins/Trader/settings'
+import {
+    bscNetworkTradeProviderSettings,
+    currentDataProviderSettings,
+    ethNetworkTradeProviderSettings,
+    polygonNetworkTradeProviderSettings,
+} from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
     currentBalanceSettings,
@@ -42,6 +47,12 @@ export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSetting
 export const [getEtherPrice, setEtherPrice] = create(currentEtherPriceSettings)
 export const [getGasNow, setGasNow] = create(currentGasNowSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
+export const [getEthNetworkTradeProvider, setEthNetworkTradeProvider] = create(ethNetworkTradeProviderSettings)
+export const [getPolygonNetworkTradeProvider, setPolygonNetworkTradeProvider] = create(
+    polygonNetworkTradeProviderSettings,
+)
+export const [getBscNetworkTradeProvider, setBscNetworkTradeProvider] = create(bscNetworkTradeProviderSettings)
+
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 
 export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(currentNetworkSettings)
@@ -79,4 +90,7 @@ export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
 }
 export async function isPluginEnabled(id: string) {
     return currentPluginEnabledStatus['plugin:' + id].value
+}
+export async function setPluginStatus(id: string, enabled: boolean) {
+    currentPluginEnabledStatus['plugin:' + id].value = enabled
 }
