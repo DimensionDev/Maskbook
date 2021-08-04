@@ -207,6 +207,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
         image: string
         text: string
         hide?: boolean
+        priority: number
     }
     const items: ToolboxItemDescriptor[] = [
         { ...ToolIconURLs.encryptedmsg, onClick: openEncryptedMessage },
@@ -241,6 +242,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const [menu, openMenu] = useMenu(
         items
             .filter((x) => x.hide !== true)
+            .sort((a, b) => b.priority - a.priority)
             .map((desc) => (
                 <MenuItem onClick={desc.onClick} className={classes.menuItem}>
                     <Image src={desc.image} width={19} height={19} />
