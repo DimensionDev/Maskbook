@@ -2,7 +2,7 @@ import { AsyncCall, AsyncCallOptions, _AsyncVersionOf } from 'async-call-rpc/ful
 import { AndroidGeckoViewChannel } from './Android.channel'
 import { iOSWebkitChannel } from './iOS.channel'
 import { MaskNetworkAPI } from './Web'
-import type { AndroidNativeAPIs, iOSNativeAPIs } from './types'
+import type { AndroidNativeAPIs, iOSNativeAPIs } from '@masknet/public-api'
 
 // This module won't be used in Web. Let it not effecting HMR.
 if (process.env.architecture === 'web' && import.meta.webpackHot) import.meta.webpackHot.accept()
