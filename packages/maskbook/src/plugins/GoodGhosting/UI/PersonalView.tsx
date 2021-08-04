@@ -65,7 +65,7 @@ export function PersonalView(props: PersonalViewProps) {
         try {
             await earlyWithdraw()
         } catch (error) {
-            if (error && error.transactionHash) {
+            if (error?.transactionHash) {
                 const link = resolveTransactionLinkOnExplorer(chainId, error.transactionHash)
                 if (error.gameActionStatus === TransactionStateType.CONFIRMED) {
                     setErrorState({

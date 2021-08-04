@@ -55,7 +55,7 @@ export function GameAction(props: GameActionProps) {
             await action()
             props.info.refresh()
         } catch (error) {
-            if (error && error.transactionHash) {
+            if (error?.transactionHash) {
                 const link = resolveTransactionLinkOnExplorer(chainId, error.transactionHash)
                 if (error.gameActionStatus === TransactionStateType.CONFIRMED) {
                     setErrorState({

@@ -20,7 +20,7 @@ export function useGameContractAddress(id: string) {
         const response = await fetch(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
         const data = await response.text()
         const gameData = data ? JSON.parse(data) : {}
-        return gameData[id] || gameData['default'] || {}
+        return gameData[id] || gameData.default || {}
     }, [GOOD_GHOSTING_CONTRACT_ADDRESS_FILE])
 
     return asyncResult
