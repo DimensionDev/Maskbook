@@ -64,7 +64,7 @@ export async function fetchLBP_PoolTokenPrices(poolId: string, address: string, 
             price: data[x][0]?.price ?? '0',
             blockNumber: x.slice(1),
         }))
-        .sort((a, z) => Number.parseInt(a.blockNumber) - Number.parseInt(z.blockNumber))
+        .sort((a, z) => Number.parseInt(a.blockNumber, 10) - Number.parseInt(z.blockNumber, 10))
 }
 
 interface LBPPoolToken {
