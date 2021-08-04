@@ -1,7 +1,7 @@
 import { EthereumAddress } from 'wallet.ts'
 import type { HttpProvider, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { addGasMargin, ChainId, EthereumMethodType, ProviderType } from '@masknet/web3-shared'
+import { addGasMargin, ChainId, EthereumMethodType, NetworkType, ProviderType } from '@masknet/web3-shared'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { createWeb3 } from './web3'
@@ -12,6 +12,7 @@ import { getGasPrice } from './network'
 import {
     currentAccountSettings,
     currentChainIdSettings,
+    currentNetworkSettings,
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
 import { debugModeSetting } from '../../../settings/settings'
@@ -128,6 +129,7 @@ export async function INTERNAL_send(
                         callback(error, response)
                         handleNonce(account, error, response)
                         handleRecentTransaction(account, response)
+                        handleAllianceTrasnaction(account, config.to ?? '', response)
                     },
                 )
                 break
@@ -135,12 +137,14 @@ export async function INTERNAL_send(
                 provider?.send(payload, (error, response) => {
                     callback(error, response)
                     handleRecentTransaction(account, response)
+                    handleAllianceTrasnaction(account, config.to ?? '', response)
                 })
                 break
             case ProviderType.WalletConnect:
                 const response = await WalletConnect.sendCustomRequest(payload as IJsonRpcRequest)
                 callback(null, response)
                 handleRecentTransaction(account, response)
+                handleAllianceTrasnaction(account, config.to ?? '', response)
                 break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
@@ -182,6 +186,23 @@ function handleRecentTransaction(account: string, response: JsonRpcResponse | un
     if (typeof hash !== 'string') return
     if (!/^0x([A-Fa-f0-9]{64})$/.test(hash)) return
     addRecentTransaction(account, hash)
+}
+
+function handleAllianceTrasnaction(account: string, to: string, response: JsonRpcResponse | undefined) {
+    // polygon only
+    if (currentNetworkSettings.value !== NetworkType.Polygon) return
+
+    // no recipient contract
+    if (!to) return
+
+    const hash = response?.result as string | undefined
+    if (typeof hash !== 'string') return
+    if (!/^0x([A-Fa-f0-9]{64})$/.test(hash)) return
+
+    // Proof has been used
+    // from: account
+    // plugin-id: to
+    // transaction hash: hash
 }
 
 async function handleNonce(account: string, error: Error | null, response: JsonRpcResponse | undefined) {
