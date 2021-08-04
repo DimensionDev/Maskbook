@@ -192,8 +192,8 @@ export function ToolboxHint(props: ToolboxHintProps) {
     ]
 
     const pluginI18N = usePluginI18NField()
-    for (const plugin of useActivatedPluginsSNSAdaptor()) {
-        if (!plugin.ToolbarEntry) continue
+    useActivatedPluginsSNSAdaptor().forEach((plugin) => {
+        if (!plugin.ToolbarEntry) return
         const { image, label, onClick: onClickRaw, priority, useShouldDisplay } = plugin.ToolbarEntry
 
         let onClick: () => void
@@ -215,7 +215,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
             useShouldDisplay,
             hide: !operatingSupportedChainMapping[plugin.ID],
         })
-    }
+    })
 
     const [menu, openMenu] = useMenu(
         items
