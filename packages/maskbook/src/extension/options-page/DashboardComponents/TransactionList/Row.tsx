@@ -6,6 +6,7 @@ import { resolveLinkOnExplorer, ChainId, useChainDetailed } from '@masknet/web3-
 import { Record } from './Record'
 import { useI18N } from '../../../../utils'
 import type { Transaction } from '../../../../plugins/Wallet/types'
+import urlcat from 'urlcat'
 
 interface Props {
     chainId: ChainId
@@ -76,7 +77,7 @@ interface AddressProps {
 }
 
 const Address: FC<AddressProps> = ({ id, mode, chainId }) => {
-    const href = `${resolveLinkOnExplorer(chainId)}/${mode}/${id}`
+    const href = urlcat(resolveLinkOnExplorer(chainId), '/:mode/:id', { mode, id })
     return id ? (
         <Link target={id} href={href}>
             <span>{id?.slice(0, 5)}</span>
