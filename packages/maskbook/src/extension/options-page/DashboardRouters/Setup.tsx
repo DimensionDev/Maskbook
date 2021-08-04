@@ -120,7 +120,7 @@ const useSetupFormStyles = makeStyles((theme) => ({
     },
 }))
 
-interface SetupFormProps extends withClasses<never> {
+interface SetupFormProps extends withClasses<'form'> {
     primary: string
     secondary?: string
     content?: React.ReactNode
