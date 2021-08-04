@@ -1,9 +1,23 @@
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { createPluginMessage } from '../utils/createPluginMessage'
 import { createPluginRPC } from '../utils/createPluginRPC'
 import { AUGUR_PLUGIN_ID } from './constants'
+import type { AMMOutcome, Market } from './types'
+
+type BuyDialogUpdated =
+    | {
+          open: true
+          market: Market
+          outcome: AMMOutcome
+          cashToken: FungibleTokenDetailed
+      }
+    | {
+          open: false
+      }
 
 interface AugurMessages {
+    ConfirmDialogUpdated: BuyDialogUpdated
     rpc: unknown
 }
 

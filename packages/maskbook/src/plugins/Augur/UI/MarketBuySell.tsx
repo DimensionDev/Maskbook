@@ -1,7 +1,21 @@
 import { useState } from 'react'
-import { makeStyles, Typography, Grid, Switch, SwitchClassKey, SwitchProps, withStyles } from '@material-ui/core'
+import {
+    makeStyles,
+    Typography,
+    Grid,
+    Switch,
+    SwitchClassKey,
+    SwitchProps,
+    withStyles,
+    Button,
+} from '@material-ui/core'
 import { Trans } from 'react-i18next'
-import type { Market } from '../types'
+import { AMMOutcome, BuySell, Market } from '../types'
+import { useI18N } from '../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { PluginAugurMessages } from '../messages'
+import { useCallback } from 'react'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
     focusVisible?: string
@@ -122,14 +136,28 @@ const AugurSwitch = withStyles((theme) => ({
 
 interface MarketBuySellProps {
     market: Market
+    ammOutcomes: AMMOutcome[]
+    cashToken: FungibleTokenDetailed
 }
 
 export const MarketBuySell = (props: MarketBuySellProps) => {
-    const { market } = props
+    const { market, ammOutcomes, cashToken } = props
 
+    const { t } = useI18N()
     const classes = useStyles()
-    const [buySell, setBuySell] = useState(false)
-    const [selected, setSelected] = useState(market.outcomes[0].shareToken)
+    const [buySell, setBuySell] = useState(BuySell.BUY)
+    const [selectedOutcome, setSelectedOutcome] = useState<AMMOutcome>()
+
+    const { setDialog: openBuyDialog } = useRemoteControlledDialog(PluginAugurMessages.events.ConfirmDialogUpdated)
+    const onBuy = useCallback(() => {
+        if (!selectedOutcome) return
+        openBuyDialog({
+            open: true,
+            market: market,
+            outcome: selectedOutcome,
+            cashToken: cashToken,
+        })
+    }, [market, openBuyDialog, selectedOutcome, buySell])
 
     return (
         <div className={`${classes.root} ${classes.spacing}`}>
@@ -144,7 +172,11 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                     className={`${classes.head} ${classes.spacing}`}>
                     <Grid item>
                         <Typography variant="h6" color="textPrimary">
-                            <AugurSwitch checked={buySell} onChange={() => setBuySell(!buySell)} name="buySell" />
+                            <AugurSwitch
+                                checked={!!buySell}
+                                onChange={() => setBuySell(buySell === BuySell.BUY ? BuySell.SELL : BuySell.BUY)}
+                                name="buySell"
+                            />
                         </Typography>
                     </Grid>
                     <Grid item container direction="column" alignItems="flex-end">
@@ -155,13 +187,13 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                         </Grid>
                         <Grid item>
                             <Typography variant="body2" color="textPrimary">
-                                1.50%
+                                {market.swapFee}%
                             </Typography>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item container direction="column" className={`${classes.spacing} ${classes.predictions}`}>
-                    {market.outcomes
+                    {ammOutcomes
                         .sort((x, y) => y.id - x.id)
                         .map((outcome) => {
                             return (
@@ -169,13 +201,32 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                                     item
                                     container
                                     justifyContent="space-between"
-                                    className={selected === outcome.shareToken ? classes.selected : undefined}
-                                    onClick={() => setSelected(outcome.shareToken)}>
+                                    key={outcome.shareToken}
+                                    className={
+                                        selectedOutcome?.shareToken === outcome.shareToken
+                                            ? classes.selected
+                                            : undefined
+                                    }
+                                    onClick={() => setSelectedOutcome(outcome)}>
                                     <Typography variant="body2">{outcome.name}</Typography>
-                                    <Typography variant="body2">$0.49</Typography>
+                                    <Typography variant="body2">
+                                        {outcome.rate.isZero() && !market.hasWinner
+                                            ? '-'
+                                            : '$' + outcome.rate.toFixed(2)}
+                                    </Typography>
                                 </Grid>
                             )
                         })}
+                </Grid>
+                <Grid item>
+                    <Button
+                        variant="contained"
+                        fullWidth
+                        color="primary"
+                        disabled={!selectedOutcome}
+                        onClick={buySell === BuySell.BUY ? onBuy : () => {}}>
+                        {t('plugin_augur_confirm')}
+                    </Button>
                 </Grid>
             </Grid>
         </div>

@@ -1,3 +1,5 @@
+import type BigNumber from 'bignumber.js'
+
 export interface Team {
     team_id: number
     name: string
@@ -31,6 +33,10 @@ export interface Outcome {
     shareToken: string
 }
 
+export interface AMMOutcome extends Outcome {
+    rate: BigNumber
+}
+
 export interface Market {
     address: string
     id: string
@@ -47,6 +53,8 @@ export interface Market {
     hasWinner: boolean
     winner?: string
     value0: string
+    collateral: string
+    swapFee: string
 }
 
 export enum SportMarketType {
@@ -58,4 +66,9 @@ export enum SportMarketType {
 export interface SportTitles {
     title: string
     description: string
+}
+
+export enum BuySell {
+    BUY,
+    SELL,
 }

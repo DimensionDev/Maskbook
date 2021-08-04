@@ -913,6 +913,7 @@
     "nft_button_set_avatar": "NFT 아바타 설정",
     "plugin_augur_loading": "",
     "plugin_augur_market_not_found": "",
+    "plugin_augur_confirm": "",
     "plugin_augur_smt_wrong": "",
     "plugin_augur_tab_description": "",
     "plugin_augur_tab_buysell": "",
@@ -920,5 +921,9 @@
     "plugin_augur_total_volume": "",
     "plugin_augur_liquidity": "",
     "plugin_augur_market_details": "",
-    "plugin_augur_fee": ""
+    "plugin_augur_fee": "",
+    "plugin_augur_avg_price": "",
+    "plugin_augur_est_shares": "",
+    "plugin_augur_max_profit": "",
+    "plugin_augur_est_fee": ""
 }

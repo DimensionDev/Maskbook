@@ -8,6 +8,9 @@ import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { MarketView } from '../UI/MarketView'
 import { BASE_URL } from '../constants'
 import { escapeRegExp } from 'lodash-es'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainId } from '@masknet/web3-shared'
+import { BuyDialog } from './BuyDialog'
 
 function createMatchLink() {
     return new RegExp(`${escapeRegExp(BASE_URL.concat('/#!/market?id='))}([x0-9A-Fa-f]+)-([0-9]+)$`)
@@ -46,7 +49,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer link={market.link} address={market.address} id={market.id} />
     },
     GlobalInjection: function Component() {
-        return <></>
+        return <BuyDialog />
     },
 }
 
@@ -56,7 +59,9 @@ function Renderer(props: React.PropsWithChildren<{ link: string; address: string
     return (
         <MaskbookPluginWrapper pluginName="Augur">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <MarketView link={props.link} address={props.address} id={props.id} />
+                <EthereumChainBoundary chainId={ChainId.Matic}>
+                    <MarketView link={props.link} address={props.address} id={props.id} />
+                </EthereumChainBoundary>
             </Suspense>
         </MaskbookPluginWrapper>
     )

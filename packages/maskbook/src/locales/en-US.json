@@ -958,6 +958,7 @@
     "nft_owner_check_info": "This NFT does not belong to you!",
     "plugin_augur_loading": "Loading",
     "plugin_augur_market_not_found": "Market not Found!",
+    "plugin_augur_confirm": "Confirm",
     "plugin_augur_smt_wrong": "Something went wrong!",
     "plugin_augur_tab_description": "Description",
     "plugin_augur_tab_buysell": "Buy / Sell",
@@ -965,5 +966,9 @@
     "plugin_augur_total_volume": "Total Volume",
     "plugin_augur_liquidity": "Liquidity",
     "plugin_augur_market_details": "Market Details",
-    "plugin_augur_fee": "Fee"
+    "plugin_augur_fee": "Fee",
+    "plugin_augur_avg_price": "Average Price",
+    "plugin_augur_est_shares": "Estimated Shares",
+    "plugin_augur_max_profit": "Max Profit",
+    "plugin_augur_est_fee": "Estimated Fees ({{symbol}})"
 }

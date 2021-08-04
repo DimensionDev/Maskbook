@@ -1,6 +1,6 @@
-import Teams from './constants/teams.json'
-import Sports from './constants/sports.json'
-import { TeamsInterface, SportsInterface, Team, Sport, Market, SportMarketType, SportTitles } from './types'
+import Teams from '../constants/teams.json'
+import Sports from '../constants/sports.json'
+import { TeamsInterface, SportsInterface, Team, Sport, Market, SportMarketType, SportTitles } from '../types'
 import { BigNumber as BN } from 'bignumber.js'
 import {
     AWAY_TEAM_OUTCOME,
@@ -9,7 +9,7 @@ import {
     NO_CONTEST,
     NO_CONTEST_OUTCOME_ID,
     NO_CONTEST_TIE,
-} from './constants'
+} from '../constants'
 
 export const getTeam = (id: string) => {
     return (Teams as TeamsInterface)[id]
@@ -26,7 +26,6 @@ export const getSport = (id: string) => {
 export const deriveSportMarketInfo = (
     address: string,
     id: string,
-    link: string,
     awayTeam: Team,
     endDate: Date,
     homeTeam: Team,
@@ -60,7 +59,6 @@ export const deriveSportMarketInfo = (
     return {
         address,
         id,
-        link,
         awayTeam,
         endDate,
         homeTeam,
@@ -74,7 +72,7 @@ export const deriveSportMarketInfo = (
         description,
         outcomes,
         spreadLine: line,
-    } as Market
+    }
 }
 
 const getOutcomeName = (

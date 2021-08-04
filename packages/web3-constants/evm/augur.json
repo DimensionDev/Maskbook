@@ -1,0 +1,13 @@
+{
+    "AMM_FACTORY_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "0x63BBEEa5085E94D1F57A5938f9a22dd485572Bb3",
+        "Mumbai": ""
+    }
+}

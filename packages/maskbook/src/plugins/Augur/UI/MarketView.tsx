@@ -19,6 +19,8 @@ import { MarketViewDeck } from './MarketViewDeck'
 import { MarketDescription } from './MarketDescription'
 import { MarketBuySell } from './MarketBuySell'
 import { useFetchMarket } from '../hooks/useMarket'
+import { useAMMOutcomes } from '../hooks/useAMMOutcomes'
+import { useERC20TokenDetailed } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -110,29 +112,46 @@ export function MarketView(props: MarketViewProps) {
     //#region tabs
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
-        <Tab className={classes.tab} key="description" label={t('plugin_augur_tab_description')} />,
         <Tab className={classes.tab} key="buysell" label={t('plugin_augur_tab_buysell')} />,
+        <Tab className={classes.tab} key="description" label={t('plugin_augur_tab_description')} />,
     ].filter(Boolean)
     //#endregion
 
     const { value: market, loading, error, retry } = useFetchMarket(address, id, link)
+    const {
+        value: ammOutcomes,
+        loading: loadingAMMOutcomes,
+        error: errorAMMOutcomes,
+        retry: retryAMMOutcomes,
+    } = useAMMOutcomes(address, id, market)
 
-    if (loading)
+    const {
+        value: cashToken,
+        loading: loadingToken,
+        retry: retryToken,
+        error: errorToken,
+    } = useERC20TokenDetailed(market?.collateral ?? '')
+
+    if (loading || loadingAMMOutcomes || loadingToken)
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_augur_loading')}
             </Typography>
         )
 
-    if (error)
+    if (error || errorAMMOutcomes || errorToken)
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_augur_smt_wrong')}
-                <RefreshIcon className={classes.refresh} color="primary" onClick={retry} />
+                <RefreshIcon
+                    className={classes.refresh}
+                    color="primary"
+                    onClick={error ? retry : errorToken ? retryToken : retryAMMOutcomes}
+                />
             </Typography>
         )
 
-    if (!market) {
+    if (!market || !ammOutcomes || !cashToken) {
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_augur_market_not_found')}
@@ -159,8 +178,10 @@ export function MarketView(props: MarketViewProps) {
                     {tabs}
                 </Tabs>
                 <Paper className={classes.body}>
-                    {tabIndex === 0 ? <MarketDescription market={market} /> : null}
-                    {tabIndex === 1 ? <MarketBuySell market={market} /> : null}
+                    {tabIndex === 0 ? (
+                        <MarketBuySell market={market} ammOutcomes={ammOutcomes} cashToken={cashToken} />
+                    ) : null}
+                    {tabIndex === 1 ? <MarketDescription market={market} /> : null}
                 </Paper>
             </CardContent>
             <CardActions className={classes.footer}>
