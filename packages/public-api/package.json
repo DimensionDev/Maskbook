@@ -1,0 +1,5 @@
+{
+  "name": "@masknet/public-api",
+  "private": true,
+  "types": "./dist/index.d.ts"
+}
