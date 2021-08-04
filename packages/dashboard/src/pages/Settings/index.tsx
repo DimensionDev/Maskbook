@@ -4,7 +4,6 @@ import SettingItem from './components/SettingItem'
 
 import LanguageIcon from '@material-ui/icons/Language'
 import PaletteIcon from '@material-ui/icons/Palette'
-import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows'
 import SyncIcon from '@material-ui/icons/Sync'
 import SaveIcon from '@material-ui/icons/Save'
 import SaveAltIcon from '@material-ui/icons/SaveAlt'
@@ -43,12 +42,6 @@ export default function Settings() {
                             title={t.settings_appearance_title()}
                             desc={t.settings_appearance_desc()}>
                             <AppearanceSetting />
-                        </SettingItem>
-                        <SettingItem
-                            icon={<DesktopWindowsIcon />}
-                            title={t.settings_ancient_post_compatibility_mode_title()}
-                            desc={t.settings_ancient_post_compatibility_mode_desc()}>
-                            <AncientPostsSetting />
                         </SettingItem>
                         <SettingItem
                             icon={<SyncIcon />}
