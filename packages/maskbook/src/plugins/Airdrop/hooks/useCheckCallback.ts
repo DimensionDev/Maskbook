@@ -90,8 +90,8 @@ export function useCheckCallback() {
                     .call()
 
                 const now = Date.now()
-                const start_ = Number.parseInt(start) * 1000
-                const end_ = Number.parseInt(end) * 1000
+                const start_ = Number.parseInt(start, 10) * 1000
+                const end_ = Number.parseInt(end, 10) * 1000
                 const isStart = now >= start_
                 const isEnd = now >= end_
 
