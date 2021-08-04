@@ -202,49 +202,51 @@ export function ToolboxHint(props: ToolboxHintProps) {
     } = useControlledDialog()
     //#endregion
 
+    interface ToolboxItemDescriptor {
+        onClick: () => void
+        image: string
+        text: string
+        hide?: boolean
+    }
+    const items: ToolboxItemDescriptor[] = [
+        { ...ToolIconURLs.encryptedmsg, onClick: openEncryptedMessage },
+        {
+            ...ToolIconURLs.redpacket,
+            onClick: openRedPacket,
+            hide: !(operatingSupportedChainMapping[RedPacket_Plugin.ID] && redPacketPluginEnabled),
+        },
+        { ...ToolIconURLs.files, onClick: openFileService, hide: !fileServicePluginEnabled },
+        {
+            ...ToolIconURLs.markets,
+            onClick: openITO,
+            hide: !(operatingSupportedChainMapping[ITO_Plugin.ID] && itoPluginEnabled),
+        },
+        {
+            ...ToolIconURLs.token,
+            onClick: openBuyCurrency,
+            hide: !(account && Flags.transak_enabled && transakPluginEnabled),
+        },
+        {
+            ...ToolIconURLs.swap,
+            onClick: openSwapDialog,
+            hide: !(chainIdValid && swapPluginEnabled),
+        },
+        {
+            ...ToolIconURLs.claim,
+            onClick: onClaimAllDialogOpen,
+            hide: operatingSupportedChainMapping[ITO_Plugin.ID],
+        },
+    ]
+
     const [menu, openMenu] = useMenu(
-        [
-            <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
-                <Image src={ToolIconURLs.encryptedmsg.image} width={19} height={19} />
-                <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
-            </MenuItem>,
-            operatingSupportedChainMapping[RedPacket_Plugin.ID] && redPacketPluginEnabled ? (
-                <MenuItem onClick={openRedPacket} className={classes.menuItem}>
-                    <Image src={ToolIconURLs.redpacket.image} width={19} height={19} />
-                    <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
+        items
+            .filter((x) => x.hide !== true)
+            .map((desc) => (
+                <MenuItem onClick={desc.onClick} className={classes.menuItem}>
+                    <Image src={desc.image} width={19} height={19} />
+                    <Typography className={classes.text}>{desc.text}</Typography>
                 </MenuItem>
-            ) : null,
-            fileServicePluginEnabled ? (
-                <MenuItem onClick={openFileService} className={classes.menuItem}>
-                    <Image src={ToolIconURLs.files.image} width={19} height={19} />
-                    <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
-                </MenuItem>
-            ) : null,
-            operatingSupportedChainMapping[ITO_Plugin.ID] && itoPluginEnabled ? (
-                <MenuItem onClick={openITO} className={classes.menuItem}>
-                    <Image src={ToolIconURLs.markets.image} width={19} height={19} />
-                    <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
-                </MenuItem>
-            ) : null,
-            account && Flags.transak_enabled && transakPluginEnabled ? (
-                <MenuItem onClick={openBuyCurrency} className={classes.menuItem}>
-                    <Image src={ToolIconURLs.token.image} width={19} height={19} />
-                    <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
-                </MenuItem>
-            ) : null,
-            chainIdValid && swapPluginEnabled ? (
-                <MenuItem onClick={openSwapDialog} className={classes.menuItem}>
-                    <Image src={ToolIconURLs.swap.image} width={19} height={19} />
-                    <Typography className={classes.text}>{ToolIconURLs.swap.text}</Typography>
-                </MenuItem>
-            ) : null,
-            operatingSupportedChainMapping[ITO_Plugin.ID] ? (
-                <MenuItem onClick={onClaimAllDialogOpen} className={classes.menuItem}>
-                    <Image src={ToolIconURLs.claim.image} width={19} height={19} />
-                    <Typography className={classes.text}>{ToolIconURLs.claim.text}</Typography>
-                </MenuItem>
-            ) : null,
-        ],
+            )),
         false,
         {
             paperProps: {
