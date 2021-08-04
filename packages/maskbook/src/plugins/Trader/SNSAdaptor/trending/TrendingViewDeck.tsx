@@ -4,7 +4,7 @@ import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutline
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-es'
-import { FormattedCurrency, useValueRef, useRemoteControlledDialog } from '@masknet/shared'
+import { FormattedCurrency, useValueRef, useRemoteControlledDialog, useStylesExtends, TokenIcon } from '@masknet/shared'
 import { useI18N, Flags } from '../../../../utils'
 import { Coin, Currency, DataProvider, Stat, TradeProvider, Trending } from '../../types'
 import { PriceChanged } from './PriceChanged'
@@ -12,8 +12,6 @@ import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
 import { useAccount } from '@masknet/web3-shared'
-import { TokenIcon } from '@masknet/shared'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeFooter } from '../trader/TradeFooter'
 import {
@@ -132,7 +130,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     //#region buy
     const account = useAccount()
     const isAllowanceCoin = useTransakAllowanceCoin(coin)
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({

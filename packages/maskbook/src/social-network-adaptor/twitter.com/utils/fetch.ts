@@ -2,8 +2,7 @@ import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
 import { defaultTo, flattenDeep } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
-import { ProfileIdentifier } from '../../../database/type'
-import { twitterUrl, canonifyImgUrl } from './url'
+import { canonifyImgUrl } from './url'
 import {
     makeTypedMessageText,
     makeTypedMessageAnchor,
@@ -13,6 +12,7 @@ import {
     isTypedMessageText,
     TypedMessageText,
 } from '@masknet/shared'
+import { collectNodeText } from '../../../utils'
 
 /**
  * @example
@@ -59,47 +59,6 @@ const isMobilePost = (node: HTMLElement) => {
     return node.classList.contains('tweet') ?? node.classList.contains('main-tweet')
 }
 
-export const bioCardParser = (cardNode: HTMLDivElement) => {
-    if (cardNode.classList.contains('profile')) {
-        const avatarElement = cardNode.querySelector<HTMLImageElement>('.avatar img')
-        const { name, handle } = parseNameArea(
-            [
-                notNullable(cardNode.querySelector<HTMLTableCellElement>('.user-info .fullname')).innerText,
-                notNullable(cardNode.querySelector<HTMLTableCellElement>('.user-info .screen-name')).innerText,
-            ].join('@'),
-        )
-        const bio = notNullable(cardNode.querySelector('.details') as HTMLTableCellElement).innerText
-        const isFollower = !!cardNode.querySelector<HTMLSpanElement>('.follows-you')
-        const isFollowing =
-            notNullable(cardNode.querySelector<HTMLFormElement>('.profile-actions form')).action.indexOf('unfollow') >
-            -1
-        return {
-            avatar: avatarElement ? avatarElement.src : undefined,
-            name,
-            handle,
-            identifier: new ProfileIdentifier(twitterUrl.hostIdentifier, handle),
-            bio,
-            isFollower,
-            isFollowing,
-        }
-    } else {
-        const avatarElement = cardNode.querySelector<HTMLImageElement>('img')
-        const { name, handle } = parseNameArea(notNullable(cardNode.children[1] as HTMLDivElement).innerText)
-        const bio = notNullable(cardNode.children[2] as HTMLDivElement).innerHTML
-        const isFollower = !!nthChild(cardNode, 1, 0, 0, 1, 1, 0)
-        const isFollowing = !!cardNode.querySelector('[data-testid*="unfollow"]')
-        return {
-            avatar: avatarElement ? avatarElement.src : undefined,
-            name,
-            handle,
-            identifier: new ProfileIdentifier(twitterUrl.hostIdentifier, handle),
-            bio,
-            isFollower,
-            isFollowing,
-        }
-    }
-}
-
 export const postIdParser = (node: HTMLElement) => {
     if (isMobilePost(node)) {
         const idNode = node.querySelector<HTMLAnchorElement>('.tweet-text')
@@ -128,7 +87,7 @@ export const postNameParser = (node: HTMLElement) => {
         // type 1:
         // normal tweet
         const anchorElement = tweetElement.querySelectorAll<HTMLAnchorElement>('a[role="link"]')[1]
-        const nameInUniqueAnchorTweet = anchorElement?.innerText
+        const nameInUniqueAnchorTweet = collectNodeText(anchorElement)
 
         // type 2:
         const nameInDoubleAnchorsTweet = Array.from(
@@ -164,30 +123,6 @@ export const postAvatarParser = (node: HTMLElement) => {
     }
 }
 
-export const postContentParser = (node: HTMLElement) => {
-    if (isMobilePost(node)) {
-        const containerNode = node.querySelector('.tweet-text > div')
-        if (!containerNode) return ''
-        return Array.from(containerNode.childNodes)
-            .map((node) => {
-                if (node.nodeType === Node.TEXT_NODE) return node.nodeValue
-                if (node.nodeName === 'A') return (node as HTMLAnchorElement).getAttribute('title')
-                return ''
-            })
-            .join(',')
-    } else {
-        const select = <T extends HTMLElement>(selectors: string) => {
-            const lang = node.parentElement!.querySelector<HTMLDivElement>('[lang]')
-            return lang ? Array.from(lang.querySelectorAll<T>(selectors)) : []
-        }
-        const sto = [
-            ...select<HTMLAnchorElement>('a').map((x) => x.textContent),
-            ...select<HTMLSpanElement>('span').map((x) => x.innerText),
-        ]
-        return sto.filter(Boolean).join(' ')
-    }
-}
-
 export const postContentMessageParser = (node: HTMLElement) => {
     function resolve(content: string) {
         if (content.startsWith('@')) return 'user'
@@ -209,7 +144,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const image = node
             const src = image.getAttribute('src')
             const matched = src?.match(/emoji\/v2\/svg\/([\d\w\-]+)\.svg/)
-            if (matched && matched[1]) {
+            if (matched?.[1]) {
                 const codePoints = matched[1].split('-').map((x) => Number.parseInt(`0x${x}`, 16))
                 return makeTypedMessageText(String.fromCodePoint(...codePoints))
             }

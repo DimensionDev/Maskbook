@@ -2,8 +2,7 @@ import { useState, useMemo } from 'react'
 import { Box, Button, DialogContent, makeStyles, TextField, DialogActions } from '@material-ui/core'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import { useI18N } from '../../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { MnemonicTab } from './MnemonicTab'
 import { FromPrivateKey, RecoverResult } from './FromPrivateKey'
@@ -113,9 +112,9 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
                             mnemonic: words,
                             passphrase: '',
                         })
-                    } catch (err) {
-                        if (err.message !== 'Add exists phrase.') {
-                            throw err
+                    } catch (error) {
+                        if (error instanceof Error && error.message !== 'Add exists phrase.') {
+                            throw error
                         }
                     }
                     break

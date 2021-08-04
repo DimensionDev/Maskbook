@@ -6,6 +6,7 @@ import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useGrant } from '../hooks/useGrant'
 import { PluginGitcoinMessages } from '../messages'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -77,9 +78,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const { value: grant, error, loading, retry } = useGrant(props.id)
 
     //#region the donation dialog
-    const { setDialog: setDonationDialog } = useRemoteControlledDialog(
-        PluginGitcoinMessages.events.donationDialogUpdated,
-    )
+    const { setDialog: setDonationDialog } = useRemoteControlledDialog(PluginGitcoinMessages.donationDialogUpdated)
     const onDonate = useCallback(() => {
         if (!grant) return
         setDonationDialog({
@@ -147,7 +146,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         color="primary"
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={`https://gitcoin.co${grant.url}`}>
+                        href={urlcat('https://gitcoin.co', grant.url)}>
                         {t('plugin_gitcoin_view_on')}
                     </Button>
                 </Grid>

@@ -19,7 +19,7 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import type { Asset } from '@masknet/web3-shared'
+import { Asset, useTrustedERC20Tokens } from '@masknet/web3-shared'
 import {
     CurrencyType,
     currySameAddress,
@@ -33,11 +33,9 @@ import {
     useStableTokensDebank,
     Wallet,
 } from '@masknet/web3-shared'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon, useStylesExtends } from '@masknet/shared'
 import { useI18N, useMatchXS } from '../../../utils'
 import { ActionsBarFT } from './ActionsBarFT'
-import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
 
 const useStyles = makeStyles<
@@ -85,6 +83,7 @@ const useStyles = makeStyles<
         display: 'flex',
         justifyContent: 'center',
         marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
     },
 }))
 
@@ -115,10 +114,11 @@ function ViewDetailed(props: ViewDetailedProps) {
                         classes={{ icon: classes.coin }}
                         name={asset.token.name}
                         address={asset.token.address}
+                        logoURI={asset.token.logoURI}
                         chainId={getChainIdFromName(asset.chain)}
                     />
                     <Typography className={classes.name}>{asset.token.symbol}</Typography>
-                    {asset.chain !== chainDetailed.shortName.toLowerCase() ? (
+                    {asset.chain.toLowerCase() !== chainDetailed.chain.toLowerCase() ? (
                         <Chip className={classes.chain} label={asset.chain} size="small" />
                     ) : null}
                 </Box>,
@@ -179,7 +179,7 @@ function ViewDetailed(props: ViewDetailedProps) {
 //#region wallet asset table
 const MIN_VALUE = 5
 
-export interface WalletAssetsTableProps extends withClasses<never> {
+export interface WalletAssetsTableProps extends withClasses<'container'> {
     wallet: Wallet
 }
 
@@ -197,7 +197,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         ...(isMobile ? [] : ['']),
     ] as const
 
-    const erc20Tokens = useTrustedERC20TokensFromDB()
+    const erc20Tokens = useTrustedERC20Tokens()
     const {
         value: detailedTokens,
         error: detailedTokensError,

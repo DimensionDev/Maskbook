@@ -1,8 +1,7 @@
-import { getEnumAsArray, safeUnreachable } from '@dimensiondev/kit'
-import BigNumber from 'bignumber.js'
 import type Web3 from 'web3'
 import { AbiOutput, hexToBytes, toAscii } from 'web3-utils'
-import CHAINS from '../assets/chains.json'
+import BigNumber from 'bignumber.js'
+import { getEnumAsArray } from '@dimensiondev/kit'
 import { getTokenConstants } from '../constants'
 import {
     Asset,
@@ -12,111 +11,22 @@ import {
     ERC20TokenDetailed,
     ERC721TokenAssetDetailed,
     EthereumTokenType,
+    FungibleTokenDetailed,
     NativeTokenDetailed,
-    NetworkType,
 } from '../types'
+import { getChainDetailed, getChainIdFromName } from './chainDetailed'
+import { formatBalance } from './formatter'
+import { isSameAddress } from './address'
 
-export function isSameAddress(addrA: string, addrB: string) {
-    return addrA.toLowerCase() === addrB.toLowerCase()
-}
-
-export function currySameAddress(base: string) {
-    return (target: string | { address: string }) => {
-        if (typeof target === 'string') {
-            return isSameAddress(base, target)
-        } else if (typeof target === 'object' && typeof target.address === 'string') {
-            return isSameAddress(base, target.address)
-        }
-        throw new Error('Unsupported `target` address format')
-    }
-}
-
-export const isDAI = currySameAddress(getTokenConstants().DAI_ADDRESS)
-
-export const isOKB = currySameAddress(getTokenConstants().OKB_ADDRESS)
-
-export const isNative = currySameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS)
-
-export function addGasMargin(value: BigNumber.Value, scale = 3000) {
-    return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
-}
-
-//#region chain detailed
-export function getChainDetailed(chainId = ChainId.Mainnet) {
-    return CHAINS.find((x) => x.chainId === chainId)
-}
-
-// Learn more: https://github.com/ChainAgnostic/CAIPs/blob/master/CAIPs/caip-2.md
-export function getChainDetailedCAIP(chainId = ChainId.Mainnet) {
-    const chainDetailed = getChainDetailed(chainId)
-    if (!chainDetailed) return
-    return {
-        chainId: `0x${chainDetailed.chainId.toString(16)}`,
-        chainName: chainDetailed.name,
-        nativeCurrency: chainDetailed.nativeCurrency,
-        rpcUrls: chainDetailed.rpc,
-        blockExplorerUrls: [
-            chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
-                ? chainDetailed.explorers[0].url
-                : chainDetailed.infoURL,
-        ],
-    }
-}
-
-export function getChainName(chainId: ChainId) {
-    const chainDetailed = getChainDetailed(chainId)
-    return chainDetailed?.name ?? 'Unknown'
-}
-
-export function getChainFullName(chainId: ChainId) {
-    const chainDetailed = getChainDetailed(chainId)
-    return chainDetailed?.fullName ?? 'Unknown'
-}
-
-export function getChainIdFromName(name: string) {
-    const chainDetailed = CHAINS.find((x) =>
-        [x.chain, x.network, x.name, x.shortName, x.fullName].map((y) => y.toLowerCase()).includes(name.toLowerCase()),
-    )
-    return chainDetailed?.chainId as ChainId | undefined
-}
-
-export function getChainIdFromNetworkType(networkType: NetworkType) {
-    switch (networkType) {
-        case NetworkType.Ethereum:
-            return ChainId.Mainnet
-        case NetworkType.Binance:
-            return ChainId.BSC
-        case NetworkType.Polygon:
-            return ChainId.Matic
-        default:
-            safeUnreachable(networkType)
-            return ChainId.Mainnet
-    }
-}
-
-export function getNetworkTypeFromChainId(chainId: ChainId) {
-    const chainDetailed = getChainDetailed(chainId)
-    switch (chainDetailed?.chain) {
-        case 'ETH':
-            return NetworkType.Ethereum
-        case 'BSC':
-            return NetworkType.Binance
-        case 'Matic':
-            return NetworkType.Polygon
-        default:
-            throw new Error('Unknown chain id.')
-    }
-}
-//#endregion
-
-//#region tokens
 export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) throw new Error('Unknown chain id.')
+    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
+    if (!NATIVE_TOKEN_ADDRESS) throw new Error('Failed to create token.')
     return {
         type: EthereumTokenType.Native,
         chainId,
-        address: getTokenConstants().NATIVE_TOKEN_ADDRESS,
+        address: NATIVE_TOKEN_ADDRESS,
         ...chainDetailed.nativeCurrency,
     }
 }
@@ -186,22 +96,28 @@ export function createERC20Tokens(
     symbol: string | ((chainId: ChainId) => string),
     decimals: number | ((chainId: ChainId) => number),
 ) {
-    return getEnumAsArray(ChainId).reduce((accumulator, { value: chainId }) => {
+    type Table = { [chainId in ChainId]: ERC20TokenDetailed }
+    const base = {} as Table
+    return getEnumAsArray(ChainId).reduce<Table>((accumulator, { value: chainId }) => {
         const evaludator: <T>(f: T | ((chainId: ChainId) => T)) => T = (f) =>
             typeof f === 'function' ? (f as any)(chainId) : f
 
         accumulator[chainId] = {
             type: EthereumTokenType.ERC20,
             chainId,
-            address: getTokenConstants(chainId)[key],
+            address: getTokenConstants(chainId)[key] ?? '',
             name: evaludator(name),
             symbol: evaludator(symbol),
             decimals: evaludator(decimals),
         }
         return accumulator
-    }, {} as { [chainId in ChainId]: ERC20TokenDetailed })
+    }, base)
 }
 //#endregion
+
+export function addGasMargin(value: BigNumber.Value, scale = 3000) {
+    return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
+}
 
 export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
     if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)
@@ -225,4 +141,53 @@ export function parseStringOrBytes32(
         : defaultValue
 }
 
+//#region asset sort
+const { MASK_ADDRESS } = getTokenConstants()
+
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
+export const getBalanceValue = (asset: Asset) => parseFloat(formatBalance(asset.balance, asset.token.decimals))
+
+export const makeSortTokenFn =
+    (options = { isMaskBoost: false }) =>
+    (a: FungibleTokenDetailed, b: FungibleTokenDetailed) => {
+        // The native token goes first
+        if (a.type === EthereumTokenType.Native) return -1
+        if (b.type === EthereumTokenType.Native) return 1
+
+        // The mask token second
+        if (options.isMaskBoost) {
+            if (isSameAddress(a.address, MASK_ADDRESS ?? '')) return -1
+            if (isSameAddress(b.address, MASK_ADDRESS ?? '')) return 1
+        }
+
+        return 0
+    }
+
+export const makeSortAssertFn =
+    (chainId: ChainId, options = { isMaskBoost: false }) =>
+    (a: Asset, b: Asset) => {
+        // The tokens with the current chain id goes first
+        if (a.chain !== b.chain) {
+            if (getChainIdFromName(a.chain) === chainId) return -1
+            if (getChainIdFromName(b.chain) === chainId) return 1
+        }
+
+        // token sort
+        const tokenDifference = makeSortTokenFn({ isMaskBoost: options.isMaskBoost })(a.token, b.token)
+        if (tokenDifference !== 0) return tokenDifference
+
+        // Token with high usd value estimation has priority
+        const valueDifference = getTokenUSDValue(b) - getTokenUSDValue(a)
+        if (valueDifference !== 0) return valueDifference
+
+        // Token with big balance has priority
+        if (getBalanceValue(a) > getBalanceValue(b)) return -1
+        if (getBalanceValue(a) < getBalanceValue(b)) return 1
+
+        // Sorted by alphabet
+        if (a.balance > b.balance) return -1
+        if (a.balance < b.balance) return 1
+
+        return 0
+    }
+//#endregion

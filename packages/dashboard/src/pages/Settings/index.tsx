@@ -5,7 +5,6 @@ import SettingItem from './components/SettingItem'
 import LanguageIcon from '@material-ui/icons/Language'
 import PaletteIcon from '@material-ui/icons/Palette'
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'
-import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows'
 import SyncIcon from '@material-ui/icons/Sync'
 import SaveIcon from '@material-ui/icons/Save'
 import SaveAltIcon from '@material-ui/icons/SaveAlt'
@@ -18,7 +17,6 @@ import { useDashboardI18N } from '../../locales'
 
 import LanguageSetting from './components/LanguageSetting'
 import AppearanceSetting from './components/AppearanceSetting'
-import AncientPostsSetting from './components/AncientPostsSetting'
 import BackupSetting from './components/BackupSetting'
 import RestoreSetting from './components/RestoreSetting'
 import MobileSyncSetting from './components/MobileSyncSetting'
@@ -53,12 +51,6 @@ export default function Settings() {
                         title={t.settings_data_source_title()}
                         desc={t.settings_data_source_desc()}>
                         <DataSourceSetting />
-                    </SettingItem>
-                    <SettingItem
-                        icon={<DesktopWindowsIcon />}
-                        title={t.settings_ancient_post_compatibility_mode_title()}
-                        desc={t.settings_ancient_post_compatibility_mode_desc()}>
-                        <AncientPostsSetting />
                     </SettingItem>
                     <SettingItem
                         icon={<SyncIcon />}

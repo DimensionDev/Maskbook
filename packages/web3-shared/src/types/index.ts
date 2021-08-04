@@ -1,4 +1,4 @@
-import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/contracts/types/types'
+import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
 
 export enum CurrencyType {
     USD = 'usd',
@@ -7,9 +7,7 @@ export enum CurrencyType {
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 
-export interface Web3Constants {
-    [K: string]: { [K in ChainId]: Primitive | Primitive[] }
-}
+export type Web3Constants = Record<string, { [K in ChainId]: Primitive | Primitive[] }>
 
 // Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
 export enum ChainId {
@@ -26,6 +24,10 @@ export enum ChainId {
     // Matic
     Matic = 137,
     Mumbai = 80001,
+
+    // Arbitrum
+    Arbitrum = 42161,
+    Arbitrum_Rinkeby = 421611,
 }
 
 export enum ProviderType {
@@ -39,6 +41,7 @@ export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
     Polygon = 'Polygon',
+    Arbitrum = 'Arbitrum',
 }
 
 export interface Wallet {
@@ -87,7 +90,7 @@ export interface ERC20TokenDetailed extends ERC20Token {
     name?: string
     symbol?: string
     decimals: number
-    logoURI?: string
+    logoURI?: string[]
 }
 //#endregion
 
@@ -133,9 +136,7 @@ export interface ERC1155TokenAssetDetailed extends ERC1155TokenDetailed {
         decimals?: string
         description?: string
         image?: string
-        properties?: {
-            [key: string]: string | any[] | { [key: string]: any }
-        }
+        properties?: Record<string, string | any[] | Record<string, any>>
     }
 }
 //#endregion
@@ -191,6 +192,7 @@ export enum EthereumTokenType {
 export enum EthereumMethodType {
     PERSONAL_SIGN = 'personal_sign',
     WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
+    WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_GAS_PRICE = 'eth_gasPrice',
@@ -202,6 +204,7 @@ export enum EthereumMethodType {
     ETH_ESTIMATE_GAS = 'eth_estimateGas',
     ETH_SIGN = 'eth_sign',
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
+    ETH_GET_LOGS = 'eth_getLogs',
 }
 
 export enum TransactionEventType {
@@ -247,7 +250,7 @@ export interface Asset {
     value?: {
         [key in CurrencyType]: string
     }
-    logoURL?: string
+    logoURI?: string
 }
 
 export enum PortfolioProvider {

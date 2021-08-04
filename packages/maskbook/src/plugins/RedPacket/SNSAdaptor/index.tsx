@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { EthereumTokenType, formatBalance, getChainDetailed, getChainIdFromName } from '@masknet/web3-shared'
+import { ChainId, EthereumTokenType, formatBalance, getChainDetailed, getChainIdFromName } from '@masknet/web3-shared'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { base } from '../base'
 import { RedPacketMetaKey } from '../constants'
@@ -25,7 +25,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         [
             RedPacketMetaKey,
             (payload: RedPacketJSONPayload) => {
-                const chainId = getChainIdFromName(payload.network ?? 'ETH')
+                const chainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
                 const chainDetailed = getChainDetailed(chainId)
                 const tokenDetailed =
                     payload.token_type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token

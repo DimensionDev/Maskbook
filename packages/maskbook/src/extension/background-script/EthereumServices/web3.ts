@@ -19,9 +19,11 @@ export function createWeb3({
         case ProviderType.MetaMask:
             return MetaMask.createWeb3()
         case ProviderType.WalletConnect:
-            return WalletConnect.createWeb3()
+            return WalletConnect.createWeb3({
+                chainId,
+            })
         case ProviderType.CustomNetwork:
-            return WalletConnect.createWeb3()
+            throw new Error('To be implemented.')
         default:
             unreachable(providerType)
     }

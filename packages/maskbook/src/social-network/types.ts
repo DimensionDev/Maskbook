@@ -8,12 +8,13 @@ import type {
     ObservableWeakMap,
 } from '@masknet/shared'
 import type { PaletteMode, Theme } from '@material-ui/core'
-import type { InjectedDialogProps } from '../components/shared/InjectedDialog'
+import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
 import type { PostInfo } from './PostInfo'
 import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
 import type { TypedMessage } from '../protocols/typed-message'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
+import type { ClassNameMap } from '@material-ui/styles'
 
 // Don't define values in namespaces
 export namespace SocialNetwork {
@@ -178,18 +179,12 @@ export namespace SocialNetworkUI {
     }
     export namespace CollectingCapabilities {
         export interface Define {
-            /** Collect all profiles seen on the network */
-            profilesCollector?(signal: AbortSignal): void
             /** Resolve the information of who am I on the current network. */
             identityProvider?: IdentityResolveProvider
             /** Maintain all the posts up-to-date. */
             postsProvider?: PostsProvider
             /** Get searched keyword */
             getSearchedKeyword?(): string
-            /** @deprecated Seems we don't use it anymore. */
-            getPostContent?(): Promise<string>
-            /** @deprecated Seems we don't use it anymore. */
-            getProfile?(): Promise<ProfileUI>
         }
         export type ProfileUI = { bioContent: string }
         export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar'>
@@ -241,10 +236,10 @@ export namespace SocialNetworkUI {
             start(signal: AbortSignal): void
         }
         export interface ComponentOverwrite {
-            InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps>
+            InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps, InjectedDialogClassKey>
         }
-        export interface ComponentOverwriteConfig<Props extends withClasses<any>> {
-            classes?: () => Props extends withClasses<infer T> ? Partial<Record<T, string>> : never
+        export interface ComponentOverwriteConfig<Props extends { classes?: any }, Classes extends string> {
+            classes?: () => Partial<ClassNameMap<Classes>>
             props?: (props: Props) => Props
         }
         export interface I18NOverwrite {
@@ -302,30 +297,5 @@ export namespace SocialNetworkWorker {
     export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared, WorkerBase {
         tasks: Tasks
     }
-    export interface Tasks {
-        /**
-         * This function should fetch the given post by `fetch`, `AutomatedTabTask` or anything
-         * @deprecated
-         * @pseudoCode
-         * fetchPostContent(post) {
-         *      let tab = get_tab_with_same_origin_and_not_pinned()
-         *      if (!isUndefined(tab)) {
-         *          // tab available, let them to fetch.
-         *          // this process should not visible to user.
-         *          return tasks(tab).fetch(url)
-         *      }
-         *
-         *      // no tab available for now, call foreground to do so.
-         *      return tasks(getPostURL(post)).getPostContent()
-         * }
-         * @param postIdentifier The post id
-         */
-        fetchPostContent?(postIdentifier: PostIdentifier<ProfileIdentifier>): Promise<string>
-        /**
-         * This function should fetch the given post by `fetch`, `AutomatedTabTask` or anything
-         * @param identifier The post id
-         * @deprecated
-         */
-        fetchProfile?(identifier: ProfileIdentifier): Promise<SocialNetworkUI.CollectingCapabilities.ProfileUI>
-    }
+    export interface Tasks {}
 }

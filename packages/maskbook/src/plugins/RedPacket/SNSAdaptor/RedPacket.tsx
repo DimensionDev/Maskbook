@@ -10,6 +10,7 @@ import {
     useChainIdValid,
     useTokenDetailed,
     useNetworkType,
+    useWeb3,
 } from '@masknet/web3-shared'
 import { Box, Card, makeStyles, Skeleton, Typography } from '@material-ui/core'
 import classNames from 'classnames'
@@ -70,6 +71,10 @@ const useStyles = makeStyles((theme) => ({
     },
     words: {
         color: '#FAF2BF',
+        whiteSpace: 'pre',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        width: '85%',
     },
     button: {
         color: theme.palette.common.white,
@@ -137,6 +142,7 @@ export function RedPacket(props: RedPacketProps) {
     const classes = useStyles()
 
     // context
+    const web3 = useWeb3()
     const account = useAccount()
     const chainIdValid = useChainIdValid()
     const networkType = useNetworkType()
@@ -172,11 +178,12 @@ export function RedPacket(props: RedPacketProps) {
                 : '',
         )
         .toString()
+
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
         payload.contract_version,
         account,
         payload.rpid,
-        payload.password,
+        web3.eth.accounts.sign(account, payload.password).signature,
     )
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
         payload.contract_version,
@@ -225,8 +232,7 @@ export function RedPacket(props: RedPacketProps) {
     // the red packet can fetch without account
     if (!availability || !token)
         return (
-            <EthereumChainBoundary
-                chainId={payload.network ? getChainIdFromName(payload.network) ?? ChainId.Mainnet : ChainId.Mainnet}>
+            <EthereumChainBoundary chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}>
                 <Card className={classes.root} component="article" elevation={0}>
                     <Skeleton
                         animation="wave"
@@ -254,8 +260,7 @@ export function RedPacket(props: RedPacketProps) {
         )
 
     return (
-        <EthereumChainBoundary
-            chainId={payload.network ? getChainIdFromName(payload.network) ?? ChainId.Mainnet : ChainId.Mainnet}>
+        <EthereumChainBoundary chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}>
             <Card className={classNames(classes.root)} component="article" elevation={0}>
                 <div className={classes.header}>
                     <Typography className={classes.from} variant="body1" color="inherit">

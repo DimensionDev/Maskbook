@@ -1,5 +1,5 @@
-import type { ExchangeProxy } from '@masknet/contracts/types/ExchangeProxy'
-import type { PayableTx } from '@masknet/contracts/types/types'
+import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
+import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
     TransactionEventType,
@@ -33,7 +33,7 @@ export function useTradeCallback(
     const tradeAmount = useTradeAmount(trade, allowedSlippage)
 
     const tradeCallback = useCallback(async () => {
-        if (!trade || !trade.inputToken || !trade.outputToken || !exchangeProxyContract) {
+        if (!trade || !trade.inputToken || !trade.outputToken || !exchangeProxyContract || !BALANCER_ETH_ADDRESS) {
             setTradeState({
                 type: TransactionStateType.UNKNOWN,
             })

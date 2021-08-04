@@ -38,7 +38,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
             } else {
                 failToRestore()
             }
-        } catch (e) {
+        } catch {
             failToRestore()
         }
     }
@@ -57,9 +57,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                             autoFocus
                             required
                             label={t('name')}
-                            inputProps={{
-                                'data-testid': 'username_input',
-                            }}
+                            inputProps={{ 'data-testid': 'username_input' }}
                             variant="outlined"
                         />
                         <TextField
@@ -67,18 +65,14 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                             onChange={(e) => setMnemonicWordsValue(e.target.value)}
                             required
                             label={t('mnemonic_words')}
-                            inputProps={{
-                                'data-testid': 'mnemonic_input',
-                            }}
+                            inputProps={{ 'data-testid': 'mnemonic_input' }}
                             variant="outlined"
                         />
                         <TextField
                             onChange={(e) => setPassword(e.target.value)}
                             value={password}
                             label={t('password')}
-                            inputProps={{
-                                'data-testid': 'password_input',
-                            }}
+                            inputProps={{ 'data-testid': 'password_input' }}
                             variant="outlined"
                         />
                     </>
@@ -112,9 +106,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                             onChange={setFile}
                             onScan={setScannedValue}
                             onError={() => {
-                                enqueueSnackbar(t('set_up_qr_scanner_fail'), {
-                                    variant: 'error',
-                                })
+                                enqueueSnackbar(t('set_up_qr_scanner_fail'), { variant: 'error' })
                             }}
                         />
                         <RestoreFromQRCodeCameraBox
@@ -123,9 +115,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                                 setScannedValue(scannedValue)
                             }}
                             onError={() => {
-                                enqueueSnackbar(t('set_up_qr_scanner_fail'), {
-                                    variant: 'error',
-                                })
+                                enqueueSnackbar(t('set_up_qr_scanner_fail'), { variant: 'error' })
                             }}
                         />
                     </>
@@ -161,10 +151,8 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                                     : Services.Identity.restoreFromBackup(scannedValue))
 
                                 importPersona(persona)
-                            } catch (e) {
-                                enqueueSnackbar(t('set_up_restore_fail'), {
-                                    variant: 'error',
-                                })
+                            } catch {
+                                enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
                             }
                         }}
                         data-testid="import_button">

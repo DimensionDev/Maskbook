@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { ChainId } from '@masknet/web3-shared'
 import { ITO_PluginID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
@@ -13,5 +14,8 @@ export const base: Plugin.Shared.Definition = {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
+        web3: {
+            operatingSupportedChains: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
+        },
     },
 }

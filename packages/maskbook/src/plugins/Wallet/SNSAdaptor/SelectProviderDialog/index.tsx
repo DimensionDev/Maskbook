@@ -10,7 +10,7 @@ import {
     Theme,
     Typography,
 } from '@material-ui/core'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
 import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
@@ -25,13 +25,10 @@ import {
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { Provider } from '../Provider'
 import { MetaMaskIcon } from '../../../../resources/MetaMaskIcon'
 import { MaskbookIcon } from '../../../../resources/MaskbookIcon'
 import { WalletConnectIcon } from '../../../../resources/WalletConnectIcon'
-import Services from '../../../../extension/service'
-import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../messages'
 import { DashboardRoute } from '../../../../extension/options-page/Route'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
@@ -114,6 +111,7 @@ const networks = [
     NetworkType.Ethereum,
     Flags.bsc_enabled ? NetworkType.Binance : undefined,
     Flags.polygon_enabled ? NetworkType.Polygon : undefined,
+    Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
 ].filter(Boolean) as NetworkType[]
 
 interface SelectProviderDialogUIProps extends withClasses<never> {}
@@ -139,6 +137,12 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     //#region select wallet dialog
     const { setDialog: setSelectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectWalletDialogUpdated,
+    )
+    //#endregion
+
+    //#region create or import wallet dialog
+    const { openDialog: openCreateImportDialog } = useRemoteControlledDialog(
+        WalletMessages.events.createImportWalletDialogUpdated,
     )
     //#endregion
 
@@ -183,17 +187,15 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     // create a new wallet
                     if (isEnvironment(Environment.ManifestOptions))
                         history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
-                    else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
+                    else openCreateImportDialog()
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:
                     if (
-                        account &&
-                        providerType === selectedProviderType &&
-                        getChainIdFromNetworkType(undeterminedNetworkType) === chainId
+                        !account ||
+                        providerType !== selectedProviderType ||
+                        getChainIdFromNetworkType(undeterminedNetworkType) !== chainId
                     ) {
-                        openWalletStatusDialog()
-                    } else {
                         setConnectWalletDialog({
                             open: true,
                             providerType,
@@ -248,7 +250,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                 </Box>
                 <Box className={classes.step}>
                     <Typography className={classes.stepTitle} variant="h2" component="h2">
-                        {`${Flags.bsc_enabled ? '2. ' : ''}Choose Wallet`}
+                        2. Choose Wallet
                     </Typography>
                     <ImageList
                         className={classnames(classes.stepContent, classes.grid)}

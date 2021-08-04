@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import type { NonPayableTx } from '@masknet/contracts/types/types'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
@@ -9,7 +9,7 @@ import { useNonce } from './useNonce'
 import { useGasPrice } from './useGasPrice'
 import { isGreaterThan, isZero } from '../utils'
 
-export function useERC20TokenTransferCallback(address: string, amount?: string, recipient?: string) {
+export function useERC20TokenTransferCallback(address?: string, amount?: string, recipient?: string) {
     const nonce = useNonce()
     const gasPrice = useGasPrice()
     const account = useAccount()

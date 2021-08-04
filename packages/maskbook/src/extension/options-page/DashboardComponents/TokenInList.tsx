@@ -1,12 +1,11 @@
 import {
+    Asset,
     currySameAddress,
-    formatEthereumAddress,
+    formatBalance,
     FungibleTokenDetailed,
+    isSameAddress,
     resolveTokenLinkOnExplorer,
     useTokenConstants,
-    useTokenDetailed,
-    EthereumTokenType,
-    isSameAddress,
 } from '@masknet/web3-shared'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
@@ -40,24 +39,20 @@ const useStyles = makeStyles((theme: Theme) => ({
         position: 'relative',
     },
     link: {
+        display: 'flex',
+        alignItems: 'center',
+        position: 'absolute',
         top: 0,
         right: 0,
         bottom: 0,
         left: 'auto',
         margin: 'auto',
-        position: 'absolute',
     },
     openIcon: {
         fontSize: 16,
         width: 16,
         height: 16,
         marginLeft: theme.spacing(0.5),
-    },
-    address: {
-        color: theme.palette.text.disabled,
-        fontSize: 12,
-        display: 'block',
-        marginTop: theme.spacing(0.25),
     },
     symbol: {},
 }))
@@ -66,7 +61,7 @@ export interface TokenInListProps {
     index: number
     style: any
     data: {
-        tokens: FungibleTokenDetailed[]
+        assets: Asset[]
         selected: string[]
         onSelect(token: FungibleTokenDetailed): void
     }
@@ -78,17 +73,16 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
 
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
 
-    const _token = data.tokens[index]
-
-    const { value: token } = useTokenDetailed(
-        isSameAddress(NATIVE_TOKEN_ADDRESS, _token.address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
-        _token.address,
-    )
+    const currentAsset = data.assets[index]
+    const { token, balance } = currentAsset
 
     if (!token) return null
     const { address, name, symbol, logoURI } = token
+
     return (
         <ListItem
+            // force react not to reuse dom node
+            key={token.address}
             button
             style={style}
             disabled={data.selected.some(currySameAddress(address))}
@@ -98,14 +92,8 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
             </ListItemIcon>
             <ListItemText classes={{ primary: classes.text }}>
                 <Typography className={classes.primary} color="textPrimary" component="span">
-                    <span className={classes.name}>{name}</span>
-                    <span className={classes.address}>
-                        {token.address !== NATIVE_TOKEN_ADDRESS ? formatEthereumAddress(token.address, 8) : null}
-                    </span>
-                </Typography>
-                <Typography className={classes.secondary} color="textSecondary" component="span">
                     <span className={classes.symbol}>{symbol}</span>
-                    {token.address !== NATIVE_TOKEN_ADDRESS ? (
+                    {!isSameAddress(token.address, NATIVE_TOKEN_ADDRESS) ? (
                         <Link
                             className={classes.link}
                             href={resolveTokenLinkOnExplorer(token)}
@@ -115,6 +103,12 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
                             <OpenInNewIcon className={classes.openIcon} />
                         </Link>
                     ) : null}
+                    <Typography className={classes.name} color="textSecondary">
+                        {name}
+                    </Typography>
+                </Typography>
+                <Typography className={classes.secondary} color="textPrimary" component="span">
+                    {balance !== null && formatBalance(balance, token.decimals, 4)}
                 </Typography>
             </ListItemText>
         </ListItem>

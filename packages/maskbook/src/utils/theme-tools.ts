@@ -14,7 +14,7 @@ export function fromRGB(rgb: string): RGB | undefined {
     const matched = rgb.match(/rgb\(\s*(\d+?)\s*,\s*(\d+?)\s*,\s*(\d+?)\s*\)/)
     if (matched) {
         const [_, r, g, b] = matched
-        return [parseInt(r), parseInt(g), parseInt(b)]
+        return [Number.parseInt(r, 10), Number.parseInt(g, 10), Number.parseInt(b, 10)]
     }
     return
 }
@@ -33,7 +33,12 @@ function fromRGBAtoRGB(color: string): string {
     const matched = color.match(/^rgba\((\d{1,3}%?),\s*(\d{1,3}%?),\s*(\d{1,3}%?),\s*(\d*(?:\.\d+)?)\)$/)
     if (matched) {
         const [_, r, g, b, a] = matched
-        const rgba: RGBA = [parseInt(r), parseInt(g), parseInt(b), parseInt(a)]
+        const rgba: RGBA = [
+            Number.parseInt(r, 10),
+            Number.parseInt(g, 10),
+            Number.parseInt(b, 10),
+            Number.parseInt(a, 10),
+        ]
 
         return toRGB(shade(rgba.slice(0, 3) as RGB, rgba[3] * 100))
     }

@@ -1,4 +1,5 @@
 import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
+import type { ChainId } from '@masknet/web3-shared'
 import type { Emitter } from '@servie/events'
 import type { Option, Result } from 'ts-results'
 
@@ -92,12 +93,14 @@ export namespace Plugin.Shared {
         experimentalMark?: boolean
         /** Configuration of how this plugin is managed by the Mask Network. */
         management?: ManagementProperty
+        /** i18n resources of this plugin */
+        i18n?: I18NResource
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
      * which you should include the information above in those three parts.
      */
-    export interface DefinitionWithInit extends Definition {
+    export interface DefinitionDeferred extends Definition, Utilities {
         /**
          * This function is called when the plugin is initialized.
          *
@@ -105,6 +108,8 @@ export namespace Plugin.Shared {
          * to make sure the plugin can be reloaded safely.
          */
         init(signal: AbortSignal): void | Promise<void>
+    }
+    export interface Utilities {
         /**
          * A pure function that convert a TypedMessage into another one
          */
@@ -130,7 +135,13 @@ export namespace Plugin.Shared {
         architecture: Record<'app' | 'web', boolean>
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
+        web3?: Web3EnableRequirement
     }
+    export interface Web3EnableRequirement {
+        /** Plugin can declare what chain it supports. When the current chain is not supported, the composition entry will be hidden. */
+        operatingSupportedChains?: ChainId[]
+    }
+
     export interface ManagementProperty {
         /** This plugin should not displayed in the plugin management page. */
         internal?: boolean
@@ -151,11 +162,15 @@ export namespace Plugin.Shared {
         type: 'opt-in' | 'opt-out'
         networks: Partial<Record<CurrentSNSNetwork, boolean>>
     }
+    export type I18NLanguage = string
+    export type I18NKey = string
+    export type I18NValue = string
+    export type I18NResource = Record<I18NLanguage, Record<I18NKey, I18NValue>>
 }
 
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
-    export interface Definition extends Shared.DefinitionWithInit {
+    export interface Definition extends Shared.DefinitionDeferred {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
@@ -181,7 +196,7 @@ export namespace Plugin.SNSAdaptor {
          * A label that will be rendered in the CompositionDialog as a chip.
          * @example {fallback: "🧧 Red Packet"}
          */
-        label: I18NStringField | React.ReactNode
+        label: I18NFieldOrReactNode
         /** This callback will be called when the user clicked on the chip. */
         onClick(): void
     }
@@ -190,7 +205,7 @@ export namespace Plugin.SNSAdaptor {
          * A label that will be rendered in the CompositionDialog as a chip.
          * @example {fallback: "🧧 Red Packet"}
          */
-        label: I18NStringField | React.ReactNode
+        label: I18NFieldOrReactNode
         /** A React dialog component that receives `open` and `onClose`. The dialog will be opened when the chip clicked. */
         dialog: React.ComponentType<CompositionDialogEntry_DialogProps>
         /**
@@ -222,7 +237,7 @@ export namespace Plugin.SNSAdaptor {
 /** This part runs in the dashboard */
 export namespace Plugin.Dashboard {
     // As you can see we currently don't have so much use case for an API here.
-    export interface Definition extends Shared.DefinitionWithInit {
+    export interface Definition extends Shared.DefinitionDeferred {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
     }
@@ -230,7 +245,7 @@ export namespace Plugin.Dashboard {
 
 /** This part runs in the background page */
 export namespace Plugin.Worker {
-    export interface Definition extends Shared.DefinitionWithInit {
+    export interface Definition extends Shared.DefinitionDeferred {
         /** TODO: this functionality has not be done yet. */
         backup?: BackupHandler
     }
@@ -288,13 +303,13 @@ export namespace Plugin {
     export type InjectUIReact<Props> = React.ComponentType<Props>
 }
 // TODO: Plugin i18n is not read today.
-// TODO: Add an entry for i18n JSON files, and provide hooks.
 export interface I18NStringField {
     /** The i18n key of the string content. */
     i18nKey?: string
     /** The fallback content to display if there is no i18n string found. */
     fallback: string
 }
+export type I18NFieldOrReactNode = I18NStringField | React.ReactNode
 
 /**
  * The current running SocialNetwork.
@@ -313,10 +328,11 @@ export enum CurrentSNSNetwork {
 export namespace Plugin.__Host {
     export interface Host {
         enabled: EnabledStatusReporter
+        addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void
         signal?: AbortSignal
     }
     export interface EnabledStatusReporter {
-        isEnabled(id: string): boolean
+        isEnabled(id: string): boolean | Promise<boolean>
         events: Emitter<{ enabled: [id: string]; disabled: [id: string] }>
     }
 }

@@ -3,6 +3,7 @@ import { useSubscription, Subscription } from 'use-subscription'
 import { createManager } from './manage'
 import { getPluginDefine } from './store'
 import type { CurrentSNSNetwork, Plugin } from '../types'
+import { useChainId } from '@masknet/web3-shared'
 
 const { events, activated, startDaemon } = createManager({
     getLoader: (plugin) => plugin.SNSAdaptor,
@@ -14,6 +15,16 @@ const subscription: Subscription<Plugin.SNSAdaptor.Definition[]> = {
 }
 export function useActivatedPluginsSNSAdaptor() {
     return useSubscription(subscription)
+}
+
+export function useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet() {
+    const chainId = useChainId()
+    const plugins = useActivatedPluginsSNSAdaptor()
+    return plugins.reduce<Record<string, boolean>>((acc, cur) => {
+        const operatingSupportedChains = cur.enableRequirement.web3?.operatingSupportedChains
+        acc[cur.ID] = !Boolean(operatingSupportedChains) || Boolean(operatingSupportedChains?.includes(chainId))
+        return acc
+    }, {})
 }
 
 export function startPluginSNSAdaptor(currentNetwork: CurrentSNSNetwork, host: Plugin.__Host.Host) {

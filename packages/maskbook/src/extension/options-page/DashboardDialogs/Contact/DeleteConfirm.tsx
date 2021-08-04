@@ -20,7 +20,7 @@ export function DashboardContactDeleteConfirmDialog(
         [contact],
         () => {
             props.onClose()
-            setTimeout(onDeleted, 0)
+            setTimeout(() => onDeleted(), 0)
         },
     )
     return (

@@ -1,4 +1,4 @@
-import { createI18NBundle } from '../i18n/register-ns'
+import { createI18NBundle } from '@masknet/shared-base'
 
 export * from './i18n_generated'
 import en from './en.json'

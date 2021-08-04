@@ -13,6 +13,10 @@ export function registerPlugin(def: Plugin.DeferredDefinition) {
     __registered.set(def.ID, def)
 }
 
+export function useRegisteredPlugins() {
+    return [...__registered.values()]
+}
+
 function __meetRegisterRequirement(def: Plugin.Shared.Definition) {
     // arch check
     if (process.env.architecture === 'app' && !def.enableRequirement.architecture.app) return false

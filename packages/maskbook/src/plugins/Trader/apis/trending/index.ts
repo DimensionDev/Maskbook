@@ -151,7 +151,7 @@ async function updateCache(dataProvider: DataProvider, keyword?: string) {
             supportedSymbolIdsMap: new Map(Object.entries(coinsGrouped).map(([symbol, coins]) => [symbol, coins])),
             lastUpdated: new Date(),
         })
-    } catch (e) {
+    } catch {
         console.error('failed to update cache')
     }
 }
@@ -175,6 +175,7 @@ export async function checkAvailabilityOnDataProvider(keyword: string, type: Tag
 
 export async function getAvailableDataProviders(type?: TagType, keyword?: string) {
     const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
+    if (!networkType) return []
     if (!type || !keyword)
         return getEnumAsArray(DataProvider)
             .filter((x) => (networkType === NetworkType.Ethereum ? true : x.value !== DataProvider.UNISWAP_INFO))
@@ -254,11 +255,11 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                             ) ?? ''
                         ],
                 },
-                market: Object.entries(info.market_data).reduce((accumulated, [key, value]) => {
+                market: Object.entries(info.market_data).reduce<any>((accumulated, [key, value]) => {
                     if (value && typeof value === 'object') accumulated[key] = value[currency.id] ?? 0
                     else accumulated[key] = value
                     return accumulated
-                }, {} as any),
+                }, {}),
                 tickers: info.tickers.slice(0, 30).map((x) => ({
                     logo_url: x.market.logo,
                     trade_url: x.trade_url,

@@ -11,16 +11,18 @@ import {
     addGasMargin,
     TransactionEventType,
 } from '@masknet/web3-shared'
-import { useDHedgePoolContract } from '../contracts/useDHedgePool'
+import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
+import { Pool, PoolType } from '../types'
 
 /**
  * A callback for invest dhedge pool
- * @param address the pool address
+ * @param pool the pool
  * @param amount
  * @param token
  */
-export function useInvestCallback(address: string, amount: string, token?: FungibleTokenDetailed) {
-    const poolContract = useDHedgePoolContract(address)
+export function useInvestCallback(pool: Pool | undefined, amount: string, token?: FungibleTokenDetailed) {
+    const poolV1Contract = useDHedgePoolV1Contract(pool?.address ?? '')
+    const poolV2Contract = useDHedgePoolV2Contract(pool?.address ?? '')
 
     const account = useAccount()
     const nonce = useNonce()
@@ -28,7 +30,7 @@ export function useInvestCallback(address: string, amount: string, token?: Fungi
     const [investState, setInvestState] = useTransactionState()
 
     const investCallback = useCallback(async () => {
-        if (!token || !poolContract) {
+        if (!token || !poolV1Contract || !poolV2Contract) {
             setInvestState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -47,8 +49,14 @@ export function useInvestCallback(address: string, amount: string, token?: Fungi
             gasPrice,
             nonce,
         }
-        const estimatedGas = await poolContract.methods
-            .deposit(amount)
+
+        const deposit = () => {
+            return pool?.poolType === PoolType.v1
+                ? poolV1Contract.methods.deposit(amount)
+                : poolV2Contract.methods.deposit(token.address, amount)
+        }
+
+        const estimatedGas = await deposit()
             .estimateGas(config)
             .catch((error) => {
                 setInvestState({
@@ -60,7 +68,7 @@ export function useInvestCallback(address: string, amount: string, token?: Fungi
 
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
-            const promiEvent = poolContract.methods.deposit(amount).send({
+            const promiEvent = deposit().send({
                 gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
             })
@@ -80,7 +88,7 @@ export function useInvestCallback(address: string, amount: string, token?: Fungi
                     reject(error)
                 })
         })
-    }, [gasPrice, nonce, address, account, amount, token])
+    }, [gasPrice, nonce, pool, account, amount, token])
 
     const resetCallback = useCallback(() => {
         setInvestState({

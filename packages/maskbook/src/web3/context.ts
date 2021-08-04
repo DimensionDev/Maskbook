@@ -18,6 +18,7 @@ import {
     currentProviderSettings,
     currentChainIdSettings,
     currentPortfolioDataProviderSettings,
+    currentEtherPriceSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
@@ -41,11 +42,12 @@ export const Web3Context: Web3ProviderType = {
     blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
     nonce: createSubscriptionFromSettings(currentNonceSettings),
     gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
-    wallets: createSubscriptionAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
+    etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
+    wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
     providerType: createSubscriptionFromSettings(currentProviderSettings),
     networkType: createSubscriptionFromSettings(currentNetworkSettings),
-    erc20Tokens: createSubscriptionAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
-    erc20TokensCount: createSubscriptionAsync(
+    erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
+    erc20TokensCount: createSubscriptionFromAsync(
         WalletRPC.getERC20TokensCount,
         0,
         WalletMessages.events.erc20TokensUpdated.on,
@@ -121,7 +123,7 @@ function createSubscriptionFromSettings<T>(settings: InternalSettings<T>): Subsc
         },
     }
 }
-function createSubscriptionAsync<T>(
+function createSubscriptionFromAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,
     onChange: (callback: () => void) => () => void,

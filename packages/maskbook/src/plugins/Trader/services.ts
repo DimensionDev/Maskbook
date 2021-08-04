@@ -8,6 +8,7 @@ import { DataProvider, TradeProvider } from './types'
 
 currentChainIdSettings.addListener((chainId: ChainId) => {
     const networkType = getNetworkTypeFromChainId(chainId)
+    if (!networkType) return
     switch (networkType) {
         case NetworkType.Ethereum:
             if ([TradeProvider.PANCAKESWAP, TradeProvider.QUICKSWAP].includes(currentTradeProviderSettings.value))
@@ -20,6 +21,11 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
             break
         case NetworkType.Polygon:
             currentTradeProviderSettings.value = TradeProvider.QUICKSWAP
+            if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
+                currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
+            break
+        case NetworkType.Arbitrum:
+            currentTradeProviderSettings.value = TradeProvider.UNISWAP
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
             break

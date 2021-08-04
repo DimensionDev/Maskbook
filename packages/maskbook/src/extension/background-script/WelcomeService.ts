@@ -6,7 +6,6 @@ import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Pe
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import type { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
 import { generateBackupJSON, BackupOptions } from './WelcomeServices/generateBackupJSON'
-import { exclusiveTasks } from '../content-script/tasks'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { saveAsFileFromBuffer } from './HelperService'
 import type { DashboardRoute } from '../options-page/Route'
@@ -98,9 +97,10 @@ async function createBackupInfo<T>(obj: T) {
 }
 
 export async function openOptionsPage(route?: DashboardRoute, search?: string) {
-    return exclusiveTasks(
-        browser.runtime.getURL(route ? `/index.html#${route}${search ? `?${search}` : ''}` : '/index.html'),
-    ).noop()
+    return browser.tabs.create({
+        active: true,
+        url: browser.runtime.getURL(route ? `/index.html#${route}${search ? `?${search}` : ''}` : '/index.html'),
+    })
 }
 
 export { createPersonaByMnemonic } from '../../database'

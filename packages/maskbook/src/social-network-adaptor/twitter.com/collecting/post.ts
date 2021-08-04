@@ -47,7 +47,12 @@ function registerPostCollectorInner(
     const watcher = new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
-            if (!tweetNode) return
+            if (!tweetNode) {
+                if (process.env.NODE_ENV === 'development') {
+                    console.log('Fails to get tweetNode from node', node)
+                }
+                return
+            }
             const refs = createRefsForCreatePostContext()
             const info = twitterShared.utils.createPostContext({
                 comments: undefined,

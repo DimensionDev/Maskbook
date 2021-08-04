@@ -1,5 +1,5 @@
 import { makeStyles, CardHeader, CardContent, CardActions, Skeleton } from '@material-ui/core'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 
 const useStyles = makeStyles((theme) => {

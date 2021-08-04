@@ -13,12 +13,16 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
-import { Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
-import { useValueRef } from '@masknet/shared'
+import {
+    I18NStringField,
+    Plugin,
+    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
+} from '@masknet/plugin-infra'
+import { useValueRef, or } from '@masknet/shared'
 import { CompositionEvent, MaskMessage, useI18N, Flags } from '../../utils'
 import { isMinds } from '../../social-network-adaptor/minds.com/base'
-import { useStylesExtends, or } from '../custom-ui-helper'
-import type { Profile, Group } from '../../database'
+import type { Profile } from '../../database'
 import { useFriendsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { currentImagePayloadStatus, debugModeSetting } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -28,23 +32,19 @@ import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import {
     TypedMessage,
     extractTextFromTypedMessage,
-    renderWithMetadataUntyped,
     makeTypedMessageText,
     isTypedMessageText,
 } from '../../protocols/typed-message'
 import { EthereumTokenType, isDAI, isOKB } from '@masknet/web3-shared'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
-import { PluginUI } from '../../plugins/PluginUI'
 import { Result } from 'ts-results'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
-import { PluginStage } from '../../plugins/types'
 import { editActivatedPostMetadata, globalTypedMessageMetadata } from '../../protocols/typed-message/global-state'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { SteganographyTextPayload } from './SteganographyTextPayload'
-
-const defaultTheme = {}
+import { PluginI18NFieldRender, usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 
 const useStyles = makeStyles({
     MUIInputRoot: {
@@ -65,15 +65,15 @@ const useStyles = makeStyles({
     },
 })
 
-export interface PostDialogUIProps extends withClasses<never> {
+export interface PostDialogUIProps {
     open: boolean
     onlyMyself: boolean
     shareToEveryone: boolean
     imagePayload: boolean
     imagePayloadUnchangeable: boolean
     maxLength?: number
-    availableShareTarget: Array<Profile | Group>
-    currentShareTarget: Array<Profile | Group>
+    availableShareTarget: Array<Profile>
+    currentShareTarget: Array<Profile>
     currentIdentity: Profile | null
     postContent: TypedMessage
     postBoxButtonDisabled: boolean
@@ -85,11 +85,10 @@ export interface PostDialogUIProps extends withClasses<never> {
     onCloseButtonClicked: () => void
     onSetSelected: SelectRecipientsUIProps['onSetSelected']
     DialogProps?: Partial<DialogProps>
-    SelectRecipientsUIProps?: Partial<SelectRecipientsUIProps>
 }
 
 export function PostDialogUI(props: PostDialogUIProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const classes = useStyles()
     const { t } = useI18N()
     const isDebug = useValueRef(debugModeSetting)
     const [showPostMetadata, setShowPostMetadata] = useState(false)
@@ -114,45 +113,10 @@ export function PostDialogUI(props: PostDialogUIProps) {
     }
 
     if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
-    const oldMetadataBadge = [...PluginUI].flatMap((plugin) =>
-        Result.wrap(() => {
-            const knownMeta = plugin.postDialogMetadataBadge
-            if (!knownMeta) return undefined
-            return [...knownMeta.entries()].map(([metadataKey, tag]) => {
-                return renderWithMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
-                    <MetaBadge key={metadataKey} meta={metadataKey} title={`Provided by plugin "${plugin.pluginName}"`}>
-                        {tag(r)}
-                    </MetaBadge>
-                ))
-            })
-        }).unwrapOr(null),
-    )
-    const oldPluginEntries = [...PluginUI].flatMap((plugin) =>
-        Result.wrap(() => {
-            const entries = plugin.postDialogEntries
-            if (!entries) return null
-            return entries.map((opt, index) => {
-                return (
-                    <ErrorBoundary subject={`Plugin "${plugin.pluginName}"`} key={plugin.identifier + ' ' + index}>
-                        <ClickableChip
-                            label={
-                                <>
-                                    {opt.label}
-                                    {plugin.stage === PluginStage.Beta && <sup className={classes.sup}>(Beta)</sup>}
-                                </>
-                            }
-                            onClick={opt.onClick}
-                        />
-                    </ErrorBoundary>
-                )
-            })
-        }).unwrapOr(null),
-    )
     return (
         <InjectedDialog open={props.open} onClose={props.onCloseButtonClicked} title={t('post_dialog__title')}>
             <DialogContent>
                 <BadgeRenderer meta={props.postContent.meta} />
-                {oldMetadataBadge}
                 <InputBase
                     classes={{
                         root: classes.MUIInputRoot,
@@ -177,7 +141,6 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         flexWrap: 'wrap',
                     }}>
                     <PluginRenderer />
-                    {oldPluginEntries}
                 </Box>
                 <Typography style={{ marginBottom: 10 }}>{t('post_dialog__select_recipients_title')}</Typography>
                 <Box
@@ -189,8 +152,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     <SelectRecipientsUI
                         items={props.availableShareTarget}
                         selected={props.currentShareTarget}
-                        onSetSelected={props.onSetSelected}
-                        {...props.SelectRecipientsUIProps}>
+                        onSetSelected={props.onSetSelected}>
                         <ClickableChip
                             checked={props.shareToEveryone}
                             label={t('post_dialog__select_recipients_share_to_everyone')}
@@ -263,7 +225,7 @@ export interface PostDialogProps extends Omit<Partial<PostDialogUIProps>, 'open'
     open?: [boolean, (next: boolean) => void]
     reason?: 'timeline' | 'popup'
     identities?: Profile[]
-    onRequestPost?: (target: (Profile | Group)[], content: TypedMessage) => void
+    onRequestPost?: (target: Profile[], content: TypedMessage) => void
     onRequestReset?: () => void
     typedMessageMetadata?: ReadonlyMap<string, any>
 }
@@ -293,7 +255,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     const people = useFriendsList()
     const availableShareTarget = props.availableShareTarget || people
     const currentIdentity = or(props.currentIdentity, useCurrentIdentity())
-    const [currentShareTarget, setCurrentShareTarget] = useState<(Profile | Group)[]>(() => [])
+    const [currentShareTarget, setCurrentShareTarget] = useState<Profile[]>(() => [])
     //#endregion
     //#region Image Based Payload Switch
     const imagePayloadStatus = useValueRef(currentImagePayloadStatus[activatedSocialNetworkUI.networkIdentifier])
@@ -309,7 +271,7 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     const onRequestPost = or(
         props.onRequestPost,
         useCallback(
-            async (target: (Profile | Group)[], content: TypedMessage) => {
+            async (target: Profile[], content: TypedMessage) => {
                 const [encrypted, token] = await Services.Crypto.encryptTo(
                     content,
                     target.map((x) => x.identifier),
@@ -317,6 +279,11 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     !!shareToEveryone,
                 )
                 const activeUI = activatedSocialNetworkUI
+
+                const redPacketPreText = isTwitter(activeUI)
+                    ? t('additional_post_box__encrypted_post_pre_red_packet_twitter', { encrypted })
+                    : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted })
+
                 // TODO: move into the plugin system
                 const redPacketMetadata = RedPacketMetadataReader(typedMessageMetadata)
                 if (imagePayloadEnabled || imageOnly) {
@@ -329,9 +296,11 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                     const isDai = isErc20 && redPacketMetadata.ok && isDAI(redPacketMetadata.val.token?.address ?? '')
                     const isOkb = isErc20 && redPacketMetadata.ok && isOKB(redPacketMetadata.val.token?.address ?? '')
 
-                    const relatedText = t('additional_post_box__steganography_post_pre', {
-                        random: new Date().toLocaleString(),
-                    })
+                    const relatedText = redPacketMetadata.ok
+                        ? redPacketPreText.replace(encrypted, '')
+                        : t('additional_post_box__steganography_post_pre', {
+                              random: new Date().toLocaleString(),
+                          })
                     activeUI.automation.nativeCompositionDialog?.appendText?.(relatedText, {
                         recover: false,
                     })
@@ -344,21 +313,14 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
                         relatedTextPayload: relatedText,
                     })
                 } else {
-                    let text = t('additional_post_box__encrypted_post_pre', { encrypted })
-                    if (redPacketMetadata.ok) {
-                        if (i18n.language?.includes('zh')) {
-                            text = isTwitter(activeUI)
-                                ? `用 #mask_io @realMaskbook 開啟紅包 ${encrypted}`
-                                : `用 #mask_io 開啟紅包 ${encrypted}`
-                        } else {
-                            text = isTwitter(activeUI)
-                                ? `Claim this Red Packet with #mask_io @realMaskbook ${encrypted}`
-                                : `Claim this Red Packet with #mask_io ${encrypted}`
-                        }
-                    }
-                    activeUI.automation.nativeCompositionDialog?.appendText?.(text, {
-                        recover: true,
-                    })
+                    const text = t('additional_post_box__encrypted_post_pre', { encrypted })
+
+                    activeUI.automation.nativeCompositionDialog?.appendText?.(
+                        redPacketMetadata.ok ? redPacketPreText : text,
+                        {
+                            recover: true,
+                        },
+                    )
                 }
                 // This step write data on gun.
                 // there is nothing to write if it shared with public
@@ -496,13 +458,15 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
 }
 
 function PluginRenderer() {
+    const pluginField = usePluginI18NField()
+    const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
     const result = useActivatedPluginsSNSAdaptor().map((plugin) =>
         Result.wrap(() => {
             const entry = plugin.CompositionDialogEntry
-            if (!entry) return null
             const unstable = plugin.enableRequirement.target !== 'stable'
+            if (!entry || !operatingSupportedChainMapping[plugin.ID]) return null
             return (
-                <ErrorBoundary subject={`Plugin "${plugin.name.fallback}"`} key={plugin.ID}>
+                <ErrorBoundary subject={`Plugin "${pluginField(plugin.ID, plugin.name)}"`} key={plugin.ID}>
                     {'onClick' in entry ? (
                         <PluginKindCustom {...entry} unstable={unstable} id={plugin.ID} />
                     ) : (
@@ -516,6 +480,7 @@ function PluginRenderer() {
 }
 function BadgeRenderer({ meta }: { meta: TypedMessage['meta'] }) {
     const plugins = useActivatedPluginsSNSAdaptor()
+    const i18n = usePluginI18NField()
     if (!meta) return null
     const metadata = [...meta.entries()]
     return (
@@ -526,23 +491,27 @@ function BadgeRenderer({ meta }: { meta: TypedMessage['meta'] }) {
                     if (!render) return null
 
                     if (typeof render === 'function') {
-                        if (process.env.NODE_ENV === 'development')
-                            return normalizeBadgeDescriptor(key, plugin, render(key, value))
+                        if (process.env.NODE_ENV === 'development') {
+                            // crash early in dev
+                            return normalizeBadgeDescriptor(key, plugin, render(key, value), i18n)
+                        }
                         try {
-                            return normalizeBadgeDescriptor(key, plugin, render(key, value))
-                        } catch (e) {
-                            console.error(e)
+                            return normalizeBadgeDescriptor(key, plugin, render(key, value), i18n)
+                        } catch (error) {
+                            console.error(error)
                             return null
                         }
                     } else {
                         const f = render.get(key)
                         if (!f) return null
-                        if (process.env.NODE_ENV === 'development')
-                            return normalizeBadgeDescriptor(key, plugin, f(value))
+                        if (process.env.NODE_ENV === 'development') {
+                            // crash early in dev
+                            return normalizeBadgeDescriptor(key, plugin, f(value), i18n)
+                        }
                         try {
-                            return normalizeBadgeDescriptor(key, plugin, f(value))
-                        } catch (e) {
-                            console.error(e)
+                            return normalizeBadgeDescriptor(key, plugin, f(value), i18n)
+                        } catch (error) {
+                            console.error(error)
                             return null
                         }
                     }
@@ -555,9 +524,10 @@ function normalizeBadgeDescriptor(
     meta: string,
     plugin: Plugin.SNSAdaptor.Definition,
     desc: Plugin.SNSAdaptor.BadgeDescriptor | string | null,
+    i18n: (id: string, field: I18NStringField) => string,
 ) {
     if (!desc) return null
-    if (typeof desc === 'string') desc = { text: desc, tooltip: `Provided by plugin "${plugin.name.fallback}"` }
+    if (typeof desc === 'string') desc = { text: desc, tooltip: `Provided by plugin "${i18n(plugin.ID, plugin.name)}"` }
     return (
         <MetaBadge key={meta + ';' + plugin.ID} title={desc.tooltip || ''} meta={meta}>
             {desc.text}
@@ -575,11 +545,7 @@ function MetaBadge({ title, children, meta: key }: React.PropsWithChildren<{ tit
         </Box>
     )
 }
-function renderLabel(label: Plugin.SNSAdaptor.CompositionDialogEntry['label']): React.ReactNode {
-    if (!label) return null
-    if (typeof label === 'object' && 'fallback' in label) return label.fallback
-    return label
-}
+
 type ExtraPluginProps = { unstable: boolean; id: string }
 function PluginKindCustom(props: Plugin.SNSAdaptor.CompositionDialogEntryCustom & ExtraPluginProps) {
     const classes = useStyles()
@@ -589,7 +555,7 @@ function PluginKindCustom(props: Plugin.SNSAdaptor.CompositionDialogEntryCustom 
         <ClickableChip
             label={
                 <>
-                    {renderLabel(label)}
+                    <PluginI18NFieldRender field={label} pluginID={id} />
                     {unstable && <sup className={classes.sup}>(Beta)</sup>}
                 </>
             }
@@ -609,7 +575,7 @@ function PluginKindDialog(props: Plugin.SNSAdaptor.CompositionDialogEntryDialog 
         <ClickableChip
             label={
                 <>
-                    {renderLabel(label)}
+                    <PluginI18NFieldRender field={label} pluginID={id} />
                     {unstable && <sup className={classes.sup}>(Beta)</sup>}
                 </>
             }

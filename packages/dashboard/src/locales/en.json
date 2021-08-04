@@ -118,8 +118,6 @@
     "settings_appearance_desc": "Select the theme you would like to use",
     "settings_data_source_title": "Data Source",
     "settings_data_source_desc": "Fetch trending data from different platformse",
-    "settings_ancient_post_compatibility_mode_title": "Ancient Post Compatibility Mode",
-    "settings_ancient_post_compatibility_mode_desc": "Enable if you need to decrypt ancient posts (created before Jan 2020)",
     "settings_sync_with_mobile_title": "Sync With Mobile",
     "settings_sync_with_mobile_desc": "You can sync your accounts and information with your mobile device. Open the Mask Network mobile app, go to Settings and tap on Sync With Plug-ins",
     "settings_global_backup_title": "Global Backup",

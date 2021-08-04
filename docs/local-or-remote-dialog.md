@@ -20,9 +20,13 @@ function useRemoteControlledDialog<
 ): readonly [boolean, (ev: T) => void]
 ```
 
-`remote-dialog` serves a special universal scene. E.g. Ethereum transaction state track dialog, Select wallet dialog, they are used at lot of places. It is a global singleton:
+`remote-dialog` serves a special universal scene.
 
-```ts
+e.g: Ethereum transaction state track dialog, Select wallet dialog, they are used at lot of places.
+
+It is a global singleton:
+
+```tsx
 export const EthereumPluginDefine: PluginConfig = {
   PageComponent() {
     return <TransactionDialog />
@@ -32,9 +36,12 @@ export const EthereumPluginDefine: PluginConfig = {
 
 ## What is local-dialog
 
-`local-dialog` serves for detailed business logic. Its props provided by parent component, since it is part of the detailed business actually, its code located under the parent component which open/close it.
+`local-dialog` serves for detailed business logic.
+Its props provided by parent component,
+since it is part of the detailed business actually,
+its code located under the parent component which open/close it.
 
-```ts
+```tsx
 <SnapshotCard>
   //...
   <VoteConfirmDialog
@@ -51,6 +58,14 @@ export const EthereumPluginDefine: PluginConfig = {
 
 ## When not to use remote-dialog
 
-1. If you render `remote-dialog` under twitter timeline payload post component. As you click the open dialog button, you will find several dialogs would be opened, because each instance has been loaded when there're multiple payload posts at the timeline and are listening to the open dialog event.
+1. If you render `remote-dialog` under twitter timeline payload post component.
+   As you click the open dialog button, you will find several dialogs would be opened,
+   because each instance has been loaded
+   when there're multiple payload posts at the timeline and are listening to the open dialog event.
 
-2. `remote-dialog` loads in advance, usually it only loads once after the web page loads, which leads to that data returned by its network request hooks isn't the latest. Even a dialog is not rendered under on timeline, there's only one instance rendered at the same time. If you want it to fetch the latest network data each time when you open it, consider using `local-dialog`.
+2. `remote-dialog` loads in advance, usually it only loads once after the web page loads,
+   which leads to that data returned by its network request hooks isn't the latest.
+   Even a dialog is not rendered under on timeline,
+   there's only one instance rendered at the same time.
+   If you want it to fetch the latest network data each time when you open it,
+   consider using `local-dialog`.

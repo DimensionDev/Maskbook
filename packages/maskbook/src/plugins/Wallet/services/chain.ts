@@ -1,16 +1,16 @@
-import { ChainId, getNetworkTypeFromChainId, ProviderType } from '@masknet/web3-shared'
+import { ProviderType } from '@masknet/web3-shared'
+import { pollingTask } from '@masknet/shared'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
-import { pollingTask, startEffects } from '../../../utils'
+import { startEffects } from '../../../utils'
+import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
+import { getWallet } from './wallet'
 import {
     currentAccountSettings,
     currentBalanceSettings,
     currentBlockNumberSettings,
     currentChainIdSettings,
-    currentNetworkSettings,
     currentProviderSettings,
 } from '../settings'
-import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
-import { getWallet } from './wallet'
 
 const beats: true[] = []
 
@@ -18,15 +18,12 @@ export async function kickToUpdateChainState() {
     beats.push(true)
 }
 
-export async function updateChainState(chainId?: ChainId) {
+export async function updateChainState() {
     // reset the polling task cause it will be called from service call
     resetPoolTask()
 
     // forget those passed beats
     beats.length = 0
-
-    // update network type
-    if (chainId) currentNetworkSettings.value = getNetworkTypeFromChainId(chainId)
 
     // update chain state
     try {
@@ -35,7 +32,7 @@ export async function updateChainState(chainId?: ChainId) {
             getBlockNumber(),
             wallet ? getBalance(wallet.address) : currentBalanceSettings.value,
         ])
-    } catch (error) {
+    } catch {
         // do nothing
     } finally {
         // reset the polling if chain state updated successfully
@@ -65,8 +62,8 @@ effect(() => {
 
 // revalidate chain state if the chainId of current provider was changed
 effect(() =>
-    currentChainIdSettings.addListener((chainId) => {
-        updateChainState(chainId)
+    currentChainIdSettings.addListener(() => {
+        updateChainState()
         if (currentProviderSettings.value === ProviderType.Maskbook) resetAllNonce()
     }),
 )

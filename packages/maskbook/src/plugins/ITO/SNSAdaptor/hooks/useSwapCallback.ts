@@ -1,8 +1,8 @@
-import type { ITO } from '@masknet/contracts/types/ITO'
-import type { ITO2 } from '@masknet/contracts/types/ITO2'
-import type { Qualification } from '@masknet/contracts/types/Qualification'
-import type { Qualification2 } from '@masknet/contracts/types/Qualification2'
-import type { PayableTx } from '@masknet/contracts/types/types'
+import type { ITO } from '@masknet/web3-contracts/types/ITO'
+import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
+import type { Qualification } from '@masknet/web3-contracts/types/Qualification'
+import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2'
+import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     currySameAddress,
     EthereumTokenType,
@@ -13,7 +13,10 @@ import {
     useAccount,
     useGasPrice,
     useNonce,
+    useChainId,
     useTransactionState,
+    isSameAddress,
+    useITOConstants,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
@@ -23,11 +26,12 @@ import { buf2hex, hex2buf, useI18N } from '../../../../utils'
 import { useITO_Contract } from './useITO_Contract'
 import { useQualificationContract } from './useQualificationContract'
 import type { JSON_PayloadInMask } from '../../types'
+import { checkAvailability } from '../../Worker/apis/checkAvailability'
 
 export function useSwapCallback(
     payload: JSON_PayloadInMask,
     total: string,
-    token: PartialRequired<FungibleTokenDetailed, 'address'>,
+    token: Partial<FungibleTokenDetailed>,
     isQualificationHasLucky = false,
 ) {
     const { t } = useI18N()
@@ -35,6 +39,8 @@ export function useSwapCallback(
     const nonce = useNonce()
     const gasPrice = useGasPrice()
     const account = useAccount()
+    const chainId = useChainId()
+    const { ITO_CONTRACT_ADDRESS } = useITOConstants()
     const { contract: ITO_Contract, version } = useITO_Contract(payload.contract_address)
     const [swapState, setSwapState] = useTransactionState()
     const { contract: qualificationContract } = useQualificationContract(
@@ -104,7 +110,7 @@ export function useSwapCallback(
                 })
                 return
             }
-        } catch (e) {
+        } catch {
             setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Failed to read qualification.'),
@@ -119,9 +125,13 @@ export function useSwapCallback(
 
         // check remaining
         try {
-            const availability = await ITO_Contract.methods.check_availability(pid).call({
-                from: account,
-            })
+            const availability = await checkAvailability(
+                pid,
+                account,
+                payload.contract_address,
+                chainId,
+                isSameAddress(payload.contract_address, ITO_CONTRACT_ADDRESS),
+            )
             if (isZero(availability.remaining)) {
                 setSwapState({
                     type: TransactionStateType.FAILED,
@@ -129,7 +139,7 @@ export function useSwapCallback(
                 })
                 return
             }
-        } catch (e) {
+        } catch {
             setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Failed to check availability.'),
@@ -226,6 +236,7 @@ export function useSwapCallback(
         gasPrice,
         nonce,
         ITO_Contract,
+        chainId,
         qualificationContract,
         account,
         payload,

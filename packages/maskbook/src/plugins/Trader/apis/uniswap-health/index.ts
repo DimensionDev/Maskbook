@@ -4,7 +4,9 @@ import { first } from 'lodash-es'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 
 async function fetchFromUniswapV2Health<T>(query: string) {
-    const response = await fetch(getTrendingConstants(currentChainIdSettings.value).UNISWAP_V2_HEALTH_URL, {
+    const subgraphURL = getTrendingConstants(currentChainIdSettings.value).UNISWAP_V2_HEALTH_URL
+    if (!subgraphURL) return null
+    const response = await fetch(subgraphURL, {
         method: 'POST',
         mode: 'cors',
         body: stringify({ query }),
@@ -46,8 +48,8 @@ export async function fetchLatestBlocks() {
       }
     `)
 
-    const latestBlock = first(response.indexingStatusForCurrentVersion.chains)?.latestBlock.number
-    const headBlock = first(response.indexingStatusForCurrentVersion.chains)?.chainHeadBlock.number
+    const latestBlock = first(response?.indexingStatusForCurrentVersion.chains)?.latestBlock.number
+    const headBlock = first(response?.indexingStatusForCurrentVersion.chains)?.chainHeadBlock.number
 
     return [latestBlock, headBlock]
 }

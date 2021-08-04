@@ -83,16 +83,18 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                 accountAddress: account,
                 recipientAddress: account,
             })
-        } catch (e) {
-            enqueueSnackbar(e.message, {
-                variant: 'error',
-                preventDuplicate: true,
-            })
-            throw e
+        } catch (error) {
+            if (error instanceof Error) {
+                enqueueSnackbar(error.message, {
+                    variant: 'error',
+                    preventDuplicate: true,
+                })
+            }
+            throw error
         }
     }, [asset?.value, account, enqueueSnackbar])
 
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
     const validationMessage = useMemo(() => {
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')
