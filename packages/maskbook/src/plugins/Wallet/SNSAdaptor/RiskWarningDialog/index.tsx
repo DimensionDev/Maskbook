@@ -1,14 +1,14 @@
-import { DialogActions, DialogContent, makeStyles, Typography, Avatar, Paper } from '@material-ui/core'
+import { DialogActions, DialogContent, makeStyles, Typography, Avatar, Paper, Button } from '@material-ui/core'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../../utils'
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { MaskColorVar, useSnackbar } from '@masknet/theme'
+import { useSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { WalletMessages } from '../../messages'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import type { Wallet } from '@masknet/web3-shared'
 import classnames from 'classnames'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 9999,
     },
     cancel: {
-        backgroundColor: MaskColorVar.normalBackground,
+        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(23, 25, 29, 1)' : 'rgba(247, 249, 250, 1)',
         color: 'rgba(28, 104, 243, 1)',
     },
     title: {
@@ -96,7 +96,7 @@ export function WalletRiskWarningDialog() {
                         variant="h4"
                         children={t('wallet_risk_warning_dialog_title')}
                     />
-                    <Typography dangerouslySetInnerHTML={{ __html: t('wallet_risk_warning_content') }} />
+                    <Trans i18nKey="multiline">{t('wallet_risk_warning_content')}</Trans>
 
                     <Paper elevation={0} className={classes.wallet}>
                         <Typography variant="body1" color="textSecondary">
@@ -109,7 +109,7 @@ export function WalletRiskWarningDialog() {
                 </Paper>
             </DialogContent>
             <DialogActions className={classes.buttons}>
-                <ActionButton
+                <Button
                     className={classnames(classes.button, classes.cancel)}
                     fullWidth
                     variant="text"
@@ -117,10 +117,10 @@ export function WalletRiskWarningDialog() {
                     onClick={onClose}
                     size="large">
                     {t('cancel')}
-                </ActionButton>
-                <ActionButton className={classes.button} fullWidth variant="contained" size="large" onClick={onClick}>
+                </Button>
+                <Button className={classes.button} fullWidth variant="contained" size="large" onClick={onClick}>
                     {t('confirm')}
-                </ActionButton>
+                </Button>
             </DialogActions>
         </InjectedDialog>
     )
