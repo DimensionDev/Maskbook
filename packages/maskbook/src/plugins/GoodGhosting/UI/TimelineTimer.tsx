@@ -76,7 +76,7 @@ interface TimerProps {
 function Timer(props: TimerProps) {
     const [dateDisplay, setDateDisplay] = useState('')
     useEffect(() => {
-        var timerId = setInterval(() => {
+        const timerId = setInterval(() => {
             const now = new Date()
 
             if (isBefore(props.targetDate, now)) {
