@@ -42,6 +42,7 @@ export interface Web3ProviderType {
     getERC721TokensPaged: (index: number, count: number, query?: string) => Promise<ERC721TokenAssetDetailed[]>
     getTransactionList: (
         address: string,
+        network: NetworkType,
         provider: PortfolioProvider,
         page?: number,
         size?: number,

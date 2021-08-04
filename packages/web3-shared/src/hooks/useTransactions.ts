@@ -2,13 +2,16 @@ import { useWeb3Context, useWeb3State } from '../context'
 import { useAsyncRetry } from 'react-use'
 import { PortfolioProvider } from '../types'
 import { unreachable } from '@dimensiondev/kit'
+import { getNetworkTypeFromChainId } from '../utils'
 
 export function useTransactions(address: string, page?: number, size?: number) {
     const { getTransactionList } = useWeb3Context()
-    const { portfolioProvider } = useWeb3State()
+    const { portfolioProvider, chainId } = useWeb3State()
 
     return useAsyncRetry(async () => {
-        if (!address) {
+        const network = getNetworkTypeFromChainId(chainId)
+
+        if (!address || !network) {
             return {
                 transactions: [],
                 hasNextPage: false,
@@ -17,11 +20,10 @@ export function useTransactions(address: string, page?: number, size?: number) {
 
         switch (portfolioProvider) {
             case PortfolioProvider.DEBANK:
-                return getTransactionList(address.toLowerCase(), portfolioProvider, page, size)
             case PortfolioProvider.ZERION:
-                return getTransactionList(address.toLowerCase(), portfolioProvider, page, size)
+                return getTransactionList(address.toLowerCase(), network, portfolioProvider, page, size)
             default:
                 unreachable(portfolioProvider)
         }
-    }, [address, portfolioProvider, page, size])
+    }, [address, chainId, portfolioProvider, page, size])
 }
