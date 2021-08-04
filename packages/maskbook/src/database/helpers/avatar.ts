@@ -41,8 +41,8 @@ export async function storeAvatar(
         } else {
             await storeAvatarDB(identifier, avatar)
         }
-    } catch (e) {
-        console.error('Store avatar failed', e)
+    } catch (error) {
+        console.error('Store avatar failed', error)
     } finally {
         queryAvatarDataURL.cache.delete(identifier.toText())
         if (identifier instanceof ProfileIdentifier) {
