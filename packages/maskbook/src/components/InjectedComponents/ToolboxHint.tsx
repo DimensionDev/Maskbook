@@ -30,7 +30,6 @@ import { Flags } from '../../utils/flags'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
 import { useI18N } from '../../utils'
-import { currentPluginEnabledStatus } from '../../settings/settings'
 import { base as ITO_Plugin } from '../../plugins/ITO/base'
 import { forwardRef, useRef } from 'react'
 import { safeUnreachable } from '@dimensiondev/kit'
@@ -150,7 +149,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Buy currency
-    const transakPluginEnabled = currentPluginEnabledStatus['plugin:' + TransakPluginID].value
+    const transakPluginEnabled = useActivatedPluginsSNSAdaptor().find((x) => x.ID === TransakPluginID)
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
     const openBuyCurrency = useCallback(() => {
         setBuyDialog({
@@ -161,7 +160,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Swap
-    const swapPluginEnabled = currentPluginEnabledStatus['plugin:' + TraderPluginID].value
+    const swapPluginEnabled = useActivatedPluginsSNSAdaptor().find((x) => x.ID === TraderPluginID)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     //#endregion
 
