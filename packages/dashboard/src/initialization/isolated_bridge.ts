@@ -1,7 +1,7 @@
 import { Environment, UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { AsyncCall } from 'async-call-rpc'
 import { serializer } from '@masknet/shared'
-import { PluginMessages, setPluginServices, setService } from '../API'
+import { PluginMessages, setMessages, setPluginMessages, setPluginServices, setService } from '../API'
 
 class WebExtensionExternalChannel extends WebExtensionMessage<any> {
     constructor(domain: string, id = 'jkoeaghipilijlahjplgbfiocjhldnap') {
@@ -12,7 +12,6 @@ installService()
 installPluginService()
 
 function installService() {
-    // @ts-expect-error 2345
     setMessages(new WebExtensionExternalChannel('mask'))
     const servicesChannel = new WebExtensionExternalChannel('services')
     const service = initProxy((prop) => initRPCBridge(servicesChannel.events[String(prop)]))
@@ -24,11 +23,10 @@ function installPluginService() {
     const Wallet = channelOf('com.maskbook.wallet')
     const Transak = channelOf('com.maskbook.transak')
     const Swap = channelOf('com.maskbook.trader')
-    // @ts-expect-error 2345
     setPluginMessages({ Wallet, Transak, Swap })
     setPluginServices({
         Wallet: initRPCBridge(PluginMessages.Wallet.events.rpc),
-        Swap: initRPCBridge(PluginMessages.Swap.events.rpc),
+        Swap: initRPCBridge(PluginMessages.Swap.rpc),
     })
 }
 
