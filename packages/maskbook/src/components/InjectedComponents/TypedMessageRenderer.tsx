@@ -114,8 +114,8 @@ export const DefaultTypedMessageTupleRenderer = memo(function DefaultTypedMessag
 ) {
     try {
         JSON.stringify(props.message.items)
-    } catch (e) {
-        if (e instanceof Error && e.message.includes('circular structure')) {
+    } catch (error) {
+        if (error instanceof Error && error.message.includes('circular structure')) {
             return (
                 <Typography>
                     The TypedMessage has a circular structure so it can't be rendered on the screen.

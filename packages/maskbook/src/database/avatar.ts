@@ -56,8 +56,8 @@ export async function queryAvatarDB(id: IdentityWithAvatar): Promise<ArrayBuffer
     const t = (await db()).transaction('avatars')
     const result = await t.objectStore('avatars').get(id.toText())
     if (result) {
-        updateAvatarMetaDB(id, { lastAccessTime: new Date() }).catch((e: unknown) => {
-            console.warn('Update last use record failed', e)
+        updateAvatarMetaDB(id, { lastAccessTime: new Date() }).catch((error: unknown) => {
+            console.warn('Update last use record failed', error)
         })
     }
     return result || null

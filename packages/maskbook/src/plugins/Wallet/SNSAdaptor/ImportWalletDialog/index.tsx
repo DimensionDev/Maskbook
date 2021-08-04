@@ -112,9 +112,9 @@ export function ImportWalletDialog(props: ImportWalletDialogProps) {
                             mnemonic: words,
                             passphrase: '',
                         })
-                    } catch (err) {
-                        if (err instanceof Error && err.message !== 'Add exists phrase.') {
-                            throw err
+                    } catch (error) {
+                        if (error instanceof Error && error.message !== 'Add exists phrase.') {
+                            throw error
                         }
                     }
                     break
