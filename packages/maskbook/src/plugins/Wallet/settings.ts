@@ -140,7 +140,7 @@ const effect = startEffects(import.meta.webpackHot)
 effect(() => {
     try {
         return connectGasNow()
-    } catch (e) {
+    } catch {
         return () => {}
     }
 })
