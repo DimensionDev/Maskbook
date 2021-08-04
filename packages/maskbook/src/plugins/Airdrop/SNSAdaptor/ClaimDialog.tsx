@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
-interface ClaimDialogUIProps extends withClasses<never>, InjectedDialogProps {
+interface ClaimDialogUIProps extends InjectedDialogProps {
     amount: string
     token?: ERC20TokenDetailed
     onClaim: () => void

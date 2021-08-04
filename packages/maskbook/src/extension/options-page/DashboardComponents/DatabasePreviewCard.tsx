@@ -39,7 +39,7 @@ export enum DatabaseRecordType {
     Wallet,
 }
 
-export interface DatabasePreviewCardProps extends withClasses<never> {
+export interface DatabasePreviewCardProps extends withClasses<'table' | 'label' | 'icon'> {
     dense?: boolean
     records: {
         type: DatabaseRecordType

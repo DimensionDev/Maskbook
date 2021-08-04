@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
-export interface TokenIconProps extends withClasses<never> {
+export interface TokenIconProps extends withClasses<'icon'> {
     name?: string
     logoURI?: string | string[]
     chainId?: ChainId
@@ -77,7 +77,7 @@ export function TokenIcon(props: TokenIconProps) {
     )
 }
 
-export interface TokenIconUIProps extends withClasses<never> {
+export interface TokenIconUIProps extends withClasses<'icon'> {
     logoURL?: string
     AvatarProps?: Partial<AvatarProps>
     name?: string
