@@ -8,7 +8,6 @@ import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows'
 import SyncIcon from '@material-ui/icons/Sync'
 import SaveIcon from '@material-ui/icons/Save'
 import SaveAltIcon from '@material-ui/icons/SaveAlt'
-import LogoutIcon from '@material-ui/icons/Logout'
 
 import { useDashboardI18N } from '../../locales'
 
@@ -22,7 +21,6 @@ import AncientPostsSetting from './components/AncientPostsSetting'
 import BackupSetting from './components/BackupSetting'
 import RestoreSetting from './components/RestoreSetting'
 import MobileSyncSetting from './components/MobileSyncSetting'
-import LogoutSetting from './components/LogoutSetting'
 
 import { PasswordVerifiedProvider } from './hooks/VerifyPasswordContext'
 import { UserProvider } from './hooks/UserContext'
@@ -76,17 +74,8 @@ export default function Settings() {
                         </SettingItem>
 
                         <PasswordSettingItem />
-                    </SettingCard>
-
-                    <SettingCard title={t.settings_profile()}>
                         <EmailSettingItem />
                         <PhoneNumberSettingItem />
-                        <SettingItem
-                            icon={<LogoutIcon />}
-                            title={t.settings_log_out_title()}
-                            desc={t.settings_log_out_desc()}>
-                            <LogoutSetting />
-                        </SettingItem>
                     </SettingCard>
                 </PasswordVerifiedProvider>
             </UserProvider>
