@@ -1,12 +1,11 @@
-import type { WebviewAPIs } from './types'
+import { MaskNetworkAPIs, NetworkType } from '@masknet/public-api'
 import Services from '../../extension/service'
 import { definedSocialNetworkWorkers } from '../../social-network/define'
 import { launchPageSettings } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
 import { unreachable } from '@dimensiondev/kit'
-import { NetworkType } from '@masknet/web3-shared'
 
-export const WebviewAPI: WebviewAPIs = {
+export const MaskNetworkAPI: MaskNetworkAPIs = {
     web_echo: async (arg) => arg,
     getDashboardURL: async () => browser.runtime.getURL('/index.html'),
     getSettings: async (key) => {
@@ -30,47 +29,37 @@ export const WebviewAPI: WebviewAPIs = {
             })
         return stringify(connectedPersonas)
     },
-    app_isPluginEnabled: async (id: string) => {
-        const endabled = await Services.Settings.isPluginEnabled(id)
-        return endabled
-    },
-    app_setPluginStatus: async (id: string, enabled: boolean) => {
-        await Services.Settings.setPluginStatus(id, enabled)
-    },
-    setting_getNetworkTraderProvider: async (network) => {
-        let provider
+    app_isPluginEnabled: (id) => Services.Settings.isPluginEnabled(id),
+    app_setPluginStatus: (id, enabled) => Services.Settings.setPluginStatus(id, enabled),
+    setting_getNetworkTraderProvider: (network) => {
         switch (network) {
             case NetworkType.Ethereum:
-                provider = await Services.Settings.getEthNetworkTradeProvider()
-                break
+                return Services.Settings.getEthNetworkTradeProvider()
             case NetworkType.Binance:
-                provider = await Services.Settings.getBscNetworkTradeProvider()
-                break
+                return Services.Settings.getBscNetworkTradeProvider()
             case NetworkType.Polygon:
-                provider = await Services.Settings.getPolygonNetworkTradeProvider()
-                break
+                return Services.Settings.getPolygonNetworkTradeProvider()
+            case NetworkType.Arbitrum:
+                throw new Error('TODO')
+            default:
+                unreachable(network)
         }
-
-        return provider
     },
-    setting_setNetworkTraderProvider: async (network, provider) => {
+    setting_setNetworkTraderProvider: (network, provider) => {
         switch (network) {
             case NetworkType.Ethereum:
-                await Services.Settings.setEthNetworkTradeProvider(provider)
-                break
+                return Services.Settings.setEthNetworkTradeProvider(provider)
             case NetworkType.Binance:
-                await Services.Settings.setBscNetworkTradeProvider(provider)
-                break
+                return Services.Settings.setBscNetworkTradeProvider(provider)
             case NetworkType.Polygon:
-                await Services.Settings.setPolygonNetworkTradeProvider(provider)
-                break
+                return Services.Settings.setPolygonNetworkTradeProvider(provider)
+            case NetworkType.Arbitrum:
+                throw new Error('TODO')
+            default:
+                unreachable(network)
         }
     },
-    settings_getTrendingDataSource: async () => {
-        const source = await Services.Settings.getTrendingDataSource()
-        return source
-    },
-    settings_setTrendingDataSource: async (provider) => {
-        await Services.Settings.setTrendingDataSource(provider)
-    },
+    settings_getTrendingDataSource: () => Services.Settings.getTrendingDataSource(),
+    settings_setTrendingDataSource: (provider) => Services.Settings.setTrendingDataSource(provider),
+    settings_getLaunchPageSettings: async () => launchPageSettings.value,
 }

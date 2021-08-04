@@ -1,6 +1,7 @@
 # Public API
 
 This package contains the type definition that expose to the native side (Android or iOS application).
+It also defines the API shape that Android or iOS exposed to the Mask Network.
 
 This package MUST NOT use any type outside of this folder.
 
