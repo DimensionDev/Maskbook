@@ -30,6 +30,10 @@ export interface SettingsUpdateEvent {
     initial: boolean
 }
 
+export interface ProfileNFTsPageEvent {
+    show: boolean
+}
+
 export interface MaskMessages extends SettingsEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: { text: string; image?: Blob }
@@ -65,6 +69,8 @@ export interface MaskMessages extends SettingsEvents {
     activatePluginCompositionEntry: string
     pluginEnabled: string
     pluginDisabled: string
+
+    profileNFTsPageUpdate: ProfileNFTsPageEvent
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })

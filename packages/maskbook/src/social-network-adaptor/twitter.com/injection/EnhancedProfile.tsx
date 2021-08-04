@@ -3,7 +3,7 @@ import { useResolveEns, useWallet } from '@masknet/web3-shared'
 import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
 import { useState } from 'react'
-import { createReactRootShadowed, startWatch } from '../../../utils'
+import { createReactRootShadowed, MaskMessage, startWatch } from '../../../utils'
 import {
     searchForegroundColorSelector,
     searchProfileActiveTabSelector,
@@ -15,10 +15,8 @@ import {
 } from '../utils/selector'
 import { useEthereumName } from './useEthereumName'
 import Color from 'color'
-import EventEmitter from 'events'
 import { CollectibleList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 
-const Event = new EventEmitter()
 function injectEnhancedProfileTab(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
     startWatch(watcher, signal)
@@ -137,7 +135,7 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
 
     bind(() => {
         setActive(false)
-        Event.emit('event', false)
+        MaskMessage.events.profileNFTsPageUpdate.sendToLocal({ show: false })
     })
 
     const onClick = () => {
@@ -161,7 +159,7 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
             )
         }
 
-        Event.emit('event', true)
+        MaskMessage.events.profileNFTsPageUpdate.sendToLocal({ show: true })
         setActive(true)
         clearStatus()
     }
@@ -184,8 +182,9 @@ export function EnhancedProfileaPage() {
     const selectedWallet = useWallet()
     const profileEthereumName = useEthereumName()
     const [show, setShow] = useState(false)
-    Event.once('event', (show: boolean) => {
-        setShow(show)
+
+    MaskMessage.events.profileNFTsPageUpdate.on((data) => {
+        setShow(data.show)
     })
 
     const resolvedAddress = useResolveEns(profileEthereumName).value
