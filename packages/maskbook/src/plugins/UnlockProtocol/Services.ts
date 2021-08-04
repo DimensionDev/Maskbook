@@ -107,10 +107,6 @@ export const postUnlockData = async (myBody: any) => {
         },
         body: stringify(myBody), // string or object
     })
-    // const myJson = await response.json() //extract JSON from the http response
-    // do something with myJson
-    console.log(response)
-    // return myJson
     return response.status
 }
 export const getKey = async <requestKeyResponse>(data: any) => {

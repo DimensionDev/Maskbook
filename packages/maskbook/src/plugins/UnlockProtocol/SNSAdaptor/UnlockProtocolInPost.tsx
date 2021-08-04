@@ -24,24 +24,23 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
     const [address, setAddress] = useState(useAccount())
     const [chain, setChain] = useState(useChainId())
     const [redirurl, setRedirurl] = useState('')
-    var data: { locks: { [key: string]: any } } = { locks: {} }
-
+    
     useEffect(() => {
         const metadata = UnlockProtocolMetadataReader(props.message.meta)
         if (metadata.ok) {
             if (!!address) {
+                var data: { locks: Record<string,any> } = { locks: {} }
                 PuginUnlockProtocolRPC.getPurchasedLocks(address, chain).then((res) => {
                     res.keyPurchases.forEach((e: { lock: string }) => {
                         metadata.val.unlockLocks.forEach((locks) => {
                             if (e.lock == locks.unlocklock) {
-                                var requestdata = {
+                                const requestdata = {
                                     lock: e.lock,
                                     address: address,
                                     chain: locks.chainid,
                                     identifier: metadata.val.iv,
                                 }
                                 PuginUnlockProtocolRPC.getKey(requestdata).then((response) => {
-                                    console.log('key :' + response.post.unlockKey)
                                     PuginUnlockProtocolRPC.decryptUnlockData(
                                         metadata.val.iv,
                                         response.post.unlockKey,

@@ -13,7 +13,6 @@ import { SelectRecipientsUnlockDialogUI } from './SelectRecipientsUnlockDialog'
 
 interface UnlockProtocolDialogProps extends withClasses<'wrapper'> {
     open: boolean
-    // onConfirm: (opt?: any) => void
     onClose: () => void
     DialogProps?: Partial<DialogProps>
     children?: React.ReactNode
@@ -21,7 +20,6 @@ interface UnlockProtocolDialogProps extends withClasses<'wrapper'> {
 
 export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
     const { t } = useI18N()
-    // var content : any = ""
     const [open, setOpen] = useState(false)
     const [address, setAddress] = useState(useAccount())
     const [currentUnlockChain, setCurrentUnlockChain] = useState(useChainId())
@@ -64,7 +62,6 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                     unlockKey: encres.key,
                 }
                 PuginUnlockProtocolRPC.postUnlockData(uploadData).then((res) => {
-                    console.log(res)
                     if (res == 200) {
                         var data = {
                             iv: uploadData.identifier,
@@ -79,7 +76,6 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                         // props.onConfirm({ post: currentUnlockPost, target: currentUnlockTarget })
                         props.onClose()
                     } else {
-                        console.log('soooo')
                         return
                     }
                 })
