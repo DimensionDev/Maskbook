@@ -240,7 +240,8 @@ export namespace Plugin.SNSAdaptor {
     //#region Toolbal entry
     export interface ToolbarEntry {
         image: string
-        label: I18NStringField
+        // TODO: remove string
+        label: I18NStringField | string
         /**
          * Used to order the toolbars
          *
@@ -251,6 +252,12 @@ export namespace Plugin.SNSAdaptor {
          * This is a React hook. If it returns false, this entry will not be displayed.
          */
         useShouldDisplay?(): boolean
+        /**
+         * What to do if the entry is clicked.
+         */
+        // TODO: add support for DialogEntry.
+        // TODO: add support for onClick event.
+        onClick: 'openCompositionEntry'
     }
     //#endregion
 }

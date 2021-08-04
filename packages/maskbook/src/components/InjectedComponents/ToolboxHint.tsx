@@ -1,4 +1,4 @@
-import { makeStyles, MenuItem, Typography } from '@material-ui/core'
+import { makeStyles, MenuItem, MenuItemProps, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import {
     useAccount,
@@ -8,7 +8,10 @@ import {
     useWallet,
     formatEthereumAddress,
 } from '@masknet/web3-shared'
-import { useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet } from '@masknet/plugin-infra'
+import {
+    useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
+    useActivatedPluginsSNSAdaptor,
+} from '@masknet/plugin-infra'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
@@ -34,6 +37,9 @@ import { currentPluginEnabledStatus } from '../../settings/settings'
 import { base as ITO_Plugin } from '../../plugins/ITO/base'
 import { base as RedPacket_Plugin } from '../../plugins/RedPacket/base'
 import Services from '../../extension/service'
+import { forwardRef, useRef } from 'react'
+import { safeUnreachable } from '@dimensiondev/kit'
+import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -159,7 +165,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region File Service
-    const fileServicePluginEnabled = currentPluginEnabledStatus['plugin:' + FileServicePluginID].value
     const openFileService = useCallback(() => {
         openEncryptedMessage()
         setTimeout(() => {
@@ -209,7 +214,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
             onClick: openRedPacket,
             hide: !(operatingSupportedChainMapping[RedPacket_Plugin.ID] && redPacketPluginEnabled),
         },
-        { ...ToolIconURLs.files, onClick: openFileService, hide: !fileServicePluginEnabled },
         {
             ...ToolIconURLs.markets,
             onClick: openITO,
@@ -232,16 +236,37 @@ export function ToolboxHint(props: ToolboxHintProps) {
         },
     ]
 
+    const pluginI18N = usePluginI18NField()
+    for (const plugin of useActivatedPluginsSNSAdaptor()) {
+        if (!plugin.ToolbarEntry) continue
+        const { image, label, onClick: onClickRaw, priority, useShouldDisplay } = plugin.ToolbarEntry
+
+        let onClick: () => void
+        if (onClickRaw === 'openCompositionEntry') {
+            onClick = () => {
+                openEncryptedMessage()
+                setTimeout(() => MaskMessage.events.activatePluginCompositionEntry.sendToLocal(plugin.ID))
+            }
+        } else {
+            safeUnreachable(onClickRaw)
+            onClick = () => {}
+        }
+
+        items.push({
+            onClick,
+            image,
+            label: typeof label === 'string' ? label : pluginI18N(plugin.ID, label),
+            priority,
+            useShouldDisplay,
+        })
+    }
+    console.log(items)
+
     const [menu, openMenu] = useMenu(
         items
             .filter((x) => x.hide !== true)
             .sort((a, b) => b.priority - a.priority)
-            .map((desc) => (
-                <MenuItem onClick={desc.onClick} className={classes.menuItem}>
-                    <Image src={desc.image} width={19} height={19} />
-                    <Typography className={classes.text}>{desc.text}</Typography>
-                </MenuItem>
-            )),
+            .map((desc) => <ToolboxItem className={classes.menuItem} {...desc} />),
         false,
         {
             paperProps: {
@@ -316,7 +341,23 @@ export function ToolboxHint(props: ToolboxHintProps) {
 interface ToolboxItemDescriptor {
     onClick: () => void
     image: string
-    text: string
+    label: string
     hide?: boolean
     priority: number
+    useShouldDisplay?(): boolean
 }
+// TODO: this should be rendered in the ErrorBoundary
+const ToolboxItem = forwardRef<any, MenuItemProps & ToolboxItemDescriptor>((props, ref) => {
+    const { image, label, hide, priority, useShouldDisplay, ...rest } = props
+    const classes = useStyles()
+    const shouldDisplay = useRef(useShouldDisplay || (() => true)).current() && !hide
+
+    if (!shouldDisplay) return null
+
+    return (
+        <MenuItem ref={ref} {...rest}>
+            <Image src={image} width={19} height={19} />
+            <Typography className={classes.text}>{label}</Typography>
+        </MenuItem>
+    )
+})
