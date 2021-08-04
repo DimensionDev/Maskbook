@@ -65,7 +65,7 @@ const useStyle = makeStyles((theme) => ({
     },
 }))
 
-export interface RestoreBoxProps extends withClasses<never> {
+export interface RestoreBoxProps extends withClasses<'root' | 'placeholder'> {
     file: File | null
     entered: boolean
     enterText: string
