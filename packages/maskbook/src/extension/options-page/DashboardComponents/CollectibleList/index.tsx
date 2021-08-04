@@ -121,7 +121,7 @@ export function CollectibleList({ wallet, owner, readonly }: CollectibleListProp
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            height: '100%',
+                            height: 'auto',
                         }}>
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
                         <Button
