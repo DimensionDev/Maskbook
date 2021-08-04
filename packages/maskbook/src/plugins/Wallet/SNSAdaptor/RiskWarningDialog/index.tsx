@@ -2,7 +2,7 @@ import { DialogActions, DialogContent, makeStyles, Typography, Avatar, Paper, Bu
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../../utils'
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh'
-import { useSnackbar } from '@masknet/theme'
+import { getMaskColor, useSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { WalletMessages } from '../../messages'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: theme.spacing(2),
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1),
-        color: 'rgb(255, 95, 95)',
+        color: getMaskColor(theme).redMain,
     },
     buttons: {
         padding: theme.spacing(3),
@@ -24,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 9999,
     },
     cancel: {
-        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(23, 25, 29, 1)' : 'rgba(247, 249, 250, 1)',
-        color: 'rgba(28, 104, 243, 1)',
+        backgroundColor: getMaskColor(theme).twitterBackground,
+        border: 'none',
     },
     title: {
         paddingTop: theme.spacing(2),
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: 'rgba(255, 95, 95, 0.2)',
     },
     wallet: {
-        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(23, 25, 29, 1)' : 'rgba(247, 249, 250, 1)',
+        backgroundColor: getMaskColor(theme).twitterBackground,
         marginTop: theme.spacing(2),
         padding: theme.spacing(2),
         borderRadius: theme.spacing(1),
@@ -112,8 +112,7 @@ export function WalletRiskWarningDialog() {
                 <Button
                     className={classnames(classes.button, classes.cancel)}
                     fullWidth
-                    variant="text"
-                    color="inherit"
+                    variant="outlined"
                     onClick={onClose}
                     size="large">
                     {t('cancel')}
