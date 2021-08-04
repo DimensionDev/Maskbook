@@ -7,5 +7,5 @@ export function useResolveEns(name: string) {
     return useAsyncRetry(async () => {
         const result = await web3.eth.ens.getAddress(name)
         return result
-    }, [name])
+    }, [web3, name])
 }
