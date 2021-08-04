@@ -15,7 +15,7 @@ import { first } from 'lodash-es'
 import { useSnackbar } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { FungibleTokenDetailed, EthereumTokenType, useAccount, isNative, useTokenWatched } from '@masknet/web3-shared'
-import { format as formatDateTime } from 'date-fns'
+import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -100,16 +100,15 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                 expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
                 paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
             })
-        } catch (e) {
-            enqueueSnackbar(e.message, {
-                variant: 'error',
-                preventDuplicate: true,
-            })
-            throw e
+        } catch (error) {
+            if (error instanceof Error) {
+                enqueueSnackbar(error.message, { variant: 'error', preventDuplicate: true })
+            }
+            throw error
         }
     }, [asset?.value, token, account, amount, expirationDateTime, isAuction, enqueueSnackbar])
 
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
     useEffect(() => {
         setAmount('')

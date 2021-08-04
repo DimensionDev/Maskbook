@@ -1,5 +1,6 @@
+import { ChainId, createERC20Tokens, getChainDetailed, ONE } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
-import { ChainId, createERC20Tokens, ERC20TokenDetailed, getChainDetailed, ONE } from '@masknet/web3-shared'
+import type { ERC20AgainstToken } from './types'
 
 export const USDC = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDC', 6)
 export const USDT = createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)
@@ -44,9 +45,7 @@ export const WETH = createERC20Tokens(
     18,
 )
 
-export const WETH_ONLY: {
-    readonly [chainId in ChainId]: ERC20TokenDetailed[]
-} = {
+export const WETH_ONLY: ERC20AgainstToken = {
     [ChainId.Mainnet]: [WETH[ChainId.Mainnet]],
     [ChainId.Ropsten]: [WETH[ChainId.Ropsten]],
     [ChainId.Rinkeby]: [WETH[ChainId.Rinkeby]],
@@ -56,6 +55,8 @@ export const WETH_ONLY: {
     [ChainId.BSCT]: [WETH[ChainId.BSCT]],
     [ChainId.Matic]: [WETH[ChainId.Matic]],
     [ChainId.Mumbai]: [WETH[ChainId.Mumbai]],
+    [ChainId.Arbitrum]: [],
+    [ChainId.Arbitrum_Rinkeby]: [],
 }
 
 export const BIPS_BASE = new BigNumber(10000)

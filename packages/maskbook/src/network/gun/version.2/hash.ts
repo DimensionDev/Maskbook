@@ -2,11 +2,10 @@
 /**
  * @see https://github.com/DimensionDev/Maskbook/wiki/Data-structure-on-Gun-version-2
  */
+import type { EC_Public_JsonWebKey } from '@masknet/shared-base'
 import Gun from 'gun'
 import 'gun/sea'
-import type { ProfileIdentifier } from '../../../database/type'
 import { memoizePromise } from '../../../utils/memoize'
-import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 
 /**
  * @param version current payload version
@@ -25,15 +24,6 @@ export async function calculatePostKeyPartition(
     const keyHash = await (version <= -39 ? hashCryptoKeyUnstable : hashCryptoKey)(partitionByCryptoKey)
     return { postHash, keyHash }
 }
-export const hashProfileIdentifier = memoizePromise(
-    async function hashProfileIdentifier(id: ProfileIdentifier) {
-        const hashPair = `f67a6a2c-fe66-4f47-bd1f-00a5603d1010`
-
-        const hash = await Gun.SEA.work(id.toText(), hashPair)!
-        return hash!
-    },
-    (id) => id.toText(),
-)
 
 export const hashPostSalt = memoizePromise(
     async function (postSalt: string, networkHint: string) {

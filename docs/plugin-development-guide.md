@@ -9,6 +9,8 @@ maintainer:
 
 ## Minimum File Structure
 
+`packages/plugins/example/src` is an example of this structure.
+
 ```plaintext
 packages/maskbook/src/plugins/{your-plugin-name}
 ├── README.md           # see `README driven development`
@@ -32,12 +34,20 @@ The file need to provide this information:
 - Reference resource list
 - Known issues / Caveats
 
+## Registration
+
+Import your plugin definition at: `packages/maskbook/src/plugin-infra/register.ts`.
+
+If your plugin is defined at `packages/plugins/*` instead of `packages/maskbook/src/plugins/*`, please make sure you have set up the monorepo correctly.
+
+Plugins defined at `packages/plugins/*` and compatible with the isolated dashboard should also be registered in `packages/dashboard/src/initialization/plugins.ts`
+
 ## Plugin APIs
 
 - Plugin definition: `packages/plugin-infra/src/types.ts`
 - Database: `createPluginDatabase` in `packages/maskbook/src/database/Plugin/wrap-plugin-database.ts`
-- Event emitter: `createPluginMessage` in `packages/maskbook/src/plugins/utils/createPluginMessage.ts`
-- RPC: `createPluginRPC` in `packages/maskbook/src/plugins/utils/createPluginRPC.ts`
+- Message emitter: `createPluginMessage` in `packages/plugin-infra/src/utils/message.ts`
+- RPC: `createPluginRPC` in `packages/plugin-infra/src/utils/rpc.ts`
 - Metadata reader: `createTypedMessageMetadataReader` in `packages/maskbook/src/protocols/typed-message/metadata.ts`
 - React renderer with metadata reader: `createRenderWithMetadata` in `packages/maskbook/src/protocols/typed-message/metadata.ts`
 

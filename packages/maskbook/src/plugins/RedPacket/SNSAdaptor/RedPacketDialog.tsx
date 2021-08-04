@@ -1,9 +1,11 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { DialogContent } from '@material-ui/core'
-import { usePortalShadowRoot, useRemoteControlledDialog } from '@masknet/shared'
+import { usePortalShadowRoot } from '@masknet/theme'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { RedPacketJSONPayload, DialogTabs, RedPacketRecord } from '../types'
+import { RedPacketRPC } from '../messages'
 import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { RedPacketMetaKey } from '../constants'
 import { RedPacketForm } from './RedPacketForm'
@@ -15,7 +17,6 @@ import {
     EthereumTokenType,
     formatBalance,
     getChainName,
-    NetworkType,
     TransactionStateType,
     useAccount,
     useChainId,
@@ -26,7 +27,6 @@ import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit } from 'lodash-es'
-import { RedPacketRPC } from '../messages'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 
 enum CreateRedPacketPageStep {
@@ -43,14 +43,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
     const chainId = useChainId()
     const account = useAccount()
-
-    const { HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } = useRedPacketConstants()
+    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
     const state = useState(DialogTabs.create)
 
     const networkType = useNetworkType()
-    const contract_version = networkType === NetworkType.Ethereum ? 2 : 3
-    const [settings, setSettings] = useState<Omit<RedPacketSettings, 'password'>>()
+    const contract_version = 4
+    const [settings, setSettings] = useState<RedPacketSettings>()
 
     const onClose = useCallback(() => {
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
@@ -67,9 +66,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 if (payload.contract_version === 1) {
                     alert('Unable to share a red packet without a password. But you can still withdraw the red packet.')
                     payload.password = prompt('Please enter the password of the red packet:', '') ?? ''
-                }
-
-                if (payload.contract_version > 1) {
+                } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
                     payload.password = await Services.Ethereum.personalSign(
                         Web3Utils.sha3(payload.sender.message) ?? '',
@@ -103,11 +100,15 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     useEffect(() => {
         if (createState.type !== TransactionStateType.UNKNOWN) return
-        payload.current.contract_address =
-            networkType === NetworkType.Ethereum ? HAPPY_RED_PACKET_ADDRESS_V2 : HAPPY_RED_PACKET_ADDRESS_V3
-        payload.current.contract_version = networkType === NetworkType.Ethereum ? 2 : 3
+        const contractAddress = HAPPY_RED_PACKET_ADDRESS_V4
+        if (!contractAddress) {
+            onClose()
+            return
+        }
+        payload.current.contract_address = contractAddress
+        payload.current.contract_version = contract_version
         payload.current.network = getChainName(chainId)
-    }, [chainId, networkType, createState])
+    }, [chainId, networkType, contract_version, createState])
 
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -141,7 +142,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             }
             payload.current.is_random = createSettings.isRandom
             payload.current.shares = createSettings.shares
-            payload.current.password = createSettings.password
+            payload.current.password = createSettings.privateKey
             payload.current.token_type = createSettings.token.type
             payload.current.rpid = CreationSuccess.id
             payload.current.total = CreationSuccess.total
@@ -163,6 +164,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     // open the transaction dialog
     useEffect(() => {
+        if (!createSettings?.token || createState.type === TransactionStateType.UNKNOWN) return
+
         // storing the created red packet in DB, it helps retrieve red packet password later
         // save to the database early, otherwise red-packet would lose when close the tx dialog or
         //  web page before create successfully.
@@ -171,13 +174,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             const record: RedPacketRecord = {
                 id: createState.hash!,
                 from: '',
-                password: createSettings!.password,
+                password: createSettings!.privateKey,
                 contract_version,
             }
             RedPacketRPC.discoverRedPacket(record)
         }
 
-        if (!createSettings?.token || createState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
             state: createState,

@@ -27,9 +27,7 @@ const BLACKLIST_MAP: {
 
 const KEYWORD_ALIAS_MAP: {
     [key in DataProvider]: {
-        [key in NetworkType]?: {
-            [key: string]: string
-        }
+        [key in NetworkType]?: Record<string, string>
     }
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
@@ -47,9 +45,7 @@ const KEYWORD_ALIAS_MAP: {
 
 const KEYWORK_ID_MAP: {
     [key in DataProvider]: {
-        [key in NetworkType]?: {
-            [key: string]: string
-        }
+        [key in NetworkType]?: Record<string, string>
     }
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
@@ -68,9 +64,7 @@ const KEYWORK_ID_MAP: {
 
 const ID_ADDRESS_MAP: {
     [key in DataProvider]: {
-        [key in NetworkType]?: {
-            [key: string]: string
-        }
+        [key in NetworkType]?: Record<string, string>
     }
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
@@ -87,11 +81,7 @@ const ID_ADDRESS_MAP: {
     [DataProvider.UNISWAP_INFO]: {},
 }
 
-const ID_NETWORK_MAP: {
-    [key in DataProvider]: {
-        [key: string]: NetworkType
-    }
-} = {
+const ID_NETWORK_MAP: Record<DataProvider, Record<string, NetworkType>> = {
     [DataProvider.COIN_GECKO]: {
         ethereum: NetworkType.Ethereum,
         'binance-smart-chain': NetworkType.Binance,

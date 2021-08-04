@@ -13,6 +13,8 @@ export const Flags = {
         target: process.env.target,
         architecture: process.env.architecture,
     },
+    /** The Mask Network v2 main switch. */
+    v2_enabled: betaOrInsiderOnly,
     /** There is no "tabs" to navigate to. We must be careful with this. */
     has_no_browser_tab_ui: appOnly,
     has_no_connected_user_link: appOnly,
@@ -28,25 +30,25 @@ export const Flags = {
     support_eth_network_switch: betaOrInsiderOnly,
     //#region Experimental features
     image_payload_marked_as_beta: appOnly,
-    /** Prohibit the use of test networks in production */
-    wallet_allow_testnet: betaOrInsiderOnly || process.env.NODE_ENV !== 'production',
     transak_enabled: webOnly,
     trader_zrx_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
     metamask_support_enabled: webOnly,
     toolbox_enabled: webOnly,
+    /** Prohibit the use of test networks in production */
+    wallet_allow_testnet: betaOrInsiderOnly || process.env.NODE_ENV !== 'production',
     wallet_mnemonic_words_backup_enabled: false,
     wallet_private_key_backup_enabled: true,
     wallet_gas_price_dialog_enable: true,
     /* construct LBP for all ERC20 tokens */
     LBP_enabled: false,
     LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
-    vcent_enabled: false,
     plugin_switch_enabled: betaOrInsiderOnly,
     //#endregion
 
     bsc_enabled: true,
     polygon_enabled: true,
+    arbitrum_enabled: betaOrInsiderOnly,
 
     //#region Functionality missing / broken
     /**

@@ -1,6 +1,6 @@
 import { ChainId } from '@masknet/web3-shared'
 
-export const DHEDGE_PLUGIN_ID = 'co.dhedge'
+export const DHEDGE_PLUGIN_ID = 'org.dhedge'
 export const POOL_DESCRIPTION_LIMIT = 210
 export const BLOCKIES_OPTIONS = {
     color: '#cb7a89',

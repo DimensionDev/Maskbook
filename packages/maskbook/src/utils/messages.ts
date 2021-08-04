@@ -3,7 +3,7 @@ if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import Serialization from './type-transform/Serialization'
-import type { ProfileIdentifier, GroupIdentifier, PersonaIdentifier } from '../database/type'
+import type { ProfileIdentifier, PersonaIdentifier } from '../database/type'
 import type { TypedMessage } from '../protocols/typed-message'
 import type { ThirdPartyPopupContextIdentifier } from '../plugins/External/popup-context'
 import type { SettingsEvents } from '../settings/listener'
@@ -43,7 +43,6 @@ export interface MaskMessages extends SettingsEvents {
     createInternalSettingsChanged: SettingsUpdateEvent
     /** emit when the settings finished syncing with storage. */
     createInternalSettingsUpdated: SettingsUpdateEvent
-    profileJoinedGroup: { group: GroupIdentifier; newMembers: ProfileIdentifier[] }
     /** emit when compose status updated. */
     compositionUpdated: CompositionEvent
     personaChanged: (UpdateEvent<PersonaIdentifier> & { owned: boolean })[]
@@ -64,6 +63,8 @@ export interface MaskMessages extends SettingsEvents {
     }
     /** Plugin ID */
     activatePluginCompositionEntry: string
+    pluginEnabled: string
+    pluginDisabled: string
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })

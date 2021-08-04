@@ -2,9 +2,9 @@ import { useCallback, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, CircularProgress, DialogActions, DialogContent } from '@material-ui/core'
 import { useI18N } from '../../utils'
-import { SelectProfileAndGroupsUI, SelectProfileAndGroupsUIProps } from '../shared/SelectPeopleAndGroups'
+import { SelectProfileUI } from '../shared/SelectProfileUI'
 import type { Profile } from '../../database'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { InjectedDialog } from '../shared/InjectedDialog'
 
 export interface SelectProfileDialogProps extends withClasses<never> {
@@ -13,7 +13,6 @@ export interface SelectProfileDialogProps extends withClasses<never> {
     alreadySelectedPreviously: Profile[]
     onClose: () => void
     onSelect: (people: Profile[]) => Promise<void>
-    SelectPeopleAndGroupsUIProps?: SelectProfileAndGroupsUIProps<Profile>
 }
 const useStyles = makeStyles({
     title: { paddingBottom: 0 },
@@ -41,13 +40,12 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
     return (
         <InjectedDialog onClose={onClose} open={props.open} title={t('share_to')}>
             <DialogContent>
-                <SelectProfileAndGroupsUI<Profile>
+                <SelectProfileUI
                     frozenSelected={props.alreadySelectedPreviously}
                     disabled={committed}
                     items={props.profiles}
                     selected={people}
                     onSetSelected={select}
-                    {...props.SelectPeopleAndGroupsUIProps}
                 />
             </DialogContent>
             {rejection && (

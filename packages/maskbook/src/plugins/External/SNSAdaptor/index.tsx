@@ -11,7 +11,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     DecryptedInspector: function Comp(props) {
         const tm = props.message
         if (!tm.meta) return null
-        let JSX: ExternalPluginLoadDetails[] = []
+        const JSX: ExternalPluginLoadDetails[] = []
         for (const [key, meta] of tm.meta) {
             if (!key.startsWith('plugin:')) continue
             const [url, metaKey] = parse(key)
@@ -37,6 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
 export default sns
 // plugin:dimensiondev.github.io/Mask-Plugin-Example/@v1
 function parse(x: string) {
+    // eslint-disable-next-line prefer-const
     let [address, ...key] = x.slice('plugin:'.length).split('@')
     if (!address.endsWith('/')) address += '/'
     const isLocalhost = new URL('https://' + address).hostname

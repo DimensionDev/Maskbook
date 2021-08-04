@@ -3,9 +3,8 @@ import classNames from 'classnames'
 import { Typography, Link, Checkbox, makeStyles, FormControlLabel } from '@material-ui/core'
 import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon } from '@masknet/shared'
+import { TokenIcon, useStylesExtends } from '@masknet/shared'
 import {
     resolveLinkOnExplorer,
     FungibleTokenDetailed,
@@ -15,6 +14,7 @@ import {
     useERC20TokenDetailedFromTokenLists,
 } from '@masknet/web3-shared'
 import { SwapStatus } from './SwapGuide'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles((theme) => ({
     reminderText: {
@@ -166,7 +166,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         target="_blank"
                         className={classes.tokenLink}
                         rel="noopener noreferrer"
-                        href={`${resolveLinkOnExplorer(chainId)}/token/${token.address}`}>
+                        href={urlcat(resolveLinkOnExplorer(chainId), '/token/:address', { address: token.address })}>
                         <Typography variant="body2">
                             <FormattedAddress address={token.address} size={4} /> ({t('plugin_ito_view_on_explorer')})
                         </Typography>

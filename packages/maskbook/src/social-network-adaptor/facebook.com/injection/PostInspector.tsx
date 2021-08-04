@@ -22,22 +22,23 @@ export function injectPostInspectorFacebook(signal: AbortSignal, current: PostIn
     })(current, signal)
 }
 function zipPostLinkPreview(node: DOMProxy) {
-    const parentEle = node.current.parentElement!
+    const parentEle = node.current.parentElement
+    if (!parentEle) return
     if (isMobileFacebook) {
         const img =
-            parentEle.querySelector('a[href*="maskbook.io"]') ||
-            parentEle.querySelector('a[href*="mask.io"]') ||
+            parentEle.querySelector('a[href*="maskbook.io"]') ??
+            parentEle.querySelector('a[href*="mask.io"]') ??
             parentEle.querySelector('a[href*="maskbook.com"]')
-        const parent = img && img.closest('section')
+        const parent = img?.closest('section')
         if (img && parent) {
             parent.style.display = 'none'
         }
     } else {
         const img =
-            parentEle.querySelector('a[href*="maskbook.io"] img') ||
-            parentEle.querySelector('a[href*="mask.io"] img') ||
+            parentEle.querySelector('a[href*="maskbook.io"] img') ??
+            parentEle.querySelector('a[href*="mask.io"] img') ??
             parentEle.querySelector('a[href*="maskbook.com"] img')
-        const parent = img && img.closest('span')
+        const parent = img?.closest('span')
         if (img && parent) {
             parent.style.display = 'none'
         }

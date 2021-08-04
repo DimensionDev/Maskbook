@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useReducer, useState } from 'react'
-import { makeTypedMessageTuple, TypedMessageTuple } from '@masknet/shared'
+import { makeTypedMessageTuple, TypedMessageTuple, or } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 
 import { delay } from '../../../utils/utils'
@@ -17,7 +17,6 @@ import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
 import { usePostClaimedAuthor, usePostInfoDetails, usePostInfoSharedPublic } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { or } from '../../custom-ui-helper'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 import type { Payload } from '../../../utils/type-transform/Payload'
 
@@ -143,11 +142,17 @@ export function DecryptPost(props: DecryptPostProps) {
         if (deconstructedPayload.ok)
             makeProgress(
                 'post text',
-                ServicesWithProgress.decryptFromText(deconstructedPayload.val, postBy, whoAmI, sharedPublic),
+                ServicesWithProgress.decryptFromText(
+                    deconstructedPayload.val,
+                    postBy,
+                    whoAmI.network,
+                    whoAmI,
+                    sharedPublic,
+                ),
             )
         postMetadataImages.forEach((url) => {
             if (signal.signal.aborted) return
-            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI))
+            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI.network, whoAmI, undefined))
         })
         return () => signal.abort()
     }, [

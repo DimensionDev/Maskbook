@@ -4,7 +4,7 @@ import { useChainId } from './useChainId'
 import { isSameAddress } from '../utils'
 import { useEthereumConstants } from '../constants'
 
-export function useERC20TokenDetailedFromTokenLists(address: string) {
+export function useERC20TokenDetailedFromTokenLists(address?: string) {
     const { ERC20_TOKEN_LISTS } = useEthereumConstants()
     const chainId = useChainId()
     const { fetchERC20TokensFromTokenLists } = useWeb3Context()

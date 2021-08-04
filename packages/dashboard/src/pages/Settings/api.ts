@@ -9,11 +9,6 @@ export const [useTrendingDataSource] = createGlobalState(Services.Settings.getTr
     Messages.events.currentTrendingDataProviderSettings.on(x),
 )
 
-export const [useAncientPostsCompatibilityMode] = createGlobalState(
-    Services.Settings.getAncientPostsCompatibiltyMode,
-    (x) => Messages.events.disableOpenNewTabInBackgroundSettings.on(x),
-)
-
 const API_HOST = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com'
 const SEND_CODE_URL = `${API_HOST}/api/v1/backup/send_code`
 const VERIFY_CODE_URL = `${API_HOST}/api/v1/backup`

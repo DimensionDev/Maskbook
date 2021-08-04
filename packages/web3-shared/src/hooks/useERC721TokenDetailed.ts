@@ -7,7 +7,7 @@ import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { useSingleContractMultipleData } from './useMulticall'
 import { formatEthereumAddress } from '../utils'
 
-export function useERC721TokenDetailed(address: string, token?: Partial<ERC721TokenDetailed>) {
+export function useERC721TokenDetailed(address?: string, token?: Partial<ERC721TokenDetailed>) {
     const chainId = useChainId()
     const erc721TokenContract = useERC721TokenContract(address)
 
@@ -26,7 +26,7 @@ export function useERC721TokenDetailed(address: string, token?: Partial<ERC721To
 
     // compose
     const token_ = useMemo(() => {
-        if (!erc721TokenContract) return
+        if (!address || !erc721TokenContract) return
         const [name, symbol, baseURI, tokenURI] = results.map((x) => (x.error ? undefined : x.value))
         return {
             type: EthereumTokenType.ERC721,

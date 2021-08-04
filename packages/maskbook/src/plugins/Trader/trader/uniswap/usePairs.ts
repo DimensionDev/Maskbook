@@ -20,10 +20,11 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
 
     const listOfPairAddress = useMemo(() => {
         if (!context) return []
-        if (!context.FACTORY_CONTRACT_ADDRESS || !context.INIT_CODE_HASH) return []
+        const { FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH } = context
+        if (!FACTORY_CONTRACT_ADDRESS || !INIT_CODE_HASH) return []
         return tokenPairs.map(([tokenA, tokenB]) =>
             tokenA && tokenB && !tokenA.equals(tokenB)
-                ? getPairAddress(context.FACTORY_CONTRACT_ADDRESS, context.INIT_CODE_HASH, tokenA, tokenB)
+                ? getPairAddress(FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH, tokenA, tokenB)
                 : undefined,
         )
     }, [context, tokenPairs])

@@ -4,8 +4,7 @@ import { Theme, IconButton } from '@material-ui/core'
 import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { setStorage } from '../../utils/browser.storage'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { DashboardRoute } from '../../extension/options-page/Route'
 import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
 import { useMount } from 'react-use'
@@ -59,7 +58,6 @@ export function Banner(props: BannerProps) {
             nextStep ?? console.warn('You must provide one of networkIdentifier or nextStep.onClick')
             return
         }
-        setStorage(networkIdentifier, { forceDisplayWelcome: false })
         Services.Welcome.openOptionsPage(DashboardRoute.Setup)
     }, [networkIdentifier, nextStep])
     const defaultUserName = networkIdentifier

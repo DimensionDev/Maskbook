@@ -15,7 +15,7 @@ import {
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { texts } from '../../settings/createSettings'
 import { useMatchXS } from '../../utils'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     container: { listStyleType: 'none', width: '100%' },
@@ -153,8 +153,8 @@ export function SettingsUIEnum<T extends object>(
 function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectProps]: useEnumSettingsParams<Q>) {
     const enum_ = getEnumAsArray(enumObject)
     const change = (value: any) => {
-        if (!Number.isNaN(parseInt(value))) {
-            value = parseInt(value)
+        if (!Number.isNaN(Number.parseInt(value, 10))) {
+            value = Number.parseInt(value, 10)
         }
         if (!enum_.some((x) => x.value === value)) {
             throw new Error('Invalid state')

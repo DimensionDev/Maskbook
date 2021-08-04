@@ -17,7 +17,6 @@ import PhoneNumberSettingItem from './components/PhoneNumberSettingItem'
 
 import LanguageSetting from './components/LanguageSetting'
 import AppearanceSetting from './components/AppearanceSetting'
-import AncientPostsSetting from './components/AncientPostsSetting'
 import BackupSetting from './components/BackupSetting'
 import RestoreSetting from './components/RestoreSetting'
 import MobileSyncSetting from './components/MobileSyncSetting'

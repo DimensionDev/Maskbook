@@ -12,13 +12,12 @@ import {
     Paper,
     Typography,
 } from '@material-ui/core'
-import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
+import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { useI18N } from '../../../../utils'
 import { TradeProvider, ZrxTradePool } from '../../types'
 import { SelectPoolPanel } from './SelectPoolPanel'
 import { SlippageSlider } from './SlippageSlider'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import {
     currentSlippageTolerance,
     currentTradeProviderSettings,
@@ -62,7 +61,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const { pools } = useTradeProviderSettings(provider)
 
     //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated)
+    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
     //#endregion
 
     const onReset = useCallback(() => {

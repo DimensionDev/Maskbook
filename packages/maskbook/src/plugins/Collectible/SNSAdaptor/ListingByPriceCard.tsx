@@ -21,7 +21,7 @@ import {
     TokenWatched,
     useAccount,
 } from '@masknet/web3-shared'
-import { format as formatDateTime } from 'date-fns'
+import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
@@ -125,12 +125,11 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 expirationTime: endingPriceChecked ? toUnixTimestamp(expirationTime) : undefined,
                 buyerAddress: privacyChecked ? buyerAddress : undefined,
             })
-        } catch (e) {
-            enqueueSnackbar(e.message, {
-                variant: 'error',
-                preventDuplicate: true,
-            })
-            throw e
+        } catch (error) {
+            if (error instanceof Error) {
+                enqueueSnackbar(error.message, { variant: 'error', preventDuplicate: true })
+            }
+            throw error
         }
     }, [
         asset?.value,
