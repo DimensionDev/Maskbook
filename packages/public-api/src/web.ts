@@ -42,12 +42,11 @@ export enum DataProvider {
 }
 
 export enum TradeProvider {
-    UNISWAP,
-    ZRX, // 0x
-    // ONE_INCH,
-    SUSHISWAP,
-    SASHIMISWAP,
-    BALANCER,
-    QUICKSWAP,
-    PANCAKESWAP,
+    UNISWAP = 0,
+    ZRX = 1,
+    SUSHISWAP = 2,
+    SASHIMISWAP = 3,
+    BALANCER = 4,
+    QUICKSWAP = 5,
+    PANCAKESWAP = 6,
 }
