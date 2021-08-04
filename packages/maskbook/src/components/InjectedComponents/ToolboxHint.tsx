@@ -35,7 +35,6 @@ import { WalletIcon } from '../shared/WalletIcon'
 import { useI18N } from '../../utils'
 import { currentPluginEnabledStatus } from '../../settings/settings'
 import { base as ITO_Plugin } from '../../plugins/ITO/base'
-import { base as RedPacket_Plugin } from '../../plugins/RedPacket/base'
 import Services from '../../extension/service'
 import { forwardRef, useRef } from 'react'
 import { safeUnreachable } from '@dimensiondev/kit'
@@ -155,7 +154,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Red packet
-    const redPacketPluginEnabled = currentPluginEnabledStatus['plugin:' + RedPacketPluginID].value
     const openRedPacket = useCallback(() => {
         openEncryptedMessage()
         setTimeout(() => {
@@ -174,7 +172,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region ITO
-    const itoPluginEnabled = currentPluginEnabledStatus['plugin:' + ITO_PluginID].value
     const openITO = useCallback(() => {
         openEncryptedMessage()
         setTimeout(() => {
@@ -209,16 +206,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     const items: ToolboxItemDescriptor[] = [
         { ...ToolIconURLs.encryptedmsg, onClick: openEncryptedMessage },
-        {
-            ...ToolIconURLs.redpacket,
-            onClick: openRedPacket,
-            hide: !(operatingSupportedChainMapping[RedPacket_Plugin.ID] && redPacketPluginEnabled),
-        },
-        {
-            ...ToolIconURLs.markets,
-            onClick: openITO,
-            hide: !(operatingSupportedChainMapping[ITO_Plugin.ID] && itoPluginEnabled),
-        },
         {
             ...ToolIconURLs.token,
             onClick: openBuyCurrency,
@@ -258,9 +245,10 @@ export function ToolboxHint(props: ToolboxHintProps) {
             label: typeof label === 'string' ? label : pluginI18N(plugin.ID, label),
             priority,
             useShouldDisplay,
+            hide: !operatingSupportedChainMapping[plugin.ID],
         })
     }
-    console.log(items)
+    console.log(items, operatingSupportedChainMapping)
 
     const [menu, openMenu] = useMenu(
         items
