@@ -1,4 +1,5 @@
 import type BigNumber from 'bignumber.js'
+import type { TransactionStateType } from '@masknet/web3-shared'
 
 export interface GameMetaData {
     contractAddress: string
@@ -50,4 +51,9 @@ export interface LendingPoolData {
     reward: string
     poolAPY: BigNumber
     poolEarnings: BigNumber
+}
+
+export interface GameActionError {
+    gameActionStatus: TransactionStateType
+    transactionHash: string
 }

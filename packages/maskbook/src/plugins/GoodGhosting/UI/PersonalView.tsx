@@ -11,7 +11,7 @@ import { useI18N } from '../../../utils'
 import { useEarlyWithdraw } from '../hooks/useGameActions'
 import { useGameToken } from '../hooks/usePoolData'
 import type { GoodGhostingInfo, Player } from '../types'
-import { getPlayerStatus, PlayerStatus } from '../utils'
+import { getPlayerStatus, isGameActionError, PlayerStatus } from '../utils'
 import BigNumber from 'bignumber.js'
 import { FormattedBalance } from '@masknet/shared'
 
@@ -65,7 +65,7 @@ export function PersonalView(props: PersonalViewProps) {
         try {
             await earlyWithdraw()
         } catch (error) {
-            if (error?.transactionHash) {
+            if (isGameActionError(error) && error.transactionHash) {
                 const link = resolveTransactionLinkOnExplorer(chainId, error.transactionHash)
                 if (error.gameActionStatus === TransactionStateType.CONFIRMED) {
                     setErrorState({

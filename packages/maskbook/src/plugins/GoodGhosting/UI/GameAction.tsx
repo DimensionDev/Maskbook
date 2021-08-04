@@ -13,6 +13,7 @@ import type { GoodGhostingInfo } from '../types'
 import { DAI } from '../constants'
 import { GameActionDialog } from './GameActionDialog'
 import { useGameToken } from '../hooks/usePoolData'
+import { isGameActionError } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -55,7 +56,7 @@ export function GameAction(props: GameActionProps) {
             await action()
             props.info.refresh()
         } catch (error) {
-            if (error?.transactionHash) {
+            if (isGameActionError(error) && error.transactionHash) {
                 const link = resolveTransactionLinkOnExplorer(chainId, error.transactionHash)
                 if (error.gameActionStatus === TransactionStateType.CONFIRMED) {
                     setErrorState({

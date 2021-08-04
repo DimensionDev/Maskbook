@@ -1,8 +1,9 @@
-import type { GoodGhostingInfo, Player, PlayerStandings, TimelineEvent } from './types'
+import type { GameActionError, GoodGhostingInfo, Player, PlayerStandings, TimelineEvent } from './types'
 import addSeconds from 'date-fns/addSeconds'
 import differenceInDays from 'date-fns/differenceInDays'
 import formatDuration from 'date-fns/formatDuration'
 import isBefore from 'date-fns/isBefore'
+import { TransactionStateType } from '@masknet/web3-shared'
 
 export enum PlayerStatus {
     Winning = 'winning',
@@ -68,4 +69,11 @@ export function getReadableInterval(roundLength: number) {
         weeks,
         days,
     })
+}
+
+export function isGameActionError(error: unknown): error is GameActionError {
+    return (
+        Object.values(TransactionStateType).includes((error as GameActionError).gameActionStatus) &&
+        (error as GameActionError).transactionHash !== undefined
+    )
 }
