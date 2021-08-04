@@ -23,7 +23,7 @@ import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSaftyAlert } from './CoinSaftyAlert'
 import { PLUGIN_IDENTIFIER as TRANSAK_PLUGIN_ID } from '../../../Transak/constants'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/src'
+import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles((theme) => {
     return {
