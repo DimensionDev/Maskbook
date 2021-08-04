@@ -1,9 +1,10 @@
 import {
     FungibleTokenDetailed,
-    getRPCConstants,
     isNative,
     useAccount,
     useBlockNumber,
+    useChainId,
+    useRPCConstants,
     useTokenConstants,
     useTraderConstants,
 } from '@masknet/web3-shared'
@@ -11,7 +12,6 @@ import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import type { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
-import { currentChainIdSettings } from '../../../Wallet/settings'
 import { first } from 'lodash-es'
 
 export function useTrade(
@@ -24,8 +24,8 @@ export function useTrade(
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const blockNumber = useBlockNumber()
     const slippage = useSlippageTolerance()
-    const chainId = currentChainIdSettings.value
-    const { RPC } = getRPCConstants(chainId)
+    const chainId = useChainId()
+    const { RPC } = useRPCConstants(chainId)
     const provderURL = first(RPC)
     const { DODO_ETH_ADDRESS } = useTraderConstants(chainId)
     const account = useAccount()
