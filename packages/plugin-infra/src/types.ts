@@ -183,7 +183,10 @@ export namespace Plugin.SNSAdaptor {
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
+        /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
+        ToolbarEntry?: ToolbarEntry
     }
+    //#region Composition entry
     /**
      * The entry has two type:
      *
@@ -232,6 +235,24 @@ export namespace Plugin.SNSAdaptor {
         text: string | React.ReactChild
         tooltip?: React.ReactChild
     }
+    //#endregion
+
+    //#region Toolbal entry
+    export interface ToolbarEntry {
+        image: string
+        label: I18NStringField
+        /**
+         * Used to order the toolbars
+         *
+         * TODO: can we make them unordered?
+         */
+        priority: number
+        /**
+         * This is a React hook. If it returns false, this entry will not be displayed.
+         */
+        useShouldDisplay?(): boolean
+    }
+    //#endregion
 }
 
 /** This part runs in the dashboard */

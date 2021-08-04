@@ -202,13 +202,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
     } = useControlledDialog()
     //#endregion
 
-    interface ToolboxItemDescriptor {
-        onClick: () => void
-        image: string
-        text: string
-        hide?: boolean
-        priority: number
-    }
     const items: ToolboxItemDescriptor[] = [
         { ...ToolIconURLs.encryptedmsg, onClick: openEncryptedMessage },
         {
@@ -318,4 +311,12 @@ export function ToolboxHint(props: ToolboxHintProps) {
             ) : null}
         </>
     )
+}
+
+interface ToolboxItemDescriptor {
+    onClick: () => void
+    image: string
+    text: string
+    hide?: boolean
+    priority: number
 }
