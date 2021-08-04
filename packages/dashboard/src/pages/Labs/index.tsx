@@ -74,13 +74,11 @@ export default function Plugins() {
     }
 
     async function onTwitter(id: string) {
-        await Services.Storage.setStorage('openPlugin', id)
-        window.open('https://www.twitter.com/home', '_blank')
+        await Services.Settings.openSNSAndActivatePlugin('https://www.twitter.com/home', id)
     }
 
     async function onFacebook(id: string) {
-        await Services.Storage.setStorage('openPlugin', id)
-        window.open('https://www.facebook.com', '_blank')
+        await Services.Settings.openSNSAndActivatePlugin('https://www.facebook.com', id)
     }
 
     function onExplore(id: string) {

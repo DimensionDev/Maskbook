@@ -19,9 +19,6 @@ import { Image } from '../shared/Image'
 import { useMenu } from '../../utils/hooks/useMenu'
 import { useCallback } from 'react'
 import { MaskMessage } from '../../utils/messages'
-import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
-import { ITO_PluginID } from '../../plugins/ITO/constants'
-import { FileServicePluginID } from '../../plugins/FileService/constants'
 import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
 import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
 import { useControlledDialog } from '../../plugins/Collectible/SNSAdaptor/useControlledDialog'
@@ -35,7 +32,6 @@ import { WalletIcon } from '../shared/WalletIcon'
 import { useI18N } from '../../utils'
 import { currentPluginEnabledStatus } from '../../settings/settings'
 import { base as ITO_Plugin } from '../../plugins/ITO/base'
-import Services from '../../extension/service'
 import { forwardRef, useRef } from 'react'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
@@ -153,33 +149,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
     )
     //#endregion
 
-    //#region Red packet
-    const openRedPacket = useCallback(() => {
-        openEncryptedMessage()
-        setTimeout(() => {
-            MaskMessage.events.activatePluginCompositionEntry.sendToLocal(RedPacketPluginID)
-        })
-    }, [openEncryptedMessage])
-    //#endregion
-
-    //#region File Service
-    const openFileService = useCallback(() => {
-        openEncryptedMessage()
-        setTimeout(() => {
-            MaskMessage.events.activatePluginCompositionEntry.sendToLocal(FileServicePluginID)
-        })
-    }, [openEncryptedMessage])
-    //#endregion
-
-    //#region ITO
-    const openITO = useCallback(() => {
-        openEncryptedMessage()
-        setTimeout(() => {
-            MaskMessage.events.activatePluginCompositionEntry.sendToLocal(ITO_PluginID)
-        })
-    }, [openEncryptedMessage])
-    //#endregion
-
     //#region Buy currency
     const transakPluginEnabled = currentPluginEnabledStatus['plugin:' + TransakPluginID].value
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
@@ -248,7 +217,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
             hide: !operatingSupportedChainMapping[plugin.ID],
         })
     }
-    console.log(items, operatingSupportedChainMapping)
 
     const [menu, openMenu] = useMenu(
         items
@@ -267,26 +235,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
     )
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
-
-    const pluginAutoOpenCheck = async () => {
-        const pluginId = await Services.Storage.getStorage('openPlugin')
-        if (pluginId) {
-            switch (pluginId) {
-                case FileServicePluginID:
-                    openFileService()
-                    break
-                case ITO_PluginID:
-                    openITO()
-                    break
-                case RedPacketPluginID:
-                    openRedPacket()
-                    break
-            }
-            Services.Storage.setStorage('openPlugin', null)
-        }
-    }
-
-    setTimeout(pluginAutoOpenCheck, 2000)
 
     return (
         <>
