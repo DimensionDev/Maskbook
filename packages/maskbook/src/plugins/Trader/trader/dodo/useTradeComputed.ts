@@ -28,7 +28,10 @@ export function useTradeComputed(
             executionPrice,
             fee: ZERO,
             maximumSold: inputAmount,
-            minimumReceived: outputAmount,
+            minimumReceived: new BigNumber(trade.fromAmount)
+                .multipliedBy(trade.resPricePerFromToken)
+                .multipliedBy(1 - trade.slippage / 100)
+                .multipliedBy(pow10(outputToken.decimals)),
 
             // minimumProtocolFee
             priceImpact,

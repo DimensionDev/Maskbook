@@ -38,4 +38,5 @@ export interface SwapRouteData {
     useSource: string
     fromAmount: number
     value: string
+    slippage: number
 }

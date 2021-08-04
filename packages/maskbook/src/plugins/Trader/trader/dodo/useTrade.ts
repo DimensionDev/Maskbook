@@ -29,6 +29,7 @@ export function useTrade(
     const provderURL = first(RPC)
     const { DODO_ETH_ADDRESS } = useTraderConstants(chainId)
     const account = useAccount()
+
     return useAsyncRetry(async () => {
         if (!inputToken || !outputToken) return null
         if (inputAmount === '0') return null
