@@ -2,7 +2,7 @@ import { GraphQLClient, gql } from 'graphql-request'
 import stringify from 'json-stable-stringify'
 import { graphEndpointKeyVal, keyServerEndpoint } from './constants'
 
-var graphQLClients: { [key: string]: GraphQLClient } = {}
+const graphQLClients: { [key: string]: GraphQLClient } = {}
 
 for (const [key, url] of Object.entries(graphEndpointKeyVal)) {
     graphQLClients[key] = new GraphQLClient(url)
@@ -43,12 +43,12 @@ const verifyHolder = async <verifyHolderResponse>(_lockAddress: String, _holder:
 
 export const verifyActiveLock = (data: { lock: string; address: string; chain: number }) => {
     verifyHolder(data.lock, data.address, data.chain).then((result) => {
-        var response: verifyHolderResponse = result
-        var keys = response.keyHolders[0].keys
+        const response: verifyHolderResponse = result
+        const keys = response.keyHolders[0].keys
         keys.forEach((key) => {
-            if (key.lock.address == data.lock) {
-                var currentTimeInSeconds = Math.floor(Date.now() / 1000)
-                var diff = key.expiration - currentTimeInSeconds
+            if (key.lock.address === data.lock) {
+                const currentTimeInSeconds = Math.floor(Date.now() / 1000)
+                const diff = key.expiration - currentTimeInSeconds
                 if (diff > 0) {
                     return true
                 } else {

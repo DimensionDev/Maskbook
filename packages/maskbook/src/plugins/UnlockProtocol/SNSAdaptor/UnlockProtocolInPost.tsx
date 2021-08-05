@@ -24,16 +24,16 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
     const [address, setAddress] = useState(useAccount())
     const [chain, setChain] = useState(useChainId())
     const [redirurl, setRedirurl] = useState('')
-    
+
     useEffect(() => {
         const metadata = UnlockProtocolMetadataReader(props.message.meta)
         if (metadata.ok) {
             if (!!address) {
-                var data: { locks: Record<string,any> } = { locks: {} }
+                const data: { locks: Record<string, any> } = { locks: {} }
                 PuginUnlockProtocolRPC.getPurchasedLocks(address, chain).then((res) => {
                     res.keyPurchases.forEach((e: { lock: string }) => {
                         metadata.val.unlockLocks.forEach((locks) => {
-                            if (e.lock == locks.unlocklock) {
+                            if (e.lock === locks.unlocklock) {
                                 const requestdata = {
                                     lock: e.lock,
                                     address: address,
@@ -50,7 +50,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                                     })
                                 })
                             }
-                            data['locks'][locks.unlocklock] = { network: locks.chainid }
+                            data.locks[locks.unlocklock] = { network: locks.chainid }
                         })
                     })
                     setRedirurl(paywallUrl + encodeURI(JSON.stringify(data)))
@@ -61,7 +61,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
         }
     }, [props.message.meta])
     if (!!cont) {
-        var jsx = message
+        const jsx = message
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
                       <>
@@ -81,7 +81,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                       <MaskbookPluginWrapper width={300} pluginName="Unlock Protocol">
                           <>
                               <text>"You don't have access to this content"</text>
-                              <br></br>
+                              <br />
                               <Button target="_blank" href={redirurl}>
                                   Buy Lock
                               </Button>

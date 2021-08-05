@@ -73,7 +73,8 @@ export function SelectRecipientsUnlockDialogUI(props: SelectRecipientsUnlockDial
                                     } else {
                                         props.onDeselect(item)
                                     }
-                                }}></LockInList>
+                                }}
+                            />
                         ))
                     )}
                 </List>

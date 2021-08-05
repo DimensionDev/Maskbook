@@ -54,7 +54,7 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
     const onInsert = () => {
         if (!!currentUnlockTarget.length && !!currentUnlockPost) {
             PuginUnlockProtocolRPC.encryptUnlockData(currentUnlockPost).then((encres) => {
-                var uploadData = {
+                const uploadData = {
                     identifier: encres.iv,
                     unlockLocks: currentUnlockTarget.map((x) => {
                         return { unlocklock: x.lock.address, chainid: currentUnlockChain }
@@ -62,8 +62,8 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                     unlockKey: encres.key,
                 }
                 PuginUnlockProtocolRPC.postUnlockData(uploadData).then((res) => {
-                    if (res == 200) {
-                        var data = {
+                    if (res === 200) {
+                        const data = {
                             iv: uploadData.identifier,
                             unlockLocks: uploadData.unlockLocks,
                             post: encres.encrypted,
@@ -95,7 +95,8 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                     rows={4}
                     variant="outlined"
                     fullWidth
-                    onChange={(e) => setCurrentUnlockPost(e.target.value)}></TextField>
+                    onChange={(e) => setCurrentUnlockPost(e.target.value)}
+                />
             </DialogContent>
             <DialogActions>
                 <Chip
@@ -108,7 +109,7 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                 <SelectRecipientsUnlockDialogUI
                     onSelect={(item) => setCurrentUnlockTarget([...currentUnlockTarget, item])}
                     onDeselect={(item) =>
-                        setCurrentUnlockTarget(currentUnlockTarget.filter((x) => x.lock.address != item.lock.address))
+                        setCurrentUnlockTarget(currentUnlockTarget.filter((x) => x.lock.address !== item.lock.address))
                     }
                     open={open}
                     selected={currentUnlockTarget}

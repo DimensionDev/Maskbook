@@ -24,8 +24,8 @@ export async function decryptUnlockData(
 ): Promise<{
     content: string
 }> {
-    var importkey = await crypto.subtle.importKey('raw', decodeArrayBuffer(key), 'AES-GCM', true, ['decrypt'])
-    var decrypted = await crypto.subtle.decrypt(
+    const importkey = await crypto.subtle.importKey('raw', decodeArrayBuffer(key), 'AES-GCM', true, ['decrypt'])
+    const decrypted = await crypto.subtle.decrypt(
         {
             name: 'AES-GCM',
             iv: decodeArrayBuffer(iv),
