@@ -74,7 +74,7 @@ export const postsContentSelector = () =>
         [
             '.tweet-text > div', // both timeline and detail page for legacy twitter
             '[data-testid="tweet"] div + div div[aria-labelledby] div[aria-labelledby]', // timeline
-            '[data-testid="tweet"] + div > div:first-child', // detail page for new twitter
+            '[data-testid="tweet"] + div > div:first-child div[lang]', // detail page for new twitter
             '[data-testid="tweet"] + div div[role="link"] div[lang]', // quoted tweet in detail page for new twitter
             '[data-testid="tweet"] > div:last-child div[role="link"] div[lang]', // quoted tweet in timeline page for new twitter
         ].join(),
