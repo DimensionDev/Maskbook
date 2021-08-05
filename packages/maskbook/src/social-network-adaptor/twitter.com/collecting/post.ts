@@ -26,14 +26,17 @@ function registerPostCollectorInner(
     cancel: AbortSignal,
 ) {
     const getTweetNode = (node: HTMLElement) => {
-        return node.closest<HTMLDivElement>(
+        const root = node.closest<HTMLDivElement>(
             [
-                '.tweet',
-                '.main-tweet',
                 'article > div',
                 'div[role="link"]', // retweet in new twitter
             ].join(),
         )
+        if (!root) return null
+        const isCardNode = node.matches('[data-testid="card.wrapper"]')
+        const hasTextNode = !!root.querySelector('[data-testid="tweet"] div[lang]')
+        if (isCardNode && hasTextNode) return null
+        return root
     }
     const updateProfileInfo = memoize(
         (info: PostInfo) => {
