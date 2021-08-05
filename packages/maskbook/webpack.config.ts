@@ -245,7 +245,6 @@ function config(opts: {
             // Have to write disk cause plugin cannot be loaded over network
             writeToDisk: true,
             compress: false,
-            hot: !disableHMR,
             hotOnly: !disableHMR,
             port: hmrPort,
             // WDS does not support chrome-extension:// browser-extension://
