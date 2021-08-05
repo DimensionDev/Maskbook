@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
         gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
         gridGap: theme.spacing(1),
     },
+    empty: {
+        display: 'flex',
+    },
     container: {
         height: 'calc(100% - 52px)',
         overflow: 'auto',
@@ -116,12 +119,12 @@ export function CollectibleList({ wallet, owner, readonly }: CollectibleListProp
             <Box className={classes.container}>
                 {collectiblesError || dataSource.length === 0 ? (
                     <Box
-                        className={classes.root}
+                        className={classes.empty}
                         sx={{
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            height: 'auto',
+                            height: '100%',
                         }}>
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
                         <Button

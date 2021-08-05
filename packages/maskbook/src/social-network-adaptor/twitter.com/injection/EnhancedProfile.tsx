@@ -2,7 +2,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { useWallet } from '@masknet/web3-shared'
 import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createReactRootShadowed, MaskMessage, startWatch } from '../../../utils'
 import {
     searchForegroundColorSelector,
@@ -102,16 +102,25 @@ const bind = (cb: () => void) => {
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {
         const line = v.querySelector('div > div') as HTMLDivElement
-        const _v = v.querySelector('div')
-        _v?.addEventListener(
-            'click',
-            () => {
-                cb()
-                if (elePage) elePage.style.display = ''
-                if (line) line.style.display = ''
-            },
-            { once: true },
-        )
+        const _v = v.querySelector('div') as HTMLDivElement
+        useEffect(() => {
+            _v.addEventListener(
+                'click',
+                () => {
+                    if (elePage) elePage.style.display = ''
+                    if (line) line.style.display = ''
+                    cb()
+                },
+                { once: true },
+            )
+            return () => {
+                _v.removeEventListener('click', () => {
+                    if (elePage) elePage.style.display = ''
+                    if (line) line.style.display = ''
+                    cb()
+                })
+            }
+        }, [line, _v, elePage, cb])
     })
 }
 
@@ -180,11 +189,14 @@ export function EnhancedProfileaPage() {
     const selectedWallet = useWallet()
     const [show, setShow] = useState(false)
 
-    MaskMessage.events.profileNFTsPageUpdate.on((data) => {
-        setShow(data.show)
-    })
+    useEffect(() => {
+        MaskMessage.events.profileNFTsPageUpdate.on((data) => {
+            setShow(data.show)
+        })
+    }, [])
 
     const resolvedAddress = useEthereumAddress()
+
     if (!selectedWallet) {
         return null
     }
