@@ -801,5 +801,7 @@
     "plugin_unlockprotocol_select_unlock_lock": "Select Unlock lock",
     "plugin_unlockprotocol_no_lock_found": "No lock found",
     "plugin_unlockprotocol_submit_post": "Submit post",
-    "plugin_unlockprotocol_title": "Title"
+    "plugin_unlockprotocol_title": "Unlock Protocol",
+    "plugin_unlockprotocol_server_error": "Some Server error occured, Please try again later.",
+    "plugin_unlockprotocol_connect_wallet": "Please connect Wallet"
 }

@@ -801,5 +801,7 @@
     "plugin_unlockprotocol_select_unlock_lock": "",
     "plugin_unlockprotocol_no_lock_found": "",
     "plugin_unlockprotocol_submit_post": "",
-    "plugin_unlockprotocol_title": ""
+    "plugin_unlockprotocol_title": "",
+    "plugin_unlockprotocol_server_error": "",
+    "plugin_unlockprotocol_connect_wallet": ""
 }

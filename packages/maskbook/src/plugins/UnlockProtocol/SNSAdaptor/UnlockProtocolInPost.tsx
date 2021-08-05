@@ -40,15 +40,22 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                                     chain: locks.chainid,
                                     identifier: metadata.val.iv,
                                 }
-                                PuginUnlockProtocolRPC.getKey(requestdata).then((response) => {
-                                    PuginUnlockProtocolRPC.decryptUnlockData(
-                                        metadata.val.iv,
-                                        response.post.unlockKey,
-                                        metadata.val.post,
-                                    ).then((content) => {
-                                        setCont(content.content)
+                                PuginUnlockProtocolRPC.getKey(requestdata)
+                                    .catch((response) => {
+                                        if (response.code === -1) {
+                                            setCont(t('plugin_unlockprotocol_server_error'))
+                                        }
                                     })
-                                })
+                                    .then((response) => {
+                                        setCont(response.message)
+                                        PuginUnlockProtocolRPC.decryptUnlockData(
+                                            metadata.val.iv,
+                                            response.post.unlockKey,
+                                            metadata.val.post,
+                                        ).then((content) => {
+                                            setCont(content.content)
+                                        })
+                                    })
                             }
                             data.locks[locks.unlocklock] = { network: locks.chainid }
                         })
@@ -56,7 +63,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                     setRedirurl(paywallUrl + encodeURI(JSON.stringify(data)))
                 })
             } else {
-                setCont('please connect wallet!!!')
+                setCont(t('plugin_unlockprotocol_connect_wallet'))
             }
         }
     }, [props.message.meta])
