@@ -23,8 +23,9 @@ import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
 import { TradeSummary } from './TradeSummary'
 import { ConfirmDialog } from './ConfirmDialog'
 import { TradeActionType } from '../../trader/useTradeState'
-import { Coin, SwapResponse, TokenPanelType, TradeComputed, TradeProvider } from '../../types'
-import { TradePairViewer } from '../uniswap/TradePairViewer'
+import { Coin, SwapResponse, SwapRouteData, TokenPanelType, TradeComputed, TradeProvider } from '../../types'
+import { TradePairViewer as UniswapPairViewer } from '../uniswap/TradePairViewer'
+import { TradePairViewer as DODOPairViewer } from '../dodo/TradePairViewer'
 import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -322,10 +323,13 @@ export function Trader(props: TraderProps) {
                         />
                     ) : null}
                     {context?.IS_UNISWAP_LIKE ? (
-                        <TradePairViewer
+                        <UniswapPairViewer
                             trade={tradeComputed as TradeComputed<Trade<Currency, Currency, TradeType>>}
                             provider={provider}
                         />
+                    ) : null}
+                    {TradeProvider.DODO === provider ? (
+                        <DODOPairViewer trade={tradeComputed as TradeComputed<SwapRouteData>} provider={provider} />
                     ) : null}
                 </>
             ) : null}

@@ -37,5 +37,7 @@ export async function swapRoute(request: SwapRouteRequest) {
         fromAmount: new BigNumber(request.fromAmount).dividedBy(pow10(request.fromToken.decimals ?? 0)).toNumber(),
         value: request.isNativeSellToken ? request.fromAmount : '0',
         slippage: request.slippage,
+        fromTokenSymbol: request.fromToken.symbol,
+        toTokenSymbol: request.toToken.symbol,
     } as SwapRouteData
 }

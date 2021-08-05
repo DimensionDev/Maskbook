@@ -97,6 +97,22 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://v2.info.uniswap.org/pair/${address}`
         case TradeProvider.ZRX:
             return ''
+        case TradeProvider.DODO:
+            switch (networkType) {
+                case NetworkType.Ethereum:
+                    return `https://app.dodoex.io/exchange/${address}?network=mainnet&forced=true`
+                case NetworkType.Binance:
+                    return `https://app.dodoex.io/exchange/${address}?network=bsc-mainnet&forced=true`
+                case NetworkType.Polygon:
+                    return `https://app.dodoex.io/exchange/${address}?network=matic&forced=true`
+                case NetworkType.Arbitrum:
+                    return ''
+                default:
+                    safeUnreachable(networkType)
+                    return ''
+            }
+        case TradeProvider.DODO:
+            return `https://app.dodoex.io/exchange/${address}`
         case TradeProvider.SUSHISWAP:
             switch (networkType) {
                 case NetworkType.Ethereum:
