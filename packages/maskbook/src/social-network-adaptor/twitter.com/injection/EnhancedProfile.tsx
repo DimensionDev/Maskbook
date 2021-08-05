@@ -2,7 +2,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { useWallet } from '@masknet/web3-shared'
 import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { createReactRootShadowed, MaskMessage, startWatch } from '../../../utils'
 import {
     searchForegroundColorSelector,
@@ -95,6 +95,18 @@ function clearStatus() {
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = 'none'
     })
+
+    const eleEmpty = searchProfileEmptySelector().evaluate()
+    if (eleEmpty) eleEmpty.style.display = 'none'
+    const elePage = searchProfileTabPageSelector().evaluate()
+    if (elePage) elePage.style.display = 'none'
+}
+
+function resetStatus() {
+    const eleEmpty = searchProfileEmptySelector().evaluate()
+    if (eleEmpty) eleEmpty.style.display = ''
+    const elePage = searchProfileTabPageSelector().evaluate()
+    if (elePage) elePage.style.display = ''
 }
 
 const bind = (cb: () => void) => {
@@ -103,22 +115,15 @@ const bind = (cb: () => void) => {
     tabList.map((v) => {
         const line = v.querySelector('div > div') as HTMLDivElement
         const _v = v.querySelector('div') as HTMLDivElement
+        const callback = () => {
+            if (elePage) elePage.style.display = ''
+            if (line) line.style.display = ''
+            cb()
+        }
         useEffect(() => {
-            _v.addEventListener(
-                'click',
-                () => {
-                    if (elePage) elePage.style.display = ''
-                    if (line) line.style.display = ''
-                    cb()
-                },
-                { once: true },
-            )
+            _v.addEventListener('click', callback, { once: true })
             return () => {
-                _v.removeEventListener('click', () => {
-                    if (elePage) elePage.style.display = ''
-                    if (line) line.style.display = ''
-                    cb()
-                })
+                _v.removeEventListener('click', callback)
             }
         }, [line, _v, elePage, cb])
     })
@@ -147,31 +152,28 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
         MaskMessage.events.profileNFTsPageUpdate.sendToLocal({ show: false })
     })
 
-    const onClick = () => {
-        const eleEmpty = searchProfileEmptySelector().evaluate()
-        if (eleEmpty) eleEmpty.style.display = 'none'
-
-        const elePage = searchProfileTabPageSelector().evaluate()
-        if (elePage) elePage.style.display = 'none'
-
+    useEffect(() => {
         const tab = searchProfileActiveTabSelector().evaluate()
-        if (tab) {
-            tab.addEventListener(
-                'click',
-                () => {
-                    if (eleEmpty) eleEmpty.style.display = ''
-                    if (elePage) elePage.style.display = ''
+        tab?.addEventListener(
+            'click',
+            () => {
+                resetStatus()
+                setActive(false)
+            },
+            { once: true },
+        )
+        return () =>
+            tab?.removeEventListener('click', () => {
+                resetStatus()
+                setActive(false)
+            })
+    }, [searchProfileActiveTabSelector, resetStatus])
 
-                    setActive(false)
-                },
-                { once: true },
-            )
-        }
-
+    const onClick = useCallback(() => {
         MaskMessage.events.profileNFTsPageUpdate.sendToLocal({ show: true })
         setActive(true)
         clearStatus()
-    }
+    }, [clearStatus])
 
     if (!eleTab) return null
 
