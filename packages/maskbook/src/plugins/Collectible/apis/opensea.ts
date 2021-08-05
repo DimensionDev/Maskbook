@@ -46,7 +46,7 @@ async function createOpenSeaAPI() {
 export async function getAsset(tokenAddress: string, tokenId: string) {
     const sdkResponse = await (await createOpenSeaPort()).api.getAsset({ tokenAddress, tokenId })
     const fetchResponse = await (
-        await fetch(urlcat(await createOpenSeaAPI(), '/assets/:tokenAddress/:tokenId', { tokenAddress, tokenId }), {
+        await fetch(urlcat(await createOpenSeaAPI(), '/asset/:tokenAddress/:tokenId', { tokenAddress, tokenId }), {
             cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : undefined,
             mode: 'cors',
             headers: {
