@@ -1,4 +1,3 @@
-import './gun-worker.patch'
 import { AsyncGeneratorCall, AsyncCall, AsyncCallOptions } from 'async-call-rpc/full'
 import { WorkerChannel } from 'async-call-rpc/utils/web/worker'
 import { serializer } from '@masknet/shared-base'

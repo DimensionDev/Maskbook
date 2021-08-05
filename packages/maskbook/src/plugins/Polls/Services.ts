@@ -30,7 +30,9 @@ interface NewPollProps {
     start_time: Date
     end_time: Date
 }
-
+export async function echo() {
+    return '1'
+}
 export async function createNewPoll(poll: NewPollProps) {
     const { id, options, start_time, end_time } = poll
 
