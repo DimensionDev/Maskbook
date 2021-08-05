@@ -295,6 +295,9 @@
     "wallet_import_keystore_content_placeholder": "",
     "wallet_import_keystore_password_label": "",
     "wallet_import_keystore_password_placeholder": "",
+    "wallet_risk_warning_dialog_title": "風險提示",
+    "wallet_risk_warning_no_select_wallet": "還沒有選擇錢包。",
+    "wallet_risk_warning_content": "尊敬的用户：<br/>在使用任何 Mask Network 内任何跟钱包相关的插件，请确认以下使用风险。<br/>Mask Network 提供非商业免费服务。接入的插件均为社区成员和其他优秀第三方DApps团队提供，由于去中心化网络的自由性和其他不确定风险因素，请用户妥善保护自己的钱包助记词、私钥等敏感信息，进行任何区块链合约交互，请谨慎操作。任何第三方 DApps 插件所带来的风险均由第三方 DApps 承担。点击确认按钮即代表同意承担以上可能带来的风险。",
     "input_length_exceed_prompt": "{{name}} 的長度需小於 {{length}}。",
     "relative_time_days_ago": "{{days}} 天前",
     "relative_time_hours_ago": "{{hours}} 小時前",
@@ -706,6 +709,7 @@
     "plugin_snapshot_download_report": "下載報告",
     "plugin_dhedge_managed_by": "由 <manager>{{managerName}}</manager> 管理",
     "plugin_dhedge_manager_share": "持有 <share>{{managerShare}}%</share> 池",
+    "plugin_dhedge_manager_share_more_than_50": "",
     "plugin_dhedge_value_managed": "託管的金額",
     "plugin_dhedge_lifetime_return": "終身回報",
     "plugin_dhedge_risk_factor": "風險因素",
@@ -789,5 +793,9 @@
     "plugin_good_ghosting_leave_game": "",
     "plugin_good_ghosting_early_withdraw_info": "",
     "plugin_good_ghosting_rules": "",
-    "plugin_good_ghosting_game_rules": ""
+    "plugin_good_ghosting_game_rules": "",
+    "plugin_good_ghosting_tx_fail": "",
+    "plugin_good_ghosting_tx_timeout": "",
+    "plugin_good_ghosting_something_went_wrong": "",
+    "plugin_good_ghosting_view_on_explorer": ""
 }

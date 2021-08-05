@@ -13,13 +13,13 @@ const useStyles = makeStyles((theme) => ({
     timer: {
         textAlign: 'center',
         display: 'inline-block',
-        padding: theme.spacing(4),
+        padding: theme.spacing(1, 4),
         margin: theme.spacing(2, 0),
         border: `solid 1px ${theme.palette.divider}`,
         borderRadius: theme.shape.borderRadius,
     },
     eventText: {
-        padding: theme.spacing(1, 6, 1.5, 6),
+        padding: theme.spacing(0.5, 6, 1, 6),
     },
 }))
 
@@ -76,7 +76,7 @@ interface TimerProps {
 function Timer(props: TimerProps) {
     const [dateDisplay, setDateDisplay] = useState('')
     useEffect(() => {
-        var timerId = setInterval(() => {
+        const timerId = setInterval(() => {
             const now = new Date()
 
             if (isBefore(props.targetDate, now)) {

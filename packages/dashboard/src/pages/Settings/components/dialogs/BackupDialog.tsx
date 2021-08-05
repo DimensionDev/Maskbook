@@ -22,7 +22,7 @@ export default function BackupDialog({ open, onClose }: BackupDialogProps) {
         try {
             await Services.Welcome.createBackupFile({ download: true, onlyBackupWhoAmI: false })
             onClose()
-        } catch (e) {
+        } catch {
             // TODO: show snack bar
             // enqueueSnackbar(t('set_up_backup_fail'), {
             //     variant: 'error',

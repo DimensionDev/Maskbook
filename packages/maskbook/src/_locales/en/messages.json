@@ -295,6 +295,9 @@
     "wallet_import_keystore_content_placeholder": "Paste the Keystore JSON here…",
     "wallet_import_keystore_password_label": "The Keystore Password",
     "wallet_import_keystore_password_placeholder": "Enter Keystore Password",
+    "wallet_risk_warning_dialog_title": "Risk Warning",
+    "wallet_risk_warning_no_select_wallet": "Not select wallet yet.",
+    "wallet_risk_warning_content": "Dear User,<br/><br/>When using any wallet-related plugins in Mask Network, please confirm the following usage risks:<br/><br/>Mask Network provides non-commercial free services. The plug-ins are provided by community members and other excellent third-party DApp teams. Due to the freedom of the decentralized network and other uncertain risk factors, users are requested to properly protect their sensitive information such as wallet mnemonic words and private keys. Please be cautious when conducting any blockchain contract interaction. The risks caused by any third-party DApps (plug-ins) are borne by the third-party DApps themselves. Clicking the confirm button means that you agree to bear the above possible risks.",
     "input_length_exceed_prompt": "The length of {{name}} should be less than {{length}}.",
     "relative_time_days_ago": "{{days}} days ago",
     "relative_time_hours_ago": "{{hours}} hours ago",
@@ -706,6 +709,7 @@
     "plugin_snapshot_download_report": "Download report",
     "plugin_dhedge_managed_by": "Managed by <manager>{{managerName}}</manager>",
     "plugin_dhedge_manager_share": "Holds <share>{{managerShare}}%</share> of the pool",
+    "plugin_dhedge_manager_share_more_than_50": "Holds more than 50% of the pool",
     "plugin_dhedge_value_managed": "VALUE MANAGED",
     "plugin_dhedge_lifetime_return": "LIFETIME RETURN",
     "plugin_dhedge_risk_factor": "RISK FACTOR",
@@ -789,5 +793,9 @@
     "plugin_good_ghosting_leave_game": "Leave Game",
     "plugin_good_ghosting_early_withdraw_info": "If you wish to withdraw from an ongoing game, you may be charged a small fee of {{amount}} {{token}} to compensate the remaining players in the savings pool.",
     "plugin_good_ghosting_rules": "Rules",
-    "plugin_good_ghosting_game_rules": "Deposit {{amount}} {{token}} every round for {{roundCount}} rounds to win the game. If other players miss depositing in a round and become ghosts, their earnings will go to you."
+    "plugin_good_ghosting_game_rules": "Deposit {{amount}} {{token}} every round for {{roundCount}} rounds to win the game. If other players miss depositing in a round and become ghosts, their earnings will go to you.",
+    "plugin_good_ghosting_tx_fail": "Failed to complete the transaction.",
+    "plugin_good_ghosting_tx_timeout": "Cannot read transaction status.",
+    "plugin_good_ghosting_something_went_wrong": "Something went wrong, please try again",
+    "plugin_good_ghosting_view_on_explorer": "View on Explorer"
 }
