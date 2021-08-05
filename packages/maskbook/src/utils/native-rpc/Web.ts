@@ -34,9 +34,9 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     setting_getNetworkTraderProvider: (network) => {
         switch (network) {
             case NetworkType.Ethereum:
-                return Services.Settings.getEthNetworkTradeProvider()
+                return Services.Settings.getEthereumNetworkTradeProvider()
             case NetworkType.Binance:
-                return Services.Settings.getBscNetworkTradeProvider()
+                return Services.Settings.getBinanceNetworkTradeProvider()
             case NetworkType.Polygon:
                 return Services.Settings.getPolygonNetworkTradeProvider()
             case NetworkType.Arbitrum:

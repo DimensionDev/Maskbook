@@ -40,7 +40,7 @@ export const currentTradeProviderSettings = createGlobalSettings<TradeProvider>(
     },
 )
 
-export const ethNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+export const ethereumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_IDENTIFIER}+eth+tradeProvider`,
     TradeProvider.UNISWAP,
     { primary: () => '' },
@@ -52,7 +52,7 @@ export const polygonNetworkTradeProviderSettings = createGlobalSettings<TradePro
     { primary: () => '' },
 )
 
-export const bscNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+export const BinanceNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_IDENTIFIER}+bsc+tradeProvider`,
     TradeProvider.PANCAKESWAP,
     { primary: () => '' },

@@ -8,9 +8,9 @@ export const [useTrendingDataSource] = createGlobalState<DataProvider>(
     Messages.events.currentTrendingDataProviderSettings.on,
 )
 
-export const [useEthNetworkTradeProvider] = createGlobalState(
-    Services.Settings.getEthNetworkTradeProvider,
-    Messages.events.ethNetworkTradeProviderSettings.on,
+export const [useEthereumNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getEthereumNetworkTradeProvider,
+    Messages.events.ethereumNetworkTradeProviderSettings.on,
 )
 
 export const [usePolygonNetworkTradeProvider] = createGlobalState(
@@ -18,7 +18,7 @@ export const [usePolygonNetworkTradeProvider] = createGlobalState(
     Messages.events.polygonNetworkTradeProviderSettings.on,
 )
 
-export const [useBscNetworkTradeProvider] = createGlobalState(
-    Services.Settings.getBscNetworkTradeProvider,
-    Messages.events.bscNetworkTradeProviderSettings.on,
+export const [useBinanceNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getBinanceNetworkTradeProvider,
+    Messages.events.BinanceNetworkTradeProviderSettings.on,
 )

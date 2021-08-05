@@ -8,9 +8,9 @@ import {
     currentPluginEnabledStatus,
 } from '../../settings/settings'
 import {
-    bscNetworkTradeProviderSettings,
+    BinanceNetworkTradeProviderSettings,
     currentDataProviderSettings,
-    ethNetworkTradeProviderSettings,
+    ethereumNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
 } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
@@ -47,11 +47,13 @@ export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSetting
 export const [getEtherPrice, setEtherPrice] = create(currentEtherPriceSettings)
 export const [getGasNow, setGasNow] = create(currentGasNowSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
-export const [getEthNetworkTradeProvider, setEthNetworkTradeProvider] = create(ethNetworkTradeProviderSettings)
+export const [getEthereumNetworkTradeProvider, setEthNetworkTradeProvider] = create(
+    ethereumNetworkTradeProviderSettings,
+)
 export const [getPolygonNetworkTradeProvider, setPolygonNetworkTradeProvider] = create(
     polygonNetworkTradeProviderSettings,
 )
-export const [getBscNetworkTradeProvider, setBscNetworkTradeProvider] = create(bscNetworkTradeProviderSettings)
+export const [getBinanceNetworkTradeProvider, setBscNetworkTradeProvider] = create(BinanceNetworkTradeProviderSettings)
 
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 

@@ -6,8 +6,8 @@ import { currentChainIdSettings } from '../Wallet/settings'
 import {
     currentTradeProviderSettings,
     currentDataProviderSettings,
-    ethNetworkTradeProviderSettings,
-    bscNetworkTradeProviderSettings,
+    ethereumNetworkTradeProviderSettings,
+    BinanceNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
 } from './settings'
 import { DataProvider, TradeProvider } from './types'
@@ -17,10 +17,10 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
     if (!networkType) return
     switch (networkType) {
         case NetworkType.Ethereum:
-            currentTradeProviderSettings.value = ethNetworkTradeProviderSettings.value
+            currentTradeProviderSettings.value = ethereumNetworkTradeProviderSettings.value
             break
         case NetworkType.Binance:
-            currentTradeProviderSettings.value = bscNetworkTradeProviderSettings.value
+            currentTradeProviderSettings.value = BinanceNetworkTradeProviderSettings.value
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_GECKO
             break
@@ -44,15 +44,17 @@ currentTradeProviderSettings.addListener((tradeProvier: TradeProvider) => {
     if (!networkType) return
     switch (networkType) {
         case NetworkType.Ethereum:
-            ethNetworkTradeProviderSettings.value = tradeProvier
+            ethereumNetworkTradeProviderSettings.value = tradeProvier
             break
         case NetworkType.Binance:
-            bscNetworkTradeProviderSettings.value = tradeProvier
+            BinanceNetworkTradeProviderSettings.value = tradeProvier
             break
         case NetworkType.Polygon:
             polygonNetworkTradeProviderSettings.value = tradeProvier
             break
+        case NetworkType.Arbitrum:
+            throw new Error('TODO')
         default:
-            break
+            unreachable(networkType)
     }
 })
