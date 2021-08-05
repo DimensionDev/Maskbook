@@ -3,6 +3,7 @@ import { Currency, DataProvider, TradeProvider, WarningLevel, ZrxTradePool } fro
 import { safeUnreachable, unreachable } from '@dimensiondev/kit'
 import {
     BIPS_BASE,
+    networkNames,
     PRICE_IMPACT_HIGH,
     PRICE_IMPACT_LOW,
     PRICE_IMPACT_MEDIUM,
@@ -10,6 +11,7 @@ import {
     PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN,
 } from './constants'
 import { NetworkType } from '@masknet/web3-shared'
+import urlcat from 'urlcat'
 
 export function resolveCurrencyName(currency: Currency) {
     return [
@@ -98,21 +100,11 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
         case TradeProvider.ZRX:
             return ''
         case TradeProvider.DODO:
-            switch (networkType) {
-                case NetworkType.Ethereum:
-                    return `https://app.dodoex.io/exchange/${address}?network=mainnet&forced=true`
-                case NetworkType.Binance:
-                    return `https://app.dodoex.io/exchange/${address}?network=bsc-mainnet&forced=true`
-                case NetworkType.Polygon:
-                    return `https://app.dodoex.io/exchange/${address}?network=matic&forced=true`
-                case NetworkType.Arbitrum:
-                    return ''
-                default:
-                    safeUnreachable(networkType)
-                    return ''
-            }
-        case TradeProvider.DODO:
-            return `https://app.dodoex.io/exchange/${address}`
+            return urlcat('https://app.dodoex.io/exchange/:address', {
+                address,
+                network: networkNames[networkType],
+                forced: true,
+            })
         case TradeProvider.SUSHISWAP:
             switch (networkType) {
                 case NetworkType.Ethereum:

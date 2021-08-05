@@ -335,6 +335,7 @@ importers:
       ts-results: ^3.3.0
       type-coverage: ^2.18.0
       unstated-next: ^1.1.0
+      urlcat: ^2.0.4
       use-subscription: ^1.5.1
       uuid: ^8.3.2
       wallet.ts: ^1.0.1
@@ -455,6 +456,7 @@ importers:
       tiny-secp256k1: 1.1.6
       ts-results: 3.3.0
       unstated-next: 1.1.0
+      urlcat: 2.0.4
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
       uuid: 8.3.2
       wallet.ts: 1.0.1
@@ -23865,6 +23867,10 @@ packages:
     dependencies:
       punycode: 1.3.2
       querystring: 0.2.0
+
+  /urlcat/2.0.4:
+    resolution: {integrity: sha512-12c4Vi40DHVdZ/8mOLjZjp0asCzM6hi8Gj116fpImRP1FN4gBMCtMi9XhLNOmre/FEQYNqHbZmX8iyYAtIcy8Q==}
+    dev: false
 
   /use-composed-ref/1.1.0_react@18.0.0-alpha-aecb3b6d1:
     resolution: {integrity: sha512-my1lNHGWsSDAhhVAT4MKs6IjBUtG6ZG11uUqexPH9PptiIZDQOzaF4f5tEbJ2+7qvNbtXNBbU3SfmN+fXlWDhg==}
