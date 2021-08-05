@@ -11,7 +11,7 @@ export class LoadingFailCard extends Component<{ title: string; retry: () => voi
         if (this.state.error) {
             return this.props.isFullPluginDown ? (
                 <>
-                    <Typography color="textPrimary">Loading fail due to Snapshot api service breakdown.</Typography>
+                    <Typography color="textPrimary">Loading fails due to Snapshot API service breakdown.</Typography>
                     <Button
                         style={{ width: 100, marginTop: 16 }}
                         variant="outlined"
@@ -24,7 +24,7 @@ export class LoadingFailCard extends Component<{ title: string; retry: () => voi
                 </>
             ) : (
                 <SnapshotCard title={this.props.title}>
-                    <Typography color="textPrimary">Loading fail due to Snapshot api service breakdown.</Typography>
+                    <Typography color="textPrimary">Loading fails due to Snapshot API service breakdown.</Typography>
                     <Button
                         style={{ width: 100, marginTop: 16 }}
                         variant="outlined"

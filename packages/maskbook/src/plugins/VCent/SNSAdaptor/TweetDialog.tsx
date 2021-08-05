@@ -10,7 +10,6 @@ const useStyle = makeStyles((theme) => ({
     root: {
         marginTop: 20,
     },
-
     content: {
         display: 'flex',
         height: 45,
