@@ -132,8 +132,6 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://info.quickswap.exchange/pair/${address}`
         case TradeProvider.PANCAKESWAP:
             return `https://pancakeswap.info/pool/${address}`
-        case TradeProvider.DODO:
-            return `https://app.dodoex.io/pool/list/${address}`
         default:
             unreachable(tradeProvider)
     }
