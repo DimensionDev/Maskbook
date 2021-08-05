@@ -1,3 +1,4 @@
+import { first } from 'lodash-es'
 import type { Pool } from '../types'
 import { makeStyles, Typography, Grid, CircularProgress, Button } from '@material-ui/core'
 import { useChainId, useERC20TokenDetailed } from '@masknet/web3-shared'
@@ -228,6 +229,8 @@ export function PoolView(props: PoolProps) {
             </Typography>
         )
     }
+    const tokenFaucet = first(pool.tokenFaucets)
+    const tokenFaucetDripToken = first(pool.tokens.tokenFaucetDripTokens)
 
     return (
         <Grid container direction="row" className={classes.root}>
@@ -267,18 +270,16 @@ export function PoolView(props: PoolProps) {
                 </Grid>
                 <Grid container item className={classes.info}>
                     <Grid item>
-                        {pool.tokenFaucets.length !== 0 &&
-                        !!pool.tokens.tokenFaucetDripTokens &&
-                        pool.tokens.tokenFaucetDripTokens?.length !== 0 ? (
+                        {tokenFaucet && tokenFaucetDripToken ? (
                             <Typography className={classes.apr} fontSize="0.7rem" variant="subtitle2">
                                 <TokenIcon
-                                    address={pool.tokens.tokenFaucetDripTokens[0].address}
-                                    name={pool.tokens.tokenFaucetDripTokens[0].symbol}
+                                    address={tokenFaucetDripToken.address}
+                                    name={tokenFaucetDripToken.symbol}
                                     classes={{ icon: classes.poolIcon }}
                                 />
                                 {t('plugin_pooltogether_apr', {
-                                    apr: pool.tokenFaucets[0].apr.toFixed(2),
-                                    token: pool.tokens.tokenFaucetDripTokens[0].symbol,
+                                    apr: tokenFaucet.apr?.toFixed(2) ?? 0,
+                                    token: tokenFaucetDripToken.symbol,
                                 })}
                             </Typography>
                         ) : null}
