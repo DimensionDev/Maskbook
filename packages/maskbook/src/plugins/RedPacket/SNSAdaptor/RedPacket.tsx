@@ -183,7 +183,7 @@ export function RedPacket(props: RedPacketProps) {
         payload.contract_version,
         account,
         payload.rpid,
-        web3.eth.accounts.sign(account, payload.password).signature,
+        payload.contract_version > 3 ? web3.eth.accounts.sign(account, payload.password).signature : payload.password,
     )
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
         payload.contract_version,
