@@ -100,7 +100,10 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
         case TradeProvider.ZRX:
             return ''
         case TradeProvider.DODO: {
-            if (!networkNames[networkType]) return ''
+            if (!networkNames[networkType]) {
+                console.error('Unsupported network: ', networkType)
+                return ''
+            }
             return urlcat('https://app.dodoex.io/exchange/:address', {
                 address,
                 network: networkNames[networkType],
