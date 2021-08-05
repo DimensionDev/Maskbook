@@ -277,7 +277,7 @@ export function PoolView(props: PoolProps) {
                                     classes={{ icon: classes.poolIcon }}
                                 />
                                 {t('plugin_pooltogether_apr', {
-                                    apr: pool.tokenFaucets[0].apr.toFixed(2),
+                                    apr: pool.tokenFaucets[0].apr?.toFixed(2) ?? 0,
                                     token: pool.tokens.tokenFaucetDripTokens[0].symbol,
                                 })}
                             </Typography>
