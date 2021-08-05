@@ -709,6 +709,7 @@
     "plugin_snapshot_download_report": "下載報告",
     "plugin_dhedge_managed_by": "由 <manager>{{managerName}}</manager> 管理",
     "plugin_dhedge_manager_share": "持有 <share>{{managerShare}}%</share> 池",
+    "plugin_dhedge_manager_share_more_than_50": "",
     "plugin_dhedge_value_managed": "託管的金額",
     "plugin_dhedge_lifetime_return": "終身回報",
     "plugin_dhedge_risk_factor": "風險因素",
