@@ -11,7 +11,7 @@ export function pasteImageToCompositionMinds() {
         { recover, relatedTextPayload }: SocialNetworkUI.AutomationCapabilities.NativeCompositionAttachImageOptions,
     ) {
         const image = typeof url === 'string' ? await downloadUrl(url) : url
-        let data = [new ClipboardItem({ [image.type]: image })]
+        const data = [new ClipboardItem({ [image.type]: image })]
         await navigator.clipboard.write(data)
         composerModalTextAreaSelector().evaluate()?.focus()
         document.execCommand('paste')

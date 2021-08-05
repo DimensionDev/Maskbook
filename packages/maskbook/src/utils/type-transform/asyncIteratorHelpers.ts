@@ -45,7 +45,7 @@ export function memorizeAsyncGenerator<Args extends unknown[], T, Return, Next>(
                     if (_.done) return _.value
                     yield _.value
                 }
-            } catch (e) {
+            } catch {
                 iterCache.delete(key)
             }
         } else {

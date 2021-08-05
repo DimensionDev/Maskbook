@@ -15,7 +15,7 @@ export default function () {
         <ThirdPartyRequestPermission
             pluginURL={plugin}
             pluginName={value.name}
-            permissions={permission.map((x) => parseInt(x, 10))}
+            permissions={permission.map((x) => Number.parseInt(x, 10))}
             onGrant={(granted) => {
                 Services.ThirdPartyPlugin.grantPermission(plugin, granted).then(() => window.close())
             }}

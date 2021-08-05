@@ -14,6 +14,7 @@ import {
     useERC20TokenDetailedFromTokenLists,
 } from '@masknet/web3-shared'
 import { SwapStatus } from './SwapGuide'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles((theme) => ({
     reminderText: {
@@ -165,7 +166,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         target="_blank"
                         className={classes.tokenLink}
                         rel="noopener noreferrer"
-                        href={`${resolveLinkOnExplorer(chainId)}/token/${token.address}`}>
+                        href={urlcat(resolveLinkOnExplorer(chainId), '/token/:address', { address: token.address })}>
                         <Typography variant="body2">
                             <FormattedAddress address={token.address} size={4} /> ({t('plugin_ito_view_on_explorer')})
                         </Typography>

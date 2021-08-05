@@ -49,7 +49,7 @@ export function OtherPlayersView(props: OtherPlayersViewProps) {
         )
     }
 
-    let playerStandings = getPlayerStandings(players, props.info)
+    const playerStandings = getPlayerStandings(players, props.info)
 
     return (
         <div className={classes.circularDataSection}>

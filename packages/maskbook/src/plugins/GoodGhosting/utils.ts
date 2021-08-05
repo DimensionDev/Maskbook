@@ -14,7 +14,7 @@ export enum PlayerStatus {
 
 export function getPlayerStatus(info: GoodGhostingInfo, player?: Player): PlayerStatus {
     if (!player) return PlayerStatus.Unknown
-    const mostRecentSegmentPaid = Number.parseInt(player.mostRecentSegmentPaid)
+    const mostRecentSegmentPaid = Number.parseInt(player.mostRecentSegmentPaid, 10)
 
     if (mostRecentSegmentPaid === info.lastSegment - 1) return PlayerStatus.Winning
     if (player.withdrawn) return PlayerStatus.Dropout
@@ -26,7 +26,7 @@ export function getPlayerStatus(info: GoodGhostingInfo, player?: Player): Player
 
 export function getNextTimelineIndex(timeline: TimelineEvent[]) {
     const now = new Date()
-    for (let i = 0; i < timeline.length; i++) {
+    for (let i = 0; i < timeline.length; i += 1) {
         if (isBefore(now, timeline[i].date)) {
             return i
         }
@@ -39,7 +39,7 @@ export function isEndOfTimeline(timelineIndex: number, timeline: TimelineEvent[]
 }
 
 export function getPlayerStandings(players: Player[], info: GoodGhostingInfo) {
-    let playerStandings: PlayerStandings = {
+    const playerStandings: PlayerStandings = {
         winning: 0,
         waiting: 0,
         ghosts: 0,

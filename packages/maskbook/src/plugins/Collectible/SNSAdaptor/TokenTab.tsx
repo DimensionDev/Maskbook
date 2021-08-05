@@ -94,7 +94,7 @@ export function TokenTab(props: TokenTabProps) {
                 <Markdown classes={{ root: classes.markdown }} content={asset.value?.description ?? ''} />
             </Box>
 
-            {asset.value.traits && asset.value.traits.length ? (
+            {asset.value.traits?.length ? (
                 <Box className={classes.container}>
                     <Typography variant="body1" sx={{ marginBottom: 1 }}>
                         {t('plugin_collectible_properties')}

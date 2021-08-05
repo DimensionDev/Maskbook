@@ -41,5 +41,5 @@ export function ToBeListened() {
 export type SettingsEventName = ReturnType<typeof ToBeListened>
 
 export type SettingsEvents = {
-    [key in keyof SettingsEventName]: SettingsEventName[key] extends ValueRef<infer T> ? T : void
+    [key in keyof SettingsEventName]: SettingsEventName[key] extends ValueRef<infer T> ? T : never
 }

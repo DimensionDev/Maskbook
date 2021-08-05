@@ -179,7 +179,7 @@ function ViewDetailed(props: ViewDetailedProps) {
 //#region wallet asset table
 const MIN_VALUE = 5
 
-export interface WalletAssetsTableProps extends withClasses<never> {
+export interface WalletAssetsTableProps extends withClasses<'container'> {
     wallet: Wallet
 }
 

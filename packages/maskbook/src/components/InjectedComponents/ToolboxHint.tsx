@@ -117,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-interface ToolboxHintProps extends withClasses<never> {}
+interface ToolboxHintProps extends withClasses<'wrapper' | 'menuItem' | 'title' | 'text' | 'button' | 'icon'> {}
 export function ToolboxHint(props: ToolboxHintProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)

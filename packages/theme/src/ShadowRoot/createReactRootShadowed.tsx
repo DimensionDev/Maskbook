@@ -1,4 +1,4 @@
-import { createRoot, Root } from 'react-dom'
+import { createRoot } from 'react-dom'
 import type {} from 'react/next'
 import type {} from 'react-dom/next'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'
@@ -78,7 +78,7 @@ function mount(
     const container = shadow.appendChild(document.createElement(tag))
     container.className = key
 
-    let undoActions: Function[] = []
+    const undoActions: Function[] = []
 
     // prevent event popup
     {
@@ -89,8 +89,7 @@ function mount(
         }
     }
 
-    let root: Root
-    root = createRoot(container)
+    const root = createRoot(container)
     root.render(jsx)
     undoActions.push(() => root.unmount())
     undoActions.push(() => container.remove())
