@@ -34,9 +34,14 @@ export const calculateNextPrize = (pool: Pool) => {
 }
 
 export const calculateSecondsRemaining = (pool: Pool) => {
-    const startedAt = Number.parseInt(pool.prize.prizePeriodStartedAt.hex, 16)
-    const seconds = Number.parseInt(pool.prize.prizePeriodSeconds.hex, 16)
-    return startedAt + seconds - Date.now() / ONE_SECOND
+    if (pool.prize.prizePeriodEndAt) {
+        const endAt = Number.parseInt(pool.prize.prizePeriodEndAt, 10)
+        return endAt - Date.now() / ONE_SECOND
+    } else {
+        const startedAt = Number.parseInt(pool.prize.prizePeriodStartedAt.hex, 16)
+        const seconds = Number.parseInt(pool.prize.prizePeriodSeconds.hex, 16)
+        return startedAt + seconds - Date.now() / ONE_SECOND
+    }
 }
 
 export const getNetworkColor = (chainId: ChainId) => {

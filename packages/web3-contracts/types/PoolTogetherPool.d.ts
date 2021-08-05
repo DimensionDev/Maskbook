@@ -49,10 +49,6 @@ export type AwardedExternalERC721 = ContractEventLog<{
     1: string
     2: string[]
 }>
-export type CompoundPrizePoolInitialized = ContractEventLog<{
-    cToken: string
-    0: string
-}>
 export type ControlledTokenAdded = ContractEventLog<{
     token: string
     0: string
@@ -94,14 +90,12 @@ export type Deposited = ContractEventLog<{
     4: string
 }>
 export type Initialized = ContractEventLog<{
-    trustedForwarder: string
     reserveRegistry: string
     maxExitFeeMantissa: string
     maxTimelockDuration: string
     0: string
     1: string
     2: string
-    3: string
 }>
 export type InstantWithdrawal = ContractEventLog<{
     operator: string
@@ -140,6 +134,10 @@ export type ReserveWithdrawal = ContractEventLog<{
     amount: string
     0: string
     1: string
+}>
+export type StakePrizePoolInitialized = ContractEventLog<{
+    stakeToken: string
+    0: string
 }>
 export type TimelockDeposited = ContractEventLog<{
     operator: string
@@ -188,8 +186,6 @@ export interface PoolTogetherPool extends BaseContract {
     methods: {
         accountedBalance(): NonPayableTransactionObject<string>
 
-        addControlledToken(_controlledToken: string): NonPayableTransactionObject<void>
-
         award(to: string, amount: number | string | BN, controlledToken: string): NonPayableTransactionObject<void>
 
         awardBalance(): NonPayableTransactionObject<string>
@@ -211,8 +207,6 @@ export interface PoolTogetherPool extends BaseContract {
         balanceOfCredit(user: string, controlledToken: string): NonPayableTransactionObject<string>
 
         beforeTokenTransfer(from: string, to: string, amount: number | string | BN): NonPayableTransactionObject<void>
-
-        cToken(): NonPayableTransactionObject<string>
 
         calculateEarlyExitFee(
             from: string,
@@ -242,6 +236,8 @@ export interface PoolTogetherPool extends BaseContract {
 
         captureAwardBalance(): NonPayableTransactionObject<string>
 
+        compLikeDelegate(compLike: string, to: string): NonPayableTransactionObject<void>
+
         creditPlanOf(controlledToken: string): NonPayableTransactionObject<{
             creditLimitMantissa: string
             creditRateMantissa: string
@@ -262,24 +258,20 @@ export interface PoolTogetherPool extends BaseContract {
             _interest: number | string | BN,
         ): NonPayableTransactionObject<string>
 
-        'initialize(address,address,address[],uint256,uint256)'(
-            _trustedForwarder: string,
+        'initialize(address,address[],uint256,uint256)'(
             _reserveRegistry: string,
             _controlledTokens: string[],
             _maxExitFeeMantissa: number | string | BN,
             _maxTimelockDuration: number | string | BN,
         ): NonPayableTransactionObject<void>
 
-        'initialize(address,address,address[],uint256,uint256,address)'(
-            _trustedForwarder: string,
+        'initialize(address,address[],uint256,uint256,address)'(
             _reserveRegistry: string,
             _controlledTokens: string[],
             _maxExitFeeMantissa: number | string | BN,
             _maxTimelockDuration: number | string | BN,
-            _cToken: string,
+            _stakeToken: string,
         ): NonPayableTransactionObject<void>
-
-        isTrustedForwarder(forwarder: string): NonPayableTransactionObject<boolean>
 
         liquidityCap(): NonPayableTransactionObject<string>
 
@@ -333,10 +325,6 @@ export interface PoolTogetherPool extends BaseContract {
 
         transferOwnership(newOwner: string): NonPayableTransactionObject<void>
 
-        trustedForwarder(): NonPayableTransactionObject<string>
-
-        versionRecipient(): NonPayableTransactionObject<string>
-
         withdrawInstantlyFrom(
             from: string,
             amount: number | string | BN,
@@ -364,9 +352,6 @@ export interface PoolTogetherPool extends BaseContract {
 
         AwardedExternalERC721(cb?: Callback<AwardedExternalERC721>): EventEmitter
         AwardedExternalERC721(options?: EventOptions, cb?: Callback<AwardedExternalERC721>): EventEmitter
-
-        CompoundPrizePoolInitialized(cb?: Callback<CompoundPrizePoolInitialized>): EventEmitter
-        CompoundPrizePoolInitialized(options?: EventOptions, cb?: Callback<CompoundPrizePoolInitialized>): EventEmitter
 
         ControlledTokenAdded(cb?: Callback<ControlledTokenAdded>): EventEmitter
         ControlledTokenAdded(options?: EventOptions, cb?: Callback<ControlledTokenAdded>): EventEmitter
@@ -404,6 +389,9 @@ export interface PoolTogetherPool extends BaseContract {
         ReserveWithdrawal(cb?: Callback<ReserveWithdrawal>): EventEmitter
         ReserveWithdrawal(options?: EventOptions, cb?: Callback<ReserveWithdrawal>): EventEmitter
 
+        StakePrizePoolInitialized(cb?: Callback<StakePrizePoolInitialized>): EventEmitter
+        StakePrizePoolInitialized(options?: EventOptions, cb?: Callback<StakePrizePoolInitialized>): EventEmitter
+
         TimelockDeposited(cb?: Callback<TimelockDeposited>): EventEmitter
         TimelockDeposited(options?: EventOptions, cb?: Callback<TimelockDeposited>): EventEmitter
 
@@ -430,9 +418,6 @@ export interface PoolTogetherPool extends BaseContract {
 
     once(event: 'AwardedExternalERC721', cb: Callback<AwardedExternalERC721>): void
     once(event: 'AwardedExternalERC721', options: EventOptions, cb: Callback<AwardedExternalERC721>): void
-
-    once(event: 'CompoundPrizePoolInitialized', cb: Callback<CompoundPrizePoolInitialized>): void
-    once(event: 'CompoundPrizePoolInitialized', options: EventOptions, cb: Callback<CompoundPrizePoolInitialized>): void
 
     once(event: 'ControlledTokenAdded', cb: Callback<ControlledTokenAdded>): void
     once(event: 'ControlledTokenAdded', options: EventOptions, cb: Callback<ControlledTokenAdded>): void
@@ -469,6 +454,9 @@ export interface PoolTogetherPool extends BaseContract {
 
     once(event: 'ReserveWithdrawal', cb: Callback<ReserveWithdrawal>): void
     once(event: 'ReserveWithdrawal', options: EventOptions, cb: Callback<ReserveWithdrawal>): void
+
+    once(event: 'StakePrizePoolInitialized', cb: Callback<StakePrizePoolInitialized>): void
+    once(event: 'StakePrizePoolInitialized', options: EventOptions, cb: Callback<StakePrizePoolInitialized>): void
 
     once(event: 'TimelockDeposited', cb: Callback<TimelockDeposited>): void
     once(event: 'TimelockDeposited', options: EventOptions, cb: Callback<TimelockDeposited>): void

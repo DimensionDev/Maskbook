@@ -5,7 +5,7 @@ import { EthereumAddress } from 'wallet.ts'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
 import { useWeb3 } from './useWeb3'
 
-function createContract<T extends BaseContract>(web3: Web3, address: string, ABI: AbiItem[]) {
+export function createContract<T extends BaseContract>(web3: Web3, address: string, ABI: AbiItem[]) {
     if (!address || !EthereumAddress.isValid(address)) return null
     const contract = new web3.eth.Contract(ABI, address) as unknown as T
     contract.transactionConfirmationBlocks = 1

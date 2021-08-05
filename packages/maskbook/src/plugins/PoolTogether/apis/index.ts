@@ -22,8 +22,6 @@ export async function fetchPool(address?: string, subgraphUrl?: string) {
                 underlyingCollateralSymbol
                 prizeStrategy{
                     singleRandomWinner{
-                        prizePeriodSeconds,
-                        prizePeriodStartedAt
                         ticket{
                             id
                             decimals
@@ -32,8 +30,6 @@ export async function fetchPool(address?: string, subgraphUrl?: string) {
                         }
                     }
                     multipleWinners{
-                        prizePeriodSeconds,
-                        prizePeriodStartedAt
                         numberOfWinners
                         ticket{
                             id
@@ -66,14 +62,6 @@ export async function fetchPool(address?: string, subgraphUrl?: string) {
             numberOfWinners: prizeStrategy.numberOfWinners ?? '1',
             prizePeriodSeconds: prizeStrategy.prizePeriodSeconds,
         },
-        prize: {
-            prizePeriodStartedAt: {
-                hex: Number.parseInt(prizeStrategy.prizePeriodStartedAt, 10).toString(16),
-            },
-            prizePeriodSeconds: {
-                hex: Number.parseInt(prizeStrategy.prizePeriodSeconds, 10).toString(16),
-            },
-        },
         prizePool: {
             address: address,
         },
@@ -92,5 +80,5 @@ export async function fetchPool(address?: string, subgraphUrl?: string) {
             },
         },
         tokenFaucets: [] as TokenFaucet[],
-    } as Pool
+    } as unknown as Pool
 }
