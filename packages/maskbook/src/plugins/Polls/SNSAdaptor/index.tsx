@@ -5,13 +5,10 @@ import type { PollMetaData } from '../types'
 import { PollMetadataReader } from '../helpers'
 import PollsDialog from './PollsDialog'
 import PollsInPost from './PollsInPost'
-import { PluginPollRPC } from '../messages'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {
-        PluginPollRPC.echo()
-    },
+    init(signal) {},
     DecryptedInspector: function Comp(props) {
         const metadata = PollMetadataReader(props.message.meta)
         if (!metadata.ok) return null

@@ -1,4 +1,3 @@
-import '../gun-worker.patch'
 import Gun from 'gun/gun'
 import 'gun/sea'
 import 'gun/lib/radix'
@@ -8,8 +7,6 @@ import 'gun/lib/rindexed'
 import { gunServers } from '../../gun-servers'
 import type { EC_Public_JsonWebKey } from '@masknet/shared-base'
 
-// @ts-ignore
-if (typeof importScripts !== 'function') throw new Error('You should not have gun.js on your import path.')
 export * from './post'
 
 export type PersonOnGun2 = {
