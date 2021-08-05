@@ -731,7 +731,7 @@
     "plugin_pooltogether_tab_pools": "Pools",
     "plugin_pooltogether_tab_account": "Account",
     "plugin_pooltogether_no_pool": "There is no pool on this network.",
-    "plugin_pooltogether_pool_ended": "Awarding...",
+    "plugin_pooltogether_pool_ended": "Awarded",
     "plugin_pooltogether_deposit": "Deposit {{token}}",
     "plugin_pooltogether_apr": "Earn {{apr}}% APR in {{token}}",
     "plugin_pooltogether_view_pool": "View pool",
