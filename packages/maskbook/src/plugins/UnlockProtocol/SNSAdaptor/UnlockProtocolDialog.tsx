@@ -103,7 +103,7 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                     // label={'post_dialog__select_specific_friends_title' {
                     //     selected: new Set([...currentUnlockTarget]).size,
                     // })}
-                    label={t('plugin_unlockprotocol_select_lock')}
+                    label={t('plugin_unlockprotocol_select_unlock_lock')}
                     onClick={() => setOpen(true)}
                 />
                 <SelectRecipientsUnlockDialogUI
