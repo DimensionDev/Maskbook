@@ -709,6 +709,7 @@
     "plugin_snapshot_download_report": "다운로드 리포트",
     "plugin_dhedge_managed_by": "관리자: <manager>{{managerName}}</manager>",
     "plugin_dhedge_manager_share": "풀의 <share>{{managerShare}}%</share> 홀드합니다.",
+    "plugin_dhedge_manager_share_more_than_50": "",
     "plugin_dhedge_value_managed": "VALUE MANAGED",
     "plugin_dhedge_lifetime_return": "LIFETIME RETURN",
     "plugin_dhedge_risk_factor": "RISK FACTOR",
