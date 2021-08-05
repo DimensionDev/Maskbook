@@ -1,13 +1,19 @@
 import type BigNumber from 'bignumber.js'
+import type { TransactionStateType } from '@masknet/web3-shared'
 
-export interface GoodGhostingInfo {
+export interface GameMetaData {
     contractAddress: string
+    gameName?: string
+}
+
+interface GoodGhostingBaseInfo {
     segmentPayment: string
     firstSegmentStart: number
     currentSegment: number
     lastSegment: number
     segmentLength: number
     numberOfPlayers: number
+    maxPlayersCount: number
     totalGameInterest: string
     totalGamePrincipal: string
     adaiTokenAddress: string
@@ -17,6 +23,8 @@ export interface GoodGhostingInfo {
     gameHasEnded: boolean
     refresh: () => void
 }
+
+export interface GoodGhostingInfo extends GoodGhostingBaseInfo, GameMetaData {}
 
 export interface Player {
     addr: string
@@ -43,4 +51,9 @@ export interface LendingPoolData {
     reward: string
     poolAPY: BigNumber
     poolEarnings: BigNumber
+}
+
+export interface GameActionError {
+    gameActionStatus: TransactionStateType
+    transactionHash: string
 }
