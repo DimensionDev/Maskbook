@@ -99,12 +99,14 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://v2.info.uniswap.org/pair/${address}`
         case TradeProvider.ZRX:
             return ''
-        case TradeProvider.DODO:
+        case TradeProvider.DODO: {
+            if (!networkNames[networkType]) return ''
             return urlcat('https://app.dodoex.io/exchange/:address', {
                 address,
                 network: networkNames[networkType],
                 forced: true,
             })
+        }
         case TradeProvider.SUSHISWAP:
             switch (networkType) {
                 case NetworkType.Ethereum:
