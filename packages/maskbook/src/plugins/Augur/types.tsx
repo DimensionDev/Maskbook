@@ -55,6 +55,7 @@ export interface Market {
     value0: string
     collateral: string
     swapFee: string
+    ammExchange?: AMMExchange
 }
 
 export enum SportMarketType {
@@ -71,4 +72,37 @@ export interface SportTitles {
 export enum BuySell {
     BUY,
     SELL,
+}
+
+export interface AMMExchange {
+    totalVolume: BigNumber
+    volume24hr: BigNumber
+    totalLiquidity: BigNumber
+    liquidity: Liquidity[]
+    trades: Trade[]
+    shareFactor: string
+    balances: string[]
+    weights: string[]
+}
+
+export interface Liquidity {
+    collateral: BigNumber
+}
+
+export interface Trade {
+    outcome: number
+    collateral: BigNumber
+    timestamp: number
+}
+
+export interface EstimateTradeResult {
+    averagePrice: string
+    outputValue: string
+    maxProfit: string
+    tradeFees: string
+    remainingShares?: string
+    ratePerCash: string
+    priceImpact: string
+    outcomeShareTokensIn?: string[]
+    maxSellAmount?: string
 }

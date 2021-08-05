@@ -1,7 +1,9 @@
 import {
     EthereumTokenType,
+    formatAmount,
     formatBalance,
     formatPercentage,
+    formatPrice,
     FungibleTokenDetailed,
     isZero,
     pow10,
@@ -26,11 +28,13 @@ import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { PluginAugurMessages } from '../messages'
-import type { AMMOutcome, Market } from '../types'
+import type { AMMOutcome, Market, EstimateTradeResult } from '../types'
 import { useBuyCallback } from '../hooks/useBuyCallback'
 import { toBips } from '../../Trader/helpers'
 import { currentSlippageTolerance } from '../../Trader/settings'
 import TuneIcon from '@material-ui/icons/Tune'
+import { estimateBuyTrade } from '../utils/bmath'
+import { SWAP_FEE_DECIMALS } from '../constants'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -84,6 +88,7 @@ export function BuyDialog() {
     const [market, setMarket] = useState<Market>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const [outcome, setOutcome] = useState<AMMOutcome>()
+    const [estimatedResult, setEstimatedResult] = useState<EstimateTradeResult>()
 
     // context
     const account = useAccount()
@@ -137,7 +142,13 @@ export function BuyDialog() {
     //#endregion
 
     //#region blocking
-    const [buyState, buyCallback, resetBuyCallback] = useBuyCallback(amount.toFixed(), market, outcome, token)
+    const [buyState, buyCallback, resetBuyCallback] = useBuyCallback(
+        amount.toFixed(),
+        currentSlippageTolerance.value,
+        market,
+        outcome,
+        token,
+    )
     //#endregion
 
     //#region Swap
@@ -177,7 +188,7 @@ export function BuyDialog() {
                 ? [
                       `I just bought ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} share of ${
                           outcome?.name
-                      }, can I win?. Follow @realMaskbook (mask.io) to bet on Augur markets.`,
+                      }, can I win?. Follow @realMaskbook (mask.io) to bet on Augur's markets.`,
                       '#mask_io #augur',
                   ].join('\n')
                 : '',
@@ -209,7 +220,7 @@ export function BuyDialog() {
             open: true,
             shareLink,
             state: buyState,
-            summary: `Buying ${formatBalance(amount, token.decimals)}${token.symbol} {outcome?.name}'s shares.`,
+            summary: `Buying ${formatBalance(amount, token.decimals)}${token.symbol} ${outcome?.name}'s shares.`,
         })
     }, [buyState /* update tx dialog only if state changed */])
     //#endregion
@@ -230,8 +241,15 @@ export function BuyDialog() {
     const { openDialog: openSettingDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated)
     //#endregion
 
-    if (!token || !market || !outcome) return null
+    const rawFee = formatAmount(new BigNumber(market?.swapFee ?? ''), SWAP_FEE_DECIMALS - 2)
+    useEffect(() => {
+        if (!market || !token || !market.ammExchange || !outcome) return
+        const estimateTradeResult = estimateBuyTrade(market.ammExchange, rawAmount, outcome, rawFee, token, 18)
+        setEstimatedResult(estimateTradeResult)
+        console.log(estimateTradeResult)
+    }, [token, market, rawAmount, outcome, rawFee])
 
+    if (!token || !market || !market.ammExchange || !outcome) return null
     return (
         <div className={classes.root}>
             <InjectedDialog open={open} onClose={onClose} title={market.title + ' ' + outcome?.name} maxWidth="xs">
@@ -293,7 +311,9 @@ export function BuyDialog() {
                                 {t('plugin_augur_avg_price')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                -
+                                {estimatedResult
+                                    ? formatPrice(estimatedResult.averagePrice, 4) + ' ' + token.symbol
+                                    : '-'}
                             </Typography>
                         </div>
                         <div className={classes.status}>
@@ -301,7 +321,7 @@ export function BuyDialog() {
                                 {t('plugin_augur_est_shares')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                -
+                                {estimatedResult ? formatPrice(estimatedResult.outputValue, 4) : '-'}
                             </Typography>
                         </div>
                         <div className={classes.status}>
@@ -309,15 +329,15 @@ export function BuyDialog() {
                                 {t('plugin_augur_max_profit')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                -
+                                {estimatedResult ? formatPrice(estimatedResult.maxProfit, 4) + ' ' + token.symbol : '-'}
                             </Typography>
                         </div>
                         <div className={classes.status}>
                             <Typography className={classes.label} color="textSecondary" variant="body2">
-                                {t('plugin_augur_est_fee', { symbol: token.symbol })}
+                                {t('plugin_augur_est_fee')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                -
+                                {estimatedResult ? formatPrice(estimatedResult.tradeFees, 4) + ' ' + token.symbol : '-'}
                             </Typography>
                         </div>
                     </div>

@@ -181,7 +181,7 @@ export function MarketView(props: MarketViewProps) {
                     {tabIndex === 0 ? (
                         <MarketBuySell market={market} ammOutcomes={ammOutcomes} cashToken={cashToken} />
                     ) : null}
-                    {tabIndex === 1 ? <MarketDescription market={market} /> : null}
+                    {tabIndex === 1 ? <MarketDescription market={market} collateral={cashToken} /> : null}
                 </Paper>
             </CardContent>
             <CardActions className={classes.footer}>

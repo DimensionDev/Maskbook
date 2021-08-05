@@ -970,5 +970,6 @@
     "plugin_augur_avg_price": "Average Price",
     "plugin_augur_est_shares": "Estimated Shares",
     "plugin_augur_max_profit": "Max Profit",
-    "plugin_augur_est_fee": "Estimated Fees ({{symbol}})"
+    "plugin_augur_est_fee": "Estimated Fees",
+    "plugin_augur_winner": "Winner"
 }

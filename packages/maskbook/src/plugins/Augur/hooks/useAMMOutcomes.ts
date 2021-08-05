@@ -23,11 +23,12 @@ export function useAMMOutcomes(address: string, id: string, market: Market | und
         }
 
         const totalShares = shares.reduce(
-            (accumulator, currentValue): BigNumber => new BigNumber(accumulator).plus(new BigNumber(currentValue)),
+            (accumulator: BigNumber, currentValue: string): BigNumber =>
+                new BigNumber(accumulator).plus(new BigNumber(currentValue)),
             new BigNumber(0),
         )
 
-        const ammOutcomes = shares.map((share, id) => {
+        const ammOutcomes = shares.map((share: string, id: number) => {
             return { ...market.outcomes[id], rate: new BigNumber(share).dividedBy(totalShares) }
         })
         return ammOutcomes as AMMOutcome[]

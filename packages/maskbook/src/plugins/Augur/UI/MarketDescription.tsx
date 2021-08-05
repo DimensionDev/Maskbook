@@ -4,7 +4,8 @@ import { Trans } from 'react-i18next'
 import type { Market } from '../types'
 import { getResolutionRules } from '../utils'
 
-import { POOL_DESCRIPTION_LIMIT } from '../constants'
+import { MARKET_DESCRIPTION_LIMIT } from '../constants'
+import { formatBalance, FungibleTokenDetailed } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,19 +37,23 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(1),
         maxWidth: '100%',
     },
+    description: {
+        whiteSpace: 'pre-line',
+    },
 }))
 
 interface MarketDescriptionProps {
     market: Market
+    collateral: FungibleTokenDetailed
 }
 
 export const MarketDescription = (props: MarketDescriptionProps) => {
-    const { market } = props
+    const { market, collateral } = props
     const classes = useStyles()
 
-    const cleanDescription = getResolutionRules(market).join(' ')
-    const [expanded, setExpanded] = useState(cleanDescription.length < POOL_DESCRIPTION_LIMIT)
-
+    const cleanDescription = getResolutionRules(market).join('\n\n')
+    const [expanded, setExpanded] = useState(cleanDescription.length < MARKET_DESCRIPTION_LIMIT)
+    console.log(market.ammExchange)
     return (
         <div className={classes.root}>
             <Grid container direction="row" wrap="nowrap" className={classes.info}>
@@ -60,7 +65,11 @@ export const MarketDescription = (props: MarketDescriptionProps) => {
                     </Grid>
                     <Grid item>
                         <Typography variant="body2" align="center">
-                            $0.00
+                            {market.ammExchange
+                                ? formatBalance(market.ammExchange.volume24hr, collateral.decimals, 2) +
+                                  ' ' +
+                                  collateral.symbol
+                                : '-'}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -72,7 +81,11 @@ export const MarketDescription = (props: MarketDescriptionProps) => {
                     </Grid>
                     <Grid item>
                         <Typography variant="body2" align="center">
-                            $0.00
+                            {market.ammExchange
+                                ? formatBalance(market.ammExchange.totalVolume, collateral.decimals, 2) +
+                                  ' ' +
+                                  collateral.symbol
+                                : '-'}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -84,7 +97,11 @@ export const MarketDescription = (props: MarketDescriptionProps) => {
                     </Grid>
                     <Grid item>
                         <Typography variant="body2" align="center">
-                            $0.00
+                            {market.ammExchange
+                                ? formatBalance(market.ammExchange.totalLiquidity, collateral.decimals, 2) +
+                                  ' ' +
+                                  collateral.symbol
+                                : '-'}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -95,17 +112,16 @@ export const MarketDescription = (props: MarketDescriptionProps) => {
                     <Typography variant="h6" color="textPrimary">
                         <Trans i18nKey="plugin_augur_market_details" />
                     </Typography>
-                    <Typography variant="subtitle2" color="textSecondary">
-                        {/* {getResolutionRules(market).join(' ')} */}
+                    <Typography variant="subtitle2" color="textSecondary" className={classes.description}>
                         <span
                             dangerouslySetInnerHTML={{
                                 __html: expanded
                                     ? cleanDescription
-                                    : cleanDescription.slice(0, POOL_DESCRIPTION_LIMIT).concat('...'),
+                                    : cleanDescription.slice(0, MARKET_DESCRIPTION_LIMIT).concat('...'),
                             }}
                         />
                     </Typography>
-                    {cleanDescription.length > POOL_DESCRIPTION_LIMIT ? (
+                    {cleanDescription.length > MARKET_DESCRIPTION_LIMIT ? (
                         <Typography
                             variant="body2"
                             color="primary"

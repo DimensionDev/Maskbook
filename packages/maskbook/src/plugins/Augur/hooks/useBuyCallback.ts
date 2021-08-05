@@ -15,7 +15,13 @@ import {
 import { useAMMFactory } from '../contracts/useAMMFactory'
 import type { AMMOutcome, Market } from '../types'
 
-export function useBuyCallback(amount: string, market?: Market, outcome?: AMMOutcome, token?: FungibleTokenDetailed) {
+export function useBuyCallback(
+    amount: string,
+    slipage: number,
+    market?: Market,
+    outcome?: AMMOutcome,
+    token?: FungibleTokenDetailed,
+) {
     const { AMM_FACTORY_ADDRESS } = useAugurConstants()
     const ammContract = useAMMFactory(AMM_FACTORY_ADDRESS)
 
@@ -52,7 +58,6 @@ export function useBuyCallback(amount: string, market?: Market, outcome?: AMMOut
                     type: TransactionStateType.FAILED,
                     error,
                 })
-                console.dir(error)
                 throw error
             })
 

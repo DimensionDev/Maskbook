@@ -9,5 +9,16 @@
         "BSCT": "",
         "Matic": "0x63BBEEa5085E94D1F57A5938f9a22dd485572Bb3",
         "Mumbai": ""
+    },
+    "GRAPH_URL": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "https://api.thegraph.com/subgraphs/name/augurproject/augur-turbo-matic",
+        "Mumbai": ""
     }
 }

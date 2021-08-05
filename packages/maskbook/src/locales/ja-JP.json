@@ -707,5 +707,6 @@
     "plugin_augur_avg_price": "",
     "plugin_augur_est_shares": "",
     "plugin_augur_max_profit": "",
-    "plugin_augur_est_fee": ""
+    "plugin_augur_est_fee": "",
+    "plugin_augur_winner": ""
 }

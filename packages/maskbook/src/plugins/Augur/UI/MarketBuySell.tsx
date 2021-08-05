@@ -15,7 +15,10 @@ import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginAugurMessages } from '../messages'
 import { useCallback } from 'react'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { FungibleTokenDetailed, useTokensBalance } from '@masknet/web3-shared'
+import { RefreshIcon } from '@masknet/icons'
+import BigNumber from 'bignumber.js'
+import { MIN_SELL_AMOUNT } from '../constants'
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
     focusVisible?: string
@@ -57,6 +60,14 @@ const useStyles = makeStyles((theme) => ({
     selected: {
         border: 'solid .0625rem #05b169',
         backgroundColor: 'rgba(5,177,105,.15)',
+    },
+    message: {
+        textAlign: 'center',
+    },
+    refresh: {
+        bottom: theme.spacing(1),
+        right: theme.spacing(1),
+        fontSize: 'inherit',
     },
 }))
 
@@ -115,6 +126,7 @@ const AugurSwitch = withStyles((theme) => ({
             content: "'Sell'",
         },
     },
+
     checked: {},
     focusVisible: {},
 }))(({ classes, ...props }: Props) => {
@@ -158,6 +170,32 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
             cashToken: cashToken,
         })
     }, [market, openBuyDialog, selectedOutcome, buySell])
+
+    const { value: rawBalances, loading, error, retry } = useTokensBalance(market.outcomes.map((x) => x.shareToken))
+    const balances = rawBalances?.map((x: string) => new BigNumber(x))
+
+    if (loading)
+        return (
+            <Typography className={classes.message} color="textPrimary">
+                {t('plugin_augur_loading')}
+            </Typography>
+        )
+
+    if (error)
+        return (
+            <Typography className={classes.message} color="textPrimary">
+                {t('plugin_augur_smt_wrong')}
+                <RefreshIcon className={classes.refresh} color="primary" onClick={retry} />
+            </Typography>
+        )
+
+    if (!balances) {
+        return (
+            <Typography className={classes.message} color="textPrimary">
+                {t('plugin_augur_market_not_found')}
+            </Typography>
+        )
+    }
 
     return (
         <div className={`${classes.root} ${classes.spacing}`}>
@@ -218,16 +256,29 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                             )
                         })}
                 </Grid>
-                <Grid item>
-                    <Button
-                        variant="contained"
-                        fullWidth
-                        color="primary"
-                        disabled={!selectedOutcome}
-                        onClick={buySell === BuySell.BUY ? onBuy : () => {}}>
-                        {t('plugin_augur_confirm')}
-                    </Button>
-                </Grid>
+                {!market.hasWinner ? (
+                    <Grid item>
+                        <Button
+                            variant="contained"
+                            fullWidth
+                            color="primary"
+                            disabled={
+                                !selectedOutcome ||
+                                !market.ammExchange ||
+                                (buySell === BuySell.BUY && market.ammExchange.totalLiquidity.isLessThanOrEqualTo(0)) ||
+                                (buySell === BuySell.SELL && balances[selectedOutcome.id].isLessThan(MIN_SELL_AMOUNT))
+                            }
+                            onClick={buySell === BuySell.BUY ? onBuy : () => {}}>
+                            {!market.ammExchange || market.ammExchange.totalLiquidity.isLessThanOrEqualTo(0)
+                                ? t('plugin_trader_error_insufficient_lp')
+                                : selectedOutcome &&
+                                  buySell === BuySell.SELL &&
+                                  balances[selectedOutcome.id].isLessThan(MIN_SELL_AMOUNT)
+                                ? t('error_insufficient_balance')
+                                : t('plugin_augur_confirm')}
+                        </Button>
+                    </Grid>
+                ) : null}
             </Grid>
         </div>
     )

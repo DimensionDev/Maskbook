@@ -4942,21 +4942,57 @@ packages:
       '@ethersproject/strings': 5.4.0
     dev: false
 
+<<<<<<< HEAD
   /@ethersproject/abstract-provider/5.4.0:
     resolution: {integrity: sha512-vPBR7HKUBY0lpdllIn7tLIzNN7DrVnhCLKSzY0l8WAwxz686m/aL7ASDzrVxV93GJtIub6N2t4dfZ29CkPOxgA==}
+=======
+  /@ethersproject/abstract-provider/5.1.0:
+    resolution: {integrity: sha512-8dJUnT8VNvPwWhYIau4dwp7qe1g+KgdRm4XTWvjkI9gAT2zZa90WF5ApdZ3vl1r6NDmnn6vUVvyphClRZRteTQ==}
+    dependencies:
+      '@ethersproject/bignumber': 5.1.1
+      '@ethersproject/bytes': 5.1.0
+      '@ethersproject/logger': 5.1.0
+      '@ethersproject/networks': 5.1.0
+      '@ethersproject/properties': 5.1.0
+      '@ethersproject/transactions': 5.1.1
+      '@ethersproject/web': 5.1.0
+    dev: false
+
+  /@ethersproject/abstract-provider/5.2.0:
+    resolution: {integrity: sha512-Xi7Pt+CulRijc/vskBGIaYMEhafKjoNx8y4RNj/dnSpXHXScOJUSTtypqGBUngZddRbcwZGbHwEr6DZoKZwIZA==}
+    dependencies:
+      '@ethersproject/bignumber': 5.2.0
+      '@ethersproject/bytes': 5.2.0
+      '@ethersproject/logger': 5.2.0
+      '@ethersproject/networks': 5.2.0
+      '@ethersproject/properties': 5.2.0
+      '@ethersproject/transactions': 5.2.0
+      '@ethersproject/web': 5.2.0
+
+  /@ethersproject/abstract-provider/5.4.1:
+    resolution: {integrity: sha512-3EedfKI3LVpjSKgAxoUaI+gB27frKsxzm+r21w9G60Ugk+3wVLQwhi1LsEJAKNV7WoZc8CIpNrATlL1QFABjtQ==}
+>>>>>>> feat: liquidity and volume
     dependencies:
       '@ethersproject/bignumber': 5.4.1
       '@ethersproject/bytes': 5.4.0
       '@ethersproject/logger': 5.4.0
+<<<<<<< HEAD
       '@ethersproject/networks': 5.4.1
+=======
+      '@ethersproject/networks': 5.4.2
+>>>>>>> feat: liquidity and volume
       '@ethersproject/properties': 5.4.0
       '@ethersproject/transactions': 5.4.0
       '@ethersproject/web': 5.4.0
 
-  /@ethersproject/abstract-signer/5.4.0:
-    resolution: {integrity: sha512-AieQAzt05HJZS2bMofpuxMEp81AHufA5D6M4ScKwtolj041nrfIbIi8ciNW7+F59VYxXq+V4c3d568Q6l2m8ew==}
+  /@ethersproject/abstract-signer/5.4.1:
+    resolution: {integrity: sha512-SkkFL5HVq1k4/25dM+NWP9MILgohJCgGv5xT5AcRruGz4ILpfHeBtO/y6j+Z3UN/PAjDeb4P7E51Yh8wcGNLGA==}
     dependencies:
+<<<<<<< HEAD
       '@ethersproject/abstract-provider': 5.4.0
+=======
+      '@ethersproject/abstract-provider': 5.4.1
+>>>>>>> feat: liquidity and volume
       '@ethersproject/bignumber': 5.4.1
       '@ethersproject/bytes': 5.4.0
       '@ethersproject/logger': 5.4.0
@@ -5017,13 +5053,32 @@ packages:
     resolution: {integrity: sha512-tzjn6S7sj9+DIIeKTJLjK9WGN2Tj0P++Z8ONEIlZjyoTkBuODN+0VfhAyYksKi43l1Sx9tX2VlFfzjfmr5Wl3Q==}
     dependencies:
       '@ethersproject/bignumber': 5.4.1
+<<<<<<< HEAD
+=======
+    dev: false
 
-  /@ethersproject/contracts/5.4.0:
-    resolution: {integrity: sha512-hkO3L3IhS1Z3ZtHtaAG/T87nQ7KiPV+/qnvutag35I0IkiQ8G3ZpCQ9NNOpSCzn4pWSW4CfzmtE02FcqnLI+hw==}
+  /@ethersproject/contracts/5.1.0:
+    resolution: {integrity: sha512-dvTMs/4XGSc57cYOW0KjgX1NdTujUu7mNb6PQdJWg08m9ULzPyGZuBkFJnijBcp6vTOCQ59RwjboWgNWw393og==}
+    dependencies:
+      '@ethersproject/abi': 5.1.0
+      '@ethersproject/abstract-provider': 5.1.0
+      '@ethersproject/abstract-signer': 5.1.0
+      '@ethersproject/address': 5.1.0
+      '@ethersproject/bignumber': 5.1.0
+      '@ethersproject/bytes': 5.1.0
+      '@ethersproject/constants': 5.1.0
+      '@ethersproject/logger': 5.1.0
+      '@ethersproject/properties': 5.1.0
+      '@ethersproject/transactions': 5.1.0
+    dev: false
+>>>>>>> feat: liquidity and volume
+
+  /@ethersproject/contracts/5.4.1:
+    resolution: {integrity: sha512-m+z2ZgPy4pyR15Je//dUaymRUZq5MtDajF6GwFbGAVmKz/RF+DNIPwF0k5qEcL3wPGVqUjFg2/krlCRVTU4T5w==}
     dependencies:
       '@ethersproject/abi': 5.4.0
-      '@ethersproject/abstract-provider': 5.4.0
-      '@ethersproject/abstract-signer': 5.4.0
+      '@ethersproject/abstract-provider': 5.4.1
+      '@ethersproject/abstract-signer': 5.4.1
       '@ethersproject/address': 5.4.0
       '@ethersproject/bignumber': 5.4.1
       '@ethersproject/bytes': 5.4.0
@@ -5104,8 +5159,13 @@ packages:
   /@ethersproject/logger/5.4.0:
     resolution: {integrity: sha512-xYdWGGQ9P2cxBayt64d8LC8aPFJk6yWCawQi/4eJ4+oJdMMjEBMrIcIMZ9AxhwpPVmnBPrsB10PcXGmGAqgUEQ==}
 
+<<<<<<< HEAD
   /@ethersproject/networks/5.4.1:
     resolution: {integrity: sha512-8SvowCKz9Uf4xC5DTKI8+il8lWqOr78kmiqAVLYT9lzB8aSmJHQMD1GSuJI0CW4hMAnzocpGpZLgiMdzsNSPig==}
+=======
+  /@ethersproject/networks/5.4.2:
+    resolution: {integrity: sha512-eekOhvJyBnuibfJnhtK46b8HimBc5+4gqpvd1/H9LEl7Q7/qhsIhM81dI9Fcnjpk3jB1aTy6bj0hz3cifhNeYw==}
+>>>>>>> feat: liquidity and volume
     dependencies:
       '@ethersproject/logger': 5.4.0
 
@@ -5133,7 +5193,11 @@ packages:
       '@ethersproject/constants': 5.4.0
       '@ethersproject/hash': 5.4.0
       '@ethersproject/logger': 5.4.0
+<<<<<<< HEAD
       '@ethersproject/networks': 5.4.1
+=======
+      '@ethersproject/networks': 5.4.2
+>>>>>>> feat: liquidity and volume
       '@ethersproject/properties': 5.4.0
       '@ethersproject/random': 5.4.0
       '@ethersproject/rlp': 5.4.0
@@ -5205,7 +5269,11 @@ packages:
   /@ethersproject/providers/5.4.3:
     resolution: {integrity: sha512-VURwkaWPoUj7jq9NheNDT5Iyy64Qcyf6BOFDwVdHsmLmX/5prNjFrgSX3GHPE4z1BRrVerDxe2yayvXKFm/NNg==}
     dependencies:
+<<<<<<< HEAD
       '@ethersproject/abstract-provider': 5.4.0
+=======
+      '@ethersproject/abstract-provider': 5.4.1
+>>>>>>> feat: liquidity and volume
       '@ethersproject/abstract-signer': 5.4.1
       '@ethersproject/address': 5.4.0
       '@ethersproject/basex': 5.4.0
