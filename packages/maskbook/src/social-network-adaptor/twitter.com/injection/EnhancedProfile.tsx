@@ -1,5 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { useResolveEns, useWallet } from '@masknet/web3-shared'
+import { useWallet } from '@masknet/web3-shared'
 import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
 import { useState } from 'react'
@@ -13,7 +13,7 @@ import {
     searchProfileTabPageSelector,
     searchProfileTabSelector,
 } from '../utils/selector'
-import { useEthereumName } from './useEthereumName'
+import { useEthereumAddress } from './useEthereumName'
 import Color from 'color'
 import { CollectibleList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 
@@ -176,18 +176,15 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
     )
 }
 
-export interface EnhancedProfilePageProps {}
-
 export function EnhancedProfileaPage() {
     const selectedWallet = useWallet()
-    const profileEthereumName = useEthereumName()
     const [show, setShow] = useState(false)
 
     MaskMessage.events.profileNFTsPageUpdate.on((data) => {
         setShow(data.show)
     })
 
-    const resolvedAddress = useResolveEns(profileEthereumName).value
+    const resolvedAddress = useEthereumAddress()
     if (!selectedWallet) {
         return null
     }

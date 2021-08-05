@@ -1,6 +1,6 @@
 import { isNull } from 'lodash-es'
 import type { SocialNetwork } from '../../../social-network'
-import { bioPageUserNickNameSelector, bioPageUserIDSelector, bioDescriptionSelector } from './selector'
+import { bioDescriptionSelector, searchNickNameSelector } from './selector'
 
 /**
  * @link https://help.twitter.com/en/managing-your-account/twitter-username-rules
@@ -16,15 +16,24 @@ export const usernameValidator: NonNullable<SocialNetwork.Utils['isValidUsername
 }
 
 export const getNickname = () => {
-    const nicknameNode = bioPageUserNickNameSelector().evaluate()
+    const node = searchNickNameSelector().evaluate()?.parentElement?.parentElement?.firstChild
+        ?.nextSibling as HTMLDivElement
+    if (!node) return ''
+
+    const nicknameNode = node.querySelector('div span span')
     if (!nicknameNode) return ''
-    return nicknameNode.innerText.trim()
+
+    return nicknameNode.innerHTML.trim()
 }
 
 export const getTwitterId = () => {
-    const twitterIdNode = bioPageUserIDSelector(bioPageUserNickNameSelector).evaluate()
+    const node = searchNickNameSelector().evaluate()?.parentElement?.parentElement?.firstChild?.nextSibling?.firstChild
+        ?.firstChild?.lastChild as HTMLDivElement
+    if (!node) return ''
+
+    const twitterIdNode = node.querySelector('div span')
     if (!twitterIdNode) return ''
-    return twitterIdNode
+    return twitterIdNode.innerHTML.trim().replace('@', '')
 }
 
 export const getBioDescription = () => {

@@ -35,6 +35,9 @@ export const searchProfileActiveTabLabelSelector: () => LiveSelector<E, true> = 
 export const searchProfileTabListSelector = () => querySelectorAll('[role="tablist"][data-testid="ScrollSnap-List"] a')
 export const searchForegroundColorSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [aria-label="Back"][role="button"] > div')
+
+export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="UserProfileHeader_Items"]')
 export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
     querySelector<HTMLDivElement, SingleMode>(
         [
