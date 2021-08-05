@@ -12,7 +12,7 @@ import urlcat from 'urlcat'
 
 export async function swapRoute(request: SwapRouteRequest) {
     const response = await fetch(
-        urlcat(`${DODO_BASE_URL}/dodoapi/getdodoroute`, {
+        urlcat(DODO_BASE_URL, '/dodoapi/getdodoroute', {
             chainId: request.chainId,
             slippage: request.slippage,
             fromTokenAddress: request.fromToken?.address,
