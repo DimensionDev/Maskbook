@@ -1,3 +1,4 @@
+import { first } from 'lodash-es'
 import type { Pool } from '../types'
 import { makeStyles, Typography, Grid, CircularProgress, Button } from '@material-ui/core'
 import { useChainId, useERC20TokenDetailed } from '@masknet/web3-shared'
@@ -228,8 +229,8 @@ export function PoolView(props: PoolProps) {
             </Typography>
         )
     }
-    const tokenFaucet = pool.tokenFaucets[0]
-    const tokenFaucetDripToken = pool.tokens.tokenFaucetDripTokens?.[0]
+    const tokenFaucet = first(pool.tokenFaucets)
+    const tokenFaucetDripToken = first(pool.tokens.tokenFaucetDripTokens)
 
     return (
         <Grid container direction="row" className={classes.root}>
