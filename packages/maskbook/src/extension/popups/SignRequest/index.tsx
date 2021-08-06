@@ -1,12 +1,21 @@
-// TODO: support wallet sign
-// TODO: support sign with given candidate (no choose)
-
-import { Box, Button, DialogActions, MenuItem, Select, TextField, Typography } from '@material-ui/core'
+import { ECKeyIdentifier, Identifier } from '@masknet/shared-base'
+import {
+    Box,
+    Button,
+    DialogActions,
+    DialogContent,
+    makeStyles,
+    MenuItem,
+    Select,
+    TextField,
+    Typography,
+} from '@material-ui/core'
 import { delay } from 'opensea-js/lib/utils/utils'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
+import { MaskMessage } from '../../../utils'
 import { MissingParameter } from '../MissingParameter'
 import type { SignRequest } from './utils'
 
@@ -14,25 +23,37 @@ export default function SignRequest() {
     const param = useLocation()
     const _ = new URLSearchParams(param.search)
     const message = _.get('message')
+    const id = _.get('id')
     const personas = useMyPersonas()
     if (!personas.length) {
         // Let it goes into suspense because personas are still loading
         if (performance.now() < 5000) throw delay(100)
         return <MissingParameter message="There is no persona" />
     }
-    if (!message) return <MissingParameter message="Bad sign request" />
-    return <SignRequestHandler message={message} />
+    if (!message || !id) return <MissingParameter message="Bad sign request" />
+    return <SignRequestHandler requestID={id} message={message} />
 }
 
+const useStyles = makeStyles({
+    root: { maxWidth: 500, padding: 32, '&>*': { marginBottom: 12 } },
+})
+
 function SignRequestHandler(props: SignRequest) {
+    const classes = useStyles()
     const personas = useMyPersonas()
     const [selected, setSelected] = useState(personas[0].identifier.toText())
     useEffect(() => {
         if (personas.find((x) => x.identifier.toText() === selected)) return
         setSelected(personas[0].identifier.toText())
     }, [selected, personas])
+    const onSign = () => {
+        MaskMessage.events.signRequestApproved.sendToBackgroundPage({
+            requestID: props.requestID,
+            selectedPersona: Identifier.fromString<ECKeyIdentifier>(selected, ECKeyIdentifier).unwrap(),
+        })
+    }
     return (
-        <Box sx={{ maxWidth: 500, padding: 4, '&>*': { marginBottom: 2 } }}>
+        <DialogContent className={classes.root}>
             <Typography variant="h2">Sign request:</Typography>
             <Typography variant="body1">
                 <Box sx={{ textDecoration: 'underline', display: 'inline' }} component="span">
@@ -50,9 +71,11 @@ function SignRequestHandler(props: SignRequest) {
                 ))}
             </Select>
             <DialogActions>
-                <Button>Cancel</Button>
-                <Button variant="contained">Sign</Button>
+                <Button onClick={window.close}>Cancel</Button>
+                <Button onClick={onSign} variant="contained">
+                    Sign
+                </Button>
             </DialogActions>
-        </Box>
+        </DialogContent>
     )
 }
