@@ -72,12 +72,17 @@ export const postsImageSelector = (node: HTMLElement) =>
 export const postsContentSelector = () =>
     querySelectorAll(
         [
-            '[data-testid="tweet"] div + div div[lang]', // text tweets on timeline
-            '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]', // link box only tweets on timeline
-            '[data-testid="tweet"] + div > div div[data-testid="card.wrapper"]', // link box only tweet on detailed page
-            '[data-testid="tweet"] + div > div:first-child div[lang]', // text tweet on detailed page
-            '[data-testid="tweet"] + div div[role="link"] div[lang]', // quoted tweet in detail page for new twitter
-            '[data-testid="tweet"] > div:last-child div[role="link"] div[lang]', // quoted tweet in timeline page for new twitter
+            // tweets on timeline page
+            '[data-testid="tweet"] div + div div[lang]', // text tweets
+            '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]', // link box tweets
+
+            // tweets on detailed page
+            '[data-testid="tweet"] + div > div:first-child div[lang]', // text tweets
+            '[data-testid="tweet"] + div > div div[data-testid="card.wrapper"]', // link box tweets
+
+            // quoted tweets
+            '[data-testid="tweet"] + div div[role="link"] div[lang]',
+            '[data-testid="tweet"] > div:last-child div[role="link"] div[lang]',
         ].join(),
     ).concat(
         querySelectorAll('[data-testid="tweet"] > div:last-child').map((x) => {
