@@ -10,12 +10,6 @@ import { useErrorStyles } from '../../../utils/theme'
 
 const circle = <CircularProgress color="inherit" size={18} />
 
-enum ThrottledButtonState {
-    Normal = 1,
-    Clicked,
-    Loading,
-}
-
 interface DebounceButtonProps extends Omit<ButtonProps, 'color' | 'onClick'> {
     color?: ButtonProps['color'] | 'danger'
     onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => unknown

@@ -9,10 +9,10 @@ export interface ExchangeTokenAndAmountState {
 }
 
 export enum ExchangeTokenAndAmountActionType {
-    ADD,
-    REMOVE,
-    UPDATE_AMOUNT,
-    UPDATE_TOKEN,
+    ADD = 0,
+    REMOVE = 1,
+    UPDATE_AMOUNT = 2,
+    UPDATE_TOKEN = 3,
 }
 
 export type ExchangeTokenAndAmountAction =
