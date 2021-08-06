@@ -170,7 +170,7 @@ export default function DashboardSettingsRouter() {
     const { value: dataProviders = [] } = useAvailableDataProviders()
     const { value: tradeProviders = [] } = useAvailableTraderProviders()
     const dataProvider = useCurrentDataProvider(dataProviders)
-    const tradeProvider = useCurrentTradeProvider(tradeProviders)
+    const tradeProvider = useCurrentTradeProvider()
     //#endregion
 
     return (
