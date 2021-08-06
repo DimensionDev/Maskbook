@@ -91,7 +91,7 @@ export function TraderView(props: TraderViewProps) {
     const classes = useStyles({ isPopper })
 
     const dataProvider = useCurrentDataProvider(dataProviders)
-    const tradeProvider = useCurrentTradeProvider(tradeProviders)
+    const tradeProvider = useCurrentTradeProvider()
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
     const chainIdValid = useChainIdValid()
 

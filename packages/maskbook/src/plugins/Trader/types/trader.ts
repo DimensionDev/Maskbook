@@ -1,17 +1,7 @@
 import type BigNumber from 'bignumber.js'
 import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@masknet/web3-shared'
-
-export enum TradeProvider {
-    UNISWAP,
-    ZRX, // 0x
-    // ONE_INCH,
-    SUSHISWAP,
-    SASHIMISWAP,
-    BALANCER,
-    QUICKSWAP,
-    PANCAKESWAP,
-}
-
+import type { TradeProvider } from '@masknet/public-api'
+export { TradeProvider } from '@masknet/public-api'
 export enum WarningLevel {
     LOW = 1,
     MEDIUM,

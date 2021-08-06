@@ -1,13 +1,8 @@
+import type { DataProvider } from '@masknet/public-api'
+export { DataProvider } from '@masknet/public-api'
 export interface Settings {
     currency: Currency
 }
-
-export enum DataProvider {
-    COIN_GECKO,
-    COIN_MARKET_CAP,
-    UNISWAP_INFO,
-}
-
 export enum TagType {
     CASH = 1,
     HASH,

@@ -9,7 +9,7 @@ export default function (signal: AbortSignal) {
         const key = _key as keyof SettingsEventName
         signal.addEventListener(
             'abort',
-            obj[key].addListener((data) => MaskMessage.events[key].sendToAll(data as never)),
+            obj[key].addListener((data: any) => MaskMessage.events[key].sendToAll(data as never)),
         )
     }
 }
