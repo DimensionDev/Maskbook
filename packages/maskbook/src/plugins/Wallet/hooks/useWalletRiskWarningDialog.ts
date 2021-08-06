@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { WalletMessages } from '../messages'
 import { useAccount } from '@masknet/web3-shared'
-import { getRiskWarningStatus, RiskWaringStatus } from '../services'
+import { WalletMessages, WalletRPC } from '../messages'
 
 export const useWalletRiskWarningDialog = () => {
     const account = useAccount()
-    const [status, setStatus] = useState<RiskWaringStatus>()
+    const [confirmed, setConfirmed] = useState(false)
 
     const fetchRiskWarningStatus = () =>
-        getRiskWarningStatus(account).then((status) => setStatus(status ?? RiskWaringStatus.Unset))
+        WalletRPC.getRiskWarningConfirmed(account).then((confirmed) => setConfirmed(confirmed ?? false))
 
     const { openDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletRiskWarningDialogUpdated,
@@ -17,12 +16,9 @@ export const useWalletRiskWarningDialog = () => {
     )
 
     useEffect(() => {
-        if (!account) {
-            setStatus(RiskWaringStatus.Unset)
-        } else {
-            fetchRiskWarningStatus()
-        }
+        if (!account) setConfirmed(false)
+        else fetchRiskWarningStatus()
     }, [account])
 
-    return { isConfirmed: status === RiskWaringStatus.Confirmed, openDialog }
+    return { isConfirmed: confirmed, openDialog }
 }
