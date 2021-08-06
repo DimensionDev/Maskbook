@@ -51,7 +51,7 @@ export const CollectibleList = memo(() => {
         value = { collectibles: [], hasNextPage: false },
         loading: collectiblesLoading,
         error: collectiblesError,
-    } = useCollectibles(account, provider, page, 20)
+    } = useCollectibles(account, chainId, provider, page, 20)
 
     const { collectibles = [], hasNextPage } = value
 

@@ -1,7 +1,15 @@
 import { createContext, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useValueRef } from '@masknet/shared'
-import { EthereumTokenType, formatEthereumAddress, useAccount, useCollectibles, Wallet } from '@masknet/web3-shared'
+import {
+    ChainId,
+    EthereumTokenType,
+    formatEthereumAddress,
+    useAccount,
+    useChainId,
+    useCollectibles,
+    Wallet,
+} from '@masknet/web3-shared'
 import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
@@ -55,15 +63,18 @@ const useStyles = makeStyles((theme) => ({
 export interface CollectibleListProps {
     wallet: Wallet
     owner?: string
+    chainId?: ChainId
     readonly?: boolean
 }
 
-export function CollectibleList({ wallet, owner, readonly }: CollectibleListProps) {
+export function CollectibleList({ wallet, owner, chainId, readonly }: CollectibleListProps) {
     const { t } = useI18N()
 
     const classes = useStyles()
     const defaultAcount = useAccount()
     const account = owner ?? defaultAcount
+
+    const _chainId = useChainId()
 
     const [page, setPage] = useState(0)
     const provider = useValueRef(currentCollectibleDataProviderSettings)
@@ -72,7 +83,7 @@ export function CollectibleList({ wallet, owner, readonly }: CollectibleListProp
         loading: collectiblesLoading,
         retry: collectiblesRetry,
         error: collectiblesError,
-    } = useCollectibles(account, provider, page, 50)
+    } = useCollectibles(account, chainId ?? _chainId, provider, page, 50)
 
     const { collectibles = [], hasNextPage } = value
 

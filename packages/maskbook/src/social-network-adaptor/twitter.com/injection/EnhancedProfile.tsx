@@ -1,5 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { useWallet } from '@masknet/web3-shared'
+import { ChainId, useWallet } from '@masknet/web3-shared'
 import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
 import { useCallback, useEffect, useState } from 'react'
@@ -109,24 +109,31 @@ function resetStatus() {
     if (elePage) elePage.style.display = ''
 }
 
-const bind = (cb: () => void) => {
+const onEvent = (parent: HTMLElement, handler: () => void) => {
     const elePage = searchProfileTabPageSelector().evaluate()
-    const tabList = searchProfileTabListSelector().evaluate()
+    if (elePage) elePage.style.display = ''
+    const line = parent.querySelector('div > div') as HTMLDivElement
+    if (line) line.style.display = ''
+    handler()
+}
+
+const addEventListener = (tabList: HTMLElement[], handler: () => void) => {
     tabList.map((v) => {
-        const line = v.querySelector('div > div') as HTMLDivElement
-        const _v = v.querySelector('div') as HTMLDivElement
-        const clickEvent = () => {
-            if (elePage) elePage.style.display = ''
-            if (line) line.style.display = ''
-            cb()
-        }
-        useEffect(() => {
-            _v.addEventListener('click', clickEvent, { once: true })
-            return () => {
-                _v.removeEventListener('click', clickEvent)
-            }
-        }, [line, _v, elePage, cb])
+        v.addEventListener('click', () => onEvent(v, handler), { once: true })
     })
+}
+
+const removeEventListener = (tabList: HTMLElement[], handler: () => void) => {
+    tabList.map((v) => {
+        v.removeEventListener('click', () => onEvent(v, handler))
+    })
+}
+const useBind = (handler: () => void) => {
+    const tabList = searchProfileTabListSelector().evaluate()
+    useEffect(() => {
+        addEventListener(tabList, handler)
+        return () => removeEventListener(tabList, handler)
+    }, [tabList, addEventListener, removeEventListener, handler])
 }
 
 export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
@@ -147,26 +154,32 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
 
     const [active, setActive] = useState(false)
 
-    bind(() => {
+    const onClose = () => {
         setActive(false)
         MaskMessage.events.profileNFTsPageUpdate.sendToLocal({ show: false })
-    })
+    }
+    const onOpen = () => {
+        MaskMessage.events.profileNFTsPageUpdate.sendToLocal({ show: true })
+        setActive(true)
+    }
 
+    useBind(onClose)
+
+    const tab = searchProfileActiveTabSelector().evaluate()
     useEffect(() => {
         const clickEvent = () => {
             resetStatus()
             setActive(false)
         }
-        const tab = searchProfileActiveTabSelector().evaluate()
+
         tab?.addEventListener('click', clickEvent, { once: true })
         return () => tab?.removeEventListener('click', clickEvent)
-    }, [searchProfileActiveTabSelector, resetStatus])
+    }, [tab, resetStatus])
 
     const onClick = useCallback(() => {
-        MaskMessage.events.profileNFTsPageUpdate.sendToLocal({ show: true })
-        setActive(true)
+        onOpen()
         clearStatus()
-    }, [clearStatus])
+    }, [clearStatus, onOpen])
 
     if (!eleTab) return null
 
@@ -196,5 +209,11 @@ export function EnhancedProfileaPage() {
         return null
     }
 
-    return <>{show ? <CollectibleList wallet={selectedWallet} owner={resolvedAddress} readonly /> : null}</>
+    return (
+        <>
+            {show ? (
+                <CollectibleList wallet={selectedWallet} owner={resolvedAddress} chainId={ChainId.Mainnet} readonly />
+            ) : null}
+        </>
+    )
 }
