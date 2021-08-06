@@ -9,17 +9,11 @@ const HOST_MAP = {
 const COULD_BASE_URL = HOST_MAP[process.env.NODE_ENV]
 const RISK_WARNING_KEY = 'com.maskbook.agreement+riskWarning'
 
-export enum RiskWaringStatus {
-    Confirmed = 'Confirmed',
-    Canceled = 'Canceled',
-    Unset = 'Unset',
-}
+export const setRiskWarningConfirmed = (address: string, confirmed = false) =>
+    setStorage<Record<string, boolean>>(RISK_WARNING_KEY, { [address]: confirmed }, { howToUpdate: 'merge' })
 
-export const setRiskWarningStatus = (address: string, status: RiskWaringStatus) =>
-    setStorage<Record<string, RiskWaringStatus>>(RISK_WARNING_KEY, { [address]: status }, { howToUpdate: 'merge' })
-
-export const getRiskWarningStatus = async (address: string) => {
-    const allStatus = await getStorage<Record<string, RiskWaringStatus>>(RISK_WARNING_KEY)
+export const getRiskWarningConfirmed = async (address: string) => {
+    const allStatus = await getStorage<Record<string, boolean>>(RISK_WARNING_KEY)
     return allStatus?.[address]
 }
 
@@ -34,7 +28,5 @@ const sendRiskWarningConfirm = (address: string, pluginId?: string) =>
 
 export const confirmRiskWarning = async (address: string, pluginId?: string) => {
     const result = await sendRiskWarningConfirm(address, pluginId)
-    if (result.ok) {
-        await setRiskWarningStatus(address, RiskWaringStatus.Confirmed)
-    }
+    if (result.ok) await setRiskWarningConfirmed(address)
 }
