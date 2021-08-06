@@ -58,7 +58,7 @@ export default function SettingItem({ legend, options, value, onChange }: Settin
             <RadioGroup
                 aria-label="gender"
                 value={value}
-                onChange={(event) => onChange && onChange(event.target.value)}
+                onChange={(event) => onChange?.(event.target.value)}
                 name="radio-buttons-group">
                 {options.map((opt) => (
                     <MyFormControlLabel
