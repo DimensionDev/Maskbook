@@ -115,15 +115,15 @@ const bind = (cb: () => void) => {
     tabList.map((v) => {
         const line = v.querySelector('div > div') as HTMLDivElement
         const _v = v.querySelector('div') as HTMLDivElement
-        const callback = () => {
+        const clickEvent = () => {
             if (elePage) elePage.style.display = ''
             if (line) line.style.display = ''
             cb()
         }
         useEffect(() => {
-            _v.addEventListener('click', callback, { once: true })
+            _v.addEventListener('click', clickEvent, { once: true })
             return () => {
-                _v.removeEventListener('click', callback)
+                _v.removeEventListener('click', clickEvent)
             }
         }, [line, _v, elePage, cb])
     })
@@ -153,20 +153,13 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
     })
 
     useEffect(() => {
+        const clickEvent = () => {
+            resetStatus()
+            setActive(false)
+        }
         const tab = searchProfileActiveTabSelector().evaluate()
-        tab?.addEventListener(
-            'click',
-            () => {
-                resetStatus()
-                setActive(false)
-            },
-            { once: true },
-        )
-        return () =>
-            tab?.removeEventListener('click', () => {
-                resetStatus()
-                setActive(false)
-            })
+        tab?.addEventListener('click', clickEvent, { once: true })
+        return () => tab?.removeEventListener('click', clickEvent)
     }, [searchProfileActiveTabSelector, resetStatus])
 
     const onClick = useCallback(() => {
