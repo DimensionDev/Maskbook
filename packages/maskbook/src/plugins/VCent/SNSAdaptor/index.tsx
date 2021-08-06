@@ -6,17 +6,13 @@ import { base } from '../base'
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    DecryptedInspector: function Comp() {
-        return <Renderer />
-    },
-    PostInspector() {
-        return <Renderer />
-    },
+    DecryptedInspector: Component,
+    PostInspector: Component,
 }
 
 export default sns
 
-function Renderer() {
+function Component() {
     const tweetAddress = usePostInfoDetails.postID()
     if (!tweetAddress) return null
     // only for detailed page
