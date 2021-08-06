@@ -40,17 +40,17 @@ export enum NetworkType {
 
 export enum DataProvider {
     COIN_GECKO = 0,
-    COIN_MARKET_CAP,
-    UNISWAP_INFO,
+    COIN_MARKET_CAP = 1,
+    UNISWAP_INFO = 2,
 }
 
 export enum TradeProvider {
     UNISWAP = 0,
-    ZRX,
-    SUSHISWAP,
-    SASHIMISWAP,
-    BALANCER,
-    QUICKSWAP,
-    PANCAKESWAP,
-    DODO,
+    ZRX = 1,
+    SUSHISWAP = 2,
+    SASHIMISWAP = 3,
+    BALANCER = 4,
+    QUICKSWAP = 5,
+    PANCAKESWAP = 6,
+    DODO = 7,
 }

@@ -7,12 +7,12 @@ import { useAirdropContract } from '../contracts/useAirdropContract'
 import { AirdropRPC } from '../messages'
 
 export enum CheckStateType {
-    UNKNOWN,
-    PENDING,
-    CLAIMED,
-    YEP,
-    NOPE,
-    FAILED,
+    UNKNOWN = 0,
+    PENDING = 1,
+    CLAIMED = 2,
+    YEP = 3,
+    NOPE = 4,
+    FAILED = 5,
 }
 
 export type CheckState =

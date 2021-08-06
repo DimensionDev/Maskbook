@@ -216,9 +216,9 @@ export enum TransactionEventType {
 }
 
 export enum TransactionStatusType {
-    NOT_DEPEND,
-    SUCCEED,
-    FAILED,
+    NOT_DEPEND = 0,
+    SUCCEED = 1,
+    FAILED = 2,
 }
 
 export type GasNow = {
@@ -255,12 +255,12 @@ export interface Asset {
 }
 
 export enum PortfolioProvider {
-    ZERION,
-    DEBANK,
+    ZERION = 0,
+    DEBANK = 1,
 }
 
 export enum CollectibleProvider {
-    OPENSEAN,
+    OPENSEAN = 0,
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>

@@ -344,9 +344,9 @@ export type I18NFieldOrReactNode = I18NStringField | React.ReactNode
  */
 export enum CurrentSNSNetwork {
     Unknown = 0,
-    Facebook,
-    Twitter,
-    Instagram,
+    Facebook = 1,
+    Twitter = 2,
+    Instagram = 3,
 }
 
 /**

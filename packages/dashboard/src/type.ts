@@ -16,8 +16,8 @@ export enum RoutePaths {
 }
 
 export enum MarketTrendProvider {
-    COIN_GECKO,
-    COIN_MARKET_CAP,
-    UNISWAP_INFO,
+    COIN_GECKO = 0,
+    COIN_MARKET_CAP = 1,
+    UNISWAP_INFO = 2,
 }
 export { TradeProvider } from '@masknet/public-api'

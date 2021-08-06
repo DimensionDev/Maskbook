@@ -5,7 +5,7 @@ export interface Settings {
 }
 export enum TagType {
     CASH = 1,
-    HASH,
+    HASH = 2,
 }
 
 export interface Currency {
