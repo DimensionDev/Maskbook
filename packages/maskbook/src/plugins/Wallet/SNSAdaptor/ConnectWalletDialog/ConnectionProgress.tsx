@@ -5,13 +5,14 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { useI18N } from '../../../../utils'
 import { useStylesExtends } from '@masknet/shared'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles((theme) => ({
     root: {},
     content: {
         padding: theme.spacing(2, 4, 3),
         borderRadius: 8,
-        backgroundColor: theme.palette.mode === 'dark' ? '#17191D' : '#F7F9FA',
+        backgroundColor: getMaskColor(theme).twitterBackground,
     },
     error: {
         fontSize: 12,

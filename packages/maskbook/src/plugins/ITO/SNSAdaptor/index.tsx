@@ -10,6 +10,7 @@ import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-es'
+import { ToolIconURLs } from '../../../resources/tool-icon'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,6 +43,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return <CompositionDialog open={open} onConfirm={onClose} onClose={onClose} />
         },
         label: { fallback: '🚀 ITO' },
+    },
+    ToolbarEntry: {
+        ...ToolIconURLs.markets,
+        onClick: 'openCompositionEntry',
     },
 }
 

@@ -13,6 +13,7 @@ type BuyTokenDialogEvent =
 
 interface PluginTransakMessage {
     buyTokenDialogUpdated: BuyTokenDialogEvent
+    rpc: unknown
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()

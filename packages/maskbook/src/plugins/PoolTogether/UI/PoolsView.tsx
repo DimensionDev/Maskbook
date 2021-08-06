@@ -1,5 +1,4 @@
 import { makeStyles, Theme } from '@material-ui/core'
-import { useI18N } from '../../../utils'
 import type { Pool } from '../types'
 import { PoolView } from './PoolView'
 
@@ -21,7 +20,6 @@ export function PoolsView(props: PoolsProps) {
     const { pools } = props
 
     const classes = useStyles()
-    const { t } = useI18N()
 
     return (
         <div className={classes.root}>
