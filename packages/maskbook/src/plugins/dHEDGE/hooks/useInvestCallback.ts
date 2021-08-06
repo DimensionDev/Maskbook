@@ -8,7 +8,6 @@ import {
     TransactionStateType,
     useNonce,
     useGasPrice,
-    addGasMargin,
     TransactionEventType,
 } from '@masknet/web3-shared'
 import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
@@ -69,8 +68,8 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
             const promiEvent = deposit().send({
-                gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
+                gas: estimatedGas,
             })
             promiEvent
                 .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
