@@ -50,7 +50,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             case NetworkType.Ethereum:
                 return Services.Settings.setEthNetworkTradeProvider(provider)
             case NetworkType.Binance:
-                return Services.Settings.setBscNetworkTradeProvider(provider)
+                return Services.Settings.setBinanceNetworkTradeProvider(provider)
             case NetworkType.Polygon:
                 return Services.Settings.setPolygonNetworkTradeProvider(provider)
             case NetworkType.Arbitrum:

@@ -21,7 +21,7 @@ import {
     currentDataProviderSettings,
     ethereumNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
-    BinanceNetworkTradeProviderSettings,
+    binanceNetworkTradeProviderSettings,
 } from '../plugins/Trader/settings'
 
 export function ToBeListened() {
@@ -43,7 +43,7 @@ export function ToBeListened() {
         currentPersonaIdentifier,
         ethereumNetworkTradeProviderSettings,
         polygonNetworkTradeProviderSettings,
-        BinanceNetworkTradeProviderSettings,
+        binanceNetworkTradeProviderSettings,
     }
 }
 export type SettingsEventName = ReturnType<typeof ToBeListened>

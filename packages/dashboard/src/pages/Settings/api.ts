@@ -20,5 +20,5 @@ export const [usePolygonNetworkTradeProvider] = createGlobalState(
 
 export const [useBinanceNetworkTradeProvider] = createGlobalState(
     Services.Settings.getBinanceNetworkTradeProvider,
-    Messages.events.BinanceNetworkTradeProviderSettings.on,
+    Messages.events.binanceNetworkTradeProviderSettings.on,
 )

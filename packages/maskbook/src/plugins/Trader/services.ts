@@ -7,7 +7,7 @@ import {
     currentTradeProviderSettings,
     currentDataProviderSettings,
     ethereumNetworkTradeProviderSettings,
-    BinanceNetworkTradeProviderSettings,
+    binanceNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
 } from './settings'
 import { DataProvider, TradeProvider } from './types'
@@ -20,7 +20,7 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
             currentTradeProviderSettings.value = ethereumNetworkTradeProviderSettings.value
             break
         case NetworkType.Binance:
-            currentTradeProviderSettings.value = BinanceNetworkTradeProviderSettings.value
+            currentTradeProviderSettings.value = binanceNetworkTradeProviderSettings.value
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_GECKO
             break
@@ -47,7 +47,7 @@ currentTradeProviderSettings.addListener((tradeProvier: TradeProvider) => {
             ethereumNetworkTradeProviderSettings.value = tradeProvier
             break
         case NetworkType.Binance:
-            BinanceNetworkTradeProviderSettings.value = tradeProvier
+            binanceNetworkTradeProviderSettings.value = tradeProvier
             break
         case NetworkType.Polygon:
             polygonNetworkTradeProviderSettings.value = tradeProvier

@@ -52,7 +52,7 @@ export const polygonNetworkTradeProviderSettings = createGlobalSettings<TradePro
     { primary: () => '' },
 )
 
-export const BinanceNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+export const binanceNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_IDENTIFIER}+bsc+tradeProvider`,
     TradeProvider.PANCAKESWAP,
     { primary: () => '' },
