@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { useI18N } from '../../../utils'
-import { pluginMetaKey } from '../constants'
+import { graphEndpointKeyVal, pluginMetaKey } from '../constants'
 import type { UnlockLocks } from '../types'
 import { PuginUnlockProtocolRPC } from '../messages'
 import { SelectRecipientsUnlockDialogUI } from './SelectRecipientsUnlockDialog'
@@ -28,27 +28,31 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
     const [availableUnlockTarget, setAvailableUnlockTarget] = useState<UnlockLocks[]>(() => [])
     const { children } = props
     useEffect(() => {
-        PuginUnlockProtocolRPC.getLocks(address, currentUnlockChain.toString())
-            .then((value) => {
-                if (value.lockManagers.length) {
-                    setAvailableUnlockTarget(value.lockManagers)
-                } else {
-                    setAvailableUnlockTarget([])
-                }
-            })
-            .catch((error) => {
-                console.error(error)
-                setAvailableUnlockTarget([
-                    {
-                        lock: {
-                            name: error.message || 'Some error occured',
-                            chain: currentUnlockChain,
-                            address: '0x0',
-                            price: '0',
+        for (const [key, url] of Object.entries(graphEndpointKeyVal)) {
+            PuginUnlockProtocolRPC.getLocks(address, key.toString())
+                .then((value) => {
+                    if (value.lockManagers.length) {
+                        console.log([...availableUnlockTarget])
+                        setAvailableUnlockTarget([...availableUnlockTarget, ...value.lockManagers])
+                        console.log([...availableUnlockTarget, ...value.lockManagers])
+                    } else {
+                        console.log(availableUnlockTarget)
+                    }
+                })
+                .catch((error) => {
+                    console.error(error)
+                    setAvailableUnlockTarget([
+                        {
+                            lock: {
+                                name: error.message || 'Some error occured',
+                                chain: currentUnlockChain,
+                                address: '0x0',
+                                price: '0',
+                            },
                         },
-                    },
-                ])
-            })
+                    ])
+                })
+        }
     }, [address])
 
     const onInsert = () => {
@@ -73,7 +77,6 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                                 ? next.set(pluginMetaKey, JSON.parse(JSON.stringify(data)))
                                 : next.delete(pluginMetaKey),
                         )
-                        // props.onConfirm({ post: currentUnlockPost, target: currentUnlockTarget })
                         props.onClose()
                     } else {
                         return
@@ -91,7 +94,6 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                 <TextField
                     id="outlined-multiline-static"
                     label={t('plugin_unlockprotocol_submit_post')}
-                    // value={CurrentUnlockPost}
                     rows={4}
                     variant="outlined"
                     fullWidth
@@ -99,13 +101,7 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                 />
             </DialogContent>
             <DialogActions>
-                <Chip
-                    // label={'post_dialog__select_specific_friends_title' {
-                    //     selected: new Set([...currentUnlockTarget]).size,
-                    // })}
-                    label={t('plugin_unlockprotocol_select_unlock_lock')}
-                    onClick={() => setOpen(true)}
-                />
+                <Chip label={t('plugin_unlockprotocol_select_unlock_lock')} onClick={() => setOpen(true)} />
                 <SelectRecipientsUnlockDialogUI
                     onSelect={(item) => setCurrentUnlockTarget([...currentUnlockTarget, item])}
                     onDeselect={(item) =>
