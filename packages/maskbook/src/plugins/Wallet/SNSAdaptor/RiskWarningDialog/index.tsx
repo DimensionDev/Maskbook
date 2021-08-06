@@ -1,14 +1,15 @@
-import { DialogActions, DialogContent, makeStyles, Typography, Avatar, Paper, Button } from '@material-ui/core'
+import { Avatar, Button, DialogActions, DialogContent, makeStyles, Paper, Typography } from '@material-ui/core'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../../utils'
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh'
 import { getMaskColor, useSnackbar } from '@masknet/theme'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { WalletMessages } from '../../messages'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import type { Wallet } from '@masknet/web3-shared'
+import { useAccount } from '@masknet/web3-shared'
 import classnames from 'classnames'
 import { Trans } from 'react-i18next'
+import { confirmRiskWarning, RiskWaringStatus, setRiskWarningStatus } from '../../services'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -55,31 +56,29 @@ const useStyles = makeStyles((theme) => ({
 export function WalletRiskWarningDialog() {
     const { t } = useI18N()
     const classes = useStyles()
-    const [wallet, setWallet] = useState<Wallet | undefined>(undefined)
+    const account = useAccount()
     const { enqueueSnackbar } = useSnackbar()
-    const { open, setDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletRiskWarningDialogUpdated,
-        (ev) => {
-            if (ev.open) {
-                setWallet(ev.wallet)
-            }
-        },
-    )
+    const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.walletRiskWarningDialogUpdated)
 
-    const onClose = useCallback(() => {
+    const onClose = useCallback(async () => {
+        if (account) {
+            await setRiskWarningStatus(account, RiskWaringStatus.Unset)
+        }
         setDialog({ open: false, type: 'cancel' })
     }, [setDialog])
 
-    const onClick = useCallback(() => {
-        if (!wallet?.address) {
+    const onConfirm = useCallback(async () => {
+        if (!account) {
             enqueueSnackbar(t('wallet_risk_warning_no_select_wallet'), {
                 variant: 'error',
                 preventDuplicate: true,
             })
             return
         }
+
+        await confirmRiskWarning(account)
         setDialog({ open: false, type: 'confirm' })
-    }, [enqueueSnackbar, wallet?.address, setDialog])
+    }, [enqueueSnackbar, account, setDialog])
 
     return (
         <InjectedDialog title={t('wallet_risk_warning_dialog_title')} open={open} onClose={onClose}>
@@ -103,7 +102,7 @@ export function WalletRiskWarningDialog() {
                             Wallet
                         </Typography>
                         <Typography variant="body1" color="textPrimary">
-                            {wallet?.address}
+                            {account}
                         </Typography>
                     </Paper>
                 </Paper>
@@ -117,7 +116,7 @@ export function WalletRiskWarningDialog() {
                     size="large">
                     {t('cancel')}
                 </Button>
-                <Button className={classes.button} fullWidth variant="contained" size="large" onClick={onClick}>
+                <Button className={classes.button} fullWidth variant="contained" size="large" onClick={onConfirm}>
                     {t('confirm')}
                 </Button>
             </DialogActions>
