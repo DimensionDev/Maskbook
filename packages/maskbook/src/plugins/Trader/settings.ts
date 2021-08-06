@@ -75,6 +75,7 @@ const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}
 const qucikswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
 const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+pancakeswap`, '')
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+balancer`, '')
+const dodoSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+dodo`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -95,6 +96,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return pancakeswapSettings
         case TradeProvider.BALANCER:
             return balancerSettings
+        case TradeProvider.DODO:
+            return dodoSettings
         default:
             unreachable(tradeProvider)
     }

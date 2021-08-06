@@ -23,11 +23,13 @@ export interface MaskNetworkAPIs {
     settings_setTrendingDataSource(provider: DataProvider): Promise<void>
     settings_getLaunchPageSettings(): Promise<LaunchPage>
 }
+
 export enum LaunchPage {
     facebook = 'facebook',
     twitter = 'twitter',
     dashboard = 'dashboard',
 }
+
 // This type MUST be sync with NetworkType in packages/web3-shared/src/types/index.ts
 export enum NetworkType {
     Ethereum = 'Ethereum',
@@ -35,18 +37,20 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
 }
+
 export enum DataProvider {
     COIN_GECKO = 0,
-    COIN_MARKET_CAP = 1,
-    UNISWAP_INFO = 2,
+    COIN_MARKET_CAP,
+    UNISWAP_INFO,
 }
 
 export enum TradeProvider {
     UNISWAP = 0,
-    ZRX = 1,
-    SUSHISWAP = 2,
-    SASHIMISWAP = 3,
-    BALANCER = 4,
-    QUICKSWAP = 5,
-    PANCAKESWAP = 6,
+    ZRX,
+    SUSHISWAP,
+    SASHIMISWAP,
+    BALANCER,
+    QUICKSWAP,
+    PANCAKESWAP,
+    DODO,
 }
