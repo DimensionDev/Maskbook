@@ -22,6 +22,7 @@ export async function fetchPool(address?: string, subgraphUrl?: string) {
                 underlyingCollateralSymbol
                 prizeStrategy{
                     singleRandomWinner{
+                        prizePeriodSeconds,
                         ticket{
                             id
                             decimals
@@ -30,6 +31,7 @@ export async function fetchPool(address?: string, subgraphUrl?: string) {
                         }
                     }
                     multipleWinners{
+                        prizePeriodSeconds,
                         numberOfWinners
                         ticket{
                             id
@@ -62,6 +64,7 @@ export async function fetchPool(address?: string, subgraphUrl?: string) {
             numberOfWinners: prizeStrategy.numberOfWinners ?? '1',
             prizePeriodSeconds: prizeStrategy.prizePeriodSeconds,
         },
+        prize: {},
         prizePool: {
             address: address,
         },
