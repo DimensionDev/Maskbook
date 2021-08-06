@@ -11,7 +11,7 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
     const [name, setName] = useState(wallet.name ?? '')
-    const renameWallet = useSnackbarCallback(
+    const handleRename = useSnackbarCallback(
         () => WalletRPC.renameWallet(wallet.address, name),
         [wallet.address],
         props.onClose,
@@ -36,14 +36,14 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                         label={t('wallet_name')}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        inputProps={{ onKeyPress: (e) => e.key === 'Enter' && renameWallet() }}
+                        inputProps={{ onKeyPress: (e) => e.key === 'Enter' && handleRename() }}
                     />
                 }
                 footer={
                     <SpacedButtonGroup>
                         <DebounceButton
                             variant="contained"
-                            onClick={renameWallet}
+                            onClick={handleRename}
                             disabled={name.length === 0 || checkInputLengthExceed(name)}>
                             {t('ok')}
                         </DebounceButton>

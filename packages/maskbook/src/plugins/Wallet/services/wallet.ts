@@ -185,11 +185,6 @@ export async function importNewWallet(
     }
 }
 
-export async function importFirstWallet(rec: Parameters<typeof importNewWallet>[0]) {
-    if (await isEmptyWallets()) return importNewWallet(rec)
-    return
-}
-
 export async function renameWallet(address: string, name: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallet = await getWalletByAddress(t, formatEthereumAddress(address))
