@@ -95,8 +95,7 @@ export function WalletRiskWarningDialog() {
                         variant="h4"
                         children={t('wallet_risk_warning_dialog_title')}
                     />
-                    <Trans i18nKey="multiline">{t('wallet_risk_warning_content')}</Trans>
-
+                    <Typography variant="body2" children={<Trans i18nKey="multiline">{t('wallet_risk_warning_content')}</Trans>} />
                     <Paper elevation={0} className={classes.wallet}>
                         <Typography variant="body1" color="textSecondary">
                             Wallet
