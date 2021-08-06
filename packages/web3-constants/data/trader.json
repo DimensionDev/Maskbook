@@ -297,5 +297,31 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": ""
+    },
+    "DODO_ETH_ADDRESS": {
+        "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Ropsten": "",
+        "Rinkeby": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Kovan": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Gorli": "",
+        "BSC": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "BSCT": "",
+        "Matic": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
+    },
+    "DODO_EXCHANGE_PROXY_ADDRESS": {
+        "Mainnet": "0xCB859eA579b28e02B87A1FDE08d087ab9dbE5149",
+        "Ropsten": "",
+        "Rinkeby": "0xcC8d87A7C747eeE4242045C47Ef25e0A81D56ae3",
+        "Kovan": "0xa375b128e139ae54EF7F189BC8fEb4624f1c2Afa",
+        "Gorli": "",
+        "BSC": "0xa128Ba44B2738A558A1fdC06d6303d52D3Cef8c1",
+        "BSCT": "",
+        "Matic": "0x6D310348d5c12009854DFCf72e0DF9027e8cb4f4",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
     }
 }

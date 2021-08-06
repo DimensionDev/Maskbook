@@ -8,6 +8,7 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { currentIsMetamaskLockedSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
 import { isZero, ProviderType, useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared'
+import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -29,6 +30,10 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const account = useAccount()
     const chainIdValid = useChainIdValid()
     const nativeTokenBalance = useNativeTokenBalance()
+
+    //#region remote controlled confirm risk warning
+    const { isConfirmed: isRiskWarningConfirmed, openDialog: openRiskWarningDialog } = useWalletRiskWarningDialog()
+    //#endregion
 
     //#region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -54,6 +59,20 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                     size="large"
                     onClick={openSelectProviderDialog}>
                     {t('plugin_wallet_connect_a_wallet')}
+                </ActionButton>
+            </Grid>
+        )
+
+    if (!isRiskWarningConfirmed)
+        return (
+            <Grid container>
+                <ActionButton
+                    className={classNames(classes.button, classes.connectWallet)}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    onClick={openRiskWarningDialog}>
+                    {t('plugin_wallet_confirm_risk_warning')}
                 </ActionButton>
             </Grid>
         )

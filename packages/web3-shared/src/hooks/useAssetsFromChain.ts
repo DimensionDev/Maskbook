@@ -31,7 +31,7 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[]) {
                 ? listOfBalance.map(
                       (balance, idx): Asset => ({
                           chain,
-                          token: tokens[idx],
+                          token: erc20Tokens[idx],
                           balance,
                       }),
                   )

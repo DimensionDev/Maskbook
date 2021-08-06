@@ -1,19 +1,19 @@
 import { useState } from 'react'
 import classNames from 'classnames'
-import { Typography, Link, Checkbox, makeStyles, FormControlLabel } from '@material-ui/core'
-import { FormattedAddress } from '@masknet/shared'
+import { Checkbox, FormControlLabel, Link, makeStyles, Typography } from '@material-ui/core'
+import { FormattedAddress, TokenIcon, useStylesExtends } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon, useStylesExtends } from '@masknet/shared'
 import {
-    resolveLinkOnExplorer,
-    FungibleTokenDetailed,
     ChainId,
-    useNetworkType,
+    FungibleTokenDetailed,
+    resolveLinkOnExplorer,
     resolveNetworkName,
     useERC20TokenDetailedFromTokenLists,
+    useNetworkType,
 } from '@masknet/web3-shared'
 import { SwapStatus } from './SwapGuide'
+import { getMaskColor } from '@masknet/theme'
 import urlcat from 'urlcat'
 
 const useStyles = makeStyles((theme) => ({
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     },
     wrapper: {
         padding: theme.spacing(2),
-        background: theme.palette.mode === 'dark' ? '#17191D' : '#F7F9FA',
+        background: getMaskColor(theme).twitterBackground,
         borderRadius: theme.shape.borderRadius,
     },
     tokenWrapper: {
