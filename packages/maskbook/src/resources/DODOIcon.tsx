@@ -1,7 +1,7 @@
 import { SvgIconProps, SvgIcon } from '@material-ui/core'
 
 const svg = (
-    <svg width="26" height="26" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+    <svg width="26" height="26" viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
         <defs>
             <linearGradient x1="4.518%" y1="-4.373%" x2="100%" y2="100%" id="a">
                 <stop stop-color="#FFFC2C" offset="0%" />
