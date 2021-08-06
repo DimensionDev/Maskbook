@@ -33,9 +33,16 @@ function registerPostCollectorInner(
             ].join(),
         )
         if (!root) return null
+
         const isCardNode = node.matches('[data-testid="card.wrapper"]')
-        const hasTextNode = !!root.querySelector('[data-testid="tweet"] div[lang]')
+        const hasTextNode = !!root.querySelector([
+            '[data-testid="tweet"] div[lang]', // timeline
+            '[data-testid="tweet"] + div div[lang]', // detailed
+        ].join())
+
+        // if a text node already exists, it's not going to decrypt the card node
         if (isCardNode && hasTextNode) return null
+
         return root
     }
     const updateProfileInfo = memoize(
