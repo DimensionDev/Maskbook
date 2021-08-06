@@ -6,16 +6,16 @@ import { base } from '../base'
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    DecryptedInspector: function Comp() {
-        const tweetAddress = usePostInfoDetails.postID()
-        if (!tweetAddress) return null
-        return <VCentDialog tweetAddress={tweetAddress} />
-    },
-    PostInspector() {
-        const tweetAddress = usePostInfoDetails.postID()
-        if (!tweetAddress) return null
-        return <VCentDialog tweetAddress={tweetAddress} />
-    },
+    DecryptedInspector: Component,
+    PostInspector: Component,
 }
 
 export default sns
+
+function Component() {
+    const tweetAddress = usePostInfoDetails.postID()
+    if (!tweetAddress) return null
+    // only for detailed page
+    if (!/\/status\/\d+$/.test(location.pathname)) return null
+    return <VCentDialog tweetAddress={tweetAddress} />
+}
