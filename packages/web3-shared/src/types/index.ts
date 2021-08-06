@@ -268,3 +268,46 @@ export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<in
     : T extends PayableTransactionObject<infer S>
     ? S
     : T
+
+export enum FilterTransactionType {
+    ALL = 'all',
+    SENT = 'sent',
+    RECEIVE = 'receive',
+}
+
+export enum DebankTransactionDirection {
+    SEND = 'send',
+    RECEIVE = 'receive',
+}
+
+export enum ZerionTransactionDirection {
+    IN = 'in',
+    OUT = 'out',
+    SELF = 'self',
+}
+
+export type TransactionDirection = ZerionTransactionDirection | DebankTransactionDirection
+
+export interface TransactionPair {
+    name: string
+    symbol: string
+    address: string
+    direction: TransactionDirection
+    amount: number
+}
+
+export type TransactionGasFee = {
+    eth: number
+    usd: number
+}
+
+export interface Transaction {
+    type: string | undefined
+    id: string
+    timeAt: Date
+    toAddress: string
+    failed: boolean
+    pairs: TransactionPair[]
+    gasFee: TransactionGasFee | undefined
+    transactionType: string
+}
