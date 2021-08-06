@@ -29,8 +29,10 @@ export function useAssetsByTokenList(tokens: FungibleTokenDetailed[]) {
 
     const assetsDetailed = assetsDetailedChain
         .map((asset) => {
-            const assertWithValue = assetsDetailedProvider.find((detail) =>
-                isSameAddress(detail.token.address, asset.token.address),
+            const assertWithValue = assetsDetailedProvider.find(
+                (detail) =>
+                    isSameAddress(detail.token.address, asset.token.address) &&
+                    detail.token.chainId === asset.token.chainId,
             )
             if (assertWithValue) {
                 return { ...asset, ...{ value: assertWithValue.value } }
