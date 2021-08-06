@@ -24,7 +24,7 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { ADDRESS_ZERO } from '../constants'
+import { ADDRESS_ZERO, ONE_DAY_SECONDS, ONE_WEEK_SECONDS } from '../constants'
 import { useDepositCallback } from '../hooks/useDepositCallback'
 import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
@@ -244,6 +244,8 @@ export function DepositDialog() {
     }, [account, amount.toFixed(), token, tokenBalance])
     //#endregion
 
+    const prizePeriodSeconds = Number.parseInt(pool?.config.prizePeriodSeconds ?? '', 10)
+
     if (!token || !pool) return null
 
     return (
@@ -305,7 +307,15 @@ export function DepositDialog() {
                             </Grid>
                             <Grid item>
                                 <Typography variant="body2" fontWeight="fontWeightBold" className={classes.oddsValue}>
-                                    {t('plugin_pooltogether_odds_value', { value: odds.toLocaleString() })}
+                                    {t('plugin_pooltogether_odds_value', {
+                                        value: odds.toLocaleString(),
+                                        period:
+                                            prizePeriodSeconds === ONE_DAY_SECONDS
+                                                ? 'Day'
+                                                : prizePeriodSeconds === ONE_WEEK_SECONDS
+                                                ? 'Week'
+                                                : (prizePeriodSeconds / ONE_WEEK_SECONDS).toFixed() + 'Days',
+                                    })}
                                 </Typography>
                             </Grid>
                         </Grid>
