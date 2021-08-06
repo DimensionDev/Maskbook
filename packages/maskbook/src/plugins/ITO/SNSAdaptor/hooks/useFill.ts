@@ -109,7 +109,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         let signedPassword = ''
         try {
             signedPassword = await web3.eth.personal.sign(password, account, '')
-        } catch (e) {
+        } catch {
             signedPassword = ''
         }
         if (!signedPassword) {

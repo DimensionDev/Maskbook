@@ -37,12 +37,11 @@ for (const api of q) {
     if (api === 'revoke') {
         continue
     }
+    // eslint-disable-next-line @typescript-eslint/no-loop-func
     test(`invoke ${api} permission api succeeded`, async () => {
         redefineApi(api, {
             value() {
-                return Promise.resolve({
-                    state: 'granted',
-                })
+                return Promise.resolve({ state: 'granted' })
             },
         })
 
@@ -52,6 +51,7 @@ for (const api of q) {
         expect(hook.result.current).toEqual('granted')
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-loop-func
     test(`invoke ${api} permission api failed`, async () => {
         redefineApi(api, {
             value() {

@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src/",
+    "outDir": "./dist/",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+  },
+  "include": ["./src/**/*"],
+  "ts-node": {
+    "compilerOptions": { "module": "CommonJS" }
+  },
+  // This package MUST NOT use any other package.
+  "references": []
+}

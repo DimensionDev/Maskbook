@@ -14,5 +14,5 @@ export function useBlockNumberOfChain(chainId: ChainId) {
         () => Services.Ethereum.request<string>({ method: EthereumMethodType.ETH_BLOCK_NUMBER }, { rpc: provderURL }),
         [provderURL],
     )
-    return value ? parseInt(value) : 0
+    return value ? Number.parseInt(value, 10) : 0
 }

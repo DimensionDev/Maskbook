@@ -162,7 +162,7 @@ export function hex2buf(hex: string) {
     hex_ = hex.replace(/^0x/, '') // strip 0x
     if (hex_.length % 2) hex_ = `0${hex_}` // pad even zero
     const buf = []
-    for (let i = 0; i < hex_.length; i += 2) buf.push(parseInt(hex_.substr(i, 2), 16))
+    for (let i = 0; i < hex_.length; i += 2) buf.push(Number.parseInt(hex_.substr(i, 2), 16))
     return new Uint8Array(buf)
 }
 

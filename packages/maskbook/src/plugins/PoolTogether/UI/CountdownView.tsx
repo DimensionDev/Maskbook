@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-interface CountdownProps extends withClasses<never> {
+interface CountdownProps extends withClasses<'digit' | 'seperator'> {
     secondsRemaining: number
     msgOnEnd: string
 }

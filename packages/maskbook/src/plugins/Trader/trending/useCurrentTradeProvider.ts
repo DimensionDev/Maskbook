@@ -1,18 +1,20 @@
 import { useValueRef } from '@masknet/shared'
 import {
-    ethNetworkTradeProviderSettings,
+    ethereumNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
-    bscNetworkTradeProviderSettings,
+    binanceNetworkTradeProviderSettings,
 } from '../settings'
 import { TradeProvider } from '../types'
-import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
+import { getNetworkTypeFromChainId } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../Wallet/settings'
+import { unreachable } from '@dimensiondev/kit'
+import { NetworkType } from '@masknet/public-api'
 
-export function useCurrentTradeProvider(availableTradeProviders: TradeProvider[]) {
-    const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
-    const ethNetworkTradeProvider = useValueRef(ethNetworkTradeProviderSettings)
+export function useCurrentTradeProvider() {
+    const networkType: NetworkType | undefined = getNetworkTypeFromChainId(currentChainIdSettings.value)
+    const ethNetworkTradeProvider = useValueRef(ethereumNetworkTradeProviderSettings)
     const polygonNetworkTradeProvider = useValueRef(polygonNetworkTradeProviderSettings)
-    const bscNetworkTradeProvider = useValueRef(bscNetworkTradeProviderSettings)
+    const binanceNetworkTradeProvider = useValueRef(binanceNetworkTradeProviderSettings)
 
     if (!networkType) return TradeProvider.UNISWAP
     switch (networkType) {
@@ -21,8 +23,10 @@ export function useCurrentTradeProvider(availableTradeProviders: TradeProvider[]
         case NetworkType.Polygon:
             return polygonNetworkTradeProvider
         case NetworkType.Binance:
-            return bscNetworkTradeProvider
+            return binanceNetworkTradeProvider
+        case NetworkType.Arbitrum:
+            throw new Error('TODO')
         default:
-            return TradeProvider.UNISWAP
+            unreachable(networkType)
     }
 }

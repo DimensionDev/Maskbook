@@ -40,6 +40,7 @@ import { checkRegionRestrict, decodeRegionCode, useIPRegion } from './hooks/useR
 import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
+import urlcat from 'urlcat'
 
 export interface IconProps {
     size?: number
@@ -527,7 +528,9 @@ export function ITO(props: ITO_Props) {
                     })}
                     <Link
                         className={classes.tokenLink}
-                        href={`${resolveLinkOnExplorer(token.chainId)}/token/${token.address}`}
+                        href={urlcat(resolveLinkOnExplorer(token.chainId), '/token/:address', {
+                            address: token.address,
+                        })}
                         target="_blank"
                         rel="noopener noreferrer">
                         <OpenInNewIcon fontSize="small" className={classes.totalIcon} />

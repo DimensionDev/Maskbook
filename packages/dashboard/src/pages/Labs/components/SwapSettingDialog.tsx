@@ -4,8 +4,8 @@ import { Services } from '../../../API'
 import { useDashboardI18N } from '../../../locales'
 import { TradeProvider } from '../../../type'
 import {
-    useBscNetworkTradeProvider,
-    useEthNetworkTradeProvider,
+    useBinanceNetworkTradeProvider,
+    useEthereumNetworkTradeProvider,
     usePolygonNetworkTradeProvider,
 } from '../../Settings/api'
 
@@ -26,9 +26,9 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
 
     const t = useDashboardI18N()
 
-    const ethNetworkTradeProvider = useEthNetworkTradeProvider()
+    const ethNetworkTradeProvider = useEthereumNetworkTradeProvider()
     const polygonNetworkTradeProvider = usePolygonNetworkTradeProvider()
-    const bscNetworkTradeProvider = useBscNetworkTradeProvider()
+    const bscNetworkTradeProvider = useBinanceNetworkTradeProvider()
 
     const polygonOptions = [
         { label: 'QuickSwap', value: TradeProvider.QUICKSWAP },
@@ -59,7 +59,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
                     legend={t.labs_settings_swap_bsc()}
                     value={bscNetworkTradeProvider}
                     options={bscOptions}
-                    onChange={(value) => Services.Settings.setBscNetworkTradeProvider(+value)}
+                    onChange={(value) => Services.Settings.setBinanceNetworkTradeProvider(+value)}
                 />
             </DialogContent>
         </MaskDialog>

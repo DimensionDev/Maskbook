@@ -17,6 +17,7 @@
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-example": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
+    "@masknet/public-api": "workspace:*",
     "@masknet/shared": "workspace:*",
     "@masknet/storybook-shared": "workspace:*",
     "@masknet/theme": "workspace:*",

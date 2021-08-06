@@ -40,7 +40,7 @@ export function transformFromJSON<T extends Constants>(
     try {
         const constants = JSON.parse(json) as T
         return transform(constants, environment)
-    } catch (e) {
+    } catch {
         return transform(fallbackConstants, environment)
     }
 }

@@ -6,6 +6,7 @@ import { ChainId, isZero, resolveAddressLinkOnExplorer } from '@masknet/web3-sha
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -51,18 +52,16 @@ interface IRowProps {
     acceptable?: boolean
 }
 
-export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
+export function OrderRow({ order, isDifferenceToken }: IRowProps) {
     const classes = useStyles()
     const { provider } = CollectibleState.useContainer()
-
+    const address = order.makerAccount?.user?.username ?? order.makerAccount?.address ?? ''
     return (
         <TableRow>
             <TableCell>
                 <Link
-                    href={`https://opensea.io/accounts/${
-                        order.makerAccount?.user?.username ?? order.makerAccount?.address ?? ''
-                    }`}
-                    title={order.makerAccount?.user?.username ?? order.makerAccount?.address ?? ''}
+                    href={urlcat('https://opensea.io/accounts/:address', { address })}
+                    title={address}
                     target="_blank"
                     className={classes.account}
                     rel="noopener noreferrer">
