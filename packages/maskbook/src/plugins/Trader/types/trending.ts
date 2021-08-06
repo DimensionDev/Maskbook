@@ -1,5 +1,4 @@
 import type { DataProvider } from '@masknet/public-api'
-export { DataProvider } from '@masknet/public-api'
 export interface Settings {
     currency: Currency
 }

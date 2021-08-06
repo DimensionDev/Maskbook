@@ -1,5 +1,6 @@
 import { NetworkType } from '@masknet/web3-shared'
-import { DataProvider, TagType } from '../../types'
+import { TagType } from '../../types'
+import { DataProvider } from '@masknet/public-api'
 import MIRRORED_TOKENS from './mirrored_tokens.json'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'

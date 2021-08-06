@@ -3,7 +3,7 @@ import { CoinMarketCapIcon } from '../../../../resources/CoinMarketCapIcon'
 import { CoinGeckoIcon } from '../../../../resources/CoinGeckoIcon'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { unreachable } from '@dimensiondev/kit'
-import { DataProvider } from '../../types'
+import { DataProvider } from '@masknet/public-api'
 
 const useStyles = makeStyles((theme) => {
     return {
