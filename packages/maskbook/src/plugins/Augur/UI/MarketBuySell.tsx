@@ -9,6 +9,7 @@ import {
     withStyles,
     Button,
     CircularProgress,
+    Link,
 } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 import type { AMMOutcome, Market } from '../types'
@@ -153,11 +154,17 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         padding: theme.spacing(2),
         paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
+        paddingBottom: theme.spacing(0),
     },
     retry: {
         fontSize: 'inherit',
         margin: 'auto',
+    },
+    link: {
+        textAlign: 'center',
+        padding: theme.spacing(2),
+        paddingTop: theme.spacing(0),
+        paddingBottom: theme.spacing(1),
     },
 }))
 
@@ -202,7 +209,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
     }, [market, openBuyDialog, selectedOutcome, isBuy, rawBalances])
 
     const validationMessage = useMemo(() => {
-        if (!selectedOutcome) return t('plugin_augur_select_outcome')
+        if (!error && !selectedOutcome) return t('plugin_augur_select_outcome')
         if (isBuy) {
             if (
                 !market.ammExchange ||
@@ -211,7 +218,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
             )
                 return t('plugin_trader_error_insufficient_lp')
         } else {
-            if (selectedOutcome && !balances) return
+            if (error) return t('plugin_augur_smt_wrong')
             if (
                 selectedOutcome &&
                 !!balances &&
@@ -238,9 +245,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                     className={`${classes.head} ${classes.spacing}`}>
                     <Grid item>
                         <Typography variant="h6" color="textPrimary">
-                            {!market.hasWinner ? (
-                                <AugurSwitch checked={!isBuy} onChange={() => setIsBuy((x) => !x)} name="buySell" />
-                            ) : null}
+                            <AugurSwitch checked={!isBuy} onChange={() => setIsBuy((x) => !x)} name="buySell" />
                         </Typography>
                     </Grid>
                     <Grid item container direction="column" alignItems="flex-end">
@@ -286,12 +291,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                     <div className={classes.message}>
                         <CircularProgress className={classes.progress} color="primary" size={15} />
                     </div>
-                ) : error ? (
-                    <Typography className={classes.message} color="textPrimary">
-                        {t('plugin_augur_smt_wrong')}
-                        <RefreshIcon className={classes.refresh} color="primary" onClick={retry} />
-                    </Typography>
-                ) : !market.hasWinner ? (
+                ) : (isBuy && !market.hasWinner) || !isBuy ? (
                     <Grid item className={classes.actions}>
                         <Button
                             variant="contained"
@@ -304,6 +304,13 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                         {!isBuy && <RefreshIcon className={classes.retry} color="primary" onClick={retry} />}
                     </Grid>
                 ) : null}
+                {!market.hasWinner && (
+                    <Grid item className={classes.link}>
+                        <Link color="primary" target="_blank" rel="noopener noreferrer" href={market.link}>
+                            <Typography color="textPrimary">{t('augur_add_liquidity')}</Typography>
+                        </Link>
+                    </Grid>
+                )}
             </Grid>
         </div>
     )

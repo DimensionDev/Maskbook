@@ -930,5 +930,6 @@
     "plugin_augur_remaining_shares": "",
     "plugin_augur_select_outcome": "",
     "plugin_augur_winner": "",
-    "plugin_augur_sell_too_low": ""
+    "plugin_augur_sell_too_low": "",
+    "augur_add_liquidity": ""
 }
