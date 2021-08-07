@@ -95,7 +95,7 @@ export function BuyDialog() {
     const account = useAccount()
 
     //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(PluginAugurMessages.events.BuyDialogUpdated, (ev) => {
+    const { open, closeDialog } = useRemoteControlledDialog(PluginAugurMessages.BuyDialogUpdated, (ev) => {
         if (ev.open) {
             setMarket(ev.market)
             setOutcome(ev.outcome)
@@ -177,7 +177,7 @@ export function BuyDialog() {
 
     //#region Swap
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
-        PluginTraderMessages.events.swapDialogUpdated,
+        PluginTraderMessages.swapDialogUpdated,
         useCallback(
             (ev) => {
                 if (!ev.open) {
@@ -263,7 +263,7 @@ export function BuyDialog() {
     //#endregion
 
     //#region remote controlled swap settings dialog
-    const { openDialog: openSettingDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated)
+    const { openDialog: openSettingDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
     //#endregion
 
     if (!token || !market || !market.ammExchange || !outcome) return null
