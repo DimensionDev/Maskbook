@@ -78,7 +78,7 @@ export const estimateSellTrade = (
     amm: AMMExchange,
     inputDisplayAmount: string,
     outcome: AMMOutcome,
-    userBalances: string[],
+    userBalance: string,
     shareTokenDecimals: number,
     fee: string,
 ): EstimateTradeResult | undefined => {
@@ -103,10 +103,9 @@ export const estimateSellTrade = (
     const displayAmount = new BN(inputDisplayAmount)
     const averagePrice = new BN(completeSets).div(displayAmount)
     const price = new BN(outcome.rate)
-    const userShares = userBalances ? new BN(userBalances[outcome.id] || '0') : '0'
     const priceImpact = averagePrice.minus(price).times(100).toFixed(4)
     const ratePerCash = new BN(completeSets).div(displayAmount).toFixed(6)
-    const displayShares = formatBalance(userShares, shareTokenDecimals)
+    const displayShares = formatBalance(userBalance, shareTokenDecimals)
     const sumUndesirable = (undesirableTokensInPerOutcome || []).reduce((p, u) => p.plus(new BN(u)), new BN(0))
     const canSellAll = new BN(amount).minus(sumUndesirable).abs()
     const remainingShares = new BN(displayShares || '0').minus(displayAmount)

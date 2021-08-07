@@ -8,7 +8,6 @@ import {
     SwitchProps,
     withStyles,
     Button,
-    CircularProgress,
     Link,
 } from '@material-ui/core'
 import { Trans } from 'react-i18next'
@@ -17,11 +16,7 @@ import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginAugurMessages } from '../messages'
 import { useCallback } from 'react'
-import { formatBalance, FungibleTokenDetailed, useTokensBalance } from '@masknet/web3-shared'
-import { RefreshIcon } from '@masknet/icons'
-import BigNumber from 'bignumber.js'
-import { estimateSellTrade, getRawFee } from '../utils'
-import { SHARE_DECIMALS } from '../constants'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
     focusVisible?: string
@@ -184,9 +179,6 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
     const [isBuy, setIsBuy] = useState(true)
     const [selectedOutcome, setSelectedOutcome] = useState<AMMOutcome>()
 
-    const { value: rawBalances, loading, error, retry } = useTokensBalance(market.outcomes.map((x) => x.shareToken))
-    const balances = rawBalances?.map((x: string) => new BigNumber(x))
-
     const { setDialog: openBuyDialog } = useRemoteControlledDialog(PluginAugurMessages.BuyDialogUpdated)
     const onBuy = useCallback(() => {
         if (!selectedOutcome) return
@@ -200,31 +192,17 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
 
     const { setDialog: openSellDialog } = useRemoteControlledDialog(PluginAugurMessages.SellDialogUpdated)
     const onSell = useCallback(() => {
-        if (!selectedOutcome || !rawBalances) return
+        if (!selectedOutcome) return
         openSellDialog({
             open: true,
             market: market,
             outcome: selectedOutcome,
-            userBalances: rawBalances,
             cashToken: cashToken,
         })
-    }, [market, openBuyDialog, selectedOutcome, isBuy, rawBalances])
-
-    const estimateTradeResult = useMemo(() => {
-        if (!market || !market.ammExchange || !selectedOutcome || !rawBalances || isBuy) return
-        const rawFee = getRawFee(market?.swapFee ?? '')
-        return estimateSellTrade(
-            market.ammExchange,
-            formatBalance(rawBalances[selectedOutcome.id], SHARE_DECIMALS),
-            selectedOutcome,
-            rawBalances,
-            SHARE_DECIMALS,
-            rawFee,
-        )
-    }, [market, rawBalances, selectedOutcome, isBuy])
+    }, [market, openBuyDialog, selectedOutcome, isBuy])
 
     const validationMessage = useMemo(() => {
-        if (!error && !selectedOutcome) return t('plugin_augur_select_outcome')
+        if (!selectedOutcome) return t('plugin_augur_select_outcome')
         if (isBuy) {
             if (
                 !market.ammExchange ||
@@ -232,17 +210,9 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                 market.ammExchange.totalLiquidity.isLessThanOrEqualTo(0)
             )
                 return t('plugin_trader_error_insufficient_lp')
-        } else {
-            if (error) return t('plugin_augur_smt_wrong')
-            if (
-                selectedOutcome &&
-                !!balances &&
-                (!market.ammExchange?.shareFactor || !estimateTradeResult || estimateTradeResult.outputValue === '0')
-            )
-                return t('plugin_augur_insufficient_balance')
         }
         return ''
-    }, [isBuy, market, selectedOutcome, balances])
+    }, [isBuy, market, selectedOutcome])
 
     return (
         <div className={`${classes.root} ${classes.spacing}`}>
@@ -299,11 +269,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                             )
                         })}
                 </Grid>
-                {!isBuy && loading ? (
-                    <div className={classes.message}>
-                        <CircularProgress className={classes.progress} color="primary" size={15} />
-                    </div>
-                ) : (isBuy && !market.hasWinner) || !isBuy ? (
+                {!market.hasWinner ? (
                     <Grid item className={classes.actions}>
                         <Button
                             variant="contained"
@@ -313,7 +279,6 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                             onClick={isBuy ? onBuy : onSell}>
                             {validationMessage ? validationMessage : isBuy ? t('buy') : t('sell')}
                         </Button>
-                        {!isBuy && <RefreshIcon className={classes.retry} color="primary" onClick={retry} />}
                     </Grid>
                 ) : null}
                 <Grid item className={classes.link}>

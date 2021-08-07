@@ -22,10 +22,11 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { WalletMessages } from '../../Wallet/messages'
 import { PluginAugurMessages } from '../messages'
-import type { AMMOutcome, Market, EstimateTradeResult } from '../types'
+import type { AMMOutcome, Market } from '../types'
 import { SHARE_DECIMALS } from '../constants'
 import { useSellCallback } from '../hooks/useSellCallback'
 import { estimateSellTrade, getRawFee } from '../utils'
+import { useAMMExchange } from '../hooks/useAMMMarket'
 // import { estimateSellTrade } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -81,9 +82,7 @@ export function SellDialog() {
     const [cashToken, setCashToken] = useState<FungibleTokenDetailed>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const [outcome, setOutcome] = useState<AMMOutcome>()
-    const [estimatedResult, setEstimatedResult] = useState<EstimateTradeResult>()
     const [rawAmount, setRawAmount] = useState('')
-    const [userBalances, setUserBalances] = useState<string[]>()
     const { AMM_FACTORY_ADDRESS } = useAugurConstants()
 
     // context
@@ -94,7 +93,6 @@ export function SellDialog() {
         if (ev.open) {
             setMarket(ev.market)
             setOutcome(ev.outcome)
-            setUserBalances(ev.userBalances)
             setCashToken(ev.cashToken)
             setToken({
                 address: ev.outcome.shareToken,
@@ -107,7 +105,6 @@ export function SellDialog() {
         closeDialog()
         setMarket(undefined)
         setOutcome(undefined)
-        setEstimatedResult(undefined)
         setRawAmount('')
         setCashToken(undefined)
     }, [closeDialog])
@@ -121,25 +118,22 @@ export function SellDialog() {
     )
     //#endregion
 
+    //#region AmmExchange
+    const { value: ammExchange, loading: loadingAmm } = useAMMExchange(market?.address ?? '', market?.id ?? '')
     const rawFee = getRawFee(market?.swapFee ?? '')
-    useEffect(() => {
-        if (!market || !market.ammExchange || !outcome || !userBalances) return
-        const estimateTradeResult = estimateSellTrade(
-            market.ammExchange,
-            rawAmount,
-            outcome,
-            userBalances,
-            SHARE_DECIMALS,
-            rawFee,
-        )
-        setEstimatedResult(estimateTradeResult)
-    }, [market, rawAmount, outcome, rawFee, userBalances])
+    const estimatedResult = useMemo(() => {
+        if (!ammExchange || !outcome || !tokenBalance || !rawAmount || !rawFee) return
+        return estimateSellTrade(ammExchange, rawAmount, outcome, tokenBalance, SHARE_DECIMALS, rawFee)
+    }, [rawAmount, outcome, rawFee, tokenBalance])
+    //#endregion
 
     //#region blocking
     const [sellState, sellCallback, resetSellCallback] = useSellCallback(
         market,
         outcome,
         estimatedResult?.outcomeShareTokensIn,
+        amount.toString(),
+        rawFee,
     )
     //#endregion
 
@@ -173,7 +167,8 @@ export function SellDialog() {
     const validationMessage = useMemo(() => {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (!amount || amount.isZero()) return t('plugin_dhedge_enter_an_amount')
-        if (!estimatedResult || estimatedResult?.outputValue === '0') return t('plugin_augur_sell_too_low')
+        if (!loadingAmm && (!estimatedResult || estimatedResult?.outputValue === '0'))
+            return t('plugin_augur_sell_too_low')
         if (amount.isGreaterThan(tokenBalance)) return t('plugin_augur_insufficient_balance')
         return ''
     }, [account, amount, tokenBalance, estimatedResult])
@@ -204,7 +199,7 @@ export function SellDialog() {
                                 disabled={!!validationMessage}
                                 onClick={sellCallback}
                                 variant="contained"
-                                loading={loadingTokenBalance}>
+                                loading={loadingTokenBalance || loadingAmm}>
                                 {validationMessage || t('sell')}
                             </ActionButton>
                         </EthereumERC20TokenApprovedBoundary>

@@ -19,7 +19,6 @@ type SellDialogUpdated =
           open: true
           market: Market
           outcome: AMMOutcome
-          userBalances: string[]
           cashToken: FungibleTokenDetailed
       }
     | {
