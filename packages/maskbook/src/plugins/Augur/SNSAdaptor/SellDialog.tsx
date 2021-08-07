@@ -124,7 +124,7 @@ export function SellDialog() {
     const estimatedResult = useMemo(() => {
         if (!ammExchange || !outcome || !tokenBalance || !rawAmount || !rawFee) return
         return estimateSellTrade(ammExchange, rawAmount, outcome, tokenBalance, SHARE_DECIMALS, rawFee)
-    }, [rawAmount, outcome, rawFee, tokenBalance])
+    }, [rawAmount, outcome, rawFee, tokenBalance, ammExchange])
     //#endregion
 
     //#region blocking

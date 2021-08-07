@@ -28,13 +28,14 @@ import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { PluginAugurMessages } from '../messages'
-import type { AMMOutcome, Market, EstimateTradeResult } from '../types'
+import type { AMMOutcome, Market } from '../types'
 import { useBuyCallback } from '../hooks/useBuyCallback'
 import { toBips } from '../../Trader/helpers'
 import { currentSlippageTolerance } from '../../Trader/settings'
 import TuneIcon from '@material-ui/icons/Tune'
-import { SHARE_DECIMALS, SWAP_FEE_DECIMALS } from '../constants'
-import { estimateBuyTrade } from '../utils'
+import { SHARE_DECIMALS } from '../constants'
+import { estimateBuyTrade, getRawFee } from '../utils'
+import { useAMMExchange } from '../hooks/useAMMMarket'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -88,7 +89,6 @@ export function BuyDialog() {
     const [market, setMarket] = useState<Market>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const [outcome, setOutcome] = useState<AMMOutcome>()
-    const [estimatedResult, setEstimatedResult] = useState<EstimateTradeResult>()
     const [rawAmount, setRawAmount] = useState('')
 
     // context
@@ -107,7 +107,6 @@ export function BuyDialog() {
         setMarket(undefined)
         setToken(undefined)
         setOutcome(undefined)
-        setEstimatedResult(undefined)
         setRawAmount('')
     }, [closeDialog])
     //#endregion
@@ -146,19 +145,14 @@ export function BuyDialog() {
     } = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     //#endregion
 
-    const rawFee = formatAmount(new BigNumber(market?.swapFee ?? ''), SWAP_FEE_DECIMALS - 2)
-    useEffect(() => {
-        if (!market || !token || !market.ammExchange || !outcome) return
-        const estimateTradeResult = estimateBuyTrade(
-            market.ammExchange,
-            rawAmount,
-            outcome,
-            rawFee,
-            token,
-            SHARE_DECIMALS,
-        )
-        setEstimatedResult(estimateTradeResult)
-    }, [token, market, rawAmount, outcome, rawFee])
+    //#region AmmExchange
+    const { value: ammExchange, loading: loadingAmm } = useAMMExchange(market?.address ?? '', market?.id ?? '')
+    const rawFee = getRawFee(market?.swapFee ?? '')
+    const estimatedResult = useMemo(() => {
+        if (!ammExchange || !token || !outcome) return
+        return estimateBuyTrade(ammExchange, rawAmount, outcome, rawFee, token, SHARE_DECIMALS)
+    }, [token, rawAmount, outcome, rawFee, ammExchange])
+    //#endregion
 
     const minTokenOut = formatAmount(
         estimatedResult?.outputValue ?? 0 * (1 - currentSlippageTolerance.value),
@@ -253,7 +247,7 @@ export function BuyDialog() {
     const validationMessage = useMemo(() => {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (!amount || amount.isZero()) return t('plugin_dhedge_enter_an_amount')
-        if (!estimatedResult) return t('plugin_trader_error_insufficient_lp')
+        if (!loadingAmm && !estimatedResult) return t('plugin_trader_error_insufficient_lp')
         if (amount.isGreaterThan(tokenBalance))
             return t('plugin_dhedge_insufficient_balance', {
                 symbol: token?.symbol,
@@ -279,7 +273,7 @@ export function BuyDialog() {
                             token={token}
                             onAmountChange={setRawAmount}
                             SelectTokenChip={{
-                                loading: loadingTokenBalance,
+                                loading: loadingTokenBalance || loadingAmm,
                                 ChipProps: {
                                     onClick: onSelectTokenChipClick,
                                 },
@@ -293,7 +287,7 @@ export function BuyDialog() {
                                 fullWidth
                                 onClick={openSwap}
                                 variant="contained"
-                                loading={loadingTokenBalance}>
+                                loading={loadingTokenBalance || loadingAmm}>
                                 {t('plugin_dhedge_buy_token', { symbol: token.symbol })}
                             </ActionButton>
                         ) : (
@@ -307,7 +301,7 @@ export function BuyDialog() {
                                     disabled={!!validationMessage}
                                     onClick={buyCallback}
                                     variant="contained"
-                                    loading={loadingTokenBalance}>
+                                    loading={loadingTokenBalance || loadingAmm}>
                                     {validationMessage || t('buy')}
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>
