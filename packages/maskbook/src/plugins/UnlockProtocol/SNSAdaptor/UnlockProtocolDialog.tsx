@@ -61,7 +61,7 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                 const uploadData = {
                     identifier: encres.iv,
                     unlockLocks: currentUnlockTarget.map((x) => {
-                        return { unlocklock: x.lock.address, chainid: currentUnlockChain }
+                        return { unlocklock: x.lock.address, chainid: x.lock.chain }
                     }),
                     unlockKey: encres.key,
                 }

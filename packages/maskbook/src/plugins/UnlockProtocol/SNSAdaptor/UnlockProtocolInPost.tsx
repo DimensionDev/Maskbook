@@ -12,11 +12,6 @@ interface UnlockProtocolInPostProps {
     message: TypedMessage
 }
 
-function UnlockDecipher(props: { iv: string }) {
-    useEffect(() => {})
-    return <> {props.iv} </>
-}
-
 export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
     const { t } = useI18N()
     const { message } = props
@@ -30,9 +25,9 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
         if (metadata.ok) {
             if (!!address) {
                 const data: { locks: Record<string, any> } = { locks: {} }
-                PuginUnlockProtocolRPC.getPurchasedLocks(address, chain).then((res) => {
-                    res.keyPurchases.forEach((e: { lock: string }) => {
-                        metadata.val.unlockLocks.forEach((locks) => {
+                PuginUnlockProtocolRPC.getPurchasedLocks(address).then((res) => {
+                    metadata.val.unlockLocks.forEach((locks) => {
+                        res.forEach((e: { lock: string }) => {
                             if (e.lock === locks.unlocklock) {
                                 const requestdata = {
                                     lock: e.lock,
@@ -57,9 +52,10 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                                         })
                                     })
                             }
-                            data.locks[locks.unlocklock] = { network: locks.chainid }
                         })
+                        data.locks[locks.unlocklock] = { network: locks.chainid }
                     })
+
                     setRedirurl(paywallUrl + encodeURI(JSON.stringify(data)))
                 })
             } else {
