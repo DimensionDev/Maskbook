@@ -7,10 +7,10 @@ import { MulticalStateType, useChainId, useMutlipleContractSingleData, useTrader
 import { usePoolContracts } from '../../contracts/uniswap/usePoolContract'
 
 export enum PoolState {
-    LOADING,
-    NOT_EXISTS,
-    EXISTS,
-    INVALID,
+    LOADING = 0,
+    NOT_EXISTS = 1,
+    EXISTS = 2,
+    INVALID = 3,
 }
 
 export function usePools(

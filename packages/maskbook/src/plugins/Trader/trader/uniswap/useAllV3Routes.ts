@@ -20,7 +20,7 @@ function computeAllRoutes(
     if (!tokenIn || !tokenOut) throw new Error('Missing tokenIn/tokenOut')
 
     for (const pool of pools) {
-        if (currentPath.indexOf(pool) !== -1 || !pool.involvesToken(tokenIn)) continue
+        if (currentPath.includes(pool) || !pool.involvesToken(tokenIn)) continue
 
         const outputToken = pool.token0.equals(tokenIn) ? pool.token1 : pool.token0
         if (outputToken.equals(tokenOut)) {

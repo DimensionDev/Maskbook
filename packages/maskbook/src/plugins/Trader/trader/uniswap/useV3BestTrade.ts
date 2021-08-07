@@ -9,11 +9,11 @@ import { useAllV3Routes } from './useAllV3Routes'
 import { MulticalStateType, useSingleContractMultipleData } from '@masknet/web3-shared'
 
 export enum V3TradeState {
-    LOADING,
-    INVALID,
-    NO_ROUTE_FOUND,
-    VALID,
-    SYNCING,
+    LOADING = 0,
+    INVALID = 1,
+    NO_ROUTE_FOUND = 2,
+    VALID = 3,
+    SYNCING = 4,
 }
 
 /**
