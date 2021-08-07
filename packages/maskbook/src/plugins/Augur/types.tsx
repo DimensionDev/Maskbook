@@ -59,9 +59,9 @@ export interface Market {
 }
 
 export enum SportMarketType {
-    HeadToHead,
-    Spread,
-    OverUnder,
+    HeadToHead = 0,
+    Spread = 1,
+    OverUnder = 2,
 }
 
 export interface SportTitles {

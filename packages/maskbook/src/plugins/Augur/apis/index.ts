@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 import type { AMMExchange } from '../types'
 
 export async function fetchAMMExchange(address: string, id: string, url: string) {
-    let body = {
+    const body = {
         query: `{
             market(id: "${address + '-' + id}") {
                 liquidity {

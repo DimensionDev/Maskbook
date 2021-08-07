@@ -109,7 +109,7 @@ function bpowApprox(base: BigNumber, exp: BigNumber, precision: BigNumber): BigN
     //         = (product(a - i - 1, i=1-->k) * x^k) / (k!)
     // each iteration, multiply previous term by (a-(k-1)) * x / k
     // continue until term is less than precision
-    for (let i = 1; term.gte(precision); i++) {
+    for (let i = 1; term.gte(precision); i += 1) {
         const bigK = BONE.mul(i)
         const [c, cneg] = bsubSign(a, bsub(bigK, BONE))
         term = bmul(term, bmul(c, x))
@@ -186,7 +186,7 @@ function attemptTokenCalc(
     let runningBalance = _tokenBalances[_outcome]
     const tokensInPerOutcome = []
     let total = tokenAmountOut
-    for (let i = 0; i < _tokenBalances.length; i++) {
+    for (let i = 0; i < _tokenBalances.length; i += 1) {
         if (i === _outcome) {
             tokensInPerOutcome[i] = tokenAmountOut
             continue
@@ -246,7 +246,7 @@ export function calculateSellCompleteSets(
     let counter = 0
     while (!tokenAmountOut.eq(0) && counter <= limit) {
         try {
-            for (let i = 0; i < _tokenBalances.length; i++) {
+            for (let i = 0; i < _tokenBalances.length; i += 1) {
                 if (i === _outcome) continue
                 assert(tokenAmountOut.lte(bmul(_tokenBalances[i], MAX_OUT_RATIO)), 'ERR_MAX_OUT_RATIO')
             }
@@ -281,7 +281,7 @@ export function calculateSellCompleteSets(
             upper = tokenAmountOut
             tokenAmountOut = upper.sub(lower).div(2).add(lower)
         }
-        counter++
+        counter += 1
     }
 
     return [tokenAmountOut.div(_shareFactor).mul(_shareFactor).toString(), tokensInPerOutcome]
@@ -356,8 +356,8 @@ function buy(
     let _totalDesiredOutcome = _sets
     let _runningBalance = BigNumber.from(0)
 
-    for (let i = 0; i < _tokenBalances.length; i++) {
-        if (i == _outcome) continue
+    for (let i = 0; i < _tokenBalances.length; i += 1) {
+        if (i === _outcome) continue
         const [_acquiredToken] = swapExactAmountIn(
             _sets,
             BigNumber.from(0),
