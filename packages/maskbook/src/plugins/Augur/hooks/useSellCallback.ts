@@ -1,8 +1,5 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import {
-    FungibleTokenDetailed,
-    EthereumTokenType,
     useAccount,
     useTransactionState,
     TransactionStateType,
@@ -15,15 +12,9 @@ import {
 import { useAMMFactory } from '../contracts/useAMMFactory'
 import type { AMMOutcome, Market } from '../types'
 
-export function useSellCallback(
-    amount: string,
-    market?: Market,
-    outcome?: AMMOutcome,
-    token?: FungibleTokenDetailed,
-    shareTokensIn?: string[],
-) {
+export function useSellCallback(market?: Market, outcome?: AMMOutcome, shareTokensIn?: string[]) {
     const { AMM_FACTORY_ADDRESS } = useAugurConstants()
-    const ammContract = useAMMFactory(AMM_FACTORY_ADDRESS)
+    const ammContract = useAMMFactory(AMM_FACTORY_ADDRESS ?? '')
 
     const account = useAccount()
     const nonce = useNonce()
@@ -31,7 +22,7 @@ export function useSellCallback(
     const [sellState, setSellState] = useTransactionState()
 
     const sellCallback = useCallback(async () => {
-        if (!token || !ammContract || !market || !outcome || !shareTokensIn) {
+        if (!ammContract || !market || !outcome || !shareTokensIn) {
             setSellState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -46,7 +37,7 @@ export function useSellCallback(
         // step 1: estimate gas
         const config = {
             from: account,
-            value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
+            value: '0',
             gasPrice,
             nonce,
         }
@@ -85,7 +76,7 @@ export function useSellCallback(
                     reject(error)
                 })
         })
-    }, [gasPrice, nonce, AMM_FACTORY_ADDRESS, account, amount, token, shareTokensIn, market, outcome])
+    }, [gasPrice, nonce, AMM_FACTORY_ADDRESS, account, shareTokensIn, market, outcome])
 
     const resetCallback = useCallback(() => {
         setSellState({

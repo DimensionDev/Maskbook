@@ -1,6 +1,5 @@
 import {
     EthereumTokenType,
-    formatAmount,
     formatBalance,
     formatPrice,
     FungibleTokenDetailed,
@@ -8,7 +7,6 @@ import {
     TransactionStateType,
     useAccount,
     useAugurConstants,
-    useERC20TokenDetailed,
     useTokenBalance,
 } from '@masknet/web3-shared'
 import { DialogContent, makeStyles, Typography } from '@material-ui/core'
@@ -22,12 +20,12 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { PluginAugurMessages } from '../messages'
 import type { AMMOutcome, Market, EstimateTradeResult } from '../types'
-import { SWAP_FEE_DECIMALS } from '../constants'
+import { SHARE_DECIMALS } from '../constants'
 import { useSellCallback } from '../hooks/useSellCallback'
-import { estimateSellTrade } from '../utils'
+import { estimateSellTrade, getRawFee } from '../utils'
 // import { estimateSellTrade } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -80,8 +78,8 @@ export function SellDialog() {
 
     const [id] = useState(uuid())
     const [market, setMarket] = useState<Market>()
-    const [token, setToken] = useState<FungibleTokenDetailed>()
     const [cashToken, setCashToken] = useState<FungibleTokenDetailed>()
+    const [token, setToken] = useState<FungibleTokenDetailed>()
     const [outcome, setOutcome] = useState<AMMOutcome>()
     const [estimatedResult, setEstimatedResult] = useState<EstimateTradeResult>()
     const [rawAmount, setRawAmount] = useState('')
@@ -92,18 +90,22 @@ export function SellDialog() {
     const account = useAccount()
 
     //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(PluginAugurMessages.events.SellDialogUpdated, (ev) => {
+    const { open, closeDialog } = useRemoteControlledDialog(PluginAugurMessages.SellDialogUpdated, (ev) => {
         if (ev.open) {
             setMarket(ev.market)
             setOutcome(ev.outcome)
             setUserBalances(ev.userBalances)
             setCashToken(ev.cashToken)
+            setToken({
+                address: ev.outcome.shareToken,
+                symbol: ev.outcome.name,
+                decimals: SHARE_DECIMALS,
+            } as FungibleTokenDetailed)
         }
     })
     const onClose = useCallback(() => {
         closeDialog()
         setMarket(undefined)
-        setToken(undefined)
         setOutcome(undefined)
         setEstimatedResult(undefined)
         setRawAmount('')
@@ -111,70 +113,32 @@ export function SellDialog() {
     }, [closeDialog])
     //#endregion
 
-    const {
-        value: shareToken,
-        loading: loadingToken,
-        error: errorToken,
-        retry: retryToken,
-    } = useERC20TokenDetailed(outcome?.shareToken ?? '')
-
-    useEffect(() => {
-        setToken(shareToken)
-    }, [shareToken])
-
-    //#region select token
-    const { setDialog: setSelectTokenDialogOpen } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                setToken(ev.token)
-            },
-            [id],
-        ),
-    )
-    const onSelectTokenChipClick = useCallback(() => {
-        if (!token) return
-        setSelectTokenDialogOpen({
-            open: true,
-            uuid: id,
-            disableNativeToken: true,
-            FixedTokenListProps: {
-                selectedTokens: [token.address],
-                whitelist: [token.address],
-            },
-        })
-    }, [id, token?.address])
-    //#endregion
-
     //#region amount
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
+    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(SHARE_DECIMALS))
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
-        token?.type ?? EthereumTokenType.Native,
-        token?.address ?? '',
+        EthereumTokenType.ERC20,
+        outcome?.shareToken ?? '',
     )
     //#endregion
 
-    const rawFee = formatAmount(new BigNumber(market?.swapFee ?? ''), SWAP_FEE_DECIMALS - 2)
+    const rawFee = getRawFee(market?.swapFee ?? '')
     useEffect(() => {
-        if (!market || !token || !market.ammExchange || !outcome || !userBalances) return
+        if (!market || !market.ammExchange || !outcome || !userBalances) return
         const estimateTradeResult = estimateSellTrade(
             market.ammExchange,
             rawAmount,
             outcome,
             userBalances,
-            token,
+            SHARE_DECIMALS,
             rawFee,
         )
         setEstimatedResult(estimateTradeResult)
-    }, [token, market, rawAmount, outcome, rawFee, userBalances])
+    }, [market, rawAmount, outcome, rawFee, userBalances])
 
     //#region blocking
     const [sellState, sellCallback, resetSellCallback] = useSellCallback(
-        amount.toString(),
         market,
         outcome,
-        shareToken,
         estimatedResult?.outcomeShareTokensIn,
     )
     //#endregion
@@ -196,12 +160,11 @@ export function SellDialog() {
 
     // open the transaction dialog
     useEffect(() => {
-        if (!token || !market) return
         if (sellState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialogOpen({
             open: true,
             state: sellState,
-            summary: `Selling ${formatBalance(amount, token.decimals)} ${outcome?.name}'s shares.`,
+            summary: `Selling ${formatBalance(amount, SHARE_DECIMALS)} ${outcome?.name} share.`,
         })
     }, [sellState /* update tx dialog only if state changed */])
     //#endregion
@@ -210,16 +173,13 @@ export function SellDialog() {
     const validationMessage = useMemo(() => {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (!amount || amount.isZero()) return t('plugin_dhedge_enter_an_amount')
-        if (estimatedResult?.outputValue === '0') return t('plugin_augur_sell_too_low')
-        if (amount.isGreaterThan(tokenBalance))
-            return t('plugin_dhedge_insufficient_balance', {
-                symbol: token?.symbol,
-            })
+        if (!estimatedResult || estimatedResult?.outputValue === '0') return t('plugin_augur_sell_too_low')
+        if (amount.isGreaterThan(tokenBalance)) return t('plugin_augur_insufficient_balance')
         return ''
-    }, [account, amount, token, tokenBalance, estimatedResult])
+    }, [account, amount, tokenBalance, estimatedResult])
     //#endregion
 
-    if (!token || !market || !market.ammExchange || !outcome || !cashToken) return null
+    if (!market || !market.ammExchange || !outcome || !cashToken) return null
     return (
         <div className={classes.root}>
             <InjectedDialog open={open} onClose={onClose} title={market.title + ' ' + outcome?.name} maxWidth="xs">
@@ -231,12 +191,6 @@ export function SellDialog() {
                             balance={tokenBalance ?? '0'}
                             token={token}
                             onAmountChange={setRawAmount}
-                            SelectTokenChip={{
-                                loading: loadingToken || loadingTokenBalance,
-                                ChipProps: {
-                                    onClick: onSelectTokenChipClick,
-                                },
-                            }}
                         />
                     </form>
                     <EthereumWalletConnectedBoundary>
@@ -250,7 +204,7 @@ export function SellDialog() {
                                 disabled={!!validationMessage}
                                 onClick={sellCallback}
                                 variant="contained"
-                                loading={loadingToken || loadingTokenBalance}>
+                                loading={loadingTokenBalance}>
                                 {validationMessage || t('sell')}
                             </ActionButton>
                         </EthereumERC20TokenApprovedBoundary>
@@ -281,9 +235,7 @@ export function SellDialog() {
                                 {t('plugin_augur_remaining_shares')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {estimatedResult && estimatedResult.remainingShares
-                                    ? estimatedResult.remainingShares
-                                    : '-'}
+                                {estimatedResult ? estimatedResult.remainingShares : '-'}
                             </Typography>
                         </div>
                         <div className={classes.status}>

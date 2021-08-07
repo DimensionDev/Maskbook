@@ -714,5 +714,7 @@
     "plugin_augur_select_outcome": "",
     "plugin_augur_winner": "",
     "plugin_augur_sell_too_low": "",
-    "augur_add_liquidity": ""
+    "plugin_augur_add_liquidity": "",
+    "plugin_augur_remove_liquidity": "",
+    "plugin_augur_insufficient_balance": ""
 }

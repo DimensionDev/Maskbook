@@ -6,7 +6,7 @@ import type { AMMOutcome, Market } from '../types'
 
 export function useAMMOutcomes(address: string, id: string, market: Market | undefined) {
     const { AMM_FACTORY_ADDRESS } = useAugurConstants()
-    const ammMarekFactoryContract = useAMMFactory(AMM_FACTORY_ADDRESS)
+    const ammMarekFactoryContract = useAMMFactory(AMM_FACTORY_ADDRESS ?? '')
 
     return useAsyncRetry(async () => {
         if (!ammMarekFactoryContract || !market) return

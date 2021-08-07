@@ -346,8 +346,8 @@ export function BuyDialog() {
                                 {t('plugin_augur_max_profit')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {estimatedResult && estimatedResult.maxProfit
-                                    ? formatPrice(estimatedResult.maxProfit, 2) + ' ' + token.symbol
+                                {estimatedResult && estimatedResult
+                                    ? formatPrice(estimatedResult.maxProfit ?? '', 2) + ' ' + token.symbol
                                     : '-'}
                             </Typography>
                         </div>

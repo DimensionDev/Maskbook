@@ -17,9 +17,11 @@ import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginAugurMessages } from '../messages'
 import { useCallback } from 'react'
-import { FungibleTokenDetailed, useTokensBalance } from '@masknet/web3-shared'
+import { formatBalance, FungibleTokenDetailed, useTokensBalance } from '@masknet/web3-shared'
 import { RefreshIcon } from '@masknet/icons'
 import BigNumber from 'bignumber.js'
+import { estimateSellTrade, getRawFee } from '../utils'
+import { SHARE_DECIMALS } from '../constants'
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
     focusVisible?: string
@@ -185,7 +187,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
     const { value: rawBalances, loading, error, retry } = useTokensBalance(market.outcomes.map((x) => x.shareToken))
     const balances = rawBalances?.map((x: string) => new BigNumber(x))
 
-    const { setDialog: openBuyDialog } = useRemoteControlledDialog(PluginAugurMessages.events.BuyDialogUpdated)
+    const { setDialog: openBuyDialog } = useRemoteControlledDialog(PluginAugurMessages.BuyDialogUpdated)
     const onBuy = useCallback(() => {
         if (!selectedOutcome) return
         openBuyDialog({
@@ -196,7 +198,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
         })
     }, [market, openBuyDialog, selectedOutcome, isBuy])
 
-    const { setDialog: openSellDialog } = useRemoteControlledDialog(PluginAugurMessages.events.SellDialogUpdated)
+    const { setDialog: openSellDialog } = useRemoteControlledDialog(PluginAugurMessages.SellDialogUpdated)
     const onSell = useCallback(() => {
         if (!selectedOutcome || !rawBalances) return
         openSellDialog({
@@ -207,6 +209,19 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
             cashToken: cashToken,
         })
     }, [market, openBuyDialog, selectedOutcome, isBuy, rawBalances])
+
+    const estimateTradeResult = useMemo(() => {
+        if (!market || !market.ammExchange || !selectedOutcome || !rawBalances || isBuy) return
+        const rawFee = getRawFee(market?.swapFee ?? '')
+        return estimateSellTrade(
+            market.ammExchange,
+            formatBalance(rawBalances[selectedOutcome.id], SHARE_DECIMALS),
+            selectedOutcome,
+            rawBalances,
+            SHARE_DECIMALS,
+            rawFee,
+        )
+    }, [market, rawBalances, selectedOutcome, isBuy])
 
     const validationMessage = useMemo(() => {
         if (!error && !selectedOutcome) return t('plugin_augur_select_outcome')
@@ -222,12 +237,9 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
             if (
                 selectedOutcome &&
                 !!balances &&
-                (!market.ammExchange?.shareFactor ||
-                    balances[selectedOutcome.id].isLessThanOrEqualTo(
-                        new BigNumber(market.ammExchange?.shareFactor).multipliedBy(10),
-                    )) // output should be greater than share factor, so multipliedBy 10 to cancel out price effect
+                (!market.ammExchange?.shareFactor || !estimateTradeResult || estimateTradeResult.outputValue === '0')
             )
-                return t('error_insufficient_balance')
+                return t('plugin_augur_insufficient_balance')
         }
         return ''
     }, [isBuy, market, selectedOutcome, balances])
@@ -304,13 +316,13 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                         {!isBuy && <RefreshIcon className={classes.retry} color="primary" onClick={retry} />}
                     </Grid>
                 ) : null}
-                {!market.hasWinner && (
-                    <Grid item className={classes.link}>
-                        <Link color="primary" target="_blank" rel="noopener noreferrer" href={market.link}>
-                            <Typography color="textPrimary">{t('augur_add_liquidity')}</Typography>
-                        </Link>
-                    </Grid>
-                )}
+                <Grid item className={classes.link}>
+                    <Link color="primary" target="_blank" rel="noopener noreferrer" href={market.link}>
+                        <Typography color="textPrimary">
+                            {!market.hasWinner ? t('plugin_augur_add_liquidity') : t('plugin_augur_remove_liquidity')}
+                        </Typography>
+                    </Link>
+                </Grid>
             </Grid>
         </div>
     )

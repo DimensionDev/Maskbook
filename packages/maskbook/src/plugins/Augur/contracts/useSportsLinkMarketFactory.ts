@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
-import SportsLinkMarketFactoryABI from '@masknet/contracts/abis/AugurSportsLinkMarketFactory.json'
-import type { AugurSportsLinkMarketFactory } from '@masknet/contracts/types/AugurSportsLinkMarketFactory'
+import SportsLinkMarketFactoryABI from '@masknet/web3-contracts/abis/AugurSportsLinkMarketFactory.json'
+import type { AugurSportsLinkMarketFactory } from '@masknet/web3-contracts/types/AugurSportsLinkMarketFactory'
 import { useContract } from '@masknet/web3-shared'
 
 export function useSportsLinkMarketFactory(address: string) {

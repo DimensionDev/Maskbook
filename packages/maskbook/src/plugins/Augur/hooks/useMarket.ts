@@ -11,7 +11,7 @@ import { deriveSportMarketInfo, getSport, getTeam } from '../utils'
 export function useFetchMarket(address: string, id: string, link: string) {
     const sportLinkMarekFactoryContract = useSportsLinkMarketFactory(address)
     const { AMM_FACTORY_ADDRESS, GRAPH_URL } = useAugurConstants()
-    const ammMarekFactoryContract = useAMMFactory(AMM_FACTORY_ADDRESS)
+    const ammMarekFactoryContract = useAMMFactory(AMM_FACTORY_ADDRESS ?? '')
 
     return useAsyncRetry(async () => {
         if (!sportLinkMarekFactoryContract || !ammMarekFactoryContract || !GRAPH_URL) return

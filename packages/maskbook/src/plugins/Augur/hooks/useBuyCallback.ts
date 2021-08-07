@@ -23,7 +23,7 @@ export function useBuyCallback(
     token?: FungibleTokenDetailed,
 ) {
     const { AMM_FACTORY_ADDRESS } = useAugurConstants()
-    const ammContract = useAMMFactory(AMM_FACTORY_ADDRESS)
+    const ammContract = useAMMFactory(AMM_FACTORY_ADDRESS ?? '')
 
     const account = useAccount()
     const nonce = useNonce()

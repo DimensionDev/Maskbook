@@ -79,12 +79,12 @@ export const estimateSellTrade = (
     inputDisplayAmount: string,
     outcome: AMMOutcome,
     userBalances: string[],
-    shareToken: FungibleTokenDetailed,
+    shareTokenDecimals: number,
     fee: string,
 ): EstimateTradeResult | undefined => {
     if (!inputDisplayAmount || !new BN(inputDisplayAmount).gte(0)) return
 
-    const amount = formatAmount(inputDisplayAmount, shareToken.decimals)
+    const amount = formatAmount(inputDisplayAmount, shareTokenDecimals)
     const decimalFee = formatBalance(fee, SWAP_FEE_DECIMALS)
 
     const [setsOut, undesirableTokensInPerOutcome] = calcSellCompleteSets(
@@ -97,7 +97,7 @@ export const estimateSellTrade = (
     )
 
     let maxSellAmount = '0'
-    const completeSets = formatBalance(setsOut, shareToken.decimals)
+    const completeSets = formatBalance(setsOut, shareTokenDecimals)
     const tradeFees = new BN(inputDisplayAmount).times(new BN(decimalFee)).toString()
 
     const displayAmount = new BN(inputDisplayAmount)
@@ -106,7 +106,7 @@ export const estimateSellTrade = (
     const userShares = userBalances ? new BN(userBalances[outcome.id] || '0') : '0'
     const priceImpact = averagePrice.minus(price).times(100).toFixed(4)
     const ratePerCash = new BN(completeSets).div(displayAmount).toFixed(6)
-    const displayShares = formatBalance(userShares, shareToken.decimals)
+    const displayShares = formatBalance(userShares, shareTokenDecimals)
     const sumUndesirable = (undesirableTokensInPerOutcome || []).reduce((p, u) => p.plus(new BN(u)), new BN(0))
     const canSellAll = new BN(amount).minus(sumUndesirable).abs()
     const remainingShares = new BN(displayShares || '0').minus(displayAmount)
@@ -294,6 +294,10 @@ const getMarketOutcome = (sportId: string, sportsMarketType: number, outcomeId: 
         return ''
     }
     return data.outcomes[outcomeId]
+}
+
+export const getRawFee = (swapFee: string) => {
+    return formatAmount(new BN(swapFee ?? ''), SWAP_FEE_DECIMALS - 2)
 }
 
 const decodeOutcomes = (

@@ -977,5 +977,7 @@
     "plugin_augur_select_outcome": "Select an Outcome",
     "plugin_augur_winner": "Winner",
     "plugin_augur_sell_too_low": "Amount is too low",
-    "augur_add_liquidity": "Add Liquidity"
+    "plugin_augur_add_liquidity": "Add Liquidity",
+    "plugin_augur_remove_liquidity": "Remove Liquidity",
+    "plugin_augur_insufficient_balance": "Insufficient Balance"
 }
