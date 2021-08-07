@@ -28,4 +28,3 @@ export function createWeb3({
             unreachable(providerType)
     }
 }
-

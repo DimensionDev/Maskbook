@@ -9,7 +9,7 @@ import { DataProvider, TradeProvider } from '@masknet/public-api'
 /**
  * The slippage tolerance of trader
  */
-export const currentSlippageToleranceSettings = createGlobalSettings<number>(
+export const currentSlippageSettings = createGlobalSettings<number>(
     `${PLUGIN_IDENTIFIER}+slippageTolerance`,
     SLIPPAGE_TOLERANCE_DEFAULT,
     {
@@ -50,7 +50,7 @@ export const currentTradeProviderSettings = createGlobalSettings<TradeProvider>(
 
 export const ethereumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_IDENTIFIER}+eth+tradeProvider`,
-    TradeProvider.UNISWAP,
+    TradeProvider.UNISWAP_V2,
     { primary: () => '' },
 )
 

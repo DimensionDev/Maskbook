@@ -120,7 +120,7 @@ export function useTradeContext(tradeProvider: TradeProvider) {
             case TradeProvider.DODO:
                 return {
                     TYPE: tradeProvider,
-                    IS_UNISWAP_LIKE: false,
+                    IS_UNISWAP_V2_LIKE: false,
                     GRAPH_API: '',
                     INIT_CODE_HASH: '',
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).DODO_EXCHANGE_PROXY_ADDRESS,

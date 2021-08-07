@@ -19,7 +19,7 @@ import { TradeProvider, ZrxTradePool } from '../../types'
 import { SelectPoolPanel } from './SelectPoolPanel'
 import { SlippageSlider } from './SlippageSlider'
 import {
-    currentSlippageToleranceSettings,
+    currentSlippageSettings,
     currentTradeProviderSettings,
     getCurrentTradeProviderGeneralSettings,
 } from '../../settings'
@@ -57,7 +57,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const provider = useValueRef(currentTradeProviderSettings)
-    const slippage = useValueRef(currentSlippageToleranceSettings)
+    const slippage = useValueRef(currentSlippageSettings)
     const { pools } = useTradeProviderSettings(provider)
 
     //#region remote controlled dialog
@@ -66,7 +66,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
 
     const onReset = useCallback(() => {
         currentTradeProviderSettings.value = TradeProvider.UNISWAP_V2
-        currentSlippageToleranceSettings.value = SLIPPAGE_TOLERANCE_DEFAULT
+        currentSlippageSettings.value = SLIPPAGE_TOLERANCE_DEFAULT
         if (provider === TradeProvider.ZRX)
             getCurrentTradeProviderGeneralSettings(provider).value = stringify({
                 pools: getEnumAsArray(ZrxTradePool).map((x) => x.value),
@@ -90,7 +90,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                     <SlippageSlider
                                         value={slippage}
                                         onChange={(tolerance) => {
-                                            currentSlippageToleranceSettings.value = tolerance
+                                            currentSlippageSettings.value = tolerance
                                         }}
                                     />
                                 </AccordionDetails>
@@ -106,7 +106,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                     <SlippageSlider
                                         value={slippage}
                                         onChange={(tolerance) => {
-                                            currentSlippageToleranceSettings.value = tolerance
+                                            currentSlippageSettings.value = tolerance
                                         }}
                                     />
                                 </AccordionDetails>
