@@ -6,8 +6,7 @@ import { TradeProvider, TradeStrategy } from '../types'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
 import { useV2Trade as useUnswapV2Trade, useV3Trade as useUnswapV3Trade } from './uniswap/useTrade'
-import { useV2TradeComputed as useUniswapV2TradeComputed } from './uniswap/useV2TradeComputed'
-import { useV3TradeComputed as useUniswapV3TradeComputed } from './uniswap/useV3TradeComputed'
+import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeComputed'
 import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
 import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
 import { useTradeComputed as useDODOTradeComputed } from './dodo/useTradeComputed'
@@ -52,17 +51,17 @@ export function useTradeComputed(
         inputToken,
         outputToken,
     )
-    const uniswapV2 = useUniswapV2TradeComputed(uniswapV2_.value, inputToken, outputToken)
+    const uniswapV2 = useUniswapTradeComputed(uniswapV2_.value, inputToken, outputToken)
 
     // uniswap-v3 like providers
     const uniswapV3_ = useUnswapV3Trade(
         strategy,
-        context?.IS_UNISWAP_V2_LIKE ? inputAmount_ : '0',
-        context?.IS_UNISWAP_V2_LIKE ? outputAmount_ : '0',
+        context?.IS_UNISWAP_V3_LIKE ? inputAmount_ : '0',
+        context?.IS_UNISWAP_V3_LIKE ? outputAmount_ : '0',
         inputToken,
         outputToken,
     )
-    const uniswapV3 = useUniswapV3TradeComputed(uniswapV3_.value, inputToken, outputToken)
+    const uniswapV3 = useUniswapTradeComputed(uniswapV3_.value, inputToken, outputToken)
 
     // zrx
     const zrx_ = useZrxTrade(

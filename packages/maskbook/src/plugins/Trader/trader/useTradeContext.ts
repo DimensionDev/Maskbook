@@ -36,7 +36,7 @@ export function useTradeContext(tradeProvider: TradeProvider) {
             case TradeProvider.UNISWAP_V3:
                 return {
                     TYPE: tradeProvider,
-                    IS_UNISWAP_V2_LIKE: false,
+                    IS_UNISWAP_V3_LIKE: true,
                     GRAPH_API: getTraderConstants(chainId).UNISWAP_V2_THEGRAPH,
                     INIT_CODE_HASH: getTraderConstants(chainId).UNISWAP_V2_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_V2_ROUTER_ADDRESS,

@@ -1,18 +1,19 @@
 import { ZERO, FungibleTokenDetailed } from '@masknet/web3-shared'
-import type { Trade } from '@uniswap/v2-sdk'
+import { Trade as V2Trade } from '@uniswap/v2-sdk'
+import type { Trade as V3Trade } from '@uniswap/v3-sdk'
 import { Currency, TradeType } from '@uniswap/sdk-core'
 import { uniswapCurrencyAmountTo, uniswapPercentTo, uniswapPriceTo, uniswapTokenTo } from '../../helpers'
 import { TradeComputed, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
-import { useV2TradeBreakdown } from './useV2TradeBreakdown'
+import { useTradeBreakdown } from './useTradeBreakdown'
 
-export function useV2TradeComputed(
-    trade: Trade<Currency, Currency, TradeType> | null,
+export function useTradeComputed(
+    trade: V2Trade<Currency, Currency, TradeType> | V3Trade<Currency, Currency, TradeType> | null,
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
-): TradeComputed<Trade<Currency, Currency, TradeType>> | null {
+): TradeComputed<V2Trade<Currency, Currency, TradeType> | V3Trade<Currency, Currency, TradeType>> | null {
     const slippage = useSlippageTolerance()
-    const breakdown = useV2TradeBreakdown(trade)
+    const breakdown = useTradeBreakdown(trade)
 
     if (!trade) return null
 
@@ -25,7 +26,7 @@ export function useV2TradeComputed(
         // @ts-ignore
         executionPrice: uniswapPriceTo(trade.executionPrice),
         priceImpact: uniswapPercentTo(breakdown?.priceImpact ?? trade.priceImpact),
-        path: trade.route.path.map((x) => [uniswapTokenTo(x)]),
+        path: trade instanceof V2Trade ? trade.route.path.map((x) => [uniswapTokenTo(x)]) : [],
         maximumSold: uniswapCurrencyAmountTo(trade.maximumAmountIn(slippage)),
         minimumReceived: uniswapCurrencyAmountTo(trade.minimumAmountOut(slippage)),
         fee: breakdown?.realizedLPFee ? uniswapCurrencyAmountTo(breakdown.realizedLPFee) : ZERO,

@@ -29,13 +29,6 @@ export function useV3SwapPools(
             }, []),
         [allCurrencyCombinations],
     )
-
-    console.log('DEBUG: useV3SwapPools')
-    console.log({
-        allCurrencyCombinations,
-        allCurrencyCombinationsWithAllFees,
-    })
-
     const pools = usePools(allCurrencyCombinationsWithAllFees)
 
     return useMemo(() => {
