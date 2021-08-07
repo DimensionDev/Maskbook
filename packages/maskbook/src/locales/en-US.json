@@ -970,6 +970,10 @@
     "plugin_augur_avg_price": "Average Price",
     "plugin_augur_est_shares": "Estimated Shares",
     "plugin_augur_max_profit": "Max Profit",
-    "plugin_augur_est_fee": "Estimated Fees",
+    "plugin_augur_est_buy_fee": "Estimated Fees",
+    "plugin_augur_est_sell_fee": "Estimated Fees (Shares)",
+    "plugin_augur_receive_amount": "Amount You'll Recieve",
+    "plugin_augur_remaining_shares": "Remaining Shares",
+    "plugin_augur_select_outcome": "Select an Outcome",
     "plugin_augur_winner": "Winner"
 }

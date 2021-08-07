@@ -29,7 +29,6 @@ export function useFetchMarket(address: string, id: string, link: string) {
         const balances = await ammMarekFactoryContract.methods.getPoolBalances(address, id).call()
         const weights = await ammMarekFactoryContract.methods.getPoolWeights(address, id).call()
         const shareFactor = await sportLinkMarekFactoryContract.methods.shareFactor().call()
-        console.log(weights)
         const [, shareTokens, rawEndDate, winner, , , ,] = await sportLinkMarekFactoryContract.methods
             .getMarket(id)
             .call()

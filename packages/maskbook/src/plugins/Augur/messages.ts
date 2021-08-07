@@ -16,8 +16,21 @@ type BuyDialogUpdated =
           open: false
       }
 
+type SellDialogUpdated =
+    | {
+          open: true
+          market: Market
+          outcome: AMMOutcome
+          userBalances: string[]
+          cashToken: FungibleTokenDetailed
+      }
+    | {
+          open: false
+      }
+
 interface AugurMessages {
-    ConfirmDialogUpdated: BuyDialogUpdated
+    BuyDialogUpdated: BuyDialogUpdated
+    SellDialogUpdated: SellDialogUpdated
     rpc: unknown
 }
 

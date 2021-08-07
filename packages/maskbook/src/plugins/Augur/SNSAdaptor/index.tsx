@@ -11,6 +11,7 @@ import { escapeRegExp } from 'lodash-es'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ChainId } from '@masknet/web3-shared'
 import { BuyDialog } from './BuyDialog'
+import { SellDialog } from './SellDialog'
 
 function createMatchLink() {
     return new RegExp(`${escapeRegExp(BASE_URL.concat('/#!/market?id='))}([x0-9A-Fa-f]+)-([0-9]+)$`)
@@ -49,7 +50,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer link={market.link} address={market.address} id={market.id} />
     },
     GlobalInjection: function Component() {
-        return <BuyDialog />
+        return (
+            <>
+                <BuyDialog />
+                <SellDialog />
+            </>
+        )
     },
 }
 

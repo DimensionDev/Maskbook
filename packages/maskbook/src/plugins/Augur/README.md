@@ -4,10 +4,11 @@ This plugin fetch and show [Augur](https://www.augur.net/) prediction markets al
 
 ## Feature Set
 
-- [] Detect Augur URL
-- [] Show market info
+- [x] Detect Augur URL
+- [x]] Show market info
+- [x] Buy/Sell
 - [] Draw market chart
-- [] Buy/Sell
+- [] Add/Remove Liquidty
 
 ## Related projects
 

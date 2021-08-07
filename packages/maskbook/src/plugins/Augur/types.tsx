@@ -93,7 +93,7 @@ export interface Trade {
 export interface EstimateTradeResult {
     averagePrice: string
     outputValue: string
-    maxProfit: string
+    maxProfit?: string
     tradeFees: string
     remainingShares?: string
     ratePerCash: string

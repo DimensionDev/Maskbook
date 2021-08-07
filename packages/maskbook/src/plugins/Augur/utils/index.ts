@@ -23,7 +23,7 @@ import {
     SWAP_FEE_DECIMALS,
 } from '../constants'
 import { formatAmount, formatBalance, FungibleTokenDetailed } from '@masknet/web3-shared'
-import { estimateBuy } from './bmath'
+import { calcSellCompleteSets, estimateBuy } from './bmath'
 
 export const getTeam = (id: string) => {
     return (Teams as TeamsInterface)[id]
@@ -71,6 +71,61 @@ export const estimateBuyTrade = (
         maxProfit,
         ratePerCash,
         priceImpact,
+    }
+}
+
+export const estimateSellTrade = (
+    amm: AMMExchange,
+    inputDisplayAmount: string,
+    outcome: AMMOutcome,
+    userBalances: string[],
+    shareToken: FungibleTokenDetailed,
+    fee: string,
+): EstimateTradeResult | undefined => {
+    if (!inputDisplayAmount || !new BN(inputDisplayAmount).gte(0)) return
+
+    const amount = formatAmount(inputDisplayAmount, shareToken.decimals)
+    const decimalFee = formatBalance(fee, SWAP_FEE_DECIMALS)
+
+    const [setsOut, undesirableTokensInPerOutcome] = calcSellCompleteSets(
+        amm.shareFactor,
+        outcome.id,
+        amount,
+        amm.balances,
+        amm.weights,
+        fee,
+    )
+
+    let maxSellAmount = '0'
+    const completeSets = formatBalance(setsOut, shareToken.decimals)
+    const tradeFees = new BN(inputDisplayAmount).times(new BN(decimalFee)).toString()
+
+    const displayAmount = new BN(inputDisplayAmount)
+    const averagePrice = new BN(completeSets).div(displayAmount)
+    const price = new BN(outcome.rate)
+    const userShares = userBalances ? new BN(userBalances[outcome.id] || '0') : '0'
+    const priceImpact = averagePrice.minus(price).times(100).toFixed(4)
+    const ratePerCash = new BN(completeSets).div(displayAmount).toFixed(6)
+    const displayShares = formatBalance(userShares, shareToken.decimals)
+    const sumUndesirable = (undesirableTokensInPerOutcome || []).reduce((p, u) => p.plus(new BN(u)), new BN(0))
+    const canSellAll = new BN(amount).minus(sumUndesirable).abs()
+    const remainingShares = new BN(displayShares || '0').minus(displayAmount)
+
+    if (remainingShares.isLessThan(0)) return
+    if (canSellAll.gte(new BN(amm.shareFactor))) {
+        maxSellAmount = formatBalance(sumUndesirable)
+    }
+
+    return {
+        outputValue: completeSets,
+        tradeFees,
+        averagePrice: averagePrice.toFixed(2),
+        maxProfit: undefined,
+        ratePerCash,
+        remainingShares: remainingShares.toFixed(6),
+        priceImpact,
+        outcomeShareTokensIn: undesirableTokensInPerOutcome, // just a pass through to sell trade call
+        maxSellAmount,
     }
 }
 

@@ -15,12 +15,12 @@ import {
 import { useAMMFactory } from '../contracts/useAMMFactory'
 import type { AMMOutcome, Market } from '../types'
 
-export function useBuyCallback(
+export function useSellCallback(
     amount: string,
-    minTokenOut: string,
     market?: Market,
     outcome?: AMMOutcome,
     token?: FungibleTokenDetailed,
+    shareTokensIn?: string[],
 ) {
     const { AMM_FACTORY_ADDRESS } = useAugurConstants()
     const ammContract = useAMMFactory(AMM_FACTORY_ADDRESS)
@@ -28,18 +28,18 @@ export function useBuyCallback(
     const account = useAccount()
     const nonce = useNonce()
     const gasPrice = useGasPrice()
-    const [buyState, setBuyState] = useTransactionState()
+    const [sellState, setSellState] = useTransactionState()
 
-    const buyCallback = useCallback(async () => {
-        if (!token || !ammContract || !market || !outcome) {
-            setBuyState({
+    const sellCallback = useCallback(async () => {
+        if (!token || !ammContract || !market || !outcome || !shareTokensIn) {
+            setSellState({
                 type: TransactionStateType.UNKNOWN,
             })
             return
         }
 
         // pre-step: start waiting for provider to confirm tx
-        setBuyState({
+        setSellState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
@@ -51,10 +51,10 @@ export function useBuyCallback(
             nonce,
         }
         const estimatedGas = await ammContract.methods
-            .buy(market.address, market.id, outcome.id, amount, minTokenOut)
+            .sellForCollateral(market.address, market.id, outcome.id, shareTokensIn, '0')
             .estimateGas(config)
             .catch((error) => {
-                setBuyState({
+                setSellState({
                     type: TransactionStateType.FAILED,
                     error,
                 })
@@ -64,34 +64,34 @@ export function useBuyCallback(
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
             const promiEvent = ammContract.methods
-                .buy(market.address, market.id, outcome.id, amount, minTokenOut)
+                .sellForCollateral(market.address, market.id, outcome.id, shareTokensIn, '0')
                 .send({
                     gas: addGasMargin(estimatedGas).toFixed(),
                     ...config,
                 })
             promiEvent
                 .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setBuyState({
+                    setSellState({
                         type: TransactionStateType.HASH,
                         hash,
                     })
                     resolve(hash)
                 })
                 .on(TransactionEventType.ERROR, (error) => {
-                    setBuyState({
+                    setSellState({
                         type: TransactionStateType.FAILED,
                         error,
                     })
                     reject(error)
                 })
         })
-    }, [gasPrice, nonce, AMM_FACTORY_ADDRESS, account, amount, token, minTokenOut, market, outcome])
+    }, [gasPrice, nonce, AMM_FACTORY_ADDRESS, account, amount, token, shareTokensIn, market, outcome])
 
     const resetCallback = useCallback(() => {
-        setBuyState({
+        setSellState({
             type: TransactionStateType.UNKNOWN,
         })
     }, [])
 
-    return [buyState, buyCallback, resetCallback] as const
+    return [sellState, sellCallback, resetCallback] as const
 }

@@ -19,7 +19,6 @@ import { useCallback } from 'react'
 import { FungibleTokenDetailed, useTokensBalance } from '@masknet/web3-shared'
 import { RefreshIcon } from '@masknet/icons'
 import BigNumber from 'bignumber.js'
-import { MIN_SELL_AMOUNT } from '../constants'
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
     focusVisible?: string
@@ -166,7 +165,10 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
     const [isBuy, setIsBuy] = useState(true)
     const [selectedOutcome, setSelectedOutcome] = useState<AMMOutcome>()
 
-    const { setDialog: openBuyDialog } = useRemoteControlledDialog(PluginAugurMessages.events.ConfirmDialogUpdated)
+    const { value: rawBalances, loading, error, retry } = useTokensBalance(market.outcomes.map((x) => x.shareToken))
+    const balances = rawBalances?.map((x: string) => new BigNumber(x))
+
+    const { setDialog: openBuyDialog } = useRemoteControlledDialog(PluginAugurMessages.events.BuyDialogUpdated)
     const onBuy = useCallback(() => {
         if (!selectedOutcome) return
         openBuyDialog({
@@ -177,10 +179,20 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
         })
     }, [market, openBuyDialog, selectedOutcome, isBuy])
 
-    const { value: rawBalances, loading, error, retry } = useTokensBalance(market.outcomes.map((x) => x.shareToken))
-    const balances = rawBalances?.map((x: string) => new BigNumber(x))
+    const { setDialog: openSellDialog } = useRemoteControlledDialog(PluginAugurMessages.events.SellDialogUpdated)
+    const onSell = useCallback(() => {
+        if (!selectedOutcome || !rawBalances) return
+        openSellDialog({
+            open: true,
+            market: market,
+            outcome: selectedOutcome,
+            userBalances: rawBalances,
+            cashToken: cashToken,
+        })
+    }, [market, openBuyDialog, selectedOutcome, isBuy, rawBalances])
 
     const validationMessage = useMemo(() => {
+        if (!selectedOutcome) return t('plugin_augur_select_outcome')
         if (isBuy) {
             if (
                 !market.ammExchange ||
@@ -189,7 +201,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
             )
                 return t('plugin_trader_error_insufficient_lp')
         } else {
-            if (selectedOutcome && !!balances && balances[selectedOutcome.id].isLessThan(MIN_SELL_AMOUNT))
+            if (selectedOutcome && !!balances && balances[selectedOutcome.id].isLessThanOrEqualTo(0))
                 return t('error_insufficient_balance')
         }
         return ''
@@ -282,7 +294,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                             fullWidth
                             color="primary"
                             disabled={!!validationMessage}
-                            onClick={isBuy ? onBuy : () => {}}>
+                            onClick={isBuy ? onBuy : onSell}>
                             {validationMessage || isBuy ? t('buy') : t('sell')}
                         </Button>
                     </Grid>

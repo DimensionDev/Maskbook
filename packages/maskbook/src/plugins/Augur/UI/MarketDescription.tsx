@@ -53,7 +53,7 @@ export const MarketDescription = (props: MarketDescriptionProps) => {
 
     const cleanDescription = getResolutionRules(market).join('\n\n')
     const [expanded, setExpanded] = useState(cleanDescription.length < MARKET_DESCRIPTION_LIMIT)
-    console.log(market.ammExchange)
+
     return (
         <div className={classes.root}>
             <Grid container direction="row" wrap="nowrap" className={classes.info}>

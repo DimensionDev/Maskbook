@@ -19,4 +19,5 @@ export const AWAY_TEAM_OUTCOME = 1
 export const MARKET_DESCRIPTION_LIMIT = 210
 export const FALLBACK_SWAP_FEE = 1.5
 export const SWAP_FEE_DECIMALS = 18
+export const SHARE_DECIMALS = 18
 export const MIN_SELL_AMOUNT = 10 ** 14
