@@ -40,16 +40,22 @@ export function injectEnhancedProfile(signal: AbortSignal) {
     injectEnhancedProfilePageState(signal)
 }
 
-const useEnhancedProfileStyles = makeStyles<
-    Theme,
-    { color: string; font: string; fontSize: string; padding: string; height: string; activeColor: string }
->((theme) => ({
+interface StyleProps {
+    color: string
+    font: string
+    fontSize: string
+    padding: string
+    height: string
+    activeColor: string
+}
+
+const useEnhancedProfileStyles = makeStyles<Theme, StyleProps>((theme) => ({
     tab: {
         '&:hover': {
-            backgroundColor: (props) => new Color(props.activeColor).alpha(0.1).toString(),
+            backgroundColor: (props: StyleProps) => new Color(props.activeColor).alpha(0.1).toString(),
             cursor: 'pointer',
         },
-        height: (props) => props.height,
+        height: (props: StyleProps) => props.height,
     },
     button: {
         display: 'flex',
@@ -57,17 +63,17 @@ const useEnhancedProfileStyles = makeStyles<
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
-        padding: (props) => props.padding,
+        padding: (props: StyleProps) => props.padding,
         fontWeight: 700,
-        color: (props) => props.color,
-        font: (props) => props.font,
-        fontSize: (props) => props.fontSize,
+        color: (props: StyleProps) => props.color,
+        font: (props: StyleProps) => props.font,
+        fontSize: (props: StyleProps) => props.fontSize,
         '&:hover': {
-            color: (props) => props.activeColor,
+            color: (props: StyleProps) => props.activeColor,
         },
     },
     hot: {
-        color: (props) => props.activeColor,
+        color: (props: StyleProps) => props.activeColor,
     },
     active: {
         dispaly: 'inline-flex',
@@ -77,7 +83,7 @@ const useEnhancedProfileStyles = makeStyles<
         minWidth: 56,
         alignSelf: 'center',
         height: 4,
-        backgroundColor: (props) => props.activeColor,
+        backgroundColor: (props: StyleProps) => props.activeColor,
     },
 }))
 export interface EnhancedProfileTabProps {}
@@ -136,21 +142,26 @@ const useBind = (handler: () => void) => {
     }, [tabList, addEventListener, removeEventListener, handler])
 }
 
-export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
+function getStyle() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
     const eleForegroundColorStyle = searchForegroundColorSelector().evaluate()
     const foregroundColorStyle = eleForegroundColorStyle
         ? window.getComputedStyle(eleForegroundColorStyle)
         : EMPTY_STYLE
-    const classes = useEnhancedProfileStyles({
+
+    return {
         color: style.color,
         font: style.font,
         fontSize: style.fontSize,
         padding: style.paddingBottom,
         height: style.height,
         activeColor: foregroundColorStyle.color,
-    })
+    } as StyleProps
+}
+export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
+    const style = getStyle()
+    const classes = useEnhancedProfileStyles(style)
 
     const [active, setActive] = useState(false)
 
@@ -167,21 +178,19 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
 
     const tab = searchProfileActiveTabSelector().evaluate()
     useEffect(() => {
-        const clickEvent = () => {
+        const onClick = () => {
             resetStatus()
             setActive(false)
         }
 
-        tab?.addEventListener('click', clickEvent, { once: true })
-        return () => tab?.removeEventListener('click', clickEvent)
+        tab?.addEventListener('click', onClick, { once: true })
+        return () => tab?.removeEventListener('click', onClick)
     }, [tab, resetStatus])
 
     const onClick = useCallback(() => {
         onOpen()
         clearStatus()
     }, [clearStatus, onOpen])
-
-    if (!eleTab) return null
 
     return (
         <div key="nfts" className={classes.tab}>
@@ -201,6 +210,10 @@ export function EnhancedProfileaPage() {
         MaskMessage.events.profileNFTsPageUpdate.on((data) => {
             setShow(data.show)
         })
+        return () =>
+            MaskMessage.events.profileNFTsPageUpdate.off((data) => {
+                setShow(false)
+            })
     }, [])
 
     const resolvedAddress = useEthereumAddress()
