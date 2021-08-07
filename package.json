@@ -37,7 +37,6 @@
     "@material-ui/system": "5.0.0-alpha.34",
     "@types/react": "^17.0.14",
     "@types/react-dom": "^17.0.9",
-    "@uniswap/v3-sdk": "3.0.0-alpha.9",
     "i18next": "^20.3.4",
     "idb": "5.0.8",
     "jss": "10.5.1",

@@ -44,8 +44,10 @@ export function useV2TradeBreakdown(trade: Trade<Currency, Currency, TradeType> 
         return {
             realizedLPFeePercent,
             realizedLPFeeAmount,
-            realizedLPFee: trade.inputAmount.multiply(realizedLPFeePercent),
-            priceImpact: trade.priceImpact.subtract(realizedLPFeePercent),
+
+            // different ver of @uniswap/sdk-core were userd by @uniswap/v2-sdk and @uniswap/v3-sdk
+            realizedLPFee: trade.inputAmount.multiply(realizedLPFeePercent) as CurrencyAmount<Currency>,
+            priceImpact: trade.priceImpact.subtract(realizedLPFeePercent) as Percent,
         }
     }, [trade])
 }

@@ -108,6 +108,7 @@ function config(opts: {
                 '@masknet/plugin-wallet': require.resolve('../plugins/Wallet/src/index.ts'),
                 '@masknet/external-plugin-previewer': require.resolve('../external-plugin-previewer/src/index.tsx'),
                 '@masknet/web3-shared': require.resolve('../web3-shared/src/index.ts'),
+                '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
             },
             // Polyfill those Node built-ins
             fallback: {

@@ -22,6 +22,7 @@ export function useV2TradeComputed(
         outputToken,
         inputAmount: uniswapCurrencyAmountTo(trade.inputAmount),
         outputAmount: uniswapCurrencyAmountTo(trade.outputAmount),
+        // @ts-ignore
         executionPrice: uniswapPriceTo(trade.executionPrice),
         priceImpact: uniswapPercentTo(breakdown?.priceImpact ?? trade.priceImpact),
         path: trade.route.path.map((x) => [uniswapTokenTo(x)]),
