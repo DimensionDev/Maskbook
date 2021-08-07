@@ -2,7 +2,7 @@ import { MaskDialog } from '@masknet/theme'
 import { DialogContent } from '@material-ui/core'
 import { Services } from '../../../API'
 import { useDashboardI18N } from '../../../locales'
-import { TradeProvider } from '../../../type'
+import { TradeProvider } from '@masknet/public-api'
 import {
     useBinanceNetworkTradeProvider,
     useEthereumNetworkTradeProvider,
