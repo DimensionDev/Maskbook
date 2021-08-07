@@ -3,7 +3,8 @@ import stringify from 'json-stable-stringify'
 import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
 import { PLUGIN_IDENTIFIER, SLIPPAGE_TOLERANCE_DEFAULT } from './constants'
-import { DataProvider, TradeProvider, ZrxTradePool } from './types'
+import { ZrxTradePool } from './types'
+import { DataProvider, TradeProvider } from '@masknet/public-api'
 
 /**
  * The slippage tolerance of trader

@@ -1,5 +1,6 @@
 import type BigNumber from 'bignumber.js'
-import { Currency, DataProvider, TradeProvider, WarningLevel, ZrxTradePool } from './types'
+import { Currency, WarningLevel, ZrxTradePool } from './types'
+import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { safeUnreachable, unreachable } from '@dimensiondev/kit'
 import {
     BIPS_BASE,

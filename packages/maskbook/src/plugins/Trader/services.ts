@@ -10,7 +10,7 @@ import {
     binanceNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
 } from './settings'
-import { DataProvider, TradeProvider } from './types'
+import { DataProvider, TradeProvider } from '@masknet/public-api'
 
 currentChainIdSettings.addListener((chainId: ChainId) => {
     const networkType = getNetworkTypeFromChainId(chainId)

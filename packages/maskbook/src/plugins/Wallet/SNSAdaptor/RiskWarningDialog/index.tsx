@@ -4,12 +4,11 @@ import { useI18N } from '../../../../utils'
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh'
 import { getMaskColor, useSnackbar } from '@masknet/theme'
 import { useCallback } from 'react'
-import { WalletMessages } from '../../messages'
+import { WalletMessages, WalletRPC } from '../../messages'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useAccount } from '@masknet/web3-shared'
 import classnames from 'classnames'
 import { Trans } from 'react-i18next'
-import { confirmRiskWarning, RiskWaringStatus, setRiskWarningStatus } from '../../services'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -61,9 +60,7 @@ export function WalletRiskWarningDialog() {
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.walletRiskWarningDialogUpdated)
 
     const onClose = useCallback(async () => {
-        if (account) {
-            await setRiskWarningStatus(account, RiskWaringStatus.Unset)
-        }
+        if (account) await WalletRPC.setRiskWarningConfirmed(account, false)
         setDialog({ open: false, type: 'cancel' })
     }, [setDialog])
 
@@ -75,8 +72,7 @@ export function WalletRiskWarningDialog() {
             })
             return
         }
-
-        await confirmRiskWarning(account)
+        await WalletRPC.confirmRiskWarning(account)
         setDialog({ open: false, type: 'confirm' })
     }, [enqueueSnackbar, account, setDialog])
 

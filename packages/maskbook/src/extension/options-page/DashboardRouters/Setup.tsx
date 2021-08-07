@@ -249,37 +249,35 @@ export function CreatePersona() {
             primary={t('set_up_create_persona')}
             secondary={t('set_up_create_persona_hint')}
             content={
-                <>
-                    <TextField
-                        required
-                        autoFocus
-                        className={setupFormClasses.input}
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                e.preventDefault()
-                                if (!checkInputLengthExceed(name) && name.length > 0) {
-                                    createPersonaAndNext()
-                                }
+                <TextField
+                    required
+                    autoFocus
+                    className={setupFormClasses.input}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault()
+                            if (!checkInputLengthExceed(name) && name.length > 0) {
+                                createPersonaAndNext()
                             }
-                        }}
-                        label={t('name')}
-                        helperText={
-                            checkInputLengthExceed(name)
-                                ? t('input_length_exceed_prompt', {
-                                      name: t('persona_name').toLowerCase(),
-                                      length: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                                  })
-                                : undefined
                         }
-                        inputProps={{
-                            'data-testid': 'username_input',
-                            maxLength: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                        }}
-                        variant="outlined"
-                    />
-                </>
+                    }}
+                    label={t('name')}
+                    helperText={
+                        checkInputLengthExceed(name)
+                            ? t('input_length_exceed_prompt', {
+                                  name: t('persona_name').toLowerCase(),
+                                  length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                              })
+                            : undefined
+                    }
+                    inputProps={{
+                        'data-testid': 'username_input',
+                        maxLength: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                    }}
+                    variant="outlined"
+                />
             }
             actions={
                 <>
