@@ -117,6 +117,18 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: {},
                 } as TradeContext_
+            case TradeProvider.DODO:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_LIKE: false,
+                    GRAPH_API: '',
+                    INIT_CODE_HASH: '',
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).DODO_EXCHANGE_PROXY_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: '',
+                    AGAINST_TOKENS: {},
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: {},
+                } as TradeContext_
             default:
                 unreachable(tradeProvider)
         }

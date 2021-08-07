@@ -6,7 +6,7 @@ import { GameStatsView } from './GameStatsView'
 import { OtherPlayersView } from './OtherPlayersView'
 import { PersonalView } from './PersonalView'
 import { useGameContractAddress, useGameInfo } from '../hooks/useGameInfo'
-import type { GoodGhostingInfo } from '../types'
+import type { GameMetaData, GoodGhostingInfo } from '../types'
 import { usePoolData } from '../hooks/usePoolData'
 import { useOtherPlayerInfo } from '../hooks/useOtherPlayerInfo'
 import { TimelineTimer } from './TimelineTimer'
@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
         minHeight: 'unset',
         minWidth: 'unset',
     },
+    gameName: {
+        textAlign: 'center',
+    },
 }))
 
 enum GoodGhostingTab {
@@ -36,10 +39,12 @@ enum GoodGhostingTab {
     Everyone = 'Everyone',
 }
 
-interface PreviewCardProps {}
+interface PreviewCardProps {
+    id: string
+}
 
 export function PreviewCard(props: PreviewCardProps) {
-    const { value: addressInfo, error, loading, retry } = useGameContractAddress()
+    const { value: addressInfo, error, loading, retry } = useGameContractAddress(props.id)
 
     if (loading) {
         return <Typography color="textPrimary">Loading...</Typography>
@@ -55,15 +60,15 @@ export function PreviewCard(props: PreviewCardProps) {
             </Box>
         )
     }
-    return <PreviewCardWithGameAddress contracAddress={addressInfo.contractAddress} />
+    return <PreviewCardWithGameAddress gameData={addressInfo} />
 }
 
 interface PreviewCardWithGameAddressProps {
-    contracAddress: string
+    gameData: GameMetaData
 }
 
 export function PreviewCardWithGameAddress(props: PreviewCardWithGameAddressProps) {
-    const { value: info, error, loading, retry } = useGameInfo(props.contracAddress)
+    const { value: info, error, loading, retry } = useGameInfo(props.gameData)
 
     if (loading) {
         return <Typography color="textPrimary">Loading...</Typography>
@@ -99,6 +104,11 @@ function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
 
     return (
         <Card variant="outlined" className={classes.root} elevation={0}>
+            {props.info.gameName && (
+                <Typography className={classes.gameName} variant="h6" color="textPrimary">
+                    {props.info.gameName}
+                </Typography>
+            )}
             <TimelineTimer info={props.info} />
             <TabContext value={activeTab}>
                 <Tabs className={classes.tabs} value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>

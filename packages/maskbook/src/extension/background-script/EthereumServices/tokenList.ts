@@ -94,8 +94,8 @@ async function fetchCommonERC20TokensFromTokenList(
  * @param urls
  * @param chainId
  */
-function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.Mainnet) {
-    return urls.map(async (x) => {
+async function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.Mainnet) {
+    const allRequest = urls.map(async (x) => {
         if (x.includes('1inch')) {
             const tokens = await fetch1inchERC20TokensFromTokenList(x, chainId)
             return { tokens, weight: 0 }
@@ -104,6 +104,9 @@ function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.Mainnet
         const tokens = await fetchCommonERC20TokensFromTokenList(x, chainId)
         return { tokens, weight: x.includes('Mask-Token-List') ? 1 : 0 }
     })
+
+    const allListResponse = await Promise.allSettled(allRequest)
+    return allListResponse.map((x) => (x.status === 'fulfilled' ? x.value : { tokens: [], weight: 0 }))
 }
 
 /**
@@ -113,8 +116,7 @@ function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.Mainnet
  */
 export const fetchERC20TokensFromTokenLists = memoizePromise(
     async (urls: string[], chainId = ChainId.Mainnet): Promise<ERC20TokenDetailed[]> => {
-        const tokens = (await Promise.allSettled(fetchERC20TokensFromTokenList(urls, chainId)))
-            .map((x) => (x.status === 'fulfilled' ? x.value : { tokens: [], weight: 0 }))
+        const tokens = (await fetchERC20TokensFromTokenList(urls, chainId))
             .sort((a, b) => b.weight - a.weight)
             .flatMap((x) => x.tokens)
         const groupedToken = groupBy(tokens, (x) => x.address.toLowerCase())

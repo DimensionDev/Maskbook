@@ -7,6 +7,7 @@ import { RedPacketMetadataReader, renderWithRedPacketMetadata } from './helpers'
 import type { RedPacketJSONPayload } from '../types'
 import RedPacketDialog from './RedPacketDialog'
 import { RedPacketInPost } from './RedPacketInPost'
+import { ToolIconURLs } from '../../../resources/tool-icon'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -38,6 +39,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
     CompositionDialogEntry: {
         dialog: RedPacketDialog,
         label: { fallback: '💰 Red Packet' },
+    },
+    ToolbarEntry: {
+        ...ToolIconURLs.redpacket,
+        onClick: 'openCompositionEntry',
     },
 }
 

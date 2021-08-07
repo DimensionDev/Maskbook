@@ -10,6 +10,7 @@ import {
     CollectibleProvider,
 } from '../types'
 import { getChainDetailed } from '../utils'
+import urlcat from 'urlcat'
 
 export function resolveProviderName(providerType: ProviderType) {
     switch (providerType) {
@@ -89,29 +90,27 @@ export function resolveChainColor(chainId: ChainId) {
 export function resolveLinkOnExplorer(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) return ''
-    return chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
-        ? chainDetailed.explorers[0].url
-        : chainDetailed.infoURL
+    return chainDetailed.explorers?.[0]?.url ?? chainDetailed.infoURL
 }
 
 export function resolveTransactionLinkOnExplorer(chainId: ChainId, tx: string) {
-    return `${resolveLinkOnExplorer(chainId)}/tx/${tx}`
+    return urlcat(resolveLinkOnExplorer(chainId), '/tx/:tx', { tx })
 }
 
-export function resolveTokenLinkOnExplorer(token: NativeToken | ERC20Token | ERC721Token) {
-    return `${resolveLinkOnExplorer(token.chainId)}/token/${token.address}`
+export function resolveTokenLinkOnExplorer({ chainId, address }: NativeToken | ERC20Token | ERC721Token) {
+    return urlcat(resolveLinkOnExplorer(chainId), '/token/:address', { address })
 }
 
 export function resolveAddressLinkOnExplorer(chainId: ChainId, address: string): string {
-    return `${resolveLinkOnExplorer(chainId)}/address/${address}`
+    return urlcat(resolveLinkOnExplorer(chainId), '/address/:address', { address })
 }
 
 export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): string {
-    return `${resolveLinkOnExplorer(chainId)}/block/${block}`
+    return urlcat(resolveLinkOnExplorer(chainId), '/block/:block', { block })
 }
 
 export function resolveIPFSLink(ipfs: string): string {
-    return `https://ipfs.fleek.co/ipfs/${ipfs}`
+    return urlcat('https://ipfs.fleek.co/ipfs/:ipfs', { ipfs })
 }
 
 export function resolveCollectibleProviderLink(chainId: ChainId, provider: CollectibleProvider) {
@@ -127,11 +126,14 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: Colle
 export function resolveCollectibleLink(
     chainId: ChainId,
     provider: CollectibleProvider,
-    token: NonFungibleTokenDetailed,
+    { address, tokenId }: NonFungibleTokenDetailed,
 ) {
     switch (provider) {
         case CollectibleProvider.OPENSEAN:
-            return `${resolveCollectibleProviderLink(chainId, provider)}/assets/${token.address}/${token.tokenId}`
+            return urlcat(resolveCollectibleProviderLink(chainId, provider), '/assets/:address/:tokenId', {
+                address,
+                tokenId,
+            })
         default:
             unreachable(provider)
     }

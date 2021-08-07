@@ -8,9 +8,9 @@ import { TradeContext } from '../useTradeContext'
 import { usePairContracts } from '../../contracts/uniswap/usePairContract'
 
 export enum PairState {
-    NOT_EXISTS,
-    EXISTS,
-    INVALID,
+    NOT_EXISTS = 0,
+    EXISTS = 1,
+    INVALID = 2,
 }
 
 export type TokenPair = [Token, Token]

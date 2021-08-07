@@ -10,15 +10,17 @@ export interface Status {
     timestamp: string
 }
 
+export interface Currency {
+    id: number
+    name: string
+    symbol: string
+    token: string
+    space: string
+}
+
 //#region get all currency
-export function getAllCurrenies() {
-    return [] as {
-        id: number
-        name: string
-        symbol: string
-        token: string
-        space: string
-    }[]
+export function getAllCurrenies(): Currency[] {
+    return []
 }
 //#endregion
 
@@ -94,7 +96,7 @@ export async function getQuotesInfo(id: string, currency: string) {
             data: Record<string, QuotesInfo>
             status: Status
         }>
-    } catch (e) {
+    } catch {
         return {
             data: null,
         }
@@ -275,7 +277,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
             }
             status: Status
         }>
-    } catch (e) {
+    } catch {
         return {
             data: {
                 id,

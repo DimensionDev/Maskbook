@@ -3,7 +3,6 @@ import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/v2-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
-
 import {
     ChainId,
     createERC20Token,
@@ -17,14 +16,16 @@ import {
     useTokenBalance,
 } from '@masknet/web3-shared'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { TradeProvider } from '@masknet/public-api'
 import { TradeForm } from './TradeForm'
 import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
 import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
 import { TradeSummary } from './TradeSummary'
 import { ConfirmDialog } from './ConfirmDialog'
 import { TradeActionType } from '../../trader/useTradeState'
-import { Coin, SwapResponse, TokenPanelType, TradeComputed, TradeProvider } from '../../types'
-import { TradePairViewer } from '../uniswap/TradePairViewer'
+import { Coin, SwapResponse, SwapRouteData, TokenPanelType, TradeComputed } from '../../types'
+import { TradePairViewer as UniswapPairViewer } from '../uniswap/TradePairViewer'
+import { TradePairViewer as DODOPairViewer } from '../dodo/TradePairViewer'
 import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -322,10 +323,13 @@ export function Trader(props: TraderProps) {
                         />
                     ) : null}
                     {context?.IS_UNISWAP_V2_LIKE ? (
-                        <TradePairViewer
+                        <UniswapPairViewer
                             trade={tradeComputed as TradeComputed<Trade<Currency, Currency, TradeType>>}
                             provider={provider}
                         />
+                    ) : null}
+                    {TradeProvider.DODO === provider ? (
+                        <DODOPairViewer trade={tradeComputed as TradeComputed<SwapRouteData>} provider={provider} />
                     ) : null}
                 </>
             ) : null}

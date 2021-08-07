@@ -220,19 +220,13 @@ export function CompositionDialog(props: CompositionDialogProps) {
     }, [ITO2_CONTRACT_ADDRESS, onClose])
 
     return (
-        <>
-            <InjectedDialog
-                disableBackdropClick
-                open={props.open}
-                title={t('plugin_ito_display_name')}
-                onClose={onClose}>
-                <DialogContent>
-                    {step === ITOCreateFormPageStep.NewItoPage ? <AbstractTab height={540} {...tabProps} /> : null}
-                    {step === ITOCreateFormPageStep.ConfirmItoPage ? (
-                        <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={onDone} onClose={onClose} />
-                    ) : null}
-                </DialogContent>
-            </InjectedDialog>
-        </>
+        <InjectedDialog disableBackdropClick open={props.open} title={t('plugin_ito_display_name')} onClose={onClose}>
+            <DialogContent>
+                {step === ITOCreateFormPageStep.NewItoPage ? <AbstractTab height={540} {...tabProps} /> : null}
+                {step === ITOCreateFormPageStep.ConfirmItoPage ? (
+                    <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={onDone} onClose={onClose} />
+                ) : null}
+            </DialogContent>
+        </InjectedDialog>
     )
 }

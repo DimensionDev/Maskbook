@@ -10,8 +10,10 @@ import { useV2TradeComputed as useUniswapV2TradeComputed } from './uniswap/useV2
 import { useV3TradeComputed as useUniswapV3TradeComputed } from './uniswap/useV3TradeComputed'
 import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
 import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
+import { useTradeComputed as useDODOTradeComputed } from './dodo/useTradeComputed'
 import { useTrade as useZrxTrade } from './0x/useTrade'
 import { useTrade as useBalancerTrade } from './balancer/useTrade'
+import { useTrade as useDODOTrade } from './dodo/useTrade'
 import { unreachable } from '@dimensiondev/kit'
 import { TradeContext } from './useTradeContext'
 
@@ -89,6 +91,16 @@ export function useTradeComputed(
         outputToken,
     )
 
+    // dodo
+    const dodo_ = useDODOTrade(
+        strategy,
+        provider === TradeProvider.DODO ? inputAmount_ : '0',
+        provider === TradeProvider.DODO ? outputAmount_ : '0',
+        inputToken,
+        outputToken,
+    )
+    const dodo = useDODOTradeComputed(dodo_.value ?? null, strategy, inputToken, outputToken)
+
     if (nativeToken_.value)
         return {
             ...nativeToken_,
@@ -119,6 +131,11 @@ export function useTradeComputed(
             return {
                 ...balancer_,
                 value: balancer,
+            }
+        case TradeProvider.DODO:
+            return {
+                ...dodo_,
+                value: dodo,
             }
         default:
             unreachable(provider)

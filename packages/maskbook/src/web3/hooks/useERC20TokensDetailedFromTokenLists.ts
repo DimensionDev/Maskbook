@@ -6,9 +6,9 @@ import { EthereumAddress } from 'wallet.ts'
 import Services from '../../extension/service'
 
 export enum TokenListsState {
-    READY,
-    LOADING_TOKEN_LISTS,
-    LOADING_SEARCHED_TOKEN,
+    READY = 0,
+    LOADING_TOKEN_LISTS = 1,
+    LOADING_SEARCHED_TOKEN = 2,
 }
 
 export function useERC20TokensDetailedFromTokenLists(lists: string[], keyword: string = '') {

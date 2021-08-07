@@ -6,6 +6,7 @@
   },
   "include": ["./src/", "./stories/", "./src/**/*.json"],
   "references": [
+    { "path": "../public-api" },
     { "path": "../theme/" },
     { "path": "../maskbook/" },
     { "path": "../web3-shared/" },

@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => {
     }
 })
 
-export interface EthereumAccountButtonProps extends withClasses<never> {
+export interface EthereumAccountButtonProps extends withClasses<'root'> {
     disableNativeToken?: boolean
     ButtonProps?: Partial<ButtonProps>
 }

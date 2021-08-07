@@ -2,11 +2,14 @@ import { useContext } from 'react'
 import type { Trade } from '@uniswap/v2-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
 import { unreachable } from '@dimensiondev/kit'
-import { SwapQuoteResponse, SwapResponse, TradeComputed, TradeProvider } from '../types'
+import { TransactionStateType } from '@masknet/web3-shared'
+import { TradeProvider } from '@masknet/public-api'
+import type { SwapQuoteResponse, SwapResponse, SwapRouteSuccessResponse, TradeComputed } from '../types'
 import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback'
 import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback'
 import { useTradeCallback as useUniswapCallback } from './uniswap/useTradeCallback'
 import { useTradeCallback as useBalancerCallback } from './balancer/useTradeCallback'
+import { useTradeCallback as useDODOCallback } from './dodo/useTradeCallback'
 import { useRouterV2Contract as useUniswapRouterV2Contract } from '../contracts/uniswap/useRouterV2Contract'
 import { useRouterV2Contract as useSushiSwapRouterV2Contract } from '../contracts/sushiswap/useRouterV2Contract'
 import { useRouterV2Contract as useSashimiSwapRouterV2Contract } from '../contracts/sashimiswap/useRouterV2Contract'
@@ -16,7 +19,6 @@ import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxy
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { isNativeTokenWrapper } from '../helpers'
 import { TradeContext } from './useTradeContext'
-import { TransactionStateType } from '@masknet/web3-shared'
 
 export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeComputed<unknown> | null) {
     const uniswapRouterV2Contract = useUniswapRouterV2Contract()
@@ -37,6 +39,9 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
             : null
     const tradeComputedForZRX = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapQuoteResponse>) : null
     const tradeComputedForBalancer = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapResponse>) : null
+    const tradeComputedForDODO = !isNativeTokenWrapper_
+        ? (tradeComputed as TradeComputed<SwapRouteSuccessResponse>)
+        : null
 
     const uniswapV2 = useUniswapCallback(tradeComputedForUniswapV2Like, uniswapRouterV2Contract)
     const sushiswap = useUniswapCallback(tradeComputedForUniswapV2Like, sushiswapRouterV2Contract)
@@ -48,6 +53,7 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         exchangeProxyContract,
     )
     const zrx = useZrxCallback(provider === TradeProvider.ZRX ? tradeComputedForZRX : null)
+    const dodo = useDODOCallback(provider === TradeProvider.DODO ? tradeComputedForDODO : null)
     const nativeTokenWrapper = useNativeTokenWrapperCallback(tradeComputed as TradeComputed<NativeTokenWrapper>)
 
     // the trade is an ETH-WETH pair
@@ -58,7 +64,7 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         case TradeProvider.UNISWAP_V2:
             return uniswapV2
         case TradeProvider.UNISWAP_V3:
-            return [TransactionStateType.UNKNOWN, () => {}, () => {}] as const
+            return uniswapV2
         case TradeProvider.SUSHISWAP:
             return sushiswap
         case TradeProvider.SASHIMISWAP:
@@ -71,6 +77,8 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
             return zrx
         case TradeProvider.BALANCER:
             return balancer
+        case TradeProvider.DODO:
+            return dodo
         default:
             unreachable(provider)
     }

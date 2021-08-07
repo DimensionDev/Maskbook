@@ -295,6 +295,9 @@
     "wallet_import_keystore_content_placeholder": "",
     "wallet_import_keystore_password_label": "",
     "wallet_import_keystore_password_placeholder": "",
+    "wallet_risk_warning_dialog_title": "",
+    "wallet_risk_warning_no_select_wallet": "",
+    "wallet_risk_warning_content": "",
     "input_length_exceed_prompt": "{{name}}의 길이가 {{length}}를 초과하면 안 됩니다.",
     "relative_time_days_ago": "{{days}} 일 전",
     "relative_time_hours_ago": "{{hours}} 시간 전",
@@ -305,6 +308,7 @@
     "plugin_powered_by": "기술 지원",
     "plugin_wallet_select_a_token": "토큰을 선택하기",
     "plugin_wallet_connect_a_wallet": "월렛을 연결하기",
+    "plugin_wallet_confirm_risk_warning": "",
     "plugin_wallet_unlock_metamask": "MetaMask를 열기",
     "plugin_wallet_no_gas_fee": "가스비가 없습니다",
     "plugin_wallet_update_gas_fee": "가스비 업데이트 중...",
@@ -707,6 +711,7 @@
     "plugin_snapshot_download_report": "다운로드 리포트",
     "plugin_dhedge_managed_by": "관리자: <manager>{{managerName}}</manager>",
     "plugin_dhedge_manager_share": "풀의 <share>{{managerShare}}%</share> 홀드합니다.",
+    "plugin_dhedge_manager_share_more_than_50": "",
     "plugin_dhedge_value_managed": "VALUE MANAGED",
     "plugin_dhedge_lifetime_return": "LIFETIME RETURN",
     "plugin_dhedge_risk_factor": "RISK FACTOR",
@@ -790,5 +795,9 @@
     "plugin_good_ghosting_leave_game": "",
     "plugin_good_ghosting_early_withdraw_info": "",
     "plugin_good_ghosting_rules": "",
-    "plugin_good_ghosting_game_rules": ""
+    "plugin_good_ghosting_game_rules": "",
+    "plugin_good_ghosting_tx_fail": "",
+    "plugin_good_ghosting_tx_timeout": "",
+    "plugin_good_ghosting_something_went_wrong": "",
+    "plugin_good_ghosting_view_on_explorer": ""
 }

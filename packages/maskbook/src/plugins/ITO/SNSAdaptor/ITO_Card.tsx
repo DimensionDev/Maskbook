@@ -161,7 +161,7 @@ export function ITO_Card(props: ITO_CardProps) {
                             className={classes.button}
                             variant="contained"
                             disabled={
-                                Number.parseInt(packet.unlockTime) > Math.round(Date.now() / 1000) ||
+                                Number.parseInt(packet.unlockTime, 10) > Math.round(Date.now() / 1000) ||
                                 packet.claimable === '0'
                             }
                             onClick={onClaimButtonClick}>

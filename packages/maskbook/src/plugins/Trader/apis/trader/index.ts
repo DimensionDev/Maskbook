@@ -15,11 +15,12 @@ export async function getAvailableTraderProviders(type?: TagType, keyword?: stri
                 TradeProvider.SASHIMISWAP,
                 TradeProvider.ZRX,
                 TradeProvider.BALANCER,
+                TradeProvider.DODO,
             ]
         case NetworkType.Polygon:
-            return [TradeProvider.QUICKSWAP, TradeProvider.SUSHISWAP]
+            return [TradeProvider.QUICKSWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO]
         case NetworkType.Binance:
-            return [TradeProvider.PANCAKESWAP, TradeProvider.SUSHISWAP]
+            return [TradeProvider.PANCAKESWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO]
         case NetworkType.Arbitrum:
             return []
         default:

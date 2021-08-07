@@ -12,7 +12,7 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
 const useStyles = makeStyles((theme) => {
     return {
         card: {
-            marginTop: theme.spacing(1),
+            margin: theme.spacing(2, 0),
             width: '100%',
             boxSizing: 'border-box',
             border: `1px solid ${theme.palette.divider}`,

@@ -103,10 +103,10 @@ async function restoreAll(parsed: BackupFormat) {
                     } else {
                         await db.add(storeName, value, key)
                     }
-                } catch (e) {
+                } catch (error) {
                     console.error('Recover error when ', key, value, parsed)
                     // Error from IndexedDB transaction is not recoverable
-                    throw e
+                    throw error
                 }
             }
         }
