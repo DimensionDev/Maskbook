@@ -32,9 +32,7 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
             PuginUnlockProtocolRPC.getLocks(address, key.toString())
                 .then((value) => {
                     if (value.lockManagers.length) {
-                        console.log([...availableUnlockTarget])
                         setAvailableUnlockTarget([...availableUnlockTarget, ...value.lockManagers])
-                        console.log([...availableUnlockTarget, ...value.lockManagers])
                     } else {
                         console.log(availableUnlockTarget)
                     }
