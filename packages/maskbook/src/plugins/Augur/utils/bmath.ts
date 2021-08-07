@@ -287,23 +287,6 @@ export function calculateSellCompleteSets(
     return [tokenAmountOut.div(_shareFactor).mul(_shareFactor).toString(), tokensInPerOutcome]
 }
 
-// export async function calculateSellCompleteSetsWithValues(
-//   _ammFactory: AMMFactory,
-//   _marketFactory: AbstractMarketFactoryV2,
-//   _marketId: string,
-//   _outcome: number,
-//   _shareTokensIn: string
-// ): Promise<[setsOut: string, undesirableTokensInPerOutcome: string[]]> {
-//   return calculateSellCompleteSets(
-//     await _marketFactory.shareFactor(),
-//     _outcome,
-//     BigNumber.from(_shareTokensIn),
-//     await _ammFactory.getPoolBalances(_marketFactory.address, _marketId),
-//     await _ammFactory.getPoolWeights(_marketFactory.address, _marketId),
-//     await _ammFactory.getSwapFee(_marketFactory.address, _marketId)
-//   );
-// }
-
 function swapExactAmountIn(
     tokenAmountIn: BigNumber,
     minAmountOut: BigNumber,
@@ -391,24 +374,3 @@ function buy(
 
     return _totalDesiredOutcome
 }
-
-// export async function buyWithValues(
-//     _ammFactory: AugurAMMFactory,
-//     _marketFactory: AugurSportsLinkMarketFactory,
-//     _marketId: number,
-//     _outcome: number,
-//     _shareTokensIn: string,
-// ): Promise<string> {
-//     return buy(
-//         BigNumber(await _marketFactory.methods.shareFactor().call()),
-//         _outcome,
-//         new BigNumber(_shareTokensIn),
-//         (await _ammFactory.methods.getPoolBalances(_marketFactory.options.address, _marketId).call()).map(
-//             (x) => new BigNumber(x),
-//         ),
-//         (await _ammFactory.methods.getPoolWeights(_marketFactory.options.address, _marketId).call()).map(
-//             (x) => new BigNumber(x),
-//         ),
-//         new BigNumber(await _ammFactory.methods.getSwapFee(_marketFactory.options.address, _marketId).call()),
-//     ).toString()
-// }

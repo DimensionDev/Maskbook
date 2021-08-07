@@ -975,5 +975,6 @@
     "plugin_augur_receive_amount": "Amount You'll Recieve",
     "plugin_augur_remaining_shares": "Remaining Shares",
     "plugin_augur_select_outcome": "Select an Outcome",
-    "plugin_augur_winner": "Winner"
+    "plugin_augur_winner": "Winner",
+    "plugin_augur_sell_too_low": "Amount is too low"
 }

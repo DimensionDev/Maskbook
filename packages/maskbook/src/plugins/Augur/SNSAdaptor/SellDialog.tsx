@@ -149,11 +149,10 @@ export function SellDialog() {
 
     //#region amount
     const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
-    const {
-        value: tokenBalance = '0',
-        loading: loadingTokenBalance,
-        retry: retryLoadTokenBalance,
-    } = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
+        token?.type ?? EthereumTokenType.Native,
+        token?.address ?? '',
+    )
     //#endregion
 
     const rawFee = formatAmount(new BigNumber(market?.swapFee ?? ''), SWAP_FEE_DECIMALS - 2)
@@ -211,12 +210,13 @@ export function SellDialog() {
     const validationMessage = useMemo(() => {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (!amount || amount.isZero()) return t('plugin_dhedge_enter_an_amount')
+        if (estimatedResult?.outputValue === '0') return t('plugin_augur_sell_too_low')
         if (amount.isGreaterThan(tokenBalance))
             return t('plugin_dhedge_insufficient_balance', {
                 symbol: token?.symbol,
             })
         return ''
-    }, [account, amount.toFixed(), token, tokenBalance, estimatedResult])
+    }, [account, amount, token, tokenBalance, estimatedResult])
     //#endregion
 
     if (!token || !market || !market.ammExchange || !outcome || !cashToken) return null

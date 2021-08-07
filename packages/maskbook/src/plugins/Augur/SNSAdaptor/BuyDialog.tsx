@@ -244,7 +244,7 @@ export function BuyDialog() {
             open: true,
             shareLink,
             state: buyState,
-            summary: `Buying ${formatBalance(amount, token.decimals)}${token.symbol} ${outcome?.name}'s shares.`,
+            summary: `Buying ${formatBalance(amount, token.decimals)} ${token.symbol} ${outcome?.name}'s shares.`,
         })
     }, [buyState /* update tx dialog only if state changed */])
     //#endregion

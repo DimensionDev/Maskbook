@@ -28,54 +28,6 @@ interface Props extends SwitchProps {
     classes: Styles
 }
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        alignItems: 'center',
-    },
-    spacing: {
-        padding: theme.spacing(2),
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-    },
-    card: {
-        border: `solid .0625rem ${theme.palette.divider}`,
-        borderRadius: '1rem',
-        gridGap: '1.1rem',
-    },
-    head: {
-        borderBottom: `solid .0625rem ${theme.palette.divider}`,
-        paddingLeft: theme.spacing(3),
-        paddingRight: theme.spacing(3),
-    },
-    predictions: {
-        gridGap: '.5rem',
-        marginBottom: theme.spacing(1),
-        '& > .MuiGrid-item': {
-            cursor: 'pointer',
-            padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
-            border: `solid .0625rem ${theme.palette.divider}`,
-            borderRadius: '.5rem',
-        },
-    },
-    selected: {
-        border: 'solid .0625rem #05b169',
-        backgroundColor: 'rgba(5,177,105,.15)',
-    },
-    message: {
-        textAlign: 'center',
-    },
-    refresh: {
-        bottom: theme.spacing(1),
-        right: theme.spacing(1),
-        fontSize: 'inherit',
-    },
-    progress: {
-        bottom: theme.spacing(1),
-        right: theme.spacing(1),
-        padding: theme.spacing(1),
-    },
-}))
-
 const AugurSwitch = withStyles((theme) => ({
     root: {
         width: 170,
@@ -151,6 +103,64 @@ const AugurSwitch = withStyles((theme) => ({
     )
 })
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        alignItems: 'center',
+    },
+    spacing: {
+        padding: theme.spacing(2),
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+    },
+    card: {
+        border: `solid .0625rem ${theme.palette.divider}`,
+        borderRadius: '1rem',
+        gridGap: '1.1rem',
+    },
+    head: {
+        borderBottom: `solid .0625rem ${theme.palette.divider}`,
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+    },
+    predictions: {
+        gridGap: '.5rem',
+        marginBottom: theme.spacing(1),
+        '& > .MuiGrid-item': {
+            cursor: 'pointer',
+            padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
+            border: `solid .0625rem ${theme.palette.divider}`,
+            borderRadius: '.5rem',
+        },
+    },
+    selected: {
+        border: 'solid .0625rem #05b169',
+        backgroundColor: 'rgba(5,177,105,.15)',
+    },
+    message: {
+        textAlign: 'center',
+    },
+    refresh: {
+        bottom: theme.spacing(1),
+        right: theme.spacing(1),
+        fontSize: 'inherit',
+    },
+    progress: {
+        bottom: theme.spacing(1),
+        right: theme.spacing(1),
+        padding: theme.spacing(1),
+    },
+    actions: {
+        display: 'flex',
+        padding: theme.spacing(2),
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+    },
+    retry: {
+        fontSize: 'inherit',
+        margin: 'auto',
+    },
+}))
+
 interface MarketBuySellProps {
     market: Market
     ammOutcomes: AMMOutcome[]
@@ -201,34 +211,19 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
             )
                 return t('plugin_trader_error_insufficient_lp')
         } else {
-            if (selectedOutcome && !!balances && balances[selectedOutcome.id].isLessThanOrEqualTo(0))
+            if (selectedOutcome && !balances) return
+            if (
+                selectedOutcome &&
+                !!balances &&
+                (!market.ammExchange?.shareFactor ||
+                    balances[selectedOutcome.id].isLessThanOrEqualTo(
+                        new BigNumber(market.ammExchange?.shareFactor).multipliedBy(10),
+                    )) // output should be greater than share factor, so multipliedBy 10 to cancel out price effect
+            )
                 return t('error_insufficient_balance')
         }
         return ''
     }, [isBuy, market, selectedOutcome, balances])
-
-    if (loading)
-        return (
-            <div className={classes.message}>
-                <CircularProgress className={classes.progress} color="primary" size={15} />
-            </div>
-        )
-
-    if (error)
-        return (
-            <Typography className={classes.message} color="textPrimary">
-                {t('plugin_augur_smt_wrong')}
-                <RefreshIcon className={classes.refresh} color="primary" onClick={retry} />
-            </Typography>
-        )
-
-    if (!balances) {
-        return (
-            <Typography className={classes.message} color="textPrimary">
-                {t('plugin_augur_market_not_found')}
-            </Typography>
-        )
-    }
 
     return (
         <div className={`${classes.root} ${classes.spacing}`}>
@@ -287,16 +282,26 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                             )
                         })}
                 </Grid>
-                {!market.hasWinner ? (
-                    <Grid item>
+                {!isBuy && loading ? (
+                    <div className={classes.message}>
+                        <CircularProgress className={classes.progress} color="primary" size={15} />
+                    </div>
+                ) : error ? (
+                    <Typography className={classes.message} color="textPrimary">
+                        {t('plugin_augur_smt_wrong')}
+                        <RefreshIcon className={classes.refresh} color="primary" onClick={retry} />
+                    </Typography>
+                ) : !market.hasWinner ? (
+                    <Grid item className={classes.actions}>
                         <Button
                             variant="contained"
                             fullWidth
                             color="primary"
                             disabled={!!validationMessage}
                             onClick={isBuy ? onBuy : onSell}>
-                            {validationMessage || isBuy ? t('buy') : t('sell')}
+                            {validationMessage ? validationMessage : isBuy ? t('buy') : t('sell')}
                         </Button>
+                        {!isBuy && <RefreshIcon className={classes.retry} color="primary" onClick={retry} />}
                     </Grid>
                 ) : null}
             </Grid>
