@@ -44,10 +44,10 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                     onSuccess?.(res)
                     return res
                 },
-                (err) => {
-                    enqueueSnackbar(`Error: ${err.message || err}`, { key, preventDuplicate: true })
-                    onError?.(err)
-                    throw err
+                (error) => {
+                    enqueueSnackbar(`Error: ${error.message || error}`, { key, preventDuplicate: true })
+                    onError?.(error)
+                    throw error
                 },
             ),
         [...deps!, enqueueSnackbar, executor, onError, onSuccess, key, successText],

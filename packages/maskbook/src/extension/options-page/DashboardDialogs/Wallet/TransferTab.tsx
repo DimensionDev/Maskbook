@@ -62,7 +62,7 @@ export function TransferTab(props: TransferTabProps) {
     const onChangeAmount = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
         const _amount = ev.currentTarget.value
         if (_amount === '') setAmount('')
-        if (/^\d+[\.]?\d*$/.test(_amount)) setAmount(_amount)
+        if (/^\d+\.?\d*$/.test(_amount)) setAmount(_amount)
     }, [])
 
     //#region transfer tokens

@@ -33,7 +33,7 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
     const contracts = usePairContracts([...new Set(listOfPairAddress.filter(Boolean) as string[])])
     const [results, calls, _, callback] = useMutlipleContractSingleData(
         contracts,
-        new Array(contracts.length).fill('getReserves'),
+        Array.from<'getReserves'>({ length: contracts.length }).fill('getReserves'),
         [],
     )
     const asyncResults = useAsyncRetry(() => callback(calls), [calls])
