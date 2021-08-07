@@ -1,6 +1,17 @@
 import Teams from '../constants/teams.json'
 import Sports from '../constants/sports.json'
-import { TeamsInterface, SportsInterface, Team, Sport, Market, SportMarketType, SportTitles } from '../types'
+import {
+    TeamsInterface,
+    SportsInterface,
+    Team,
+    Sport,
+    Market,
+    SportMarketType,
+    SportTitles,
+    AMMExchange,
+    AMMOutcome,
+    EstimateTradeResult,
+} from '../types'
 import { BigNumber as BN } from 'bignumber.js'
 import {
     AWAY_TEAM_OUTCOME,
@@ -9,7 +20,10 @@ import {
     NO_CONTEST,
     NO_CONTEST_OUTCOME_ID,
     NO_CONTEST_TIE,
+    SWAP_FEE_DECIMALS,
 } from '../constants'
+import { formatAmount, formatBalance, FungibleTokenDetailed } from '@masknet/web3-shared'
+import { estimateBuy } from './bmath'
 
 export const getTeam = (id: string) => {
     return (Teams as TeamsInterface)[id]
@@ -21,6 +35,43 @@ export const getFullTeamName = (team: Team) => {
 
 export const getSport = (id: string) => {
     return (Sports as SportsInterface)[id]
+}
+
+export const estimateBuyTrade = (
+    amm: AMMExchange,
+    inputDisplayAmount: string,
+    outcome: AMMOutcome,
+    fee: string,
+    cash: FungibleTokenDetailed,
+    shareDecimals: number,
+): EstimateTradeResult | undefined => {
+    if (!inputDisplayAmount || !new BN(inputDisplayAmount).gte(0)) return
+    let result
+    const amount = formatAmount(inputDisplayAmount, cash.decimals)
+
+    try {
+        result = estimateBuy(amm.shareFactor, outcome.id, amount, amm.balances, amm.weights, fee)
+    } catch (e) {
+        if (!result) return
+    }
+
+    const decimalFee = formatBalance(fee, SWAP_FEE_DECIMALS)
+    const estimatedShares = formatBalance(result, shareDecimals)
+    const tradeFees = new BN(inputDisplayAmount).multipliedBy(decimalFee).toString()
+    const averagePrice = new BN(inputDisplayAmount).div(new BN(estimatedShares)).toString()
+    const maxProfit = new BN(estimatedShares).minus(new BN(inputDisplayAmount)).toString()
+    const price = new BN(outcome.rate)
+    const priceImpact = price.minus(averagePrice).div(price).multipliedBy(100).toString()
+    const ratePerCash = new BN(estimatedShares).div(new BN(inputDisplayAmount)).toString()
+
+    return {
+        outputValue: estimatedShares,
+        tradeFees,
+        averagePrice,
+        maxProfit,
+        ratePerCash,
+        priceImpact,
+    }
 }
 
 export const deriveSportMarketInfo = (

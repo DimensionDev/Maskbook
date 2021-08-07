@@ -69,11 +69,6 @@ export interface SportTitles {
     description: string
 }
 
-export enum BuySell {
-    BUY,
-    SELL,
-}
-
 export interface AMMExchange {
     totalVolume: BigNumber
     volume24hr: BigNumber

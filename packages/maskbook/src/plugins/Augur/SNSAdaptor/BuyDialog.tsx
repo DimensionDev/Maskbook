@@ -33,8 +33,8 @@ import { useBuyCallback } from '../hooks/useBuyCallback'
 import { toBips } from '../../Trader/helpers'
 import { currentSlippageTolerance } from '../../Trader/settings'
 import TuneIcon from '@material-ui/icons/Tune'
-import { estimateBuyTrade } from '../utils/bmath'
 import { SWAP_FEE_DECIMALS } from '../constants'
+import { estimateBuyTrade } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -141,10 +141,20 @@ export function BuyDialog() {
     } = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     //#endregion
 
+    const rawFee = formatAmount(new BigNumber(market?.swapFee ?? ''), SWAP_FEE_DECIMALS - 2)
+    useEffect(() => {
+        if (!market || !token || !market.ammExchange || !outcome) return
+        const estimateTradeResult = estimateBuyTrade(market.ammExchange, rawAmount, outcome, rawFee, token, 18)
+        setEstimatedResult(estimateTradeResult)
+        console.log(estimateTradeResult)
+    }, [token, market, rawAmount, outcome, rawFee])
+
+    const minTokenOut = (estimatedResult?.outputValue ?? 0 * (1 - currentSlippageTolerance.value)).toString()
+
     //#region blocking
     const [buyState, buyCallback, resetBuyCallback] = useBuyCallback(
         amount.toFixed(),
-        currentSlippageTolerance.value,
+        minTokenOut,
         market,
         outcome,
         token,
@@ -188,7 +198,7 @@ export function BuyDialog() {
                 ? [
                       `I just bought ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} share of ${
                           outcome?.name
-                      }, can I win?. Follow @realMaskbook (mask.io) to bet on Augur's markets.`,
+                      }, can I win? Follow @realMaskbook (mask.io) to bet on Augur's markets.`,
                       '#mask_io #augur',
                   ].join('\n')
                 : '',
@@ -229,25 +239,18 @@ export function BuyDialog() {
     const validationMessage = useMemo(() => {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (!amount || amount.isZero()) return t('plugin_dhedge_enter_an_amount')
+        if (!estimatedResult) return t('plugin_trader_error_insufficient_lp')
         if (amount.isGreaterThan(tokenBalance))
             return t('plugin_dhedge_insufficient_balance', {
                 symbol: token?.symbol,
             })
         return ''
-    }, [account, amount.toFixed(), token, tokenBalance])
+    }, [account, amount.toFixed(), token, tokenBalance, estimatedResult])
     //#endregion
 
     //#region remote controlled swap settings dialog
     const { openDialog: openSettingDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated)
     //#endregion
-
-    const rawFee = formatAmount(new BigNumber(market?.swapFee ?? ''), SWAP_FEE_DECIMALS - 2)
-    useEffect(() => {
-        if (!market || !token || !market.ammExchange || !outcome) return
-        const estimateTradeResult = estimateBuyTrade(market.ammExchange, rawAmount, outcome, rawFee, token, 18)
-        setEstimatedResult(estimateTradeResult)
-        console.log(estimateTradeResult)
-    }, [token, market, rawAmount, outcome, rawFee])
 
     if (!token || !market || !market.ammExchange || !outcome) return null
     return (
@@ -270,7 +273,7 @@ export function BuyDialog() {
                         />
                     </form>
                     <EthereumWalletConnectedBoundary>
-                        {isZero(tokenBalance) ? (
+                        {isZero(tokenBalance) || (amount.isGreaterThan(tokenBalance) && !!estimatedResult) ? (
                             <ActionButton
                                 className={classes.button}
                                 fullWidth
@@ -291,7 +294,7 @@ export function BuyDialog() {
                                     onClick={buyCallback}
                                     variant="contained"
                                     loading={loadingTokenBalance}>
-                                    {validationMessage || t('plugin_dhedge_invest')}
+                                    {validationMessage || t('buy')}
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>
                         )}
@@ -312,7 +315,7 @@ export function BuyDialog() {
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
                                 {estimatedResult
-                                    ? formatPrice(estimatedResult.averagePrice, 4) + ' ' + token.symbol
+                                    ? formatPrice(estimatedResult.averagePrice, 2) + ' ' + token.symbol
                                     : '-'}
                             </Typography>
                         </div>
@@ -329,7 +332,7 @@ export function BuyDialog() {
                                 {t('plugin_augur_max_profit')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {estimatedResult ? formatPrice(estimatedResult.maxProfit, 4) + ' ' + token.symbol : '-'}
+                                {estimatedResult ? formatPrice(estimatedResult.maxProfit, 2) + ' ' + token.symbol : '-'}
                             </Typography>
                         </div>
                         <div className={classes.status}>
@@ -337,7 +340,7 @@ export function BuyDialog() {
                                 {t('plugin_augur_est_fee')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {estimatedResult ? formatPrice(estimatedResult.tradeFees, 4) + ' ' + token.symbol : '-'}
+                                {estimatedResult ? formatPrice(estimatedResult.tradeFees, 2) + ' ' + token.symbol : '-'}
                             </Typography>
                         </div>
                     </div>

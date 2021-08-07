@@ -10,6 +10,7 @@ import {
     Tab,
     Tabs,
     Typography,
+    CircularProgress,
 } from '@material-ui/core'
 import React, { useState } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
@@ -95,6 +96,11 @@ const useStyles = makeStyles((theme) => ({
         width: 40,
         height: 10,
     },
+    progress: {
+        bottom: theme.spacing(1),
+        right: theme.spacing(1),
+        padding: theme.spacing(1),
+    },
 }))
 
 interface MarketViewProps {
@@ -134,9 +140,9 @@ export function MarketView(props: MarketViewProps) {
 
     if (loading || loadingAMMOutcomes || loadingToken)
         return (
-            <Typography className={classes.message} color="textPrimary">
-                {t('plugin_augur_loading')}
-            </Typography>
+            <div className={classes.message}>
+                <CircularProgress className={classes.progress} color="primary" size={15} />
+            </div>
         )
 
     if (error || errorAMMOutcomes || errorToken)

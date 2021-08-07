@@ -17,7 +17,7 @@ import type { AMMOutcome, Market } from '../types'
 
 export function useBuyCallback(
     amount: string,
-    slipage: number,
+    minTokenOut: string,
     market?: Market,
     outcome?: AMMOutcome,
     token?: FungibleTokenDetailed,
@@ -51,7 +51,7 @@ export function useBuyCallback(
             nonce,
         }
         const estimatedGas = await ammContract.methods
-            .buy(market.address, market.id, outcome.id, amount, amount)
+            .buy(market.address, market.id, outcome.id, amount, minTokenOut)
             .estimateGas(config)
             .catch((error) => {
                 setBuyState({
@@ -63,10 +63,12 @@ export function useBuyCallback(
 
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
-            const promiEvent = ammContract.methods.buy(market.address, market.id, outcome.id, amount, amount).send({
-                gas: addGasMargin(estimatedGas).toFixed(),
-                ...config,
-            })
+            const promiEvent = ammContract.methods
+                .buy(market.address, market.id, outcome.id, amount, minTokenOut)
+                .send({
+                    gas: addGasMargin(estimatedGas).toFixed(),
+                    ...config,
+                })
             promiEvent
                 .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     setBuyState({

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
     makeStyles,
     Typography,
@@ -8,9 +8,10 @@ import {
     SwitchProps,
     withStyles,
     Button,
+    CircularProgress,
 } from '@material-ui/core'
 import { Trans } from 'react-i18next'
-import { AMMOutcome, BuySell, Market } from '../types'
+import type { AMMOutcome, Market } from '../types'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginAugurMessages } from '../messages'
@@ -68,6 +69,11 @@ const useStyles = makeStyles((theme) => ({
         bottom: theme.spacing(1),
         right: theme.spacing(1),
         fontSize: 'inherit',
+    },
+    progress: {
+        bottom: theme.spacing(1),
+        right: theme.spacing(1),
+        padding: theme.spacing(1),
     },
 }))
 
@@ -157,7 +163,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
 
     const { t } = useI18N()
     const classes = useStyles()
-    const [buySell, setBuySell] = useState(BuySell.BUY)
+    const [isBuy, setIsBuy] = useState(true)
     const [selectedOutcome, setSelectedOutcome] = useState<AMMOutcome>()
 
     const { setDialog: openBuyDialog } = useRemoteControlledDialog(PluginAugurMessages.events.ConfirmDialogUpdated)
@@ -169,16 +175,31 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
             outcome: selectedOutcome,
             cashToken: cashToken,
         })
-    }, [market, openBuyDialog, selectedOutcome, buySell])
+    }, [market, openBuyDialog, selectedOutcome, isBuy])
 
     const { value: rawBalances, loading, error, retry } = useTokensBalance(market.outcomes.map((x) => x.shareToken))
     const balances = rawBalances?.map((x: string) => new BigNumber(x))
 
+    const validationMessage = useMemo(() => {
+        if (isBuy) {
+            if (
+                !market.ammExchange ||
+                !market.ammExchange.totalLiquidity ||
+                market.ammExchange.totalLiquidity.isLessThanOrEqualTo(0)
+            )
+                return t('plugin_trader_error_insufficient_lp')
+        } else {
+            if (selectedOutcome && !!balances && balances[selectedOutcome.id].isLessThan(MIN_SELL_AMOUNT))
+                return t('error_insufficient_balance')
+        }
+        return ''
+    }, [isBuy, market, selectedOutcome, balances])
+
     if (loading)
         return (
-            <Typography className={classes.message} color="textPrimary">
-                {t('plugin_augur_loading')}
-            </Typography>
+            <div className={classes.message}>
+                <CircularProgress className={classes.progress} color="primary" size={15} />
+            </div>
         )
 
     if (error)
@@ -210,11 +231,9 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                     className={`${classes.head} ${classes.spacing}`}>
                     <Grid item>
                         <Typography variant="h6" color="textPrimary">
-                            <AugurSwitch
-                                checked={!!buySell}
-                                onChange={() => setBuySell(buySell === BuySell.BUY ? BuySell.SELL : BuySell.BUY)}
-                                name="buySell"
-                            />
+                            {!market.hasWinner ? (
+                                <AugurSwitch checked={!isBuy} onChange={() => setIsBuy((x) => !x)} name="buySell" />
+                            ) : null}
                         </Typography>
                     </Grid>
                     <Grid item container direction="column" alignItems="flex-end">
@@ -262,20 +281,9 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                             variant="contained"
                             fullWidth
                             color="primary"
-                            disabled={
-                                !selectedOutcome ||
-                                !market.ammExchange ||
-                                (buySell === BuySell.BUY && market.ammExchange.totalLiquidity.isLessThanOrEqualTo(0)) ||
-                                (buySell === BuySell.SELL && balances[selectedOutcome.id].isLessThan(MIN_SELL_AMOUNT))
-                            }
-                            onClick={buySell === BuySell.BUY ? onBuy : () => {}}>
-                            {!market.ammExchange || market.ammExchange.totalLiquidity.isLessThanOrEqualTo(0)
-                                ? t('plugin_trader_error_insufficient_lp')
-                                : selectedOutcome &&
-                                  buySell === BuySell.SELL &&
-                                  balances[selectedOutcome.id].isLessThan(MIN_SELL_AMOUNT)
-                                ? t('error_insufficient_balance')
-                                : t('plugin_augur_confirm')}
+                            disabled={!!validationMessage}
+                            onClick={isBuy ? onBuy : () => {}}>
+                            {validationMessage || isBuy ? t('buy') : t('sell')}
                         </Button>
                     </Grid>
                 ) : null}
