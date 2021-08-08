@@ -798,5 +798,8 @@
     "plugin_good_ghosting_tx_fail": "",
     "plugin_good_ghosting_tx_timeout": "",
     "plugin_good_ghosting_something_went_wrong": "",
-    "plugin_good_ghosting_view_on_explorer": ""
+    "plugin_good_ghosting_view_on_explorer": "",
+    "plugin_good_ghosting_checking_balance": "",
+    "plugin_good_ghosting_insufficient_balance": "",
+    "plugin_good_ghosting_balance_error": ""
 }

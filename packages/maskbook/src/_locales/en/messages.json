@@ -798,5 +798,8 @@
     "plugin_good_ghosting_tx_fail": "Failed to complete the transaction.",
     "plugin_good_ghosting_tx_timeout": "Cannot read transaction status.",
     "plugin_good_ghosting_something_went_wrong": "Something went wrong, please try again",
-    "plugin_good_ghosting_view_on_explorer": "View on Explorer"
+    "plugin_good_ghosting_view_on_explorer": "View on Explorer",
+    "plugin_good_ghosting_checking_balance": "Checking Balance...",
+    "plugin_good_ghosting_insufficient_balance": "You need at least {{amount}} {{token}} in your wallet to do this.",
+    "plugin_good_ghosting_balance_error": "Failed to check balance. Click to retry."
 }
