@@ -11,6 +11,8 @@ import { PopupFrame } from './components/PopupFrame'
 import { Web3Provider } from '@masknet/web3-shared'
 import { DialogRoutes } from './index'
 import { Web3Context } from '../../web3/context'
+// import { ImportWallet } from './pages/ImportWallet'
+// import { AddDeriveWallet } from './pages/AddDeriveWallet'
 
 if (location.pathname === '/popups.html' && !document.getElementById('root')) {
     const root = document.createElement('div')

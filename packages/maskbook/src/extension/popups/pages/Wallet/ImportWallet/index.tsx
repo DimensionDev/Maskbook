@@ -1,16 +1,20 @@
-import { memo, useCallback, useMemo, useState } from 'react'
-import { Button, makeStyles, Tab, Tabs, TextField, Typography } from '@material-ui/core'
+import { memo, useMemo, useState } from 'react'
+import { makeStyles, Tab, Tabs, TextField, Typography } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
 import { z as zod } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { NetworkSelector } from '../NetworkSelector'
-import { useI18N } from '../../../../../../utils'
-import { getEnumAsArray } from '@dimensiondev/kit'
-import { TabContext, TabPanel } from '@material-ui/lab'
-import { useHistory } from 'react-router-dom'
-import { DialogRoutes } from '../../../../index'
 import { checkUppercase, checkLowercase, checkNumber } from '@masknet/shared'
-
+import { zodResolver } from '@hookform/resolvers/zod'
+import { NetworkSelector } from '../../../components/NetworkSelector'
+import { useI18N } from '../../../../../utils'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { LoadingButton, TabContext, TabPanel } from '@material-ui/lab'
+import { useHistory } from 'react-router-dom'
+import { DialogRoutes } from '../../../index'
+import { JsonFileBox } from '../components/JsonFileBox'
+import { StyledInput } from '../../../components/StyledInput'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { useAsyncFn } from 'react-use'
+import { useSnackbar } from '@masknet/theme'
 const useStyles = makeStyles((theme) => ({
     container: {
         padding: '16px 10px',
@@ -26,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
         lineHeight: 1.5,
         fontWeight: 500,
     },
+    textField: {
+        marginTop: 10,
+    },
     form: {
         marginTop: 26,
         width: '100%',
@@ -34,17 +41,6 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 12,
         lineHeight: '16px',
         color: '#1C68F3',
-    },
-    textField: {
-        width: '100%',
-        marginTop: 10,
-    },
-    textFieldInput: {
-        backgroundColor: '#F7F9FA',
-    },
-    input: {
-        padding: '11px 9px',
-        fontSize: 12,
     },
     tips: {
         color: '#7B8192',
@@ -97,12 +93,16 @@ enum ImportWalletTab {
     PrivateKey = 'Private Key',
 }
 
-export const ImportWallet = memo(() => {
+const ImportWallet = memo(() => {
     const { t } = useI18N()
+    const { enqueueSnackbar } = useSnackbar()
     const history = useHistory()
     const classes = useStyles()
     const [currentTab, setCurrentTab] = useState(ImportWalletTab.Mnemonic)
     const [mnemonic, setMnemonic] = useState('')
+    const [keyStoreContent, setKeyStoreContent] = useState('')
+    const [keyStorePassword, setKeyStorePassword] = useState('')
+    const [privateKey, setPrivateKey] = useState('')
 
     const schema = useMemo(() => {
         return zod
@@ -154,6 +154,7 @@ export const ImportWallet = memo(() => {
 
     const {
         control,
+        handleSubmit,
         formState: { errors, isValid },
     } = useForm<zod.infer<typeof schema>>({
         mode: 'onChange',
@@ -165,20 +166,63 @@ export const ImportWallet = memo(() => {
         },
     })
 
-    const onSubmit = useCallback(() => {
+    const [{ loading }, onDerivedWallet] = useAsyncFn(
+        async (data: zod.infer<typeof schema>) => {
+            switch (currentTab) {
+                case ImportWalletTab.Mnemonic:
+                    const params = new URLSearchParams()
+                    params.set('mnemonic', mnemonic)
+                    history.push({
+                        pathname: DialogRoutes.AddDeriveWallet,
+                        search: `?${params.toString()}`,
+                    })
+                    break
+                case ImportWalletTab.JsonFile:
+                    const { address, privateKey: _private_key_ } = await WalletRPC.fromKeyStore(
+                        keyStoreContent,
+                        Buffer.from(keyStorePassword, 'utf-8'),
+                    )
+                    await WalletRPC.importNewWallet({
+                        name: data.name,
+                        address,
+                        _private_key_,
+                    })
+                    history.goBack()
+                    break
+                case ImportWalletTab.PrivateKey:
+                    const { address: walletAddress, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(
+                        privateKey,
+                    )
+                    if (!privateKeyValid) enqueueSnackbar('Import Failed', { variant: 'error' })
+                    await WalletRPC.importNewWallet({
+                        name: data.name,
+                        address: walletAddress,
+                        _private_key_: privateKey,
+                    })
+                    history.goBack()
+                    break
+                default:
+                    break
+            }
+        },
+        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey],
+    )
+
+    const onSubmit = handleSubmit(onDerivedWallet)
+
+    const disabled = useMemo(() => {
+        if (!isValid) return true
         switch (currentTab) {
             case ImportWalletTab.Mnemonic:
-                const params = new URLSearchParams()
-                params.set('mnemonic', mnemonic)
-                history.push({
-                    pathname: DialogRoutes.AddDeriveWallet,
-                    search: `?${params.toString()}`,
-                })
-                break
+                return !mnemonic
+            case ImportWalletTab.JsonFile:
+                return !keyStoreContent
+            case ImportWalletTab.PrivateKey:
+                return !privateKey
             default:
-                break
+                return true
         }
-    }, [mnemonic, currentTab])
+    }, [currentTab, mnemonic, keyStorePassword, keyStoreContent, privateKey, isValid])
 
     return (
         <div className={classes.container}>
@@ -191,15 +235,13 @@ export const ImportWallet = memo(() => {
                     <Typography className={classes.label}>Wallet name</Typography>
                     <Controller
                         render={({ field }) => (
-                            <TextField
+                            <StyledInput
                                 {...field}
+                                classes={{ root: classes.textField }}
                                 error={!!errors.name?.message}
                                 helperText={errors.name?.message}
                                 variant="filled"
                                 placeholder="Enter 1-12 characters"
-                                className={classes.textField}
-                                inputProps={{ className: classes.input }}
-                                InputProps={{ disableUnderline: true, classes: { root: classes.textFieldInput } }}
                             />
                         )}
                         control={control}
@@ -211,32 +253,28 @@ export const ImportWallet = memo(() => {
                     <Controller
                         control={control}
                         render={({ field }) => (
-                            <TextField
+                            <StyledInput
                                 {...field}
+                                classes={{ root: classes.textField }}
                                 type="password"
                                 variant="filled"
                                 placeholder="Payment Password"
                                 error={!!errors.password?.message}
                                 helperText={errors.password?.message}
-                                className={classes.textField}
-                                inputProps={{ className: classes.input }}
-                                InputProps={{ disableUnderline: true, classes: { root: classes.textFieldInput } }}
                             />
                         )}
                         name="password"
                     />
                     <Controller
                         render={({ field }) => (
-                            <TextField
+                            <StyledInput
+                                classes={{ root: classes.textField }}
                                 {...field}
                                 error={!!errors.confirm?.message}
                                 helperText={errors.confirm?.message}
                                 type="password"
                                 variant="filled"
                                 placeholder="Re-enter the payment password"
-                                className={classes.textField}
-                                inputProps={{ className: classes.input }}
-                                InputProps={{ disableUnderline: true, classes: { root: classes.textFieldInput } }}
                             />
                         )}
                         name="confirm"
@@ -272,15 +310,41 @@ export const ImportWallet = memo(() => {
                         inputProps={{ className: classes.textArea }}
                     />
                 </TabPanel>
+                <TabPanel value={ImportWalletTab.JsonFile} className={classes.tabPanel}>
+                    <JsonFileBox onChange={(content: string) => setKeyStoreContent(content)} />
+                    <StyledInput
+                        type="password"
+                        classes={{ root: classes.textField }}
+                        placeholder="Original Password"
+                        onChange={(e) => setKeyStorePassword(e.target.value)}
+                        value={keyStorePassword}
+                    />
+                </TabPanel>
+                <TabPanel value={ImportWalletTab.PrivateKey} className={classes.tabPanel}>
+                    <TextField
+                        variant="filled"
+                        multiline
+                        value={privateKey}
+                        onChange={(e) => setPrivateKey(e.target.value)}
+                        rows={4}
+                        placeholder="Private Key"
+                        InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
+                        className={classes.multiline}
+                        inputProps={{ className: classes.textArea }}
+                    />
+                </TabPanel>
             </TabContext>
-            <Button
+            <LoadingButton
+                loading={loading}
                 variant="contained"
                 fullWidth
                 className={classes.button}
-                disabled={!isValid || !mnemonic}
+                disabled={disabled}
                 onClick={onSubmit}>
                 Import
-            </Button>
+            </LoadingButton>
         </div>
     )
 })
+
+export default ImportWallet

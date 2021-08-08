@@ -13,6 +13,7 @@ import AbstractTab, { AbstractTabProps } from '../../../../components/shared/Abs
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
 import type { FC } from 'react'
+import { useWalletHD } from '../../../../web3/hooks/useWalletHD'
 
 const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({
     wrapper: {
@@ -271,17 +272,6 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
             />
         </DashboardDialogCore>
     )
-}
-
-/** Return the wallet with mnemonic words */
-function useWalletHD() {
-    const selectedWallet = useWallet()?.address
-    return useAsync(async () => {
-        const selected = await WalletRPC.getWallet(selectedWallet)
-        if (selected?.mnemonic.length) return selected
-        const all = await WalletRPC.getWallets()
-        return first(all.filter((x) => x.mnemonic.length).sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime()))
-    }, [selectedWallet]).value
 }
 
 const WalletName: FC<{ name: string; onChange(name: string): void }> = ({ name, onChange }) => {

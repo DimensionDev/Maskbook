@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { Box, makeStyles, MenuItem, Typography } from '@material-ui/core'
-import { Flags } from '../../../../../../utils'
+import { Flags } from '../../../../utils'
 import {
     ChainId,
     getChainIdFromNetworkType,
@@ -9,7 +9,7 @@ import {
     NetworkType,
     resolveNetworkName,
 } from '@masknet/web3-shared'
-import { currentChainIdSettings } from '../../../../../../plugins/Wallet/settings'
+import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
 import { useMenu, useValueRef } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'
 import { getEnumAsArray } from '@dimensiondev/kit'

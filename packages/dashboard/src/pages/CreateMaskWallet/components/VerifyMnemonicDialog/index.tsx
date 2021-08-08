@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 20,
         marginLeft: 12,
         cursor: 'pointer',
+        stroke: '#111432',
     },
 }))
 

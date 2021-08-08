@@ -1,8 +1,7 @@
 import { memo } from 'react'
-import type { ChainId } from '@masknet/web3-shared'
+import { ChainId, getChainDetailed, getNetworkTypeFromChainId, resolveChainColor } from '@masknet/web3-shared'
 import { makeStyles } from '@material-ui/core'
-import { NetworkIcon } from '../../../../../../components/shared/NetworkIcon'
-import { getChainDetailed, getNetworkTypeFromChainId, resolveChainColor } from '@masknet/web3-shared'
+import { NetworkIcon } from '../../../../components/shared/NetworkIcon'
 
 const useStyles = makeStyles(() => ({
     point: {

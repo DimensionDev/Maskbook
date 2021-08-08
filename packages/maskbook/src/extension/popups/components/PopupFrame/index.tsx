@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Box, makeStyles, Paper, withStyles } from '@material-ui/core'
-import { MiniMaskIcon } from '@masknet/icons'
-import { NavLink } from 'react-router-dom'
+import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
+import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
 import { DialogRoutes } from '../../index'
 import { useI18N } from '../../../../utils'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
@@ -24,7 +24,8 @@ const GlobalCss = withStyles({
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        minHeight: 380,
+        height: 474,
+        overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
     },
@@ -66,15 +67,31 @@ export interface PopupFrameProps extends React.PropsWithChildren<{}> {}
 
 export const PopupFrame = memo<PopupFrameProps>((props) => {
     const { t } = useI18N()
+    const history = useHistory()
     const classes = useStyles()
     const personas = useMyPersonas()
+
+    const matchWallet = useRouteMatch({
+        path: DialogRoutes.Wallet,
+        exact: true,
+    })
+
+    const matchPersona = useRouteMatch({
+        path: DialogRoutes.Personas,
+        exact: true,
+    })
+
     return (
         <>
             <GlobalCss />
             <Paper elevation={0}>
                 <Box className={classes.header}>
                     <Box className={classes.left}>
-                        <MiniMaskIcon />
+                        {matchWallet || matchPersona ? (
+                            <MiniMaskIcon />
+                        ) : (
+                            <ArrowBackIcon onClick={history.goBack} style={{ fill: '#ffffff', cursor: 'pointer' }} />
+                        )}
                     </Box>
                     <Box className={classes.right}>
                         <NavLink

@@ -1,11 +1,11 @@
-import { memo, useCallback } from 'react'
-import { makeStyles, Typography } from '@material-ui/core'
-import { NetworkSelector } from '../NetworkSelector'
+import { memo, useCallback, useState } from 'react'
+import { Button, makeStyles, Typography } from '@material-ui/core'
+import { NetworkSelector } from '../../../components/NetworkSelector'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import { useLocation } from 'react-router-dom'
 import { useAsync } from 'react-use'
-import { WalletRPC } from '../../../../../../plugins/Wallet/messages'
-import { DeriveWalletTable } from '../DeriveWalletTable'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { DeriveWalletTable } from '../components/DeriveWalletTable'
 import { currySameAddress, useWallets } from '@masknet/web3-shared'
 
 const useStyles = makeStyles(() => ({
@@ -31,17 +31,30 @@ const useStyles = makeStyles(() => ({
         lineHeight: '16px',
         fontWeight: 600,
     },
+    controller: {
+        display: 'grid',
+        marginTop: 24,
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: 20,
+    },
+    button: {
+        padding: '10px 0',
+        borderRadius: 20,
+        fontSize: 14,
+        lineHeight: '20px',
+    },
 }))
 
-export const AddDeriveWallet = memo(() => {
+const AddDeriveWallet = memo(() => {
     const location = useLocation()
     const classes = useStyles()
     const wallets = useWallets()
     const mnemonic = new URLSearchParams(location.search).get('mnemonic')
+    const [page, setPage] = useState(0)
 
     const { loading, value: dataSource } = useAsync(async () => {
         if (mnemonic) {
-            const derivedWallets = await WalletRPC.queryDerivableWalletFromPhrase(mnemonic.split(' '), '', 1)
+            const derivedWallets = await WalletRPC.queryDerivableWalletFromPhrase(mnemonic.split(' '), '', page + 1)
 
             return derivedWallets.map((derivedWallet) => {
                 const added = !!wallets.find(currySameAddress(derivedWallet.address))
@@ -54,12 +67,12 @@ export const AddDeriveWallet = memo(() => {
             })
         }
         return []
-    }, [mnemonic, wallets])
+    }, [mnemonic, wallets, page])
 
     const onAdd = useCallback(
         async (index) => {
             if (mnemonic) {
-                await WalletRPC.deriveWalletFromIndex(`Account${index}`, mnemonic.split(' '), '', index)
+                await WalletRPC.deriveWalletFromIndex(mnemonic.split(' '), '', index)
             }
         },
         [mnemonic],
@@ -73,7 +86,24 @@ export const AddDeriveWallet = memo(() => {
             </div>
             <Typography className={classes.path}>Derivation path ({HD_PATH_WITHOUT_INDEX_ETHEREUM})</Typography>
             <DeriveWalletTable loading={loading} dataSource={dataSource} onAdd={onAdd} />
-            {/*    TODO: Paged */}
+            <div className={classes.controller}>
+                <Button
+                    variant="contained"
+                    className={classes.button}
+                    disabled={page === 0 || loading}
+                    onClick={() => setPage((prev) => prev - 1)}>
+                    Previous
+                </Button>
+                <Button
+                    variant="contained"
+                    className={classes.button}
+                    onClick={() => setPage((prev) => prev + 1)}
+                    disabled={loading}>
+                    Next
+                </Button>
+            </div>
         </div>
     )
 })
+
+export default AddDeriveWallet

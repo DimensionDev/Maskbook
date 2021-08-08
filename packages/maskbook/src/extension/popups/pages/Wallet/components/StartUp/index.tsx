@@ -1,8 +1,10 @@
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { Alert, AlertTitle, Box, makeStyles, Typography } from '@material-ui/core'
+import { Link } from 'react-router-dom'
 import { MaskWalletIcon, ImportWalletIcon } from '@masknet/icons'
 import { EnterDashboard } from '../../../../components/EnterDashboard'
-import { NetworkSelector } from '../NetworkSelector'
+import { NetworkSelector } from '../../../../components/NetworkSelector'
+import { DialogRoutes } from '../../../../index'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -60,6 +62,13 @@ const useStyles = makeStyles((theme) => ({
 
 export const WalletStartUp = memo(() => {
     const classes = useStyles()
+    const onEnterCreateWallet = useCallback(() => {
+        browser.tabs.create({
+            active: true,
+            url: browser.runtime.getURL('/next.html#/create-mask-wallet/form'),
+        })
+    }, [])
+
     return (
         <Box className={classes.container}>
             <Alert icon={false} severity="info" className={classes.alert}>
@@ -73,14 +82,16 @@ export const WalletStartUp = memo(() => {
                     <Typography className={classes.title}>New Wallet</Typography>
                     <NetworkSelector />
                 </Box>
-                <Box className={classes.item}>
+                <Box className={classes.item} onClick={onEnterCreateWallet}>
                     <MaskWalletIcon sx={{ fontSize: 20 }} />
                     <Typography className={classes.itemTitle}>New Wallet</Typography>
                 </Box>
-                <Box className={classes.item}>
-                    <ImportWalletIcon sx={{ fontSize: 20 }} />
-                    <Typography className={classes.itemTitle}>Import the wallet</Typography>
-                </Box>
+                <Link to={DialogRoutes.ImportWallet} style={{ textDecoration: 'none' }}>
+                    <Box className={classes.item}>
+                        <ImportWalletIcon sx={{ fontSize: 20 }} />
+                        <Typography className={classes.itemTitle}>Import the wallet</Typography>
+                    </Box>
+                </Link>
             </Box>
             <EnterDashboard />
         </Box>
