@@ -15,7 +15,6 @@ export function useAmmExchange(address: string, id: string) {
         const balances = await ammMarekFactoryContract.methods.getPoolBalances(address, id).call()
         const weights = await ammMarekFactoryContract.methods.getPoolWeights(address, id).call()
         const shareFactor = await sportLinkMarekFactoryContract.methods.shareFactor().call()
-
         return { balances, weights, shareFactor } as AmmExchange
     }, [address, id])
 }

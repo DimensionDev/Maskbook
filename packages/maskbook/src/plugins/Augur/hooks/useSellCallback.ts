@@ -12,13 +12,7 @@ import {
 import { useAmmFactory } from '../contracts/useAmmFactory'
 import type { AmmOutcome, Market } from '../types'
 
-export function useSellCallback(
-    market?: Market,
-    outcome?: AmmOutcome,
-    shareTokensIn?: string[],
-    amount?: string,
-    fee?: string,
-) {
+export function useSellCallback(market?: Market, outcome?: AmmOutcome, shareTokensIn?: string[]) {
     const { AMM_FACTORY_ADDRESS } = useAugurConstants()
     const ammContract = useAmmFactory(AMM_FACTORY_ADDRESS ?? '')
     const account = useAccount()
@@ -27,7 +21,7 @@ export function useSellCallback(
     const [sellState, setSellState] = useTransactionState()
 
     const sellCallback = useCallback(async () => {
-        if (!ammContract || !market || !market.ammExchange || !outcome || !shareTokensIn || !amount || !fee) {
+        if (!ammContract || !market || !market.ammExchange || !outcome || !shareTokensIn) {
             setSellState({
                 type: TransactionStateType.UNKNOWN,
             })

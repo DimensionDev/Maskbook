@@ -1,4 +1,5 @@
 import {
+    ERC20TokenDetailed,
     EthereumTokenType,
     formatBalance,
     formatPrice,
@@ -80,7 +81,7 @@ export function SellDialog() {
     const [id] = useState(uuid())
     const [market, setMarket] = useState<Market>()
     const [cashToken, setCashToken] = useState<FungibleTokenDetailed>()
-    const [token, setToken] = useState<FungibleTokenDetailed>()
+    const [token, setToken] = useState<ERC20TokenDetailed>()
     const [outcome, setOutcome] = useState<AmmOutcome>()
     const [rawAmount, setRawAmount] = useState('')
     const { AMM_FACTORY_ADDRESS } = useAugurConstants()
@@ -98,7 +99,7 @@ export function SellDialog() {
                 address: ev.outcome.shareToken,
                 symbol: ev.outcome.name,
                 decimals: SHARE_DECIMALS,
-            } as FungibleTokenDetailed)
+            } as ERC20TokenDetailed)
         }
     })
     const onClose = useCallback(() => {
@@ -121,6 +122,7 @@ export function SellDialog() {
     //#region AmmExchange
     const { value: ammExchange, loading: loadingAmm } = useAmmExchange(market?.address ?? '', market?.id ?? '')
     const rawFee = getRawFee(market?.swapFee ?? '')
+
     const estimatedResult = useMemo(() => {
         if (!ammExchange || !outcome || !tokenBalance || !rawAmount || !rawFee) return
         return estimateSellTrade(ammExchange, rawAmount, outcome, tokenBalance, SHARE_DECIMALS, rawFee)
@@ -132,8 +134,6 @@ export function SellDialog() {
         market,
         outcome,
         estimatedResult?.outcomeShareTokensIn,
-        amount.toString(),
-        rawFee,
     )
     //#endregion
 
@@ -192,7 +192,7 @@ export function SellDialog() {
                         <EthereumERC20TokenApprovedBoundary
                             amount={amount.toFixed()}
                             spender={AMM_FACTORY_ADDRESS}
-                            token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
+                            token={token}>
                             <ActionButton
                                 className={classes.button}
                                 fullWidth

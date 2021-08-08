@@ -86,7 +86,6 @@ export const estimateSellTrade = (
 
     const amount = formatAmount(inputDisplayAmount, shareTokenDecimals)
     const decimalFee = formatBalance(fee, SWAP_FEE_DECIMALS)
-
     const [setsOut, undesirableTokensInPerOutcome] = calcSellCompleteSets(
         amm.shareFactor,
         outcome.id,
