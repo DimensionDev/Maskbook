@@ -1,5 +1,6 @@
 import { ChainId } from '@masknet/web3-shared'
-import { ONE_SECOND, ONE_WEEK_SECONDS } from './constants'
+import type { I18NFunction } from '../../utils'
+import { ONE_DAY_SECONDS, ONE_SECOND, ONE_WEEK_SECONDS } from './constants'
 import type { Pool } from './types'
 
 export const calculateOdds = (usersTicketBalance: number, totalSupply: number, numberOfWinners: number) => {
@@ -54,4 +55,12 @@ export const getNetworkColor = (chainId: ChainId) => {
         default:
             return '#f1f1f1'
     }
+}
+
+export const getPrizePeriod = (t: I18NFunction, preiod: number) => {
+    return preiod === ONE_DAY_SECONDS
+        ? t('daily')
+        : preiod === ONE_WEEK_SECONDS
+        ? t('weekly')
+        : t('days', { preiod: (preiod / ONE_WEEK_SECONDS).toFixed() })
 }
