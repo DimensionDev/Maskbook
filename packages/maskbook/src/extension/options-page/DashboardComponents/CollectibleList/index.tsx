@@ -3,11 +3,15 @@ import { useUpdateEffect } from 'react-use'
 import { useValueRef } from '@masknet/shared'
 import {
     ChainId,
+    CollectibleProvider,
+    ERC1155TokenAssetDetailed,
+    ERC721TokenAssetDetailed,
     EthereumTokenType,
     formatEthereumAddress,
     useAccount,
     useChainId,
     useCollectibles,
+    useWallet,
     Wallet,
 } from '@masknet/web3-shared'
 import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
@@ -60,38 +64,36 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface CollectibleListProps {
+interface CollectibleListUIProps {
+    provider: CollectibleProvider
     wallet: Wallet
-    owner?: string
-    chainId?: ChainId
+    collectibles: (ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed)[]
+    loading: boolean
+    collectiblesRetry: () => void
+    error: Error | undefined
+    hasNextPage: boolean
     readonly?: boolean
+    page: number
+    onNextPage: () => void
+    onPrevPage: () => void
 }
-
-export function CollectibleList({ wallet, owner, chainId, readonly }: CollectibleListProps) {
+function CollectibleListUI({
+    provider,
+    wallet,
+    collectibles,
+    loading,
+    hasNextPage,
+    collectiblesRetry,
+    error,
+    readonly,
+    page,
+    onNextPage,
+    onPrevPage,
+}: CollectibleListUIProps) {
+    const classes = useStyles()
     const { t } = useI18N()
 
-    const classes = useStyles()
-    const defaultAcount = useAccount()
-    const account = owner ?? defaultAcount
-
-    const _chainId = useChainId()
-
-    const [page, setPage] = useState(0)
-    const provider = useValueRef(currentCollectibleDataProviderSettings)
-    const {
-        value = { collectibles: [], hasNextPage: false },
-        loading: collectiblesLoading,
-        retry: collectiblesRetry,
-        error: collectiblesError,
-    } = useCollectibles(account, chainId ?? _chainId, provider, page, 50)
-
-    const { collectibles = [], hasNextPage } = value
-
-    useUpdateEffect(() => {
-        setPage(0)
-    }, [account, provider])
-
-    if (collectiblesLoading)
+    if (loading)
         return (
             <Box className={classes.root}>
                 {Array.from({ length: 4 })
@@ -111,24 +113,10 @@ export function CollectibleList({ wallet, owner, chainId, readonly }: Collectibl
             </Box>
         )
 
-    const dataSource = owner
-        ? collectibles
-        : collectibles.filter((x) => {
-              const key = `${formatEthereumAddress(x.address)}_${x.tokenId}`
-              switch (x.type) {
-                  case EthereumTokenType.ERC721:
-                      return wallet.erc721_token_blacklist ? !wallet.erc721_token_blacklist.has(key) : true
-                  case EthereumTokenType.ERC1155:
-                      return wallet.erc1155_token_blacklist ? !wallet.erc1155_token_blacklist.has(key) : true
-                  default:
-                      return false
-              }
-          })
-
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
             <Box className={classes.container}>
-                {collectiblesError || dataSource.length === 0 ? (
+                {error || collectibles.length === 0 ? (
                     <Box
                         className={classes.empty}
                         sx={{
@@ -149,7 +137,7 @@ export function CollectibleList({ wallet, owner, chainId, readonly }: Collectibl
                     </Box>
                 ) : (
                     <Box className={classes.root}>
-                        {dataSource.map((x) => (
+                        {collectibles.map((x) => (
                             <div className={classes.card} key={x.tokenId}>
                                 <CollectibleCard token={x} provider={provider} wallet={wallet} readonly={readonly} />
                                 <div className={classes.description}>
@@ -162,7 +150,7 @@ export function CollectibleList({ wallet, owner, chainId, readonly }: Collectibl
                     </Box>
                 )}
             </Box>
-            {!(page === 0 && dataSource.length === 0) ? (
+            {!(page === 0 && collectibles.length === 0) ? (
                 <TablePagination
                     count={-1}
                     component="div"
@@ -172,17 +160,109 @@ export function CollectibleList({ wallet, owner, chainId, readonly }: Collectibl
                     rowsPerPageOptions={[30]}
                     labelDisplayedRows={() => null}
                     backIconButtonProps={{
-                        onClick: () => setPage((prev) => prev - 1),
+                        onClick: () => onPrevPage(),
                         size: 'small',
                         disabled: page === 0,
                     }}
                     nextIconButtonProps={{
-                        onClick: () => setPage((prev) => prev + 1),
+                        onClick: () => onNextPage(),
                         disabled: !hasNextPage,
                         size: 'small',
                     }}
                 />
             ) : null}
         </CollectibleContext.Provider>
+    )
+}
+
+export interface CollectibleListAddressProps {
+    address: string
+}
+
+export function CollectibleListAddress({ address }: CollectibleListAddressProps) {
+    const wallet = useWallet()
+    const provider = useValueRef(currentCollectibleDataProviderSettings)
+    const chainId = ChainId.Mainnet
+    const [page, setPage] = useState(0)
+
+    const {
+        value = { collectibles: [], hasNextPage: false },
+        loading: collectiblesLoading,
+        retry: collectiblesRetry,
+        error: collectiblesError,
+    } = useCollectibles(address, chainId, provider, page, 50)
+    const { collectibles = [], hasNextPage } = value
+
+    useUpdateEffect(() => {
+        setPage(0)
+    }, [provider, address])
+
+    if (!wallet) return null
+    return (
+        <CollectibleListUI
+            provider={provider}
+            wallet={wallet}
+            collectibles={collectibles}
+            loading={collectiblesLoading}
+            collectiblesRetry={collectiblesRetry}
+            error={collectiblesError}
+            readonly={true}
+            page={page}
+            hasNextPage={hasNextPage}
+            onPrevPage={() => setPage((prev) => prev - 1)}
+            onNextPage={() => setPage((next) => next + 1)}
+        />
+    )
+}
+
+export interface CollectibleListProps {
+    wallet: Wallet
+    readonly?: boolean
+}
+
+export function CollectibleList({ wallet, readonly }: CollectibleListProps) {
+    const account = useAccount()
+    const chainId = useChainId()
+    const [page, setPage] = useState(0)
+    const provider = useValueRef(currentCollectibleDataProviderSettings)
+    const {
+        value = { collectibles: [], hasNextPage: false },
+        loading: collectiblesLoading,
+        retry: collectiblesRetry,
+        error: collectiblesError,
+    } = useCollectibles(account, chainId, provider, page, 50)
+
+    const { collectibles = [], hasNextPage } = value
+
+    useUpdateEffect(() => {
+        setPage(0)
+    }, [account, provider])
+
+    const dataSource = collectibles.filter((x) => {
+        const key = `${formatEthereumAddress(x.address)}_${x.tokenId}`
+        switch (x.type) {
+            case EthereumTokenType.ERC721:
+                return wallet.erc721_token_blacklist ? !wallet.erc721_token_blacklist.has(key) : true
+            case EthereumTokenType.ERC1155:
+                return wallet.erc1155_token_blacklist ? !wallet.erc1155_token_blacklist.has(key) : true
+            default:
+                return false
+        }
+    })
+
+    return (
+        <CollectibleListUI
+            provider={provider}
+            wallet={wallet}
+            collectibles={dataSource}
+            loading={collectiblesLoading}
+            error={collectiblesError}
+            collectiblesRetry={collectiblesRetry}
+            hasNextPage={hasNextPage}
+            readonly={readonly}
+            page={page}
+            onPrevPage={() => setPage((prev) => prev - 1)}
+            onNextPage={() => setPage((prev) => prev + 1)}
+        />
     )
 }

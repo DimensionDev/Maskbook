@@ -1,5 +1,4 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { ChainId, useWallet } from '@masknet/web3-shared'
 import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
 import { useCallback, useEffect, useState } from 'react'
@@ -15,7 +14,7 @@ import {
 } from '../utils/selector'
 import { useEthereumAddress } from './useEthereumName'
 import Color from 'color'
-import { CollectibleList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
+import { CollectibleListAddress } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 
 function injectEnhancedProfileTab(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
@@ -203,7 +202,6 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
 }
 
 export function EnhancedProfileaPage() {
-    const selectedWallet = useWallet()
     const [show, setShow] = useState(false)
 
     useEffect(() => {
@@ -217,16 +215,5 @@ export function EnhancedProfileaPage() {
     }, [])
 
     const resolvedAddress = useEthereumAddress()
-
-    if (!selectedWallet) {
-        return null
-    }
-
-    return (
-        <>
-            {show ? (
-                <CollectibleList wallet={selectedWallet} owner={resolvedAddress} chainId={ChainId.Mainnet} readonly />
-            ) : null}
-        </>
-    )
+    return <>{show ? <CollectibleListAddress address={resolvedAddress ?? ''} /> : null}</>
 }
