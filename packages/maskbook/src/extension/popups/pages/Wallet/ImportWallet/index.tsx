@@ -2,7 +2,7 @@ import { memo, useMemo, useState } from 'react'
 import { makeStyles, Tab, Tabs, TextField, Typography } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
 import { z as zod } from 'zod'
-import { checkUppercase, checkLowercase, checkNumber } from '@masknet/shared'
+import { isUppercase, isLowercase, isDigit } from '@masknet/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { useI18N } from '../../../../../utils'
@@ -116,7 +116,7 @@ const ImportWallet = memo(() => {
                         (data) =>
                             Array.from(data).some((char) => {
                                 const code = char.charCodeAt(0)
-                                return checkUppercase(code)
+                                return isUppercase(code)
                             }),
                         'Must contain an uppercase character',
                     )
@@ -124,7 +124,7 @@ const ImportWallet = memo(() => {
                         (data) =>
                             Array.from(data).some((char) => {
                                 const code = char.charCodeAt(0)
-                                return checkLowercase(code)
+                                return isLowercase(code)
                             }),
                         'Must contain a lowercase character',
                     )
@@ -132,7 +132,7 @@ const ImportWallet = memo(() => {
                         (data) =>
                             Array.from(data).some((char) => {
                                 const code = char.charCodeAt(0)
-                                return checkNumber(code)
+                                return isDigit(code)
                             }),
                         'Must contain a number',
                     )
@@ -140,7 +140,7 @@ const ImportWallet = memo(() => {
                         (data) =>
                             Array.from(data).some((char) => {
                                 const code = char.charCodeAt(0)
-                                return !(checkUppercase(code) || checkLowercase(code) || checkNumber(code))
+                                return !(isUppercase(code) || isLowercase(code) || isDigit(code))
                             }),
                         'Must contain a special character',
                     ),

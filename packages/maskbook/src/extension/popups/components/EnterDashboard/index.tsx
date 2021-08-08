@@ -1,9 +1,9 @@
 import { memo } from 'react'
 import { Box, Typography } from '@material-ui/core'
-import { useEnter } from '../../hook/useEnter'
+import { useEnterDashboard } from '../../hook/useEnter'
 
 export const EnterDashboard = memo(() => {
-    const onEnter = useEnter()
+    const onEnter = useEnterDashboard()
 
     return (
         <Box style={{ padding: '12px 16px', cursor: 'pointer' }} onClick={onEnter}>

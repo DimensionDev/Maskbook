@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-export const useEnter = () => {
+export const useEnterDashboard = () => {
     return useCallback((event: React.MouseEvent) => {
         if (event.shiftKey) {
             browser.tabs.create({

@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { makeStyles, Box, Button, Typography } from '@material-ui/core'
-import { useEnter } from '../../hook/useEnter'
+import { useEnterDashboard } from '../../hook/useEnter'
 import { useRouteMatch } from 'react-router-dom'
 import { DialogRoutes } from '../../index'
 import { MasksIcon, MaskWalletIcon } from '@masknet/icons'
@@ -34,7 +34,7 @@ export const InitialPlaceholder = memo(() => {
     const { t } = useI18N()
     const classes = useStyles()
     const matchWallet = useRouteMatch(DialogRoutes.Wallet)
-    const onEnter = useEnter()
+    const onEnter = useEnterDashboard()
 
     return (
         <Box className={classes.container}>

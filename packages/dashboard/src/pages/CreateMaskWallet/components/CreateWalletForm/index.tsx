@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 import { MaskColorVar } from '@masknet/theme'
-import { checkUppercase, checkLowercase, checkNumber } from '@masknet/shared'
+import { isUppercase, isLowercase, isDigit } from '@masknet/shared'
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -76,7 +76,7 @@ export const CreateWalletForm = memo(() => {
                         (data) =>
                             Array.from(data).some((char) => {
                                 const code = char.charCodeAt(0)
-                                return checkUppercase(code)
+                                return isUppercase(code)
                             }),
                         'Must contain an uppercase character',
                     )
@@ -84,7 +84,7 @@ export const CreateWalletForm = memo(() => {
                         (data) =>
                             Array.from(data).some((char) => {
                                 const code = char.charCodeAt(0)
-                                return checkLowercase(code)
+                                return isLowercase(code)
                             }),
                         'Must contain a lowercase character',
                     )
@@ -92,7 +92,7 @@ export const CreateWalletForm = memo(() => {
                         (data) =>
                             Array.from(data).some((char) => {
                                 const code = char.charCodeAt(0)
-                                return checkNumber(code)
+                                return isDigit(code)
                             }),
                         'Must contain a number',
                     )
@@ -100,7 +100,7 @@ export const CreateWalletForm = memo(() => {
                         (data) =>
                             Array.from(data).some((char) => {
                                 const code = char.charCodeAt(0)
-                                return !(checkUppercase(code) || checkLowercase(code) || checkNumber(code))
+                                return !(isUppercase(code) || isLowercase(code) || isDigit(code))
                             }),
                         'Must contain a special character',
                     ),
