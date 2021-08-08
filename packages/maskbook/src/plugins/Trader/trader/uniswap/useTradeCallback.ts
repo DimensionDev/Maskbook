@@ -4,7 +4,7 @@ import type { SwapParameters, Trade } from '@uniswap/v2-sdk'
 import type { RouterV2 } from '@masknet/web3-contracts/types/RouterV2'
 import { TransactionState, TransactionStateType, TransactionEventType, useAccount } from '@masknet/web3-shared'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
-import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
+import { SLIPPAGE_SETTINGS_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
 import type { TradeComputed } from '../../types'
 
 interface SuccessfulCall {
@@ -20,7 +20,7 @@ interface FailedCall {
 export function useTradeCallback(
     trade: TradeComputed<Trade<Currency, Currency, TradeType>> | null,
     routerV2Contract: RouterV2 | null,
-    allowedSlippage = SLIPPAGE_TOLERANCE_DEFAULT,
+    allowedSlippage = SLIPPAGE_SETTINGS_DEFAULT,
     ddl = DEFAULT_TRANSACTION_DEADLINE,
 ) {
     const account = useAccount()

@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import JSBI from 'jsbi'
 import { Percent, TradeType, Currency } from '@uniswap/sdk-core'
 import { Router, Trade } from '@uniswap/v2-sdk'
-import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
+import { SLIPPAGE_SETTINGS_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
 import { useAccount } from '@masknet/web3-shared'
 import type { TradeComputed } from '../../types'
 
@@ -16,7 +16,7 @@ const UNISWAP_BIPS_BASE = JSBI.BigInt(10_000)
  */
 export function useSwapParameters(
     trade: TradeComputed<Trade<Currency, Currency, TradeType>> | null, // trade to execute, required
-    allowedSlippage: number = SLIPPAGE_TOLERANCE_DEFAULT, // in bips
+    allowedSlippage: number = SLIPPAGE_SETTINGS_DEFAULT, // in bips
     deadline: number = DEFAULT_TRANSACTION_DEADLINE, // in seconds from now
 ) {
     const account = useAccount()
