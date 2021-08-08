@@ -10,7 +10,7 @@ export function NativeQRScanner(props: { onScan?: (val: string) => void; onQuit?
                 // TODO:
                 throw new Error('Not supported on Android')
             }
-        } catch (e) {
+        } catch {
             props.onQuit?.()
         }
     })

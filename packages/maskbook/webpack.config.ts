@@ -245,7 +245,6 @@ function config(opts: {
             // Have to write disk cause plugin cannot be loaded over network
             writeToDisk: true,
             compress: false,
-            hot: !disableHMR,
             hotOnly: !disableHMR,
             port: hmrPort,
             // WDS does not support chrome-extension:// browser-extension://
@@ -338,9 +337,8 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
             getHTMLPlugin({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
             getHTMLPlugin({ chunks: ['debug'], filename: 'debug.html' }),
             getHTMLPlugin({ chunks: ['popups'], filename: 'popups.html' }),
+            getHTMLPlugin({ chunks: ['dashboard-next'], filename: 'next.html' }),
         ) // generate pages for each entry
-        if (mode === 'development')
-            main.plugins!.push(getHTMLPlugin({ chunks: ['dashboard-next'], filename: 'next.html' }))
         if (!isManifestV3)
             main.plugins!.push(getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }))
     }
@@ -411,7 +409,7 @@ function getCompilationInfo(argv: any) {
 
     //#region build time flags
     let isReproducibleBuild = !!argv.reproducible
-    let isProfile = !!argv.profile
+    const isProfile = !!argv.profile
     let webExtensionFirefoxLaunchVariant = 'firefox-desktop' as 'firefox-desktop' | 'firefox-android'
     //#endregion
 
@@ -435,7 +433,7 @@ function getCompilationInfo(argv: any) {
     let resolution: 'desktop' | 'mobile' = 'desktop'
     let build: 'stable' | 'beta' | 'insider' = 'stable'
     let manifest: 2 | 3 = 2
-    let readonlyCache = !!argv.readonlyCache
+    const readonlyCache = !!argv.readonlyCache
 
     //#region Manifest V3
     if (argv['manifest-v3']) {

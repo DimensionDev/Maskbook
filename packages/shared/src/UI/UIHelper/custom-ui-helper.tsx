@@ -1,10 +1,11 @@
 /// <reference path="./custom-ui.d.ts" />
+import type { ClassNameMap } from '@material-ui/styles'
 // Priority: classes from props > configHooks > defaultStyles
 export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
-    defaultStyles: Record<InternalKeys, string>,
-    props: withClasses<OverwrittenKeys>,
-    useConfigHooks?: () => Partial<Record<OverwrittenKeys, string>>,
-): Record<InternalKeys, string> & Partial<Record<OverwrittenKeys, string>> {
+    defaultStyles: ClassNameMap<InternalKeys>,
+    props: { classes?: Partial<ClassNameMap<OverwrittenKeys>> },
+    useConfigHooks?: () => Partial<ClassNameMap<OverwrittenKeys>>,
+): ClassNameMap<InternalKeys> & Partial<ClassNameMap<OverwrittenKeys>> {
     // Note: this is a React hooks
     const configOverwrite = useConfigHooks?.()
     const propsOverwrite = props.classes

@@ -5,6 +5,11 @@
         "logo_url": "https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"
     },
     {
+        "name": "MASK",
+        "address": "0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7",
+        "logo_url": "https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"
+    },
+    {
         "name": "NEST",
         "address": "0x04abEdA201850aC0124161F037Efd70c74ddC74C",
         "logo_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/5841.png"

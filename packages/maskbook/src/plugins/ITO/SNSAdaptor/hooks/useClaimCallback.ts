@@ -27,9 +27,7 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
     const isV1 = isSameAddress(ITO_CONTRACT_ADDRESS ?? '', contractAddress)
     const claimCallback = useCallback(async () => {
         if (!ITO_Contract || !contractAddress || pids.length === 0) {
-            setClaimState({
-                type: TransactionStateType.UNKNOWN,
-            })
+            setClaimState({ type: TransactionStateType.UNKNOWN })
             return
         }
         // start waiting for provider to confirm tx
@@ -51,7 +49,7 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
                 })
                 return
             }
-        } catch (e) {
+        } catch {
             setClaimState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Failed to check availability.'),
@@ -64,14 +62,9 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
             from: account,
             gas: await ITO_Contract.methods
                 .claim(pids)
-                .estimateGas({
-                    from: account,
-                })
+                .estimateGas({ from: account })
                 .catch((error) => {
-                    setClaimState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
+                    setClaimState({ type: TransactionStateType.FAILED, error })
                     throw error
                 }),
             gasPrice,
@@ -115,9 +108,7 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
     }, [account, chainId, ITO_Contract, stringify(pids), isV1])
 
     const resetCallback = useCallback(() => {
-        setClaimState({
-            type: TransactionStateType.UNKNOWN,
-        })
+        setClaimState({ type: TransactionStateType.UNKNOWN })
     }, [])
 
     return [claimState, claimCallback, resetCallback] as const

@@ -9,7 +9,8 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core'
-import { DataProvider, Trending } from '../../types'
+import type { Trending } from '../../types'
+import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({

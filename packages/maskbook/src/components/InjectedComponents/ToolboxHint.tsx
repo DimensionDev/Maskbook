@@ -1,4 +1,4 @@
-import { makeStyles, MenuItem, Typography } from '@material-ui/core'
+import { makeStyles, MenuItem, MenuItemProps, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import {
     useAccount,
@@ -8,7 +8,10 @@ import {
     useWallet,
     formatEthereumAddress,
 } from '@masknet/web3-shared'
-import { useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet } from '@masknet/plugin-infra'
+import {
+    useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
+    useActivatedPluginsSNSAdaptor,
+} from '@masknet/plugin-infra'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
@@ -16,9 +19,8 @@ import { Image } from '../shared/Image'
 import { useMenu } from '../../utils/hooks/useMenu'
 import { useCallback } from 'react'
 import { MaskMessage } from '../../utils/messages'
-import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
-import { ITO_PluginID } from '../../plugins/ITO/constants'
-import { FileServicePluginID } from '../../plugins/FileService/constants'
+import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
+import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
 import { useControlledDialog } from '../../plugins/Collectible/SNSAdaptor/useControlledDialog'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
@@ -29,7 +31,9 @@ import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
 import { useI18N } from '../../utils'
 import { base as ITO_Plugin } from '../../plugins/ITO/base'
-import { base as RedPacket_Plugin } from '../../plugins/RedPacket/base'
+import { forwardRef, useRef } from 'react'
+import { safeUnreachable } from '@dimensiondev/kit'
+import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -117,7 +121,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-interface ToolboxHintProps extends withClasses<never> {}
+interface ToolboxHintProps extends withClasses<'wrapper' | 'menuItem' | 'title' | 'text' | 'button' | 'icon'> {}
 export function ToolboxHint(props: ToolboxHintProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -144,34 +148,8 @@ export function ToolboxHint(props: ToolboxHintProps) {
     )
     //#endregion
 
-    //#region Red packet
-    const openRedPacket = useCallback(() => {
-        openEncryptedMessage()
-        setTimeout(() => {
-            MaskMessage.events.activatePluginCompositionEntry.sendToLocal(RedPacketPluginID)
-        })
-    }, [openEncryptedMessage])
-    //#endregion
-
-    //#region File Service
-    const openFileService = useCallback(() => {
-        openEncryptedMessage()
-        setTimeout(() => {
-            MaskMessage.events.activatePluginCompositionEntry.sendToLocal(FileServicePluginID)
-        })
-    }, [openEncryptedMessage])
-    //#endregion
-
-    //#region ITO
-    const openITO = useCallback(() => {
-        openEncryptedMessage()
-        setTimeout(() => {
-            MaskMessage.events.activatePluginCompositionEntry.sendToLocal(ITO_PluginID)
-        })
-    }, [openEncryptedMessage])
-    //#endregion
-
     //#region Buy currency
+    const transakPluginEnabled = useActivatedPluginsSNSAdaptor().find((x) => x.ID === TransakPluginID)
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
     const openBuyCurrency = useCallback(() => {
         setBuyDialog({
@@ -182,6 +160,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     //#region Swap
+    const swapPluginEnabled = useActivatedPluginsSNSAdaptor().find((x) => x.ID === TraderPluginID)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     //#endregion
 
@@ -193,47 +172,56 @@ export function ToolboxHint(props: ToolboxHintProps) {
     } = useControlledDialog()
     //#endregion
 
+    const items: ToolboxItemDescriptor[] = [
+        { ...ToolIconURLs.encryptedmsg, onClick: openEncryptedMessage },
+        {
+            ...ToolIconURLs.token,
+            onClick: openBuyCurrency,
+            hide: !(account && Flags.transak_enabled && transakPluginEnabled),
+        },
+        {
+            ...ToolIconURLs.swap,
+            onClick: openSwapDialog,
+            hide: !(chainIdValid && swapPluginEnabled),
+        },
+        {
+            ...ToolIconURLs.claim,
+            onClick: onClaimAllDialogOpen,
+            hide: operatingSupportedChainMapping[ITO_Plugin.ID],
+        },
+    ]
+
+    const pluginI18N = usePluginI18NField()
+    useActivatedPluginsSNSAdaptor().forEach((plugin) => {
+        if (!plugin.ToolbarEntry) return
+        const { image, label, onClick: onClickRaw, priority, useShouldDisplay } = plugin.ToolbarEntry
+
+        let onClick: () => void
+        if (onClickRaw === 'openCompositionEntry') {
+            onClick = () => {
+                openEncryptedMessage()
+                setTimeout(() => MaskMessage.events.activatePluginCompositionEntry.sendToLocal(plugin.ID))
+            }
+        } else {
+            safeUnreachable(onClickRaw)
+            onClick = () => {}
+        }
+
+        items.push({
+            onClick,
+            image,
+            label: typeof label === 'string' ? label : pluginI18N(plugin.ID, label),
+            priority,
+            useShouldDisplay,
+            hide: !operatingSupportedChainMapping[plugin.ID],
+        })
+    })
+
     const [menu, openMenu] = useMenu(
-        [
-            <MenuItem onClick={openEncryptedMessage} className={classes.menuItem}>
-                <Image src={ToolIconURLs.encryptedmsg.image} width={19} height={19} />
-                <Typography className={classes.text}>{ToolIconURLs.encryptedmsg.text}</Typography>
-            </MenuItem>,
-            operatingSupportedChainMapping[RedPacket_Plugin.ID] ? (
-                <MenuItem onClick={openRedPacket} className={classes.menuItem}>
-                    <Image src={ToolIconURLs.redpacket.image} width={19} height={19} />
-                    <Typography className={classes.text}>{ToolIconURLs.redpacket.text}</Typography>
-                </MenuItem>
-            ) : null,
-            <MenuItem onClick={openFileService} className={classes.menuItem}>
-                <Image src={ToolIconURLs.files.image} width={19} height={19} />
-                <Typography className={classes.text}>{ToolIconURLs.files.text}</Typography>
-            </MenuItem>,
-            operatingSupportedChainMapping[ITO_Plugin.ID] ? (
-                <MenuItem onClick={openITO} className={classes.menuItem}>
-                    <Image src={ToolIconURLs.markets.image} width={19} height={19} />
-                    <Typography className={classes.text}>{ToolIconURLs.markets.text}</Typography>
-                </MenuItem>
-            ) : null,
-            account && Flags.transak_enabled ? (
-                <MenuItem onClick={openBuyCurrency} className={classes.menuItem}>
-                    <Image src={ToolIconURLs.token.image} width={19} height={19} />
-                    <Typography className={classes.text}>{ToolIconURLs.token.text}</Typography>
-                </MenuItem>
-            ) : null,
-            chainIdValid ? (
-                <MenuItem onClick={openSwapDialog} className={classes.menuItem}>
-                    <Image src={ToolIconURLs.swap.image} width={19} height={19} />
-                    <Typography className={classes.text}>{ToolIconURLs.swap.text}</Typography>
-                </MenuItem>
-            ) : null,
-            operatingSupportedChainMapping[ITO_Plugin.ID] ? (
-                <MenuItem onClick={onClaimAllDialogOpen} className={classes.menuItem}>
-                    <Image src={ToolIconURLs.claim.image} width={19} height={19} />
-                    <Typography className={classes.text}>{ToolIconURLs.claim.text}</Typography>
-                </MenuItem>
-            ) : null,
-        ],
+        items
+            .filter((x) => x.hide !== true)
+            .sort((a, b) => b.priority - a.priority)
+            .map((desc) => <ToolboxItem className={classes.menuItem} {...desc} />),
         false,
         {
             paperProps: {
@@ -284,3 +272,27 @@ export function ToolboxHint(props: ToolboxHintProps) {
         </>
     )
 }
+
+interface ToolboxItemDescriptor {
+    onClick: () => void
+    image: string
+    label: string
+    hide?: boolean
+    priority: number
+    useShouldDisplay?(): boolean
+}
+// TODO: this should be rendered in the ErrorBoundary
+const ToolboxItem = forwardRef<any, MenuItemProps & ToolboxItemDescriptor>((props, ref) => {
+    const { image, label, hide, priority, useShouldDisplay, ...rest } = props
+    const classes = useStyles()
+    const shouldDisplay = useRef(useShouldDisplay || (() => true)).current() && !hide
+
+    if (!shouldDisplay) return null
+
+    return (
+        <MenuItem ref={ref} {...rest}>
+            <Image src={image} width={19} height={19} />
+            <Typography className={classes.text}>{label}</Typography>
+        </MenuItem>
+    )
+})

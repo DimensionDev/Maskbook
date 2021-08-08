@@ -205,8 +205,8 @@ async function* decryptFromPayloadWithProgress_raw(
             const b = decryptAsAuthor(whoAmI, minePublic)
             // ! Don't remove the await
             return await a.catch(() => b)
-        } catch (e) {
-            lastError = e
+        } catch (error) {
+            lastError = error
         }
 
         if (author.equals(whoAmI)) {
@@ -235,16 +235,16 @@ async function* decryptFromPayloadWithProgress_raw(
         try {
             // ! Do not remove the await here.
             return await decryptWith(aesKeyEncrypted)
-        } catch (e) {
-            if (e.message === i18n.t('service_not_share_target')) {
-                console.debug(e)
+        } catch (error) {
+            if (error instanceof Error && error.message === i18n.t('service_not_share_target')) {
+                console.debug(error)
                 // TODO: Replace this error with:
                 // You do not have the necessary private key to decrypt this message.
                 // What to do next: You can ask your friend to visit your profile page, so that their Mask extension will detect and add you to recipients.
                 // ? after the auto-share with friends is done.
-                yield makeError(e)
+                yield makeError(error)
             } else {
-                return handleDOMException(e)
+                return handleDOMException(error)
             }
         }
 
@@ -261,8 +261,8 @@ async function* decryptFromPayloadWithProgress_raw(
             console.log('New key received, trying', aes)
             try {
                 return await decryptWith(aes)
-            } catch (e) {
-                console.debug(e)
+            } catch (error) {
+                console.debug(error)
             }
         }
         return makeError(i18n.t('service_not_share_target'))
@@ -319,7 +319,7 @@ async function* decryptFromImageUrlWithProgress_raw(
     const post = await decodeImageUrl(url, {
         pass: author.toText(),
     })
-    if (post.indexOf('🎼') !== 0 && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
+    if (!post.startsWith('🎼') && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
         return makeError(i18n.t('service_decode_image_payload_failed'), true)
     const worker = await Result.wrapAsync(() => getNetworkWorker(author))
     if (worker.err) return makeError(worker.val as Error)
@@ -385,7 +385,7 @@ async function* findAuthorPublicKey(
                 .catch(() => null)
         }
     }
-    if (author && author.publicKey) return author
+    if (author?.publicKey) return author
     return 'out of chance'
 }
 
@@ -405,7 +405,7 @@ async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
             'append',
         )
     }
-    if (cachedKey && cachedKey.postCryptoKey) {
+    if (cachedKey?.postCryptoKey) {
         try {
             const result = decodeText(
                 await cryptoProvider.decryptWithAES({

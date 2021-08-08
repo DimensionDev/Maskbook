@@ -5,8 +5,9 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-es'
 import { FormattedCurrency, useValueRef, useRemoteControlledDialog, useStylesExtends, TokenIcon } from '@masknet/shared'
-import { useI18N, Flags } from '../../../../utils'
-import { Coin, Currency, DataProvider, Stat, TradeProvider, Trending } from '../../types'
+import { useI18N } from '../../../../utils'
+import type { Coin, Currency, Stat, Trending } from '../../types'
+import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
@@ -22,6 +23,8 @@ import {
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSaftyAlert } from './CoinSaftyAlert'
+import { PLUGIN_IDENTIFIER as TRANSAK_PLUGIN_ID } from '../../../Transak/constants'
+import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -128,6 +131,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     //#region buy
+    const transakPluginEnabled = useActivatedPluginsSNSAdaptor().find((x) => x.ID === TRANSAK_PLUGIN_ID)
     const account = useAccount()
     const isAllowanceCoin = useTransakAllowanceCoin(coin)
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
@@ -203,7 +207,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             </CoinMenu>
                         ) : null}
 
-                        {account && trending.coin.symbol && isAllowanceCoin && Flags.transak_enabled ? (
+                        {transakPluginEnabled && account && trending.coin.symbol && isAllowanceCoin ? (
                             <Button
                                 className={classes.buy}
                                 startIcon={<MonetizationOnOutlinedIcon />}

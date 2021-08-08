@@ -35,6 +35,7 @@ import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { NetworkIcon } from '../../../../components/shared/NetworkIcon'
 import { currentNetworkSettings, currentProviderSettings } from '../../settings'
 import { Flags } from '../../../../utils'
+import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles((theme: Theme) => ({
     paper: {
@@ -75,10 +76,10 @@ const useStyles = makeStyles((theme: Theme) => ({
         height: 48,
         width: 48,
         borderRadius: 48,
-        backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey['900'] : '#F7F9FA',
+        backgroundColor: getMaskColor(theme).twitterBackground,
     },
     networkIcon: {
-        backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey['900'] : '#F7F9FA',
+        backgroundColor: getMaskColor(theme).twitterBackground,
     },
     checkedBadge: {
         position: 'absolute',
@@ -111,6 +112,7 @@ const networks = [
     NetworkType.Ethereum,
     Flags.bsc_enabled ? NetworkType.Binance : undefined,
     Flags.polygon_enabled ? NetworkType.Polygon : undefined,
+    Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
 ].filter(Boolean) as NetworkType[]
 
 interface SelectProviderDialogUIProps extends withClasses<never> {}

@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface TradeSummaryProps extends withClasses<never> {
+export interface TradeSummaryProps extends withClasses<'root'> {
     trade: TradeComputed
     provider: TradeProvider
     inputToken: FungibleTokenDetailed

@@ -82,10 +82,12 @@ export const Balance = memo<BalanceCardProps>(({ balance, onSend, onBuy, onSwap,
                 <BalanceDisplayContainer>
                     <BalanceTitle>{t.wallets_balance()}</BalanceTitle>
                     <BalanceContent>
-                        {balance.toLocaleString('en', {
-                            style: 'currency',
-                            currency: 'USD',
-                        })}
+                        {isNaN(balance)
+                            ? '-'
+                            : balance.toLocaleString('en', {
+                                  style: 'currency',
+                                  currency: 'USD',
+                              })}
                     </BalanceContent>
                 </BalanceDisplayContainer>
             </Box>

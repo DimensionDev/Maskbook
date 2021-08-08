@@ -12,7 +12,7 @@ import { useMnemonicWordsPuzzle } from '@masknet/web3-shared'
 
 enum CreateWalletStep {
     NameAndWords = 0,
-    Verify,
+    Verify = 1,
 }
 
 const useStyles = makeStyles((theme) => ({

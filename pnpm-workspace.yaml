@@ -5,6 +5,7 @@ packages:
   - 'packages/scripts'
   - 'packages/dashboard'
   - 'packages/maskbook'
+  - 'packages/public-api'
   - 'packages/shared-base'
   - 'packages/shared'
   - 'packages/web3-constants'

@@ -38,8 +38,8 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
                 // if the open success, the stored version is small or eq than currentTryOpenVersion
                 // let's call the prepare function to do all the async jobs
                 lastVersionData = await asyncUpgradePrepare(db)
-            } catch (e) {
-                if (currentVersion >= latestVersion) throw e
+            } catch (error) {
+                if (currentVersion >= latestVersion) throw error
                 // if the stored database version is bigger than the currentTryOpenVersion
                 // It will fail and we just move to next version
             }

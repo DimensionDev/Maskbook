@@ -33,13 +33,13 @@ const useDatabasePreviewCardStyles = makeStyles((theme: Theme) => ({
 }))
 
 export enum DatabaseRecordType {
-    Persona,
-    Profile,
-    Post,
-    Wallet,
+    Persona = 0,
+    Profile = 1,
+    Post = 2,
+    Wallet = 3,
 }
 
-export interface DatabasePreviewCardProps extends withClasses<never> {
+export interface DatabasePreviewCardProps extends withClasses<'table' | 'label' | 'icon'> {
     dense?: boolean
     records: {
         type: DatabaseRecordType

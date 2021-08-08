@@ -13,6 +13,8 @@ export const LightColor = {
     lightBackground: '#F9FAFA',
     suspensionBackground: 'rgba(249, 250, 250, 0.8)',
     normalBackground: '#F3F3F4',
+    twitterBackground: '#F7F9FA',
+    twitterBackgroundHover: '#EFF1F2',
     redMain: '#ff5f5f',
     redLight: '#ffafaf',
     redContrastText: '#ffffff',
@@ -44,7 +46,8 @@ export const LightColor = {
     textLight: '#A6A9B6',
     lightestBackground: '#FFFFFF',
     linkText: '#1C68F3',
-    white: '#ffffff',
+    twitter: '#2CA4EF',
+    facebook: '#4267B2',
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
@@ -58,6 +61,8 @@ export const DarkColor: typeof LightColor = {
     lightBackground: '#2E314F',
     suspensionBackground: 'rgba(27, 30, 60, 0.8)',
     normalBackground: '#262947',
+    twitterBackground: '#17191D',
+    twitterBackgroundHover: '#17191D',
     redMain: '#ff5f5f',
     redLight: '#46304a',
     redContrastText: '#ffffff',
@@ -91,7 +96,8 @@ export const DarkColor: typeof LightColor = {
     textLight: '#A6A9B6',
     lightestBackground: '#212422',
     linkText: '#ffffff',
-    white: '#ffffff',
+    twitter: '#2CA4EF',
+    facebook: '#4267B2',
 }
 
 export type Color = typeof LightColor

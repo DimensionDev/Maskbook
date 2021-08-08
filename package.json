@@ -24,7 +24,7 @@
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
     "packages/**/*.{ts,tsx,js,jsx}": "eslint -c packages/.eslintrc.json --fix",
-    "packages/maskbook/**/*": "gulp locale-kit --sync-keys --remove-unused-keys"
+    "packages/maskbook/**/*": "node ./packages/scripts/src/bin/precommit-hook-localekit.js"
   },
   "dependencies": {
     "@emotion/cache": "^11.4.0",
