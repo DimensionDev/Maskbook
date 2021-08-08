@@ -28,14 +28,14 @@ import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { PluginAugurMessages } from '../messages'
-import type { AMMOutcome, Market } from '../types'
+import type { AmmOutcome, Market } from '../types'
 import { useBuyCallback } from '../hooks/useBuyCallback'
 import { toBips } from '../../Trader/helpers'
 import { currentSlippageTolerance } from '../../Trader/settings'
 import TuneIcon from '@material-ui/icons/Tune'
 import { SHARE_DECIMALS } from '../constants'
 import { estimateBuyTrade, getRawFee } from '../utils'
-import { useAMMExchange } from '../hooks/useAMMMarket'
+import { useAmmExchange } from '../hooks/useAmmExchange'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -88,7 +88,7 @@ export function BuyDialog() {
     const [id] = useState(uuid())
     const [market, setMarket] = useState<Market>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
-    const [outcome, setOutcome] = useState<AMMOutcome>()
+    const [outcome, setOutcome] = useState<AmmOutcome>()
     const [rawAmount, setRawAmount] = useState('')
 
     // context
@@ -146,7 +146,7 @@ export function BuyDialog() {
     //#endregion
 
     //#region AmmExchange
-    const { value: ammExchange, loading: loadingAmm } = useAMMExchange(market?.address ?? '', market?.id ?? '')
+    const { value: ammExchange, loading: loadingAmm } = useAmmExchange(market?.address ?? '', market?.id ?? '')
     const rawFee = getRawFee(market?.swapFee ?? '')
     const estimatedResult = useMemo(() => {
         if (!ammExchange || !token || !outcome) return

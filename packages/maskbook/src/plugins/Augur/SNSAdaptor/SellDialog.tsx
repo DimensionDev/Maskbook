@@ -22,11 +22,11 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { WalletMessages } from '../../Wallet/messages'
 import { PluginAugurMessages } from '../messages'
-import type { AMMOutcome, Market } from '../types'
+import type { AmmOutcome, Market } from '../types'
 import { SHARE_DECIMALS } from '../constants'
 import { useSellCallback } from '../hooks/useSellCallback'
 import { estimateSellTrade, getRawFee } from '../utils'
-import { useAMMExchange } from '../hooks/useAMMMarket'
+import { useAmmExchange } from '../hooks/useAmmExchange'
 // import { estimateSellTrade } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -81,7 +81,7 @@ export function SellDialog() {
     const [market, setMarket] = useState<Market>()
     const [cashToken, setCashToken] = useState<FungibleTokenDetailed>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
-    const [outcome, setOutcome] = useState<AMMOutcome>()
+    const [outcome, setOutcome] = useState<AmmOutcome>()
     const [rawAmount, setRawAmount] = useState('')
     const { AMM_FACTORY_ADDRESS } = useAugurConstants()
 
@@ -119,7 +119,7 @@ export function SellDialog() {
     //#endregion
 
     //#region AmmExchange
-    const { value: ammExchange, loading: loadingAmm } = useAMMExchange(market?.address ?? '', market?.id ?? '')
+    const { value: ammExchange, loading: loadingAmm } = useAmmExchange(market?.address ?? '', market?.id ?? '')
     const rawFee = getRawFee(market?.swapFee ?? '')
     const estimatedResult = useMemo(() => {
         if (!ammExchange || !outcome || !tokenBalance || !rawAmount || !rawFee) return

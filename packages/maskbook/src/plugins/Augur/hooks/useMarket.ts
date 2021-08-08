@@ -2,7 +2,7 @@ import { formatAmount, formatBalance, useAugurConstants } from '@masknet/web3-sh
 import BigNumber from 'bignumber.js'
 import { useAsyncRetry } from 'react-use'
 import { FALLBACK_SWAP_FEE, SWAP_FEE_DECIMALS } from '../constants'
-import { useAMMFactory } from '../contracts/useAMMFactory'
+import { useAmmFactory } from '../contracts/useAmmFactory'
 import { useSportsLinkMarketFactory } from '../contracts/useSportsLinkMarketFactory'
 import { PluginAugurRPC } from '../messages'
 import type { Market } from '../types'
@@ -11,7 +11,7 @@ import { deriveSportMarketInfo, getSport, getTeam } from '../utils'
 export function useFetchMarket(address: string, id: string, link: string) {
     const sportLinkMarekFactoryContract = useSportsLinkMarketFactory(address)
     const { AMM_FACTORY_ADDRESS, GRAPH_URL } = useAugurConstants()
-    const ammMarekFactoryContract = useAMMFactory(AMM_FACTORY_ADDRESS ?? '')
+    const ammMarekFactoryContract = useAmmFactory(AMM_FACTORY_ADDRESS ?? '')
 
     return useAsyncRetry(async () => {
         if (!sportLinkMarekFactoryContract || !ammMarekFactoryContract || !GRAPH_URL) return
@@ -25,7 +25,7 @@ export function useFetchMarket(address: string, id: string, link: string) {
             rawSwapFee = formatAmount(FALLBACK_SWAP_FEE / 100, SWAP_FEE_DECIMALS)
         }
 
-        const ammExchange = await PluginAugurRPC.fetchAMMExchange(address, id, GRAPH_URL)
+        const ammExchange = await PluginAugurRPC.fetchAmmExchange(address, id, GRAPH_URL)
         const balances = await ammMarekFactoryContract.methods.getPoolBalances(address, id).call()
         const weights = await ammMarekFactoryContract.methods.getPoolWeights(address, id).call()
         const shareFactor = await sportLinkMarekFactoryContract.methods.shareFactor().call()

@@ -11,7 +11,7 @@ import {
     Link,
 } from '@material-ui/core'
 import { Trans } from 'react-i18next'
-import type { AMMOutcome, Market } from '../types'
+import type { AmmOutcome, Market } from '../types'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginAugurMessages } from '../messages'
@@ -167,7 +167,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface MarketBuySellProps {
     market: Market
-    ammOutcomes: AMMOutcome[]
+    ammOutcomes: AmmOutcome[]
     cashToken: FungibleTokenDetailed
 }
 
@@ -177,7 +177,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
     const { t } = useI18N()
     const classes = useStyles()
     const [isBuy, setIsBuy] = useState(true)
-    const [selectedOutcome, setSelectedOutcome] = useState<AMMOutcome>()
+    const [selectedOutcome, setSelectedOutcome] = useState<AmmOutcome>()
 
     const { setDialog: openBuyDialog } = useRemoteControlledDialog(PluginAugurMessages.BuyDialogUpdated)
     const onBuy = useCallback(() => {

@@ -1,12 +1,12 @@
 import { useAugurConstants } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useAsyncRetry } from 'react-use'
-import { useAMMFactory } from '../contracts/useAMMFactory'
-import type { AMMOutcome, Market } from '../types'
+import { useAmmFactory } from '../contracts/useAmmFactory'
+import type { AmmOutcome, Market } from '../types'
 
-export function useAMMOutcomes(address: string, id: string, market: Market | undefined) {
+export function useAmmOutcomes(address: string, id: string, market: Market | undefined) {
     const { AMM_FACTORY_ADDRESS } = useAugurConstants()
-    const ammMarekFactoryContract = useAMMFactory(AMM_FACTORY_ADDRESS ?? '')
+    const ammMarekFactoryContract = useAmmFactory(AMM_FACTORY_ADDRESS ?? '')
 
     return useAsyncRetry(async () => {
         if (!ammMarekFactoryContract || !market) return
@@ -31,6 +31,6 @@ export function useAMMOutcomes(address: string, id: string, market: Market | und
         const ammOutcomes = shares.map((share: string, id: number) => {
             return { ...market.outcomes[id], rate: new BigNumber(share).dividedBy(totalShares) }
         })
-        return ammOutcomes as AMMOutcome[]
+        return ammOutcomes as AmmOutcome[]
     }, [address, id, ammMarekFactoryContract, market])
 }

@@ -8,8 +8,8 @@ import {
     Market,
     SportMarketType,
     SportTitles,
-    AMMExchange,
-    AMMOutcome,
+    AmmExchange,
+    AmmOutcome,
     EstimateTradeResult,
 } from '../types'
 import { BigNumber as BN } from 'bignumber.js'
@@ -38,9 +38,9 @@ export const getSport = (id: string) => {
 }
 
 export const estimateBuyTrade = (
-    amm: AMMExchange,
+    amm: AmmExchange,
     inputDisplayAmount: string,
-    outcome: AMMOutcome,
+    outcome: AmmOutcome,
     fee: string,
     cash: FungibleTokenDetailed,
     shareDecimals: number,
@@ -75,9 +75,9 @@ export const estimateBuyTrade = (
 }
 
 export const estimateSellTrade = (
-    amm: AMMExchange,
+    amm: AmmExchange,
     inputDisplayAmount: string,
-    outcome: AMMOutcome,
+    outcome: AmmOutcome,
     userBalance: string,
     shareTokenDecimals: number,
     fee: string,

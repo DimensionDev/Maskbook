@@ -33,7 +33,7 @@ export interface Outcome {
     shareToken: string
 }
 
-export interface AMMOutcome extends Outcome {
+export interface AmmOutcome extends Outcome {
     rate: BigNumber
 }
 
@@ -55,7 +55,7 @@ export interface Market {
     value0: string
     collateral: string
     swapFee: string
-    ammExchange?: AMMExchange
+    ammExchange?: AmmExchange
 }
 
 export enum SportMarketType {
@@ -69,7 +69,7 @@ export interface SportTitles {
     description: string
 }
 
-export interface AMMExchange {
+export interface AmmExchange {
     totalVolume: BigNumber
     volume24hr: BigNumber
     totalLiquidity: BigNumber

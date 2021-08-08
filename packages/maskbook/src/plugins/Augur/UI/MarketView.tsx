@@ -20,7 +20,7 @@ import { MarketViewDeck } from './MarketViewDeck'
 import { MarketDescription } from './MarketDescription'
 import { MarketBuySell } from './MarketBuySell'
 import { useFetchMarket } from '../hooks/useMarket'
-import { useAMMOutcomes } from '../hooks/useAMMOutcomes'
+import { useAmmOutcomes } from '../hooks/useAmmOutcomes'
 import { useERC20TokenDetailed } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
@@ -126,10 +126,10 @@ export function MarketView(props: MarketViewProps) {
     const { value: market, loading, error, retry } = useFetchMarket(address, id, link)
     const {
         value: ammOutcomes,
-        loading: loadingAMMOutcomes,
-        error: errorAMMOutcomes,
-        retry: retryAMMOutcomes,
-    } = useAMMOutcomes(address, id, market)
+        loading: loadingAmmOutcomes,
+        error: errorAmmOutcomes,
+        retry: retryAmmOutcomes,
+    } = useAmmOutcomes(address, id, market)
 
     const {
         value: cashToken,
@@ -138,21 +138,21 @@ export function MarketView(props: MarketViewProps) {
         error: errorToken,
     } = useERC20TokenDetailed(market?.collateral ?? '')
 
-    if (loading || loadingAMMOutcomes || loadingToken)
+    if (loading || loadingAmmOutcomes || loadingToken)
         return (
             <div className={classes.message}>
                 <CircularProgress className={classes.progress} color="primary" size={15} />
             </div>
         )
 
-    if (error || errorAMMOutcomes || errorToken)
+    if (error || errorAmmOutcomes || errorToken)
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_augur_smt_wrong')}
                 <RefreshIcon
                     className={classes.refresh}
                     color="primary"
-                    onClick={error ? retry : errorToken ? retryToken : retryAMMOutcomes}
+                    onClick={error ? retry : errorToken ? retryToken : retryAmmOutcomes}
                 />
             </Typography>
         )

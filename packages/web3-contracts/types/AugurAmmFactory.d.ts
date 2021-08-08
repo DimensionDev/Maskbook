@@ -66,9 +66,9 @@ export type SharesSwapped = ContractEventLog<{
     6: string
 }>
 
-export interface AugurAMMFactory extends BaseContract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): AugurAMMFactory
-    clone(): AugurAMMFactory
+export interface AugurAmmFactory extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): AugurAmmFactory
+    clone(): AugurAmmFactory
     methods: {
         BONE(): NonPayableTransactionObject<string>
 

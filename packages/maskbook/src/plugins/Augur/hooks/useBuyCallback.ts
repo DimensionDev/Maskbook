@@ -12,18 +12,18 @@ import {
     TransactionEventType,
     useAugurConstants,
 } from '@masknet/web3-shared'
-import { useAMMFactory } from '../contracts/useAMMFactory'
-import type { AMMOutcome, Market } from '../types'
+import { useAmmFactory } from '../contracts/useAmmFactory'
+import type { AmmOutcome, Market } from '../types'
 
 export function useBuyCallback(
     amount: string,
     minTokenOut: string,
     market?: Market,
-    outcome?: AMMOutcome,
+    outcome?: AmmOutcome,
     token?: FungibleTokenDetailed,
 ) {
     const { AMM_FACTORY_ADDRESS } = useAugurConstants()
-    const ammContract = useAMMFactory(AMM_FACTORY_ADDRESS ?? '')
+    const ammContract = useAmmFactory(AMM_FACTORY_ADDRESS ?? '')
 
     const account = useAccount()
     const nonce = useNonce()

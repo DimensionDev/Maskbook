@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
-import type { AMMExchange } from '../types'
+import type { AmmExchange } from '../types'
 
-export async function fetchAMMExchange(address: string, id: string, url: string) {
+export async function fetchAmmExchange(address: string, id: string, url: string) {
     const body = {
         query: `{
             market(id: "${address + '-' + id}") {
@@ -22,14 +22,14 @@ export async function fetchAMMExchange(address: string, id: string, url: string)
         mode: 'cors',
         credentials: 'omit',
     })
-    const rawAMMExchange = (await response.json())?.data.market
-    if (!rawAMMExchange) return
+    const rawAmmExchange = (await response.json())?.data.market
+    if (!rawAmmExchange) return
 
     const ammExchange = {
-        liquidity: rawAMMExchange.liquidity.map((x: { collateral: string }) => {
+        liquidity: rawAmmExchange.liquidity.map((x: { collateral: string }) => {
             return { collateral: new BigNumber(x.collateral).negated() }
         }),
-        trades: rawAMMExchange.trades.map((x: { outcome: string; collateral: string; timestamp: string }) => {
+        trades: rawAmmExchange.trades.map((x: { outcome: string; collateral: string; timestamp: string }) => {
             return {
                 outcome: Number.parseInt(x.outcome, 16),
                 collateral: new BigNumber(x.collateral).negated(),
@@ -39,7 +39,7 @@ export async function fetchAMMExchange(address: string, id: string, url: string)
         totalLiquidity: new BigNumber(0),
         totalVolume: new BigNumber(0),
         volume24hr: new BigNumber(0),
-    } as AMMExchange
+    } as AmmExchange
 
     ammExchange.totalLiquidity = ammExchange.liquidity.reduce(
         (accumulator, currentValue): BigNumber => accumulator.plus(currentValue.collateral),

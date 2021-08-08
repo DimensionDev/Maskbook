@@ -1,13 +1,13 @@
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { AUGUR_PLUGIN_ID } from './constants'
-import type { AMMOutcome, Market } from './types'
+import type { AmmOutcome, Market } from './types'
 
 type BuyDialogUpdated =
     | {
           open: true
           market: Market
-          outcome: AMMOutcome
+          outcome: AmmOutcome
           cashToken: FungibleTokenDetailed
       }
     | {
@@ -18,7 +18,7 @@ type SellDialogUpdated =
     | {
           open: true
           market: Market
-          outcome: AMMOutcome
+          outcome: AmmOutcome
           cashToken: FungibleTokenDetailed
       }
     | {
