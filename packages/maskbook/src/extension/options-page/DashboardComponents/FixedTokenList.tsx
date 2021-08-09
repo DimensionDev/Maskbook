@@ -1,6 +1,5 @@
 import {
     currySameAddress,
-    EthereumTokenType,
     FungibleTokenDetailed,
     makeSortTokenFn,
     useAccount,
