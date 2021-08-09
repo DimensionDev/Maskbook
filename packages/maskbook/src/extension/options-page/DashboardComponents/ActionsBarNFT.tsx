@@ -3,7 +3,7 @@ import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { Wallet, NonFungibleTokenDetailed, EthereumTokenType, useChainIdValid } from '@masknet/web3-shared'
 import { useMenu, useI18N } from '../../../utils'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogNFT } from '../DashboardDialogs/Wallet'
 

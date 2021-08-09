@@ -1,24 +1,24 @@
-import { isNil } from 'lodash-es'
+import { NetworkType, pow10, PortfolioProvider } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
+import { isNil } from 'lodash-es'
+import * as DeBankAPI from '../apis/debank'
+import * as ZerionApi from '../apis/zerion'
+import { resolveDebankChainName, resolveZerionTransactionsScopeName } from '../pipes'
 import {
     DebankTransactionDirection,
     HistoryResponse,
-    PortfolioProvider,
     Transaction,
     ZerionRBDTransactionType,
     ZerionTransactionItem,
     ZerionTransactionStatus,
 } from '../types'
-import * as DeBankAPI from '../apis/debank'
-import * as ZerionApi from '../apis/zerion'
-import { NetworkType, pow10 } from '@masknet/web3-shared'
-import { resolveDebankChainName, resolveZerionTransactionsScopeName } from '../pipes'
 
 export async function getTransactionList(
     address: string,
     network: NetworkType,
     provider: PortfolioProvider,
     page?: number,
+    size = 30,
 ): Promise<{
     transactions: Transaction[]
     hasNextPage: boolean
@@ -47,7 +47,7 @@ export async function getTransactionList(
         if (meta.status !== 'ok') throw new Error('Fail to load transactions.')
         return {
             transactions: fromZerion(payload.transactions),
-            hasNextPage: payload.transactions.length === 30,
+            hasNextPage: payload.transactions.length === size,
         }
     }
     return {

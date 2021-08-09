@@ -31,7 +31,7 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
         try {
             await Services.Welcome.createBackupFile({ download: true, onlyBackupWhoAmI: false })
             props.onClose()
-        } catch (e) {
+        } catch {
             enqueueSnackbar(t('set_up_backup_fail'), {
                 variant: 'error',
             })

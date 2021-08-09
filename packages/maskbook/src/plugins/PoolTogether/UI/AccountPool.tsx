@@ -143,7 +143,7 @@ export function AccountPool(props: AccountPoolProps) {
                     </Typography>
                 </Grid>
             </Grid>
-            <Grid container item xs={9} className={classes.info}>
+            <Grid container flexWrap="nowrap" item xs={9} className={classes.info}>
                 <Grid item className={classes.item}>
                     <Typography color={DarkColor.textSecondary} variant="h5" fontWeight="fontWeightBold">
                         {formattedBalance}

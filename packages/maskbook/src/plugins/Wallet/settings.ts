@@ -1,8 +1,14 @@
 import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
-import { ChainId, ProviderType, NetworkType, GasNow } from '@masknet/web3-shared'
+import {
+    ChainId,
+    ProviderType,
+    PortfolioProvider,
+    CollectibleProvider,
+    NetworkType,
+    GasNow,
+} from '@masknet/web3-shared'
 import { PLUGIN_IDENTIFIER } from './constants'
-import { CollectibleProvider, PortfolioProvider } from './types'
 import { isEqual } from 'lodash-es'
 import { connectGasNow } from './apis/gasnow'
 import { trackEtherPrice } from './apis/coingecko'
@@ -131,5 +137,11 @@ export const currentEtherPriceSettings = createGlobalSettings<number>(`${PLUGIN_
 
 const effect = startEffects(import.meta.webpackHot)
 
-effect(() => connectGasNow())
+effect(() => {
+    try {
+        return connectGasNow()
+    } catch {
+        return () => {}
+    }
+})
 effect(() => trackEtherPrice())

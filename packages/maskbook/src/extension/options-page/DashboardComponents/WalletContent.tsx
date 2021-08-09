@@ -6,7 +6,7 @@ import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutline
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Check from '@material-ui/icons/Check'
-import { Wallet, useChainIdValid } from '@masknet/web3-shared'
+import { Wallet, useChainIdValid, useChainDetailed, FilterTransactionType } from '@masknet/web3-shared'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddERC20TokenDialog,
@@ -23,7 +23,6 @@ import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
-import { FilterTransactionType } from '../../../plugins/Wallet/types'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -83,6 +82,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     const color = useColorStyles()
     const xsMatched = useMatchXS()
     const chainIdValid = useChainIdValid()
+    const chainDetailed = useChainDetailed()
 
     const [transactionType, setTransactionType] = useState<FilterTransactionType>(FilterTransactionType.ALL)
 
@@ -126,9 +126,9 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                 <Check className={classes.checkIcon} fontSize="small" />
             ) : null}
         </MenuItem>,
-        <MenuItem key="Sent" onClick={() => setTransactionType(FilterTransactionType.SEND)}>
+        <MenuItem key="Sent" onClick={() => setTransactionType(FilterTransactionType.SENT)}>
             {t('sent_transactions')}
-            {transactionType === FilterTransactionType.SEND ? (
+            {transactionType === FilterTransactionType.SENT ? (
                 <Check className={classes.checkIcon} fontSize="small" />
             ) : null}
         </MenuItem>,
@@ -267,6 +267,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                                 setBuyDialog({
                                     open: true,
                                     address: wallet.address,
+                                    code: chainDetailed?.nativeCurrency.symbol,
                                 })
                             }}
                             startIcon={<MonetizationOnOutlinedIcon />}>

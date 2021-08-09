@@ -4,7 +4,7 @@ import { useI18N } from '../../../utils'
 import type { Profile } from '../../../database'
 import { ProfileInList } from './ProfileInList'
 import { ProfileInChip } from './ProfileInChip'
-import { useStylesExtends } from '../../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { FixedSizeList } from 'react-window'
 
 export interface SelectProfileUIProps extends withClasses<'root'> {
@@ -38,7 +38,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
         return true
     })
     const listAfterSearch = listBeforeSearch.filter((x) => {
-        if (frozenSelected && frozenSelected.find((y) => x.identifier.equals(y.identifier))) return false
+        if (frozenSelected.find((y) => x.identifier.equals(y.identifier))) return false
         if (search === '') return true
         return (
             !!x.identifier.userId.toLowerCase().match(search.toLowerCase()) ||

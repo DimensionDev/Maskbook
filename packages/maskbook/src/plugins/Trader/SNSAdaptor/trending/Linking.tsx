@@ -22,7 +22,7 @@ export function Linking(props: LinkingProps) {
                 )}
             </Link>
         )
-    } catch (e) {
+    } catch {
         return (
             <span className={LinkProps?.className} title={LinkProps?.title}>
                 {children ? (

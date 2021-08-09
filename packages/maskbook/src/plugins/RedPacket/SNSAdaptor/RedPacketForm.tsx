@@ -4,23 +4,23 @@ import {
     FungibleTokenDetailed,
     isGreaterThan,
     isZero,
-    NetworkType,
     pow10,
     useAccount,
     useNativeTokenDetailed,
     useNetworkType,
     useRedPacketConstants,
     useTokenBalance,
+    useWeb3,
 } from '@masknet/web3-shared'
+import { omit } from 'lodash-es'
 import { FormControl, InputLabel, makeStyles, MenuItem, MenuProps, Select, TextField } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -61,8 +61,8 @@ const useStyles = makeStyles((theme) => ({
 export interface RedPacketFormProps extends withClasses<never> {
     onCreate?(payload: RedPacketJSONPayload): void
     SelectMenuProps?: Partial<MenuProps>
-    onChange(settings: Omit<RedPacketSettings, 'password'>): void
-    origin?: Omit<RedPacketSettings, 'password'>
+    onChange(settings: RedPacketSettings): void
+    origin?: RedPacketSettings
     onNext: () => void
 }
 
@@ -71,11 +71,10 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { onChange, onNext, origin } = props
     // context
+    const web3 = useWeb3()
     const account = useAccount()
     const networkType = useNetworkType()
-    const { HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } = useRedPacketConstants()
-    const contract_address =
-        networkType === NetworkType.Ethereum ? HAPPY_RED_PACKET_ADDRESS_V2 : HAPPY_RED_PACKET_ADDRESS_V3
+    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
     //#region select token
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
@@ -152,13 +151,16 @@ export function RedPacketForm(props: RedPacketFormProps) {
     }, [account, amount, totalAmount, shares, token, tokenBalance])
 
     const onClick = useCallback(() => {
+        const { address: publicKey, privateKey } = web3.eth.accounts.create()
         onChange({
+            publicKey,
+            privateKey,
             duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
             isRandom: Boolean(isRandom),
             name: senderName,
             message: message || t('plugin_red_packet_best_wishes'),
             shares: shares || 0,
-            token,
+            token: token ? (omit(token, ['logoURI']) as FungibleTokenDetailed) : undefined,
             total: totalAmount.toFixed(),
         })
         onNext()
@@ -241,7 +243,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                 <EthereumERC20TokenApprovedBoundary
                     amount={totalAmount.toFixed()}
                     token={token?.type === EthereumTokenType.ERC20 ? token : undefined}
-                    spender={contract_address}>
+                    spender={HAPPY_RED_PACKET_ADDRESS_V4}>
                     <ActionButton
                         variant="contained"
                         size="large"

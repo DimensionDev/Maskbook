@@ -23,8 +23,8 @@ async function openPostDialogFacebook() {
                 notActivated.evaluate()[0].click()
                 await timeout(new MutationObserverWatcher(activated), 2000)
                 await delay(1000)
-            } catch (e) {
-                clickFailed(e)
+            } catch (error) {
+                clickFailed(error)
             }
         } else {
             try {
@@ -37,8 +37,8 @@ async function openPostDialogFacebook() {
                 dom2.click()
                 await timeout(new MutationObserverWatcher(activated), 1000)
                 if (!dialog.evaluate()[0]) throw new Error('Click not working')
-            } catch (e) {
-                clickFailed(e)
+            } catch (error) {
+                clickFailed(error)
             }
             console.log('Awaiting dialog')
         }
@@ -47,10 +47,12 @@ async function openPostDialogFacebook() {
     try {
         await timeout(new MutationObserverWatcher(isMobileFacebook ? activated : dialog), 2000)
         console.log('Dialog appeared')
-    } catch {}
-    function clickFailed(e: unknown) {
-        console.warn(e)
-        if (!dialog.evaluate()[0]) alert('请点击输入框')
+    } catch {
+        // ignore
+    }
+    function clickFailed(error: unknown) {
+        console.warn(error)
+        if (!dialog.evaluate()[0]) alert('Click the input box, please.')
     }
 }
 
@@ -90,14 +92,14 @@ export async function pasteTextToCompositionFacebook(
             if (e) e.style.display = 'none'
         }
         // Prevent Custom Paste failed, this will cause service not available to user.
-        if (element.innerText.indexOf(text) === -1 || ('value' in element && element.value.indexOf(text) === -1))
+        if (!element.innerText.includes(text) || ('value' in element && !element.value.includes(text)))
             copyFailed('Not detected')
-    } catch (e) {
-        copyFailed(e)
+    } catch (error) {
+        copyFailed(error)
     }
     scrollBack()
-    function copyFailed(e: any) {
-        console.warn('Text not pasted to the text area', e)
+    function copyFailed(error: unknown) {
+        console.warn('Text not pasted to the text area', error)
         if (recover) MaskMessage.events.autoPasteFailed.sendToLocal({ text })
     }
 }

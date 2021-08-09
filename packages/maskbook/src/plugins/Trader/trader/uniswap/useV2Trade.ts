@@ -24,7 +24,7 @@ export function useV2BestTradeExactIn(
             }
             // search through trades with varying hops, find best trade out of them
             let bestTradeSoFar: Trade<Currency, Currency, TradeType.EXACT_INPUT> | null = null
-            for (let i = 1; i <= maxHops; i++) {
+            for (let i = 1; i <= maxHops; i += 1) {
                 const currentTrade: Trade<Currency, Currency, TradeType.EXACT_INPUT> | null =
                     Trade.bestTradeExactIn(allowedPairs, currencyAmountIn, currencyOut, {
                         maxHops: i,
@@ -65,7 +65,7 @@ export function useV2BestTradeExactOut(
             }
             // search through trades with varying hops, find best trade out of them
             let bestTradeSoFar: Trade<Currency, Currency, TradeType.EXACT_OUTPUT> | null = null
-            for (let i = 1; i <= maxHops; i++) {
+            for (let i = 1; i <= maxHops; i += 1) {
                 const currentTrade =
                     Trade.bestTradeExactOut(allowedPairs, currencyIn, currencyAmountOut, {
                         maxHops: i,

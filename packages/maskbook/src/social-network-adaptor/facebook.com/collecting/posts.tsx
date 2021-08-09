@@ -70,7 +70,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 .map((x) => x.parentElement)
                 .querySelectorAll('textarea')
                 .map((x) => x.parentElement)
-                .filter((x) => x.innerHTML.indexOf('comment') !== -1)
+                .filter((x) => x.innerHTML.includes('comment'))
 
             const commentBoxSelector = isMobileFacebook ? commentBoxSelectorMobile : commentBoxSelectorPC
 

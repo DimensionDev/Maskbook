@@ -51,7 +51,7 @@ export function PoolStats(props: PoolStatsProps) {
     const valueManaged = formatAmountPostfix(formatBalance(pool?.totalValue, DIGIT_LENGTH))
     const lifeTimeReturn = new BigNumber(formatBalance(pool.performance, DIGIT_LENGTH)).minus(1).multipliedBy(100)
 
-    const riskFactor = pool && pool?.riskFactor != -1 ? pool?.riskFactor : '-'
+    const riskFactor = pool && pool?.riskFactor !== -1 ? pool?.riskFactor : '-'
     // pool detail contains raw html and need to sanitize before use
     const cleanDescription = DOMPurify.sanitize(pool.poolDetails)
     const [expanded, setExpanded] = useState(cleanDescription.length < POOL_DESCRIPTION_LIMIT)

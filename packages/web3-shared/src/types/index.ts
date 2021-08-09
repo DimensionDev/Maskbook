@@ -7,9 +7,7 @@ export enum CurrencyType {
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 
-export interface Web3Constants {
-    [K: string]: { [K in ChainId]: Primitive | Primitive[] }
-}
+export type Web3Constants = Record<string, { [K in ChainId]: Primitive | Primitive[] }>
 
 // Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
 export enum ChainId {
@@ -26,6 +24,10 @@ export enum ChainId {
     // Matic
     Matic = 137,
     Mumbai = 80001,
+
+    // Arbitrum
+    Arbitrum = 42161,
+    Arbitrum_Rinkeby = 421611,
 }
 
 export enum ProviderType {
@@ -34,11 +36,13 @@ export enum ProviderType {
     WalletConnect = 'WalletConnect',
     CustomNetwork = 'CustomNetwork',
 }
-
+// If you change this enum, please sync it to packages/public-api/src/web.ts
+// (it's a breaking change. Please notify the iOS and Android dev)
 export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
     Polygon = 'Polygon',
+    Arbitrum = 'Arbitrum',
 }
 
 export interface Wallet {
@@ -133,9 +137,7 @@ export interface ERC1155TokenAssetDetailed extends ERC1155TokenDetailed {
         decimals?: string
         description?: string
         image?: string
-        properties?: {
-            [key: string]: string | any[] | { [key: string]: any }
-        }
+        properties?: Record<string, string | any[] | Record<string, any>>
     }
 }
 //#endregion
@@ -214,9 +216,9 @@ export enum TransactionEventType {
 }
 
 export enum TransactionStatusType {
-    NOT_DEPEND,
-    SUCCEED,
-    FAILED,
+    NOT_DEPEND = 0,
+    SUCCEED = 1,
+    FAILED = 2,
 }
 
 export type GasNow = {
@@ -253,12 +255,12 @@ export interface Asset {
 }
 
 export enum PortfolioProvider {
-    ZERION,
-    DEBANK,
+    ZERION = 0,
+    DEBANK = 1,
 }
 
 export enum CollectibleProvider {
-    OPENSEAN,
+    OPENSEAN = 0,
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
@@ -266,3 +268,46 @@ export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<in
     : T extends PayableTransactionObject<infer S>
     ? S
     : T
+
+export enum FilterTransactionType {
+    ALL = 'all',
+    SENT = 'sent',
+    RECEIVE = 'receive',
+}
+
+export enum DebankTransactionDirection {
+    SEND = 'send',
+    RECEIVE = 'receive',
+}
+
+export enum ZerionTransactionDirection {
+    IN = 'in',
+    OUT = 'out',
+    SELF = 'self',
+}
+
+export type TransactionDirection = ZerionTransactionDirection | DebankTransactionDirection
+
+export interface TransactionPair {
+    name: string
+    symbol: string
+    address: string
+    direction: TransactionDirection
+    amount: number
+}
+
+export type TransactionGasFee = {
+    eth: number
+    usd: number
+}
+
+export interface Transaction {
+    type: string | undefined
+    id: string
+    timeAt: Date
+    toAddress: string
+    failed: boolean
+    pairs: TransactionPair[]
+    gasFee: TransactionGasFee | undefined
+    transactionType: string
+}

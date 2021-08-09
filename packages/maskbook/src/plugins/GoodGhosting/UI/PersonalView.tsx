@@ -1,12 +1,19 @@
-import { formatBalance, formatEthereumAddress } from '@masknet/web3-shared'
-import { makeStyles, Grid, Typography, Button } from '@material-ui/core'
+import {
+    formatBalance,
+    formatEthereumAddress,
+    resolveTransactionLinkOnExplorer,
+    TransactionStateType,
+    useChainId,
+} from '@masknet/web3-shared'
+import { makeStyles, Grid, Typography, Button, Link } from '@material-ui/core'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'
 import { useEarlyWithdraw } from '../hooks/useGameActions'
 import { useGameToken } from '../hooks/usePoolData'
 import type { GoodGhostingInfo, Player } from '../types'
-import { getPlayerStatus, PlayerStatus } from '../utils'
+import { getPlayerStatus, isGameActionError, PlayerStatus } from '../utils'
 import BigNumber from 'bignumber.js'
+import { FormattedBalance } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     infoRow: {
@@ -34,12 +41,13 @@ interface PersonalViewProps {
 }
 
 export function PersonalView(props: PersonalViewProps) {
+    const chainId = useChainId()
     const classes = useStyles()
     const { t } = useI18N()
     const gameToken = useGameToken()
     const { canEarlyWithdraw, earlyWithdraw } = useEarlyWithdraw(props.info)
     const [buttonEnabled, setButtonEnabled] = useState(true)
-    const [errorMessage, setErrorMessage] = useState('')
+    const [errorState, setErrorState] = useState<{ message?: string; link?: string }>({})
 
     const status = usePlayerStatusMessage(props.info, props.info.currentPlayer)
 
@@ -53,11 +61,28 @@ export function PersonalView(props: PersonalViewProps) {
 
     const withdraw = async () => {
         setButtonEnabled(false)
-        setErrorMessage('')
+        setErrorState({})
         try {
             await earlyWithdraw()
         } catch (error) {
-            setErrorMessage(t('error_unknown'))
+            if (isGameActionError(error) && error.transactionHash) {
+                const link = resolveTransactionLinkOnExplorer(chainId, error.transactionHash)
+                if (error.gameActionStatus === TransactionStateType.CONFIRMED) {
+                    setErrorState({
+                        message: t('plugin_good_ghosting_tx_fail'),
+                        link,
+                    })
+                } else {
+                    setErrorState({
+                        message: t('plugin_good_ghosting_tx_timeout'),
+                        link,
+                    })
+                }
+            } else {
+                setErrorState({
+                    message: t('plugin_good_ghosting_something_went_wrong'),
+                })
+            }
         } finally {
             setButtonEnabled(true)
         }
@@ -90,7 +115,11 @@ export function PersonalView(props: PersonalViewProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" color="textSecondary">
-                            {formatBalance(props.info.currentPlayer.amountPaid, gameToken.decimals)} {gameToken.symbol}
+                            <FormattedBalance
+                                value={props.info.currentPlayer.amountPaid}
+                                decimals={gameToken.decimals}
+                                symbol={gameToken.symbol}
+                            />
                         </Typography>
                     </Grid>
                 </Grid>
@@ -133,9 +162,14 @@ export function PersonalView(props: PersonalViewProps) {
                     <Button color="primary" disabled={!buttonEnabled} onClick={() => withdraw()}>
                         {t('plugin_good_ghosting_leave_game')}
                     </Button>
-                    <Typography variant="body1" color="warning">
-                        {errorMessage}
+                    <Typography variant="body1" color="textPrimary">
+                        {errorState.message}
                     </Typography>
+                    {errorState.link && (
+                        <Link color="primary" target="_blank" rel="noopener noreferrer" href={errorState.link}>
+                            <Typography variant="subtitle1">{t('plugin_good_ghosting_view_on_explorer')}</Typography>
+                        </Link>
+                    )}
                 </div>
             )}
         </>

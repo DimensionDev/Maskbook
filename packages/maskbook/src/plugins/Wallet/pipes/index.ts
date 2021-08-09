@@ -1,8 +1,5 @@
 import { safeUnreachable, unreachable } from '@dimensiondev/kit'
-import { NetworkType } from '@masknet/web3-shared'
-import { PortfolioProvider } from '../types'
-
-export { resolveCollectibleProviderLink, resolveCollectibleLink } from '@masknet/web3-shared'
+import { NetworkType, PortfolioProvider } from '@masknet/web3-shared'
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
     switch (provider) {
@@ -23,6 +20,8 @@ export function resolveDebankChainName(network: NetworkType) {
             return 'bsc'
         case NetworkType.Polygon:
             return 'matic'
+        case NetworkType.Arbitrum:
+            return 'arbitrum'
         default:
             safeUnreachable(network)
             return ''
@@ -37,6 +36,8 @@ export function resolveZerionAssetsScopeName(network: NetworkType) {
             return 'bsc-assets'
         case NetworkType.Polygon:
             return 'polygon-assets'
+        case NetworkType.Arbitrum:
+            return ''
         default:
             safeUnreachable(network)
             return ''
@@ -50,6 +51,8 @@ export function resolveZerionTransactionsScopeName(network: NetworkType) {
         case NetworkType.Binance:
             return ''
         case NetworkType.Polygon:
+            return ''
+        case NetworkType.Arbitrum:
             return ''
         default:
             safeUnreachable(network)

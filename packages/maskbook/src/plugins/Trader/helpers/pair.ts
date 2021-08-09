@@ -2,11 +2,8 @@ import type { Token } from '@uniswap/sdk-core'
 import { getCreate2Address } from '@ethersproject/address'
 import { pack, keccak256 } from '@ethersproject/solidity'
 
-interface PairCache {
-    [token0Address: string]: {
-        [token1Address: string]: string
-    }
-}
+/** cache[token0Address][token1Address] = value  */
+type PairCache = Record<string, Record<string, string>>
 
 const map = new Map<string, PairCache>()
 

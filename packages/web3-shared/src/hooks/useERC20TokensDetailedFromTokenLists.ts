@@ -9,9 +9,9 @@ import { EthereumTokenType } from '../types'
 import { useERC20TokenDetailed } from './useERC20TokenDetailed'
 
 export enum TokenListsState {
-    READY,
-    LOADING_TOKEN_LISTS,
-    LOADING_SEARCHED_TOKEN,
+    READY = 0,
+    LOADING_TOKEN_LISTS = 1,
+    LOADING_SEARCHED_TOKEN = 2,
 }
 
 export function useERC20TokensDetailedFromTokenLists(lists?: string[], keyword: string = '') {

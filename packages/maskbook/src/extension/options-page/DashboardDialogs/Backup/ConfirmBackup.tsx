@@ -58,7 +58,7 @@ export function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackup
                 setImported('loading')
                 await Services.Welcome.confirmBackup(restoreId)
                 setImported(true)
-            } catch (e) {
+            } catch {
                 failToRestore()
                 setImported(false)
             }

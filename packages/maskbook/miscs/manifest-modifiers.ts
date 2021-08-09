@@ -1,5 +1,5 @@
 import base from '../src/manifest.json'
-type Manifest = typeof base & { [key: string]: any }
+type Manifest = typeof base & Record<string, any>
 export function manifestV3(manifest: Manifest) {
     const isDev = manifest.content_security_policy
     // https://developer.chrome.com/docs/extensions/mv3/intro/mv3-migration/

@@ -107,7 +107,7 @@ export class ExtendedEther extends Ether {
         throw new Error('Unsupported chain ID')
     }
 
-    private static _cachedEther: { [chainId: number]: ExtendedEther } = {}
+    private static _cachedEther: Record<number, ExtendedEther> = {}
 
     public static onChain(chainId: number): ExtendedEther {
         return this._cachedEther[chainId] ?? (this._cachedEther[chainId] = new ExtendedEther(chainId))

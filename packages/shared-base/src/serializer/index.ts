@@ -52,12 +52,7 @@ export const serializer: Serialization = {
         return typeson.encapsulate(from, {}, { sync: false, throwOnBadSyncType: false })
     },
     async deserialization(to: string) {
-        try {
-            return await typeson.revive(to, { sync: false, throwOnBadSyncType: false })
-        } catch (e) {
-            console.error(e)
-            throw e
-        }
+        return typeson.revive(to, { sync: false, throwOnBadSyncType: false })
     },
 }
 console.log(serializer)

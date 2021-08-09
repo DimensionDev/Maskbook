@@ -11,7 +11,8 @@ import {
     IconButton,
 } from '@material-ui/core'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
-import type { DataProvider, Trending } from '../../types'
+import type { Trending } from '../../types'
+import type { DataProvider } from '@masknet/public-api'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import { Linking } from './Linking'
 import { FormattedAddress } from '@masknet/shared'

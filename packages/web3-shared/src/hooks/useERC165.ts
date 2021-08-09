@@ -13,7 +13,7 @@ export function useERC165<T extends BaseContract>(contract: T | null, address: s
             const isERC165 = await contract.methods.supportsInterface(ERC165_INTERFACE_ID).call({ from: account })
             const isVerify = await contract.methods.supportsInterface(interfaceId).call({ from: account })
             return isERC165 && isVerify
-        } catch (e) {
+        } catch {
             return false
         }
     }, [account, address, interfaceId])

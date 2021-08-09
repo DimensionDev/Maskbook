@@ -8,7 +8,7 @@ import { activatedSocialNetworkUI } from '../../social-network'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { ProfileIdentifier } from '../../database/type'
 import { currentSelectedIdentity } from '../../settings/settings'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles({
     root: {

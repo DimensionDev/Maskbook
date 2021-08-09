@@ -36,7 +36,7 @@ export default function Welcome() {
     useEffect(
         () => () => {
             const link = privacyPolicyElement()
-            link && link.removeEventListener('click', handleLinkClick)
+            link?.removeEventListener('click', handleLinkClick)
         },
         [],
     )
@@ -48,7 +48,7 @@ export default function Welcome() {
 
     const handleIFrameLoad = () => {
         const link = privacyPolicyElement()
-        link && link.addEventListener('click', handleLinkClick)
+        link?.addEventListener('click', handleLinkClick)
     }
 
     const handleLinkClick = useCallback(() => {

@@ -1,9 +1,8 @@
 import { AvatarGroup, Box, Breadcrumbs, makeStyles, Paper, Typography } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import type { TradeComputed } from '../../types'
 import { formatEthereumAddress } from '@masknet/web3-shared'
-import { TokenIcon } from '@masknet/shared'
+import { TokenIcon, useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface TradeRouteProps extends withClasses<never> {
+export interface TradeRouteProps extends withClasses<'root'> {
     trade: TradeComputed
 }
 

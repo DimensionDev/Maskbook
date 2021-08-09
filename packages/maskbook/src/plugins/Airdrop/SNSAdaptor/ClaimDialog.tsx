@@ -1,7 +1,6 @@
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
 import { DialogContent, Box, Theme, makeStyles, DialogActions, Button, Typography } from '@material-ui/core'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { TokenIcon } from '@masknet/shared'
+import { TokenIcon, useStylesExtends } from '@masknet/shared'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -24,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 
-interface ClaimDialogUIProps extends withClasses<never>, InjectedDialogProps {
+interface ClaimDialogUIProps extends InjectedDialogProps {
     amount: string
     token?: ERC20TokenDetailed
     onClaim: () => void

@@ -33,8 +33,7 @@ import {
     useStableTokensDebank,
     Wallet,
 } from '@masknet/web3-shared'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon, useStylesExtends } from '@masknet/shared'
 import { useI18N, useMatchXS } from '../../../utils'
 import { ActionsBarFT } from './ActionsBarFT'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
@@ -180,7 +179,7 @@ function ViewDetailed(props: ViewDetailedProps) {
 //#region wallet asset table
 const MIN_VALUE = 5
 
-export interface WalletAssetsTableProps extends withClasses<never> {
+export interface WalletAssetsTableProps extends withClasses<'container'> {
     wallet: Wallet
 }
 

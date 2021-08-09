@@ -7,7 +7,7 @@ export async function instagramUpload(url: string) {
     const target = document.querySelectorAll('input')
     const postButton = document.querySelector<HTMLElement>('[data-testid="new-post-button"]')
     if (!postButton || target.length === 0) return
-    let done = false
+    const done = false
     for (const input of target) {
         overwriteFunctionOnXRayObject(input, 'click', (_target: Function, thisArg, args) => {
             if (done) {

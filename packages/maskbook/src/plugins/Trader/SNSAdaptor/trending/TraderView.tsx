@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { makeStyles, Link, Tab, Tabs, Theme } from '@material-ui/core'
 import { useI18N, useSettingsSwticher, useValueRef } from '../../../../utils'
-import { DataProvider, TagType, TradeProvider } from '../../types'
+import type { TagType } from '../../types'
+import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
 import { TickersTable } from './TickersTable'
@@ -91,7 +92,7 @@ export function TraderView(props: TraderViewProps) {
     const classes = useStyles({ isPopper })
 
     const dataProvider = useCurrentDataProvider(dataProviders)
-    const tradeProvider = useCurrentTradeProvider(tradeProviders)
+    const tradeProvider = useCurrentTradeProvider()
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
     const chainIdValid = useChainIdValid()
 

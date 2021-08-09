@@ -6,29 +6,20 @@ import { base } from '../base'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { PoolView } from '../UI/PoolView'
 import { InvestDialog } from '../UI/InvestDialog'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { ChainId, getDHedgeConstants } from '@masknet/web3-shared'
-import { getEnumAsArray } from '@dimensiondev/kit'
 import { escapeRegExp } from 'lodash-es'
+import { BASE_URL, STAGING_URL } from '../constants'
 
-function createMatchLink(chainId: ChainId) {
-    const BASE_URL = getDHedgeConstants(chainId).BASE_URL ?? ''
-    if (!BASE_URL) return
-    return new RegExp(`${escapeRegExp(BASE_URL)}/pool/(\\w+)`)
+function createMatchLink() {
+    return new RegExp(`(${escapeRegExp(BASE_URL)}|${escapeRegExp(STAGING_URL)})/pool/(\\w+)`)
 }
 
 function getPoolFromLink(link: string) {
-    return getEnumAsArray(ChainId)
-        .map(({ value: chainId }) => {
-            const matchLink = createMatchLink(chainId)
-            const [, address] = matchLink ? link.match(matchLink) ?? [] : []
-            return {
-                link,
-                address,
-                chainId,
-            }
-        })
-        .find((x) => x.address && x.link && x.chainId)
+    const matchLink = createMatchLink()
+    const [, , address] = matchLink ? link.match(matchLink) ?? [] : []
+    return {
+        link,
+        address,
+    }
 }
 
 function getPoolFromLinks(links: string[]) {
@@ -43,33 +34,27 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const links = useMemo(() => parseURL(text.val || ''), [text.val])
         const pool = getPoolFromLinks(links)
         if (!text.ok) return null
-        if (!pool) return null
-        return <Renderer chainId={pool.chainId} address={pool.address} />
+        if (!pool?.address) return null
+        return <Renderer link={pool.link} address={pool.address} />
     },
     PostInspector: function Component() {
         const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
         const pool = getPoolFromLinks(links)
-        if (!pool) return null
-        return <Renderer chainId={pool.chainId} address={pool.address} />
+        if (!pool?.address) return null
+        return <Renderer link={pool.link} address={pool.address} />
     },
     GlobalInjection: function Component() {
-        return (
-            <>
-                <InvestDialog />
-            </>
-        )
+        return <InvestDialog />
     },
 }
 
 export default sns
 
-function Renderer(props: React.PropsWithChildren<{ chainId: ChainId; address: string }>) {
+function Renderer(props: React.PropsWithChildren<{ link: string; address: string }>) {
     return (
         <MaskbookPluginWrapper pluginName="dHEDGE">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <EthereumChainBoundary chainId={props.chainId}>
-                    <PoolView address={props.address} />
-                </EthereumChainBoundary>
+                <PoolView address={props.address} link={props.link} />
             </Suspense>
         </MaskbookPluginWrapper>
     )
