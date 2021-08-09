@@ -6,25 +6,23 @@ import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutline
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Check from '@material-ui/icons/Check'
+import { Wallet, useChainIdValid, useChainDetailed, FilterTransactionType } from '@masknet/web3-shared'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddERC20TokenDialog,
     DashboardWalletAddERC721TokenDialog,
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
-    DashboardWalletRenameDialog,
 } from '../DashboardDialogs/Wallet'
-import { Flags, useMenu, useI18N, useColorStyles, useMatchXS, useRemoteControlledDialog } from '../../../utils'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import { Flags, useMenu, useI18N, useColorStyles, useMatchXS } from '../../../utils'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
-import { useChainIdValid } from '../../../web3/hooks/useChainId'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import { FilterTransactionType } from '../../../plugins/Wallet/types'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface WalletContentProps {
-    wallet: WalletRecord
+    wallet: Wallet
 }
 
 export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ wallet }, ref) => {
@@ -80,25 +78,34 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
 
     const history = useHistory()
     const location = useLocation()
-    const account = useAccount()
 
     const color = useColorStyles()
     const xsMatched = useMatchXS()
     const chainIdValid = useChainIdValid()
+    const chainDetailed = useChainDetailed()
 
     const [transactionType, setTransactionType] = useState<FilterTransactionType>(FilterTransactionType.ALL)
 
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
     const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
-    const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
     const [addAsset, , openAddAsset] = useModal(DashboardWalletAddERC721TokenDialog)
+    const { setDialog: setWalletRenameDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletRenameDialogUpdated,
+    )
 
     const [menu, openMenu] = useMenu([
-        <MenuItem key="rename" onClick={() => openWalletRename({ wallet })}>
+        <MenuItem
+            key="rename"
+            onClick={() => {
+                setWalletRenameDialog({
+                    open: true,
+                    wallet,
+                })
+            }}>
             {t('rename')}
         </MenuItem>,
-        wallet._private_key_ || wallet.mnemonic.length ? (
+        wallet.hasPrivateKey ? (
             <MenuItem key="backup" onClick={() => openWalletBackup({ wallet })}>
                 {t('backup')}
             </MenuItem>
@@ -134,7 +141,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     ])
 
     //#region remote controlled buy dialog
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
     //#endregion
 
     //#region tab
@@ -173,13 +180,17 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
         }
     }, [tabIndex, classes, wallet, transactionType])
 
-    return (
-        <div className={classes.root} ref={ref}>
-            {!chainIdValid ? (
+    if (!chainIdValid)
+        return (
+            <div className={classes.root} ref={ref}>
                 <Alert className={classes.alert} severity="warning">
                     {t('plugin_wallet_wrong_network_tip')}
                 </Alert>
-            ) : null}
+            </div>
+        )
+
+    return (
+        <div className={classes.root} ref={ref}>
             <Box
                 className={classes.caption}
                 sx={{
@@ -256,6 +267,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                                 setBuyDialog({
                                     open: true,
                                     address: wallet.address,
+                                    code: chainDetailed?.nativeCurrency.symbol,
                                 })
                             }}
                             startIcon={<MonetizationOnOutlinedIcon />}>
@@ -278,7 +290,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
             {addAsset}
             {walletBackup}
             {walletDelete}
-            {walletRename}
         </div>
     )
 })

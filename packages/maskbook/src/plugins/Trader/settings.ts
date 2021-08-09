@@ -1,10 +1,10 @@
+import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import stringify from 'json-stable-stringify'
-import { createInternalSettings, createGlobalSettings } from '../../settings/createSettings'
-import { DataProvider, ZrxTradePool, TradeProvider } from './types'
-import { SLIPPAGE_TOLERANCE_DEFAULT, PLUGIN_IDENTIFIER } from './constants'
+import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
-import { unreachable } from '../../utils/utils'
-import { getEnumAsArray } from '../../utils/enum'
+import { PLUGIN_IDENTIFIER, SLIPPAGE_TOLERANCE_DEFAULT } from './constants'
+import { ZrxTradePool } from './types'
+import { DataProvider, TradeProvider } from '@masknet/public-api'
 
 /**
  * The slippage tolerance of trader
@@ -18,11 +18,11 @@ export const currentSlippageTolerance = createGlobalSettings<number>(
 )
 
 /**
- * The default trending data provider
+ * The default data provider
  */
-export const currentTrendingDataProviderSettings = createGlobalSettings<DataProvider>(
+export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
     `${PLUGIN_IDENTIFIER}+dataProvider`,
-    DataProvider.COIN_MARKET_CAP,
+    DataProvider.COIN_GECKO,
     {
         primary: () => i18n.t('plugin_trader_settings_data_source_primary'),
         secondary: () => i18n.t('plugin_trader_settings_data_source_secondary'),
@@ -41,6 +41,24 @@ export const currentTradeProviderSettings = createGlobalSettings<TradeProvider>(
     },
 )
 
+export const ethereumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+eth+tradeProvider`,
+    TradeProvider.UNISWAP,
+    { primary: () => '' },
+)
+
+export const polygonNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+polygon+tradeProvider`,
+    TradeProvider.QUICKSWAP,
+    { primary: () => '' },
+)
+
+export const binanceNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+bsc+tradeProvider`,
+    TradeProvider.PANCAKESWAP,
+    { primary: () => '' },
+)
+
 //#region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]
@@ -55,7 +73,10 @@ const zrxSettings = createInternalSettings<string>(
 )
 const sushiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sushiswap`, '')
 const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sashimiswap`, '')
+const qucikswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
+const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+pancakeswap`, '')
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+balancer`, '')
+const dodoSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+dodo`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -70,8 +91,14 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return sushiswapSettings
         case TradeProvider.SASHIMISWAP:
             return sashimiswapSettings
+        case TradeProvider.QUICKSWAP:
+            return qucikswapSettings
+        case TradeProvider.PANCAKESWAP:
+            return pancakeswapSettings
         case TradeProvider.BALANCER:
             return balancerSettings
+        case TradeProvider.DODO:
+            return dodoSettings
         default:
             unreachable(tradeProvider)
     }

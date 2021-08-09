@@ -71,6 +71,7 @@ export interface CoinInfo {
         total_supply: number
         total_volume: Record<string, number>
     }
+    platforms: Record<string, string>
     name: string
     symbol: string
     tickers: {

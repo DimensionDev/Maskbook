@@ -1,5 +1,5 @@
 import type { OpenSeaFungibleToken, WyvernSchemaName } from 'opensea-js/lib/types'
-import type { ChainId } from '../../../web3/types'
+import type { ChainId } from '@masknet/web3-shared'
 import type { OpenSeaAssetEventType } from './opensea'
 import type { RaribleEventType } from './rarible'
 
@@ -13,11 +13,11 @@ export interface CollectibleJSON_Payload {
 }
 
 export enum CollectibleTab {
-    ARTICLE,
-    TOKEN,
-    OFFER,
-    LISTING,
-    HISTORY,
+    ARTICLE = 0,
+    TOKEN = 1,
+    OFFER = 2,
+    LISTING = 3,
+    HISTORY = 4,
 }
 
 export interface CollectibleToken {
@@ -28,8 +28,8 @@ export interface CollectibleToken {
 }
 
 export enum CollectibleProvider {
-    OPENSEA,
-    RARIBLE,
+    OPENSEA = 0,
+    RARIBLE = 1,
 }
 
 export interface NFTAsset {

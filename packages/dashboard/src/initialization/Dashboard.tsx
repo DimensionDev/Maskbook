@@ -1,36 +1,27 @@
-import React, { StrictMode } from 'react'
 import { HashRouter } from 'react-router-dom'
 import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@material-ui/core'
 import { StylesProvider } from '@material-ui/styles'
 import {
+    CustomSnackbarProvider,
     MaskLightTheme,
-    ErrorBoundary,
     applyMaskColorVars,
     MaskDarkTheme,
     useSystemPreferencePalatte,
-} from '@dimensiondev/maskbook-theme'
-import { ChainId } from '@dimensiondev/maskbook-shared'
-import { Emitter } from '@servie/events'
+} from '@masknet/theme'
+import { ErrorBoundary } from '@masknet/shared'
 
 import i18n from 'i18next'
 import { I18nextProvider } from 'react-i18next'
 
-import './plugins'
-import {
-    startPluginDashboard,
-    createInjectHooksRenderer,
-    useActivatedPluginsDashboard,
-} from '@dimensiondev/mask-plugin-infra'
+import './PluginHost'
+import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { Pages } from '../pages/routes'
 import { useAppearance } from '../pages/Personas/api'
+import { Web3Provider } from '@masknet/web3-shared'
+import { Web3Context } from '../web3/context'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
-// TODO: implement
-startPluginDashboard({
-    enabled: { events: new Emitter(), isEnabled: () => true },
-    eth: { current: () => ChainId.Mainnet, events: new Emitter() },
-})
 export default function DashboardRoot() {
     const settings = useAppearance()
     const mode = useSystemPreferencePalatte()
@@ -44,22 +35,24 @@ export default function DashboardRoot() {
     applyMaskColorVars(document.body, settings === 'default' ? mode : settings)
 
     return (
-        <StrictMode>
+        <Web3Provider value={Web3Context}>
             <I18nextProvider i18n={i18n}>
                 <StyledEngineProvider injectFirst>
                     <StylesProvider>
                         <ThemeProvider theme={theme}>
                             <ErrorBoundary>
                                 <CssBaseline />
-                                <HashRouter>
-                                    <Pages />
-                                </HashRouter>
-                                <PluginRender />
+                                <CustomSnackbarProvider>
+                                    <HashRouter>
+                                        <Pages />
+                                    </HashRouter>
+                                    <PluginRender />
+                                </CustomSnackbarProvider>
                             </ErrorBoundary>
                         </ThemeProvider>
                     </StylesProvider>
                 </StyledEngineProvider>
             </I18nextProvider>
-        </StrictMode>
+        </Web3Provider>
     )
 }

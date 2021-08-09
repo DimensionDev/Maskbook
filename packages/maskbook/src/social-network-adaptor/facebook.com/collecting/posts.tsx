@@ -1,8 +1,6 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import type { SocialNetworkUI as Next } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
-import { PostInfo } from '../../../social-network/PostInfo'
 import { isMobileFacebook } from '../utils/isMobile'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier'
 import {
@@ -14,6 +12,10 @@ import {
 import { clickSeeMore } from '../injection/PostInspector'
 import { startWatch } from '../../../utils/watcher'
 import { facebookShared } from '../shared'
+import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
+import { Flags } from '../../../utils'
+import { collectNodeText } from '../../../utils'
+import { None, Some, Option } from 'ts-results'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container > div' : '[role=article] [data-ad-preview="message"]',
@@ -39,6 +41,11 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 .replace(() => [metadata.realCurrent])
                 .closest('[role=article]')
                 .map((x) => x.parentElement?.parentElement?.parentElement)
+            const rootProxy = DOMProxy({
+                afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
+                beforeShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
+            })
+            rootProxy.realCurrent = root.evaluate()[0]
 
             // ? inject after comments
             const commentSelectorPC = root
@@ -50,7 +57,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 .map((x) => x.parentElement)
                 .querySelectorAll<HTMLElement>('[data-commentid]')
 
-            const commentSelector = isMobileFacebook ? commentSelectorMobile : commentSelectorPC
+            const commentsSelector = isMobileFacebook ? commentSelectorMobile : commentSelectorPC
 
             // ? inject comment text field
             const commentBoxSelectorPC = root
@@ -63,29 +70,41 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 .map((x) => x.parentElement)
                 .querySelectorAll('textarea')
                 .map((x) => x.parentElement)
-                .filter((x) => x.innerHTML.indexOf('comment') !== -1)
+                .filter((x) => x.innerHTML.includes('comment'))
 
             const commentBoxSelector = isMobileFacebook ? commentBoxSelectorMobile : commentBoxSelectorPC
 
-            const info: PostInfo = new (class extends PostInfo {
-                commentsSelector = commentSelector
-                commentBoxSelector = commentBoxSelector
-                get rootNode() {
-                    return root.evaluate()[0]! as HTMLElement
-                }
-                rootNodeProxy = metadata
-                postContentNode = metadata.realCurrent!
-            })()
+            const { subscriptions, ...info } = createRefsForCreatePostContext()
+            const postInfo = facebookShared.utils.createPostContext({
+                rootElement: rootProxy,
+                suggestedInjectionPoint: metadata.realCurrent!,
+                signal,
+                comments: { commentBoxSelector, commentsSelector },
+                ...subscriptions,
+            })
 
-            store.set(metadata, info)
+            store.set(metadata, postInfo)
             function collectPostInfo() {
+                rootProxy.realCurrent = root.evaluate()[0]
                 const nextTypedMessage: TypedMessage[] = []
-                info.postBy.value = getPostBy(metadata, info.postPayload.value !== null).identifier
+                info.postBy.value = getPostBy(metadata, postInfo.postPayload.getCurrentValue() !== null).identifier
                 info.postID.value = getPostID(metadata)
                 // parse text
-                const text = collectNodeText(node)
+                const text = collectNodeText(node, {
+                    onHTMLAnchorElement(node: HTMLAnchorElement): Option<string> {
+                        const href = node.getAttribute('href')
+                        if (!href) {
+                            return None
+                        }
+                        return Some(
+                            '\n' +
+                                (href.includes('l.facebook.com')
+                                    ? new URL(href).searchParams.get('u')
+                                    : node.innerText),
+                        )
+                    },
+                })
                 nextTypedMessage.push(makeTypedMessageText(text))
-                info.postContent.value = text
                 // parse image
                 const images = getMetadataImages(metadata)
                 for (const url of images) {
@@ -96,16 +115,6 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 info.postMessage.value = makeTypedMessageTuple(nextTypedMessage)
             }
             collectPostInfo()
-            info.postPayload.value = deconstructPayload(
-                info.postContent.value,
-                facebookShared.utils.textPayloadPostProcessor?.decoder,
-            )
-            info.postContent.addListener((newVal) => {
-                info.postPayload.value = deconstructPayload(
-                    newVal,
-                    facebookShared.utils.textPayloadPostProcessor?.decoder,
-                )
-            })
             return {
                 onNodeMutation: collectPostInfo,
                 onTargetChanged: collectPostInfo,
@@ -114,24 +123,6 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
         }),
         signal,
     )
-}
-
-export function collectNodeText(node: HTMLElement | undefined): string {
-    if (!node) return ''
-    if (!node.querySelector('a,img')) return node.innerText
-    return [...node.childNodes]
-        .map((each) => {
-            if (each.nodeType === document.TEXT_NODE) return (each as Text).nodeValue || ''
-            if (each instanceof HTMLAnchorElement) {
-                const href = each.getAttribute('href')
-                if (!href) return each.innerText
-                return '\n' + (href.includes('l.facebook.com') ? new URL(href).searchParams.get('u') : each.innerText)
-            }
-            if (each instanceof HTMLImageElement) return each.alt
-            if (each instanceof HTMLElement) return collectNodeText(each)
-            return ''
-        })
-        .join('')
 }
 
 function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {
@@ -168,12 +159,12 @@ function getPostID(node: DOMProxy): null | string {
 }
 
 function getMetadataImages(node: DOMProxy): string[] {
-    const parent = node.current.parentElement
+    const parent = node.current.parentElement?.parentElement
 
     if (!parent) return []
     const imgNodes = isMobileFacebook
         ? parent.querySelectorAll<HTMLImageElement>('div>div>div>a>div>div>i.img')
-        : parent.nextElementSibling?.querySelectorAll('img') || []
+        : parent.querySelectorAll('img') || []
     if (!imgNodes.length) return []
     const imgUrls = isMobileFacebook
         ? (getComputedStyle(imgNodes[0]).backgroundImage || '')

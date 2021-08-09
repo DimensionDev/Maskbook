@@ -1,9 +1,5 @@
 import * as c from '../crypto-alpha-38'
-import {
-    makeTypedMessageText,
-    makeTypedMessageTupleSerializable,
-    makeTypedMessageUnknown,
-} from '@dimensiondev/maskbook-shared'
+import { makeTypedMessageText, makeTypedMessageTupleSerializable, makeTypedMessageUnknown } from '@masknet/shared'
 import { encodeText, encodeArrayBuffer, decodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { CryptoWorker } from '../../modules/workers'

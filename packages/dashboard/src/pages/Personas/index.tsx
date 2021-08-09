@@ -4,22 +4,15 @@ import { useEffect, useState } from 'react'
 import { capitalize } from 'lodash-es'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { PersonaSetup } from './components/PersonaSetup'
-import { AuthorIcon, ArrowDownRound, ArrowUpRound } from '@dimensiondev/icons'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { AuthorIcon, ArrowDownRound, ArrowUpRound } from '@masknet/icons'
+import { MaskColorVar } from '@masknet/theme'
 import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaContext } from './hooks/usePersonaContext'
 import { useDashboardI18N } from '../../locales'
-import type { PersonaInformation } from '@dimensiondev/maskbook-shared'
+import type { PersonaInformation } from '@masknet/shared'
+import { ContentContainer } from '../../components/ContentContainer'
 
 const useStyles = makeStyles((theme) => ({
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-    },
-    wrapper: {
-        textTransform: 'none',
-    },
     tabPanel: {
         padding: 0,
         flex: 1,
@@ -83,7 +76,7 @@ function Personas() {
                     </IconButton>
                 </Box>
             }>
-            <Box className={classes.container}>
+            <ContentContainer>
                 <TabContext value={activeTab}>
                     <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
                         {definedSocialNetworks.map(({ networkIdentifier }) => (
@@ -92,7 +85,6 @@ function Personas() {
                                 value={networkIdentifier}
                                 // They should be localized
                                 label={capitalize(networkIdentifier.replace('.com', ''))}
-                                classes={{ wrapper: classes.wrapper }}
                             />
                         ))}
                     </Tabs>
@@ -101,7 +93,7 @@ function Personas() {
                         const profile = currentPersona.linkedProfiles.find(
                             (x) => x.identifier.network === networkIdentifier,
                         )
-                        if (profile) return <TabPanel key={networkIdentifier} value={networkIdentifier}></TabPanel>
+                        if (profile) return <TabPanel key={networkIdentifier} value={networkIdentifier} />
                         return (
                             <TabPanel key={networkIdentifier} value={networkIdentifier} sx={{ flex: 1 }}>
                                 <PersonaSetup
@@ -112,7 +104,7 @@ function Personas() {
                         )
                     })}
                 </TabContext>
-            </Box>
+            </ContentContainer>
             <PersonaDrawer personas={personas} />
         </PageFrame>
     )

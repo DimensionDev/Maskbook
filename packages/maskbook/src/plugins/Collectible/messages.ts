@@ -1,14 +1,10 @@
 import { PLUGIN_IDENTIFIER } from './constants'
-import { createPluginMessage } from '../utils/createPluginMessage'
-import { createPluginRPC } from '../utils/createPluginRPC'
-interface CollectibleMessage {
-    rpc: unknown
-}
+import { createPluginMessage, createPluginRPC } from '@masknet/plugin-infra'
 
-if (module.hot) module.hot.accept()
-export const PluginCollectibleMessage = createPluginMessage<CollectibleMessage>(PLUGIN_IDENTIFIER)
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
+const PluginCollectibleMessage = createPluginMessage(PLUGIN_IDENTIFIER)
 export const PluginCollectibleRPC = createPluginRPC(
     PLUGIN_IDENTIFIER,
     () => import('./services'),
-    PluginCollectibleMessage.events.rpc,
+    PluginCollectibleMessage.rpc,
 )

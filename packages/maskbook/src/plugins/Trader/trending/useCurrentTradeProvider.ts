@@ -1,19 +1,32 @@
-import { useEffect, useState } from 'react'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { currentTradeProviderSettings } from '../settings'
+import { useValueRef } from '@masknet/shared'
+import {
+    ethereumNetworkTradeProviderSettings,
+    polygonNetworkTradeProviderSettings,
+    binanceNetworkTradeProviderSettings,
+} from '../settings'
 import { TradeProvider } from '../types'
+import { getNetworkTypeFromChainId } from '@masknet/web3-shared'
+import { currentChainIdSettings } from '../../Wallet/settings'
+import { unreachable } from '@dimensiondev/kit'
+import { NetworkType } from '@masknet/public-api'
 
-export function useCurrentTradeProvider(availableTradeProviders: TradeProvider[]) {
-    const [tradeProvider, setTradeProvider] = useState(
-        availableTradeProviders.length ? availableTradeProviders[0] : TradeProvider.UNISWAP,
-    )
-    const currentTradeProvider = useValueRef(currentTradeProviderSettings)
+export function useCurrentTradeProvider() {
+    const networkType: NetworkType | undefined = getNetworkTypeFromChainId(currentChainIdSettings.value)
+    const ethNetworkTradeProvider = useValueRef(ethereumNetworkTradeProviderSettings)
+    const polygonNetworkTradeProvider = useValueRef(polygonNetworkTradeProviderSettings)
+    const binanceNetworkTradeProvider = useValueRef(binanceNetworkTradeProviderSettings)
 
-    // sync trade provider
-    useEffect(() => {
-        // cached trade provider unavailable
-        if (!availableTradeProviders.includes(currentTradeProvider)) return
-        setTradeProvider(currentTradeProvider)
-    }, [availableTradeProviders.sort().join(','), currentTradeProvider])
-    return tradeProvider
+    if (!networkType) return TradeProvider.UNISWAP
+    switch (networkType) {
+        case NetworkType.Ethereum:
+            return ethNetworkTradeProvider
+        case NetworkType.Polygon:
+            return polygonNetworkTradeProvider
+        case NetworkType.Binance:
+            return binanceNetworkTradeProvider
+        case NetworkType.Arbitrum:
+            throw new Error('TODO')
+        default:
+            unreachable(networkType)
+    }
 }

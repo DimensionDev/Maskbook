@@ -1,7 +1,7 @@
 import { Box, makeStyles, Theme } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
 import classNames from 'classnames'
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { Database as DatabaseIcon } from 'react-feather'
 import { useI18N, BackupJSONFileLatest } from '../../../../utils'
@@ -48,7 +48,6 @@ export function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackup
         { type: DatabaseRecordType.Persona, length: backup?.personas.length ?? 0, checked: imported === true },
         { type: DatabaseRecordType.Profile, length: backup?.profiles.length ?? 0, checked: imported === true },
         { type: DatabaseRecordType.Post, length: backup?.posts.length ?? 0, checked: imported === true },
-        { type: DatabaseRecordType.Group, length: backup?.userGroups.length ?? 0, checked: imported === true },
         { type: DatabaseRecordType.Wallet, length: backup?.wallets.length ?? 0, checked: imported === true },
     ]
 
@@ -59,7 +58,7 @@ export function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackup
                 setImported('loading')
                 await Services.Welcome.confirmBackup(restoreId)
                 setImported(true)
-            } catch (e) {
+            } catch {
                 failToRestore()
                 setImported(false)
             }
@@ -98,7 +97,8 @@ export function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackup
                                 confirmBackupClasses.dashboardPreviewCardTable,
                             ),
                         }}
-                        records={records}></DatabasePreviewCard>
+                        records={records}
+                    />
                     {imported === true ? (
                         <ActionButton className={confirmBackupClasses.doneButton} variant="contained" onClick={onDone}>
                             {t('set_up_button_done')}

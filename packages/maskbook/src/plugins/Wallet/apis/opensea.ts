@@ -1,4 +1,4 @@
-import { ChainId } from '../../../web3/types'
+import { ChainId } from '@masknet/web3-shared'
 
 interface AssetContract {
     address: string

@@ -26,9 +26,12 @@ To develop Mask Network, you need to have ...
 
 ### Install
 
-`pnpm install`
+```bash
+pnpm install
+```
 
-If you encounter with error `EACCES: permission denied, open...'`, please run `chown -R $USER /pathToYourProject/Maskbook` to solve.
+If you encounter with error `EACCES: permission denied, open...'`,
+please run `chown -R $USER /pathToYourProject/Maskbook` to solve.
 
 ### Start the development server
 
@@ -79,8 +82,15 @@ _save as temp variables_ also fails.
 
 #### Use React Devtools
 
-React devtools is also an browser extension so unfortunately it doesn't work with Mask Network out of the box.
-You need [the standalone version of React Devtools](https://github.com/facebook/react/tree/master/packages/react-devtools#:~:text=Chrome%20extension,instead)
+Run the following command to start the React Devtools. It doesn't work if you install it as a browser extension.
+
+> pnpx react-devtools
+
+Due to bug <https://github.com/facebook/react/issues/20377>, React Devtools is conflict with React Fast Refresh.
+
+Please use the following command, it will start the development process in profile mode, which disables React Fast Refresh and enables React Devtools.
+
+> pnpx dev profile
 
 ## Contribute your working
 
@@ -97,10 +107,11 @@ Please use [Conventional Commits](https://www.conventionalcommits.org) when comm
 npx husky install # on project root directory
 ```
 
-### Synchronize upstream
+### Using Git
 
-- <https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork>
-- <https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork>
+- [Using git rebase on the command line](https://docs.github.com/en/github/getting-started-with-github/using-git-rebase-on-the-command-line)
+- [Configuring a remote for a fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork)
+- [Syncing a fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork)
 
 ## Caveats for Library
 

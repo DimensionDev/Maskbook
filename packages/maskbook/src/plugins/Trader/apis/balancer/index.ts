@@ -1,28 +1,30 @@
-import BigNumber from 'bignumber.js'
-import { first, memoize } from 'lodash-es'
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
-import { getChainId } from '../../../../extension/background-script/EthereumService'
-import { getConstant, isSameAddress } from '../../../../web3/helpers'
-import type { ChainId } from '../../../../web3/types'
-import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE, TRADE_CONSTANTS } from '../../constants'
-import { CONSTANTS } from '../../../../web3/constants'
-import type { Route } from '../../types'
+import { ChainId, getRPCConstants, getTraderConstants, isSameAddress, ZERO } from '@masknet/web3-shared'
+import BigNumber from 'bignumber.js'
+import { first, memoize } from 'lodash-es'
+import { currentChainIdSettings } from '../../../Wallet/settings'
+import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE } from '../../constants'
 import { getFutureTimestamps } from '../../helpers/blocks'
+import type { Route } from '../../types'
 import { fetchBlockNumbersByTimestamps } from '../blocks'
 import { fetchLBP_PoolsByTokenAddress, fetchLBP_PoolTokenPrices, fetchLBP_PoolTokens } from '../LBP'
 
 //#region create cached SOR
 const createSOR_ = memoize(
-    (chainId: ChainId) =>
-        new SOR(
+    (chainId: ChainId) => {
+        const { RPC } = getRPCConstants(chainId)
+        const provderURL = first(RPC)
+        if (!provderURL) throw new Error('Unknown chain id.')
+        return new SOR(
             // we choose a fixed provider cause it's only used here.
-            new JsonRpcProvider(getConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST', chainId)[0]),
+            new JsonRpcProvider(provderURL),
             BALANCER_SOR_GAS_PRICE,
             BALANCER_MAX_NO_POOLS,
             chainId,
             '', // set pools url later
-        ),
+        )
+    },
     (chainId: ChainId) => String(chainId),
 )
 
@@ -30,25 +32,25 @@ function createSOR(chainId: ChainId) {
     const sor = createSOR_(chainId)
 
     // update pools url when sor object was created or reused
-    sor.poolsUrl = `${getConstant(TRADE_CONSTANTS, 'BALANCER_POOLS_URL', chainId)}?timestamp=${Date.now()}`
+    sor.poolsUrl = `${getTraderConstants(chainId).BALANCER_POOLS_URL}?timestamp=${Date.now()}`
 
     return sor
 }
 //#endregion
 
 export async function updatePools(force = false) {
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     const sor = createSOR(chainId)
 
     // this fetches all pools list from URL in constructor then onChain balances using Multicall
     if (!sor.isAllFetched || force) {
-        sor.poolsUrl = `${getConstant(TRADE_CONSTANTS, 'BALANCER_POOLS_URL', chainId)}?timestamp=${Date.now()}`
+        sor.poolsUrl = `${getTraderConstants(chainId).BALANCER_POOLS_URL}?timestamp=${Date.now()}`
         await sor.fetchPools()
     }
 }
 
 export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALANCER_SWAP_TYPE, amount: string) {
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     const sor = createSOR(chainId)
 
     // this calculates the cost to make a swap which is used as an input to sor to allow it to make gas efficient recommendations.
@@ -64,9 +66,7 @@ export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALA
 
     // compose routes
     // learn more: https://github.com/balancer-labs/balancer-frontend/blob/develop/src/components/swap/Routing.vue
-    const totalSwapAmount = swaps.reduce((total, rawHops) => {
-        return total.plus(rawHops[0].swapAmount || '0')
-    }, new BigNumber(0))
+    const totalSwapAmount = swaps.reduce((total, rawHops) => total.plus(rawHops[0].swapAmount || '0'), ZERO)
 
     const pools = sor.onChainCache.pools
     const routes = swaps.map((rawHops) => {

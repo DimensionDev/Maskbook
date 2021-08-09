@@ -22,7 +22,8 @@ import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 import stringify from 'json-stable-stringify'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { noop } from 'lodash-es'
-import { useI18N, MaskMessage, useValueRef, useMatchXS, extendsTheme } from '../../utils'
+import { useValueRef } from '@masknet/shared'
+import { useI18N, MaskMessage, useMatchXS, extendsTheme } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
@@ -395,7 +396,8 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                             }}
                             onChange={(e) => onUsernameChange(e.target.value)}
                             onKeyDown={onKeyDown}
-                            inputProps={{ 'data-testid': 'username_input' }}></TextField>
+                            inputProps={{ 'data-testid': 'username_input' }}
+                        />
                         {gotoProfilePageImpl && xsOnly ? (
                             <IconButton
                                 className={findUsernameClasses.button}
@@ -432,7 +434,8 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     {t('confirm')}
                 </ActionButtonPromise>
             }
-            onClose={onClose}></WizardDialog>
+            onClose={onClose}
+        />
     )
 }
 //#endregion
@@ -507,7 +510,8 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                 </>
             }
             onBack={onBack}
-            onClose={onClose}></WizardDialog>
+            onClose={onClose}
+        />
     )
 }
 //#endregion

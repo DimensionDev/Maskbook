@@ -1,5 +1,8 @@
-import { useMemo, useState, useEffect, useReducer, Fragment } from 'react'
-import { delay, unreachable } from '../../../utils/utils'
+import { Fragment, useEffect, useMemo, useReducer, useState } from 'react'
+import { makeTypedMessageTuple, TypedMessageTuple, or } from '@masknet/shared'
+import { unreachable } from '@dimensiondev/kit'
+
+import { delay } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
 import type { ProfileIdentifier } from '../../../database/type'
@@ -8,14 +11,12 @@ import type {
     FailureDecryption,
     SuccessDecryption,
 } from '../../../extension/background-script/CryptoServices/decryptFrom'
-import type { TypedMessage } from '../../../protocols/typed-message'
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
-import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwaiting'
-import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'
+import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
+import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
 import { usePostClaimedAuthor, usePostInfoDetails, usePostInfoSharedPublic } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { or } from '../../custom-ui-helper'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 import type { Payload } from '../../../utils/type-transform/Payload'
 
@@ -48,7 +49,7 @@ function progressReducer(
 }
 
 export interface DecryptPostProps {
-    onDecrypted: (post: TypedMessage, raw: string) => void
+    onDecrypted: (post: TypedMessageTuple) => void
     whoAmI: ProfileIdentifier
     profiles: Profile[]
     alreadySelectedPreviously: Profile[]
@@ -62,13 +63,13 @@ export interface DecryptPostProps {
 }
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
-    const deconstructedPayload = usePostInfoDetails('postPayload')
+    const deconstructedPayload = usePostInfoDetails.postPayload()
     const authorInPayload = usePostClaimedAuthor()
-    const current = usePostInfo()
-    const currentPostBy = usePostInfoDetails('postBy')
-    const decryptedPayloadForImage = usePostInfoDetails('decryptedPayloadForImage')
+    const current = usePostInfo()!
+    const currentPostBy = usePostInfoDetails.postBy()
+    const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postBy = or(authorInPayload, currentPostBy)
-    const postMetadataImages = usePostInfoDetails('postMetadataImages')
+    const postMetadataImages = usePostInfoDetails.postMetadataImages()
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
     const Failed = props.failedComponent || DecryptPostFailed
@@ -141,11 +142,17 @@ export function DecryptPost(props: DecryptPostProps) {
         if (deconstructedPayload.ok)
             makeProgress(
                 'post text',
-                ServicesWithProgress.decryptFromText(deconstructedPayload.val, postBy, whoAmI, sharedPublic),
+                ServicesWithProgress.decryptFromText(
+                    deconstructedPayload.val,
+                    postBy,
+                    whoAmI.network,
+                    whoAmI,
+                    sharedPublic,
+                ),
             )
         postMetadataImages.forEach((url) => {
             if (signal.signal.aborted) return
-            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI))
+            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI.network, whoAmI, undefined))
         })
         return () => signal.abort()
     }, [
@@ -172,7 +179,7 @@ export function DecryptPost(props: DecryptPostProps) {
     const firstSucceedDecrypted = progress.find((p) => p.progress.type === 'success')
     useEffect(() => {
         if (firstSucceedDecrypted?.progress.type !== 'success') return
-        onDecrypted(firstSucceedDecrypted.progress.content, firstSucceedDecrypted.progress.rawContent)
+        onDecrypted(makeTypedMessageTuple([firstSucceedDecrypted.progress.content]))
     }, [firstSucceedDecrypted, onDecrypted])
     //#endregion
 

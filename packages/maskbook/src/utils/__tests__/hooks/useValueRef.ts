@@ -1,6 +1,6 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { renderHook, act } from '@testing-library/react-hooks'
-import { useValueRef } from '../../hooks/useValueRef'
+import { useValueRef } from '@masknet/shared'
 
 test('update ref', async () => {
     const valueRef = new ValueRef(0)

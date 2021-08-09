@@ -1,25 +1,21 @@
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { FungibleTokenDetailed, isNative, useBlockNumber, useTokenConstants } from '@masknet/web3-shared'
 import { difference } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
-import { getEnumAsArray } from '../../../../utils/enum'
-import { CONSTANTS } from '../../../../web3/constants'
-import { useBlockNumber } from '../../../../web3/hooks/useBlockNumber'
-import { useConstant } from '../../../../web3/hooks/useConstant'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy, ZrxTradePool } from '../../types'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance'
 import { useTradeProviderSettings } from '../useTradeSettings'
-import { isNative } from '../../../../web3/helpers'
 
 export function useTrade(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
-    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
+    inputToken?: FungibleTokenDetailed,
+    outputToken?: FungibleTokenDetailed,
 ) {
-    const NATIVE_TOKEN_ADDRESS = useConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS')
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const blockNumber = useBlockNumber()
 
     const slippage = useSlippageTolerance()

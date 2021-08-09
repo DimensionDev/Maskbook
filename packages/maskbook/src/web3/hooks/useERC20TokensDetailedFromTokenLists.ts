@@ -1,17 +1,14 @@
-import { useMemo } from 'react'
+import { currySameAddress, EthereumTokenType, useChainId, useERC20TokenDetailed } from '@masknet/web3-shared'
 import Fuse from 'fuse.js'
-import Services from '../../extension/service'
+import { useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
-import { isSameAddress } from '../helpers'
-import { useChainId } from './useChainId'
-import { EthereumTokenType } from '../types'
-import { useERC20TokenDetailed } from './useERC20TokenDetailed'
+import Services from '../../extension/service'
 
 export enum TokenListsState {
-    READY,
-    LOADING_TOKEN_LISTS,
-    LOADING_SEARCHED_TOKEN,
+    READY = 0,
+    LOADING_TOKEN_LISTS = 1,
+    LOADING_SEARCHED_TOKEN = 2,
 }
 
 export function useERC20TokensDetailedFromTokenLists(lists: string[], keyword: string = '') {
@@ -43,9 +40,7 @@ export function useERC20TokensDetailedFromTokenLists(lists: string[], keyword: s
     const searchedTokens = useMemo(() => {
         if (!keyword) return allTokens
         return [
-            ...(EthereumAddress.isValid(keyword)
-                ? allTokens.filter((token) => isSameAddress(token.address, keyword))
-                : []),
+            ...(EthereumAddress.isValid(keyword) ? allTokens.filter(currySameAddress(keyword)) : []),
             ...fuse.search(keyword).map((x) => x.item),
         ]
     }, [keyword, fuse, allTokens])

@@ -18,7 +18,7 @@ function isAcceptablePermission(x: string): x is browser.permissions.Permission 
     return (acceptable as string[]).includes(x)
 }
 
-export function RequestPermissionPage() {
+export default function RequestPermissionPage() {
     const param = useLocation()
     const _ = new URLSearchParams(param.search)
     const origins = _.getAll('origins')

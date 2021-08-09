@@ -2,10 +2,6 @@
     "type": "object",
     "additionalProperties": true,
     "properties": {
-        "contract_version": {
-            "type": "number",
-            "title": "contract_version"
-        },
         "contract_address": {
             "type": "string",
             "title": "contract_address"
@@ -13,6 +9,10 @@
         "rpid": {
             "type": "string",
             "title": "rpid"
+        },
+        "txid": {
+            "type": "string",
+            "title": "txid"
         },
         "password": {
             "type": "string",
@@ -59,7 +59,6 @@
             "title": "duration"
         },
         "network": {
-            "enum": ["Mainnet", "Rinkeby", "Ropsten"],
             "type": "string",
             "title": "network"
         },
@@ -99,7 +98,6 @@
     },
     "required": [
         "contract_address",
-        "contract_version",
         "creation_time",
         "duration",
         "is_random",

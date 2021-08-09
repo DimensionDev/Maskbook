@@ -1,15 +1,29 @@
 import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
-import { ChainId, ProviderType } from '../../web3/types'
+import {
+    ChainId,
+    ProviderType,
+    PortfolioProvider,
+    CollectibleProvider,
+    NetworkType,
+    GasNow,
+} from '@masknet/web3-shared'
 import { PLUGIN_IDENTIFIER } from './constants'
-import { CollectibleProvider, PortfolioProvider } from './types'
+import { isEqual } from 'lodash-es'
+import { connectGasNow } from './apis/gasnow'
+import { trackEtherPrice } from './apis/coingecko'
+import { startEffects } from '../../utils/side-effects'
+
+export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+selectedWalletAddress`, '', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
 
 /**
- * The address of the selected wallet
+ * The network type of the selected wallet
  */
-export const currentSelectedWalletAddressSettings = createGlobalSettings<string>(
-    `${PLUGIN_IDENTIFIER}+selectedWalletAddress`,
-    '',
+export const currentNetworkSettings = createGlobalSettings<NetworkType>(
+    `${PLUGIN_IDENTIFIER}+selectedWalletNetwork`,
+    NetworkType.Ethereum,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
@@ -18,7 +32,7 @@ export const currentSelectedWalletAddressSettings = createGlobalSettings<string>
 /**
  * The provider type of the selected wallet
  */
-export const currentSelectedWalletProviderSettings = createGlobalSettings<ProviderType>(
+export const currentProviderSettings = createGlobalSettings<ProviderType>(
     `${PLUGIN_IDENTIFIER}+selectedWalletProvider`,
     ProviderType.Maskbook,
     {
@@ -62,53 +76,72 @@ export const currentCollectibleDataProviderSettings = createGlobalSettings<Colle
 )
 
 /**
- * The block number state
+ * Chain Id
+ */
+export const currentChainIdSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+chainId`, ChainId.Mainnet, {
+    primary: () => i18n.t('settings_choose_eth_network'),
+    secondary: () => 'This only affects the built-in wallet.',
+})
+
+/**
+ * Block number
  */
 export const currentBlockNumberSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+blockNumber`, 0, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
 /**
- * Chain Id of Mask Network
+ * Balance
  */
-export const currentMaskbookChainIdSettings = createGlobalSettings<ChainId>(
-    `${PLUGIN_IDENTIFIER}+MaskChainId`,
-    ChainId.Mainnet,
-    {
-        primary: () => i18n.t('settings_choose_eth_network'),
-        secondary: () => 'This only affects the built-in wallet.',
-    },
-)
+export const currentBalanceSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+balance`, '0', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
 
 /**
- * Chain Id of MetaMask
+ * Nonce
  */
-export const currentMetaMaskChainIdSettings = createGlobalSettings<ChainId>(
-    `${PLUGIN_IDENTIFIER}+MetaMaskChainID`,
-    ChainId.Mainnet,
+export const currentNonceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+nonce`, 0, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+/**
+ * Gas Price
+ */
+export const currentGasPriceSettings = createGlobalSettings<number>(
+    `${PLUGIN_IDENTIFIER}+gasPrice`,
+    0,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
+    (a: number, b: number) => isEqual(a, b),
 )
 
 /**
- * Chain Id of WalletConnect
+ * Gas Now
  */
-export const currentWalletConnectChainIdSettings = createGlobalSettings<ChainId>(
-    `${PLUGIN_IDENTIFIER}+WalletConnectChainId`,
-    ChainId.Mainnet,
+export const currentGasNowSettings = createGlobalSettings<GasNow | null>(
+    `${PLUGIN_IDENTIFIER}+gasNow`,
+    null,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
+    (a: GasNow | null, b: GasNow | null) => isEqual(a, b),
 )
 
 /**
- * Chain Id of CustomNetwork
+ * Ether Price in USD
  */
-export const currentCustomNetworkChainIdSettings = createGlobalSettings<ChainId>(
-    `${PLUGIN_IDENTIFIER}+CustomNetworkChainId`,
-    ChainId.Mainnet,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
+export const currentEtherPriceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+etherPriceUSD`, 0, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+const effect = startEffects(import.meta.webpackHot)
+
+effect(() => {
+    try {
+        return connectGasNow()
+    } catch {
+        return () => {}
+    }
+})
+effect(() => trackEtherPrice())

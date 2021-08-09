@@ -9,13 +9,11 @@ export async function getMaskAirdropPacket(address: string) {
     try {
         const response = await fetch('https://service.r2d2.to/airdrop-lookup', {
             method: 'POST',
-            body: JSON.stringify({
-                address,
-            }),
+            body: JSON.stringify({ address }),
         })
-
-        return (await response.json()) as AirdropPacket
-    } catch (e) {
-        return
+        return response.json() as Promise<AirdropPacket>
+    } catch {
+        // ignore
     }
+    return
 }

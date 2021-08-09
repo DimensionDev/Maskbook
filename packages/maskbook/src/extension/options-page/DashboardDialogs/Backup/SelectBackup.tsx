@@ -1,6 +1,6 @@
 import { Box, InputBase, makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { Database as DatabaseIcon } from 'react-feather'
 import { useAsync } from 'react-use'
@@ -13,7 +13,7 @@ import {
     UpgradeBackupJSONFile,
 } from '../../../../utils'
 import Services from '../../../service'
-import AbstractTab, { AbstractTabProps } from '../../DashboardComponents/AbstractTab'
+import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import ActionButton from '../../DashboardComponents/ActionButton'
 import { RestoreFromBackupBox } from '../../DashboardComponents/RestoreFromBackupBox'
 import { DashboardDialogWrapper } from '../Base'
@@ -79,7 +79,7 @@ export function SelectBackup({ onConfirm }: SelectBackupProps) {
                     <InputBase
                         className={selectBackupClasses.input}
                         placeholder={t('dashboard_paste_database_backup_hint')}
-                        inputRef={(input: HTMLInputElement) => input && input.focus()}
+                        inputRef={(input: HTMLInputElement) => input?.focus()}
                         multiline
                         value={textValue}
                         onChange={(e) => setTextValue(e.target.value)}
@@ -112,7 +112,7 @@ export function SelectBackup({ onConfirm }: SelectBackupProps) {
             const restoreId = uuid()
             await Services.Welcome.setUnconfirmedBackup(restoreId, json)
             onConfirm?.(restoreId, json)
-        } catch (e) {
+        } catch {
             enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
         }
     }
@@ -138,7 +138,7 @@ export function SelectBackup({ onConfirm }: SelectBackupProps) {
                             display: 'flex',
                             flexDirection: 'column',
                         }}>
-                        <AbstractTab {...tabProps}></AbstractTab>
+                        <AbstractTab {...tabProps} />
                     </Box>
                     <ActionButton
                         className={selectBackupClasses.button}

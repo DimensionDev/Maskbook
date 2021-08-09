@@ -7,7 +7,7 @@ import {
     isAvatarOutdatedDB,
     deleteAvatarsDB,
 } from '../avatar'
-import { ProfileIdentifier, GroupIdentifier } from '../type'
+import { ProfileIdentifier } from '../type'
 
 function createBeforeDate(beforeDays: number) {
     return new Date(Date.now() - 1000 * 60 * 60 * 24 * beforeDays)
@@ -17,10 +17,6 @@ function createProfileIdentifier() {
     return new ProfileIdentifier(uuid(), uuid())
 }
 
-function createGroupIdentifier() {
-    return new GroupIdentifier(uuid(), uuid(), uuid())
-}
-
 function createArrayBuffer(length: number) {
     return new Uint8Array(new Array(length).fill(0).map(() => Math.round(Math.random() * 256))).buffer
 }
@@ -28,13 +24,9 @@ function createArrayBuffer(length: number) {
 test('storeAvatarDB & queryAvatarDB', async () => {
     const ab = createArrayBuffer(20)
     const profileIdentifier = createProfileIdentifier()
-    const groupIdentifier = createGroupIdentifier()
 
     await storeAvatarDB(profileIdentifier, ab)
     expect(await queryAvatarDB(profileIdentifier)).toEqual(ab)
-
-    await storeAvatarDB(groupIdentifier, ab)
-    expect(await queryAvatarDB(groupIdentifier)).toEqual(ab)
 })
 
 test('updateAvatarMetaDB & queryAvatarOutdatedDB', async () => {

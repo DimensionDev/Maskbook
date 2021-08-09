@@ -1,6 +1,6 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { PersonaCardUI as C } from '../../../src/pages/Personas/components/PersonaCard'
-import { ECKeyIdentifier, ProfileIdentifier } from '@dimensiondev/maskbook-shared'
+import { ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared'
 import { action } from '@storybook/addon-actions'
 
 const { meta, of } = story(C)

@@ -1,4 +1,5 @@
 import { first } from 'lodash-es'
+import '../../network/gun/gun-worker.patch'
 import { gun2 } from '../../network/gun/version.2'
 import type { PollMetaData } from './types'
 import { PollGunServer } from './constants'
@@ -71,6 +72,7 @@ export async function vote(props: voteProps) {
     PollGun
         // @ts-ignore
         .get(poll.key)
+        // @ts-ignore
         .get('results')
         .on((item) => {
             // @ts-ignore
@@ -86,6 +88,7 @@ export async function vote(props: voteProps) {
     PollGun
         // @ts-ignore
         .get(poll.key)
+        // @ts-ignore
         .get('results')
         // @ts-ignore
         .put(newResults)
@@ -107,6 +110,7 @@ export async function getPollByKey(props: { key: string }) {
     PollGun
         // @ts-ignore
         .get(props.key)
+        // @ts-ignore
         .on((data: PollGunDB) => {
             poll = {
                 ...poll,
@@ -119,6 +123,7 @@ export async function getPollByKey(props: { key: string }) {
                 PollGun
                     // @ts-ignore
                     .get(props.key)
+                    // @ts-ignore
                     .get('options')
                     .on((options) => {
                         // @ts-ignore
@@ -130,6 +135,7 @@ export async function getPollByKey(props: { key: string }) {
                 PollGun
                     // @ts-ignore
                     .get(props.key)
+                    // @ts-ignore
                     .get('results')
                     .on((results) => {
                         // @ts-ignore

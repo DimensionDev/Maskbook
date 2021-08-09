@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from 'react'
 import { useDropArea } from 'react-use'
 import { makeStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { RestoreBox } from './RestoreBox'
+import { blobToText } from '@dimensiondev/kit'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,9 +37,7 @@ export function RestoreFromBackupBox(props: RestoreFromBackupBoxProps) {
     // invoke callback
     useEffect(() => {
         if (file) {
-            const fr = new FileReader()
-            fr.readAsText(file)
-            fr.addEventListener('loadend', () => props.onChange?.(file, fr.result as string))
+            blobToText(file).then((result) => props.onChange?.(file, result))
         }
     }, [file, props.onChange])
 
@@ -62,7 +61,7 @@ export function RestoreFromBackupBox(props: RestoreFromBackupBoxProps) {
                 darkPlaceholderImageURL={new URL('./RestoreFromBackupBox-dark.png', import.meta.url).toString()}
                 lightPlaceholderImageURL={new URL('./RestoreFromBackupBox-light.png', import.meta.url).toString()}
                 data-active={over}
-                onClick={() => inputRef.current && inputRef.current.click()}
+                onClick={() => inputRef.current?.click()}
             />
         </div>
     )

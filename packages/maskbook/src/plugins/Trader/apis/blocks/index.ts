@@ -1,20 +1,19 @@
-import { chunk, first, flatten } from 'lodash-es'
+import { getTrendingConstants } from '@masknet/web3-shared'
 import stringify from 'json-stable-stringify'
-import { getConstant } from '../../../../web3/helpers'
-import { TRENDING_CONSTANTS } from '../../constants'
-import { getChainId } from '../../../../extension/background-script/EthereumService'
+import { chunk, first, flatten } from 'lodash-es'
+import { currentChainIdSettings } from '../../../Wallet/settings'
 
 interface Block {
     number: string
 }
 
 async function fetchFromEthereumBlocksSubgraph<T>(query: string) {
-    const response = await fetch(getConstant(TRENDING_CONSTANTS, 'ETHEREUM_BLOCKS_SUBGRAPH_URL', await getChainId()), {
+    const subgraphURL = getTrendingConstants(currentChainIdSettings.value).ETHEREUM_BLOCKS_SUBGRAPH_URL
+    if (!subgraphURL) return null
+    const response = await fetch(subgraphURL, {
         method: 'POST',
         mode: 'cors',
-        body: stringify({
-            query,
-        }),
+        body: stringify({ query }),
     })
     const { data } = (await response.json()) as {
         data: T
@@ -27,7 +26,7 @@ async function fetchFromEthereumBlocksSubgraph<T>(query: string) {
  * @param timestamp
  */
 export async function fetchBlockNumberByTimestamp(timestamp: number) {
-    const response = await fetchFromEthereumBlocksSubgraph<{
+    const data = await fetchFromEthereumBlocksSubgraph<{
         blocks: Block[]
     }>(`
     {
@@ -43,7 +42,7 @@ export async function fetchBlockNumberByTimestamp(timestamp: number) {
         }
     }
     `)
-    return first(response.blocks)?.number
+    return first(data?.blocks)?.number
 }
 
 /**
@@ -55,7 +54,7 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[], skipCo
     // avoiding request entity too large
     const chunkTimestamps = chunk(timestamps, skipCount)
 
-    const response = await Promise.all(
+    const data = await Promise.all(
         chunkTimestamps.map(async (chunk) => {
             const queries = chunk.map((x) => {
                 return `
@@ -73,9 +72,7 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[], skipCo
                 `
             })
 
-            return fetchFromEthereumBlocksSubgraph<{
-                [key: string]: Block[]
-            }>(`
+            return fetchFromEthereumBlocksSubgraph<Record<string, Block[]>>(`
                 query blocks {
                     ${queries}
                 }
@@ -84,8 +81,8 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[], skipCo
     )
 
     return flatten(
-        response.map((result) =>
-            Object.keys(result).map((x) => ({
+        data.filter(Boolean).map((result) =>
+            Object.keys(result!).map((x) => ({
                 timestamp: Number(x.split('t')[1]),
                 // @ts-ignore
                 blockNumber: first(result[x])!.number,
@@ -115,18 +112,17 @@ export async function fetchBlockNumbersObjectByTimestamps(timestamps: number[]) 
         `
     })
 
-    const response = await fetchFromEthereumBlocksSubgraph<{
-        [key: string]: Block[]
-    }>(`
+    const data = await fetchFromEthereumBlocksSubgraph<Record<string, Block[]>>(`
         query blocks {
             ${queries}
         }
     `)
 
-    const result: { [key: string]: string | undefined } = {}
+    const result: Record<string, string | undefined> = {}
+    if (!data) return result
 
-    Object.keys(response).map((key) => {
-        result[key] = first(response[key])?.number
+    Object.keys(data).map((key) => {
+        result[key] = first(data[key])?.number
     })
 
     return result

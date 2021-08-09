@@ -1,6 +1,6 @@
 import { Network } from 'opensea-js'
-import { unreachable } from '../../../utils/utils'
-import { ChainId } from '../../../web3/types'
+import { unreachable } from '@dimensiondev/kit'
+import { ChainId } from '@masknet/web3-shared'
 import { NullAddress, RaribleRopstenUserURL, RaribleUserURL } from '../constants'
 import { CollectibleProvider, OpenSeaAssetEventType, RaribleEventType } from '../types'
 

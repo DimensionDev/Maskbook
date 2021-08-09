@@ -1,8 +1,7 @@
-import { Box, makeStyles, TextField } from '@material-ui/core'
 import { useState } from 'react'
+import { Box, makeStyles, TextField } from '@material-ui/core'
+import { EthereumTokenType, ERC20TokenDetailed } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
-import type { ERC20TokenDetailed } from '../../../../web3/types'
-import { EthereumTokenType } from '../../../../web3/types'
 import { FixedTokenList } from '../../DashboardComponents/FixedTokenList'
 
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) => ({
@@ -51,7 +50,7 @@ export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelector
                 classes={{ list: classes.list, placeholder: classes.placeholder }}
                 keyword={keyword}
                 blacklist={excludeTokens}
-                onSubmit={(token) => token.type === EthereumTokenType.ERC20 && onTokenChange?.(token)}
+                onSelect={(token) => onTokenChange?.(token?.type === EthereumTokenType.ERC20 ? token : null)}
                 FixedSizeListProps={{
                     height: 192,
                     itemSize: 52,

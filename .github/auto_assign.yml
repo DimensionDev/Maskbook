@@ -3,11 +3,7 @@ addReviewers: true
 addAssignees: false
 
 reviewers:
-  - guanbinrui
-  - Jack-Works
-  - jk234ert
-  - septs
-  - zhouhanseng
+  - Dev-Maskbook
 
 numberOfReviewers: 0
 

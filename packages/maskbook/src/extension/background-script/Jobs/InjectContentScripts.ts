@@ -1,7 +1,7 @@
 import { Flags } from '../../../utils/flags'
 
 type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never
-export default function () {
+export default function (signal: AbortSignal) {
     const injectedScript = fetchInjectedScript()
     const contentScripts = fetchInjectContentScript('/generated__content__script.html')
     async function onCommittedListener(arg: Args): Promise<void> {
@@ -33,7 +33,7 @@ export default function () {
         contentScripts(arg.tabId, arg.frameId).catch(HandleError(arg))
     }
     browser.webNavigation.onCommitted.addListener(onCommittedListener)
-    return () => browser.webNavigation.onCommitted.removeListener(onCommittedListener)
+    signal.addEventListener('abort', () => browser.webNavigation.onCommitted.removeListener(onCommittedListener))
 }
 
 function fetchInjectContentScript(entryHTML: string) {
@@ -70,16 +70,18 @@ async function fetchInjectedScript() {
         .then(JSON.stringify)}
     document.documentElement.appendChild(script)
 }`
-    } catch (e) {
-        console.error(e)
+    } catch (error) {
+        console.error(error)
         return `console.log('Injected script failed to load.')`
     }
 }
 function HandleError(arg: unknown): (reason: Error) => void {
-    return (e) => {
+    return (error) => {
         const ignoredErrorMessages = ['non-structured-clonable data', 'No tab with id']
-        if (ignoredErrorMessages.some((x) => e.message.includes(x))) {
+        if (ignoredErrorMessages.some((x) => error.message.includes(x))) {
             // It's okay we don't need the result, happened on Firefox
-        } else console.error('Inject error', e.message, arg, ...Object.entries(e))
+        } else {
+            console.error('Inject error', error.message, arg, ...Object.entries(error))
+        }
     }
 }

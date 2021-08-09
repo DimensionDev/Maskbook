@@ -5,38 +5,49 @@ import {
     ListItemIcon,
     Collapse,
     Theme,
-    ListItemProps,
     useMediaQuery,
     experimentalStyled as styled,
     listItemClasses,
     listItemIconClasses,
+    ListItemProps,
 } from '@material-ui/core'
 import { Masks, AccountBalanceWallet, ExpandLess, ExpandMore, Settings } from '@material-ui/icons'
 import { useContext } from 'react'
-import { useRouteMatch } from 'react-router'
-import { Link, LinkProps } from 'react-router-dom'
-import { Routes } from '../../pages/routes'
+import { useMatch, useNavigate } from 'react-router'
 import { DashboardContext } from './context'
-import { MaskNotSquareIcon } from '@dimensiondev/icons'
+import { MaskNotSquareIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
+import { RoutePaths } from '../../type'
 
-function ListItemLinkUnStyled({ nested, ...props }: LinkProps & ListItemProps & { nested?: boolean; to: string }) {
-    return <MuiListItem button component={Link} selected={!!useRouteMatch(props.to)} {...props} />
+const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
+    const navigate = useNavigate()
+
+    return (
+        <MuiListItem
+            {...props}
+            selected={!!useMatch(to)}
+            onClick={(event) => {
+                navigate(to)
+                props.onClick?.(event)
+            }}
+        />
+    )
 }
 
-const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
+const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
     return {
         [`&.${listItemClasses.root}`]: {
             color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
-            paddingLeft: nested ? theme.spacing(9) : theme.spacing(2),
+            paddingLeft: theme.spacing(2),
+            cursor: 'pointer',
         },
         [`&.${listItemClasses.selected}`]: {
-            color: MaskColorVar.linkText,
+            color: MaskColorVar.textLink,
             backgroundColor: 'transparent',
             position: 'relative',
             [`${listItemIconClasses.root}`]: {
-                color: MaskColorVar.linkText,
+                color: MaskColorVar.textLink,
             },
             '&:after': {
                 content: '""',
@@ -45,7 +56,7 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme, nested }) => {
                 height: 40,
                 boxShadow: '-2px 0px 10px 2px rgba(0, 56, 255, 0.15)',
                 borderRadius: 50,
-                background: MaskColorVar.linkText,
+                background: MaskColorVar.textLink,
                 position: 'absolute',
                 right: 0,
             },
@@ -82,30 +93,39 @@ export function Navigation({}: NavigationProps) {
                     <MaskNotSquareIcon />
                 </LogoItem>
             )}
-            <ListItemLink to={Routes.Personas}>
+            <ListItemLink to={RoutePaths.Personas}>
                 <ListItemIcon>
                     <Masks />
                 </ListItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
-            <ListItem button selected={!!useRouteMatch(Routes.Wallets)} onClick={toggleNavigationExpand}>
+            <ListItemLink
+                to={RoutePaths.Wallets}
+                selected={!!useMatch(RoutePaths.Wallets)}
+                onClick={toggleNavigationExpand}>
                 <ListItemIcon>
                     <AccountBalanceWallet />
                 </ListItemIcon>
                 <ListItemText>{t.wallets()}</ListItemText>
                 {expanded ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
+            </ListItemLink>
             <Collapse in={expanded}>
                 <List disablePadding>
-                    <ListItemLink nested to={Routes.WalletsTransfer}>
-                        <ListItemText primary={t.wallets_transfer()} />
+                    <ListItemLink to={RoutePaths.WalletsTransfer}>
+                        <ListItemText inset primary={t.wallets_transfer()} />
                     </ListItemLink>
-                    <ListItemLink nested to={Routes.WalletsHistory}>
-                        <ListItemText primary={t.wallets_history()} />
+                    <ListItemLink to={RoutePaths.WalletsHistory}>
+                        <ListItemText inset primary={t.wallets_history()} />
                     </ListItemLink>
                 </List>
             </Collapse>
-            <ListItemLink to={Routes.Settings}>
+            <ListItemLink to={RoutePaths.Labs}>
+                <ListItemIcon>
+                    <Settings />
+                </ListItemIcon>
+                <ListItemText primary={t.labs()} />
+            </ListItemLink>
+            <ListItemLink to={RoutePaths.Settings}>
                 <ListItemIcon>
                     <Settings />
                 </ListItemIcon>

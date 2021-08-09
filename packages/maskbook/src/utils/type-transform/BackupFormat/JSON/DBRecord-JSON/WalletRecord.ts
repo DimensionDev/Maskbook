@@ -2,7 +2,7 @@ import type { WalletRecord } from '../../../../../plugins/Wallet/database/types'
 import type { BackupJSONFileLatest } from '../latest'
 import { keyToJWK, keyToAddr, JWKToKey } from '../../../SECP256k1-ETH'
 import type { PartialBy } from '../../../../type'
-import { isSameAddress } from '../../../../../web3/helpers'
+import { isSameAddress } from '@masknet/web3-shared'
 
 type WalletBackup = BackupJSONFileLatest['wallets'][0]
 
@@ -30,8 +30,8 @@ export function WalletRecordToJSONFormat(wallet: WalletRecord): WalletBackup {
             backup.publicKey = keyToJWK(wallet_._public_key_, 'public')
         if (wallet_._private_key_ && isSameAddress(keyToAddr(wallet_._private_key_, 'private'), wallet.address))
             backup.privateKey = keyToJWK(wallet_._private_key_, 'private')
-    } catch (e) {
-        console.error(e)
+    } catch (error) {
+        console.error(error)
     }
     return backup as WalletBackup
 }

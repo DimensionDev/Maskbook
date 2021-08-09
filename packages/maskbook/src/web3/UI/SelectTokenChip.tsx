@@ -3,8 +3,8 @@ import { makeStyles, Theme, Chip, ChipProps, CircularProgress } from '@material-
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ErrorIcon from '@material-ui/icons/Error'
 import { noop } from 'lodash-es'
-import { TokenIcon } from '../../extension/options-page/DashboardComponents/TokenIcon'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../types'
+import { TokenIcon } from '@masknet/shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { useI18N } from '../../utils'
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) => {
 })
 
 export interface SelectTokenChipProps {
-    token?: NativeTokenDetailed | ERC20TokenDetailed | null
+    token?: FungibleTokenDetailed | null
     error?: Error
     loading?: boolean
     readonly?: boolean
@@ -61,7 +61,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
         return (
             <Chip
                 className={classes.chip}
-                icon={<TokenIcon address={token.address} name={token.name} />}
+                icon={<TokenIcon address={token.address} name={token.name} logoURI={token.logoURI} />}
                 deleteIcon={<ErrorIcon className={classes.icon} />}
                 label={token.symbol}
                 color="default"
@@ -76,7 +76,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
     return (
         <Chip
             className={classes.chip}
-            icon={<TokenIcon address={token.address} name={token.name} />}
+            icon={<TokenIcon address={token.address} name={token.name} logoURI={token.logoURI} />}
             deleteIcon={readonly ? undefined : <ExpandMoreIcon className={classes.icon} />}
             color="default"
             size="small"

@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react'
-import { MaskDialog } from '@dimensiondev/maskbook-theme'
+import { MaskDialog } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, TextField } from '@material-ui/core'
 import { useDashboardI18N } from '../../../../locales'
 import { isPersonaNameLengthValid, PERSONA_NAME_MAX_LENGTH } from '../../../../utils/checkLengthExceed'
@@ -23,8 +23,8 @@ export const RenameDialog = memo<RenameDialogProps>(({ open, nickname, onClose, 
         <MaskDialog open={open} title={t.personas_rename()} onClose={onClose}>
             <DialogContent>
                 <TextField
+                    placeholder={t.personas_rename_placeholder()}
                     style={{ width: '100%' }}
-                    variant="filled"
                     error={!isPersonaNameLengthValid(name)}
                     helperText={
                         !isPersonaNameLengthValid(name)

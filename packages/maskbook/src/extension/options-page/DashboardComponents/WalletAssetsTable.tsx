@@ -19,19 +19,24 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { formatBalance, formatCurrency, FormattedCurrency } from '@dimensiondev/maskbook-shared'
-import { useMatchXS, useI18N } from '../../../utils'
-import { CurrencyType, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
-import { isSameAddress } from '../../../web3/helpers'
-import { TokenIcon } from './TokenIcon'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import { Asset, useTrustedERC20Tokens } from '@masknet/web3-shared'
+import {
+    CurrencyType,
+    currySameAddress,
+    EthereumTokenType,
+    formatBalance,
+    formatCurrency,
+    getChainIdFromName,
+    isGreaterThan,
+    useAssets,
+    useChainDetailed,
+    useStableTokensDebank,
+    Wallet,
+} from '@masknet/web3-shared'
+import { FormattedCurrency, TokenIcon, useStylesExtends } from '@masknet/shared'
+import { useI18N, useMatchXS } from '../../../utils'
 import { ActionsBarFT } from './ActionsBarFT'
-import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
-import { useStableTokensDebank } from '../../../web3/hooks/useStableTokensDebank'
-import type { Asset } from '../../../plugins/Wallet/types'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
-import { useAssets } from '../../../plugins/Wallet/hooks/useAssets'
 
 const useStyles = makeStyles<
     Theme,
@@ -78,6 +83,7 @@ const useStyles = makeStyles<
         display: 'flex',
         justifyContent: 'center',
         marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
     },
 }))
 
@@ -91,9 +97,11 @@ function ViewDetailed(props: ViewDetailedProps) {
 
     const isMobile = useMatchXS()
     const classes = useStylesExtends(useStyles({ isMobile }), props)
-    const stableTokens = useStableTokensDebank()
 
-    console.log(asset)
+    const stableTokens = useStableTokensDebank()
+    const chainDetailed = useChainDetailed()
+
+    if (!chainDetailed) return null
 
     return (
         <TableRow className={classes.cell} key={asset.token.address}>
@@ -102,9 +110,17 @@ function ViewDetailed(props: ViewDetailedProps) {
                     sx={{
                         display: 'flex',
                     }}>
-                    <TokenIcon classes={{ icon: classes.coin }} name={asset.token.name} address={asset.token.address} />
+                    <TokenIcon
+                        classes={{ icon: classes.coin }}
+                        name={asset.token.name}
+                        address={asset.token.address}
+                        logoURI={asset.token.logoURI}
+                        chainId={getChainIdFromName(asset.chain)}
+                    />
                     <Typography className={classes.name}>{asset.token.symbol}</Typography>
-                    {asset.chain !== 'eth' ? <Chip className={classes.chain} label={asset.chain} size="small" /> : null}
+                    {asset.chain.toLowerCase() !== chainDetailed.chain.toLowerCase() ? (
+                        <Chip className={classes.chain} label={asset.chain} size="small" />
+                    ) : null}
                 </Box>,
                 <Box
                     sx={{
@@ -124,9 +140,7 @@ function ViewDetailed(props: ViewDetailedProps) {
                     }}>
                     <Typography className={classes.name} color="textPrimary" component="span">
                         {new BigNumber(formatBalance(asset.balance, asset.token.decimals)).toFixed(
-                            stableTokens.some((y: ERC20TokenDetailed) => isSameAddress(y.address, asset.token.address))
-                                ? 2
-                                : 6,
+                            stableTokens.some(currySameAddress(asset.token.address)) ? 2 : 6,
                         )}
                     </Typography>
                 </Box>,
@@ -165,8 +179,8 @@ function ViewDetailed(props: ViewDetailedProps) {
 //#region wallet asset table
 const MIN_VALUE = 5
 
-export interface WalletAssetsTableProps extends withClasses<never> {
-    wallet: WalletRecord
+export interface WalletAssetsTableProps extends withClasses<'container'> {
+    wallet: Wallet
 }
 
 export function WalletAssetsTable(props: WalletAssetsTableProps) {
@@ -183,7 +197,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         ...(isMobile ? [] : ['']),
     ] as const
 
-    const erc20Tokens = useTrustedERC20TokensFromDB()
+    const erc20Tokens = useTrustedERC20Tokens()
     const {
         value: detailedTokens,
         error: detailedTokensError,
@@ -219,8 +233,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
 
     const viewDetailedTokens = detailedTokens.filter(
         (x) =>
-            new BigNumber(x.value?.[CurrencyType.USD] || '0').isGreaterThan(MIN_VALUE) ||
-            x.token.type === EthereumTokenType.Native,
+            isGreaterThan(x.value?.[CurrencyType.USD] || '0', MIN_VALUE) || x.token.type === EthereumTokenType.Native,
     )
 
     return (
@@ -244,39 +257,19 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                             ? new Array(3).fill(0).map((_, i) => (
                                   <TableRow className={classes.cell} key={i}>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                       <TableCell>
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              width="100%"
-                                              height={30}></Skeleton>
+                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
                                       </TableCell>
                                   </TableRow>
                               ))

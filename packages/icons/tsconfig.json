@@ -4,7 +4,7 @@
     "outDir": "./dist/",
     "stripInternal": true
   },
-  "include": ["./brands/**/*.tsx", "./general/**/*.tsx", "./utils/index.tsx", "./index.ts"],
+  "include": ["./**/*.tsx", "./**/*.ts"],
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": { "module": "CommonJS" }

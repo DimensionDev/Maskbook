@@ -3,8 +3,9 @@ import { useDropArea } from 'react-use'
 import { makeStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 import { RestoreBox } from './RestoreBox'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { QRCodeImageScanner } from './QRCodeImageScanner'
+import { blobToDataURL } from '@dimensiondev/kit'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -58,10 +59,7 @@ export function RestoreFromQRCodeImageBox(props: RestoreFromQRCodeImageBoxProps)
     // read file as data URL
     useEffect(() => {
         if (file) {
-            const fr = new FileReader()
-            fr.readAsDataURL(file)
-            fr.addEventListener('loadend', () => setDataURL(fr.result as string))
-            fr.addEventListener('error', () => setDataURL(''))
+            blobToDataURL(file).then(setDataURL, () => setDataURL(''))
         } else {
             setDataURL('')
         }
@@ -90,7 +88,7 @@ export function RestoreFromQRCodeImageBox(props: RestoreFromQRCodeImageBoxProps)
                 darkPlaceholderImageURL={new URL('./RestoreFromQRCodeImageBox-dark.png', import.meta.url).toString()}
                 lightPlaceholderImageURL={new URL('./RestoreFromQRCodeImageBox-light.png', import.meta.url).toString()}
                 data-active={over}
-                onClick={() => inputRef.current && inputRef.current.click()}>
+                onClick={() => inputRef.current?.click()}>
                 {file ? <QRCodeImageScanner src={dataURL} onScan={onScan} onError={onError} /> : null}
             </RestoreBox>
         </div>

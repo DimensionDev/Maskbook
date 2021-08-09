@@ -1,13 +1,12 @@
 import { useState } from 'react'
-import { DialogContent, Typography, DialogProps } from '@material-ui/core'
-import { InjectedDialog } from '../shared/InjectedDialog'
+import { DialogContent, Typography } from '@material-ui/core'
+import { InjectedDialog, InjectedDialogProps } from '../shared/InjectedDialog'
 import { makeStyles } from '@material-ui/core/styles'
-import { useStylesExtends } from '../custom-ui-helper'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
-import { FormattedBalance } from '@dimensiondev/maskbook-shared'
+import { FormattedBalance, useStylesExtends } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
-import { ITO_Card } from '../../plugins/ITO/UI/ITO_Card'
-import type { ERC20TokenDetailed } from '../../web3/types'
+import { ITO_Card } from '../../plugins/ITO/SNSAdaptor/ITO_Card'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 
 const useStyles = makeStyles((theme) => ({
     dialogPaper: {
@@ -50,13 +49,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-interface BreakdownDialogUIProps extends withClasses<never> {
-    open: boolean
+interface BreakdownDialogUIProps extends InjectedDialogProps {
     token: ERC20TokenDetailed
     balance: string
     onUpdateBalance: () => void
-    onClose?: () => void
-    DialogProps?: Partial<DialogProps>
 }
 
 function BreakdownDialogUI(props: BreakdownDialogUIProps) {

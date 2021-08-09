@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { useCallback } from 'react'
+import { useValueRef } from '@masknet/shared'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import type { InternalSettings } from '../../settings/createSettings'
-import { useValueRef } from './useValueRef'
 
 export function useSettingsSwticher<T extends number, S extends InternalSettings<T>>(
     settings: S,

@@ -2,20 +2,20 @@ import { omit } from 'lodash-es'
 import type { IDBPSafeTransaction } from '../../../database/helpers/openDB'
 import type { WalletDB } from '../database/Wallet.db'
 import type {
-    WalletRecord,
+    ERC1155TokenRecord,
+    ERC1155TokenRecordInDatabase,
     ERC20TokenRecord,
-    WalletRecordInDatabase,
     ERC20TokenRecordInDatabase,
     ERC721TokenRecord,
     ERC721TokenRecordInDatabase,
-    ERC1155TokenRecord,
-    ERC1155TokenRecordInDatabase,
     PhraseRecord,
     PhraseRecordInDatabase,
+    TransactionChunkRecord,
+    TransactionChunkRecordInDatabase,
+    WalletRecord,
+    WalletRecordInDatabase,
 } from '../database/types'
-import { resolveChainId } from '../../../web3/pipes'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { ChainId } from '../../../web3/types'
+import { ChainId, formatEthereumAddress, getChainIdFromName } from '@masknet/web3-shared'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatEthereumAddress(address))
@@ -58,7 +58,7 @@ export function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
     {
         // fix: network has been renamed to chainId
         const record_ = record as any
-        if (!record.chainId) record.chainId = resolveChainId(record_.network) ?? ChainId.Mainnet
+        if (!record.chainId) record.chainId = getChainIdFromName(record_.network) ?? ChainId.Mainnet
     }
     record.address = formatEthereumAddress(record.address)
     return record
@@ -89,5 +89,18 @@ export function ERC1155TokenRecordIntoDB(x: ERC1155TokenRecord) {
 
 export function ERC1155TokenRecordOutDB(x: ERC1155TokenRecordInDatabase) {
     const record: ERC1155TokenRecord = omit(x, 'record_id')
+    return record
+}
+
+export function TransactionChunkRecordIntoDB(x: TransactionChunkRecord) {
+    const record: TransactionChunkRecordInDatabase = {
+        ...x,
+        record_id: `${x.chain_id}_${formatEthereumAddress(x.address)}`,
+    }
+    return record
+}
+
+export function TransactionChunkRecordOutDB(x: TransactionChunkRecordInDatabase) {
+    const record: TransactionChunkRecord = omit(x, 'record_id')
     return record
 }

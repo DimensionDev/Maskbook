@@ -1,8 +1,9 @@
 import { useAsyncRetry } from 'react-use'
-import type { Currency, DataProvider } from '../types'
+import type { Currency } from '../types'
+import type { DataProvider } from '@masknet/public-api'
 import { isUndefined } from 'lodash-es'
-import { Days } from '../UI/trending/PriceChartDaysControl'
 import { PluginTraderRPC } from '../messages'
+import { Days } from '../SNSAdaptor/trending/PriceChartDaysControl'
 
 interface Options {
     coinId?: string

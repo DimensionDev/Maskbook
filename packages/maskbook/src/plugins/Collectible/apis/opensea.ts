@@ -2,14 +2,15 @@ import { head } from 'lodash-es'
 import { OpenSeaPort } from 'opensea-js'
 import type { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
-import { getChainId, request, requestSend } from '../../../extension/background-script/EthereumService'
+import { ChainId, getChainName } from '@masknet/web3-shared'
+import { request, requestSend } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaRinkebyBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
 import { Flags } from '../../../utils/flags'
 import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../types'
 import { OpenSeaEventHistoryQuery } from '../queries/OpenSea'
-import { ChainId } from '../../../web3/types'
-import { resolveChainName } from '../../../web3/pipes'
+import { currentChainIdSettings } from '../../Wallet/settings'
+import urlcat from 'urlcat'
 
 function createExternalProvider() {
     return {
@@ -24,7 +25,7 @@ function createExternalProvider() {
 }
 
 async function createOpenSeaPort() {
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     return new OpenSeaPort(
         createExternalProvider(),
         {
@@ -36,16 +37,16 @@ async function createOpenSeaPort() {
 }
 
 async function createOpenSeaAPI() {
-    const chainId = await getChainId()
+    const chainId = currentChainIdSettings.value
     if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId))
-        throw new Error(`${resolveChainName(chainId)} is not supported.`)
+        throw new Error(`${getChainName(chainId)} is not supported.`)
     return chainId === ChainId.Mainnet ? OpenSeaBaseURL : OpenSeaRinkebyBaseURL
 }
 
 export async function getAsset(tokenAddress: string, tokenId: string) {
     const sdkResponse = await (await createOpenSeaPort()).api.getAsset({ tokenAddress, tokenId })
     const fetchResponse = await (
-        await fetch(`${await createOpenSeaAPI()}asset/${tokenAddress}/${tokenId}`, {
+        await fetch(urlcat(await createOpenSeaAPI(), '/asset/:tokenAddress/:tokenId', { tokenAddress, tokenId }), {
             cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : undefined,
             mode: 'cors',
             headers: {

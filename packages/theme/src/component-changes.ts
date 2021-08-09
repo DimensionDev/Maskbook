@@ -69,8 +69,12 @@ export const Button: Theme = (mode, colors): ThemeOptions => ({
                     style: { [button.light]: colors.secondary, [button.main]: colors.primary },
                 },
                 {
-                    props: { color: 'error' as any },
-                    style: { [button.main]: colors.redMain, [button.contrast]: colors.redContrastText },
+                    props: { color: 'error' },
+                    style: { [button.main]: colors.redMain, [button.contrast]: colors.primaryContrastText },
+                },
+                {
+                    props: { color: 'warning' },
+                    style: { [button.main]: colors.warning, [button.contrast]: colors.primaryContrastText },
                 },
             ],
         },
@@ -85,7 +89,9 @@ export const Dialog: Theme = {
             },
         },
         MuiDialogActions: {
-            styleOverrides: { root: { justifyContent: 'center', paddingBottom: 24 } },
+            styleOverrides: {
+                root: { justifyContent: 'center', paddingBottom: 24, '&>:not(:first-of-type)': { marginLeft: 18 } },
+            },
         },
     },
 }
@@ -124,6 +130,93 @@ export const List: Theme = (mode, colors) => ({
                     '&:hover': mode === 'light' ? { backgroundColor: '#f5fcff' } : {},
                 },
             },
+        },
+    },
+})
+
+export const Card: Theme = (mode, colors) => ({
+    components: {
+        MuiCard: {
+            styleOverrides: {},
+            variants: [
+                {
+                    props: { variant: 'outlined' },
+                    style: {
+                        border: `1px solid ${colors.lineLight}`,
+                    },
+                },
+            ],
+        },
+    },
+})
+
+export const Paper: Theme = (mode, colors) => ({
+    components: {
+        MuiPaper: {
+            styleOverrides: {},
+            variants: [
+                {
+                    props: { variant: 'outlined' },
+                    style: {
+                        borderRadius: 12,
+                    },
+                },
+            ],
+        },
+    },
+})
+
+export const Typography: Theme = (mode, colors) => ({
+    components: {
+        MuiTypography: {
+            styleOverrides: {},
+            variants: [
+                // UI component: h3
+                {
+                    props: { variant: 'h3' },
+                    style: {
+                        fontSize: 24,
+                        lineHeight: '30px',
+                        color: colors.textPrimary,
+                    },
+                },
+                // UI component: h4
+                {
+                    props: { variant: 'h4' },
+                    style: {
+                        fontSize: 18,
+                        lineHeight: '24px',
+                        fontStyle: 'normal',
+                        color: colors.textPrimary,
+                    },
+                },
+                // UI component: h5
+                {
+                    props: { variant: 'h5' },
+                    style: {
+                        fontSize: 16,
+                        lineHeight: '22px',
+                        color: colors.textPrimary,
+                    },
+                },
+                // UI component: P4
+                {
+                    props: { variant: 'body2', paragraph: true },
+                    style: {
+                        fontSize: 14,
+                        color: colors.textSecondary,
+                    },
+                },
+                // UI component: P12
+                {
+                    props: { variant: 'body2', component: 'span' },
+                    style: {
+                        fontSize: 12,
+                        color: colors.textSecondary,
+                        lineHeight: '16px',
+                    },
+                },
+            ],
         },
     },
 })

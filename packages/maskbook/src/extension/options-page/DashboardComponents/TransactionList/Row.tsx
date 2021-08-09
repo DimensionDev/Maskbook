@@ -2,10 +2,11 @@ import type { FC } from 'react'
 import classNames from 'classnames'
 import { isNil } from 'lodash-es'
 import { Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { resolveLinkOnExplorer, ChainId, useChainDetailed } from '@masknet/web3-shared'
 import { Record } from './Record'
+import { useI18N } from '../../../../utils'
 import type { Transaction } from '../../../../plugins/Wallet/types'
-import { resolveLinkOnExplorer } from '../../../../web3/pipes'
-import type { ChainId } from '../../../../web3/types'
+import urlcat from 'urlcat'
 
 interface Props {
     chainId: ChainId
@@ -28,6 +29,8 @@ const useStyles = makeStyles(() => ({
 
 export const Row: FC<Props> = ({ transaction, chainId }) => {
     const styles = useStyles()
+    const { t } = useI18N()
+    const chainDetailed = useChainDetailed()
     return (
         <TableRow component="div" className={classNames({ [styles.failed]: transaction.failed })}>
             <TableCell component="div">
@@ -51,10 +54,10 @@ export const Row: FC<Props> = ({ transaction, chainId }) => {
                 <Typography
                     className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}
                     color="textSecondary">
-                    Gas fee
+                    {t('gas_fee')}
                 </Typography>
                 <Typography className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })} variant="body2">
-                    {transaction.gasFee?.eth.toFixed(4)} ETH
+                    {transaction.gasFee?.eth.toFixed(4)} {chainDetailed?.nativeCurrency.symbol}
                 </Typography>
                 <Typography
                     className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}
@@ -74,7 +77,7 @@ interface AddressProps {
 }
 
 const Address: FC<AddressProps> = ({ id, mode, chainId }) => {
-    const href = `${resolveLinkOnExplorer(chainId)}/${mode}/${id}`
+    const href = urlcat(resolveLinkOnExplorer(chainId), '/:mode/:id', { mode, id })
     return id ? (
         <Link target={id} href={href}>
             <span>{id?.slice(0, 5)}</span>

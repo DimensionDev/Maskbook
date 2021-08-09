@@ -13,8 +13,6 @@ import type { Configuration as DevServerConfiguration } from 'webpack-dev-server
 
 //#region Development plugins
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
-import ReactRefreshTypeScriptTransformer from 'react-refresh-typescript'
-import WatchMissingModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin'
 import NotifierPlugin from 'webpack-notifier'
 //#endregion
 //#region Other plugins
@@ -48,6 +46,9 @@ function EnvironmentPluginNoCache(def: Record<string, any>) {
     }
     return new DefinePlugin(next)
 }
+const watchOptions = {
+    ignored: /\bnode_modules\b/,
+}
 
 function config(opts: {
     name: string
@@ -59,6 +60,7 @@ function config(opts: {
     disableReactHMR?: boolean
     hmrPort?: number
     noEval?: boolean
+    readonlyCache?: boolean
 }) {
     // https://github.com/facebook/react/issues/20377 React-devtools conflicts with react-refresh
     const disableReactHMR = opts.isProfile || opts.disableReactHMR
@@ -86,8 +88,8 @@ function config(opts: {
         resolve: {
             extensions: ['.js', '.ts', '.tsx'],
             alias: {
-                'async-call-rpc$': 'async-call-rpc/full',
-                lodash: 'lodash-es',
+                'async-call-rpc$': require.resolve('async-call-rpc/full'),
+                lodash: require.resolve('lodash-es'),
                 // Strange...
                 '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
                 // It's a node impl for xhr which is unnecessary
@@ -95,12 +97,17 @@ function config(opts: {
                 // Monorepo building speed optimization
                 // Those packages are also installed as dependencies so they appears in node_modules
                 // By aliasing them to the original position, we can speed up the compile because there is no need to wait tsc build them to the dist folder.
-                '@dimensiondev/dashboard': require.resolve('../dashboard/src/entry.tsx'),
-                '@dimensiondev/maskbook-shared': require.resolve('../shared/src/index.ts'),
-                '@dimensiondev/maskbook-theme': require.resolve('../theme/src/theme.ts'),
-                '@dimensiondev/icons': require.resolve('../icons/index.ts'),
-                '@dimensiondev/mask-plugin-infra': require.resolve('../plugin-infra/src/index.ts'),
-                '@dimensiondev/plugin-example': require.resolve('../plugins/example/src/index.ts'),
+                '@masknet/dashboard': require.resolve('../dashboard/src/entry.tsx'),
+                '@masknet/shared': require.resolve('../shared/src/index.ts'),
+                '@masknet/shared-base': require.resolve('../shared-base/src/index.ts'),
+                '@masknet/theme/constants': require.resolve('../theme/src/constants.ts'),
+                '@masknet/theme': require.resolve('../theme/src/theme.ts'),
+                '@masknet/icons': require.resolve('../icons/index.ts'),
+                '@masknet/plugin-infra': require.resolve('../plugin-infra/src/index.ts'),
+                '@masknet/plugin-example': require.resolve('../plugins/example/src/index.ts'),
+                '@masknet/plugin-wallet': require.resolve('../plugins/Wallet/src/index.ts'),
+                '@masknet/external-plugin-previewer': require.resolve('../external-plugin-previewer/src/index.tsx'),
+                '@masknet/web3-shared': require.resolve('../web3-shared/src/index.ts'),
             },
             // Polyfill those Node built-ins
             fallback: {
@@ -126,18 +133,30 @@ function config(opts: {
                     parser: { worker: ['OnDemandWorker', '...'] },
                     // Compile all ts files in the workspace
                     include: src('../'),
-                    loader: require.resolve('ts-loader'),
+                    loader: require.resolve('swc-loader'),
                     options: {
-                        transpileOnly: true,
-                        compilerOptions: {
-                            importsNotUsedAsValues: 'remove',
-                            jsx: mode === 'production' ? 'react-jsx' : 'react-jsxdev',
+                        jsc: {
+                            parser: {
+                                syntax: 'typescript',
+                                dynamicImport: true,
+                                tsx: true,
+                                importAssertions: true,
+                            },
+                            target: 'es2019',
+                            externalHelpers: true,
+                            transform: {
+                                react: {
+                                    runtime: 'automatic',
+                                    useBuiltins: true,
+                                    development: disableReactHMR ? false : mode === 'development',
+                                    refresh: {
+                                        refreshReg: '$RefreshReg$',
+                                        refreshSig: '$RefreshSig$',
+                                        emitFullSignatures: true,
+                                    },
+                                },
+                            },
                         },
-                        getCustomTransformers: () => ({
-                            before: [!disableHMR && !disableReactHMR && ReactRefreshTypeScriptTransformer()].filter(
-                                Boolean,
-                            ),
-                        }),
                     },
                 },
             ],
@@ -153,10 +172,9 @@ function config(opts: {
                 Buffer: ['buffer', 'Buffer'],
                 'process.nextTick': 'next-tick',
             }),
-            new WatchMissingModulesPlugin(path.resolve('node_modules')),
             // Note: In development mode gitInfo will share across cache (and get inaccurate result). I (@Jack-Works) think this is a valuable trade-off.
             (mode === 'development' ? EnvironmentPluginCache : EnvironmentPluginNoCache)({
-                ...getGitInfo(),
+                ...getGitInfo(target.isReproducibleBuild),
                 ...target.runtimeEnv,
             }),
             new EnvironmentPlugin({ NODE_ENV: mode, NODE_DEBUG: false, STORYBOOK: false }),
@@ -168,6 +186,8 @@ function config(opts: {
                 'process.stderr': '/* stdin */ null',
             }),
             ...getHotModuleReloadPlugin(),
+            // https://github.com/webpack/webpack/issues/13581
+            opts.readonlyCache && new ReadonlyCachePlugin(),
         ].filter(nonNullable),
         optimization: {
             minimize: false,
@@ -198,6 +218,15 @@ function config(opts: {
             },
         },
         output: {
+            environment: {
+                arrowFunction: true,
+                const: true,
+                destructuring: true,
+                forOf: true,
+                module: false,
+                bigIntLiteral: false,
+                dynamicImport: !target.iOS,
+            },
             path: dist,
             filename: 'js/[name].js',
             // In some cases webpack will emit files starts with "_" which is reserved in web extension.
@@ -206,6 +235,9 @@ function config(opts: {
             hotUpdateMainFilename: 'hot.[runtime].[fullhash].json',
             globalObject: 'globalThis',
             publicPath: '/',
+            // clean: undefined,
+            // do not use output.clean
+            // we're using multiple configs (main and injected script), that will cause injected script output get removed when the main config starts to build.
         },
         ignoreWarnings: [/Failed to parse source map/],
         // @ts-ignore
@@ -213,7 +245,6 @@ function config(opts: {
             // Have to write disk cause plugin cannot be loaded over network
             writeToDisk: true,
             compress: false,
-            hot: !disableHMR,
             hotOnly: !disableHMR,
             port: hmrPort,
             // WDS does not support chrome-extension:// browser-extension://
@@ -226,7 +257,9 @@ function config(opts: {
                 'Access-Control-Allow-Origin': '*',
             },
             transportMode: 'ws',
+            watchOptions,
         } as DevServerConfiguration,
+        stats: mode === 'development' ? undefined : 'errors-only',
     }
     if (isProfile) {
         config.resolve!.alias!['react-dom$'] = 'react-dom/profiling'
@@ -238,7 +271,7 @@ function config(opts: {
         // overlay is not working in our environment
         return [
             new HotModuleReplacementPlugin(),
-            !disableReactHMR && new ReactRefreshWebpackPlugin({ overlay: false }),
+            !disableReactHMR && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
         ].filter(nonNullable)
     }
 }
@@ -246,15 +279,25 @@ function nonNullable<T>(x: T | false | undefined | null): x is T {
     return Boolean(x)
 }
 
-export default async function (cli_env: Record<string, boolean> = {}, argv: { mode?: 'production' | 'development' }) {
+type Argv = {
+    mode?: 'production' | 'development'
+    outputPath?: string
+}
+
+export default async function (cli_env: Record<string, boolean> = {}, argv: Argv) {
     const target = getCompilationInfo(cli_env)
     const mode: 'production' | 'development' = argv.mode ?? 'production'
-    const dist = mode === 'production' ? root('./build') : root('./dist')
-    if (mode === 'production') await promisify(rimraf)(root('./build'))
+    const defaultDist = mode === 'production' ? root('./build') : root('./dist')
+    const dist = argv.outputPath
+        ? path.isAbsolute(argv.outputPath)
+            ? argv.outputPath
+            : root(argv.outputPath)
+        : defaultDist
+    if (mode === 'production') await promisify(rimraf)(dist)
     const disableHMR = Boolean(process.env.NO_HMR)
     const isManifestV3 = target.runtimeEnv.manifest === 3
 
-    const shared = { mode, target, dist, isProfile: target.isProfile }
+    const shared = { mode, target, dist, isProfile: target.isProfile, readonlyCache: target.readonlyCache }
     const main = config({ ...shared, disableHMR, name: 'main' })
     const manifestV3 = config({ ...shared, disableHMR: true, name: 'background-worker', hmrPort: 35938 })
     const injectedScript = config({
@@ -294,9 +337,8 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
             getHTMLPlugin({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
             getHTMLPlugin({ chunks: ['debug'], filename: 'debug.html' }),
             getHTMLPlugin({ chunks: ['popups'], filename: 'popups.html' }),
+            getHTMLPlugin({ chunks: ['dashboard-next'], filename: 'next.html' }),
         ) // generate pages for each entry
-        if (mode === 'development')
-            main.plugins!.push(getHTMLPlugin({ chunks: ['dashboard-next'], filename: 'next.html' }))
         if (!isManifestV3)
             main.plugins!.push(getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }))
     }
@@ -317,7 +359,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: { mo
     // @ts-ignore
     delete injectedScript.devServer
     // TODO: multiple config seems doesn't work well therefore we start the watch mode webpack compiler manually, ignore the build message currently
-    webpack(injectedScript, () => {}).watch({}, () => {})
+    webpack(injectedScript).watch(watchOptions, () => {})
     return main
 
     function withReactDevTools(...x: string[]) {
@@ -367,7 +409,7 @@ function getCompilationInfo(argv: any) {
 
     //#region build time flags
     let isReproducibleBuild = !!argv.reproducible
-    let isProfile = !!argv.profile
+    const isProfile = !!argv.profile
     let webExtensionFirefoxLaunchVariant = 'firefox-desktop' as 'firefox-desktop' | 'firefox-android'
     //#endregion
 
@@ -391,6 +433,7 @@ function getCompilationInfo(argv: any) {
     let resolution: 'desktop' | 'mobile' = 'desktop'
     let build: 'stable' | 'beta' | 'insider' = 'stable'
     let manifest: 2 | 3 = 2
+    const readonlyCache = !!argv.readonlyCache
 
     //#region Manifest V3
     if (argv['manifest-v3']) {
@@ -439,13 +482,14 @@ function getCompilationInfo(argv: any) {
         FirefoxEngine: preset === 'firefox' || preset === 'android',
         // ! We cannot upload different version for Firefox desktop and Firefox Android, so they must emit same output.
         Firefox: preset === 'firefox',
+        readonlyCache,
     }
 }
 
 export type Target = ReturnType<typeof getCompilationInfo>
 /** Get git info */
-function getGitInfo() {
-    if (git.isRepository())
+function getGitInfo(reproducible: boolean) {
+    if (!reproducible && git.isRepository())
         return {
             BUILD_DATE: new Date().toISOString(),
             VERSION: git.describe('--dirty'),
@@ -456,6 +500,7 @@ function getGitInfo() {
             BRANCH_NAME: git.branchName(),
             DIRTY: git.isDirty(),
             TAG_DIRTY: git.isTagDirty(),
+            WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
         }
     return {
         BUILD_DATE: new Date(0).toISOString(),
@@ -467,6 +512,7 @@ function getGitInfo() {
         BRANCH_NAME: 'N/A',
         DIRTY: false,
         TAG_DIRTY: false,
+        WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
     }
 }
 
@@ -493,3 +539,17 @@ promises.readdir(path.join(__dirname, '../../dist')).then(
     },
     () => {},
 )
+
+class ReadonlyCachePlugin {
+    apply(compiler: webpack.Compiler) {
+        compiler.cache.hooks.store.intercept({
+            register: (tapInfo) => {
+                return {
+                    name: ReadonlyCachePlugin.name,
+                    type: tapInfo.type,
+                    fn: function preventCacheStore() {},
+                }
+            },
+        })
+    }
+}

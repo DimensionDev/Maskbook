@@ -1,9 +1,10 @@
 import classNames from 'classnames'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
-import { Table, TableBody, TableRow, TableCell, Typography, makeStyles, Theme } from '@material-ui/core'
-import { useI18N, unreachable } from '../../../utils'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { makeStyles, Table, TableBody, TableCell, TableRow, Theme, Typography } from '@material-ui/core'
+import { unreachable } from '@dimensiondev/kit'
+import { useI18N } from '../../../utils'
+import { useStylesExtends } from '@masknet/shared'
 
 const useDatabasePreviewCardStyles = makeStyles((theme: Theme) => ({
     table: {
@@ -32,14 +33,13 @@ const useDatabasePreviewCardStyles = makeStyles((theme: Theme) => ({
 }))
 
 export enum DatabaseRecordType {
-    Persona,
-    Profile,
-    Post,
-    Group,
-    Wallet,
+    Persona = 0,
+    Profile = 1,
+    Post = 2,
+    Wallet = 3,
 }
 
-export interface DatabasePreviewCardProps extends withClasses<never> {
+export interface DatabasePreviewCardProps extends withClasses<'table' | 'label' | 'icon'> {
     dense?: boolean
     records: {
         type: DatabaseRecordType
@@ -61,8 +61,6 @@ export function DatabasePreviewCard(props: DatabasePreviewCardProps) {
                 return t('profiles')
             case DatabaseRecordType.Post:
                 return t('posts')
-            case DatabaseRecordType.Group:
-                return t('groups')
             case DatabaseRecordType.Wallet:
                 return t('wallets')
             default:

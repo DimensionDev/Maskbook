@@ -1,22 +1,23 @@
 import BigNumber from 'bignumber.js'
 import type { Coin, Currency, Stat } from '../../types'
+import type { Pair } from '../uniswap-v2-subgraph'
 import {
-    fetchTokensByKeyword,
-    fetchTokenData,
+    fetchEtherPriceByBlockNumber,
+    fetchEtherPricesByBlockNumbers,
+    fetchPairData,
     fetchPairsBulk,
     fetchPairsHistoricalBulk,
-    fetchPairData,
     fetchPricesByBlocks,
-    fetchEtherPricesByBlockNumbers,
-    fetchEtherPriceByBlockNumber,
+    fetchTokenData,
+    fetchTokensByKeyword,
 } from '../uniswap-v2-subgraph'
-import type { Pair } from '../uniswap-v2-subgraph'
 import {
     fetchBlockNumberByTimestamp,
     fetchBlockNumbersByTimestamps,
     fetchBlockNumbersObjectByTimestamps,
 } from '../blocks'
 import { fetchLatestBlocks } from '../uniswap-health'
+import { isGreaterThan } from '@masknet/web3-shared'
 
 type Value = string | number | BigNumber | undefined
 
@@ -116,7 +117,7 @@ export async function getAllCoinsByKeyword(keyword: string) {
                 id: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
                 name: 'Mask Network',
                 symbol: 'MASK',
-                eth_address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
+                contract_address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
             } as Coin,
         ]
     }
@@ -128,7 +129,7 @@ export async function getAllCoinsByKeyword(keyword: string) {
             ({
                 ...x,
                 address: x.id,
-                eth_address: x.id,
+                contract_address: x.id,
             } as Coin),
     )
 
@@ -137,7 +138,7 @@ export async function getAllCoinsByKeyword(keyword: string) {
             id: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
             address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
             name: 'ETHer (Wrapped)',
-            eth_address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+            contract_address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
             symbol: 'eth',
             decimals: 18,
         } as Coin)
@@ -146,7 +147,7 @@ export async function getAllCoinsByKeyword(keyword: string) {
             id: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
             address: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
             name: 'Energi',
-            eth_address: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
+            contract_address: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
             symbol: 'NRGT',
             decimals: 18,
         } as Coin)
@@ -312,49 +313,40 @@ export async function getBulkPairData(pairList: string[]) {
 
     const oneDayResult = await fetchPairsHistoricalBulk(pairList, oneDayBlock)
 
-    const oneDayData = oneDayResult.reduce<{
-        [key: string]: Data
-    }>((obj, cur) => ({ ...obj, [cur.id]: cur }), {})
+    const oneDayData = oneDayResult.reduce<Record<string, Data>>((obj, cur) => ({ ...obj, [cur.id]: cur }), {})
 
     const pairsData = await Promise.all(
-        current &&
-            current.map(async (pair) => {
-                let oneDayHistory = oneDayData[pair.id]
-                if (!oneDayHistory) {
-                    oneDayHistory = await fetchPairData(pair.id, oneDayBlock)
-                }
+        current?.map(async (pair) => {
+            let oneDayHistory = oneDayData[pair.id]
+            if (!oneDayHistory) {
+                oneDayHistory = await fetchPairData(pair.id, oneDayBlock)
+            }
 
-                const oneDayVolumeUSD = new BigNumber(pair.volumeUSD).minus(oneDayHistory?.volumeUSD ?? 0).toNumber()
-                const oneDayVolumeUntracked = new BigNumber(pair.untrackedVolumeUSD)
-                    .minus(oneDayHistory?.untrackedVolumeUSD ?? 0)
-                    .toNumber()
+            const oneDayVolumeUSD = new BigNumber(pair.volumeUSD).minus(oneDayHistory?.volumeUSD ?? 0).toNumber()
+            const oneDayVolumeUntracked = new BigNumber(pair.untrackedVolumeUSD)
+                .minus(oneDayHistory?.untrackedVolumeUSD ?? 0)
+                .toNumber()
 
-                const result = {
-                    ...pair,
-                    oneDayVolumeUSD,
-                    oneDayVolumeUntracked,
-                }
+            const result = {
+                ...pair,
+                oneDayVolumeUSD,
+                oneDayVolumeUntracked,
+            }
 
-                if (
-                    !oneDayHistory &&
-                    pair &&
-                    new BigNumber(pair.createdAtBlockNumber).isGreaterThan(oneDayBlock ?? 0)
-                ) {
-                    result.oneDayVolumeUSD = new BigNumber(pair.volumeUSD).toNumber()
-                }
-                if (!oneDayHistory && pair) {
-                    result.oneDayVolumeUSD = new BigNumber(pair.volumeUSD).toNumber()
-                }
-                return result
-            }),
+            if (!oneDayHistory && pair && isGreaterThan(pair.createdAtBlockNumber, oneDayBlock ?? 0)) {
+                result.oneDayVolumeUSD = new BigNumber(pair.volumeUSD).toNumber()
+            }
+            if (!oneDayHistory && pair) {
+                result.oneDayVolumeUSD = new BigNumber(pair.volumeUSD).toNumber()
+            }
+            return result
+        }),
     )
 
-    return pairsData.reduce<{
-        [key: string]: Data & {
-            oneDayVolumeUSD: number
-            oneDayVolumeUntracked: number
-        }
-    }>((obj, cur) => ({ ...obj, [cur.id]: cur }), {})
+    return pairsData.reduce<Record<string, Data & { oneDayVolumeUSD: number; oneDayVolumeUntracked: number }>>(
+        (obj, cur) => ({ ...obj, [cur.id]: cur }),
+        {},
+    )
 }
 
 export async function getPriceStats(

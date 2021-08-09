@@ -1,0 +1,50 @@
+{
+    "ERC20_TOKEN_LISTS": {
+        "Mainnet": [
+            "https://api.1inch.exchange/v3.0/1/tokens",
+            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/1/tokens.json"
+        ],
+        "Ropsten": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/3/tokens.json"],
+        "Rinkeby": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/4/tokens.json"],
+        "Kovan": ["https://irhonin.github.io/kovan-token-list/kovan-token-list.json"],
+        "Gorli": [],
+        "BSC": [
+            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/56/tokens.json",
+            "https://api.1inch.exchange/v3.0/56/tokens"
+        ],
+        "BSCT": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
+        "Matic": [
+            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/137/tokens.json",
+            "https://api.1inch.exchange/v3.0/137/tokens"
+        ],
+        "Mumbai": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/80001/tokens.json"],
+        "Arbitrum": [],
+        "Arbitrum_Rinkeby": []
+    },
+    "BALANCE_CHECKER_ADDRESS": {
+        "Mainnet": "0xb1F8e55c7f64D203C1400B9D8555d050F94aDF39",
+        "Ropsten": "0xD5C432dFbDEcB6068583BC5241D1b308D70721a4",
+        "Rinkeby": "0x0987506Bc4C4167E1a6d0Be0e007E4A9609d5c77",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "0xC119574D5Fb333F5AC018658D4d8b5035E16bf39",
+        "BSCT": "0x7f004a42D760Eb68eB95Fa50f739917675181fCA",
+        "Matic": "0x6cc1b1058F9153358278C35E0b2D382f1585854B",
+        "Mumbai": "0xFEd05EE9b7DdbAb97Abc55e27EF95C7c14688Aad",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "0xF98dC9391273c5ab9fa2c980A8d4F875ece802db"
+    },
+    "MULTICALL_ADDRESS": {
+        "Mainnet": "0xeefba1e63905ef1d7acba5a8513c70307c1ce441",
+        "Ropsten": "0x69F47251bAa9Ee4568Aba01Bc7B61720ba6caCef",
+        "Rinkeby": "0xC65e66535170fEA12088b373c0bEB0647Fa636B8",
+        "Kovan": "0x2cc8688c5f75e365aaeeb4ea8d6a480405a48d2a",
+        "Gorli": "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e",
+        "BSC": "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c",
+        "BSCT": "0x6cc1b1058F9153358278C35E0b2D382f1585854B",
+        "Matic": "0xC119574D5Fb333F5AC018658D4d8b5035E16bf39",
+        "Mumbai": "0x6B70EC653c4331bdD0D0DCC7C941eb594e69a91d",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "0xED3567405159F99d1ebAebcff5D44494BCE5cD0A"
+    }
+}

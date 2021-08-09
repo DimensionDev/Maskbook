@@ -1,7 +1,6 @@
-import { createPluginMessage } from '../utils/createPluginMessage'
-import { createPluginRPC } from '../utils/createPluginRPC'
-import { AirdropPluginID } from './constants'
+import { createPluginMessage, createPluginRPC } from '@masknet/plugin-infra'
+import { PLUGIN_ID } from './constants'
 
-if (module.hot) module.hot.accept()
-export const AirdropMessage = createPluginMessage<{ _: unknown }>(AirdropPluginID)
-export const PluginAirdropRPC = createPluginRPC(AirdropPluginID, () => import('./services'), AirdropMessage.events._)
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
+const AirdropMessage = createPluginMessage(PLUGIN_ID)
+export const AirdropRPC = createPluginRPC(PLUGIN_ID, () => import('./services'), AirdropMessage.rpc)

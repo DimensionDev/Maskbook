@@ -1,8 +1,8 @@
 import { useState } from 'react'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 import { Hexagon as HexagonIcon } from 'react-feather'
 import { useI18N } from '../../../../utils'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
-import type { ERC20TokenDetailed } from '../../../../web3/types'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
 import { ERC20PredefinedTokenSelector } from './ERC20PredefinedTokenSelector'
@@ -36,7 +36,9 @@ export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<Wal
                 }
                 footer={
                     <DebounceButton disabled={!token} variant="contained" onClick={onSubmit}>
-                        {t('add_token')}
+                        {t('add_token_symbol', {
+                            symbol: token?.symbol ?? 'Token',
+                        })}
                     </DebounceButton>
                 }
             />

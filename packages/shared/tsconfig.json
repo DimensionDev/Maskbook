@@ -3,10 +3,11 @@
   "compilerOptions": {
     "rootDir": "./src/",
     "outDir": "./dist/",
-    "experimentalDecorators": true
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./src/"],
+  "include": ["./src/**/*", "./src/**/*.json", "./src/locales/*.json"],
   "ts-node": {
     "compilerOptions": { "module": "CommonJS" }
-  }
+  },
+  "references": [{ "path": "../web3-shared" }, { "path": "../theme" }, { "path": "../shared-base" }]
 }

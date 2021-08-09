@@ -52,12 +52,12 @@ function dispatchEventRaw<T extends Event>(target: Node | Document | null, event
         // passive event
         const listeners = CapturedListeners.get(Node)?.get(type)
         if (!listeners) continue
-        for (const [f, { capture, once, passive }] of listeners) {
+        for (const [fn, { capture }] of listeners) {
             if (capture) continue
             try {
-                f(event)
-            } catch (e) {
-                error(e)
+                fn(event)
+            } catch (error) {
+                error(error)
             }
         }
     }

@@ -1,11 +1,12 @@
 import { memo } from 'react'
 import { ConnectActionList, ConnectActionListItem } from '../ConnectActionList'
-import { PolkaDotIcon, WalletConnectIcon, MetaMaskIcon } from '@dimensiondev/icons'
+import { PolkaDotIcon, WalletConnectIcon, MetaMaskIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
+
 export enum ConnectWalletTargets {
-    MetaMask,
-    Connect,
-    PolkaDot,
+    MetaMask = 0,
+    Connect = 1,
+    PolkaDot = 2,
 }
 export interface ConnectWalletListProps {
     onConnect(target: ConnectWalletTargets): void

@@ -1,0 +1,28 @@
+{
+    "BASE_URL": {
+        "Mainnet": "https://app.dhedge.org",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "https://dh-1111.web.app",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "https://dh-pre-prod.web.app",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
+    },
+    "API_URL": {
+        "Mainnet": "https://api-v2.dhedge.org/graphql",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "https://api-v2.dhedge.org/graphql",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "https://api-v2.dhedge.org/graphql",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
+    }
+}

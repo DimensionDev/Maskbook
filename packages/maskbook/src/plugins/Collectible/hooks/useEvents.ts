@@ -1,10 +1,9 @@
 import { useAsyncRetry } from 'react-use'
-import type { CollectibleToken, NFTHistory } from '../types'
-import { CollectibleProvider, OpenSeaAssetEventType } from '../types'
+import { useChainId } from '@masknet/web3-shared'
+import { CollectibleToken, NFTHistory, CollectibleProvider, OpenSeaAssetEventType } from '../types'
 import { PluginCollectibleRPC } from '../messages'
 import { NullAddress, NullContractAddress, OpenSeaAccountURL } from '../constants'
 import { toRaribleImage, toTokenIdentifier } from '../helpers'
-import { useChainId } from '../../../web3/hooks/useChainId'
 import { resolveRaribleUserNetwork } from '../pipes'
 
 export function useEvents(provider: CollectibleProvider, token?: CollectibleToken, cursor?: string) {

@@ -9,12 +9,13 @@ import { managedStateCreator } from './utils'
 import { delay } from '../utils/utils'
 import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
-import { ECKeyIdentifier, Identifier } from '@dimensiondev/maskbook-shared'
+import { ECKeyIdentifier, Identifier } from '@masknet/shared'
 import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
-import { startPluginSNSAdaptor } from '@dimensiondev/mask-plugin-infra'
+import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
+import { MaskMessage } from '../utils'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -32,7 +33,7 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     injection: {},
     networkIdentifier: 'localhost',
     shouldActivate: () => false,
-    utils: {},
+    utils: { createPostContext: null! },
     notReadyForProduction: true,
     declarativePermissions: { origins: [] },
 }
@@ -48,7 +49,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     const abort = new AbortController()
     const { signal } = abort
-    if (module.hot) {
+    if (import.meta.webpackHot) {
         console.log('SNS adaptor HMR enabled.')
         ui_deferred.hotModuleReload?.(async (newDefinition) => {
             console.log('SNS adaptor updated. Uninstalling current adaptor.')
@@ -71,14 +72,14 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.collecting.postsProvider?.start(signal)
     startPostListener()
 
-    ui.collecting.profilesCollector?.(signal)
     ui.injection.pageInspector?.(signal)
-    if (Flags.toolbar_enabled) ui.injection.toolbar?.(signal)
     if (Flags.toolbox_enabled) ui.injection.toolBoxInNavBar?.(signal)
     ui.injection.setupPrompt?.(signal)
     ui.injection.newPostComposition?.start?.(signal)
     ui.injection.searchResult?.(signal)
     ui.injection.userBadge?.(signal)
+
+    setTimeout(activateSNSAdaptorPluginOnStart, 1000)
 
     startPluginSNSAdaptor(getCurrentSNSNetwork(ui.networkIdentifier), createPluginHost(signal))
 
@@ -149,6 +150,14 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         currentSetupGuideStatus[network].readyPromise.then(onStatusUpdate)
         onStatusUpdate(id)
     }
+
+    async function activateSNSAdaptorPluginOnStart() {
+        const plugin = await Services.Settings.shouldActivatePluginOnSNSStart()
+        if (!plugin) return
+        MaskMessage.events.compositionUpdated.sendToLocal({ open: true, reason: 'timeline' })
+        await delay(500)
+        MaskMessage.events.activatePluginCompositionEntry.sendToLocal(plugin)
+    }
 }
 
 export async function loadSocialNetworkUI(identifier: string): Promise<SocialNetworkUI.Definition> {
@@ -157,8 +166,12 @@ export async function loadSocialNetworkUI(identifier: string): Promise<SocialNet
     if (!define) throw new Error('SNS adaptor not found')
     const ui = (await define.load()).default
     definedSocialNetworkUIsResolved.set(identifier, ui)
-    if (module.hot) {
+    if (import.meta.webpackHot) {
         define.hotModuleReload?.((ui) => definedSocialNetworkUIsResolved.set(identifier, ui))
     }
     return ui
+}
+export function loadSocialNetworkUISync(identifier: string): SocialNetworkUI.Definition | null {
+    if (definedSocialNetworkUIsResolved.has(identifier)) return definedSocialNetworkUIsResolved.get(identifier)!
+    return null
 }

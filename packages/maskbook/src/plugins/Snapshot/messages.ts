@@ -1,27 +1,10 @@
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { createPluginMessage } from '../utils/createPluginMessage'
-import { createPluginRPC } from '../utils/createPluginRPC'
+import { createPluginMessage, createPluginRPC } from '@masknet/plugin-infra'
 import { SNAPSHOT_PLUGIN_ID } from './constants'
 
-type VoteConfirmDialogEvent =
-    | {
-          open: true
-          choice: number
-          choiceText: string
-      }
-    | {
-          open: false
-      }
-
-interface SnapshotMessages {
-    rpc: unknown
-    voteConfirmDialogUpdated: VoteConfirmDialogEvent
-}
-
-export const PluginSnapshotMessages: WebExtensionMessage<SnapshotMessages> =
-    createPluginMessage<SnapshotMessages>(SNAPSHOT_PLUGIN_ID)
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
+const PluginSnapshotMessages = createPluginMessage(SNAPSHOT_PLUGIN_ID)
 export const PluginSnapshotRPC = createPluginRPC(
     SNAPSHOT_PLUGIN_ID,
-    () => import('./services'),
-    PluginSnapshotMessages.events.rpc,
+    () => import('./Worker/services'),
+    PluginSnapshotMessages.rpc,
 )

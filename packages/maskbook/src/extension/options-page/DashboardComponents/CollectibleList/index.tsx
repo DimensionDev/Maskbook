@@ -1,15 +1,11 @@
 import { createContext, useState } from 'react'
-import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
-import { CollectibleCard } from './CollectibleCard'
-import type { WalletRecord } from '../../../../plugins/Wallet/database/types'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { EthereumTokenType } from '../../../../web3/types'
-import { useValueRef } from '../../../../utils/hooks/useValueRef'
-import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
-import { useAccount } from '../../../../web3/hooks/useAccount'
-import { useCollectibles } from '../../../../plugins/Wallet/hooks/useCollectibles'
 import { useUpdateEffect } from 'react-use'
+import { useValueRef } from '@masknet/shared'
+import { EthereumTokenType, formatEthereumAddress, useAccount, useCollectibles, Wallet } from '@masknet/web3-shared'
+import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
+import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
+import { CollectibleCard } from './CollectibleCard'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -49,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export interface CollectibleListProps {
-    wallet: WalletRecord
+    wallet: Wallet
 }
 
 export function CollectibleList(props: CollectibleListProps) {
@@ -66,7 +62,7 @@ export function CollectibleList(props: CollectibleListProps) {
         loading: collectiblesLoading,
         retry: collectiblesRetry,
         error: collectiblesError,
-    } = useCollectibles(account, provider, page)
+    } = useCollectibles(account, provider, page, 50)
 
     const { collectibles = [], hasNextPage } = value
 
@@ -79,13 +75,8 @@ export function CollectibleList(props: CollectibleListProps) {
             <Box className={classes.root}>
                 {new Array(4).fill(0).map((_, i) => (
                     <Box className={classes.card} display="flex" flexDirection="column" key={i}>
-                        <Skeleton animation="wave" variant="rectangular" width={160} height={220}></Skeleton>
-                        <Skeleton
-                            animation="wave"
-                            variant="text"
-                            width={160}
-                            height={20}
-                            style={{ marginTop: 4 }}></Skeleton>
+                        <Skeleton animation="wave" variant="rectangular" width={160} height={220} />
+                        <Skeleton animation="wave" variant="text" width={160} height={20} style={{ marginTop: 4 }} />
                     </Box>
                 ))}
             </Box>

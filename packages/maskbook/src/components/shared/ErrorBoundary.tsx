@@ -1,1 +1,1 @@
-export { ErrorBoundary, withErrorBoundary } from '@dimensiondev/maskbook-theme'
+export { ErrorBoundary, withErrorBoundary } from '@masknet/shared'

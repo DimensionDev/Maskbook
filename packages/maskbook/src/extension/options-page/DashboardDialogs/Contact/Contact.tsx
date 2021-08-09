@@ -64,7 +64,8 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactProps & 
                             {t('cancel')}
                         </Button>
                     </SpacedButtonGroup>
-                }></DashboardDialogWrapper>
+                }
+            />
         </DashboardDialogCore>
     )
 }

@@ -1,12 +1,14 @@
-import { useCallback, ChangeEvent, useMemo } from 'react'
-import { makeStyles, TextField, Typography, Box, Chip, InputProps, ChipProps, TextFieldProps } from '@material-ui/core'
+import { ChangeEvent, useCallback, useMemo } from 'react'
+import { Box, Chip, ChipProps, InputProps, makeStyles, TextField, TextFieldProps, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
-import { formatBalance, FormattedBalance } from '@dimensiondev/maskbook-shared'
-import { MIN_AMOUNT_LENGTH, MAX_AMOUNT_LENGTH } from '../constants'
-import { useStylesExtends } from '../../components/custom-ui-helper'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../types'
+import { FormattedBalance, useStylesExtends } from '@masknet/shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { formatBalance } from '@masknet/web3-shared'
 import { useI18N } from '../../utils'
+
+const MIN_AMOUNT_LENGTH = 1
+const MAX_AMOUNT_LENGTH = 79
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -49,7 +51,7 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     disableToken?: boolean
     disableBalance?: boolean
     label: string
-    token?: NativeTokenDetailed | ERC20TokenDetailed | null
+    token?: FungibleTokenDetailed | null
     onAmountChange: (amount: string) => void
     InputProps?: Partial<InputProps>
     MaxChipProps?: Partial<ChipProps>
@@ -99,6 +101,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
             value={amount}
             variant="outlined"
             onChange={onChange}
+            placeholder="0.0"
             InputProps={{
                 inputProps: {
                     autoComplete: 'off',
@@ -109,7 +112,6 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                     minLength: MIN_AMOUNT_LENGTH,
                     maxLength: MAX_AMOUNT_LENGTH,
                     pattern: '^[0-9]*[.,]?[0-9]*$',
-                    placeholder: '0.0',
                     spellCheck: false,
                     className: classes.input,
                 },

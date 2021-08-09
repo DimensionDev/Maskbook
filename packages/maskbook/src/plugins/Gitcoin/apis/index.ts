@@ -1,3 +1,4 @@
+import urlcat from 'urlcat'
 import { GITCOIN_API_GRANTS_V1 } from '../constants'
 
 export interface Metadata {}
@@ -39,7 +40,7 @@ export interface GitcoinGrant {
 
 export async function fetchGrant(id: string) {
     if (!/\d+/.test(id)) return
-    const response = await fetch(`${GITCOIN_API_GRANTS_V1}${id}/`)
+    const response = await fetch(urlcat(GITCOIN_API_GRANTS_V1, { id }))
     const { grants } = (await response.json()) as {
         grants: GitcoinGrant
         status: number

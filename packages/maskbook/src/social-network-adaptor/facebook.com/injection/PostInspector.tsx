@@ -3,7 +3,6 @@ import { isMobileFacebook } from '../utils/isMobile'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector'
 import { Flags } from '../../../utils/flags'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 
 const map = new WeakMap<HTMLElement, ShadowRoot>()
 function getShadowRoot(node: HTMLElement) {
@@ -13,36 +12,33 @@ function getShadowRoot(node: HTMLElement) {
     return dom
 }
 export function injectPostInspectorFacebook(signal: AbortSignal, current: PostInfo) {
-    clickSeeMore(current.rootNodeProxy.current.parentElement!)
+    clickSeeMore(current.rootNodeProxy.current?.parentElement)
     return injectPostInspectorDefault({
         zipPost(node) {
             zipEncryptedPostContent(node)
             zipPostLinkPreview(node)
         },
-        render(jsx, postInfo) {
-            const root = createReactRootShadowed(getShadowRoot(postInfo.postContentNode!), { signal })
-            root.render(jsx)
-            return root.destory
-        },
+        injectionPoint: (post) => getShadowRoot(post.postContentNode),
     })(current, signal)
 }
 function zipPostLinkPreview(node: DOMProxy) {
-    const parentEle = node.current.parentElement!
+    const parentEle = node.current.parentElement
+    if (!parentEle) return
     if (isMobileFacebook) {
         const img =
-            parentEle.querySelector('a[href*="maskbook.io"]') ||
-            parentEle.querySelector('a[href*="mask.io"]') ||
+            parentEle.querySelector('a[href*="maskbook.io"]') ??
+            parentEle.querySelector('a[href*="mask.io"]') ??
             parentEle.querySelector('a[href*="maskbook.com"]')
-        const parent = img && img.closest('section')
+        const parent = img?.closest('section')
         if (img && parent) {
             parent.style.display = 'none'
         }
     } else {
         const img =
-            parentEle.querySelector('a[href*="maskbook.io"] img') ||
-            parentEle.querySelector('a[href*="mask.io"] img') ||
+            parentEle.querySelector('a[href*="maskbook.io"] img') ??
+            parentEle.querySelector('a[href*="mask.io"] img') ??
             parentEle.querySelector('a[href*="maskbook.com"] img')
-        const parent = img && img.closest('span')
+        const parent = img?.closest('span')
         if (img && parent) {
             parent.style.display = 'none'
         }
@@ -75,7 +71,8 @@ padding: 0px 10px;`,
         }
     }
 }
-export function clickSeeMore(node: HTMLElement) {
+export function clickSeeMore(node: HTMLElement | undefined | null) {
+    if (!node) return
     const more = node.querySelector<HTMLDivElement | HTMLSpanElement>(
         isMobileFacebook ? '[data-sigil="more"] a' : '[role=article] span[dir="auto"] div[dir="auto"] [role="button"]',
     )

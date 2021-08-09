@@ -4,10 +4,12 @@
     "rootDir": "./",
     "outDir": "./dist/"
   },
-  "include": ["./src/", "./stories/", "./src/locales/*.json"],
+  "include": ["./src/", "./stories/", "./src/**/*.json"],
   "references": [
+    { "path": "../public-api" },
     { "path": "../theme/" },
     { "path": "../maskbook/" },
+    { "path": "../web3-shared/" },
     { "path": "../storybook-shared/" },
     { "path": "../icons/" },
     { "path": "../plugin-infra" }

@@ -1,13 +1,14 @@
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { ZERO } from '@masknet/web3-shared'
 import type { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types'
 
 export function useTradeComputed(
     trade: SwapQuoteResponse | null,
     strategy: TradeStrategy,
-    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
-    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
+    inputToken?: FungibleTokenDetailed,
+    outputToken?: FungibleTokenDetailed,
 ) {
     return useMemo(() => {
         if (!trade) return null
@@ -25,13 +26,9 @@ export function useTradeComputed(
             fee: new BigNumber(trade.minimumProtocolFee),
             maximumSold: new BigNumber(trade.sellAmount),
             minimumReceived: outputAmount,
-            priceImpactWithoutFee: new BigNumber(0),
-
-            // not supported fields
-            nextMidPrice: new BigNumber(0),
 
             // minimumProtocolFee
-            priceImpact: new BigNumber(0),
+            priceImpact: ZERO,
 
             trade_: { ...trade, buyAmount: outputAmount.toFixed() },
         } as TradeComputed<SwapQuoteResponse>

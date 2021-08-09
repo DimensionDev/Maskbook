@@ -21,6 +21,7 @@ export interface Proposal {
     status: string
     authorName: string | null
     authorAvatar: string | null
+    network: string
 }
 
 /**
@@ -45,6 +46,7 @@ export interface ProposalPayload {
     name: string
     metadata: {
         strategies: Strategy[]
+        network: string
     }
 }
 
@@ -69,6 +71,7 @@ export interface VoteItem {
     balance: number
     /** the consist detail of voting power */
     scores: number[]
+    strategySymbol: string
     sig: string
     authorName: string | null
     authorAvatar: string | null
@@ -105,7 +108,7 @@ export interface ProposalResult {
  * https://3boxlabs.com/
  */
 export interface Profile3Box {
-    eth_address: string
+    contract_address: string
     image: string | null
     name: string | null
 }

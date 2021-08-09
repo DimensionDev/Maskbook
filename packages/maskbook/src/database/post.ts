@@ -17,7 +17,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                 type Version2PostRecord = {
                     postBy: PrototypeLess<ProfileIdentifier>
                     identifier: string
-                    recipientGroups: PrototypeLess<GroupIdentifier>[]
+                    recipientGroups?: unknown
                     recipients?: ProfileIdentifier[]
                     foundAt: Date
                     postCryptoKey?: CryptoKey
@@ -174,7 +174,6 @@ export async function updatePostDB(
         recipients: new IdentifierMap(new Map()),
         postBy: ProfileIdentifier.unknown,
         foundAt: new Date(),
-        recipientGroups: [],
     }
     const currentRecord = (await queryPostDB(updateRecord.identifier, t)) || emptyRecord
     const nextRecord: PostRecord = { ...currentRecord, ...updateRecord }
@@ -238,13 +237,12 @@ export async function deletePostCryptoKeyDB(record: PostIVIdentifier, t?: PostTr
 
 //#region db in and out
 function postOutDB(db: PostDBRecord): PostRecord {
-    const { identifier, foundAt, postBy, recipientGroups, recipients, postCryptoKey } = db
+    const { identifier, foundAt, postBy, recipients, postCryptoKey } = db
     for (const detail of recipients.values()) {
         detail.reason.forEach((x) => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
     }
     return {
         identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(),
-        recipientGroups: restorePrototypeArray(recipientGroups, GroupIdentifier.prototype),
         postBy: restorePrototype(postBy, ProfileIdentifier.prototype),
         recipients: new IdentifierMap(recipients, ProfileIdentifier),
         foundAt: foundAt,
@@ -291,10 +289,8 @@ export interface PostRecord {
      * Receivers
      */
     recipients: IdentifierMap<ProfileIdentifier, RecipientDetail>
-    /**
-     * This post shared with these groups.
-     */
-    recipientGroups: GroupIdentifier[]
+    /** @deprecated */
+    recipientGroups?: unknown
     /**
      * When does Mask find this post.
      * For your own post, it is when Mask created this post.
@@ -303,11 +299,10 @@ export interface PostRecord {
     foundAt: Date
 }
 
-interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients' | 'recipientGroups'> {
+interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients'> {
     postBy: PrototypeLess<ProfileIdentifier>
     identifier: string
     recipients: Map<string, RecipientDetail>
-    recipientGroups: PrototypeLess<GroupIdentifier>[]
 }
 
 interface PostDB extends DBSchema {

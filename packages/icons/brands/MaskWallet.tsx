@@ -11,7 +11,7 @@ export const MaskWalletIcon = createIcon(
                 fillOpacity=".4"
             />
         </g>
-        <path d="M28.87 25.142a8 8 0 11-8-13.856 8 8 0 018 13.856z" fill="url(#paint0_linear)" />
+        <path d="M28.87 25.142a8 8 0 11-8-13.856 8 8 0 018 13.856z" fill="url(#mask_wallet_paint0_linear)" />
         <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -55,7 +55,7 @@ export const MaskWalletIcon = createIcon(
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
             <linearGradient
-                id="paint0_linear"
+                id="mask_wallet_paint0_linear"
                 x1="31.433"
                 y1="13.777"
                 x2="16.29"

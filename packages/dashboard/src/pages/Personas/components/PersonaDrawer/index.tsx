@@ -2,10 +2,10 @@ import { memo, useState } from 'react'
 import { Box, Button, Drawer, makeStyles } from '@material-ui/core'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PersonaCard } from '../PersonaCard'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 import { AddPersonaCard } from '../AddPersonaCard'
 import { useDashboardI18N } from '../../../../locales'
-import type { PersonaIdentifier, PersonaInformation } from '@dimensiondev/maskbook-shared'
+import type { PersonaIdentifier, PersonaInformation } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -106,8 +106,7 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                 )}
                 <Box className={classes.buttons}>
                     <Button onClick={() => setShowAddPersonaCard(true)}>{t.personas_add_persona()}</Button>
-                    {/* TODO: replace className to color prop */}
-                    <Button className={classes.backup}>{t.personas_back_up()}</Button>
+                    <Button color="warning">{t.personas_back_up()}</Button>
                 </Box>
             </Drawer>
         )

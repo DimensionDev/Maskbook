@@ -1,13 +1,11 @@
 import { useCallback, useState } from 'react'
-import type { SwapParameters, Trade } from '@uniswap/sdk'
-import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
+import type { Currency, TradeType } from '@uniswap/sdk-core'
+import type { SwapParameters, Trade } from '@uniswap/v2-sdk'
+import type { RouterV2 } from '@masknet/web3-contracts/types/RouterV2'
+import { TransactionState, TransactionStateType, TransactionEventType, useAccount } from '@masknet/web3-shared'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
-import { addGasMargin } from '../../../../web3/helpers'
-import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
+import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
 import type { TradeComputed } from '../../types'
-import type { RouterV2 } from '@dimensiondev/contracts/types/RouterV2'
-import { TransactionEventType } from '../../../../web3/types'
-import { useAccount } from '../../../../web3/hooks/useAccount'
 
 interface SuccessfulCall {
     parameters: SwapParameters
@@ -20,7 +18,7 @@ interface FailedCall {
 }
 
 export function useTradeCallback(
-    trade: TradeComputed<Trade> | null,
+    trade: TradeComputed<Trade<Currency, Currency, TradeType>> | null,
     routerV2Contract: RouterV2 | null,
     allowedSlippage = SLIPPAGE_TOLERANCE_DEFAULT,
     ddl = DEFAULT_TRANSACTION_DEADLINE,
@@ -50,9 +48,13 @@ export function useTradeCallback(
             tradeParameters.map(async (x) => {
                 const { methodName, args, value } = x
                 const config = !value || /^0x0*$/.test(value) ? {} : { value }
+
                 // @ts-ignore
-                return routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args)
+                const tx = routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args)
+
+                return tx
                     .estimateGas({
+                        from: account,
                         to: routerV2Contract.options.address,
                         ...config,
                     })
@@ -63,13 +65,28 @@ export function useTradeCallback(
                                 gasEstimated,
                             } as SuccessfulCall),
                     )
-                    .catch(
-                        (error) =>
-                            ({
-                                parameters: x,
-                                error,
-                            } as FailedCall),
-                    )
+                    .catch(() => {
+                        return tx
+                            .call({
+                                from: account,
+                                to: routerV2Contract.options.address,
+                                ...config,
+                            })
+                            .then(
+                                () =>
+                                    ({
+                                        parameters: x,
+                                        error: new Error('Unexpected issue with estimating the gas. Please try again.'),
+                                    } as FailedCall),
+                            )
+                            .catch(
+                                (error) =>
+                                    ({
+                                        parameters: x,
+                                        error,
+                                    } as FailedCall),
+                            )
+                    })
             }),
         )
 
@@ -99,9 +116,9 @@ export function useTradeCallback(
             // @ts-ignore
             routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args)
                 .send({
-                    from: account,
-                    gas: addGasMargin(gasEstimated).toFixed(),
                     ...config,
+                    from: account,
+                    gas: gasEstimated,
                 })
                 .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     setTradeState({

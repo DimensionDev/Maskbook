@@ -1,16 +1,10 @@
+import type { DataProvider } from '@masknet/public-api'
 export interface Settings {
     currency: Currency
 }
-
-export enum DataProvider {
-    COIN_GECKO,
-    COIN_MARKET_CAP,
-    UNISWAP_INFO,
-}
-
 export enum TagType {
     CASH = 1,
-    HASH,
+    HASH = 2,
 }
 
 export interface Currency {
@@ -18,6 +12,13 @@ export interface Currency {
     name: string
     symbol?: string
     description?: string
+}
+
+export interface Platform {
+    id: string | number
+    name: string
+    slug: string
+    symbol: string
 }
 
 export interface Coin {
@@ -38,7 +39,7 @@ export interface Coin {
     image_url?: string
     description?: string
     market_cap_rank?: number
-    eth_address?: string
+    contract_address?: string
     facebook_url?: string
     twitter_url?: string
     telegram_url?: string
@@ -79,6 +80,7 @@ export interface Trending {
     currency: Currency
     dataProvider: DataProvider
     coin: Coin
+    platform?: Platform
     market?: Market
     tickers: Ticker[]
     lastUpdated: string

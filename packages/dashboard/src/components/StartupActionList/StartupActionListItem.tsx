@@ -9,7 +9,7 @@ import {
     Typography,
 } from '@material-ui/core'
 import { memo, useLayoutEffect, useRef } from 'react'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 
 export interface StartupActionListItemProps {
     icon: React.ReactNode

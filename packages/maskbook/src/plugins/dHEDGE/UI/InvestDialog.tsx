@@ -1,30 +1,32 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react'
-import { makeStyles, DialogContent } from '@material-ui/core'
+import {
+    EthereumTokenType,
+    formatBalance,
+    FungibleTokenDetailed,
+    isZero,
+    pow10,
+    TransactionStateType,
+    useAccount,
+    useTokenBalance,
+} from '@masknet/web3-shared'
+import { DialogContent, makeStyles } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { EthereumTokenType, NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
-import { useAccount } from '../../../web3/hooks/useAccount'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useInvestCallback } from '../hooks/useInvestCallback'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { PluginDHedgeMessages } from '../messages'
-import { EthereumMessages } from '../../Ethereum/messages'
-import { useTokenBalance } from '../../../web3/hooks/useTokenBalance'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { PluginTraderMessages } from '../../Trader/messages'
-import type { Pool } from '../types'
 import type { Coin } from '../../Trader/types'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { useInvestCallback } from '../hooks/useInvestCallback'
+import { PluginDHedgeMessages } from '../messages'
+import type { Pool } from '../types'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -55,19 +57,23 @@ export function InvestDialog() {
 
     const [id] = useState(uuid())
     const [pool, setPool] = useState<Pool>()
-    const [token, setToken] = useState<NativeTokenDetailed | ERC20TokenDetailed>()
+    const [token, setToken] = useState<FungibleTokenDetailed>()
+    const [allowedTokens, setAllowedTokens] = useState<string[]>()
 
     // context
     const account = useAccount()
 
     //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated, (ev) => {
+    const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated, (ev) => {
         if (ev.open) {
             setPool(ev.pool)
-            setToken(ev.token)
+            setAllowedTokens(ev.tokens)
         }
     })
     const onClose = useCallback(() => {
+        setPool(undefined)
+        setAllowedTokens([])
+        setToken(undefined)
         closeDialog()
     }, [closeDialog])
     //#endregion
@@ -84,22 +90,20 @@ export function InvestDialog() {
         ),
     )
     const onSelectTokenChipClick = useCallback(() => {
-        if (!token) return
         setSelectTokenDialogOpen({
             open: true,
             uuid: id,
-            disableEther: true,
+            disableNativeToken: true,
             FixedTokenListProps: {
-                selectedTokens: [token.address],
-                whitelist: [token.address],
+                whitelist: allowedTokens,
             },
         })
-    }, [id, token?.address])
+    }, [id, token?.address, allowedTokens])
     //#endregion
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(new BigNumber(10).pow(token?.decimals ?? 0))
+    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
     const {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
@@ -108,16 +112,12 @@ export function InvestDialog() {
     //#endregion
 
     //#region blocking
-    const [investState, investCallback, resetInvestCallback] = useInvestCallback(
-        pool?.address ?? '',
-        amount.toFixed(),
-        token,
-    )
+    const [investState, investCallback, resetInvestCallback] = useInvestCallback(pool, amount.toFixed(), token)
     //#endregion
 
     //#region Swap
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
-        PluginTraderMessages.events.swapDialogUpdated,
+        PluginTraderMessages.swapDialogUpdated,
         useCallback(
             (ev) => {
                 if (!ev.open) {
@@ -136,7 +136,7 @@ export function InvestDialog() {
                     id: token.address,
                     name: token.name ?? '',
                     symbol: token.symbol ?? '',
-                    eth_address: token.address,
+                    contract_address: token.address,
                     decimals: token.decimals,
                 } as Coin,
             },
@@ -146,16 +146,14 @@ export function InvestDialog() {
 
     //#region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             token
                 ? [
-                      `I just invested ${formatBalance(amount, 6)} ${cashTag}${token.symbol} in ${
+                      `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${
                           pool?.name
                       }. Follow @realMaskbook (mask.io) to invest dHEDGE pools.`,
                       '#mask_io',
-                      postLink,
                   ].join('\n')
                 : '',
         )
@@ -163,7 +161,7 @@ export function InvestDialog() {
 
     // on close transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
-        EthereumMessages.events.transactionDialogUpdated,
+        WalletMessages.events.transactionDialogUpdated,
         useCallback(
             (ev) => {
                 if (!ev.open) {
@@ -203,11 +201,10 @@ export function InvestDialog() {
     }, [account, amount.toFixed(), token, tokenBalance])
     //#endregion
 
-    if (!token || !pool) return null
-
+    if (!pool) return null
     return (
         <div className={classes.root}>
-            <InjectedDialog open={open} onClose={onClose} title={pool.name} DialogProps={{ maxWidth: 'xs' }}>
+            <InjectedDialog open={open} onClose={onClose} title={pool.name} maxWidth="xs">
                 <DialogContent>
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel
@@ -224,17 +221,17 @@ export function InvestDialog() {
                             }}
                         />
                     </form>
-                    {new BigNumber(tokenBalance).isZero() ? (
-                        <ActionButton
-                            className={classes.button}
-                            fullWidth
-                            onClick={openSwap}
-                            variant="contained"
-                            loading={loadingTokenBalance}>
-                            {t('plugin_dhedge_buy_token', { symbol: token.symbol })}
-                        </ActionButton>
-                    ) : (
-                        <EthereumWalletConnectedBoundary>
+                    <EthereumWalletConnectedBoundary>
+                        {isZero(tokenBalance) ? (
+                            <ActionButton
+                                className={classes.button}
+                                fullWidth
+                                onClick={openSwap}
+                                variant="contained"
+                                loading={loadingTokenBalance}>
+                                {t('plugin_dhedge_buy_token', { symbol: token?.symbol })}
+                            </ActionButton>
+                        ) : (
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
                                 spender={pool.address}
@@ -249,8 +246,8 @@ export function InvestDialog() {
                                     {validationMessage || t('plugin_dhedge_invest')}
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>
-                        </EthereumWalletConnectedBoundary>
-                    )}
+                        )}
+                    </EthereumWalletConnectedBoundary>
                 </DialogContent>
             </InjectedDialog>
         </div>

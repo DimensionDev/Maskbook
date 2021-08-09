@@ -1,18 +1,13 @@
+import { resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared'
+import { Avatar, Button, Grid, Link, makeStyles, Typography } from '@material-ui/core'
+import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import { Trans } from 'react-i18next'
-import BigNumber from 'bignumber.js'
-import { makeStyles, Typography, Grid, Link, Avatar, Button, Chip } from '@material-ui/core'
-import type { Pool } from '../types'
-import { resolveAddressLinkOnExplorer } from '../../../web3/pipes'
-import { useAvatar } from '../hooks/useManager'
-import { useChainId } from '../../../web3/hooks/useChainId'
-import { usePoolURL } from '../hooks/useUrl'
-import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
-import { PluginTraderMessages } from '../../Trader/messages'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import type { Coin } from '../../Trader/types'
+import { useAvatar } from '../hooks/useManager'
 import { PluginDHedgeMessages } from '../messages'
+import type { Pool } from '../types'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -58,67 +53,48 @@ const useStyles = makeStyles((theme) => ({
 
 interface PoolDeckProps {
     pool: Pool
-    inputToken: NativeTokenDetailed | ERC20TokenDetailed
+    inputTokens: string[] | undefined
+    link: string
 }
 
 export function PoolViewDeck(props: PoolDeckProps) {
-    const { pool, inputToken } = props
+    const { pool, inputTokens, link } = props
 
     const classes = useStyles()
     const { t } = useI18N()
 
     const blockie = useAvatar(pool.managerAddress)
     const chainId = useChainId()
-    const poolUrl = usePoolURL(pool.address)
 
     //#region manager share
     const managerShare = new BigNumber(pool.balanceOfManager)
         .dividedBy(pool.totalSupply)
         .multipliedBy(100)
         .integerValue(BigNumber.ROUND_UP)
-
-    //#endregion
-
-    //#region Swap
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated)
-    const openSwap = useCallback(() => {
-        openSwapDialog({
-            open: true,
-            traderProps: {
-                coin: {
-                    id: inputToken.address,
-                    name: inputToken.name ?? '',
-                    symbol: inputToken.symbol ?? '',
-                    eth_address: inputToken.address,
-                    decimals: inputToken.decimals,
-                } as Coin,
-            },
-        })
-    }, [openSwapDialog])
     //#endregion
 
     //#region the invest dialog
-    const { setDialog: openInvestDialog } = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated)
+    const { setDialog: openInvestDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated)
     const onInvest = useCallback(() => {
-        if (!pool) return
+        if (!pool || !inputTokens) return
         openInvestDialog({
             open: true,
             pool: pool,
-            token: inputToken,
+            tokens: inputTokens,
         })
-    }, [pool, openInvestDialog])
+    }, [pool, inputTokens, openInvestDialog])
     //#endregion
 
     return (
         <Grid container className={classes.meta} direction="row">
             <Grid item alignSelf="center" xs={2}>
-                <Link target="_blank" rel="noopener noreferrer" href={poolUrl}>
+                <Link target="_blank" rel="noopener noreferrer" href={link}>
                     <Avatar src={blockie} className={classes.avatar} />
                 </Link>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
                 <div className={classes.title}>
-                    <Link color="primary" target="_blank" rel="noopener noreferrer" href={poolUrl}>
+                    <Link color="primary" target="_blank" rel="noopener noreferrer" href={link}>
                         <Typography variant="h6">{pool.name.toUpperCase()}</Typography>
                     </Link>
                 </div>
@@ -144,31 +120,27 @@ export function PoolViewDeck(props: PoolDeckProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body2" color="textSecondary" className={classes.text}>
-                            <Trans
-                                i18nKey="plugin_dhedge_manager_share"
-                                components={{
-                                    share: <span />,
-                                }}
-                                values={{
-                                    managerShare: managerShare,
-                                }}
-                            />
+                            {managerShare.isLessThanOrEqualTo(50) ? (
+                                <Trans
+                                    i18nKey="plugin_dhedge_manager_share"
+                                    components={{
+                                        share: <span />,
+                                    }}
+                                    values={{
+                                        managerShare: managerShare,
+                                    }}
+                                />
+                            ) : (
+                                t('plugin_dhedge_manager_share_more_than_50')
+                            )}
                         </Typography>
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item alignSelf="right" xs={2}>
+            <Grid item alignSelf="right" xs={4} textAlign="center">
                 <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
                     {t('plugin_dhedge_invest')}
                 </Button>
-                <Chip
-                    className={classes.chip}
-                    label={t('plugin_dhedge_buy_token', { symbol: inputToken.symbol })}
-                    clickable
-                    color="primary"
-                    variant="outlined"
-                    onClick={openSwap}
-                />
             </Grid>
         </Grid>
     )

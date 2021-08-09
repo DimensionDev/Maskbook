@@ -1,20 +1,22 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
-import { makeStyles, Button, ButtonProps, Typography } from '@material-ui/core'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import { FormattedBalance, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import {
+    formatEthereumAddress,
+    useAccount,
+    useChainColor,
+    useChainDetailed,
+    useChainIdValid,
+    useWallet,
+    useNativeTokenBalance,
+} from '@masknet/web3-shared'
+import { Button, ButtonProps, makeStyles, Typography } from '@material-ui/core'
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
-import { useStylesExtends } from '../../components/custom-ui-helper'
-import { useWallet } from '../../plugins/Wallet/hooks/useWallet'
-import { ProviderIcon } from '../../components/shared/ProviderIcon'
-import { formatEthereumAddress, FormattedBalance } from '@dimensiondev/maskbook-shared'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import { WalletIcon } from '../../components/shared/WalletIcon'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { useI18N, useRemoteControlledDialog, useValueRef, Flags } from '../../utils'
-import { useChainId } from '../hooks/useChainId'
-import { resolveChainColor } from '../pipes'
-import { ChainId } from '../types'
-import { currentSelectedWalletProviderSettings } from '../../plugins/Wallet/settings'
-import { useNativeTokenBalance } from '../hooks/useNativeTokenBalance'
-import { useAccount } from '../hooks/useAccount'
+import { Flags, useI18N } from '../../utils'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -35,11 +37,6 @@ const useStyles = makeStyles((theme) => {
         buttonTransparent: {
             backgroundColor: 'transparent',
         },
-        providerIcon: {
-            fontSize: 18,
-            width: 18,
-            height: 18,
-        },
         chainIcon: {
             fontSize: 18,
             width: 18,
@@ -49,8 +46,8 @@ const useStyles = makeStyles((theme) => {
     }
 })
 
-export interface EthereumAccountButtonProps extends withClasses<never> {
-    disableEther?: boolean
+export interface EthereumAccountButtonProps extends withClasses<'root'> {
+    disableNativeToken?: boolean
     ButtonProps?: Partial<ButtonProps>
 }
 
@@ -58,12 +55,13 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const chainId = useChainId()
     const account = useAccount()
-    const { value: balance = '0' } = useNativeTokenBalance(account)
+    const chainColor = useChainColor()
+    const chainIdValid = useChainIdValid()
+    const chainDetailed = useChainDetailed()
+    const { value: balance = '0' } = useNativeTokenBalance()
 
     const selectedWallet = useWallet()
-    const selectedWalletProvider = useValueRef(currentSelectedWalletProviderSettings)
 
     const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
@@ -72,43 +70,42 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const onOpen = useCallback(() => {
-        if (selectedWallet) openSelectWalletDialog()
+        if (account && selectedWallet) openSelectWalletDialog()
         else openSelectProviderDialog()
-    }, [selectedWallet, openSelectWalletDialog, openSelectProviderDialog])
+    }, [account, openSelectWalletDialog, openSelectProviderDialog])
 
     if (Flags.has_native_nav_bar) return <AccountBalanceWalletIcon onClick={onOpen} />
 
     return (
-        <div className={props.disableEther ? '' : classes.root}>
-            {!props.disableEther ? (
+        <div className={props.disableNativeToken ? '' : classes.root}>
+            {!props.disableNativeToken ? (
                 <Typography className={classes.balance}>
                     <FormattedBalance value={balance} decimals={18} significant={4} symbol="ETH" />
                 </Typography>
             ) : null}
             <Button
-                className={classNames(classes.button, props.disableEther ? classes.buttonTransparent : '')}
+                className={classNames(classes.button, props.disableNativeToken ? classes.buttonTransparent : '')}
                 variant="outlined"
                 startIcon={
-                    selectedWallet ? (
-                        <ProviderIcon
-                            classes={{ icon: classes.providerIcon }}
-                            size={18}
-                            providerType={selectedWalletProvider}
-                        />
-                    ) : null
+                    account && chainIdValid ? (
+                        <WalletIcon size={18} badgeSize={9} />
+                    ) : (
+                        <InfoOutlinedIcon fontSize="medium" />
+                    )
                 }
                 color="primary"
                 onClick={onOpen}
                 {...props.ButtonProps}>
-                {selectedWallet?.name ?? ''}
-                {selectedWallet?.address
-                    ? ` (${formatEthereumAddress(selectedWallet.address, 4)})`
+                {account
+                    ? chainIdValid
+                        ? `${selectedWallet?.name ?? ''} (${formatEthereumAddress(account, 4)})`
+                        : t('plugin_wallet_wrong_network')
                     : t('plugin_wallet_on_connect')}
-                {chainId !== ChainId.Mainnet && selectedWallet ? (
+                {account && chainIdValid && chainDetailed?.network !== 'mainnet' ? (
                     <FiberManualRecordIcon
                         className={classes.chainIcon}
                         style={{
-                            color: resolveChainColor(chainId),
+                            color: chainColor,
                         }}
                     />
                 ) : null}

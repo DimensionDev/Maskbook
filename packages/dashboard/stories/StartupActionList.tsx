@@ -1,4 +1,4 @@
-import { story } from '@dimensiondev/maskbook-storybook-shared'
+import { story } from '@masknet/storybook-shared'
 import { StartupActionList as C, StartupActionListItem } from '../src/components/StartupActionList'
 import { CloudUpload, CloudDownload, Restore } from '@material-ui/icons'
 const { meta, of } = story(C)

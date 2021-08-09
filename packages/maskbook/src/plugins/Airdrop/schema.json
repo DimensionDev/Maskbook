@@ -7,7 +7,7 @@
             "additionalProperties": true,
             "properties": {
                 "chain_id": {
-                    "enum": [1, 3, 4, 5, 42],
+                    "type": "number",
                     "title": "chain_id"
                 },
                 "type": {
@@ -89,7 +89,7 @@
             "title": "creation_time"
         },
         "chain_id": {
-            "enum": [1, 3, 4, 5, 42],
+            "type": "number",
             "title": "chain_id"
         },
         "token": {

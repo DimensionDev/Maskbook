@@ -1,6 +1,6 @@
 import { memo, MouseEvent } from 'react'
 import { Link, Typography } from '@material-ui/core'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 
 export interface UnconnectedPersonaLineProps {
@@ -48,17 +48,15 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(({ userId, o
             <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>
                 {userId}
             </Typography>
-            {
-                <Link
-                    component="button"
-                    variant="caption"
-                    onClick={(e: MouseEvent) => {
-                        e.stopPropagation()
-                        onDisconnect()
-                    }}>
-                    {t.personas_disconnect()}
-                </Link>
-            }
+            <Link
+                component="button"
+                variant="caption"
+                onClick={(e: MouseEvent) => {
+                    e.stopPropagation()
+                    onDisconnect()
+                }}>
+                {t.personas_disconnect()}
+            </Link>
         </Link>
     )
 })

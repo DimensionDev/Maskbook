@@ -1,24 +1,31 @@
+import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
+import type { PayableTx } from '@masknet/web3-contracts/types/types'
+import {
+    EthereumTokenType,
+    TransactionEventType,
+    TransactionState,
+    TransactionStateType,
+    useAccount,
+    useChainId,
+    useGasPrice,
+    useNonce,
+    useTraderConstants,
+} from '@masknet/web3-shared'
 import { useCallback, useState } from 'react'
-import type { PayableTx } from '@dimensiondev/contracts/types/types'
-import { useAccount } from '../../../../web3/hooks/useAccount'
-import { useChainId } from '../../../../web3/hooks/useChainId'
-import { TransactionState, TransactionStateType } from '../../../../web3/hooks/useTransactionState'
+import { SLIPPAGE_TOLERANCE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
-import type { ExchangeProxy } from '@dimensiondev/contracts/types/ExchangeProxy'
-import { SLIPPAGE_TOLERANCE_DEFAULT, TRADE_CONSTANTS } from '../../constants'
-import { EthereumTokenType, TransactionEventType } from '../../../../web3/types'
-import { useConstant } from '../../../../web3/hooks/useConstant'
 import { useTradeAmount } from './useTradeAmount'
-import Services from '../../../../extension/service'
 
 export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,
     exchangeProxyContract: ExchangeProxy | null,
     allowedSlippage = SLIPPAGE_TOLERANCE_DEFAULT,
 ) {
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
-    const BALANCER_ETH_ADDRESS = useConstant(TRADE_CONSTANTS, 'BALANCER_ETH_ADDRESS')
+    const { BALANCER_ETH_ADDRESS } = useTraderConstants()
 
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
@@ -26,7 +33,7 @@ export function useTradeCallback(
     const tradeAmount = useTradeAmount(trade, allowedSlippage)
 
     const tradeCallback = useCallback(async () => {
-        if (!trade || !trade.inputToken || !trade.outputToken || !exchangeProxyContract) {
+        if (!trade || !trade.inputToken || !trade.outputToken || !exchangeProxyContract || !BALANCER_ETH_ADDRESS) {
             setTradeState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -57,7 +64,7 @@ export function useTradeCallback(
             ),
         )
 
-        // balancer use a different address for Ether
+        // balancer use a different address for the native token
         const inputTokenAddress =
             trade.inputToken.type === EthereumTokenType.Native ? BALANCER_ETH_ADDRESS : trade.inputToken.address
         const outputTokenAddress =
@@ -79,7 +86,7 @@ export function useTradeCallback(
                       tradeAmount.toFixed(),
                   )
 
-        // trade with ether
+        // trade with the native token
         let transactionValue = '0'
         if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Native)
             transactionValue = trade.inputAmount.toFixed()
@@ -87,18 +94,24 @@ export function useTradeCallback(
             transactionValue = trade.outputAmount.toFixed()
 
         // send transaction and wait for hash
-        const config = await Services.Ethereum.composeTransaction({
+        const config = {
             from: account,
-            to: exchangeProxyContract.options.address,
+            gas: await tx
+                .estimateGas({
+                    from: account,
+                    value: transactionValue,
+                })
+                .catch((error: Error) => {
+                    setTradeState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    throw error
+                }),
+            gasPrice,
+            nonce,
             value: transactionValue,
-            data: tx.encodeABI(),
-        }).catch((error: Error) => {
-            setTradeState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
-            throw error
-        })
+        }
 
         // send transaction and wait for hash
         return new Promise<void>((resolve, reject) => {
@@ -127,7 +140,7 @@ export function useTradeCallback(
                     reject(error)
                 })
         })
-    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS])
+    }, [nonce, gasPrice, chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS])
 
     const resetCallback = useCallback(() => {
         setTradeState({

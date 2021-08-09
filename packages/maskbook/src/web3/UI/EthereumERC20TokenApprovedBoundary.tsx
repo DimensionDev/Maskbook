@@ -1,12 +1,16 @@
-import { Grid, makeStyles } from '@material-ui/core'
-import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect } from 'react'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
-import { useI18N, unreachable } from '../../utils'
+import { useSnackbar } from '@masknet/theme'
+import { Grid, makeStyles } from '@material-ui/core'
+import {
+    ApproveStateType,
+    ERC20TokenDetailed,
+    formatBalance,
+    TransactionStateType,
+    useERC20TokenApproveCallback,
+} from '@masknet/web3-shared'
+import { unreachable } from '@dimensiondev/kit'
+import { useI18N } from '../../utils'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
-import { ApproveStateType, useERC20TokenApproveCallback } from '../hooks/useERC20TokenApproveCallback'
-import { TransactionStateType } from '../hooks/useTransactionState'
-import type { ERC20TokenDetailed } from '../types'
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -30,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 export interface EthereumERC20TokenApprovedBoundaryProps {
     amount: string
-    spender: string
+    spender?: string
     token?: ERC20TokenDetailed
     children?: React.ReactNode | ((allowance: string) => React.ReactNode)
 }

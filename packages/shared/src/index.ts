@@ -1,15 +1,17 @@
-export { serializer } from './serializer'
-export { IdentifierMap, ReadonlyIdentifierMap } from './Identifier/IdentifierMap'
-export * from './collections'
-export * from './MaskPayload'
-export * from './Identifier/type'
-export * from './i18n/register-ns'
-export * from './web3'
-export * from './react/createGlobalState'
-export * from './ShadowRoot'
-export * from './TypedMessage'
-export * from './utils'
 export * from './hooks'
-export * from './crypto/JWKType'
 export * from './wallet'
-export * from './Persona/type'
+export * from './UI'
+export * from './locales'
+export * from './utils'
+export * from '@masknet/shared-base'
+// This interface is used as a proxy type to avoid circular project dependencies
+export interface DashboardPluginMessages {
+    Wallet: unknown
+    Transak: unknown
+    Swap: unknown
+}
+
+export interface DashboardPluginServices {
+    Wallet: unknown
+    Swap: unknown
+}

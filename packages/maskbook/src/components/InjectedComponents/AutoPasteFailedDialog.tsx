@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { formatDateTime, useI18N, MaskMessages, useMatchXS, useQueryNavigatorPermission } from '../../utils'
+import { useI18N, MaskMessages, useMatchXS, useQueryNavigatorPermission } from '../../utils'
+import formatDateTime from 'date-fns/format'
 import { makeStyles } from '@material-ui/core/styles'
 import {
     DialogActions,
@@ -14,9 +15,9 @@ import {
     Link,
     Button,
 } from '@material-ui/core'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { Image } from '../shared/Image'
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from '@masknet/theme'
 import { DraggableDiv } from '../shared/DraggableDiv'
 import Download from '@material-ui/icons/CloudDownload'
 import CloseIcon from '@material-ui/icons/Close'
@@ -41,7 +42,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const [, copy] = useCopyToClipboard()
     const isMobile = useMatchXS()
     const permission = useQueryNavigatorPermission(true, 'clipboard-write')
-    const fileName = `maskbook-encrypted-${formatDateTime(new Date()).replace(/:/g, '-')}.png`
+    const fileName = `maskbook-encrypted-${formatDateTime(Date.now(), 'yyyyMMddHHmmss')}.png`
 
     return (
         <DraggableDiv>
@@ -62,7 +63,8 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                             <Box
                                 sx={{
                                     marginBottom: 1,
-                                }}></Box>
+                                }}
+                            />
                             <Button
                                 variant="contained"
                                 onClick={() => {
@@ -84,7 +86,8 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     <Box
                         sx={{
                             marginBottom: 1,
-                        }}></Box>
+                        }}
+                    />
                     <div style={{ textAlign: permission === 'granted' ? 'left' : 'center' }}>
                         {data.image ? (
                             // It must be img
@@ -93,7 +96,8 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                         <Box
                             sx={{
                                 marginBottom: 1,
-                            }}></Box>
+                            }}
+                        />
                         {permission === 'granted' ? (
                             <Button
                                 variant="contained"
@@ -147,7 +151,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     </div>
                 </DialogContent>
                 {/* To leave some bottom padding */}
-                <DialogActions></DialogActions>
+                <DialogActions />
             </Paper>
         </DraggableDiv>
     )

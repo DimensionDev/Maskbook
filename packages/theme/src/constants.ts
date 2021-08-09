@@ -10,8 +10,11 @@ export const LightColor = {
 
     primaryBackground: '#ffffff',
     secondaryBackground: '#f9fafa',
+    lightBackground: '#F9FAFA',
     suspensionBackground: 'rgba(249, 250, 250, 0.8)',
     normalBackground: '#F3F3F4',
+    twitterBackground: '#F7F9FA',
+    twitterBackgroundHover: '#EFF1F2',
     redMain: '#ff5f5f',
     redLight: '#ffafaf',
     redContrastText: '#ffffff',
@@ -36,21 +39,31 @@ export const LightColor = {
 
     infoBackground: 'rgba(175, 195, 225, 0.15)',
     warning: '#FFB915',
-    blue: 'rgb(28, 104, 243)',
-    linkText: '#1C68F3',
+    blue: '#1C68F3',
+    textLink: '#1C68F3',
+    lineLight: '#E4E8F1',
     lineLighter: '#E9E9EA',
+    textLight: '#A6A9B6',
+    lightestBackground: '#FFFFFF',
+    linkText: '#1C68F3',
+
+    twitter: '#2CA4EF',
+    facebook: '#4267B2',
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
     primaryContrastText: '#ffffff',
 
     secondary: '#242e57',
-    secondaryContrastText: '#1c68f3',
+    secondaryContrastText: '#ffffff',
 
     primaryBackground: '#212442',
     secondaryBackground: '#252846',
+    lightBackground: '#2E314F',
     suspensionBackground: 'rgba(27, 30, 60, 0.8)',
     normalBackground: '#262947',
+    twitterBackground: '#17191D',
+    twitterBackgroundHover: '#17191D',
     redMain: '#ff5f5f',
     redLight: '#46304a',
     redContrastText: '#ffffff',
@@ -77,9 +90,16 @@ export const DarkColor: typeof LightColor = {
 
     infoBackground: 'rgba(175, 195, 225, 0.15)',
     warning: '#FFB915',
-    blue: 'rgb(28, 104, 243)',
+    blue: '#1C68F3',
+    textLink: '#ffffff',
+    lineLight: '#32365B',
+    lineLighter: '#32365B',
+    textLight: '#A6A9B6',
+    lightestBackground: '#212422',
     linkText: '#ffffff',
-    lineLighter: '#E9E9EA',
+
+    twitter: '#2CA4EF',
+    facebook: '#4267B2',
 }
 
 export type Color = typeof LightColor

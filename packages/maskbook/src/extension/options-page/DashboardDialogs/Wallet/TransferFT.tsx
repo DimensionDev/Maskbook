@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { Send as SendIcon } from 'react-feather'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../../web3/types'
-import AbstractTab, { AbstractTabProps } from '../../DashboardComponents/AbstractTab'
+import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import { ReceiveTab } from './ReceiveTab'
 import { TransferTab } from './TransferTab'
 import type { WalletProps } from './types'
 
 export function DashboardWalletTransferDialogFT(
-    props: WrappedDialogProps<WalletProps & { token: NativeTokenDetailed | ERC20TokenDetailed }>,
+    props: WrappedDialogProps<WalletProps & { token: FungibleTokenDetailed }>,
 ) {
     const { wallet, token } = props.ComponentProps!
     const { t } = useI18N()

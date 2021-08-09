@@ -4,16 +4,15 @@ import { MaskbookIcon } from '../resources/MaskbookIcon'
 import { Suspense, useRef } from 'react'
 import { isTwitter } from '../social-network-adaptor/twitter.com/base'
 
-interface PluginWrapperProps {
+interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     pluginName: string
-    children?: JSX.Element | string
     width?: number
 }
 
 const useStyles = makeStyles((theme) => {
     return {
         card: {
-            marginTop: theme.spacing(1),
+            margin: theme.spacing(2, 0),
             width: '100%',
             boxSizing: 'border-box',
             border: `1px solid ${theme.palette.divider}`,
@@ -58,7 +57,7 @@ export default function MaskbookPluginWrapper(props: PluginWrapperProps) {
     const inner = (
         <div className={classes.card} onClick={(ev) => ev.stopPropagation()}>
             <div className={classes.header}>
-                <MaskbookIcon className={classes.icon}></MaskbookIcon>
+                <MaskbookIcon className={classes.icon} />
                 <div className={classes.title}>
                     <Typography variant="overline">Mask Plugin</Typography>
                     <Typography variant="h6">{pluginName}</Typography>

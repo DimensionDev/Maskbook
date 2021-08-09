@@ -1,7 +1,12 @@
+// This file should be free of side effects
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
+
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import Serialization from './type-transform/Serialization'
-import type { ProfileIdentifier, GroupIdentifier, PersonaIdentifier } from '../database/type'
+import type { ProfileIdentifier, PersonaIdentifier } from '../database/type'
 import type { TypedMessage } from '../protocols/typed-message'
+import type { ThirdPartyPopupContextIdentifier } from '../plugins/External/popup-context'
+import type { SettingsEvents } from '../settings/listener'
 
 export interface UpdateEvent<Data> {
     readonly reason: 'update' | 'delete' | 'new'
@@ -25,7 +30,7 @@ export interface SettingsUpdateEvent {
     initial: boolean
 }
 
-export interface MaskMessages {
+export interface MaskMessages extends SettingsEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: { text: string; image?: Blob }
     /**
@@ -38,7 +43,6 @@ export interface MaskMessages {
     createInternalSettingsChanged: SettingsUpdateEvent
     /** emit when the settings finished syncing with storage. */
     createInternalSettingsUpdated: SettingsUpdateEvent
-    profileJoinedGroup: { group: GroupIdentifier; newMembers: ProfileIdentifier[] }
     /** emit when compose status updated. */
     compositionUpdated: CompositionEvent
     personaChanged: (UpdateEvent<PersonaIdentifier> & { owned: boolean })[]
@@ -49,6 +53,18 @@ export interface MaskMessages {
         before: PersonaIdentifier | undefined
         after: PersonaIdentifier | undefined
     }[]
+    // When a SNS page get this event, if it know this context, it should response the challenge with pong.
+    thirdPartyPing: { context: ThirdPartyPopupContextIdentifier; challenge: number }
+    thirdPartyPong: number
+    thirdPartySetPayload: {
+        payload: Record<string, unknown>
+        appendText: string
+        context: ThirdPartyPopupContextIdentifier
+    }
+    /** Plugin ID */
+    activatePluginCompositionEntry: string
+    pluginEnabled: string
+    pluginDisabled: string
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })

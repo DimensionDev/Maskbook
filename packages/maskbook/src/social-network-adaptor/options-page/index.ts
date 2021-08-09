@@ -3,6 +3,7 @@ import { isEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-ki
 import { IdentifierMap } from '../../database/IdentifierMap'
 import Services from '../../extension/service'
 import { MaskMessage } from '../../utils/messages'
+import { currentImportingBackup } from '../../settings/settings'
 
 const base: SocialNetwork.Base = {
     networkIdentifier: 'localhost',
@@ -26,13 +27,14 @@ const define: SocialNetworkUI.Definition = {
             return false
         },
     },
-    utils: {},
+    utils: { createPostContext: null! },
     async init(signal) {
         const state: Readonly<SocialNetworkUI.AutonomousState> = {
             profiles: new ValueRef([]),
             friends: new ValueRef(new IdentifierMap(new Map())),
         }
         async function load() {
+            if (currentImportingBackup.value) return
             const x = await Services.Identity.queryMyProfiles()
             if (signal.aborted) return
             state.profiles.value = x

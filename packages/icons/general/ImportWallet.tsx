@@ -1,6 +1,6 @@
 import { createIcon } from '../utils'
 export const ImportWalletIcon = createIcon(
-    'ImportWallet',
+    'Index',
     <>
         <g filter="url(#filter0_b)">
             <path

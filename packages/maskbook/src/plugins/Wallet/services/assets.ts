@@ -1,16 +1,30 @@
-import { values } from 'lodash-es'
+import { unreachable } from '@dimensiondev/kit'
+import {
+    Asset,
+    ChainId,
+    createERC1155Token,
+    createERC20Token,
+    createERC721Token,
+    createNativeToken,
+    CurrencyType,
+    EthereumTokenType,
+    formatEthereumAddress,
+    getChainIdFromName,
+    getTokenConstants,
+    isChainIdMainnet,
+    NetworkType,
+    pow10,
+    CollectibleProvider,
+    PortfolioProvider,
+} from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
+import { values } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
-import { Asset, CollectibleProvider, BalanceRecord, PortfolioProvider, ZerionAddressAsset } from '../types'
+import * as DebankAPI from '../apis/debank'
 import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
-import * as DebankAPI from '../apis/debank'
-import { CurrencyType } from '../../../web3/types'
-import { ChainId, EthereumTokenType } from '../../../web3/types'
-import { unreachable } from '../../../utils/utils'
-import { createERC1155Token, createERC721Token, createEtherToken, getConstant } from '../../../web3/helpers'
-import { formatEthereumAddress } from '@dimensiondev/maskbook-shared'
-import { CONSTANTS } from '../../../web3/constants'
+import { resolveZerionAssetsScopeName } from '../pipes'
+import type { BalanceRecord, ZerionAddressAsset } from '../types'
 
 export async function getAssetsListNFT(
     address: string,
@@ -58,7 +72,7 @@ export async function getAssetsListNFT(
                             unreachable(x.asset_contract.schema_name)
                     }
                 }),
-            hasNextPage: assets.length === 50,
+            hasNextPage: assets.length === size,
         }
     }
     return {
@@ -67,12 +81,18 @@ export async function getAssetsListNFT(
     }
 }
 
-export async function getAssetsList(address: string, chainId: ChainId, provider: PortfolioProvider): Promise<Asset[]> {
-    if (chainId !== ChainId.Mainnet) return []
+export async function getAssetsList(
+    address: string,
+    network: NetworkType,
+    provider: PortfolioProvider,
+): Promise<Asset[]> {
     if (!EthereumAddress.isValid(address)) return []
     switch (provider) {
         case PortfolioProvider.ZERION:
-            const { meta, payload } = await ZerionAPI.getAssetsList(address)
+            if (network !== NetworkType.Ethereum) return []
+            const scope = resolveZerionAssetsScopeName(network)
+            if (!scope) return []
+            const { meta, payload } = await ZerionAPI.getAssetsList(address, scope)
             if (meta.status !== 'ok') throw new Error('Fail to load assets.')
             // skip NFT assets
             const assetsList = values(payload.assets).filter((x) => x.asset.is_displayable && x.asset.icon_url)
@@ -87,33 +107,30 @@ export async function getAssetsList(address: string, chainId: ChainId, provider:
 }
 
 function formatAssetsFromDebank(data: BalanceRecord[]) {
-    return data.map(
-        (x): Asset => ({
-            chain: x.chain,
-            token:
-                x.id === 'eth'
-                    ? createEtherToken(ChainId.Mainnet)
-                    : {
-                          // distinguish token type
-                          type: EthereumTokenType.ERC20,
-                          address: formatEthereumAddress(x.id),
-                          chainId: ChainId.Mainnet,
-                          name: x.name,
-                          symbol: x.symbol,
-                          decimals: x.decimals,
-                      },
-            balance: new BigNumber(x.balance).toFixed(),
-            price: {
-                [CurrencyType.USD]: new BigNumber(x.price).toFixed(),
-            },
-            value: {
-                [CurrencyType.USD]: new BigNumber(x.price)
-                    .multipliedBy(new BigNumber(x.balance).dividedBy(new BigNumber(10).pow(x.decimals)))
-                    .toFixed(),
-            },
-            logoURL: x.logo_url,
-        }),
-    )
+    return data
+        .filter((x) => getChainIdFromName(x.chain))
+        .map((y): Asset => {
+            const chainId = getChainIdFromName(y.chain) ?? ChainId.Mainnet
+            // the asset id is the token address or the name of the chain
+            const chainIdFormId = getChainIdFromName(y.id)
+            return {
+                chain: y.chain,
+                token:
+                    chainIdFormId && isChainIdMainnet(chainIdFormId)
+                        ? createNativeToken(chainId)
+                        : createERC20Token(chainId, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
+                balance: new BigNumber(y.balance).toFixed(),
+                price: {
+                    [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
+                },
+                value: {
+                    [CurrencyType.USD]: new BigNumber(y.price ?? 0)
+                        .multipliedBy(new BigNumber(y.balance).dividedBy(pow10(y.decimals)))
+                        .toFixed(),
+                },
+                logoURI: y.logo_url,
+            }
+        })
 }
 
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
@@ -122,15 +139,21 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
     return data
         .filter(({ asset }) => asset.is_displayable && !filterAssetType.some((type) => type === asset.type))
         .map(({ asset, quantity }) => {
-            const balance = Number(new BigNumber(quantity).dividedBy(new BigNumber(10).pow(asset.decimals)).toString())
+            const balance = Number(new BigNumber(quantity).dividedBy(pow10(asset.decimals)).toString())
             return {
                 token: {
                     name: asset.name,
                     symbol: asset.symbol,
                     decimals: asset.decimals,
-                    address: asset.name === 'Ether' ? getConstant(CONSTANTS, 'NATIVE_TOKEN_ADDRESS') : asset.asset_code,
+                    address:
+                        asset.name === 'Ether' || asset.name === 'Ethereum'
+                            ? getTokenConstants().NATIVE_TOKEN_ADDRESS
+                            : asset.asset_code,
                     chainId: ChainId.Mainnet,
-                    type: asset.name === 'Ether' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                    type:
+                        asset.name === 'Ether' || asset.name === 'Ethereum'
+                            ? EthereumTokenType.Native
+                            : EthereumTokenType.ERC20,
                 },
                 chain: 'eth',
                 balance: quantity,
@@ -140,7 +163,7 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
                 value: {
                     usd: new BigNumber(balance).multipliedBy(asset.price?.value ?? 0).toString(),
                 },
-                logoURL: asset.icon_url,
+                logoURI: asset.icon_url,
             }
         }) as Asset[]
 }

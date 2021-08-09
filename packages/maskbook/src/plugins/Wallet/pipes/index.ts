@@ -1,6 +1,5 @@
-import { unreachable } from '../../../utils/utils'
-import { ChainId, ERC1155TokenDetailed, ERC721TokenDetailed } from '../../../web3/types'
-import { CollectibleProvider, PortfolioProvider } from '../types'
+import { safeUnreachable, unreachable } from '@dimensiondev/kit'
+import { NetworkType, PortfolioProvider } from '@masknet/web3-shared'
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
     switch (provider) {
@@ -13,25 +12,50 @@ export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
     }
 }
 
-export function resolveCollectibleProviderLink(chainId: ChainId, provider: CollectibleProvider) {
-    switch (provider) {
-        case CollectibleProvider.OPENSEAN:
-            if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io`
-            return `https://opensea.io`
+export function resolveDebankChainName(network: NetworkType) {
+    switch (network) {
+        case NetworkType.Ethereum:
+            return 'eth'
+        case NetworkType.Binance:
+            return 'bsc'
+        case NetworkType.Polygon:
+            return 'matic'
+        case NetworkType.Arbitrum:
+            return 'arbitrum'
         default:
-            unreachable(provider)
+            safeUnreachable(network)
+            return ''
     }
 }
 
-export function resolveCollectibleLink(
-    chainId: ChainId,
-    provider: CollectibleProvider,
-    token: ERC721TokenDetailed | ERC1155TokenDetailed,
-) {
-    switch (provider) {
-        case CollectibleProvider.OPENSEAN:
-            return `${resolveCollectibleProviderLink(chainId, provider)}/assets/${token.address}/${token.tokenId}`
+export function resolveZerionAssetsScopeName(network: NetworkType) {
+    switch (network) {
+        case NetworkType.Ethereum:
+            return 'assets'
+        case NetworkType.Binance:
+            return 'bsc-assets'
+        case NetworkType.Polygon:
+            return 'polygon-assets'
+        case NetworkType.Arbitrum:
+            return ''
         default:
-            unreachable(provider)
+            safeUnreachable(network)
+            return ''
+    }
+}
+
+export function resolveZerionTransactionsScopeName(network: NetworkType) {
+    switch (network) {
+        case NetworkType.Ethereum:
+            return 'transactions'
+        case NetworkType.Binance:
+            return ''
+        case NetworkType.Polygon:
+            return ''
+        case NetworkType.Arbitrum:
+            return ''
+        default:
+            safeUnreachable(network)
+            return ''
     }
 }

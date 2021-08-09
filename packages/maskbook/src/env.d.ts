@@ -1,6 +1,6 @@
 /// <reference types="web-ext-types" />
-/// <reference types="react/experimental" />
-/// <reference types="react-dom/experimental" />
+/// <reference types="react/next" />
+/// <reference types="react-dom/next" />
 /// <reference path="./components/custom-ui.d.ts" />
 
 declare module NodeJS {
@@ -36,6 +36,11 @@ declare module NodeJS {
         BRANCH_NAME: string
         DIRTY: boolean
         TAG_DIRTY: boolean
+
+        /**
+         * Web3 Constants
+         */
+        WEB3_CONSTANTS_RPC: string
     }
 }
 
@@ -49,21 +54,6 @@ declare class ClipboardItem {
 
 interface Permissions {
     request(permission: { name: PermissionName }): Promise<PermissionStatus>
-}
-
-declare module 'eth-contract-metadata' {
-    export interface TokenMetadata {
-        decimals: number
-        erc20?: boolean
-        erc721?: boolean
-        logo: string
-        name: string
-        symbol: string
-    }
-    const metadata: {
-        [address: string]: TokenMetadata
-    }
-    export default metadata
 }
 
 declare module 'react-middle-ellipsis' {

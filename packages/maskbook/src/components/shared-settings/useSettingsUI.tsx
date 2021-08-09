@@ -1,21 +1,21 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '../../utils/hooks/useValueRef'
-import { useMatchXS } from '../../utils/hooks/useMatchXS'
-import { texts } from '../../settings/createSettings'
+import { useValueRef } from '@masknet/shared'
+import { getEnumAsArray } from '@dimensiondev/kit'
 import {
     ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
-    Switch,
-    Select,
-    MenuItem,
-    makeStyles,
     ListItemIcon,
+    ListItemSecondaryAction,
+    ListItemText,
+    makeStyles,
+    MenuItem,
+    Select,
     SelectProps,
+    Switch,
 } from '@material-ui/core'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
-import { useStylesExtends } from '../custom-ui-helper'
-import { getEnumAsArray } from '../../utils/enum'
+import { texts } from '../../settings/createSettings'
+import { useMatchXS } from '../../utils'
+import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
     container: { listStyleType: 'none', width: '100%' },
@@ -153,21 +153,22 @@ export function SettingsUIEnum<T extends object>(
 function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectProps]: useEnumSettingsParams<Q>) {
     const enum_ = getEnumAsArray(enumObject)
     const change = (value: any) => {
-        if (!Number.isNaN(parseInt(value))) {
-            value = parseInt(value)
+        if (!Number.isNaN(Number.parseInt(value, 10))) {
+            value = Number.parseInt(value, 10)
         }
         if (!enum_.some((x) => x.value === value)) {
             throw new Error('Invalid state')
         }
         ref.value = value
     }
+
     return (
         <Select
             fullWidth
             variant="outlined"
-            {...selectProps}
             value={useValueRef(ref)}
-            onChange={(event) => change(event.target.value)}>
+            onChange={(event) => change(event.target.value)}
+            {...selectProps}>
             {enum_.map(({ key, value }) => (
                 <MenuItem value={String(value)} key={String(key)}>
                     {getText?.(value) ?? String(key)}
@@ -176,6 +177,7 @@ function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectP
         </Select>
     )
 }
+
 type useEnumSettingsParams<Q extends object> = [
     ref: ValueRef<Q[keyof Q]>,
     enumObject: Q,

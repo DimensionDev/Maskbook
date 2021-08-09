@@ -1,25 +1,25 @@
 import { useReducer } from 'react'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { TradeStrategy } from '../types'
 
 export interface TradeState {
     strategy: TradeStrategy
     inputAmount: string
     outputAmount: string
-    inputToken?: NativeTokenDetailed | ERC20TokenDetailed
-    outputToken?: NativeTokenDetailed | ERC20TokenDetailed
+    inputToken?: FungibleTokenDetailed
+    outputToken?: FungibleTokenDetailed
     inputTokenBalance: string
     outputTokenBalance: string
 }
 
 export enum TradeActionType {
-    SWITCH_TOKEN,
-    UPDATE_INPUT_TOKEN,
-    UPDATE_OUTPUT_TOKEN,
-    UPDATE_INPUT_AMOUNT,
-    UPDATE_OUTPUT_AMOUNT,
-    UPDATE_INPUT_TOKEN_BALANCE,
-    UPDATE_OUTPUT_TOKEN_BALANCE,
+    SWITCH_TOKEN = 0,
+    UPDATE_INPUT_TOKEN = 1,
+    UPDATE_OUTPUT_TOKEN = 2,
+    UPDATE_INPUT_AMOUNT = 3,
+    UPDATE_OUTPUT_AMOUNT = 4,
+    UPDATE_INPUT_TOKEN_BALANCE = 5,
+    UPDATE_OUTPUT_TOKEN_BALANCE = 6,
 }
 
 export type SwapAction =
@@ -28,11 +28,11 @@ export type SwapAction =
       }
     | {
           type: TradeActionType.UPDATE_INPUT_TOKEN
-          token?: NativeTokenDetailed | ERC20TokenDetailed
+          token?: FungibleTokenDetailed
       }
     | {
           type: TradeActionType.UPDATE_OUTPUT_TOKEN
-          token?: NativeTokenDetailed | ERC20TokenDetailed
+          token?: FungibleTokenDetailed
       }
     | {
           type: TradeActionType.UPDATE_INPUT_AMOUNT
@@ -102,10 +102,7 @@ function reducer(state: TradeState, action: SwapAction): TradeState {
     }
 }
 
-export function useTradeState(
-    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
-    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
-) {
+export function useTradeState(inputToken?: FungibleTokenDetailed, outputToken?: FungibleTokenDetailed) {
     return useReducer(reducer, {
         strategy: TradeStrategy.ExactIn,
         inputAmount: '',

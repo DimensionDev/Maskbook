@@ -5,11 +5,16 @@ import Typography from '@material-ui/core/Typography'
 import { Card } from '@material-ui/core'
 import { Flags, useI18N } from '../../../utils'
 import { useModal } from '../DashboardDialogs/Base'
-import type { PluginConfig } from '../../../plugins/types'
 import { DashboardPluginDetailDialog } from '../DashboardDialogs/Plugin'
 
-interface Props {
-    plugin: PluginConfig
+export interface PluginCardProps {
+    id: string
+    name: string
+    icon: React.ReactNode
+    description?: string
+    enabled: boolean
+    onSwitch(): void
+    canDisable: boolean
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -75,31 +80,36 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export default function PluginCard({ plugin }: Props) {
+export default function PluginCard({ id, name, icon, description, enabled, onSwitch, canDisable }: PluginCardProps) {
     const { t } = useI18N()
     const classes = useStyles()
-    const [pluginDetail, openPluginDetail] = useModal(DashboardPluginDetailDialog, { plugin })
+    const [pluginDetail, openPluginDetail] = useModal(DashboardPluginDetailDialog, {
+        id,
+        name,
+        icon,
+        description,
+    })
 
     return (
         <Card className={classes.card} elevation={2}>
             <div className={classes.info}>
                 <div className={classes.logoWraper}>
-                    <span className={classes.logo}>{plugin.pluginIcon}</span>
+                    <span className={classes.logo}>{icon}</span>
                 </div>
                 <dl className={classes.metas}>
                     <dt className={classes.meta}>
                         <Typography className={classes.title} variant="h5" component="h3" color="textPrimary">
-                            {plugin.pluginName}
+                            {name}
                         </Typography>
                     </dt>
                     <dd className={classes.meta}>
                         <Typography color="textSecondary" variant="body2">
-                            {plugin.pluginDescription}
+                            {description}
                         </Typography>
                     </dd>
                     <dd className={classes.meta}>
                         <Typography color="textSecondary" variant="body2">
-                            ID: {plugin.id}
+                            ID: {id}
                         </Typography>
                     </dd>
                 </dl>
@@ -108,12 +118,14 @@ export default function PluginCard({ plugin }: Props) {
                 <Button variant="outlined" size="small" onClick={openPluginDetail}>
                     {t('details')}
                 </Button>
-                {Flags.plugin_switch_enabled ? (
+                {Flags.plugin_switch_enabled && canDisable ? (
                     <Switch
                         className={classes.switch}
                         color="primary"
                         size="small"
-                        inputProps={{ 'aria-label': t('eanble_or_disable_plugin') }}
+                        inputProps={{ 'aria-label': t('enable_or_disable_plugin') }}
+                        checked={enabled}
+                        onChange={() => onSwitch()}
                     />
                 ) : null}
             </div>

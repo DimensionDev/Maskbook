@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import type { Pool } from '../types'
-import { makeStyles, Typography, Grid, Divider } from '@material-ui/core'
+import { Divider, Grid, makeStyles, Typography } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 import { formatAmountPostfix } from '../utils'
-import { MaskColorVar } from '@dimensiondev/maskbook-theme'
+import { MaskColorVar } from '@masknet/theme'
 import DOMPurify from 'isomorphic-dompurify'
 import { POOL_DESCRIPTION_LIMIT } from '../constants'
 import BigNumber from 'bignumber.js'
-import { formatBalance } from '@dimensiondev/maskbook-shared'
+import { formatBalance } from '@masknet/web3-shared'
 
 const DIGIT_LENGTH = 18
 
@@ -48,12 +48,10 @@ export function PoolStats(props: PoolStatsProps) {
     const classes = useStyles()
 
     //#region process stats
-    const valueManaged = formatAmountPostfix(formatBalance(new BigNumber(pool?.totalValue), DIGIT_LENGTH))
-    const lifeTimeReturn = new BigNumber(formatBalance(new BigNumber(pool.performance), DIGIT_LENGTH))
-        .minus(1)
-        .multipliedBy(100)
+    const valueManaged = formatAmountPostfix(formatBalance(pool?.totalValue, DIGIT_LENGTH))
+    const lifeTimeReturn = new BigNumber(formatBalance(pool.performance, DIGIT_LENGTH)).minus(1).multipliedBy(100)
 
-    const riskFactor = pool && pool?.riskFactor != -1 ? pool?.riskFactor : '-'
+    const riskFactor = pool && pool?.riskFactor !== -1 ? pool?.riskFactor : '-'
     // pool detail contains raw html and need to sanitize before use
     const cleanDescription = DOMPurify.sanitize(pool.poolDetails)
     const [expanded, setExpanded] = useState(cleanDescription.length < POOL_DESCRIPTION_LIMIT)
@@ -129,7 +127,8 @@ export function PoolStats(props: PoolStatsProps) {
                                 __html: expanded
                                     ? cleanDescription
                                     : cleanDescription.slice(0, POOL_DESCRIPTION_LIMIT).concat('...'),
-                            }}></span>
+                            }}
+                        />
                     </Typography>
                     {cleanDescription.length > POOL_DESCRIPTION_LIMIT ? (
                         <Typography variant="body2" color="primary" onClick={() => setExpanded(!expanded)}>

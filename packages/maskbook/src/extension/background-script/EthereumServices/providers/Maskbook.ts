@@ -1,9 +1,8 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { currentMaskbookChainIdSettings } from '../../../../plugins/Wallet/settings'
-import { getConstant } from '../../../../web3/helpers'
-import { CONSTANTS } from '../../../../web3/constants'
-import type { ChainId } from '../../../../web3/types'
+import { ChainId, getChainRPC } from '@masknet/web3-shared'
+import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
+import { getWalletsCached } from '../wallet'
 
 //#region providers
 const providerPool = new Map<string, HttpProvider>()
@@ -32,12 +31,13 @@ export function createProvider(url: string) {
 
 //#region web3 instances
 const instancePool = new Map<string, Web3>()
+const SEED = Math.floor(Math.random() * 4)
 
 function createWeb3Instance(provider: HttpProvider) {
     return (
         instancePool.get(provider.host) ??
         (() => {
-            const newInstance = new Web3()
+            const newInstance = new Web3(provider)
             instancePool.set(provider.host, newInstance)
             return newInstance
         })()
@@ -46,20 +46,14 @@ function createWeb3Instance(provider: HttpProvider) {
 
 export function createWeb3({
     url = '',
-    chainId = currentMaskbookChainIdSettings.value,
+    chainId = currentChainIdSettings.value,
     privKeys = [],
 }: {
     url?: string
     chainId?: ChainId
     privKeys?: string[]
 } = {}) {
-    // get the provider url by weights if needed
-    if (!url) {
-        const urls = getConstant(CONSTANTS, 'PROVIDER_ADDRESS_LIST', chainId)
-        const weights = getConstant(CONSTANTS, 'PROVIDER_WEIGHT_LIST', chainId)
-        const seed = getConstant(CONSTANTS, 'PROVIDER_WEIGHT_SEED', chainId)
-        url = urls[weights[seed]]
-    }
+    url = url || getChainRPC(chainId, SEED)
     const provider = createProvider(url)
     const web3 = createWeb3Instance(provider)
     if (privKeys.length) {
@@ -69,3 +63,12 @@ export function createWeb3({
     return web3
 }
 //#endregion
+
+export async function requestAccounts() {
+    const wallets = getWalletsCached()
+    const accounts = wallets.filter((x) => x._private_key_ || x.mnemonic.length).map((y) => y.address)
+    return {
+        accounts,
+        chainId: currentChainIdSettings.value,
+    }
+}

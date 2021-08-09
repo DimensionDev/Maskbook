@@ -1,25 +1,35 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import { NativeTokenDetailed, ERC20TokenDetailed, EthereumTokenType } from '../../../web3/types'
-import { addGasMargin } from '../../../web3/helpers'
-import { TransactionStateType, useTransactionState } from '../../../web3/hooks/useTransactionState'
-import { useDHedgePoolContract } from '../contracts/useDHedgePool'
-import { useAccount } from '../../../web3/hooks/useAccount'
+import {
+    FungibleTokenDetailed,
+    EthereumTokenType,
+    useAccount,
+    useTransactionState,
+    TransactionStateType,
+    useNonce,
+    useGasPrice,
+    TransactionEventType,
+} from '@masknet/web3-shared'
+import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
+import { Pool, PoolType } from '../types'
 
 /**
  * A callback for invest dhedge pool
- * @param address the pool address
+ * @param pool the pool
  * @param amount
  * @param token
  */
-export function useInvestCallback(address: string, amount: string, token?: NativeTokenDetailed | ERC20TokenDetailed) {
-    const poolContract = useDHedgePoolContract(address)
+export function useInvestCallback(pool: Pool | undefined, amount: string, token?: FungibleTokenDetailed) {
+    const poolV1Contract = useDHedgePoolV1Contract(pool?.address ?? '')
+    const poolV2Contract = useDHedgePoolV2Contract(pool?.address ?? '')
 
     const account = useAccount()
+    const nonce = useNonce()
+    const gasPrice = useGasPrice()
     const [investState, setInvestState] = useTransactionState()
 
     const investCallback = useCallback(async () => {
-        if (!token || !poolContract) {
+        if (!token || !poolV1Contract || !poolV2Contract) {
             setInvestState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -34,13 +44,20 @@ export function useInvestCallback(address: string, amount: string, token?: Nativ
         // step 1: estimate gas
         const config = {
             from: account,
-            to: poolContract.options.address,
             value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
+            gasPrice,
+            nonce,
         }
-        const estimatedGas = await poolContract.methods
-            .deposit(amount)
+
+        const deposit = () => {
+            return pool?.poolType === PoolType.v1
+                ? poolV1Contract.methods.deposit(amount)
+                : poolV2Contract.methods.deposit(token.address, amount)
+        }
+
+        const estimatedGas = await deposit()
             .estimateGas(config)
-            .catch((error: any) => {
+            .catch((error) => {
                 setInvestState({
                     type: TransactionStateType.FAILED,
                     error,
@@ -50,29 +67,27 @@ export function useInvestCallback(address: string, amount: string, token?: Nativ
 
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
-            poolContract.methods.deposit(amount).send(
-                {
-                    gas: addGasMargin(estimatedGas).toFixed(),
-                    ...config,
-                },
-                (error: any, hash: string) => {
-                    if (error) {
-                        setInvestState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
-                        reject(error)
-                    } else {
-                        setInvestState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
-                    }
-                },
-            )
+            const promiEvent = deposit().send({
+                ...config,
+                gas: estimatedGas,
+            })
+            promiEvent
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                    setInvestState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                    resolve(hash)
+                })
+                .on(TransactionEventType.ERROR, (error) => {
+                    setInvestState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                })
         })
-    }, [address, account, amount, token])
+    }, [gasPrice, nonce, pool, account, amount, token])
 
     const resetCallback = useCallback(() => {
         setInvestState({

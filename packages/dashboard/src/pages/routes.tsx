@@ -1,35 +1,32 @@
-import { Route, Switch, Redirect } from 'react-router'
+import { Route, Routes, Navigate } from 'react-router'
 import React, { lazy, Suspense } from 'react'
 import { DashboardFrame } from '../components/DashboardFrame'
-export enum Routes {
-    Welcome = '/welcome',
-    Personas = '/personas',
-    Wallets = '/wallets',
-    WalletsTransfer = '/wallets/transfer',
-    WalletsSwap = '/wallets/swap',
-    WalletsRedPacket = '/wallets/red-packet',
-    WalletsSell = '/wallets/sell',
-    WalletsHistory = '/wallets/history',
-    Settings = '/settings',
-    Plugins = '/plugins',
-}
+import { RoutePaths } from '../type'
 const Wallets = lazy(() => import('./Wallets'))
+const Setup = lazy(() => import('./Setup'))
+const SignUp = lazy(() => import('./SignUp'))
+const Login = lazy(() => import('./Login'))
+const PrivacyPolicy = lazy(() => import('./PrivacyPolicy'))
 const Welcome = lazy(() => import('./Welcome'))
 const Personas = lazy(() => import('./Personas'))
 const Settings = lazy(() => import('./Settings'))
-const Plugins = lazy(() => import('./Plugins'))
+const Labs = lazy(() => import('./Labs'))
+
 export function Pages() {
     return (
         <Suspense fallback="loading...">
-            <Switch>
-                <Route path={Routes.Welcome} children={<Welcome />} />
-                <Route path={Routes.Personas} children={frame(<Personas />)} exact />
-                {/* This is intentional. Wallets has subroutes and we want to make it selected in the subroutes */}
-                <Route path={Routes.Wallets} children={frame(<Wallets />)} />
-                <Route path={Routes.Settings} children={frame(<Settings />)} exact />
-                <Route path={Routes.Plugins} children={frame(<Plugins />)} exact />
-                <Route children={<Redirect to={Routes.Personas} />} />
-            </Switch>
+            <Routes>
+                <Route path={RoutePaths.Welcome} element={<Welcome />} />
+                <Route path={RoutePaths.Setup} element={<Setup />} />
+                <Route path={RoutePaths.SignUp} element={<SignUp />} />
+                <Route path={RoutePaths.Login} element={<Login />} />
+                <Route path={RoutePaths.PrivacyPolicy} element={<PrivacyPolicy />} />
+                <Route path={RoutePaths.Personas} element={frame(<Personas />)} />
+                <Route path={`${RoutePaths.Wallets}/*`} element={frame(<Wallets />)} />
+                <Route path={RoutePaths.Settings} element={frame(<Settings />)} />
+                <Route path={RoutePaths.Labs} element={frame(<Labs />)} />
+                <Route element={<Navigate to={RoutePaths.Personas} />} />
+            </Routes>
         </Suspense>
     )
 }

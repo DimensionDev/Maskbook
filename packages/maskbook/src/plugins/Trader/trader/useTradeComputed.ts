@@ -1,33 +1,41 @@
+import { useContext } from 'react'
 import BigNumber from 'bignumber.js'
-import type { NativeTokenDetailed, ERC20TokenDetailed } from '../../../web3/types'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { pow10 } from '@masknet/web3-shared'
 import { TradeProvider, TradeStrategy } from '../types'
-import { useTrade as useEtherTrade } from './ether/useTrade'
-import { useTradeComputed as useEtherTradeComputed } from './ether/useTradeComputed'
-import { useV2Trade as useUniswapTrade } from './uniswap/useV2Trade'
+import { useTrade as useNativeTokenTrade } from './native/useTrade'
+import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
+import { useTrade as useUniswapTrade } from './uniswap/useTrade'
 import { useV2TradeComputed as useUniswapTradeComputed } from './uniswap/useV2TradeComputed'
 import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
 import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
+import { useTradeComputed as useDODOTradeComputed } from './dodo/useTradeComputed'
 import { useTrade as useZrxTrade } from './0x/useTrade'
 import { useTrade as useBalancerTrade } from './balancer/useTrade'
-import { unreachable } from '../../../utils/utils'
+import { useTrade as useDODOTrade } from './dodo/useTrade'
+import { unreachable } from '@dimensiondev/kit'
+import { TradeContext } from './useTradeContext'
 
 export function useTradeComputed(
     provider: TradeProvider,
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: NativeTokenDetailed | ERC20TokenDetailed,
-    outputToken?: NativeTokenDetailed | ERC20TokenDetailed,
+    inputToken?: FungibleTokenDetailed,
+    outputToken?: FungibleTokenDetailed,
 ) {
-    const inputTokenProduct = new BigNumber(10).pow(inputToken?.decimals ?? 0)
-    const outputTokenProduct = new BigNumber(10).pow(outputToken?.decimals ?? 0)
+    const inputTokenProduct = pow10(inputToken?.decimals ?? 0)
+    const outputTokenProduct = pow10(outputToken?.decimals ?? 0)
     const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
 
-    // ETH-WETH pair
-    const ether_ = useEtherTrade(inputToken, outputToken)
-    const ether = useEtherTradeComputed(
-        ether_.value ?? false,
+    // trade conetxt
+    const context = useContext(TradeContext)
+
+    // NATIVE-WNATIVE pair
+    const nativeToken_ = useNativeTokenTrade(inputToken, outputToken)
+    const nativeToken = useNativeTokenTradeComputed(
+        nativeToken_.value ?? false,
         strategy,
         inputAmount_,
         outputAmount_,
@@ -38,12 +46,8 @@ export function useTradeComputed(
     // uniswap like providers
     const uniswap_ = useUniswapTrade(
         strategy,
-        [TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider)
-            ? inputAmount_
-            : '0',
-        [TradeProvider.UNISWAP, TradeProvider.SUSHISWAP, TradeProvider.SASHIMISWAP].includes(provider)
-            ? outputAmount_
-            : '0',
+        context?.IS_UNISWAP_LIKE ? inputAmount_ : '0',
+        context?.IS_UNISWAP_LIKE ? outputAmount_ : '0',
         inputToken,
         outputToken,
     )
@@ -76,14 +80,28 @@ export function useTradeComputed(
         outputToken,
     )
 
-    if (ether_.value)
+    // dodo
+    const dodo_ = useDODOTrade(
+        strategy,
+        provider === TradeProvider.DODO ? inputAmount_ : '0',
+        provider === TradeProvider.DODO ? outputAmount_ : '0',
+        inputToken,
+        outputToken,
+    )
+    const dodo = useDODOTradeComputed(dodo_.value ?? null, strategy, inputToken, outputToken)
+
+    if (nativeToken_.value)
         return {
-            ...ether_,
-            value: ether,
+            ...nativeToken_,
+            value: nativeToken,
         }
 
     switch (provider) {
         case TradeProvider.UNISWAP:
+        case TradeProvider.SUSHISWAP:
+        case TradeProvider.SASHIMISWAP:
+        case TradeProvider.QUICKSWAP:
+        case TradeProvider.PANCAKESWAP:
             return {
                 ...uniswap_,
                 value: uniswap,
@@ -93,20 +111,15 @@ export function useTradeComputed(
                 ...zrx_,
                 value: zrx,
             }
-        case TradeProvider.SUSHISWAP:
-            return {
-                ...uniswap_,
-                value: uniswap,
-            }
-        case TradeProvider.SASHIMISWAP:
-            return {
-                ...uniswap_,
-                value: uniswap,
-            }
         case TradeProvider.BALANCER:
             return {
                 ...balancer_,
                 value: balancer,
+            }
+        case TradeProvider.DODO:
+            return {
+                ...dodo_,
+                value: dodo,
             }
         default:
             unreachable(provider)

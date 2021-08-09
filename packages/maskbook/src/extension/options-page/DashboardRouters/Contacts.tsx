@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
+import { MaskColorVar } from '@masknet/theme'
 import DashboardRouterContainer from './Container'
 import { TextField, IconButton, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -127,7 +128,7 @@ export default function DashboardContactsRouter() {
             InputProps={{
                 endAdornment: (
                     <IconButton size="small" onClick={() => setSearch('')}>
-                        {search ? <ClearIcon /> : <SearchIcon />}
+                        {search ? <ClearIcon /> : <SearchIcon htmlColor={MaskColorVar.textPrimary} />}
                     </IconButton>
                 ),
             }}
