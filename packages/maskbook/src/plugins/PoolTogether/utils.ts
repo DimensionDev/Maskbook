@@ -57,10 +57,11 @@ export const getNetworkColor = (chainId: ChainId) => {
     }
 }
 
-export const getPrizePeriod = (t: I18NFunction, preiod: number) => {
-    return preiod === ONE_DAY_SECONDS
-        ? t('daily')
-        : preiod === ONE_WEEK_SECONDS
-        ? t('weekly')
-        : t('days', { preiod: (preiod / ONE_WEEK_SECONDS).toFixed() })
+export function getPrizePeriod(t: I18NFunction, preiod: number) {
+    if (preiod === ONE_DAY_SECONDS) {
+        return t('daily')
+    } else if (preiod === ONE_WEEK_SECONDS) {
+        return t('weekly')
+    }
+    return t('days', { preiod: (preiod / ONE_WEEK_SECONDS).toFixed() })
 }
