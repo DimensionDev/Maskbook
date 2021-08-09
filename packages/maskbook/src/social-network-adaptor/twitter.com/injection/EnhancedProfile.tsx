@@ -5,7 +5,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { createReactRootShadowed, MaskMessage, startWatch } from '../../../utils'
 import {
     searchForegroundColorSelector,
-    searchProfileActiveTabSelector,
     searchProfileEmptySelector,
     searchProfileTabListLastChildSelector,
     searchProfileTabListSelector,
@@ -167,6 +166,7 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
     const onClose = () => {
         setActive(false)
         MaskMessage.events.profileNFTsPageUpdate.sendToLocal({ show: false })
+        resetStatus()
     }
     const onOpen = () => {
         MaskMessage.events.profileNFTsPageUpdate.sendToLocal({ show: true })
@@ -174,17 +174,6 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
     }
 
     useBind(onClose)
-
-    const tab = searchProfileActiveTabSelector().evaluate()
-    useEffect(() => {
-        const onClick = () => {
-            resetStatus()
-            setActive(false)
-        }
-
-        tab?.addEventListener('click', onClick, { once: true })
-        return () => tab?.removeEventListener('click', onClick)
-    }, [tab, resetStatus])
 
     const onClick = useCallback(() => {
         onOpen()
