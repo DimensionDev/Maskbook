@@ -10,13 +10,13 @@ import { useWeb3 } from './useWeb3'
 type Call = [string, string]
 
 export enum MulticalStateType {
-    UNKNOWN,
+    UNKNOWN = 0,
     /** Wait for tx call */
-    PENDING,
+    PENDING = 1,
     /** Tx call resolved */
-    SUCCEED,
+    SUCCEED = 2,
     /** Tx call rejected */
-    FAILED,
+    FAILED = 3,
 }
 
 export type MulticalState =

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { flatten, uniq } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
-import { useSnackbar, VariantType } from '@masknet/theme'
+import { getMaskColor, useSnackbar, VariantType } from '@masknet/theme'
 import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles, DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@material-ui/core'
 import {
@@ -126,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.mode === 'light' ? '#15181B' : '#D9D9D9',
     },
     tabs: {
-        backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+        backgroundColor: getMaskColor(theme).twitterBackground,
         width: 536,
         height: 36,
         minHeight: 36,

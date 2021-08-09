@@ -1,27 +1,32 @@
 import { Switch, experimentalStyled as styled, switchClasses } from '@material-ui/core'
 
-export default styled(Switch)(() => ({
-    [`&.${switchClasses.root}`]: {
-        width: 72,
-        height: 48,
-    },
-    [`& .${switchClasses.thumb}`]: {
-        width: 24,
-        height: 24,
-    },
-    [`& .${switchClasses.checked}`]: {
-        [`&.${switchClasses.switchBase}`]: {
-            transform: 'translateX(28px)',
+export default styled<typeof Switch>(Switch)(({ size }) => {
+    const isSmall = size === 'small'
+    const base = isSmall ? 16 : 24
+    return {
+        [`&.${switchClasses.root}`]: {
+            width: base * 3,
+            height: base * 2,
+            padding: isSmall ? 8 : 12,
         },
-        [`&+.${switchClasses.track}`]: {
-            opacity: '0.1 !important',
+        [`& .${switchClasses.thumb}`]: {
+            width: base,
+            height: base,
         },
-    },
-    [`& .${switchClasses.track}`]: {
-        borderRadius: 12,
-    },
-    [`& .${switchClasses.switchBase}`]: {
-        top: 3,
-        transform: 'translateX(2px)',
-    },
-}))
+        [`& .${switchClasses.checked}`]: {
+            [`&.${switchClasses.switchBase}`]: {
+                transform: `translateX(${isSmall ? 20 : 28}px)`,
+            },
+            [`&+.${switchClasses.track}`]: {
+                opacity: '0.1 !important',
+            },
+        },
+        [`& .${switchClasses.track}`]: {
+            borderRadius: base / 2,
+        },
+        [`& .${switchClasses.switchBase}`]: {
+            top: isSmall ? 4 : 3,
+            transform: `translateX(${isSmall ? 4 : 2}px)`,
+        },
+    }
+})

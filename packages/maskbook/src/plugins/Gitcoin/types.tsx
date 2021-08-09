@@ -3,8 +3,8 @@ import type { ERC20TokenRecord } from '../Wallet/database/types'
 import type { ChainId, EthereumTokenType } from '@masknet/web3-shared'
 
 export enum GitcoinGrantFailedReason {
-    InvalidURL,
-    FetchFailed,
+    InvalidURL = 0,
+    FetchFailed = 1,
 }
 
 //#endregion

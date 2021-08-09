@@ -12,5 +12,12 @@ export enum RoutePaths {
     WalletsSell = '/wallets/sell',
     WalletsHistory = '/wallets/history',
     Settings = '/settings',
-    Plugins = '/plugins',
+    Labs = '/labs',
 }
+
+export enum MarketTrendProvider {
+    COIN_GECKO = 0,
+    COIN_MARKET_CAP = 1,
+    UNISWAP_INFO = 2,
+}
+export { TradeProvider } from '@masknet/public-api'

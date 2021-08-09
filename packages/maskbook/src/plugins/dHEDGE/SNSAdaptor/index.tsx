@@ -44,11 +44,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer link={pool.link} address={pool.address} />
     },
     GlobalInjection: function Component() {
-        return (
-            <>
-                <InvestDialog />
-            </>
-        )
+        return <InvestDialog />
     },
 }
 

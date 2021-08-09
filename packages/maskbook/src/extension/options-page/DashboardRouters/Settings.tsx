@@ -45,7 +45,7 @@ import { useAvailableTraderProviders } from '../../../plugins/Trader/trending/us
 import { useAvailableDataProviders } from '../../../plugins/Trader/trending/useAvailableDataProviders'
 import { useCurrentTradeProvider } from '../../../plugins/Trader/trending/useCurrentTradeProvider'
 import { useCurrentDataProvider } from '../../../plugins/Trader/trending/useCurrentDataProvider'
-import { DataProvider, TradeProvider } from '../../../plugins/Trader/types'
+import { DataProvider, TradeProvider } from '@masknet/public-api'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -170,7 +170,7 @@ export default function DashboardSettingsRouter() {
     const { value: dataProviders = [] } = useAvailableDataProviders()
     const { value: tradeProviders = [] } = useAvailableTraderProviders()
     const dataProvider = useCurrentDataProvider(dataProviders)
-    const tradeProvider = useCurrentTradeProvider(tradeProviders)
+    const tradeProvider = useCurrentTradeProvider()
     //#endregion
 
     return (

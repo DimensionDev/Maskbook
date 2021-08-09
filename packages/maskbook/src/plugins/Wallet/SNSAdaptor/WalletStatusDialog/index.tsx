@@ -20,6 +20,7 @@ import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { currentProviderSettings } from '../../settings'
 import { RecentTransactionList } from './RecentTransactionList'
+import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 3),
         marginBottom: theme.spacing(2),
         display: 'flex',
-        backgroundColor: theme.palette.mode === 'dark' ? '#17191D' : '#F7F9FA',
+        backgroundColor: getMaskColor(theme).twitterBackground,
         borderRadius: 8,
         alignItems: 'center',
     },

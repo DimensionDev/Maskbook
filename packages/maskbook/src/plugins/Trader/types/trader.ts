@@ -1,23 +1,15 @@
 import type BigNumber from 'bignumber.js'
 import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@masknet/web3-shared'
+import type { TradeProvider } from '@masknet/public-api'
 
-export enum TradeProvider {
-    UNISWAP,
-    ZRX, // 0x
-    // ONE_INCH,
-    SUSHISWAP,
-    SASHIMISWAP,
-    BALANCER,
-    QUICKSWAP,
-    PANCAKESWAP,
-}
+export { TradeProvider } from '@masknet/public-api'
 
 export enum WarningLevel {
     LOW = 1,
-    MEDIUM,
-    HIGH,
-    CONFIRMATION_REQUIRED,
-    BLOCKED,
+    MEDIUM = 2,
+    HIGH = 3,
+    CONFIRMATION_REQUIRED = 4,
+    BLOCKED = 5,
 }
 
 // ZRX supported source swap list
@@ -74,13 +66,13 @@ export interface TradeComputed<T = unknown> {
 }
 
 export enum TradeStrategy {
-    ExactIn,
-    ExactOut,
+    ExactIn = 0,
+    ExactOut = 1,
 }
 
 export enum TokenPanelType {
-    Input,
-    Output,
+    Input = 0,
+    Output = 1,
 }
 
 export interface TradeContext {

@@ -32,11 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     GlobalInjection: function Component() {
-        return (
-            <>
-                <DepositDialog />
-            </>
-        )
+        return <DepositDialog />
     },
 }
 

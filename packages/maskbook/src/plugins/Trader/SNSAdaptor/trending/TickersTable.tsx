@@ -13,7 +13,8 @@ import {
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
-import { DataProvider, Ticker } from '../../types'
+import type { Ticker } from '../../types'
+import { DataProvider } from '@masknet/public-api'
 import { formatElapsed } from '../../../Wallet/formatter'
 
 const useStyles = makeStyles((theme: Theme) => ({

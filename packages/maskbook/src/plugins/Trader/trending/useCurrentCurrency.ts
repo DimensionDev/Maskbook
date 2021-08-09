@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useValueRef } from '@masknet/shared'
-import type { DataProvider, Currency, Settings } from '../types'
+import type { Currency, Settings } from '../types'
+import type { DataProvider } from '@masknet/public-api'
 import { getCurrentDataProviderGeneralSettings } from '../settings'
 import { PluginTraderRPC } from '../messages'
 

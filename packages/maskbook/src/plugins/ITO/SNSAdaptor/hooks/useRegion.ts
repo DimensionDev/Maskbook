@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/prefer-enum-initializers */
+
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
