@@ -9,6 +9,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { useAccount } from '@masknet/web3-shared'
 import classnames from 'classnames'
 import { Trans } from 'react-i18next'
+import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -114,9 +115,21 @@ export function WalletRiskWarningDialog() {
                     size="large">
                     {t('cancel')}
                 </Button>
-                <Button className={classes.button} fullWidth variant="contained" size="large" onClick={onConfirm}>
-                    {t('confirm')}
-                </Button>
+                <ActionButtonPromise
+                    className={classes.button}
+                    variant="contained"
+                    fullWidth
+                    disabled={!account}
+                    size="large"
+                    init={t('confirm')}
+                    waiting={t('wallet_risk_confirm_confirming')}
+                    failed={t('wallet_risk_confirm_failed')}
+                    executor={onConfirm}
+                    completeIcon={null}
+                    failIcon={null}
+                    failedOnClick="use executor"
+                    complete={t('done')}
+                />
             </DialogActions>
         </InjectedDialog>
     )

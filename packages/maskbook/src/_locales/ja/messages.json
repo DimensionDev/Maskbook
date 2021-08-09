@@ -298,6 +298,8 @@
     "wallet_risk_warning_dialog_title": "",
     "wallet_risk_warning_no_select_wallet": "",
     "wallet_risk_warning_content": "",
+    "wallet_risk_confirm_confirming": "",
+    "wallet_risk_confirm_failed": "",
     "input_length_exceed_prompt": "{{name}}の長さは{{length}}より短くしてください。",
     "relative_time_days_ago": "{{days}}日前",
     "relative_time_hours_ago": "{{hours}}時間前",
