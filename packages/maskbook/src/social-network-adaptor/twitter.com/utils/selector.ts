@@ -19,20 +19,21 @@ const querySelectorAll = <T extends E>(selector: string) => {
 export const searchProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label="Profile timelines"][role="navigation"]')
 export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="tablist"][data-testid="ScrollSnap-List"] > :last-child')
+    querySelector<E>('[aria-label="Profile timelines"] [role="tablist"][data-testid="ScrollSnap-List"] > :last-child')
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [role="region"] [aria-label]')
 export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
 export const searchProfileActiveTabSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="tablist"] [role="tab"][aria-selected="true"]')
+    querySelector<E>('[aria-label="Profile timelines"] [role="tablist"] [role="tab"][aria-selected="true"]')
 export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="tablist"] [role="tab"][aria-selected="false"]')
+    querySelector<E>('[aria-label="Profile timelines"] [role="tablist"] [role="tab"][aria-selected="false"]')
 export const searchProfileActiveTabStatusLineSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="tablist"] [role="tab"][aria-selected="true"] > div > div')
+    querySelector<E>('[aria-label="Profile timelines"] [role="tablist"] [role="tab"][aria-selected="true"] > div > div')
 export const searchProfileActiveTabLabelSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="tablist"] [role="tab"][aria-selected="true"] > div')
-export const searchProfileTabListSelector = () => querySelectorAll('[role="tablist"][data-testid="ScrollSnap-List"] a')
+    querySelector<E>('[aria-label="Profile timelines"] [role="tablist"] [role="tab"][aria-selected="true"] > div')
+export const searchProfileTabListSelector = () =>
+    querySelectorAll('[aria-label="Profile timelines"] [role="tablist"][data-testid="ScrollSnap-List"] a')
 export const searchForegroundColorSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [aria-label="Back"][role="button"] > div')
 
