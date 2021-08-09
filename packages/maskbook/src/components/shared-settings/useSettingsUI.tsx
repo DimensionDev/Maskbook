@@ -6,18 +6,18 @@ import {
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
-    makeStyles,
     MenuItem,
     Select,
     SelectProps,
     Switch,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { texts } from '../../settings/createSettings'
 import { useMatchXS } from '../../utils'
 import { useStylesExtends } from '@masknet/shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: { listStyleType: 'none', width: '100%' },
     secondaryAction: { paddingLeft: theme.spacing(2) },
     listItemText: {
@@ -123,7 +123,7 @@ export function SettingsUIEnum<T extends object>(
 ) {
     const { primary, secondary } = withDefaultText(props)
     const xsMatched = useMatchXS()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { value, enumObject, getText, SelectProps } = props
     const ui = useEnumSettings(value, enumObject, getText, SelectProps)
     return (

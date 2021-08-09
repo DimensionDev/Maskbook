@@ -2,6 +2,16 @@
 import type { ClassNameMap } from '@material-ui/styles'
 // Priority: classes from props > configHooks > defaultStyles
 export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
+    defaultStyles: { classes?: ClassNameMap<InternalKeys> },
+    props: { classes?: Partial<ClassNameMap<OverwrittenKeys>> },
+    useConfigHooks?: () => Partial<ClassNameMap<OverwrittenKeys>>,
+): ClassNameMap<InternalKeys> & Partial<ClassNameMap<OverwrittenKeys>>
+export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
+    defaultStyles: ClassNameMap<InternalKeys>,
+    props: { classes?: Partial<ClassNameMap<OverwrittenKeys>> },
+    useConfigHooks?: () => Partial<ClassNameMap<OverwrittenKeys>>,
+): ClassNameMap<InternalKeys> & Partial<ClassNameMap<OverwrittenKeys>>
+export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
     defaultStyles: { classes?: ClassNameMap<InternalKeys> } | ClassNameMap<InternalKeys>,
     props: { classes?: Partial<ClassNameMap<OverwrittenKeys>> },
     useConfigHooks?: () => Partial<ClassNameMap<OverwrittenKeys>>,
