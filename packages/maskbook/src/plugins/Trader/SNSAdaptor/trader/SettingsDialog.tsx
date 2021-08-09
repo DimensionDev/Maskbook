@@ -23,7 +23,7 @@ import {
     currentTradeProviderSettings,
     getCurrentTradeProviderGeneralSettings,
 } from '../../settings'
-import { SLIPPAGE_TOLERANCE_DEFAULT } from '../../constants'
+import { SLIPPAGE_SETTINGS_DEFAULT } from '../../constants'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { PluginTraderMessages } from '../../messages'
 import stringify from 'json-stable-stringify'
@@ -66,7 +66,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
 
     const onReset = useCallback(() => {
         currentTradeProviderSettings.value = TradeProvider.UNISWAP_V2
-        currentSlippageSettings.value = SLIPPAGE_TOLERANCE_DEFAULT
+        currentSlippageSettings.value = SLIPPAGE_SETTINGS_DEFAULT
         if (provider === TradeProvider.ZRX)
             getCurrentTradeProviderGeneralSettings(provider).value = stringify({
                 pools: getEnumAsArray(ZrxTradePool).map((x) => x.value),
