@@ -6,7 +6,7 @@ import { ChainId, ProviderType } from '@masknet/web3-shared'
 import { resetAccount, updateAccount } from '../../../../plugins/Wallet/services'
 import {
     currentChainIdSettings,
-    currentIsMetamaskLockedSettings,
+    currentIsMetaMaskLockedSettings,
     currentProviderSettings,
 } from '../../../../plugins/Wallet/settings'
 
@@ -48,9 +48,9 @@ async function onError(error: string) {
 
 export async function updateIsMetaMaskLockedSettings() {
     try {
-        currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked())
+        currentIsMetaMaskLockedSettings.value = !(await provider?._metamask?.isUnlocked())
     } catch {
-        currentIsMetamaskLockedSettings.value = false
+        currentIsMetaMaskLockedSettings.value = false
     }
 }
 
