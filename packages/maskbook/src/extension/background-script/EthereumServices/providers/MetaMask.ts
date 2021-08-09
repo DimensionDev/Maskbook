@@ -14,8 +14,9 @@ let provider: MetaMaskInpageProvider | null = null
 let web3: Web3 | null = null
 
 async function onAccountsChanged(accounts: string[]) {
-    currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked()) && accounts.length === 0
+    await updateIsMetaMaskLockedSettings()
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
+
     await updateAccount({
         account: first(accounts),
         providerType: ProviderType.MetaMask,
@@ -25,7 +26,7 @@ async function onAccountsChanged(accounts: string[]) {
 }
 
 async function onChainIdChanged(id: string) {
-    currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked())
+    await updateIsMetaMaskLockedSettings()
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
 
     // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
@@ -43,6 +44,14 @@ async function onError(error: string) {
     await resetAccount({
         providerType: ProviderType.MetaMask,
     })
+}
+
+export async function updateIsMetaMaskLockedSettings() {
+    try {
+        currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked())
+    } catch {
+        currentIsMetamaskLockedSettings.value = false
+    }
 }
 
 export function createProvider() {
@@ -66,8 +75,8 @@ export function createWeb3() {
 
 export async function requestAccounts() {
     const web3 = createWeb3()
-    const accounts = await web3.eth.requestAccounts()
     const chainId = await web3.eth.getChainId()
+    const accounts = await web3.eth.requestAccounts()
     return {
         chainId,
         accounts,
