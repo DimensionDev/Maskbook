@@ -11,7 +11,6 @@ import {
     useAccount,
     useChainId,
     useCollectibles,
-    useWallet,
     Wallet,
 } from '@masknet/web3-shared'
 import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
@@ -66,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface CollectibleListUIProps {
     provider: CollectibleProvider
-    wallet: Wallet
+    wallet?: Wallet
     collectibles: (ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed)[]
     loading: boolean
     collectiblesRetry: () => void
@@ -180,7 +179,6 @@ export interface CollectibleListAddressProps {
 }
 
 export function CollectibleListAddress({ address }: CollectibleListAddressProps) {
-    const wallet = useWallet()
     const provider = useValueRef(currentCollectibleDataProviderSettings)
     const chainId = ChainId.Mainnet
     const [page, setPage] = useState(0)
@@ -197,11 +195,9 @@ export function CollectibleListAddress({ address }: CollectibleListAddressProps)
         setPage(0)
     }, [provider, address])
 
-    if (!wallet) return null
     return (
         <CollectibleListUI
             provider={provider}
-            wallet={wallet}
             collectibles={collectibles}
             loading={collectiblesLoading}
             collectiblesRetry={collectiblesRetry}

@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 export interface CollectibleCardProps {
     provider: CollectibleProvider
-    wallet: Wallet
+    wallet?: Wallet
     token: ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed
     readonly?: boolean
 }
@@ -49,7 +49,9 @@ export function CollectibleCard(props: CollectibleCardProps) {
     return (
         <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(chainId, provider, token)}>
             <Card className={classes.root} style={{ width: 160, height: 220 }}>
-                {readonly ? null : <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />}
+                {readonly || !wallet ? null : (
+                    <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
+                )}
                 {token.asset?.image ? (
                     <Image
                         component="img"
