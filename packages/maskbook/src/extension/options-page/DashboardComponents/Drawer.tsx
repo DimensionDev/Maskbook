@@ -1,10 +1,10 @@
 import { Fragment } from 'react'
+import { Linkedin, Smile } from 'react-feather'
 import classNames from 'classnames'
 import { List, ListItem, ListItemIcon, ListItemText, Typography, Box, Divider } from '@material-ui/core'
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
 import { Link, useRouteMatch } from 'react-router-dom'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
 import { useI18N, useMatchXS, extendsTheme } from '../../../utils'
 import Logo from './MaskbookLogo'
 import { Carousel } from './Carousel'
@@ -130,6 +130,10 @@ export default function Drawer(props: DrawerProps) {
         open('https://forms.gle/Tb26MEcE3kLar6CFA')
     }
 
+    const onJoin = () => {
+        open('https://www.linkedin.com/company/masknetwork/jobs/')
+    }
+
     const onDebugPage = (event: React.MouseEvent) => {
         if (event.shiftKey) {
             browser.tabs.create({
@@ -190,10 +194,29 @@ export default function Drawer(props: DrawerProps) {
                                 <ListItem
                                     className={classNames(classes.drawerItem, classes.drawerFeedback)}
                                     button
+                                    onClick={onJoin}>
+                                    <ListItemIcon
+                                        className={classes.drawerItemIcon}
+                                        children={<Linkedin fontSize={14} />}
+                                    />
+                                    <ListItemText
+                                        className={classes.drawerItemText}
+                                        primary={t('join_us')}
+                                        primaryTypographyProps={{ className: classes.drawerItemTextPrimary }}
+                                    />
+                                    {xsMatched ? (
+                                        <ListItemIcon>
+                                            <ChevronRightIcon color="action" />
+                                        </ListItemIcon>
+                                    ) : null}
+                                </ListItem>
+                                <ListItem
+                                    className={classNames(classes.drawerItem, classes.drawerFeedback)}
+                                    button
                                     onClick={onFeedback}>
                                     <ListItemIcon
                                         className={classes.drawerItemIcon}
-                                        children={<SentimentSatisfiedOutlinedIcon fontSize="small" />}
+                                        children={<Smile fontSize="small" />}
                                     />
                                     <ListItemText
                                         className={classes.drawerItemText}
