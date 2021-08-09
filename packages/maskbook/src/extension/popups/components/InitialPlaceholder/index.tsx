@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { makeStyles, Box, Button, Typography } from '@material-ui/core'
-import { useEnterDashboard } from '../../hook/useEnter'
+import { useEnterDashboard } from '../../hook/useEnterDashboard'
 import { useRouteMatch } from 'react-router-dom'
 import { DialogRoutes } from '../../index'
 import { MasksIcon, MaskWalletIcon } from '@masknet/icons'

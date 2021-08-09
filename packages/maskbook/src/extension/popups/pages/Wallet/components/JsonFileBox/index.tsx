@@ -70,10 +70,7 @@ export const JsonFileBox = memo<JsonFileBox>(({ onChange }) => {
                         if (currentTarget.files) setFile(currentTarget.files.item(0))
                     }}
                 />
-                <div
-                    className={classes.enter}
-                    data-active={over}
-                    onClick={() => inputRef.current && inputRef.current.click()}>
+                <div className={classes.enter} data-active={over} onClick={() => inputRef.current?.click()}>
                     <FileIcon style={{ fontSize: 32, width: 32, height: 32 }} />
                     <Typography className={classes.tips}>
                         {over ? 'Drag your file into here…' : file ? file.name : 'Click or drag your file here'}

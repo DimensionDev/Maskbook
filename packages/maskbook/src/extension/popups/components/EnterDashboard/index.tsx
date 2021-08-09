@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Box, Typography } from '@material-ui/core'
-import { useEnterDashboard } from '../../hook/useEnter'
+import { useEnterDashboard } from '../../hook/useEnterDashboard'
 
 export const EnterDashboard = memo(() => {
     const onEnter = useEnterDashboard()
