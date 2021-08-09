@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import type { Asset, FungibleTokenDetailed } from '@masknet/web3-shared'
+import type { Asset } from '@masknet/web3-shared'
 import { List, ListItem, ListItemText, makeStyles } from '@material-ui/core'
 import { ArrowRightIcon } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'

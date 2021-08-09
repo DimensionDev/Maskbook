@@ -2,7 +2,6 @@ import { memo, useMemo, useState } from 'react'
 import { makeStyles, Tab, Tabs, TextField, Typography } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
 import { z as zod } from 'zod'
-import { isUppercase, isLowercase, isDigit } from '@masknet/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { useI18N } from '../../../../../utils'
@@ -112,38 +111,10 @@ const ImportWallet = memo(() => {
                     .string()
                     .min(8)
                     .max(20)
-                    .refine(
-                        (data) =>
-                            Array.from(data).some((char) => {
-                                const code = char.charCodeAt(0)
-                                return isUppercase(code)
-                            }),
-                        'Must contain an uppercase character',
-                    )
-                    .refine(
-                        (data) =>
-                            Array.from(data).some((char) => {
-                                const code = char.charCodeAt(0)
-                                return isLowercase(code)
-                            }),
-                        'Must contain a lowercase character',
-                    )
-                    .refine(
-                        (data) =>
-                            Array.from(data).some((char) => {
-                                const code = char.charCodeAt(0)
-                                return isDigit(code)
-                            }),
-                        'Must contain a number',
-                    )
-                    .refine(
-                        (data) =>
-                            Array.from(data).some((char) => {
-                                const code = char.charCodeAt(0)
-                                return !(isUppercase(code) || isLowercase(code) || isDigit(code))
-                            }),
-                        'Must contain a special character',
-                    ),
+                    .refine((input) => /[A-Z]/.test(input), 'Must contain an uppercase character')
+                    .refine((input) => /[a-z]/.test(input), 'Must contain a lowercase character')
+                    .refine((input) => /\d/.test(input), 'Must contain a number')
+                    .refine((input) => /[^\dA-Za-z]/.test(input), 'Must contain a special character'),
                 confirm: zod.string().min(8).max(20),
             })
             .refine((data) => data.password === data.confirm, {
