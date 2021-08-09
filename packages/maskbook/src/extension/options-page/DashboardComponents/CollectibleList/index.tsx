@@ -103,7 +103,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     if (loading)
         return (
             <Box className={classes.root}>
-                {Array.from({ length: 4 })
+                {Array.from({ length: 6 })
                     .fill(0)
                     .map((_, i) => (
                         <Box className={classes.card} display="flex" flexDirection="column" key={i}>

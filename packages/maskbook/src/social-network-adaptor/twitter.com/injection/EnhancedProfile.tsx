@@ -107,37 +107,28 @@ function clearStatus() {
 }
 
 function resetStatus() {
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+    if (!eleTab) return
+
     const eleEmpty = searchProfileEmptySelector().evaluate()
     if (eleEmpty) eleEmpty.style.display = ''
     const elePage = searchProfileTabPageSelector().evaluate()
     if (elePage) elePage.style.display = ''
-}
 
-const onEvent = (parent: HTMLElement, handler: () => void) => {
-    const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) elePage.style.display = ''
-    const line = parent.querySelector('div > div') as HTMLDivElement
-    if (line) line.style.display = ''
-    handler()
-}
-
-const addEventListener = (tabList: HTMLElement[], handler: () => void) => {
-    tabList.map((v) => {
-        v.addEventListener('click', () => onEvent(v, handler), { once: true })
-    })
-}
-
-const removeEventListener = (tabList: HTMLElement[], handler: () => void) => {
-    tabList.map((v) => {
-        v.removeEventListener('click', () => onEvent(v, handler))
-    })
-}
-const useBind = (handler: () => void) => {
     const tabList = searchProfileTabListSelector().evaluate()
+    tabList.map((v) => {
+        const _v = v.querySelector('div') as HTMLDivElement
+        _v.style.color = ''
+        const line = v.querySelector('div > div') as HTMLDivElement
+        line.style.display = ''
+    })
+}
+
+const useBind = (handler: () => void) => {
     useEffect(() => {
-        addEventListener(tabList, handler)
-        return () => removeEventListener(tabList, handler)
-    }, [tabList, addEventListener, removeEventListener, handler])
+        window.addEventListener('replacestate', handler)
+        return () => window.removeEventListener('replacestate', handler)
+    }, [handler])
 }
 
 function getStyle() {
