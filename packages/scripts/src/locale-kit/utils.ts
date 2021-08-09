@@ -2,7 +2,7 @@
 import { promises as fs, readdirSync } from 'fs'
 import { difference, keys, uniq, without } from 'lodash'
 import { resolve, relative } from 'path'
-import { EXTENSION_SOURCE, ROOT_PATH } from '../utils'
+import { EXTENSION_SOURCE, ROOT_PATH, walk } from '../utils'
 import { getUsedKeys } from './ast'
 
 export const LOCALE_PATH = resolve(EXTENSION_SOURCE, '_locales')
@@ -27,7 +27,7 @@ export async function writeMessages(name: string, messages: unknown) {
 
 export async function findAllUsedKeys() {
     const usedKeys: string[] = []
-    for await (const file of walk(EXTENSION_SOURCE)) {
+    for await (const file of walk(EXTENSION_SOURCE, /\.(tsx?)$/)) {
         usedKeys.push(...getUsedKeys(await fs.readFile(file, 'utf-8')))
     }
     return uniq(usedKeys)
@@ -48,15 +48,4 @@ export async function findAllUnsyncedLocales(locales = without(LOCALE_NAMES, 'en
         }
     }
     return record
-}
-
-async function* walk(dir: string): AsyncIterableIterator<string> {
-    for await (const dirent of await fs.opendir(dir)) {
-        const entry = resolve(dir, dirent.name)
-        if (dirent.isDirectory()) {
-            yield* walk(entry)
-        } else if (dirent.isFile() && /\.(tsx?)$/.test(entry)) {
-            yield entry
-        }
-    }
 }
