@@ -1,6 +1,6 @@
 import { createContext, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { useValueRef } from '@masknet/shared'
+import { useStylesExtends, useValueRef } from '@masknet/shared'
 import {
     ChainId,
     CollectibleProvider,
@@ -31,6 +31,13 @@ const useStyles = makeStyles((theme) => ({
     },
     empty: {
         display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+    },
+    button: {
+        marginTop: theme.spacing(1),
     },
     container: {
         height: 'calc(100% - 52px)',
@@ -63,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-interface CollectibleListUIProps {
+interface CollectibleListUIProps extends withClasses<'empty' | 'button'> {
     provider: CollectibleProvider
     wallet?: Wallet
     collectibles: (ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed)[]
@@ -76,20 +83,21 @@ interface CollectibleListUIProps {
     onNextPage: () => void
     onPrevPage: () => void
 }
-function CollectibleListUI({
-    provider,
-    wallet,
-    collectibles,
-    loading,
-    hasNextPage,
-    collectiblesRetry,
-    error,
-    readonly,
-    page,
-    onNextPage,
-    onPrevPage,
-}: CollectibleListUIProps) {
-    const classes = useStyles()
+function CollectibleListUI(props: CollectibleListUIProps) {
+    const {
+        provider,
+        wallet,
+        collectibles,
+        loading,
+        hasNextPage,
+        collectiblesRetry,
+        error,
+        readonly,
+        page,
+        onNextPage,
+        onPrevPage,
+    } = props
+    const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
     if (loading)
@@ -116,21 +124,9 @@ function CollectibleListUI({
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
             <Box className={classes.container}>
                 {error || collectibles.length === 0 ? (
-                    <Box
-                        className={classes.empty}
-                        sx={{
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            height: '100%',
-                        }}>
+                    <Box className={classes.empty}>
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
-                        <Button
-                            sx={{
-                                marginTop: 1,
-                            }}
-                            variant="text"
-                            onClick={() => collectiblesRetry()}>
+                        <Button className={classes.button} variant="text" onClick={() => collectiblesRetry()}>
                             {t('plugin_collectible_retry')}
                         </Button>
                     </Box>
@@ -174,14 +170,20 @@ function CollectibleListUI({
     )
 }
 
-export interface CollectibleListAddressProps {
+const useCollectibleListAddressStyles = makeStyles((theme) => ({
+    empty: {},
+    button: {},
+}))
+export interface CollectibleListAddressProps extends withClasses<'empty' | 'button'> {
     address: string
 }
 
-export function CollectibleListAddress({ address }: CollectibleListAddressProps) {
+export function CollectibleListAddress(props: CollectibleListAddressProps) {
+    const { address } = props
     const provider = useValueRef(currentCollectibleDataProviderSettings)
     const chainId = ChainId.Mainnet
     const [page, setPage] = useState(0)
+    const classes = useStylesExtends(useCollectibleListAddressStyles(), props)
 
     const {
         value = { collectibles: [], hasNextPage: false },
@@ -197,6 +199,7 @@ export function CollectibleListAddress({ address }: CollectibleListAddressProps)
 
     return (
         <CollectibleListUI
+            classes={classes}
             provider={provider}
             collectibles={collectibles}
             loading={collectiblesLoading}

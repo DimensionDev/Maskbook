@@ -190,19 +190,38 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
     )
 }
 
+const EnhancedProfileaPageStyles = makeStyles<Theme, StyleProps>((theme) => ({
+    empty: {
+        paddingTop: 36,
+        paddingBottom: 36,
+        '& > p': {
+            fontSize: 18,
+            fontFamily: 'inherit',
+            fontWeight: 700,
+            color: 'black',
+        },
+    },
+    button: {
+        backgroundColor: (props: StyleProps) => props.activeColor,
+        color: 'white',
+        marginTop: 18,
+        '&:hover': {
+            backgroundColor: (props: StyleProps) => props.activeColor,
+        },
+    },
+}))
+
 export function EnhancedProfileaPage() {
     const [show, setShow] = useState(false)
+    const style = getStyle()
+    const classes = EnhancedProfileaPageStyles(style)
 
     useEffect(() => {
         MaskMessage.events.profileNFTsPageUpdate.on((data) => {
             setShow(data.show)
         })
-        return () =>
-            MaskMessage.events.profileNFTsPageUpdate.off((data) => {
-                setShow(false)
-            })
     }, [])
 
     const resolvedAddress = useEthereumAddress()
-    return <>{show ? <CollectibleListAddress address={resolvedAddress ?? ''} /> : null}</>
+    return <>{show ? <CollectibleListAddress classes={classes} address={resolvedAddress ?? ''} /> : null}</>
 }
