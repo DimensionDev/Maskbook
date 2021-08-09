@@ -1,16 +1,17 @@
 import {
     currySameAddress,
+    EthereumTokenType,
     FungibleTokenDetailed,
     makeSortTokenFn,
-    TokenListsState,
     useAccount,
     useAssetsByTokenList,
+    useERC20TokenDetailed,
     useERC20TokensDetailedFromTokenLists,
     useEthereumConstants,
 } from '@masknet/web3-shared'
 import { makeStyles, Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { useStylesExtends } from '@masknet/shared'
 import { TokenInList } from './TokenInList'
@@ -48,10 +49,16 @@ export function FixedTokenList(props: FixedTokenListProps) {
     const [address, setAddress] = useState('')
     const { ERC20_TOKEN_LISTS } = useEthereumConstants()
 
-    const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(
-        ERC20_TOKEN_LISTS,
-        keyword,
-    )
+    const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
+        useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS, keyword)
+
+    //#region add token by address
+    const matchedTokenAddress = useMemo(() => {
+        if (!keyword || !EthereumAddress.isValid(keyword) || erc20TokensDetailed.length) return
+        return keyword
+    }, [keyword, erc20TokensDetailed.length])
+    const { value: searchedToken, loading: searchedTokenLoading } = useERC20TokenDetailed(matchedTokenAddress ?? '')
+    //#endregion
 
     const filteredTokens = erc20TokensDetailed.filter(
         (token) =>
@@ -59,7 +66,9 @@ export function FixedTokenList(props: FixedTokenListProps) {
             (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
     )
 
-    const renderTokens = uniqBy([...tokens, ...filteredTokens], (x) => x.address.toLowerCase())
+    const renderTokens = uniqBy([...tokens, ...filteredTokens, ...(searchedToken ? [searchedToken] : [])], (x) =>
+        x.address.toLowerCase(),
+    )
 
     const {
         loading: loadingAssets,
@@ -82,8 +91,8 @@ export function FixedTokenList(props: FixedTokenListProps) {
     )
     //#endregion
 
-    if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
-    if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token...')
+    if (erc20TokensDetailedLoading) return renderPlaceholder('Loading token lists...')
+    if (searchedTokenLoading) return renderPlaceholder('Loading token...')
     if (!renderAssets.length) return renderPlaceholder('No token found')
 
     return (
