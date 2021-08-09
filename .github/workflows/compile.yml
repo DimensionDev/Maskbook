@@ -14,34 +14,35 @@ jobs:
     steps:
       - name: Get cache date
         id: get-date
-        run: |
-          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
         shell: bash
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - uses: actions/setup-node@v2-beta
-      - uses: actions/cache@v2
+      - uses: actions/setup-node@v2
+      - name: pnpm cache
+        uses: actions/cache@v2
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
-      - uses: actions/cache@v2
+      - name: compiled dist cache
+        uses: actions/cache@v2
         with:
-          path: "packages/**/dist/"
+          path: packages/**/dist
           key: ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
           restore-keys: |
             ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
             ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}
-      - uses: actions/cache@v2
+      - name: maskbook webpack cache
+        uses: actions/cache@v2
         with:
-          path: ./packages/maskbook/node_modules/.cache/webpack/
+          path: packages/maskbook/node_modules/.cache/webpack
           key: ${{ runner.os }}-webpack-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
           # Not fallback to different dependencies. Webpack seems like have bug.
           # An example caused by the webpack cache bug: https://github.com/facebook/react/issues/21587
-          restore-keys: |
-            ${{ runner.os }}-webpack-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-webpack-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: npx pnpm install
       - run: npx gulp build-ci
       - name: Upload `Maskbook.base.zip`

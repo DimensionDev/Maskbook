@@ -1,12 +1,26 @@
 import { createGlobalState } from '@masknet/shared'
 import { Services, Messages } from '../../API'
+import type { DataProvider } from '@masknet/public-api'
+export const [useLanguage] = createGlobalState(Services.Settings.getLanguage, Messages.events.languageSettings.on)
 
-export const [useLanguage] = createGlobalState(Services.Settings.getLanguage, (x) =>
-    Messages.events.languageSettings.on(x),
+export const [useTrendingDataSource] = createGlobalState<DataProvider>(
+    Services.Settings.getTrendingDataSource,
+    Messages.events.currentTrendingDataProviderSettings.on,
 )
 
-export const [useTrendingDataSource] = createGlobalState(Services.Settings.getTrendingDataSource, (x) =>
-    Messages.events.currentTrendingDataProviderSettings.on(x),
+export const [useEthereumNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getEthereumNetworkTradeProvider,
+    Messages.events.ethereumNetworkTradeProviderSettings.on,
+)
+
+export const [usePolygonNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getPolygonNetworkTradeProvider,
+    Messages.events.polygonNetworkTradeProviderSettings.on,
+)
+
+export const [useBinanceNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getBinanceNetworkTradeProvider,
+    Messages.events.binanceNetworkTradeProviderSettings.on,
 )
 
 const API_HOST = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com'

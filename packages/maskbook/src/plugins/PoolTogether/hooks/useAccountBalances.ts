@@ -5,6 +5,8 @@ import type { PoolTogetherTicket } from '@masknet/web3-contracts/types/PoolToget
 import { useAsyncRetry } from 'react-use'
 import type { AccountPool, Pool } from '../types'
 
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+
 /**
  * A callback for getting account balances of ticket pools
  * @param pools
@@ -18,7 +20,7 @@ export function useAccountBalance(pools: Pool[]) {
     const [results, calls, _, callback] = useMutlipleContractSingleData(
         ticketContracts,
         new Array(ticketContracts.length).fill('balanceOf'),
-        [account],
+        [account || ZERO_ADDRESS],
     )
     const asyncResults = useAsyncRetry(() => callback(calls), [calls])
 

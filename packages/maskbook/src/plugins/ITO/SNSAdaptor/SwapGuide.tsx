@@ -17,10 +17,10 @@ import { SwapDialog, SwapDialogProps } from './SwapDialog'
 import { UnlockDialog } from './UnlockDialog'
 
 export enum SwapStatus {
-    Remind,
-    Swap,
-    Share,
-    Unlock,
+    Remind = 0,
+    Swap = 1,
+    Share = 2,
+    Unlock = 3,
 }
 
 const useStyles = makeStyles((theme) => ({
