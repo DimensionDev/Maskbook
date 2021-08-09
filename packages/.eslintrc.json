@@ -26,7 +26,7 @@
         "lodash/import-scope": ["error", "member"],
         "unused-imports/no-unused-imports-ts": "warn",
         "unicorn/better-regex": "error",
-        "unicorn/catch-error-name": "error",
+        "unicorn/catch-error-name": ["error", { "ignore": ["^err$"] }],
         "unicorn/no-instanceof-array": "error",
         "unicorn/no-new-array": "error",
         "unicorn/no-new-buffer": "error",
