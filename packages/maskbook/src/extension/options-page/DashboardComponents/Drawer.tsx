@@ -1,5 +1,5 @@
 import { Fragment } from 'react'
-import { Linkedin, Smile } from 'react-feather'
+import { Linkedin as LinkedinIcon, Smile as SmileIcon } from 'react-feather'
 import classNames from 'classnames'
 import { List, ListItem, ListItemIcon, ListItemText, Typography, Box, Divider } from '@material-ui/core'
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
@@ -197,7 +197,7 @@ export default function Drawer(props: DrawerProps) {
                                     onClick={onJoin}>
                                     <ListItemIcon
                                         className={classes.drawerItemIcon}
-                                        children={<Linkedin fontSize={14} />}
+                                        children={<LinkedinIcon width={22} height={22} />}
                                     />
                                     <ListItemText
                                         className={classes.drawerItemText}
@@ -216,7 +216,7 @@ export default function Drawer(props: DrawerProps) {
                                     onClick={onFeedback}>
                                     <ListItemIcon
                                         className={classes.drawerItemIcon}
-                                        children={<Smile fontSize="small" />}
+                                        children={<SmileIcon width={22} height={22} />}
                                     />
                                     <ListItemText
                                         className={classes.drawerItemText}
