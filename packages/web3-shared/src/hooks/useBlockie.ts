@@ -10,7 +10,7 @@ export function useBlockie(address: string, options?: BlockieOptions) {
         }
         try {
             return create({ ...defaultOptions, ...options }).toDataURL()
-        } catch (e) {
+        } catch {
             return ''
         }
     }, [address])

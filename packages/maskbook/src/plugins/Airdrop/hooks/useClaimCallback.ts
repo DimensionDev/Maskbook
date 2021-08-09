@@ -47,7 +47,7 @@ export function useClaimCallback(packet?: AirdropPacket) {
                 })
                 return
             }
-        } catch (e) {
+        } catch {
             setClaimState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Failed to claim the reward.'),

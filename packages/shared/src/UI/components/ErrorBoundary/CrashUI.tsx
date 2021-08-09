@@ -29,7 +29,7 @@ export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
     const reportBody: string = `<!--Thanks for the crash report!
 Please write down what you're doing when the crash happened, that will help us to fix it easier!-->
 
-I was *doing something...*, then Mask report an error.
+I was *doing something...*, then Mask reports an error.
 
 > ${error.message}
 

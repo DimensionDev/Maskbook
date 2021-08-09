@@ -31,7 +31,7 @@ export async function generateOthersAESKeyEncrypted(
     )
     const othersAESKeyEncrypted_ = othersAESKeyEncrypted.map<PublishedAESKeyRecordV39OrV38>((key) => ({
         aesKey: key.key,
-        receiverKey: othersPublicKeyECDH[parseInt(key.name, 10)],
+        receiverKey: othersPublicKeyECDH[Number.parseInt(key.name, 10)],
     }))
     return othersAESKeyEncrypted_
 }
@@ -71,7 +71,7 @@ export async function encrypt1ToN(info: {
     })
     const othersAESKeyEncrypted_ = othersAESKeyEncrypted.map((key) => ({
         aesKey: key.key,
-        receiverKey: othersPublicKeyECDH[parseInt(key.name, 10)].key,
+        receiverKey: othersPublicKeyECDH[Number.parseInt(key.name, 10)].key,
     }))
     return {
         encryptedContent,

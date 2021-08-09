@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useValueRef } from '@masknet/shared'
 import { getCurrentPreferredCoinIdSettings } from '../settings'
-import type { DataProvider } from '../types'
+import type { DataProvider } from '@masknet/public-api'
 
 export function usePreferredCoinId(keyword: string, dataProvider: DataProvider) {
     const keyword_ = keyword.toLowerCase()
@@ -11,7 +11,7 @@ export function usePreferredCoinId(keyword: string, dataProvider: DataProvider) 
         try {
             const parsedSettings = JSON.parse(settings) as Record<string, string>
             return parsedSettings[keyword_] ?? ''
-        } catch (e) {
+        } catch {
             return ''
         }
     }, [keyword_, settings])

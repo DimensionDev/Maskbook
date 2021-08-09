@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core'
-import type { DataProvider, Trending } from '../../types'
+import type { Trending } from '../../types'
+import type { DataProvider } from '@masknet/public-api'
 import { CoinMarketTable } from './CoinMarketTable'
 import { CoinMetadataTable } from './CoinMetadataTable'
 

@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-interface BreakdownDialogUIProps extends withClasses<never>, InjectedDialogProps {
+interface BreakdownDialogUIProps extends InjectedDialogProps {
     token: ERC20TokenDetailed
     balance: string
     onUpdateBalance: () => void

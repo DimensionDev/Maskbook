@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface ProviderLineProps extends withClasses<never> {
+export interface ProviderLineProps extends withClasses<'text'> {
     internalName: string
     network: string
     connected?: boolean

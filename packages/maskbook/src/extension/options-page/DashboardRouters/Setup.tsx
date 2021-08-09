@@ -120,7 +120,7 @@ const useSetupFormStyles = makeStyles((theme) => ({
     },
 }))
 
-interface SetupFormProps extends withClasses<never> {
+interface SetupFormProps extends withClasses<'form'> {
     primary: string
     secondary?: string
     content?: React.ReactNode
@@ -249,37 +249,35 @@ export function CreatePersona() {
             primary={t('set_up_create_persona')}
             secondary={t('set_up_create_persona_hint')}
             content={
-                <>
-                    <TextField
-                        required
-                        autoFocus
-                        className={setupFormClasses.input}
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                e.preventDefault()
-                                if (!checkInputLengthExceed(name) && name.length > 0) {
-                                    createPersonaAndNext()
-                                }
+                <TextField
+                    required
+                    autoFocus
+                    className={setupFormClasses.input}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault()
+                            if (!checkInputLengthExceed(name) && name.length > 0) {
+                                createPersonaAndNext()
                             }
-                        }}
-                        label={t('name')}
-                        helperText={
-                            checkInputLengthExceed(name)
-                                ? t('input_length_exceed_prompt', {
-                                      name: t('persona_name').toLowerCase(),
-                                      length: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                                  })
-                                : undefined
                         }
-                        inputProps={{
-                            'data-testid': 'username_input',
-                            maxLength: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                        }}
-                        variant="outlined"
-                    />
-                </>
+                    }}
+                    label={t('name')}
+                    helperText={
+                        checkInputLengthExceed(name)
+                            ? t('input_length_exceed_prompt', {
+                                  name: t('persona_name').toLowerCase(),
+                                  length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                              })
+                            : undefined
+                    }
+                    inputProps={{
+                        'data-testid': 'username_input',
+                        maxLength: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                    }}
+                    variant="outlined"
+                />
             }
             actions={
                 <>
@@ -456,7 +454,7 @@ export function RestoreDatabase() {
                     <InputBase
                         className={restoreDatabaseClasses.input}
                         placeholder={t('dashboard_paste_database_backup_hint')}
-                        inputRef={(input: HTMLInputElement) => input && input.focus()}
+                        inputRef={(input: HTMLInputElement) => input?.focus()}
                         multiline
                         value={textValue}
                         onChange={(e) => setTextValue(e.target.value)}
@@ -491,7 +489,7 @@ export function RestoreDatabase() {
             restoreParams.append('uuid', restoreId)
             await Services.Welcome.setUnconfirmedBackup(restoreId, json)
             history.push(`${SetupStep.RestoreDatabaseConfirmation}?${restoreParams.toString()}`)
-        } catch (e) {
+        } catch {
             enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
         }
     }
@@ -569,7 +567,7 @@ export function RestoreDatabaseAdvance() {
             } else {
                 failToRestore()
             }
-        } catch (e) {
+        } catch {
             failToRestore()
         }
     }
@@ -691,10 +689,8 @@ export function RestoreDatabaseAdvance() {
                                     : Services.Identity.restoreFromBackup(scannedValue))
 
                                 importPersona(persona)
-                            } catch (e) {
-                                enqueueSnackbar(t('set_up_advance_restore_fail'), {
-                                    variant: 'error',
-                                })
+                            } catch {
+                                enqueueSnackbar(t('set_up_advance_restore_fail'), { variant: 'error' })
                             }
                         }}
                         data-testid="import_button">
@@ -777,7 +773,7 @@ export function RestoreDatabaseConfirmation() {
                 setImported('loading')
                 await Services.Welcome.confirmBackup(uuid)
                 setImported(true)
-            } catch (e) {
+            } catch {
                 failToRestore()
                 setImported(false)
             }

@@ -22,7 +22,7 @@ import type { Subscription } from 'use-subscription'
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
         const cancel: (Function | undefined)[] = []
-        opt.signal?.addEventListener('abort', () => cancel.forEach((f) => f && f()))
+        opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))
 
         //#region Post text content
         const postContent = new ValueRef(extractText())

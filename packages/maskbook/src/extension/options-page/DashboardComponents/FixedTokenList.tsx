@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     placeholder: {},
 }))
 
-export interface FixedTokenListProps extends withClasses<never> {
+export interface FixedTokenListProps extends withClasses<'list' | 'placeholder'> {
     keyword?: string
     whitelist?: string[]
     blacklist?: string[]

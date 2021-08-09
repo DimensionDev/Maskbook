@@ -77,6 +77,16 @@ export type WalletRenameDialogEvent = {
     wallet: Wallet | null
 }
 
+export type WalletRiskWarningDialogEvent =
+    | {
+          open: true
+          wallet?: Wallet
+      }
+    | {
+          open: false
+          type: 'cancel' | 'confirm'
+      }
+
 export type WalletConnectQRCodeDialogEvent =
     | {
           open: true
@@ -170,6 +180,11 @@ export interface WalletMessage {
      * WalletConnect QR Code dialog
      */
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
+
+    /**
+     * Wallet Risk Warning dialog
+     */
+    walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
 
     walletsUpdated: void
     phrasesUpdated: void
