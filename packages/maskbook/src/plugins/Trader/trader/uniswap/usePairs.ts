@@ -45,8 +45,8 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
                 if (x.error) return undefined
                 return {
                     id: contracts[i].options.address,
-                    reserve0: x.value._reserve0,
-                    reserve1: x.value._reserve1,
+                    reserve0: x.value!._reserve0,
+                    reserve1: x.value!._reserve1,
                 }
             })
             .filter(Boolean) as {
