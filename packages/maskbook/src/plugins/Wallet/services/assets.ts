@@ -2,6 +2,7 @@ import { unreachable } from '@dimensiondev/kit'
 import {
     Asset,
     ChainId,
+    CollectibleProvider,
     createERC1155Token,
     createERC20Token,
     createERC721Token,
@@ -12,10 +13,8 @@ import {
     getChainIdFromName,
     getTokenConstants,
     isChainIdMainnet,
-    NetworkType,
-    pow10,
-    CollectibleProvider,
     PortfolioProvider,
+    pow10,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-es'
@@ -23,8 +22,16 @@ import { EthereumAddress } from 'wallet.ts'
 import * as DebankAPI from '../apis/debank'
 import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
-import { resolveZerionAssetsScopeName } from '../pipes'
-import type { BalanceRecord, ZerionAddressAsset } from '../types'
+import { resolveChainByScope } from '../pipes'
+import type {
+    BalanceRecord,
+    SocketRequestAssetScope,
+    ZerionAddressAsset,
+    ZerionAddressBSCAsset,
+    ZerionAddressPolygonAsset,
+    ZerionAsset,
+    ZerionCovalentAsset,
+} from '../types'
 
 export async function getAssetsListNFT(
     address: string,
@@ -81,22 +88,28 @@ export async function getAssetsListNFT(
     }
 }
 
-export async function getAssetsList(
-    address: string,
-    network: NetworkType,
-    provider: PortfolioProvider,
-): Promise<Asset[]> {
+export async function getAssetsList(address: string, provider: PortfolioProvider): Promise<Asset[]> {
     if (!EthereumAddress.isValid(address)) return []
     switch (provider) {
         case PortfolioProvider.ZERION:
-            if (network !== NetworkType.Ethereum) return []
-            const scope = resolveZerionAssetsScopeName(network)
-            if (!scope) return []
-            const { meta, payload } = await ZerionAPI.getAssetsList(address, scope)
+            const { meta, payload } = await ZerionAPI.getAssetsList(address, ['assets', 'bsc-assets', 'polygon-assets'])
             if (meta.status !== 'ok') throw new Error('Fail to load assets.')
-            // skip NFT assets
-            const assetsList = values(payload.assets).filter((x) => x.asset.is_displayable && x.asset.icon_url)
-            return formatAssetsFromZerion(assetsList)
+
+            const assets = Object.entries(payload).map(([key, value]) => {
+                if (key === 'assets') {
+                    const assetsList = (values(value) as ZerionAddressAsset[]).filter(
+                        ({ asset }) =>
+                            asset.is_displayable &&
+                            !filterAssetType.some((type) => type === asset.type) &&
+                            asset.icon_url,
+                    )
+                    return formatAssetsFromZerion(assetsList, key)
+                }
+
+                return formatAssetsFromZerion(values(value) as ZerionAddressBSCAsset[], key as SocketRequestAssetScope)
+            })
+
+            return assets.flat()
         case PortfolioProvider.DEBANK:
             const { data = [], error_code } = await DebankAPI.getAssetsList(address)
             if (error_code === 0) return formatAssetsFromDebank(data)
@@ -135,35 +148,37 @@ function formatAssetsFromDebank(data: BalanceRecord[]) {
 
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
 
-function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
-    return data
-        .filter(({ asset }) => asset.is_displayable && !filterAssetType.some((type) => type === asset.type))
-        .map(({ asset, quantity }) => {
-            const balance = Number(new BigNumber(quantity).dividedBy(pow10(asset.decimals)).toString())
-            return {
-                token: {
-                    name: asset.name,
-                    symbol: asset.symbol,
-                    decimals: asset.decimals,
-                    address:
-                        asset.name === 'Ether' || asset.name === 'Ethereum'
-                            ? getTokenConstants().NATIVE_TOKEN_ADDRESS
-                            : asset.asset_code,
-                    chainId: ChainId.Mainnet,
-                    type:
-                        asset.name === 'Ether' || asset.name === 'Ethereum'
-                            ? EthereumTokenType.Native
-                            : EthereumTokenType.ERC20,
-                },
-                chain: 'eth',
-                balance: quantity,
-                price: {
-                    usd: new BigNumber(asset.price?.value ?? 0).toString(),
-                },
-                value: {
-                    usd: new BigNumber(balance).multipliedBy(asset.price?.value ?? 0).toString(),
-                },
-                logoURI: asset.icon_url,
-            }
-        }) as Asset[]
+function formatAssetsFromZerion(
+    data: ZerionAddressAsset[] | ZerionAddressBSCAsset[] | ZerionAddressPolygonAsset[],
+    scope: SocketRequestAssetScope,
+) {
+    return data.map(({ asset, quantity }) => {
+        const balance = Number(new BigNumber(quantity).dividedBy(pow10(asset.decimals)).toString())
+        const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
+        return {
+            token: {
+                name: asset.name,
+                symbol: asset.symbol,
+                decimals: asset.decimals,
+                address:
+                    asset.name === 'Ether' || asset.name === 'Ethereum'
+                        ? getTokenConstants().NATIVE_TOKEN_ADDRESS
+                        : asset.asset_code,
+                chainId: ChainId.Mainnet,
+                type:
+                    asset.name === 'Ether' || asset.name === 'Ethereum'
+                        ? EthereumTokenType.Native
+                        : EthereumTokenType.ERC20,
+            },
+            chain: resolveChainByScope(scope),
+            balance: quantity,
+            price: {
+                usd: new BigNumber(value).toString(),
+            },
+            value: {
+                usd: new BigNumber(balance).multipliedBy(value).toString(),
+            },
+            logoURI: asset.icon_url,
+        }
+    }) as Asset[]
 }

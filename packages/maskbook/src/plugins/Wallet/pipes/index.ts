@@ -1,5 +1,6 @@
 import { safeUnreachable, unreachable } from '@dimensiondev/kit'
 import { NetworkType, PortfolioProvider } from '@masknet/web3-shared'
+import type { SocketRequestAssetScope } from '../types'
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
     switch (provider) {
@@ -40,6 +41,20 @@ export function resolveZerionAssetsScopeName(network: NetworkType) {
             return ''
         default:
             safeUnreachable(network)
+            return ''
+    }
+}
+
+export function resolveChainByScope(scope: SocketRequestAssetScope) {
+    switch (scope) {
+        case 'assets':
+            return 'eth'
+        case 'bsc-assets':
+            return 'bsc'
+        case 'polygon-assets':
+            return 'matic'
+        default:
+            safeUnreachable(scope)
             return ''
     }
 }
