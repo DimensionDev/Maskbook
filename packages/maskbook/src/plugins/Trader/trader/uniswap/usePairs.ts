@@ -40,8 +40,13 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
 
     // compose reserves from multicall results
     const listOfReserves = useMemo(() => {
+        type Result = {
+            id: string
+            reserve0: string
+            reserve1: string
+        }
         return results
-            .map((x, i) => {
+            .map((x, i): Result | undefined => {
                 if (x.error || !x.value) return undefined
                 return {
                     id: contracts[i].options.address,
@@ -49,11 +54,7 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
                     reserve1: x.value._reserve1,
                 }
             })
-            .filter(Boolean) as {
-            id: string
-            reserve0: string
-            reserve1: string
-        }[]
+            .filter((value): value is Result => value !== undefined)
     }, [results, contracts])
 
     // compose pairs from list of reserves
