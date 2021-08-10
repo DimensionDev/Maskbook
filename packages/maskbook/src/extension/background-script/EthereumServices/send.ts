@@ -180,7 +180,7 @@ export async function INTERNAL_send(
 function handleRecentTransaction(account: string, response: JsonRpcResponse | undefined) {
     const hash = response?.result as string | undefined
     if (typeof hash !== 'string') return
-    if (!/^0x([A-Fa-f0-9]{64})$/.test(hash)) return
+    if (!/^0x([\dA-Fa-f]{64})$/.test(hash)) return
     addRecentTransaction(account, hash)
 }
 

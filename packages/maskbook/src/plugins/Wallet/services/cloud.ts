@@ -1,7 +1,7 @@
 import { getStorage, setStorage } from '../../../extension/background-script/StorageService'
 
 const HOST_MAP = {
-    production: 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api',
+    production: 'https://backup.mask.io/api',
     development: 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api',
     test: 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api',
 }

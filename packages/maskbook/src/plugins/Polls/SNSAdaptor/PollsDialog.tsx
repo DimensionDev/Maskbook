@@ -118,7 +118,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
 
     // react hooks are not binded with the function identity but hooks order
     const useSelect = (count: number, fn: (newVal: number) => void, defaultIndex = 0) => {
-        const options = new Array(count).fill('')
+        const options = Array.from<string>({ length: count }).fill('')
 
         return usePortalShadowRoot((container) => (
             <Select

@@ -15,7 +15,7 @@ export interface SearchResultInspectorProps {}
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     const classes = useStylesExtends(useStyles(), props)
     const keyword = useSearchedKeyword()
-    const [_, type, name = ''] = keyword.match(/([\$\#])([\w\d]+)/) ?? []
+    const [_, type, name = ''] = keyword.match(/([#$])(\w+)/) ?? []
     const type_ = type === '$' ? TagType.CASH : TagType.HASH
     const { value: dataProviders = [] } = useAvailableDataProviders(type_, name)
     const { value: traderProviders = [] } = useAvailableTraderProviders(type_, name)
