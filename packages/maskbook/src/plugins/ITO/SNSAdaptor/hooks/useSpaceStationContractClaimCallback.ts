@@ -50,7 +50,7 @@ ${campaignInfo.description}`,
         if (!allow) {
             setClaimState({
                 type: TransactionStateType.FAILED,
-                error: new Error('Not allowed to claim'),
+                error: new Error('Not allowed to claim.'),
             })
         }
         const params = [CAMPAIGN_ID, nftCoreAddress, verifyIDs[0], powahs[0], signature] as Parameters<

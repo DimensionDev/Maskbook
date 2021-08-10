@@ -127,7 +127,7 @@ export async function getAccountClaimSignature(
         }){
             allow
             signature
-            mintFuncInfo{
+            mintFuncInfo {
                 nftCoreAddress
                 verifyIDs
                 powahs

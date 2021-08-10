@@ -163,7 +163,6 @@ export function NftAirdropCard() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const snackbarOptions = {
         preventDuplicate: true,
-        autoHideDuration: 100000,
         anchorOrigin: {
             vertical: 'top',
             horizontal: 'center',
@@ -286,10 +285,10 @@ export function NftAirdropCard() {
                             onClick={async () => spaceStationAccountClaimableCallback(checkAddress)}
                             classes={{ disabled: classes.disabledButton }}
                             className={classes.actionButton}>
-                            <span>{t('plugin_airdrop_nft_check')}</span>
                             {spaceStationAccountClaimableLoading ? (
                                 <CircularProgress size={16} className={classes.loading} />
                             ) : null}
+                            <span>{t('plugin_airdrop_nft_check')}</span>
                         </Button>
                     </div>
                     <Typography className={classes.text}>
