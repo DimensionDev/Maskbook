@@ -144,6 +144,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                                     : state.error.message.includes('User denied transaction signature.')
                                     ? t('plugin_wallet_transaction_rejected')
                                     : state.error.code === JSON_RPC_ErrorCode.INTERNAL_ERROR ||
+                                      state.error.message.includes(`"code":${JSON_RPC_ErrorCode.INTERNAL_ERROR}`) ||
                                       (state.error.code &&
                                           state.error.code <= JSON_RPC_ErrorCode.SERVER_ERROR_RANGE_START &&
                                           state.error.code >= JSON_RPC_ErrorCode.SERVER_ERROR_RANGE_END)
