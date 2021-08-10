@@ -1,8 +1,9 @@
 import { createIcon } from '../utils'
+import type { SvgIcon } from '@material-ui/core'
 
-export const RestoreIcon = createIcon(
+export const RestoreIcon: typeof SvgIcon = createIcon(
     'Restore',
-    <>
+    <g>
         <g filter="url(#filter0_b)">
             <path
                 d="M7 25C7 23.8954 7.89543 23 9 23H39C40.1046 23 41 23.8954 41 25V35C41 35.5523 40.5523 36 40 36H8C7.44772 36 7 35.5523 7 35V25Z"
@@ -59,6 +60,6 @@ export const RestoreIcon = createIcon(
                 <stop offset="1" stopColor="#FFC524" />
             </linearGradient>
         </defs>
-    </>,
+    </g>,
     '0 0 48 48',
 )
