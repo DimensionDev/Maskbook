@@ -26,9 +26,6 @@ export function useFetchMarket(address: string, id: string, link: string) {
         }
 
         const ammExchange = await PluginAugurRPC.fetchAmmExchange(address, id, GRAPH_URL)
-        const balances = await ammMarekFactoryContract.methods.getPoolBalances(address, id).call()
-        const weights = await ammMarekFactoryContract.methods.getPoolWeights(address, id).call()
-        const shareFactor = await sportLinkMarekFactoryContract.methods.shareFactor().call()
         const [, shareTokens, rawEndDate, winner, , , ,] = await sportLinkMarekFactoryContract.methods
             .getMarket(id)
             .call()
@@ -61,7 +58,7 @@ export function useFetchMarket(address: string, id: string, link: string) {
             collateral,
             swapFee,
             link,
-            ammExchange: { ...ammExchange, balances, weights, shareFactor },
+            ammExchange: { ...ammExchange, address: AMM_FACTORY_ADDRESS },
         } as Market
     }, [address, id])
 }

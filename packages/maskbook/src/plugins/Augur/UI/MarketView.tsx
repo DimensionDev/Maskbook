@@ -129,7 +129,7 @@ export function MarketView(props: MarketViewProps) {
         loading: loadingAmmOutcomes,
         error: errorAmmOutcomes,
         retry: retryAmmOutcomes,
-    } = useAmmOutcomes(address, id, market)
+    } = useAmmOutcomes(market)
 
     const {
         value: cashToken,

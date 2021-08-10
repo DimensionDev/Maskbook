@@ -7,7 +7,6 @@ import {
     pow10,
     TransactionStateType,
     useAccount,
-    useAugurConstants,
     useTokenBalance,
 } from '@masknet/web3-shared'
 import { DialogContent, makeStyles, Typography } from '@material-ui/core'
@@ -28,7 +27,6 @@ import { SHARE_DECIMALS } from '../constants'
 import { useSellCallback } from '../hooks/useSellCallback'
 import { estimateSellTrade, getRawFee } from '../utils'
 import { useAmmExchange } from '../hooks/useAmmExchange'
-// import { estimateSellTrade } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -84,7 +82,6 @@ export function SellDialog() {
     const [token, setToken] = useState<ERC20TokenDetailed>()
     const [outcome, setOutcome] = useState<AmmOutcome>()
     const [rawAmount, setRawAmount] = useState('')
-    const { AMM_FACTORY_ADDRESS } = useAugurConstants()
 
     // context
     const account = useAccount()
@@ -120,7 +117,7 @@ export function SellDialog() {
     //#endregion
 
     //#region AmmExchange
-    const { value: ammExchange, loading: loadingAmm } = useAmmExchange(market?.address ?? '', market?.id ?? '')
+    const { value: ammExchange, loading: loadingAmm } = useAmmExchange(market)
     const rawFee = getRawFee(market?.swapFee ?? '')
 
     const estimatedResult = useMemo(() => {
@@ -191,7 +188,7 @@ export function SellDialog() {
                     <EthereumWalletConnectedBoundary>
                         <EthereumERC20TokenApprovedBoundary
                             amount={amount.toFixed()}
-                            spender={AMM_FACTORY_ADDRESS}
+                            spender={market.ammExchange.address}
                             token={token}>
                             <ActionButton
                                 className={classes.button}

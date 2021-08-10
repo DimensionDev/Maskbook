@@ -146,7 +146,7 @@ export function BuyDialog() {
     //#endregion
 
     //#region AmmExchange
-    const { value: ammExchange, loading: loadingAmm } = useAmmExchange(market?.address ?? '', market?.id ?? '')
+    const { value: ammExchange, loading: loadingAmm } = useAmmExchange(market)
     const rawFee = getRawFee(market?.swapFee ?? '')
     const estimatedResult = useMemo(() => {
         if (!ammExchange || !token || !outcome) return
@@ -281,7 +281,7 @@ export function BuyDialog() {
                         />
                     </form>
                     <EthereumWalletConnectedBoundary>
-                        {isZero(tokenBalance) || (amount.isGreaterThan(tokenBalance) && !!estimatedResult) ? (
+                        {estimatedResult && (isZero(tokenBalance) || amount.isGreaterThan(tokenBalance)) ? (
                             <ActionButton
                                 className={classes.button}
                                 fullWidth
@@ -293,7 +293,7 @@ export function BuyDialog() {
                         ) : (
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
-                                spender={market.address}
+                                spender={market.ammExchange.address}
                                 token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
                                 <ActionButton
                                     className={classes.button}

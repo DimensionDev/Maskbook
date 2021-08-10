@@ -10,7 +10,6 @@ import {
     useGasPrice,
     addGasMargin,
     TransactionEventType,
-    useAugurConstants,
 } from '@masknet/web3-shared'
 import { useAmmFactory } from '../contracts/useAmmFactory'
 import type { AmmOutcome, Market } from '../types'
@@ -22,8 +21,7 @@ export function useBuyCallback(
     outcome?: AmmOutcome,
     token?: FungibleTokenDetailed,
 ) {
-    const { AMM_FACTORY_ADDRESS } = useAugurConstants()
-    const ammContract = useAmmFactory(AMM_FACTORY_ADDRESS ?? '')
+    const ammContract = useAmmFactory(market?.ammExchange?.address ?? '')
 
     const account = useAccount()
     const nonce = useNonce()
@@ -85,7 +83,7 @@ export function useBuyCallback(
                     reject(error)
                 })
         })
-    }, [gasPrice, nonce, AMM_FACTORY_ADDRESS, account, amount, token, minTokenOut, market, outcome])
+    }, [gasPrice, nonce, account, amount, token, minTokenOut, market, outcome])
 
     const resetCallback = useCallback(() => {
         setBuyState({

@@ -70,6 +70,7 @@ export interface SportTitles {
 }
 
 export interface AmmExchange {
+    address: string
     totalVolume: BigNumber
     volume24hr: BigNumber
     totalLiquidity: BigNumber
