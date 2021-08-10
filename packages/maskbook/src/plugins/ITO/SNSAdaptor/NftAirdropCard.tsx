@@ -1,6 +1,12 @@
 import formatDateTime from 'date-fns/format'
 import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
-import { ChainId, TransactionStateType, useAccount, resolveTransactionLinkOnExplorer } from '@masknet/web3-shared'
+import {
+    ChainId,
+    TransactionStateType,
+    useAccount,
+    resolveTransactionLinkOnExplorer,
+    useChainId,
+} from '@masknet/web3-shared'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { Box, makeStyles, Typography, Button, TextField, useTheme, CircularProgress, Link } from '@material-ui/core'
@@ -12,6 +18,7 @@ import { useState, useEffect } from 'react'
 import { useSnackbar, OptionsObject } from '@masknet/theme'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import CloseIcon from '@material-ui/icons/Close'
+import classNames from 'classnames'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,10 +40,6 @@ const useStyles = makeStyles((theme) => ({
     },
     subText: {
         fontSize: 14,
-    },
-    claimButtonWrapper: {
-        whiteSpace: 'nowrap',
-        width: 130,
     },
     claimTimeWrapper: {
         display: 'flex',
@@ -86,6 +89,11 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             background: 'rgba(255, 255, 255, 0.4)',
         },
+    },
+    connectWallet: {
+        width: 200,
+        minHeight: 40,
+        whiteSpace: 'nowrap',
     },
     address: {
         width: 340,
@@ -138,13 +146,15 @@ const useStyles = makeStyles((theme) => ({
 
 export function NftAirdropCard() {
     const { t } = useI18N()
-    const classes = useStyles()
     const [checkAddress, setCheckAddress] = useState('')
     const { value: campaignInfo, loading: campaignInfoLoading } = useSpaceStationCampaignInfo()
     const [spaceStationClaimableCount, spaceStationAccountClaimableCallback, spaceStationAccountClaimableLoading] =
         useSpaceStationClaimableTokenCountCallback()
     const account = useAccount()
-    const { value: claimable, loading: claimableLoading } = useSpaceStationClaimable(account)
+    const currentChainId = useChainId()
+    const { value: _claimable, loading: claimableLoading } = useSpaceStationClaimable(account)
+    const claimable = Boolean(_claimable) && currentChainId === ChainId.Mumbai
+    const classes = useStyles({ claimable })
     const loading = claimableLoading || campaignInfoLoading
     const [claimState, claimCallback] = useSpaceStationContractClaimCallback(campaignInfo!)
     const theme = useTheme()
@@ -160,7 +170,6 @@ export function NftAirdropCard() {
     useEffect(() => setCheckAddress(''), [account])
 
     useEffect(() => {
-        console.log({ claimState })
         if (claimState.type === TransactionStateType.CONFIRMED && claimState.no === 0) {
             enqueueSnackbar(
                 <div className={classes.snackbarContent}>
@@ -206,53 +215,55 @@ export function NftAirdropCard() {
 
     return (
         <Box className={classes.root}>
-            <EthereumChainBoundary
-                chainId={ChainId.Mumbai}
-                noSwitchNetworkTip={true}
-                switchButtonStyle={{
-                    background: 'rgba(255, 255, 255, 0.2)',
-                    color: theme.palette.text.primary,
-                    '&:hover': {
-                        background: 'rgba(255, 255, 255, 0.4)',
-                    },
-                    alignSelf: 'baseline',
-                }}>
-                {loading || !campaignInfo ? (
-                    <CircularProgress size={16} className={classes.loading} />
-                ) : (
-                    <>
-                        <Typography className={classes.title}>{campaignInfo.name}</Typography>
-                        <div className={classes.claimTimeWrapper}>
-                            <Typography className={classes.text}>{t('wallet_airdrop_nft_unclaimed_title')}</Typography>
-                            {campaignInfo.endTime ? (
-                                <Typography className={classes.text}>
-                                    {t('plugin_airdrop_nft_end_time', {
-                                        date: formatDateTime(campaignInfo.endTime * 1000, 'yyyy-MM-dd HH:mm'),
-                                    })}
-                                </Typography>
-                            ) : null}
-                        </div>
-                        <div className={classes.claimWrapper}>
-                            <div className={classes.nftsWrapper}>
-                                <div className={classes.gallery}>
-                                    {claimable
-                                        ? campaignInfo.nfts.map((nft, i) => (
-                                              <div className={classes.imgWrapper} key={i}>
-                                                  <img src={nft.image} className={classes.nftImage} />{' '}
-                                              </div>
-                                          ))
-                                        : null}
-                                </div>
-                                <Typography className={classes.text}>
-                                    {claimable
-                                        ? `${campaignInfo.nfts.length} ${
-                                              campaignInfo.nfts.length > 1 ? 'Items' : 'Item'
-                                          }`
-                                        : `0 Item`}
-                                </Typography>
+            {loading || !campaignInfo ? (
+                <CircularProgress size={16} className={classes.loading} />
+            ) : (
+                <>
+                    <Typography className={classes.title}>{campaignInfo.name}</Typography>
+                    <div className={classes.claimTimeWrapper}>
+                        <Typography className={classes.text}>{t('wallet_airdrop_nft_unclaimed_title')}</Typography>
+                        {campaignInfo.endTime ? (
+                            <Typography className={classes.text}>
+                                {t('plugin_airdrop_nft_end_time', {
+                                    date: formatDateTime(campaignInfo.endTime * 1000, 'yyyy-MM-dd HH:mm'),
+                                })}
+                            </Typography>
+                        ) : null}
+                    </div>
+                    <div className={classes.claimWrapper}>
+                        <div className={classes.nftsWrapper}>
+                            <div className={classes.gallery}>
+                                {claimable
+                                    ? campaignInfo.nfts.map((nft, i) => (
+                                          <div className={classes.imgWrapper} key={i}>
+                                              <img src={nft.image} className={classes.nftImage} />{' '}
+                                          </div>
+                                      ))
+                                    : null}
                             </div>
-                            <div className={classes.claimButtonWrapper}>
-                                <EthereumWalletConnectedBoundary>
+                            <Typography className={classes.text}>
+                                {claimable
+                                    ? `${campaignInfo.nfts.length} ${campaignInfo.nfts.length > 1 ? 'Items' : 'Item'}`
+                                    : `0 Item`}
+                            </Typography>
+                        </div>
+                        <div>
+                            <EthereumChainBoundary
+                                chainId={ChainId.Mumbai}
+                                noSwitchNetworkTip={true}
+                                switchButtonStyle={{
+                                    whiteSpace: 'nowrap',
+                                    width: 'auto',
+                                    background: 'rgba(255, 255, 255, 0.2)',
+                                    '&:hover': {
+                                        background: 'rgba(255, 255, 255, 0.4)',
+                                    },
+                                    alignSelf: 'baseline',
+                                }}>
+                                <EthereumWalletConnectedBoundary
+                                    classes={{
+                                        connectWallet: classNames(classes.actionButton, classes.connectWallet),
+                                    }}>
                                     <Button
                                         disabled={
                                             claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING ||
@@ -269,47 +280,46 @@ export function NftAirdropCard() {
                                         ) : null}
                                     </Button>
                                 </EthereumWalletConnectedBoundary>
-                            </div>
+                            </EthereumChainBoundary>
                         </div>
+                    </div>
 
-                        <Typography className={classes.subText}>{t('plugin_airdrop_nft_check_address')}</Typography>
-                        <div className={classes.checkWrapper}>
-                            <TextField
-                                value={checkAddress}
-                                onChange={(e) => setCheckAddress(e.target.value)}
-                                className={classes.address}
-                                InputProps={{ classes: { input: classes.addressInput } }}
-                                placeholder="Enter your wallet address"
-                            />
-                            <Button
-                                disabled={spaceStationAccountClaimableLoading || checkAddress === ''}
-                                onClick={async () => spaceStationAccountClaimableCallback(checkAddress)}
-                                className={classes.actionButton}>
-                                <span>{t('plugin_airdrop_nft_check')}</span>
-                                {spaceStationAccountClaimableLoading ? (
-                                    <CircularProgress size={16} className={classes.loading} />
-                                ) : null}
-                            </Button>
-                        </div>
-                        <Typography className={classes.text}>
-                            {spaceStationClaimableCount
-                                ? spaceStationClaimableCount.maxCount === -1
-                                    ? t('plugin_airdrop_nft_incorrect_address')
-                                    : spaceStationClaimableCount.maxCount === 0 || campaignInfo.nfts.length === 0
-                                    ? t('plugin_airdrop_nft_none_to_claim')
-                                    : spaceStationClaimableCount.maxCount - spaceStationClaimableCount.usedCount === 0
-                                    ? t('plugin_airdrop_nft_already_claimed')
-                                    : t('plugin_airdrop_nft_number_to_claim', {
-                                          count:
-                                              (spaceStationClaimableCount.maxCount -
-                                                  spaceStationClaimableCount.usedCount) *
-                                              campaignInfo.nfts.length,
-                                      })
-                                : null}
-                        </Typography>
-                    </>
-                )}
-            </EthereumChainBoundary>
+                    <Typography className={classes.subText}>{t('plugin_airdrop_nft_check_address')}</Typography>
+                    <div className={classes.checkWrapper}>
+                        <TextField
+                            value={checkAddress}
+                            onChange={(e) => setCheckAddress(e.target.value)}
+                            className={classes.address}
+                            InputProps={{ classes: { input: classes.addressInput } }}
+                            placeholder="Enter your wallet address"
+                        />
+                        <Button
+                            disabled={spaceStationAccountClaimableLoading || checkAddress === ''}
+                            onClick={async () => spaceStationAccountClaimableCallback(checkAddress)}
+                            className={classes.actionButton}>
+                            <span>{t('plugin_airdrop_nft_check')}</span>
+                            {spaceStationAccountClaimableLoading ? (
+                                <CircularProgress size={16} className={classes.loading} />
+                            ) : null}
+                        </Button>
+                    </div>
+                    <Typography className={classes.text}>
+                        {spaceStationClaimableCount
+                            ? spaceStationClaimableCount.maxCount === -1
+                                ? t('plugin_airdrop_nft_incorrect_address')
+                                : spaceStationClaimableCount.maxCount === 0 || campaignInfo.nfts.length === 0
+                                ? t('plugin_airdrop_nft_none_to_claim')
+                                : spaceStationClaimableCount.maxCount - spaceStationClaimableCount.usedCount === 0
+                                ? t('plugin_airdrop_nft_already_claimed')
+                                : t('plugin_airdrop_nft_number_to_claim', {
+                                      count:
+                                          (spaceStationClaimableCount.maxCount - spaceStationClaimableCount.usedCount) *
+                                          campaignInfo.nfts.length,
+                                  })
+                            : null}
+                    </Typography>
+                </>
+            )}
         </Box>
     )
 }
