@@ -148,6 +148,20 @@ function getStyle() {
         activeColor: foregroundColorStyle.color,
     } as StyleProps
 }
+
+function useLocationChange() {
+    const onLocationChange = useCallback(() => {
+        console.log(location.href)
+    }, [])
+
+    useEffect(() => {
+        onLocationChange()
+        window.addEventListener('locationchange', onLocationChange)
+        return () => window.removeEventListener('locationchange', onLocationChange)
+    }, [onLocationChange])
+}
+
+
 export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
     const style = getStyle()
     const classes = useEnhancedProfileStyles(style)
@@ -206,6 +220,8 @@ export function EnhancedProfileaPage() {
     const [show, setShow] = useState(false)
     const style = getStyle()
     const classes = EnhancedProfileaPageStyles(style)
+
+    useLocationChange()
 
     useEffect(() => {
         return MaskMessage.events.profileNFTsPageUpdate.on((data) => {
