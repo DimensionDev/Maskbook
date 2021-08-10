@@ -130,3 +130,16 @@ export interface PhraseRecordInDatabase extends PhraseRecord {}
 export interface TransactionChunkRecordInDatabase extends TransactionChunkRecord {
     record_id: string
 }
+
+export interface EncryptedWallet {
+    type: 'wallet'
+    id: 'wallet'
+    encrypted: ArrayBuffer
+    iv: ArrayBuffer
+}
+export interface EncryptedWalletPrimaryKey {
+    type: 'primary-key'
+    id: 'wallet'
+    wrappedKey: ArrayBuffer
+    iv: ArrayBuffer
+}
