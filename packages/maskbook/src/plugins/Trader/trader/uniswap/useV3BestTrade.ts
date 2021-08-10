@@ -39,7 +39,7 @@ export function useV3BestTradeExactIn(
 
     const [quotesResults, quotesCalls, quotesState, quotesCallback] = useSingleContractMultipleData(
         quoterContract,
-        new Array(quoteExactInInputs.length).fill('quoteExactInput'),
+        Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),
         quoteExactInInputs,
     )
     const asyncResult = useAsyncRetry(
@@ -135,7 +135,7 @@ export function useV3BestTradeExactOut(
 
     const [quotesResults, quotesCalls, quotesState, quotesCallback] = useSingleContractMultipleData(
         quoterContract,
-        new Array(quoteExactOutInputs.length).fill('quoteExactOutput'),
+        Array.from<'quoteExactOutput'>({ length: quoteExactOutInputs.length }).fill('quoteExactOutput'),
         quoteExactOutInputs,
     )
     const asyncResult = useAsyncRetry(

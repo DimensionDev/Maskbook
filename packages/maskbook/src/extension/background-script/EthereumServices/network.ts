@@ -70,6 +70,17 @@ export async function getTransactionCount(address: string, overrides?: SendOverr
     return Number.parseInt(count, 16)
 }
 
+export async function call(config: TransactionConfig, overrides?: SendOverrides) {
+    const result = await request<string>(
+        {
+            method: EthereumMethodType.ETH_CALL,
+            params: [config],
+        },
+        overrides,
+    )
+    return result
+}
+
 export async function estimateGas(config: TransactionConfig, overrides?: SendOverrides) {
     const gas = await request<string>(
         {
@@ -133,6 +144,16 @@ export async function signTransaction(config: TransactionConfig, overrides?: Sen
     return request<SignedTransaction>(
         {
             method: EthereumMethodType.ETH_SIGN_TRANSACTION,
+            params: [config],
+        },
+        overrides,
+    )
+}
+
+export async function sendTransaction(config: TransactionConfig, overrides?: SendOverrides) {
+    return request<string>(
+        {
+            method: EthereumMethodType.ETH_SEND_TRANSACTION,
             params: [config],
         },
         overrides,

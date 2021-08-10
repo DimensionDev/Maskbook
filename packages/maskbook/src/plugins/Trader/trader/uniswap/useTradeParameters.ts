@@ -7,7 +7,7 @@ import { useAccount } from '@masknet/web3-shared'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { SwapRouter } from '@uniswap/v3-sdk'
 import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract'
-import { useRouterV3Contract } from '../../contracts/uniswap/useRouterV3Contract'
+import { useSwapRouterContract } from '../../contracts/uniswap/useSwapRouterContract'
 
 const UNISWAP_BIPS_BASE = JSBI.BigInt(10_000)
 
@@ -24,7 +24,8 @@ export function useSwapParameters(
 ) {
     const account = useAccount()
     const routerV2Contract = useRouterV2Contract()
-    const routerV3Contract = useRouterV3Contract()
+    const swapRouterContract = useSwapRouterContract()
+
     return useMemo<SwapCall[]>(() => {
         if (!account || !trade?.trade_) return []
 
@@ -53,26 +54,27 @@ export function useSwapParameters(
             return parameters.map(({ methodName, args, value }) => {
                 return {
                     address: routerV2Contract.options.address,
-                    // @ts-ignore
-                    calldata: routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args).encodeABI(),
+                    calldata: routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](
+                        // @ts-ignore
+                        ...args,
+                    ).encodeABI(),
                     value,
                 }
             })
         } else {
-            if (!routerV3Contract) return []
+            if (!swapRouterContract) return []
             const { value, calldata } = SwapRouter.swapCallParameters(trade_, {
                 recipient: account,
                 slippageTolerance: allowedSlippage_,
                 deadline: deadline.toString(),
-              })
-              return [
+            })
+            return [
                 {
-                  address: routerV3Contract.options.address,
-                  calldata,
-                  value,
+                    address: swapRouterContract.options.address,
+                    calldata,
+                    value,
                 },
-              ]
+            ]
         }
-
-    }, [account, allowedSlippage, deadline, trade, routerV2Contract, routerV3Contract])
+    }, [account, allowedSlippage, deadline, trade, routerV2Contract, swapRouterContract])
 }

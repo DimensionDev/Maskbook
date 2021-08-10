@@ -51,7 +51,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": ""
     },
-    "UNISWAP_V3_ROUTER_ADDRESS": {
+    "UNISWAP_SWAP_ROUTER_ADDRESS": {
         "Mainnet": "0xe592427a0aece92de3edee1f18e0157c05861564",
         "Ropsten": "0xe592427a0aece92de3edee1f18e0157c05861564",
         "Rinkeby": "0xe592427a0aece92de3edee1f18e0157c05861564",

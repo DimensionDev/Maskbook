@@ -9,9 +9,7 @@ const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
 const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE)
 
 // computes realized lp fee as a percent
-function computeRealizedLPFeePercent(
-    trade: Trade,
-): Percent {
+function computeRealizedLPFeePercent(trade: Trade): Percent {
     if (trade instanceof V2Trade) {
         // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
         // e.g. for 3 tokens/2 hops: 1 - ((1 - .03) * (1-.03))
@@ -35,9 +33,7 @@ function computeRealizedLPFeePercent(
 }
 
 // computes price breakdown for the trade
-function computeRealizedLPFeeAmount(
-    trade?: Trade | null,
-): CurrencyAmount<Currency> | undefined {
+function computeRealizedLPFeeAmount(trade?: Trade | null): CurrencyAmount<Currency> | undefined {
     if (trade) {
         const realizedLPFee = computeRealizedLPFeePercent(trade)
 
@@ -50,9 +46,7 @@ function computeRealizedLPFeeAmount(
     return undefined
 }
 
-export function useTradeBreakdown(
-    trade: Trade | null,
-) {
+export function useTradeBreakdown(trade: Trade | null) {
     return useMemo(() => {
         if (!trade) return null
         const realizedLPFeePercent = computeRealizedLPFeePercent(trade)

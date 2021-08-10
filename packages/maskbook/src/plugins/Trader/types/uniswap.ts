@@ -8,4 +8,4 @@ export interface SwapCall {
     address: string
     calldata: string
     value: string
-  }
+}

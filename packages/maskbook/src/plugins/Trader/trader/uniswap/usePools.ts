@@ -47,12 +47,12 @@ export function usePools(
 
     const [slot0s, slot0sCalls, slot0sState, slot0sCallback] = useMutlipleContractSingleData(
         poolContracts,
-        new Array(poolContracts.length).fill('slot0'),
+        Array.from<'slot0'>({ length: poolContracts.length }).fill('slot0'),
         [],
     )
     const [liquidities, liquiditiesCalls, liquiditiesState, liquiditiesCallback] = useMutlipleContractSingleData(
         poolContracts,
-        new Array(poolContracts.length).fill('liquidity'),
+        Array.from<'liquidity'>({ length: poolContracts.length }).fill('liquidity'),
         [],
     )
 
