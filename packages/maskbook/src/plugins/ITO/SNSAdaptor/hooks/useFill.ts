@@ -280,8 +280,8 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
             .estimateGas({
                 from: account,
             })
-            .catch((err: Error) => {
-                gasError = err
+            .catch((error: Error) => {
+                gasError = error
             })) as number | undefined
 
         return { gas, params, paramsObj, gasError }

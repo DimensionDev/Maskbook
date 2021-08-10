@@ -20,23 +20,25 @@ const useStyles = makeStyles((theme) => {
 })
 
 const isSnaphotURL = (x: string): boolean =>
-    /^https:\/\/(?:www.)?snapshot.(org|page)\/#\/(.*?)\/proposal\/[A-Za-z0-9]+$/.test(x)
+    /^https:\/\/(?:www.)?snapshot.(org|page)\/#\/(.*?)\/proposal\/[\dA-Za-z]+$/.test(x)
 
 function Renderer({ url }: { url: string }) {
     const classes = useStyles()
     return (
         <MaskbookPluginWrapper pluginName="Snapshot">
             <Suspense
-                fallback={new Array(2).fill(0).map((_, i) => (
-                    <Skeleton
-                        key={i}
-                        className={classes.skeleton}
-                        animation="wave"
-                        variant="rectangular"
-                        width={i === 0 ? '80%' : '60%'}
-                        height={15}
-                    />
-                ))}>
+                fallback={Array.from({ length: 2 })
+                    .fill(0)
+                    .map((_, i) => (
+                        <Skeleton
+                            key={i}
+                            className={classes.skeleton}
+                            animation="wave"
+                            variant="rectangular"
+                            width={i === 0 ? '80%' : '60%'}
+                            height={15}
+                        />
+                    ))}>
                 <PostInspector url={url} />
             </Suspense>
         </MaskbookPluginWrapper>

@@ -126,7 +126,7 @@ export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string
 }
 
 // parse a name or symbol from a token response
-const BYTES32_REGEX = /^0x[a-fA-F0-9]{64}$/
+const BYTES32_REGEX = /^0x[\dA-Fa-f]{64}$/
 
 export function parseStringOrBytes32(
     str: string | undefined,

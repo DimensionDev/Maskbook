@@ -52,7 +52,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
         } else if (node instanceof HTMLImageElement) {
             const image = node
             const src = image.getAttribute('src')
-            const matched = src?.match(/emoji\/v2\/svg\/([\d\w\-]+)\.svg/)
+            const matched = src?.match(/emoji\/v2\/svg\/([\w\-]+)\.svg/)
             if (matched?.[1]) {
                 const codePoints = matched[1].split('-').map((x) => Number.parseInt(`0x${x}`, 16))
                 return makeTypedMessageText(String.fromCodePoint(...codePoints))
