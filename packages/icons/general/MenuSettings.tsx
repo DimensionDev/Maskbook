@@ -1,7 +1,9 @@
 import { createIcon } from '../utils'
-export const MenuSettingsIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const MenuSettingsIcon: typeof SvgIcon = createIcon(
     'MenuSettingsIcon',
-    <>
+    <g>
         <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -46,6 +48,6 @@ export const MenuSettingsIcon = createIcon(
                 <stop offset="1" stopColor="#C3D7F5" />
             </linearGradient>
         </defs>
-    </>,
+    </g>,
     '0 0 24 24',
 )

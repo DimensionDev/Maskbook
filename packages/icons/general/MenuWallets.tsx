@@ -1,7 +1,9 @@
 import { createIcon } from '../utils'
-export const MenuWalletsIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const MenuWalletsIcon: typeof SvgIcon = createIcon(
     'MenuWalletsIcon',
-    <>
+    <g>
         <path opacity=".8" d="M19 13.504v-.184h.408a.092.092 0 110 .184H19z" fill="#1C68F3" />
         <g filter="url(#filter0_b)">
             <path
@@ -76,6 +78,6 @@ export const MenuWalletsIcon = createIcon(
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
         </defs>
-    </>,
+    </g>,
     '0 0 24 24',
 )

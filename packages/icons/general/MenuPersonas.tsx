@@ -1,7 +1,9 @@
 import { createIcon } from '../utils'
-export const MenuPersonasIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const MenuPersonasIcon: typeof SvgIcon = createIcon(
     'MenuPersonasIcon',
-    <>
+    <g>
         <rect
             x="3.641"
             y="13.087"
@@ -71,6 +73,6 @@ export const MenuPersonasIcon = createIcon(
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
         </defs>
-    </>,
+    </g>,
     '0 0 24 24',
 )

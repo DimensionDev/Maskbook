@@ -1,7 +1,9 @@
 import { createIcon } from '../utils'
-export const MenuWalletsActiveIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const MenuWalletsActiveIcon: typeof SvgIcon = createIcon(
     'MenuWalletsActiveIcon',
-    <>
+    <g>
         <path d="M19 13.503v-.182h.41a.09.09 0 110 .182H19z" fill="#1C68F3" />
         <g filter="url(#filter0_b)">
             <path
@@ -68,6 +70,6 @@ export const MenuWalletsActiveIcon = createIcon(
                 <stop offset="1" stopColor="#6CB8FF" />
             </linearGradient>
         </defs>
-    </>,
+    </g>,
     '0 0 24 24',
 )

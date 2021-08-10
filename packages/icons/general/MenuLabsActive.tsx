@@ -1,7 +1,9 @@
 import { createIcon } from '../utils'
-export const MenuLabsActiveIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const MenuLabsActiveIcon: typeof SvgIcon = createIcon(
     'MenuLabsActiveIcon',
-    <>
+    <g>
         <circle cx="11" cy="12" r="6" fill="url(#paint0_linear)" />
         <g filter="url(#filter0_b)">
             <path
@@ -38,6 +40,6 @@ export const MenuLabsActiveIcon = createIcon(
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
         </defs>
-    </>,
+    </g>,
     '0 0 24 24',
 )
