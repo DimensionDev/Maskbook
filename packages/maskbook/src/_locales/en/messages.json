@@ -587,7 +587,7 @@
     "plugin_ito_list_total": "Total: ",
     "plugin_ito_list_table_type": "Type",
     "plugin_ito_list_table_price": "Swap Ratio",
-    "plugin_ito_no_claimable_token": "Your wallet address does not have any tokens from ITO that can be claimed.",
+    "plugin_ito_no_claimable_token": "Your wallet address does not have any tokens that can be claimed.",
     "plugin_ito_list_table_sold": "Swapped",
     "plugin_ito_list_table_got": "Balance",
     "plugin_ito_list_button_send": "Send",
