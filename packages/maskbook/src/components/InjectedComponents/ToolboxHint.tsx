@@ -30,7 +30,6 @@ import { Flags } from '../../utils/flags'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
 import { useI18N } from '../../utils'
-import { base as ITO_Plugin } from '../../plugins/ITO/base'
 import { forwardRef, useRef } from 'react'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
@@ -187,7 +186,6 @@ export function ToolboxHint(props: ToolboxHintProps) {
         {
             ...ToolIconURLs.claim,
             onClick: onClaimAllDialogOpen,
-            hide: operatingSupportedChainMapping[ITO_Plugin.ID],
         },
     ]
 
