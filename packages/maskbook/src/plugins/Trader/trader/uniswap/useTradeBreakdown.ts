@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import JSBI from 'jsbi'
 import { Trade as V2Trade } from '@uniswap/v2-sdk'
-import type { Trade as V3Trade } from '@uniswap/v3-sdk'
-import { Percent, Fraction, CurrencyAmount, Currency, TradeType } from '@uniswap/sdk-core'
+import { Percent, Fraction, CurrencyAmount, Currency } from '@uniswap/sdk-core'
+import type { Trade } from '../../types'
 
 const BASE_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000))
 const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
@@ -10,7 +10,7 @@ const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE)
 
 // computes realized lp fee as a percent
 function computeRealizedLPFeePercent(
-    trade: V2Trade<Currency, Currency, TradeType> | V3Trade<Currency, Currency, TradeType>,
+    trade: Trade,
 ): Percent {
     if (trade instanceof V2Trade) {
         // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
@@ -36,7 +36,7 @@ function computeRealizedLPFeePercent(
 
 // computes price breakdown for the trade
 function computeRealizedLPFeeAmount(
-    trade?: V2Trade<Currency, Currency, TradeType> | V3Trade<Currency, Currency, TradeType> | null,
+    trade?: Trade | null,
 ): CurrencyAmount<Currency> | undefined {
     if (trade) {
         const realizedLPFee = computeRealizedLPFeePercent(trade)
@@ -51,7 +51,7 @@ function computeRealizedLPFeeAmount(
 }
 
 export function useTradeBreakdown(
-    trade: V2Trade<Currency, Currency, TradeType> | V3Trade<Currency, Currency, TradeType> | null,
+    trade: Trade | null,
 ) {
     return useMemo(() => {
         if (!trade) return null

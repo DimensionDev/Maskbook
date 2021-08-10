@@ -1,11 +1,10 @@
 import { useCallback, useState } from 'react'
-import type { Currency, TradeType } from '@uniswap/sdk-core'
-import type { SwapParameters, Trade } from '@uniswap/v2-sdk'
+import type { SwapParameters } from '@uniswap/v2-sdk'
 import type { RouterV2 } from '@masknet/web3-contracts/types/RouterV2'
 import { TransactionState, TransactionStateType, TransactionEventType, useAccount } from '@masknet/web3-shared'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
-import type { TradeComputed } from '../../types'
+import type { Trade, TradeComputed } from '../../types'
 
 interface SuccessfulCall {
     parameters: SwapParameters
@@ -18,7 +17,7 @@ interface FailedCall {
 }
 
 export function useTradeCallback(
-    trade: TradeComputed<Trade<Currency, Currency, TradeType>> | null,
+    trade: TradeComputed<Trade> | null,
     routerV2Contract: RouterV2 | null,
     allowedSlippage = SLIPPAGE_TOLERANCE_DEFAULT,
     ddl = DEFAULT_TRANSACTION_DEADLINE,

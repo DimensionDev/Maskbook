@@ -1,17 +1,16 @@
 import { ZERO, FungibleTokenDetailed } from '@masknet/web3-shared'
 import { Trade as V2Trade } from '@uniswap/v2-sdk'
-import type { Trade as V3Trade } from '@uniswap/v3-sdk'
-import { Currency, TradeType } from '@uniswap/sdk-core'
+import { TradeType } from '@uniswap/sdk-core'
 import { uniswapCurrencyAmountTo, uniswapPercentTo, uniswapPriceTo, uniswapTokenTo } from '../../helpers'
-import { TradeComputed, TradeStrategy } from '../../types'
+import { Trade, TradeComputed, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { useTradeBreakdown } from './useTradeBreakdown'
 
 export function useTradeComputed(
-    trade: V2Trade<Currency, Currency, TradeType> | V3Trade<Currency, Currency, TradeType> | null,
+    trade: Trade | null,
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
-): TradeComputed<V2Trade<Currency, Currency, TradeType> | V3Trade<Currency, Currency, TradeType>> | null {
+): TradeComputed<Trade> | null {
     const slippage = useSlippageTolerance()
     const breakdown = useTradeBreakdown(trade)
 
