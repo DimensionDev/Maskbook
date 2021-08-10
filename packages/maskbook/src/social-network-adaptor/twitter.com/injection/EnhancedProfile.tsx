@@ -161,7 +161,6 @@ function useLocationChange() {
     }, [onLocationChange])
 }
 
-
 export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
     const style = getStyle()
     const classes = useEnhancedProfileStyles(style)
