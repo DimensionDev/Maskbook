@@ -42,11 +42,11 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
     const listOfReserves = useMemo(() => {
         return results
             .map((x, i) => {
-                if (x.error) return undefined
+                if (x.error || !x.value) return undefined
                 return {
                     id: contracts[i].options.address,
-                    reserve0: x.value!._reserve0,
-                    reserve1: x.value!._reserve1,
+                    reserve0: x.value._reserve0,
+                    reserve1: x.value._reserve1,
                 }
             })
             .filter(Boolean) as {
