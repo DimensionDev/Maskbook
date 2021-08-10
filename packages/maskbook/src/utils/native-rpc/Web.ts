@@ -29,9 +29,9 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             })
         return stringify(connectedPersonas)
     },
-    app_isPluginEnabled: (id) => Services.Settings.isPluginEnabled(id),
-    app_setPluginStatus: (id, enabled) => Services.Settings.setPluginStatus(id, enabled),
-    setting_getNetworkTraderProvider: (network) => {
+    app_isPluginEnabled: ({ pluginID }) => Services.Settings.isPluginEnabled(pluginID),
+    app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginStatus(pluginID, enabled),
+    setting_getNetworkTraderProvider: ({ network }) => {
         switch (network) {
             case NetworkType.Ethereum:
                 return Services.Settings.getEthereumNetworkTradeProvider()
@@ -45,7 +45,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 unreachable(network)
         }
     },
-    setting_setNetworkTraderProvider: (network, provider) => {
+    setting_setNetworkTraderProvider: ({ network, provider }) => {
         switch (network) {
             case NetworkType.Ethereum:
                 return Services.Settings.setEthNetworkTradeProvider(provider)
@@ -60,6 +60,6 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         }
     },
     settings_getTrendingDataSource: () => Services.Settings.getTrendingDataSource(),
-    settings_setTrendingDataSource: (provider) => Services.Settings.setTrendingDataSource(provider),
+    settings_setTrendingDataSource: ({ provider }) => Services.Settings.setTrendingDataSource(provider),
     settings_getLaunchPageSettings: async () => launchPageSettings.value,
 }

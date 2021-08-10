@@ -15,12 +15,12 @@ export interface MaskNetworkAPIs {
      * @example [[{ network: "twitter.com", connected: false } ]]
      */
     getConnectedPersonas(): Promise<string>
-    app_isPluginEnabled(pluginID: string): Promise<boolean>
-    app_setPluginStatus(pluginID: string, enabled: boolean): Promise<void>
-    setting_getNetworkTraderProvider(network: NetworkType): Promise<TradeProvider | undefined>
-    setting_setNetworkTraderProvider(network: NetworkType, provider: TradeProvider): Promise<void>
+    app_isPluginEnabled(payload: { pluginID: string }): Promise<boolean>
+    app_setPluginStatus(payload: { pluginID: string; enabled: boolean }): Promise<void>
+    setting_getNetworkTraderProvider(payload: { network: NetworkType }): Promise<TradeProvider | undefined>
+    setting_setNetworkTraderProvider(payload: { network: NetworkType; provider: TradeProvider }): Promise<void>
     settings_getTrendingDataSource(): Promise<DataProvider>
-    settings_setTrendingDataSource(provider: DataProvider): Promise<void>
+    settings_setTrendingDataSource(payload: { provider: DataProvider }): Promise<void>
     settings_getLaunchPageSettings(): Promise<LaunchPage>
 }
 
