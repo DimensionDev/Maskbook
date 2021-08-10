@@ -70,7 +70,8 @@ export interface MaskMessages extends SettingsEvents {
     pluginEnabled: string
     pluginDisabled: string
 
-    profileNFTsPageUpdate: ProfileNFTsPageEvent
+    profileNFTsPageUpdated: ProfileNFTsPageEvent
+    profileNFTsTabUpdated: 'reset'
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })

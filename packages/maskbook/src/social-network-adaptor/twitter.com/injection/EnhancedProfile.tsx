@@ -14,6 +14,7 @@ import {
 import { useEthereumAddress } from './useEthereumName'
 import Color from 'color'
 import { CollectibleListAddress } from '../../../extension/options-page/DashboardComponents/CollectibleList'
+import { getMaskColor } from '@masknet/theme'
 
 function injectEnhancedProfileTab(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
@@ -124,13 +125,6 @@ function resetStatus() {
     })
 }
 
-function useRepaceState(handler: () => void) {
-    useEffect(() => {
-        window.addEventListener('replacestate', handler)
-        return () => window.removeEventListener('replacestate', handler)
-    }, [handler])
-}
-
 function getStyle() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
@@ -149,13 +143,12 @@ function getStyle() {
     } as StyleProps
 }
 
-function useLocationChange() {
+function useLocationChange(handler: () => void) {
     const onLocationChange = useCallback(() => {
-        console.log(location.href)
-    }, [])
+        handler()
+    }, [handler])
 
     useEffect(() => {
-        onLocationChange()
         window.addEventListener('locationchange', onLocationChange)
         return () => window.removeEventListener('locationchange', onLocationChange)
     }, [onLocationChange])
@@ -169,15 +162,17 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
 
     const onClose = () => {
         setActive(false)
-        MaskMessage.events.profileNFTsPageUpdate.sendToLocal({ show: false })
+        MaskMessage.events.profileNFTsPageUpdated.sendToLocal({ show: false })
         resetStatus()
     }
     const onOpen = () => {
-        MaskMessage.events.profileNFTsPageUpdate.sendToLocal({ show: true })
+        MaskMessage.events.profileNFTsPageUpdated.sendToLocal({ show: true })
         setActive(true)
     }
 
-    useRepaceState(onClose)
+    useEffect(() => {
+        return MaskMessage.events.profileNFTsTabUpdated.on(onClose)
+    }, [])
 
     const onClick = useCallback(() => {
         onOpen()
@@ -202,7 +197,7 @@ const EnhancedProfileaPageStyles = makeStyles<Theme, StyleProps>((theme) => ({
             fontSize: 18,
             fontFamily: 'inherit',
             fontWeight: 700,
-            color: 'black',
+            color: getMaskColor(theme).textPrimary,
         },
     },
     button: {
@@ -220,10 +215,12 @@ export function EnhancedProfileaPage() {
     const style = getStyle()
     const classes = EnhancedProfileaPageStyles(style)
 
-    useLocationChange()
+    useLocationChange(() => {
+        MaskMessage.events.profileNFTsTabUpdated.sendToLocal('reset')
+    })
 
     useEffect(() => {
-        return MaskMessage.events.profileNFTsPageUpdate.on((data) => {
+        return MaskMessage.events.profileNFTsPageUpdated.on((data) => {
             setShow(data.show)
         })
     }, [])
