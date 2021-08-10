@@ -1,5 +1,7 @@
 import { createIcon } from '../utils'
-export const ImportWalletIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const ImportWalletIcon: typeof SvgIcon = createIcon(
     'Index',
     <g>
         <g filter="url(#filter0_b)">

@@ -1,6 +1,7 @@
 import { createIcon } from '../utils'
+import type { SvgIcon } from '@material-ui/core'
 
-export const MaskTextNightlyIcon = createIcon(
+export const MaskTextNightlyIcon: typeof SvgIcon = createIcon(
     'MaskTextNightly',
     <g>
         <path

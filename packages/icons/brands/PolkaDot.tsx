@@ -1,5 +1,7 @@
 import { createIcon } from '../utils'
-export const PolkaDotIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const PolkaDotIcon: typeof SvgIcon = createIcon(
     'PolkaDot',
     <g>
         <path

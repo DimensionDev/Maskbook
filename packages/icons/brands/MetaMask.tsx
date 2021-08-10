@@ -1,5 +1,7 @@
 import { createIcon } from '../utils'
-export const MetaMaskIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const MetaMaskIcon: typeof SvgIcon = createIcon(
     'MetaMask',
     <g>
         <path

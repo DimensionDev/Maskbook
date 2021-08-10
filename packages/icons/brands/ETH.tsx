@@ -1,6 +1,7 @@
 import { createIcon } from '../utils'
+import type { SvgIcon } from '@material-ui/core'
 
-export const ETHIcon = createIcon(
+export const ETHIcon: typeof SvgIcon = createIcon(
     'ETH',
     <g>
         <circle cx="10" cy="10" r="10" fill="#AFC3E1" />

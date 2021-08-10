@@ -1,6 +1,7 @@
 import { createIcon } from '../utils'
+import type { SvgIcon } from '@material-ui/core'
 
-export const EmptyIcon = createIcon(
+export const EmptyIcon: typeof SvgIcon = createIcon(
     'EmptyIcon',
     <g>
         <g clipPath="url(#empty_clip0)">

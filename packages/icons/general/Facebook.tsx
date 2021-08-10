@@ -1,5 +1,7 @@
 import { createIcon } from '../utils'
-export const FacebookIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const FacebookIcon: typeof SvgIcon = createIcon(
     'FacebookIcon',
     <g>
         <path

@@ -1,5 +1,7 @@
 import { createIcon } from '../utils'
-export const UploadIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const UploadIcon: typeof SvgIcon = createIcon(
     'UploadIcon',
     <g>
         <path

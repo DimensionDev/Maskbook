@@ -1,6 +1,7 @@
 import { createIcon } from '../utils'
+import type { SvgIcon } from '@material-ui/core'
 
-export const RedPacketIcon = createIcon(
+export const RedPacketIcon: typeof SvgIcon = createIcon(
     'RedPacketIcon',
     <g>
         <path d="M3.765 5.161s-.661-1.903 6.767-1.903c7.428 0 6.767 1.903 6.767 1.903v.82H3.765v-.82z" fill="#DB1919" />

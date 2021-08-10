@@ -1,6 +1,7 @@
 import { createIcon } from '../utils'
+import type { SvgIcon } from '@material-ui/core'
 
-export const MaskNotSquareIcon = createIcon(
+export const MaskNotSquareIcon: typeof SvgIcon = createIcon(
     'Mask',
     <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <g transform="translate(30.000000, 30.000000)">

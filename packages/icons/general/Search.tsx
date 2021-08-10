@@ -1,6 +1,7 @@
 import { createIcon } from '../utils'
+import type { SvgIcon } from '@material-ui/core'
 
-export const SearchIcon = createIcon(
+export const SearchIcon: typeof SvgIcon = createIcon(
     'Search',
     <g>
         <path

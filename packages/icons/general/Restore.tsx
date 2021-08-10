@@ -1,6 +1,7 @@
 import { createIcon } from '../utils'
+import type { SvgIcon } from '@material-ui/core'
 
-export const RestoreIcon = createIcon(
+export const RestoreIcon: typeof SvgIcon = createIcon(
     'Restore',
     <g>
         <g filter="url(#filter0_b)">

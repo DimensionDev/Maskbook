@@ -1,6 +1,7 @@
 import { createIcon } from '../utils'
+import type { SvgIcon } from '@material-ui/core'
 
-export const MaskWalletIcon = createIcon(
+export const MaskWalletIcon: typeof SvgIcon = createIcon(
     'Wallet',
     <g>
         <path d="M38 27.006v-.363h.819a.181.181 0 110 .363H38z" fill="#1C68F3" />

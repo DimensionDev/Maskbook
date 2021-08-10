@@ -1,6 +1,7 @@
 import { createPaletteAwareIcon } from '../utils'
+import type { SvgIcon } from '@material-ui/core'
 
-export const LinkOutIcon = createPaletteAwareIcon(
+export const LinkOutIcon: typeof SvgIcon = createPaletteAwareIcon(
     'LinkOutIcon',
     <g>
         <path

@@ -1,5 +1,7 @@
 import { createIcon } from '../utils'
-export const AirdropNotSquareIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const AirdropNotSquareIcon: typeof SvgIcon = createIcon(
     'AirdropIcon',
     <g>
         <path

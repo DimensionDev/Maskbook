@@ -1,5 +1,7 @@
 import { createIcon } from '../utils'
-export const TwitterIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const TwitterIcon: typeof SvgIcon = createIcon(
     'TwitterIcon',
     <g>
         <path

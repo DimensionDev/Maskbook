@@ -1,5 +1,7 @@
 import { createIcon } from '../utils'
-export const CardIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const CardIcon: typeof SvgIcon = createIcon(
     'CardIcon',
     <g>
         <g clipPath="url(#card_clip0)" stroke="#fff" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">

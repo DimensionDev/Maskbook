@@ -1,5 +1,7 @@
 import { createIcon } from '../utils'
-export const LinkIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const LinkIcon: typeof SvgIcon = createIcon(
     'Link',
     <g>
         <path
