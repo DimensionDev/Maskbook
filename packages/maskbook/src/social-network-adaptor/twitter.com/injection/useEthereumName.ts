@@ -4,7 +4,7 @@ import { getBioDescription, getNickname, getTwitterId } from '../utils/user'
 
 const ENS_RE = /\w+\.eth/
 const ENS_RE_FULL = /^\w+\.eth$/
-const ADDRESS = /0x[a-fA-F0-9]{40}/
+const ADDRESS = /0x[\dA-Fa-f]{40}/
 
 export function useEthereumName() {
     const [ethereumName, setEthereumName] = useState('')
