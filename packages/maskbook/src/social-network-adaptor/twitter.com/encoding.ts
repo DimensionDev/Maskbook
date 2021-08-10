@@ -68,9 +68,9 @@ export const twitterEncoding = {
             return [
                 `🎼${batchReplace(
                     payload
-                        // eslint-disable-next-line unicorn/better-regex
                         // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/1476
-                        .replace(/^postdata_v\d=/i, '')
+                        // eslint-disable-next-line unicorn/better-regex
+                        .replace(/^PostData_v\d=/i, '')
                         .replace(/^%20/, '')
                         .replace(/%40$/, ''),
                     [
