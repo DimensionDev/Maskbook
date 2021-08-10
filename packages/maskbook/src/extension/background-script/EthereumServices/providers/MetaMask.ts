@@ -38,7 +38,7 @@ async function onChainIdChanged(id: string) {
 }
 
 async function onError(error: string) {
-    if (typeof error !== 'string' || !/lost connection to metamask/i.test(error)) return
+    if (typeof error !== 'string' || !error.toLowerCase().includes('lost connection to metamask')) return
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
     await resetAccount({
         providerType: ProviderType.MetaMask,
