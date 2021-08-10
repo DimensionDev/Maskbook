@@ -8,8 +8,7 @@ import {
     useChainId,
 } from '@masknet/web3-shared'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { Box, makeStyles, Typography, Button, TextField, useTheme, CircularProgress, Link } from '@material-ui/core'
+import { Box, makeStyles, Typography, Button, TextField, CircularProgress, Link } from '@material-ui/core'
 import { useSpaceStationClaimableTokenCountCallback } from './hooks/useSpaceStationClaimableTokenCountCallback'
 import { useSpaceStationContractClaimCallback } from './hooks/useSpaceStationContractClaimCallback'
 import { useSpaceStationClaimable } from './hooks/useSpaceStationClaimable'
@@ -24,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         color: '#fff',
         width: 496,
-        height: 340,
+        height: ({ claimable }: { claimable: boolean }) => (claimable ? 340 : 250),
         padding: 20,
         borderRadius: 12,
         marginBottom: theme.spacing(1.5),
@@ -89,11 +88,15 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             background: 'rgba(255, 255, 255, 0.4)',
         },
+        '&.Mui-disabled': { color: '#fff', opacity: 0.6, background: 'rgba(255, 255, 255, 0.2)' },
     },
     connectWallet: {
         width: 200,
         minHeight: 40,
         whiteSpace: 'nowrap',
+    },
+    disabledButton: {
+        color: '#fff',
     },
     address: {
         width: 340,
@@ -157,7 +160,6 @@ export function NftAirdropCard() {
     const classes = useStyles({ claimable })
     const loading = claimableLoading || campaignInfoLoading
     const [claimState, claimCallback] = useSpaceStationContractClaimCallback(campaignInfo!)
-    const theme = useTheme()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const snackbarOptions = {
         preventDuplicate: true,
@@ -248,39 +250,29 @@ export function NftAirdropCard() {
                             </Typography>
                         </div>
                         <div>
-                            <EthereumChainBoundary
-                                chainId={ChainId.Mumbai}
-                                noSwitchNetworkTip={true}
-                                switchButtonStyle={{
-                                    whiteSpace: 'nowrap',
-                                    width: 'auto',
-                                    background: 'rgba(255, 255, 255, 0.2)',
-                                    '&:hover': {
-                                        background: 'rgba(255, 255, 255, 0.4)',
-                                    },
-                                    alignSelf: 'baseline',
+                            <EthereumWalletConnectedBoundary
+                                classes={{
+                                    connectWallet: classNames(classes.actionButton, classes.connectWallet),
+                                    gasFeeButton: classNames(classes.actionButton, classes.connectWallet),
+                                    invalidButton: classNames(classes.actionButton, classes.connectWallet),
                                 }}>
-                                <EthereumWalletConnectedBoundary
-                                    classes={{
-                                        connectWallet: classNames(classes.actionButton, classes.connectWallet),
-                                    }}>
-                                    <Button
-                                        disabled={
-                                            claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING ||
-                                            claimState.type === TransactionStateType.HASH ||
-                                            campaignInfo.nfts.length === 0 ||
-                                            !claimable
-                                        }
-                                        onClick={claimCallback}
-                                        className={classes.actionButton}>
-                                        <span>{t('plugin_airdrop_nft_claim')}</span>
-                                        {claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING ||
-                                        claimState.type === TransactionStateType.HASH ? (
-                                            <CircularProgress size={16} className={classes.loading} />
-                                        ) : null}
-                                    </Button>
-                                </EthereumWalletConnectedBoundary>
-                            </EthereumChainBoundary>
+                                <Button
+                                    disabled={
+                                        claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING ||
+                                        claimState.type === TransactionStateType.HASH ||
+                                        campaignInfo.nfts.length === 0 ||
+                                        !claimable
+                                    }
+                                    classes={{ disabled: classes.disabledButton }}
+                                    onClick={claimCallback}
+                                    className={classes.actionButton}>
+                                    <span>{t('plugin_airdrop_nft_claim')}</span>
+                                    {claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING ||
+                                    claimState.type === TransactionStateType.HASH ? (
+                                        <CircularProgress size={16} className={classes.loading} />
+                                    ) : null}
+                                </Button>
+                            </EthereumWalletConnectedBoundary>
                         </div>
                     </div>
 
@@ -296,6 +288,7 @@ export function NftAirdropCard() {
                         <Button
                             disabled={spaceStationAccountClaimableLoading || checkAddress === ''}
                             onClick={async () => spaceStationAccountClaimableCallback(checkAddress)}
+                            classes={{ disabled: classes.disabledButton }}
                             className={classes.actionButton}>
                             <span>{t('plugin_airdrop_nft_check')}</span>
                             {spaceStationAccountClaimableLoading ? (

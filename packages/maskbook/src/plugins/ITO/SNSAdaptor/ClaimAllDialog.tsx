@@ -27,7 +27,7 @@ import { useLayoutEffect, useRef } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
-        padding: theme.spacing(4),
+        padding: theme.spacing(0, 4),
     },
     actionButton: {
         margin: '0 auto',
@@ -62,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
     tokenCardWrapper: {
         width: '100%',
         color: 'white',
-        maxHeight: 450,
         overflow: 'auto',
         paddingTop: theme.spacing(1),
         marginBottom: theme.spacing(0.5),
@@ -145,8 +144,19 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(3),
     },
     contentWrapper: {
-        minHeight: 350,
-        marginTop: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        height: 650,
+    },
+    actionButtonWrapper: {
+        position: 'sticky',
+        width: '100%',
+        marginTop: 'auto',
+        bottom: 0,
+        zIndex: 2,
+        paddingBottom: theme.spacing(4),
+        paddingTop: theme.spacing(2),
+        backgroundColor: theme.palette.background.paper,
     },
     emptyContentWrapper: {
         display: 'flex',
@@ -182,6 +192,15 @@ const useStyles = makeStyles((theme) => ({
     },
     snackbarError: {
         backgroundColor: '#FF5555',
+    },
+    abstractTabWrapper: {
+        position: 'sticky',
+        top: 0,
+        width: '100%',
+        zIndex: 2,
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(2),
+        backgroundColor: theme.palette.background.paper,
     },
 }))
 
@@ -341,60 +360,78 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             }}>
             <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_dialog_title')}>
                 <DialogContent className={classes.wrapper}>
-                    <AbstractTab {...tabProps} />
+                    <div className={classes.abstractTabWrapper}>
+                        <AbstractTab {...tabProps} />
+                    </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
-                        {chainId === ChainId.Matic || chainId === ChainId.Mumbai ? <NftAirdropCard /> : null}
+                        {chainId === ChainId.Matic ? <NftAirdropCard /> : null}
 
-                        <div>
-                            {loading || loadingOld || initLoading || !swappedTokens || !swappedTokensOld ? (
-                                <div className={classes.emptyContentWrapper}>
-                                    <CircularProgress size={24} />
-                                </div>
-                            ) : swappedTokens.length > 0 || swappedTokensOld.length > 0 ? (
-                                <>
-                                    {swappedTokensOld.length > 0 ? (
-                                        <div className={classes.content}>
-                                            {swappedTokens.length > 0 && swappedTokensOld.length > 0 ? (
-                                                <Typography color="textPrimary" className={classes.contentTitle}>
-                                                    {t('plugin_ito_claim_all_old_contract')}
-                                                </Typography>
-                                            ) : null}
-                                            <Content
-                                                chainId={chainId}
-                                                onClaimButtonClick={onClaimButtonClickOld}
-                                                swappedTokens={swappedTokensOld}
-                                                claimablePids={claimablePidsOld}
-                                            />
-                                        </div>
-                                    ) : null}
-                                    {swappedTokens.length > 0 ? (
-                                        <div className={classes.content}>
-                                            {swappedTokens.length > 0 && swappedTokensOld.length > 0 ? (
-                                                <Typography color="textPrimary" className={classes.contentTitle}>
-                                                    {t('plugin_ito_claim_all_new_contract')}
-                                                </Typography>
-                                            ) : null}
-                                            <Content
-                                                chainId={chainId}
-                                                onClaimButtonClick={onClaimButtonClick}
-                                                swappedTokens={swappedTokens}
-                                                claimablePids={claimablePids}
-                                            />
-                                        </div>
-                                    ) : null}
-                                </>
-                            ) : (
-                                <div
-                                    className={classNames(
-                                        classes.emptyContentWrapper,
-                                        currentChainId === ChainId.Mumbai && chainId === ChainId.Matic
-                                            ? classes.emptyContentWrapperNoHeight
-                                            : '',
-                                    )}>
-                                    <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
-                                </div>
-                            )}
-                        </div>
+                        {loading || loadingOld || initLoading || !swappedTokens || !swappedTokensOld ? (
+                            <div className={classes.emptyContentWrapper}>
+                                <CircularProgress size={24} />
+                            </div>
+                        ) : swappedTokens.length > 0 || swappedTokensOld.length > 0 ? (
+                            <>
+                                {swappedTokensOld.length > 0 ? (
+                                    <div className={classes.content}>
+                                        {swappedTokens.length > 0 && swappedTokensOld.length > 0 ? (
+                                            <Typography color="textPrimary" className={classes.contentTitle}>
+                                                {t('plugin_ito_claim_all_old_contract')}
+                                            </Typography>
+                                        ) : null}
+                                        <Content swappedTokens={swappedTokensOld} />
+                                    </div>
+                                ) : null}
+                                {swappedTokens.length > 0 ? (
+                                    <div className={classes.content}>
+                                        {swappedTokens.length > 0 && swappedTokensOld.length > 0 ? (
+                                            <Typography color="textPrimary" className={classes.contentTitle}>
+                                                {t('plugin_ito_claim_all_new_contract')}
+                                            </Typography>
+                                        ) : null}
+                                        <Content swappedTokens={swappedTokens} />
+                                    </div>
+                                ) : null}
+                            </>
+                        ) : chainId !== ChainId.Matic ? (
+                            <div
+                                className={classNames(
+                                    classes.emptyContentWrapper,
+                                    currentChainId === ChainId.Mumbai ? classes.emptyContentWrapperNoHeight : '',
+                                )}>
+                                <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
+                            </div>
+                        ) : null}
+                        {(swappedTokens && swappedTokens.length > 0) ||
+                        (swappedTokensOld && swappedTokensOld.length > 0) ||
+                        chainId === ChainId.Matic ? (
+                            <div className={classes.actionButtonWrapper}>
+                                <EthereumChainBoundary
+                                    chainId={chainId}
+                                    noSwitchNetworkTip={true}
+                                    switchButtonStyle={{
+                                        backgroundColor: '#1C68F3',
+                                        '&:hover': {
+                                            backgroundColor: '#1854c4',
+                                        },
+                                        minHeight: 'auto',
+                                        width: '100%',
+                                        fontSize: 18,
+                                        fontWeight: 400,
+                                    }}>
+                                    <EthereumWalletConnectedBoundary>
+                                        <ActionButton
+                                            className={classes.actionButton}
+                                            variant="contained"
+                                            disabled={claimablePids!.length === 0}
+                                            size="large"
+                                            onClick={onClaimButtonClick}>
+                                            {t('plugin_ito_claim_all')}
+                                        </ActionButton>
+                                    </EthereumWalletConnectedBoundary>
+                                </EthereumChainBoundary>
+                            </div>
+                        ) : null}
                     </div>
                 </DialogContent>
             </InjectedDialog>
@@ -403,50 +440,21 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
 }
 
 interface ContentProps {
-    chainId: ChainId
-    onClaimButtonClick: () => void
     swappedTokens: SwappedToken[]
-    claimablePids: string[]
 }
 
 function Content(props: ContentProps) {
     const { t } = useI18N()
     const classes = useStyles()
-    const { onClaimButtonClick, swappedTokens, claimablePids, chainId } = props
+    const { swappedTokens } = props
     return (
-        <>
-            <List className={classes.tokenCardWrapper}>
-                {swappedTokens.map((swappedToken, i) => (
-                    <div key={i}>
-                        <SwappedToken i={i} swappedToken={swappedToken} />
-                    </div>
-                ))}
-            </List>
-            <EthereumChainBoundary
-                chainId={chainId}
-                noSwitchNetworkTip={true}
-                switchButtonStyle={{
-                    backgroundColor: '#1C68F3',
-                    '&:hover': {
-                        backgroundColor: '#1854c4',
-                    },
-                    minHeight: 'auto',
-                    width: '100%',
-                    fontSize: 18,
-                    fontWeight: 400,
-                }}>
-                <EthereumWalletConnectedBoundary>
-                    <ActionButton
-                        className={classes.actionButton}
-                        variant="contained"
-                        disabled={claimablePids!.length === 0}
-                        size="large"
-                        onClick={onClaimButtonClick}>
-                        {t('plugin_ito_claim_all')}
-                    </ActionButton>
-                </EthereumWalletConnectedBoundary>
-            </EthereumChainBoundary>
-        </>
+        <List className={classes.tokenCardWrapper}>
+            {swappedTokens.map((swappedToken, i) => (
+                <div key={i}>
+                    <SwappedToken i={i} swappedToken={swappedToken} />
+                </div>
+            ))}
+        </List>
     )
 }
 
