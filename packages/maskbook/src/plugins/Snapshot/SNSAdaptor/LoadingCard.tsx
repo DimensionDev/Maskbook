@@ -19,16 +19,18 @@ export function LoadingCard(props: React.PropsWithChildren<{ title: string }>) {
         <Suspense
             fallback={
                 <SnapshotCard title={props.title}>
-                    {new Array(2).fill(0).map((_, i) => (
-                        <Skeleton
-                            key={i}
-                            className={classes.skeleton}
-                            animation="wave"
-                            variant="rectangular"
-                            width={i === 0 ? '80%' : '60%'}
-                            height={15}
-                        />
-                    ))}
+                    {Array.from({ length: 2 })
+                        .fill(0)
+                        .map((_, i) => (
+                            <Skeleton
+                                key={i}
+                                className={classes.skeleton}
+                                animation="wave"
+                                variant="rectangular"
+                                width={i === 0 ? '80%' : '60%'}
+                                height={15}
+                            />
+                        ))}
                 </SnapshotCard>
             }>
             {props.children}

@@ -111,7 +111,7 @@ export function useSingleContractMultipleData<T extends BaseContract, K extends 
         ])
     }, [contract?.options.address, names.join(), callDatas.flatMap((x) => x).join()])
     const [state, callback] = useMulticallCallback()
-    const results = useMutlicallStateDecoded(new Array(calls.length).fill(contract) as T[], names, state)
+    const results = useMutlicallStateDecoded(Array.from({ length: calls.length }).fill(contract) as T[], names, state)
     return [results, calls, state, callback] as const
 }
 

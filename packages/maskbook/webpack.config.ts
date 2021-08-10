@@ -203,7 +203,7 @@ function config(opts: {
                 cacheGroups: {
                     // per-npm-package splitting
                     defaultVendors: {
-                        test: /[\\/]node_modules[\\/]/,
+                        test: /[/\\]node_modules[/\\]/,
                         name(module) {
                             const path = (module.context as string)
                                 .replace(/\\/g, '/')

@@ -1,4 +1,5 @@
 import { useAsyncRetry } from 'react-use'
+import { EthereumAddress } from 'wallet.ts'
 import { ERC20TokenDetailed, FungibleToken, ChainId, EthereumTokenType, FungibleTokenDetailed } from '../types'
 import { useChainId } from './useChainId'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
@@ -17,6 +18,7 @@ export function useERC20TokenDetailed(address?: string, token?: Partial<ERC20Tok
 
     return useAsyncRetry(async () => {
         if (!address) return
+        if (!EthereumAddress.isValid(address)) return
         return getERC20TokenDetailed(address, chainId, erc20TokenContract, erc20TokenBytes32Contract, token)
     }, [chainId, token, erc20TokenContract, erc20TokenBytes32Contract, address])
 }
