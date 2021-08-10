@@ -186,6 +186,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
         {
             ...ToolIconURLs.claim,
             onClick: onClaimAllDialogOpen,
+            hide: !account,
         },
     ]
 
