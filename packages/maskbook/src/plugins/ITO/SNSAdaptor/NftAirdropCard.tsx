@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         color: '#fff',
         width: 496,
-        height: ({ claimable }: { claimable: boolean }) => (claimable ? 340 : 250),
+        height: 340,
         padding: 20,
         borderRadius: 12,
         marginBottom: theme.spacing(1.5),
@@ -157,7 +157,7 @@ export function NftAirdropCard() {
     const currentChainId = useChainId()
     const { value: _claimable, loading: claimableLoading } = useSpaceStationClaimable(account)
     const claimable = Boolean(_claimable) && currentChainId === ChainId.Mumbai
-    const classes = useStyles({ claimable })
+    const classes = useStyles()
     const loading = claimableLoading || campaignInfoLoading
     const [claimState, claimCallback] = useSpaceStationContractClaimCallback(campaignInfo!)
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -235,18 +235,14 @@ export function NftAirdropCard() {
                     <div className={classes.claimWrapper}>
                         <div className={classes.nftsWrapper}>
                             <div className={classes.gallery}>
-                                {claimable
-                                    ? campaignInfo.nfts.map((nft, i) => (
-                                          <div className={classes.imgWrapper} key={i}>
-                                              <img src={nft.image} className={classes.nftImage} />{' '}
-                                          </div>
-                                      ))
-                                    : null}
+                                {campaignInfo.nfts.map((nft, i) => (
+                                    <div className={classes.imgWrapper} key={i}>
+                                        <img src={nft.image} className={classes.nftImage} />{' '}
+                                    </div>
+                                ))}
                             </div>
                             <Typography className={classes.text}>
-                                {claimable
-                                    ? `${campaignInfo.nfts.length} ${campaignInfo.nfts.length > 1 ? 'Items' : 'Item'}`
-                                    : `0 Item`}
+                                {`${campaignInfo.nfts.length} ${campaignInfo.nfts.length > 1 ? 'Items' : 'Item'}`}
                             </Typography>
                         </div>
                         <div>

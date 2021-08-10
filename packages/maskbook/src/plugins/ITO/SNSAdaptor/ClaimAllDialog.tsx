@@ -164,9 +164,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         height: 350,
     },
-    emptyContentWrapperNoHeight: {
-        height: 30,
-    },
+
     lockIcon: {
         width: 22,
         height: 22,
@@ -394,11 +392,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                 ) : null}
                             </>
                         ) : chainId !== ChainId.Matic ? (
-                            <div
-                                className={classNames(
-                                    classes.emptyContentWrapper,
-                                    currentChainId === ChainId.Mumbai ? classes.emptyContentWrapperNoHeight : '',
-                                )}>
+                            <div className={classes.emptyContentWrapper}>
                                 <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
                             </div>
                         ) : null}
