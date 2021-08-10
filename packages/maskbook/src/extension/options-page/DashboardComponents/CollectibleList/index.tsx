@@ -170,10 +170,6 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     )
 }
 
-const useCollectibleListAddressStyles = makeStyles((theme) => ({
-    empty: {},
-    button: {},
-}))
 export interface CollectibleListAddressProps extends withClasses<'empty' | 'button'> {
     address: string
 }
@@ -183,7 +179,7 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
     const provider = useValueRef(currentCollectibleDataProviderSettings)
     const chainId = ChainId.Mainnet
     const [page, setPage] = useState(0)
-    const classes = useStylesExtends(useCollectibleListAddressStyles(), props)
+    const classes = props.classes ?? {}
 
     const {
         value = { collectibles: [], hasNextPage: false },

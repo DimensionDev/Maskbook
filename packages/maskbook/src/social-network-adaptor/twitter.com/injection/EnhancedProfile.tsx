@@ -124,7 +124,7 @@ function resetStatus() {
     })
 }
 
-const useBind = (handler: () => void) => {
+function useRepaceState(handler: () => void) {
     useEffect(() => {
         window.addEventListener('replacestate', handler)
         return () => window.removeEventListener('replacestate', handler)
@@ -164,7 +164,7 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
         setActive(true)
     }
 
-    useBind(onClose)
+    useRepaceState(onClose)
 
     const onClick = useCallback(() => {
         onOpen()
@@ -208,7 +208,7 @@ export function EnhancedProfileaPage() {
     const classes = EnhancedProfileaPageStyles(style)
 
     useEffect(() => {
-        MaskMessage.events.profileNFTsPageUpdate.on((data) => {
+        return MaskMessage.events.profileNFTsPageUpdate.on((data) => {
             setShow(data.show)
         })
     }, [])
