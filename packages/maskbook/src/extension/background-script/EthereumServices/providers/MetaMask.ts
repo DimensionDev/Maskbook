@@ -39,7 +39,7 @@ async function onChainIdChanged(id: string) {
 }
 
 async function onError(error: string) {
-    if (typeof error !== 'string' || !/Lost Connection to MetaMask/i.test(error)) return
+    if (typeof error !== 'string' || !error.toLowerCase().includes('Lost Connection to MetaMask'.toLowerCase())) return
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
     await resetAccount({
         providerType: ProviderType.MetaMask,

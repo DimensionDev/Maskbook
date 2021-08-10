@@ -76,7 +76,9 @@ function Content() {
     const classes = useStyles()
     const { t } = useI18N()
     const listRef = useRef<HTMLSpanElement[]>([])
-    const [tooltipsVisible, setTooltipsVisible] = useState<readonly boolean[]>(new Array(results.length).fill(false))
+    const [tooltipsVisible, setTooltipsVisible] = useState<readonly boolean[]>(
+        Array.from<boolean>({ length: results.length }).fill(false),
+    )
 
     useEffect(() => {
         setTooltipsVisible(listRef.current.map((element) => (element.offsetWidth === choiceMaxWidth ? true : false)))
@@ -126,9 +128,9 @@ function Content() {
                                 title={
                                     <Typography color="textPrimary" className={classes.ellipsisText}>
                                         {result.powerDetail.reduce((sum, cur, i) => {
-                                            return `${sum} ${i === 0 ? '' : '+'} ${
+                                            const name =
                                                 millify(cur.power, { precision: 2, lowercase: true }) + ' ' + cur.name
-                                            }`
+                                            return `${sum} ${i === 0 ? '' : '+'} ${name}`
                                         }, '')}
                                     </Typography>
                                 }

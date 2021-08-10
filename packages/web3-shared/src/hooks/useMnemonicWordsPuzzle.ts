@@ -21,7 +21,12 @@ export function useMnemonicWordsPuzzle() {
     //#region generate some mask indexes randomly which should be filled by the user
     const [seed, setSeed] = useState(0)
     const indexes = useMemo(
-        () => shuffle(new Array(TOTAL_SIZE).fill(seed).map((_, i) => i)).slice(0, PUZZLE_SIZE),
+        () =>
+            shuffle(
+                Array.from({ length: TOTAL_SIZE })
+                    .fill(seed)
+                    .map((_, i) => i),
+            ).slice(0, PUZZLE_SIZE),
         [seed, words],
     )
     //#endregion
