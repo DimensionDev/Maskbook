@@ -2,7 +2,7 @@ import { createIcon } from '../utils'
 
 export const SignUpAccountIcon = createIcon(
     'SignUpAccount',
-    <>
+    <g>
         <rect x="7" y="26.5" width="3" height="15" rx="1.5" transform="rotate(-30 7 26.5)" fill="#1C68F3" />
         <path
             fillRule="evenodd"
@@ -44,6 +44,6 @@ export const SignUpAccountIcon = createIcon(
                 <stop offset="1" stopColor="#6CB8FF" />
             </linearGradient>
         </defs>
-    </>,
+    </g>,
     '0 0 48 48',
 )

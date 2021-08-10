@@ -2,7 +2,7 @@ import { createIcon } from '../utils'
 
 export const EmptyIcon = createIcon(
     'EmptyIcon',
-    <>
+    <g>
         <g clipPath="url(#empty_clip0)">
             <path
                 d="M94 77c0 8.284-20.147 15-45 15S4 85.284 4 77c0-4.353 5.564-8.274 14.45-11.014v.608L47.906 78.5 77.35 66.578v-1.227C87.51 68.1 94 72.298 94 77z"
@@ -94,6 +94,6 @@ export const EmptyIcon = createIcon(
                 <path fill="#fff" d="M0 0h96v96H0z" />
             </clipPath>
         </defs>
-    </>,
+    </g>,
     '0 0 96 96',
 )

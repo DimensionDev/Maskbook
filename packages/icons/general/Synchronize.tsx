@@ -2,7 +2,7 @@ import { createIcon } from '../utils'
 
 export const SynchronizeIcon = createIcon(
     'SynchronizeIcon',
-    <>
+    <g>
         <path
             d="M0 30C0 13.431 13.431 0 30 0c16.569 0 30 13.431 30 30 0 16.569-13.431 30-30 30C13.431 60 0 46.569 0 30z"
             fill="#D9E6FD"
@@ -12,6 +12,6 @@ export const SynchronizeIcon = createIcon(
             fill="#1C68F3"
             stroke="#1C68F3"
         />
-    </>,
+    </g>,
     '0 0 60 60',
 )
