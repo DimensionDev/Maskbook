@@ -4,6 +4,7 @@ import {
     makeSortTokenFn,
     useAccount,
     useAssetsByTokenList,
+    useChainId,
     useERC20TokenDetailed,
     useERC20TokensDetailedFromTokenLists,
     useEthereumConstants,
@@ -34,6 +35,7 @@ export interface FixedTokenListProps extends withClasses<'list' | 'placeholder'>
 export function FixedTokenList(props: FixedTokenListProps) {
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
+    const chainId = useChainId()
 
     const {
         keyword,
@@ -78,7 +80,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     const renderAssets =
         !account || assetsError || assetsLoading
             ? renderTokens
-                  .sort(makeSortTokenFn({ isMaskBoost: true }))
+                  .sort(makeSortTokenFn({ isMaskBoost: true, chainId }))
                   .map((token) => ({ token: token, balance: null }))
             : assets
 

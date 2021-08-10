@@ -142,14 +142,13 @@ export function parseStringOrBytes32(
 }
 
 //#region asset sort
-const { MASK_ADDRESS } = getTokenConstants()
-
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
 export const getBalanceValue = (asset: Asset) => parseFloat(formatBalance(asset.balance, asset.token.decimals))
 
-export const makeSortTokenFn =
-    (options = { isMaskBoost: false }) =>
-    (a: FungibleTokenDetailed, b: FungibleTokenDetailed) => {
+export const makeSortTokenFn = (options = { isMaskBoost: false, chainId: ChainId.Mainnet }) => {
+    const { MASK_ADDRESS } = getTokenConstants(options.chainId)
+
+    return (a: FungibleTokenDetailed, b: FungibleTokenDetailed) => {
         // The native token goes first
         if (a.type === EthereumTokenType.Native) return -1
         if (b.type === EthereumTokenType.Native) return 1
@@ -162,6 +161,7 @@ export const makeSortTokenFn =
 
         return 0
     }
+}
 
 export const makeSortAssertFn =
     (chainId: ChainId, options = { isMaskBoost: false }) =>
@@ -173,7 +173,7 @@ export const makeSortAssertFn =
         }
 
         // token sort
-        const tokenDifference = makeSortTokenFn({ isMaskBoost: options.isMaskBoost })(a.token, b.token)
+        const tokenDifference = makeSortTokenFn({ isMaskBoost: options.isMaskBoost, chainId })(a.token, b.token)
         if (tokenDifference !== 0) return tokenDifference
 
         // Token with high usd value estimation has priority
