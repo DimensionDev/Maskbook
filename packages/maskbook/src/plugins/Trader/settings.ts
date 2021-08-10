@@ -2,7 +2,7 @@ import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import stringify from 'json-stable-stringify'
 import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
-import { PLUGIN_IDENTIFIER, SLIPPAGE_SETTINGS_DEFAULT } from './constants'
+import { PLUGIN_IDENTIFIER, SLIPPAGE_DEFAULT } from './constants'
 import { ZrxTradePool } from './types'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 
@@ -11,7 +11,7 @@ import { DataProvider, TradeProvider } from '@masknet/public-api'
  */
 export const currentSlippageSettings = createGlobalSettings<number>(
     `${PLUGIN_IDENTIFIER}+slippageTolerance`,
-    SLIPPAGE_SETTINGS_DEFAULT,
+    SLIPPAGE_DEFAULT,
     {
         primary: () => '',
     },

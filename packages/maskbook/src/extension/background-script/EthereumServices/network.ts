@@ -71,14 +71,13 @@ export async function getTransactionCount(address: string, overrides?: SendOverr
 }
 
 export async function call(config: TransactionConfig, overrides?: SendOverrides) {
-    const result = await request<string>(
+    return request<string>(
         {
             method: EthereumMethodType.ETH_CALL,
             params: [config],
         },
         overrides,
     )
-    return result
 }
 
 export async function estimateGas(config: TransactionConfig, overrides?: SendOverrides) {
