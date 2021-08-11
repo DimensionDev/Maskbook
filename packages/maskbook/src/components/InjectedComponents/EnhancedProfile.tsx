@@ -1,5 +1,5 @@
 import { getMaskColor } from '@masknet/theme'
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import Color from 'color'
 import { useCallback, useEffect, useState } from 'react'
@@ -23,13 +23,13 @@ interface StyleProps {
     activeColor: string
 }
 
-const useEnhancedProfileStyles = makeStyles<Theme, StyleProps>((theme) => ({
+const useEnhancedProfileStyles = makeStyles<StyleProps>()((theme, props) => ({
     tab: {
         '&:hover': {
-            backgroundColor: (props: StyleProps) => new Color(props.activeColor).alpha(0.1).toString(),
+            backgroundColor: new Color(props.activeColor).alpha(0.1).toString(),
             cursor: 'pointer',
         },
-        height: (props: StyleProps) => props.height,
+        height: props.height,
     },
     button: {
         display: 'flex',
@@ -37,17 +37,17 @@ const useEnhancedProfileStyles = makeStyles<Theme, StyleProps>((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
-        padding: (props: StyleProps) => props.padding,
+        padding: props.padding,
         fontWeight: 700,
-        color: (props: StyleProps) => props.color,
-        font: (props: StyleProps) => props.font,
-        fontSize: (props: StyleProps) => props.fontSize,
+        color: props.color,
+        font: props.font,
+        fontSize: props.fontSize,
         '&:hover': {
-            color: (props: StyleProps) => props.activeColor,
+            color: props.activeColor,
         },
     },
     hot: {
-        color: (props: StyleProps) => props.activeColor,
+        color: props.activeColor,
     },
     active: {
         dispaly: 'inline-flex',
@@ -57,7 +57,7 @@ const useEnhancedProfileStyles = makeStyles<Theme, StyleProps>((theme) => ({
         minWidth: 56,
         alignSelf: 'center',
         height: 4,
-        backgroundColor: (props: StyleProps) => props.activeColor,
+        backgroundColor: props.activeColor,
     },
 }))
 export interface EnhancedProfileTabProps {}
@@ -131,8 +131,7 @@ function useLocationChange(handler: () => void) {
 
 export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
     const style = getStyle()
-    const classes = useEnhancedProfileStyles(style)
-
+    const { classes } = useEnhancedProfileStyles(style)
     const [active, setActive] = useState(false)
 
     const onClose = () => {
@@ -163,8 +162,7 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
         </div>
     )
 }
-
-const EnhancedProfileaPageStyles = makeStyles<Theme, StyleProps>((theme) => ({
+const useEnhancedProfileaPageStyles = makeStyles<StyleProps>()((theme, props) => ({
     empty: {
         paddingTop: 36,
         paddingBottom: 36,
@@ -176,11 +174,11 @@ const EnhancedProfileaPageStyles = makeStyles<Theme, StyleProps>((theme) => ({
         },
     },
     button: {
-        backgroundColor: (props: StyleProps) => props.activeColor,
+        backgroundColor: props.activeColor,
         color: 'white',
         marginTop: 18,
         '&:hover': {
-            backgroundColor: (props: StyleProps) => props.activeColor,
+            backgroundColor: props.activeColor,
         },
     },
 }))
@@ -188,7 +186,7 @@ const EnhancedProfileaPageStyles = makeStyles<Theme, StyleProps>((theme) => ({
 export function EnhancedProfileaPage() {
     const [show, setShow] = useState(false)
     const style = getStyle()
-    const classes = EnhancedProfileaPageStyles(style)
+    const { classes } = useEnhancedProfileaPageStyles(style)
 
     useLocationChange(() => {
         MaskMessage.events.profileNFTsTabUpdated.sendToLocal('reset')
