@@ -22,6 +22,23 @@ export interface MaskNetworkAPIs {
     settings_getTrendingDataSource(): Promise<DataProvider>
     settings_setTrendingDataSource(payload: { provider: DataProvider }): Promise<void>
     settings_getLaunchPageSettings(): Promise<LaunchPage>
+    settings_getTheme(): Promise<Appearance>
+    settings_setTheme(payload: { theme: Appearance }): Promise<void>
+    settings_getLanguage(): Promise<Language>
+    settings_setLanguage(payload: { language: Language }): Promise<void>
+}
+
+export enum Appearance {
+    default = 'default',
+    light = 'light',
+    dark = 'dark',
+}
+
+export enum Language {
+    zh = 'zh',
+    en = 'en',
+    ko = 'ko',
+    ja = 'ja',
 }
 
 export enum LaunchPage {

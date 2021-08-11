@@ -62,4 +62,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     settings_getTrendingDataSource: () => Services.Settings.getTrendingDataSource(),
     settings_setTrendingDataSource: ({ provider }) => Services.Settings.setTrendingDataSource(provider),
     settings_getLaunchPageSettings: async () => launchPageSettings.value,
+    settings_getTheme: () => Services.Settings.getTheme(),
+    settings_setTheme: ({ theme }) => Services.Settings.setTheme(theme),
+    settings_getLanguage: () => Services.Settings.getLanguage(),
+    settings_setLanguage: ({ language }) => Services.Settings.setLanguage(language),
 }
