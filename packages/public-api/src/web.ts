@@ -26,6 +26,23 @@ export interface MaskNetworkAPIs {
     settings_setTheme(payload: { theme: Appearance }): Promise<void>
     settings_getLanguage(): Promise<Language>
     settings_setLanguage(payload: { language: Language }): Promise<void>
+    persona_createPersonaByMnemonic(payload: { mnemonic: string; nickname: string; password: string }): Promise<any>
+    persona_queryPersonas(payload: { identifier: string; hasPrivateKey: boolean }): Promise<any>
+    persona_queryMyPersonas(payload: { network: string }): Promise<any>
+    persona_updatePersonaInfo(payload: { identifier: string; data: { nickname: string } }): Promise<void>
+    persona_removePersona(payload: { identifier: string }): Promise<void>
+    persona_restoreFromJson(payload: { backup: string }): Promise<any>
+    persona_restoreFromBase64(payload: { backup: string }): Promise<any>
+    persona_restoreFromMnemonic(payload: { mnemonic: string; nickname: string; password: string }): Promise<any>
+    persona_connectProfile(payload: {
+        network: string
+        profileUsername: string
+        personaIdentifier: string
+    }): Promise<void>
+    persona_disconnectProfile(payload: { profileUsername: string; network: string }): Promise<void>
+    persona_backupMnemonic(payload: { identifier: string }): Promise<any>
+    persona_backupBase64(payload: { identifier: string }): Promise<string>
+    persona_backupJson(payload: { identifier: string }): Promise<any>
 }
 
 export enum Appearance {

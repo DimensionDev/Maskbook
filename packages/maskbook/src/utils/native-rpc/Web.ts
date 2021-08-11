@@ -3,7 +3,10 @@ import Services from '../../extension/service'
 import { definedSocialNetworkWorkers } from '../../social-network/define'
 import { launchPageSettings } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
-import { unreachable } from '@dimensiondev/kit'
+import { encodeArrayBuffer, encodeText, unreachable } from '@dimensiondev/kit'
+import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
+
+const stringToIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 
 export const MaskNetworkAPI: MaskNetworkAPIs = {
     web_echo: async (arg) => arg,
@@ -66,4 +69,47 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     settings_setTheme: ({ theme }) => Services.Settings.setTheme(theme),
     settings_getLanguage: () => Services.Settings.getLanguage(),
     settings_setLanguage: ({ language }) => Services.Settings.setLanguage(language),
+    persona_createPersonaByMnemonic: ({ mnemonic, nickname, password }) =>
+        Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonic, password, { nickname }),
+    persona_queryPersonas: ({ identifier, hasPrivateKey }) =>
+        Services.Identity.queryPersonas(stringToIdentifier(identifier), hasPrivateKey),
+    persona_queryMyPersonas: ({ network }) => Services.Identity.queryMyPersonas(network),
+    persona_updatePersonaInfo: ({ identifier, data }) => {
+        const { nickname } = data
+        return Services.Identity.renamePersona(stringToIdentifier(identifier), nickname)
+    },
+    persona_removePersona: ({ identifier }) =>
+        Services.Identity.deletePersona(stringToIdentifier(identifier), 'delete even with private'),
+    persona_restoreFromJson: ({ backup }) => Services.Identity.restoreFromBackup(backup),
+    persona_restoreFromBase64: ({ backup }) => Services.Identity.restoreFromBase64(backup),
+    persona_restoreFromMnemonic: ({ mnemonic, nickname, password }) =>
+        Services.Identity.restoreFromMnemonicWords(mnemonic, nickname, password),
+    persona_connectProfile: async ({ network, profileUsername, personaIdentifier }) => {
+        const identifier = stringToIdentifier(personaIdentifier)
+        await Services.Identity.attachProfile(new ProfileIdentifier(network, profileUsername), identifier, {
+            connectionConfirmState: 'confirmed',
+        })
+
+        const persona = await Services.Identity.queryPersona(identifier)
+        if (!persona.hasPrivateKey) throw new Error('invalid persona')
+        await Services.Identity.setupPersona(persona.identifier)
+    },
+    persona_disconnectProfile: ({ profileUsername, network }) =>
+        Services.Identity.detachProfile(new ProfileIdentifier(network, profileUsername)),
+    persona_backupMnemonic: async ({ identifier }) => {
+        const persona = await Services.Identity.queryPersona(stringToIdentifier(identifier))
+        return persona.mnemonic
+    },
+    persona_backupJson: async ({ identifier }) => {
+        const persona = await Services.Identity.queryPersona(stringToIdentifier(identifier))
+        return Services.Welcome.generateBackupJSON({
+            noPosts: true,
+            noWallets: true,
+            filter: { type: 'persona', wanted: [persona.identifier] },
+        })
+    },
+    persona_backupBase64: async ({ identifier }) => {
+        const file = await MaskNetworkAPI.persona_backupJson({ identifier })
+        return encodeArrayBuffer(encodeText(JSON.stringify(file)))
+    },
 }
