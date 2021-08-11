@@ -1,14 +1,14 @@
 import { Image } from './Image'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { NetworkType } from '@masknet/web3-shared'
 import { useStylesExtends } from '@masknet/shared'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     icon: {
         borderRadius: '50%',
         backgroundColor: '#F7F9FA',
     },
-}))
+})
 
 export interface NetworkIconProps extends withClasses<'icon'> {
     size?: number

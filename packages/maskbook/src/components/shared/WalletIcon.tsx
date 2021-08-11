@@ -1,11 +1,11 @@
 import { useValueRef } from '@masknet/shared'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { FC } from 'react'
 import { currentNetworkSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
 import { NetworkIcon } from './NetworkIcon'
 import { ProviderIcon } from './ProviderIcon'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()({
     root: {
         position: 'relative',
         display: 'flex',
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#ffffff',
         borderRadius: '50%',
     },
-}))
+})
 
 interface WalletIconProps {
     size?: number
@@ -29,7 +29,7 @@ interface WalletIconProps {
 }
 
 export const WalletIcon: FC<WalletIconProps> = ({ size = 24, badgeSize = 14 }) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const selectedNetwork = useValueRef(currentNetworkSettings)
     const selectedWalletProvider = useValueRef(currentProviderSettings)
     return (
