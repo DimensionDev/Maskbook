@@ -15,6 +15,7 @@ ReactDOM.createRoot(root).render(<Dialogs />)
 const RequestPermissionPage = lazy(() => import('./RequestPermission'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission'))
+const SignRequest = lazy(() => import('./SignRequest'))
 function Dialogs() {
     return MaskUIRoot(
         <Suspense fallback="">
@@ -28,6 +29,9 @@ function Dialogs() {
                     </Route>
                     <Route path={DialogRoutes.ThirdPartyRequestPermission} exact>
                         <ThirdPartyRequestPermission />
+                    </Route>
+                    <Route path={DialogRoutes.SignRequest} exact>
+                        <SignRequest />
                     </Route>
                 </Switch>
             </HashRouter>

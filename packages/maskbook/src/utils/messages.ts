@@ -8,6 +8,8 @@ import type { TypedMessage } from '../protocols/typed-message'
 import type { ThirdPartyPopupContextIdentifier } from '../plugins/External/popup-context'
 import type { SettingsEvents } from '../settings/listener'
 
+// This file is designed as HMR-safe.
+import.meta.webpackHot && import.meta.webpackHot.accept()
 export interface UpdateEvent<Data> {
     readonly reason: 'update' | 'delete' | 'new'
     readonly of: Data
@@ -72,6 +74,10 @@ export interface MaskMessages extends SettingsEvents {
 
     profileNFTsPageUpdated: ProfileNFTsPageEvent
     profileNFTsTabUpdated: 'reset'
+    signRequestApproved: {
+        requestID: string
+        selectedPersona: PersonaIdentifier
+    }
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })

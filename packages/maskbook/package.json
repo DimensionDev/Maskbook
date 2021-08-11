@@ -70,6 +70,7 @@
     "d3": "^5.16.0",
     "date-fns": "^2.23.0",
     "elliptic": "^6.5.3",
+    "ethereumjs-util": "^7.1.0",
     "event-iterator": "^2.0.0",
     "fuse.js": "^6.4.3",
     "gun": "0.2020.520",

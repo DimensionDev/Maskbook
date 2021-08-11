@@ -28,8 +28,10 @@
   },
   "dependencies": {
     "@emotion/cache": "^11.4.0",
-    "@emotion/react": "^11.4.0",
+    "@emotion/react": "^11.4.1",
+    "@emotion/serialize": "^1.0.2",
     "@emotion/styled": "^11.3.0",
+    "@emotion/utils": "^1.0.0",
     "@material-ui/core": "5.0.0-alpha.34",
     "@material-ui/icons": "5.0.0-alpha.34",
     "@material-ui/lab": "5.0.0-alpha.34",
