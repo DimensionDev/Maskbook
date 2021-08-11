@@ -1,7 +1,6 @@
 import {
     EthereumTokenType,
     formatAmount,
-    formatBalance,
     formatPercentage,
     formatPrice,
     FungibleTokenDetailed,
@@ -33,8 +32,8 @@ import { useBuyCallback } from '../hooks/useBuyCallback'
 import { toBips } from '../../Trader/helpers'
 import { currentSlippageTolerance } from '../../Trader/settings'
 import TuneIcon from '@material-ui/icons/Tune'
-import { SHARE_DECIMALS } from '../constants'
-import { estimateBuyTrade, getRawFee } from '../utils'
+import { BALANCE_DECIMALS, SHARE_DECIMALS } from '../constants'
+import { estimateBuyTrade, getRawFee, rawToFixed } from '../utils'
 import { useAmmExchange } from '../hooks/useAmmExchange'
 
 const useStyles = makeStyles((theme) => ({
@@ -89,7 +88,7 @@ export function BuyDialog() {
     const [market, setMarket] = useState<Market>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const [outcome, setOutcome] = useState<AmmOutcome>()
-    const [rawAmount, setRawAmount] = useState('')
+    const [inputAmount, setInputAmount] = useState('')
 
     // context
     const account = useAccount()
@@ -107,7 +106,7 @@ export function BuyDialog() {
         setMarket(undefined)
         setToken(undefined)
         setOutcome(undefined)
-        setRawAmount('')
+        setInputAmount('')
     }, [closeDialog])
     //#endregion
 
@@ -137,12 +136,18 @@ export function BuyDialog() {
     //#endregion
 
     //#region amount
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
+    const amount = new BigNumber(inputAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
     const {
-        value: tokenBalance = '0',
+        value: _tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
     } = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+
+    // Reduce balance accuracy to $BALANCE_DECIMALS
+    const tokenBalance = useMemo(
+        () => rawToFixed(_tokenBalance, token?.decimals ?? 0, BALANCE_DECIMALS),
+        [_tokenBalance],
+    )
     //#endregion
 
     //#region AmmExchange
@@ -150,8 +155,12 @@ export function BuyDialog() {
     const rawFee = getRawFee(market?.swapFee ?? '')
     const estimatedResult = useMemo(() => {
         if (!ammExchange || !token || !outcome) return
-        return estimateBuyTrade(ammExchange, rawAmount, outcome, rawFee, token, SHARE_DECIMALS)
-    }, [token, rawAmount, outcome, rawFee, ammExchange])
+        return estimateBuyTrade(ammExchange, inputAmount, outcome, rawFee, token, SHARE_DECIMALS)
+    }, [token, inputAmount, outcome, rawFee, ammExchange])
+
+    const isTradeable = useMemo(() => {
+        return estimatedResult && estimatedResult.outputValue !== '0'
+    }, [estimatedResult])
     //#endregion
 
     const minTokenOut = formatAmount(
@@ -204,9 +213,7 @@ export function BuyDialog() {
         .getShareLinkURL?.(
             token
                 ? [
-                      `I just bought ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} share of ${
-                          outcome?.name
-                      }, can I win? Follow @realMaskbook (mask.io) to bet on Augur's markets.`,
+                      `I just bought ${inputAmount} ${cashTag}${token.symbol} share of ${outcome?.name}, can I win? Follow @realMaskbook (mask.io) to bet on Augur's markets.`,
                       '#mask_io #augur',
                   ].join('\n')
                 : '',
@@ -223,7 +230,7 @@ export function BuyDialog() {
                     openSwapDialog({ open: false })
                     if (buyState.type === TransactionStateType.HASH) onClose()
                 }
-                if (buyState.type === TransactionStateType.HASH) setRawAmount('')
+                if (buyState.type === TransactionStateType.HASH) setInputAmount('')
                 resetBuyCallback()
             },
             [id, buyState, openSwapDialog, retryLoadTokenBalance, onClose],
@@ -238,7 +245,7 @@ export function BuyDialog() {
             open: true,
             shareLink,
             state: buyState,
-            summary: `Buying ${formatBalance(amount, token.decimals)} ${token.symbol} ${outcome?.name}'s shares.`,
+            summary: `Buying ${inputAmount} ${token.symbol} ${outcome?.name}'s shares.`,
         })
     }, [buyState /* update tx dialog only if state changed */])
     //#endregion
@@ -247,7 +254,7 @@ export function BuyDialog() {
     const validationMessage = useMemo(() => {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (!amount || amount.isZero()) return t('plugin_dhedge_enter_an_amount')
-        if (!loadingAmm && !estimatedResult) return t('plugin_trader_error_insufficient_lp')
+        if (!loadingAmm && !isTradeable) return t('plugin_trader_error_insufficient_lp')
         if (amount.isGreaterThan(tokenBalance))
             return t('plugin_dhedge_insufficient_balance', {
                 symbol: token?.symbol,
@@ -268,10 +275,10 @@ export function BuyDialog() {
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel
                             label="Amount"
-                            amount={rawAmount}
+                            amount={inputAmount}
                             balance={tokenBalance ?? '0'}
                             token={token}
-                            onAmountChange={setRawAmount}
+                            onAmountChange={setInputAmount}
                             SelectTokenChip={{
                                 loading: loadingTokenBalance || loadingAmm,
                                 ChipProps: {
@@ -322,8 +329,8 @@ export function BuyDialog() {
                                 {t('plugin_augur_avg_price')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {estimatedResult
-                                    ? formatPrice(estimatedResult.averagePrice, 2) + ' ' + token.symbol
+                                {isTradeable
+                                    ? formatPrice(estimatedResult?.averagePrice ?? '', 2) + ' ' + token.symbol
                                     : '-'}
                             </Typography>
                         </div>
@@ -332,7 +339,7 @@ export function BuyDialog() {
                                 {t('plugin_augur_est_shares')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {estimatedResult ? formatPrice(estimatedResult.outputValue, 4) : '-'}
+                                {isTradeable ? formatPrice(estimatedResult?.outputValue ?? '', 4) : '-'}
                             </Typography>
                         </div>
                         <div className={classes.status}>
@@ -340,8 +347,8 @@ export function BuyDialog() {
                                 {t('plugin_augur_max_profit')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {estimatedResult && estimatedResult
-                                    ? formatPrice(estimatedResult.maxProfit ?? '', 2) + ' ' + token.symbol
+                                {isTradeable
+                                    ? formatPrice(estimatedResult?.maxProfit ?? '', 2) + ' ' + token.symbol
                                     : '-'}
                             </Typography>
                         </div>
@@ -350,7 +357,9 @@ export function BuyDialog() {
                                 {t('plugin_augur_est_buy_fee')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {estimatedResult ? formatPrice(estimatedResult.tradeFees, 2) + ' ' + token.symbol : '-'}
+                                {isTradeable
+                                    ? formatPrice(estimatedResult?.tradeFees ?? '', 2) + ' ' + token.symbol
+                                    : '-'}
                             </Typography>
                         </div>
                     </div>

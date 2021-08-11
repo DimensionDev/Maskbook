@@ -1,7 +1,6 @@
 import {
     ERC20TokenDetailed,
     EthereumTokenType,
-    formatBalance,
     formatPrice,
     FungibleTokenDetailed,
     pow10,
@@ -23,9 +22,9 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { WalletMessages } from '../../Wallet/messages'
 import { PluginAugurMessages } from '../messages'
 import type { AmmOutcome, Market } from '../types'
-import { SHARE_DECIMALS } from '../constants'
+import { BALANCE_DECIMALS, SHARE_DECIMALS } from '../constants'
 import { useSellCallback } from '../hooks/useSellCallback'
-import { estimateSellTrade, getRawFee } from '../utils'
+import { estimateSellTrade, getRawFee, rawToFixed } from '../utils'
 import { useAmmExchange } from '../hooks/useAmmExchange'
 
 const useStyles = makeStyles((theme) => ({
@@ -81,7 +80,7 @@ export function SellDialog() {
     const [cashToken, setCashToken] = useState<FungibleTokenDetailed>()
     const [token, setToken] = useState<ERC20TokenDetailed>()
     const [outcome, setOutcome] = useState<AmmOutcome>()
-    const [rawAmount, setRawAmount] = useState('')
+    const [inputAmount, setInputAmount] = useState('')
 
     // context
     const account = useAccount()
@@ -103,27 +102,37 @@ export function SellDialog() {
         closeDialog()
         setMarket(undefined)
         setOutcome(undefined)
-        setRawAmount('')
+        setInputAmount('')
         setCashToken(undefined)
     }, [closeDialog])
     //#endregion
 
     //#region amount
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(SHARE_DECIMALS))
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
+    const amount = new BigNumber(inputAmount || '0').multipliedBy(pow10(SHARE_DECIMALS))
+    const { value: _tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
         EthereumTokenType.ERC20,
         outcome?.shareToken ?? '',
+    )
+
+    // Reduce balance accuracy to $BALANCE_DECIMALS
+    const tokenBalance = useMemo(
+        () => rawToFixed(_tokenBalance, token?.decimals ?? 0, BALANCE_DECIMALS),
+        [_tokenBalance],
     )
     //#endregion
 
     //#region AmmExchange
     const { value: ammExchange, loading: loadingAmm } = useAmmExchange(market)
-    const rawFee = getRawFee(market?.swapFee ?? '')
+    const inputFee = getRawFee(market?.swapFee ?? '')
 
     const estimatedResult = useMemo(() => {
-        if (!ammExchange || !outcome || !tokenBalance || !rawAmount || !rawFee) return
-        return estimateSellTrade(ammExchange, rawAmount, outcome, tokenBalance, SHARE_DECIMALS, rawFee)
-    }, [rawAmount, outcome, rawFee, tokenBalance, ammExchange])
+        if (!ammExchange || !outcome || !tokenBalance || !inputAmount || !inputFee) return
+        return estimateSellTrade(ammExchange, inputAmount, outcome, tokenBalance, SHARE_DECIMALS, inputFee)
+    }, [inputAmount, outcome, inputFee, tokenBalance, ammExchange])
+
+    const isTradeable = useMemo(() => {
+        return estimatedResult && estimatedResult.outputValue !== '0'
+    }, [estimatedResult])
     //#endregion
 
     //#region blocking
@@ -142,7 +151,7 @@ export function SellDialog() {
                 if (!ev.open) {
                     if (sellState.type === TransactionStateType.HASH) onClose()
                 }
-                if (sellState.type === TransactionStateType.HASH) setRawAmount('')
+                if (sellState.type === TransactionStateType.HASH) setInputAmount('')
                 resetSellCallback()
             },
             [id, sellState, onClose],
@@ -155,7 +164,7 @@ export function SellDialog() {
         setTransactionDialogOpen({
             open: true,
             state: sellState,
-            summary: `Selling ${formatBalance(amount, SHARE_DECIMALS)} ${outcome?.name} share.`,
+            summary: `Selling ${inputAmount} ${outcome?.name} share.`,
         })
     }, [sellState /* update tx dialog only if state changed */])
     //#endregion
@@ -164,9 +173,8 @@ export function SellDialog() {
     const validationMessage = useMemo(() => {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (!amount || amount.isZero()) return t('plugin_dhedge_enter_an_amount')
-        if (!loadingAmm && (!estimatedResult || estimatedResult?.outputValue === '0'))
-            return t('plugin_augur_sell_too_low')
         if (amount.isGreaterThan(tokenBalance)) return t('plugin_augur_insufficient_balance')
+        if (!loadingAmm && !isTradeable) return t('plugin_augur_sell_too_low')
         return ''
     }, [account, amount, tokenBalance, estimatedResult])
     //#endregion
@@ -179,10 +187,10 @@ export function SellDialog() {
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel
                             label="Amount"
-                            amount={rawAmount}
+                            amount={inputAmount}
                             balance={tokenBalance ?? '0'}
                             token={token}
-                            onAmountChange={setRawAmount}
+                            onAmountChange={setInputAmount}
                         />
                     </form>
                     <EthereumWalletConnectedBoundary>
@@ -207,8 +215,8 @@ export function SellDialog() {
                                 {t('plugin_augur_avg_price')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {estimatedResult
-                                    ? formatPrice(estimatedResult.averagePrice, 2) + ' ' + cashToken.symbol
+                                {isTradeable
+                                    ? formatPrice(estimatedResult?.averagePrice ?? '', 2) + ' ' + cashToken.symbol
                                     : '-'}
                             </Typography>
                         </div>
@@ -217,8 +225,8 @@ export function SellDialog() {
                                 {t('plugin_augur_receive_amount')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {estimatedResult
-                                    ? formatPrice(estimatedResult.outputValue, 4) + ' ' + cashToken.symbol
+                                {isTradeable
+                                    ? formatPrice(estimatedResult?.outputValue ?? '', 4) + ' ' + cashToken.symbol
                                     : '-'}
                             </Typography>
                         </div>
@@ -227,7 +235,7 @@ export function SellDialog() {
                                 {t('plugin_augur_remaining_shares')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {estimatedResult ? estimatedResult.remainingShares : '-'}
+                                {isTradeable ? estimatedResult?.remainingShares : '-'}
                             </Typography>
                         </div>
                         <div className={classes.status}>
@@ -235,7 +243,7 @@ export function SellDialog() {
                                 {t('plugin_augur_est_sell_fee')}
                             </Typography>
                             <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {estimatedResult ? formatPrice(estimatedResult.tradeFees, 2) : '-'}
+                                {isTradeable ? formatPrice(estimatedResult?.tradeFees ?? '', 2) : '-'}
                             </Typography>
                         </div>
                     </div>

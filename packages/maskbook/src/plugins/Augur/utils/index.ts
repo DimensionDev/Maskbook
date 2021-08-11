@@ -36,6 +36,11 @@ export const getFullTeamName = (team: Team) => {
 export const getSport = (id: string) => {
     return (Sports as SportsInterface)[id]
 }
+export const rawToFixed = (amount: string, decimals: number, accuracy: number) => {
+    const displayAmount = new BN(formatBalance(amount, decimals))
+    const fixedAmount = displayAmount.toFixed(accuracy, BN.ROUND_DOWN)
+    return formatAmount(fixedAmount, decimals)
+}
 
 export const estimateBuyTrade = (
     amm: AmmExchange,
