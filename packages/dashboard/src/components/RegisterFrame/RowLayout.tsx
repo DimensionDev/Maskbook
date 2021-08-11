@@ -14,15 +14,16 @@ const Container = styled('div')(
 
 const LeftSide = styled('div')(
     ({ theme }) => `
+    padding: 40px;
     width: 30%;
     max-width: 500px;
-    padding: 40px;
     background: ${theme.palette.primary.main};
 `,
 )
 
 const RightContent = styled('div')(
     ({ theme }) => `
+    flex: 1;
     width: 70%;
     background: ${theme.palette.mode === 'dark' ? LightColor.textPrimary : theme.palette.common};
 `,

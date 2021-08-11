@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
-import { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
+import { MutableRefObject, useEffect, useMemo, useRef } from 'react'
+import { useAppearance } from '../Personas/api'
 
 const Content = styled('div')(
     ({ theme }) => `
@@ -30,30 +31,46 @@ const IFrame = styled('iframe')(
 
 export default function Welcome() {
     const iframeRef = useRef<HTMLIFrameElement | null>(null)
+    const mode = useAppearance()
     const navigate = useNavigate()
-    const privacyPolicyURL = new URL('./en.html', import.meta.url).toString()
+
+    const privacyPolicyURL = new URL(`./en.html`, import.meta.url).toString()
+    const privacyPolicyDocument = useMemo(() => () => iframeRef?.current?.contentWindow?.document, [iframeRef])
 
     useEffect(
         () => () => {
-            const link = privacyPolicyElement()
+            const link = privacyPolicyDocument()?.getElementById('link')
             link?.removeEventListener('click', handleLinkClick)
         },
         [],
     )
 
-    const privacyPolicyElement = useMemo(
-        () => () => iframeRef?.current?.contentWindow?.document.getElementById('link'),
-        [iframeRef],
-    )
+    useEffect(() => {
+        updateIFrameStyle()
+    }, [mode])
+
+    const updateIFrameStyle = () => {
+        const document = privacyPolicyDocument()
+        if (!document) return
+
+        const style = document.createElement('style')
+        style.innerHTML = `
+              h3, h6 { color: ${mode === 'dark' ? '#FFFFFF' : '#111432'}; }
+              p { color: ${mode === 'dark' ? 'rgba(255, 255, 255, 0.8);' : '#7b8192'}; }
+            `
+        document.head.appendChild(style)
+    }
 
     const handleIFrameLoad = () => {
-        const link = privacyPolicyElement()
+        updateIFrameStyle()
+
+        const link = document.getElementById('link')
         link?.addEventListener('click', handleLinkClick)
     }
 
-    const handleLinkClick = useCallback(() => {
+    const handleLinkClick = () => {
         window.open(`next.html#${RoutePaths.PrivacyPolicy}`)
-    }, [])
+    }
 
     return (
         <WelcomeUI
