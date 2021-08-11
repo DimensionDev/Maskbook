@@ -1,6 +1,9 @@
-export const AUGUR_PLUGIN_ID = 'co.augur'
+import { ChainId } from '@masknet/web3-shared'
 
-export const CONSTANT = {}
+export const AUGUR_PLUGIN_ID = 'com.augur'
+export const AUGUR_CHAIN_ID = ChainId.Matic
+export const PLUGIN_NAME = 'Augur'
+
 export const BASE_URL = 'https://bafybeihjxaxtcqe6emgwlq5kymnym6xejr4qoi26ggaijo7wo525vq4n4a.ipfs.dweb.link'
 export const NO_CONTEST_OUTCOME_ID: number = 0
 export const NAMING_TEAM = {

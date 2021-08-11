@@ -181,74 +181,77 @@ export function SellDialog() {
 
     if (!market || !market.ammExchange || !outcome || !cashToken) return null
     return (
-        <div className={classes.root}>
-            <InjectedDialog open={open} onClose={onClose} title={market.title + ' ' + outcome?.name} maxWidth="xs">
-                <DialogContent>
-                    <form className={classes.form} noValidate autoComplete="off">
-                        <TokenAmountPanel
-                            label="Amount"
-                            amount={inputAmount}
-                            balance={tokenBalance ?? '0'}
-                            token={token}
-                            onAmountChange={setInputAmount}
-                        />
-                    </form>
-                    <EthereumWalletConnectedBoundary>
-                        <EthereumERC20TokenApprovedBoundary
-                            amount={amount.toFixed()}
-                            spender={market.ammExchange.address}
-                            token={token}>
-                            <ActionButton
-                                className={classes.button}
-                                fullWidth
-                                disabled={!!validationMessage}
-                                onClick={sellCallback}
-                                variant="contained"
-                                loading={loadingTokenBalance || loadingAmm}>
-                                {validationMessage || t('sell')}
-                            </ActionButton>
-                        </EthereumERC20TokenApprovedBoundary>
-                    </EthereumWalletConnectedBoundary>
-                    <div className={classes.section}>
-                        <div className={classes.status}>
-                            <Typography className={classes.label} color="textSecondary" variant="body2">
-                                {t('plugin_augur_avg_price')}
-                            </Typography>
-                            <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {isTradeable
-                                    ? formatPrice(estimatedResult?.averagePrice ?? '', 2) + ' ' + cashToken.symbol
-                                    : '-'}
-                            </Typography>
-                        </div>
-                        <div className={classes.status}>
-                            <Typography className={classes.label} color="textSecondary" variant="body2">
-                                {t('plugin_augur_receive_amount')}
-                            </Typography>
-                            <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {isTradeable
-                                    ? formatPrice(estimatedResult?.outputValue ?? '', 4) + ' ' + cashToken.symbol
-                                    : '-'}
-                            </Typography>
-                        </div>
-                        <div className={classes.status}>
-                            <Typography className={classes.label} color="textSecondary" variant="body2">
-                                {t('plugin_augur_remaining_shares')}
-                            </Typography>
-                            <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {isTradeable ? estimatedResult?.remainingShares : '-'}
-                            </Typography>
-                        </div>
-                        <div className={classes.status}>
-                            <Typography className={classes.label} color="textSecondary" variant="body2">
-                                {t('plugin_augur_est_sell_fee')}
-                            </Typography>
-                            <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {isTradeable ? formatPrice(estimatedResult?.tradeFees ?? '', 2) : '-'}
-                            </Typography>
-                        </div>
+        <InjectedDialog
+            className={classes.root}
+            open={open}
+            onClose={onClose}
+            title={market.title + ' ' + outcome?.name}
+            maxWidth="xs">
+            <DialogContent>
+                <form className={classes.form} noValidate autoComplete="off">
+                    <TokenAmountPanel
+                        label="Amount"
+                        amount={inputAmount}
+                        balance={tokenBalance ?? '0'}
+                        token={token}
+                        onAmountChange={setInputAmount}
+                    />
+                </form>
+                <EthereumWalletConnectedBoundary>
+                    <EthereumERC20TokenApprovedBoundary
+                        amount={amount.toFixed()}
+                        spender={market.ammExchange.address}
+                        token={token}>
+                        <ActionButton
+                            className={classes.button}
+                            fullWidth
+                            disabled={!!validationMessage}
+                            onClick={sellCallback}
+                            variant="contained"
+                            loading={loadingTokenBalance || loadingAmm}>
+                            {validationMessage || t('sell')}
+                        </ActionButton>
+                    </EthereumERC20TokenApprovedBoundary>
+                </EthereumWalletConnectedBoundary>
+                <div className={classes.section}>
+                    <div className={classes.status}>
+                        <Typography className={classes.label} color="textSecondary" variant="body2">
+                            {t('plugin_augur_avg_price')}
+                        </Typography>
+                        <Typography className={classes.value} color="textSecondary" variant="body2">
+                            {isTradeable
+                                ? formatPrice(estimatedResult?.averagePrice ?? '', 2) + ' ' + cashToken.symbol
+                                : '-'}
+                        </Typography>
                     </div>
-                </DialogContent>
-            </InjectedDialog>
-        </div>
+                    <div className={classes.status}>
+                        <Typography className={classes.label} color="textSecondary" variant="body2">
+                            {t('plugin_augur_receive_amount')}
+                        </Typography>
+                        <Typography className={classes.value} color="textSecondary" variant="body2">
+                            {isTradeable
+                                ? formatPrice(estimatedResult?.outputValue ?? '', 4) + ' ' + cashToken.symbol
+                                : '-'}
+                        </Typography>
+                    </div>
+                    <div className={classes.status}>
+                        <Typography className={classes.label} color="textSecondary" variant="body2">
+                            {t('plugin_augur_remaining_shares')}
+                        </Typography>
+                        <Typography className={classes.value} color="textSecondary" variant="body2">
+                            {isTradeable ? estimatedResult?.remainingShares : '-'}
+                        </Typography>
+                    </div>
+                    <div className={classes.status}>
+                        <Typography className={classes.label} color="textSecondary" variant="body2">
+                            {t('plugin_augur_est_sell_fee')}
+                        </Typography>
+                        <Typography className={classes.value} color="textSecondary" variant="body2">
+                            {isTradeable ? formatPrice(estimatedResult?.tradeFees ?? '', 2) : '-'}
+                        </Typography>
+                    </div>
+                </div>
+            </DialogContent>
+        </InjectedDialog>
     )
 }

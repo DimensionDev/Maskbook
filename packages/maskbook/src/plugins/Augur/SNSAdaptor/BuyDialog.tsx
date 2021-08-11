@@ -89,6 +89,7 @@ export function BuyDialog() {
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const [outcome, setOutcome] = useState<AmmOutcome>()
     const [inputAmount, setInputAmount] = useState('')
+    const [postLink, setpostLink] = useState<URL | string>()
 
     // context
     const account = useAccount()
@@ -99,6 +100,7 @@ export function BuyDialog() {
             setMarket(ev.market)
             setOutcome(ev.outcome)
             setToken(ev.cashToken)
+            setpostLink(ev.postLink)
         }
     })
     const onClose = useCallback(() => {
@@ -211,12 +213,15 @@ export function BuyDialog() {
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            token
-                ? [
-                      `I just bought ${inputAmount} ${cashTag}${token.symbol} share of ${outcome?.name}, can I win? Follow @realMaskbook (mask.io) to bet on Augur's markets.`,
-                      '#mask_io #augur',
-                  ].join('\n')
-                : '',
+            [
+                t('plugin_augur_share', {
+                    amount: inputAmount,
+                    cashTag,
+                    symbol: token?.symbol,
+                    outcome: outcome?.name,
+                }),
+                postLink,
+            ].join('\n'),
         )
         .toString()
 
@@ -269,102 +274,101 @@ export function BuyDialog() {
 
     if (!token || !market || !market.ammExchange || !outcome) return null
     return (
-        <div className={classes.root}>
-            <InjectedDialog open={open} onClose={onClose} title={market.title + ' ' + outcome?.name} maxWidth="xs">
-                <DialogContent>
-                    <form className={classes.form} noValidate autoComplete="off">
-                        <TokenAmountPanel
-                            label="Amount"
-                            amount={inputAmount}
-                            balance={tokenBalance ?? '0'}
-                            token={token}
-                            onAmountChange={setInputAmount}
-                            SelectTokenChip={{
-                                loading: loadingTokenBalance || loadingAmm,
-                                ChipProps: {
-                                    onClick: onSelectTokenChipClick,
-                                },
-                            }}
-                        />
-                    </form>
-                    <EthereumWalletConnectedBoundary>
-                        {estimatedResult && (isZero(tokenBalance) || amount.isGreaterThan(tokenBalance)) ? (
+        <InjectedDialog
+            className={classes.root}
+            open={open}
+            onClose={onClose}
+            title={market.title + ' ' + outcome?.name}
+            maxWidth="xs">
+            <DialogContent>
+                <form className={classes.form} noValidate autoComplete="off">
+                    <TokenAmountPanel
+                        label="Amount"
+                        amount={inputAmount}
+                        balance={tokenBalance ?? '0'}
+                        token={token}
+                        onAmountChange={setInputAmount}
+                        SelectTokenChip={{
+                            loading: loadingTokenBalance || loadingAmm,
+                            ChipProps: {
+                                onClick: onSelectTokenChipClick,
+                            },
+                        }}
+                    />
+                </form>
+                <EthereumWalletConnectedBoundary>
+                    {estimatedResult && (isZero(tokenBalance) || amount.isGreaterThan(tokenBalance)) ? (
+                        <ActionButton
+                            className={classes.button}
+                            fullWidth
+                            onClick={openSwap}
+                            variant="contained"
+                            loading={loadingTokenBalance || loadingAmm}>
+                            {t('plugin_dhedge_buy_token', { symbol: token.symbol })}
+                        </ActionButton>
+                    ) : (
+                        <EthereumERC20TokenApprovedBoundary
+                            amount={amount.toFixed()}
+                            spender={market.ammExchange.address}
+                            token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
                             <ActionButton
                                 className={classes.button}
                                 fullWidth
-                                onClick={openSwap}
+                                disabled={!!validationMessage}
+                                onClick={buyCallback}
                                 variant="contained"
                                 loading={loadingTokenBalance || loadingAmm}>
-                                {t('plugin_dhedge_buy_token', { symbol: token.symbol })}
+                                {validationMessage || t('buy')}
                             </ActionButton>
-                        ) : (
-                            <EthereumERC20TokenApprovedBoundary
-                                amount={amount.toFixed()}
-                                spender={market.ammExchange.address}
-                                token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
-                                <ActionButton
-                                    className={classes.button}
-                                    fullWidth
-                                    disabled={!!validationMessage}
-                                    onClick={buyCallback}
-                                    variant="contained"
-                                    loading={loadingTokenBalance || loadingAmm}>
-                                    {validationMessage || t('buy')}
-                                </ActionButton>
-                            </EthereumERC20TokenApprovedBoundary>
-                        )}
-                    </EthereumWalletConnectedBoundary>
-                    <div className={classes.section}>
-                        <div className={classes.status}>
-                            <Typography className={classes.label} color="textSecondary" variant="body2">
-                                {t('plugin_trader_slipage_tolerance')}{' '}
-                                {formatPercentage(toBips(currentSlippageTolerance.value))}
-                            </Typography>
-                            <IconButton className={classes.icon} size="small" onClick={openSettingDialog}>
-                                <TuneIcon fontSize="small" />
-                            </IconButton>
-                        </div>
-                        <div className={classes.status}>
-                            <Typography className={classes.label} color="textSecondary" variant="body2">
-                                {t('plugin_augur_avg_price')}
-                            </Typography>
-                            <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {isTradeable
-                                    ? formatPrice(estimatedResult?.averagePrice ?? '', 2) + ' ' + token.symbol
-                                    : '-'}
-                            </Typography>
-                        </div>
-                        <div className={classes.status}>
-                            <Typography className={classes.label} color="textSecondary" variant="body2">
-                                {t('plugin_augur_est_shares')}
-                            </Typography>
-                            <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {isTradeable ? formatPrice(estimatedResult?.outputValue ?? '', 4) : '-'}
-                            </Typography>
-                        </div>
-                        <div className={classes.status}>
-                            <Typography className={classes.label} color="textSecondary" variant="body2">
-                                {t('plugin_augur_max_profit')}
-                            </Typography>
-                            <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {isTradeable
-                                    ? formatPrice(estimatedResult?.maxProfit ?? '', 2) + ' ' + token.symbol
-                                    : '-'}
-                            </Typography>
-                        </div>
-                        <div className={classes.status}>
-                            <Typography className={classes.label} color="textSecondary" variant="body2">
-                                {t('plugin_augur_est_buy_fee')}
-                            </Typography>
-                            <Typography className={classes.value} color="textSecondary" variant="body2">
-                                {isTradeable
-                                    ? formatPrice(estimatedResult?.tradeFees ?? '', 2) + ' ' + token.symbol
-                                    : '-'}
-                            </Typography>
-                        </div>
+                        </EthereumERC20TokenApprovedBoundary>
+                    )}
+                </EthereumWalletConnectedBoundary>
+                <div className={classes.section}>
+                    <div className={classes.status}>
+                        <Typography className={classes.label} color="textSecondary" variant="body2">
+                            {t('plugin_trader_slipage_tolerance')}{' '}
+                            {formatPercentage(toBips(currentSlippageTolerance.value))}
+                        </Typography>
+                        <IconButton className={classes.icon} size="small" onClick={openSettingDialog}>
+                            <TuneIcon fontSize="small" />
+                        </IconButton>
                     </div>
-                </DialogContent>
-            </InjectedDialog>
-        </div>
+                    <div className={classes.status}>
+                        <Typography className={classes.label} color="textSecondary" variant="body2">
+                            {t('plugin_augur_avg_price')}
+                        </Typography>
+                        <Typography className={classes.value} color="textSecondary" variant="body2">
+                            {isTradeable
+                                ? formatPrice(estimatedResult?.averagePrice ?? '', 2) + ' ' + token.symbol
+                                : '-'}
+                        </Typography>
+                    </div>
+                    <div className={classes.status}>
+                        <Typography className={classes.label} color="textSecondary" variant="body2">
+                            {t('plugin_augur_est_shares')}
+                        </Typography>
+                        <Typography className={classes.value} color="textSecondary" variant="body2">
+                            {isTradeable ? formatPrice(estimatedResult?.outputValue ?? '', 4) : '-'}
+                        </Typography>
+                    </div>
+                    <div className={classes.status}>
+                        <Typography className={classes.label} color="textSecondary" variant="body2">
+                            {t('plugin_augur_max_profit')}
+                        </Typography>
+                        <Typography className={classes.value} color="textSecondary" variant="body2">
+                            {isTradeable ? formatPrice(estimatedResult?.maxProfit ?? '', 2) + ' ' + token.symbol : '-'}
+                        </Typography>
+                    </div>
+                    <div className={classes.status}>
+                        <Typography className={classes.label} color="textSecondary" variant="body2">
+                            {t('plugin_augur_est_buy_fee')}
+                        </Typography>
+                        <Typography className={classes.value} color="textSecondary" variant="body2">
+                            {isTradeable ? formatPrice(estimatedResult?.tradeFees ?? '', 2) + ' ' + token.symbol : '-'}
+                        </Typography>
+                    </div>
+                </div>
+            </DialogContent>
+        </InjectedDialog>
     )
 }

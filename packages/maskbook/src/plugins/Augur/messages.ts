@@ -9,6 +9,7 @@ type BuyDialogUpdated =
           market: Market
           outcome: AmmOutcome
           cashToken: FungibleTokenDetailed
+          postLink: URL | string
       }
     | {
           open: false

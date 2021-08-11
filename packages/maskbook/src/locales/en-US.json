@@ -979,5 +979,6 @@
     "plugin_augur_sell_too_low": "Amount is too low",
     "plugin_augur_add_liquidity": "Add Liquidity",
     "plugin_augur_remove_liquidity": "Remove Liquidity",
+    "plugin_augur_share": "I just bought {{amount}} {{cashTag}}{{symbol}} share of {{outcome}}, can I win?\nFollow @realMaskbook (mask.io) to bet on Augur's markets.\n#mask_io #augur",
     "plugin_augur_insufficient_balance": "Insufficient Balance"
 }

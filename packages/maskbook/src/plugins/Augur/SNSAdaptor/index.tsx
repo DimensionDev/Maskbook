@@ -1,15 +1,12 @@
-import { Suspense, useMemo } from 'react'
+import { Suspense } from 'react'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
-import { extractTextFromTypedMessage, parseURL } from '@masknet/shared'
 import { SnackbarContent } from '@material-ui/core'
 import { base } from '../base'
-import { useIsMarketUrl } from '../hooks/useUrl'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { MarketView } from '../UI/MarketView'
-import { BASE_URL } from '../constants'
+import { AUGUR_CHAIN_ID, BASE_URL, PLUGIN_NAME } from '../constants'
 import { escapeRegExp } from 'lodash-es'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { ChainId } from '@masknet/web3-shared'
 import { BuyDialog } from './BuyDialog'
 import { SellDialog } from './SellDialog'
 
@@ -34,16 +31,7 @@ function getMarketFromLinks(links: string[]) {
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    DecryptedInspector: function Component(props) {
-        const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const links = useMemo(() => parseURL(text.val || ''), [text.val])
-        const market = getMarketFromLinks(links)
-        if (!text.ok) return null
-        if (!market?.address || !market.id) return null
-        return <Renderer link={market.link} address={market.address} id={market.id} />
-    },
     PostInspector: function Component() {
-        const isMarketUrl = useIsMarketUrl()
         const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
         const market = getMarketFromLinks(links)
         if (!market?.address || !market.id) return null
@@ -63,9 +51,9 @@ export default sns
 
 function Renderer(props: React.PropsWithChildren<{ link: string; address: string; id: string }>) {
     return (
-        <MaskbookPluginWrapper pluginName="Augur">
+        <MaskbookPluginWrapper pluginName={PLUGIN_NAME}>
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <EthereumChainBoundary chainId={ChainId.Matic}>
+                <EthereumChainBoundary chainId={AUGUR_CHAIN_ID}>
                     <MarketView link={props.link} address={props.address} id={props.id} />
                 </EthereumChainBoundary>
             </Suspense>

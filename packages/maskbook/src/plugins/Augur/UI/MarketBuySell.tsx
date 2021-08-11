@@ -17,6 +17,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginAugurMessages } from '../messages'
 import { useCallback } from 'react'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import { usePostLink } from '../../../components/DataSource/usePostInfo'
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
     focusVisible?: string
@@ -176,6 +177,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
 
     const { t } = useI18N()
     const classes = useStyles()
+    const postLink = usePostLink()
     const [isBuy, setIsBuy] = useState(true)
     const [selectedOutcome, setSelectedOutcome] = useState<AmmOutcome>()
 
@@ -187,6 +189,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
             market: market,
             outcome: selectedOutcome,
             cashToken: cashToken,
+            postLink,
         })
     }, [market, openBuyDialog, selectedOutcome, isBuy])
 
