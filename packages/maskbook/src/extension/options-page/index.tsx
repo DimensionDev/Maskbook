@@ -13,7 +13,7 @@ import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import PowerIcon from '@material-ui/icons/Power'
 import { HashRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom'
 
-import { useI18N, SSRRenderer, Flags, useMatchXS } from '../../utils'
+import { useI18N, createNormalReactRoot, Flags, useMatchXS } from '../../utils'
 
 import FooterLine from './DashboardComponents/FooterLine'
 import Drawer from './DashboardComponents/Drawer'
@@ -221,5 +221,5 @@ export function Dashboard() {
     )
 }
 
-export default SSRRenderer(<Dashboard />)
+export default createNormalReactRoot(<Dashboard />)
 startPluginDashboard(createPluginHost())
