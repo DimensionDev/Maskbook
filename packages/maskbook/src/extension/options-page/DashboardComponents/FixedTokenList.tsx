@@ -80,7 +80,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     const renderAssets =
         !account || assetsError || assetsLoading
             ? renderTokens
-                  .sort(makeSortTokenFn({ isMaskBoost: true, chainId }))
+                  .sort(makeSortTokenFn(chainId, { isMaskBoost: true }))
                   .map((token) => ({ token: token, balance: null }))
             : assets
 

@@ -145,8 +145,9 @@ export function parseStringOrBytes32(
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
 export const getBalanceValue = (asset: Asset) => parseFloat(formatBalance(asset.balance, asset.token.decimals))
 
-export const makeSortTokenFn = (options = { isMaskBoost: false, chainId: ChainId.Mainnet }) => {
-    const { MASK_ADDRESS } = getTokenConstants(options.chainId)
+export const makeSortTokenFn = (chainId: ChainId, options: { isMaskBoost?: boolean } = {}) => {
+    const { isMaskBoost = false } = options
+    const { MASK_ADDRESS } = getTokenConstants(chainId)
 
     return (a: FungibleTokenDetailed, b: FungibleTokenDetailed) => {
         // The native token goes first
@@ -154,7 +155,7 @@ export const makeSortTokenFn = (options = { isMaskBoost: false, chainId: ChainId
         if (b.type === EthereumTokenType.Native) return 1
 
         // The mask token second
-        if (options.isMaskBoost) {
+        if (isMaskBoost) {
             if (isSameAddress(a.address, MASK_ADDRESS ?? '')) return -1
             if (isSameAddress(b.address, MASK_ADDRESS ?? '')) return 1
         }
@@ -163,18 +164,26 @@ export const makeSortTokenFn = (options = { isMaskBoost: false, chainId: ChainId
     }
 }
 
-export const makeSortAssertFn =
-    (chainId: ChainId, options = { isMaskBoost: false }) =>
-    (a: Asset, b: Asset) => {
+export const makeSortAssertFn = (chainId: ChainId, options: { isMaskBoost?: boolean } = {}) => {
+    const { isMaskBoost = false } = options
+    const { MASK_ADDRESS } = getTokenConstants(chainId)
+
+    return (a: Asset, b: Asset) => {
         // The tokens with the current chain id goes first
         if (a.chain !== b.chain) {
             if (getChainIdFromName(a.chain) === chainId) return -1
             if (getChainIdFromName(b.chain) === chainId) return 1
         }
 
-        // token sort
-        const tokenDifference = makeSortTokenFn({ isMaskBoost: options.isMaskBoost, chainId })(a.token, b.token)
-        if (tokenDifference !== 0) return tokenDifference
+        // native token sort
+        const nativeTokenDifference = makeSortTokenFn(chainId, { isMaskBoost: false })(a.token, b.token)
+        if (nativeTokenDifference !== 0) return nativeTokenDifference
+
+        // Mask token at second if value > 0
+        if (isMaskBoost) {
+            if (isSameAddress(a.token.address, MASK_ADDRESS) && getBalanceValue(a) > 0) return -1
+            if (isSameAddress(b.token.address, MASK_ADDRESS) && getBalanceValue(b) > 0) return 1
+        }
 
         // Token with high usd value estimation has priority
         const valueDifference = getTokenUSDValue(b) - getTokenUSDValue(a)
@@ -184,10 +193,17 @@ export const makeSortAssertFn =
         if (getBalanceValue(a) > getBalanceValue(b)) return -1
         if (getBalanceValue(a) < getBalanceValue(b)) return 1
 
+        // mask token behind all valuable tokens if value = 0 and balance = 0
+        if (isMaskBoost) {
+            if (isSameAddress(a.token.address, MASK_ADDRESS)) return -1
+            if (isSameAddress(b.token.address, MASK_ADDRESS)) return 1
+        }
+
         // Sorted by alphabet
         if (a.balance > b.balance) return -1
         if (a.balance < b.balance) return 1
 
         return 0
     }
+}
 //#endregion
