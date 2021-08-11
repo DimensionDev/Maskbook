@@ -146,7 +146,7 @@ const useStyles = makeStyles((theme) => ({
     contentWrapper: {
         display: 'flex',
         flexDirection: 'column',
-        height: 650,
+        height: ({ hasNFTwithNoITOTokens }: { hasNFTwithNoITOTokens: boolean }) => (hasNFTwithNoITOTokens ? 450 : 650),
     },
     actionButtonWrapper: {
         position: 'sticky',
@@ -220,7 +220,12 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     // Todo: Remove the code after the period that old ITO is being used and continues to be used for a while
     const { value: swappedTokensOld, loading: loadingOld, retry: retryOld } = useClaimablePools(chainId, true)
-    const classes = useStyles()
+    const classes = useStyles({
+        hasNFTwithNoITOTokens:
+            chainId === ChainId.Matic &&
+            (!swappedTokens || swappedTokens.length === 0) &&
+            (!swappedTokensOld || swappedTokensOld.length === 0),
+    })
     const { enqueueSnackbar } = useSnackbar()
     const popEnqueueSnackbar = useCallback(
         (variant: VariantType) =>
@@ -413,16 +418,21 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                         fontSize: 18,
                                         fontWeight: 400,
                                     }}>
-                                    <EthereumWalletConnectedBoundary>
-                                        <ActionButton
-                                            className={classes.actionButton}
-                                            variant="contained"
-                                            disabled={claimablePids!.length === 0}
-                                            size="large"
-                                            onClick={onClaimButtonClick}>
-                                            {t('plugin_ito_claim_all')}
-                                        </ActionButton>
-                                    </EthereumWalletConnectedBoundary>
+                                    {(swappedTokens && swappedTokens.length > 0) ||
+                                    (swappedTokensOld && swappedTokensOld.length > 0) ? (
+                                        <EthereumWalletConnectedBoundary>
+                                            <ActionButton
+                                                className={classes.actionButton}
+                                                variant="contained"
+                                                disabled={claimablePids!.length === 0}
+                                                size="large"
+                                                onClick={onClaimButtonClick}>
+                                                {t('plugin_ito_claim_all')}
+                                            </ActionButton>
+                                        </EthereumWalletConnectedBoundary>
+                                    ) : (
+                                        <div />
+                                    )}
                                 </EthereumChainBoundary>
                             </div>
                         ) : null}
@@ -438,8 +448,7 @@ interface ContentProps {
 }
 
 function Content(props: ContentProps) {
-    const { t } = useI18N()
-    const classes = useStyles()
+    const classes = useStyles({ hasNFTwithNoITOTokens: false })
     const { swappedTokens } = props
     return (
         <List className={classes.tokenCardWrapper}>
@@ -459,7 +468,7 @@ interface SwappedTokensProps {
 
 function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const classes = useStyles({ hasNFTwithNoITOTokens: false })
     const theme = useTheme()
 
     return swappedToken.token ? (

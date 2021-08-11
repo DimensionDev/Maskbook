@@ -155,8 +155,8 @@ export function NftAirdropCard() {
         useSpaceStationClaimableTokenCountCallback()
     const account = useAccount()
     const currentChainId = useChainId()
-    const { value: _claimable, loading: claimableLoading } = useSpaceStationClaimable(account)
-    const claimable = Boolean(_claimable) && currentChainId === ChainId.Mumbai
+    const { value: claimInfo, loading: claimableLoading } = useSpaceStationClaimable(account)
+    const claimable = Boolean(claimInfo?.claimable) && currentChainId === ChainId.Mumbai
     const classes = useStyles()
     const loading = claimableLoading || campaignInfoLoading
     const [claimState, claimCallback] = useSpaceStationContractClaimCallback(campaignInfo!)
@@ -261,7 +261,11 @@ export function NftAirdropCard() {
                                     classes={{ disabled: classes.disabledButton }}
                                     onClick={claimCallback}
                                     className={classes.actionButton}>
-                                    <span>{t('plugin_airdrop_nft_claim')}</span>
+                                    <span>
+                                        {claimInfo?.claimed
+                                            ? t('plugin_airdrop_nft_claimed')
+                                            : t('plugin_airdrop_nft_claim')}
+                                    </span>
                                     {claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING ||
                                     claimState.type === TransactionStateType.HASH ? (
                                         <CircularProgress size={16} className={classes.loading} />

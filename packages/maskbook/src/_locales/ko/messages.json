@@ -268,6 +268,7 @@
     "wallet_airdrop_nft_unclaimed_title": "",
     "plugin_airdrop_nft_end_time": "",
     "plugin_airdrop_nft_claim": "",
+    "plugin_airdrop_nft_claimed": "",
     "plugin_airdrop_nft_check": "",
     "plugin_airdrop_nft_check_address": "",
     "plugin_airdrop_nft_incorrect_address": "",
