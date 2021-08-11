@@ -29,7 +29,7 @@ import { currentSelectedIdentity } from '../../settings/settings'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { ProfileIdentifier } from '../../database/type'
 import { unreachable } from '@dimensiondev/kit'
-import { injectEnhancedProfile } from './injection/EnhancedProfile'
+import { injectEnhancedProfile } from './injection/EnhancedProfileTab'
 
 const twitterUI: SocialNetworkUI.Definition = {
     ...twitterBase,

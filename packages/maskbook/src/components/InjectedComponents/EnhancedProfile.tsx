@@ -1,43 +1,18 @@
-import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { getMaskColor } from '@masknet/theme'
 import { makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
+import Color from 'color'
 import { useCallback, useEffect, useState } from 'react'
-import { createReactRootShadowed, MaskMessage, startWatch } from '../../../utils'
+import { CollectibleListAddress } from '../../extension/options-page/DashboardComponents/CollectibleList'
+import { useEthereumAddress } from '../../social-network-adaptor/twitter.com/injection/useEthereumName'
 import {
     searchForegroundColorSelector,
     searchProfileEmptySelector,
-    searchProfileTabListLastChildSelector,
     searchProfileTabListSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
-} from '../utils/selector'
-import { useEthereumAddress } from './useEthereumName'
-import Color from 'color'
-import { CollectibleListAddress } from '../../../extension/options-page/DashboardComponents/CollectibleList'
-import { getMaskColor } from '@masknet/theme'
-
-function injectEnhancedProfileTab(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
-    startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfileTab />)
-}
-
-function injectEnhancedProfilePageForEmptyState(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
-    startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfileaPage />)
-}
-
-function injectEnhancedProfilePageState(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchProfileTabPageSelector())
-    startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfileaPage />)
-}
-export function injectEnhancedProfile(signal: AbortSignal) {
-    injectEnhancedProfileTab(signal)
-    injectEnhancedProfilePageForEmptyState(signal)
-    injectEnhancedProfilePageState(signal)
-}
+} from '../../social-network-adaptor/twitter.com/utils/selector'
+import { MaskMessage } from '../../utils'
 
 interface StyleProps {
     color: string
