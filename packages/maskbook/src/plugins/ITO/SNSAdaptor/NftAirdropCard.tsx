@@ -150,7 +150,7 @@ const useStyles = makeStyles((theme) => ({
 export function NftAirdropCard() {
     const { t } = useI18N()
     const [checkAddress, setCheckAddress] = useState('')
-    const now = new Date().getTime()
+    const now = Date.now()
     const { value: campaignInfo, loading: campaignInfoLoading } = useSpaceStationCampaignInfo()
     const [spaceStationClaimableCount, spaceStationAccountClaimableCallback, spaceStationAccountClaimableLoading] =
         useSpaceStationClaimableTokenCountCallback()
