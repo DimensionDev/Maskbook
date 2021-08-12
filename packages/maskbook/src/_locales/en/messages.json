@@ -279,7 +279,7 @@
     "plugin_airdrop_nft_incorrect_address": "Your wallet address is incorrect.",
     "plugin_airdrop_nft_none_to_claim": "You don’t have airdrop to claim.",
     "plugin_airdrop_nft_already_claimed": "You have claimed.",
-    "plugin_airdrop_nft_number_to_claim": "Your have {{count}} NFT to claim.",
+    "plugin_airdrop_nft_number_to_claim": "You have {{count}} NFT to claim.",
     "plugin_airdrop_nft_claim_all": "Claim Token",
     "plugin_airdrop_nft_claim_successful": "Token claimed successfully",
     "plugin_airdrop_nft_claim_failed": "Token claimed failed",
