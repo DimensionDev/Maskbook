@@ -321,6 +321,12 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
                                       count:
                                           (spaceStationClaimableCount.maxCount - spaceStationClaimableCount.usedCount) *
                                           campaignInfo.nfts.length,
+                                      name:
+                                          (spaceStationClaimableCount.maxCount - spaceStationClaimableCount.usedCount) *
+                                              campaignInfo.nfts.length >
+                                          1
+                                              ? 'NFTs'
+                                              : 'NFT',
                                   })
                             : null}
                     </Typography>
