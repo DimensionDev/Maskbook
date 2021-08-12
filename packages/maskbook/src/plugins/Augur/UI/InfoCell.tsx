@@ -14,7 +14,7 @@ export const InfoCell = (props: InfoCellProps) => {
     const { title, value, decimals, precision, symbol } = props
     const formattedValue = formatBalance(rawToFixed(value.toString(), decimals, precision), decimals)
     const displayValue = formattedValue !== '0' ? formattedValue + ' ' + symbol : '-'
-    console.log(value)
+
     return (
         <Grid item container direction="column" justifyContent="center">
             <Grid item>
