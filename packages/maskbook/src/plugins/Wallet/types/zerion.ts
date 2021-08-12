@@ -76,12 +76,7 @@ export interface ZerionAddressAsset {
     quantity: string
 }
 
-export interface ZerionAddressBSCAsset {
-    asset: ZerionCovalentAsset
-    quantity: string
-}
-
-export interface ZerionAddressPolygonAsset {
+export interface ZerionAddressCovalentAsset {
     asset: ZerionCovalentAsset
     quantity: string
 }
@@ -135,8 +130,8 @@ export interface ZerionTransactionResponseBody extends SocketResponseBody {
 
 type ZerionAssetResponseBodyPayload = {
     assets: Record<string, ZerionAddressAsset>
-    'bsc-assets': Record<string, ZerionAddressBSCAsset>
-    'polygon-assets': Record<string, ZerionAddressPolygonAsset>
+    'bsc-assets': Record<string, ZerionAddressCovalentAsset>
+    'polygon-assets': Record<string, ZerionAddressCovalentAsset>
 }
 
 export interface ZerionAssetResponseBody extends SocketResponseBody {

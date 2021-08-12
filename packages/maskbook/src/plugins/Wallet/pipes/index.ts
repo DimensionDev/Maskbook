@@ -55,7 +55,7 @@ export function resolveChainByScope(scope: SocketRequestAssetScope) {
             return 'matic'
         default:
             safeUnreachable(scope)
-            return ''
+            return 'Unknown'
     }
 }
 

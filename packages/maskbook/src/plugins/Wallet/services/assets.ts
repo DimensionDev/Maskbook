@@ -13,6 +13,7 @@ import {
     getChainIdFromName,
     getTokenConstants,
     isChainIdMainnet,
+    NetworkType,
     PortfolioProvider,
     pow10,
 } from '@masknet/web3-shared'
@@ -22,13 +23,12 @@ import { EthereumAddress } from 'wallet.ts'
 import * as DebankAPI from '../apis/debank'
 import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
-import { resolveChainByScope } from '../pipes'
+import { resolveChainByScope, resolveZerionAssetsScopeName } from '../pipes'
 import type {
     BalanceRecord,
     SocketRequestAssetScope,
     ZerionAddressAsset,
-    ZerionAddressBSCAsset,
-    ZerionAddressPolygonAsset,
+    ZerionAddressCovalentAsset,
     ZerionAsset,
     ZerionCovalentAsset,
 } from '../types'
@@ -88,11 +88,17 @@ export async function getAssetsListNFT(
     }
 }
 
-export async function getAssetsList(address: string, provider: PortfolioProvider): Promise<Asset[]> {
+export async function getAssetsList(
+    address: string,
+    network: NetworkType,
+    provider: PortfolioProvider,
+): Promise<Asset[]> {
     if (!EthereumAddress.isValid(address)) return []
     switch (provider) {
         case PortfolioProvider.ZERION:
-            const { meta, payload } = await ZerionAPI.getAssetsList(address, ['assets', 'bsc-assets', 'polygon-assets'])
+            const scope = resolveZerionAssetsScopeName(network)
+
+            const { meta, payload } = await ZerionAPI.getAssetsList(address, scope)
             if (meta.status !== 'ok') throw new Error('Fail to load assets.')
 
             const assets = Object.entries(payload).map(([key, value]) => {
@@ -106,7 +112,10 @@ export async function getAssetsList(address: string, provider: PortfolioProvider
                     return formatAssetsFromZerion(assetsList, key)
                 }
 
-                return formatAssetsFromZerion(values(value) as ZerionAddressBSCAsset[], key as SocketRequestAssetScope)
+                return formatAssetsFromZerion(
+                    values(value) as ZerionAddressCovalentAsset[],
+                    key as SocketRequestAssetScope,
+                )
             })
 
             return assets.flat()
@@ -149,7 +158,7 @@ function formatAssetsFromDebank(data: BalanceRecord[]) {
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
 
 function formatAssetsFromZerion(
-    data: ZerionAddressAsset[] | ZerionAddressBSCAsset[] | ZerionAddressPolygonAsset[],
+    data: ZerionAddressAsset[] | ZerionAddressCovalentAsset[],
     scope: SocketRequestAssetScope,
 ) {
     return data.map(({ asset, quantity }) => {
@@ -169,6 +178,7 @@ function formatAssetsFromZerion(
                     asset.name === 'Ether' || asset.name === 'Ethereum'
                         ? EthereumTokenType.Native
                         : EthereumTokenType.ERC20,
+                logoURI: asset.icon_url,
             },
             chain: resolveChainByScope(scope),
             balance: quantity,

@@ -63,9 +63,9 @@ export async function getTransactionList(address: string, scope: string, page?: 
     })) as ZerionTransactionResponseBody
 }
 
-export async function getAssetsList(address: string, scope: string[]) {
+export async function getAssetsList(address: string, scope: string) {
     return (await subscribeFromZerion(addressSocket, {
-        scope: scope,
+        scope: [scope],
         payload: {
             address,
             currency: 'usd',
