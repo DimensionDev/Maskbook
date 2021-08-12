@@ -68,7 +68,8 @@ export const SLIPPAGE_MIN = 10 // bips
 export const SLIPPAGE_DEFAULT = 50 // bips
 export const SLIPPAGE_MAX = 500 // bips
 
-export const DEFAULT_TRANSACTION_DEADLINE = 20 /* minutes */ * 60 /* seconds */
+export const DEFAULT_TRANSACTION_DEADLINE = 30 /* minutes */ * 60 /* seconds */
+export const L2_TRANSACTION_DEADLINE = 60 /* minutes */ * 5 /* seconds */
 
 export const PRICE_IMPACT_LOW = 100 // 1%
 export const PRICE_IMPACT_MEDIUM = 300 // 3%

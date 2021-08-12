@@ -74,7 +74,7 @@ export async function call(config: TransactionConfig, overrides?: SendOverrides)
     return request<string>(
         {
             method: EthereumMethodType.ETH_CALL,
-            params: [config],
+            params: [config, 'latest'],
         },
         overrides,
     )

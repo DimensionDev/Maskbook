@@ -30,10 +30,9 @@ interface FailedCall extends SwapCallEstimate {
 export function useTradeCallback(
     trade: TradeComputed<Trade> | null,
     allowedSlippage = SLIPPAGE_DEFAULT,
-    ddl = DEFAULT_TRANSACTION_DEADLINE,
 ) {
     const account = useAccount()
-    const tradeParameters = useTradeParameters(trade, allowedSlippage, ddl)
+    const tradeParameters = useTradeParameters(trade, allowedSlippage)
 
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,

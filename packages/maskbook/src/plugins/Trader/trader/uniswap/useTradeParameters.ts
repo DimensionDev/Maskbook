@@ -9,6 +9,7 @@ import { SwapRouter } from '@uniswap/v3-sdk'
 import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract'
 import { useSwapRouterContract } from '../../contracts/uniswap/useSwapRouterContract'
 import { TradeContext } from '../useTradeContext'
+import { useTransactionDeadline } from './useTransactionDeadline'
 
 const UNISWAP_BIPS_BASE = JSBI.BigInt(10_000)
 
@@ -21,15 +22,15 @@ const UNISWAP_BIPS_BASE = JSBI.BigInt(10_000)
 export function useSwapParameters(
     trade: TradeComputed<Trade> | null, // trade to execute, required
     allowedSlippage: number = SLIPPAGE_DEFAULT, // in bips
-    deadline: number = DEFAULT_TRANSACTION_DEADLINE, // in seconds from now
 ) {
     const account = useAccount()
     const context = useContext(TradeContext)
+    const deadline = useTransactionDeadline()
     const routerV2Contract = useRouterV2Contract(context?.ROUTER_CONTRACT_ADDRESS)
     const swapRouterContract = useSwapRouterContract(context?.ROUTER_CONTRACT_ADDRESS)
 
     return useMemo<SwapCall[]>(() => {
-        if (!account || !trade?.trade_) return []
+        if (!account || !trade?.trade_ || !deadline) return []
 
         const { trade_ } = trade
         const allowedSlippage_ = new Percent(JSBI.BigInt(allowedSlippage), UNISWAP_BIPS_BASE)
@@ -41,7 +42,7 @@ export function useSwapParameters(
                     feeOnTransfer: false,
                     allowedSlippage: allowedSlippage_,
                     recipient: account,
-                    ttl: deadline,
+                    ttl: deadline.toNumber(),
                 }),
             ]
             if (trade_.tradeType === TradeType.EXACT_INPUT)
@@ -50,7 +51,7 @@ export function useSwapParameters(
                         feeOnTransfer: true,
                         allowedSlippage: allowedSlippage_,
                         recipient: account,
-                        ttl: deadline,
+                        ttl: deadline.toNumber(),
                     }),
                 )
             return parameters.map(({ methodName, args, value }) => {
