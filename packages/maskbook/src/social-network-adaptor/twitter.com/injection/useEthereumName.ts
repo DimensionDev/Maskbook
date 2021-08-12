@@ -31,6 +31,7 @@ export function useEthereumAddress(nickanme: string, twitterId: string, bio: str
     const ens_addr = useResolveEns(name).value
 
     useEffect(() => {
+        setAddr('')
         const matched = bio.match(ADDRESS)
         if (matched) setAddr(matched[0])
     }, [bio])

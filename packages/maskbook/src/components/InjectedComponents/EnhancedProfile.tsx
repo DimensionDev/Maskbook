@@ -1,19 +1,13 @@
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { useStylesExtends } from '@masknet/shared'
+import { getMaskColor } from '@masknet/theme'
+import { makeStyles } from '@material-ui/core'
 import { useState, useEffect } from 'react'
 import { CollectibleListAddress } from '../../extension/options-page/DashboardComponents/CollectibleList'
 import { useEthereumAddress } from '../../social-network-adaptor/twitter.com/injection/useEthereumName'
-import { searchNewTweetButtonSelector } from '../../social-network-adaptor/twitter.com/utils/selector'
-import { getBioDescription, getNickname, getTwitterId } from '../../social-network-adaptor/twitter.com/utils/user'
 import { MaskMessage } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 
-interface StyleProps {
-    backgroundColor: string
-}
-
-const EMPTY_STYLE = {} as CSSStyleDeclaration
-
-const useStyles = makeStyles<StyleProps>()((theme, props) => ({
+const useStyles = makeStyles((theme) => ({
     empty: {
         paddingTop: 36,
         paddingBottom: 36,
@@ -24,25 +18,20 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
             color: getMaskColor(theme).textPrimary,
         },
     },
-    button: {
-        backgroundColor: props.backgroundColor,
-        color: 'white',
-        marginTop: 18,
-        '&:hover': {
-            backgroundColor: props.backgroundColor,
-        },
-    },
+    button: {},
 }))
 
-export function EnhancedProfileaPage() {
-    const [show, setShow] = useState(false)
-    const newTweetButton = searchNewTweetButtonSelector().evaluate()
-    const style = newTweetButton ? window.getComputedStyle(newTweetButton) : EMPTY_STYLE
-    const { classes } = useStyles({ backgroundColor: style.backgroundColor })
+interface EnhancedProfileaPageProps extends withClasses<'empty' | 'button'> {
+    bioDescription: string
+    nickname: string
+    twitterId: string
+    onUpdated: () => void
+}
 
-    const [bio, setBio] = useState(getBioDescription())
-    const [nickname, setNickname] = useState(getNickname())
-    const [twitterId, setTwitterId] = useState(getTwitterId())
+export function EnhancedProfileaPage(props: EnhancedProfileaPageProps) {
+    const [show, setShow] = useState(false)
+    const classes = useStylesExtends(useStyles(), props)
+    const { bioDescription, nickname, twitterId, onUpdated } = props
 
     const onLocalChange = () => {
         MaskMessage.events.profileNFTsTabUpdated.sendToLocal('reset')
@@ -50,12 +39,7 @@ export function EnhancedProfileaPage() {
 
     useEffect(() => {
         return MaskMessage.events.profileNFTsTabUpdated.on((data) => {
-            const _bioDescription = getBioDescription()
-            setBio(_bioDescription)
-            const _nickname = getNickname()
-            setNickname(_nickname)
-            const _twitterId = getTwitterId()
-            setTwitterId(_twitterId)
+            onUpdated()
         })
     }, [])
 
@@ -67,6 +51,6 @@ export function EnhancedProfileaPage() {
         })
     }, [])
 
-    const resolvedAddress = useEthereumAddress(nickname, twitterId, bio)
+    const resolvedAddress = useEthereumAddress(nickname, twitterId, bioDescription)
     return <>{show ? <CollectibleListAddress classes={classes} address={resolvedAddress ?? ''} /> : null}</>
 }
