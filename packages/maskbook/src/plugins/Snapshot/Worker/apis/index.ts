@@ -1,5 +1,5 @@
-import ss from '@snapshot-labs/snapshot.js'
-import type { VoteItemList, Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess } from '../../types'
+import ss from '@dimensiondev/snapshot.js'
+import type { Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess, RawVote } from '../../types'
 import Services from '../../../../extension/service'
 import { resolveIPFSLink } from '@masknet/web3-shared'
 
@@ -7,13 +7,12 @@ export async function fetchProposal(id: string) {
     const response = await fetch(resolveIPFSLink(id), {
         method: 'GET',
     })
-    const network = await fetchProposalNetwork(id)
+    const { network, votes } = await fetchProposalFromGraphql(id)
     const result = await response.json()
-
-    return { ...result, network } as Proposal
+    return { ...result, network, votes } as Proposal
 }
 
-async function fetchProposalNetwork(id: string) {
+async function fetchProposalFromGraphql(id: string) {
     const response = await fetch(`https://hub.snapshot.org/graphql`, {
         method: 'POST',
         headers: {
@@ -21,35 +20,35 @@ async function fetchProposalNetwork(id: string) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            operationName: 'Proposal',
             query: `query Proposal($id: String!) {
                 proposal(id: $id) {
                     network
                 }
+                votes(first: 10000, where: { proposal: $id }) {
+                    id
+                    voter
+                    created
+                    choice
+                  }
             }`,
             variables: {
                 id,
             },
         }),
     })
+    const res = await response.json()
 
     const {
         data: {
             proposal: { network },
+            votes,
         },
-    } = await response.json()
+    } = res
 
-    return network as string
-}
-
-export function fetchAllProposalsOfSpace() {}
-
-export async function fetchAllVotesOfProposal(id: string, space: string) {
-    const response = await fetch(`https://hub.snapshot.page/api/${space}/proposal/${id}`, {
-        method: 'GET',
-    })
-    const result: VoteItemList = await response.json()
-    return result
+    return { votes, network } as {
+        network: string
+        votes: RawVote[]
+    }
 }
 
 export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Box[]> {
