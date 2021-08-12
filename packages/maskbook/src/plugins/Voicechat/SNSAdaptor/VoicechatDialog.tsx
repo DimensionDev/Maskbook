@@ -68,7 +68,7 @@ export const VoicechatDialog = (props: VoicechatDialogProps) => {
                     control={
                         <Checkbox
                             checked={voicechatEnabled}
-                            onChange={(e) => setVoicechatEnabled(e.target.checked)}
+                            onChange={(event) => setVoicechatEnabled(event.target.checked)}
                             name="voicechatEnabled"
                             color="primary"
                         />
@@ -79,8 +79,8 @@ export const VoicechatDialog = (props: VoicechatDialogProps) => {
                     <TextField
                         label={t('plugin_voicechat_custom_server_url')}
                         value={customServerURL}
-                        onChange={(e) => setCustomServerURL(e.target.value)}
-                        fullWidth={true}
+                        onChange={(event) => setCustomServerURL(event.target.value)}
+                        fullWidth
                     />
                 </Box>
                 <div className={classes.line} style={{ justifyContent: 'flex-end' }}>
