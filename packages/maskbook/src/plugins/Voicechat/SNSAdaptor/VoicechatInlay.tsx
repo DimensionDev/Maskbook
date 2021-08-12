@@ -3,7 +3,7 @@ import { CloseOutlined, VolumeMuteOutlined, VolumeOffOutlined, VolumeUpOutlined 
 import { useState } from 'react'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { usePortalShadowRoot } from '../../../utils/shadow-root/usePortalShadowRoot'
+import { usePortalShadowRoot } from '@masknet/theme'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import type { PeerMediaElement, VoiceChatMetadata } from '../types'
 import { changeMediaDevice, disconnectVoice, init, registerSpeakingUsernames } from '../utils/voicechat'

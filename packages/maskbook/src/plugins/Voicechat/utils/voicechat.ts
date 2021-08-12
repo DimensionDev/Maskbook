@@ -122,7 +122,7 @@ export function init(
                     session_description: localDescription,
                 })
                 console.log('Offer setLocalDescription succeeded')
-            } catch (e) {
+            } catch {
                 alert('Voicechat failed to create offer')
             }
         }
@@ -140,7 +140,7 @@ export function init(
         const desc = new RTCSessionDescription(remoteDescription)
         await peer.setRemoteDescription(desc)
         console.log('setRemoteDescription succeeded')
-        if (remoteDescription.type == 'offer') {
+        if (remoteDescription.type === 'offer') {
             console.log('Creating answer')
 
             const localDescription = await peer.createAnswer()
@@ -191,7 +191,7 @@ interface Config {
 
 // Local Media
 function setupLocalMedia(callback: () => void, onError: () => void, username: string) {
-    if (localMediaStream != null) {
+    if (localMediaStream !== null) {
         callback()
         return
     }
@@ -282,7 +282,9 @@ export function disconnectVoice() {
 
     try {
         signalingSocket?.close()
-    } catch (e) {}
+    } catch {
+        // ignore
+    }
 
     updateState()
 }

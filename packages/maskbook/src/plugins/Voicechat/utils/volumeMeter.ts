@@ -52,7 +52,7 @@ function getDynamicRange(buffer: Uint8Array) {
     let min = 128
     let max = 128
 
-    for (let i = 0; i < len; i++) {
+    for (let i = 0; i < len; i += 1) {
         const sample = buffer[i]
         if (sample < min) min = sample
         else if (sample > max) max = sample
