@@ -1,12 +1,12 @@
 import { LoadingIcon } from '@masknet/icons'
 import { Card, Stack, Typography } from '@material-ui/core'
+import { memo } from 'react'
 
 interface LoadingProps {
     text?: string
 }
 
-export const LoadingCard = ({ text = 'Loading' }: LoadingProps) => {
-    // todo: add loading icon
+export const LoadingCard = memo(({ text = 'Loading' }: LoadingProps) => {
     return (
         <Card variant="background" sx={{ width: '100%' }}>
             <Stack justifyContent="center" alignItems="center" sx={{ minHeight: 140 }}>
@@ -17,4 +17,4 @@ export const LoadingCard = ({ text = 'Loading' }: LoadingProps) => {
             </Stack>
         </Card>
     )
-}
+})

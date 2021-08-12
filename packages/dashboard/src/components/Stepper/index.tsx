@@ -52,6 +52,15 @@ export const Stepper = (props: StepperProps) => {
     }
 
     useEffect(() => {
+        Children.forEach(props.children, (child: ReactElement<StepProps>) => {
+            if (isValidElement(child)) {
+                const name = child.props.name
+                setSteps(name, child)
+            }
+        })
+    }, [])
+
+    useEffect(() => {
         if (!transition) {
             setCurrentTransition(null)
             return
@@ -62,15 +71,6 @@ export const Stepper = (props: StepperProps) => {
             setCurrentTransition(null)
         }
     }, [transition])
-
-    useEffect(() => {
-        Children.forEach(props.children, (child: ReactElement<StepProps>) => {
-            if (isValidElement(child)) {
-                const name = child.props.name
-                setSteps(name, child)
-            }
-        })
-    }, [])
 
     useEffect(() => {
         if (!step) return

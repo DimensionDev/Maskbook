@@ -1,4 +1,5 @@
 import { Button, Stack, Typography } from '@material-ui/core'
+import { memo } from 'react'
 
 interface LabelProps {
     onModeChange(mode: AccountValidationType): void
@@ -12,7 +13,7 @@ export enum ValidationCodeStep {
     ConfirmBackupInfo = 'ConfirmBackupInfo',
 }
 
-export const Label = ({ mode, onModeChange }: LabelProps) => {
+export const Label = memo(({ mode, onModeChange }: LabelProps) => {
     return (
         <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="body2" sx={{ fontWeight: 'bolder' }} color="textPrimary">
@@ -29,4 +30,4 @@ export const Label = ({ mode, onModeChange }: LabelProps) => {
             )}
         </Stack>
     )
-}
+})

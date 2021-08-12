@@ -1,12 +1,12 @@
 import { useDashboardI18N } from '../../../locales'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { PhoneNumberField } from '@masknet/theme'
 import { ButtonGroup } from '../../RegisterFrame/ButtonGroup'
 import { Button } from '@material-ui/core'
 import { Label, ValidationCodeStep } from './Commont'
 import type { StepCommonProps } from '../../Stepper'
 
-export const PhoneField = ({ toStep }: StepCommonProps) => {
+export const PhoneField = memo(({ toStep }: StepCommonProps) => {
     const t = useDashboardI18N()
     const [account, setAccount] = useState<string>('')
 
@@ -34,4 +34,4 @@ export const PhoneField = ({ toStep }: StepCommonProps) => {
             </ButtonGroup>
         </>
     )
-}
+})

@@ -18,7 +18,7 @@ export const RestoreFromPrivateKey = memo(() => {
     const { changeCurrentPersona } = PersonaContext.useContainer()
     const t = useDashboardI18N()
     const schema = z.object({
-        privateKey: z.string(), // string
+        privateKey: z.string(),
     })
 
     const {
@@ -39,7 +39,6 @@ export const RestoreFromPrivateKey = memo(() => {
             if (persona) {
                 changeCurrentPersona(persona.identifier)
             } else {
-                // todo fix i18n
                 setError('privateKey', { type: 'value', message: t.sign_in_account_private_key_persona_not_found() })
             }
         } catch (_) {

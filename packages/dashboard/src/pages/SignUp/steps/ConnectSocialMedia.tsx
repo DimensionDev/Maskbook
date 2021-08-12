@@ -12,26 +12,21 @@ import { useDashboardI18N } from '../../../locales'
 import { SetupActionCard } from '../../Setup'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 import { upperFirst } from 'lodash-es'
-import { FacebookIcon, InstagramIcon, TwitterIcon } from '@masknet/icons'
+import { FacebookColoredIcon, MindsIcon, TwitterColoredIcon } from '@masknet/icons'
 import { Button, Stack } from '@material-ui/core'
 
-// icons maping
 const ICON_MAPPING = [
     {
         type: 'facebook.com',
-        icon: <FacebookIcon />,
+        icon: <FacebookColoredIcon />,
     },
     {
         type: 'twitter.com',
-        icon: <TwitterIcon />,
-    },
-    {
-        type: 'instagram.com',
-        icon: <InstagramIcon />,
+        icon: <TwitterColoredIcon />,
     },
     {
         type: 'minds.com',
-        icon: <InstagramIcon />,
+        icon: <MindsIcon />,
     },
 ]
 export const ConnectSocialMedia = () => {
