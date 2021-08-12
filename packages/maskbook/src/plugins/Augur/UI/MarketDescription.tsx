@@ -6,6 +6,7 @@ import { getResolutionRules } from '../utils'
 
 import { MARKET_DESCRIPTION_LIMIT } from '../constants'
 import { formatBalance, FungibleTokenDetailed } from '@masknet/web3-shared'
+import DOMPurify from 'dompurify'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,7 +52,8 @@ export const MarketDescription = (props: MarketDescriptionProps) => {
     const { market, collateral } = props
     const classes = useStyles()
 
-    const cleanDescription = getResolutionRules(market).join('\n\n')
+    const description = getResolutionRules(market).join('\n\n')
+    const cleanDescription = DOMPurify.sanitize(description)
     const [expanded, setExpanded] = useState(cleanDescription.length < MARKET_DESCRIPTION_LIMIT)
 
     return (
