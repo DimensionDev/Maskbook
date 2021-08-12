@@ -13,9 +13,6 @@ import {
 import { Trans } from 'react-i18next'
 import type { AmmOutcome, Market } from '../types'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { PluginAugurMessages } from '../messages'
-import { useCallback } from 'react'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { BuyDialog } from '../SNSAdaptor/BuyDialog'
 import { SellDialog } from '../SNSAdaptor/SellDialog'
@@ -182,17 +179,6 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
     const [selectedOutcome, setSelectedOutcome] = useState<AmmOutcome>()
     const [buyDialogOpen, setBuyDialogOpen] = useState(false)
     const [sellDialogOpen, setSellDialogOpen] = useState(false)
-
-    const { setDialog: openSellDialog } = useRemoteControlledDialog(PluginAugurMessages.SellDialogUpdated)
-    const onSell = useCallback(() => {
-        if (!selectedOutcome) return
-        openSellDialog({
-            open: true,
-            market: market,
-            outcome: selectedOutcome,
-            cashToken: cashToken,
-        })
-    }, [market, selectedOutcome, isBuy])
 
     const validationMessage = useMemo(() => {
         if (!selectedOutcome) return t('plugin_augur_select_outcome')
