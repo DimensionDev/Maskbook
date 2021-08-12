@@ -25,3 +25,4 @@ export const SWAP_FEE_DECIMALS = 18
 export const SHARE_DECIMALS = 18
 export const MIN_SELL_AMOUNT = 10 ** 14
 export const BALANCE_DECIMALS = 4
+export const DESCRIPTION_PRECISION = 2

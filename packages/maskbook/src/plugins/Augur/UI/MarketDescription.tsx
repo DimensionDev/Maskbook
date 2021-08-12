@@ -4,9 +4,11 @@ import { Trans } from 'react-i18next'
 import type { Market } from '../types'
 import { getResolutionRules } from '../utils'
 
-import { MARKET_DESCRIPTION_LIMIT } from '../constants'
-import { formatBalance, FungibleTokenDetailed } from '@masknet/web3-shared'
-import DOMPurify from 'dompurify'
+import { DESCRIPTION_PRECISION, MARKET_DESCRIPTION_LIMIT } from '../constants'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import DOMPurify from 'isomorphic-dompurify'
+import { InfoCell } from './InfoCell'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,7 +53,7 @@ interface MarketDescriptionProps {
 export const MarketDescription = (props: MarketDescriptionProps) => {
     const { market, collateral } = props
     const classes = useStyles()
-
+    const { t } = useI18N()
     const description = getResolutionRules(market).join('\n\n')
     const cleanDescription = DOMPurify.sanitize(description)
     const [expanded, setExpanded] = useState(cleanDescription.length < MARKET_DESCRIPTION_LIMIT)
@@ -59,23 +61,28 @@ export const MarketDescription = (props: MarketDescriptionProps) => {
     return (
         <div className={classes.root}>
             <Grid container direction="row" wrap="nowrap" className={classes.info}>
-                <Grid item container direction="column" justifyContent="center">
-                    <Grid item>
-                        <Typography variant="body2" color="textSecondary" align="center">
-                            <Trans i18nKey="plugin_augur_24hr_volume" />
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Typography variant="body2" align="center">
-                            {market.ammExchange
-                                ? formatBalance(market.ammExchange.volume24hr, collateral.decimals, 2) +
-                                  ' ' +
-                                  collateral.symbol
-                                : '-'}
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Grid item container direction="column" justifyContent="center">
+                <InfoCell
+                    title={t('plugin_augur_24hr_volume')}
+                    value={market.ammExchange?.volume24hr?.toString() ?? ''}
+                    decimals={collateral.decimals}
+                    symbol={collateral.symbol ?? ''}
+                    precision={DESCRIPTION_PRECISION}
+                />
+                <InfoCell
+                    title={t('plugin_augur_total_volume')}
+                    value={market.ammExchange?.totalVolume?.toString() ?? ''}
+                    decimals={collateral.decimals}
+                    symbol={collateral.symbol ?? ''}
+                    precision={DESCRIPTION_PRECISION}
+                />
+                <InfoCell
+                    title={t('plugin_augur_liquidity')}
+                    value={market.ammExchange?.totalLiquidity?.toString() ?? ''}
+                    decimals={collateral.decimals}
+                    symbol={collateral.symbol ?? ''}
+                    precision={DESCRIPTION_PRECISION}
+                />
+                {/* <Grid item container direction="column" justifyContent="center">
                     <Grid item>
                         <Typography variant="body2" color="textSecondary" align="center">
                             <Trans i18nKey="plugin_augur_total_volume" />
@@ -84,7 +91,11 @@ export const MarketDescription = (props: MarketDescriptionProps) => {
                     <Grid item>
                         <Typography variant="body2" align="center">
                             {market.ammExchange
-                                ? formatBalance(market.ammExchange.totalVolume, collateral.decimals, 2) +
+                                ? rawToFixed(
+                                      market.ammExchange.totalVolume.toString(),
+                                      collateral.decimals,
+                                      DESCRIPTION_PRECISION,
+                                  ) +
                                   ' ' +
                                   collateral.symbol
                                 : '-'}
@@ -100,13 +111,17 @@ export const MarketDescription = (props: MarketDescriptionProps) => {
                     <Grid item>
                         <Typography variant="body2" align="center">
                             {market.ammExchange
-                                ? formatBalance(market.ammExchange.totalLiquidity, collateral.decimals, 2) +
+                                ? rawToFixed(
+                                      market.ammExchange.totalLiquidity.toString(),
+                                      collateral.decimals,
+                                      DESCRIPTION_PRECISION,
+                                  ) +
                                   ' ' +
                                   collateral.symbol
                                 : '-'}
                         </Typography>
                     </Grid>
-                </Grid>
+                </Grid> */}
             </Grid>
 
             {cleanDescription ? (
