@@ -25,20 +25,18 @@ async function Suspender(identifier: ProposalIdentifier) {
     const profiles = await PluginSnapshotRPC.fetch3BoxProfiles(voters)
     const profileEntries = Object.fromEntries(profiles.map((p) => [p.contract_address, p]))
     return proposal.votes
-        .map((v) => {
-            return {
-                choiceIndex: v.choice,
-                choice: message.payload.choices[v.choice - 1],
-                address: v.voter,
-                authorIpfsHash: v.id,
-                balance: scores.reduce((a, b) => a + (b[v.voter.toLowerCase()] ? b[v.voter.toLowerCase()] : 0), 0),
-                scores: message.payload.metadata.strategies.map((_strategy, i) => scores[i][v.voter] || 0),
-                strategySymbol: message.payload.metadata.strategies[0].params.symbol,
-                authorName: profileEntries[v.voter.toLowerCase()]?.name,
-                authorAvatar: profileEntries[v.voter.toLowerCase()]?.image,
-                timestamp: v.created,
-            }
-        })
+        .map((v) => ({
+            choiceIndex: v.choice,
+            choice: message.payload.choices[v.choice - 1],
+            address: v.voter,
+            authorIpfsHash: v.id,
+            balance: scores.reduce((a, b) => a + (b[v.voter.toLowerCase()] ? b[v.voter.toLowerCase()] : 0), 0),
+            scores: message.payload.metadata.strategies.map((_strategy, i) => scores[i][v.voter] || 0),
+            strategySymbol: message.payload.metadata.strategies[0].params.symbol,
+            authorName: profileEntries[v.voter.toLowerCase()]?.name,
+            authorAvatar: profileEntries[v.voter.toLowerCase()]?.image,
+            timestamp: v.created,
+        }))
         .sort((a, b) => b.balance - a.balance)
         .filter((v) => v.balance > 0)
 }
