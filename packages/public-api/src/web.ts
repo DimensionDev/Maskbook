@@ -27,8 +27,8 @@ export interface MaskNetworkAPIs {
     settings_getLanguage(): Promise<Language>
     settings_setLanguage(payload: { language: Language }): Promise<void>
     persona_createPersonaByMnemonic(payload: { mnemonic: string; nickname: string; password: string }): Promise<any>
-    persona_queryPersonas(payload: { identifier: string; hasPrivateKey: boolean }): Promise<any>
-    persona_queryMyPersonas(payload: { network: string }): Promise<any>
+    persona_queryPersonas(payload: { identifier?: string; hasPrivateKey: boolean }): Promise<any>
+    persona_queryMyPersonas(payload: { network?: string }): Promise<any>
     persona_updatePersonaInfo(payload: { identifier: string; data: { nickname: string } }): Promise<void>
     persona_removePersona(payload: { identifier: string }): Promise<void>
     persona_restoreFromJson(payload: { backup: string }): Promise<any>

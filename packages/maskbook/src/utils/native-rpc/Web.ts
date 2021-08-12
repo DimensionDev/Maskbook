@@ -71,8 +71,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     settings_setLanguage: ({ language }) => Services.Settings.setLanguage(language),
     persona_createPersonaByMnemonic: ({ mnemonic, nickname, password }) =>
         Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonic, password, { nickname }),
-    persona_queryPersonas: ({ identifier, hasPrivateKey }) =>
-        Services.Identity.queryPersonas(stringToIdentifier(identifier), hasPrivateKey),
+    persona_queryPersonas: ({ identifier, hasPrivateKey }) => {
+        const id = identifier ? stringToIdentifier(identifier) : undefined
+        return Services.Identity.queryPersonas(id, hasPrivateKey)
+    },
     persona_queryMyPersonas: ({ network }) => Services.Identity.queryMyPersonas(network),
     persona_updatePersonaInfo: ({ identifier, data }) => {
         const { nickname } = data
