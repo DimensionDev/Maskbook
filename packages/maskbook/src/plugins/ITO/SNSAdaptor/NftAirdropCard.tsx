@@ -1,5 +1,4 @@
 import formatDateTime from 'date-fns/format'
-import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
 import {
     ChainId,
     TransactionStateType,
@@ -18,6 +17,7 @@ import { useSnackbar, OptionsObject } from '@masknet/theme'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import CloseIcon from '@material-ui/icons/Close'
 import classNames from 'classnames'
+import type { CampaignInfo } from '../types'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -147,19 +147,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export function NftAirdropCard() {
+interface NftAirdropCardProps {
+    campaignInfo: CampaignInfo
+}
+
+export function NftAirdropCard(props: NftAirdropCardProps) {
     const { t } = useI18N()
     const [checkAddress, setCheckAddress] = useState('')
     const now = Date.now()
-    const { value: campaignInfo, loading: campaignInfoLoading } = useSpaceStationCampaignInfo()
+    const { campaignInfo } = props
+
     const [spaceStationClaimableCount, spaceStationAccountClaimableCallback, spaceStationAccountClaimableLoading] =
         useSpaceStationClaimableTokenCountCallback()
     const account = useAccount()
     const currentChainId = useChainId()
-    const { value: claimInfo, loading: claimableLoading } = useSpaceStationClaimable(account)
+    const { value: claimInfo, loading } = useSpaceStationClaimable(account)
     const claimable = Boolean(claimInfo?.claimable) && currentChainId === ChainId.Mumbai
     const classes = useStyles()
-    const loading = claimableLoading || campaignInfoLoading
     const [claimState, claimCallback] = useSpaceStationContractClaimCallback(campaignInfo!)
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const snackbarOptions = {
@@ -218,7 +222,7 @@ export function NftAirdropCard() {
 
     return (
         <Box className={classes.root}>
-            {loading || !campaignInfo ? (
+            {loading ? (
                 <CircularProgress size={16} className={classes.loading} />
             ) : (
                 <>

@@ -15,6 +15,7 @@ import {
 import classNames from 'classnames'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../../../utils'
+import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
 import { NftAirdropCard } from './NftAirdropCard'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useClaimablePools, SwappedToken } from './hooks/useClaimablePools'
@@ -212,6 +213,14 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { open, onClose } = props
     const DialogRef = useRef<HTMLDivElement>(null)
     const currentChainId = useChainId()
+    const { value: campaignInfo } = useSpaceStationCampaignInfo()
+    const now = Date.now()
+    // tomorrow at 00:00:00 of campaign endTime.
+    const dateToHideSpaceStationCampaign = new Date()
+    dateToHideSpaceStationCampaign.setDate(
+        new Date(campaignInfo ? campaignInfo.endTime * 1000 : now + 1000 * 1000).getDate() + 1,
+    )
+    dateToHideSpaceStationCampaign.setHours(0, 0, 0, 0)
     const [chainId, setChainId] = useState(
         [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].includes(currentChainId) ? currentChainId : ChainId.Mainnet,
     )
@@ -367,7 +376,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         <AbstractTab {...tabProps} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
-                        {chainId === ChainId.Matic ? <NftAirdropCard /> : null}
+                        {chainId === ChainId.Matic && campaignInfo && now < dateToHideSpaceStationCampaign.getTime() ? (
+                            <NftAirdropCard campaignInfo={campaignInfo} />
+                        ) : null}
 
                         {loading || loadingOld || initLoading || !swappedTokens || !swappedTokensOld ? (
                             <div className={classes.emptyContentWrapper}>
