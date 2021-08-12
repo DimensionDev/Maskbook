@@ -2,7 +2,7 @@ import { useStylesExtends } from '@masknet/shared'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import Color from 'color'
-import { useCallback, useEffect, useState } from 'react'
+import { ReactElement, useCallback, useEffect, useState } from 'react'
 
 import { MaskMessage } from '../../utils'
 
@@ -23,27 +23,18 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: getMaskColor(theme).blue,
     },
-    hot: {
+    selected: {
         color: 'black',
     },
-    line: {
-        dispaly: 'inline-flex',
-        borderRadius: 99999,
-        position: 'absolute',
-        bottom: 0,
-        minWidth: 56,
-        alignSelf: 'center',
-        height: 4,
-        backgroundColor: getMaskColor(theme).blue,
-    },
 }))
-export interface EnhancedProfileTabProps extends withClasses<'tab' | 'button' | 'hot' | 'line'> {
+export interface EnhancedProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {
     clear(): void
     reset(): void
+    hot?: ReactElement
 }
 
 export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
-    const { reset, clear } = props
+    const { reset, clear, hot } = props
     const { classes } = useStyles()
     const styles = useStylesExtends(classes, props)
     const [active, setActive] = useState(false)
@@ -69,9 +60,9 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
 
     return (
         <div key="nfts" className={styles.tab}>
-            <div className={classNames(styles.button, active ? styles.hot : '')} onClick={onClick}>
+            <div className={classNames(styles.button, active ? styles.selected : '')} onClick={onClick}>
                 NFTs
-                {active ? <div className={styles.line} /> : null}
+                {active && hot ? hot : null}
             </div>
         </div>
     )

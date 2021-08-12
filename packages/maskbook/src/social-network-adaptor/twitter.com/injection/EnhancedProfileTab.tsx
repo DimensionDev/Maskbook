@@ -52,7 +52,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
             color: (props: StyleProps) => props.hover,
         },
     },
-    hot: {
+    selected: {
         color: (props: StyleProps) => props.hover,
     },
     line: {
