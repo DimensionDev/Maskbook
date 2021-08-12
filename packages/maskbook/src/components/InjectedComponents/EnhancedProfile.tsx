@@ -7,20 +7,17 @@ import { MaskMessage } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 
 const useStyles = makeStyles()((theme) => ({
-    empty: {
+    text: {
         paddingTop: 36,
         paddingBottom: 36,
         '& > p': {
-            fontSize: 28,
-            fontFamily: 'inherit',
-            fontWeight: 700,
             color: getMaskColor(theme).textPrimary,
         },
     },
     button: {},
 }))
 
-interface EnhancedProfileaPageProps extends withClasses<'empty' | 'button'> {
+interface EnhancedProfileaPageProps extends withClasses<'text' | 'button'> {
     bioDescription: string
     nickname: string
     twitterId: string

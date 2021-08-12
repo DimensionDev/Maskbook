@@ -19,9 +19,11 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
-        padding: theme.spacing(1),
         fontWeight: 700,
         color: getMaskColor(theme).blue,
+        '&:hover': {
+            color: getMaskColor(theme).blue,
+        },
     },
     selected: {
         color: 'black',

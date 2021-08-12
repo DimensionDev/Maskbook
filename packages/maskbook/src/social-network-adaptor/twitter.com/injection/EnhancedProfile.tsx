@@ -32,11 +32,11 @@ interface StyleProps {
 }
 
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
-    empty: {
+    text: {
         paddingTop: 36,
         paddingBottom: 36,
         '& > p': {
-            fontSize: 18,
+            fontSize: 28,
             fontFamily: 'inherit',
             fontWeight: 700,
             color: getMaskColor(theme).textPrimary,

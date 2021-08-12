@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
         gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
         gridGap: theme.spacing(1),
     },
-    empty: {
+    text: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -126,7 +126,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
             <Box className={classes.container}>
                 {error || collectibles.length === 0 ? (
-                    <Box className={classes.empty}>
+                    <Box className={classes.text}>
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
                         {hasRetry ? (
                             <Button className={classes.button} variant="text" onClick={() => collectiblesRetry()}>
