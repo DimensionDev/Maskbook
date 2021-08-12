@@ -1,21 +1,18 @@
-import { makeStyles } from '@masknet/theme'
+import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
 import { Typography, Chip } from '@material-ui/core'
+import { LoadingButton } from '@material-ui/lab'
+import { makeTypedMessageText, TypedMessage } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { Send } from '@material-ui/icons'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
-import { useRef, useState, startTransition } from 'react'
 import { CharLimitIndicator } from './CharLimitIndicator'
 import { Flags, useI18N, useValueRef } from '../../utils'
 import { debugModeSetting } from '../../settings/settings'
-import { makeTypedMessageText, TypedMessage } from '@masknet/shared-base'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
-import { useCallback } from 'react'
 import type { Profile } from '../../database'
 import { CompositionContext } from './CompositionContext'
-import { useMemo } from 'react'
-import { forwardRef } from 'react'
-import { useImperativeHandle } from 'react'
-import { LoadingButton } from '@material-ui/lab'
 
 const useStyles = makeStyles()({
     root: {
@@ -211,7 +208,13 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
             </div>
             <div className={classes.actions}>
                 {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
-                <LoadingButton disabled={!submitAvailable} loading={sending} variant="contained" onClick={onSubmit}>
+                <LoadingButton
+                    disabled={!submitAvailable}
+                    loading={sending}
+                    loadingPosition="start"
+                    variant="contained"
+                    onClick={onSubmit}
+                    startIcon={<Send />}>
                     {t('post_dialog__button')}
                 </LoadingButton>
             </div>
