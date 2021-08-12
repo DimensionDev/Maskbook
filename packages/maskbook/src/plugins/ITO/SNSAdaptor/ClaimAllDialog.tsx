@@ -147,7 +147,7 @@ const useStyles = makeStyles((theme) => ({
     contentWrapper: {
         display: 'flex',
         flexDirection: 'column',
-        height: ({ hasNFTwithNoITOTokens }: { hasNFTwithNoITOTokens: boolean }) => (hasNFTwithNoITOTokens ? 450 : 650),
+        height: ({ shortITOwrapper }: { shortITOwrapper: boolean }) => (shortITOwrapper ? 450 : 650),
     },
     actionButtonWrapper: {
         position: 'sticky',
@@ -229,12 +229,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     // Todo: Remove the code after the period that old ITO is being used and continues to be used for a while
     const { value: swappedTokensOld, loading: loadingOld, retry: retryOld } = useClaimablePools(chainId, true)
-    const classes = useStyles({
-        hasNFTwithNoITOTokens:
-            chainId === ChainId.Matic &&
-            (!swappedTokens || swappedTokens.length === 0) &&
-            (!swappedTokensOld || swappedTokensOld.length === 0),
-    })
+
     const { enqueueSnackbar } = useSnackbar()
     const popEnqueueSnackbar = useCallback(
         (variant: VariantType) =>
@@ -257,7 +252,13 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     )
 
     const showNftAirdrop = chainId === ChainId.Matic && campaignInfo && now < dateToHideSpaceStationCampaign.getTime()
-
+    const classes = useStyles({
+        shortITOwrapper:
+            (showNftAirdrop &&
+                (!swappedTokens || swappedTokens.length === 0) &&
+                (!swappedTokensOld || swappedTokensOld.length === 0)) ||
+            !showNftAirdrop,
+    })
     const [initLoading, setInitLoading] = useState(true)
     useLayoutEffect(() => {
         setTimeout(() => setInitLoading(false), 1000)
@@ -459,7 +460,7 @@ interface ContentProps {
 }
 
 function Content(props: ContentProps) {
-    const classes = useStyles({ hasNFTwithNoITOTokens: false })
+    const classes = useStyles({ shortITOwrapper: false })
     const { swappedTokens } = props
     return (
         <List className={classes.tokenCardWrapper}>
@@ -479,7 +480,7 @@ interface SwappedTokensProps {
 
 function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
     const { t } = useI18N()
-    const classes = useStyles({ hasNFTwithNoITOTokens: false })
+    const classes = useStyles({ shortITOwrapper: false })
     const theme = useTheme()
 
     return swappedToken.token ? (
