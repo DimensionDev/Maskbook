@@ -33,7 +33,7 @@ function PostDialogHintAtMinds({ reason }: { reason: 'timeline' | 'popup' }) {
     const classes = useStyles()
 
     const onHintButtonClicked = useCallback(
-        () => MaskMessage.events.compositionUpdated.sendToLocal({ reason, open: true }),
+        () => MaskMessage.events.requestComposition.sendToLocal({ reason, open: true }),
         [reason],
     )
     return (

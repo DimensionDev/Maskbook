@@ -27,6 +27,7 @@ import type { PollMetaData } from '../types'
 import { POLL_META_KEY_1 } from '../constants'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { PluginPollRPC } from '../messages'
+import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 
 const useNewPollStyles = makeStyles((theme) => ({
     menuPaper: {
@@ -260,12 +261,15 @@ export default function PollsDialog(props: PollsDialogProps) {
     const loading = useState(false)
 
     const { t } = useI18N()
+    const { attachMetadata, dropMetadata } = useCompositionContext()
 
     const createNewPoll = () => {
         setTabState(1)
     }
 
     const insertPoll = (data?: PollMetaData | null) => {
+        if (data) attachMetadata(POLL_META_KEY_1, data)
+        else dropMetadata(POLL_META_KEY_1)
         editActivatedPostMetadata((next) => (data ? next.set(POLL_META_KEY_1, data) : next.delete(POLL_META_KEY_1)))
         props.onClose()
     }

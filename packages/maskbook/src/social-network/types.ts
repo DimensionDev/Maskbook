@@ -166,8 +166,7 @@ export namespace SocialNetworkUI {
             open?(content: TypedMessage, options?: MaskCompositionDialogOpenOptions): void
         }
         export interface MaskCompositionDialogOpenOptions {
-            onlyMySelf?: boolean
-            shareToEveryOne?: boolean
+            target?: 'E2E' | 'Everyone'
         }
         export interface NativeCommentBox {
             appendText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void

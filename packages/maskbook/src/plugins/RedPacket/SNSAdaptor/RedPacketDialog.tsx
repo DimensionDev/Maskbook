@@ -28,6 +28,7 @@ import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/set
 import { WalletMessages } from '../../Wallet/messages'
 import { omit } from 'lodash-es'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
+import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 
 enum CreateRedPacketPageStep {
     NewRedPacketPage = 'new',
@@ -44,6 +45,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const chainId = useChainId()
     const account = useAccount()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
+    const { attachMetadata, dropMetadata } = useCompositionContext()
 
     const state = useState(DialogTabs.create)
 
@@ -76,6 +78,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 }
             }
 
+            if (payload) attachMetadata(RedPacketMetaKey, payload)
+            else dropMetadata(RedPacketMetaKey)
             editActivatedPostMetadata((next) =>
                 payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey),
             )

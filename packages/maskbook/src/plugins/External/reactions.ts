@@ -13,15 +13,20 @@ startEffect(module.hot, () =>
 startEffect(module.hot, () =>
     MaskMessage.events.thirdPartySetPayload.on((data) => {
         if (!isLocalContext(data.context)) return
+        const meta = new Map<string, unknown>()
+        for (const [key, value] of Object.entries(data.payload)) {
+            meta.set(key, value)
+        }
+
         editActivatedPostMetadata((meta) => {
             for (const [key, value] of Object.entries(data.payload)) {
                 meta.set(key, value)
             }
         })
-        MaskMessage.events.compositionUpdated.sendToLocal({
+        MaskMessage.events.requestComposition.sendToLocal({
             open: true,
             reason: 'popup',
-            content: makeTypedMessageText(data.appendText),
+            content: makeTypedMessageText(data.appendText, meta),
         })
     }),
 )

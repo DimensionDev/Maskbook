@@ -15,13 +15,13 @@ export interface UpdateEvent<Data> {
     readonly of: Data
 }
 
-export interface CompositionEvent {
+export interface CompositionRequest {
     readonly reason: 'timeline' | 'popup'
     readonly open: boolean
     readonly content?: TypedMessage
     readonly options?: {
-        onlyMySelf?: boolean
-        shareToEveryOne?: boolean
+        target?: 'E2E' | 'Everyone'
+        startupPlugin?: string
     }
 }
 
@@ -45,8 +45,7 @@ export interface MaskMessages extends SettingsEvents {
     createInternalSettingsChanged: SettingsUpdateEvent
     /** emit when the settings finished syncing with storage. */
     createInternalSettingsUpdated: SettingsUpdateEvent
-    /** emit when compose status updated. */
-    compositionUpdated: CompositionEvent
+    requestComposition: CompositionRequest
     personaChanged: (UpdateEvent<PersonaIdentifier> & { owned: boolean })[]
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
     /** Public Key found / Changed */
@@ -63,7 +62,7 @@ export interface MaskMessages extends SettingsEvents {
         appendText: string
         context: ThirdPartyPopupContextIdentifier
     }
-    /** Plugin ID */
+    /** @deprecated */
     activatePluginCompositionEntry: string
     pluginEnabled: string
     pluginDisabled: string

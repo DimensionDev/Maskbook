@@ -20,6 +20,7 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-es'
+import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',
@@ -36,6 +37,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const account = useAccount()
     const chainId = useChainId()
+    const { attachMetadata, dropMetadata } = useCompositionContext()
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
 
@@ -134,27 +136,30 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 alert('Failed to sign the password.')
                 return
             }
+            const payloadDetail = omit(
+                set(
+                    set(payloadOutMask(payload), 'token', payload.token.address),
+                    'exchange_tokens',
+                    payload.exchange_tokens.map(({ address }) => ({ address })),
+                ),
+                [
+                    'creation_time',
+                    'unlock_time',
+                    'total_remaining',
+                    'buyers',
+                    'regions',
+                    'start_time',
+                    'end_time',
+                    'qualification_address',
+                ],
+            )
+            if (payload) attachMetadata(ITO_MetaKey_2, payloadDetail)
+            else dropMetadata(ITO_MetaKey_2)
             editActivatedPostMetadata((next) => {
                 // To meet the max allowance of the data size of image steganography, we need to
                 //  cut off and simplify some properties, such as save the token address string only.
-                const r = omit(
-                    set(
-                        set(payloadOutMask(payload), 'token', payload.token.address),
-                        'exchange_tokens',
-                        payload.exchange_tokens.map(({ address }) => ({ address })),
-                    ),
-                    [
-                        'creation_time',
-                        'unlock_time',
-                        'total_remaining',
-                        'buyers',
-                        'regions',
-                        'start_time',
-                        'end_time',
-                        'qualification_address',
-                    ],
-                )
-                return payload ? next.set(ITO_MetaKey_2, r) : next.delete(ITO_MetaKey_2)
+
+                return payload ? next.set(ITO_MetaKey_2, payloadDetail) : next.delete(ITO_MetaKey_2)
             })
 
             props.onConfirm(payload)

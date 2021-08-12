@@ -9,6 +9,7 @@ import { Entry } from './components'
 import { META_KEY_2 } from '../constants'
 import { Exchange } from './hooks/Exchange'
 import type { FileInfo } from '../types'
+import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 
 interface Props extends InjectedDialogProps {
     onClose: () => void
@@ -33,9 +34,15 @@ const FileServiceDialog: React.FC<Props> = (props) => {
     const snackbar = useSnackbar()
     const [uploading, setUploading] = useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = useState<FileInfo | null>(null)
+    const { attachMetadata, dropMetadata } = useCompositionContext()
     const onInsert = () => {
         if (isNil(selectedFileInfo)) {
             return
+        }
+        if (selectedFileInfo) {
+            attachMetadata(META_KEY_2, JSON.parse(JSON.stringify(selectedFileInfo)))
+        } else {
+            dropMetadata(META_KEY_2)
         }
         editActivatedPostMetadata((next) => {
             if (selectedFileInfo) {

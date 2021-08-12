@@ -25,7 +25,7 @@ export function injectCompositionFacebook(signal: AbortSignal) {
 }
 function UI() {
     const onHintButtonClicked = useCallback(
-        () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'popup', open: true }),
+        () => MaskMessage.events.requestComposition.sendToLocal({ reason: 'popup', open: true }),
         [],
     )
     return (

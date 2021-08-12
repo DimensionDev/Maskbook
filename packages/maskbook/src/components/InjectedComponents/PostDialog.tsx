@@ -20,7 +20,7 @@ import {
     useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
 } from '@masknet/plugin-infra'
 import { useValueRef, or } from '@masknet/shared'
-import { CompositionEvent, MaskMessage, useI18N, Flags } from '../../utils'
+import { CompositionRequest, MaskMessage, useI18N, Flags } from '../../utils'
 import { isMinds } from '../../social-network-adaptor/minds.com/base'
 import type { Profile } from '../../database'
 import { useFriendsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
@@ -354,12 +354,12 @@ export function PostDialog({ reason: props_reason = 'timeline', ...props }: Post
     //#region My Identity
     const identities = useMyIdentities()
     useEffect(() => {
-        return MaskMessage.events.compositionUpdated.on(({ reason, open, content, options }: CompositionEvent) => {
+        return MaskMessage.events.requestComposition.on(({ reason, open, content, options }: CompositionRequest) => {
             if (reason !== props_reason || identities.length <= 0) return
             setOpen(open)
             if (content) setPostBoxContent(content)
-            if (options?.onlyMySelf) setOnlyMyself(true)
-            if (options?.shareToEveryOne) setShareToEveryone(true)
+            if (options?.target === 'E2E') setOnlyMyself(true)
+            if (options?.target === 'Everyone') setShareToEveryone(true)
         })
     }, [identities.length, props_reason, setOpen])
 
