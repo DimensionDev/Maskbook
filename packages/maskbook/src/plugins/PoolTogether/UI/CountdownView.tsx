@@ -58,7 +58,7 @@ export const CountdownView = (props: CountdownProps) => {
 
     const { days, hours, minutes, seconds } = intervalToDuration({ start: 0, end: secs * 1000 })
 
-    if (secs === 0 || (days === 0 && hours === 0 && minutes === 0 && seconds === 0)) {
+    if (secs <= 0 || (days === 0 && hours === 0 && minutes === 0 && seconds === 0)) {
         return (
             <Typography variant="h6" color={DarkColor.textSecondary} className={classes.end}>
                 {msgOnEnd}

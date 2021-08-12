@@ -3,7 +3,7 @@ import type { SvgIcon } from '@material-ui/core'
 
 export const SwapServiceIcon: typeof SvgIcon = createIcon(
     'SwapService',
-    <>
+    <g>
         <circle cx="14" cy="14" r="14" fill="#FFB915" fillOpacity=".15" />
         <g clipPath="url(#clip0)" stroke="#FFB915" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
             <path d="M17.241 6.87l2.593 2.593-2.593 2.592" />
@@ -15,6 +15,6 @@ export const SwapServiceIcon: typeof SvgIcon = createIcon(
                 <path fill="#fff" transform="translate(6.222 6.222)" d="M0 0h15.556v15.556H0z" />
             </clipPath>
         </defs>
-    </>,
+    </g>,
     '0 0 28 28',
 )

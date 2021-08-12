@@ -33,27 +33,28 @@ export function usePairs(tokenPairs: readonly TokenPair[]) {
     const contracts = usePairContracts([...new Set(listOfPairAddress.filter(Boolean) as string[])])
     const [results, calls, _, callback] = useMutlipleContractSingleData(
         contracts,
-        new Array(contracts.length).fill('getReserves'),
+        Array.from<'getReserves'>({ length: contracts.length }).fill('getReserves'),
         [],
     )
     const asyncResults = useAsyncRetry(() => callback(calls), [calls])
 
     // compose reserves from multicall results
     const listOfReserves = useMemo(() => {
+        type Result = {
+            id: string
+            reserve0: string
+            reserve1: string
+        }
         return results
-            .map((x, i) => {
-                if (x.error) return undefined
+            .map((x, i): Result | undefined => {
+                if (x.error || !x.value) return undefined
                 return {
                     id: contracts[i].options.address,
                     reserve0: x.value._reserve0,
                     reserve1: x.value._reserve1,
                 }
             })
-            .filter(Boolean) as {
-            id: string
-            reserve0: string
-            reserve1: string
-        }[]
+            .filter((value): value is Result => value !== undefined)
     }, [results, contracts])
 
     // compose pairs from list of reserves

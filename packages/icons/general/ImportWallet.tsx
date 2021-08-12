@@ -1,7 +1,9 @@
 import { createIcon } from '../utils'
-export const ImportWalletIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const ImportWalletIcon: typeof SvgIcon = createIcon(
     'Index',
-    <>
+    <g>
         <g filter="url(#filter0_b)">
             <path
                 d="M8 22.19C8 19.877 9.976 18 12.414 18h23.172C38.024 18 40 19.876 40 22.19v13.62c0 2.314-1.976 4.19-4.414 4.19H12.414C9.976 40 8 38.124 8 35.81V22.19z"
@@ -50,6 +52,6 @@ export const ImportWalletIcon = createIcon(
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
         </defs>
-    </>,
+    </g>,
     '0 0 48 48',
 )
