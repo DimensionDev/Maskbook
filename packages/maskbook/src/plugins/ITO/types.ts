@@ -109,7 +109,8 @@ export interface CampaignInfo {
     name: string
     description: string
     chain: string
-    endTime: number | null
+    endTime: number
+    startTime: number
     nfts: { image: string }[]
 }
 

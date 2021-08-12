@@ -55,7 +55,8 @@ export async function getCampaignInfo(): Promise<CampaignInfo> {
             name: string
             description: string
             chain: string
-            endTime: number | null
+            endTime: number
+            startTime: number
             gamification: {
                 nfts: { nft: { image: string } }[]
             }
@@ -66,6 +67,7 @@ export async function getCampaignInfo(): Promise<CampaignInfo> {
             chain
             name
             endTime
+            startTime
             description
             gamification {
                 nfts {
@@ -86,6 +88,7 @@ export async function getCampaignInfo(): Promise<CampaignInfo> {
             name,
             description,
             endTime,
+            startTime,
             gamification: { nfts },
         },
     } = data
@@ -95,6 +98,7 @@ export async function getCampaignInfo(): Promise<CampaignInfo> {
         name,
         description,
         endTime,
+        startTime,
         nfts: nfts.map((v) => v.nft),
     }
 }

@@ -150,6 +150,7 @@ const useStyles = makeStyles((theme) => ({
 export function NftAirdropCard() {
     const { t } = useI18N()
     const [checkAddress, setCheckAddress] = useState('')
+    const now = new Date().getTime()
     const { value: campaignInfo, loading: campaignInfoLoading } = useSpaceStationCampaignInfo()
     const [spaceStationClaimableCount, spaceStationAccountClaimableCallback, spaceStationAccountClaimableLoading] =
         useSpaceStationClaimableTokenCountCallback()
@@ -168,6 +169,7 @@ export function NftAirdropCard() {
             horizontal: 'center',
         },
     }
+
     useEffect(() => setCheckAddress(''), [account])
 
     useEffect(() => {
@@ -223,13 +225,16 @@ export function NftAirdropCard() {
                     <Typography className={classes.title}>{campaignInfo.name}</Typography>
                     <div className={classes.claimTimeWrapper}>
                         <Typography className={classes.text}>{t('wallet_airdrop_nft_unclaimed_title')}</Typography>
-                        {campaignInfo.endTime ? (
-                            <Typography className={classes.text}>
-                                {t('plugin_airdrop_nft_end_time', {
-                                    date: formatDateTime(campaignInfo.endTime * 1000, 'yyyy-MM-dd HH:mm'),
-                                })}
-                            </Typography>
-                        ) : null}
+
+                        <Typography className={classes.text}>
+                            {now < campaignInfo.startTime * 1000
+                                ? t('plugin_airdrop_nft_start_time', {
+                                      date: formatDateTime(campaignInfo.startTime * 1000, 'yyyy-MM-dd HH:mm'),
+                                  })
+                                : t('plugin_airdrop_nft_end_time', {
+                                      date: formatDateTime(campaignInfo.endTime * 1000, 'yyyy-MM-dd HH:mm'),
+                                  })}
+                        </Typography>
                     </div>
                     <div className={classes.claimWrapper}>
                         <div className={classes.nftsWrapper}>
@@ -250,13 +255,16 @@ export function NftAirdropCard() {
                                     connectWallet: classNames(classes.actionButton, classes.connectWallet),
                                     gasFeeButton: classNames(classes.actionButton, classes.connectWallet),
                                     invalidButton: classNames(classes.actionButton, classes.connectWallet),
+                                    unlockMetaMask: classNames(classes.actionButton, classes.connectWallet),
                                 }}>
                                 <Button
                                     disabled={
                                         claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING ||
                                         claimState.type === TransactionStateType.HASH ||
                                         campaignInfo.nfts.length === 0 ||
-                                        !claimable
+                                        !claimable ||
+                                        now < campaignInfo.startTime * 1000 ||
+                                        now > campaignInfo.endTime * 1000
                                     }
                                     classes={{ disabled: classes.disabledButton }}
                                     onClick={claimCallback}
@@ -264,6 +272,8 @@ export function NftAirdropCard() {
                                     <span>
                                         {claimInfo?.claimed
                                             ? t('plugin_airdrop_nft_claimed')
+                                            : now > campaignInfo.endTime * 1000
+                                            ? t('plugin_airdrop_nft_expired')
                                             : t('plugin_airdrop_nft_claim')}
                                     </span>
                                     {claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING ||
