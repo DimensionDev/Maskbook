@@ -1,6 +1,6 @@
 import { useStylesExtends } from '@masknet/shared'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
+import classnames from 'classnames'
 import Color from 'color'
 import { ReactElement, useCallback, useEffect, useState } from 'react'
 
@@ -30,13 +30,12 @@ const useStyles = makeStyles()((theme) => ({
 export interface EnhancedProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {
     clear(): void
     reset(): void
-    hot?: ReactElement
+    children?: ReactElement
 }
 
 export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
-    const { reset, clear, hot } = props
-    const { classes } = useStyles()
-    const styles = useStylesExtends(classes, props)
+    const { reset, clear, children } = props
+    const classes = useStylesExtends(useStyles(), props)
     const [active, setActive] = useState(false)
 
     const onClose = () => {
@@ -59,10 +58,10 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
     }, [clear, onOpen])
 
     return (
-        <div key="nfts" className={styles.tab}>
-            <div className={classNames(styles.button, active ? styles.selected : '')} onClick={onClick}>
+        <div key="nfts" className={classes.tab}>
+            <div className={classnames(classes.button, active ? classes.selected : '')} onClick={onClick}>
                 NFTs
-                {active && hot ? hot : null}
+                {active && children ? children : null}
             </div>
         </div>
     )

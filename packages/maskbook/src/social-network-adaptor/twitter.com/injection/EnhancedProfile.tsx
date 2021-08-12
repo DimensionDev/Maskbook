@@ -1,6 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { getMaskColor } from '@masknet/theme'
-import { makeStyles, Theme } from '@material-ui/core'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { EnhancedProfileaPage } from '../../../components/InjectedComponents/EnhancedProfile'
 import { createReactRootShadowed, startWatch } from '../../../utils'
@@ -32,7 +31,7 @@ interface StyleProps {
     backgroundColor: string
 }
 
-const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     empty: {
         paddingTop: 36,
         paddingBottom: 36,
@@ -44,11 +43,11 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
         },
     },
     button: {
-        backgroundColor: (props: StyleProps) => props.backgroundColor,
+        backgroundColor: props.backgroundColor,
         color: 'white',
         marginTop: 18,
         '&:hover': {
-            backgroundColor: (props: StyleProps) => props.backgroundColor,
+            backgroundColor: props.backgroundColor,
         },
     },
 }))
@@ -56,7 +55,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
 export function EnhancedProfileaPageAtTwitter() {
     const newTweetButton = searchNewTweetButtonSelector().evaluate()
     const style = newTweetButton ? window.getComputedStyle(newTweetButton) : EMPTY_STYLE
-    const classes = useStyles({ backgroundColor: style.backgroundColor })
+    const { classes } = useStyles({ backgroundColor: style.backgroundColor })
 
     const [bio, setBio] = useState(getBioDescription())
     const [nickname, setNickname] = useState(getNickname())

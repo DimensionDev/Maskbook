@@ -1,18 +1,17 @@
 import { useStylesExtends } from '@masknet/shared'
-import { getMaskColor } from '@masknet/theme'
-import { makeStyles } from '@material-ui/core'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import { useState, useEffect } from 'react'
 import { CollectibleListAddress } from '../../extension/options-page/DashboardComponents/CollectibleList'
 import { useEthereumAddress } from '../../social-network-adaptor/twitter.com/injection/useEthereumName'
 import { MaskMessage } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     empty: {
         paddingTop: 36,
         paddingBottom: 36,
         '& > p': {
-            fontSize: 18,
+            fontSize: 28,
             fontFamily: 'inherit',
             fontWeight: 700,
             color: getMaskColor(theme).textPrimary,
@@ -37,13 +36,13 @@ export function EnhancedProfileaPage(props: EnhancedProfileaPageProps) {
         MaskMessage.events.profileNFTsTabUpdated.sendToLocal('reset')
     }
 
+    useLocationChange(onLocalChange)
+
     useEffect(() => {
         return MaskMessage.events.profileNFTsTabUpdated.on((data) => {
             onUpdated()
         })
     }, [])
-
-    useLocationChange(onLocalChange)
 
     useEffect(() => {
         return MaskMessage.events.profileNFTsPageUpdated.on((data) => {

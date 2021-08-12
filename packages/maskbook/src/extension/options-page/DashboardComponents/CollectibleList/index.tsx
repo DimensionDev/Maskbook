@@ -80,6 +80,7 @@ interface CollectibleListUIProps extends withClasses<'empty' | 'button'> {
     hasNextPage: boolean
     readonly?: boolean
     page: number
+    hasRetry?: boolean
     onNextPage: () => void
     onPrevPage: () => void
 }
@@ -94,6 +95,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
         error,
         readonly,
         page,
+        hasRetry = true,
         onNextPage,
         onPrevPage,
     } = props
@@ -126,9 +128,11 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                 {error || collectibles.length === 0 ? (
                     <Box className={classes.empty}>
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
-                        <Button className={classes.button} variant="text" onClick={() => collectiblesRetry()}>
-                            {t('plugin_collectible_retry')}
-                        </Button>
+                        {hasRetry ? (
+                            <Button className={classes.button} variant="text" onClick={() => collectiblesRetry()}>
+                                {t('plugin_collectible_retry')}
+                            </Button>
+                        ) : null}
                     </Box>
                 ) : (
                     <Box className={classes.root}>
@@ -204,6 +208,7 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
             readonly={true}
             page={page}
             hasNextPage={hasNextPage}
+            hasRetry={!!address}
             onPrevPage={() => setPage((prev) => prev - 1)}
             onNextPage={() => setPage((next) => next + 1)}
         />

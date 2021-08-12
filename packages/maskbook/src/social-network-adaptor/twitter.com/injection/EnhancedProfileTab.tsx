@@ -11,7 +11,7 @@ import {
     searchProfileTabSelector,
 } from '../utils/selector'
 import Color from 'color'
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 
 export function injectEnhancedProfileTabAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
@@ -29,13 +29,13 @@ interface StyleProps {
     line: string
 }
 
-const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     tab: {
         '&:hover': {
-            backgroundColor: (props: StyleProps) => new Color(props.hover).alpha(0.1).toString(),
+            backgroundColor: new Color(props.hover).alpha(0.1).toString(),
             cursor: 'pointer',
         },
-        height: (props: StyleProps) => props.height,
+        height: props.height,
     },
     button: {
         display: 'flex',
@@ -43,17 +43,17 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
-        padding: (props: StyleProps) => props.padding,
+        padding: props.padding,
         fontWeight: 700,
-        color: (props: StyleProps) => props.color,
-        font: (props: StyleProps) => props.font,
-        fontSize: (props: StyleProps) => props.fontSize,
+        color: props.color,
+        font: props.font,
+        fontSize: props.fontSize,
         '&:hover': {
-            color: (props: StyleProps) => props.hover,
+            color: props.hover,
         },
     },
     selected: {
-        color: (props: StyleProps) => props.hover,
+        color: props.hover,
     },
     line: {
         dispaly: 'inline-flex',
@@ -63,7 +63,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
         minWidth: 56,
         alignSelf: 'center',
         height: 4,
-        backgroundColor: (props: StyleProps) => props.line,
+        backgroundColor: props.line,
     },
 }))
 
@@ -126,6 +126,8 @@ function getStyle() {
 
 export function EnhancedProfileTabAtTwitter() {
     const style = getStyle()
-    const classes = useStyles(style)
-    return <EnhancedProfileTab classes={classes} reset={reset} clear={clear} hot={<div className={classes.line} />} />
+    const { classes } = useStyles(style)
+    return (
+        <EnhancedProfileTab classes={classes} reset={reset} clear={clear} children={<div className={classes.line} />} />
+    )
 }
