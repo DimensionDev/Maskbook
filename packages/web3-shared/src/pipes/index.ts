@@ -1,16 +1,16 @@
 import { unreachable, safeUnreachable } from '@dimensiondev/kit'
-import { getTokenConstants } from '../constants'
 import {
     ChainId,
-    CollectibleProvider,
     ERC20Token,
     ERC721Token,
     NativeToken,
     NetworkType,
     NonFungibleTokenDetailed,
     ProviderType,
+    CollectibleProvider,
 } from '../types'
-import { formatEthereumAddress, getChainDetailed } from '../utils'
+import { getChainDetailed } from '../utils'
+import urlcat from 'urlcat'
 
 export function resolveProviderName(providerType: ProviderType) {
     switch (providerType) {
@@ -36,6 +36,8 @@ export function resolveNetworkAddress(networkType: NetworkType, address: string)
             return `polygon:${address}`
         case NetworkType.Ethereum:
             return `ethereum:${address}`
+        case NetworkType.Arbitrum:
+            return `arbitrum:${address}`
         default:
             safeUnreachable(networkType)
             return address
@@ -50,6 +52,8 @@ export function resolveNetworkName(networkType: NetworkType) {
             return 'Polygon'
         case NetworkType.Ethereum:
             return 'Ethereum'
+        case NetworkType.Arbitrum:
+            return 'Arbitrum'
         default:
             safeUnreachable(networkType)
             return 'Unknown'
@@ -86,29 +90,27 @@ export function resolveChainColor(chainId: ChainId) {
 export function resolveLinkOnExplorer(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) return ''
-    return chainDetailed.explorers && chainDetailed.explorers.length > 0 && chainDetailed.explorers[0].url
-        ? chainDetailed.explorers[0].url
-        : chainDetailed.infoURL
+    return chainDetailed.explorers?.[0]?.url ?? chainDetailed.infoURL
 }
 
 export function resolveTransactionLinkOnExplorer(chainId: ChainId, tx: string) {
-    return `${resolveLinkOnExplorer(chainId)}/tx/${tx}`
+    return urlcat(resolveLinkOnExplorer(chainId), '/tx/:tx', { tx })
 }
 
-export function resolveTokenLinkOnExplorer(token: NativeToken | ERC20Token | ERC721Token) {
-    return `${resolveLinkOnExplorer(token.chainId)}/token/${token.address}`
+export function resolveTokenLinkOnExplorer({ chainId, address }: NativeToken | ERC20Token | ERC721Token) {
+    return urlcat(resolveLinkOnExplorer(chainId), '/token/:address', { address })
 }
 
 export function resolveAddressLinkOnExplorer(chainId: ChainId, address: string): string {
-    return `${resolveLinkOnExplorer(chainId)}/address/${address}`
+    return urlcat(resolveLinkOnExplorer(chainId), '/address/:address', { address })
 }
 
 export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): string {
-    return `${resolveLinkOnExplorer(chainId)}/block/${block}`
+    return urlcat(resolveLinkOnExplorer(chainId), '/block/:block', { block })
 }
 
 export function resolveIPFSLink(ipfs: string): string {
-    return `https://ipfs.fleek.co/ipfs/${ipfs}`
+    return urlcat('https://ipfs.fleek.co/ipfs/:ipfs', { ipfs })
 }
 
 export function resolveCollectibleProviderLink(chainId: ChainId, provider: CollectibleProvider) {
@@ -124,28 +126,15 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: Colle
 export function resolveCollectibleLink(
     chainId: ChainId,
     provider: CollectibleProvider,
-    token: NonFungibleTokenDetailed,
+    { address, tokenId }: NonFungibleTokenDetailed,
 ) {
     switch (provider) {
         case CollectibleProvider.OPENSEAN:
-            return `${resolveCollectibleProviderLink(chainId, provider)}/assets/${token.address}/${token.tokenId}`
+            return urlcat(resolveCollectibleProviderLink(chainId, provider), '/assets/:address/:tokenId', {
+                address,
+                tokenId,
+            })
         default:
             unreachable(provider)
     }
-}
-
-export function resolveTokenIconURL(address: string, baseURI: string) {
-    const iconMap = {
-        [getTokenConstants().NATIVE_TOKEN_ADDRESS]: `${baseURI}/info/logo.png`,
-        '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074':
-            'https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg', // MASK
-        '0x32a7C02e79c4ea1008dD6564b35F131428673c41': 'https://s2.coinmarketcap.com/static/img/coins/64x64/6747.png', // CRUST
-        '0x04abEdA201850aC0124161F037Efd70c74ddC74C': 'https://s2.coinmarketcap.com/static/img/coins/64x64/5841.png', // NEST
-        '0x14de81C71B3F73874659082b971433514E201B27': 'https://etherscan.io/token/images/ykyctoken_32.png', // Yes KYC
-        '0x3B73c1B2ea59835cbfcADade5462b6aB630D9890':
-            'https://raw.githubusercontent.com/chainswap/chainswap-assets/main/logo_white_256.png', // TOKEN
-    }
-    const checksummedAddress = formatEthereumAddress(address)
-    if (iconMap[checksummedAddress]) return iconMap[checksummedAddress]
-    return `${baseURI}/assets/${checksummedAddress}/logo.png`
 }

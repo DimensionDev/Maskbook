@@ -5,6 +5,37 @@ type IndexableTaggedUnion = {
     type: string | number
     id: string | number
 }
+/**
+ * @typeParameter Data It should be a [tagged union](https://en.wikipedia.org/wiki/Tagged_union) with an extra `id` field
+ * @param plugin_id Plugin ID
+ * @returns The database
+ * @example
+ *
+ * type File = { type: 'file'; name: string; id: string }
+ * type Folder = { type: 'folder'; file: string[]; id: string }
+ * const pluginDatabase = createPluginDatabase<File | Folder>('id')
+ * const file: File = { type: 'file', name: 'file.txt', id: uuid() }
+ * const folder: Folder = { type: 'folder', file: [file.id], id: uuid() }
+ * // Add new data
+ * await pluginDatabase.add(file)
+ * await pluginDatabase.add(folder)
+ * // Remove
+ * await pluginDatabase.remove('file', file.id)
+ * // Query
+ * const result: File | undefined = await pluginDatabase.get('file', file.id)
+ * const has: boolean = await pluginDatabase.has('file', file.id)
+ * // iterate
+ * for await (const i of pluginDatabase.iterate('file')) {
+ *     // read only during the for...await loop
+ *     // !! NO: await pluginDatabase.remove('file', file.id)
+ *     console.log(i.name)
+ * }
+ * for await (const i of pluginDatabase.iterate_mutate('folder')) {
+ *     i.data // Folder
+ *     await i.update({ ...i.data, file: [] })
+ *     await i.delete()
+ * }
+ */
 export function createPluginDatabase<Data extends IndexableTaggedUnion>(plugin_id: string) {
     type Type = Data['type']
     type Of<K extends Type> = Data & {

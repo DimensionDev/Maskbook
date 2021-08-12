@@ -10,7 +10,8 @@
         "nativeCurrency": {
             "name": "Ether",
             "symbol": "ETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "faucets": [],
         "explorers": [
@@ -125,7 +126,8 @@
         "nativeCurrency": {
             "name": "Binance Chain Native Token",
             "symbol": "BNB",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/bsc_token/logo_url/bsc/8bfdeaa46fe9be8f5cd43a53b8d1eea1.png"
         },
         "faucets": [],
         "explorers": [
@@ -143,7 +145,7 @@
         "fullName": "Binance",
         "shortName": "bnbt",
         "chain": "BSC",
-        "network": "Chapel",
+        "network": "chapel",
         "networkId": 97,
         "nativeCurrency": {
             "name": "Binance Chain Native Token",
@@ -171,7 +173,8 @@
         "nativeCurrency": {
             "name": "Matic",
             "symbol": "MATIC",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
         },
         "faucets": [],
         "explorers": [
@@ -205,6 +208,52 @@
             }
         ],
         "infoURL": "https://matic.network/"
+    },
+    {
+        "name": "Arbitrum One",
+        "chainId": 42161,
+        "fullName": "Arbitrum",
+        "shortName": "arb",
+        "chain": "Arbitrum",
+        "network": "mainnet",
+        "networkId": 42161,
+        "nativeCurrency": {
+            "name": "Arbitrum Ether",
+            "symbol": "ARETH",
+            "decimals": 18
+        },
+        "faucets": [],
+        "explorers": [
+            {
+                "name": "arbitrum",
+                "url": "https://explorer.arbitrum.io",
+                "standard": "EIP3091"
+            }
+        ],
+        "infoURL": "https://arbitrum.io"
+    },
+    {
+        "name": "Arbitrum Testnet Rinkeby",
+        "chainId": 421611,
+        "fullName": "Arbitrum",
+        "shortName": "arb-rinkeby",
+        "chain": "Arbitrum",
+        "network": "rinkeby",
+        "networkId": 421611,
+        "nativeCurrency": {
+            "name": "Arbitrum Rinkeby Ether",
+            "symbol": "ARETH",
+            "decimals": 18
+        },
+        "faucets": [],
+        "explorers": [
+            {
+                "name": "arbitrum-rinkeby",
+                "url": "https://rinkeby-explorer.arbitrum.io",
+                "standard": "EIP3091"
+            }
+        ],
+        "infoURL": "https://arbitrum.io"
     },
     {
         "name": "Expanse Network",

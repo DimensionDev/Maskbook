@@ -1,5 +1,6 @@
 import { Dialog, DialogActions, DialogContent, DialogProps } from '@material-ui/core'
 import { memo, ReactNode, useCallback, useState } from 'react'
+import { usePortalShadowRoot } from '../../ShadowRoot'
 import { MaskDialogTitle, MaskDialogTitleProps } from './DialogTitle'
 export interface MaskDialogProps
     extends React.PropsWithChildren<Omit<MaskDialogTitleProps, 'children'>>,
@@ -18,14 +19,14 @@ export interface MaskDialogProps
 export const MaskDialog = memo((props: MaskDialogProps) => {
     const { title, onBack, onClose, open, children, DialogProps, ...inferredDialogProps } = props
     const dialogProps: DialogProps = { onBackdropClick: onClose, onClose, open, ...inferredDialogProps, ...DialogProps }
-    return (
-        <Dialog {...dialogProps}>
+    return usePortalShadowRoot((container) => (
+        <Dialog container={container} {...dialogProps}>
             <MaskDialogTitle onBack={onBack} onClose={onClose}>
                 {title}
             </MaskDialogTitle>
             {children}
         </Dialog>
-    )
+    ))
 })
 
 export function useMaskDialog(title: string, content: ReactNode, actions: ReactNode) {

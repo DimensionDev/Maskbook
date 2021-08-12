@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
     cell: {
         padding: '16px 28px',
+        border: 'none',
     },
 }))
 
@@ -39,6 +40,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
                         address={asset.token.address}
                         name={asset.token.name}
                         chainId={asset.token.chainId}
+                        logoURI={asset.token.logoURI}
                         AvatarProps={{ sx: { width: 36, height: 36 } }}
                     />
                     <Typography className={classes.symbol}>{asset.token.symbol}</Typography>

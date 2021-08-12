@@ -37,7 +37,7 @@ export class ErrorBoundary extends Component<Partial<CrashUIProps>> {
             stack = String(this.state.error!.stack!) || '<stack not available>'
             stack = stack.replace(/webpack-internal:.+node_modules\//g, 'npm:')
             // remove webpack-internal:///
-            stack = stack.replace(/webpack-internal:\/\/\//g, '')
+            stack = stack.replace(/webpack-internal:\/{3}/g, '')
         } catch {}
         try {
             type = String(this.state.error!.name!) || '<type not available>'

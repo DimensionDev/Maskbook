@@ -6,6 +6,7 @@ import { TokenAssets } from './components/TokenAssets'
 import { Route, Routes } from 'react-router'
 import { Balance } from './components/Balance'
 import { Transfer } from './components/Transfer'
+import { History } from './components/History'
 import { useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { ReceiveDialog } from './components/ReceiveDialog'
@@ -47,6 +48,7 @@ function Wallets() {
                     <Routes>
                         <Route path="/" element={<TokenAssets />} />
                         <Route path="transfer" element={<Transfer />} />
+                        <Route path="history" element={<History />} />
                     </Routes>
                 </Box>
             )}

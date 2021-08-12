@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useDropArea } from 'react-use'
 import { makeStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { RestoreBox } from './RestoreBox'
 import { blobToText } from '@dimensiondev/kit'
 
@@ -61,7 +61,7 @@ export function RestoreFromBackupBox(props: RestoreFromBackupBoxProps) {
                 darkPlaceholderImageURL={new URL('./RestoreFromBackupBox-dark.png', import.meta.url).toString()}
                 lightPlaceholderImageURL={new URL('./RestoreFromBackupBox-light.png', import.meta.url).toString()}
                 data-active={over}
-                onClick={() => inputRef.current && inputRef.current.click()}
+                onClick={() => inputRef.current?.click()}
             />
         </div>
     )

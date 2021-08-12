@@ -15,15 +15,15 @@ import { isLessThan } from '../utils'
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
 export enum ApproveStateType {
-    UNKNOWN,
-    NOT_APPROVED,
-    UPDATING,
-    PENDING,
-    APPROVED,
-    FAILED,
+    UNKNOWN = 0,
+    NOT_APPROVED = 1,
+    UPDATING = 2,
+    PENDING = 3,
+    APPROVED = 4,
+    FAILED = 5,
 }
 
-export function useERC20TokenApproveCallback(address: string, amount?: string, spender?: string) {
+export function useERC20TokenApproveCallback(address?: string, amount?: string, spender?: string) {
     const account = useAccount()
     const nonce = useNonce()
     const gasPrice = useGasPrice()

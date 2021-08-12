@@ -1,11 +1,10 @@
 import type { JsonRpcResponse } from 'web3-core-helpers'
 import { first } from 'lodash-es'
-import { EthereumAddress } from 'wallet.ts'
 import WalletConnect from '@walletconnect/client'
 import type { IJsonRpcRequest } from '@walletconnect/types'
-import { ProviderType, NetworkType, ChainId } from '@masknet/web3-shared'
+import { ProviderType, ChainId } from '@masknet/web3-shared'
 import * as Maskbook from '../providers/Maskbook'
-import { updateAccount, updateExoticWalletFromSource } from '../../../../plugins/Wallet/services'
+import { resetAccount, updateAccount } from '../../../../plugins/Wallet/services'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 
 let connector: WalletConnect | null = null
@@ -14,13 +13,11 @@ let connector: WalletConnect | null = null
  * Create a new connector and destroy the previous one if exists
  */
 export async function createConnector() {
-    // disconnect previous connector if exists
-    if (connector?.connected) await connector.killSession()
-    connector = null
+    if (connector?.connected) return connector
 
     // create a new connector
     connector = new WalletConnect({
-        bridge: 'https://bridge.walletconnect.org',
+        bridge: 'https://uniswap.bridge.walletconnect.org',
         clientMeta: {
             name: 'Mask Netowrk',
             description: 'Mask Network',
@@ -55,7 +52,7 @@ export async function sendCustomRequest(payload: IJsonRpcRequest) {
 
 // Wrap promise as PromiEvent because WalletConnect returns transaction hash only
 // docs: https://docs.walletconnect.org/client-api
-export function createWeb3(chainId = currentChainIdSettings.value) {
+export function createWeb3({ chainId = currentChainIdSettings.value }: { chainId?: ChainId } = {}) {
     return Maskbook.createWeb3({
         chainId,
     })
@@ -85,17 +82,11 @@ export async function requestAccounts() {
     })
 }
 
-const onConnect = async () => {
-    if (!connector?.accounts.length) return
-    await updateAccount({
-        chainId: connector.chainId,
-    })
-    await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, true)
-}
+const onConnect = () => onUpdate(null)
 
 const onUpdate = async (
     error: Error | null,
-    payload: {
+    payload?: {
         params: {
             chainId: number
             accounts: string[]
@@ -104,37 +95,21 @@ const onUpdate = async (
 ) => {
     if (error) return
     if (!connector?.accounts.length) return
+    if (currentProviderSettings.value !== ProviderType.WalletConnect) return
     await updateAccount({
+        name: connector.peerMeta?.name,
+        account: first(connector.accounts),
         chainId: connector.chainId,
+        providerType: ProviderType.WalletConnect,
+        networkType: undefined,
     })
-    await updateWalletInDB(first(connector.accounts) ?? '', connector.peerMeta?.name, false)
 }
 
 const onDisconnect = async (error: Error | null) => {
     if (connector?.connected) await connector.killSession()
     connector = null
     if (currentProviderSettings.value !== ProviderType.WalletConnect) return
-    await updateAccount({
-        account: '',
-        networkType: NetworkType.Ethereum,
-    })
-}
-
-async function updateWalletInDB(address: string, name: string = 'WalletConnect', setAsDefault: boolean = false) {
-    const providerType = currentProviderSettings.value
-
-    // validate address
-    if (!EthereumAddress.isValid(address)) {
-        if (providerType === ProviderType.WalletConnect) await updateAccount({ account: '' })
-        return
-    }
-
-    // update wallet in the DB
-    await updateExoticWalletFromSource(ProviderType.WalletConnect, new Map([[address, { name, address }]]))
-
-    // update chain account
-    await updateAccount({
-        account: setAsDefault || providerType === ProviderType.WalletConnect ? address : undefined,
-        providerType: setAsDefault ? ProviderType.WalletConnect : undefined,
+    await resetAccount({
+        providerType: ProviderType.WalletConnect,
     })
 }

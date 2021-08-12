@@ -102,16 +102,18 @@ export function UnlockDialog(props: UnlockDialogProps) {
                     },
                 }}
             />
-            <Typography className={classes.tip} variant="body2" color="textSecondary">
-                Allow the contract{' '}
-                <Link
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={resolveAddressLinkOnExplorer(chainId, ITO2_CONTRACT_ADDRESS)}>
-                    <FormattedAddress address={ITO2_CONTRACT_ADDRESS} size={4} />
-                </Link>{' '}
-                to use your {token.symbol ?? 'Token'} tokens when a new ITO round starts later.
-            </Typography>
+            {ITO2_CONTRACT_ADDRESS ? (
+                <Typography className={classes.tip} variant="body2" color="textSecondary">
+                    Allow the contract{' '}
+                    <Link
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={resolveAddressLinkOnExplorer(chainId, ITO2_CONTRACT_ADDRESS)}>
+                        <FormattedAddress address={ITO2_CONTRACT_ADDRESS} size={4} />
+                    </Link>{' '}
+                    to use your {token.symbol ?? 'Token'} tokens when a new ITO round starts later.
+                </Typography>
+            ) : null}
             <EthereumWalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
                     amount={amount.toFixed()}

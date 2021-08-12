@@ -8,7 +8,7 @@ import { useBlockNumber } from './useBlockNumber'
  * Fetch token balance from chain
  * @param token
  */
-export function useERC20TokenBalance(address: string) {
+export function useERC20TokenBalance(address?: string) {
     const account = useAccount()
     const chainId = useChainId()
     const blockNumber = useBlockNumber()

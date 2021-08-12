@@ -1,7 +1,8 @@
 import { useChainId } from '@masknet/web3-shared'
 import { useAsync } from 'react-use'
 import { PluginTraderRPC } from '../messages'
-import type { DataProvider, TagType } from '../types'
+import type { TagType } from '../types'
+import type { DataProvider } from '@masknet/public-api'
 import { useCurrentCurrency } from './useCurrentCurrency'
 
 export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProvider: DataProvider) {

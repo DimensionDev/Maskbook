@@ -4,12 +4,12 @@ import {
     appearanceSettings,
     languageSettings,
     debugModeSetting,
-    disableOpenNewTabInBackgroundSettings,
     currentPersonaIdentifier,
 } from './settings'
 import {
     currentAccountSettings,
     currentBalanceSettings,
+    currentEtherPriceSettings,
     currentBlockNumberSettings,
     currentChainIdSettings,
     currentCollectibleDataProviderSettings,
@@ -17,7 +17,12 @@ import {
     currentPortfolioDataProviderSettings,
     currentProviderSettings,
 } from '../plugins/Wallet/settings'
-import { currentDataProviderSettings } from '../plugins/Trader/settings'
+import {
+    currentDataProviderSettings,
+    ethereumNetworkTradeProviderSettings,
+    polygonNetworkTradeProviderSettings,
+    binanceNetworkTradeProviderSettings,
+} from '../plugins/Trader/settings'
 
 export function ToBeListened() {
     return {
@@ -28,14 +33,17 @@ export function ToBeListened() {
         currentChainIdSettings,
         currentBalanceSettings,
         currentBlockNumberSettings,
+        currentEtherPriceSettings,
         currentTrendingDataProviderSettings: currentDataProviderSettings,
-        disableOpenNewTabInBackgroundSettings,
         currentProviderSettings,
         currentNetworkSettings,
         currentAccountSettings,
         currentPortfolioDataProviderSettings,
         currentCollectibleDataProviderSettings,
         currentPersonaIdentifier,
+        ethereumNetworkTradeProviderSettings,
+        polygonNetworkTradeProviderSettings,
+        binanceNetworkTradeProviderSettings,
     }
 }
 export type SettingsEventName = ReturnType<typeof ToBeListened>

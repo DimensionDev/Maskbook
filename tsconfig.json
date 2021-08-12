@@ -2,8 +2,10 @@
   "references": [
     { "path": "./e2e/" },
     { "path": "./packages/maskbook/" },
+    { "path": "./packages/public-api/" },
     { "path": "./packages/theme/" },
     { "path": "./packages/dashboard/" },
+    { "path": "./packages/shared-base/" },
     { "path": "./packages/shared/" },
     { "path": "./packages/web3-shared/" },
     { "path": "./packages/storybook-shared/" },

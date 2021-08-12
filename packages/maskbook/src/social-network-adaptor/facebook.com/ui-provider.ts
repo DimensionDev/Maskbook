@@ -3,8 +3,6 @@ import { stateCreator } from '../../social-network/utils'
 import { facebookBase } from './base'
 import { facebookShared } from './shared'
 import { getProfilePageUrlAtFacebook } from './utils/parse-username'
-import { getPostContentFacebook } from './collecting/getPostContent'
-import { getProfileFacebook } from './collecting/getProfile'
 import { taskOpenComposeBoxFacebook } from './automation/openComposeBox'
 import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposition'
 import { IdentityProviderFacebook } from './collecting/identity'
@@ -16,7 +14,6 @@ import { injectPostCommentsDefault } from '../../social-network/defaults/inject/
 import { pasteToCommentBoxFacebook } from './automation/pasteToCommentBoxFacebook'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/inject/CommentBox'
 import { injectPostInspectorFacebook } from './injection/PostInspector'
-import { profilesCollectorFacebook } from './collecting/profiles'
 import { PostProviderFacebook } from './collecting/posts'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
@@ -59,9 +56,6 @@ const facebookUI: SocialNetworkUI.Definition = {
         },
     },
     collecting: {
-        getPostContent: getPostContentFacebook,
-        getProfile: getProfileFacebook,
-        profilesCollector: profilesCollectorFacebook,
         identityProvider: IdentityProviderFacebook,
         postsProvider: PostProviderFacebook,
     },

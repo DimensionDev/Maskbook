@@ -10,30 +10,20 @@ import { useWeb3 } from './useWeb3'
 type Call = [string, string]
 
 export enum MulticalStateType {
-    UNKNOWN,
+    UNKNOWN = 0,
     /** Wait for tx call */
-    PENDING,
+    PENDING = 1,
     /** Tx call resolved */
-    SUCCEED,
+    SUCCEED = 2,
     /** Tx call rejected */
-    FAILED,
+    FAILED = 3,
 }
 
 export type MulticalState =
-    | {
-          type: MulticalStateType.UNKNOWN
-      }
-    | {
-          type: MulticalStateType.PENDING
-      }
-    | {
-          type: MulticalStateType.SUCCEED
-          results: string[]
-      }
-    | {
-          type: MulticalStateType.FAILED
-          error: Error
-      }
+    | { type: MulticalStateType.UNKNOWN }
+    | { type: MulticalStateType.PENDING }
+    | { type: MulticalStateType.SUCCEED; results: string[] }
+    | { type: MulticalStateType.FAILED; error: Error }
 
 /**
  * The basic hook for fetching data from the Multicall contract
@@ -64,10 +54,12 @@ export function useMulticallCallback() {
                     results: returnData,
                 })
             } catch (error) {
-                setMulticallState({
-                    type: MulticalStateType.FAILED,
-                    error,
-                })
+                if (error instanceof Error) {
+                    setMulticallState({
+                        type: MulticalStateType.FAILED,
+                        error,
+                    })
+                }
             }
         },
         [multicallContract],
@@ -83,25 +75,23 @@ export function useMutlicallStateDecoded<
     R extends UnboxTransactionObject<ReturnType<T['methods'][K]>>,
 >(contracts: T[], names: K[], state: MulticalState) {
     const web3 = useWeb3()
+    type Result = { raw: string } & ({ error: any; value: null } | { error: null; value: R })
     return useMemo(() => {
         if (state.type !== MulticalStateType.SUCCEED) return []
         if (contracts.length !== state.results.length) return []
-        return state.results.map((raw, i) => {
-            const outputs: AbiOutput[] =
-                contracts[i].options.jsonInterface.find((x) => x.type === 'function' && x.name === names[i])?.outputs ??
-                []
+        return state.results.map((raw, index): Result => {
+            // the ignore formatter for better reading
+            // prettier-ignore
+            const outputs: AbiOutput[] = (
+                contracts[index].options.jsonInterface
+                    .find(({ type, name }) => type === 'function' && name === names[index])
+                    ?.outputs ?? []
+            )
             try {
-                return {
-                    raw,
-                    error: null,
-                    value: decodeOutputString(web3, outputs, raw) as R,
-                }
-            } catch (error) {
-                return {
-                    raw,
-                    error: error as Error,
-                    value: null,
-                }
+                const value = decodeOutputString(web3, outputs, raw) as R
+                return { raw, error: null, value }
+            } catch (error: any) {
+                return { raw, error, value: null }
             }
         })
     }, [web3, contracts.map((x) => x.options.address).join(','), names.join(''), state])
@@ -121,7 +111,7 @@ export function useSingleContractMultipleData<T extends BaseContract, K extends 
         ])
     }, [contract?.options.address, names.join(''), callDatas.flatMap((x) => x).join('')])
     const [state, callback] = useMulticallCallback()
-    const results = useMutlicallStateDecoded(new Array(calls.length).fill(contract) as T[], names, state)
+    const results = useMutlicallStateDecoded(Array.from({ length: calls.length }).fill(contract) as T[], names, state)
     return [results, calls, state, callback] as const
 }
 

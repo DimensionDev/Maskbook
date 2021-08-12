@@ -17,9 +17,8 @@ import {
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { JSON_RPC_ErrorCode } from '../constants'
@@ -145,6 +144,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                                     : state.error.message.includes('User denied transaction signature.')
                                     ? t('plugin_wallet_transaction_rejected')
                                     : state.error.code === JSON_RPC_ErrorCode.INTERNAL_ERROR ||
+                                      state.error.message.includes(`"code":${JSON_RPC_ErrorCode.INTERNAL_ERROR}`) ||
                                       (state.error.code &&
                                           state.error.code <= JSON_RPC_ErrorCode.SERVER_ERROR_RANGE_START &&
                                           state.error.code >= JSON_RPC_ErrorCode.SERVER_ERROR_RANGE_END)

@@ -40,6 +40,7 @@ import { checkRegionRestrict, decodeRegionCode, useIPRegion } from './hooks/useR
 import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
+import urlcat from 'urlcat'
 
 export interface IconProps {
     size?: number
@@ -186,7 +187,11 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 
     return (
         <>
-            <TokenIcon classes={{ icon: classes.tokenIcon }} address={exchangeToken.address} />
+            <TokenIcon
+                classes={{ icon: classes.tokenIcon }}
+                address={exchangeToken.address}
+                logoURI={exchangeToken.logoURI}
+            />
             <Typography component="span">
                 <strong>{price}</strong>{' '}
                 {isSameAddress(exchangeToken.address, NATIVE_TOKEN_ADDRESS)
@@ -523,7 +528,9 @@ export function ITO(props: ITO_Props) {
                     })}
                     <Link
                         className={classes.tokenLink}
-                        href={`${resolveLinkOnExplorer(token.chainId)}/token/${token.address}`}
+                        href={urlcat(resolveLinkOnExplorer(token.chainId), '/token/:address', {
+                            address: token.address,
+                        })}
                         target="_blank"
                         rel="noopener noreferrer">
                         <OpenInNewIcon fontSize="small" className={classes.totalIcon} />
@@ -619,7 +626,7 @@ export function ITO(props: ITO_Props) {
                         {hasLockTime ? (
                             <Grid item xs={6}>
                                 {isUnlocked ? (
-                                    Number(availability?.swapped) > 0 ? (
+                                    !availability?.claimed ? (
                                         <ActionButton
                                             onClick={onClaimButtonClick}
                                             variant="contained"

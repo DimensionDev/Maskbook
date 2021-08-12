@@ -1,5 +1,6 @@
 import { Fragment, memo, createElement } from 'react'
-import { Typography, Link, makeStyles } from '@material-ui/core'
+import { Typography, Link } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import anchorme from 'anchorme'
 import classNames from 'classnames'
 import {
@@ -114,8 +115,8 @@ export const DefaultTypedMessageTupleRenderer = memo(function DefaultTypedMessag
 ) {
     try {
         JSON.stringify(props.message.items)
-    } catch (e) {
-        if ((e?.message as string).includes('circular structure')) {
+    } catch (error) {
+        if (error instanceof Error && error.message.includes('circular structure')) {
             return (
                 <Typography>
                     The TypedMessage has a circular structure so it can't be rendered on the screen.
@@ -213,17 +214,17 @@ interface ParseTextLinkProps extends ParseTextProps {
     link: string
 }
 
-const useStyle = makeStyles((theme) => ({
+const useStyle = makeStyles<number>()((theme, fontSize) => ({
     link: {
         color: theme.palette.primary.main,
     },
     text: {
-        fontSize: (fontSize) => Number(fontSize) + 'rem',
+        fontSize: Number(fontSize) + 'rem',
     },
 }))
 
 const ParseTextLink = memo(function ParseTextLink({ link, text, fontSize }: ParseTextLinkProps) {
-    const classes = useStyle(fontSize)
+    const { classes } = useStyle(fontSize)
     return (
         <Link
             className={classNames(classes.text, classes.link)}
@@ -237,7 +238,7 @@ const ParseTextLink = memo(function ParseTextLink({ link, text, fontSize }: Pars
 })
 
 const ParseText = memo(function ParseText({ text, fontSize }: ParseTextProps) {
-    const classes = useStyle(fontSize)
+    const { classes } = useStyle(fontSize)
     return <span className={classes.text}>{text}</span>
 })
 

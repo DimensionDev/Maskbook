@@ -15,9 +15,9 @@ import {
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import addDate from 'date-fns/add'
-import { usePortalShadowRoot } from '@masknet/shared'
+import { usePortalShadowRoot } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -118,7 +118,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
 
     // react hooks are not binded with the function identity but hooks order
     const useSelect = (count: number, fn: (newVal: number) => void, defaultIndex = 0) => {
-        const options = new Array(count).fill('')
+        const options = Array.from<string>({ length: count }).fill('')
 
         return usePortalShadowRoot((container) => (
             <Select

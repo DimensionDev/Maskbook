@@ -19,12 +19,12 @@ export function TraderDialog() {
     const chainIdValid = useChainIdValid()
     const [traderProps, setTraderProps] = useState<TraderProps>()
 
-    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.events.swapDialogUpdated, (ev) => {
+    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated, (ev) => {
         if (ev?.traderProps) setTraderProps(ev.traderProps)
     })
 
     const { value: tradeProviders = [] } = useAvailableTraderProviders(TagType.CASH, 'MASK')
-    const tradeProvider = useCurrentTradeProvider(tradeProviders)
+    const tradeProvider = useCurrentTradeProvider()
     const tradeContext = useTradeContext(tradeProvider)
 
     const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {

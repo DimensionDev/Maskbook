@@ -47,8 +47,6 @@ export function PostInspector(props: PostInspectorProps) {
     }, [postBy, whoAmI, encryptedPost])
     useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
 
-    if (postBy.isUnknown) return <slot />
-
     const debugInfo = isDebugging ? (
         <DebugList
             items={[
@@ -113,6 +111,9 @@ export function PostInspector(props: PostInspectorProps) {
         const slot = encryptedPost.ok ? null : <slot />
         return (
             <>
+                {process.env.NODE_ENV === 'development' && postBy.isUnknown ? (
+                    <h2 style={{ background: 'red', color: 'white' }}>Please fix me. Post author is $unknown</h2>
+                ) : null}
                 {props.slotPosition !== 'after' && slot}
                 {x}
                 <PluginHooksRenderer />

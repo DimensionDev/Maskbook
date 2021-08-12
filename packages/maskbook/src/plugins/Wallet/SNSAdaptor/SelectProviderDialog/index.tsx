@@ -10,7 +10,7 @@ import {
     Theme,
     Typography,
 } from '@material-ui/core'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
 import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
@@ -25,18 +25,17 @@ import {
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { Provider } from '../Provider'
 import { MetaMaskIcon } from '../../../../resources/MetaMaskIcon'
 import { MaskbookIcon } from '../../../../resources/MaskbookIcon'
 import { WalletConnectIcon } from '../../../../resources/WalletConnectIcon'
-import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../messages'
 import { DashboardRoute } from '../../../../extension/options-page/Route'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { NetworkIcon } from '../../../../components/shared/NetworkIcon'
 import { currentNetworkSettings, currentProviderSettings } from '../../settings'
 import { Flags } from '../../../../utils'
+import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles((theme: Theme) => ({
     paper: {
@@ -77,10 +76,10 @@ const useStyles = makeStyles((theme: Theme) => ({
         height: 48,
         width: 48,
         borderRadius: 48,
-        backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey['900'] : '#F7F9FA',
+        backgroundColor: getMaskColor(theme).twitterBackground,
     },
     networkIcon: {
-        backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey['900'] : '#F7F9FA',
+        backgroundColor: getMaskColor(theme).twitterBackground,
     },
     checkedBadge: {
         position: 'absolute',
@@ -113,6 +112,7 @@ const networks = [
     NetworkType.Ethereum,
     Flags.bsc_enabled ? NetworkType.Binance : undefined,
     Flags.polygon_enabled ? NetworkType.Polygon : undefined,
+    Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
 ].filter(Boolean) as NetworkType[]
 
 interface SelectProviderDialogUIProps extends withClasses<never> {}
@@ -188,19 +188,15 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     // create a new wallet
                     if (isEnvironment(Environment.ManifestOptions))
                         history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
-                    else {
-                        openCreateImportDialog()
-                    }
+                    else openCreateImportDialog()
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:
                     if (
-                        account &&
-                        providerType === selectedProviderType &&
-                        getChainIdFromNetworkType(undeterminedNetworkType) === chainId
+                        !account ||
+                        providerType !== selectedProviderType ||
+                        getChainIdFromNetworkType(undeterminedNetworkType) !== chainId
                     ) {
-                        openWalletStatusDialog()
-                    } else {
                         setConnectWalletDialog({
                             open: true,
                             providerType,

@@ -59,8 +59,8 @@ export interface WrappedDialogProps<T extends object = any> extends DialogProps 
 }
 enum DialogState {
     Opened = 1,
-    Closing,
-    Destroyed,
+    Closing = 2,
+    Destroyed = 3,
 }
 
 type useModalState<Props extends object> = { state: DialogState; props?: Props }

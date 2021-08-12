@@ -1,8 +1,13 @@
 import { Card, Link, makeStyles } from '@material-ui/core'
-import { Wallet, useChainId, ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '@masknet/web3-shared'
+import {
+    Wallet,
+    useChainId,
+    ERC1155TokenAssetDetailed,
+    ERC721TokenAssetDetailed,
+    resolveCollectibleLink,
+    CollectibleProvider,
+} from '@masknet/web3-shared'
 import { Image } from '../../../../components/shared/Image'
-import { resolveCollectibleLink } from '../../../../plugins/Wallet/pipes'
-import type { CollectibleProvider } from '../../../../plugins/Wallet/types'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 

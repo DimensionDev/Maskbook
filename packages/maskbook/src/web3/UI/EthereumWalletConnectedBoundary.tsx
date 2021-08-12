@@ -1,14 +1,14 @@
 import { Grid, makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 import { useCallback } from 'react'
-import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
+import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import Services from '../../extension/service'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { currentIsMetamaskLockedSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
+import { currentIsMetaMaskLockedSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
 import { isZero, ProviderType, useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared'
-import { useStylesExtends } from '../../components/custom-ui-helper'
+import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -31,6 +31,10 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const chainIdValid = useChainIdValid()
     const nativeTokenBalance = useNativeTokenBalance()
 
+    //#region remote controlled confirm risk warning
+    const { isConfirmed: isRiskWarningConfirmed, openDialog: openRiskWarningDialog } = useWalletRiskWarningDialog()
+    //#endregion
+
     //#region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
@@ -39,7 +43,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     //#region metamask
     const providerType = useValueRef(currentProviderSettings)
-    const currentIsMetamaskLocked = useValueRef(currentIsMetamaskLockedSettings)
+    const currentIsMetamaskLocked = useValueRef(currentIsMetaMaskLockedSettings)
     const onConnectMetaMask = useCallback(async () => {
         await Services.Ethereum.connectMetaMask()
     }, [])
@@ -55,6 +59,20 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                     size="large"
                     onClick={openSelectProviderDialog}>
                     {t('plugin_wallet_connect_a_wallet')}
+                </ActionButton>
+            </Grid>
+        )
+
+    if (!isRiskWarningConfirmed)
+        return (
+            <Grid container>
+                <ActionButton
+                    className={classNames(classes.button, classes.connectWallet)}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    onClick={openRiskWarningDialog}>
+                    {t('plugin_wallet_confirm_risk_warning')}
                 </ActionButton>
             </Grid>
         )

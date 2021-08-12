@@ -5,34 +5,45 @@ maintainer:
   - Septs
 ---
 
-# How to use CSS in JS
+# CSS in JS guide in Mask Network
+
+> &#9888; Migration from `@material-ui/core` to `tss-react` in progress.
+> Please use `makeStyles` exported from `@masknet/theme` instead of `@material-ui/core`.
 
 ## General guides
 
 - ✅ For recommendations
 - &#9888; For warnings
 - 🚫 For forbiddens
-- ✅ Use [the Box component provided by the library](https://next.material-ui.com/components/box/#main-content) when the CSS is simple and only used once.
-- ✅ CSS custom variables is OK but do not abuse it. Get the variable from the theme if it is possible.
-- ✅ CSS grid is OK but you may want to use the `Grid` component. Choose the fit one based on your need.
-- 🚫 DO NOT use mystery abbreviations in the `sx` properties, e.g. `<Box sx={{ p: 5 }} />` (DON'T) but `<Box sx={{ padding: 5 }}>` (DO, easier to read).
-- 🚫 DO NOT mix two styling solution together. It may cause unknown bugs. FYI: `makeStyles` is `JSS`, `Box`, `sx` and `styled` are `@emotion`.
+- ✅ Use [the Box component provided by the library](https://next.material-ui.com/components/box/#main-content)
+  when the CSS is simple and only used once.
+- ✅ CSS custom variables is OK but do not abuse it.
+  Get the variable from the theme if it is possible.
+- ✅ CSS grid is OK but you may want to use the `Grid` component.
+  Choose the fit one based on your need.
+- 🚫 DO NOT use mystery abbreviations in the `sx` properties, e.g. `<Box sx={{ p: 5 }} />`
+  (DON'T) but `<Box sx={{ padding: 5 }}>` (DO, easier to read).
+- 🚫 DO NOT mix two styling solution together. It may cause unknown bugs.
+  FYI: `makeStyles` (from `@material-ui/core`) is `JSS`,
+  `Box`, `sx`, `makeStyles` (from `@masknet/theme`) and `styled` are `@emotion`.
 
 ## Guides on the `makeStyles` style
 
-```js
-const useStyle = makeStyles((theme) => ({
+```ts
+const useStyle = makeStyles<Props>()((theme) => ({
   root: { margin: theme.spacing(4) },
 }))
 ```
 
-### ✅ &#9888; You can use `makeStyles` in the project
+### ✅ Use `makeStyles` from `@masknet/theme` package in the project
 
-Reason: This is the recommend way of writing way in @material-ui 4.
+This is the recommended way.
 
-&#9888; In @material-ui 5 there is [an RFC](https://github.com/mui-org/material-ui/issues/26571) about to add `makeStyles` API back and migrate to based on emotion. Even if this RFC doesn't land, there is a community solution called [tss-react](https://github.com/garronej/tss-react) that we can migrate to. Therefore it's safe to continue use the `makeStyles` API.
+### &#9888; Use `makeStyles` from `@material-ui/core` package in the project
 
-#### Change style of MUI components
+This is deprecated. Migration in process.
+
+### Change style of MUI components
 
 ✅ DO
 
@@ -40,7 +51,7 @@ Reason: This is the recommend way of writing way in @material-ui 4.
 <Button classes={{ disabled: classes.disabled }} />
 ```
 
-## Guides on the `styled` style (let's call it `styled component`)
+## Guides on the `styled component`
 
 ```js
 const Title = style.div`
@@ -48,13 +59,11 @@ const Title = style.div`
 `
 ```
 
-### ✅ You can use `styled component` in the project
+### ✅ &#9888; You can use `styled component` in the project
 
-Reason: Good DX (Note: you may want to install editor plugins for styled-components).
+#### &#9888; You may want to use "object style" when it involves dynamic styles
 
-### &#9888; You may want to use "object style" when it involves dynamic styles
-
-Reason: _Potential_ performance lost.
+Not suggested: _Potential_ performance lost.
 
 Not enforcement because it is not confirmed.
 
@@ -76,7 +85,7 @@ const Title = style(Typography)(({ theme }) => {
 
 ```js
 const Title = style.div`
-    & .Mui-selected { display: flex; }
+    & .Mui-Button-root { display: flex; }
 `
 ```
 
@@ -84,27 +93,19 @@ DO NOT do this.
 
 Reason: Not type-checked. Easy to get things wrong.
 
-### &#9888; Calculated selector to the deeper elements of the library
+### 🚫 Selector used in the styled component
 
-&#9888; Not recommended. Please perfer to use `makeStyles` in this case.
-
-&#9888; Caution: Please aware of CSS selector. You may want `& > .${selected}` or `&.${selected}` in most cases instead of `& .${selected}`.
+Please use `makeStyles` in this case.
 
 ```js
-import { buttonClasses } from '@material-ui/core'
-// Way 1
-const Button1 = style(Button)`
-    &[disabled] {}
-`
-// way 2 (if applicable)
-const Button2 = style(Button)`
-    &.${buttonClasses.disabled} {}
+const Dialog1 = style(Dialog)`
+    & > .Mui-Some-Mui-Selector {}
 `
 ```
 
 ### ✅ `components` or `*Component` style
 
-Overwriting styles in this way is good.
+Overwriting styles in this way is acceptable.
 
 ```js
 const MyExample = styled(Example)`
@@ -117,4 +118,5 @@ const MyExample = styled(Example)`
 <Parent ExampleComponent={MyExample} />
 ```
 
-&#9888; No every component has this kind of API that allowing to overwrite the inner component so this method may not be able to use.
+&#9888; No every component has this kind of API that allowing to overwrite
+the inner component so this method may not be able to use.

@@ -163,7 +163,11 @@ export function PoolInList(props: PoolInListProps) {
         <div className={classes.top}>
             <Card className={classes.root} variant="outlined">
                 <Box className={classes.iconbar}>
-                    <TokenIcon classes={{ icon: classes.icon }} address={pool.token.address} />
+                    <TokenIcon
+                        classes={{ icon: classes.icon }}
+                        address={pool.token.address}
+                        logoURI={pool.token.logoURI}
+                    />
                 </Box>
                 <Box className={classes.content}>
                     <Box className={classes.header}>
@@ -279,9 +283,9 @@ export function PoolInList(props: PoolInListProps) {
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 <FormattedBalance
                                                     value={exchange_in_volumes[index]}
-                                                    decimals={pool.token.decimals}
+                                                    decimals={token.decimals}
                                                     significant={6}
-                                                    symbol={pool.token.symbol}
+                                                    symbol={token.symbol}
                                                 />
                                             </TableCell>
                                         </TableRow>

@@ -7,7 +7,6 @@ import { i18n } from '../../../utils/i18n-next'
 import { queryPersonaRecord, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
-import { addPerson } from './addPerson'
 import { getNetworkWorker, getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { cryptoProviderTable } from './cryptoProviderTable'
 import type { PersonaRecord } from '../../../database/Persona/Persona.db'
@@ -23,7 +22,6 @@ import stringify from 'json-stable-stringify'
 import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
 import { MaskMessage } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
-import { calculatePostKeyPartition } from '../../../network/gun/version.2/hash'
 import { Err, Ok, Result } from 'ts-results'
 import { decodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
 
@@ -97,7 +95,9 @@ function makeError(error: string | Error, internal: boolean = false): Failure {
  * Decrypt message from a user
  * @param post post
  * @param author Post by
+ * @param authorNetworkHint When the author is unknown, the decryption (to public) won't die
  * @param whoAmI My username
+ * @param publicShared Is this post public shared
  *
  * @description
  * The decrypt process:
@@ -126,16 +126,17 @@ function makeError(error: string | Error, internal: boolean = false): Failure {
 async function* decryptFromPayloadWithProgress_raw(
     post: Payload,
     author: ProfileIdentifier,
+    authorNetworkHint: string,
     whoAmI: ProfileIdentifier,
-    publicShared?: boolean,
+    publicShared: undefined | boolean,
 ): ReturnOfDecryptPostContentWithProgress {
     const cacheKey = stringify(post)
     if (successDecryptionCache.has(cacheKey)) return successDecryptionCache.get(cacheKey)!
     yield makeProgress('init')
 
-    const authorNetworkWorker = Result.wrap(() => getNetworkWorkerUninitialized(author.network)).andThen((x) =>
-        x ? Ok(x) : Err(new Error('Worker not found')),
-    )
+    const authorNetworkWorker = Result.wrap(() =>
+        getNetworkWorkerUninitialized(author.isUnknown ? authorNetworkHint : author.network),
+    ).andThen((x) => (x ? Ok(x) : Err(new Error('Worker not found'))))
     if (authorNetworkWorker.err) return makeError(authorNetworkWorker.val as Error)
 
     const data = post
@@ -157,12 +158,13 @@ async function* decryptFromPayloadWithProgress_raw(
         }
 
         // ? If the author's key is in the payload, store it.
-        if (data.version === -38 && data.authorPublicKey) {
+        if (data.version === -38 && data.authorPublicKey && !author.isUnknown) {
             await verifyOthersProve({ raw: data.authorPublicKey }, author).catch(console.error)
         }
         // ? Find author's public key.
         let authorPersona!: PersonaRecord
         for await (const _ of asyncIteratorWithResult(findAuthorPublicKey(author, !!cachedPostResult))) {
+            if (author.isUnknown) break
             if (!_.done) {
                 yield _.value
                 continue
@@ -185,7 +187,9 @@ async function* decryptFromPayloadWithProgress_raw(
         try {
             if (version === -40) throw ''
             const gunNetworkHint = networkWorker!.gunNetworkHint
-            const { keyHash, postHash } = await calculatePostKeyPartition(version, iv, minePublic, gunNetworkHint)
+            const { keyHash, postHash } = await (
+                await import('../../../network/gun/version.2/hash')
+            ).calculatePostKeyPartition(version, iv, minePublic, gunNetworkHint)
             yield { type: 'debug', debug: 'debug_finding_hash', hash: [postHash, keyHash] }
         } catch {}
         if (cachedPostResult) return makeSuccessResult(cachedPostResult, ['post_key_cached'])
@@ -201,8 +205,8 @@ async function* decryptFromPayloadWithProgress_raw(
             const b = decryptAsAuthor(whoAmI, minePublic)
             // ! Don't remove the await
             return await a.catch(() => b)
-        } catch (e) {
-            lastError = e
+        } catch (error) {
+            lastError = error
         }
 
         if (author.equals(whoAmI)) {
@@ -231,16 +235,16 @@ async function* decryptFromPayloadWithProgress_raw(
         try {
             // ! Do not remove the await here.
             return await decryptWith(aesKeyEncrypted)
-        } catch (e) {
-            if (e.message === i18n.t('service_not_share_target')) {
-                console.debug(e)
+        } catch (error) {
+            if (error instanceof Error && error.message === i18n.t('service_not_share_target')) {
+                console.debug(error)
                 // TODO: Replace this error with:
                 // You do not have the necessary private key to decrypt this message.
                 // What to do next: You can ask your friend to visit your profile page, so that their Mask extension will detect and add you to recipients.
                 // ? after the auto-share with friends is done.
-                yield makeError(e)
+                yield makeError(error)
             } else {
-                return handleDOMException(e)
+                return handleDOMException(error)
             }
         }
 
@@ -257,8 +261,8 @@ async function* decryptFromPayloadWithProgress_raw(
             console.log('New key received, trying', aes)
             try {
                 return await decryptWith(aes)
-            } catch (e) {
-                console.debug(e)
+            } catch (error) {
+                console.debug(error)
             }
         }
         return makeError(i18n.t('service_not_share_target'))
@@ -306,6 +310,7 @@ async function* decryptFromPayloadWithProgress_raw(
 async function* decryptFromImageUrlWithProgress_raw(
     url: string,
     author: ProfileIdentifier,
+    authorNetworkHint: string,
     whoAmI: ProfileIdentifier,
     publicShared?: boolean,
 ): ReturnOfDecryptPostContentWithProgress {
@@ -314,26 +319,26 @@ async function* decryptFromImageUrlWithProgress_raw(
     const post = await decodeImageUrl(url, {
         pass: author.toText(),
     })
-    if (post.indexOf('🎼') !== 0 && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
+    if (!post.startsWith('🎼') && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
         return makeError(i18n.t('service_decode_image_payload_failed'), true)
     const worker = await Result.wrapAsync(() => getNetworkWorker(author))
     if (worker.err) return makeError(worker.val as Error)
     const payload = deconstructPayload(post, await decodeTextPayloadWorker(author))
     if (payload.err) return makeError(payload.val)
-    return yield* decryptFromText(payload.val, author, whoAmI, publicShared)
+    return yield* decryptFromText(payload.val, author, authorNetworkHint, whoAmI, publicShared)
 }
 
 export const decryptFromText = memorizeAsyncGenerator(
     decryptFromPayloadWithProgress_raw,
-    (encrypted, author, whoAmI, publicShared = undefined) =>
-        JSON.stringify([encrypted, author.toText(), whoAmI.toText(), publicShared]),
+    (encrypted, author, authorNetworkHint, whoAmI, publicShared = undefined) =>
+        JSON.stringify([encrypted, author.toText(), authorNetworkHint, whoAmI.toText(), publicShared]),
     1000 * 30,
 )
 
 export const decryptFromImageUrl = memorizeAsyncGenerator(
     decryptFromImageUrlWithProgress_raw,
-    (url, author, whoAmI, publicShared = undefined) =>
-        JSON.stringify([url, author.toText(), whoAmI.toText(), publicShared]),
+    (url, author, authorNetworkHint, whoAmI, publicShared = undefined) =>
+        JSON.stringify([url, author.toText(), authorNetworkHint, whoAmI.toText(), publicShared]),
     1000 * 30,
 )
 
@@ -354,22 +359,11 @@ async function* findAuthorPublicKey(
         if (iterations < maxIteration) yield makeProgress('finding_person_public_key')
         else return 'out of chance' as const
 
-        author = await addPerson(by).catch(() => null)
+        author = await queryPersonaRecord(by).catch(() => null)
 
         if (!author?.publicKey) {
             if (hasCache) return 'use cache' as const
             const abort = new AbortController()
-            const gunPromise = (async () => {
-                const subscription = Gun2Subscribe.subscribeProfileFromGun2(by)
-                const undo = () => subscription.return?.(void 0)
-                abort.signal.addEventListener('abort', undo)
-                GunWorker?.onTerminated(undo)
-                for await (const data of subscription) {
-                    const provePostID = String(data?.provePostId || '')
-                    if (provePostID.length > 0) return
-                }
-                throw new Error()
-            })()
             const databasePromise = new Promise<void>((resolve, reject) => {
                 abort.signal.addEventListener('abort', () => {
                     undo()
@@ -386,12 +380,12 @@ async function* findAuthorPublicKey(
                     }
                 })
             })
-            await Promise.race([gunPromise, databasePromise])
+            await Promise.race([databasePromise])
                 .then(() => abort.abort())
                 .catch(() => null)
         }
     }
-    if (author && author.publicKey) return author
+    if (author?.publicKey) return author
     return 'out of chance'
 }
 
@@ -411,7 +405,7 @@ async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
             'append',
         )
     }
-    if (cachedKey && cachedKey.postCryptoKey) {
+    if (cachedKey?.postCryptoKey) {
         try {
             const result = decodeText(
                 await cryptoProvider.decryptWithAES({

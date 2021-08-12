@@ -4,7 +4,8 @@ import { Popper, ClickAwayListener, PopperProps, Fade } from '@material-ui/core'
 import { useLocation, useWindowScroll } from 'react-use'
 import { PluginTraderMessages } from '../../messages'
 import { WalletMessages } from '../../../Wallet/messages'
-import type { DataProvider, TradeProvider, TagType } from '../../types'
+import type { TagType } from '../../types'
+import type { DataProvider, TradeProvider } from '@masknet/public-api'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginTransakMessages } from '../../../Transak/messages'
 
@@ -37,15 +38,15 @@ export function TrendingPopper(props: TrendingPopperProps) {
     useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.walletConnectQRCodeDialogUpdated, onFreezed)
-    useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated, onFreezed)
-    useRemoteControlledDialog(PluginTraderMessages.events.swapSettingsUpdated, onFreezed)
+    useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated, onFreezed)
+    useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated, onFreezed)
     //#endregion
 
     //#region open or close popper
     // open popper from message center
     useEffect(
         () =>
-            PluginTraderMessages.events.cashTagObserved.on((ev) => {
+            PluginTraderMessages.cashTagObserved.on((ev) => {
                 const update = () => {
                     setLocked(true)
                     setName(ev.name)

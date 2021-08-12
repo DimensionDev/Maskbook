@@ -1,19 +1,14 @@
-import { ChainId, ERC20TokenDetailed } from '@masknet/web3-shared'
-import { WETH_ONLY, WETH, DAI, BUSD, UST, BTCB, ETHER } from './trader'
+import { ChainId } from '@masknet/web3-shared'
+import { BTCB, BUSD, DAI, ETHER, UST, WETH, WETH_ONLY } from './trader'
+import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
  * Some tokens can only be swapped via certain pairs,
  * so we override the list of bases that are considered for these tokens.
  */
-export const PANCAKESWAP_CUSTOM_BASES: {
-    readonly [chainId in ChainId]?: {
-        [tokenAddress: string]: ERC20TokenDetailed[]
-    }
-} = {}
+export const PANCAKESWAP_CUSTOM_BASES: ERC20TokenCustomizedBase = {}
 
-export const PANCAKESWAP_BASE_AGAINST_TOKENS: {
-    readonly [chainId in ChainId]: ERC20TokenDetailed[]
-} = {
+export const PANCAKESWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WETH_ONLY,
     [ChainId.BSC]: [WETH, DAI, BUSD, BTCB, UST, ETHER].map((x) => x[ChainId.BSC]),
 }

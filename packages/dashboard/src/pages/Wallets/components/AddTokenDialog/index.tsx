@@ -24,8 +24,8 @@ export interface AddTokenDialogProps {
 }
 
 enum AddTokenStep {
-    INFORMATION,
-    CONFIRM,
+    INFORMATION = 0,
+    CONFIRM = 1,
 }
 
 export const AddTokenDialog = memo<AddTokenDialogProps>(({ open, onClose }) => {

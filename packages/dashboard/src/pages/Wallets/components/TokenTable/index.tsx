@@ -30,8 +30,9 @@ const useStyles = makeStyles((theme) => ({
     header: {
         color: MaskColorVar.normalText,
         fontWeight: theme.typography.fontWeightRegular,
-        padding: '24px 28px',
+        padding: '36px 0 12px',
         backgroundColor: MaskColorVar.primaryBackground,
+        border: 'none',
     },
     footer: {
         flex: 1,

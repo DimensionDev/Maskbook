@@ -1,14 +1,18 @@
 import type BigNumber from 'bignumber.js'
-import { Currency, DataProvider, TradeProvider, WarningLevel, ZrxTradePool } from './types'
-import { unreachable } from '@dimensiondev/kit'
+import { Currency, WarningLevel, ZrxTradePool } from './types'
+import { DataProvider, TradeProvider } from '@masknet/public-api'
+import { safeUnreachable, unreachable } from '@dimensiondev/kit'
 import {
     BIPS_BASE,
+    networkNames,
     PRICE_IMPACT_HIGH,
     PRICE_IMPACT_LOW,
     PRICE_IMPACT_MEDIUM,
     PRICE_IMPACT_NON_EXPERT_BLOCKED,
     PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN,
 } from './constants'
+import { NetworkType } from '@masknet/web3-shared'
+import urlcat from 'urlcat'
 
 export function resolveCurrencyName(currency: Currency) {
     return [
@@ -60,6 +64,8 @@ export function resolveTradeProviderName(tradeProvider: TradeProvider) {
             return 'QuickSwap'
         case TradeProvider.PANCAKESWAP:
             return 'PancakeSwap'
+        case TradeProvider.DODO:
+            return 'DODO'
         default:
             unreachable(tradeProvider)
     }
@@ -81,25 +87,50 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider) {
             return 'https://quickswap.exchange/'
         case TradeProvider.PANCAKESWAP:
             return 'https://exchange.pancakeswap.finance/#/swap'
+        case TradeProvider.DODO:
+            return 'https://app.dodoex.io'
         default:
             unreachable(tradeProvider)
     }
 }
 
-export function resolveTradePairLink(tradeProvider: TradeProvider, address: string) {
+export function resolveTradePairLink(tradeProvider: TradeProvider, address: string, networkType: NetworkType) {
     switch (tradeProvider) {
         case TradeProvider.UNISWAP:
-            return `https://info.uniswap.org/pair/${address}`
+            return `https://v2.info.uniswap.org/pair/${address}`
         case TradeProvider.ZRX:
             return ''
+        case TradeProvider.DODO: {
+            if (!networkNames[networkType]) {
+                console.error('Unsupported network: ', networkType)
+                return ''
+            }
+            return urlcat('https://app.dodoex.io/exchange/:address', {
+                address,
+                network: networkNames[networkType],
+                forced: true,
+            })
+        }
         case TradeProvider.SUSHISWAP:
-            return `https://analytics.sushiswap.fi/pairs/${address}`
+            switch (networkType) {
+                case NetworkType.Ethereum:
+                    return `https://analytics.sushi.com/pairs/${address}`
+                case NetworkType.Binance:
+                    return `https://analytics-bsc.sushi.com/pairs/${address}`
+                case NetworkType.Polygon:
+                    return `https://analytics-polygon.sushi.com/pairs/${address}`
+                case NetworkType.Arbitrum:
+                    return ''
+                default:
+                    safeUnreachable(networkType)
+                    return ''
+            }
         case TradeProvider.SASHIMISWAP:
             return `https://info.sashimi.cool/pair/${address}`
         case TradeProvider.BALANCER:
             return `https://pools.balancer.exchange/#/pool/${address}/`
         case TradeProvider.QUICKSWAP:
-            return `https://info.quickswap.exchange/pair${address}`
+            return `https://info.quickswap.exchange/pair/${address}`
         case TradeProvider.PANCAKESWAP:
             return `https://pancakeswap.info/pool/${address}`
         default:
@@ -126,7 +157,7 @@ export function resolveUniswapWarningLevel(priceImpact: BigNumber) {
 }
 
 export function resolveUniswapWarningLevelColor(warningLevel?: WarningLevel) {
-    const COLOR_MAP: EnumRecord<WarningLevel, string> = {
+    const COLOR_MAP: Record<WarningLevel, string> = {
         [WarningLevel.LOW]: 'inherit',
         [WarningLevel.MEDIUM]: '#f3841e',
         [WarningLevel.HIGH]: '#f3841e',
@@ -137,7 +168,7 @@ export function resolveUniswapWarningLevelColor(warningLevel?: WarningLevel) {
 }
 
 export function resolveZrxTradePoolName(swapSource: ZrxTradePool) {
-    const SWAP_SOURCE_NAME_MAP: EnumRecord<ZrxTradePool, string> = {
+    const SWAP_SOURCE_NAME_MAP: Record<ZrxTradePool, string> = {
         [ZrxTradePool.ZRX]: 'ZRX',
         [ZrxTradePool.Uniswap]: 'Uniswap',
         [ZrxTradePool.UniswapV2]: 'Uniswap V2',

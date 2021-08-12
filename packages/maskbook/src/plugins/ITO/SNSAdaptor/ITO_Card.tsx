@@ -2,12 +2,11 @@ import { ERC20TokenDetailed, formatBalance, TransactionStateType } from '@maskne
 import { Alert, Box, Skeleton, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useCallback, useEffect } from 'react'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { WalletMessages } from '../../Wallet/messages'
 import { useMaskClaimCallback } from './hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet'
@@ -162,7 +161,7 @@ export function ITO_Card(props: ITO_CardProps) {
                             className={classes.button}
                             variant="contained"
                             disabled={
-                                Number.parseInt(packet.unlockTime) > Math.round(Date.now() / 1000) ||
+                                Number.parseInt(packet.unlockTime, 10) > Math.round(Date.now() / 1000) ||
                                 packet.claimable === '0'
                             }
                             onClick={onClaimButtonClick}>

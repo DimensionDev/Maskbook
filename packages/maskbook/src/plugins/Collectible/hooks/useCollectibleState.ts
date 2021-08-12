@@ -41,8 +41,7 @@ function useCollectibleState(token?: CollectibleToken) {
 
     useUpdateEffect(() => {
         if (
-            events.value &&
-            events.value.pageInfo.endCursor &&
+            events.value?.pageInfo.endCursor &&
             !cursors.current.some((item) => events.value && item === events.value.pageInfo.endCursor)
         ) {
             cursors.current.push(events.value.pageInfo.endCursor)

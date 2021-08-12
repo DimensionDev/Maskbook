@@ -18,6 +18,7 @@ import {
     currentProviderSettings,
     currentChainIdSettings,
     currentPortfolioDataProviderSettings,
+    currentEtherPriceSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
@@ -41,6 +42,7 @@ export const Web3Context: Web3ProviderType = {
     blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
     nonce: createSubscriptionFromSettings(currentNonceSettings),
     gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
+    etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
     wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
     providerType: createSubscriptionFromSettings(currentProviderSettings),
     networkType: createSubscriptionFromSettings(currentNetworkSettings),
@@ -56,6 +58,7 @@ export const Web3Context: Web3ProviderType = {
     getAssetsListNFT: WalletRPC.getAssetsListNFT,
     getERC721TokensPaged,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+    getTransactionList: WalletRPC.getTransactionList,
     createMnemonicWords: WalletRPC.createMnemonicWords,
 }
 

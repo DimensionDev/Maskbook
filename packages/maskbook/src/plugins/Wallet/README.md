@@ -13,7 +13,3 @@ Current Provider:
 
 - Mask (built-in wallet)
 - MetaMask
-
-## TODO
-
-- Migrate deprecated createPluginWalletAccess to new createPluginDatabase

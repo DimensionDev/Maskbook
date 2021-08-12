@@ -1,8 +1,16 @@
 import type { BigNumber } from 'bignumber.js'
 import { FC, Fragment } from 'react'
+import { makeStyles } from '@material-ui/core'
 import { formatBalance, formatCurrency, formatEthereumAddress } from '@masknet/web3-shared'
+import { useStylesExtends } from '../UI/UIHelper/custom-ui-helper'
 
-export interface FormattedBalanceProps {
+const useStyles = makeStyles((theme) => ({
+    balance: {
+        marginRight: theme.spacing(0.5),
+    },
+}))
+
+export interface FormattedBalanceProps extends withClasses<'balance' | 'symbol'> {
     value: BigNumber.Value | undefined
     decimals?: number
     significant?: number
@@ -10,8 +18,16 @@ export interface FormattedBalanceProps {
 }
 
 export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
-    const formatted = formatBalance(props.value, props.decimals, props.significant)
-    if (props.symbol) return <Fragment>{`${formatted} ${props.symbol}`}</Fragment>
+    const { value, decimals, significant, symbol } = props
+    const formatted = formatBalance(value, decimals, significant)
+    const classes = useStylesExtends(useStyles(), props)
+    if (symbol)
+        return (
+            <Fragment>
+                <span className={classes.balance}>{formatted}</span>
+                <span className={classes?.symbol}>{symbol}</span>
+            </Fragment>
+        )
     return <Fragment>{formatted}</Fragment>
 }
 
@@ -21,18 +37,19 @@ export interface FormattedCurrencyProps {
     value: BigNumber.Value
 }
 
-export const FormattedCurrency: FC<FormattedCurrencyProps> = (props) => {
-    const formatted = formatCurrency(props.value, props.sign)
-    if (props.symbol) return <Fragment>{`${formatted} ${props.symbol}`}</Fragment>
+export const FormattedCurrency: FC<FormattedCurrencyProps> = ({ value, sign, symbol }) => {
+    const formatted = formatCurrency(value, sign)
+    if (symbol) return <Fragment>{`${formatted} ${symbol}`}</Fragment>
     return <Fragment>{formatted}</Fragment>
 }
 
 interface FormattedEthereumAddressProps {
-    address: string
+    address?: string
     size?: number
 }
 
-export const FormattedAddress: FC<FormattedEthereumAddressProps> = (props) => {
-    const formatted = formatEthereumAddress(props.address, props.size)
+export const FormattedAddress: FC<FormattedEthereumAddressProps> = ({ address, size }) => {
+    if (!address) return null
+    const formatted = formatEthereumAddress(address, size)
     return <Fragment>{formatted}</Fragment>
 }

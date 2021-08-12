@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { makeStyles, Link, Tab, Tabs, Theme } from '@material-ui/core'
 import { useI18N, useSettingsSwticher, useValueRef } from '../../../../utils'
-import { DataProvider, TagType, TradeProvider } from '../../types'
+import type { TagType } from '../../types'
+import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
 import { TickersTable } from './TickersTable'
@@ -19,7 +20,7 @@ import { TrendingViewDeck } from './TrendingViewDeck'
 import { currentDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType, useTokenDetailed } from '@masknet/web3-shared'
+import { EthereumTokenType, useTokenDetailed, useChainIdValid } from '@masknet/web3-shared'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 
@@ -91,8 +92,9 @@ export function TraderView(props: TraderViewProps) {
     const classes = useStyles({ isPopper })
 
     const dataProvider = useCurrentDataProvider(dataProviders)
-    const tradeProvider = useCurrentTradeProvider(tradeProviders)
+    const tradeProvider = useCurrentTradeProvider()
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
+    const chainIdValid = useChainIdValid()
 
     //#region track network type
     const networkType = useValueRef(currentNetworkSettings)
@@ -186,8 +188,12 @@ export function TraderView(props: TraderViewProps) {
     //#endregion
 
     //#region if the coin is a native token or contract address exists
+
     const isSwapable =
-        !!trending?.coin.contract_address || ['eth', 'matic', 'bnb'].includes(trending?.coin.symbol.toLowerCase() ?? '')
+        (!!trending?.coin.contract_address ||
+            ['eth', 'matic', 'bnb'].includes(trending?.coin.symbol.toLowerCase() ?? '')) &&
+        chainIdValid &&
+        tradeProviders.length
     //#endregion
 
     //#region display loading skeleton
@@ -206,9 +212,7 @@ export function TraderView(props: TraderViewProps) {
         <Tab className={classes.tab} key="market" label={t('plugin_trader_tab_market')} />,
         <Tab className={classes.tab} key="price" label={t('plugin_trader_tab_price')} />,
         <Tab className={classes.tab} key="exchange" label={t('plugin_trader_tab_exchange')} />,
-        isSwapable && tradeProviders.length ? (
-            <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} />
-        ) : null,
+        isSwapable ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
     ].filter(Boolean)
     //#endregion
 

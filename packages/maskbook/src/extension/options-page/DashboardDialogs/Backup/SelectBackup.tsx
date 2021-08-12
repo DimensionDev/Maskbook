@@ -79,7 +79,7 @@ export function SelectBackup({ onConfirm }: SelectBackupProps) {
                     <InputBase
                         className={selectBackupClasses.input}
                         placeholder={t('dashboard_paste_database_backup_hint')}
-                        inputRef={(input: HTMLInputElement) => input && input.focus()}
+                        inputRef={(input: HTMLInputElement) => input?.focus()}
                         multiline
                         value={textValue}
                         onChange={(e) => setTextValue(e.target.value)}
@@ -112,7 +112,7 @@ export function SelectBackup({ onConfirm }: SelectBackupProps) {
             const restoreId = uuid()
             await Services.Welcome.setUnconfirmedBackup(restoreId, json)
             onConfirm?.(restoreId, json)
-        } catch (e) {
+        } catch {
             enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
         }
     }

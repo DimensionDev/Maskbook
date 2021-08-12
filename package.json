@@ -1,18 +1,17 @@
 {
   "name": "maskbook",
-  "version": "1.22.3",
+  "version": "1.35.2",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "dev",
-    "start-e2e": "env target=E2E dev",
-    "ts": "dev --daemon",
+    "start-e2e": "env target=E2E dev --preset E2E",
+    "ts": "gulp codegen-watch",
+    "codegen": "gulp codegen-watch",
     "go": "dev --help",
     "build": "build",
-    "build-e2e": "env target=E2E build",
-    "build-ios": "run-s build:ios:webpack build:ios:ext:prebuilt",
-    "build:ios:ext:prebuilt": "webextensiom-shim-prebuilt",
-    "build:ios:webpack": "build iOS",
+    "build-e2e": "env target=E2E build --preset E2E",
+    "build-ios": "build --preset iOS",
     "lint": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache --fix",
     "lint:ci": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache",
     "test": "jest --verbose --watch",
@@ -25,12 +24,14 @@
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
     "packages/**/*.{ts,tsx,js,jsx}": "eslint -c packages/.eslintrc.json --fix",
-    "packages/maskbook/**/*": "locale-kit --sync-keys --remove-unused-keys"
+    "packages/maskbook/**/*": "node ./packages/scripts/src/bin/precommit-hook-localekit.js"
   },
   "dependencies": {
     "@emotion/cache": "^11.4.0",
-    "@emotion/react": "^11.4.0",
+    "@emotion/react": "^11.4.1",
+    "@emotion/serialize": "^1.0.2",
     "@emotion/styled": "^11.3.0",
+    "@emotion/utils": "^1.0.0",
     "@material-ui/core": "5.0.0-alpha.34",
     "@material-ui/icons": "5.0.0-alpha.34",
     "@material-ui/lab": "5.0.0-alpha.34",
@@ -38,34 +39,36 @@
     "@material-ui/system": "5.0.0-alpha.34",
     "@types/react": "^17.0.14",
     "@types/react-dom": "^17.0.9",
-    "i18next": "^20.3.2",
+    "i18next": "^20.3.4",
     "idb": "5.0.8",
     "jss": "10.5.1",
     "react": "=18.0.0-alpha-aecb3b6d1",
     "react-dom": "=18.0.0-alpha-aecb3b6d1",
-    "react-i18next": "^11.11.1"
+    "react-i18next": "^11.11.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
+    "@dimensiondev/patch-package": "^6.4.7",
     "@magic-works/commonjs-import.meta": "^1.0.1",
     "@magic-works/i18n-codegen": "^0.0.6",
     "@masknet/cli": "workspace:*",
     "@nice-labs/git-rev": "^3.5.0",
-    "eslint": "^7.30.0",
+    "eslint": "^7.31.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-lodash": "^7.1.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-unicorn": "^35.0.0",
     "eslint-plugin-unused-imports": "^1.1.2",
     "esm": "^3.2.25",
-    "husky": "^6.0.0",
-    "lint-staged": "^11.0.0",
+    "gulp": "^4.0.2",
+    "husky": "^7.0.1",
+    "lint-staged": "^11.1.0",
     "npm-run-all": "^4.1.5",
     "only-allow": "^1.0.0",
-    "patch-package": "./patches/patch-package-6.4.7.tgz",
     "prettier": "^2.3.2",
     "ts-node": "^10.1.0",
     "ttypescript": "^1.5.12",
@@ -74,11 +77,5 @@
   "engines": {
     "node": ">=14.4.0",
     "pnpm": ">=6"
-  },
-  "pnpm": {
-    "overrides": {
-      "react": "=18.0.0-alpha-aecb3b6d1",
-      "react-dom": "=18.0.0-alpha-aecb3b6d1"
-    }
   }
 }

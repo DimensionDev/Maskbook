@@ -7,12 +7,12 @@ export const resolveTCOLink = memoizePromise(
     async (u: string) => {
         if (!u.startsWith('https://t.co/')) return null
         if (cache.has(u)) return cache.get(u)!
-        const req = await globalThis.fetch(u, {
+        const res = await globalThis.fetch(u, {
             redirect: 'error',
             credentials: 'omit',
             referrerPolicy: 'no-referrer',
         })
-        const text = await req.text()
+        const text = await res.text()
         const parser = new DOMParser()
         const doc = parser.parseFromString(text, 'text/html')
         const dom = doc.querySelector('noscript > meta') as HTMLMetaElement

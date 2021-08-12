@@ -10,7 +10,6 @@ const useStyle = makeStyles((theme) => ({
     root: {
         marginTop: 20,
     },
-
     content: {
         display: 'flex',
         height: 45,
@@ -76,27 +75,27 @@ export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) 
 
     const tweet: TweetAPI.TweetData | undefined = useAsync(() => TweetAPI.getTweetData(tweetAddress), [tweetAddress])
         .value?.[0]
-    const type = tweet?.type || ''
+
+    // only offer tweets
+    if (tweet?.type !== 'Offer') return null
 
     return (
         <div className={classes.root}>
-            {tweet && type === 'Offer' ? (
-                <Button
-                    className={classes.content}
-                    target="_blank"
-                    href={VALUABLES_VCENT_URL + tweet.tweet_id}
-                    style={isDarkTheme() ? { backgroundColor: '#1a2735' } : { backgroundColor: '#f3f3f3' }}>
-                    <div className={classes.VCent}>{isDarkTheme() ? <VCentIconDark /> : <VCentIconLight />}</div>
-                    <div className={classes.bidInfo}>
-                        <div className={classes.text}> LATEST OFFER at</div>
-                        <div className={classes.textUSD}> ${tweet.amount_usd}</div>
-                        <div className={classes.textETH}>
-                            (<ETHIcon />
-                            {tweet.amount_eth.toFixed(4)})
-                        </div>
+            <Button
+                className={classes.content}
+                target="_blank"
+                href={VALUABLES_VCENT_URL + tweet.tweet_id}
+                style={isDarkTheme() ? { backgroundColor: '#1a2735' } : { backgroundColor: '#f3f3f3' }}>
+                <div className={classes.VCent}>{isDarkTheme() ? <VCentIconDark /> : <VCentIconLight />}</div>
+                <div className={classes.bidInfo}>
+                    <div className={classes.text}> LATEST OFFER at</div>
+                    <div className={classes.textUSD}> ${tweet.amount_usd}</div>
+                    <div className={classes.textETH}>
+                        (<ETHIcon />
+                        {tweet.amount_eth.toFixed(4)})
                     </div>
-                </Button>
-            ) : null}
+                </div>
+            </Button>
         </div>
     )
 }

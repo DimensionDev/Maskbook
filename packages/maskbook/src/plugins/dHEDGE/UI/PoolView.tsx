@@ -1,5 +1,5 @@
 import { RefreshIcon } from '@masknet/icons'
-import { useERC20TokenDetailed, useTokenConstants } from '@masknet/web3-shared'
+import { useChainId } from '@masknet/web3-shared'
 import {
     Card,
     CardActions,
@@ -15,7 +15,8 @@ import {
 import React, { useState } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import type { Pool } from '../types'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool'
 import { PerformanceChart } from './PerformanceChart'
 import { PoolStats } from './PoolStats'
 import { PoolViewDeck } from './PoolViewDeck'
@@ -100,26 +101,25 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface PoolViewProps {
-    pool?: Pool
-    loading?: Boolean
-    error?: Error
-    retry?: () => void
+    address?: string
+    link: string
 }
 
 export function PoolView(props: PoolViewProps) {
-    const { pool, loading, error, retry } = props
-
     const { t } = useI18N()
     const classes = useStyles()
+    const currentChainId = useChainId()
+
+    //#region allowed tokens
+    const { value: pool, error, loading, retry } = useFetchPool(props.address ?? '')
 
     //#region susd token
-    const { sUSD_ADDRESS } = useTokenConstants()
     const {
-        value: susdTokenDetailed,
-        loading: loadingToken,
-        retry: retryToken,
-        error: errorToken,
-    } = useERC20TokenDetailed(sUSD_ADDRESS)
+        value: allowedTokens,
+        loading: loadingAllowedTokens,
+        retry: retryAllowedTokens,
+        error: errorAllowedTokens,
+    } = usePoolDepositAssets(pool)
     //#endregion
 
     //#region tabs
@@ -130,77 +130,81 @@ export function PoolView(props: PoolViewProps) {
     ].filter(Boolean)
     //#endregion
 
-    if (loading || loadingToken)
+    if (loading || loadingAllowedTokens)
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_dhedge_loading')}
             </Typography>
         )
-    if (!pool) {
+    if (!pool)
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_dhedge_pool_not_found')}
             </Typography>
         )
-    }
-    if (error || errorToken || !susdTokenDetailed)
+    if (error || (errorAllowedTokens && currentChainId === pool.chainId))
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_dhedge_smt_wrong')}
-                <RefreshIcon className={classes.refresh} color="primary" onClick={error ? retry : retryToken} />
+                <br />
+                {error?.message || errorAllowedTokens?.message}
+                <br />
+                <RefreshIcon className={classes.refresh} color="primary" onClick={error ? retry : retryAllowedTokens} />
             </Typography>
         )
 
     return (
-        <Card className={classes.root} elevation={0}>
-            <CardHeader subheader={<PoolViewDeck pool={pool} inputToken={susdTokenDetailed} />} />
-            <CardContent className={classes.content}>
-                <Tabs
-                    className={classes.tabs}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    variant="fullWidth"
-                    value={tabIndex}
-                    onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
-                    TabIndicatorProps={{
-                        style: {
-                            display: 'none',
-                        },
-                    }}>
-                    {tabs}
-                </Tabs>
-                <Paper className={classes.body}>
-                    {tabIndex === 0 ? <PoolStats pool={pool} /> : null}
-                    {tabIndex === 1 ? <PerformanceChart pool={pool} /> : null}
-                </Paper>
-            </CardContent>
-            <CardActions className={classes.footer}>
-                <Typography className={classes.footnote} variant="subtitle2">
-                    <span>{t('plugin_powered_by')} </span>
-                    <Link
-                        className={classes.footLink}
-                        color="textSecondary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title="Mask"
-                        href="https://mask.io">
-                        <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
-                    </Link>
-                </Typography>
-                <Typography className={classes.footnote} variant="subtitle2">
-                    <span>Supported by</span>
-                    <Link
-                        className={classes.footLink}
-                        target="_blank"
-                        color="textSecondary"
-                        rel="noopener noreferrer"
-                        title="dHEDGE"
-                        href="https://dhedge.org">
-                        <img className={classes.dhedge} src="https://app.dhedge.org/favicon.ico" />
-                        dHEDGE
-                    </Link>
-                </Typography>
-            </CardActions>
-        </Card>
+        <EthereumChainBoundary chainId={pool.chainId}>
+            <Card className={classes.root} elevation={0}>
+                <CardHeader subheader={<PoolViewDeck pool={pool} inputTokens={allowedTokens} link={props.link} />} />
+                <CardContent className={classes.content}>
+                    <Tabs
+                        className={classes.tabs}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="fullWidth"
+                        value={tabIndex}
+                        onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
+                        TabIndicatorProps={{
+                            style: {
+                                display: 'none',
+                            },
+                        }}>
+                        {tabs}
+                    </Tabs>
+                    <Paper className={classes.body}>
+                        {tabIndex === 0 ? <PoolStats pool={pool} /> : null}
+                        {tabIndex === 1 ? <PerformanceChart pool={pool} /> : null}
+                    </Paper>
+                </CardContent>
+                <CardActions className={classes.footer}>
+                    <Typography className={classes.footnote} variant="subtitle2">
+                        <span>{t('plugin_powered_by')} </span>
+                        <Link
+                            className={classes.footLink}
+                            color="textSecondary"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Mask"
+                            href="https://mask.io">
+                            <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
+                        </Link>
+                    </Typography>
+                    <Typography className={classes.footnote} variant="subtitle2">
+                        <span>Supported by</span>
+                        <Link
+                            className={classes.footLink}
+                            target="_blank"
+                            color="textSecondary"
+                            rel="noopener noreferrer"
+                            title="dHEDGE"
+                            href="https://dhedge.org">
+                            <img className={classes.dhedge} src="https://app.dhedge.org/favicon.ico" />
+                            dHEDGE
+                        </Link>
+                    </Typography>
+                </CardActions>
+            </Card>
+        </EthereumChainBoundary>
     )
 }

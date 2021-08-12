@@ -1,5 +1,6 @@
 import { makeStyles, Typography, Card, ButtonBase, ButtonBaseProps } from '@material-ui/core'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
+import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         padding: theme.spacing(4, 1),
-        backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey['900'] : '#F7F9FA',
+        backgroundColor: getMaskColor(theme).twitterBackground,
     },
     logo: {
         width: 45,

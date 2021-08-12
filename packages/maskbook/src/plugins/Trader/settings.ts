@@ -3,7 +3,8 @@ import stringify from 'json-stable-stringify'
 import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
 import { PLUGIN_IDENTIFIER, SLIPPAGE_TOLERANCE_DEFAULT } from './constants'
-import { DataProvider, TradeProvider, ZrxTradePool } from './types'
+import { ZrxTradePool } from './types'
+import { DataProvider, TradeProvider } from '@masknet/public-api'
 
 /**
  * The slippage tolerance of trader
@@ -21,7 +22,7 @@ export const currentSlippageTolerance = createGlobalSettings<number>(
  */
 export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
     `${PLUGIN_IDENTIFIER}+dataProvider`,
-    DataProvider.COIN_MARKET_CAP,
+    DataProvider.COIN_GECKO,
     {
         primary: () => i18n.t('plugin_trader_settings_data_source_primary'),
         secondary: () => i18n.t('plugin_trader_settings_data_source_secondary'),
@@ -38,6 +39,24 @@ export const currentTradeProviderSettings = createGlobalSettings<TradeProvider>(
         primary: () => i18n.t('plugin_trader_settings_trade_provider_primary'),
         secondary: () => i18n.t('plugin_trader_settings_trade_provider_secondary'),
     },
+)
+
+export const ethereumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+eth+tradeProvider`,
+    TradeProvider.UNISWAP,
+    { primary: () => '' },
+)
+
+export const polygonNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+polygon+tradeProvider`,
+    TradeProvider.QUICKSWAP,
+    { primary: () => '' },
+)
+
+export const binanceNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+bsc+tradeProvider`,
+    TradeProvider.PANCAKESWAP,
+    { primary: () => '' },
 )
 
 //#region trade provider general settings
@@ -57,6 +76,7 @@ const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}
 const qucikswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
 const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+pancakeswap`, '')
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+balancer`, '')
+const dodoSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+dodo`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -77,6 +97,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return pancakeswapSettings
         case TradeProvider.BALANCER:
             return balancerSettings
+        case TradeProvider.DODO:
+            return dodoSettings
         default:
             unreachable(tradeProvider)
     }

@@ -16,10 +16,10 @@ export async function requestNotification(props: Props) {
         icon: icon || '128x128.png',
         body,
     })
-    notification.onclick =
-        onClick ||
-        (() => {
-            browser.tabs.create({ url: getWelcomePageURL() })
-        })
+    notification.addEventListener('click', onClick || openWelcomePage)
     return true
+}
+
+function openWelcomePage() {
+    browser.tabs.create({ url: getWelcomePageURL() })
 }

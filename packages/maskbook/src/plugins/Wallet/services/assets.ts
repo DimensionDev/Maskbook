@@ -1,5 +1,6 @@
 import { unreachable } from '@dimensiondev/kit'
 import {
+    Asset,
     ChainId,
     createERC1155Token,
     createERC20Token,
@@ -13,6 +14,8 @@ import {
     isChainIdMainnet,
     NetworkType,
     pow10,
+    CollectibleProvider,
+    PortfolioProvider,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-es'
@@ -20,7 +23,8 @@ import { EthereumAddress } from 'wallet.ts'
 import * as DebankAPI from '../apis/debank'
 import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
-import { Asset, BalanceRecord, CollectibleProvider, PortfolioProvider, ZerionAddressAsset } from '../types'
+import { resolveZerionAssetsScopeName } from '../pipes'
+import type { BalanceRecord, ZerionAddressAsset } from '../types'
 
 export async function getAssetsListNFT(
     address: string,
@@ -86,13 +90,15 @@ export async function getAssetsList(
     switch (provider) {
         case PortfolioProvider.ZERION:
             if (network !== NetworkType.Ethereum) return []
-            const { meta, payload } = await ZerionAPI.getAssetsList(address)
+            const scope = resolveZerionAssetsScopeName(network)
+            if (!scope) return []
+            const { meta, payload } = await ZerionAPI.getAssetsList(address, scope)
             if (meta.status !== 'ok') throw new Error('Fail to load assets.')
             // skip NFT assets
             const assetsList = values(payload.assets).filter((x) => x.asset.is_displayable && x.asset.icon_url)
             return formatAssetsFromZerion(assetsList)
         case PortfolioProvider.DEBANK:
-            const { data = [], error_code } = await DebankAPI.getAssetsList(address, network)
+            const { data = [], error_code } = await DebankAPI.getAssetsList(address)
             if (error_code === 0) return formatAssetsFromDebank(data)
             return []
         default:
@@ -115,14 +121,14 @@ function formatAssetsFromDebank(data: BalanceRecord[]) {
                         : createERC20Token(chainId, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
                 balance: new BigNumber(y.balance).toFixed(),
                 price: {
-                    [CurrencyType.USD]: new BigNumber(y.price).toFixed(),
+                    [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
                 },
                 value: {
-                    [CurrencyType.USD]: new BigNumber(y.price)
+                    [CurrencyType.USD]: new BigNumber(y.price ?? 0)
                         .multipliedBy(new BigNumber(y.balance).dividedBy(pow10(y.decimals)))
                         .toFixed(),
                 },
-                logoURL: y.logo_url,
+                logoURI: y.logo_url,
             }
         })
 }
@@ -157,7 +163,7 @@ function formatAssetsFromZerion(data: ZerionAddressAsset[]) {
                 value: {
                     usd: new BigNumber(balance).multipliedBy(asset.price?.value ?? 0).toString(),
                 },
-                logoURL: asset.icon_url,
+                logoURI: asset.icon_url,
             }
         }) as Asset[]
 }

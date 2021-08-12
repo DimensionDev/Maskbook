@@ -20,7 +20,7 @@ export function getChainDetailed(chainId = ChainId.Mainnet) {
 // Learn more: https://github.com/ChainAgnostic/CAIPs/blob/master/CAIPs/caip-2.md
 export function getChainDetailedCAIP(chainId = ChainId.Mainnet) {
     const chainDetailed = getChainDetailed(chainId)
-    const { RPC } = getRPCConstants(chainId)
+    const { RPC = [] } = getRPCConstants(chainId)
     if (!chainDetailed) return
     return {
         chainId: `0x${chainDetailed.chainId.toString(16)}`,
@@ -72,6 +72,8 @@ export function getChainIdFromNetworkType(networkType: NetworkType) {
             return ChainId.BSC
         case NetworkType.Polygon:
             return ChainId.Matic
+        case NetworkType.Arbitrum:
+            return ChainId.Arbitrum
         default:
             safeUnreachable(networkType)
             return ChainId.Mainnet
@@ -87,6 +89,8 @@ export function getNetworkTypeFromChainId(chainId: ChainId) {
             return NetworkType.Binance
         case 'Matic':
             return NetworkType.Polygon
+        case 'Arbitrum':
+            return NetworkType.Arbitrum
         default:
             return
     }
