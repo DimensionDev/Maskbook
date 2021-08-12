@@ -45,16 +45,10 @@ async function fetchProposalFromGraphql(id: string) {
             votes: RawVote[]
         }
     }
-    const res: Res = await response.json()
 
-    const {
-        data: {
-            proposal: { network },
-            votes,
-        },
-    } = res
+    const { data }: Res = await response.json()
 
-    return { votes, network }
+    return { votes: data.votes, network: data.proposal.network }
 }
 
 export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Box[]> {
