@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 import { experimentalStyled as styled } from '@material-ui/core/styles'
-import { MutableRefObject, useEffect, useMemo, useRef } from 'react'
+import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { useAppearance } from '../Personas/api'
+import { useDashboardI18N } from '../../locales'
 
 const Content = styled('div')(
     ({ theme }) => `
@@ -58,7 +59,7 @@ export default function Welcome() {
               h3, h6 { color: ${mode === 'dark' ? '#FFFFFF' : '#111432'}; }
               p { color: ${mode === 'dark' ? 'rgba(255, 255, 255, 0.8);' : '#7b8192'}; }
             `
-        document.head.appendChild(style)
+        document.head?.appendChild(style)
     }
 
     const handleIFrameLoad = () => {
@@ -78,6 +79,7 @@ export default function Welcome() {
             privacyPolicyURL={privacyPolicyURL}
             iframeLoadHandler={handleIFrameLoad}
             agreeHandler={() => navigate(RoutePaths.Setup)}
+            cancelHandler={() => window.close()}
         />
     )
 }
@@ -87,18 +89,26 @@ interface WelcomeUIProps {
     iframeRef: MutableRefObject<HTMLIFrameElement | null>
     iframeLoadHandler(): void
     agreeHandler(): void
+    cancelHandler(): void
 }
 
-const WelcomeUI: React.FC<WelcomeUIProps> = ({ privacyPolicyURL, iframeLoadHandler, agreeHandler, iframeRef }) => (
-    <ColumnLayout>
-        <Content>
-            <IFrame ref={iframeRef} src={privacyPolicyURL} onLoad={iframeLoadHandler} />
-            <ButtonGroup>
-                <Button color="secondary">Cancel</Button>
-                <Button color="primary" onClick={agreeHandler}>
-                    Agree
-                </Button>
-            </ButtonGroup>
-        </Content>
-    </ColumnLayout>
+const WelcomeUI = memo(
+    ({ privacyPolicyURL, iframeLoadHandler, agreeHandler, cancelHandler, iframeRef }: WelcomeUIProps) => {
+        const t = useDashboardI18N()
+        return (
+            <ColumnLayout>
+                <Content>
+                    <IFrame ref={iframeRef} src={privacyPolicyURL} onLoad={iframeLoadHandler} />
+                    <ButtonGroup>
+                        <Button color="secondary" onClick={cancelHandler}>
+                            {t.cancel()}
+                        </Button>
+                        <Button color="primary" onClick={agreeHandler}>
+                            {t.agree()}
+                        </Button>
+                    </ButtonGroup>
+                </Content>
+            </ColumnLayout>
+        )
+    },
 )

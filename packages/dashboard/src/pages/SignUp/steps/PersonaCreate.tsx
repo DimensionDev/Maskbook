@@ -61,10 +61,10 @@ export const PersonaCreate = () => {
                 <Box>
                     <MaskTextField
                         required
-                        label={<Label value={t.personas()} />}
-                        variant="filled"
+                        label={<Label value={t.persona()} />}
                         InputProps={{ disableUnderline: true }}
                         onChange={(e) => setPersonaName(e.currentTarget.value)}
+                        inputProps={{ maxLength: 24 }}
                     />
                     <ButtonGroup>
                         <Button variant="rounded" color="secondary" onClick={() => navigate(-1)}>

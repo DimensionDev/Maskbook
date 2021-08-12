@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { fetchDownloadLink } from '../../pages/Settings/api'
 import { useAsyncFn } from 'react-use'
-import { Step, Stepper } from '../stepper'
+import { Step, Stepper } from '../Stepper'
 import { ConfirmBackupInfo } from './steps/ConfirmBackupInfo'
 import { EmailField } from './steps/EmailField'
 import { PhoneField } from './steps/PhoneField'

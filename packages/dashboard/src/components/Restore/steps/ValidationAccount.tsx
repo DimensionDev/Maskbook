@@ -5,10 +5,10 @@ import { sendCode } from '../../../pages/Settings/api'
 import { SendingCodeField } from '@masknet/theme'
 import { Button, Typography } from '@material-ui/core'
 import { ButtonGroup } from '../../RegisterFrame/ButtonGroup'
-import type { CommonProps } from '../../stepper'
+import type { StepCommonProps } from '../../Stepper'
 import { ValidationCodeStep } from './Commont'
 
-interface ValidationAccountProps extends CommonProps {
+interface ValidationAccountProps extends StepCommonProps {
     account: string
     type: AccountValidationType
     onNext(account: string, type: AccountValidationType, code: string): Promise<BackupFileInfo | { message: string }>
@@ -43,8 +43,7 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
                     </Typography>
                 }
                 onChange={(c) => setCode(c)}
-                // todo : handle message in front end
-                errorMessage={(sendCodeError && sendCodeError.message) || error}
+                errorMessage={sendCodeError?.message || error}
                 onSend={handleSendCodeFn}
             />
             <ButtonGroup>

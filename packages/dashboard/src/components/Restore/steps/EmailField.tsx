@@ -4,9 +4,9 @@ import { MaskTextField } from '@masknet/theme'
 import { ButtonGroup } from '../../RegisterFrame/ButtonGroup'
 import { Button } from '@material-ui/core'
 import { Label, ValidationCodeStep } from './Commont'
-import type { CommonProps } from '../../stepper'
+import type { StepCommonProps } from '../../Stepper'
 
-export const EmailField = ({ toStep }: CommonProps) => {
+export const EmailField = ({ toStep }: StepCommonProps) => {
     const t = useDashboardI18N()
     const [account, setAccount] = useState<string>('')
     return (
@@ -17,7 +17,6 @@ export const EmailField = ({ toStep }: CommonProps) => {
                 value={account}
                 onChange={(event) => setAccount(event.target.value)}
                 type="email"
-                variant="outlined"
             />
             <ButtonGroup>
                 <Button variant="rounded" color="secondary" onClick={() => {}}>

@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface CommonProps {
+export interface StepCommonProps {
     toStep: (stepName: string, params?: any) => void
 }
 

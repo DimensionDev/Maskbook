@@ -11,7 +11,7 @@ import { useSnackbar } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
-import { Step, Stepper } from '../stepper'
+import { Step, Stepper } from '../Stepper'
 import { LoadingCard } from './steps/LoadingCard'
 
 export const RestoreFromCloud = memo(() => {
@@ -26,7 +26,7 @@ export const RestoreFromCloud = memo(() => {
         [],
     )
 
-    const [{ loading: decryptingBackup, error: decryptError }, decryptBackupFn] = useAsyncFn(
+    const [{ loading: decryptingBackup }, decryptBackupFn] = useAsyncFn(
         async (account: string, password: string, encryptedValue: string) => {
             return Services.Crypto.decryptBackup('password', 'account', encryptedValue)
         },
@@ -35,13 +35,8 @@ export const RestoreFromCloud = memo(() => {
 
     useEffect(() => {
         if (!fetchBackupValueError) return
-        enqueueSnackbar('Download backup failed', { variant: 'error' })
+        enqueueSnackbar(t.sign_in_account_cloud_backup_download_failed(), { variant: 'error' })
     }, [fetchBackupValueError])
-
-    useEffect(() => {
-        if (!decryptError) return
-        enqueueSnackbar('Decrypt failed, please check password', { variant: 'error' })
-    }, [decryptError])
 
     const onValidated = async (downloadLink: string, account: string, password: string) => {
         try {
@@ -54,9 +49,8 @@ export const RestoreFromCloud = memo(() => {
                 setStep({ name: 'restore', params: { backupJson: backupInfo.info } })
             }
             return null
-        } catch (e) {
-            enqueueSnackbar('Backup failed', { variant: 'error' })
-            return 'Password is wrong'
+        } catch (_) {
+            return t.sign_in_account_cloud_backup_decrypt_failed()
         }
     }
 
@@ -64,8 +58,8 @@ export const RestoreFromCloud = memo(() => {
         try {
             await Services.Welcome.checkPermissionsAndRestore(backupId)
             navigate(RoutePaths.Personas, { replace: true })
-        } catch (e) {
-            enqueueSnackbar('Backup failed', { variant: 'error' })
+        } catch (_) {
+            enqueueSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
         }
     }
 

@@ -27,7 +27,7 @@ export const RestoreFromMnemonic = () => {
     const [error, setError] = useState('')
     const { changeCurrentPersona } = PersonaContext.useContainer()
     const t = useDashboardI18N()
-    const [values, { updateAt }] = useList(new Array(12).fill(''))
+    const [values, { updateAt }] = useList(Array.from<string>({ length: 12 }).fill(''))
 
     const handleImport = async () => {
         try {
@@ -36,7 +36,6 @@ export const RestoreFromMnemonic = () => {
                 changeCurrentPersona(persona.identifier)
                 navigate(RoutePaths.Personas, { replace: true })
             } else {
-                // todo fix i18n
                 setError(t.sign_in_account_private_key_error())
             }
         } catch (_) {

@@ -1,5 +1,13 @@
 import { ForwardedRef, forwardRef } from 'react'
-import { Box, formHelperTextClasses, makeStyles, TextField, TextFieldProps, Typography } from '@material-ui/core'
+import {
+    Box,
+    formHelperTextClasses,
+    makeStyles,
+    TextField,
+    StandardTextFieldProps,
+    InputProps,
+    Typography,
+} from '@material-ui/core'
 import { getMaskColor } from '../../constants'
 
 const useStyles = makeStyles((theme) => ({
@@ -31,10 +39,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-type MaskTextFieldProps = Exclude<TextFieldProps, 'variant'>
+type MaskTextFieldProps = Exclude<StandardTextFieldProps, 'variant'>
 
 export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: ForwardedRef<any>) => {
     const { label, ...rest } = props
+    const inputProps = (props.inputProps as InputProps) ?? {}
     const classes = useStyles()
 
     return (
@@ -50,7 +59,7 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 {...rest}
                 classes={{ root: classes.field }}
                 variant="standard"
-                InputProps={{ disableUnderline: true, className: classes.input }}
+                InputProps={{ ...inputProps, disableUnderline: true, className: classes.input }}
             />
         </Box>
     )

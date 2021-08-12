@@ -28,7 +28,7 @@ export interface PhoneNumberFieldProps {
 }
 
 // todo: remove regex, 123123d
-export const phoneRegexp = /(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{4})/
+export const phoneRegexp = /(\+?([ .-])?\d{1,2}([ .-])?)?(\(?\d{3}\)?|\d{3})([ .-])?(\d{3}([ .-])?\d{4})/
 
 export const PhoneNumberField = ({
     label,
@@ -46,17 +46,17 @@ export const PhoneNumberField = ({
 
     const handleCountryCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value
-        const prefix = /^\+/.test(inputValue) ? '' : '+'
+        const prefix = inputValue.startsWith('+') ? '' : '+'
 
         setCountryCode(prefix + inputValue)
-        onChange && onChange({ country: inputValue, phone: phone })
+        onChange?.({ country: inputValue, phone: phone })
     }
 
     const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value
 
         setPhone(inputValue)
-        onChange && onChange({ country: countryCode, phone: inputValue })
+        onChange?.({ country: countryCode, phone: inputValue })
     }
 
     const validCheck = () => {
@@ -65,11 +65,10 @@ export const PhoneNumberField = ({
         const isValid = phoneRegexp.test(countryCode + phone)
 
         if (isValid) {
-            onBlur &&
-                onBlur({
-                    country: countryCode,
-                    phone: phone,
-                })
+            onBlur?.({
+                country: countryCode,
+                phone: phone,
+            })
         }
         setInvalidPhone(!isValid)
     }
@@ -82,7 +81,6 @@ export const PhoneNumberField = ({
                     <MaskTextField
                         value={countryCode}
                         onChange={handleCountryCodeChange}
-                        variant="outlined"
                         placeholder={countryPlaceholder}
                     />
                 </div>

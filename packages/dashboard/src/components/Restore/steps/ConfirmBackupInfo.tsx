@@ -1,19 +1,19 @@
 import { useDashboardI18N } from '../../../locales'
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { Box, Button } from '@material-ui/core'
 import { BackupInfoCard } from '../BackupInfoCard'
 import { MaskTextField } from '@masknet/theme'
 import { ButtonGroup } from '../../RegisterFrame/ButtonGroup'
-import type { CommonProps } from '../../stepper'
+import type { StepCommonProps } from '../../Stepper'
 import { ValidationCodeStep } from './Commont'
 
-interface ConfirmBackupInfoProps extends CommonProps {
+interface ConfirmBackupInfoProps extends StepCommonProps {
     backupInfo: BackupFileInfo
     account: string
     onNext(downloadLink: string, account: string, password: string): Promise<string | null>
 }
 
-export const ConfirmBackupInfo = ({ backupInfo, onNext, account, toStep }: ConfirmBackupInfoProps) => {
+export const ConfirmBackupInfo = memo(({ backupInfo, onNext, account, toStep }: ConfirmBackupInfoProps) => {
     const t = useDashboardI18N()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
@@ -31,7 +31,7 @@ export const ConfirmBackupInfo = ({ backupInfo, onNext, account, toStep }: Confi
                 <BackupInfoCard info={backupInfo} />
                 <Box sx={{ mt: 4 }}>
                     <MaskTextField
-                        label="Backup Password"
+                        label={t.sign_in_account_cloud_backup_password}
                         type="password"
                         onChange={(e) => setPassword(e.currentTarget.value)}
                         error={!!errorMessage}
@@ -49,4 +49,4 @@ export const ConfirmBackupInfo = ({ backupInfo, onNext, account, toStep }: Confi
             </ButtonGroup>
         </>
     ) : null
-}
+})

@@ -28,7 +28,6 @@ import { decompressBackupFile } from '../../utils/type-transform/BackupFileShort
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { PersonaInformation, ProfileInformation } from '@masknet/shared'
-import { createInternalSettings, InternalSettings } from '../../settings/createSettings'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 
 assertEnvironment(Environment.ManifestBackground)
@@ -88,7 +87,7 @@ export {
 export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
     const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
     const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey, 'private')
-    return queryPersona(identifier)
+    return queryPersonaDB(identifier)
 }
 export async function queryPersonas(identifier?: PersonaIdentifier, requirePrivateKey = false): Promise<Persona[]> {
     if (typeof identifier === 'undefined')
