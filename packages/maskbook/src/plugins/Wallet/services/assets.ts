@@ -172,11 +172,11 @@ function formatAssetsFromZerion(
                 symbol: asset.symbol,
                 decimals: asset.decimals,
                 address: isNativeToken(asset.symbol) ? getTokenConstants().NATIVE_TOKEN_ADDRESS : asset.asset_code,
-                chainId: ChainId.Mainnet,
+                chainId: resolveChainByScope(scope).chainId,
                 type: isNativeToken(asset.symbol) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                 logoURI: asset.icon_url,
             },
-            chain: resolveChainByScope(scope),
+            chain: resolveChainByScope(scope).chain,
             balance: quantity,
             price: {
                 usd: new BigNumber(value).toString(),
