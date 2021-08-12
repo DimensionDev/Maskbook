@@ -112,4 +112,18 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         const file = await MaskNetworkAPI.persona_backupJson({ identifier })
         return encodeArrayBuffer(encodeText(JSON.stringify(file)))
     },
+    profile_queryProfiles: ({ network }) => Services.Identity.queryProfiles(network),
+    profile_queryMyProfile: ({ network }) => Services.Identity.queryMyProfiles(network),
+    profile_updateProfileInfo: async ({ identifier, data }) => {
+        const id = ProfileIdentifier.fromString(identifier)
+        if (!(id instanceof ProfileIdentifier)) throw new Error('invalid identifier')
+
+        await Services.Identity.updateProfileInfo(id, data)
+    },
+    profile_removeProfile: async ({ identifier }) => {
+        const id = ProfileIdentifier.fromString(identifier)
+        if (!(id instanceof ProfileIdentifier)) throw new Error('invalid identifier')
+
+        await Services.Identity.removeProfile(id)
+    },
 }

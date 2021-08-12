@@ -43,6 +43,13 @@ export interface MaskNetworkAPIs {
     persona_backupMnemonic(payload: { identifier: string }): Promise<any>
     persona_backupBase64(payload: { identifier: string }): Promise<string>
     persona_backupJson(payload: { identifier: string }): Promise<any>
+    profile_queryProfiles(payload: { network: string }): Promise<any>
+    profile_queryMyProfile(payload: { network: string }): Promise<any>
+    profile_updateProfileInfo(payload: {
+        identifier: string
+        data: { nickname?: string; avatarURL?: string }
+    }): Promise<void>
+    profile_removeProfile(payload: { identifier: string }): Promise<void>
 }
 
 export enum Appearance {
