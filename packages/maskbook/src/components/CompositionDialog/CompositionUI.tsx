@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
 import { Typography, Chip, Button } from '@material-ui/core'
 import { LoadingButton } from '@material-ui/lab'
-import { makeTypedMessageText, TypedMessage } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Send } from '@material-ui/icons'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
@@ -36,17 +36,17 @@ const useStyles = makeStyles()({
         '& > *': { marginLeft: `12px !important` },
     },
 })
-const empty = makeTypedMessageText('')
 
 export interface CompositionProps {
     maxLength?: number
-    defaultValue?: TypedMessage
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
     disabledRecipients?: undefined | 'E2E' | 'Everyone'
     recipients: Profile[]
+    // Enabled features
     supportTextEncoding: boolean
     supportImageEncoding: boolean
+    // Requirements
     requireClipboardPermission?: boolean
     hasClipboardPermission?: boolean
     onRequestClipboardPermission?(): void
@@ -73,7 +73,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
 
     const [sending, setSending] = useState(false)
 
-    const updateSize = useCallback((size: number) => {
+    const updatePostSize = useCallback((size: number) => {
         startTransition(() => __updatePostSize(size))
     }, [])
 
@@ -86,8 +86,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         recipients,
         setRecipients,
     } = useSetEncryptionKind(props)
-    const encoding = useEncryptionEncode(props)
-    const { setEncoding } = encoding
+    const { encodingKind, imagePayloadReadonly, imagePayloadSelected, imagePayloadVisible, setEncoding } =
+        useEncryptionEncode(props)
 
     const reset = useCallback(() => {
         startTransition(() => {
@@ -120,18 +120,18 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         [],
     )
     const MoreOptions = [
-        encoding.imageDisplay && (
+        imagePayloadVisible && (
             <ClickableChip
                 key="image"
-                checked={encoding.encoding === 'image'}
+                checked={imagePayloadSelected}
                 label={
                     <>
                         {t('post_dialog__image_payload')}
                         {Flags.image_payload_marked_as_beta && <sup className={classes.sup}>(Beta)</sup>}
                     </>
                 }
-                onClick={() => encoding.setEncoding(encoding.encoding === 'image' ? 'text' : 'image')}
-                disabled={encoding.imageReadonly}
+                onClick={() => setEncoding(encodingKind === 'image' ? 'text' : 'image')}
+                disabled={imagePayloadReadonly || sending}
             />
         ),
         ...useMetadataDebugger(context, Editor.current),
@@ -144,11 +144,11 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         props
             .onSubmit({
                 content: Editor.current.value,
-                encode: encoding.encoding,
+                encode: encodingKind,
                 target: encryptionKind === 'E2E' ? recipients : 'Everyone',
             })
             .finally(reset)
-    }, [encoding.encoding, encryptionKind, recipients])
+    }, [encodingKind, encryptionKind, recipients])
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
@@ -157,13 +157,12 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     readonly={sending}
                     ref={(e) => {
                         Editor.current = e
-                        if (e) updateSize(e.estimatedLength)
+                        if (e) updatePostSize(e.estimatedLength)
                     }}
                     onChange={(message) => {
                         startTransition(() => props.onChange?.(message))
-                        updateSize(Editor.current?.estimatedLength || 0)
+                        updatePostSize(Editor.current?.estimatedLength || 0)
                     }}
-                    defaultValue={props.defaultValue}
                 />
 
                 <Typography>
@@ -184,7 +183,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     <ClickableChip
                         checked={encryptionKind === 'E2E'}
                         disabled={E2EDisabled || sending}
-                        label={t('post_dialog__select_recipients_only_myself')}
+                        label={t('post_dialog__select_recipients_end_to_end')}
                         onClick={() => setEncryptionKind('E2E')}
                     />
                     {recipientSelectorAvailable && (
@@ -256,19 +255,19 @@ function useSetEncryptionKind(props: Pick<CompositionProps, 'disabledRecipients'
 function useEncryptionEncode(props: Pick<CompositionProps, 'supportImageEncoding' | 'supportTextEncoding'>) {
     const [encoding, setEncoding] = useState<'text' | 'image'>(props.supportTextEncoding ? 'text' : 'image')
 
-    const imageSelected = props.supportImageEncoding && (encoding === 'image' || !props.supportTextEncoding)
+    const imagePayloadSelected = props.supportImageEncoding && (encoding === 'image' || !props.supportTextEncoding)
     // XOR
-    const imageReadonly =
+    const imagePayloadReadonly =
         (props.supportImageEncoding && !props.supportTextEncoding) ||
         (!props.supportImageEncoding && props.supportTextEncoding)
-    const imageDisplay = props.supportImageEncoding
-    const actualEncoding: typeof encoding = imageSelected ? 'image' : 'text'
+    const imagePayloadVisible = props.supportImageEncoding
+    const encodingKind: typeof encoding = imagePayloadSelected ? 'image' : 'text'
 
     return {
-        encoding: actualEncoding,
-        imageSelected,
-        imageReadonly,
-        imageDisplay,
+        encodingKind,
+        imagePayloadSelected,
+        imagePayloadReadonly,
+        imagePayloadVisible,
         setEncoding,
     }
 }
