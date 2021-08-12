@@ -14,7 +14,7 @@ export function useAssetsFromProvider() {
 
     return useAsyncRetry(async () => {
         if (!account) return []
-        if (!chainDetailed) return []
+        if (chainDetailed?.network !== 'mainnet') return []
         if (getNetworkTypeFromChainId(chainDetailed.chainId) !== network) return []
 
         return getAssetList(account.toLowerCase(), network, portfolioProvider)
