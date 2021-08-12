@@ -11,4 +11,5 @@ export {
     setupPortalShadowRoot,
     createShadowRootForwardedComponent,
     createShadowRootForwardedPopperComponent,
+    NoEffectUsePortalShadowRootContext,
 } from './Portal'
