@@ -2,6 +2,7 @@ import ss from '@dimensiondev/snapshot.js'
 import type { Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess, RawVote } from '../../types'
 import Services from '../../../../extension/service'
 import { resolveIPFSLink } from '@masknet/web3-shared'
+import { transform } from 'lodash-es'
 
 export async function fetchProposal(id: string) {
     const response = await fetch(resolveIPFSLink(id), {
@@ -82,7 +83,11 @@ export async function getScores(message: ProposalMessage, voters: string[], bloc
         voters,
         blockTag,
     )
-    return scores
+    return scores.map((score) =>
+        transform(score, function (result: { [key in string]: number }, val, key: string) {
+            result[key.toString().toLowerCase()] = val
+        }),
+    )
 }
 
 export async function vote(identifier: ProposalIdentifier, choice: number, address: string) {

@@ -31,7 +31,7 @@ async function Suspender(identifier: ProposalIdentifier) {
                 choice: message.payload.choices[v.choice - 1],
                 address: v.voter,
                 authorIpfsHash: v.id,
-                balance: scores.reduce((a, b) => a + b[v.voter], 0),
+                balance: scores.reduce((a, b) => a + (b[v.voter.toLowerCase()] ? b[v.voter.toLowerCase()] : 0), 0),
                 scores: message.payload.metadata.strategies.map((_strategy, i) => scores[i][v.voter] || 0),
                 strategySymbol: message.payload.metadata.strategies[0].params.symbol,
                 authorName: profileEntries[v.voter.toLowerCase()]?.name,
