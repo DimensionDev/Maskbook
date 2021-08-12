@@ -56,7 +56,7 @@ export const estimateBuyTrade = (
 
     try {
         result = estimateBuy(amm.shareFactor, outcome.id, amount, amm.balances, amm.weights, fee)
-    } catch (e) {
+    } catch (error) {
         if (!result) return
     }
 

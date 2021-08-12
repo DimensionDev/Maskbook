@@ -276,7 +276,7 @@ export function calculateSellCompleteSets(
 
             // Find mid-point of the new upper/lower bounds.
             tokenAmountOut = upper.sub(lower).div(2).add(lower)
-        } catch (e) {
+        } catch (error) {
             // On error we go lower.
             upper = tokenAmountOut
             tokenAmountOut = upper.sub(lower).div(2).add(lower)
