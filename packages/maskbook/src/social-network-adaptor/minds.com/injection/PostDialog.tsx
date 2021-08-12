@@ -13,5 +13,7 @@ function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T,
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, signal)
 
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<Composition type={reason} />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+        <Composition requireClipboardPermission type={reason} />,
+    )
 }

@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
-import { Typography, Chip } from '@material-ui/core'
+import { Typography, Chip, Button } from '@material-ui/core'
 import { LoadingButton } from '@material-ui/lab'
 import { makeTypedMessageText, TypedMessage } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -33,6 +33,7 @@ const useStyles = makeStyles()({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
+        '& > *': { marginLeft: `12px !important` },
     },
 })
 const empty = makeTypedMessageText('')
@@ -46,6 +47,9 @@ export interface CompositionProps {
     recipients: Profile[]
     supportTextEncoding: boolean
     supportImageEncoding: boolean
+    requireClipboardPermission?: boolean
+    hasClipboardPermission?: boolean
+    onRequestClipboardPermission?(): void
 }
 export interface SubmitComposition {
     target: 'Everyone' | Profile[]
@@ -202,6 +206,11 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
             </div>
             <div className={classes.actions}>
                 {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
+                {props.requireClipboardPermission && !props.hasClipboardPermission && (
+                    <Button variant="outlined" onClick={props.onRequestClipboardPermission}>
+                        Enable auto paste
+                    </Button>
+                )}
                 <LoadingButton
                     disabled={!submitAvailable}
                     loading={sending}

@@ -7,13 +7,14 @@ import { MaskMessage, useI18N } from '../../utils'
 import { useFriendsList as useRecipientsList } from '../DataSource/useActivatedUI'
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { CompositionDialogUI, CompositionRef } from './CompositionUI'
+import { useCompositionClipboardRequest } from './useCompositionClipboardRequest'
 import { useSubmit } from './useSubmit'
 
-// 2. Clipboard permission
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
+    requireClipboardPermission?: boolean
 }
-export function Composition({ type = 'timeline' }: PostDialogProps) {
+export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useI18N()
 
     //#region Open
@@ -42,6 +43,8 @@ export function Composition({ type = 'timeline' }: PostDialogProps) {
             <DialogContent>
                 <CompositionDialogUI
                     ref={UI}
+                    {...useCompositionClipboardRequest(requireClipboardPermission || false)}
+                    disabledRecipients={disableE2E ? 'E2E' : undefined}
                     recipients={useRecipientsList()}
                     maxLength={560}
                     onSubmit={useSubmit(onClose)}
@@ -51,7 +54,6 @@ export function Composition({ type = 'timeline' }: PostDialogProps) {
                         const shouldDisableE2E = hasRedPacket
                         setDisableE2E(shouldDisableE2E)
                     }}
-                    disabledRecipients={disableE2E ? 'E2E' : undefined}
                     supportImageEncoding={networkSupport?.text ?? false}
                     supportTextEncoding={networkSupport?.image ?? false}
                 />
