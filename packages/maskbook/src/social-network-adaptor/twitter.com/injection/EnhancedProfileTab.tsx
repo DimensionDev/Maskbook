@@ -127,5 +127,5 @@ function getStyle() {
 export function EnhancedProfileTabAtTwitter() {
     const style = getStyle()
     const classes = useStyles(style)
-    return <EnhancedProfileTab classes={classes} reset={reset} clear={clear} />
+    return <EnhancedProfileTab classes={classes} reset={reset} clear={clear} hot={<div className={classes.line} />} />
 }
