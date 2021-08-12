@@ -164,20 +164,16 @@ function formatAssetsFromZerion(
     return data.map(({ asset, quantity }) => {
         const balance = Number(new BigNumber(quantity).dividedBy(pow10(asset.decimals)).toString())
         const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
+        const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC'].includes(symbol)
+
         return {
             token: {
                 name: asset.name,
                 symbol: asset.symbol,
                 decimals: asset.decimals,
-                address:
-                    asset.name === 'Ether' || asset.name === 'Ethereum'
-                        ? getTokenConstants().NATIVE_TOKEN_ADDRESS
-                        : asset.asset_code,
+                address: isNativeToken(asset.symbol) ? getTokenConstants().NATIVE_TOKEN_ADDRESS : asset.asset_code,
                 chainId: ChainId.Mainnet,
-                type:
-                    asset.name === 'Ether' || asset.name === 'Ethereum'
-                        ? EthereumTokenType.Native
-                        : EthereumTokenType.ERC20,
+                type: isNativeToken(asset.symbol) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                 logoURI: asset.icon_url,
             },
             chain: resolveChainByScope(scope),
