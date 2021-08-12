@@ -687,7 +687,7 @@ importers:
       react-window: ^1.8.6
       storybook-addon-matrix: ^1.6.0
       tinycolor2: ^1.4.2
-      tss-react: ^0.6.0-beta.1
+      tss-react: ^0.6.0
       use-subscription: ^1.5.1
     dependencies:
       '@masknet/storybook-shared': link:../storybook-shared
@@ -697,7 +697,7 @@ importers:
       notistack: 1.0.6-next.1_132ff92e0fd7328580f6380de259b809
       react-window: 1.8.6_f991c289939c8299bed5e4a6a5a79a62
       tinycolor2: 1.4.2
-      tss-react: 0.6.0-beta.1_c6fea8dcaf6b764ffb1999acad870c8e
+      tss-react: 0.6.0_bef0d66e98e8cc6f9687bc5bf9034690
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
     devDependencies:
       '@babel/core': 7.14.8
@@ -18524,6 +18524,7 @@ packages:
   /multibase/2.0.0:
     resolution: {integrity: sha512-xIrqUVsinSlFjqj+OtEgCJ6MRl5hXjHMBPWsUt1ZGSRMx8rzm+7hCLE4wDeSA3COomlUC9zHCoUlvWjvAMtfDg==}
     engines: {node: '>=10.0.0', npm: '>=6.0.0'}
+    deprecated: This module has been superseded by the multiformats module
     dependencies:
       base-x: 3.0.8
       buffer: 5.7.1
@@ -18533,6 +18534,7 @@ packages:
   /multibase/3.1.2:
     resolution: {integrity: sha512-bpklWHs70LO3smJUHOjcnzGceJJvn9ui0Vau6Za0B/GBepaXswmW8Ufea0uD9pROf/qCQ4N4lZ3sf3U+SNf0tw==}
     engines: {node: '>=10.0.0', npm: '>=6.0.0'}
+    deprecated: This module has been superseded by the multiformats module
     dependencies:
       '@multiformats/base-x': 4.0.1
       web-encoding: 1.1.5
@@ -18541,6 +18543,7 @@ packages:
   /multibase/4.0.4:
     resolution: {integrity: sha512-8/JmrdSGzlw6KTgAJCOqUBSGd1V6186i/X8dDCGy/lbCKrQ+1QB6f3HE+wPr7Tpdj4U3gutaj9jG2rNX6UpiJg==}
     engines: {node: '>=12.0.0', npm: '>=6.0.0'}
+    deprecated: This module has been superseded by the multiformats module
     dependencies:
       '@multiformats/base-x': 4.0.1
     dev: false
@@ -23586,13 +23589,10 @@ packages:
       typescript: 2.9.2
     dev: false
 
-  /tss-react/0.6.0-beta.1_c6fea8dcaf6b764ffb1999acad870c8e:
-    resolution: {integrity: sha512-2RtMNR5KQoZIixu+osV2tJJxIT0KBdW+sKTS2LCuz4WpULUFj5e5BUNpV4RFZj7Fmt/+mImpDHVATCx73+qLyQ==}
+  /tss-react/0.6.0_bef0d66e98e8cc6f9687bc5bf9034690:
+    resolution: {integrity: sha512-9AiMS/P30X3xPk7VMj14WBsZ/erb/Tr/Z/m07Va84E/tPy1GqVFnixx42XYwzDehaVOQQ9ap+bUNxdpBI98+uQ==}
     peerDependencies:
-      '@emotion/cache': ^11.4.0
       '@emotion/react': ^11.4.1
-      '@emotion/serialize': ^1.0.2
-      '@emotion/utils': ^1.0.0
     dependencies:
       '@emotion/cache': 11.4.0
       '@emotion/react': 11.4.1_010541d7fdfc8cbcdd915345c89295c8
