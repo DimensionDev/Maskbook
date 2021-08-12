@@ -162,7 +162,7 @@ export function CreateForm(props: CreateFormProps) {
     const onTotalOfPerWalletChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
         const total = ev.currentTarget.value
         if (total === '') setTotalOfPerWallet('')
-        if (/^\d+[\.]?\d*$/.test(total)) {
+        if (/^\d+\.?\d*$/.test(total)) {
             setTotalOfPerWallet(total)
         }
     }, [])

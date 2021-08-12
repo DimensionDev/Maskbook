@@ -54,5 +54,5 @@ export function hookTransform<T>(getConstants: (chainId: ChainId) => Partial<T>)
 }
 
 function replaceAll(input: string, values: Record<string, string>) {
-    return input.replace(/\$\{([^}]+)\}/g, (match, p1) => values[p1] ?? match)
+    return input.replace(/\${([^}]+)}/g, (match, p1) => values[p1] ?? match)
 }

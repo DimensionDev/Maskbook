@@ -1,4 +1,5 @@
-import { makeStyles, MenuItem, MenuItemProps, Typography } from '@material-ui/core'
+import { MenuItem, MenuItemProps, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import {
     useAccount,
@@ -34,7 +35,7 @@ import { forwardRef, useRef } from 'react'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     paper: {
         borderRadius: 4,
         transform: 'translateY(-150px) !important',
@@ -283,7 +284,7 @@ interface ToolboxItemDescriptor {
 // TODO: this should be rendered in the ErrorBoundary
 const ToolboxItem = forwardRef<any, MenuItemProps & ToolboxItemDescriptor>((props, ref) => {
     const { image, label, hide, priority, useShouldDisplay, ...rest } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const shouldDisplay = useRef(useShouldDisplay || (() => true)).current() && !hide
 
     if (!shouldDisplay) return null
