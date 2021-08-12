@@ -80,7 +80,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.userBadge?.(signal)
 
     setTimeout(activateSNSAdaptorPluginOnStart, 1000)
+
     ui.injection.enhancedProfile?.(signal)
+    ui.injection.enhancedProfileTab?.(signal)
 
     startPluginSNSAdaptor(getCurrentSNSNetwork(ui.networkIdentifier), createPluginHost(signal))
 

@@ -36,7 +36,8 @@ export const searchProfileTabListSelector = () =>
     querySelectorAll('[aria-label="Profile timelines"] [role="tablist"][data-testid="ScrollSnap-List"] a')
 export const searchForegroundColorSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [aria-label="Back"][role="button"] > div')
-
+export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="UserProfileHeader_Items"]')
 export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>

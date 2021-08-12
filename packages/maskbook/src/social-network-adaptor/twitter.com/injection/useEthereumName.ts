@@ -1,23 +1,19 @@
 import { useResolveEns } from '@masknet/web3-shared'
 import { useEffect, useMemo, useState } from 'react'
-import { getBioDescription, getNickname, getTwitterId } from '../utils/user'
 
 const ENS_RE = /\w+\.eth/
 const ENS_RE_FULL = /^\w+\.eth$/
 const ADDRESS = /0x[\dA-Fa-f]{40}/
 
-export function useEthereumName() {
+export function useEthereumName(nickname: string, twitterId: string, bio: string) {
     const [ethereumName, setEthereumName] = useState('')
-    const nickname = getNickname()
-    const twitterId = getTwitterId()
-    const bioDescription = getBioDescription()
 
     useEffect(() => {
-        const matched = bioDescription.match(ENS_RE)
+        const matched = bio.match(ENS_RE)
         if (matched) {
             setEthereumName(matched[0])
         }
-    }, [bioDescription])
+    }, [bio])
     const name = useMemo(() => {
         if (ENS_RE_FULL.test(nickname)) {
             return nickname
@@ -29,16 +25,15 @@ export function useEthereumName() {
     return name
 }
 
-export function useEthereumAddress() {
-    const bioDescription = getBioDescription()
+export function useEthereumAddress(nickanme: string, twitterId: string, bio: string) {
     const [addr, setAddr] = useState<string | undefined>()
-    const name = useEthereumName()
+    const name = useEthereumName(nickanme, twitterId, bio)
     const ens_addr = useResolveEns(name).value
 
     useEffect(() => {
-        const matched = bioDescription.match(ADDRESS)
+        const matched = bio.match(ADDRESS)
         if (matched) setAddr(matched[0])
-    }, [bioDescription])
+    }, [bio])
 
     return ens_addr ?? addr
 }
