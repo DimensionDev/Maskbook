@@ -25,8 +25,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { PluginAugurMessages } from '../messages'
+import { WalletMessages } from '../../Wallet/messages'
 import type { AmmOutcome, Market } from '../types'
 import { useBuyCallback } from '../hooks/useBuyCallback'
 import { toBips } from '../../Trader/helpers'
@@ -35,6 +34,7 @@ import TuneIcon from '@material-ui/icons/Tune'
 import { BALANCE_DECIMALS, SHARE_DECIMALS } from '../constants'
 import { estimateBuyTrade, getRawFee, rawToFixed } from '../utils'
 import { useAmmExchange } from '../hooks/useAmmExchange'
+import { usePostLink } from '../../../components/DataSource/usePostInfo'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -80,62 +80,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export function BuyDialog() {
+interface BuyDialogProps {
+    open: boolean
+    onClose: () => void
+    market: Market
+    outcome: AmmOutcome | undefined
+    token: FungibleTokenDetailed
+}
+
+export function BuyDialog(props: BuyDialogProps) {
+    const { open, onClose, market, outcome, token } = props
     const { t } = useI18N()
     const classes = useStyles()
 
     const [id] = useState(uuid())
-    const [market, setMarket] = useState<Market>()
-    const [token, setToken] = useState<FungibleTokenDetailed>()
-    const [outcome, setOutcome] = useState<AmmOutcome>()
     const [inputAmount, setInputAmount] = useState('')
-    const [postLink, setpostLink] = useState<URL | string>()
 
     // context
     const account = useAccount()
-
-    //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(PluginAugurMessages.BuyDialogUpdated, (ev) => {
-        if (ev.open) {
-            setMarket(ev.market)
-            setOutcome(ev.outcome)
-            setToken(ev.cashToken)
-            setpostLink(ev.postLink)
-        }
-    })
-    const onClose = useCallback(() => {
-        closeDialog()
-        setMarket(undefined)
-        setToken(undefined)
-        setOutcome(undefined)
-        setInputAmount('')
-    }, [closeDialog])
-    //#endregion
-
-    //#region select token
-    const { setDialog: setSelectTokenDialogOpen } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                setToken(ev.token)
-            },
-            [id],
-        ),
-    )
-    const onSelectTokenChipClick = useCallback(() => {
-        if (!token) return
-        setSelectTokenDialogOpen({
-            open: true,
-            uuid: id,
-            disableNativeToken: true,
-            FixedTokenListProps: {
-                selectedTokens: [token.address],
-                whitelist: [token.address],
-            },
-        })
-    }, [id, token?.address])
-    //#endregion
 
     //#region amount
     const amount = new BigNumber(inputAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
@@ -150,6 +112,10 @@ export function BuyDialog() {
         () => rawToFixed(_tokenBalance, token?.decimals ?? 0, BALANCE_DECIMALS),
         [_tokenBalance],
     )
+    const onDialogClose = () => {
+        setInputAmount('')
+        onClose()
+    }
     //#endregion
 
     //#region AmmExchange
@@ -211,6 +177,7 @@ export function BuyDialog() {
 
     //#region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+    const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             [
@@ -233,12 +200,12 @@ export function BuyDialog() {
                 if (!ev.open) {
                     retryLoadTokenBalance()
                     openSwapDialog({ open: false })
-                    if (buyState.type === TransactionStateType.HASH) onClose()
+                    if (buyState.type === TransactionStateType.HASH) onDialogClose()
                 }
                 if (buyState.type === TransactionStateType.HASH) setInputAmount('')
                 resetBuyCallback()
             },
-            [id, buyState, openSwapDialog, retryLoadTokenBalance, onClose],
+            [id, buyState, openSwapDialog, retryLoadTokenBalance, onDialogClose],
         ),
     )
 
@@ -277,7 +244,7 @@ export function BuyDialog() {
         <InjectedDialog
             className={classes.root}
             open={open}
-            onClose={onClose}
+            onClose={onDialogClose}
             title={market.title + ' ' + outcome?.name}
             maxWidth="xs">
             <DialogContent>
@@ -288,12 +255,6 @@ export function BuyDialog() {
                         balance={tokenBalance ?? '0'}
                         token={token}
                         onAmountChange={setInputAmount}
-                        SelectTokenChip={{
-                            loading: loadingTokenBalance || loadingAmm,
-                            ChipProps: {
-                                onClick: onSelectTokenChipClick,
-                            },
-                        }}
                     />
                 </form>
                 <EthereumWalletConnectedBoundary>

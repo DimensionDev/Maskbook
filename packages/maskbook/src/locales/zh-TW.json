@@ -727,5 +727,6 @@
     "plugin_augur_sell_too_low": "",
     "plugin_augur_add_liquidity": "",
     "plugin_augur_remove_liquidity": "",
+    "plugin_augur_share": "",
     "plugin_augur_insufficient_balance": ""
 }

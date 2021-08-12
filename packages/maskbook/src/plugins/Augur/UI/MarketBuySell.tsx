@@ -17,7 +17,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginAugurMessages } from '../messages'
 import { useCallback } from 'react'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import { BuyDialog } from '../SNSAdaptor/BuyDialog'
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
     focusVisible?: string
@@ -177,21 +177,11 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
 
     const { t } = useI18N()
     const classes = useStyles()
-    const postLink = usePostLink()
     const [isBuy, setIsBuy] = useState(true)
     const [selectedOutcome, setSelectedOutcome] = useState<AmmOutcome>()
+    const [buyDialogOpen, setBuyDialogOpen] = useState(false)
 
-    const { setDialog: openBuyDialog } = useRemoteControlledDialog(PluginAugurMessages.BuyDialogUpdated)
-    const onBuy = useCallback(() => {
-        if (!selectedOutcome) return
-        openBuyDialog({
-            open: true,
-            market: market,
-            outcome: selectedOutcome,
-            cashToken: cashToken,
-            postLink,
-        })
-    }, [market, openBuyDialog, selectedOutcome, isBuy])
+    const onBuy = () => setBuyDialogOpen(true)
 
     const { setDialog: openSellDialog } = useRemoteControlledDialog(PluginAugurMessages.SellDialogUpdated)
     const onSell = useCallback(() => {
@@ -202,7 +192,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
             outcome: selectedOutcome,
             cashToken: cashToken,
         })
-    }, [market, openBuyDialog, selectedOutcome, isBuy])
+    }, [market, selectedOutcome, isBuy])
 
     const validationMessage = useMemo(() => {
         if (!selectedOutcome) return t('plugin_augur_select_outcome')
@@ -292,6 +282,13 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                     </Link>
                 </Grid>
             </Grid>
+            <BuyDialog
+                open={buyDialogOpen}
+                market={market}
+                outcome={selectedOutcome}
+                token={cashToken}
+                onClose={() => setBuyDialogOpen(false)}
+            />
         </div>
     )
 }

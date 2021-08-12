@@ -7,7 +7,6 @@ import { MarketView } from '../UI/MarketView'
 import { AUGUR_CHAIN_ID, BASE_URL, PLUGIN_NAME } from '../constants'
 import { escapeRegExp } from 'lodash-es'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { BuyDialog } from './BuyDialog'
 import { SellDialog } from './SellDialog'
 
 function createMatchLink() {
@@ -40,7 +39,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection: function Component() {
         return (
             <>
-                <BuyDialog />
                 <SellDialog />
             </>
         )
