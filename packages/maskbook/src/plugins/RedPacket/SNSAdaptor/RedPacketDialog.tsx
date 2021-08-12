@@ -6,7 +6,6 @@ import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { RedPacketJSONPayload, DialogTabs, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
-import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { RedPacketMetaKey } from '../constants'
 import { RedPacketForm } from './RedPacketForm'
 import { RedPacketHistoryList } from './RedPacketHistoryList'
@@ -80,9 +79,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
             if (payload) attachMetadata(RedPacketMetaKey, payload)
             else dropMetadata(RedPacketMetaKey)
-            editActivatedPostMetadata((next) =>
-                payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey),
-            )
             onClose()
         },
         [onClose, chainId],

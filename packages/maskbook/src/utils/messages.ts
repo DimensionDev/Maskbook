@@ -62,8 +62,6 @@ export interface MaskMessages extends SettingsEvents {
         appendText: string
         context: ThirdPartyPopupContextIdentifier
     }
-    /** @deprecated */
-    activatePluginCompositionEntry: string
     pluginEnabled: string
     pluginDisabled: string
     signRequestApproved: {

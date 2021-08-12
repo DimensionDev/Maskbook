@@ -19,7 +19,6 @@ import { usePortalShadowRoot } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '@masknet/shared'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
@@ -270,7 +269,6 @@ export default function PollsDialog(props: PollsDialogProps) {
     const insertPoll = (data?: PollMetaData | null) => {
         if (data) attachMetadata(POLL_META_KEY_1, data)
         else dropMetadata(POLL_META_KEY_1)
-        editActivatedPostMetadata((next) => (data ? next.set(POLL_META_KEY_1, data) : next.delete(POLL_META_KEY_1)))
         props.onClose()
     }
 

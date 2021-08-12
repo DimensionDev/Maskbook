@@ -12,23 +12,5 @@ function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T,
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, signal)
 
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
-        <PostDialogAtTwitter reason={reason} />,
-    )
-}
-
-function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {
-    // const rootRef = useRef<HTMLDivElement>(null)
-    // const willRenderInPopup = props.reason === 'popup'
-    // const dialogProps = willRenderInPopup
-    //     ? {
-    //           disablePortal: true,
-    //           container: () => rootRef.current,
-    //       }
-    //     : {}
-    // const dialog = <PostDialog DialogProps={dialogProps} reason={props.reason} />
-    // ! Render dialog into native composition view instead of portal shadow
-    // ! More https://github.com/DimensionDev/Maskbook/issues/837
-    // return willRenderInPopup ? <div ref={rootRef}>{dialog}</div> : dialog
-    return <Composition type={props.reason} />
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<Composition type={reason} />)
 }

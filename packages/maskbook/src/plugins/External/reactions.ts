@@ -1,5 +1,4 @@
 import { makeTypedMessageText } from '../../protocols/typed-message'
-import { editActivatedPostMetadata } from '../../protocols/typed-message/global-state'
 import { MaskMessage, startEffect } from '../../utils'
 import { isLocalContext } from './popup-context'
 
@@ -18,11 +17,6 @@ startEffect(module.hot, () =>
             meta.set(key, value)
         }
 
-        editActivatedPostMetadata((meta) => {
-            for (const [key, value] of Object.entries(data.payload)) {
-                meta.set(key, value)
-            }
-        })
         MaskMessage.events.requestComposition.sendToLocal({
             open: true,
             reason: 'popup',

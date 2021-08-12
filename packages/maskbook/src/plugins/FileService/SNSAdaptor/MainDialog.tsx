@@ -4,7 +4,6 @@ import { useSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
-import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { Entry } from './components'
 import { META_KEY_2 } from '../constants'
 import { Exchange } from './hooks/Exchange'
@@ -44,14 +43,6 @@ const FileServiceDialog: React.FC<Props> = (props) => {
         } else {
             dropMetadata(META_KEY_2)
         }
-        editActivatedPostMetadata((next) => {
-            if (selectedFileInfo) {
-                // Make a Date become string
-                next.set(META_KEY_2, JSON.parse(JSON.stringify(selectedFileInfo)))
-            } else {
-                next.delete(META_KEY_2)
-            }
-        })
         props.onClose()
     }
     const onDecline = () => {

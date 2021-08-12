@@ -9,7 +9,6 @@ import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
 import { DialogTabs, JSON_PayloadInMask } from '../types'
 import { CreateForm } from './CreateForm'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { payloadOutMask } from './helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
@@ -136,6 +135,9 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 alert('Failed to sign the password.')
                 return
             }
+
+            // To meet the max allowance of the data size of image steganography, we need to
+            //  cut off and simplify some properties, such as save the token address string only.
             const payloadDetail = omit(
                 set(
                     set(payloadOutMask(payload), 'token', payload.token.address),
@@ -155,12 +157,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
             )
             if (payload) attachMetadata(ITO_MetaKey_2, payloadDetail)
             else dropMetadata(ITO_MetaKey_2)
-            editActivatedPostMetadata((next) => {
-                // To meet the max allowance of the data size of image steganography, we need to
-                //  cut off and simplify some properties, such as save the token address string only.
-
-                return payload ? next.set(ITO_MetaKey_2, payloadDetail) : next.delete(ITO_MetaKey_2)
-            })
 
             props.onConfirm(payload)
             // storing the created pool in DB, it helps retrieve the pool password later

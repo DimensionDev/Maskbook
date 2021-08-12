@@ -206,10 +206,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
         let onClick: () => void
         if (onClickRaw === 'openCompositionEntry') {
-            onClick = () => {
-                openEncryptedMessage(plugin.ID)
-                setTimeout(() => MaskMessage.events.activatePluginCompositionEntry.sendToLocal(plugin.ID))
-            }
+            onClick = () => openEncryptedMessage(plugin.ID)
         } else {
             safeUnreachable(onClickRaw)
             onClick = () => {}
