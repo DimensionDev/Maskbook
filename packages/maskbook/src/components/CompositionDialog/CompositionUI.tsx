@@ -13,6 +13,7 @@ import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
 import type { Profile } from '../../database'
 import { CompositionContext } from './CompositionContext'
+import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 
 const useStyles = makeStyles()({
     root: {
@@ -61,10 +62,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     const { classes } = useStyles()
     const { t } = useI18N()
 
-    const isDebug = useValueRef(debugModeSetting)
-    const [showMetadataDebugger, setShowMetadataDebugger] = useState(false)
-
-    const currentPostMessage = useRef<TypedMessage>(props.defaultValue || empty)
     const [currentPostSize, __updatePostSize] = useState(0)
 
     const Editor = useRef<TypedMessageEditorRef | null>(null)
@@ -111,6 +108,13 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         [reset],
     )
 
+    const context = useMemo(
+        (): CompositionContext => ({
+            attachMetadata: (meta, data) => Editor.current?.attachMetadata(meta, data),
+            dropMetadata: (meta) => Editor.current?.dropMetadata(meta),
+        }),
+        [],
+    )
     const MoreOptions = [
         encoding.imageDisplay && (
             <ClickableChip
@@ -126,20 +130,10 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 disabled={encoding.imageReadonly}
             />
         ),
-        isDebug && (
-            <Chip key="debug" label="Post metadata inspector" onClick={() => setShowMetadataDebugger((e) => !e)} />
-        ),
+        ...useMetadataDebugger(context, Editor.current),
     ].filter(Boolean)
 
     const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Infinity)
-
-    const context = useMemo(
-        (): CompositionContext => ({
-            attachMetadata: (meta, data) => Editor.current?.attachMetadata(meta, data),
-            dropMetadata: (meta) => Editor.current?.dropMetadata(meta),
-        }),
-        [],
-    )
     const onSubmit = useCallback(() => {
         if (!Editor.current) return
         setSending(true)
@@ -155,11 +149,11 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
                 <TypedMessageEditor
+                    autoFocus
                     readonly={sending}
-                    debugMetadataInspector={showMetadataDebugger}
                     ref={(e) => {
                         Editor.current = e
-                        e && updateSize(e.estimatedLength)
+                        if (e) updateSize(e.estimatedLength)
                     }}
                     onChange={(message) => {
                         startTransition(() => props.onChange?.(message))
@@ -268,4 +262,33 @@ function useEncryptionEncode(props: Pick<CompositionProps, 'supportImageEncoding
         imageDisplay,
         setEncoding,
     }
+}
+
+function useMetadataDebugger(context: CompositionContext, Editor: TypedMessageEditorRef | null) {
+    const isDebug = useValueRef(debugModeSetting)
+    const [__MetadataDebuggerMeta, __configureMetadataDebugger] = useState<TypedMessage['meta'] | null>(null)
+
+    const __syncMetadataDebugger = () => {
+        const meta = Editor?.value.meta ?? new Map()
+        setTimeout(() => __configureMetadataDebugger(meta))
+    }
+    const UI = [
+        isDebug && <Chip key="debug" label="Post metadata inspector" onClick={__syncMetadataDebugger} />,
+        isDebug && __MetadataDebuggerMeta && (
+            <DebugMetadataInspector
+                key="debug-dialog"
+                meta={__MetadataDebuggerMeta}
+                onNewMeta={(meta, data) => {
+                    context.attachMetadata(meta, data)
+                    __syncMetadataDebugger()
+                }}
+                onDeleteMeta={(meta) => {
+                    context.dropMetadata(meta)
+                    __syncMetadataDebugger()
+                }}
+                onExit={() => __configureMetadataDebugger(null)}
+            />
+        ),
+    ]
+    return UI
 }

@@ -9,7 +9,6 @@ import { InjectedDialog } from '../shared/InjectedDialog'
 import { CompositionDialogUI, CompositionRef } from './CompositionUI'
 import { useSubmit } from './useSubmit'
 
-// 1. Metadata debug mode
 // 2. Clipboard permission
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'

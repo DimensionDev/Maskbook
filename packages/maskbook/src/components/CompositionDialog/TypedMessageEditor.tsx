@@ -23,8 +23,8 @@ const useStyles = makeStyles()({
 export interface TypedMessageEditorProps {
     defaultValue?: TypedMessage
     onChange?(message: TypedMessage): void
-    debugMetadataInspector?: boolean
     readonly?: boolean
+    autoFocus?: boolean
 }
 export interface TypedMessageEditorRef {
     /** Current message, it is a getter/setter. */
@@ -120,7 +120,7 @@ export const TypedMessageEditor = memo(
                         root: classes.root,
                         input: classes.input,
                     }}
-                    autoFocus
+                    autoFocus={props.autoFocus}
                     value={value.content}
                     onChange={setAsText}
                     fullWidth
