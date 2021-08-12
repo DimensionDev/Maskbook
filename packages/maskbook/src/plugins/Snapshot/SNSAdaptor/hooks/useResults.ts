@@ -1,4 +1,4 @@
-import type { ProposalIdentifier, ProposalResult, VoteItemList } from '../../types'
+import type { ProposalIdentifier, ProposalResult, VoteItem } from '../../types'
 import { useSuspense } from '../../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
 import { useVotes } from './useVotes'
@@ -34,7 +34,7 @@ async function Suspender(identifier: ProposalIdentifier) {
     const powerDetailOfChoices = message.payload.choices.map((_choice, i) =>
         strategies.map((_strategy, sI) => voteForChoice(votes, i).reduce((a, b) => a + b.scores[sI], 0)),
     )
-    const totalPower = Object.values(votes).reduce((a, b) => a + b.balance, 0)
+    const totalPower = votes.reduce((a, b) => a + b.balance, 0)
 
     const results: ProposalResult[] = powerOfChoices
         .map((p, i) => ({
@@ -52,6 +52,6 @@ async function Suspender(identifier: ProposalIdentifier) {
     return { results, totalPower }
 }
 
-function voteForChoice(votes: VoteItemList, i: number) {
-    return Object.values(votes).filter((vote) => vote.msg.payload.choice === i + 1)
+function voteForChoice(votes: VoteItem[], i: number) {
+    return votes.filter((vote) => vote.choiceIndex === i + 1)
 }
