@@ -256,6 +256,8 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         ITO_CONTRACT_ADDRESS_MAINNET,
     )
 
+    const showNftAirdrop = chainId === ChainId.Matic && campaignInfo && now < dateToHideSpaceStationCampaign.getTime()
+
     const [initLoading, setInitLoading] = useState(true)
     useLayoutEffect(() => {
         setTimeout(() => setInitLoading(false), 1000)
@@ -376,9 +378,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         <AbstractTab {...tabProps} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
-                        {chainId === ChainId.Matic && campaignInfo && now < dateToHideSpaceStationCampaign.getTime() ? (
-                            <NftAirdropCard campaignInfo={campaignInfo} />
-                        ) : null}
+                        {showNftAirdrop ? <NftAirdropCard campaignInfo={campaignInfo} /> : null}
 
                         {loading || loadingOld || initLoading || !swappedTokens || !swappedTokensOld ? (
                             <div className={classes.emptyContentWrapper}>
@@ -407,14 +407,14 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     </div>
                                 ) : null}
                             </>
-                        ) : chainId !== ChainId.Matic ? (
+                        ) : !showNftAirdrop ? (
                             <div className={classes.emptyContentWrapper}>
                                 <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
                             </div>
                         ) : null}
                         {(swappedTokens && swappedTokens.length > 0) ||
                         (swappedTokensOld && swappedTokensOld.length > 0) ||
-                        chainId === ChainId.Matic ? (
+                        showNftAirdrop ? (
                             <div className={classes.actionButtonWrapper}>
                                 <EthereumChainBoundary
                                     chainId={chainId}
