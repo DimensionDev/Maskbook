@@ -7,7 +7,6 @@ import { MarketView } from '../UI/MarketView'
 import { AUGUR_CHAIN_ID, BASE_URL, PLUGIN_NAME } from '../constants'
 import { escapeRegExp } from 'lodash-es'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { SellDialog } from './SellDialog'
 
 function createMatchLink() {
     return new RegExp(`${escapeRegExp(BASE_URL.concat('/#!/market?id='))}([x0-9A-Fa-f]+)-([0-9]+)$`)
@@ -35,13 +34,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const market = getMarketFromLinks(links)
         if (!market?.address || !market.id) return null
         return <Renderer link={market.link} address={market.address} id={market.id} />
-    },
-    GlobalInjection: function Component() {
-        return (
-            <>
-                <SellDialog />
-            </>
-        )
     },
 }
 

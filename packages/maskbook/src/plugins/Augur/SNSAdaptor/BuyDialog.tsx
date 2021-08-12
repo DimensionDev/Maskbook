@@ -96,6 +96,11 @@ export function BuyDialog(props: BuyDialogProps) {
     const [id] = useState(uuid())
     const [inputAmount, setInputAmount] = useState('')
 
+    const onDialogClose = () => {
+        setInputAmount('')
+        onClose()
+    }
+
     // context
     const account = useAccount()
 
@@ -112,10 +117,6 @@ export function BuyDialog(props: BuyDialogProps) {
         () => rawToFixed(_tokenBalance, token?.decimals ?? 0, BALANCE_DECIMALS),
         [_tokenBalance],
     )
-    const onDialogClose = () => {
-        setInputAmount('')
-        onClose()
-    }
     //#endregion
 
     //#region AmmExchange

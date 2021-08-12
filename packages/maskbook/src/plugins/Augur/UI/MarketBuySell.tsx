@@ -18,6 +18,7 @@ import { PluginAugurMessages } from '../messages'
 import { useCallback } from 'react'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { BuyDialog } from '../SNSAdaptor/BuyDialog'
+import { SellDialog } from '../SNSAdaptor/SellDialog'
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
     focusVisible?: string
@@ -180,8 +181,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
     const [isBuy, setIsBuy] = useState(true)
     const [selectedOutcome, setSelectedOutcome] = useState<AmmOutcome>()
     const [buyDialogOpen, setBuyDialogOpen] = useState(false)
-
-    const onBuy = () => setBuyDialogOpen(true)
+    const [sellDialogOpen, setSellDialogOpen] = useState(false)
 
     const { setDialog: openSellDialog } = useRemoteControlledDialog(PluginAugurMessages.SellDialogUpdated)
     const onSell = useCallback(() => {
@@ -269,7 +269,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                             fullWidth
                             color="primary"
                             disabled={!!validationMessage}
-                            onClick={isBuy ? onBuy : onSell}>
+                            onClick={isBuy ? () => setBuyDialogOpen(true) : () => setSellDialogOpen(true)}>
                             {validationMessage ? validationMessage : isBuy ? t('buy') : t('sell')}
                         </Button>
                     </Grid>
@@ -288,6 +288,13 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                 outcome={selectedOutcome}
                 token={cashToken}
                 onClose={() => setBuyDialogOpen(false)}
+            />
+            <SellDialog
+                open={sellDialogOpen}
+                market={market}
+                outcome={selectedOutcome}
+                cashToken={cashToken}
+                onClose={() => setSellDialogOpen(false)}
             />
         </div>
     )

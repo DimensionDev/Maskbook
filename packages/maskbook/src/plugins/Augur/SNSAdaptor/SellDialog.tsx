@@ -20,7 +20,6 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { WalletMessages } from '../../Wallet/messages'
-import { PluginAugurMessages } from '../messages'
 import type { AmmOutcome, Market } from '../types'
 import { BALANCE_DECIMALS, SHARE_DECIMALS } from '../constants'
 import { useSellCallback } from '../hooks/useSellCallback'
@@ -71,41 +70,36 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export function SellDialog() {
+interface SellDialogProps {
+    open: boolean
+    onClose: () => void
+    market: Market
+    outcome: AmmOutcome | undefined
+    cashToken: FungibleTokenDetailed
+}
+
+export function SellDialog(props: SellDialogProps) {
+    const { open, onClose, market, outcome, cashToken } = props
+
     const { t } = useI18N()
     const classes = useStyles()
 
     const [id] = useState(uuid())
-    const [market, setMarket] = useState<Market>()
-    const [cashToken, setCashToken] = useState<FungibleTokenDetailed>()
-    const [token, setToken] = useState<ERC20TokenDetailed>()
-    const [outcome, setOutcome] = useState<AmmOutcome>()
     const [inputAmount, setInputAmount] = useState('')
+
+    const token = {
+        address: outcome?.shareToken,
+        symbol: outcome?.name,
+        decimals: SHARE_DECIMALS,
+    } as ERC20TokenDetailed
+
+    const onDialogClose = () => {
+        setInputAmount('')
+        onClose()
+    }
 
     // context
     const account = useAccount()
-
-    //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(PluginAugurMessages.SellDialogUpdated, (ev) => {
-        if (ev.open) {
-            setMarket(ev.market)
-            setOutcome(ev.outcome)
-            setCashToken(ev.cashToken)
-            setToken({
-                address: ev.outcome.shareToken,
-                symbol: ev.outcome.name,
-                decimals: SHARE_DECIMALS,
-            } as ERC20TokenDetailed)
-        }
-    })
-    const onClose = useCallback(() => {
-        closeDialog()
-        setMarket(undefined)
-        setOutcome(undefined)
-        setInputAmount('')
-        setCashToken(undefined)
-    }, [closeDialog])
-    //#endregion
 
     //#region amount
     const amount = new BigNumber(inputAmount || '0').multipliedBy(pow10(SHARE_DECIMALS))
@@ -149,12 +143,12 @@ export function SellDialog() {
         useCallback(
             (ev) => {
                 if (!ev.open) {
-                    if (sellState.type === TransactionStateType.HASH) onClose()
+                    if (sellState.type === TransactionStateType.HASH) onDialogClose()
                 }
                 if (sellState.type === TransactionStateType.HASH) setInputAmount('')
                 resetSellCallback()
             },
-            [id, sellState, onClose],
+            [id, sellState, onDialogClose],
         ),
     )
 
@@ -184,7 +178,7 @@ export function SellDialog() {
         <InjectedDialog
             className={classes.root}
             open={open}
-            onClose={onClose}
+            onClose={onDialogClose}
             title={market.title + ' ' + outcome?.name}
             maxWidth="xs">
             <DialogContent>
