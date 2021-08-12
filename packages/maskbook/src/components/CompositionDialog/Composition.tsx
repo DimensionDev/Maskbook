@@ -11,7 +11,6 @@ import { useSubmit } from './useSubmit'
 
 // 1. Metadata debug mode
 // 2. Clipboard permission
-// 5. Fix Recipient selector (click area)
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
 }
