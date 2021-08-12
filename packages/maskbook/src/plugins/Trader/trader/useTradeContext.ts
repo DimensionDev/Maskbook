@@ -39,8 +39,8 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     IS_UNISWAP_V3_LIKE: true,
                     GRAPH_API: getTraderConstants(chainId).UNISWAP_V2_THEGRAPH,
                     INIT_CODE_HASH: getTraderConstants(chainId).UNISWAP_V2_INIT_CODE_HASH,
-                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_V2_ROUTER_ADDRESS,
-                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_V2_FACTORY_ADDRESS,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_SWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_V3_FACTORY_ADDRESS,
                     AGAINST_TOKENS: UNISWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: UNISWAP_CUSTOM_BASES,
@@ -96,38 +96,16 @@ export function useTradeContext(tradeProvider: TradeProvider) {
             case TradeProvider.ZRX:
                 return {
                     TYPE: tradeProvider,
-                    IS_UNISWAP_V2_LIKE: false,
-                    GRAPH_API: '',
-                    INIT_CODE_HASH: '',
-                    ROUTER_CONTRACT_ADDRESS: '',
-                    FACTORY_CONTRACT_ADDRESS: '',
-                    AGAINST_TOKENS: {},
-                    ADDITIONAL_TOKENS: {},
-                    CUSTOM_TOKENS: {},
                 } as TradeContext_
             case TradeProvider.BALANCER:
                 return {
                     TYPE: tradeProvider,
-                    IS_UNISWAP_V2_LIKE: false,
-                    GRAPH_API: '',
-                    INIT_CODE_HASH: '',
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).BALANCER_EXCHANGE_PROXY_ADDRESS,
-                    FACTORY_CONTRACT_ADDRESS: '',
-                    AGAINST_TOKENS: {},
-                    ADDITIONAL_TOKENS: {},
-                    CUSTOM_TOKENS: {},
                 } as TradeContext_
             case TradeProvider.DODO:
                 return {
                     TYPE: tradeProvider,
-                    IS_UNISWAP_V2_LIKE: false,
-                    GRAPH_API: '',
-                    INIT_CODE_HASH: '',
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).DODO_EXCHANGE_PROXY_ADDRESS,
-                    FACTORY_CONTRACT_ADDRESS: '',
-                    AGAINST_TOKENS: {},
-                    ADDITIONAL_TOKENS: {},
-                    CUSTOM_TOKENS: {},
                 } as TradeContext_
             default:
                 unreachable(tradeProvider)

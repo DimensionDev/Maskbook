@@ -1,8 +1,7 @@
 import { useCallback, useState } from 'react'
-import type { SwapParameters } from '@uniswap/v2-sdk'
-import type { RouterV2 } from '@masknet/web3-contracts/types/RouterV2'
-import { TransactionState, TransactionStateType, useAccount } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
+import type { SwapParameters } from '@uniswap/v2-sdk'
+import { TransactionState, TransactionStateType, useAccount } from '@masknet/web3-shared'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { SLIPPAGE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
@@ -30,7 +29,6 @@ interface FailedCall extends SwapCallEstimate {
 
 export function useTradeCallback(
     trade: TradeComputed<Trade> | null,
-    routerV2Contract: RouterV2 | null,
     allowedSlippage = SLIPPAGE_DEFAULT,
     ddl = DEFAULT_TRANSACTION_DEADLINE,
 ) {
@@ -42,7 +40,7 @@ export function useTradeCallback(
     })
 
     const tradeCallback = useCallback(async () => {
-        if (!routerV2Contract) {
+        if (!tradeParameters.length) {
             setTradeState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -159,7 +157,7 @@ export function useTradeCallback(
                 }
             }
         })
-    }, [account, tradeParameters, routerV2Contract])
+    }, [account, tradeParameters])
 
     const resetCallback = useCallback(() => {
         setTradeState({

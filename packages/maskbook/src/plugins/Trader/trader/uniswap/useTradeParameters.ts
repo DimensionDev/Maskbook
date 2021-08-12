@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import JSBI from 'jsbi'
 import { Percent, TradeType } from '@uniswap/sdk-core'
 import { Router, Trade as V2Trade } from '@uniswap/v2-sdk'
@@ -8,6 +8,7 @@ import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { SwapRouter } from '@uniswap/v3-sdk'
 import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract'
 import { useSwapRouterContract } from '../../contracts/uniswap/useSwapRouterContract'
+import { TradeContext } from '../useTradeContext'
 
 const UNISWAP_BIPS_BASE = JSBI.BigInt(10_000)
 
@@ -23,8 +24,9 @@ export function useSwapParameters(
     deadline: number = DEFAULT_TRANSACTION_DEADLINE, // in seconds from now
 ) {
     const account = useAccount()
-    const routerV2Contract = useRouterV2Contract()
-    const swapRouterContract = useSwapRouterContract()
+    const context = useContext(TradeContext)
+    const routerV2Contract = useRouterV2Contract(context?.ROUTER_CONTRACT_ADDRESS)
+    const swapRouterContract = useSwapRouterContract(context?.ROUTER_CONTRACT_ADDRESS)
 
     return useMemo<SwapCall[]>(() => {
         if (!account || !trade?.trade_) return []

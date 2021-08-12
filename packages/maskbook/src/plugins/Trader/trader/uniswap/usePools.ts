@@ -1,10 +1,11 @@
-import { useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { computePoolAddress, Pool, FeeAmount } from '@uniswap/v3-sdk'
 import type { Token, Currency } from '@uniswap/sdk-core'
 import { MulticalStateType, useChainId, useMutlipleContractSingleData, useTraderConstants } from '@masknet/web3-shared'
 import { usePoolContracts } from '../../contracts/uniswap/usePoolContract'
+import { TradeContext } from '../useTradeContext'
 
 export enum PoolState {
     LOADING = 0,
@@ -17,7 +18,7 @@ export function usePools(
     poolKeys: [Currency | undefined, Currency | undefined, FeeAmount | undefined][],
 ): [PoolState, Pool | null][] {
     const chainId = useChainId()
-    const { UNISWAP_V3_FACTORY_ADDRESS } = useTraderConstants(chainId)
+    const context = useContext(TradeContext)
 
     const transformed: ([Token, Token, FeeAmount] | null)[] = useMemo(() => {
         return poolKeys.map(([currencyA, currencyB, feeAmount]) => {
@@ -33,15 +34,16 @@ export function usePools(
 
     const poolAddresses = useMemo(() => {
         return transformed.map((value) => {
-            if (!UNISWAP_V3_FACTORY_ADDRESS || !value) return ''
+            if (!context?.IS_UNISWAP_V3_LIKE) return ''
+            if (!context?.FACTORY_CONTRACT_ADDRESS || !value) return ''
             return computePoolAddress({
-                factoryAddress: UNISWAP_V3_FACTORY_ADDRESS,
+                factoryAddress: context.FACTORY_CONTRACT_ADDRESS,
                 tokenA: value[0],
                 tokenB: value[1],
                 fee: value[2],
             })
         })
-    }, [chainId, transformed, UNISWAP_V3_FACTORY_ADDRESS])
+    }, [chainId, transformed, context?.FACTORY_CONTRACT_ADDRESS])
 
     const poolContracts = usePoolContracts(poolAddresses)
 
