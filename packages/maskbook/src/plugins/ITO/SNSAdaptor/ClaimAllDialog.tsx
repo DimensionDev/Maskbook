@@ -378,7 +378,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         <AbstractTab {...tabProps} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
-                        {showNftAirdrop ? <NftAirdropCard campaignInfo={campaignInfo} /> : null}
+                        {showNftAirdrop ? <NftAirdropCard campaignInfo={campaignInfo!} /> : null}
 
                         {loading || loadingOld || initLoading || !swappedTokens || !swappedTokensOld ? (
                             <div className={classes.emptyContentWrapper}>
