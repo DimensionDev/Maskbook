@@ -1,0 +1,12 @@
+preserve_hierarchy: true
+pull_request_title: "i18n: sync i18n files from Crowdin"
+commit_message: "i18n: sync translation %original_file_name% for %language%"
+files:
+  - source: /packages/maskbook/src/_locales/en/messages.json
+    translation: /packages/maskbook/src/_locales/%two_letters_code%/messages.json
+    update_option: "update_as_unapproved"
+    skip_untranslated_strings: true
+  - source: /packages/**/locales/en.json
+    translation: /packages/**/locales/%two_letters_code%.json
+    update_option: "update_as_unapproved"
+    skip_untranslated_strings: true
