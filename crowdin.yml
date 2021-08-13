@@ -1,0 +1,5 @@
+files:
+  - source: /packages/maskbook/src/_locales/en/messages.json
+    translation: /packages/maskbook/src/_locales/%two_letters_code%/messages.json
+  - source: /packages/**/locales/en.json
+    translation: /packages/**/locales/%two_letters_code%.json

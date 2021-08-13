@@ -1,8 +1,7 @@
 import { useRef } from 'react'
 import Draggable, { DraggableProps } from 'react-draggable'
-import { makeStyles, Theme } from '@material-ui/core'
-
-const useStyle = makeStyles((theme: Theme) => ({
+import { makeStyles } from '@masknet/theme'
+const useStyle = makeStyles()((theme) => ({
     root: {
         position: 'fixed',
         width: '100vw',
@@ -30,7 +29,7 @@ export function DraggableDiv({
     DraggableProps,
     ...props
 }: React.HTMLAttributes<HTMLDivElement> & { DraggableProps?: Partial<DraggableProps> }) {
-    const classes = useStyle()
+    const { classes } = useStyle()
     const ref = useRef<HTMLDivElement>(null)
     return (
         <div className={classes.root}>

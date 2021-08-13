@@ -43,6 +43,7 @@
     "create_a_persona": "建立一個角色",
     "create_persona": "建立角色",
     "creating": "建立中…",
+    "daily": "",
     "dashboard": "儀錶板",
     "dashboard_tab_assets": "資產",
     "dashboard_tab_collectibles": "收藏",
@@ -67,6 +68,7 @@
     "dashboard_email_address": "info@dimension.im",
     "dashboard_license": "GNU AGPL 3.0",
     "dashboard_no_collectible_found": "找不到收藏品",
+    "days": "",
     "decrypted_postbox_add_recipients": "新增收件人",
     "decrypted_postbox_decrypting": "Mask 正在解密…",
     "decrypted_postbox_decoding": "Mask 正在解碼…",
@@ -299,6 +301,7 @@
     "wallet_risk_warning_dialog_title": "風險提示",
     "wallet_risk_warning_no_select_wallet": "還沒有選擇錢包。",
     "wallet_risk_warning_content": "尊敬的用户：<br/>在使用任何 Mask Network 内任何跟钱包相关的插件，请确认以下使用风险。<br/>Mask Network 提供非商业免费服务。接入的插件均为社区成员和其他优秀第三方DApps团队提供，由于去中心化网络的自由性和其他不确定风险因素，请用户妥善保护自己的钱包助记词、私钥等敏感信息，进行任何区块链合约交互，请谨慎操作。任何第三方 DApps 插件所带来的风险均由第三方 DApps 承担。点击确认按钮即代表同意承担以上可能带来的风险。",
+    "weekly": "",
     "wallet_risk_confirm_confirming": "",
     "wallet_risk_confirm_failed": "",
     "input_length_exceed_prompt": "{{name}} 的長度需小於 {{length}}。",
@@ -802,5 +805,8 @@
     "plugin_good_ghosting_tx_fail": "",
     "plugin_good_ghosting_tx_timeout": "",
     "plugin_good_ghosting_something_went_wrong": "",
-    "plugin_good_ghosting_view_on_explorer": ""
+    "plugin_good_ghosting_view_on_explorer": "",
+    "plugin_good_ghosting_checking_balance": "",
+    "plugin_good_ghosting_insufficient_balance": "",
+    "plugin_good_ghosting_balance_error": ""
 }

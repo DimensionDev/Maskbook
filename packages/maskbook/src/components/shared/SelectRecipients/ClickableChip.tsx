@@ -1,13 +1,12 @@
 import classNames from 'classnames'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import DoneIcon from '@material-ui/icons/Done'
 import Chip, { ChipProps } from '@material-ui/core/Chip'
 
 export interface ClickableChipProps extends ChipProps {
     checked?: boolean
 }
-
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     root: {
         marginRight: 6,
         marginBottom: 6,
@@ -22,7 +21,7 @@ const useStyles = makeStyles({
 })
 
 export function ClickableChip(props: ClickableChipProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <Chip
             avatar={props.checked ? <DoneIcon className={classes.icon} /> : undefined}

@@ -3,7 +3,7 @@ import type { SvgIcon } from '@material-ui/core'
 
 export const TransakIcon: typeof SvgIcon = createIcon(
     'Transak',
-    <>
+    <g>
         <rect x="4.167" y="3.5" width="21" height="21" rx="2" fill="url(#paint0_linear)" />
         <path
             fillRule="evenodd"
@@ -25,6 +25,6 @@ export const TransakIcon: typeof SvgIcon = createIcon(
                 <stop offset="1" stopColor="#0064EA" />
             </linearGradient>
         </defs>
-    </>,
+    </g>,
     '0 0 28 28',
 )

@@ -1,5 +1,3 @@
-import type snapshot from '@snapshot-labs/snapshot.js'
-
 export interface ProposalIdentifier {
     /**
      * ENS domain name of space.
@@ -8,6 +6,12 @@ export interface ProposalIdentifier {
      */
     space: string
     /** the identifier of proposal */
+    id: string
+}
+export interface RawVote {
+    choice: number
+    created: number
+    voter: string
     id: string
 }
 
@@ -22,6 +26,7 @@ export interface Proposal {
     authorName: string | null
     authorAvatar: string | null
     network: string
+    votes: RawVote[]
 }
 
 /**
@@ -29,7 +34,7 @@ export interface Proposal {
  * https://docs.snapshot.org/strategies
  */
 export interface Strategy {
-    name: keyof typeof snapshot.strategies
+    name: string
     params: {
         address: string
         decimals?: number
@@ -66,26 +71,15 @@ export interface VoteItem {
     choice: string
     address: string
     authorIpfsHash: string
-    relayerIpfsHash: string
     /** the voting power of one voter */
     balance: number
     /** the consist detail of voting power */
     scores: number[]
     strategySymbol: string
-    sig: string
     authorName: string | null
     authorAvatar: string | null
-    msg: {
-        payload: {
-            choice: number
-            metadata: {}
-            proposal: string
-        }
-        space: string
-        timestamp: string
-        type: 'vote'
-        version: string
-    }
+    choiceIndex: number
+    timestamp: number
 }
 
 export type VoteItemList = {

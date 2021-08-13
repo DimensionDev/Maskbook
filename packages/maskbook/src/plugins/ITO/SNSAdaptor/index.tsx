@@ -11,6 +11,7 @@ import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-es'
 import { ToolIconURLs } from '../../../resources/tool-icon'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,7 +31,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!payload.ok) return null
         return (
             <MaskbookPluginWrapper pluginName="ITO">
-                <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
+                <EthereumChainBoundary chainId={payload.val.chain_id}>
+                    <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
+                </EthereumChainBoundary>
             </MaskbookPluginWrapper>
         )
     },
