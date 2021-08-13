@@ -40,9 +40,9 @@
         "Rinkeby": "0x1F98415757620B543A52E61c46B32eB19261F984",
         "Kovan": "0x1F98415757620B543A52E61c46B32eB19261F984",
         "Gorli": "0x1F98415757620B543A52E61c46B32eB19261F984",
-        "BSC": "",
+        "BSC": "0x5211fe40fE49a13CC86E3bC77855152457eDE585",
         "BSCT": "",
-        "Matic": "",
+        "Matic": "0x54c06a5D7C6447BE47E07390eD7da7e6994585f4",
         "Mumbai": "",
         "Arbitrum": "0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB",
         "Arbitrum_Rinkeby": "0xa501c031958F579dB7676fF1CE78AD305794d579"

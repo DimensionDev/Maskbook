@@ -7,7 +7,7 @@ import { encodeRouteToPath, Route, Trade } from '@uniswap/v3-sdk'
 import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract'
 import { useAllV3Routes } from './useAllV3Routes'
 import { useSingleContractMultipleData } from '@masknet/web3-shared'
-import { DEFAULT_GAS_LIMIT } from '../../constants'
+import { DEFAULT_MULTICALL_GAS_LIMIT } from '../../constants'
 
 export enum V3TradeState {
     LOADING = 0,
@@ -42,12 +42,13 @@ export function useV3BestTradeExactIn(
         quoterContract,
         Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),
         quoteExactInInputs,
-        DEFAULT_GAS_LIMIT,
+        DEFAULT_MULTICALL_GAS_LIMIT,
     )
-    const { loading: quotesLoading, retry: quotesRetry } = useAsyncRetry(
-        () => quotesCallback(quotesCalls),
-        [quoterContract, quotesCalls.map((x) => x.join()).join()],
-    )
+    const {
+        loading: quotesLoading,
+        error: quotesError,
+        retry: quotesRetry,
+    } = useAsyncRetry(() => quotesCallback(quotesCalls), [quoterContract, quotesCalls.map((x) => x.join()).join()])
 
     const asyncBestTrade = (() => {
         if (!amountIn || !currencyOut) {
@@ -57,7 +58,7 @@ export function useV3BestTradeExactIn(
                 error: new Error('Invalid trade info.'),
             }
         }
-        if (routesLoading || quotesLoading) {
+        if (routesLoading || quotesLoading || (routes.length && !quotesResults.length && !quotesError)) {
             return {
                 value: undefined,
                 loading: true,
@@ -141,16 +142,17 @@ export function useV3BestTradeExactOut(
         )
     }, [amountOut, routes])
 
-    const [quotesResults, quotesCalls, quotesState, quotesCallback] = useSingleContractMultipleData(
+    const [quotesResults, quotesCalls, , quotesCallback] = useSingleContractMultipleData(
         quoterContract,
         Array.from<'quoteExactOutput'>({ length: quoteExactOutInputs.length }).fill('quoteExactOutput'),
         quoteExactOutInputs,
-        DEFAULT_GAS_LIMIT,
+        DEFAULT_MULTICALL_GAS_LIMIT,
     )
-    const { loading: quotesLoading, retry: quotesRetry } = useAsyncRetry(
-        () => quotesCallback(quotesCalls),
-        [quotesCallback, quotesCalls.map((x) => x.join()).join()],
-    )
+    const {
+        loading: quotesLoading,
+        error: quotesError,
+        retry: quotesRetry,
+    } = useAsyncRetry(() => quotesCallback(quotesCalls), [quotesCallback, quotesCalls.map((x) => x.join()).join()])
     const asyncBestTrade = (() => {
         if (!amountOut || !currencyIn || quotesResults.some(({ error }) => !!error)) {
             return {
@@ -159,7 +161,7 @@ export function useV3BestTradeExactOut(
                 error: new Error('Invalid trade info.'),
             }
         }
-        if (routesLoading || quotesLoading) {
+        if (routesLoading || quotesLoading || (routes.length && !quotesResults.length && !quotesError)) {
             return {
                 value: undefined,
                 loading: true,
