@@ -18,7 +18,7 @@ interface PoolTogetherMessages {
 
     rpc: unknown
 }
-import.meta.webpackHot?.accept()
+import.meta.webpackHot && import.meta.webpackHot.accept()
 export const PluginPoolTogetherMessages: PluginMessageEmitter<PoolTogetherMessages> =
     createPluginMessage(POOLTOGETHER_PLUGIN_ID)
 

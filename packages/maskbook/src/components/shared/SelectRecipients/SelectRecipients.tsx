@@ -1,4 +1,5 @@
-import { makeStyles, Box, Chip } from '@material-ui/core'
+import { Box, Chip } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import AddIcon from '@material-ui/icons/Add'
 import { useState } from 'react'
 import { difference } from 'lodash-es'
@@ -7,7 +8,7 @@ import type { Profile } from '../../../database'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     root: {
         display: 'inline-flex',
         flexWrap: 'wrap',
@@ -27,7 +28,7 @@ export interface SelectRecipientsUIProps {
 
 export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { items, selected, onSetSelected, children } = props
     const currentIdentity = useCurrentIdentity()
     const profileItems = items.filter(

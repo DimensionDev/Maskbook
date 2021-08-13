@@ -43,8 +43,8 @@ export const currentProviderSettings = createGlobalSettings<ProviderType>(
 /**
  * Is Metamask Locked
  */
-export const currentIsMetamaskLockedSettings = createGlobalSettings<boolean>(
-    `${PLUGIN_IDENTIFIER}+isMetamaskLocked`,
+export const currentIsMetaMaskLockedSettings = createGlobalSettings<boolean>(
+    `${PLUGIN_IDENTIFIER}+isMetaMaskLocked`,
     true,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',

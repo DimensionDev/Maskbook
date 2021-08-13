@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
 import {
-    makeStyles,
     InputBase,
     Button,
     Typography,
@@ -13,6 +12,7 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     I18NStringField,
     Plugin,
@@ -45,8 +45,10 @@ import { editActivatedPostMetadata, globalTypedMessageMetadata } from '../../pro
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { SteganographyTextPayload } from './SteganographyTextPayload'
 import { PluginI18NFieldRender, usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
+import { base as redpacketBase } from '../../plugins/RedPacket/base'
+import { base as ITOBase } from '../../plugins/ITO/base'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     MUIInputRoot: {
         minHeight: 108,
         flexDirection: 'column',
@@ -88,7 +90,7 @@ export interface PostDialogUIProps {
 }
 
 export function PostDialogUI(props: PostDialogUIProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     const isDebug = useValueRef(debugModeSetting)
     const [showPostMetadata, setShowPostMetadata] = useState(false)
@@ -460,22 +462,27 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
 function PluginRenderer() {
     const pluginField = usePluginI18NField()
     const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
-    const result = useActivatedPluginsSNSAdaptor().map((plugin) =>
-        Result.wrap(() => {
-            const entry = plugin.CompositionDialogEntry
-            const unstable = plugin.enableRequirement.target !== 'stable'
-            if (!entry || !operatingSupportedChainMapping[plugin.ID]) return null
-            return (
-                <ErrorBoundary subject={`Plugin "${pluginField(plugin.ID, plugin.name)}"`} key={plugin.ID}>
-                    {'onClick' in entry ? (
-                        <PluginKindCustom {...entry} unstable={unstable} id={plugin.ID} />
-                    ) : (
-                        <PluginKindDialog {...entry} unstable={unstable} id={plugin.ID} />
-                    )}
-                </ErrorBoundary>
-            )
-        }).unwrapOr(null),
-    )
+    const result = useActivatedPluginsSNSAdaptor()
+        .sort((plugin) => {
+            if (plugin.ID === redpacketBase.ID || plugin.ID === ITOBase.ID) return -1
+            return 1
+        })
+        .map((plugin) =>
+            Result.wrap(() => {
+                const entry = plugin.CompositionDialogEntry
+                const unstable = plugin.enableRequirement.target !== 'stable'
+                if (!entry || !operatingSupportedChainMapping[plugin.ID]) return null
+                return (
+                    <ErrorBoundary subject={`Plugin "${pluginField(plugin.ID, plugin.name)}"`} key={plugin.ID}>
+                        {'onClick' in entry ? (
+                            <PluginKindCustom {...entry} unstable={unstable} id={plugin.ID} />
+                        ) : (
+                            <PluginKindDialog {...entry} unstable={unstable} id={plugin.ID} />
+                        )}
+                    </ErrorBoundary>
+                )
+            }).unwrapOr(null),
+        )
     return <>{result}</>
 }
 function BadgeRenderer({ meta }: { meta: TypedMessage['meta'] }) {
@@ -548,7 +555,7 @@ function MetaBadge({ title, children, meta: key }: React.PropsWithChildren<{ tit
 
 type ExtraPluginProps = { unstable: boolean; id: string }
 function PluginKindCustom(props: Plugin.SNSAdaptor.CompositionDialogEntryCustom & ExtraPluginProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { id, label, onClick, unstable } = props
     useActivatePluginCompositionEntryEvent(id, onClick)
     return (
@@ -565,7 +572,7 @@ function PluginKindCustom(props: Plugin.SNSAdaptor.CompositionDialogEntryCustom 
 }
 
 function PluginKindDialog(props: Plugin.SNSAdaptor.CompositionDialogEntryDialog & ExtraPluginProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { dialog: Dialog, id, label, unstable, keepMounted } = props
     const [open, setOpen] = useState(false)
     const opener = useCallback(() => setOpen(true), [])

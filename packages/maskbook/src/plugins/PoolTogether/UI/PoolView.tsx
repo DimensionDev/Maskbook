@@ -5,10 +5,9 @@ import { useChainId, useERC20TokenDetailed } from '@masknet/web3-shared'
 import { RefreshIcon } from '@masknet/icons'
 import { usePoolURL } from '../hooks/usePoolURL'
 import { CountdownView } from './CountdownView'
-import { ONE_DAY_SECONDS, ONE_WEEK_SECONDS } from '../constants'
 import { PluginPoolTogetherMessages } from '../messages'
 import { useCallback, useEffect, useState } from 'react'
-import { calculateNextPrize, calculateSecondsRemaining } from '../utils'
+import { calculateNextPrize, calculateSecondsRemaining, getPrizePeriod } from '../utils'
 import { NetworkView } from './NetworkView'
 import { useI18N } from '../../../utils'
 import { TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
@@ -183,13 +182,7 @@ export function PoolView(props: PoolProps) {
     const prizePeriodSeconds = Number.parseInt(pool.config.prizePeriodSeconds, 10)
     useEffect(() => {
         setPrize(calculateNextPrize(pool))
-        setPeriod(
-            prizePeriodSeconds === ONE_DAY_SECONDS
-                ? 'Daily'
-                : prizePeriodSeconds === ONE_WEEK_SECONDS
-                ? 'Weekly'
-                : 'Custom Period',
-        )
+        setPeriod(getPrizePeriod(t, prizePeriodSeconds))
     }, [pool])
     //#endregion
 

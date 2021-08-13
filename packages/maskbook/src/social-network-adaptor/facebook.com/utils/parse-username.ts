@@ -11,7 +11,7 @@ export function isValidFacebookUsername(name: string) {
     // Avoid common mistake
     if (name === 'photo.php') return null
     const n = name.toLowerCase().replace(/\./g, '')
-    if (n.match(/^[a-z0-9]{5,}$/)) {
+    if (n.match(/^[\da-z]{5,}$/)) {
         return n
     }
     return null

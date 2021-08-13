@@ -46,7 +46,7 @@ export function useGameInfo(gameData: GameMetaData) {
         ] as any
         return {
             names: [...names, 'players'],
-            callDatas: [...Array(names.length).fill([]), [account]],
+            callDatas: [...Array(names.length).fill([]), [account || ZERO_ADDRESS]],
         }
     }, [account])
 

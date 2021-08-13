@@ -56,7 +56,7 @@ export function TokenIcon(props: TokenIconProps) {
         _logoURI = nativeToken?.nativeCurrency.logoURI
     }
 
-    const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId)
+    const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId ?? _chainId)
     const fallbackLogos = getFallbackIcons(address, TOKEN_ASSET_BASE_URI ?? [])
 
     const tokenBlockie = useBlockie(address)

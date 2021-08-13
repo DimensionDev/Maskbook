@@ -1,7 +1,9 @@
 import { createIcon } from '../utils'
-export const AirdropNotSquareIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const AirdropNotSquareIcon: typeof SvgIcon = createIcon(
     'AirdropIcon',
-    <>
+    <g>
         <path
             d="M35.523 70.684l-12.818-1.13 4.489-11.115 12.817 1.13-4.488 11.115z"
             fill="url(#airdrop_panint0_linear)"
@@ -131,7 +133,7 @@ export const AirdropNotSquareIcon = createIcon(
                 <path fill="#fff" transform="matrix(.90794 .41846 -.4237 .9061 19.137 56.68)" d="M0 0h4.436v6.27H0z" />
             </clipPath>
         </defs>
-    </>,
+    </g>,
     '0 0 70 79',
     [70, 79],
 )

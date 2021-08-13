@@ -191,6 +191,8 @@ export interface WalletMessage {
     erc20TokensUpdated: void
     erc721TokensUpdated: void
     erc1155TokensUpdated: void
+    /** true: Now locked; false: Now unlocked */
+    walletLockStatusUpdated: boolean
     rpc: unknown
 }
 

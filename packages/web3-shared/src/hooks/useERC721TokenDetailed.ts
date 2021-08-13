@@ -15,7 +15,7 @@ export function useERC721TokenDetailed(address?: string, token?: Partial<ERC721T
     const { names, callDatas } = useMemo(
         () => ({
             names: ['name', 'symbol', 'baseURI', 'tokenURI'] as 'name'[],
-            callDatas: new Array(3).fill([]),
+            callDatas: Array.from<[]>({ length: 3 }).fill([]),
         }),
         [],
     )

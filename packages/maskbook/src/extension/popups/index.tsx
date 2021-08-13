@@ -17,6 +17,7 @@ export enum DialogRoutes {
     PermissionAwareRedirect = '/redirect',
     RequestPermission = '/request-permission',
     ThirdPartyRequestPermission = '/3rd-request-permission',
+    SignRequest = '/sign-request',
 }
 
 export function getRouteURLWithNoParam(kind: DialogRoutes) {
@@ -29,3 +30,4 @@ export function PermissionAwareRedirectOf(url: string, context: ThirdPartyPopupC
     )
 }
 export { constructRequestPermissionURL } from './RequestPermission/utils'
+export { constructSignRequestURL } from './SignRequest/utils'

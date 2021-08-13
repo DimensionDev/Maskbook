@@ -1,7 +1,9 @@
 import { createIcon } from '../utils'
-export const SliderIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const SliderIcon: typeof SvgIcon = createIcon(
     'SliderIcon',
-    <>
+    <g>
         <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -14,6 +16,6 @@ export const SliderIcon = createIcon(
             d="M1 4.977h7v1.5H1v-1.5zM19 14.617h-7v-1.5h7v1.5zM16 4.977h3v1.5h-3v-1.5zM4 14.617H1v-1.5h3v1.5z"
             fill="#111432"
         />
-    </>,
+    </g>,
     '0 0 20 20',
 )
