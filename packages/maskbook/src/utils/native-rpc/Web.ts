@@ -5,8 +5,36 @@ import { launchPageSettings } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
 import { encodeArrayBuffer, encodeText, unreachable } from '@dimensiondev/kit'
 import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
+import type { Persona, Profile } from '../../database'
 
 const stringToIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
+const personaFomatter = (p: Persona) => {
+    const profiles = {}
+
+    for (const [key, value] of p.linkedProfiles) {
+        const k = key.toText()
+        Object.assign(profiles, { [k]: value?.connectionConfirmState })
+    }
+
+    return {
+        identifier: p.identifier.toText(),
+        nickname: p.nickname,
+        linkedProfiles: profiles,
+        hasPrivateKey: p.hasPrivateKey,
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
+    }
+}
+
+const profileFormatter = (p: Profile) => {
+    return {
+        identifier: p.identifier.toText(),
+        nickname: p.nickname,
+        linkedPersona: !!p.linkedPersona,
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
+    }
+}
 
 export const MaskNetworkAPI: MaskNetworkAPIs = {
     web_echo: async (arg) => arg.echo,
@@ -78,23 +106,43 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             throw new Error('invalid json')
         }
     },
-    persona_createPersonaByMnemonic: ({ mnemonic, nickname, password }) =>
-        Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonic, password, { nickname }),
-    persona_queryPersonas: ({ identifier, hasPrivateKey }) => {
-        const id = identifier ? stringToIdentifier(identifier) : undefined
-        return Services.Identity.queryPersonas(id, hasPrivateKey)
+    persona_createPersonaByMnemonic: async ({ mnemonic, nickname, password }) => {
+        const x = await Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonic, password, { nickname })
+
+        return x.toText()
     },
-    persona_queryMyPersonas: ({ network }) => Services.Identity.queryMyPersonas(network),
+    persona_queryPersonas: async ({ identifier, hasPrivateKey }) => {
+        const id = identifier ? stringToIdentifier(identifier) : undefined
+        const result = await Services.Identity.queryPersonas(id, hasPrivateKey)
+
+        return result?.map(personaFomatter)
+    },
+    persona_queryMyPersonas: async ({ network }) => {
+        const result = await Services.Identity.queryMyPersonas(network)
+
+        return result?.map(personaFomatter)
+    },
     persona_updatePersonaInfo: ({ identifier, data }) => {
         const { nickname } = data
         return Services.Identity.renamePersona(stringToIdentifier(identifier), nickname)
     },
     persona_removePersona: ({ identifier }) =>
         Services.Identity.deletePersona(stringToIdentifier(identifier), 'delete even with private'),
-    persona_restoreFromJson: ({ backup }) => Services.Identity.restoreFromBackup(backup),
-    persona_restoreFromBase64: ({ backup }) => Services.Identity.restoreFromBase64(backup),
-    persona_restoreFromMnemonic: ({ mnemonic, nickname, password }) =>
-        Services.Identity.restoreFromMnemonicWords(mnemonic, nickname, password),
+    persona_restoreFromJson: async ({ backup }) => {
+        const result = await Services.Identity.restoreFromBackup(backup)
+
+        if (!result) throw new Error('invalid json')
+    },
+    persona_restoreFromBase64: async ({ backup }) => {
+        const result = await Services.Identity.restoreFromBase64(backup)
+
+        if (!result) throw new Error('invalid base64')
+    },
+    persona_restoreFromMnemonic: async ({ mnemonic, nickname, password }) => {
+        const result = await Services.Identity.restoreFromMnemonicWords(mnemonic, nickname, password)
+
+        if (!result) throw new Error('restore failed')
+    },
     persona_connectProfile: async ({ network, profileUsername, personaIdentifier }) => {
         const identifier = stringToIdentifier(personaIdentifier)
         await Services.Identity.attachProfile(new ProfileIdentifier(network, profileUsername), identifier, {
@@ -109,7 +157,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         Services.Identity.detachProfile(new ProfileIdentifier(network, profileUsername)),
     persona_backupMnemonic: async ({ identifier }) => {
         const persona = await Services.Identity.queryPersona(stringToIdentifier(identifier))
-        return persona.mnemonic
+        return persona.mnemonic?.words
     },
     persona_backupJson: async ({ identifier }) => {
         const persona = await Services.Identity.queryPersona(stringToIdentifier(identifier))
@@ -123,8 +171,16 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         const file = await MaskNetworkAPI.persona_backupJson({ identifier })
         return encodeArrayBuffer(encodeText(JSON.stringify(file)))
     },
-    profile_queryProfiles: ({ network }) => Services.Identity.queryProfiles(network),
-    profile_queryMyProfile: ({ network }) => Services.Identity.queryMyProfiles(network),
+    profile_queryProfiles: async ({ network }) => {
+        const result = await Services.Identity.queryProfiles(network)
+
+        return result?.map(profileFormatter)
+    },
+    profile_queryMyProfile: async ({ network }) => {
+        const result = await Services.Identity.queryMyProfiles(network)
+
+        return result?.map(profileFormatter)
+    },
     profile_updateProfileInfo: async ({ identifier, data }) => {
         const id = ProfileIdentifier.fromString(identifier)
         if (!(id instanceof ProfileIdentifier)) throw new Error('invalid identifier')
