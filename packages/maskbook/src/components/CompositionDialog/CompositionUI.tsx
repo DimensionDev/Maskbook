@@ -237,7 +237,7 @@ function useSetEncryptionKind(props: Pick<CompositionProps, 'disabledRecipients'
     const everyoneSelected = props.disabledRecipients !== 'Everyone' && (E2EDisabled || encryptionKind === 'Everyone')
     const _E2ESelected =
         props.disabledRecipients !== 'E2E' && (props.disabledRecipients === 'Everyone' || encryptionKind === 'E2E')
-    const recipientSelectorAvailable = Boolean(props.recipients.length && !everyoneSelected)
+    const recipientSelectorAvailable = true // Boolean(props.recipients.length && !everyoneSelected)
 
     return {
         recipients,
