@@ -20,5 +20,10 @@
     { "path": "../plugins/Wallet" },
     { "path": "../external-plugin-previewer" }
   ],
-  "ts-node": { "transpileOnly": true, "compilerOptions": { "module": "CommonJS" } }
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
 }
