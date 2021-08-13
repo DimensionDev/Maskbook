@@ -22,3 +22,9 @@ export interface Contact {
     fingerprint?: string
     identifier: ProfileIdentifier
 }
+
+export interface Relation {
+    profile: ProfileIdentifier
+    linked: PersonaIdentifier
+    favor?: boolean
+}

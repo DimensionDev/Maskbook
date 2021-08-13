@@ -24,7 +24,3 @@ export const [useAppearance] = createGlobalState(Services.Settings.getTheme, (x)
 export const [useCurrentPersonaIdentifier] = createGlobalState(Services.Settings.getCurrentPersonaIdentifier, (x) =>
     Messages.events.currentPersonaIdentifier.on(x),
 )
-
-export const [useRelations] = createGlobalState(Services.Identity.queryRelations, (x) =>
-    Messages.events.relationsChanged.on(x),
-)

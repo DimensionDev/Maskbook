@@ -1,4 +1,4 @@
-import { Dispatch, memo, SetStateAction, useMemo, useState } from 'react'
+import { Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useContacts } from '../../hooks/useContacts'
 import type { Contact } from '@masknet/shared'
 import {
@@ -10,15 +10,15 @@ import {
     makeStyles,
     TableBody,
     Box,
-    Pagination,
-    PaginationItem,
+    TablePagination,
 } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
 import { ContactTableRow } from '../ContactTableRow'
 import { EmptyContactPlaceholder } from '../EmptyContactPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlacholder'
-import { ceil, sortBy } from 'lodash-es'
+import { sortBy } from 'lodash-es'
 import { useDashboardI18N } from '../../../../locales'
+import { Messages } from '../../../../API'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -58,10 +58,12 @@ export interface ContactsTableProps {
     network: string
 }
 
-export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
-    const [page, setPage] = useState(1)
+const PageSize = 20
 
-    const { value, error, loading } = useContacts(network)
+export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
+    const [page, setPage] = useState(0)
+
+    const { value, error, loading, retry } = useContacts(network, page, PageSize)
 
     const dataSource = useMemo(() => {
         if (!value) return []
@@ -74,8 +76,16 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
                 avatar: profile.avatar,
             })),
             (item) => !item.favorite,
-        ).slice((page - 1) * 20, page * 20)
+        )
     }, [value, page])
+
+    useEffect(() => {
+        setPage(1)
+    }, [network])
+
+    useEffect(() => {
+        return Messages.events.relationsChanged.on(retry)
+    }, [retry])
 
     return (
         <ContactsTableUI
@@ -85,7 +95,6 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
             dataSource={dataSource}
             page={page}
             onPageChange={setPage}
-            count={ceil((value?.length ?? 0) / 20) ?? 1}
             showPagination={!loading && !error && !!value?.length}
         />
     )
@@ -98,11 +107,10 @@ export interface ContactsTableUIProps extends ContactsTableProps {
     page: number
     onPageChange: Dispatch<SetStateAction<number>>
     showPagination: boolean
-    count: number
 }
 
 export const ContactsTableUI = memo<ContactsTableUIProps>(
-    ({ showPagination, page, count, onPageChange, network, dataSource, isEmpty, isLoading }) => {
+    ({ showPagination, page, onPageChange, network, dataSource, isEmpty, isLoading }) => {
         const t = useDashboardI18N()
         const classes = useStyles()
         return (
@@ -130,7 +138,7 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
                                         <ContactTableRow
                                             key={index}
                                             contact={item}
-                                            index={(page - 1) * 20 + index + 1}
+                                            index={page * PageSize + index + 1}
                                             network={network}
                                         />
                                     ))}
@@ -141,15 +149,24 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
                 </TableContainer>
                 {showPagination && !isEmpty ? (
                     <Box className={classes.footer}>
-                        <Pagination
-                            variant="outlined"
-                            shape="rounded"
-                            count={count}
+                        <TablePagination
+                            count={-1}
+                            component="div"
+                            onPageChange={() => {}}
                             page={page}
-                            onChange={(event, page) => onPageChange(page)}
-                            renderItem={(item) => (
-                                <PaginationItem {...item} classes={{ root: classes.paginationItem }} />
-                            )}
+                            rowsPerPage={PageSize}
+                            rowsPerPageOptions={[PageSize]}
+                            labelDisplayedRows={() => null}
+                            backIconButtonProps={{
+                                onClick: () => onPageChange((prev) => prev - 1),
+                                size: 'small',
+                                disabled: page === 0,
+                            }}
+                            nextIconButtonProps={{
+                                onClick: () => onPageChange((prev) => prev + 1),
+                                disabled: dataSource.length < PageSize,
+                                size: 'small',
+                            }}
                         />
                     </Box>
                 ) : null}

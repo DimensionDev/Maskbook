@@ -38,18 +38,16 @@ import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-Json
  */
 
 const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
-    1,
     2,
+    3,
     (currentOpenVersion, knowledge) => {
         return openDB<PersonaDB>('maskbook-persona', currentOpenVersion, {
             upgrade(db, oldVersion, newVersion, transaction) {
                 function v0_v1() {
                     db.createObjectStore('personas', { keyPath: 'identifier' })
                     db.createObjectStore('profiles', { keyPath: 'identifier' })
-                    db.createObjectStore('relations', { keyPath: ['linked', 'profile'] })
                     transaction.objectStore('profiles').createIndex('network', 'network', { unique: false })
                     transaction.objectStore('personas').createIndex('hasPrivateKey', 'hasPrivateKey', { unique: false })
-                    transaction.objectStore('relations').createIndex('linked', 'linked', { unique: false })
                 }
                 async function v1_v2() {
                     const persona = transaction.objectStore('personas')
@@ -73,8 +71,13 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                         }
                     }
                 }
+                async function v2_v3() {
+                    db.createObjectStore('relations', { keyPath: ['linked', 'profile'] })
+                    transaction.objectStore('relations').createIndex('linked', 'linked', { unique: false })
+                }
                 if (oldVersion < 1) return v0_v1()
                 if (oldVersion < 2) v1_v2()
+                if (oldVersion < 3) v2_v3()
             },
         })
     },
@@ -515,6 +518,41 @@ export async function queryRelationsDB(
     return (await t.objectStore('relations').index('linked').getAll(IDBKeyRange.only(linked.toText()))).map(
         relationRecordOutDB,
     )
+}
+
+/**
+ * Query relations by paged
+ */
+export async function queryRelationsPagedDB(
+    linked: PersonaIdentifier,
+    options: {
+        after?: [PersonaIdentifier, ProfileIdentifier]
+    },
+    count: number,
+) {
+    const t = createTransaction(await db(), 'readonly')('relations')
+    let firstRecord = true
+    const breakPoint = options.after?.join(',')
+    const data: RelationRecord[] = []
+    for await (const rec of t.objectStore('relations').iterate()) {
+        // matching related linked persona record
+        if (rec.key[0] !== linked.toText()) continue
+
+        if (firstRecord && breakPoint && rec.key.join(',') !== breakPoint) {
+            rec.continue(breakPoint.split(','))
+            firstRecord = false
+            continue
+        }
+        firstRecord = false
+
+        if (rec.key.join(',') === breakPoint) continue
+        if (count <= 0) break
+        const outData = relationRecordOutDB(rec.value)
+        count -= 1
+        data.push(outData)
+    }
+
+    return data
 }
 
 /**

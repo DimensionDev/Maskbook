@@ -1,6 +1,6 @@
 import { memoizePromise } from '../../utils/memoize'
 import { constructRequestPermissionURL } from '../popups'
-import { exclusiveTasks } from '../content-script/tasks'
+// import { exclusiveTasks } from '../content-script/tasks'
 
 const cache = new Map<string, string>()
 export const resolveTCOLink = memoizePromise(
@@ -71,7 +71,8 @@ export function queryPermission(permission: browser.permissions.Permissions) {
 }
 
 export function queryPasteIntoPostBox(url: string, post: string) {
-    return exclusiveTasks(url, {
-        active: true,
-    }).pasteIntoPostBox(post, {})
+    // return exclusiveTasks(url, {
+    //     active: true,
+    // }).pasteIntoPostBox(post, {})
+    return () => {}
 }

@@ -16,6 +16,8 @@ import {
     createRelationDB,
     updateRelationDB,
     queryRelationsDB,
+    queryRelationsPagedDB,
+    RelationRecord,
 } from '../../database/Persona/Persona.db'
 import { queryPersona } from '../../database'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
@@ -170,6 +172,20 @@ export async function queryRelations() {
     if (currentPersona) {
         return queryRelationsDB(currentPersona)
     }
+    return []
+}
+
+export async function queryRelationPaged(
+    options: {
+        after?: [PersonaIdentifier, ProfileIdentifier]
+    },
+    count: number,
+): Promise<RelationRecord[]> {
+    const currentPersona = await getCurrentPersonaIdentifier()
+    if (currentPersona) {
+        return queryRelationsPagedDB(currentPersona, options, count)
+    }
+
     return []
 }
 
