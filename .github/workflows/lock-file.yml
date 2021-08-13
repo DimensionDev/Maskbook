@@ -7,6 +7,7 @@ on:
 jobs:
   resolve-conflicts:
     runs-on: ubuntu-20.04
+    if: ${{ github.event.label.name == 'Blocked: Has Conflict' }}
     steps:
       - uses: actions/checkout@v2
       - name: check conflicts
