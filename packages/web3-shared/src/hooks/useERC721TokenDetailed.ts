@@ -27,15 +27,20 @@ export function useERC721TokenDetailed(address?: string, token?: Partial<ERC721T
     // compose
     const token_ = useMemo(() => {
         if (!address || !erc721TokenContract) return
-        const [name, symbol, baseURI, tokenURI] = results.map((x) => (x.error ? undefined : x.value))
+        const [
+            name = token?.name ?? '',
+            symbol = token?.symbol ?? '',
+            baseURI = token?.baseURI ?? '',
+            tokenURI = token?.tokenURI ?? '',
+        ] = results.map((x) => (!x.succeed || x.error ? undefined : x.value))
         return {
             type: EthereumTokenType.ERC721,
             address: formatEthereumAddress(address),
             chainId,
-            name: name ?? token?.name ?? '',
-            symbol: symbol ?? token?.symbol ?? '',
-            baseURI: baseURI ?? token?.baseURI ?? '',
-            tokenURI: tokenURI ?? token?.tokenURI ?? '',
+            name,
+            symbol,
+            baseURI,
+            tokenURI,
         } as ERC721TokenDetailed
     }, [erc721TokenContract, address, chainId, results, token?.name, token?.symbol, token?.baseURI])
 

@@ -7,6 +7,7 @@ import { encodeRouteToPath, Route, Trade } from '@uniswap/v3-sdk'
 import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract'
 import { useAllV3Routes } from './useAllV3Routes'
 import { MulticalStateType, useSingleContractMultipleData } from '@masknet/web3-shared'
+import { DEFAULT_GAS_LIMIT } from '../../constants'
 
 export enum V3TradeState {
     LOADING = 0,
@@ -41,6 +42,7 @@ export function useV3BestTradeExactIn(
         quoterContract,
         Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),
         quoteExactInInputs,
+        DEFAULT_GAS_LIMIT,
     )
     const asyncResult = useAsyncRetry(
         () => quotesCallback(quotesCalls),
@@ -62,29 +64,35 @@ export function useV3BestTradeExactIn(
             }
         }
 
-        const { bestRoute, amountOut } = quotesResults.reduce(
-            (currentBest: { bestRoute: Route<Currency, Currency> | null; amountOut: string | null }, { value }, i) => {
-                if (!value) return currentBest
+        const { bestRoute, amountOut } = quotesResults
+            .filter((x) => x.succeed)
+            .reduce(
+                (
+                    currentBest: { bestRoute: Route<Currency, Currency> | null; amountOut: string | null },
+                    { value },
+                    i,
+                ) => {
+                    if (!value) return currentBest
 
-                if (currentBest.amountOut === null) {
-                    return {
-                        bestRoute: routes[i],
-                        amountOut: value,
+                    if (currentBest.amountOut === null) {
+                        return {
+                            bestRoute: routes[i],
+                            amountOut: value,
+                        }
+                    } else if (new BigNumber(currentBest.amountOut).lt(value)) {
+                        return {
+                            bestRoute: routes[i],
+                            amountOut: value,
+                        }
                     }
-                } else if (new BigNumber(currentBest.amountOut).lt(value)) {
-                    return {
-                        bestRoute: routes[i],
-                        amountOut: value,
-                    }
-                }
 
-                return currentBest
-            },
-            {
-                bestRoute: null,
-                amountOut: null,
-            },
-        )
+                    return currentBest
+                },
+                {
+                    bestRoute: null,
+                    amountOut: null,
+                },
+            )
 
         if (!bestRoute || !amountOut) {
             return {
@@ -137,6 +145,7 @@ export function useV3BestTradeExactOut(
         quoterContract,
         Array.from<'quoteExactOutput'>({ length: quoteExactOutInputs.length }).fill('quoteExactOutput'),
         quoteExactOutInputs,
+        DEFAULT_GAS_LIMIT,
     )
     const asyncResult = useAsyncRetry(
         () => quotesCallback(quotesCalls),
@@ -159,29 +168,35 @@ export function useV3BestTradeExactOut(
             }
         }
 
-        const { bestRoute, amountIn } = quotesResults.reduce(
-            (currentBest: { bestRoute: Route<Currency, Currency> | null; amountIn: string | null }, { value }, i) => {
-                if (!value) return currentBest
+        const { bestRoute, amountIn } = quotesResults
+            .filter((x) => x.succeed)
+            .reduce(
+                (
+                    currentBest: { bestRoute: Route<Currency, Currency> | null; amountIn: string | null },
+                    { value },
+                    i,
+                ) => {
+                    if (!value) return currentBest
 
-                if (currentBest.amountIn === null) {
-                    return {
-                        bestRoute: routes[i],
-                        amountIn: value,
+                    if (currentBest.amountIn === null) {
+                        return {
+                            bestRoute: routes[i],
+                            amountIn: value,
+                        }
+                    } else if (new BigNumber(currentBest.amountIn).gt(value)) {
+                        return {
+                            bestRoute: routes[i],
+                            amountIn: value,
+                        }
                     }
-                } else if (new BigNumber(currentBest.amountIn).gt(value)) {
-                    return {
-                        bestRoute: routes[i],
-                        amountIn: value,
-                    }
-                }
 
-                return currentBest
-            },
-            {
-                bestRoute: null,
-                amountIn: null,
-            },
-        )
+                    return currentBest
+                },
+                {
+                    bestRoute: null,
+                    amountIn: null,
+                },
+            )
 
         if (!bestRoute || !amountIn) {
             return {
