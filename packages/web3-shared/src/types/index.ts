@@ -203,6 +203,7 @@ export enum EthereumMethodType {
     ETH_GET_TRANSACTION_RECEIPT = 'eth_getTransactionReceipt',
     ETH_GET_TRANSACTION_COUNT = 'eth_getTransactionCount',
     ETH_ESTIMATE_GAS = 'eth_estimateGas',
+    ETH_CALL = 'eth_call',
     ETH_SIGN = 'eth_sign',
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
     ETH_GET_LOGS = 'eth_getLogs',

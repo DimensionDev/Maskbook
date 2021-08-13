@@ -45,7 +45,7 @@ export enum DataProvider {
 }
 
 export enum TradeProvider {
-    UNISWAP = 0,
+    UNISWAP_V2 = 0,
     ZRX = 1,
     SUSHISWAP = 2,
     SASHIMISWAP = 3,
@@ -53,4 +53,5 @@ export enum TradeProvider {
     QUICKSWAP = 5,
     PANCAKESWAP = 6,
     DODO = 7,
+    UNISWAP_V3 = 8,
 }

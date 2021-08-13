@@ -42,7 +42,9 @@ export function useV2BestTradeExactIn(
 
     return {
         ...asyncResult,
-        value: bestTrade,
+
+        // override the trade type from @uniswap/v2-sdk
+        value: bestTrade as Trade<Currency, Currency, TradeType.EXACT_INPUT> | null,
     }
 }
 
@@ -82,6 +84,8 @@ export function useV2BestTradeExactOut(
 
     return {
         ...asyncResult,
-        value: bestTrade,
+
+        // override the trade type from @uniswap/v2-sdk
+        value: bestTrade as Trade<Currency, Currency, TradeType.EXACT_OUTPUT> | null,
     }
 }

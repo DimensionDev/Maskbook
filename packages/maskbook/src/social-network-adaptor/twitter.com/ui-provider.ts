@@ -29,6 +29,8 @@ import { currentSelectedIdentity } from '../../settings/settings'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { ProfileIdentifier } from '../../database/type'
 import { unreachable } from '@dimensiondev/kit'
+import { injectEnhancedProfileTabAtTwitter } from './injection/EnhancedProfileTab'
+import { injectEnhancedProfileAtTwitter } from './injection/EnhancedProfile'
 
 const twitterUI: SocialNetworkUI.Definition = {
     ...twitterBase,
@@ -77,6 +79,8 @@ const twitterUI: SocialNetworkUI.Definition = {
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
         setupPrompt: injectSetupPromptAtTwitter,
+        enhancedProfile: injectEnhancedProfileAtTwitter,
+        enhancedProfileTab: injectEnhancedProfileTabAtTwitter,
         newPostComposition: {
             start: injectPostBoxComposed,
             supportedInputTypes: {
