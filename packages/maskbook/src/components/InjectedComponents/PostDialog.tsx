@@ -462,7 +462,7 @@ export function CharLimitIndicator({ value, max, ...props }: CircularProgressPro
 function PluginRenderer() {
     const pluginField = usePluginI18NField()
     const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
-    const result = useActivatedPluginsSNSAdaptor()
+    const result = [...useActivatedPluginsSNSAdaptor()]
         .sort((plugin) => {
             if (plugin.ID === redpacketBase.ID || plugin.ID === ITOBase.ID) return -1
             return 1
