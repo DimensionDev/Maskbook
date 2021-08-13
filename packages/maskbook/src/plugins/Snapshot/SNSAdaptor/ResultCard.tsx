@@ -86,14 +86,13 @@ function Content() {
 
     const dataForCsv = useMemo(
         () =>
-            Object.entries(votes).map((vote) => ({
-                address: vote[0],
-                choice: vote[1].msg.payload.choice,
-                balance: vote[1].balance,
-                timestamp: vote[1].msg.timestamp,
-                dateUtc: new Date(Number.parseInt(vote[1].msg.timestamp, 10) * 1e3).toUTCString(),
-                authorIpfsHash: vote[1].authorIpfsHash,
-                relayerIpfsHash: vote[1].relayerIpfsHash,
+            votes.map((vote) => ({
+                address: vote.address,
+                choice: vote.choiceIndex,
+                balance: vote.balance,
+                timestamp: vote.timestamp,
+                dateUtc: new Date(vote.timestamp * 1e3).toUTCString(),
+                authorIpfsHash: vote.authorIpfsHash,
             })),
         [votes],
     )
