@@ -8,6 +8,8 @@ import { EnterDashboard } from '../../../../components/EnterDashboard'
 import { AssetsList } from '../AssetsList'
 import { useHistory } from 'react-router-dom'
 import { DialogRoutes } from '../../../../index'
+import { ActivityList } from '../ActivityList'
+
 const useStyles = makeStyles(() => ({
     content: {
         flex: 1,
@@ -105,7 +107,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
                         value={WalletTabs.Activity}
                         className={classes.tabPanel}
                         style={{ flex: currentTab === WalletTabs.Activity ? '1' : '0' }}>
-                        test
+                        <ActivityList />
                     </TabPanel>
                 </TabContext>
             </div>
