@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import en from './locales/en.json'
-import zh from './locales/zh.json'
+import zh from './locales/zh-TW.json'
 
 export const base: Plugin.Shared.Definition = {
     ID: 'io.mask.example',

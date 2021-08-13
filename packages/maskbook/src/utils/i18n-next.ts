@@ -1,6 +1,6 @@
 import i18nNextInstance from 'i18next'
 import en from '../_locales/en/messages.json' // english
-import zh from '../_locales/zh/messages.json' // traditional chinese
+import zh from '../_locales/zh-TW/messages.json' // traditional chinese
 import ko from '../_locales/ko/messages.json' // korean
 import ja from '../_locales/ja/messages.json' // japanese
 import { addMaskSharedI18N } from '@masknet/shared'
@@ -34,7 +34,7 @@ if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(
         [
             '../_locales/en/messages.json',
-            '../_locales/zh/messages.json',
+            '../_locales/zh-TW/messages.json',
             '../_locales/ko/messages.json',
             '../_locales/ja/messages.json',
         ],
