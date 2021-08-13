@@ -10,7 +10,7 @@ export function CountdownButton(props: CountdownButtonProps) {
     const [countdown, setCountdown] = useState(0)
     const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setCountdown(duration)
-        onClick && onClick(event)
+        onClick?.(event)
     }
 
     useEffect(() => {

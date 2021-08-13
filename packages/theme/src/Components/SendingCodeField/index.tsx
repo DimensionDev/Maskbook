@@ -25,7 +25,7 @@ export const SendingCodeField = ({
     const [code, setCode] = useState<string>('')
 
     useEffect(() => {
-        onChange && onChange(code)
+        onChange?.(code)
     }, [code])
 
     return (
@@ -40,7 +40,7 @@ export const SendingCodeField = ({
                             onChange={(event) => setCode(event.target.value)}
                             error={!!errorMessage}
                             helperText={errorMessage}
-                            onBlur={() => onBlur && onBlur(code)}
+                            onBlur={() => onBlur?.(code)}
                             disabled={disabled}
                         />
                     </Box>

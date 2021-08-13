@@ -33,7 +33,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
 
     const handleCountryCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value
-        const prefix = /^\+/.test(event.target.value) ? '' : '+'
+        const prefix = event.target.value.startsWith('+') ? '' : '+'
         setCountryCode(prefix + value)
     }
 

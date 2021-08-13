@@ -25,9 +25,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 enum RestoreStatus {
-    WaitingInput,
-    Verifying,
-    Verified,
+    WaitingInput = 0,
+    Verifying = 1,
+    Verified = 2,
 }
 
 export interface RestoreFromJsonProps {}

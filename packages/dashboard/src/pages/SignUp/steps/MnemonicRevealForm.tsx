@@ -20,8 +20,8 @@ import { useSnackbar } from '@masknet/theme'
 import { ButtonGroup } from '../../../components/RegisterFrame/ButtonGroup'
 
 enum CreateWalletStep {
-    NameAndWords,
-    Verify,
+    NameAndWords = 0,
+    Verify = 1,
 }
 
 export const MnemonicRevealForm = memo(() => {
