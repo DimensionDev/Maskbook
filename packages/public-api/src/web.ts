@@ -26,6 +26,9 @@ export interface MaskNetworkAPIs {
     settings_setTheme(payload: { theme: Appearance }): Promise<void>
     settings_getLanguage(): Promise<Language>
     settings_setLanguage(payload: { language: Language }): Promise<void>
+    settings_createBackupJson(payload: Partial<BackupOptions>): Promise<any>
+    settings_getBackupPreviewInfo(payload: string): Promise<any>
+    settings_restoreBackup(payload: string): Promise<void>
     persona_createPersonaByMnemonic(payload: { mnemonic: string; nickname: string; password: string }): Promise<any>
     persona_queryPersonas(payload: { identifier?: string; hasPrivateKey: boolean }): Promise<any>
     persona_queryMyPersonas(payload: { network?: string }): Promise<any>
@@ -50,6 +53,14 @@ export interface MaskNetworkAPIs {
         data: { nickname?: string; avatarURL?: string }
     }): Promise<void>
     profile_removeProfile(payload: { identifier: string }): Promise<void>
+}
+
+export interface BackupOptions {
+    noPosts: boolean
+    noWallets: boolean
+    noPersonas: boolean
+    noProfiles: boolean
+    hasPrivateKeyOnly: boolean
 }
 
 export enum Appearance {

@@ -69,6 +69,19 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     settings_setTheme: ({ theme }) => Services.Settings.setTheme(theme),
     settings_getLanguage: () => Services.Settings.getLanguage(),
     settings_setLanguage: ({ language }) => Services.Settings.setLanguage(language),
+    settings_createBackupJson: (options) => Services.Welcome.generateBackupJSON(options),
+    settings_getBackupPreviewInfo: async (str) => {
+        const data = Services.Welcome.parseBackupStr(str)
+        return data?.info
+    },
+    settings_restoreBackup: (str) => {
+        try {
+            const json = JSON.parse(str)
+            return Services.Welcome.restoreBackup(json)
+        } catch (error) {
+            throw new Error('invalid json')
+        }
+    },
     persona_createPersonaByMnemonic: ({ mnemonic, nickname, password }) =>
         Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonic, password, { nickname }),
     persona_queryPersonas: ({ identifier, hasPrivateKey }) => {
