@@ -57,7 +57,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     line: {
         dispaly: 'inline-flex',
-        borderRadius: '100%',
+        borderRadius: 9999,
         position: 'absolute',
         bottom: 0,
         minWidth: 56,
