@@ -64,7 +64,7 @@ function registerPostCollectorInner(
                 nickname: info.nickname.getCurrentValue(),
                 avatarURL: info.avatarURL.getCurrentValue(),
             })
-            if (currentProfile && currentProfile.linkedPersona) {
+            if (currentProfile?.linkedPersona) {
                 Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona.identifier)
             }
         },
