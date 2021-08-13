@@ -38,7 +38,7 @@ export function useV2BestTradeExactIn(
             return bestTradeSoFar
         }
         return null
-    }, [allowedPairs, currencyAmountIn, currencyOut, maxHops])
+    }, [allowedPairs, currencyAmountIn?.toFixed(), currencyOut, maxHops])
 
     return {
         ...asyncResult,
@@ -80,7 +80,7 @@ export function useV2BestTradeExactOut(
             return bestTradeSoFar
         }
         return null
-    }, [currencyIn, currencyAmountOut, allowedPairs, maxHops])
+    }, [currencyIn, currencyAmountOut?.toFixed(), allowedPairs, maxHops])
 
     return {
         ...asyncResult,

@@ -6,7 +6,7 @@ import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
 import { encodeRouteToPath, Route, Trade } from '@uniswap/v3-sdk'
 import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract'
 import { useAllV3Routes } from './useAllV3Routes'
-import { MulticalStateType, useSingleContractMultipleData } from '@masknet/web3-shared'
+import { useSingleContractMultipleData } from '@masknet/web3-shared'
 import { DEFAULT_GAS_LIMIT } from '../../constants'
 
 export enum V3TradeState {
@@ -36,19 +36,20 @@ export function useV3BestTradeExactIn(
                     string,
                 ],
         )
-    }, [amountIn, routes])
+    }, [amountIn?.toFixed(), routes])
 
-    const [quotesResults, quotesCalls, quotesState, quotesCallback] = useSingleContractMultipleData(
+    const [quotesResults, quotesCalls, , quotesCallback] = useSingleContractMultipleData(
         quoterContract,
         Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),
         quoteExactInInputs,
         DEFAULT_GAS_LIMIT,
     )
-    const asyncResult = useAsyncRetry(
+    const { loading: quotesLoading, retry: quotesRetry } = useAsyncRetry(
         () => quotesCallback(quotesCalls),
         [quoterContract, quotesCalls.map((x) => x.join()).join()],
     )
-    const asyncBestTrade = useMemo(() => {
+
+    const asyncBestTrade = (() => {
         if (!amountIn || !currencyOut) {
             return {
                 value: undefined,
@@ -56,14 +57,13 @@ export function useV3BestTradeExactIn(
                 error: new Error('Invalid trade info.'),
             }
         }
-        if (routesLoading || quotesState.type === MulticalStateType.PENDING) {
+        if (routesLoading || quotesLoading) {
             return {
                 value: undefined,
                 loading: true,
                 error: undefined,
             }
         }
-
         const { bestRoute, amountOut } = quotesResults
             .filter((x) => x.succeed)
             .reduce(
@@ -112,11 +112,11 @@ export function useV3BestTradeExactIn(
             loading: false,
             error: undefined,
         }
-    }, [amountIn, currencyOut, quotesResults, routes, routesLoading])
+    })()
 
     return {
         ...asyncBestTrade,
-        retry: asyncResult.retry,
+        retry: quotesRetry,
     }
 }
 
@@ -147,11 +147,11 @@ export function useV3BestTradeExactOut(
         quoteExactOutInputs,
         DEFAULT_GAS_LIMIT,
     )
-    const asyncResult = useAsyncRetry(
+    const { loading: quotesLoading, retry: quotesRetry } = useAsyncRetry(
         () => quotesCallback(quotesCalls),
         [quotesCallback, quotesCalls.map((x) => x.join()).join()],
     )
-    const asyncBestTrade = useMemo(() => {
+    const asyncBestTrade = (() => {
         if (!amountOut || !currencyIn || quotesResults.some(({ error }) => !!error)) {
             return {
                 value: undefined,
@@ -159,15 +159,13 @@ export function useV3BestTradeExactOut(
                 error: new Error('Invalid trade info.'),
             }
         }
-
-        if (routesLoading || quotesState.type === MulticalStateType.PENDING) {
+        if (routesLoading || quotesLoading) {
             return {
                 value: undefined,
                 loading: true,
                 error: undefined,
             }
         }
-
         const { bestRoute, amountIn } = quotesResults
             .filter((x) => x.succeed)
             .reduce(
@@ -216,10 +214,10 @@ export function useV3BestTradeExactOut(
             loading: false,
             error: undefined,
         }
-    }, [amountOut, currencyIn, quotesResults, routes, routesLoading])
+    })()
 
     return {
         ...asyncBestTrade,
-        retry: asyncResult.retry,
+        retry: quotesRetry,
     }
 }
