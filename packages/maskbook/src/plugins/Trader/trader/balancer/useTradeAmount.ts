@@ -1,13 +1,10 @@
 import { ZERO } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
-import { ONE_BIPS, SLIPPAGE_TOLERANCE_DEFAULT } from '../../constants'
+import { ONE_BIPS, SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 
-export function useTradeAmount(
-    trade: TradeComputed<SwapResponse> | null,
-    allowedSlippage = SLIPPAGE_TOLERANCE_DEFAULT,
-) {
+export function useTradeAmount(trade: TradeComputed<SwapResponse> | null, allowedSlippage = SLIPPAGE_DEFAULT) {
     return useMemo(() => {
         if (!trade) return ZERO
         return trade.strategy === TradeStrategy.ExactIn

@@ -24,8 +24,8 @@ export const IMTokenIcon: React.FC<SvgIconProps> = (props) => (
             />
             <defs>
                 <linearGradient id="paint0_linear" x1="128" y1="54.5" x2="0" y2="55" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#11C3D1" />
-                    <stop offset="1" stop-color="#057EB8" />
+                    <stop stopColor="#11C3D1" />
+                    <stop offset="1" stopColor="#057EB8" />
                 </linearGradient>
             </defs>
         </svg>
@@ -56,8 +56,8 @@ export const RainbowIcon: React.FC<SvgIconProps> = (props) => (
                     r="1"
                     gradientTransform="matrix(35.56535 -34.37578 34.64161 35.84038 23.943 103.361)"
                     gradientUnits="userSpaceOnUse">
-                    <stop offset=".662" stop-color="#01B1E2" />
-                    <stop offset="1" stop-color="#01D64F" />
+                    <stop offset=".662" stopColor="#01B1E2" />
+                    <stop offset="1" stopColor="#01D64F" />
                 </radialGradient>
                 <radialGradient
                     id="paint2_radial"
@@ -66,8 +66,8 @@ export const RainbowIcon: React.FC<SvgIconProps> = (props) => (
                     r="1"
                     gradientTransform="rotate(-44.956 139.17 26.446) scale(69.6855 70.0822)"
                     gradientUnits="userSpaceOnUse">
-                    <stop offset=".76" stop-color="#FE0" />
-                    <stop offset=".973" stop-color="#FFA000" />
+                    <stop offset=".76" stopColor="#FE0" />
+                    <stop offset=".973" stopColor="#FFA000" />
                 </radialGradient>
                 <radialGradient
                     id="paint3_radial"
@@ -76,12 +76,12 @@ export const RainbowIcon: React.FC<SvgIconProps> = (props) => (
                     r="1"
                     gradientTransform="matrix(61.26799 -59.14432 59.4229 61.55657 22 106.063)"
                     gradientUnits="userSpaceOnUse">
-                    <stop offset=".81" stop-color="#EE3E1D" />
-                    <stop offset="1" stop-color="#8854C4" />
+                    <stop offset=".81" stopColor="#EE3E1D" />
+                    <stop offset="1" stopColor="#8854C4" />
                 </radialGradient>
                 <linearGradient id="paint0_linear" x1="64" x2="64" y1="0" y2="128" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#164299" />
-                    <stop offset="1" stop-color="#001E59" />
+                    <stop stopColor="#164299" />
+                    <stop offset="1" stopColor="#001E59" />
                 </linearGradient>
             </defs>
         </svg>
