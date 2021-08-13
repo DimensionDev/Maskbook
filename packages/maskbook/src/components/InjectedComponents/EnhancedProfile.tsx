@@ -29,11 +29,9 @@ export function EnhancedProfileaPage(props: EnhancedProfileaPageProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { bioDescription, nickname, twitterId, onUpdated } = props
 
-    const onLocalChange = () => {
+    useLocationChange(() => {
         MaskMessage.events.profileNFTsTabUpdated.sendToLocal('reset')
-    }
-
-    useLocationChange(onLocalChange)
+    })
 
     useEffect(() => {
         return MaskMessage.events.profileNFTsTabUpdated.on((data) => {
