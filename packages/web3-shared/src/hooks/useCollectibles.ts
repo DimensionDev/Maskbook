@@ -1,5 +1,4 @@
-import type { CollectibleProvider, ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '../types'
-import { useChainId } from './useChainId'
+import type { ChainId, CollectibleProvider, ERC1155TokenAssetDetailed, ERC721TokenAssetDetailed } from '../types'
 import { useAsyncRetry } from 'react-use'
 import { useWeb3Context } from '../context'
 import { uniqWith } from 'lodash-es'
@@ -8,6 +7,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export function useCollectibles(
     address: string,
+    chainId: ChainId,
     provider: CollectibleProvider,
     page: number,
     size: number,
@@ -15,7 +15,6 @@ export function useCollectibles(
     collectibles: (ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed)[]
     hasNextPage: boolean
 }> {
-    const chainId = useChainId()
     const { getAssetsListNFT, getERC721TokensPaged } = useWeb3Context()
     return useAsyncRetry(async () => {
         if (!address) {
