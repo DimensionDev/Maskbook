@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import en from './locales/en.json'
+import en from './locales/en-US.json'
 import zh from './locales/zh-TW.json'
 
 export const base: Plugin.Shared.Definition = {
