@@ -1,43 +1,18 @@
-import { useStylesExtends } from '@masknet/shared'
-import { getMaskColor, makeStyles } from '@masknet/theme'
 import classnames from 'classnames'
-import Color from 'color'
 import { ReactElement, useCallback, useEffect, useState } from 'react'
 
 import { MaskMessage } from '../../utils'
 
-const useStyles = makeStyles()((theme) => ({
-    tab: {
-        '&:hover': {
-            backgroundColor: new Color(getMaskColor(theme).blue).alpha(0.1).toString(),
-            cursor: 'pointer',
-        },
-    },
-    button: {
-        display: 'flex',
-        minWidth: 56,
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        fontWeight: 700,
-        color: getMaskColor(theme).blue,
-        '&:hover': {
-            color: getMaskColor(theme).blue,
-        },
-    },
-    selected: {
-        color: 'black',
-    },
-}))
 export interface EnhancedProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {
     clear(): void
     reset(): void
     children?: ReactElement
+    // Required! This component don't have it own style.
+    classes: Record<'tab' | 'button' | 'selected', string>
 }
 
 export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
-    const { reset, clear, children } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { reset, clear, children, classes } = props
     const [active, setActive] = useState(false)
 
     const onClose = () => {
