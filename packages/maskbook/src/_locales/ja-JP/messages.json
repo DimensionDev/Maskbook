@@ -392,7 +392,6 @@
     "plugin_trader_settings_trade_provider_primary": "交換するネットワークを選択",
     "plugin_trader_settings_trade_provider_secondary": "その他の取引所で暗号通貨をスワップする",
     "plugin_trader_slipage_tolerance": "スリッページの許容範囲：",
-    "plugin_trader_single_hop_only": "",
     "plugin_trader_swap_settings": "スワップの設定",
     "plugin_poll_display_name": "プラグイン: 投票",
     "plugin_poll_question_hint": "質問を入力してください...",
