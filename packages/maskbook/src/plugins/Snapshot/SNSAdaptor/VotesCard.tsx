@@ -1,9 +1,15 @@
-import { formatEthereumAddress, resolveAddressLinkOnExplorer, resolveIPFSLink, useChainId } from '@masknet/web3-shared'
+import {
+    formatEthereumAddress,
+    resolveAddressLinkOnExplorer,
+    resolveIPFSLink,
+    useChainId,
+    formatPercentage,
+} from '@masknet/web3-shared'
 import { Avatar, Badge, Box, Link, List, ListItem, makeStyles, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import millify from 'millify'
 import { useContext } from 'react'
-import { useI18N } from '../../../utils'
+import { useI18N, ShadowRootTooltip } from '../../../utils'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
 import { SnapshotContext } from '../context'
 import { useRetry } from './hooks/useRetry'
@@ -38,6 +44,10 @@ const useStyles = makeStyles((theme) => {
         },
         choice: {
             flexGrow: 1,
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            maxWidth: 180,
         },
         ellipsisText: {
             textOverflow: 'ellipsis',
@@ -55,6 +65,9 @@ const useStyles = makeStyles((theme) => {
             alignItems: 'center',
             textDecoration: 'none !important',
             marginRight: 16,
+        },
+        shadowRootTooltip: {
+            color: 'white',
         },
     }
 })
@@ -79,6 +92,18 @@ function Content() {
             }>
             <List className={classes.list}>
                 {votes.map((v) => {
+                    const fullChoiceText =
+                        v.totalWeight && v.choices
+                            ? v.choices.reduce((acc, choice, i) => {
+                                  return (
+                                      acc +
+                                      (i === 0 ? '' : ', ') +
+                                      formatPercentage(choice.weight / v.totalWeight!) +
+                                      ' ' +
+                                      choice.name
+                                  )
+                              }, '')
+                            : null
                     return (
                         <ListItem className={classes.listItem} key={v.address}>
                             <Link
@@ -95,7 +120,21 @@ function Content() {
                                 </Box>
                                 <Typography>{v.authorName ?? formatEthereumAddress(v.address, 4)}</Typography>
                             </Link>
-                            <Typography className={classes.choice}>{v.choice}</Typography>
+                            {v.choice ? (
+                                <Typography className={classes.choice}>{v.choice}</Typography>
+                            ) : v.choices ? (
+                                <ShadowRootTooltip
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    title={
+                                        <Typography className={classes.shadowRootTooltip}>{fullChoiceText}</Typography>
+                                    }
+                                    placement="top"
+                                    arrow>
+                                    <Typography className={classes.choice}>{fullChoiceText}</Typography>
+                                </ShadowRootTooltip>
+                            ) : null}
                             <Typography>
                                 {millify(v.balance, { precision: 2, lowercase: true }) +
                                     ' ' +
