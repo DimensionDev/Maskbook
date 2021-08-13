@@ -1,5 +1,5 @@
-import { useAsyncRetry } from "react-use"
-import { useMulticallContract } from "../contracts/useMulticallContract";
+import { useAsyncRetry } from 'react-use'
+import { useMulticallContract } from '../contracts/useMulticallContract'
 
 export function useCurrentBlockTimestamp() {
     const multicallContract = useMulticallContract()

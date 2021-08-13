@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { computePoolAddress, Pool, FeeAmount } from '@uniswap/v3-sdk'
 import type { Token, Currency } from '@uniswap/sdk-core'
-import { MulticalStateType, useChainId, useMutlipleContractSingleData, useTraderConstants } from '@masknet/web3-shared'
+import { MulticalStateType, useChainId, useMutlipleContractSingleData } from '@masknet/web3-shared'
 import { usePoolContracts } from '../../contracts/uniswap/usePoolContract'
 import { TradeContext } from '../useTradeContext'
 
