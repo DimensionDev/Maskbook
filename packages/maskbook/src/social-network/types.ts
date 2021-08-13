@@ -123,6 +123,9 @@ export namespace SocialNetworkUI {
             /** Inject UI to the search result */
             searchResult?(signal: AbortSignal): void
             setupWizard?(signal: AbortSignal, for_: PersonaIdentifier): void
+            /** Inject UI to the Profile page */
+            enhancedProfileTab?(signal: AbortSignal): void
+            enhancedProfile?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void

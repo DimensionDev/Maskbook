@@ -36,16 +36,3 @@ export async function findAllUsedKeys() {
 export async function findAllUnusedKeys() {
     return difference(keys(await readMessages('en')), await findAllUsedKeys())
 }
-
-export async function findAllUnsyncedLocales(locales = without(LOCALE_NAMES, 'en')) {
-    const names = keys(await readMessages('en'))
-    const record: Record<string, string[]> = {}
-    for (const name of locales) {
-        const nextKeys = keys(await readMessages(name))
-        const diffKeys = difference(names, nextKeys)
-        if (diffKeys.length) {
-            record[name] = diffKeys
-        }
-    }
-    return record
-}
