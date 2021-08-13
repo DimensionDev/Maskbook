@@ -3,7 +3,6 @@ import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import { makeStyles } from '@material-ui/core'
 import type { Trade } from '@uniswap/v2-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
-
 import {
     ChainId,
     createERC20Token,
@@ -71,7 +70,7 @@ export function Trader(props: TraderProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const context = useContext(TradeContext)
-    const provider = context?.TYPE ?? TradeProvider.UNISWAP
+    const provider = context?.TYPE ?? TradeProvider.UNISWAP_V2
 
     //#region trade state
     const {
@@ -313,7 +312,7 @@ export function Trader(props: TraderProps) {
                         inputToken={inputToken}
                         outputToken={outputToken}
                     />
-                    {context?.IS_UNISWAP_LIKE ? (
+                    {context?.IS_UNISWAP_V2_LIKE ? (
                         <UniswapTradeRoute classes={{ root: classes.router }} trade={tradeComputed} />
                     ) : null}
                     {[TradeProvider.BALANCER].includes(provider) ? (
@@ -322,7 +321,7 @@ export function Trader(props: TraderProps) {
                             trade={tradeComputed as TradeComputed<SwapResponse>}
                         />
                     ) : null}
-                    {context?.IS_UNISWAP_LIKE ? (
+                    {context?.IS_UNISWAP_V2_LIKE ? (
                         <UniswapPairViewer
                             trade={tradeComputed as TradeComputed<Trade<Currency, Currency, TradeType>>}
                             provider={provider}

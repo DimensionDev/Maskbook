@@ -1,0 +1,42 @@
+name: Resolve Lockfile Conflicts
+
+on:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  resolve-conflicts:
+    if: endsWith(github.event.label.name, 'Has Conflict')
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: check conflicts
+        run: |
+          git fetch ${{ github.event.pull_request.base.ref }}
+          git merge ${{ github.event.pull_request.base.ref }}
+          echo "CONFLICT_FILES<<EOF" >> $GITHUB_ENV
+          git diff --name-only --diff-filter=U >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: resolve conflicts
+        if: ${{ env.CONFLICT_FILES == 'pnpm-lock.yaml' }}
+        run: |
+          # pnpm install will resolve the conflicts automatically
+          pnpm install
+
+      - name: Create Pull Request
+        if: ${{ env.CONFLICT_FILES == 'pnpm-lock.yaml' }}
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: ':chore: resolve lockfile conflicts for #${{ github.event.number }}'
+          committer: Maskbook maintainer bot <bot@mask.io>
+          author: Maskbook maintainer bot <bot@mask.io>
+          branch: resolve-lockfile-conflicts-for-pr-${{ github.event.number }}
+          title: ':chore: twitter get updated'
+          body: "## lockfile conflicts got resolved, feel free to merge"
+          assignees: |
+            ${{ github.event.pull_request.user.login }}
+          draft: false
+
