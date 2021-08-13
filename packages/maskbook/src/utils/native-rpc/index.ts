@@ -14,7 +14,10 @@ export let nativeAPI:
 
 export let sharedNativeAPI: _AsyncVersionOf<iOSNativeAPIs | AndroidNativeAPIs> | undefined = undefined
 if (process.env.architecture === 'app') {
-    const options: Partial<AsyncCallOptions> = { key: 'native' }
+    const options: Partial<AsyncCallOptions> = {
+        key: 'native',
+        parameterStructures: 'by-name',
+    }
     if (process.env.target === 'safari') {
         const api = (sharedNativeAPI = AsyncCall<iOSNativeAPIs>(MaskNetworkAPI, {
             ...options,
