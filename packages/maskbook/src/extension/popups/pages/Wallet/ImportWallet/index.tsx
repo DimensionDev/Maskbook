@@ -14,6 +14,7 @@ import { StyledInput } from '../../../components/StyledInput'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useAsyncFn } from 'react-use'
 import { useSnackbar } from '@masknet/theme'
+import { query } from 'urlcat'
 const useStyles = makeStyles((theme) => ({
     container: {
         padding: '16px 10px',
@@ -141,11 +142,10 @@ const ImportWallet = memo(() => {
         async (data: zod.infer<typeof schema>) => {
             switch (currentTab) {
                 case ImportWalletTab.Mnemonic:
-                    const params = new URLSearchParams()
-                    params.set('mnemonic', mnemonic)
+                    const params = query({ mnemonic })
                     history.replace({
                         pathname: DialogRoutes.AddDeriveWallet,
-                        search: `?${params.toString()}`,
+                        search: `?${params}`,
                     })
                     break
                 case ImportWalletTab.JsonFile:
