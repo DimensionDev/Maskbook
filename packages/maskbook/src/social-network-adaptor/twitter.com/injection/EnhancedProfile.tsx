@@ -29,15 +29,16 @@ export function injectEnhancedProfileAtTwitter(signal: AbortSignal) {
 const EMPTY_STYLE = {} as CSSStyleDeclaration
 interface StyleProps {
     backgroundColor: string
+    fontFamily: string
 }
 
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     text: {
-        paddingTop: 36,
-        paddingBottom: 36,
+        paddingTop: 29,
+        paddingBottom: 29,
         '& > p': {
             fontSize: 28,
-            fontFamily: 'inherit',
+            fontFamily: props.fontFamily,
             fontWeight: 700,
             color: getMaskColor(theme).textPrimary,
         },
@@ -55,7 +56,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
 export function EnhancedProfileaPageAtTwitter() {
     const newTweetButton = searchNewTweetButtonSelector().evaluate()
     const style = newTweetButton ? window.getComputedStyle(newTweetButton) : EMPTY_STYLE
-    const { classes } = useStyles({ backgroundColor: style.backgroundColor })
+    const fontStyle = newTweetButton?.firstChild
+        ? window.getComputedStyle(newTweetButton.firstChild as HTMLElement)
+        : EMPTY_STYLE
+    const { classes } = useStyles({ backgroundColor: style.backgroundColor, fontFamily: fontStyle.fontFamily })
 
     const [bio, setBio] = useState(getBioDescription())
     const [nickname, setNickname] = useState(getNickname())
