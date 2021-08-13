@@ -11,11 +11,8 @@ export interface iOSNativeAPIs extends SharedNativeAPIs {
      * @returns The scan result
      */
     scanQRCode(): Promise<string>
-    log(...args: any[]): Promise<void>
 }
 /**
  * APIs that only implemented by Android Mask Network
  */
-export interface AndroidNativeAPIs extends SharedNativeAPIs {
-    android_echo(arg: string): Promise<string>
-}
+export interface AndroidNativeAPIs extends SharedNativeAPIs {}

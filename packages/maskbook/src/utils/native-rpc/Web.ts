@@ -9,12 +9,8 @@ import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-
 const stringToIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 
 export const MaskNetworkAPI: MaskNetworkAPIs = {
-    web_echo: async (arg) => arg,
+    web_echo: async (arg) => arg.echo,
     getDashboardURL: async () => browser.runtime.getURL('/index.html'),
-    getSettings: async (key) => {
-        if (key === 'launchPageSettings') return launchPageSettings.value
-        unreachable(key)
-    },
     getConnectedPersonas: async () => {
         const personas = await Services.Identity.queryMyPersonas()
         const connectedPersonas: { network: string; connected: boolean }[][] = personas
