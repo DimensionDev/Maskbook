@@ -143,7 +143,7 @@ const ImportWallet = memo(() => {
                 case ImportWalletTab.Mnemonic:
                     const params = new URLSearchParams()
                     params.set('mnemonic', mnemonic)
-                    history.push({
+                    history.replace({
                         pathname: DialogRoutes.AddDeriveWallet,
                         search: `?${params.toString()}`,
                     })

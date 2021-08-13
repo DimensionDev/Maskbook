@@ -68,7 +68,12 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSo
                               </TableCell>
                               <TableCell align="center" variant="body" className={classes.cell}>
                                   <Typography className={classes.title}>
-                                      <FormattedBalance value={item.balance} decimals={3} />
+                                      <FormattedBalance
+                                          value={item.balance}
+                                          decimals={18}
+                                          significant={4}
+                                          symbol="ETH"
+                                      />
                                   </Typography>
                               </TableCell>
                               <TableCell align="center" variant="body" className={classes.cell}>
@@ -78,19 +83,21 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSo
                               </TableCell>
                           </TableRow>
                       ))
-                    : new Array(10).fill(0).map((_, index) => (
-                          <TableRow key={index}>
-                              <TableCell align="center" variant="body" className={classes.cell}>
-                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
-                              </TableCell>
-                              <TableCell align="center" variant="body" className={classes.cell}>
-                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
-                              </TableCell>
-                              <TableCell align="center" variant="body" className={classes.cell}>
-                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
-                              </TableCell>
-                          </TableRow>
-                      ))}
+                    : Array.from({ length: 10 })
+                          .fill(0)
+                          .map((_, index) => (
+                              <TableRow key={index}>
+                                  <TableCell align="center" variant="body" className={classes.cell}>
+                                      <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
+                                  </TableCell>
+                                  <TableCell align="center" variant="body" className={classes.cell}>
+                                      <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
+                                  </TableCell>
+                                  <TableCell align="center" variant="body" className={classes.cell}>
+                                      <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
+                                  </TableCell>
+                              </TableRow>
+                          ))}
             </TableBody>
         </Table>
     )

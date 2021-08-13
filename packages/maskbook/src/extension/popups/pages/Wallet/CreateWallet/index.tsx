@@ -1,8 +1,7 @@
-import { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { Button, makeStyles, Typography } from '@material-ui/core'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { StyledInput } from '../../../components/StyledInput'
-import { useSnackbarCallback } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
 import { useWalletHD } from '../../../../../web3/hooks/useWalletHD'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
@@ -44,15 +43,12 @@ const CreateWallet = memo(() => {
     const [name, setName] = useState('')
     const hdWallet = useWalletHD()
 
-    const onCreate = useSnackbarCallback(
-        async () => {
-            if (hdWallet) {
-                await WalletRPC.deriveWalletFromPhrase(name, hdWallet.mnemonic, hdWallet.passphrase)
-            }
-        },
-        [hdWallet, name],
-        history.goBack,
-    )
+    const onCreate = useCallback(async () => {
+        if (hdWallet) {
+            await WalletRPC.deriveWalletFromPhrase(name, hdWallet.mnemonic, hdWallet.passphrase)
+            history.goBack()
+        }
+    }, [hdWallet, name])
 
     return (
         <>

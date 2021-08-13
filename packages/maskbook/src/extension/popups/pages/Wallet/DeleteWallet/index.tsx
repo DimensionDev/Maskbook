@@ -1,11 +1,10 @@
-import { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { Button, makeStyles, Typography } from '@material-ui/core'
 import { WalletInfo } from '../components/WalletInfo'
 import { WarningIcon } from '@masknet/icons'
 import { StyledInput } from '../../../components/StyledInput'
 import { useHistory } from 'react-router-dom'
 import { useWallet } from '@masknet/web3-shared'
-import { useSnackbarCallback } from '../../../../options-page/DashboardDialogs/Base'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 
 const useStyles = makeStyles(() => ({
@@ -71,16 +70,13 @@ const DeleteWallet = memo(() => {
     const classes = useStyles()
     const [password, setPassword] = useState('')
 
-    const onConfirm = useSnackbarCallback(
-        async () => {
-            if (wallet?.address) {
-                await WalletRPC.removeWallet(wallet.address)
-                await WalletRPC.resetAccount()
-            }
-        },
-        [wallet?.address],
-        history.goBack,
-    )
+    const onConfirm = useCallback(async () => {
+        if (wallet?.address) {
+            await WalletRPC.removeWallet(wallet.address)
+            await WalletRPC.resetAccount()
+            history.goBack()
+        }
+    }, [wallet])
 
     return (
         <>

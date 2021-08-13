@@ -1,10 +1,9 @@
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { Button, makeStyles, Typography } from '@material-ui/core'
 import {
     Asset,
     currySameAddress,
     EthereumTokenType,
-    TokenListsState,
     useAssetsByTokenList,
     useERC20TokensDetailedFromTokenLists,
     useEthereumConstants,
@@ -12,8 +11,7 @@ import {
 } from '@masknet/web3-shared'
 import { uniqBy } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
-import { TokenList, useSnackbarCallback } from '@masknet/shared'
-import { useHistory } from 'react-router'
+import { TokenList } from '@masknet/shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 
 const useStyles = makeStyles(() => ({
@@ -49,9 +47,9 @@ const useStyles = makeStyles(() => ({
 const AddToken = memo(() => {
     const classes = useStyles()
     const wallet = useWallet()
-    const history = useHistory()
     const { ERC20_TOKEN_LISTS } = useEthereumConstants()
-    const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS, '')
+    const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
+        useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS, '')
 
     const excludeTokens = Array.from(wallet?.erc20_token_whitelist ?? [])
 
@@ -64,14 +62,15 @@ const AddToken = memo(() => {
     const { loading: loadingAssets, value: assets } = useAssetsByTokenList(
         renderTokens.filter((x) => EthereumAddress.isValid(x.address)),
     )
+
     const placeholder = useMemo(() => {
-        if (state === TokenListsState.LOADING_TOKEN_LISTS || loadingAssets) return 'Loading token lists'
-        if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return 'Loading token...'
+        if (erc20TokensDetailedLoading) return 'Loading token lists'
+        if (loadingAssets) return 'Loading token assets'
         if (!assets.length) return 'No token found'
         return undefined
-    }, [state, assets])
+    }, [erc20TokensDetailedLoading, loadingAssets, renderTokens])
 
-    const onSubmit = useSnackbarCallback(
+    const onSubmit = useCallback(
         async (asset: Asset) => {
             if (wallet && asset.token.type === EthereumTokenType.ERC20) {
                 await Promise.all([

@@ -1,9 +1,9 @@
-import { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { Button, makeStyles, Typography } from '@material-ui/core'
 import { StyledInput } from '../../../components/StyledInput'
 import { useWallet } from '@masknet/web3-shared'
-import { useSnackbarCallback } from '@masknet/shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { useHistory } from 'react-router'
 
 const useStyles = makeStyles(() => ({
     header: {
@@ -29,14 +29,14 @@ const useStyles = makeStyles(() => ({
 }))
 
 const WalletRename = memo(() => {
+    const history = useHistory()
     const classes = useStyles()
     const wallet = useWallet()
     const [name, setName] = useState('')
-    const renameWallet = useSnackbarCallback(() => {
-        if (!wallet?.address) {
-            throw new Error('Not select wallet yet.')
-        }
-        return WalletRPC.renameWallet(wallet.address, name)
+    const renameWallet = useCallback(async () => {
+        if (!wallet?.address) return
+        await WalletRPC.renameWallet(wallet.address, name)
+        return history.goBack()
     }, [wallet?.address])
     return (
         <>
