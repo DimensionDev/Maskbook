@@ -8,17 +8,17 @@ export const MenuSettingsActiveIcon: typeof SvgIcon = createIcon(
             fillRule="evenodd"
             clipRule="evenodd"
             d="M6 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2V8zm9.5 1.5H10a.5.5 0 000 1h5.5a.5.5 0 000-1zm-1.5 4H8.5a.5.5 0 000 1H14a.5.5 0 000-1z"
-            fill="url(#paint0_linear)"
+            fill="url(#settings_active_linear)"
         />
-        <g filter="url(#filter0_b)">
+        <g filter="url(#settings_active_circle_0)">
             <circle cx="9.5" cy="10" r="1.5" fill="#fff" fillOpacity=".1" />
         </g>
-        <g filter="url(#filter1_b)">
+        <g filter="url(#settings_active_circle_1)">
             <circle cx="14.5" cy="14" r="1.5" fill="#fff" fillOpacity=".1" />
         </g>
         <defs>
             <filter
-                id="filter0_b"
+                id="settings_active_circle_0"
                 x="4"
                 y="4.5"
                 width="11"
@@ -31,7 +31,7 @@ export const MenuSettingsActiveIcon: typeof SvgIcon = createIcon(
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
             <filter
-                id="filter1_b"
+                id="settings_active_circle_1"
                 x="9"
                 y="8.5"
                 width="11"
@@ -44,7 +44,7 @@ export const MenuSettingsActiveIcon: typeof SvgIcon = createIcon(
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
             <linearGradient
-                id="paint0_linear"
+                id="settings_active_linear"
                 x1="6.073"
                 y1="11.579"
                 x2="18.244"
