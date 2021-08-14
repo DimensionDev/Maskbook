@@ -16,6 +16,6 @@
     "@types/inquirer": "^7.3.3",
     "@types/lodash": "^4.14.171",
     "@types/proper-lockfile": "^4.1.2",
-    "ts-node": "^10.1.0"
+    "ts-node": "^10.2.0"
   }
 }
