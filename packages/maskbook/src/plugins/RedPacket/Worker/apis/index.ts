@@ -6,7 +6,7 @@ import {
     getRedPacketConstants,
     NativeTokenDetailed,
 } from '@masknet/web3-shared'
-import stringify from 'json-stable-stringify'
+import { ApolloClient, InMemoryCache, QueryOptions, gql } from '@apollo/client'
 import { first, pick } from 'lodash-es'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
 import { currentChainIdSettings } from '../../../Wallet/settings'
@@ -71,39 +71,49 @@ const RED_PACKET_FIELDS = `
     }
 `
 
-async function fetchFromRedPacketSubgraph<T>(query: string) {
-    const subgraphURL = getRedPacketConstants(currentChainIdSettings.value).SUBGRAPH_URL
+async function fetchFromRedPacketSubgraph<T>(query: QueryOptions<{ [variable: string]: any }, any>, chainId?: ChainId) {
+    const subgraphURL = getRedPacketConstants(chainId ? chainId : currentChainIdSettings.value).SUBGRAPH_URL
     if (!subgraphURL) return null
-    const response = await fetch(subgraphURL, {
-        method: 'POST',
-        mode: 'cors',
-        body: stringify({ query }),
+
+    const apolloClient = new ApolloClient({
+        uri: subgraphURL,
+        cache: new InMemoryCache(),
     })
-    const { data } = (await response.json()) as {
-        data: T
-    }
+
+    const { data }: { data: T } = await apolloClient.query(query)
+
     return data
 }
 
 export async function getRedPacketTxid(rpid: string) {
-    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedPacketSubgraphOutMask[] }>(`
-    {
-        redPackets (where: { rpid: "${rpid.toLowerCase()}" }) {
-            ${RED_PACKET_FIELDS}
-        }
-    }
-    `)
+    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedPacketSubgraphOutMask[] }>({
+        query: gql`
+            query ($rpid: String!) {
+                redPackets (where: { rpid: $rpid }) {
+                    ${RED_PACKET_FIELDS}
+                }
+            }
+        `,
+        variables: {
+            rpid: rpid.toLowerCase(),
+        },
+    })
     return first(data?.redPackets)?.txid
 }
 
 export async function getRedPacketHistory(address: string, chainId: ChainId) {
-    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedPacketSubgraphOutMask[] }>(`
-    {
-        redPackets (where: { creator: "${address.toLowerCase()}" }) {
-            ${RED_PACKET_FIELDS}
-        }
-    }
-    `)
+    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedPacketSubgraphOutMask[] }>({
+        query: gql`
+            query ($creator: String!) {
+                redPackets (where: { creator: $creator }) {
+                    ${RED_PACKET_FIELDS}
+                }
+            }
+        `,
+        variables: {
+            creator: address.toLowerCase(),
+        },
+    })
 
     if (!data?.redPackets) return []
     return data.redPackets

@@ -1,4 +1,5 @@
 import ss from '@dimensiondev/snapshot.js'
+import { ApolloClient, InMemoryCache, QueryOptions, gql } from '@apollo/client'
 import type { Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess, RawVote } from '../../types'
 import Services from '../../../../extension/service'
 import { resolveIPFSLink } from '@masknet/web3-shared'
@@ -8,20 +9,31 @@ export async function fetchProposal(id: string) {
     const response = await fetch(resolveIPFSLink(id), {
         method: 'GET',
     })
-    const { network, votes } = await fetchProposalFromGraphql(id)
+    const { network, votes } = await getProposal(id)
     const result = await response.json()
     return { ...result, network, votes } as Proposal
 }
 
-async function fetchProposalFromGraphql(id: string) {
-    const response = await fetch(`https://hub.snapshot.org/graphql`, {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            query: `query Proposal($id: String!) {
+async function fetchFromSnapshotSubgraph<T>(query: QueryOptions<{ [variable: string]: any }, any>) {
+    const apolloClient = new ApolloClient({
+        uri: 'https://hub.snapshot.org/graphql',
+        cache: new InMemoryCache(),
+    })
+
+    const { data }: { data: T } = await apolloClient.query(query)
+
+    return data
+}
+
+async function getProposal(id: string) {
+    const data = await fetchFromSnapshotSubgraph<{
+        proposal: {
+            network: string
+        }
+        votes: RawVote[]
+    }>({
+        query: gql`
+            query Proposal($id: String!) {
                 proposal(id: $id) {
                     network
                 }
@@ -30,23 +42,13 @@ async function fetchProposalFromGraphql(id: string) {
                     voter
                     created
                     choice
-                  }
-            }`,
-            variables: {
-                id,
-            },
-        }),
-    })
-    interface Res {
-        data: {
-            proposal: {
-                network: string
+                }
             }
-            votes: RawVote[]
-        }
-    }
-
-    const { data }: Res = await response.json()
+        `,
+        variables: {
+            id,
+        },
+    })
 
     return { votes: data.votes, network: data.proposal.network }
 }
