@@ -20,7 +20,7 @@
     // Type Checking
     "strict": true,
     // exactOptionalPropertyTypes: false,
-    // noImplicitOverride: true,
+    "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
