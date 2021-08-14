@@ -50,7 +50,7 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
-    "@dimensiondev/patch-package": "^6.4.7",
+    "@dimensiondev/patch-package": "^6.5.0",
     "@magic-works/commonjs-import.meta": "^1.0.1",
     "@magic-works/i18n-codegen": "^0.0.6",
     "@masknet/cli": "workspace:*",
