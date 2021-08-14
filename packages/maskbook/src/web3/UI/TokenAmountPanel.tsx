@@ -61,6 +61,7 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     MaxChipStyle?: ChipProps['classes']
     SelectTokenChip?: Partial<SelectTokenChipProps>
     TextFieldProps?: Partial<TextFieldProps>
+    significant?: number
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
@@ -75,6 +76,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         disableToken = false,
         disableBalance = false,
         MaxChipProps,
+        significant = 6,
     } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -137,7 +139,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                 variant="body2"
                                 component="span">
                                 {t('plugin_ito_list_table_got')}:
-                                <FormattedBalance value={balance} decimals={token.decimals} significant={6} />
+                                <FormattedBalance value={balance} decimals={token.decimals} significant={significant} />
                             </Typography>
                         ) : null}
                         <Box

@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { Suspense, useMemo } from 'react'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import { SnackbarContent } from '@material-ui/core'
 import { base } from '../base'
@@ -7,6 +7,7 @@ import { MarketView } from '../UI/MarketView'
 import { AUGUR_CHAIN_ID, BASE_URL, PLUGIN_NAME } from '../constants'
 import { escapeRegExp } from 'lodash-es'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 
 function createMatchLink() {
     return new RegExp(`${escapeRegExp(BASE_URL.concat('/#!/market?id='))}([x0-9A-Fa-f]+)-([0-9]+)$`)
@@ -29,6 +30,14 @@ function getMarketFromLinks(links: string[]) {
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
+    DecryptedInspector: function Component(props) {
+        const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
+        const links = useMemo(() => parseURL(text.val || ''), [text.val])
+        const market = getMarketFromLinks(links)
+        if (!text.ok) return null
+        if (!market?.address || !market.id) return null
+        return <Renderer link={market.link} address={market.address} id={market.id} />
+    },
     PostInspector: function Component() {
         const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
         const market = getMarketFromLinks(links)

@@ -48,6 +48,7 @@ export function useBuyCallback(
             gasPrice,
             nonce,
         }
+
         const estimatedGas = await ammContract.methods
             .buy(market.address, market.id, outcome.id, amount, minTokenOut)
             .estimateGas(config)
@@ -74,6 +75,13 @@ export function useBuyCallback(
                         hash,
                     })
                     resolve(hash)
+                })
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                    setBuyState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
                 })
                 .on(TransactionEventType.ERROR, (error) => {
                     setBuyState({

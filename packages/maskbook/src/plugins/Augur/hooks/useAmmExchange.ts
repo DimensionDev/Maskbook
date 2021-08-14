@@ -1,18 +1,36 @@
 import { useAsyncRetry } from 'react-use'
 import { useAmmFactory } from '../contracts/useAmmFactory'
+import { useMmaLinkMarketFactory } from '../contracts/useMmaLinkMarketFactory'
 import { useSportsLinkMarketFactory } from '../contracts/useSportsLinkMarketFactory'
-import type { AmmExchange, Market } from '../types'
+import { AmmExchange, Market, MarketType } from '../types'
 
 export function useAmmExchange(market: Market | undefined) {
-    const sportLinkMarekFactoryContract = useSportsLinkMarketFactory(market?.address ?? '')
     const ammMarekFactoryContract = useAmmFactory(market?.ammExchange?.address ?? '')
+    const sportLinkMarekFactoryContract = useSportsLinkMarketFactory(market?.address ?? '')
+    const mmaMarekFactoryContract = useMmaLinkMarketFactory(market?.address ?? '')
 
     return useAsyncRetry(async () => {
-        if (!market || !ammMarekFactoryContract || !sportLinkMarekFactoryContract) return
+        if (
+            !market ||
+            !market.ammExchange ||
+            !ammMarekFactoryContract ||
+            !sportLinkMarekFactoryContract ||
+            !mmaMarekFactoryContract
+        )
+            return
 
         const balances = await ammMarekFactoryContract.methods.getPoolBalances(market.address, market.id).call()
         const weights = await ammMarekFactoryContract.methods.getPoolWeights(market.address, market.id).call()
-        const shareFactor = await sportLinkMarekFactoryContract.methods.shareFactor().call()
-        return { balances, weights, shareFactor } as AmmExchange
-    }, [market])
+
+        let shareFactor
+        if (market.marketType === MarketType.Sport) {
+            shareFactor = await sportLinkMarekFactoryContract.methods.shareFactor().call()
+        } else if (market.marketType === MarketType.Mma) {
+            shareFactor = await mmaMarekFactoryContract.methods.shareFactor().call()
+        } else if (market.marketType === MarketType.Crypto) {
+            // TODO: when augur deployed any crypto market
+        }
+        market.dirtyAmmExchnage = false
+        return { address: market.ammExchange.address, balances, weights, shareFactor } as AmmExchange
+    }, [market, market?.dirtyAmmExchnage])
 }

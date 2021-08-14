@@ -112,9 +112,9 @@ export type WinningsClaimed = ContractEventLog<{
     5: string
 }>
 
-export interface AugurSportsLinkMarketFactory extends BaseContract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): AugurSportsLinkMarketFactory
-    clone(): AugurSportsLinkMarketFactory
+export interface AugurSportsLinkMarketFactoryV1 extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): AugurSportsLinkMarketFactoryV1
+    clone(): AugurSportsLinkMarketFactoryV1
     methods: {
         accumulatedProtocolFee(): NonPayableTransactionObject<string>
 

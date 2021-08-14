@@ -65,6 +65,13 @@ export function useSellCallback(market?: Market, outcome?: AmmOutcome, shareToke
                     })
                     resolve(hash)
                 })
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                    setSellState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                })
                 .on(TransactionEventType.ERROR, (error) => {
                     setSellState({
                         type: TransactionStateType.FAILED,

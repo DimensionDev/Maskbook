@@ -1,6 +1,7 @@
 import {
     EthereumTokenType,
     formatAmount,
+    formatBalance,
     formatPercentage,
     formatPrice,
     FungibleTokenDetailed,
@@ -31,8 +32,8 @@ import { useBuyCallback } from '../hooks/useBuyCallback'
 import { toBips } from '../../Trader/helpers'
 import { currentSlippageTolerance } from '../../Trader/settings'
 import TuneIcon from '@material-ui/icons/Tune'
-import { BALANCE_DECIMALS, SHARE_DECIMALS } from '../constants'
-import { estimateBuyTrade, getRawFee, rawToFixed } from '../utils'
+import { BALANCE_DECIMALS, MINIMUM_BALANCE, SHARE_DECIMALS } from '../constants'
+import { estimateBuyTrade, getRawFee } from '../utils'
 import { useAmmExchange } from '../hooks/useAmmExchange'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 
@@ -95,6 +96,7 @@ export function BuyDialog(props: BuyDialogProps) {
 
     const [id] = useState(uuid())
     const [inputAmount, setInputAmount] = useState('')
+    const [significant, setSignificant] = useState(4)
 
     const onDialogClose = () => {
         setInputAmount('')
@@ -112,11 +114,22 @@ export function BuyDialog(props: BuyDialogProps) {
         retry: retryLoadTokenBalance,
     } = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
 
-    // Reduce balance accuracy to $BALANCE_DECIMALS
-    const tokenBalance = useMemo(
-        () => rawToFixed(_tokenBalance, token?.decimals ?? 0, BALANCE_DECIMALS),
-        [_tokenBalance],
-    )
+    // set balance to 0 if less than minimum amount
+    const tokenBalance = useMemo(() => {
+        const formattedBalance = new BigNumber(formatBalance(_tokenBalance, token?.decimals ?? 0))
+        if (formattedBalance.isLessThan(MINIMUM_BALANCE)) return '0'
+        return _tokenBalance
+    }, [_tokenBalance])
+    //#endregion
+
+    // calc the significant
+    useEffect(() => {
+        const formattedBalance = new BigNumber(formatBalance(tokenBalance, token?.decimals ?? 0))
+        if (formattedBalance.isGreaterThanOrEqualTo(MINIMUM_BALANCE)) setSignificant(1)
+        if (formattedBalance.isGreaterThanOrEqualTo(MINIMUM_BALANCE * 10)) setSignificant(2)
+        if (formattedBalance.isGreaterThanOrEqualTo(MINIMUM_BALANCE * 100)) setSignificant(3)
+        if (formattedBalance.isGreaterThanOrEqualTo(MINIMUM_BALANCE * 1000)) setSignificant(4)
+    }, [tokenBalance])
     //#endregion
 
     //#region AmmExchange
@@ -133,7 +146,9 @@ export function BuyDialog(props: BuyDialogProps) {
     //#endregion
 
     const minTokenOut = formatAmount(
-        estimatedResult?.outputValue ?? 0 * (1 - currentSlippageTolerance.value),
+        new BigNumber(estimatedResult?.outputValue ?? 0)
+            .multipliedBy(1 - currentSlippageTolerance.value / 10000)
+            .toFixed(0, BigNumber.ROUND_DOWN),
         SHARE_DECIMALS,
     )
 
@@ -214,6 +229,10 @@ export function BuyDialog(props: BuyDialogProps) {
     useEffect(() => {
         if (!token || !market) return
         if (buyState.type === TransactionStateType.UNKNOWN) return
+        if (buyState.type === TransactionStateType.CONFIRMED) {
+            market.dirtyAmmExchnage = true
+            return
+        }
         setTransactionDialogOpen({
             open: true,
             shareLink,
@@ -223,7 +242,7 @@ export function BuyDialog(props: BuyDialogProps) {
     }, [buyState /* update tx dialog only if state changed */])
     //#endregion
 
-    //#region submit button
+    //#region submit button1
     const validationMessage = useMemo(() => {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (!amount || amount.isZero()) return t('plugin_dhedge_enter_an_amount')
@@ -256,6 +275,7 @@ export function BuyDialog(props: BuyDialogProps) {
                         balance={tokenBalance ?? '0'}
                         token={token}
                         onAmountChange={setInputAmount}
+                        significant={significant}
                     />
                 </form>
                 <EthereumWalletConnectedBoundary>
@@ -310,7 +330,7 @@ export function BuyDialog(props: BuyDialogProps) {
                             {t('plugin_augur_est_shares')}
                         </Typography>
                         <Typography className={classes.value} color="textSecondary" variant="body2">
-                            {isTradeable ? formatPrice(estimatedResult?.outputValue ?? '', 4) : '-'}
+                            {isTradeable ? formatPrice(estimatedResult?.outputValue ?? '', BALANCE_DECIMALS) : '-'}
                         </Typography>
                     </div>
                     <div className={classes.status}>

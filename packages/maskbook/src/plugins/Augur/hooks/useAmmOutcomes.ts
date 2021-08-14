@@ -14,6 +14,7 @@ export function useAmmOutcomes(market: Market | undefined) {
             })
 
         const shares = await ammMarekFactoryContract.methods.tokenRatios(market.address, market.id).call()
+
         if (shares.length === 0) {
             return market.outcomes.map((o) => {
                 return { ...o, rate: new BigNumber(0) }

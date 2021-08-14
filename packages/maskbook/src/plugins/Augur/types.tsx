@@ -1,7 +1,7 @@
 import type BigNumber from 'bignumber.js'
 
 export interface Team {
-    team_id: number
+    teamId: number
     name: string
     mascot: string
     abbreviation: string
@@ -17,6 +17,7 @@ export interface Sport {
     sportId: string
     name: string
     categories: string[]
+    teams: TeamsInterface
 }
 
 export interface SportsInterface {
@@ -37,12 +38,43 @@ export interface AmmOutcome extends Outcome {
     rate: BigNumber
 }
 
+export interface TeamSportsMarket {
+    homeTeamId: string
+    awayTeamId: string
+    endTime: string
+    winner: string | null
+    score: string
+    marketType: string
+}
+
+export interface MmaMarket {
+    homeFighterId: string
+    awayFighterId: string
+    homeFighterName: string
+    awayFighterName: string
+    endTime: string
+    winner: string | null
+    marketType: string
+}
+
+export interface CryptoMarket {
+    endTime: string
+    winner: string | null
+    marketType: string
+}
+
+export interface MarketInfo {
+    teamSportsMarket?: TeamSportsMarket[]
+    mmaMarket?: MmaMarket[]
+    cryptoMarket?: CryptoMarket[]
+}
+
 export interface Market {
     address: string
     id: string
     link: string
-    homeTeam: Team
-    awayTeam: Team
+    homeTeam?: Team
+    awayTeam?: Team
     title: string
     description: string
     endDate: Date
@@ -52,10 +84,11 @@ export interface Market {
     shareTokens: string[]
     hasWinner: boolean
     winner?: string
-    value0: string
     collateral: string
     swapFee: string
     ammExchange?: AmmExchange
+    marketType: MarketType
+    dirtyAmmExchnage?: boolean
 }
 
 export enum SportMarketType {
@@ -64,7 +97,13 @@ export enum SportMarketType {
     OverUnder = 2,
 }
 
-export interface SportTitles {
+export enum MarketType {
+    Sport = 0,
+    Mma = 1,
+    Crypto = 2,
+}
+
+export interface MarketTitle {
     title: string
     description: string
 }

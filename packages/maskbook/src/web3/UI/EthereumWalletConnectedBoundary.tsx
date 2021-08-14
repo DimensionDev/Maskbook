@@ -31,7 +31,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const account = useAccount()
     const chainIdValid = useChainIdValid()
     const nativeTokenBalance = useNativeTokenBalance()
-
+    console.log()
     //#region remote controlled confirm risk warning
     const { isConfirmed: isRiskWarningConfirmed, openDialog: openRiskWarningDialog } = useWalletRiskWarningDialog()
     //#endregion
