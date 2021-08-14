@@ -23,6 +23,7 @@ importers:
       '@nice-labs/git-rev': ^3.5.0
       '@types/react': ^17.0.14
       '@types/react-dom': ^17.0.9
+      '@types/web': ^0.0.16
       eslint: ^7.32.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-import: ^2.24.0
@@ -61,6 +62,7 @@ importers:
       '@material-ui/system': 5.0.0-alpha.34_873b6ee332b32a0534335ea366866a4e
       '@types/react': 17.0.15
       '@types/react-dom': 17.0.9
+      '@types/web': 0.0.16
       i18next: 20.3.5
       idb: 5.0.8
       jss: 10.5.1
@@ -9202,6 +9204,10 @@ packages:
       '@types/expect': 1.20.4
       '@types/node': 16.4.3
     dev: true
+
+  /@types/web/0.0.16:
+    resolution: {integrity: sha512-pLyVJ5DCQtPGYF6dYgH81ViGYGSynt0AQjSntKSIERu9yvXB0yPcHLGbbYMaLmNuWhTICOSUKS8je+VFjtttJw==}
+    dev: false
 
   /@types/webpack-dev-server/3.11.5:
     resolution: {integrity: sha512-vjsbQBW3fE5FDICkF3w3ZWFRXNwQdKt7JRPLmRy5W0KXlcuew4wgpKWXhgHS71iLNv7Z2PlY9dSSIaYg+bk+9w==}

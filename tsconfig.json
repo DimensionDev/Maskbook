@@ -53,7 +53,7 @@
 
     // Language and Environment
     "jsx": "react-jsx",
-    "lib": ["DOM", "DOM.Iterable", "ES2020"],
+    "lib": ["ES2020"], // don't add "DOM", we use @types/web
     "target": "ES2019",
     "useDefineForClassFields": true,
 
