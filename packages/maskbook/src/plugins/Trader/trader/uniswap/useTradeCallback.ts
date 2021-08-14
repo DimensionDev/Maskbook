@@ -138,7 +138,7 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                 })
                 resolve(hash)
             } catch (error) {
-                if (error?.code) {
+                if ((error as any)?.code) {
                     const error_ = new Error('Transaction rejected.')
                     setTradeState({
                         type: TransactionStateType.FAILED,

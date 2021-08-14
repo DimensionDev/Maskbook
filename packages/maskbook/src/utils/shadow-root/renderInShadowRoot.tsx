@@ -16,7 +16,6 @@ const captureEvents: (keyof HTMLElementEventMap)[] = [
     'drag',
     'dragend',
     'dragenter',
-    'dragexit',
     'dragleave',
     'dragover',
     'dragstart',

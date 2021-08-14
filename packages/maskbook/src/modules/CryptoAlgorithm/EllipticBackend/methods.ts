@@ -26,8 +26,8 @@ function initEllipticBackend(_: WebCryptoSupportedMethods): WebCryptoNotSupporte
                 [...ECDH],
             )
             return {
-                privateKey: await CryptoKeyToJsonWebKey(privateKey),
-                publicKey: await CryptoKeyToJsonWebKey(publicKey),
+                privateKey: await CryptoKeyToJsonWebKey(privateKey!),
+                publicKey: await CryptoKeyToJsonWebKey(publicKey!),
             }
         },
         async derive_aes_from_ecdh_k256(priv, pub, aes = 'AES-GCM', length = 256) {
