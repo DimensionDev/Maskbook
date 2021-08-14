@@ -9,7 +9,11 @@ export interface ProposalIdentifier {
     id: string
 }
 export interface RawVote {
-    choice: number
+    /**
+     * There're two sorts of vote,
+     * for multiple choice vote, each choice can be assigned to a different weight.
+     */
+    choice: number | { [choiceIndex: number]: number }
     created: number
     voter: string
     id: string
@@ -68,7 +72,15 @@ export interface ProposalMessage {
  * Payload of a vote
  */
 export interface VoteItem {
-    choice: string
+    choice: string | undefined
+    totalWeight: number | undefined
+    choices:
+        | {
+              index: number
+              weight: number
+              name: string
+          }[]
+        | undefined
     address: string
     authorIpfsHash: string
     /** the voting power of one voter */
@@ -78,7 +90,8 @@ export interface VoteItem {
     strategySymbol: string
     authorName: string | null
     authorAvatar: string | null
-    choiceIndex: number
+    choiceIndex: number | undefined
+    choiceIndexes: number[] | undefined
     timestamp: number
 }
 
@@ -88,7 +101,6 @@ export type VoteItemList = {
 
 export interface ProposalResult {
     choice: string
-    voteNumber: number
     powerDetail: {
         power: number
         name: string
