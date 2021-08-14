@@ -94,7 +94,7 @@ export function useMutlicallStateDecoded<
                 return { raw, error, value: null }
             }
         })
-    }, [web3, contracts.map((x) => x.options.address).join(','), names.join(''), state])
+    }, [web3, contracts.map((x) => x.options.address).join(), names.join(), state])
 }
 //#endregion
 
@@ -109,9 +109,9 @@ export function useSingleContractMultipleData<T extends BaseContract, K extends 
             contract.options.address,
             contract.methods[names[i]](...data).encodeABI() as string,
         ])
-    }, [contract?.options.address, names.join(''), callDatas.flatMap((x) => x).join('')])
+    }, [contract?.options.address, names.join(), callDatas.flatMap((x) => x).join()])
     const [state, callback] = useMulticallCallback()
-    const results = useMutlicallStateDecoded(new Array(calls.length).fill(contract) as T[], names, state)
+    const results = useMutlicallStateDecoded(Array.from({ length: calls.length }).fill(contract) as T[], names, state)
     return [results, calls, state, callback] as const
 }
 
@@ -126,7 +126,7 @@ export function useMutlipleContractSingleData<T extends BaseContract, K extends 
                 contract.options.address,
                 contract.methods[names[i]](...callData).encodeABI() as string,
             ]),
-        [contracts.map((x) => x.options.address).join(''), names.join(''), callData.join('')],
+        [contracts.map((x) => x.options.address).join(), names.join(), callData.join()],
     )
     const [state, callback] = useMulticallCallback()
     const results = useMutlicallStateDecoded(contracts, names, state)
@@ -144,7 +144,7 @@ export function useMultipleContractMultipleData<T extends BaseContract, K extend
                 contract.options.address,
                 contract.methods[names[i]](callDatas[i]).encodeABI() as string,
             ]),
-        [contracts.map((x) => x.options.address).join(''), names.join(''), callDatas.flatMap((x) => x).join('')],
+        [contracts.map((x) => x.options.address).join(), names.join(), callDatas.flatMap((x) => x).join()],
     )
     const [state, callback] = useMulticallCallback()
     const results = useMutlicallStateDecoded(contracts, names, state)

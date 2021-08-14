@@ -5,7 +5,7 @@ import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@maskn
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import Services from '../../extension/service'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { currentIsMetamaskLockedSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
+import { currentIsMetaMaskLockedSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
 import { isZero, ProviderType, useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared'
 import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
@@ -43,7 +43,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     //#region metamask
     const providerType = useValueRef(currentProviderSettings)
-    const currentIsMetamaskLocked = useValueRef(currentIsMetamaskLockedSettings)
+    const currentIsMetamaskLocked = useValueRef(currentIsMetaMaskLockedSettings)
     const onConnectMetaMask = useCallback(async () => {
         await Services.Ethereum.connectMetaMask()
     }, [])

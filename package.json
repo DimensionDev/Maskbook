@@ -1,6 +1,6 @@
 {
   "name": "maskbook",
-  "version": "1.35.0",
+  "version": "1.35.2",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -28,8 +28,10 @@
   },
   "dependencies": {
     "@emotion/cache": "^11.4.0",
-    "@emotion/react": "^11.4.0",
+    "@emotion/react": "^11.4.1",
+    "@emotion/serialize": "^1.0.2",
     "@emotion/styled": "^11.3.0",
+    "@emotion/utils": "^1.0.0",
     "@material-ui/core": "5.0.0-alpha.34",
     "@material-ui/icons": "5.0.0-alpha.34",
     "@material-ui/lab": "5.0.0-alpha.34",
@@ -59,6 +61,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-unicorn": "^35.0.0",
     "eslint-plugin-unused-imports": "^1.1.2",
     "esm": "^3.2.25",
     "gulp": "^4.0.2",

@@ -16,7 +16,7 @@ export function useCurrentTradeProvider() {
     const polygonNetworkTradeProvider = useValueRef(polygonNetworkTradeProviderSettings)
     const binanceNetworkTradeProvider = useValueRef(binanceNetworkTradeProviderSettings)
 
-    if (!networkType) return TradeProvider.UNISWAP
+    if (!networkType) return TradeProvider.UNISWAP_V2
     switch (networkType) {
         case NetworkType.Ethereum:
             return ethNetworkTradeProvider

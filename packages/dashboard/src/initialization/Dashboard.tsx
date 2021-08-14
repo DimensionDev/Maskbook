@@ -7,6 +7,7 @@ import {
     applyMaskColorVars,
     MaskDarkTheme,
     useSystemPreferencePalatte,
+    NoEffectUsePortalShadowRootContext,
 } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared'
 
@@ -35,24 +36,26 @@ export default function DashboardRoot() {
     applyMaskColorVars(document.body, settings === 'default' ? mode : settings)
 
     return (
-        <Web3Provider value={Web3Context}>
-            <I18nextProvider i18n={i18n}>
-                <StyledEngineProvider injectFirst>
-                    <StylesProvider>
-                        <ThemeProvider theme={theme}>
-                            <ErrorBoundary>
-                                <CssBaseline />
-                                <CustomSnackbarProvider>
-                                    <HashRouter>
-                                        <Pages />
-                                    </HashRouter>
-                                    <PluginRender />
-                                </CustomSnackbarProvider>
-                            </ErrorBoundary>
-                        </ThemeProvider>
-                    </StylesProvider>
-                </StyledEngineProvider>
-            </I18nextProvider>
-        </Web3Provider>
+        <NoEffectUsePortalShadowRootContext.Provider value={true}>
+            <Web3Provider value={Web3Context}>
+                <I18nextProvider i18n={i18n}>
+                    <StyledEngineProvider injectFirst>
+                        <StylesProvider>
+                            <ThemeProvider theme={theme}>
+                                <ErrorBoundary>
+                                    <CssBaseline />
+                                    <CustomSnackbarProvider>
+                                        <HashRouter>
+                                            <Pages />
+                                        </HashRouter>
+                                        <PluginRender />
+                                    </CustomSnackbarProvider>
+                                </ErrorBoundary>
+                            </ThemeProvider>
+                        </StylesProvider>
+                    </StyledEngineProvider>
+                </I18nextProvider>
+            </Web3Provider>
+        </NoEffectUsePortalShadowRootContext.Provider>
     )
 }

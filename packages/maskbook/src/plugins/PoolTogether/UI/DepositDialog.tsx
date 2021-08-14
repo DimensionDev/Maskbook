@@ -28,7 +28,7 @@ import { ADDRESS_ZERO } from '../constants'
 import { useDepositCallback } from '../hooks/useDepositCallback'
 import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
-import { calculateOdds } from '../utils'
+import { calculateOdds, getPrizePeriod } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -244,6 +244,8 @@ export function DepositDialog() {
     }, [account, amount.toFixed(), token, tokenBalance])
     //#endregion
 
+    const prizePeriodSeconds = Number.parseInt(pool?.config.prizePeriodSeconds ?? '', 10)
+
     if (!token || !pool) return null
 
     return (
@@ -269,17 +271,17 @@ export function DepositDialog() {
                             }}
                         />
                     </form>
-                    {isZero(tokenBalance) ? (
-                        <ActionButton
-                            className={classes.button}
-                            fullWidth
-                            onClick={openSwap}
-                            variant="contained"
-                            loading={loadingTokenBalance}>
-                            {t('plugin_pooltogether_buy', { symbol: token.symbol })}
-                        </ActionButton>
-                    ) : (
-                        <EthereumWalletConnectedBoundary>
+                    <EthereumWalletConnectedBoundary>
+                        {isZero(tokenBalance) ? (
+                            <ActionButton
+                                className={classes.button}
+                                fullWidth
+                                onClick={openSwap}
+                                variant="contained"
+                                loading={loadingTokenBalance}>
+                                {t('plugin_pooltogether_buy', { symbol: token.symbol })}
+                            </ActionButton>
+                        ) : (
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
                                 spender={pool.prizePool.address}
@@ -294,8 +296,8 @@ export function DepositDialog() {
                                     {validationMessage || t('plugin_pooltogether_deposit')}
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>
-                        </EthereumWalletConnectedBoundary>
-                    )}
+                        )}
+                    </EthereumWalletConnectedBoundary>
                     {odds ? (
                         <Grid container direction="column" className={classes.odds}>
                             <Grid item>
@@ -305,7 +307,10 @@ export function DepositDialog() {
                             </Grid>
                             <Grid item>
                                 <Typography variant="body2" fontWeight="fontWeightBold" className={classes.oddsValue}>
-                                    {t('plugin_pooltogether_odds_value', { value: odds.toLocaleString() })}
+                                    {t('plugin_pooltogether_odds_value', {
+                                        value: odds.toLocaleString(),
+                                        period: getPrizePeriod(t, prizePeriodSeconds),
+                                    })}
                                 </Typography>
                             </Grid>
                         </Grid>

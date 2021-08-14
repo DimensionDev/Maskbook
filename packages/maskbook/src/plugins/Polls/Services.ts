@@ -35,7 +35,7 @@ interface NewPollProps {
 export async function createNewPoll(poll: NewPollProps) {
     const { id, options, start_time, end_time } = poll
 
-    const results = new Array<number>(options.length).fill(0)
+    const results = Array.from<number>({ length: options.length }).fill(0)
     const resultsObj = { ...results }
     const optionsObj = { ...options }
 

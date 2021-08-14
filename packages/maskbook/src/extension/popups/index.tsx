@@ -5,6 +5,7 @@ export enum PopupRoutes {
     RequestPermission = '/request-permission',
     ThirdPartyRequestPermission = '/3rd-request-permission',
     PostInspector = '/post-inspector',
+    SignRequest = '/sign-request',
 }
 
 export function getRouteURLWithNoParam(kind: PopupRoutes) {
@@ -17,3 +18,4 @@ export function PermissionAwareRedirectOf(url: string, context: ThirdPartyPopupC
     )
 }
 export { constructRequestPermissionURL } from './RequestPermission/utils'
+export { constructSignRequestURL } from './SignRequest/utils'
