@@ -1,8 +1,8 @@
 import i18nNextInstance from 'i18next'
-import en from '../_locales/en/messages.json' // english
-import zh from '../_locales/zh/messages.json' // traditional chinese
-import ko from '../_locales/ko/messages.json' // korean
-import ja from '../_locales/ja/messages.json' // japanese
+import en from '../_locales/en-US/messages.json' // english
+import zh from '../_locales/zh-TW/messages.json' // traditional chinese
+import ko from '../_locales/ko-KR/messages.json' // korean
+import ja from '../_locales/ja-JP/messages.json' // japanese
 import { addMaskSharedI18N } from '@masknet/shared'
 import type { I18NFunction } from './i18n-next-ui'
 // @ts-ignore in case circle dependency make typescript complains
@@ -33,10 +33,10 @@ i18nNextInstance.languages = ['en', 'zh', 'ko', 'ja']
 if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(
         [
-            '../_locales/en/messages.json',
-            '../_locales/zh/messages.json',
-            '../_locales/ko/messages.json',
-            '../_locales/ja/messages.json',
+            '../_locales/en-US/messages.json',
+            '../_locales/zh-TW/messages.json',
+            '../_locales/ko-KR/messages.json',
+            '../_locales/ja-JP/messages.json',
         ],
         () => {
             i18nNextInstance.addResources('zh', 'translation', zh)
