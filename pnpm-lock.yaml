@@ -730,23 +730,32 @@ importers:
       unstated-next: 1.1.0
       urlcat: 2.0.4
 <<<<<<< HEAD
+<<<<<<< HEAD
+      use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
+=======
+=======
+>>>>>>> fix: conflicts
+<<<<<<< HEAD
+      use-subscription: 1.5.1
+=======
+=======
+>>>>>>> fix: conflicts
+<<<<<<< HEAD
+      use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
+=======
+=======
+>>>>>>> fix: conflicts
+<<<<<<< HEAD
+      use-subscription: 1.5.1
+=======
+=======
+>>>>>>> fix: conflicts
+<<<<<<< HEAD
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
 =======
 <<<<<<< HEAD
       use-subscription: 1.5.1
 =======
-<<<<<<< HEAD
-      use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
-=======
-<<<<<<< HEAD
-      use-subscription: 1.5.1
-=======
-<<<<<<< HEAD
-      use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
-=======
-<<<<<<< HEAD
-      use-subscription: 1.5.1
-=======
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
 <<<<<<< HEAD
 =======
@@ -815,8 +824,17 @@ importers:
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+=======
+=======
+=======
+      use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
       uuid: 8.3.2
       wallet.ts: 1.0.1
       web-ext-types: 3.2.1
@@ -837,6 +855,7 @@ importers:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12_typescript@4.4.4
 =======
 =======
@@ -845,6 +864,8 @@ importers:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12
 =======
@@ -854,6 +875,8 @@ importers:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12_typescript@4.4.3
 >>>>>>> feat: initial setup for augur
@@ -869,6 +892,8 @@ importers:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12
 =======
@@ -878,6 +903,8 @@ importers:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12_typescript@4.4.2
 >>>>>>> feat: initial setup for augur
@@ -889,6 +916,8 @@ importers:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@dimensiondev/webextension-shim': 0.0.3-20210708053012-57a254d_typescript@4.4.1-rc
 =======
@@ -898,6 +927,8 @@ importers:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@dimensiondev/webextension-shim': 0.0.3-20210708053012-57a254d
 <<<<<<< HEAD
@@ -912,14 +943,33 @@ importers:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
       '@dimensiondev/webextension-shim': 0.0.3-20210708053012-57a254d_typescript@4.3.5
->>>>>>> feat: initial setup for augur
       '@pmmmwh/react-refresh-webpack-plugin': 0.5.0-rc.2_0cb17a392999b7da0b5f4263f37b1695
 >>>>>>> feat: initial setup for augur
 >>>>>>> feat: initial setup for augur
       '@sinonjs/text-encoding': 0.7.1
+<<<<<<< HEAD
       '@swc/core': 1.2.83
+<<<<<<< HEAD
       '@testing-library/react-hooks': 7.0.2_react-test-renderer@17.0.2
+=======
+      '@testing-library/react-hooks': 7.0.2_1959de3a9153879cff3acd96b46ed70f
+=======
+<<<<<<< HEAD
+      '@swc/core': 1.2.77
+<<<<<<< HEAD
+      '@testing-library/react-hooks': 7.0.1_1959de3a9153879cff3acd96b46ed70f
+=======
+      '@testing-library/react-hooks': 7.0.1_react-test-renderer@17.0.2
+=======
+      '@swc/core': 1.2.66
+      '@testing-library/react-hooks': 7.0.1_1959de3a9153879cff3acd96b46ed70f
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
       '@types/enzyme': 3.10.9
       '@types/enzyme-adapter-react-16': 1.0.6
       '@types/expect-puppeteer': 4.4.6
@@ -957,9 +1007,12 @@ importers:
 >>>>>>> fix: conflicts and bugs
       '@types/webpack-dev-server': 3.11.5
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@typescript-eslint/eslint-plugin': 4.29.1_9e650468d3ce62d57e2df2f2fad149b2
       '@typescript-eslint/parser': 4.29.1_f8ed5431742f75332c3083279db44140
 =======
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@typescript-eslint/eslint-plugin': 4.29.1_@typescript-eslint+parser@4.29.1
       '@typescript-eslint/parser': 4.29.1
@@ -968,6 +1021,10 @@ importers:
 =======
       '@typescript-eslint/eslint-plugin': 4.28.5_@typescript-eslint+parser@4.28.5
       '@typescript-eslint/parser': 4.28.5
+=======
+      '@typescript-eslint/eslint-plugin': 4.28.5_514553717ff968e20f6d1c6e521f8616
+      '@typescript-eslint/parser': 4.28.5_eslint@7.31.0+typescript@4.3.5
+>>>>>>> fix: conflicts
       babel-loader: 8.2.2_webpack@5.46.0
 <<<<<<< HEAD
 =======
@@ -1008,21 +1065,9 @@ importers:
       file-loader: 6.2.0_webpack@5.46.0
       html-webpack-plugin: 5.3.2_webpack@5.46.0
 <<<<<<< HEAD
->>>>>>> feat: initial setup for augur
-      jest: 27.0.6
-=======
-      jest: 27.0.6_ts-node@10.1.0
-<<<<<<< HEAD
-=======
-      fake-indexeddb: 3.1.2
-      file-loader: 6.2.0_webpack@5.37.1
-      html-webpack-plugin: 5.3.1_webpack@5.37.1
-<<<<<<< HEAD
-<<<<<<< HEAD
-      jest: 27.0.1
->>>>>>> feat: initial setup for augur
 <<<<<<< HEAD
 >>>>>>> feat: initial setup for augur
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> feat: initial setup for augur
 <<<<<<< HEAD
@@ -1065,7 +1110,17 @@ importers:
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+=======
+=======
+      jest: 27.0.6
+=======
+=======
+>>>>>>> fix: conflicts
+      jest: 27.0.6_ts-node@10.1.0
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
       jest-environment-jsdom-fourteen: 1.0.1
       jest-esm-transformer: 1.0.0
       jest-junit: 12.2.0
@@ -1075,6 +1130,7 @@ importers:
       openzeppelin-solidity: 3.4.1
       react-devtools-core: 4.18.0
       react-refresh: 0.10.0
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1095,6 +1151,8 @@ importers:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       react-test-renderer: 17.0.2
 =======
@@ -1104,6 +1162,8 @@ importers:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       react-test-renderer: 17.0.2_react@18.0.0-alpha-aecb3b6d1
 <<<<<<< HEAD
@@ -1139,9 +1199,11 @@ importers:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
       react-test-renderer: 17.0.2_react@18.0.0-alpha-aecb3b6d1
->>>>>>> feat: initial setup for augur
       rimraf: 3.0.2
+<<<<<<< HEAD
       source-map-loader: 3.0.0_webpack@5.50.0
       swc-loader: 0.1.14_webpack@5.50.0
       ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
@@ -1152,6 +1214,12 @@ importers:
       webpack-cli: 4.7.2_2f87bc69d24ff610f8f32a7541f06226
       webpack-dev-server: 3.11.2_webpack-cli@4.7.2+webpack@5.50.0
 =======
+=======
+      source-map-loader: 3.0.0_webpack@5.46.0
+      swc-loader: 0.1.14_webpack@5.46.0
+      ts-jest: 27.0.4_52cc4273aa16028085013af47e479e10
+      type-coverage: 2.18.0_typescript@4.3.5
+>>>>>>> fix: conflicts
       webpack: 5.46.0_webpack-cli@4.7.2
       webpack-cli: 4.7.2_d46d1c9a5e33a01c3500802a2e542ae0
       webpack-dev-server: 3.11.2_webpack-cli@4.7.2+webpack@5.46.0
@@ -5311,57 +5379,6 @@ packages:
       scrypt-js: 3.0.1
     dev: false
 
-<<<<<<< HEAD
-  /@ethersproject/keccak256/5.1.0:
-    resolution: {integrity: sha512-vrTB1W6AEYoadww5c9UyVJ2YcSiyIUTNDRccZIgwTmFFoSHwBtcvG1hqy9RzJ1T0bMdATbM9Hfx2mJ6H0i7Hig==}
-    dependencies:
-      '@ethersproject/bytes': 5.1.0
-      js-sha3: 0.5.7
-
-  /@ethersproject/keccak256/5.2.0:
-    resolution: {integrity: sha512-LqyxTwVANga5Y3L1yo184czW6b3PibabN8xyE/eOulQLLfXNrHHhwrOTpOhoVRWCICVCD/5SjQfwqTrczjS7jQ==}
-    dependencies:
-      '@ethersproject/bytes': 5.2.0
-      js-sha3: 0.5.7
->>>>>>> fix: prices
-
-  /@ethersproject/hdnode/5.4.0:
-    resolution: {integrity: sha512-pKxdS0KAaeVGfZPp1KOiDLB0jba11tG6OP1u11QnYfb7pXn6IZx0xceqWRr6ygke8+Kw74IpOoSi7/DwANhy8Q==}
-    dependencies:
-      '@ethersproject/abstract-signer': 5.4.1
-      '@ethersproject/basex': 5.4.0
-      '@ethersproject/bignumber': 5.4.1
-      '@ethersproject/bytes': 5.4.0
-      '@ethersproject/logger': 5.4.0
-      '@ethersproject/pbkdf2': 5.4.0
-      '@ethersproject/properties': 5.4.0
-      '@ethersproject/sha2': 5.4.0
-      '@ethersproject/signing-key': 5.4.0
-      '@ethersproject/strings': 5.4.0
-      '@ethersproject/transactions': 5.4.0
-      '@ethersproject/wordlists': 5.4.0
-    dev: false
-
-  /@ethersproject/json-wallets/5.4.0:
-    resolution: {integrity: sha512-igWcu3fx4aiczrzEHwG1xJZo9l1cFfQOWzTqwRw/xcvxTk58q4f9M7cjh51EKphMHvrJtcezJ1gf1q1AUOfEQQ==}
-    dependencies:
-      '@ethersproject/abstract-signer': 5.4.1
-      '@ethersproject/address': 5.4.0
-      '@ethersproject/bytes': 5.4.0
-      '@ethersproject/hdnode': 5.4.0
-      '@ethersproject/keccak256': 5.4.0
-      '@ethersproject/logger': 5.4.0
-      '@ethersproject/pbkdf2': 5.4.0
-      '@ethersproject/properties': 5.4.0
-      '@ethersproject/random': 5.4.0
-      '@ethersproject/strings': 5.4.0
-      '@ethersproject/transactions': 5.4.0
-      aes-js: 3.0.0
-      scrypt-js: 3.0.1
-    dev: false
-
-=======
->>>>>>> fix: conflicts and bugs
   /@ethersproject/keccak256/5.4.0:
     resolution: {integrity: sha512-FBI1plWet+dPUvAzPAeHzRKiPpETQzqSUWR1wXJGHVWi4i8bOSrpC3NwpkPjgeXG7MnugVc1B42VbfnQikyC/A==}
     dependencies:
@@ -5390,6 +5407,7 @@ packages:
     dev: false
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@ethersproject/properties/5.1.0:
     resolution: {integrity: sha512-519KKTwgmH42AQL3+GFV3SX6khYEfHsvI6v8HYejlkigSDuqttdgVygFTDsGlofNFchhDwuclrxQnD5B0YLNMg==}
     dependencies:
@@ -5410,6 +5428,8 @@ packages:
 
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
   /@ethersproject/properties/5.4.0:
     resolution: {integrity: sha512-7jczalGVRAJ+XSRvNA6D5sAwT4gavLq3OXPuV/74o3Rd2wuzSL035IMpIMgei4CYyBdialJMrTqkOnzccLHn4A==}
     dependencies:
@@ -5615,22 +5635,10 @@ packages:
       '@ethersproject/logger': 5.4.0
     dev: false
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-  /@ethersproject/wallet/5.4.0:
-    resolution: {integrity: sha512-wU29majLjM6AjCjpat21mPPviG+EpK7wY1+jzKD0fg3ui5fgedf2zEu1RDgpfIMsfn8fJHJuzM4zXZ2+hSHaSQ==}
-    dependencies:
-      '@ethersproject/abstract-provider': 5.4.0
-=======
-<<<<<<< HEAD
-=======
-=======
->>>>>>> fix: conflicts and bugs
   /@ethersproject/wallet/5.4.0:
     resolution: {integrity: sha512-wU29majLjM6AjCjpat21mPPviG+EpK7wY1+jzKD0fg3ui5fgedf2zEu1RDgpfIMsfn8fJHJuzM4zXZ2+hSHaSQ==}
     dependencies:
       '@ethersproject/abstract-provider': 5.4.1
->>>>>>> fix: prices
       '@ethersproject/abstract-signer': 5.4.1
       '@ethersproject/address': 5.4.0
       '@ethersproject/bignumber': 5.4.1
@@ -5647,32 +5655,6 @@ packages:
       '@ethersproject/wordlists': 5.4.0
     dev: false
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  /@ethersproject/web/5.1.0:
-    resolution: {integrity: sha512-LTeluWgTq04+RNqAkVhpydPcRZK/kKxD2Vy7PYGrAD27ABO9kTqTBKwiOuzTyAHKUQHfnvZbXmxBXJAGViSDcA==}
-    dependencies:
-      '@ethersproject/base64': 5.1.0
-      '@ethersproject/bytes': 5.1.0
-      '@ethersproject/logger': 5.1.0
-      '@ethersproject/properties': 5.1.0
-      '@ethersproject/strings': 5.1.0
-    dev: false
-
-  /@ethersproject/web/5.2.0:
-    resolution: {integrity: sha512-mYb9qxGlOBFR2pR6t1CZczuqqX6r8RQGn7MtwrBciMex3cvA/qs+wbmcDgl+/OZY0Pco/ih6WHQRnVi+4sBeCQ==}
-    dependencies:
-      '@ethersproject/base64': 5.2.0
-      '@ethersproject/bytes': 5.2.0
-      '@ethersproject/logger': 5.2.0
-      '@ethersproject/properties': 5.2.0
-      '@ethersproject/strings': 5.2.0
-
->>>>>>> fix: prices
->>>>>>> fix: prices
-=======
->>>>>>> fix: conflicts and bugs
   /@ethersproject/web/5.4.0:
     resolution: {integrity: sha512-1bUusGmcoRLYgMn6c1BLk1tOKUIFuTg8j+6N8lYlbMpDesnle+i3pGSagGNvwjaiLo4Y5gBibwctpPRmjrh4Og==}
     dependencies:
@@ -5751,6 +5733,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@jest/core/27.2.0_ts-node@10.2.1:
     resolution: {integrity: sha512-E/2NHhq+VMo18DpKkoty8Sjey8Kps5Cqa88A8NP757s6JjYqPdioMuyUBhDiIOGCdQByEp0ou3jskkTszMS0nw==}
 =======
@@ -5760,6 +5743,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@jest/core/27.1.0:
 =======
@@ -5769,6 +5754,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@jest/core/27.1.0_ts-node@10.2.1:
 >>>>>>> feat: initial setup for augur
@@ -5780,6 +5767,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@jest/core/27.0.6_ts-node@10.2.0:
 =======
@@ -5802,6 +5791,9 @@ packages:
   /@jest/core/27.0.6_ts-node@10.1.0:
 >>>>>>> feat: initial setup for augur
 >>>>>>> feat: initial setup for augur
+=======
+  /@jest/core/27.0.6_ts-node@10.1.0:
+>>>>>>> fix: conflicts
     resolution: {integrity: sha512-SsYBm3yhqOn5ZLJCtccaBcvD/ccTLCeuDv8U41WJH/V1MW5eKUkeMHT9U+Pw/v1m1AIWlnIW/eM2XzQr0rEmow==}
 <<<<<<< HEAD
 =======
@@ -5866,7 +5858,11 @@ packages:
 =======
       graceful-fs: 4.2.6
       jest-changed-files: 27.0.6
+<<<<<<< HEAD
       jest-config: 27.0.6_ts-node@10.2.0
+=======
+      jest-config: 27.0.6_ts-node@10.1.0
+>>>>>>> fix: conflicts
       jest-haste-map: 27.0.6
       jest-message-util: 27.0.6
       jest-regex-util: 27.0.6
@@ -12712,6 +12708,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       react-error-boundary: 3.1.3
       react-test-renderer: 17.0.2
 =======
@@ -12721,6 +12718,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
 =======
 =======
@@ -12744,10 +12743,13 @@ packages:
 =======
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       react-error-boundary: 3.1.3_react@18.0.0-alpha-aecb3b6d1
       react-test-renderer: 17.0.2_react@18.0.0-alpha-aecb3b6d1
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -12795,7 +12797,12 @@ packages:
 =======
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+=======
+=======
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
     dev: true
 
 >>>>>>> feat: initial setup for augur
@@ -13809,6 +13816,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@typescript-eslint/eslint-plugin/4.31.1_160ac4995e3ab15f365de9f1ef076662:
 =======
 =======
@@ -13817,6 +13825,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/eslint-plugin/4.31.1_@typescript-eslint+parser@4.31.1:
 =======
@@ -13826,6 +13836,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/eslint-plugin/4.31.1_e2d3c88d378335c4183365c112128ce9:
 >>>>>>> feat: initial setup for augur
@@ -13838,6 +13850,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/eslint-plugin/4.30.0_@typescript-eslint+parser@4.30.0:
 =======
@@ -13847,6 +13861,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/eslint-plugin/4.30.0_8a8a2d3eaa9257455a03c16dce5f55b3:
 >>>>>>> feat: initial setup for augur
@@ -13858,6 +13874,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/eslint-plugin/4.29.1_9e650468d3ce62d57e2df2f2fad149b2:
 =======
@@ -13867,6 +13885,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/eslint-plugin/4.29.1_@typescript-eslint+parser@4.29.1:
 >>>>>>> feat: initial setup for augur
@@ -13888,8 +13908,9 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
   /@typescript-eslint/eslint-plugin/4.28.5_514553717ff968e20f6d1c6e521f8616:
->>>>>>> feat: initial setup for augur
     resolution: {integrity: sha512-m31cPEnbuCqXtEZQJOXAHsHvtoDi9OVaeL5wZnO2KZTnkvELk+u6J6jHg+NzvWQxk+87Zjbc4lJS4NHmgImz6Q==}
 <<<<<<< HEAD
 =======
@@ -13926,6 +13947,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@typescript-eslint/experimental-utils': 4.31.1_eslint@7.32.0+typescript@4.4.4
       '@typescript-eslint/parser': 4.31.1_eslint@7.32.0+typescript@4.4.4
       '@typescript-eslint/scope-manager': 4.31.1
@@ -13938,6 +13960,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@typescript-eslint/experimental-utils': 4.31.1
       '@typescript-eslint/parser': 4.31.1
@@ -13950,6 +13974,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@typescript-eslint/experimental-utils': 4.31.1_eslint@7.32.0+typescript@4.4.3
       '@typescript-eslint/parser': 4.31.1_eslint@7.32.0+typescript@4.4.3
@@ -13963,6 +13989,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@typescript-eslint/experimental-utils': 4.30.0
       '@typescript-eslint/parser': 4.30.0
@@ -13973,6 +14001,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@typescript-eslint/experimental-utils': 4.30.0_eslint@7.32.0+typescript@4.4.2
       '@typescript-eslint/parser': 4.30.0_eslint@7.32.0+typescript@4.4.2
@@ -13985,6 +14015,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@typescript-eslint/experimental-utils': 4.29.1_f8ed5431742f75332c3083279db44140
       '@typescript-eslint/parser': 4.29.1_f8ed5431742f75332c3083279db44140
@@ -13995,6 +14027,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@typescript-eslint/experimental-utils': 4.29.1
       '@typescript-eslint/parser': 4.29.1
@@ -14027,11 +14061,14 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
       '@typescript-eslint/experimental-utils': 4.28.5_eslint@7.31.0+typescript@4.3.5
       '@typescript-eslint/parser': 4.28.5_eslint@7.31.0+typescript@4.3.5
       '@typescript-eslint/scope-manager': 4.28.5
       debug: 4.3.2
       eslint: 7.31.0
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
       '@typescript-eslint/experimental-utils': 4.25.0
@@ -14091,6 +14128,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
       functional-red-black-tree: 1.0.1
       regexpp: 3.2.0
       semver: 7.3.5
@@ -14149,6 +14188,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@typescript-eslint/experimental-utils/4.31.1_eslint@7.32.0+typescript@4.4.4:
 =======
 =======
@@ -14157,6 +14197,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/experimental-utils/4.31.1:
 =======
@@ -14166,6 +14208,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/experimental-utils/4.31.1_eslint@7.32.0+typescript@4.4.3:
 >>>>>>> feat: initial setup for augur
@@ -14178,6 +14222,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/experimental-utils/4.30.0:
 =======
@@ -14187,6 +14233,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/experimental-utils/4.30.0_eslint@7.32.0+typescript@4.4.2:
 >>>>>>> feat: initial setup for augur
@@ -14198,6 +14246,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/experimental-utils/4.29.1_f8ed5431742f75332c3083279db44140:
 =======
@@ -14207,6 +14257,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/experimental-utils/4.29.1:
 >>>>>>> feat: initial setup for augur
@@ -14228,8 +14280,9 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
   /@typescript-eslint/experimental-utils/4.28.5_eslint@7.31.0+typescript@4.3.5:
->>>>>>> feat: initial setup for augur
     resolution: {integrity: sha512-bGPLCOJAa+j49hsynTaAtQIWg6uZd8VLiPcyDe4QPULsvQwLHGLSGKKcBN8/lBxIX14F74UEMK2zNDI8r0okwA==}
 <<<<<<< HEAD
 =======
@@ -14296,11 +14349,9 @@ packages:
       '@types/json-schema': 7.0.8
       '@typescript-eslint/scope-manager': 4.28.5
       '@typescript-eslint/types': 4.28.5
-<<<<<<< HEAD
-      '@typescript-eslint/typescript-estree': 4.28.5
-=======
       '@typescript-eslint/typescript-estree': 4.28.5_typescript@4.3.5
       eslint: 7.31.0
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
       '@types/json-schema': 7.0.7
@@ -14383,16 +14434,40 @@ packages:
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
       eslint-scope: 5.1.1
+<<<<<<< HEAD
       eslint-utils: 3.0.0_eslint@7.32.0
+=======
+<<<<<<< HEAD
+      eslint-utils: 3.0.0
+=======
+<<<<<<< HEAD
+      eslint-utils: 3.0.0_eslint@7.32.0
+=======
+<<<<<<< HEAD
+      eslint-utils: 3.0.0
+=======
+      eslint-utils: 3.0.0_eslint@7.32.0
+=======
+=======
+>>>>>>> fix: conflicts
+      eslint-scope: 5.1.1
+      eslint-utils: 3.0.0_eslint@7.31.0
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
     transitivePeerDependencies:
       - supports-color
       - typescript
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -14405,6 +14480,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/parser/4.31.1:
 =======
@@ -14414,6 +14491,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/parser/4.31.1_eslint@7.32.0+typescript@4.4.3:
 >>>>>>> feat: initial setup for augur
@@ -14426,6 +14505,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/parser/4.30.0:
 =======
@@ -14435,6 +14516,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/parser/4.30.0_eslint@7.32.0+typescript@4.4.2:
 >>>>>>> feat: initial setup for augur
@@ -14446,6 +14529,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/parser/4.29.1_f8ed5431742f75332c3083279db44140:
 =======
@@ -14455,6 +14540,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/parser/4.29.1:
 >>>>>>> feat: initial setup for augur
@@ -14476,8 +14563,9 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
   /@typescript-eslint/parser/4.28.5_eslint@7.31.0+typescript@4.3.5:
->>>>>>> feat: initial setup for augur
     resolution: {integrity: sha512-NPCOGhTnkXGMqTznqgVbA5LqVsnw+i3+XA1UKLnAb+MG1Y1rP4ZSK9GX0kJBmAZTMIktf+dTwXToT6kFwyimbw==}
 <<<<<<< HEAD
 =======
@@ -14554,13 +14642,16 @@ packages:
 >>>>>>> fix: conflicts and bugs
       '@typescript-eslint/scope-manager': 4.28.5
       '@typescript-eslint/types': 4.28.5
+<<<<<<< HEAD
       '@typescript-eslint/typescript-estree': 4.28.5
 >>>>>>> feat: initial setup for augur
-      debug: 4.3.2
-<<<<<<< HEAD
 =======
+      '@typescript-eslint/typescript-estree': 4.28.5_typescript@4.3.5
+>>>>>>> fix: conflicts
+      debug: 4.3.2
       eslint: 7.31.0
       typescript: 4.3.5
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
       '@typescript-eslint/scope-manager': 4.25.0
@@ -14636,6 +14727,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -14657,6 +14750,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@typescript-eslint/typescript-estree/4.31.1_typescript@4.4.4:
 =======
 =======
@@ -14665,6 +14759,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/typescript-estree/4.31.1:
 =======
@@ -14674,6 +14770,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/typescript-estree/4.31.1_typescript@4.4.3:
 >>>>>>> feat: initial setup for augur
@@ -14686,6 +14784,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/typescript-estree/4.30.0:
 =======
@@ -14695,6 +14795,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/typescript-estree/4.30.0_typescript@4.4.2:
 >>>>>>> feat: initial setup for augur
@@ -14706,6 +14808,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/typescript-estree/4.29.1_typescript@4.4.1-rc:
 =======
@@ -14715,6 +14819,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /@typescript-eslint/typescript-estree/4.29.1:
 >>>>>>> feat: initial setup for augur
@@ -14736,8 +14842,9 @@ packages:
 <<<<<<< HEAD
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
   /@typescript-eslint/typescript-estree/4.28.5_typescript@4.3.5:
->>>>>>> feat: initial setup for augur
     resolution: {integrity: sha512-FzJUKsBX8poCCdve7iV7ShirP8V+ys2t1fvamVeD1rWpiAnIm550a+BX/fmTHrjEpQJ7ZAn+Z7ZZwJjytk9rZw==}
 <<<<<<< HEAD
 =======
@@ -14887,7 +14994,7 @@ packages:
       '@ethersproject/address': 5.4.0
       big.js: 5.2.2
       decimal.js-light: 2.5.1
-      jsbi: 3.1.4
+      jsbi: 3.1.5
       tiny-invariant: 1.1.0
       toformat: 2.0.0
     dev: false
@@ -17094,8 +17201,41 @@ packages:
     resolution: {integrity: sha512-WHVocJYavUwVgVViC0ORikPHQquXwVh939TaelZ4WDqpWgTX/FsGhl/+P4qBUAGcRvtOgDgC+xftNWWp2RUTAQ==}
     hasBin: true
     dependencies:
+<<<<<<< HEAD
       caniuse-lite: 1.0.30001265
       electron-to-chromium: 1.3.865
+=======
+<<<<<<< HEAD
+      caniuse-lite: 1.0.30001261
+      electron-to-chromium: 1.3.853
+=======
+<<<<<<< HEAD
+      caniuse-lite: 1.0.30001255
+      electron-to-chromium: 1.3.830
+=======
+<<<<<<< HEAD
+      caniuse-lite: 1.0.30001252
+      electron-to-chromium: 1.3.826
+=======
+<<<<<<< HEAD
+      caniuse-lite: 1.0.30001251
+<<<<<<< HEAD
+      electron-to-chromium: 1.3.812
+=======
+<<<<<<< HEAD
+      electron-to-chromium: 1.3.806
+=======
+      electron-to-chromium: 1.3.807
+=======
+      caniuse-lite: 1.0.30001248
+      electron-to-chromium: 1.3.792
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
     dev: false
 
   /browserslist/4.14.2:
@@ -17419,6 +17559,7 @@ packages:
   /caniuse-lite/1.0.30001248:
     resolution: {integrity: sha512-NwlQbJkxUFJ8nMErnGtT0QTM2TJ33xgz4KXJSMIrjXIbDVdaYueGyjOrLKRtJC+rTiWfi6j5cnZN1NBiSBJGNw==}
 <<<<<<< HEAD
+<<<<<<< HEAD
     dev: true
 
   /caniuse-lite/1.0.30001251:
@@ -17427,6 +17568,8 @@ packages:
 =======
 =======
 >>>>>>> fix: recreate pnpm-lock
+=======
+>>>>>>> fix: conflicts
     dev: false
 >>>>>>> fix: recreate pnpm-lock
 
@@ -19282,6 +19425,7 @@ packages:
   /electron-to-chromium/1.3.792:
     resolution: {integrity: sha512-RM2O2xrNarM7Cs+XF/OE2qX/aBROyOZqqgP+8FXMXSuWuUqCfUUzg7NytQrzZU3aSqk1Qq6zqnVkJsbfMkIatg==}
 <<<<<<< HEAD
+<<<<<<< HEAD
     dev: true
 
 <<<<<<< HEAD
@@ -19311,6 +19455,8 @@ packages:
 =======
 >>>>>>> fix: recreate pnpm-lock
 >>>>>>> fix: recreate pnpm-lock
+=======
+>>>>>>> fix: conflicts
     dev: false
 >>>>>>> fix: recreate pnpm-lock
 >>>>>>> fix: recreate pnpm-lock
@@ -19483,7 +19629,7 @@ packages:
     resolution: {integrity: sha512-2qbxE7ek3YxPJ1ML6V+satHkzHpJQKWkRHmRx6mfAoW59yP8YH8BFplbegSP+u2hBd6B6KCOpvJQ3dZAP+hkpg==}
     engines: {node: '>=4.3.0 <5.0.0 || >=5.10'}
     dependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.6
       memory-fs: 0.4.1
       object-assign: 4.1.1
       tapable: 0.2.9
@@ -20045,7 +20191,41 @@ packages:
       eslint-visitor-keys: 1.3.0
     dev: true
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+  /eslint-utils/3.0.0:
+    resolution: {integrity: sha512-uuQC43IGctw68pJA1RgbQS8/NP7rch6Cwd4j3ZBtgo4/8Flj4eGE7ZYSZRN3iq5pVUv6GPdW5Z1RFleo84uLDA==}
+    engines: {node: ^10.0.0 || ^12.0.0 || >= 14.0.0}
+    peerDependencies:
+      eslint: '>=5'
+    dependencies:
+      eslint-visitor-keys: 2.1.0
+    dev: true
+
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
   /eslint-utils/3.0.0_eslint@7.32.0:
+=======
+  /eslint-utils/3.0.0_eslint@7.31.0:
+>>>>>>> fix: conflicts
     resolution: {integrity: sha512-uuQC43IGctw68pJA1RgbQS8/NP7rch6Cwd4j3ZBtgo4/8Flj4eGE7ZYSZRN3iq5pVUv6GPdW5Z1RFleo84uLDA==}
     engines: {node: ^10.0.0 || ^12.0.0 || >= 14.0.0}
     peerDependencies:
@@ -21161,7 +21341,7 @@ packages:
   /fs-extra/0.30.0:
     resolution: {integrity: sha1-8jP/zAjU2n1DLapEl3aYnbHfk/A=}
     dependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.6
       jsonfile: 2.4.0
       klaw: 1.3.1
       path-is-absolute: 1.0.1
@@ -21662,8 +21842,14 @@ packages:
   /graceful-fs/4.2.6:
     resolution: {integrity: sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==}
 
+<<<<<<< HEAD
   /graceful-fs/4.2.8:
     resolution: {integrity: sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==}
+=======
+  /growly/1.3.0:
+    resolution: {integrity: sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=}
+    dev: true
+>>>>>>> fix: conflicts
 
   /graphql-request/3.5.0_graphql@15.5.3:
     resolution: {integrity: sha512-Io89QpfU4rqiMbqM/KwMBzKaDLOppi8FU8sEccCE4JqCgz95W9Q8bvxQ4NfPALLSMvg9nafgg8AkYRmgKSlukA==}
@@ -21860,12 +22046,15 @@ packages:
       has-symbol-support-x: 1.4.2
     dev: false
 
+<<<<<<< HEAD
   /has-tostringtag/1.0.0:
     resolution: {integrity: sha512-kFjcSNhnlGV1kyoGk7OXKSawH5JOb/LzUc5w9B02hOTO0dfFRjbHQKvg1d6cf3HbeUmtU9VbbV3qzZ2Teh97WQ==}
     engines: {node: '>= 0.4'}
     dependencies:
       has-symbols: 1.0.2
 
+=======
+>>>>>>> fix: conflicts
   /has-unicode/2.0.1:
     resolution: {integrity: sha1-4Ob+aijPUROIVeCG0Wkedx3iqLk=}
     dev: true
@@ -22106,8 +22295,13 @@ packages:
       void-elements: 3.1.0
     dev: false
 
+<<<<<<< HEAD
   /html-react-parser/1.3.0_react@18.0.0-alpha-aecb3b6d1:
     resolution: {integrity: sha512-lhpkOFH8pwqEjlNUYCWvjT43/JVCZO9MAZuCS6afT1/VP+bZcNxNUs4AUqiMzH0QPSDHwM/GFNXZNok1KTA4BQ==}
+=======
+  /html-react-parser/1.2.7_react@18.0.0-alpha-aecb3b6d1:
+    resolution: {integrity: sha512-gUUEgrZV0YaCxtZO2XuJDUnHSq7gOqKu1krye97cxgiZ+ipaIzspGMhATeq9lhy9gwYmwBF2YCHe/accrMMo8Q==}
+>>>>>>> fix: conflicts
     peerDependencies:
       react: 0.14 || 15 || 16 || 17
     dependencies:
@@ -22874,6 +23068,7 @@ packages:
       has-symbols: 1.0.2
     dev: true
 
+<<<<<<< HEAD
   /is-regex/1.1.4:
     resolution: {integrity: sha512-kvRdxDsxZjhzUX07ZnLydzS1TU/TJlTUHHY4YLL87e37oUA49DfkLqgy+VjFocowy29cKvcSiu+kIv728jTTVg==}
     engines: {node: '>= 0.4'}
@@ -22881,6 +23076,8 @@ packages:
       call-bind: 1.0.2
       has-tostringtag: 1.0.0
 
+=======
+>>>>>>> fix: conflicts
   /is-regexp/1.0.0:
     resolution: {integrity: sha1-/S2INUXEa6xaYz57mgnof6LLUGk=}
     engines: {node: '>=0.10.0'}
@@ -23242,6 +23439,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /jest-cli/27.2.0_ts-node@10.2.1:
     resolution: {integrity: sha512-bq1X/B/b1kT9y1zIFMEW3GFRX1HEhFybiqKdbxM+j11XMMYSbU9WezfyWIhrSOmPT+iODLATVjfsCnbQs7cfIA==}
 =======
@@ -23251,6 +23449,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /jest-cli/27.1.0:
 =======
@@ -23260,6 +23460,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /jest-cli/27.1.0_ts-node@10.2.1:
 >>>>>>> feat: initial setup for augur
@@ -23271,6 +23473,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /jest-cli/27.0.6_ts-node@10.2.0:
 =======
@@ -23293,6 +23497,9 @@ packages:
   /jest-cli/27.0.6_ts-node@10.1.0:
 >>>>>>> feat: initial setup for augur
 >>>>>>> feat: initial setup for augur
+=======
+  /jest-cli/27.0.6_ts-node@10.1.0:
+>>>>>>> fix: conflicts
     resolution: {integrity: sha512-qUUVlGb9fdKir3RDE+B10ULI+LQrz+MCflEH2UJyoUjoHHCbxDrMxSzjQAPUMsic4SncI62ofYCcAvW6+6rhhg==}
 <<<<<<< HEAD
 =======
@@ -23324,6 +23531,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@jest/core': 27.2.0_ts-node@10.2.1
       '@jest/test-result': 27.2.0
       '@jest/types': 27.1.1
@@ -23334,6 +23542,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@jest/core': 27.1.0
 =======
@@ -23343,6 +23553,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@jest/core': 27.1.0_ts-node@10.2.1
 >>>>>>> feat: initial setup for augur
@@ -23357,6 +23569,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@jest/core': 27.0.6_ts-node@10.2.0
 =======
@@ -23379,6 +23593,9 @@ packages:
       '@jest/core': 27.0.6_ts-node@10.1.0
 >>>>>>> feat: initial setup for augur
 >>>>>>> feat: initial setup for augur
+=======
+      '@jest/core': 27.0.6_ts-node@10.1.0
+>>>>>>> fix: conflicts
       '@jest/test-result': 27.0.6
       '@jest/types': 27.0.6
       chalk: 4.1.1
@@ -23386,6 +23603,7 @@ packages:
       exit: 0.1.2
       graceful-fs: 4.2.8
       import-local: 3.0.2
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -23400,6 +23618,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       jest-config: 27.1.0
 =======
@@ -23409,6 +23629,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       jest-config: 27.1.0_ts-node@10.2.1
 >>>>>>> feat: initial setup for augur
@@ -23421,6 +23643,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       jest-config: 27.0.6_ts-node@10.2.0
 =======
@@ -23443,6 +23667,9 @@ packages:
       jest-config: 27.0.6_ts-node@10.1.0
 >>>>>>> feat: initial setup for augur
 >>>>>>> feat: initial setup for augur
+=======
+      jest-config: 27.0.6_ts-node@10.1.0
+>>>>>>> fix: conflicts
       jest-util: 27.0.6
       jest-validate: 27.0.6
 <<<<<<< HEAD
@@ -23478,6 +23705,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /jest-config/27.2.0_ts-node@10.2.1:
     resolution: {integrity: sha512-Z1romHpxeNwLxQtouQ4xt07bY6HSFGKTo0xJcvOK3u6uJHveA4LB2P+ty9ArBLpTh3AqqPxsyw9l9GMnWBYS9A==}
 =======
@@ -23487,6 +23715,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /jest-config/27.1.0:
 =======
@@ -23496,6 +23726,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /jest-config/27.1.0_ts-node@10.2.1:
 >>>>>>> feat: initial setup for augur
@@ -23507,6 +23739,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /jest-config/27.0.6_ts-node@10.2.0:
 =======
@@ -23529,6 +23763,9 @@ packages:
   /jest-config/27.0.6_ts-node@10.1.0:
 >>>>>>> feat: initial setup for augur
 >>>>>>> feat: initial setup for augur
+=======
+  /jest-config/27.0.6_ts-node@10.1.0:
+>>>>>>> fix: conflicts
     resolution: {integrity: sha512-JZRR3I1Plr2YxPBhgqRspDE2S5zprbga3swYNrvY3HfQGu7p/GjyLOqwrYad97tX3U3mzT53TPHVmozacfP/3w==}
 <<<<<<< HEAD
 =======
@@ -23639,6 +23876,7 @@ packages:
 =======
       pretty-format: 27.0.6
 <<<<<<< HEAD
+<<<<<<< HEAD
       ts-node: 10.2.0_typescript@4.4.1-rc
 =======
 <<<<<<< HEAD
@@ -23726,7 +23964,13 @@ packages:
 =======
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+=======
+=======
+      ts-node: 10.1.0_typescript@4.3.5
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -24315,6 +24559,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /jest-worker/27.2.0:
     resolution: {integrity: sha512-laB0ZVIBz+voh/QQy9dmUuuDsadixeerrKqyVpgPz+CCWiOYjOBabUXHIXZhsdvkWbLqSHbgkAHWl5cg24Q6RA==}
     engines: {node: '>= 10.13.0'}
@@ -24333,6 +24578,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /jest/27.1.0:
 =======
@@ -24342,6 +24589,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /jest/27.1.0_ts-node@10.2.1:
 >>>>>>> feat: initial setup for augur
@@ -24353,6 +24602,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /jest/27.0.6_ts-node@10.2.0:
 =======
@@ -24375,6 +24626,9 @@ packages:
   /jest/27.0.6_ts-node@10.1.0:
 >>>>>>> feat: initial setup for augur
 >>>>>>> feat: initial setup for augur
+=======
+  /jest/27.0.6_ts-node@10.1.0:
+>>>>>>> fix: conflicts
     resolution: {integrity: sha512-EjV8aETrsD0wHl7CKMibKwQNQc3gIRBXlTikBmmHUeVMKaPFxdcUIBfoDqTSXDoGJIivAYGqCWVlzCSaVjPQsA==}
 <<<<<<< HEAD
 =======
@@ -24406,6 +24660,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@jest/core': 27.2.0_ts-node@10.2.1
       import-local: 3.0.2
       jest-cli: 27.2.0_ts-node@10.2.1
@@ -24416,6 +24671,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@jest/core': 27.1.0
       import-local: 3.0.2
@@ -24427,6 +24684,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@jest/core': 27.1.0_ts-node@10.2.1
       import-local: 3.0.2
@@ -24438,6 +24697,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       '@jest/core': 27.0.6_ts-node@10.2.0
       import-local: 3.0.2
@@ -24526,9 +24787,23 @@ packages:
       jest-cli: 27.0.6_ts-node@10.1.0
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+=======
+=======
+=======
+=======
+      '@jest/core': 27.0.6_ts-node@10.1.0
+      import-local: 3.0.2
+      jest-cli: 27.0.6_ts-node@10.1.0
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -24589,6 +24864,10 @@ packages:
 
   /jsbi/3.1.4:
     resolution: {integrity: sha512-52QRRFSsi9impURE8ZUbzAMCLjPm4THO7H2fcuIvaaeFTbSysvkodbQQXIVsNgq/ypDbq6dJiuGKL0vZ/i9hUg==}
+    dev: false
+
+  /jsbi/3.1.5:
+    resolution: {integrity: sha512-w2BY0VOYC1ahe+w6Qhl4SFoPvPsZ9NPHY4bwass+LCgU7RK3PBoVQlQ3G1s7vI8W3CYyJiEXcbKF7FIM/L8q3Q==}
     dev: false
 
   /jsbn/0.1.1:
@@ -24761,7 +25040,7 @@ packages:
   /jsonfile/2.4.0:
     resolution: {integrity: sha1-NzaitCi4e72gzIO1P6PWM6NcKug=}
     optionalDependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.6
 
   /jsonfile/4.0.0:
     resolution: {integrity: sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=}
@@ -24882,7 +25161,7 @@ packages:
   /klaw/1.3.1:
     resolution: {integrity: sha1-QIhDO0azsbolnXh4XY6W9zugJDk=}
     optionalDependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.6
 
   /kleur/3.0.3:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
@@ -25055,7 +25334,7 @@ packages:
     resolution: {integrity: sha1-lWkFcI1YtLq0wiYbBPWfMcmTdMA=}
     engines: {node: '>=0.10.0'}
     dependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.6
       parse-json: 2.2.0
       pify: 2.3.0
       pinkie-promise: 2.0.1
@@ -25803,36 +26082,6 @@ packages:
       buffer: 5.7.1
     dev: false
 
-<<<<<<< HEAD
-=======
-  /multibase/2.0.0:
-    resolution: {integrity: sha512-xIrqUVsinSlFjqj+OtEgCJ6MRl5hXjHMBPWsUt1ZGSRMx8rzm+7hCLE4wDeSA3COomlUC9zHCoUlvWjvAMtfDg==}
-    engines: {node: '>=10.0.0', npm: '>=6.0.0'}
-    deprecated: This module has been superseded by the multiformats module
-    dependencies:
-      base-x: 3.0.8
-      buffer: 5.7.1
-      web-encoding: 1.1.5
-    dev: false
-
-  /multibase/3.1.2:
-    resolution: {integrity: sha512-bpklWHs70LO3smJUHOjcnzGceJJvn9ui0Vau6Za0B/GBepaXswmW8Ufea0uD9pROf/qCQ4N4lZ3sf3U+SNf0tw==}
-    engines: {node: '>=10.0.0', npm: '>=6.0.0'}
-    deprecated: This module has been superseded by the multiformats module
-    dependencies:
-      '@multiformats/base-x': 4.0.1
-      web-encoding: 1.1.5
-    dev: false
-
-  /multibase/4.0.4:
-    resolution: {integrity: sha512-8/JmrdSGzlw6KTgAJCOqUBSGd1V6186i/X8dDCGy/lbCKrQ+1QB6f3HE+wPr7Tpdj4U3gutaj9jG2rNX6UpiJg==}
-    engines: {node: '>=12.0.0', npm: '>=6.0.0'}
-    deprecated: This module has been superseded by the multiformats module
-    dependencies:
-      '@multiformats/base-x': 4.0.1
-    dev: false
-
->>>>>>> refactor: break market description to seperate comps
   /multicast-dns-service-types/1.1.0:
     resolution: {integrity: sha1-iZ8R2WhuXgXLkbNdXw5jt3PPyQE=}
     dev: true
@@ -25904,6 +26153,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /nano-base32/1.0.1:
     resolution: {integrity: sha1-ulSMh578+5DaHE2eCX20pGySVe8=}
     dev: false
@@ -25943,6 +26193,8 @@ packages:
 =======
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
 =======
 >>>>>>> feat: three tabs added to the market view
@@ -26015,8 +26267,9 @@ packages:
 =======
 >>>>>>> feat: initial setup for augur
 =======
+=======
+>>>>>>> fix: conflicts
   /nano-css/5.3.1_f991c289939c8299bed5e4a6a5a79a62:
->>>>>>> feat: three tabs added to the market view
     resolution: {integrity: sha512-ENPIyNzANQRyYVvb62ajDd7PAyIgS2LIUnT9ewih4yrXSZX4hKoUwssy8WjUH++kEOA5wUTMgNnV7ko5n34kUA==}
 >>>>>>> feat: initial setup for augur
 >>>>>>> feat: initial setup for augur
@@ -27002,7 +27255,7 @@ packages:
     resolution: {integrity: sha1-WcRPfuSR2nBNpBXaWkBwuk+P5EE=}
     engines: {node: '>=0.10.0'}
     dependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.6
       pify: 2.3.0
       pinkie-promise: 2.0.1
 
@@ -27994,6 +28247,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> feat: three tabs added to the market view
@@ -28001,6 +28255,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /react-error-boundary/3.1.3:
 =======
@@ -28010,6 +28266,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
   /react-error-boundary/3.1.3_react@18.0.0-alpha-aecb3b6d1:
 =======
@@ -28032,7 +28290,13 @@ packages:
   /react-error-boundary/3.1.3_react@18.0.0-alpha-aecb3b6d1:
 >>>>>>> feat: initial setup for augur
 >>>>>>> feat: initial setup for augur
+<<<<<<< HEAD
 >>>>>>> feat: initial setup for augur
+=======
+=======
+  /react-error-boundary/3.1.3_react@18.0.0-alpha-aecb3b6d1:
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
     resolution: {integrity: sha512-A+F9HHy9fvt9t8SNDlonq01prnU8AmkjvGKV4kk8seB9kU3xMEO8J/PQlLVmoOIDODl5U2kufSBs4vrWIqhsAA==}
     engines: {node: '>=10', npm: '>=6'}
     peerDependencies:
@@ -28048,6 +28312,7 @@ packages:
 =======
 >>>>>>> fix: conflicts and bugs
       '@babel/runtime': 7.14.8
+<<<<<<< HEAD
 <<<<<<< HEAD
       react: 18.0.0-alpha-aecb3b6d1
 =======
@@ -28092,6 +28357,9 @@ packages:
 =======
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
+=======
+      react: 18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: conflicts
     dev: true
 
 >>>>>>> feat: initial setup for augur
@@ -28831,6 +29099,7 @@ packages:
 =======
       tslib: 2.3.0
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
       react: 18.0.0-alpha-aecb3b6d1
@@ -28859,11 +29128,12 @@ packages:
     dependencies:
 <<<<<<< HEAD
       tslib: 2.3.0
+=======
+>>>>>>> fix: conflicts
     dev: false
 
-  /react-use/17.2.4:
-=======
   /react-use/17.2.4_f991c289939c8299bed5e4a6a5a79a62:
+<<<<<<< HEAD
 >>>>>>> feat: three tabs added to the market view
 =======
       tslib: 2.2.0
@@ -28911,6 +29181,8 @@ packages:
 =======
   /react-use/17.2.4:
 >>>>>>> feat: initial setup for augur
+=======
+>>>>>>> fix: conflicts
     resolution: {integrity: sha512-vQGpsAM0F5UIlshw5UI8ULGPS4yn5rm7/qvn3T1Gnkrz7YRMEEMh+ynKcmRloOyiIeLvKWiQjMiwRGtdbgs5qQ==}
 >>>>>>> feat: initial setup for augur
     peerDependencies:
@@ -29016,36 +29288,43 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-    dependencies:
-      react: 18.0.0-alpha-aecb3b6d1
-      react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
-=======
-<<<<<<< HEAD
-=======
-=======
->>>>>>> fix: prices
-=======
->>>>>>> fix: conflicts and bugs
-<<<<<<< HEAD
-=======
->>>>>>> feat: three tabs added to the market view
-=======
->>>>>>> feat: three tabs added to the market view
-=======
->>>>>>> fix: prices
-=======
->>>>>>> fix: conflicts and bugs
 <<<<<<< HEAD
     dependencies:
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
 =======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> fix: prices
+=======
+>>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
+<<<<<<< HEAD
+=======
+>>>>>>> feat: three tabs added to the market view
 =======
 >>>>>>> feat: three tabs added to the market view
 =======
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
+<<<<<<< HEAD
+    dependencies:
+      react: 18.0.0-alpha-aecb3b6d1
+      react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
+=======
+=======
+>>>>>>> feat: three tabs added to the market view
+=======
+>>>>>>> fix: prices
+=======
+>>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
 >>>>>>> feat: initial setup for augur
     dev: false
@@ -29071,6 +29350,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
     dependencies:
       react: 18.0.0-alpha-aecb3b6d1
@@ -29161,10 +29442,27 @@ packages:
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+=======
+=======
+=======
+=======
+=======
+    dependencies:
+      react: 18.0.0-alpha-aecb3b6d1
+      react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
+>>>>>>> fix: conflicts
     dev: false
 
   /react-window/1.8.6_f991c289939c8299bed5e4a6a5a79a62:
@@ -31076,7 +31374,7 @@ packages:
       glob: 7.1.7
       has: 1.0.3
       inherits: 2.0.4
-      is-regex: 1.1.4
+      is-regex: 1.1.3
       minimist: 1.2.5
       object-inspect: 1.11.0
       resolve: 1.20.0
@@ -31654,6 +31952,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> feat: initial setup for augur
 =======
 <<<<<<< HEAD
@@ -31664,6 +31963,9 @@ packages:
 =======
 <<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+=======
+<<<<<<< HEAD
+>>>>>>> fix: conflicts
   /ts-interface-checker/0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
@@ -31696,6 +31998,9 @@ packages:
 =======
 <<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+=======
+<<<<<<< HEAD
+>>>>>>> fix: conflicts
   /ts-jest/27.0.4_2b1bb99c65ce8fc8eda3ccb6cb24befc:
 =======
 =======
@@ -31717,6 +32022,9 @@ packages:
   /ts-jest/27.0.4_52cc4273aa16028085013af47e479e10:
 >>>>>>> feat: initial setup for augur
 >>>>>>> feat: initial setup for augur
+=======
+  /ts-jest/27.0.4_52cc4273aa16028085013af47e479e10:
+>>>>>>> fix: conflicts
     resolution: {integrity: sha512-c4E1ECy9Xz2WGfTMyHbSaArlIva7Wi2p43QOMmCqjSSjHP06KXv+aT+eSY+yZMuqsMi3k7pyGsGj2q5oSl5WfQ==}
 <<<<<<< HEAD
 =======
@@ -31754,6 +32062,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       jest: 27.2.0_ts-node@10.2.1
       jest-util: 27.2.0
 =======
@@ -31763,6 +32072,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       jest: 27.1.0
 =======
@@ -31772,6 +32083,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       jest: 27.1.0_ts-node@10.2.1
 >>>>>>> feat: initial setup for augur
@@ -31783,6 +32096,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       jest: 27.0.6_ts-node@10.2.0
 =======
@@ -31805,6 +32120,9 @@ packages:
       jest: 27.0.6_ts-node@10.1.0
 >>>>>>> feat: initial setup for augur
 >>>>>>> feat: initial setup for augur
+=======
+      jest: 27.0.6_ts-node@10.1.0
+>>>>>>> fix: conflicts
       jest-util: 27.0.6
 <<<<<<< HEAD
 =======
@@ -31832,6 +32150,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typescript: 4.4.4
 =======
 =======
@@ -31840,6 +32159,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       typescript: 4.4.3
 =======
@@ -31849,6 +32170,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
 =======
 >>>>>>> feat: three tabs added to the market view
@@ -31858,6 +32181,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       typescript: 4.4.2
 >>>>>>> feat: initial setup for augur
@@ -31875,6 +32200,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
       typescript: 4.4.1-rc
 =======
@@ -31899,6 +32226,9 @@ packages:
       typescript: 4.3.5
 >>>>>>> feat: initial setup for augur
 >>>>>>> feat: initial setup for augur
+=======
+      typescript: 4.3.5
+>>>>>>> fix: conflicts
       yargs-parser: 20.2.9
     dev: true
 
@@ -32130,7 +32460,11 @@ packages:
       '@emotion/serialize': 1.0.2
       '@emotion/server': 11.4.0
       '@emotion/utils': 1.0.0
+<<<<<<< HEAD
       html-react-parser: 1.3.0_react@18.0.0-alpha-aecb3b6d1
+=======
+      html-react-parser: 1.2.7_react@18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: conflicts
     transitivePeerDependencies:
       - '@emotion/css'
       - react
@@ -32402,11 +32736,19 @@ packages:
 =======
 >>>>>>> fix: conflicts and bugs
       tslib: 2.3.0
+<<<<<<< HEAD
       tsutils: 3.21.0_typescript@4.4.1-rc
       typescript: 4.4.1-rc
     dev: true
 
   /type-coverage/2.18.0_typescript@4.4.1-rc:
+=======
+      tsutils: 3.21.0_typescript@4.3.5
+      typescript: 4.3.5
+    dev: true
+
+  /type-coverage/2.18.0_typescript@4.3.5:
+>>>>>>> fix: conflicts
     resolution: {integrity: sha512-SAyrR6Xl7GfHNcXU8Y3wSnJfGftdCvf/b2JlJJtt7gt74T0dCF077/ukhlLjI/MsWmRCxW8k8x/d4AjrFiLSpQ==}
 <<<<<<< HEAD
 =======
@@ -33176,6 +33518,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /use-subscription/1.5.1:
 =======
 =======
@@ -33184,6 +33527,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
 <<<<<<< HEAD
 =======
 =======
@@ -33238,8 +33583,9 @@ packages:
 =======
 >>>>>>> feat: initial setup for augur
 =======
+=======
+>>>>>>> fix: conflicts
   /use-subscription/1.5.1_react@18.0.0-alpha-aecb3b6d1:
->>>>>>> feat: three tabs added to the market view
     resolution: {integrity: sha512-Xv2a1P/yReAjAbhylMfFplFKj9GssgTwN7RlcTxBujFQcloStWNDQdc4g4NRWH9xS4i/FDk04vQBptAXoF3VcA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0

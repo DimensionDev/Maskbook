@@ -14,7 +14,6 @@ import {
 import { DialogContent, IconButton, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { v4 as uuid } from 'uuid'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -30,12 +29,12 @@ import { WalletMessages } from '../../Wallet/messages'
 import type { AmmOutcome, Market } from '../types'
 import { useBuyCallback } from '../hooks/useBuyCallback'
 import { toBips } from '../../Trader/helpers'
-import { currentSlippageTolerance } from '../../Trader/settings'
 import TuneIcon from '@material-ui/icons/Tune'
 import { BALANCE_DECIMALS, MINIMUM_BALANCE, SHARE_DECIMALS } from '../constants'
 import { estimateBuyTrade, getRawFee } from '../utils'
 import { useAmmExchange } from '../hooks/useAmmExchange'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import { currentSlippageSettings } from '../../Trader/settings'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -94,7 +93,6 @@ export function BuyDialog(props: BuyDialogProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const [id] = useState(uuid())
     const [inputAmount, setInputAmount] = useState('')
     const [significant, setSignificant] = useState(4)
 
@@ -145,12 +143,11 @@ export function BuyDialog(props: BuyDialogProps) {
     }, [estimatedResult])
     //#endregion
 
-    const minTokenOut = formatAmount(
-        new BigNumber(estimatedResult?.outputValue ?? 0)
-            .multipliedBy(1 - currentSlippageTolerance.value / 10000)
-            .toFixed(0, BigNumber.ROUND_DOWN),
-        SHARE_DECIMALS,
-    )
+    //#region calc min output
+    const minTokenOut = new BigNumber(formatAmount(estimatedResult?.outputValue ?? 0, SHARE_DECIMALS))
+        .multipliedBy(1 - currentSlippageSettings.value / 10000)
+        .toFixed(0)
+    //#endregion
 
     //#region blocking
     const [buyState, buyCallback, resetBuyCallback] = useBuyCallback(
@@ -221,7 +218,7 @@ export function BuyDialog(props: BuyDialogProps) {
                 if (buyState.type === TransactionStateType.HASH) setInputAmount('')
                 resetBuyCallback()
             },
-            [id, buyState, openSwapDialog, retryLoadTokenBalance, onDialogClose],
+            [buyState, openSwapDialog, retryLoadTokenBalance, onDialogClose],
         ),
     )
 
@@ -309,7 +306,7 @@ export function BuyDialog(props: BuyDialogProps) {
                     <div className={classes.status}>
                         <Typography className={classes.label} color="textSecondary" variant="body2">
                             {t('plugin_trader_slipage_tolerance')}{' '}
-                            {formatPercentage(toBips(currentSlippageTolerance.value))}
+                            {formatPercentage(toBips(currentSlippageSettings.value))}
                         </Typography>
                         <IconButton className={classes.icon} size="small" onClick={openSettingDialog}>
                             <TuneIcon fontSize="small" />

@@ -13,7 +13,6 @@ import {
 import { DialogContent, makeStyles, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { v4 as uuid } from 'uuid'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -86,7 +85,6 @@ export function SellDialog(props: SellDialogProps) {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const [id] = useState(uuid())
     const [inputAmount, setInputAmount] = useState('')
     const [significant, setSignificant] = useState(4)
 
@@ -163,7 +161,7 @@ export function SellDialog(props: SellDialogProps) {
                 if (sellState.type === TransactionStateType.HASH) setInputAmount('')
                 resetSellCallback()
             },
-            [id, sellState, onDialogClose],
+            [sellState, onDialogClose],
         ),
     )
 
