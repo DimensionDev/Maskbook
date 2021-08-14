@@ -60,9 +60,7 @@ function chunkArray(items: Call[], gasLimit = CONSERVATIVE_BLOCK_GAS_LIMIT * 10)
     let currentChunk: Call[] = []
     let currentChunkCumulativeGas = 0
 
-    for (let i = 0; i < items.length; i++) {
-        const item = items[i]
-
+    for (const item of items) {
         // calculate the gas required by the current item
         const gasRequired = item[1] ?? DEFAULT_GAS_REQUIRED
 
