@@ -2,6 +2,8 @@ import type BigNumber from 'bignumber.js'
 import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@masknet/web3-shared'
 import type { TradeProvider } from '@masknet/public-api'
 
+export { TradeProvider } from '@masknet/public-api'
+
 export enum WarningLevel {
     LOW = 1,
     MEDIUM = 2,
@@ -75,7 +77,8 @@ export enum TokenPanelType {
 
 export interface TradeContext {
     TYPE: TradeProvider
-    IS_UNISWAP_LIKE: boolean
+    IS_UNISWAP_V2_LIKE?: boolean
+    IS_UNISWAP_V3_LIKE?: boolean
     GRAPH_API?: string
     INIT_CODE_HASH?: string
     ROUTER_CONTRACT_ADDRESS?: string
