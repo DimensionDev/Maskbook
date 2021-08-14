@@ -32,7 +32,7 @@ export function useERC721TokenDetailed(address?: string, token?: Partial<ERC721T
             symbol = token?.symbol ?? '',
             baseURI = token?.baseURI ?? '',
             tokenURI = token?.tokenURI ?? '',
-        ] = results.map((x) => (!x.succeed || x.error ? undefined : x.value))
+        ] = results.map((x) => (x.succeed ? x.value : undefined))
         return {
             type: EthereumTokenType.ERC721,
             address: formatEthereumAddress(address),

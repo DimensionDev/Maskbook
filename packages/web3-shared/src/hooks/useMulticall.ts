@@ -180,7 +180,7 @@ export function useMutlicallStateDecoded<
                 const value = decodeOutputString(web3, outputs, result) as R
                 return { succeed, gasUsed, value, error: null }
             } catch (error: any) {
-                return { succeed, gasUsed, value: null, error }
+                return { succeed: false, gasUsed, value: null, error }
             }
         })
     }, [web3, contracts.map((x) => x.options.address).join(), names.join(), state])
