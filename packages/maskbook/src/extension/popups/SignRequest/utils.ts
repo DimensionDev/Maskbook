@@ -1,4 +1,4 @@
-import { DialogRoutes, getRouteURLWithNoParam } from '..'
+import { getRouteURLWithNoParam, PopupRoutes } from '..'
 
 export interface SignRequest {
     // TODO: support sign binary (u8[])
@@ -12,5 +12,5 @@ export function constructSignRequestURL(request: SignRequest) {
     const params = new URLSearchParams()
     params.set('message', request.message)
     params.set('id', request.requestID)
-    return `${getRouteURLWithNoParam(DialogRoutes.SignRequest)}?${params.toString()}`
+    return `${getRouteURLWithNoParam(PopupRoutes.SignRequest)}?${params.toString()}`
 }
