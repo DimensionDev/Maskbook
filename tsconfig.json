@@ -29,7 +29,6 @@
     // noUncheckedIndexedAccess: false,
     // noUnusedLocals: false,
     // noUnusedParameters: false,
-    "useUnknownInCatchVariables": false,
 
     // Modules
     "module": "ESNext",
