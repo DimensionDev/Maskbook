@@ -36,7 +36,7 @@ export function useV3BestTradeExactIn(
                     string,
                 ],
         )
-    }, [amountIn?.toFixed(), routes])
+    }, [amountIn, routes])
 
     const [quotesResults, quotesCalls, , quotesCallback] = useSingleContractMultipleData(
         quoterContract,
