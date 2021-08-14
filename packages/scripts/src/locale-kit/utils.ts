@@ -33,5 +33,5 @@ export async function findAllUsedKeys() {
 }
 
 export async function findAllUnusedKeys() {
-    return difference(keys(await readMessages('en')), await findAllUsedKeys())
+    return difference(keys(await readMessages('en-US')), await findAllUsedKeys())
 }
