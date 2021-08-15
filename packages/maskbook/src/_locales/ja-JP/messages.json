@@ -276,7 +276,6 @@
     "relative_time_years_ago": "{{years}}年前",
     "plugin_wallet_select_a_token": "トークンを選択",
     "plugin_wallet_connect_a_wallet": "ウォレットと接続",
-    "plugin_wallet_unlock_metamask": "MetaMask をアンロック",
     "plugin_wallet_no_gas_fee": "ガス代が不足しています",
     "plugin_wallet_update_gas_fee": "ガス代を更新中…",
     "plugin_wallet_invalid_network": "無効のネットワーク",
