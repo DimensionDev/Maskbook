@@ -14,7 +14,7 @@ let provider: MetaMaskInpageProvider | null = null
 let web3: Web3 | null = null
 
 async function onAccountsChanged(accounts: string[]) {
-    await updateIsMetaMaskLockedSettings()
+    await updateIsMetaMaskLockedSettings(accounts)
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
 
     await updateAccount({
@@ -46,9 +46,10 @@ async function onError(error: string) {
     })
 }
 
-export async function updateIsMetaMaskLockedSettings() {
+export async function updateIsMetaMaskLockedSettings(accounts: string[] = []) {
     try {
-        currentIsMetaMaskLockedSettings.value = !(await provider?._metamask?.isUnlocked())
+        const unlocked = accounts.length > 0 || await provider?._metamask?.isUnlocked()
+        currentIsMetaMaskLockedSettings.value = !unlocked
     } catch {
         currentIsMetaMaskLockedSettings.value = false
     }
