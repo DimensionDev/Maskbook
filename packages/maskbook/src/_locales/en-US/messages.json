@@ -404,7 +404,7 @@
     "plugin_red_packet_amount_total": "Amount Total",
     "plugin_red_packet_next": "Next",
     "plugin_red_packet_back": "Back",
-    "plugin_red_packet_hint": "You can withdraw the remaining balance 24 hours after the red packet is sent",
+    "plugin_red_packet_hint": "You can withdraw the remaining balance 24 hours after the red packet is sent.",
     "plugin_red_packet_token": "Token",
     "plugin_red_packet_create_with_token": "Creating red packet with {{symbol}}",
     "plugin_red_packet_history_duration": "Time: {{startTime}} ~ {{endTime}} (UTC+8)",
