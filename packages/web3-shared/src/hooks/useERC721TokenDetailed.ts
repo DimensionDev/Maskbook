@@ -4,9 +4,11 @@ import { useChainId } from './useChainId'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { createERC721Token, safeNonPayableTransactionCall } from '../utils'
 import type { ERC721 } from '../../../web3-contracts/types/ERC721'
+import { useMemo } from 'react'
 
-export function useERC721TokenDetailed(address?: string, token?: Partial<ERC721TokenDetailed>) {
+export function useERC721TokenDetailed(address?: string, _token?: Partial<ERC721TokenDetailed>) {
     const chainId = useChainId()
+    const token = useMemo(() => _token, [])
     const erc721TokenContract = useERC721TokenContract(address)
     return useAsyncRetry(async () => {
         if (!address) return
