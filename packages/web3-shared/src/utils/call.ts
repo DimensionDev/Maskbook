@@ -4,7 +4,7 @@ export function safeNonPayableTransactionCall<T>(tx?: NonPayableTransactionObjec
     try {
         if (!tx) return
         return tx.call(overrides)
-    } catch (e) {
+    } catch (error) {
         return
     }
 }

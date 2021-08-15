@@ -14,6 +14,8 @@ export function useERC721TokenDetailed(address?: string, token?: Partial<ERC721T
     }, [chainId, token, erc721TokenContract, address])
 }
 
+const lazyBlank = Promise.resolve('')
+
 async function getERC721TokenDetailed(
     address: string,
     chainId: ChainId,
@@ -21,13 +23,13 @@ async function getERC721TokenDetailed(
     token?: Partial<ERC721TokenDetailed>,
 ) {
     const results = await Promise.allSettled([
-        token?.name ?? (await safeNonPayableTransactionCall(erc721TokenContract?.methods.name())) ?? '',
-        token?.symbol ?? (await safeNonPayableTransactionCall(erc721TokenContract?.methods.symbol())) ?? '',
-        token?.baseURI ?? (await safeNonPayableTransactionCall(erc721TokenContract?.methods.baseURI())) ?? '',
+        token?.name ?? safeNonPayableTransactionCall(erc721TokenContract?.methods.name()) ?? lazyBlank,
+        token?.symbol ?? safeNonPayableTransactionCall(erc721TokenContract?.methods.symbol()) ?? lazyBlank,
+        token?.baseURI ?? safeNonPayableTransactionCall(erc721TokenContract?.methods.baseURI()) ?? lazyBlank,
         token?.tokenURI ??
             (token?.tokenId
-                ? (await safeNonPayableTransactionCall(erc721TokenContract?.methods.tokenURI(token.tokenId))) ?? ''
-                : ''),
+                ? safeNonPayableTransactionCall(erc721TokenContract?.methods.tokenURI(token.tokenId)) ?? lazyBlank
+                : lazyBlank),
     ])
     const [name, symbol, baseURI, tokenURI] = results.map((result) =>
         result.status === 'fulfilled' ? result.value : '',
