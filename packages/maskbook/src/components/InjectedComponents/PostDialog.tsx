@@ -463,9 +463,12 @@ function PluginRenderer() {
     const pluginField = usePluginI18NField()
     const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
     const result = useActivatedPluginsSNSAdaptor()
-        .sort((plugin) => {
-            if (plugin.ID === redpacketBase.ID || plugin.ID === ITOBase.ID) return -1
-            return 1
+        .sort((pluginA, pluginB) => {
+            if (pluginA.ID === redpacketBase.ID && pluginB.ID === ITOBase.ID) return -1
+            if (pluginB.ID === redpacketBase.ID && pluginA.ID === ITOBase.ID) return 1
+            if ([redpacketBase.ID, ITOBase.ID].includes(pluginA.ID)) return -1
+            if ([redpacketBase.ID, ITOBase.ID].includes(pluginB.ID)) return 1
+            return 0
         })
         .map((plugin) =>
             Result.wrap(() => {
