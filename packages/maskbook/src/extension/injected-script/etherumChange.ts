@@ -13,7 +13,6 @@ type EthereumInjectedContext = {
 function registerListenersOnMetaMaskProvider() {
     const ethereum = (globalThis as unknown as EthereumInjectedContext).ethereum
     if (!ethereum?.isMetaMask) return
-    console.log('register listeners')
     ethereum.on('accountsChanged', onMetaMaskAccountsChange as (...args: unknown[]) => void)
     ethereum.on('chainChanged', onMetaMaskChainIdChange as (...args: unknown[]) => void)
 }
