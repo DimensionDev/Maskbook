@@ -115,6 +115,7 @@
     "settings_profile": "Profile",
     "settings_language_title": "Language",
     "settings_language_desc": "Select the language you would like to use",
+    "settings_language_auto": "Follow system",
     "settings_appearance_title": "Appearance",
     "settings_appearance_desc": "Select the theme you would like to use",
     "settings_data_source_title": "Data Source",
