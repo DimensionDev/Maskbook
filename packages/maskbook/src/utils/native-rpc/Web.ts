@@ -21,8 +21,8 @@ const personaFomatter = (p: Persona) => {
         nickname: p.nickname,
         linkedProfiles: profiles,
         hasPrivateKey: p.hasPrivateKey,
-        createdAt: p.createdAt,
-        updatedAt: p.updatedAt,
+        createdAt: p.createdAt.toUTCString(),
+        updatedAt: p.updatedAt.toUTCString(),
     }
 }
 
@@ -31,8 +31,8 @@ const profileFormatter = (p: Profile) => {
         identifier: p.identifier.toText(),
         nickname: p.nickname,
         linkedPersona: !!p.linkedPersona,
-        createdAt: p.createdAt,
-        updatedAt: p.updatedAt,
+        createdAt: p.createdAt.toUTCString(),
+        updatedAt: p.updatedAt.toUTCString(),
     }
 }
 
