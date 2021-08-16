@@ -59,7 +59,7 @@ export default function BackupModeSelectDialog({ open, onClose, onSelect }: Back
     const classes = useStyles()
     const { user } = useContext(UserContext)
     return (
-        <MaskDialog title="Backup" open={open} onClose={onClose}>
+        <MaskDialog title={t.settings_button_backup()} open={open} onClose={onClose}>
             <Box className={classes.container}>
                 <Box className={classes.mode} onClick={() => onSelect('local')}>
                     <LocalBackupIcon className={classes.icon} />

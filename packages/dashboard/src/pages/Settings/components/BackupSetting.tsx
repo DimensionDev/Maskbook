@@ -4,12 +4,14 @@ import BackupDialog from './dialogs/BackupDialog'
 import BackupModeSelectDialog from './dialogs/BackupModeSelectDialog'
 import { PasswordVerifiedContext } from '../hooks/VerifyPasswordContext'
 import { useDashboardI18N } from '../../../locales'
+import { CloudBackupVerifyDialog, FileInfo } from './dialogs/CloudBackupVerifyDialog'
 
 export default function BackupSetting() {
     const t = useDashboardI18N()
     const { ensurePasswordVerified } = useContext(PasswordVerifiedContext)
     const [openBackup, setOpenBackup] = useState(false)
     const [openModeSelect, setOpenModeSelect] = useState(false)
+    const [openCloudVerify, setOpenCloudVerify] = useState(false)
     const onBackup = () => {
         // ensurePasswordVerified(() => setOpenBackup(true))
         setOpenModeSelect(true)
@@ -22,6 +24,14 @@ export default function BackupSetting() {
     const onSelectMode = (mode: string) => {
         console.log('mode', mode)
         setOpenModeSelect(false)
+
+        if (mode === 'cloud') {
+            setOpenCloudVerify(true)
+        }
+    }
+
+    const handleUploaded = (fileInfo: FileInfo | undefined) => {
+        console.log(fileInfo)
     }
 
     return (
@@ -32,6 +42,11 @@ export default function BackupSetting() {
                 open={openModeSelect}
                 onClose={() => setOpenModeSelect(false)}
                 onSelect={onSelectMode}
+            />
+            <CloudBackupVerifyDialog
+                open={openCloudVerify}
+                onClose={() => setOpenCloudVerify(false)}
+                onNext={handleUploaded}
             />
         </>
     )
