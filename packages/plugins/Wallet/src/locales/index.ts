@@ -3,6 +3,7 @@
 import en_US from './en-US.json'
 import es_ES from './es-ES.json'
 import fa_IR from './fa-IR.json'
+import fr_FR from './fr-FR.json'
 import it_IT from './it-IT.json'
 import ja_JP from './ja-JP.json'
 import ko_KR from './ko-KR.json'
@@ -16,6 +17,7 @@ export const languages = {
     'en-US': en_US,
     'es-ES': es_ES,
     'fa-IR': fa_IR,
+    'fr-FR': fr_FR,
     'it-IT': it_IT,
     'ja-JP': ja_JP,
     'ko-KR': ko_KR,

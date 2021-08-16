@@ -23,6 +23,7 @@ export default function LanguageSetting() {
             <MenuItem value={LanguageOptions.koKR}>한국인</MenuItem>
             {process.env.build !== 'stable' && <MenuItem value={LanguageOptions.esES}>lengua española</MenuItem>}
             {process.env.build !== 'stable' && <MenuItem value={LanguageOptions.itIT}>lingua italiana</MenuItem>}
+            {process.env.build !== 'stable' && <MenuItem value={LanguageOptions.frFR}>langue française</MenuItem>}
             {process.env.build !== 'stable' && <MenuItem value={LanguageOptions.ruRU}>русский язык</MenuItem>}
             {process.env.build !== 'stable' && <MenuItem value={LanguageOptions.faIR}>زبان فارسی</MenuItem>}
         </SettingSelect>

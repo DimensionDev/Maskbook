@@ -139,6 +139,7 @@ export default function DashboardSettingsRouter() {
         LanguageOptions.faIR,
         LanguageOptions.ruRU,
         LanguageOptions.itIT,
+        LanguageOptions.frFR,
     ]
     const langMapper = useRef((x: LanguageOptions) => {
         if (x === LanguageOptions.enUS) return 'English'
@@ -149,6 +150,7 @@ export default function DashboardSettingsRouter() {
         if (x === LanguageOptions.itIT) return 'lingua italiana'
         if (x === LanguageOptions.esES) return 'lengua española'
         if (x === LanguageOptions.ruRU) return 'русский язык'
+        if (x === LanguageOptions.frFR) return 'langue française'
         if (x === LanguageOptions.faIR) return 'زبان فارسی'
         if (x === LanguageOptions.__auto__) return t('language_auto')
         safeUnreachable(x)

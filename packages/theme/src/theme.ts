@@ -65,6 +65,7 @@ export enum SupportedLanguages {
     faIR = 'fa-IR',
     itIT = 'it-IT',
     ruRU = 'ru-RU',
+    frFR = 'fr-FR',
 }
 /** Supported language settings */
 export enum LanguageOptions {
@@ -78,4 +79,5 @@ export enum LanguageOptions {
     faIR = 'fa-IR',
     itIT = 'it-IT',
     ruRU = 'ru-RU',
+    frFR = 'fr-FR',
 }
