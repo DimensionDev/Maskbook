@@ -16,7 +16,7 @@ export interface ProfileInformation {
 }
 
 export interface Contact {
-    favorite?: boolean
+    favorite?: number
     avatar?: string
     name: string
     fingerprint?: string
@@ -26,5 +26,6 @@ export interface Contact {
 export interface Relation {
     profile: ProfileIdentifier
     linked: PersonaIdentifier
-    favor?: boolean
+    favor: number
+    network: string
 }

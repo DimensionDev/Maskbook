@@ -17,7 +17,8 @@ export const useContacts = (network: string, page: number, size = 20) => {
 
         const values = await Services.Identity.queryRelationPaged(
             {
-                after: lastValue ? [lastValue.linked, lastValue.profile] : undefined,
+                network,
+                after: lastValue,
             },
             size,
         )
@@ -25,9 +26,7 @@ export const useContacts = (network: string, page: number, size = 20) => {
         // Cache the last record of  each page
         cache.current.set(page, last(values))
 
-        const targets = values.filter((x) => x.profile.network === network).map((x) => x.profile)
-
-        const profiles = await Services.Identity.queryProfilesWithIdentifiers(targets)
+        const profiles = await Services.Identity.queryProfilesWithIdentifiers(values.map((x) => x.profile))
 
         return profiles.map((profile) => {
             const favor = values.find((x) => x.profile.equals(profile.identifier))?.favor

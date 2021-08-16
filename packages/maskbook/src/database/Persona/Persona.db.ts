@@ -73,7 +73,10 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                 }
                 async function v2_v3() {
                     db.createObjectStore('relations', { keyPath: ['linked', 'profile'] })
-                    transaction.objectStore('relations').createIndex('linked', 'linked', { unique: false })
+                    transaction
+                        .objectStore('relations')
+                        .createIndex('linked, profile, favor', ['linked', 'profile', 'favor'], { unique: false })
+                    // transaction.objectStore('relations').createIndex('linked', 'linked', { unique: false })
                 }
                 if (oldVersion < 1) return v0_v1()
                 if (oldVersion < 2) v1_v2()
@@ -502,22 +505,12 @@ export async function deleteProfileDB(id: ProfileIdentifier, t: ProfileTransacti
 /**
  * Create a new Relation
  */
-export async function createRelationDB(record: RelationRecord, t: RelationTransaction<'readwrite'>): Promise<void> {
+export async function createRelationDB(
+    record: Omit<RelationRecord, 'network'>,
+    t: RelationTransaction<'readwrite'>,
+): Promise<void> {
     await t.objectStore('relations').add(relationRecordToDB(record))
-    MaskMessage.events.relationsChanged.sendToAll([{ of: record.profile, reason: 'update' }])
-}
-
-/**
- * Query many relations
- */
-export async function queryRelationsDB(
-    linked: PersonaIdentifier,
-    t?: RelationTransaction<'readonly'>,
-): Promise<RelationRecord[]> {
-    t = t || createTransaction(await db(), 'readonly')('relations')
-    return (await t.objectStore('relations').index('linked').getAll(IDBKeyRange.only(linked.toText()))).map(
-        relationRecordOutDB,
-    )
+    MaskMessage.events.relationsChanged.sendToAll([{ of: record.profile, reason: 'update', favor: record.favor }])
 }
 
 /**
@@ -526,32 +519,42 @@ export async function queryRelationsDB(
 export async function queryRelationsPagedDB(
     linked: PersonaIdentifier,
     options: {
-        after?: [PersonaIdentifier, ProfileIdentifier]
+        network: string
+        after?: RelationRecord
     },
     count: number,
 ) {
     const t = createTransaction(await db(), 'readonly')('relations')
     let firstRecord = true
-    const breakPoint = options.after ? [options.after[0].toText(), options.after[1].toText()].join(',') : ''
-    const data: RelationRecord[] = []
-    for await (const rec of t.objectStore('relations').iterate()) {
-        // matching related linked persona record
-        if (rec.key[0] !== linked.toText()) continue
 
-        if (firstRecord && breakPoint && rec.key.join(',') !== breakPoint) {
-            rec.continue(breakPoint.split(','))
+    const data: RelationRecord[] = []
+
+    for await (const cursor of t.objectStore('relations').index('linked, profile, favor').iterate()) {
+        if (cursor.value.linked !== linked.toText()) continue
+        if (
+            firstRecord &&
+            options.after &&
+            options.after.linked.toText() !== cursor?.value.linked &&
+            options.after.profile.toText() !== cursor?.value.profile
+        ) {
+            cursor.continue([options.after.linked, options.after.profile, options.after.favor].join(', '))
             firstRecord = false
             continue
         }
+
         firstRecord = false
 
-        if (rec.key.join(',') === breakPoint) continue
+        if (
+            options.after?.linked.toText() === cursor?.value.linked &&
+            options.after?.profile.toText() === cursor?.value.profile
+        )
+            continue
+
         if (count <= 0) break
-        const outData = relationRecordOutDB(rec.value)
+        const outData = relationRecordOutDB(cursor.value)
         count -= 1
         data.push(outData)
     }
-
     return data
 }
 
@@ -560,7 +563,10 @@ export async function queryRelationsPagedDB(
  * @param updating
  * @param t
  */
-export async function updateRelationDB(updating: RelationRecord, t: RelationTransaction<'readwrite'>): Promise<void> {
+export async function updateRelationDB(
+    updating: Omit<RelationRecord, 'network'>,
+    t: RelationTransaction<'readwrite'>,
+): Promise<void> {
     const old = await t
         .objectStore('relations')
         .get(IDBKeyRange.only([updating.linked.toText(), updating.profile.toText()]))
@@ -618,7 +624,8 @@ export interface PersonaRecord {
 export interface RelationRecord {
     profile: ProfileIdentifier
     linked: PersonaIdentifier
-    favor?: boolean
+    network: string
+    favor: number
 }
 
 type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey'> & {
@@ -664,7 +671,7 @@ export interface PersonaDB extends DBSchema {
         key: IDBValidKey[]
         value: RelationRecordDB
         indexes: {
-            linked: string
+            'linked, profile, favor': string
         }
     }
 }
@@ -707,7 +714,7 @@ function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
     return obj
 }
 
-function relationRecordToDB(x: RelationRecord): RelationRecordDB {
+function relationRecordToDB(x: Omit<RelationRecord, 'network'>): RelationRecordDB {
     return {
         ...x,
         network: x.profile.network,

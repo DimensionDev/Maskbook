@@ -15,7 +15,6 @@ import {
     consistentPersonaDBWriteAccess,
     createRelationDB,
     updateRelationDB,
-    queryRelationsDB,
     queryRelationsPagedDB,
     RelationRecord,
 } from '../../database/Persona/Persona.db'
@@ -164,20 +163,13 @@ export { detachProfileDB as detachProfile } from '../../database/Persona/Persona
 
 //#region Relation
 export async function createNewRelation(profile: ProfileIdentifier, linked: PersonaIdentifier) {
-    await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked }, t))
-}
-
-export async function queryRelations() {
-    const currentPersona = await getCurrentPersonaIdentifier()
-    if (currentPersona) {
-        return queryRelationsDB(currentPersona)
-    }
-    return []
+    await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked, favor: 0 }, t))
 }
 
 export async function queryRelationPaged(
     options: {
-        after?: [PersonaIdentifier, ProfileIdentifier]
+        network: string
+        after?: RelationRecord
     },
     count: number,
 ): Promise<RelationRecord[]> {
@@ -189,7 +181,7 @@ export async function queryRelationPaged(
     return []
 }
 
-export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: boolean) {
+export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: number) {
     await consistentPersonaDBWriteAccess((t) =>
         updateRelationDB(
             {

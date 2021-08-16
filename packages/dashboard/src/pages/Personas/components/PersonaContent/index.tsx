@@ -32,7 +32,7 @@ export const PersonaContent = memo<PersonaContentProps>(({ network }) => {
     return (
         <Box className={classes.container}>
             <TabContext value={String(tab)}>
-                <ButtonGroupTabList onChange={(e, v) => setTab(v)} aria-label="person-button-group">
+                <ButtonGroupTabList onChange={(e, v) => setTab(v)} aria-label="persona-post-contacts-button-group">
                     <Tab value={PersonaContentTab.POST} label="POST" />
                     <Tab value={PersonaContentTab.Contacts} label="Contacts" />
                 </ButtonGroupTabList>
