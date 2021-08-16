@@ -6,7 +6,7 @@ import { CountdownButton } from '../CountdownButton'
 
 export interface SendingCodeFieldProps {
     label?: ReactNode
-    buttonWording?: string
+    sendButtonText?: string
     errorMessage?: string
     disabled?: boolean
     onBlur?(code: string): void
@@ -15,7 +15,7 @@ export interface SendingCodeFieldProps {
 }
 export const SendingCodeField = ({
     onSend,
-    buttonWording = 'Send',
+    sendButtonText = 'Send',
     label,
     errorMessage,
     onBlur,
@@ -49,7 +49,7 @@ export const SendingCodeField = ({
                         sx={{ height: '40px', width: '100px' }}
                         onClick={onSend}
                         disabled={disabled}>
-                        {buttonWording}
+                        {sendButtonText}
                     </CountdownButton>
                 </Stack>
             </Box>
