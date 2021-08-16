@@ -532,7 +532,7 @@ export async function queryRelationsPagedDB(
 ) {
     const t = createTransaction(await db(), 'readonly')('relations')
     let firstRecord = true
-    const breakPoint = options.after?.join(',')
+    const breakPoint = options.after ? [options.after[0].toText(), options.after[1].toText()].join(',') : ''
     const data: RelationRecord[] = []
     for await (const rec of t.objectStore('relations').iterate()) {
         // matching related linked persona record

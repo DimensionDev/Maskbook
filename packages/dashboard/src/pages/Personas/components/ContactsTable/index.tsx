@@ -80,7 +80,7 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
     }, [value, page])
 
     useEffect(() => {
-        setPage(1)
+        setPage(0)
     }, [network])
 
     useEffect(() => {
@@ -113,6 +113,8 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
     ({ showPagination, page, onPageChange, network, dataSource, isEmpty, isLoading }) => {
         const t = useDashboardI18N()
         const classes = useStyles()
+
+        console.log(page)
         return (
             <>
                 <TableContainer className={classes.container}>

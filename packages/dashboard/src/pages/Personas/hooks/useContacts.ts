@@ -5,32 +5,28 @@ import { useRef } from 'react'
 import { last } from 'lodash-es'
 
 export const useContacts = (network: string, page: number, size = 20) => {
-    const cache = useRef<Relation[]>([])
+    const cache = useRef<Map<number, Relation | undefined>>(new Map([]))
 
     // If the network type be changed, clean cache
     useUpdateEffect(() => {
-        if (cache.current.length) cache.current = []
+        cache.current = new Map()
     }, [network])
 
     return useAsyncRetry(async () => {
         let relations: Relation[] = []
 
-        // If return data exists, the cache is returned directly
-        const cacheValue = cache.current.slice(page * 20, (page + 1) * 20)
-        if (cacheValue.length) relations = cacheValue
-        else {
-            const lastValue = last(cache.current)
-            const values = await Services.Identity.queryRelationPaged(
-                {
-                    after: lastValue ? [lastValue.linked, lastValue.profile] : undefined,
-                },
-                size,
-            )
+        const lastValue = cache.current.get(page - 1)
 
-            // Cache each page of data
-            cache.current.push(...values)
-            relations = values
-        }
+        const values = await Services.Identity.queryRelationPaged(
+            {
+                after: lastValue ? [lastValue.linked, lastValue.profile] : undefined,
+            },
+            size,
+        )
+
+        // Cache the last record of  each page
+        cache.current.set(page, last(values))
+        relations = values
 
         const targets = relations.filter((x) => x.profile.network === network).map((x) => x.profile)
 
