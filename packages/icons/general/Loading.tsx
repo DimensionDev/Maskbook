@@ -1,7 +1,7 @@
 import { createIcon } from '../utils'
 export const LoadingIcon = createIcon(
     'Loading',
-    <>
+    <g>
         <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -50,6 +50,6 @@ export const LoadingIcon = createIcon(
             d="M16.3335 3.80977C16.5776 4.05384 16.5776 4.44957 16.3335 4.69365L13.9751 7.05198C13.7311 7.29606 13.3353 7.29606 13.0913 7.05198C12.8472 6.80791 12.8472 6.41218 13.0913 6.1681L15.4496 3.80977C15.6937 3.56569 16.0894 3.56569 16.3335 3.80977Z"
             fill="#111432"
         />
-    </>,
+    </g>,
     '0 0 20 20',
 )

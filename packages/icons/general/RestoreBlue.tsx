@@ -2,7 +2,7 @@ import { createIcon } from '../utils'
 
 export const RestoreBlueIcon = createIcon(
     'RestoreBlue',
-    <>
+    <g>
         <g filter="url(#filter0_b)">
             <path
                 d="M4 11.0952C4 9.93807 4.98806 9 6.2069 9H17.7931C19.0119 9 20 9.93807 20 11.0952V17.9048C20 19.0619 19.0119 20 17.7931 20H6.2069C4.98806 20 4 19.0619 4 17.9048V11.0952Z"
@@ -75,6 +75,6 @@ export const RestoreBlueIcon = createIcon(
                 <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
         </defs>
-    </>,
+    </g>,
     '0 0 24 24',
 )
