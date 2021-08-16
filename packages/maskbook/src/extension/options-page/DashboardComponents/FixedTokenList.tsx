@@ -82,12 +82,12 @@ export function FixedTokenList(props: FixedTokenListProps) {
 
     const renderAssets =
         !account || assetsError || assetsLoading
-            ? renderTokens
+            ? [...renderTokens]
                   .sort(makeSortTokenFn(chainId, { isMaskBoost: true }))
                   .map((token) => ({ token: token, balance: null }))
             : !!keyword
             ? assets
-            : assets.sort(makeSortAssertFn(chainId, { isMaskBoost: true }))
+            : [...assets].sort(makeSortAssertFn(chainId, { isMaskBoost: true }))
 
     //#region UI helpers
     const renderPlaceholder = (message: string) => (
