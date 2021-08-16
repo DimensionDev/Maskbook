@@ -19,7 +19,7 @@ export const TradeContext = createContext<TradeContext_ | null>(null)
 
 export function useTradeContext(tradeProvider: TradeProvider) {
     const chainId = useChainId()
-    return useMemo(() => {
+    return useMemo<TradeContext_>(() => {
         switch (tradeProvider) {
             case TradeProvider.UNISWAP_V2:
                 return {
@@ -37,8 +37,8 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                 return {
                     TYPE: tradeProvider,
                     IS_UNISWAP_V3_LIKE: true,
-                    GRAPH_API: getTraderConstants(chainId).UNISWAP_V2_THEGRAPH,
-                    INIT_CODE_HASH: getTraderConstants(chainId).UNISWAP_V2_INIT_CODE_HASH,
+                    GRAPH_API: getTraderConstants(chainId).UNISWAP_V3_THEGRAPH,
+                    INIT_CODE_HASH: getTraderConstants(chainId).UNISWAP_V3_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_SWAP_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).UNISWAP_V3_FACTORY_ADDRESS,
                     AGAINST_TOKENS: UNISWAP_BASE_AGAINST_TOKENS,
@@ -96,17 +96,17 @@ export function useTradeContext(tradeProvider: TradeProvider) {
             case TradeProvider.ZRX:
                 return {
                     TYPE: tradeProvider,
-                } as TradeContext_
+                }
             case TradeProvider.BALANCER:
                 return {
                     TYPE: tradeProvider,
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).BALANCER_EXCHANGE_PROXY_ADDRESS,
-                } as TradeContext_
+                }
             case TradeProvider.DODO:
                 return {
                     TYPE: tradeProvider,
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).DODO_EXCHANGE_PROXY_ADDRESS,
-                } as TradeContext_
+                }
             default:
                 unreachable(tradeProvider)
         }
