@@ -11,22 +11,21 @@ const Content = styled('div')(
 `,
 )
 
-const ButtonGroup = styled('div')(
-    ({ theme }) => `
+const ButtonGroup = styled('div')`
     margin: 0 auto;
     display: flex;
     justify-content: space-around;
     width: 180px;
-`,
-)
+`
 
-const IFrame = styled('iframe')(
-    ({ theme }) => `
+const IFrame = styled('iframe')`
     border: none;
     width: 100%;
     min-height: 520px;
-`,
-)
+    /* fit dark mode */
+    background: white;
+    padding: 12px 24px;
+`
 
 export default function Welcome() {
     const iframeRef = useRef<HTMLIFrameElement | null>(null)
