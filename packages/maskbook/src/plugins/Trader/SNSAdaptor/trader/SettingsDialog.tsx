@@ -30,6 +30,7 @@ import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { PluginTraderMessages } from '../../messages'
 import stringify from 'json-stable-stringify'
 import { useTradeProviderSettings } from '../../trader/useTradeSettings'
+import { useSingleHopOnly } from '../../trader/uniswap/useSingleHopOnly'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -60,7 +61,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
 
     const provider = useValueRef(currentTradeProviderSettings)
     const slippage = useValueRef(currentSlippageSettings)
-    const SHO = useValueRef(currentSingleHopOnlySettings)
+    const singleHopOnly = useSingleHopOnly()
     const { pools } = useTradeProviderSettings(provider)
 
     //#region remote controlled dialog
@@ -106,7 +107,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                         <Switch
                                             color="primary"
                                             size="small"
-                                            checked={SHO}
+                                            checked={singleHopOnly}
                                             onChange={(ev) => {
                                                 ev.stopPropagation()
                                                 currentSingleHopOnlySettings.value = ev.target.checked
