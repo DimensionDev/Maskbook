@@ -68,7 +68,6 @@ export function SettingsDialog(props: SettingsDialogProps) {
     //#endregion
 
     const onReset = useCallback(() => {
-        currentTradeProviderSettings.value = TradeProvider.UNISWAP_V2
         currentSlippageSettings.value = SLIPPAGE_DEFAULT
         if (provider === TradeProvider.ZRX)
             getCurrentTradeProviderGeneralSettings(provider).value = stringify({
