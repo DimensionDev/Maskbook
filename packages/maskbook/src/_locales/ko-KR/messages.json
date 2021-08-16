@@ -276,7 +276,6 @@
     "plugin_powered_by": "기술 지원",
     "plugin_wallet_select_a_token": "토큰을 선택하기",
     "plugin_wallet_connect_a_wallet": "월렛을 연결하기",
-    "plugin_wallet_unlock_metamask": "MetaMask를 열기",
     "plugin_wallet_no_gas_fee": "가스비가 없습니다",
     "plugin_wallet_update_gas_fee": "가스비 업데이트 중...",
     "plugin_wallet_invalid_network": "잘못된 네트워크",
