@@ -13,6 +13,8 @@ export function CountdownButton(props: CountdownButtonProps) {
         onClick?.(event)
     }
 
+    useEffect(() => () => clearTimeout(countdown))
+
     useEffect(() => {
         if (countdown) {
             setTimeout(() => {
