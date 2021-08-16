@@ -95,7 +95,8 @@ export function FixedTokenList(props: FixedTokenListProps) {
     if (erc20TokensDetailedLoading) return renderPlaceholder('Loading token lists...')
     if (searchedTokenLoading) return renderPlaceholder('Loading token...')
     if (assetsLoading) return renderPlaceholder('Loading token assets...')
-    if (!renderAssets.length) return renderPlaceholder('No token found')
+    if (!renderAssets.length)
+        return renderPlaceholder('No results or contract address does not meet the query criteria.')
 
     return (
         <FixedSizeList
