@@ -55,8 +55,10 @@ export interface Profile {
     identifier: string
     nickname?: string
     linkedPersona: boolean
-    createdAt: number // milliseconds since midnight, January 1, 1970 UTC.
-    updatedAt: number // milliseconds since midnight, January 1, 1970 UTC.
+    /** Unix timestamp */
+    createdAt: number
+    /** Unix timestamp */
+    updatedAt: number
 }
 
 export interface ProfileState {
@@ -68,8 +70,10 @@ export interface Persona {
     nickname?: string
     linkedProfiles: ProfileState
     hasPrivateKey: boolean
-    createdAt: number // milliseconds since midnight, January 1, 1970 UTC.
-    updatedAt: number // milliseconds since midnight, January 1, 1970 UTC.
+    /** Unix timestamp */
+    createdAt: number
+    /** Unix timestamp */
+    updatedAt: number
 }
 
 export interface BackupOptions {
