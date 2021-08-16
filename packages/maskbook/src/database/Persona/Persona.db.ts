@@ -38,8 +38,8 @@ import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-Json
  */
 
 const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
+    1,
     2,
-    3,
     (currentOpenVersion, knowledge) => {
         return openDB<PersonaDB>('maskbook-persona', currentOpenVersion, {
             upgrade(db, oldVersion, newVersion, transaction) {
