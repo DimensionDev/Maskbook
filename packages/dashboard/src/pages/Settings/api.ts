@@ -1,6 +1,7 @@
 import { createGlobalState } from '@masknet/shared'
 import { Messages, Services } from '../../API'
 import type { DataProvider } from '@masknet/public-api'
+import type { AccountValidationType, BackupFileInfo } from './type'
 export const [useLanguage] = createGlobalState(Services.Settings.getLanguage, Messages.events.languageSettings.on)
 
 export const [useTrendingDataSource] = createGlobalState<DataProvider>(

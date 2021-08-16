@@ -7,6 +7,7 @@ import { Button, Typography } from '@material-ui/core'
 import { ButtonGroup } from '../../RegisterFrame/ButtonGroup'
 import type { StepCommonProps } from '../../Stepper'
 import { ValidationCodeStep } from './Commont'
+import type { AccountValidationType, BackupFileInfo } from '../../../pages/Settings/type'
 
 interface ValidationAccountProps extends StepCommonProps {
     account: string

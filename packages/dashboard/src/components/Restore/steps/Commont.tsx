@@ -1,5 +1,6 @@
 import { Button, Stack, Typography } from '@material-ui/core'
 import { memo } from 'react'
+import type { AccountValidationType } from '../../../pages/Settings/type'
 
 interface LabelProps {
     onModeChange(mode: AccountValidationType): void

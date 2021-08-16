@@ -1,8 +1,8 @@
-interface BackupFileInfo {
+export interface BackupFileInfo {
     downloadURL: string
     size: number
     uploadedAt: number
     abstract: string
 }
 
-type AccountValidationType = 'email' | 'phone'
+export type AccountValidationType = 'email' | 'phone'

@@ -8,6 +8,7 @@ import { PhoneField } from './steps/PhoneField'
 import { LoadingCard } from './steps/LoadingCard'
 import { ValidationAccount } from './steps/ValidationAccount'
 import { ValidationCodeStep } from './steps/Commont'
+import type { AccountValidationType } from '../../pages/Settings/type'
 
 interface CodeValidationProps {
     onValidated(downloadLink: string, account: string, password: string): Promise<string | null>
