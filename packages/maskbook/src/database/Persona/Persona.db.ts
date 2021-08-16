@@ -661,7 +661,7 @@ export interface PersonaDB extends DBSchema {
     }
     /** Use inline keys **/
     relations: {
-        key: IDBArrayKey
+        key: IDBValidKey[]
         value: RelationRecordDB
         indexes: {
             linked: string

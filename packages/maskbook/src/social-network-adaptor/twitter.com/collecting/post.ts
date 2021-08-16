@@ -52,7 +52,7 @@ function registerPostCollectorInner(
     const getCurrentIdentifier = () => {
         const current = currentSelectedIdentity[activatedSocialNetworkUI.networkIdentifier]
         return (
-            globalUIState.profiles.value.find((i) => i.identifier.toText() === current) ||
+            globalUIState.profiles.value.find((i) => i.identifier.toText() === current.value) ||
             globalUIState.profiles.value[0]
         )
     }
