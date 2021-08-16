@@ -10,7 +10,7 @@ const Actions = () => {
             return <MnemonicRevealForm />
         case SignUpRoutePath.PersonaCreate:
             return <PersonaCreate />
-        case SignUpRoutePath.ConnectSocialMedial:
+        case SignUpRoutePath.ConnectSocialMedia:
             return <ConnectSocialMedia />
         default:
             return <MnemonicRevealForm />

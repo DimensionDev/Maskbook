@@ -43,7 +43,7 @@ export const PersonaCreate = () => {
 
     const handleCreatePersona = useSnackbarCallback({
         executor: () => createPersona(mnemonic.join(' '), personaName),
-        onSuccess: () => navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedial}`),
+        onSuccess: () => navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`),
         onError: () => navigate(`${RoutePaths.SignUp}`),
         successText: t.create_account_persona_successfully(),
         deps: [],
