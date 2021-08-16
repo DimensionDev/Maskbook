@@ -25,7 +25,7 @@ export const [useBinanceNetworkTradeProvider] = createGlobalState(
 
 const API_HOST = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com'
 const SEND_CODE_URL = `${API_HOST}/api/v1/backup/send_code`
-const VERIFY_CODE_URL = `${API_HOST}/api/v1/backup`
+const VERIFY_CODE_URL = `${API_HOST}/api/v1/backup/validate_code`
 
 interface SendCodeProps {
     account: string
@@ -34,7 +34,7 @@ interface SendCodeProps {
 
 export const sendCode = ({ account, type }: SendCodeProps) => {
     return fetch(SEND_CODE_URL, {
-        method: 'PUT',
+        method: 'POST',
         body: JSON.stringify({
             account,
             account_type: type,
@@ -48,7 +48,7 @@ interface VerifyCodeProps extends SendCodeProps {
 
 export const verifyCode = ({ account, type, code }: VerifyCodeProps) => {
     return fetch(VERIFY_CODE_URL, {
-        method: 'PUT',
+        method: 'POST',
         body: JSON.stringify({
             account,
             account_type: type,
