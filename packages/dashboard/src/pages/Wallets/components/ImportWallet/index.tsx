@@ -73,7 +73,7 @@ export const ImportWallet = memo(() => {
             privateKey: t.wallets_wallet_private_key(),
         },
         {
-            mnemonic: <DesktopMnemonicConfirm onChange={() => {}} />,
+            mnemonic: <DesktopMnemonicConfirm onChange={() => {}} indexes={[]} puzzleWords={[]} />,
             json: 'TBD',
             privateKey: (
                 <>
@@ -97,7 +97,7 @@ export const ImportWallet = memo(() => {
                     <Button color="primary">{t.wallets_import_wallet_import()}</Button>
                 </ControlContainer>
                 <AlertContainer>
-                    <MaskAlert />
+                    <MaskAlert description={t.wallets_create_wallet_alert()} />
                 </AlertContainer>
             </Container>
         </>
