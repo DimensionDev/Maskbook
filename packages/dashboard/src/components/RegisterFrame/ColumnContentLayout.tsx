@@ -13,14 +13,14 @@ export const ColumnContentLayout = styled('div')(
 `,
 )
 
-export const Body = styled('div')(
+export const Body = styled('main')(
     ({ theme }) => `
     flex: 2;
     width: 78%;
 `,
 )
 
-export const Footer = styled('div')(
+export const Footer = styled('footer')(
     ({ theme }) => `
     flex: 1;
     width: 78%;
