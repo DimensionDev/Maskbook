@@ -61,6 +61,10 @@ export enum SupportedLanguages {
     zhTW = 'zh-TW',
     koKR = 'ko-KR',
     jaJP = 'ja-JP',
+    esES = 'es-ES',
+    faIR = 'fa-IR',
+    itIT = 'it-IT',
+    ruRU = 'ru-RU',
 }
 /** Supported language settings */
 export enum LanguageOptions {
@@ -70,4 +74,8 @@ export enum LanguageOptions {
     zhTW = 'zh-TW',
     koKR = 'ko-KR',
     jaJP = 'ja-JP',
+    esES = 'es-ES',
+    faIR = 'fa-IR',
+    itIT = 'it-IT',
+    ruRU = 'ru-RU',
 }
