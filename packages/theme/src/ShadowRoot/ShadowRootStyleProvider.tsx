@@ -36,15 +36,15 @@ class EmotionInformativeSheetsRegistry {
 }
 class JSSInformativeSheetsRegistry extends JSSSheetsRegistry {
     reg = new Informative()
-    add(...args: Parameters<JSSSheetsRegistry['add']>) {
+    override add(...args: Parameters<JSSSheetsRegistry['add']>) {
         super.add(...args)
         this.reg.inform()
     }
-    reset(...args: Parameters<JSSSheetsRegistry['reset']>) {
+    override reset(...args: Parameters<JSSSheetsRegistry['reset']>) {
         super.reset(...args)
         this.reg.inform()
     }
-    remove(...args: Parameters<JSSSheetsRegistry['remove']>) {
+    override remove(...args: Parameters<JSSSheetsRegistry['remove']>) {
         super.remove(...args)
         this.reg.inform()
     }
