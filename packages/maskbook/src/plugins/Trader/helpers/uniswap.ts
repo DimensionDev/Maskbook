@@ -10,6 +10,7 @@ import {
     EthereumTokenType,
     FungibleTokenDetailed,
     isSameAddress,
+    isGreaterThan,
 } from '@masknet/web3-shared'
 import { ONE_HUNDRED_PERCENT, WETH, ZERO_PERCENT } from '../constants'
 
@@ -81,7 +82,7 @@ export function toUniswapCurrencyAmount(chainId: ChainId, token?: FungibleTokenD
     if (!token || !amount) return
     const currency = toUniswapCurrency(chainId, token)
     if (!currency) return
-    if (amount !== '0') return CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(amount))
+    if (isGreaterThan(amount, 0)) return CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(amount))
     return
 }
 
