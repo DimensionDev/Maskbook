@@ -22,6 +22,8 @@ export const UNISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
 
 export const MAX_HOP = 3
 
+export const DEFAULT_MULTICALL_GAS_LIMIT = 2_000_000
+
 // used to ensure the user doesn't send so much ETH so they end up with <.01
 export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(JSBI.BigInt(50), JSBI.BigInt(10000))
 

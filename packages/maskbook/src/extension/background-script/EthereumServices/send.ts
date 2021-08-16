@@ -4,6 +4,7 @@ import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { addGasMargin, ChainId, EthereumMethodType, ProviderType } from '@masknet/web3-shared'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/kit'
+import * as MetaMask from './providers/MetaMask'
 import { createWeb3 } from './web3'
 import * as WalletConnect from './providers/WalletConnect'
 import { addRecentTransaction, getWallet } from '../../../plugins/Wallet/services'
@@ -75,6 +76,12 @@ export async function INTERNAL_send(
                 })
                 break
             case ProviderType.MetaMask:
+                try {
+                    await MetaMask.ensureConnectedAndUnlocked()
+                } catch (error: any) {
+                    callback(error)
+                    break
+                }
                 provider?.send(
                     {
                         ...payload,
@@ -132,6 +139,12 @@ export async function INTERNAL_send(
                 )
                 break
             case ProviderType.MetaMask:
+                try {
+                    await MetaMask.ensureConnectedAndUnlocked()
+                } catch (error: any) {
+                    callback(error)
+                    break
+                }
                 provider?.send(payload, (error, response) => {
                     callback(error, response)
                     handleRecentTransaction(account, response)
