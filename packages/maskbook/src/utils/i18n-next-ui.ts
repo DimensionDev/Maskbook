@@ -4,7 +4,7 @@ import { initReactI18next, useTranslation as useTranslation_, UseTranslationOpti
 import type { TOptions } from 'i18next'
 import { useEffect } from 'react'
 import { useUpdate } from 'react-use'
-import type en from '../_locales/en/messages.json'
+import type en from '../_locales/en-US/messages.json'
 import i18nNextInstance from './i18n-next'
 import { languageSettings } from '../settings/settings'
 

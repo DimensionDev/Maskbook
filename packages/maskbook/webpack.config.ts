@@ -108,6 +108,7 @@ function config(opts: {
                 '@masknet/plugin-wallet': require.resolve('../plugins/Wallet/src/index.ts'),
                 '@masknet/external-plugin-previewer': require.resolve('../external-plugin-previewer/src/index.tsx'),
                 '@masknet/web3-shared': require.resolve('../web3-shared/src/index.ts'),
+                '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
             },
             // Polyfill those Node built-ins
             fallback: {
@@ -202,7 +203,7 @@ function config(opts: {
                 cacheGroups: {
                     // per-npm-package splitting
                     defaultVendors: {
-                        test: /[\\/]node_modules[\\/]/,
+                        test: /[/\\]node_modules[/\\]/,
                         name(module) {
                             const path = (module.context as string)
                                 .replace(/\\/g, '/')
@@ -245,7 +246,6 @@ function config(opts: {
             // Have to write disk cause plugin cannot be loaded over network
             writeToDisk: true,
             compress: false,
-            hot: !disableHMR,
             hotOnly: !disableHMR,
             port: hmrPort,
             // WDS does not support chrome-extension:// browser-extension://

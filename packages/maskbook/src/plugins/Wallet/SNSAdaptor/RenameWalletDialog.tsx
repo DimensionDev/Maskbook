@@ -36,7 +36,7 @@ export function WalletRenameWalletDialog() {
             wallet: null,
         })
     }, [])
-    const renameWallet = useSnackbarCallback(
+    const handleRename = useSnackbarCallback(
         () => {
             if (!wallet?.address) {
                 throw new Error('Not select wallet yet.')
@@ -58,7 +58,7 @@ export function WalletRenameWalletDialog() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder={t('plugin_wallet_name_placeholder')}
-                    onKeyPress={(e) => e.key === 'Enter' && renameWallet()}
+                    onKeyPress={(e) => e.key === 'Enter' && handleRename()}
                 />
             </DialogContent>
             <DialogActions className={classes.dialogActions}>
@@ -68,7 +68,7 @@ export function WalletRenameWalletDialog() {
                 <Button
                     className={classes.actionButton}
                     variant="contained"
-                    onClick={renameWallet}
+                    onClick={handleRename}
                     disabled={!name}
                     fullWidth>
                     Confirm

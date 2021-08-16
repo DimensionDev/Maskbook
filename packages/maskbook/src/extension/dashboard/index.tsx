@@ -1,22 +1,31 @@
-import type {} from 'react/next'
-import type {} from 'react-dom/next'
-import ReactDOM from 'react-dom'
-
 // @ts-ignore in case circle dependency make typescript complains
-import { IntergratedDashboard } from '@masknet/dashboard'
-// @ts-ignore
-import { setService, setPluginMessages, setMessages, setPluginServices } from '@masknet/dashboard'
+import { setService, setPluginMessages, setMessages, setPluginServices, IntergratedDashboard } from '@masknet/dashboard'
 import Services from '../service'
 import { WalletRPC, WalletMessages } from '../../plugins/Wallet/messages'
+import { PluginTransakMessages } from '../../plugins/Transak/messages'
+import { PluginTraderMessages, PluginTraderRPC } from '../../plugins/Trader/messages'
 import { MaskMessage } from '../../utils/messages'
 import { startPluginDashboard } from '@masknet/plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
-setService(Services)
-setMessages(MaskMessage)
-setPluginServices({ Wallet: WalletRPC })
-setPluginMessages({ Wallet: WalletMessages })
-startPluginDashboard(createPluginHost())
+import type { DashboardPluginMessages, DashboardPluginServices } from '@masknet/shared'
+import { createNormalReactRoot } from '../../utils/createNormalReactRoot'
 
-const root = document.createElement('div')
-document.body.insertBefore(root, document.body.children[0])
-ReactDOM.createRoot(root).render(<IntergratedDashboard />)
+const msg: DashboardPluginMessages = {
+    Wallet: WalletMessages,
+    Swap: PluginTraderMessages,
+    Transak: PluginTransakMessages,
+}
+const rpc: DashboardPluginServices = {
+    Wallet: WalletRPC,
+    Swap: PluginTraderRPC,
+}
+// @ts-ignore To avoid build failure due to the circular project reference
+setService(Services)
+// @ts-ignore
+setMessages(MaskMessage)
+// @ts-ignore
+setPluginServices(rpc)
+// @ts-ignore
+setPluginMessages(msg)
+startPluginDashboard(createPluginHost())
+createNormalReactRoot(<IntergratedDashboard />)

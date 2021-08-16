@@ -8,7 +8,6 @@ import {
     TransactionStateType,
     useNonce,
     useGasPrice,
-    addGasMargin,
     TransactionEventType,
 } from '@masknet/web3-shared'
 import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool'
@@ -69,8 +68,8 @@ export function useDepositCallback(
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
             const promiEvent = poolContract.methods.depositTo(account, amount, controlledToken, referrer).send({
-                gas: addGasMargin(estimatedGas).toFixed(),
                 ...config,
+                gas: estimatedGas,
             })
             promiEvent
                 .on(TransactionEventType.TRANSACTION_HASH, (hash) => {

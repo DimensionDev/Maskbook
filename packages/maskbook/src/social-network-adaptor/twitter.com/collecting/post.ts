@@ -26,14 +26,26 @@ function registerPostCollectorInner(
     cancel: AbortSignal,
 ) {
     const getTweetNode = (node: HTMLElement) => {
-        return node.closest<HTMLDivElement>(
+        const root = node.closest<HTMLDivElement>(
             [
-                '.tweet',
-                '.main-tweet',
                 'article > div',
                 'div[role="link"]', // retweet in new twitter
             ].join(),
         )
+        if (!root) return null
+
+        const isCardNode = node.matches('[data-testid="card.wrapper"]')
+        const hasTextNode = !!root.querySelector(
+            [
+                '[data-testid="tweet"] div[lang]', // timeline
+                '[data-testid="tweet"] + div div[lang]', // detailed
+            ].join(),
+        )
+
+        // if a text node already exists, it's not going to decrypt the card node
+        if (isCardNode && hasTextNode) return null
+
+        return root
     }
     const updateProfileInfo = memoize(
         (info: PostInfo) => {
@@ -47,12 +59,7 @@ function registerPostCollectorInner(
     const watcher = new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
-            if (!tweetNode) {
-                if (process.env.NODE_ENV === 'development') {
-                    console.log('Fails to get tweetNode from node', node)
-                }
-                return
-            }
+            if (!tweetNode) return
             const refs = createRefsForCreatePostContext()
             const info = twitterShared.utils.createPostContext({
                 comments: undefined,

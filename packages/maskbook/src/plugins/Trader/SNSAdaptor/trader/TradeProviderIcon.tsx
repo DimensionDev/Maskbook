@@ -5,6 +5,7 @@ import { SashimiSwapIcon } from '../../../../resources/SashimiSwapIcon'
 import { SushiSwapIcon } from '../../../../resources/SushiSwapIcon'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { ZRXIcon } from '../../../../resources/ZRXIcon'
+import { DODOIcon } from '../../../../resources/DODOIcon'
 import { resolveTradeProviderName } from '../../pipes'
 import { TradeProvider } from '../../types'
 
@@ -25,7 +26,9 @@ export interface TradeProviderIconProps {
 export function TradeProviderIcon(props: TradeProviderIconProps) {
     const classes = useStyles()
     switch (props.provider) {
-        case TradeProvider.UNISWAP:
+        case TradeProvider.UNISWAP_V2:
+            return <UniswapIcon classes={{ root: classes.icon }} />
+        case TradeProvider.UNISWAP_V3:
             return <UniswapIcon classes={{ root: classes.icon }} />
         case TradeProvider.ZRX:
             return <ZRXIcon classes={{ root: classes.icon }} />
@@ -51,6 +54,8 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
                     className={classes.icon}
                 />
             )
+        case TradeProvider.DODO:
+            return <DODOIcon classes={{ root: classes.icon }} />
         default:
             unreachable(props.provider)
     }

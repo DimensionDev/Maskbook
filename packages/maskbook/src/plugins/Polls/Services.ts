@@ -1,4 +1,5 @@
 import { first } from 'lodash-es'
+import '../../network/gun/gun-worker.patch'
 import { gun2 } from '../../network/gun/version.2'
 import type { PollMetaData } from './types'
 import { PollGunServer } from './constants'
@@ -34,7 +35,7 @@ interface NewPollProps {
 export async function createNewPoll(poll: NewPollProps) {
     const { id, options, start_time, end_time } = poll
 
-    const results = new Array<number>(options.length).fill(0)
+    const results = Array.from<number>({ length: options.length }).fill(0)
     const resultsObj = { ...results }
     const optionsObj = { ...options }
 

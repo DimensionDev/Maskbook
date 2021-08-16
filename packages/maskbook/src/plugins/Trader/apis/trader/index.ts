@@ -9,18 +9,20 @@ export async function getAvailableTraderProviders(type?: TagType, keyword?: stri
     switch (networkType) {
         case NetworkType.Ethereum:
             return [
-                TradeProvider.UNISWAP,
+                TradeProvider.UNISWAP_V2,
+                TradeProvider.UNISWAP_V3,
                 TradeProvider.SUSHISWAP,
                 TradeProvider.SASHIMISWAP,
                 TradeProvider.ZRX,
                 TradeProvider.BALANCER,
+                TradeProvider.DODO,
             ]
         case NetworkType.Polygon:
-            return [TradeProvider.QUICKSWAP, TradeProvider.SUSHISWAP]
+            return [TradeProvider.QUICKSWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO]
         case NetworkType.Binance:
-            return [TradeProvider.PANCAKESWAP, TradeProvider.SUSHISWAP]
+            return [TradeProvider.PANCAKESWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO]
         case NetworkType.Arbitrum:
-            return []
+            return [TradeProvider.UNISWAP_V3]
         default:
             safeUnreachable(networkType)
             return []

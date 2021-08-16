@@ -36,7 +36,8 @@ export enum ProviderType {
     WalletConnect = 'WalletConnect',
     CustomNetwork = 'CustomNetwork',
 }
-
+// If you change this enum, please sync it to packages/public-api/src/web.ts
+// (it's a breaking change. Please notify the iOS and Android dev)
 export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
@@ -202,6 +203,7 @@ export enum EthereumMethodType {
     ETH_GET_TRANSACTION_RECEIPT = 'eth_getTransactionReceipt',
     ETH_GET_TRANSACTION_COUNT = 'eth_getTransactionCount',
     ETH_ESTIMATE_GAS = 'eth_estimateGas',
+    ETH_CALL = 'eth_call',
     ETH_SIGN = 'eth_sign',
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
     ETH_GET_LOGS = 'eth_getLogs',
@@ -215,9 +217,9 @@ export enum TransactionEventType {
 }
 
 export enum TransactionStatusType {
-    NOT_DEPEND,
-    SUCCEED,
-    FAILED,
+    NOT_DEPEND = 0,
+    SUCCEED = 1,
+    FAILED = 2,
 }
 
 export type GasNow = {
@@ -254,12 +256,12 @@ export interface Asset {
 }
 
 export enum PortfolioProvider {
-    ZERION,
-    DEBANK,
+    ZERION = 0,
+    DEBANK = 1,
 }
 
 export enum CollectibleProvider {
-    OPENSEAN,
+    OPENSEAN = 0,
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
@@ -267,3 +269,46 @@ export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<in
     : T extends PayableTransactionObject<infer S>
     ? S
     : T
+
+export enum FilterTransactionType {
+    ALL = 'all',
+    SEND = 'send',
+    RECEIVE = 'receive',
+}
+
+export enum DebankTransactionDirection {
+    SEND = 'send',
+    RECEIVE = 'receive',
+}
+
+export enum ZerionTransactionDirection {
+    IN = 'in',
+    OUT = 'out',
+    SELF = 'self',
+}
+
+export type TransactionDirection = ZerionTransactionDirection | DebankTransactionDirection
+
+export interface TransactionPair {
+    name: string
+    symbol: string
+    address: string
+    direction: TransactionDirection
+    amount: number
+}
+
+export type TransactionGasFee = {
+    eth: number
+    usd: number
+}
+
+export interface Transaction {
+    type: string | undefined
+    id: string
+    timeAt: Date
+    toAddress: string
+    failed: boolean
+    pairs: TransactionPair[]
+    gasFee: TransactionGasFee | undefined
+    transactionType: string
+}

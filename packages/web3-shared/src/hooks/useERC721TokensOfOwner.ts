@@ -12,12 +12,13 @@ export function useERC721TokenIdsOfOwner(token?: ERC721Token) {
     const erc721Contract = useERC721TokenContract(token?.address)
     const { names, callDatas } = useMemo(() => {
         const balanceOf = asyncResultOfBalanceOf.value ?? '0'
-        return {
-            names: new Array(Number.parseInt(balanceOf, 10)).fill('tokenOfOwnerByIndex') as 'tokenOfOwnerByIndex'[],
-            callDatas: new Array(Number.parseInt(balanceOf, 10))
-                .fill('')
-                .map((_, i) => [account, i] as [string, number]),
-        }
+        const names = Array.from<'tokenOfOwnerByIndex'>({
+            length: Number.parseInt(balanceOf, 10),
+        }).fill('tokenOfOwnerByIndex')
+        const callDatas = Array.from({ length: Number.parseInt(balanceOf, 10) })
+            .fill('')
+            .map((_, i) => [account, i] as [string, number])
+        return { names, callDatas }
     }, [account, asyncResultOfBalanceOf.value])
 
     // valdiate
@@ -27,7 +28,7 @@ export function useERC721TokenIdsOfOwner(token?: ERC721Token) {
     // compose
     const tokenIds = useMemo(() => {
         if (!erc721Contract) return []
-        return results.filter((x) => !x.error).map((x) => x.value) as string[]
+        return results.filter((x) => x.succeed).map((x) => x.value) as string[]
     }, [erc721Contract, results])
 
     return {

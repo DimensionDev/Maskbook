@@ -9,7 +9,8 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core'
-import { DataProvider, Trending } from '../../types'
+import type { Trending } from '../../types'
+import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
 
 const useStyles = makeStyles((theme) => ({
@@ -80,11 +81,11 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                     <TableRow>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
                             <TableCell className={classes.cell} align="center">
-                                <FormattedCurrency sign="$" symbol="USD" value={trending.market?.market_cap ?? 0} />
+                                <FormattedCurrency symbol="USD" value={trending.market?.market_cap ?? 0} />
                             </TableCell>
                         ) : null}
                         <TableCell className={classes.cell} align="center">
-                            <FormattedCurrency sign="$" symbol="USD" value={trending.market?.total_volume ?? 0} />
+                            <FormattedCurrency symbol="USD" value={trending.market?.total_volume ?? 0} />
                         </TableCell>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
                             <>

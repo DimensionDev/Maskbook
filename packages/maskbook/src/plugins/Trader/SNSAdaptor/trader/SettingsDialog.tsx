@@ -19,11 +19,11 @@ import { TradeProvider, ZrxTradePool } from '../../types'
 import { SelectPoolPanel } from './SelectPoolPanel'
 import { SlippageSlider } from './SlippageSlider'
 import {
-    currentSlippageTolerance,
+    currentSlippageSettings,
     currentTradeProviderSettings,
     getCurrentTradeProviderGeneralSettings,
 } from '../../settings'
-import { SLIPPAGE_TOLERANCE_DEFAULT } from '../../constants'
+import { SLIPPAGE_DEFAULT } from '../../constants'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { PluginTraderMessages } from '../../messages'
 import stringify from 'json-stable-stringify'
@@ -57,7 +57,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const provider = useValueRef(currentTradeProviderSettings)
-    const slippage = useValueRef(currentSlippageTolerance)
+    const slippage = useValueRef(currentSlippageSettings)
     const { pools } = useTradeProviderSettings(provider)
 
     //#region remote controlled dialog
@@ -65,8 +65,8 @@ export function SettingsDialog(props: SettingsDialogProps) {
     //#endregion
 
     const onReset = useCallback(() => {
-        currentTradeProviderSettings.value = TradeProvider.UNISWAP
-        currentSlippageTolerance.value = SLIPPAGE_TOLERANCE_DEFAULT
+        currentTradeProviderSettings.value = TradeProvider.UNISWAP_V2
+        currentSlippageSettings.value = SLIPPAGE_DEFAULT
         if (provider === TradeProvider.ZRX)
             getCurrentTradeProviderGeneralSettings(provider).value = stringify({
                 pools: getEnumAsArray(ZrxTradePool).map((x) => x.value),
@@ -90,7 +90,23 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                     <SlippageSlider
                                         value={slippage}
                                         onChange={(tolerance) => {
-                                            currentSlippageTolerance.value = tolerance
+                                            currentSlippageSettings.value = tolerance
+                                        }}
+                                    />
+                                </AccordionDetails>
+                            </Accordion>
+                            <Accordion className={classes.accordion} elevation={0}>
+                                <AccordionSummary>
+                                    <Typography className={classes.heading}>
+                                        {t('plugin_trader_single_hop_only')}
+                                    </Typography>
+                                    <Typography className={classes.subheading}>{slippage / 100}%</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails className={classes.details}>
+                                    <SlippageSlider
+                                        value={slippage}
+                                        onChange={(tolerance) => {
+                                            currentSlippageSettings.value = tolerance
                                         }}
                                     />
                                 </AccordionDetails>

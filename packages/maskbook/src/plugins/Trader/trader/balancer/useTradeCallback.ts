@@ -12,14 +12,14 @@ import {
     useTraderConstants,
 } from '@masknet/web3-shared'
 import { useCallback, useState } from 'react'
-import { SLIPPAGE_TOLERANCE_DEFAULT } from '../../constants'
+import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import { useTradeAmount } from './useTradeAmount'
 
 export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,
     exchangeProxyContract: ExchangeProxy | null,
-    allowedSlippage = SLIPPAGE_TOLERANCE_DEFAULT,
+    allowedSlippage = SLIPPAGE_DEFAULT,
 ) {
     const nonce = useNonce()
     const gasPrice = useGasPrice()

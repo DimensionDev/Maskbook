@@ -6,7 +6,7 @@ import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutline
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Check from '@material-ui/icons/Check'
-import { Wallet, useChainIdValid, useChainDetailed } from '@masknet/web3-shared'
+import { Wallet, useChainIdValid, useChainDetailed, FilterTransactionType } from '@masknet/web3-shared'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddERC20TokenDialog,
@@ -23,7 +23,6 @@ import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
-import { FilterTransactionType } from '../../../plugins/Wallet/types'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -127,13 +126,13 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                 <Check className={classes.checkIcon} fontSize="small" />
             ) : null}
         </MenuItem>,
-        <MenuItem key="Sent" onClick={() => setTransactionType(FilterTransactionType.SEND)}>
+        <MenuItem key="send" onClick={() => setTransactionType(FilterTransactionType.SEND)}>
             {t('sent_transactions')}
             {transactionType === FilterTransactionType.SEND ? (
                 <Check className={classes.checkIcon} fontSize="small" />
             ) : null}
         </MenuItem>,
-        <MenuItem key="Received" onClick={() => setTransactionType(FilterTransactionType.RECEIVE)}>
+        <MenuItem key="receive" onClick={() => setTransactionType(FilterTransactionType.RECEIVE)}>
             {t('received_transactions')}
             {transactionType === FilterTransactionType.RECEIVE ? (
                 <Check className={classes.checkIcon} fontSize="small" />

@@ -64,7 +64,7 @@ export class OnDemandWorker extends EventTarget implements Worker {
         return () => this.removeEventListener('terminated', callback)
     }
     postMessage(message: any, transfer: Transferable[]): void
-    postMessage(message: any, options?: PostMessageOptions): void
+    postMessage(message: any, options?: StructuredSerializeOptions): void
     postMessage(...args: [any, any]) {
         this.use(() => this.worker && Worker.prototype.postMessage.apply(this.worker, args))
     }

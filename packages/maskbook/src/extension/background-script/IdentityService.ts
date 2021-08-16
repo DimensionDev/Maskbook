@@ -176,3 +176,4 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
         // the profile already exists
     }
 }
+export * from './IdentityServices/sign'
