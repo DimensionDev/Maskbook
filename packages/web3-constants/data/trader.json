@@ -60,7 +60,9 @@
         "BSC": "",
         "BSCT": "",
         "Matic": "",
-        "Mumbai": ""
+        "Mumbai": "",
+        "Arbitrum": "0xE592427A0AEce92De3Edee1F18E0157C05861564",
+        "Arbitrum_Rinkeby": "0xE592427A0AEce92De3Edee1F18E0157C05861564"
     },
     "UNISWAP_V3_FACTORY_ADDRESS": {
         "Mainnet": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
@@ -71,7 +73,9 @@
         "BSC": "",
         "BSCT": "",
         "Matic": "",
-        "Mumbai": ""
+        "Mumbai": "",
+        "Arbitrum": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "Arbitrum_Rinkeby": "0x1F98431c8aD98523631AE4a59f267346ea31F984"
     },
     "UNISWAP_V3_QUOTER_ADDRESS": {
         "Mainnet": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
@@ -82,18 +86,22 @@
         "BSC": "",
         "BSCT": "",
         "Matic": "",
-        "Mumbai": ""
+        "Mumbai": "",
+        "Arbitrum": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+        "Arbitrum_Rinkeby": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6"
     },
     "UNISWAP_V3_THEGRAPH": {
-        "Mainnet": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
-        "Ropsten": "",
-        "Rinkeby": "",
-        "Kovan": "",
-        "Gorli": "",
+        "Mainnet": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
+        "Ropsten": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
+        "Rinkeby": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
+        "Kovan": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
+        "Gorli": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
         "BSC": "",
         "BSCT": "",
         "Matic": "",
-        "Mumbai": ""
+        "Mumbai": "",
+        "Arbitrum": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
+        "Arbitrum_Rinkeby": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3"
     },
     "UNISWAP_V3_INIT_CODE_HASH": {
         "Mainnet": "0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54",
@@ -104,7 +112,9 @@
         "BSC": "",
         "BSCT": "",
         "Matic": "",
-        "Mumbai": ""
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
     },
     "SUSHISWAP_ROUTER_ADDRESS": {
         "Mainnet": "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",

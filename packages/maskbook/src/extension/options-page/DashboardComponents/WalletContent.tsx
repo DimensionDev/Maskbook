@@ -126,13 +126,13 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                 <Check className={classes.checkIcon} fontSize="small" />
             ) : null}
         </MenuItem>,
-        <MenuItem key="Sent" onClick={() => setTransactionType(FilterTransactionType.SENT)}>
+        <MenuItem key="send" onClick={() => setTransactionType(FilterTransactionType.SEND)}>
             {t('sent_transactions')}
-            {transactionType === FilterTransactionType.SENT ? (
+            {transactionType === FilterTransactionType.SEND ? (
                 <Check className={classes.checkIcon} fontSize="small" />
             ) : null}
         </MenuItem>,
-        <MenuItem key="Received" onClick={() => setTransactionType(FilterTransactionType.RECEIVE)}>
+        <MenuItem key="receive" onClick={() => setTransactionType(FilterTransactionType.RECEIVE)}>
             {t('received_transactions')}
             {transactionType === FilterTransactionType.RECEIVE ? (
                 <Check className={classes.checkIcon} fontSize="small" />

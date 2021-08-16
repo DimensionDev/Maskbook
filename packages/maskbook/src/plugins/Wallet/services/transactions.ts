@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import { isNil } from 'lodash-es'
 import * as DeBankAPI from '../apis/debank'
 import * as ZerionApi from '../apis/zerion'
-import { resolveDebankChainName, resolveZerionTransactionsScopeName } from '../pipes'
+import { resolveDebankChainName, resolveDebankTransactionType, resolveZerionTransactionsScopeName } from '../pipes'
 import {
     DebankTransactionDirection,
     HistoryResponse,
@@ -94,7 +94,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['da
                 gasFee: transaction.tx
                     ? { eth: transaction.tx.eth_gas_fee, usd: transaction.tx.usd_gas_fee }
                     : undefined,
-                transactionType: transaction.cate_id,
+                transactionType: resolveDebankTransactionType(transaction.cate_id),
             }
         })
 }

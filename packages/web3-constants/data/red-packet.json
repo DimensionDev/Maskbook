@@ -47,7 +47,9 @@
         "BSC": "0x0ca42C178e14c618c81B8438043F27d9D38145f6",
         "BSCT": "",
         "Matic": "0x93e0b87A0aD0C991dc1B5176ddCD850c9a78aabb",
-        "Mumbai": ""
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mainnet",

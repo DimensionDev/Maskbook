@@ -27,24 +27,14 @@ export interface Multicall extends BaseContract {
     methods: {
         getCurrentBlockTimestamp(): NonPayableTransactionObject<string>
 
-        aggregate(calls: [string, string | number[]][]): NonPayableTransactionObject<{
-            blockNumber: string
-            returnData: string[]
-            0: string
-            1: string[]
-        }>
-
-        getLastBlockHash(): NonPayableTransactionObject<string>
-
         getEthBalance(addr: string): NonPayableTransactionObject<string>
 
-        getCurrentBlockDifficulty(): NonPayableTransactionObject<string>
-
-        getCurrentBlockGasLimit(): NonPayableTransactionObject<string>
-
-        getCurrentBlockCoinbase(): NonPayableTransactionObject<string>
-
-        getBlockHash(blockNumber: number | string | BN): NonPayableTransactionObject<string>
+        multicall(calls: [string, number | string | BN, string | number[]][]): NonPayableTransactionObject<{
+            blockNumber: string
+            returnData: [boolean, string, string][]
+            0: string
+            1: [boolean, string, string][]
+        }>
     }
     events: {
         allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter

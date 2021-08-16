@@ -1,5 +1,5 @@
 import { safeUnreachable, unreachable } from '@dimensiondev/kit'
-import { ChainId, NetworkType, PortfolioProvider } from '@masknet/web3-shared'
+import { ChainId, FilterTransactionType, NetworkType, PortfolioProvider } from '@masknet/web3-shared'
 import type { SocketRequestAssetScope } from '../types'
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
@@ -10,6 +10,17 @@ export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
             return 'Debank'
         default:
             unreachable(provider)
+    }
+}
+
+export function resolveDebankTransactionType(category: string) {
+    switch (category) {
+        case 'send':
+            return FilterTransactionType.SEND
+        case 'receive':
+            return FilterTransactionType.RECEIVE
+        default:
+            return FilterTransactionType.ALL
     }
 }
 
