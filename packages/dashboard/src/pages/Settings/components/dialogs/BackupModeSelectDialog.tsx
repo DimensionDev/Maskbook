@@ -1,6 +1,9 @@
 import { MaskColorVar, MaskDialog } from '@masknet/theme'
-import { Box, makeStyles, Typography } from '@material-ui/core'
+import { Box, makeStyles, Tooltip, Typography } from '@material-ui/core'
 import { LocalBackupIcon, CloudBackupIcon } from '@masknet/icons'
+import { useContext } from 'react'
+import { UserContext } from '../../hooks/UserContext'
+import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -11,6 +14,7 @@ const useStyles = makeStyles(() => ({
         paddingBottom: '20px',
     },
     mode: {
+        position: 'relative',
         width: '110px',
         height: '116px',
         background: MaskColorVar.lightBackground,
@@ -34,6 +38,14 @@ const useStyles = makeStyles(() => ({
         paddingTop: '10px',
         fontSize: '13px',
     },
+    mask: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        top: 0,
+        left: 0,
+        background: 'rgba(255,255,255,.5)',
+    },
 }))
 
 export interface BackupModeSelectDialogProps {
@@ -43,7 +55,9 @@ export interface BackupModeSelectDialogProps {
 }
 
 export default function BackupModeSelectDialog({ open, onClose, onSelect }: BackupModeSelectDialogProps) {
+    const t = useDashboardI18N()
     const classes = useStyles()
+    const { user } = useContext(UserContext)
     return (
         <MaskDialog title="Backup" open={open} onClose={onClose}>
             <Box className={classes.container}>
@@ -52,6 +66,12 @@ export default function BackupModeSelectDialog({ open, onClose, onSelect }: Back
                     <Typography className={classes.label}>Local Backup</Typography>
                 </Box>
                 <Box className={classes.mode}>
+                    {!(user.email || user.phone) ? (
+                        <Tooltip title={t.settings_dialogs_bind_email_or_phone()} placement="top" arrow>
+                            <div className={classes.mask} />
+                        </Tooltip>
+                    ) : null}
+
                     <CloudBackupIcon className={classes.icon} onClick={() => onSelect('cloud')} />
                     <Typography className={classes.label}>Cloud Backup</Typography>
                 </Box>
