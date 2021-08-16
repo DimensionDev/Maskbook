@@ -97,26 +97,24 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                     />
                                 </AccordionDetails>
                             </Accordion>
-                            {
-                                provider === TradeProvider.UNISWAP_V3 ? (
-                                    <Accordion className={classes.accordion} elevation={0} expanded={false}>
-                                        <AccordionSummary>
-                                            <Typography className={classes.heading}>
-                                                {t('plugin_trader_single_hop_only')}
-                                            </Typography>
-                                            <Switch
-                                                color="primary"
-                                                size="small"
-                                                checked={SHO}
-                                                onChange={(ev) => {
-                                                    ev.stopPropagation()
-                                                    currentSingleHopOnlySettings.value = ev.target.checked
-                                                }}
-                                            />
-                                        </AccordionSummary>
-                                    </Accordion>
-                                ) : null
-                            }
+                            {provider === TradeProvider.UNISWAP_V3 ? (
+                                <Accordion className={classes.accordion} elevation={0} expanded={false}>
+                                    <AccordionSummary>
+                                        <Typography className={classes.heading}>
+                                            {t('plugin_trader_single_hop_only')}
+                                        </Typography>
+                                        <Switch
+                                            color="primary"
+                                            size="small"
+                                            checked={SHO}
+                                            onChange={(ev) => {
+                                                ev.stopPropagation()
+                                                currentSingleHopOnlySettings.value = ev.target.checked
+                                            }}
+                                        />
+                                    </AccordionSummary>
+                                </Accordion>
+                            ) : null}
                             {provider === TradeProvider.ZRX ? (
                                 <Accordion className={classes.accordion} elevation={0}>
                                     <AccordionSummary>
