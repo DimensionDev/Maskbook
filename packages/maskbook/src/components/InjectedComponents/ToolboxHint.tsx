@@ -188,7 +188,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
         {
             ...ToolIconURLs.claim,
             onClick: onClaimAllDialogOpen,
-            hide: operatingSupportedChainMapping[ITO_Plugin.ID],
+            hide: !operatingSupportedChainMapping[ITO_Plugin.ID],
         },
     ]
 
