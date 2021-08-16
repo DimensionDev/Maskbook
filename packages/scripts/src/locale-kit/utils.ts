@@ -6,8 +6,7 @@ import { EXTENSION_SOURCE, ROOT_PATH, walk } from '../utils'
 import { getUsedKeys } from './ast'
 
 export const LOCALE_PATH = resolve(EXTENSION_SOURCE, '_locales')
-// only allow ISO 639-1 two-letter code for locale directory name
-export const LOCALE_NAMES = readdirSync(LOCALE_PATH).filter((name) => /^[a-z]{2}$/.test(name))
+export const LOCALE_NAMES = readdirSync(LOCALE_PATH).filter((name) => /^[a-zA-Z-]+$/.test(name))
 
 export function getMessagePath(name: string) {
     return resolve(LOCALE_PATH, name, 'messages.json')
@@ -34,5 +33,5 @@ export async function findAllUsedKeys() {
 }
 
 export async function findAllUnusedKeys() {
-    return difference(keys(await readMessages('en')), await findAllUsedKeys())
+    return difference(keys(await readMessages('en-US')), await findAllUsedKeys())
 }

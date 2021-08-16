@@ -141,14 +141,14 @@ export function isTradeBetter(
 }
 
 export class ExtendedEther extends Ether {
-    public get wrapped(): Token {
+    public override get wrapped(): Token {
         if (this.chainId in WETH) return ExtendedEther.wrapEther(this.chainId)
         throw new Error('Unsupported chain ID')
     }
 
     private static _cachedEther: Record<number, ExtendedEther> = {}
 
-    public static onChain(chainId: number): ExtendedEther {
+    public static override onChain(chainId: number): ExtendedEther {
         return this._cachedEther[chainId] ?? (this._cachedEther[chainId] = new ExtendedEther(chainId))
     }
 

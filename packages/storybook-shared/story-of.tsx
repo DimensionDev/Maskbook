@@ -16,7 +16,7 @@ export type { Story, Meta } from '@storybook/react/types-6-0'
  */
 export function story<T>(Component: React.ComponentType<T>) {
     return {
-        meta(meta: Meta<T>): Meta<T> {
+        meta(meta: Meta<T>): unknown {
             return { ...meta, component: Component }
         },
         of(annotations: ComponentAnnotations<T> = {}): React.ComponentType<T> {

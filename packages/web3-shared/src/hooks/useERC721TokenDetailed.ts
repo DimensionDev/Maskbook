@@ -1,46 +1,72 @@
-import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { ERC721TokenDetailed, EthereumTokenType } from '../types'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { ChainId, ERC721TokenAssetDetailed, ERC721TokenDetailed } from '../types'
 import { useChainId } from './useChainId'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
-import { useSingleContractMultipleData } from './useMulticall'
-import { formatEthereumAddress } from '../utils'
+import { createERC721Token, safeNonPayableTransactionCall } from '../utils'
+import type { ERC721 } from '../../../web3-contracts/types/ERC721'
+import { useMemo } from 'react'
 
-export function useERC721TokenDetailed(address?: string, token?: Partial<ERC721TokenDetailed>) {
+export function useERC721TokenDetailed(address?: string, _token?: Partial<ERC721TokenDetailed>) {
     const chainId = useChainId()
+    const token = useMemo(() => _token, [])
     const erc721TokenContract = useERC721TokenContract(address)
+    return useAsyncRetry(async () => {
+        if (!address) return
+        return getERC721TokenDetailed(address, chainId, erc721TokenContract, token)
+    }, [chainId, token, erc721TokenContract, address])
+}
 
-    // compose calls
-    const { names, callDatas } = useMemo(
-        () => ({
-            names: ['name', 'symbol', 'baseURI', 'tokenURI'] as 'name'[],
-            callDatas: Array.from<[]>({ length: 3 }).fill([]),
-        }),
-        [],
-    )
+const lazyBlank = Promise.resolve('')
 
-    // validate
-    const [results, calls, _, callback] = useSingleContractMultipleData(erc721TokenContract, names, callDatas)
-    const asyncResult = useAsyncRetry(() => callback(calls), [erc721TokenContract, names, callDatas, chainId])
+async function getERC721TokenDetailed(
+    address: string,
+    chainId: ChainId,
+    erc721TokenContract: ERC721 | null,
+    token?: Partial<ERC721TokenDetailed>,
+) {
+    const results = await Promise.allSettled([
+        token?.name ?? safeNonPayableTransactionCall(erc721TokenContract?.methods.name()) ?? lazyBlank,
+        token?.symbol ?? safeNonPayableTransactionCall(erc721TokenContract?.methods.symbol()) ?? lazyBlank,
+        token?.baseURI ?? safeNonPayableTransactionCall(erc721TokenContract?.methods.baseURI()) ?? lazyBlank,
+        token?.tokenURI ??
+            (token?.tokenId
+                ? safeNonPayableTransactionCall(erc721TokenContract?.methods.tokenURI(token.tokenId)) ?? lazyBlank
+                : lazyBlank),
+    ])
+    const [name, symbol, baseURI, tokenURI] = results.map((result) =>
+        result.status === 'fulfilled' ? result.value : '',
+    ) as string[]
+    const asset = await getERC721TokenAsset(tokenURI)
+    return createERC721Token(chainId, token?.tokenId ?? '', address, name, symbol, baseURI, tokenURI, asset)
+}
 
-    // compose
-    const token_ = useMemo(() => {
-        if (!address || !erc721TokenContract) return
-        const [name, symbol, baseURI, tokenURI] = results.map((x) => (x.error ? undefined : x.value))
-        return {
-            type: EthereumTokenType.ERC721,
-            address: formatEthereumAddress(address),
-            chainId,
-            name: name ?? token?.name ?? '',
-            symbol: symbol ?? token?.symbol ?? '',
-            baseURI: baseURI ?? token?.baseURI ?? '',
-            tokenURI: tokenURI ?? token?.tokenURI ?? '',
-        } as ERC721TokenDetailed
-    }, [erc721TokenContract, address, chainId, results, token?.name, token?.symbol, token?.baseURI])
+const BASE64_PREFIX = 'data:application/json;base64,'
 
-    return {
-        ...asyncResult,
-        value: token_,
-    } as AsyncStateRetry<typeof token_>
+async function getERC721TokenAsset(tokenURI?: string) {
+    if (!tokenURI) return
+
+    // for some NFT tokens retrun JSON in base64 encoded
+    if (tokenURI.startsWith(BASE64_PREFIX))
+        try {
+            return JSON.parse(atob(tokenURI.replace(BASE64_PREFIX, ''))) as ERC721TokenAssetDetailed['asset']
+        } catch (error) {
+            void 0
+        }
+
+    // for some NFT tokens return JSON
+    try {
+        return JSON.parse(tokenURI) as ERC721TokenAssetDetailed['asset']
+    } catch (error) {
+        void 0
+    }
+
+    // for some NFT tokens return an URL refers to a JSON file
+    try {
+        const response = await fetch(tokenURI)
+        return (await response.json()) as ERC721TokenAssetDetailed['asset']
+    } catch (error) {
+        void 0
+    }
+
+    return
 }

@@ -22,7 +22,7 @@ export async function getAvailableTraderProviders(type?: TagType, keyword?: stri
         case NetworkType.Binance:
             return [TradeProvider.PANCAKESWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO]
         case NetworkType.Arbitrum:
-            return []
+            return [TradeProvider.UNISWAP_V3]
         default:
             safeUnreachable(networkType)
             return []
