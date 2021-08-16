@@ -76,8 +76,9 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     //#region update amount by self
-    const { RE_MATCH_WHOLE_AMOUNT } = useMemo(
+    const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
         () => ({
+            RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`), // .ddd...d
             RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals}}$`), // d.ddd...d
         }),
         [token?.decimals],
@@ -85,9 +86,10 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const onChange = useCallback(
         (ev: ChangeEvent<HTMLInputElement>) => {
             const amount_ = ev.currentTarget.value.replace(/,/g, '.')
-            if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) onAmountChange(amount_)
+            if (RE_MATCH_FRACTION_AMOUNT.test(amount_)) onAmountChange(`0${amount_}`)
+            else if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) onAmountChange(amount_)
         },
-        [onAmountChange, RE_MATCH_WHOLE_AMOUNT],
+        [onAmountChange, RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT],
     )
     //#endregion
 

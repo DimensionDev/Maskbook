@@ -16,9 +16,9 @@ export function useAllCurrencyCombinations(currencyA?: Currency, currencyB?: Cur
 
     const bases: Token[] = useMemo(() => {
         if (!chainIdValid) return []
-        const common = context?.AGAINST_TOKENS[chainId] ?? []
-        const additionalA = tokenA ? context?.ADDITIONAL_TOKENS[chainId]?.[tokenA.address] ?? [] : []
-        const additionalB = tokenB ? context?.ADDITIONAL_TOKENS[chainId]?.[tokenB.address] ?? [] : []
+        const common = context?.AGAINST_TOKENS?.[chainId] ?? []
+        const additionalA = tokenA ? context?.ADDITIONAL_TOKENS?.[chainId]?.[tokenA.address] ?? [] : []
+        const additionalB = tokenB ? context?.ADDITIONAL_TOKENS?.[chainId]?.[tokenB.address] ?? [] : []
         return [...common, ...additionalA, ...additionalB].map((x) => toUniswapToken(chainId, x))
     }, [chainId, chainIdValid, tokenA?.address, tokenB?.address])
 
