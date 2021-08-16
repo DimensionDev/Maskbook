@@ -1,11 +1,11 @@
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { makeStyles, Typography } from '@material-ui/core'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { getTokenUSDValue } from '../../../../../plugins/Wallet/helpers'
 import { ArrowDownCircle, ArrowUpCircle } from 'react-feather'
-import { InteractionCircleIcon } from '../../../../../../../icons/general'
+import { InteractionCircleIcon } from '@masknet/icons'
 
 const useStyles = makeStyles(() => ({
     content: {
@@ -36,10 +36,10 @@ const useStyles = makeStyles(() => ({
         gap: 20,
         gridTemplateColumns: 'repeat(3,1fr)',
         marginTop: 20,
-    },
-    item: {
-        textAlign: 'center',
-        cursor: 'pointer',
+        '& > *': {
+            textAlign: 'center',
+            cursor: 'pointer',
+        },
     },
     icon: {
         stroke: '#1C68F3',
@@ -50,6 +50,12 @@ const useStyles = makeStyles(() => ({
 const TokenDetail = memo(() => {
     const classes = useStyles()
     const { currentToken } = useContainer(WalletContext)
+
+    const openLabPage = useCallback(() => {
+        browser.windows.create({
+            url: browser.runtime.getURL('/next.html#/labs'),
+        })
+    }, [])
 
     if (!currentToken) return null
 
@@ -76,15 +82,15 @@ const TokenDetail = memo(() => {
                     <FormattedCurrency value={getTokenUSDValue(currentToken).toFixed(2)} sign="$" />
                 </Typography>
                 <div className={classes.controller}>
-                    <div className={classes.item}>
+                    <div onClick={openLabPage}>
                         <ArrowDownCircle className={classes.icon} />
                         <Typography className={classes.text}>Buy</Typography>
                     </div>
-                    <div className={classes.item}>
+                    <div>
                         <ArrowUpCircle className={classes.icon} />
                         <Typography className={classes.text}>Send</Typography>
                     </div>
-                    <div className={classes.item}>
+                    <div onClick={openLabPage}>
                         <InteractionCircleIcon className={classes.icon} />
                         <Typography className={classes.text}>Swap</Typography>
                     </div>
