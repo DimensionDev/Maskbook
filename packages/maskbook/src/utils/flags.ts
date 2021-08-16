@@ -48,7 +48,7 @@ export const Flags = {
 
     bsc_enabled: true,
     polygon_enabled: true,
-    arbitrum_enabled: true,
+    arbitrum_enabled: false,
 
     //#region Functionality missing / broken
     /**

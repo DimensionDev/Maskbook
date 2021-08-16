@@ -1,7 +1,8 @@
 import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { FooterLine } from '../FooterLine'
 import { makeStyles, Paper, Typography } from '@material-ui/core'
-import { MaskNotSquareIcon } from '@masknet/icons'
+import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
+import { useAppearance } from '../../pages/Personas/api'
 
 const Container = styled('div')(
     ({ theme }) => `
@@ -31,14 +32,13 @@ interface ColumnLayoutProps extends React.PropsWithChildren<{}> {}
 
 export const ColumnLayout = ({ children }: ColumnLayoutProps) => {
     const classes = useStyles()
+    const mode = useAppearance()
 
     return (
         <Container>
             <Content>
                 <Paper className={classes.paper} variant="outlined">
-                    <Typography>
-                        <MaskNotSquareIcon />
-                    </Typography>
+                    <Typography>{mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}</Typography>
                     {children}
                 </Paper>
                 <FooterLine />

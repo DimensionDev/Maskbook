@@ -22,7 +22,7 @@ import { useCallback } from 'react'
 import { MaskMessage } from '../../utils/messages'
 import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
 import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
-import { useControlledDialog } from '../../plugins/Collectible/SNSAdaptor/useControlledDialog'
+import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
@@ -195,7 +195,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
         {
             ...ToolIconURLs.claim,
             onClick: onClaimAllDialogOpen,
-            hide: operatingSupportedChainMapping[ITO_Plugin.ID],
+            hide: !operatingSupportedChainMapping[ITO_Plugin.ID],
         },
     ]
 

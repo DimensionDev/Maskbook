@@ -1,12 +1,12 @@
 import { makeStyles, Card, Typography, CircularProgress, List, ListItem } from '@material-ui/core'
 import isValid from 'date-fns/isValid'
 import formatDistance from 'date-fns/formatDistance'
-import { zhTW, enUS, ja } from 'date-fns/locale'
-import { useValueRef } from '@masknet/shared'
-import { useI18N } from '../../../utils'
-import { languageSettings } from '../../../settings/settings'
+import { zhTW, enUS, ja, zhCN, ko } from 'date-fns/locale'
+import { useI18N, useLanguage } from '../../../utils'
 import type { PollGunDB } from '../Services'
 import { PollStatus } from '../types'
+import { SupportedLanguages } from '@masknet/theme'
+import { safeUnreachable } from '@dimensiondev/kit'
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -68,7 +68,7 @@ export function PollCardUI(props: PollCardProps) {
     const classes = useStyles()
     const isClosed = Date.now() > poll.end_time ? true : false
     const { t } = useI18N()
-    const lang = useValueRef(languageSettings)
+    const lang = useLanguage()
 
     const totalVotes = poll.results.reduce(
         (accumulator: number, currentValue: number): number => accumulator + currentValue,
@@ -78,16 +78,13 @@ export function PollCardUI(props: PollCardProps) {
         const deadline = new Date(date)
         if (isValid(deadline)) {
             const localeMapping = () => {
-                switch (lang) {
-                    case 'en':
-                        return enUS
-                    case 'ja':
-                        return ja
-                    case 'zh':
-                        return zhTW
-                    default:
-                        return enUS
-                }
+                if (lang === SupportedLanguages.enUS) return enUS
+                if (lang === SupportedLanguages.jaJP) return ja
+                if (lang === SupportedLanguages.zhTW) return zhTW
+                if (lang === SupportedLanguages.zhCN) return zhCN
+                if (lang === SupportedLanguages.koKR) return ko
+                safeUnreachable(lang)
+                return enUS
             }
             const time = formatDistance(poll.start_time, poll.end_time, {
                 locale: localeMapping(),
