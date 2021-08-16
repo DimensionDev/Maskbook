@@ -38,7 +38,7 @@ export const RestoreFromMnemonic = () => {
             } else {
                 setError(t.sign_in_account_private_key_error())
             }
-        } catch (_) {
+        } catch {
             setError(t.sign_in_account_private_key_error())
         }
     }

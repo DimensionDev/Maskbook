@@ -49,7 +49,7 @@ export const RestoreFromCloud = memo(() => {
                 setStep({ name: 'restore', params: { backupJson: backupInfo.info } })
             }
             return null
-        } catch (_) {
+        } catch {
             return t.sign_in_account_cloud_backup_decrypt_failed()
         }
     }
@@ -58,7 +58,7 @@ export const RestoreFromCloud = memo(() => {
         try {
             await Services.Welcome.checkPermissionsAndRestore(backupId)
             navigate(RoutePaths.Personas, { replace: true })
-        } catch (_) {
+        } catch {
             enqueueSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
         }
     }

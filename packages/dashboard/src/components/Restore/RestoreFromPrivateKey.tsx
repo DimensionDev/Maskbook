@@ -41,7 +41,7 @@ export const RestoreFromPrivateKey = memo(() => {
             } else {
                 setError('privateKey', { type: 'value', message: t.sign_in_account_private_key_persona_not_found() })
             }
-        } catch (_) {
+        } catch {
             setError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
         }
     }

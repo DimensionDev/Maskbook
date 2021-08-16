@@ -63,7 +63,7 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
         try {
             await Services.Welcome.checkPermissionsAndRestore(backupId)
             navigate(RoutePaths.Personas, { replace: true })
-        } catch (_) {
+        } catch {
             enqueueSnackbar('Restore backup failed, Please try again', { variant: 'error' })
         }
     }
