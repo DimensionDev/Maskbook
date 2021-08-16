@@ -22,7 +22,7 @@ import { decodeText, decodeArrayBuffer } from '../../utils/type-transform/String
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import type { PersonaInformation, ProfileInformation } from '@masknet/shared'
+import type { EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared'
 assertEnvironment(Environment.ManifestBackground)
 
 export { storeAvatar, queryAvatarDataURL } from '../../database'
@@ -86,6 +86,12 @@ export function queryMyPersonas(network?: string): Promise<Persona[]> {
               })
             : x,
     )
+}
+export async function backupPersonaPrivateKey(
+    identifier: PersonaIdentifier,
+): Promise<EC_Private_JsonWebKey | undefined> {
+    const x = await queryPersonaDB(identifier)
+    return x?.privateKey
 }
 
 export async function queryOwnedPersonaInformation(): Promise<PersonaInformation[]> {

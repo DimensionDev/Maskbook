@@ -42,6 +42,7 @@ export interface MaskNetworkAPIs {
     persona_backupMnemonic(params: { identifier: string }): Promise<string | undefined>
     persona_backupBase64(params: { identifier: string }): Promise<string>
     persona_backupJson(params: { identifier: string }): Promise<unknown>
+    persona_backupPrivateKey(params: { identifier: string }): Promise<string | undefined>
     profile_queryProfiles(params: { network: string }): Promise<Profile[]>
     profile_queryMyProfile(params: { network: string }): Promise<Profile[]>
     profile_updateProfileInfo(params: {
