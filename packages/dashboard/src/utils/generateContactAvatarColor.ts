@@ -1,4 +1,4 @@
-export const mapContactAvatarColor = (string: string, theme: 'light' | 'dark') => {
+export function generateContactAvatarColor(string: string, theme: 'light' | 'dark') {
     const hash = [...string].reduce((prev, current) => {
         // eslint-disable-next-line no-bitwise
         const next = current.charCodeAt(0) + (prev << 5) - prev

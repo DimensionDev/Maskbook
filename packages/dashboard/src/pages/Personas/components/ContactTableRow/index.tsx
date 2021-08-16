@@ -5,7 +5,7 @@ import { StarIcon, MaskNetworkIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import { Services } from '../../../../API'
 import { useDashboardI18N } from '../../../../locales'
-import { mapContactAvatarColor } from '../../../../utils/mapContactAvatarColor'
+import { generateContactAvatarColor } from '../../../../utils/generateContactAvatarColor'
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 
@@ -115,7 +115,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                                 aria-label={contact.name}
                                 src={contact.avatar}
                                 sx={{
-                                    backgroundColor: mapContactAvatarColor(contact.identifier.toText(), theme),
+                                    backgroundColor: generateContactAvatarColor(contact.identifier.toText(), theme),
                                     width: 48,
                                     height: 48,
                                 }}>
