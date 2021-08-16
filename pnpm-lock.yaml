@@ -139,6 +139,7 @@ importers:
       snowpack: ^3.8.3
       unstated-next: ^1.1.0
       use-subscription: ^1.5.1
+      uuid: ^8.3.2
       wallet.ts: ^1.0.1
       zod: ^3.5.1
     dependencies:
@@ -170,6 +171,7 @@ importers:
       react-use: 17.2.4_f991c289939c8299bed5e4a6a5a79a62
       unstated-next: 1.1.0
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
+      uuid: 8.3.2
       wallet.ts: 1.0.1
       zod: 3.5.1
     devDependencies:

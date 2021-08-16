@@ -11,6 +11,7 @@ let web3: Web3 | null = null
 
 async function onAccountsChanged(accounts: string[]) {
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
+    if (!accounts.length) return
     await updateAccount({
         account: first(accounts),
         providerType: ProviderType.MetaMask,
