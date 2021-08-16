@@ -6,6 +6,7 @@ import { MaskTextField } from '@masknet/theme'
 import { ButtonGroup } from '../../RegisterFrame/ButtonGroup'
 import type { StepCommonProps } from '../../Stepper'
 import { ValidationCodeStep } from './Commont'
+import type { BackupFileInfo } from '../../../pages/Settings/type'
 
 interface ConfirmBackupInfoProps extends StepCommonProps {
     backupInfo: BackupFileInfo

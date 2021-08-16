@@ -5,7 +5,7 @@ interface GuardRouteProps extends RouteProps {
     redirectTo?: string
 }
 
-export default function NotLoginGuardRoute(props: GuardRouteProps) {
+export default function NoPersonaGuardRoute(props: GuardRouteProps) {
     const { currentPersona } = PersonaContext.useContainer()
     const { redirectTo, ...rest } = props
 
