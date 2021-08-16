@@ -32,6 +32,10 @@ export interface SettingsUpdateEvent {
     initial: boolean
 }
 
+export interface ProfileNFTsPageEvent {
+    show: boolean
+}
+
 export interface MaskMessages extends SettingsEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: { text: string; image?: Blob }
@@ -68,6 +72,9 @@ export interface MaskMessages extends SettingsEvents {
     activatePluginCompositionEntry: string
     pluginEnabled: string
     pluginDisabled: string
+
+    profileNFTsPageUpdated: ProfileNFTsPageEvent
+    profileNFTsTabUpdated: 'reset'
     signRequestApproved: {
         requestID: string
         selectedPersona: PersonaIdentifier

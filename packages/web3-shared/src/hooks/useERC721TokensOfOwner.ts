@@ -28,7 +28,7 @@ export function useERC721TokenIdsOfOwner(token?: ERC721Token) {
     // compose
     const tokenIds = useMemo(() => {
         if (!erc721Contract) return []
-        return results.filter((x) => !x.error).map((x) => x.value) as string[]
+        return results.filter((x) => x.succeed).map((x) => x.value) as string[]
     }, [erc721Contract, results])
 
     return {
