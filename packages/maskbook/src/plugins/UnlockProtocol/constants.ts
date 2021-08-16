@@ -12,6 +12,6 @@ export const graphEndpointKeyVal = {
     137: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/polygon',
 }
 
-export const keyServerEndpoint = 'http://localhost:5000'
+export const keyServerEndpoint = 'https://unlock.iamzub.in'
 
 export const paywallUrl = 'https://app.unlock-protocol.com/checkout?paywallConfig='
