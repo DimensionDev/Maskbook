@@ -272,7 +272,7 @@ export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<in
 
 export enum FilterTransactionType {
     ALL = 'all',
-    SENT = 'sent',
+    SEND = 'send',
     RECEIVE = 'receive',
 }
 
