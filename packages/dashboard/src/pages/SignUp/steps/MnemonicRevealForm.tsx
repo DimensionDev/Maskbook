@@ -11,7 +11,7 @@ import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { Button, Stack } from '@material-ui/core'
 import { useDashboardI18N } from '../../../locales'
-import { DesktopMnemonicConfirm, MnemonicRevealLG } from '../../../components/Mnemonic'
+import { DesktopMnemonicConfirm, MnemonicReveal } from '../../../components/Mnemonic'
 import { SignUpRoutePath } from '../routePath'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { memo, useState } from 'react'
@@ -66,7 +66,7 @@ export const MnemonicRevealForm = memo(() => {
                                 {t.refresh()}
                             </Button>
                         </Stack>
-                        <MnemonicRevealLG words={words} />
+                        <MnemonicReveal words={words} />
                         <ButtonGroup>
                             <Button
                                 variant="rounded"
