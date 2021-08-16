@@ -36,8 +36,8 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                                     identifier: metadata.val.iv,
                                 }
                                 PuginUnlockProtocolRPC.getKey(requestdata)
-                                    .catch((response) => {
-                                        if (response.code === -1) {
+                                    .catch((error) => {
+                                        if (error.code === -1) {
                                             setCont(t('plugin_unlockprotocol_server_error'))
                                         }
                                     })
