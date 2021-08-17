@@ -117,8 +117,8 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
                         plugins[plugin.ID] = result.map(JSON.stringify).map(JSON.parse).val
                     }
                     if (process.env.NODE_ENV === 'development') return backupPlugin()
-                    return backupPlugin().catch((e) =>
-                        console.error(`[@masknet/plugin-infra] Plugin ${plugin.ID} failed to backup`, e),
+                    return backupPlugin().catch((error) =>
+                        console.error(`[@masknet/plugin-infra] Plugin ${plugin.ID} failed to backup`, error),
                     )
                 }),
         )
