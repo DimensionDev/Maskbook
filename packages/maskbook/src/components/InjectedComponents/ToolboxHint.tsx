@@ -85,7 +85,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
-        fontWeight: 700,
         fontSize: 20,
         marginLeft: 22,
         lineHeight: 1.35,
@@ -124,6 +123,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface ToolboxHintProps extends withClasses<'wrapper' | 'menuItem' | 'title' | 'text' | 'button' | 'icon'> {}
+
 export function ToolboxHint(props: ToolboxHintProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -243,6 +243,22 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
 
+    function renderButtonText() {
+        if (!account) return t('plugin_wallet_on_connect')
+        if (!chainIdValid) return t('plugin_wallet_wrong_network')
+        if (pendingTransactions.length <= 0) return formatEthereumAddress(account, 4)
+        return (
+            <>
+                <span>
+                    {t('plugin_wallet_pending_transactions', {
+                        count: pendingTransactions.length,
+                    })}
+                </span>
+                <CircularProgress sx={{ marginLeft: 1.5 }} thickness={6} size={20} color="inherit" />
+            </>
+        )
+    }
+
     return (
         <>
             <div className={classes.wrapper} onClick={openMenu}>
@@ -258,26 +274,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     {isWalletValid ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} size={24} />}
 
                     <Typography className={classes.title}>
-                        {account ? (
-                            chainIdValid ? (
-                                pendingTransactions.length > 0 ? (
-                                    <>
-                                        <span>
-                                            {t('plugin_wallet_pending_transactions', {
-                                                count: pendingTransactions.length,
-                                            })}
-                                        </span>
-                                        <CircularProgress size={20} color="inherit" />
-                                    </>
-                                ) : (
-                                    formatEthereumAddress(account, 4)
-                                )
-                            ) : (
-                                t('plugin_wallet_wrong_network')
-                            )
-                        ) : (
-                            t('plugin_wallet_on_connect')
-                        )}
+                        {renderButtonText()}
                         {account && chainIdValid && chainDetailed?.network !== 'mainnet' ? (
                             <FiberManualRecordIcon
                                 className={classes.chainIcon}
