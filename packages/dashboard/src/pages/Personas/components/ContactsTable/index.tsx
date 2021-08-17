@@ -1,6 +1,6 @@
 import { Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useContacts } from '../../hooks/useContacts'
-import type { Contact } from '@masknet/shared'
+import type { RelationProfile } from '@masknet/shared'
 import {
     Table,
     TableCell,
@@ -68,7 +68,7 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
     const dataSource = useMemo(() => {
         if (!value) return []
         return sortBy(
-            value.map<Contact>((profile) => ({
+            value.map<RelationProfile>((profile) => ({
                 favorite: profile.favor,
                 name: profile.nickname || profile.identifier.userId || '',
                 fingerprint: profile.linkedPersona?.fingerprint,
@@ -101,7 +101,7 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
 })
 
 export interface ContactsTableUIProps extends ContactsTableProps {
-    dataSource: Contact[]
+    dataSource: RelationProfile[]
     isEmpty: boolean
     isLoading: boolean
     page: number

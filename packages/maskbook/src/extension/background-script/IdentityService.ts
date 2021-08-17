@@ -202,7 +202,7 @@ export async function queryRelationPaged(
     return []
 }
 
-export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: number) {
+export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: 0 | 1) {
     await consistentPersonaDBWriteAccess((t) =>
         updateRelationDB(
             {

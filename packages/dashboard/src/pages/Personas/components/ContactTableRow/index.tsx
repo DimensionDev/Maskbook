@@ -1,4 +1,4 @@
-import type { Contact } from '@masknet/shared'
+import type { RelationProfile } from '@masknet/shared'
 import { memo, useCallback } from 'react'
 import { Box, TableCell, TableRow, Typography, makeStyles, Avatar, useTheme, Button } from '@material-ui/core'
 import { StarIcon, MaskNetworkIcon } from '@masknet/icons'
@@ -43,7 +43,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 export interface ContactTableRowProps {
-    contact: Contact
+    contact: RelationProfile
     index: number
     network: string
 }

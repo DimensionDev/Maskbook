@@ -624,7 +624,7 @@ export interface RelationRecord {
     profile: ProfileIdentifier
     linked: PersonaIdentifier
     network: string
-    favor: number
+    favor: 0 | 1
 }
 
 type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey'> & {
