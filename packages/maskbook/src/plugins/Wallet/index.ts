@@ -7,9 +7,6 @@ registerPlugin({
         load: () => import('./SNSAdaptor'),
         hotModuleReload: (hot) => {
             import.meta.webpackHot && import.meta.webpackHot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor')))
-            // If you're changing @masknet/plugin-wallet/components package
-            // you can uncomment the following line to fix HMR
-            // import.meta.webpackHot?.accept()
         },
     },
     Dashboard: {
