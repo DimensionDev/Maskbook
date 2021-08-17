@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Box, makeStyles, TextField } from '@material-ui/core'
+import { Box, makeStyles } from '@material-ui/core'
 import { EthereumTokenType, ERC20TokenDetailed } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
 import { FixedTokenList } from '../../DashboardComponents/FixedTokenList'
+import { SearchInput } from '../../DashboardComponents/SearchInput'
 
 const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) => ({
     list: {
@@ -10,9 +11,6 @@ const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-    },
-    search: {
-        marginBottom: theme.spacing(1),
     },
     placeholder: {
         textAlign: 'center',
@@ -38,13 +36,11 @@ export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelector
             sx={{
                 textAlign: 'left',
             }}>
-            <TextField
-                className={classes.search}
+            <SearchInput
                 label={t('add_token_search_hint')}
-                autoFocus
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-                variant="outlined"
+                onChange={(keyword) => {
+                    setKeyword(keyword)
+                }}
             />
             <FixedTokenList
                 classes={{ list: classes.list, placeholder: classes.placeholder }}

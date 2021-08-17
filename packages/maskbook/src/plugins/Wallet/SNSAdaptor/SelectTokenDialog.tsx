@@ -1,36 +1,14 @@
 import { useCallback, useState } from 'react'
-import { makeStyles, Theme, DialogContent, Paper, IconButton, InputBase, Typography } from '@material-ui/core'
+import { makeStyles, Theme, DialogContent } from '@material-ui/core'
 import { FungibleTokenDetailed, useNativeTokenDetailed, useChainDetailed } from '@masknet/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 import { WalletMessages } from '../../Wallet/messages'
 import { delay, useI18N } from '../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
-import { SearchIcon } from '@masknet/icons'
-import { getMaskColor } from '@masknet/theme'
+import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 
 const useStyles = makeStyles((theme: Theme) => ({
-    searchbox: {
-        display: 'block',
-        width: '100%',
-        border: `1px solid ${getMaskColor(theme).border}`,
-        alignItems: 'center',
-        padding: theme.spacing(1),
-    },
-    search: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    input: {
-        width: '100%',
-    },
-    iconButton: {
-        padding: theme.spacing(0.5),
-    },
-    label: {
-        width: '100%',
-        paddingLeft: theme.spacing(1),
-    },
     list: {
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
@@ -54,7 +32,6 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
     const chainDetailed = useChainDetailed()
-    const [visible, setVisible] = useState(false)
 
     //#region the native token
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
@@ -81,7 +58,6 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
             })
             await delay(300)
             setKeyword('')
-            setVisible(false)
         },
         [id, setDialog, setKeyword],
     )
@@ -92,37 +68,17 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
         })
         await delay(300)
         setKeyword('')
-        setVisible(false)
     }, [id, setDialog])
     //#endregion
+
+    const onChange = useCallback((keyword: string) => {
+        setKeyword(keyword)
+    }, [])
 
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_token')} maxWidth="xs">
             <DialogContent>
-                {!disableSearchBar ? (
-                    <Paper className={classes.searchbox}>
-                        {visible ? (
-                            <Typography variant="body2" className={classes.label}>
-                                {t('add_token_search_hint')}
-                            </Typography>
-                        ) : null}
-                        <Paper component="form" className={classes.search}>
-                            <IconButton className={classes.iconButton} aria-label="menu">
-                                <SearchIcon />
-                            </IconButton>
-                            <InputBase
-                                className={classes.input}
-                                inputProps={{ 'aria-label': 'select a token' }}
-                                placeholder={t('add_token_search_hint')}
-                                value={keyword}
-                                onChange={(e) => {
-                                    setKeyword(e.target.value)
-                                    setVisible(e.target.value.length !== 0)
-                                }}
-                            />
-                        </Paper>
-                    </Paper>
-                ) : null}
+                {!disableSearchBar ? <SearchInput label={t('add_token_search_hint')} onChange={onChange} /> : null}
                 <FixedTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     keyword={keyword}
