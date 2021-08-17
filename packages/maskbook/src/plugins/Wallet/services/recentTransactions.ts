@@ -1,3 +1,4 @@
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { formatEthereumAddress, isSameAddress, TransactionStateType, TransactionStatusType } from '@masknet/web3-shared'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { getTransactionReceipt } from '../../../extension/background-script/EthereumService'
@@ -6,7 +7,7 @@ import { createWalletDBAccess } from '../database/Wallet.db'
 import { currentChainIdSettings } from '../settings'
 import { TransactionChunkRecordIntoDB, TransactionChunkRecordOutDB } from './helpers'
 
-const MAX_RECENT_TRANSACTIONS_SIZE = 5
+const MAX_RECENT_TRANSACTIONS_SIZE = 10
 
 function getRecordId(address: string) {
     return `${currentChainIdSettings.value}_${formatEthereumAddress(address)}`
@@ -56,6 +57,7 @@ export async function updateTransactions(updates: Map<string, TransactionRecord[
             }),
         )
     }
+    WalletMessages.events.transactionsUpdated.sendToAll(undefined)
 }
 
 export async function clearRecentTransactions(address: string) {
@@ -64,6 +66,7 @@ export async function clearRecentTransactions(address: string) {
         if (!isSameAddress(x.value.address, address)) continue
         x.delete()
     }
+    WalletMessages.events.transactionsUpdated.sendToAll(undefined)
 }
 
 export async function addRecentTransaction(address: string, hash: string) {
@@ -98,4 +101,5 @@ export async function addRecentTransaction(address: string, hash: string) {
 
     // write the new transaction into DB
     await t.objectStore('TransactionChunk').put(chunk)
+    WalletMessages.events.transactionsUpdated.sendToAll(undefined)
 }
