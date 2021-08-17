@@ -94,13 +94,13 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     settings_getLanguage: () => Services.Settings.getLanguage(),
     settings_setLanguage: ({ language }) => Services.Settings.setLanguage(language),
     settings_createBackupJson: (options) => Services.Welcome.generateBackupJSON(options),
-    settings_getBackupPreviewInfo: async (str) => {
-        const data = Services.Welcome.parseBackupStr(str)
+    settings_getBackupPreviewInfo: async ({ backupInfo }) => {
+        const data = Services.Welcome.parseBackupStr(backupInfo)
         return data?.info
     },
-    settings_restoreBackup: (str) => {
+    settings_restoreBackup: ({ backupInfo }) => {
         try {
-            const json = JSON.parse(str)
+            const json = JSON.parse(backupInfo)
             return Services.Welcome.restoreBackup(json)
         } catch (error) {
             throw new Error('invalid json')
