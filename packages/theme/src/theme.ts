@@ -54,21 +54,3 @@ export enum Appearance {
     light = 'light',
     dark = 'dark',
 }
-
-/** Supported display languages */
-export enum SupportedLanguages {
-    enUS = 'en-US',
-    zhCN = 'zh-CN',
-    zhTW = 'zh-TW',
-    koKR = 'ko-KR',
-    jaJP = 'ja-JP',
-}
-/** Supported language settings */
-export enum LanguageOptions {
-    __auto__ = 'auto',
-    enUS = 'en-US',
-    zhCN = 'zh-CN',
-    zhTW = 'zh-TW',
-    koKR = 'ko-KR',
-    jaJP = 'ja-JP',
-}

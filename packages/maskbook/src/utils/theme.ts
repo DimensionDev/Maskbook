@@ -1,10 +1,11 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef, or } from '@masknet/shared'
 import { safeUnreachable } from '@dimensiondev/kit'
-import { Appearance, LanguageOptions, SupportedLanguages } from '@masknet/theme'
+import { Appearance } from '@masknet/theme'
+import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
 import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@material-ui/core'
 import { blue, green, grey, orange, red } from '@material-ui/core/colors'
-import { jaJP, koKR, zhTW, zhCN } from '@material-ui/core/locale/index'
+import { jaJP, koKR, zhTW, zhCN, esES, itIT, ruRU, faIR, frFR } from '@material-ui/core/locale/index'
 import { makeStyles } from '@material-ui/core/styles'
 import type { Theme, ThemeOptions } from '@material-ui/core/styles/createTheme'
 import { cloneDeep, merge } from 'lodash-es'
@@ -134,6 +135,17 @@ export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Sup
             return unstable_createMuiStrictModeTheme(baseTheme, zhTW)
         case SupportedLanguages.zhCN:
             return unstable_createMuiStrictModeTheme(baseTheme, zhCN)
+        case SupportedLanguages.ruRU:
+            return unstable_createMuiStrictModeTheme(baseTheme, ruRU)
+        case SupportedLanguages.itIT:
+            return unstable_createMuiStrictModeTheme(baseTheme, itIT)
+        case SupportedLanguages.esES:
+            return unstable_createMuiStrictModeTheme(baseTheme, esES)
+        case SupportedLanguages.frFR:
+            return unstable_createMuiStrictModeTheme(baseTheme, frFR)
+        // TODO: it should be a RTL theme.
+        case SupportedLanguages.faIR:
+            return unstable_createMuiStrictModeTheme(baseTheme, faIR)
         default:
             safeUnreachable(language)
             return baseTheme
