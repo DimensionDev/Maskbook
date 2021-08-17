@@ -61,7 +61,7 @@ export const MnemonicRevealForm = memo(() => {
                         <Stack
                             direction="row"
                             justifyContent="flex-end"
-                            sx={{ marginBottom: (theme) => theme.spacing(4) }}>
+                            sx={{ marginBottom: (theme) => theme.spacing(2) }}>
                             <Button variant="text" startIcon={<RefreshIcon />} onClick={refreshCallback}>
                                 {t.refresh()}
                             </Button>

@@ -80,7 +80,7 @@
     "wallets_create_wallet_alert": "Mask Network is a free, open-source, client-side interface. Mask Network allows you to interact directly with the blockchain, while you remain in full control of your keys and funds.Please think about this carefully. YOU are the one who is in control. Mask Network is not a bank or exchange. We don't hold your keys, your funds, or your information. This means we can't access accounts, recover keys, reset passwords, or reverse transactions.",
     "wallets_wallet_connect_title": "Scan QR code with a WalletConnect-compatible wallet",
     "wallets_wallet_mnemonic": "Mnemonic",
-    "wallets_wallet_json_file": "JSON File",
+    "wallets_wallet_json_file": "Local Backup",
     "wallets_wallet_private_key": "Private Key",
     "wallets_import_wallet_tabs": "Import Wallet Tabs",
     "wallets_import_wallet_password_placeholder": "Wallet Password",

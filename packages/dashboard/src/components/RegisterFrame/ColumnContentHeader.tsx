@@ -10,6 +10,7 @@ const HeaderContainer = styled('header')(
     display: flex;
     flex-direction: column;
     justify-content: center;
+    max-height: 30%;
     min-height: 25%;`,
 )
 
