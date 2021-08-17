@@ -331,6 +331,7 @@
     "plugin_wallet_on_create": "Create Wallet",
     "plugin_wallet_on_connect": "Connect Wallet",
     "plugin_wallet_wrong_network": "Wrong Network",
+    "plugin_wallet_pending_transactions": "{{count}} Pending",
     "plugin_wallet_setup_title_create": "Create a Wallet",
     "plugin_wallet_create_import_choose": "Create Wallet & Import Wallet",
     "plugin_wallet_create_a_new_wallet": "Create a New Wallet",

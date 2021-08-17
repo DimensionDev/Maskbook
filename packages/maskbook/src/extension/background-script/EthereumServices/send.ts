@@ -22,6 +22,7 @@ export interface SendOverrides {
     account?: string
     providerType?: ProviderType
     rpc?: string
+    description?: string
 }
 
 /**
@@ -38,6 +39,7 @@ export async function INTERNAL_send(
         account = currentAccountSettings.value,
         providerType = currentProviderSettings.value,
         rpc,
+        description,
     }: SendOverrides = {},
 ) {
     if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
