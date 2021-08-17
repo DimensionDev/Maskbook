@@ -79,6 +79,7 @@ export const getLocks = async <UnlockLocks>(_address1: String, chain: string) =>
     }
 
     const data = await graphQLClients[chain].request(query, variables)
+
     data.lockManagers.forEach(
         (element: { lock: { chain?: number; name?: string; price?: string; address?: string } }) => {
             element.lock.chain = parseInt(chain, 10)
@@ -113,7 +114,7 @@ export const getPurchasedLocks = async (_address: string) => {
     return dataRes
 }
 
-export const postUnlockData = async (myBody: any) => {
+export const postUnlockData = async (myBody: string | object) => {
     const response = await fetch(keyServerEndpoint + '/add', {
         method: 'POST',
         headers: {
@@ -123,7 +124,7 @@ export const postUnlockData = async (myBody: any) => {
     })
     return response.status
 }
-export const getKey = async <requestKeyResponse>(data: any) => {
+export const getKey = async <requestKeyResponse>(data: unknown) => {
     const response = await fetch(keyServerEndpoint + '/request', {
         method: 'POST',
         headers: {

@@ -15,7 +15,7 @@ interface UnlockProtocolInPostProps {
 export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
     const { t } = useI18N()
     const { message } = props
-    const [cont, setCont] = useState('')
+    const [content, setContent] = useState('')
     const [address, setAddress] = useState(useAccount())
     const [chain, setChain] = useState(useChainId())
     const [redirurl, setRedirurl] = useState('')
@@ -24,7 +24,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
         const metadata = UnlockProtocolMetadataReader(props.message.meta)
         if (metadata.ok) {
             if (!!address) {
-                const data: { locks: Record<string, any> } = { locks: {} }
+                const data: { locks: Record<string, object> } = { locks: {} }
                 PuginUnlockProtocolRPC.getPurchasedLocks(address).then((res) => {
                     metadata.val.unlockLocks.forEach((locks) => {
                         res.forEach((e: { lock: string }) => {
@@ -38,40 +38,57 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                                 PuginUnlockProtocolRPC.getKey(requestdata)
                                     .catch((error) => {
                                         if (error.code === -1) {
-                                            setCont(t('plugin_unlockprotocol_server_error'))
+                                            setContent(t('plugin_unlockprotocol_server_error'))
                                         }
                                     })
                                     .then((response) => {
-                                        setCont(response.message)
+                                        setContent(response.message)
                                         PuginUnlockProtocolRPC.decryptUnlockData(
                                             metadata.val.iv,
                                             response.post.unlockKey,
                                             metadata.val.post,
                                         ).then((content) => {
-                                            setCont(content.content)
+                                            setContent(content.content)
                                         })
                                     })
                             }
                         })
                         data.locks[locks.unlocklock] = { network: locks.chainid }
                     })
-
                     setRedirurl(paywallUrl + encodeURI(JSON.stringify(data)))
                 })
             } else {
-                setCont(t('plugin_unlockprotocol_connect_wallet'))
+                setContent(t('plugin_unlockprotocol_connect_wallet'))
             }
         }
-    }, [props.message.meta])
-    if (!!cont) {
+    }, useState(useAccount()))
+    if (!!content) {
         const jsx = message
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
                       <>
                           <MaskbookPluginWrapper width={300} pluginName="Unlock Protocol">
-                              {cont}
+                              {content}
                           </MaskbookPluginWrapper>
                       </>
+                  )
+              })
+            : null
+
+        return <>{jsx}</>
+    } else if (!!redirurl) {
+        const jsx = message
+            ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
+                  return (
+                      <MaskbookPluginWrapper width={300} pluginName="Unlock Protocol">
+                          <>
+                              <text>"You don't have access to this content"</text>
+                              <br />
+                              <Button target="_blank" href={redirurl}>
+                                  Buy Lock
+                              </Button>
+                          </>
+                      </MaskbookPluginWrapper>
                   )
               })
             : null
@@ -83,11 +100,8 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                   return (
                       <MaskbookPluginWrapper width={300} pluginName="Unlock Protocol">
                           <>
-                              <text>"You don't have access to this content"</text>
+                              <text>"Loading..."</text>
                               <br />
-                              <Button target="_blank" href={redirurl}>
-                                  Buy Lock
-                              </Button>
                           </>
                       </MaskbookPluginWrapper>
                   )

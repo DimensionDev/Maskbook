@@ -1,4 +1,4 @@
-import { decodeArrayBuffer, encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
+import { decodeArrayBuffer, decodeText, encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 
 export async function encryptUnlockData(content: string): Promise<{
     iv: string
@@ -33,5 +33,5 @@ export async function decryptUnlockData(
         importkey,
         decodeArrayBuffer(encrypted),
     )
-    return { content: atob(encodeArrayBuffer(decrypted)) }
+    return { content: decodeText(decrypted) }
 }

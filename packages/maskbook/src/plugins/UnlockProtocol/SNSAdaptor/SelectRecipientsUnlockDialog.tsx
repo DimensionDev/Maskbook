@@ -55,7 +55,7 @@ export function SelectRecipientsUnlockDialogUI(props: SelectRecipientsUnlockDial
             <DialogContent>
                 <InputBase value={search} onChange={(e) => setSearch(e.target.value)} />
 
-                <List style={{ height: items.length * LIST_ITEM_HEIGHT }} dense>
+                <List style={{ height: items.length * LIST_ITEM_HEIGHT || 40 }} dense>
                     {itemsAfterSearch.length === 0 ? (
                         <ListItem>
                             <ListItemText primary={t('plugin_unlockprotocol_no_lock_found')} />

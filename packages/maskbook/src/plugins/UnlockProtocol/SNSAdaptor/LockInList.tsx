@@ -5,7 +5,6 @@ import type { DefaultComponentProps } from '@material-ui/core/OverridableCompone
 import type { CheckboxProps } from '@material-ui/core/Checkbox'
 import type { ListItemTypeMap } from '@material-ui/core/ListItem'
 import type { UnlockLocks } from '../types'
-import { useStylesExtends } from '@masknet/shared'
 
 const useStyle = makeStyles((theme: Theme) => ({
     root: {
@@ -24,7 +23,7 @@ const useStyle = makeStyles((theme: Theme) => ({
     },
 }))
 
-export interface LockInListProps extends withClasses<never> {
+export interface LockInListProps {
     item: UnlockLocks
     search?: string
     checked?: boolean
@@ -35,7 +34,7 @@ export interface LockInListProps extends withClasses<never> {
 }
 
 export function LockInList(props: LockInListProps) {
-    const classes = useStylesExtends(useStyle(), props)
+    const classes = useStyle()
     const lock = props.item
     const name = lock.lock.name
     const secondary = lock.lock.address
