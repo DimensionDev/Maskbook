@@ -4,21 +4,12 @@ import { useDashboardI18N } from '../../../../locales'
 import { useState, useContext } from 'react'
 import { UserContext } from '../../hooks/UserContext'
 import CountdownButton from '../../../../components/CountdownButton'
-import { download, sendCode } from '../../api'
-
-export interface FileInfo {
-    url: string
-    size: number
-    uploadedAt: Date
-    abstract: {
-        personas: string[]
-    }
-}
-
+import { fetchDownloadLink, sendCode } from '../../api'
+import type { BackupFileInfo } from '../../type'
 export interface CloudBackupVerifyDialogProps {
     open: boolean
     onClose(): void
-    onNext(file: FileInfo | undefined): void
+    onNext(file: BackupFileInfo | undefined): void
 }
 
 export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVerifyDialogProps) {
@@ -36,27 +27,20 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
     }
 
     const handleNext = async () => {
-        const res = await download({
+        const res = await fetchDownloadLink({
             account: mode,
             type: /@/.test(mode) ? 'email' : 'phone',
             code,
         }).catch((error) => {
-            console.log(error)
+            if (error.status === 400) {
+                setInvalidCode(true)
+            } else if (error.status === 404) {
+                onNext(undefined)
+            }
         })
 
-        if (res?.status === 400) {
-            setInvalidCode(true)
-        } else if (res?.status === 404) {
-            // no backup
-            onNext(undefined)
-        } else if (res?.status === 201) {
-            const info = await res.json()
-            onNext({
-                url: info.download_url,
-                size: info.size,
-                uploadedAt: new Date(info.uploaded_at * 1000),
-                abstract: JSON.parse(info.abstract),
-            })
+        if (res) {
+            onNext(res)
         }
     }
 

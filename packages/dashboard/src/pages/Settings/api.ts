@@ -47,7 +47,7 @@ const withErrorMiddleware =
     async (res: Response) => {
         const result = await handler(res)
         if (!res.ok) {
-            return Promise.reject<T>(result)
+            return Promise.reject<T>({ status: res.status, ...result })
         }
         return Promise.resolve<T>(result)
     }
