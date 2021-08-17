@@ -3,13 +3,14 @@ import { experimentalStyled as styled } from '@material-ui/core/styles'
 import { Button, Typography } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
 
-const HeaderContainer = styled('div')(
+const HeaderContainer = styled('header')(
     ({ theme }) => `
     flex: 1;
     width: 78%;
     display: flex;
     flex-direction: column;
-    justify-content: center;`,
+    justify-content: center;
+    min-height: 25%;`,
 )
 
 const TitleContainer = styled('div')(
