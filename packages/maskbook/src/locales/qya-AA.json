@@ -331,6 +331,7 @@
     "plugin_wallet_on_create": "crwdns4627:0crwdne4627:0",
     "plugin_wallet_on_connect": "crwdns4629:0crwdne4629:0",
     "plugin_wallet_wrong_network": "crwdns4631:0crwdne4631:0",
+    "plugin_wallet_pending_transactions": "crwdns7717:0{{count}}crwdne7717:0",
     "plugin_wallet_setup_title_create": "crwdns4633:0crwdne4633:0",
     "plugin_wallet_create_import_choose": "crwdns4635:0crwdne4635:0",
     "plugin_wallet_create_a_new_wallet": "crwdns4637:0crwdne4637:0",
