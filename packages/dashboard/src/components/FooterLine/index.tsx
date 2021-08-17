@@ -15,13 +15,14 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: '40px 0',
     },
     ol: {
-        justifyContent: 'center',
+        justifyContent: 'space-around',
     },
     footerLink: {
         display: 'inline-flex',
-        borderRadius: '0',
+        padding: theme.spacing(0.5),
+        borderRadius: 0,
         whiteSpace: 'nowrap',
-        padding: '4px 20px',
+        verticalAlign: 'middle',
     },
     separator: {
         color: getMaskColor(theme).lineLight,
