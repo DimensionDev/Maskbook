@@ -5,6 +5,7 @@ import { MaskWalletIcon, ImportWalletIcon } from '@masknet/icons'
 import { EnterDashboard } from '../../../../components/EnterDashboard'
 import { NetworkSelector } from '../../../../components/NetworkSelector'
 import { DialogRoutes } from '../../../../index'
+import { useI18N } from '../../../../../../utils'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const WalletStartUp = memo(() => {
+    const { t } = useI18N()
     const classes = useStyles()
     const onEnterCreateWallet = useCallback(() => {
         browser.tabs.create({
@@ -72,24 +74,22 @@ export const WalletStartUp = memo(() => {
     return (
         <Box className={classes.container}>
             <Alert icon={false} severity="info" className={classes.alert}>
-                <AlertTitle className={classes.alertTitle}>Welcome</AlertTitle>
-                <Typography className={classes.alertContent}>
-                    Connect to your Wallet，Create a new wallet or recover an existing wallet using a seed phrase.
-                </Typography>
+                <AlertTitle className={classes.alertTitle}>{t('popups_welcome')}</AlertTitle>
+                <Typography className={classes.alertContent}>{t('popups_wallet_startUp_tip')}</Typography>
             </Alert>
             <Box className={classes.content}>
                 <Box className={classes.header}>
-                    <Typography className={classes.title}>New Wallet</Typography>
+                    <Typography className={classes.title}>{t('wallet_new')}</Typography>
                     <NetworkSelector />
                 </Box>
                 <Box className={classes.item} onClick={onEnterCreateWallet}>
                     <MaskWalletIcon sx={{ fontSize: 20 }} />
-                    <Typography className={classes.itemTitle}>New Wallet</Typography>
+                    <Typography className={classes.itemTitle}>{t('wallet_new')}</Typography>
                 </Box>
                 <Link to={DialogRoutes.ImportWallet} style={{ textDecoration: 'none' }}>
                     <Box className={classes.item}>
                         <ImportWalletIcon sx={{ fontSize: 20 }} />
-                        <Typography className={classes.itemTitle}>Import the wallet</Typography>
+                        <Typography className={classes.itemTitle}>{t('plugin_wallet_import_wallet')}</Typography>
                     </Box>
                 </Link>
             </Box>

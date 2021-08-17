@@ -4,7 +4,6 @@ import { useForm, Controller } from 'react-hook-form'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NetworkSelector } from '../../../components/NetworkSelector'
-import { useI18N } from '../../../../../utils'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { LoadingButton, TabContext, TabPanel } from '@material-ui/lab'
 import { useHistory } from 'react-router-dom'
@@ -15,6 +14,8 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useAsyncFn } from 'react-use'
 import { useSnackbar } from '@masknet/theme'
 import { query } from 'urlcat'
+import { useI18N } from '../../../../../utils'
+
 const useStyles = makeStyles((theme) => ({
     container: {
         padding: '16px 10px',
@@ -94,7 +95,7 @@ enum ImportWalletTab {
 }
 
 const ImportWallet = memo(() => {
-    const { t } = useI18N()
+    const { t } = useI18N
     const { enqueueSnackbar } = useSnackbar()
     const history = useHistory()
     const classes = useStyles()
@@ -112,14 +113,14 @@ const ImportWallet = memo(() => {
                     .string()
                     .min(8)
                     .max(20)
-                    .refine((input) => /[A-Z]/.test(input), 'Must contain an uppercase character')
-                    .refine((input) => /[a-z]/.test(input), 'Must contain a lowercase character')
-                    .refine((input) => /\d/.test(input), 'Must contain a number')
-                    .refine((input) => /[^\dA-Za-z]/.test(input), 'Must contain a special character'),
+                    .refine((input) => /[A-Z]/.test(input), t('popups_wallet_password_uppercase_tip'))
+                    .refine((input) => /[a-z]/.test(input), t('popups_wallet_password_lowercase_tip'))
+                    .refine((input) => /\d/.test(input), t('popups_wallet_password_number_tip'))
+                    .refine((input) => /[^\dA-Za-z]/.test(input), t('popups_wallet_password_special_character_tip')),
                 confirm: zod.string().min(8).max(20),
             })
             .refine((data) => data.password === data.confirm, {
-                message: "Passwords don't match",
+                message: t('popups_wallet_password_dont_match'),
                 path: ['confirm'],
             })
     }, [])
@@ -164,7 +165,7 @@ const ImportWallet = memo(() => {
                     const { address: walletAddress, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(
                         privateKey,
                     )
-                    if (!privateKeyValid) enqueueSnackbar('Import Failed', { variant: 'error' })
+                    if (!privateKeyValid) enqueueSnackbar(t('import_failed'), { variant: 'error' })
                     await WalletRPC.importNewWallet({
                         name: data.name,
                         address: walletAddress,
@@ -198,12 +199,12 @@ const ImportWallet = memo(() => {
     return (
         <div className={classes.container}>
             <div className={classes.header}>
-                <Typography className={classes.title}>Import the wallet</Typography>
+                <Typography className={classes.title}>{t('import_failed')}</Typography>
                 <NetworkSelector />
             </div>
             <form className={classes.form}>
                 <div>
-                    <Typography className={classes.label}>Wallet name</Typography>
+                    <Typography className={classes.label}>{t('wallet_name')}</Typography>
                     <Controller
                         render={({ field }) => (
                             <StyledInput
@@ -212,7 +213,7 @@ const ImportWallet = memo(() => {
                                 error={!!errors.name?.message}
                                 helperText={errors.name?.message}
                                 variant="filled"
-                                placeholder="Enter 1-12 characters"
+                                placeholder={t('popups_wallet_name_placeholder')}
                             />
                         )}
                         control={control}
@@ -220,7 +221,7 @@ const ImportWallet = memo(() => {
                     />
                 </div>
                 <div style={{ marginTop: 16 }}>
-                    <Typography className={classes.label}>Payment Password</Typography>
+                    <Typography className={classes.label}>{t('popups_wallet_payment_password')}</Typography>
                     <Controller
                         control={control}
                         render={({ field }) => (
@@ -229,7 +230,7 @@ const ImportWallet = memo(() => {
                                 classes={{ root: classes.textField }}
                                 type="password"
                                 variant="filled"
-                                placeholder="Payment Password"
+                                placeholder={t('popups_wallet_payment_password')}
                                 error={!!errors.password?.message}
                                 helperText={errors.password?.message}
                             />

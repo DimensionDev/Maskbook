@@ -3,9 +3,9 @@ import { Box, makeStyles, Paper, withStyles } from '@material-ui/core'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
 import { DialogRoutes } from '../../index'
-import { useI18N } from '../../../../utils'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { InitialPlaceholder } from '../InitialPlaceholder'
+import { useI18N } from '../../../../utils'
 
 const GlobalCss = withStyles({
     '@global': {

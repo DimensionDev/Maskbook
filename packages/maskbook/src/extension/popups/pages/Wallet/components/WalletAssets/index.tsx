@@ -9,6 +9,7 @@ import { AssetsList } from '../AssetsList'
 import { useHistory } from 'react-router-dom'
 import { DialogRoutes } from '../../../../index'
 import { ActivityList } from '../ActivityList'
+import { useI18N } from '../../../../../../utils'
 
 const useStyles = makeStyles(() => ({
     content: {
@@ -79,6 +80,7 @@ export interface WalletAssetsUIProps {
 }
 
 export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) => {
+    const { t } = useI18N()
     const classes = useStyles()
     const [currentTab, setCurrentTab] = useState(WalletTabs.Assets)
 
@@ -89,8 +91,8 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
             <div className={classes.content}>
                 <TabContext value={currentTab}>
                     <StyledTabs value={currentTab} onChange={(event, tab) => setCurrentTab(tab)}>
-                        <StyledTab label="Assets" value={WalletTabs.Assets} />
-                        <StyledTab label="Activity" value={WalletTabs.Activity} />
+                        <StyledTab label={t('popups_wallet_tab_assets')} value={WalletTabs.Assets} />
+                        <StyledTab label={t('popups_wallet_tab_activity')} value={WalletTabs.Activity} />
                     </StyledTabs>
                     <TabPanel
                         value={WalletTabs.Assets}
@@ -99,7 +101,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
                         <AssetsList />
                         <div style={{ padding: 16 }}>
                             <Button className={classes.button} fullWidth onClick={onAddTokenClick}>
-                                Add Token
+                                {t('add_token')}
                             </Button>
                         </div>
                     </TabPanel>
