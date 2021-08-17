@@ -129,10 +129,4 @@ function Personas() {
     )
 }
 
-export default function () {
-    return (
-        <PersonaContext.Provider>
-            <Personas />
-        </PersonaContext.Provider>
-    )
-}
+export default Personas

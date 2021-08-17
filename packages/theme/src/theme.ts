@@ -1,3 +1,4 @@
+/// <reference path="./global.d.ts" />
 import { createTheme, PaletteMode, ThemeOptions, useMediaQuery, useTheme } from '@material-ui/core'
 import * as Changes from './changes'
 import * as Components from './component-changes'
@@ -54,9 +55,20 @@ export enum Appearance {
     dark = 'dark',
 }
 
-export enum Language {
-    zh = 'zh',
-    en = 'en',
-    ko = 'ko',
-    ja = 'ja',
+/** Supported display languages */
+export enum SupportedLanguages {
+    enUS = 'en-US',
+    zhCN = 'zh-CN',
+    zhTW = 'zh-TW',
+    koKR = 'ko-KR',
+    jaJP = 'ja-JP',
+}
+/** Supported language settings */
+export enum LanguageOptions {
+    __auto__ = 'auto',
+    enUS = 'en-US',
+    zhCN = 'zh-CN',
+    zhTW = 'zh-TW',
+    koKR = 'ko-KR',
+    jaJP = 'ja-JP',
 }

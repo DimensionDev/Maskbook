@@ -1,10 +1,10 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef, or } from '@masknet/shared'
 import { safeUnreachable } from '@dimensiondev/kit'
-import { Appearance, Language } from '@masknet/theme'
+import { Appearance, LanguageOptions, SupportedLanguages } from '@masknet/theme'
 import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@material-ui/core'
 import { blue, green, grey, orange, red } from '@material-ui/core/colors'
-import { jaJP, koKR, zhTW } from '@material-ui/core/locale/index'
+import { jaJP, koKR, zhTW, zhCN } from '@material-ui/core/locale/index'
 import { makeStyles } from '@material-ui/core/styles'
 import type { Theme, ThemeOptions } from '@material-ui/core/styles/createTheme'
 import { cloneDeep, merge } from 'lodash-es'
@@ -99,8 +99,15 @@ const baseTheme = (theme: 'dark' | 'light') => {
 const MaskbookLightTheme = unstable_createMuiStrictModeTheme(baseTheme('light'))
 const MaskbookDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))
 
-export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Language }) {
-    const language = opt?.language ?? languageSettings.value
+export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: SupportedLanguages }) {
+    let language = opt?.language
+    if (!language) {
+        const settings = languageSettings.value
+        // TODO:
+        if (settings === LanguageOptions.__auto__) language = SupportedLanguages.enUS
+        else language = settings as any
+    }
+    if (!language) language = SupportedLanguages.enUS
     const preference = opt?.appearance ?? appearanceSettings.value
 
     // Priority:
@@ -117,22 +124,31 @@ export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Lan
     }
     const baseTheme = isDark ? MaskbookDarkTheme : MaskbookLightTheme
     switch (language) {
-        case Language.en:
+        case SupportedLanguages.enUS:
             return baseTheme
-        case Language.ja:
+        case SupportedLanguages.jaJP:
             return unstable_createMuiStrictModeTheme(baseTheme, jaJP)
-        case Language.ko:
+        case SupportedLanguages.koKR:
             return unstable_createMuiStrictModeTheme(baseTheme, koKR)
-        case Language.zh:
+        case SupportedLanguages.zhTW:
             return unstable_createMuiStrictModeTheme(baseTheme, zhTW)
+        case SupportedLanguages.zhCN:
+            return unstable_createMuiStrictModeTheme(baseTheme, zhCN)
         default:
             safeUnreachable(language)
             return baseTheme
     }
 }
 // We're developing a new theme in the theme/ package
-export function useClassicMaskTheme(opt?: { appearance?: Appearance; language?: Language }) {
-    const language = or(opt?.language, useValueRef(languageSettings))
+export function useClassicMaskTheme(opt?: { appearance?: Appearance; language?: SupportedLanguages }) {
+    const langSettingsValue = useValueRef(languageSettings)
+    let language = opt?.language
+    if (!language) {
+        // TODO:
+        if (langSettingsValue === LanguageOptions.__auto__) language = SupportedLanguages.enUS
+        else language = langSettingsValue as any
+    }
+
     const appearance = or(opt?.appearance, useValueRef(appearanceSettings))
     const systemPreference = useMediaQuery('(prefers-color-scheme: dark)')
     const paletteProvider = useRef(
