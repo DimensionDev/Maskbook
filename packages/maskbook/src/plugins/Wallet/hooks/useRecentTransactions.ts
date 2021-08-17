@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAsyncRetry, useInterval } from 'react-use'
 import { TransactionStatusType, useAccount, useChainId } from '@masknet/web3-shared'
 import { WalletRPC } from '../messages'
