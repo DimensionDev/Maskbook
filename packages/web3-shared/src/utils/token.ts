@@ -200,8 +200,8 @@ export const makeSortAssertFn = (chainId: ChainId, options: { isMaskBoost?: bool
         }
 
         // Sorted by alphabet
-        if (a.balance > b.balance) return -1
-        if (a.balance < b.balance) return 1
+        if ((a.token.name ?? '') > (b.token.name ?? '')) return 1
+        if ((a.token.name ?? '') < (b.token.name ?? '')) return -1
 
         return 0
     }

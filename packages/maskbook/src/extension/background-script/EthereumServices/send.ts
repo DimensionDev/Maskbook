@@ -1,7 +1,7 @@
 import { EthereumAddress } from 'wallet.ts'
 import type { HttpProvider, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { addGasMargin, ChainId, EthereumMethodType, ProviderType } from '@masknet/web3-shared'
+import { addGasMargin, ChainId, EthereumMethodType, isEIP1159Supported, ProviderType } from '@masknet/web3-shared'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/kit'
 import * as MetaMask from './providers/MetaMask'
@@ -16,12 +16,18 @@ import {
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
 import { debugModeSetting } from '../../../settings/settings'
+import { Flags } from '../../../utils'
 
 export interface SendOverrides {
     chainId?: ChainId
     account?: string
     providerType?: ProviderType
     rpc?: string
+    description?: string
+}
+
+function parseGasPrice(price: string | undefined) {
+    return Number.parseInt(price ?? '0x0', 16)
 }
 
 /**
@@ -38,6 +44,7 @@ export async function INTERNAL_send(
         account = currentAccountSettings.value,
         providerType = currentProviderSettings.value,
         rpc,
+        description,
     }: SendOverrides = {},
 ) {
     if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
@@ -105,17 +112,30 @@ export async function INTERNAL_send(
     }
 
     async function sendTransaction() {
-        const [config] = payload.params as [TransactionConfig]
+        const [config] = payload.params as [
+            TransactionConfig & {
+                // EIP1159
+                maxFeePerGas?: string
+                maxPriorityFeePerGas?: string
+            },
+        ]
 
         // add nonce
         if (providerType === ProviderType.Maskbook && config.from) config.nonce = await getNonce(config.from as string)
 
-        // add gas price
-        if (!config.gasPrice || !Number.parseInt((config.gasPrice as string) ?? '0x0', 16))
-            config.gasPrice = await getGasPrice()
-
         // add gas margin
         if (config.gas) config.gas = `0x${addGasMargin(config.gas).toString(16)}`
+
+        // pricing transaction
+        const isGasPriceValid = parseGasPrice(config.gasPrice as string) > 0
+        const isEIP1159Valid =
+            parseGasPrice(config.maxFeePerGas as string) > 0 && parseGasPrice(config.maxPriorityFeePerGas as string) > 0
+
+        if (Flags.EIP1159_enabled && isEIP1159Supported(chainId) && !isGasPriceValid && !isEIP1159Valid) {
+            throw new Error('To be implemented.')
+        } else {
+            config.gasPrice = await getGasPrice()
+        }
 
         // send the transaction
         switch (providerType) {

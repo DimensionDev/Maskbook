@@ -3,7 +3,7 @@ import type { PostInfo } from '../../PostInfo'
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostComment, PostCommentProps } from '../../../components/InjectedComponents/PostComments'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-es'
 import { collectNodeText } from '../../../utils'
@@ -18,11 +18,11 @@ interface injectPostCommentsDefaultConfig {
 export function injectPostCommentsDefault<T extends string>(
     config: injectPostCommentsDefaultConfig = {},
     additionalPropsToPostComment: (classes: Record<T, string>) => Partial<PostCommentProps> = () => ({}),
-    useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
+    useCustomStyles: (props?: any) => { classes: Record<T, string> } = makeStyles()({}) as any,
 ) {
     const { needZip } = config
     const PostCommentDefault = memo(function PostCommentDefault(props: Pick<PostCommentProps, 'needZip' | 'comment'>) {
-        const classes = useCustomStyles()
+        const { classes } = useCustomStyles()
         const additional = additionalPropsToPostComment(classes)
         return <PostComment {...props} {...additional} />
     })

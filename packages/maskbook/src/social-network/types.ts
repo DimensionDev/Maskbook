@@ -241,7 +241,7 @@ export namespace SocialNetworkUI {
             InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps, InjectedDialogClassKey>
         }
         export interface ComponentOverwriteConfig<Props extends { classes?: any }, Classes extends string> {
-            classes?: () => Partial<ClassNameMap<Classes>>
+            classes?: () => { classes: Partial<ClassNameMap<Classes>> }
             props?: (props: Props) => Props
         }
         export interface I18NOverwrite {
