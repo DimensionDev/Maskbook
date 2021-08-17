@@ -38,7 +38,6 @@ export async function encryptTo(
     whoAmI: ProfileIdentifier,
     publicShared: boolean,
 ): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
-    if (to.length === 0 && publicShared === false) return ['', '']
     if (publicShared) to = []
     const [recipients, toKey] = await prepareRecipientDetail(to)
 
@@ -99,7 +98,9 @@ export async function encryptTo(
  * @param iv Token that returns in the encryptTo
  */
 export async function publishPostAESKey(iv: string) {
-    if (!OthersAESKeyEncryptedMap.has(iv)) throw new Error(i18n.t('service_publish_post_aes_key_failed'))
+    const info = OthersAESKeyEncryptedMap.get(iv)
+    if (!info) throw new Error(i18n.t('service_publish_post_aes_key_failed'))
+    if (!info[1].length) return
     // Use the latest payload version here since we do not accept new post for older version.
-    return Gun2.publishPostAESKeyOnGun2(-38, iv, ...OthersAESKeyEncryptedMap.get(iv)!)
+    return Gun2.publishPostAESKeyOnGun2(-38, iv, ...info)
 }

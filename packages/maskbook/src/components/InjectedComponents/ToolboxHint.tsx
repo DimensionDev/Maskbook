@@ -142,7 +142,14 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
-        () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'timeline', open: true }),
+        (id?: string) =>
+            MaskMessage.events.requestComposition.sendToLocal({
+                reason: 'timeline',
+                open: true,
+                options: {
+                    startupPlugin: id,
+                },
+            }),
         [],
     )
     //#endregion
@@ -181,7 +188,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     const items: ToolboxItemDescriptor[] = [
-        { ...ToolIconURLs.encryptedmsg, onClick: openEncryptedMessage },
+        { ...ToolIconURLs.encryptedmsg, onClick: () => openEncryptedMessage() },
         {
             ...ToolIconURLs.token,
             onClick: openBuyCurrency,
@@ -206,10 +213,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
         let onClick: () => void
         if (onClickRaw === 'openCompositionEntry') {
-            onClick = () => {
-                openEncryptedMessage()
-                setTimeout(() => MaskMessage.events.activatePluginCompositionEntry.sendToLocal(plugin.ID))
-            }
+            onClick = () => openEncryptedMessage(plugin.ID)
         } else {
             safeUnreachable(onClickRaw)
             onClick = () => {}

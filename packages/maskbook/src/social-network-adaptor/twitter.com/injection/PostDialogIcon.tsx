@@ -32,6 +32,6 @@ const useTwitterMaskbookIcon = makeStyles()((theme) => ({
 
 function PostDialogIconAtTwitter() {
     const { classes } = useTwitterMaskbookIcon()
-    const onIconClicked = () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'timeline', open: true })
+    const onIconClicked = () => MaskMessage.events.requestComposition.sendToLocal({ reason: 'timeline', open: true })
     return <PostDialogIcon classes={classes} onClick={onIconClicked} />
 }
