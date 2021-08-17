@@ -22,7 +22,7 @@ export function useRecentTransactions(status?: TransactionStatusType) {
     useInterval(() => setFlag((x) => !x), delay)
 
     // update transactions by message center
-    useEffect(() => WalletMessages.events.transactionsUpdated.on(() => setFlag(x => !x)), [setFlag])
+    useEffect(() => WalletMessages.events.transactionsUpdated.on(() => setFlag((x) => !x)), [setFlag])
 
     return useAsyncRetry(async () => {
         try {
