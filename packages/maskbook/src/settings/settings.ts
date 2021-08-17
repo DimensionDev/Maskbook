@@ -2,7 +2,8 @@ import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './
 import { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { LaunchPage } from './types'
-import { Appearance, LanguageOptions } from '@masknet/theme'
+import { Appearance } from '@masknet/theme'
+import { LanguageOptions } from '@masknet/public-api'
 
 /**
  * Does the debug mode on

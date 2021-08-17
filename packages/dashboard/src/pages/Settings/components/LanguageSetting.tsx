@@ -2,7 +2,7 @@ import { MenuItem } from '@material-ui/core'
 import { useLanguage } from '../api'
 import { Services } from '../../../API'
 import SettingSelect from './SettingSelect'
-import { LanguageOptions } from '@masknet/theme'
+import { LanguageOptions } from '@masknet/public-api'
 import { useDashboardI18N } from '../../../locales'
 
 export default function LanguageSetting() {

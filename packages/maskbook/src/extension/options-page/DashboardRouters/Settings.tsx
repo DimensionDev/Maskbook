@@ -1,7 +1,8 @@
 import { useRef } from 'react'
 import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
-import { Appearance, LanguageOptions } from '@masknet/theme'
+import { Appearance } from '@masknet/theme'
+import { LanguageOptions } from '@masknet/public-api'
 import { getEnumAsObject } from '@masknet/shared'
 import { getChainName, ChainId, ProviderType, useAccount, PortfolioProvider } from '@masknet/web3-shared'
 

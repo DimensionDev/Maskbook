@@ -7,7 +7,7 @@ import { useUpdate } from 'react-use'
 import type en from '../locales/en-US.json'
 import i18nNextInstance from './i18n-next'
 import { languageSettings } from '../settings/settings'
-import { LanguageOptions, SupportedLanguages } from '@masknet/theme'
+import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
 import { languages } from '../locales'
 
 i18nNextInstance.use(initReactI18next)

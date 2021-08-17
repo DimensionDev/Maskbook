@@ -5,7 +5,7 @@ import { zhTW, enUS, ja, zhCN, ko, es, ru, it, faIR, fr } from 'date-fns/locale'
 import { useI18N, useLanguage } from '../../../utils'
 import type { PollGunDB } from '../Services'
 import { PollStatus } from '../types'
-import { SupportedLanguages } from '@masknet/theme'
+import { SupportedLanguages } from '@masknet/public-api'
 import { safeUnreachable } from '@dimensiondev/kit'
 
 const useStyles = makeStyles((theme) => ({
