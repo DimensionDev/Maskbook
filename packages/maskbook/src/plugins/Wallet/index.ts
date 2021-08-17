@@ -5,9 +5,8 @@ registerPlugin({
     ...base,
     SNSAdaptor: {
         load: () => import('./SNSAdaptor'),
-        hotModuleReload: (hot) => {
-            import.meta.webpackHot && import.meta.webpackHot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor')))
-        },
+        hotModuleReload: (hot) =>
+            import.meta.webpackHot && import.meta.webpackHot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor'))),
     },
     Dashboard: {
         load: () => import('./Dashboard'),
