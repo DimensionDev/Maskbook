@@ -15,7 +15,7 @@ import { SignUpRoutePath } from '../routePath'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
 import { Services } from '../../../API'
-import { ButtonGroup } from '../../../components/RegisterFrame/ButtonGroup'
+import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
 
 const Label = ({ value }: { value: string }) => (
     <Typography
@@ -66,14 +66,11 @@ export const PersonaCreate = () => {
                         onChange={(e) => setPersonaName(e.currentTarget.value)}
                         inputProps={{ maxLength: 24 }}
                     />
-                    <ButtonGroup>
-                        <Button variant="rounded" color="secondary" onClick={() => navigate(-1)}>
-                            {t.back()}
-                        </Button>
+                    <ButtonContainer>
                         <Button variant="rounded" color="primary" onClick={handleCreatePersona} disabled={!personaName}>
                             {t.next()}
                         </Button>
-                    </ButtonGroup>
+                    </ButtonContainer>
                 </Box>
             </Body>
             <Footer />

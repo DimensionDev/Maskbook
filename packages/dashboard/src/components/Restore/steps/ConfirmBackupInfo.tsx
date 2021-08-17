@@ -3,9 +3,8 @@ import { useState, memo } from 'react'
 import { Box, Button } from '@material-ui/core'
 import { BackupInfoCard } from '../BackupInfoCard'
 import { MaskTextField } from '@masknet/theme'
-import { ButtonGroup } from '../../RegisterFrame/ButtonGroup'
+import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
 import type { StepCommonProps } from '../../Stepper'
-import { ValidationCodeStep } from './Commont'
 import type { BackupFileInfo } from '../../../pages/Settings/type'
 
 interface ConfirmBackupInfoProps extends StepCommonProps {
@@ -40,14 +39,11 @@ export const ConfirmBackupInfo = memo(({ backupInfo, onNext, account, toStep }: 
                     />
                 </Box>
             </Box>
-            <ButtonGroup>
-                <Button variant="rounded" color="secondary" onClick={() => toStep(ValidationCodeStep.EmailInput)}>
-                    {t.cancel()}
-                </Button>
+            <ButtonContainer>
                 <Button variant="rounded" color="primary" onClick={handleNext}>
-                    {t.next()}
+                    {t.restore()}
                 </Button>
-            </ButtonGroup>
+            </ButtonContainer>
         </>
     ) : null
 })
