@@ -51,21 +51,24 @@ export default function Welcome() {
     }, [mode])
 
     const updateIFrameStyle = () => {
-        const document = privacyPolicyDocument()
-        if (!document) return
+        const iframeDocument = privacyPolicyDocument()
+        if (!iframeDocument) return
 
-        const style = document.createElement('style')
+        const style = iframeDocument.createElement('style')
         style.innerHTML = `
               h3, h6 { color: ${mode === 'dark' ? '#FFFFFF' : '#111432'}; }
               p { color: ${mode === 'dark' ? 'rgba(255, 255, 255, 0.8);' : '#7b8192'}; }
             `
-        document.head?.appendChild(style)
+        iframeDocument.head?.appendChild(style)
     }
 
     const handleIFrameLoad = () => {
         updateIFrameStyle()
 
-        const link = document.getElementById('link')
+        const iframeDocument = privacyPolicyDocument()
+        if (!iframeDocument) return
+
+        const link = iframeDocument.getElementById('link')
         link?.addEventListener('click', handleLinkClick)
     }
 
