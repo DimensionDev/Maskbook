@@ -1,7 +1,6 @@
 import type { FC } from 'react'
-import { Box, Card, makeStyles, TextField, Typography } from '@material-ui/core'
+import { Box, Button, Card, makeStyles, TextField, Typography } from '@material-ui/core'
 import classNames from 'classnames'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -73,7 +72,7 @@ export const StepVerify: FC<StepVerifyProps> = ({
                 ))}
             </Card>
             <Box className={classes.bottom}>
-                <ActionButton
+                <Button
                     fullWidth
                     color="primary"
                     variant="text"
@@ -82,10 +81,10 @@ export const StepVerify: FC<StepVerifyProps> = ({
                         marginRight: 16,
                     }}>
                     {t('plugin_wallet_setup_back')}
-                </ActionButton>
-                <ActionButton variant="contained" fullWidth disabled={!wordsMatched} onClick={onSubmit}>
+                </Button>
+                <Button variant="contained" fullWidth disabled={!wordsMatched} onClick={onSubmit}>
                     {t('plugin_wallet_setup_verify')}
-                </ActionButton>
+                </Button>
             </Box>
         </Box>
     )
