@@ -107,9 +107,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         }
     },
     persona_createPersonaByMnemonic: async ({ mnemonic, nickname, password }) => {
-        const x = await Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonic, password, { nickname })
-
-        return x.toText()
+        const x = await Services.Identity.restoreFromMnemonicWords(mnemonic, nickname, password)
+        return personaFomatter(x)
     },
     persona_queryPersonas: async ({ identifier, hasPrivateKey }) => {
         const id = identifier ? stringToIdentifier(identifier) : undefined
@@ -138,11 +137,6 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
 
         if (!result) throw new Error('invalid base64')
     },
-    persona_restoreFromMnemonic: async ({ mnemonic, nickname, password }) => {
-        const result = await Services.Identity.restoreFromMnemonicWords(mnemonic, nickname, password)
-
-        if (!result) throw new Error('restore failed')
-    },
     persona_connectProfile: async ({ network, profileUsername, personaIdentifier }) => {
         const identifier = stringToIdentifier(personaIdentifier)
         await Services.Identity.attachProfile(new ProfileIdentifier(network, profileUsername), identifier, {
@@ -153,8 +147,11 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         if (!persona.hasPrivateKey) throw new Error('invalid persona')
         await Services.Identity.setupPersona(persona.identifier)
     },
-    persona_disconnectProfile: ({ profileUsername, network }) =>
-        Services.Identity.detachProfile(new ProfileIdentifier(network, profileUsername)),
+    persona_disconnectProfile: async ({ identifier }) => {
+        const id = ProfileIdentifier.fromString(identifier)
+        if (!(id instanceof ProfileIdentifier)) throw new Error('invalid identifier')
+        await Services.Identity.detachProfile(id)
+    },
     persona_backupMnemonic: async ({ identifier }) => {
         const persona = await Services.Identity.queryPersona(stringToIdentifier(identifier))
         return persona.mnemonic?.words
