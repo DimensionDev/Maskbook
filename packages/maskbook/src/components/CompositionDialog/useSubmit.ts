@@ -66,10 +66,8 @@ async function pasteImage(encrypted: string, template: ImageTemplateTypes, text:
     const defaultText = i18n.t('additional_post_box__steganography_post_pre', {
         random: new Date().toLocaleString(),
     })
-    activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.(text ?? defaultText, {
-        recover: false,
-    })
     const img = await SteganographyTextPayload(template, encrypted)
+    // Don't await this, otherwise the dialog won't disappear
     activatedSocialNetworkUI.automation.nativeCompositionDialog!.attachImage!(img, {
         recover: true,
         relatedTextPayload: text ?? defaultText,
