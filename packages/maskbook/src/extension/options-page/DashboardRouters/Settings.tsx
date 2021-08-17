@@ -1,7 +1,8 @@
 import { useRef } from 'react'
 import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
-import { Appearance, LanguageOptions } from '@masknet/theme'
+import { Appearance } from '@masknet/theme'
+import { LanguageOptions } from '@masknet/public-api'
 import { getEnumAsObject } from '@masknet/shared'
 import { getChainName, ChainId, ProviderType, useAccount, PortfolioProvider } from '@masknet/web3-shared'
 
@@ -133,12 +134,25 @@ const settingsTheme = extendsTheme((theme) => ({
 export default function DashboardSettingsRouter() {
     const { t } = useI18N()
     const isMobile = useMatchXS()
+    const notReadyLanguages = [
+        LanguageOptions.esES,
+        LanguageOptions.zhCN,
+        LanguageOptions.faIR,
+        LanguageOptions.ruRU,
+        LanguageOptions.itIT,
+        LanguageOptions.frFR,
+    ]
     const langMapper = useRef((x: LanguageOptions) => {
         if (x === LanguageOptions.enUS) return 'English'
         if (x === LanguageOptions.zhTW) return '正體中文'
         if (x === LanguageOptions.zhCN) return '简体中文'
         if (x === LanguageOptions.koKR) return '한국인'
         if (x === LanguageOptions.jaJP) return '日本語'
+        if (x === LanguageOptions.itIT) return 'lingua italiana'
+        if (x === LanguageOptions.esES) return 'lengua española'
+        if (x === LanguageOptions.ruRU) return 'русский язык'
+        if (x === LanguageOptions.frFR) return 'langue française'
+        if (x === LanguageOptions.faIR) return 'زبان فارسی'
         if (x === LanguageOptions.__auto__) return t('language_auto')
         safeUnreachable(x)
         return x
@@ -199,6 +213,7 @@ export default function DashboardSettingsRouter() {
                                 <SettingsUIEnum
                                     classes={listStyle}
                                     enumObject={LanguageOptions}
+                                    ignoredItems={process.env.build !== 'stable' ? [] : notReadyLanguages}
                                     getText={langMapper}
                                     icon={<LanguageIcon />}
                                     value={languageSettings}

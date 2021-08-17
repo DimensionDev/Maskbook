@@ -77,31 +77,37 @@ function BrowserActionUI() {
     )
 
     const onEnter = useCallback((event: React.MouseEvent) => {
+        const openLegacyDashboard = () => browser.runtime.openOptionsPage()
+        const openNextDashboard = () =>
+            browser.tabs.create({
+                active: true,
+                url: browser.runtime.getURL('/next.html'),
+            })
+        const shouldOpenNextDashboard =
+            (process.env.NODE_ENV === 'development' && event.ctrlKey && !Flags.v2_enabled) ||
+            (Flags.v2_enabled && !event.ctrlKey)
         if (event.shiftKey) {
             browser.tabs.create({
                 active: true,
                 url: browser.runtime.getURL('/debug.html'),
             })
-        } else if (process.env.NODE_ENV === 'development' && event.ctrlKey) {
-            browser.tabs.create({
-                active: true,
-                url: browser.runtime.getURL('/next.html'),
-            })
+        } else if (shouldOpenNextDashboard) {
+            openNextDashboard()
         } else {
-            browser.runtime.openOptionsPage()
+            openLegacyDashboard()
         }
     }, [])
 
-    const { openDialog: openSelectProviderDailog } = useRemoteControlledDialog(
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
         noop,
         'activated',
     )
     const onConnect = useCallback(async () => {
-        openSelectProviderDailog()
+        openSelectProviderDialog()
         await delay(200)
         window.close()
-    }, [openSelectProviderDailog])
+    }, [openSelectProviderDialog])
 
     const Trademark = memo(() => {
         const src =

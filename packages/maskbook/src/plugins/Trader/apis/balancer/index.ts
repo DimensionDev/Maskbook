@@ -70,7 +70,7 @@ export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALA
 
     const pools = sor.onChainCache.pools
     const routes = swaps.map((rawHops) => {
-        const swapAmount = new BigNumber(rawHops[0].swapAmount || '0')
+        const swapAmount = new BigNumber(first(rawHops)?.swapAmount || '0')
         const share = swapAmount.div(totalSwapAmount).toNumber()
         const hops = rawHops.map((rawHop) => {
             const { swapAmount } = rawHop

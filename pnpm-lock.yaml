@@ -106,6 +106,7 @@ importers:
       '@masknet/icons': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-infra': workspace:*
+      '@masknet/plugin-wallet': workspace:*
       '@masknet/public-api': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/storybook-shared': workspace:*
@@ -139,6 +140,7 @@ importers:
       snowpack: ^3.8.3
       unstated-next: ^1.1.0
       use-subscription: ^1.5.1
+      uuid: ^8.3.2
       wallet.ts: ^1.0.1
       zod: ^3.5.1
     dependencies:
@@ -148,6 +150,7 @@ importers:
       '@masknet/icons': link:../icons
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/plugin-wallet': link:../plugins/Wallet
       '@masknet/public-api': link:../public-api
       '@masknet/shared': link:../shared
       '@masknet/storybook-shared': link:../storybook-shared
@@ -170,6 +173,7 @@ importers:
       react-use: 17.2.4_f991c289939c8299bed5e4a6a5a79a62
       unstated-next: 1.1.0
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
+      uuid: 8.3.2
       wallet.ts: 1.0.1
       zod: 3.5.1
     devDependencies:
@@ -580,10 +584,16 @@ importers:
   packages/plugins/Wallet:
     specifiers:
       '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/theme': workspace:*
       '@masknet/web3-shared': workspace:*
+      react-use: ^17.2.4
     dependencies:
       '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/theme': link:../../theme
       '@masknet/web3-shared': link:../../web3-shared
+      react-use: 17.2.4_f991c289939c8299bed5e4a6a5a79a62
 
   packages/plugins/example:
     specifiers:

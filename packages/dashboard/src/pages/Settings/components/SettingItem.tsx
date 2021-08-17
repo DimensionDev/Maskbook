@@ -11,6 +11,7 @@ export interface SettingItemProps extends React.PropsWithChildren<{}> {
     title: React.ReactNode | string
     desc?: React.ReactNode
     icon?: React.ReactElement
+    error?: boolean
 }
 
 const IconWarpper = styled(ListItemIcon)(({ theme }) => ({
@@ -28,14 +29,17 @@ const TextWrapper = styled(ListItemText)(({ theme }) => ({
     [`& .${listItemTextClasses.primary}`]: {
         paddingBottom: theme.spacing(2),
     },
+    [`&.${listItemTextClasses.root}.error .${listItemTextClasses.secondary}`]: {
+        color: theme.palette.error.main,
+    },
 }))
 
 export default function SettingItem(props: SettingItemProps) {
-    const { title, desc, icon } = props
+    const { title, desc, icon, error = false } = props
     return (
         <ListItem sx={{ paddingLeft: 0 }}>
             <IconWarpper>{icon}</IconWarpper>
-            <TextWrapper primary={title} secondary={desc} />
+            <TextWrapper primary={title} secondary={desc} className={error ? 'error' : ''} />
             {props.children}
         </ListItem>
     )

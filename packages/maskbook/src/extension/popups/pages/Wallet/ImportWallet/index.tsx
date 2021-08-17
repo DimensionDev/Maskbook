@@ -95,7 +95,7 @@ enum ImportWalletTab {
 }
 
 const ImportWallet = memo(() => {
-    const { t } = useI18N
+    const { t } = useI18N()
     const { enqueueSnackbar } = useSnackbar()
     const history = useHistory()
     const classes = useStyles()

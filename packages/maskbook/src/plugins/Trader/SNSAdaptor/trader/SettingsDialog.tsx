@@ -10,6 +10,7 @@ import {
     DialogContent,
     makeStyles,
     Paper,
+    Switch,
     Typography,
 } from '@material-ui/core'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
@@ -19,6 +20,7 @@ import { TradeProvider, ZrxTradePool } from '../../types'
 import { SelectPoolPanel } from './SelectPoolPanel'
 import { SlippageSlider } from './SlippageSlider'
 import {
+    currentSingleHopOnlySettings,
     currentSlippageSettings,
     currentTradeProviderSettings,
     getCurrentTradeProviderGeneralSettings,
@@ -28,6 +30,7 @@ import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { PluginTraderMessages } from '../../messages'
 import stringify from 'json-stable-stringify'
 import { useTradeProviderSettings } from '../../trader/useTradeSettings'
+import { useSingleHopOnly } from '../../trader/uniswap/useSingleHopOnly'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -58,6 +61,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
 
     const provider = useValueRef(currentTradeProviderSettings)
     const slippage = useValueRef(currentSlippageSettings)
+    const singleHopOnly = useSingleHopOnly()
     const { pools } = useTradeProviderSettings(provider)
 
     //#region remote controlled dialog
@@ -65,7 +69,6 @@ export function SettingsDialog(props: SettingsDialogProps) {
     //#endregion
 
     const onReset = useCallback(() => {
-        currentTradeProviderSettings.value = TradeProvider.UNISWAP_V2
         currentSlippageSettings.value = SLIPPAGE_DEFAULT
         if (provider === TradeProvider.ZRX)
             getCurrentTradeProviderGeneralSettings(provider).value = stringify({
@@ -95,22 +98,24 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                     />
                                 </AccordionDetails>
                             </Accordion>
-                            <Accordion className={classes.accordion} elevation={0}>
-                                <AccordionSummary>
-                                    <Typography className={classes.heading}>
-                                        {t('plugin_trader_single_hop_only')}
-                                    </Typography>
-                                    <Typography className={classes.subheading}>{slippage / 100}%</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails className={classes.details}>
-                                    <SlippageSlider
-                                        value={slippage}
-                                        onChange={(tolerance) => {
-                                            currentSlippageSettings.value = tolerance
-                                        }}
-                                    />
-                                </AccordionDetails>
-                            </Accordion>
+                            {provider === TradeProvider.UNISWAP_V3 ? (
+                                <Accordion className={classes.accordion} elevation={0} expanded={false}>
+                                    <AccordionSummary>
+                                        <Typography className={classes.heading}>
+                                            {t('plugin_trader_single_hop_only')}
+                                        </Typography>
+                                        <Switch
+                                            color="primary"
+                                            size="small"
+                                            checked={singleHopOnly}
+                                            onChange={(ev) => {
+                                                ev.stopPropagation()
+                                                currentSingleHopOnlySettings.value = ev.target.checked
+                                            }}
+                                        />
+                                    </AccordionSummary>
+                                </Accordion>
+                            ) : null}
                             {provider === TradeProvider.ZRX ? (
                                 <Accordion className={classes.accordion} elevation={0}>
                                     <AccordionSummary>

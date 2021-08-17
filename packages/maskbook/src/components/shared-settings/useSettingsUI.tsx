@@ -119,13 +119,14 @@ export function SettingsUIEnum<T extends object>(
         enumObject: T
         getText?: useEnumSettingsParams<T>[2]
         SelectProps?: SelectProps
+        ignoredItems?: T[keyof T][]
     } & SettingsUIProps<T[keyof T]>,
 ) {
     const { primary, secondary } = withDefaultText(props)
     const xsMatched = useMatchXS()
     const { classes } = useStyles()
-    const { value, enumObject, getText, SelectProps } = props
-    const ui = useEnumSettings(value, enumObject, getText, SelectProps)
+    const { value, enumObject, getText, SelectProps, ignoredItems } = props
+    const ui = useEnumSettings(value, enumObject, getText, SelectProps, ignoredItems)
     return (
         <SharedListItem
             {...props}
@@ -150,7 +151,9 @@ export function SettingsUIEnum<T extends object>(
  *
  * ? because the limit on the type system, I can't type it as an object which key is enum and value is string
  */
-function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectProps]: useEnumSettingsParams<Q>) {
+function useEnumSettings<Q extends object>(
+    ...[ref, enumObject, getText, selectProps, ignoredItems]: useEnumSettingsParams<Q>
+) {
     const enum_ = getEnumAsArray(enumObject)
     const change = (value: any) => {
         if (!Number.isNaN(Number.parseInt(value, 10))) {
@@ -169,11 +172,13 @@ function useEnumSettings<Q extends object>(...[ref, enumObject, getText, selectP
             value={useValueRef(ref)}
             onChange={(event) => change(event.target.value)}
             {...selectProps}>
-            {enum_.map(({ key, value }) => (
-                <MenuItem value={String(value)} key={String(key)}>
-                    {getText?.(value) ?? String(key)}
-                </MenuItem>
-            ))}
+            {enum_
+                .filter((x) => !ignoredItems?.includes(x.value))
+                .map(({ key, value }) => (
+                    <MenuItem value={String(value)} key={String(key)}>
+                        {getText?.(value) ?? String(key)}
+                    </MenuItem>
+                ))}
         </Select>
     )
 }
@@ -183,4 +188,5 @@ type useEnumSettingsParams<Q extends object> = [
     enumObject: Q,
     getText: ((x: Q[keyof Q]) => string) | undefined,
     selectProps: SelectProps | undefined,
+    ignoredItems: Q[keyof Q][] | undefined,
 ]

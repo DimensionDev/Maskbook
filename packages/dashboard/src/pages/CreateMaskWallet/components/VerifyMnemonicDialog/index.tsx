@@ -146,8 +146,8 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                             <Box className={classes.confirm}>
                                 <DesktopMnemonicConfirm
                                     indexes={indexes}
-                                    words={puzzleWords}
-                                    onUpdateAnswerWords={onUpdateAnswerWords}
+                                    puzzleWords={puzzleWords}
+                                    onChange={onUpdateAnswerWords}
                                 />
                             </Box>
                             <LoadingButton
