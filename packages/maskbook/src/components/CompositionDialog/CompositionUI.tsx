@@ -94,7 +94,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
             Editor.current?.reset()
             setEncryptionKind('Everyone')
             setRecipients([])
-            setEncoding('text')
+            // Don't clean up the image/text selection across different encryption.
+            // setEncoding('text')
             setSending(false)
         })
     }, [])
@@ -237,7 +238,7 @@ function useSetEncryptionKind(props: Pick<CompositionProps, 'disabledRecipients'
     const everyoneSelected = props.disabledRecipients !== 'Everyone' && (E2EDisabled || encryptionKind === 'Everyone')
     const _E2ESelected =
         props.disabledRecipients !== 'E2E' && (props.disabledRecipients === 'Everyone' || encryptionKind === 'E2E')
-    const recipientSelectorAvailable = true // Boolean(props.recipients.length && !everyoneSelected)
+    const recipientSelectorAvailable = Boolean(props.recipients.length && !everyoneSelected)
 
     return {
         recipients,
