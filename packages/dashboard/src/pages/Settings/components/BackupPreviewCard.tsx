@@ -3,6 +3,7 @@ import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
 import { useDashboardI18N } from '../../../locales'
+import formatDateTime from 'date-fns/format'
 export interface BackupPreview {
     email?: string
     personas: number
@@ -11,6 +12,7 @@ export interface BackupPreview {
     contacts: number
     files: number
     wallets: number
+    createdAt?: number
 }
 
 const useStyles = makeStyles(() => ({
@@ -19,14 +21,16 @@ const useStyles = makeStyles(() => ({
         minHeight: 205,
         borderRadius: 8,
         background: MaskColorVar.infoBackground,
+        width: '100%',
     },
     item: {
         paddingBottom: 10,
         display: 'flex',
         justifyContent: 'space-between',
+        fontSize: 14,
     },
     sub: {
-        paddingLeft: 60,
+        paddingLeft: 30,
     },
 }))
 
@@ -39,10 +43,6 @@ export default function BackupPreviewCard({ json }: Props) {
     const classes = useStyles()
 
     const records = [
-        {
-            name: t.settings_backup_preview_account(),
-            value: json.email,
-        },
         {
             name: t.settings_backup_preview_personas(),
             value: json.personas,
@@ -71,14 +71,18 @@ export default function BackupPreviewCard({ json }: Props) {
             name: t.settings_backup_preview_wallets(),
             value: json.wallets,
         },
+        {
+            name: t.settings_backup_preview_created_at(),
+            value: json.createdAt ? formatDateTime(json.createdAt, 'MM-dd-yyyy HH:mm:ss') : '',
+        },
     ]
 
     return (
         <div className={classes.root}>
             {records.map((record, idx) => (
                 <div className={classNames(classes.item, record.sub ? classes.sub : '')} key={idx}>
-                    <Typography>{record.name}</Typography>
-                    <Typography>{record.value}</Typography>
+                    <Typography variant="body2">{record.name}</Typography>
+                    <Typography variant="body2">{record.value}</Typography>
                 </div>
             ))}
         </div>

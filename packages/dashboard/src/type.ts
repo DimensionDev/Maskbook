@@ -2,7 +2,7 @@ export enum RoutePaths {
     Welcome = '/welcome',
     Setup = '/setup',
     SignUp = '/sign-up',
-    Login = '/login',
+    SignIn = '/sign-in',
     PrivacyPolicy = '/privacy-policy',
     Personas = '/personas',
     Wallets = '/wallets',

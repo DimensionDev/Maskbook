@@ -3,9 +3,9 @@ import { useContext, useState } from 'react'
 import { Box, TextField, Typography, makeStyles } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
-import CountdownButton from '../../../../components/CountdownButton'
 import { sendCode, verifyCode } from '../../api'
 import { phoneRegexp } from '../../regexp'
+import { CountdownButton } from '@masknet/theme'
 
 const useStyles = makeStyles({
     container: {
@@ -33,7 +33,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
 
     const handleCountryCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value
-        const prefix = /^\+/.test(event.target.value) ? '' : '+'
+        const prefix = value.startsWith('+') ? '' : '+'
         setCountryCode(prefix + value)
     }
 

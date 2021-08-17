@@ -1,4 +1,5 @@
 import { MaskDialog } from '@masknet/theme'
+import type { PropsWithChildren, ReactNode } from 'react'
 import { DialogContent, DialogActions, Button, experimentalStyled as styled, buttonClasses } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
 
@@ -8,15 +9,15 @@ const StyledButton: typeof Button = styled(Button)(() => ({
     },
 })) as any
 
-export interface ConfirmDialogProps extends React.PropsWithChildren<{}> {
+export interface ConfirmDialogProps extends PropsWithChildren<{}> {
     title: string
     open: boolean
-    cancelText?: React.ReactNode | string
-    confirmText?: React.ReactNode | string
+    cancelText?: ReactNode | string
+    confirmText?: ReactNode | string
     confirmDisabled?: boolean
-    maxWidth?: false | 'sm' | 'xs' | 'md' | 'lg' | 'xl' | undefined
+    maxWidth?: false | 'sm' | 'xs' | 'md' | 'lg' | 'xl'
     onClose(): void
-    onConfirm(): void
+    onConfirm?(): void
 }
 
 export default function ConfirmDialog(props: ConfirmDialogProps) {
