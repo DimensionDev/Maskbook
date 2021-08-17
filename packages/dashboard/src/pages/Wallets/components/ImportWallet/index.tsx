@@ -81,7 +81,7 @@ export const ImportWallet = memo(() => {
                         <Tab label={t.wallets_wallet_private_key()} value={tabs.privateKey} />
                     </ButtonGroupTabList>
                     <TabPanel classes={tabPanelClasses} value={tabs.mnemonic}>
-                        <DesktopMnemonicConfirm onChange={() => {}} />
+                        <DesktopMnemonicConfirm puzzleWords={[]} onChange={() => {}} />
                     </TabPanel>
                     <TabPanel classes={tabPanelClasses} value={tabs.json}>
                         TBD
