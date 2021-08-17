@@ -253,6 +253,7 @@ export function DepositDialog() {
     const prizePeriodSeconds = Number.parseInt(pool?.config.prizePeriodSeconds ?? '', 10)
 
     if (!token || !pool) return null
+
     return (
         <div className={classes.root}>
             <InjectedDialog
