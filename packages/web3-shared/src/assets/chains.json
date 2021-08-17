@@ -38,7 +38,7 @@
             "decimals": 18
         },
         "faucets": ["https://faucet.ropsten.be?${ADDRESS}"],
-        "features": [],
+        "features": ["EIP1159"],
         "explorers": [
             {
                 "name": "etherscan",
