@@ -1,4 +1,4 @@
-import { MenuItem, MenuItemProps, Typography } from '@material-ui/core'
+import { CircularProgress, MenuItem, MenuItemProps, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import {
@@ -8,6 +8,7 @@ import {
     useChainIdValid,
     useWallet,
     formatEthereumAddress,
+    TransactionStatusType,
 } from '@masknet/web3-shared'
 import {
     useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
@@ -18,7 +19,7 @@ import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIc
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
 import { useMenu } from '../../utils/hooks/useMenu'
-import { useCallback } from 'react'
+import { forwardRef, useRef, useCallback } from 'react'
 import { MaskMessage } from '../../utils/messages'
 import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
 import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
@@ -32,9 +33,9 @@ import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
 import { useI18N } from '../../utils'
 import { base as ITO_Plugin } from '../../plugins/ITO/base'
-import { forwardRef, useRef } from 'react'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
+import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -132,6 +133,12 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
     const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
+
+    //#region recent pending transactions
+    const { value: pendingTransactions = [], retry: retryTransactions } = useRecentTransactions(
+        TransactionStatusType.NOT_DEPEND,
+    )
+    //#endregion
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
@@ -251,11 +258,26 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     {isWalletValid ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} size={24} />}
 
                     <Typography className={classes.title}>
-                        {account
-                            ? chainIdValid
-                                ? formatEthereumAddress(account, 4)
-                                : t('plugin_wallet_wrong_network')
-                            : t('plugin_wallet_on_connect')}
+                        {account ? (
+                            chainIdValid ? (
+                                pendingTransactions.length > 0 ? (
+                                    <>
+                                        <span>
+                                            {t('plugin_wallet_pending_transactions', {
+                                                count: pendingTransactions.length,
+                                            })}
+                                        </span>
+                                        <CircularProgress size={20} color="inherit" />
+                                    </>
+                                ) : (
+                                    formatEthereumAddress(account, 4)
+                                )
+                            ) : (
+                                t('plugin_wallet_wrong_network')
+                            )
+                        ) : (
+                            t('plugin_wallet_on_connect')
+                        )}
                         {account && chainIdValid && chainDetailed?.network !== 'mainnet' ? (
                             <FiberManualRecordIcon
                                 className={classes.chainIcon}
