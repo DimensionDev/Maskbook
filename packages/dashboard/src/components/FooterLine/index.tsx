@@ -28,10 +28,10 @@ const useStyles = makeStyles((theme: Theme) => ({
         color: getMaskColor(theme).lineLight,
     },
     closeButton: {
-        color: theme.palette.text.secondary,
         position: 'absolute',
-        right: 12,
-        top: 0,
+        right: theme.spacing(2.5),
+        top: theme.spacing(1),
+        color: theme.palette.text.secondary,
     },
 }))
 
