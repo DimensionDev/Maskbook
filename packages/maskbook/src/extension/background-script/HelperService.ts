@@ -1,5 +1,6 @@
 import { memoizePromise } from '../../utils/memoize'
 import { constructRequestPermissionURL } from '../popups'
+import { getNetworkWorker } from '../../social-network/worker'
 // import { exclusiveTasks } from '../content-script/tasks'
 
 const cache = new Map<string, string>()
@@ -70,9 +71,8 @@ export function queryPermission(permission: browser.permissions.Permissions) {
     return browser.permissions.contains(permission)
 }
 
-export function queryPasteIntoPostBox(url: string, post: string) {
-    // return exclusiveTasks(url, {
-    //     active: true,
-    // }).pasteIntoPostBox(post, {})
-    return () => {}
+export async function openNewWindowAndPasteShareContent(SNSIdentifier: string, post: string) {
+    const url = (await getNetworkWorker(SNSIdentifier)).utils.getShareLinkURL?.(post)
+    if (!url) return
+    browser.tabs.create({ active: true, url: url.toString() })
 }

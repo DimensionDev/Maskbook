@@ -39,7 +39,7 @@ import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-Json
 
 const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
     1,
-    2,
+    3,
     (currentOpenVersion, knowledge) => {
         return openDB<PersonaDB>('maskbook-persona', currentOpenVersion, {
             upgrade(db, oldVersion, newVersion, transaction) {
@@ -76,7 +76,6 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                     transaction
                         .objectStore('relations')
                         .createIndex('linked, profile, favor', ['linked', 'profile', 'favor'], { unique: false })
-                    // transaction.objectStore('relations').createIndex('linked', 'linked', { unique: false })
                 }
                 if (oldVersion < 1) return v0_v1()
                 if (oldVersion < 2) v1_v2()

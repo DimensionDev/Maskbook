@@ -65,8 +65,8 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
     }, [contact, currentPersona])
 
     const handleClickInvite = useCallback(() => {
-        Services.Helper.queryPasteIntoPostBox(
-            `https://${network}`,
+        Services.Helper.openNewWindowAndPasteShareContent(
+            network,
             t.personas_invite_post({ identifier: contact.identifier.userId }),
         )
     }, [])
