@@ -25,20 +25,19 @@ export interface MaskNetworkAPIs {
     settings_createBackupJson(params: Partial<BackupOptions>): Promise<unknown>
     settings_getBackupPreviewInfo(params: { backupInfo: string }): Promise<BackupPreview | undefined>
     settings_restoreBackup(params: { backupInfo: string }): Promise<void>
-    persona_createPersonaByMnemonic(params: { mnemonic: string; nickname: string; password: string }): Promise<string>
+    persona_createPersonaByMnemonic(params: { mnemonic: string; nickname: string; password: string }): Promise<Persona>
     persona_queryPersonas(params: { identifier?: string; hasPrivateKey: boolean }): Promise<Persona[]>
     persona_queryMyPersonas(params: { network?: string }): Promise<Persona[]>
     persona_updatePersonaInfo(params: { identifier: string; data: { nickname: string } }): Promise<void>
     persona_removePersona(params: { identifier: string }): Promise<void>
     persona_restoreFromJson(params: { backup: string }): Promise<void>
     persona_restoreFromBase64(params: { backup: string }): Promise<void>
-    persona_restoreFromMnemonic(params: { mnemonic: string; nickname: string; password: string }): Promise<void>
     persona_connectProfile(params: {
         network: string
         profileUsername: string
         personaIdentifier: string
     }): Promise<void>
-    persona_disconnectProfile(params: { profileUsername: string; network: string }): Promise<void>
+    persona_disconnectProfile(params: { identifier: string }): Promise<void>
     persona_backupMnemonic(params: { identifier: string }): Promise<string | undefined>
     persona_backupBase64(params: { identifier: string }): Promise<string>
     persona_backupJson(params: { identifier: string }): Promise<unknown>
