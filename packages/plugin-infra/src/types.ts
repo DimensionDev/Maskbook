@@ -473,11 +473,11 @@ export namespace Plugin.ContextFree {
         //#region Static render
         // new Map([ [reader, react component] ])
         export type StaticRender<T = any> = ReadonlyMap<MetadataReader<T>, StaticRenderComponent<T>>
-        export type StaticRenderComponent<T> = React.ForwardRefExoticComponent<StaticRenderProps<T>>
+        export type StaticRenderComponent<T> = Omit<React.ForwardRefExoticComponent<StaticRenderProps<T>>, 'propTypes'>
         export type StaticRenderProps<T> = Context<T> & React.RefAttributes<RenderActions<T>> & { metadata: T }
         //#endregion
         //#region DynamicRender
-        export type DynamicRender = React.ForwardRefExoticComponent<DynamicRenderProps>
+        export type DynamicRender = Omit<React.ForwardRefExoticComponent<DynamicRenderProps>, 'propTypes'>
         export type DynamicRenderProps = Context<unknown> &
             React.RefAttributes<RenderActions<unknown>> & { metadata: TypedMessage['meta'] }
         //#endregion
