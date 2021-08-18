@@ -39,8 +39,8 @@ async function getERC721ContractDetailedFromChain(address: string, chainId: Chai
     return createERC721ContractDetailed(chainId, address, name, symbol, baseURI)
 }
 
-async function getERC721ContractDetailedFromOpensea(address: string, chainId: ChainId, getContractApiUrl: string) {
-    const response = await fetch(`${getContractApiUrl}/${address}`)
+async function getERC721ContractDetailedFromOpensea(address: string, chainId: ChainId, apiUrl: string) {
+    const response = await fetch(`${apiUrl}/${address}`)
     type openseaContractData = {
         name: string
         symbol: string
@@ -48,7 +48,6 @@ async function getERC721ContractDetailedFromOpensea(address: string, chainId: Ch
     }
     if (response.ok) {
         const data: openseaContractData = await response.json()
-        console.log({ data })
         return createERC721ContractDetailed(chainId, address, data.name, data.symbol, undefined, data.image_url)
     }
     return null

@@ -3,32 +3,68 @@ import type { ERC721ContractDetailed, ERC721TokenInfo } from '../types'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { safeNonPayableTransactionCall, createERC721Token } from '../utils'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
+import { useOpenseaAPIConstants } from '../constants'
 
 export function useERC721TokenDetailed(
     contractDetailed: ERC721ContractDetailed | undefined,
     tokenId: string | undefined,
 ) {
+    const { GET_SINGLE_ASSET_URL } = useOpenseaAPIConstants()
     const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
     return useAsyncRetry(async () => {
         if (!erc721TokenContract || !contractDetailed || !tokenId) return
-        return getERC721TokenDetailed(contractDetailed, erc721TokenContract, tokenId)
+        if (!GET_SINGLE_ASSET_URL)
+            return getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
+
+        const tokenDetailedFromOpensea = await getERC721TokenDetailedFromOpensea(
+            contractDetailed,
+            tokenId,
+            GET_SINGLE_ASSET_URL,
+        )
+
+        return (
+            tokenDetailedFromOpensea ?? getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
+        )
     }, [erc721TokenContract, tokenId])
 }
 
-async function getERC721TokenDetailed(
-    contractDetailed: ERC721ContractDetailed | undefined,
+async function getERC721TokenDetailedFromOpensea(
+    contractDetailed: ERC721ContractDetailed,
+    tokenId: string,
+    apiUrl: string,
+) {
+    const response = await fetch(`${apiUrl}/${contractDetailed.address}/${tokenId}`)
+    type openseaTokenData = {
+        name: string | null
+        description: string | null
+        image_url: string | null
+    }
+
+    if (response.ok) {
+        const { name, description, image_url }: openseaTokenData = await response.json()
+        return createERC721Token(
+            contractDetailed,
+            { name: name ?? undefined, description: description ?? undefined, image: image_url ?? undefined },
+            tokenId,
+        )
+    }
+    return null
+}
+
+async function getERC721TokenDetailedFromChain(
+    contractDetailed: ERC721ContractDetailed,
     erc721TokenContract: ERC721,
     tokenId: string,
 ) {
     if (!contractDetailed) return
     const tokenURI = await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenURI(tokenId))
-    const asset = await getERC721TokenAsset(tokenURI)
+    const asset = await getERC721TokenAssetFromChain(tokenURI)
     return createERC721Token(contractDetailed, asset ?? {}, tokenId)
 }
 
 const BASE64_PREFIX = 'data:application/json;base64,'
 const CORS_PROXY = 'https://whispering-harbor-49523.herokuapp.com'
-async function getERC721TokenAsset(tokenURI?: string) {
+async function getERC721TokenAssetFromChain(tokenURI?: string) {
     if (!tokenURI) return
 
     // for some NFT tokens retrun JSON in base64 encoded
@@ -50,7 +86,6 @@ async function getERC721TokenAsset(tokenURI?: string) {
     try {
         const response = await fetch(`${CORS_PROXY}/${tokenURI}`)
         const r = await response.json()
-        console.log({ r })
         return r as ERC721TokenInfo
     } catch (error) {
         void 0
