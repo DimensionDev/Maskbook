@@ -57,7 +57,7 @@ export const InitialPlaceholder = memo(() => {
                 </Typography>
             </Box>
             <Button variant="contained" color="primary" className={classes.button} onClick={onEnter}>
-                Enter Dashboard
+                {t('browser_action_enter_dashboard')}
             </Button>
         </Box>
     )

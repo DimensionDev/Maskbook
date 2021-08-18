@@ -6,6 +6,7 @@ import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { getTokenUSDValue } from '../../../../../plugins/Wallet/helpers'
 import { ArrowDownCircle, ArrowUpCircle } from 'react-feather'
 import { InteractionCircleIcon } from '@masknet/icons'
+import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles(() => ({
     content: {
@@ -48,6 +49,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const TokenDetail = memo(() => {
+    const { t } = useI18N()
     const classes = useStyles()
     const { currentToken } = useContainer(WalletContext)
 
@@ -75,7 +77,6 @@ const TokenDetail = memo(() => {
                         value={currentToken.balance}
                         decimals={currentToken.token.decimals}
                         symbol={currentToken.token.symbol}
-                        // classes={{ symbol: classes.symbol }}
                     />
                 </Typography>
                 <Typography className={classes.text}>
@@ -84,15 +85,15 @@ const TokenDetail = memo(() => {
                 <div className={classes.controller}>
                     <div onClick={openLabPage}>
                         <ArrowDownCircle className={classes.icon} />
-                        <Typography className={classes.text}>Buy</Typography>
+                        <Typography className={classes.text}>{t('popups_wallet_token_buy')}</Typography>
                     </div>
                     <div>
                         <ArrowUpCircle className={classes.icon} />
-                        <Typography className={classes.text}>Send</Typography>
+                        <Typography className={classes.text}>{t('popups_wallet_token_send')}</Typography>
                     </div>
                     <div onClick={openLabPage}>
                         <InteractionCircleIcon className={classes.icon} />
-                        <Typography className={classes.text}>Swap</Typography>
+                        <Typography className={classes.text}>{t('popups_wallet_token_swap')}</Typography>
                     </div>
                 </div>
             </div>

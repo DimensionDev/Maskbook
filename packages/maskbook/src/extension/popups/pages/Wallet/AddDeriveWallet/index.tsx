@@ -7,6 +7,7 @@ import { useAsync } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { DeriveWalletTable } from '../components/DeriveWalletTable'
 import { currySameAddress, useWallets } from '@masknet/web3-shared'
+import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -46,6 +47,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const AddDeriveWallet = memo(() => {
+    const { t } = useI18N()
     const location = useLocation()
     const classes = useStyles()
     const wallets = useWallets()
@@ -81,10 +83,14 @@ const AddDeriveWallet = memo(() => {
     return (
         <div className={classes.container}>
             <div className={classes.header}>
-                <Typography className={classes.title}>Import the wallet</Typography>
+                <Typography className={classes.title}>{t('plugin_wallet_import_wallet')}</Typography>
                 <NetworkSelector />
             </div>
-            <Typography className={classes.path}>Derivation path ({HD_PATH_WITHOUT_INDEX_ETHEREUM})</Typography>
+            <Typography className={classes.path}>
+                {t('popups_wallet_derivation_path', {
+                    path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
+                })}
+            </Typography>
             <DeriveWalletTable loading={loading} dataSource={dataSource} onAdd={onAdd} />
             <div className={classes.controller}>
                 <Button
@@ -92,14 +98,14 @@ const AddDeriveWallet = memo(() => {
                     className={classes.button}
                     disabled={page === 0 || loading}
                     onClick={() => setPage((prev) => prev - 1)}>
-                    Previous
+                    {t('popups_wallet_previous')}
                 </Button>
                 <Button
                     variant="contained"
                     className={classes.button}
                     onClick={() => setPage((prev) => prev + 1)}
                     disabled={loading}>
-                    Next
+                    {t('popups_wallet_next')}
                 </Button>
             </div>
         </div>

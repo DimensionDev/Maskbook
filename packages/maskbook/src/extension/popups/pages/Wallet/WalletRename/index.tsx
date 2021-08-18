@@ -4,6 +4,7 @@ import { StyledInput } from '../../../components/StyledInput'
 import { useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useHistory } from 'react-router'
+import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles(() => ({
     header: {
@@ -29,6 +30,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const WalletRename = memo(() => {
+    const { t } = useI18N()
     const history = useHistory()
     const classes = useStyles()
     const wallet = useWallet()
@@ -41,7 +43,7 @@ const WalletRename = memo(() => {
     return (
         <>
             <div className={classes.header}>
-                <Typography className={classes.title}>Rename</Typography>
+                <Typography className={classes.title}>{t('rename')}</Typography>
             </div>
             <div className={classes.content}>
                 <StyledInput value={name} onChange={(e) => setName(e.target.value)} />
@@ -51,7 +53,7 @@ const WalletRename = memo(() => {
                     disabled={!name}
                     className={classes.button}
                     onClick={renameWallet}>
-                    Confirm
+                    {t('confirm')}
                 </Button>
             </div>
         </>

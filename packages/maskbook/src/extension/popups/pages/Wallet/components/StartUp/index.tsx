@@ -75,7 +75,7 @@ export const WalletStartUp = memo(() => {
         <Box className={classes.container}>
             <Alert icon={false} severity="info" className={classes.alert}>
                 <AlertTitle className={classes.alertTitle}>{t('popups_welcome')}</AlertTitle>
-                <Typography className={classes.alertContent}>{t('popups_wallet_startUp_tip')}</Typography>
+                <Typography className={classes.alertContent}>{t('popups_wallet_start_up_tip')}</Typography>
             </Alert>
             <Box className={classes.content}>
                 <Box className={classes.header}>

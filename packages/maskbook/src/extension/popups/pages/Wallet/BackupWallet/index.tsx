@@ -8,6 +8,7 @@ import { File as FileIcon } from '@masknet/icons'
 import { useWallet } from '@masknet/web3-shared'
 import { useAsync } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles(() => ({
     header: {
@@ -107,13 +108,14 @@ enum BackupTabs {
 }
 
 const BackupWallet = memo(() => {
+    const { t } = useI18N()
     const classes = useStyles()
     const wallet = useWallet()
     const [confirmed, setConfirmed] = useState(false)
     const [currentTab, setCurrentTab] = useState(BackupTabs.JsonFile)
     const [password, setPassword] = useState('')
 
-    const { value: [privateKeyInHex, mnemonic] = ['', []] } = useAsync(async () => {
+    const { value: [privateKeyInHex] = ['', []] } = useAsync(async () => {
         if (!wallet) return
         const record = await WalletRPC.getWallet(wallet.address)
         if (!record) return
@@ -130,14 +132,14 @@ const BackupWallet = memo(() => {
     return (
         <>
             <div className={classes.header}>
-                <Typography className={classes.title}>Back up the wallet</Typography>
+                <Typography className={classes.title}>{t('popups_wallet_backup_wallet')}</Typography>
                 <NetworkSelector />
             </div>
             <div className={classes.content}>
                 <TabContext value={currentTab}>
                     <StyledTabs value={currentTab} onChange={(event, tab) => setCurrentTab(tab)}>
-                        <StyledTab label="Json File" value={BackupTabs.JsonFile} />
-                        <StyledTab label="Private Key" value={BackupTabs.PrivateKey} />
+                        <StyledTab label={t('popups_wallet_backup_json_file')} value={BackupTabs.JsonFile} />
+                        <StyledTab label={t('popups_wallet_backup_private_key')} value={BackupTabs.PrivateKey} />
                     </StyledTabs>
                     {confirmed ? (
                         <>
@@ -149,8 +151,7 @@ const BackupWallet = memo(() => {
                                     <FileIcon style={{ fontSize: 32, width: 32, height: 32 }} />
                                 </div>
                                 <Typography className={classes.tip}>
-                                    This file has been encrypted and stored with your current password. Your current
-                                    password is needed to decrypt this file when using it to import wallet.
+                                    {t('popups_wallet_backup_json_file_confirm_password_tip')}
                                 </Typography>
                             </TabPanel>
                             <TabPanel
@@ -159,8 +160,7 @@ const BackupWallet = memo(() => {
                                 style={{ flex: currentTab === BackupTabs.PrivateKey ? '1' : '0' }}>
                                 <Typography className={classes.privateKey}>{privateKeyInHex}</Typography>
                                 <Typography className={classes.tip}>
-                                    Please don’t show anyone your private key. The private key can be used in any wallet
-                                    that supports ETH without decryption.
+                                    {t('popups_wallet_backup_private_key_tip')}
                                 </Typography>
                             </TabPanel>
                         </>
@@ -170,7 +170,7 @@ const BackupWallet = memo(() => {
                             <StyledInput
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Input your password"
+                                placeholder={t('popups_wallet_backup_input_password')}
                             />
                         </div>
                     )}
@@ -185,7 +185,7 @@ const BackupWallet = memo(() => {
                         className={classes.button}
                         disabled={!confirmed && !password}
                         onClick={onConfirm}>
-                        {!confirmed ? 'Next' : 'Download'}
+                        {!confirmed ? t('popups_wallet_next') : t('download')}
                     </Button>
                 </div>
             ) : null}

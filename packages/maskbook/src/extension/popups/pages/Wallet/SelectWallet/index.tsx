@@ -7,6 +7,7 @@ import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
 import { DialogRoutes } from '../../../index'
+import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles(() => ({
     content: {
@@ -59,6 +60,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const SelectWallet = memo(() => {
+    const { t } = useI18N()
     const classes = useStyles()
     const history = useHistory()
     const wallet = useWallet()
@@ -92,13 +94,13 @@ const SelectWallet = memo(() => {
                     className={classes.button}
                     onClick={() => history.goBack()}
                     style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}>
-                    Cancel
+                    {t('cancel')}
                 </Button>
                 <Button
                     variant="contained"
                     className={classes.button}
                     onClick={() => history.push(DialogRoutes.CreateWallet)}>
-                    Import
+                    {t('import')}
                 </Button>
             </div>
         </>

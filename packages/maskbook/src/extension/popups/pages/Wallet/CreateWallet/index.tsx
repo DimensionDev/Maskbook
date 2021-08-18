@@ -5,6 +5,7 @@ import { StyledInput } from '../../../components/StyledInput'
 import { useHistory } from 'react-router-dom'
 import { useWalletHD } from '../../../../../web3/hooks/useWalletHD'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles(() => ({
     header: {
@@ -38,6 +39,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const CreateWallet = memo(() => {
+    const { t } = useI18N()
     const history = useHistory()
     const classes = useStyles()
     const [name, setName] = useState('')
@@ -60,13 +62,13 @@ const CreateWallet = memo(() => {
                 <div>
                     <Typography className={classes.label}>Wallet Name</Typography>
                     <StyledInput
-                        placeholder="Enter your wallet name"
+                        placeholder={t('popups_wallet_enter_your_wallet_name')}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
                 </div>
                 <Button variant="contained" className={classes.button} disabled={!name} onClick={onCreate}>
-                    Confirm
+                    {t('confirm')}
                 </Button>
             </div>
         </>

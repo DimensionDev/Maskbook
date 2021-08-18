@@ -3,6 +3,7 @@ import { makeStyles, Typography } from '@material-ui/core'
 import { useDropArea } from 'react-use'
 import { File as FileIcon } from '@masknet/icons'
 import { blobToText } from '@dimensiondev/kit'
+import { useI18N } from '../../../../../../utils'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,6 +43,7 @@ export interface JsonFileBox {
 }
 
 export const JsonFileBox = memo<JsonFileBox>(({ onChange }) => {
+    const { t } = useI18N()
     const classes = useStyles()
     const inputRef = useRef<HTMLInputElement>(null)
     const [file, setFile] = useState<File | null>()
@@ -73,7 +75,11 @@ export const JsonFileBox = memo<JsonFileBox>(({ onChange }) => {
                 <div className={classes.enter} data-active={over} onClick={() => inputRef.current?.click()}>
                     <FileIcon style={{ fontSize: 32, width: 32, height: 32 }} />
                     <Typography className={classes.tips}>
-                        {over ? 'Drag your file into here…' : file ? file.name : 'Click or drag your file here'}
+                        {over
+                            ? t('popups_wallet_backup_json_file_drag_tip')
+                            : file
+                            ? file.name
+                            : t('popups_wallet_backup_json_file_click_tip')}
                     </Typography>
                 </div>
             </div>

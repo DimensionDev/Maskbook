@@ -13,6 +13,7 @@ import { uniqBy } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import { TokenList } from '@masknet/shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles(() => ({
     header: {
@@ -45,6 +46,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const AddToken = memo(() => {
+    const { t } = useI18N()
     const classes = useStyles()
     const wallet = useWallet()
     const { ERC20_TOKEN_LISTS } = useEthereumConstants()
@@ -64,9 +66,9 @@ const AddToken = memo(() => {
     )
 
     const placeholder = useMemo(() => {
-        if (erc20TokensDetailedLoading) return 'Loading token lists'
-        if (loadingAssets) return 'Loading token assets'
-        if (!assets.length) return 'No token found'
+        if (erc20TokensDetailedLoading) return t('popups_wallet_loading_token_list')
+        if (loadingAssets) return t('popups_wallet_loading_token_assets')
+        if (!assets.length) return t('popups_wallet_no_token_found')
         return undefined
     }, [erc20TokensDetailedLoading, loadingAssets, renderTokens])
 
@@ -84,13 +86,13 @@ const AddToken = memo(() => {
 
     return (
         <>
-            <div className={classes.header}>Add Token</div>
+            <div className={classes.header}>{t('add_token')}</div>
             <div className={classes.content}>
-                <Typography className={classes.label}>Token</Typography>
+                <Typography className={classes.label}>{t('popups_wallet_token')}</Typography>
                 <TokenList onSelect={onSubmit} assets={assets} loading={loadingAssets} placeholder={placeholder} />
             </div>
             <div style={{ padding: 16 }}>
-                <Button className={classes.button}>Go back</Button>
+                <Button className={classes.button}>{t('popups_wallet_go_back')}</Button>
             </div>
         </>
     )

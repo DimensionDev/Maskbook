@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { Alert, AlertTitle, Box, makeStyles, Typography } from '@material-ui/core'
 import { ImportWalletIcon, MasksIcon } from '@masknet/icons'
 import { EnterDashboard } from '../../../../components/EnterDashboard'
+import { useI18N } from '../../../../../../utils'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -45,23 +46,22 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const PersonaStartUp = memo(() => {
+    const { t } = useI18N()
     const classes = useStyles()
     return (
         <Box className={classes.container}>
             <Alert icon={false} severity="info" className={classes.alert}>
                 <AlertTitle className={classes.alertTitle}>Welcome</AlertTitle>
-                <Typography className={classes.alertContent}>
-                    Connect to your Personas，Create a new Personas or Restore backups.
-                </Typography>
+                <Typography className={classes.alertContent}>{t('popups_persona_start_up_tip')}</Typography>
             </Alert>
             <Box className={classes.content}>
                 <Box className={classes.item}>
                     <MasksIcon sx={{ fontSize: 20 }} />
-                    <Typography className={classes.itemTitle}>New Persona</Typography>
+                    <Typography className={classes.itemTitle}>{t('popups_persona_new_persona')}</Typography>
                 </Box>
                 <Box className={classes.item}>
                     <ImportWalletIcon sx={{ fontSize: 20 }} />
-                    <Typography className={classes.itemTitle}>Restore Backups</Typography>
+                    <Typography className={classes.itemTitle}>{t('popups_persona_restore_backups')}</Typography>
                 </Box>
             </Box>
             <EnterDashboard />

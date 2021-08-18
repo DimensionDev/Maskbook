@@ -6,6 +6,7 @@ import { StyledInput } from '../../../components/StyledInput'
 import { useHistory } from 'react-router-dom'
 import { useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles(() => ({
     content: {
@@ -65,6 +66,7 @@ const useStyles = makeStyles(() => ({
 
 //TODO: password confirm
 const DeleteWallet = memo(() => {
+    const { t } = useI18N()
     const history = useHistory()
     const wallet = useWallet()
     const classes = useStyles()
@@ -86,10 +88,8 @@ const DeleteWallet = memo(() => {
                     <WarningIcon style={{ fontSize: 48 }} />
                     <Typography className={classes.title}>Delete Wallet</Typography>
                 </div>
-                <Typography className={classes.tip}>
-                    Are you sure you want to delete this wallet? Your wallet cannot be recovered without seed phrase.
-                </Typography>
-                <Typography className={classes.label}>Confirm with payment password</Typography>
+                <Typography className={classes.tip}>{t('popups_wallet_delete_tip')}</Typography>
+                <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
                 <StyledInput
                     placeholder="Input your password"
                     value={password}
@@ -102,10 +102,10 @@ const DeleteWallet = memo(() => {
                     color="inherit"
                     className={classes.cancelButton}
                     onClick={() => history.goBack()}>
-                    Cancel
+                    {t('cancel')}
                 </Button>
                 <Button variant="contained" color="error" className={classes.deleteButton} onClick={onConfirm}>
-                    Delete
+                    {t('delete')}
                 </Button>
             </div>
         </>
