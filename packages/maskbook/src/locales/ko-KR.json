@@ -508,13 +508,10 @@
     "plugin_ito_amount_unlocked": "{{amount}} {{symbol}} 언락됨",
     "plugin_ito_amount_unlocked_infinity": "언락된 인피니티 {{symbol}}",
     "plugin_ito_unlocking_symbol": "{{symbol}} 언락 중",
-<<<<<<< HEAD
-=======
     "plugin_ito_continue": "",
     "plugin_ito_view_on_explorer": "",
     "plugin_ito_placeholder_when_token_unselected": "",
     "plugin_collectible_you": "You",
->>>>>>> 33d3264d1 (fix: i18n)
     "plugin_collectible_done": "닫기",
     "plugin_collectible_retry": "다시 시도하기",
     "plugin_collectible_sell": "매도",
