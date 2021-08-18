@@ -3,11 +3,11 @@ import { createDBAccess } from '../../../database/helpers/openDB'
 import type {
     ERC1155TokenRecordInDatabase,
     ERC20TokenRecordInDatabase,
-    ERC721TokenRecordInDatabase,
     PhraseRecordInDatabase,
     TransactionChunkRecordInDatabase,
     WalletRecordInDatabase,
 } from './types'
+import type { ERC721TokenRecordInDatabase } from '@masknet/web3-shared'
 
 function path<T>(x: T) {
     return x

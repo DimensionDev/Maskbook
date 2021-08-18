@@ -5,7 +5,7 @@ import {
     ERC721Token,
     NativeToken,
     NetworkType,
-    NonFungibleTokenDetailed,
+    ERC721TokenDetailed,
     ProviderType,
     CollectibleProvider,
 } from '../types'
@@ -126,7 +126,7 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: Colle
 export function resolveCollectibleLink(
     chainId: ChainId,
     provider: CollectibleProvider,
-    { address, tokenId }: NonFungibleTokenDetailed,
+    { contractDetailed: { address }, tokenId }: ERC721TokenDetailed,
 ) {
     switch (provider) {
         case CollectibleProvider.OPENSEAN:

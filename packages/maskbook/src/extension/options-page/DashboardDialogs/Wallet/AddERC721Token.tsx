@@ -4,37 +4,34 @@ import { Octagon as OctagonIcon } from 'react-feather'
 import { EthereumAddress } from 'wallet.ts'
 import { useI18N } from '../../../../utils'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
-import { useERC721TokenAssetDetailed, useERC721TokenDetailed } from '@masknet/web3-shared'
+import { useERC721TokenDetailed, useERC721ContractDetailed } from '@masknet/web3-shared'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
 import type { WalletProps } from './types'
 
 export function DashboardWalletAddERC721TokenDialog(props: WrappedDialogProps<WalletProps>) {
-    const { wallet } = props.ComponentProps!
-
     const { t } = useI18N()
     const [tokenId, setTokenId] = useState('')
     const [address, setAddress] = useState('')
 
-    const tokenDetailed = useERC721TokenDetailed(address)
-    const assetDetailed = useERC721TokenAssetDetailed(tokenDetailed.value)
+    const { value: contractDetailed, loading: loadingContract } = useERC721ContractDetailed(address)
+    const { value: tokenDetailed, loading: loadingToken } = useERC721TokenDetailed(contractDetailed, tokenId)
+
+    const loading = loadingContract || loadingToken
 
     const onSubmit = useSnackbarCallback(
         async () => {
-            if (!tokenDetailed.value || !assetDetailed.value) return
-            await WalletRPC.addERC721Token({
-                ...tokenDetailed.value,
-                asset: assetDetailed.value,
-            })
+            if (!tokenDetailed) return
+            await WalletRPC.addERC721Token(tokenDetailed)
         },
-        [tokenDetailed, assetDetailed],
+        [tokenDetailed],
         props.onClose,
     )
 
     const validationMessage = useMemo(() => {
-        if (EthereumAddress.isValid(address)) return t('wallet_add_nft_invalid_address')
+        if (!EthereumAddress.isValid(address)) return t('wallet_add_nft_invalid_address')
         return ''
-    }, [address, tokenId])
+    }, [address])
 
     return (
         <DashboardDialogCore {...props}>
@@ -61,7 +58,14 @@ export function DashboardWalletAddERC721TokenDialog(props: WrappedDialogProps<Wa
                 }
                 footer={
                     <DebounceButton
-                        disabled={!!validationMessage || !address || !tokenId || tokenDetailed.loading}
+                        disabled={
+                            !!validationMessage ||
+                            !address ||
+                            !tokenId ||
+                            !contractDetailed ||
+                            !tokenDetailed ||
+                            loading
+                        }
                         variant="contained"
                         onClick={onSubmit}>
                         {validationMessage || t('add_asset')}
