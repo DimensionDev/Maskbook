@@ -14,13 +14,13 @@ import type {
 function resolveZRXLink(networkType: NetworkType) {
     switch (networkType) {
         case NetworkType.Binance:
-            return `https://bsc.${ZRX_BASE_URL}`
+            return `${ZRX_BASE_URL.replace(/(.{8})/, '$1bsc.')}`
         case NetworkType.Ethereum:
-            return `https://${ZRX_BASE_URL}`
+            return `${ZRX_BASE_URL}`
         case NetworkType.Polygon:
-            return `https://polygon.${ZRX_BASE_URL}`
+            return `${ZRX_BASE_URL.replace(/(.{8})/, '$1polygon.')}`
         case NetworkType.Arbitrum:
-            return `https://${ZRX_BASE_URL}`
+            return ''
         default:
             safeUnreachable(networkType)
             return ''
