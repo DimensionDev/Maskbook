@@ -1,3 +1,4 @@
+import type { TransactionConfig as TransactionConfig_ } from 'web3-core'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
 
 export enum CurrencyType {
@@ -240,6 +241,12 @@ export enum EthereumTransactionType {
     SIGN_PERSONAL = 'personal_sign',
     ETH_DECRYPT = 'eth_decrypt',
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
+}
+
+export type EthereumTransactionConfig = TransactionConfig_ & {
+    // EIP1159
+    maxFeePerGas?: string
+    maxPriorityFeePerGas?: string
 }
 
 export enum TransactionEventType {

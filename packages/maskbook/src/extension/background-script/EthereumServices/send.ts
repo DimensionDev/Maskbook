@@ -1,7 +1,14 @@
 import { EthereumAddress } from 'wallet.ts'
-import type { HttpProvider, TransactionConfig } from 'web3-core'
+import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { addGasMargin, ChainId, EthereumMethodType, isEIP1159Supported, ProviderType } from '@masknet/web3-shared'
+import {
+    addGasMargin,
+    ChainId,
+    EthereumMethodType,
+    EthereumTransactionConfig,
+    isEIP1159Supported,
+    ProviderType,
+} from '@masknet/web3-shared'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/kit'
 import * as MetaMask from './providers/MetaMask'
@@ -112,13 +119,7 @@ export async function INTERNAL_send(
     }
 
     async function sendTransaction() {
-        const [config] = payload.params as [
-            TransactionConfig & {
-                // EIP1159
-                maxFeePerGas?: string
-                maxPriorityFeePerGas?: string
-            },
-        ]
+        const [config] = payload.params as [EthereumTransactionConfig]
 
         // add nonce
         if (providerType === ProviderType.Maskbook && config.from) config.nonce = await getNonce(config.from as string)
