@@ -20,7 +20,9 @@ export async function swapQuote(request: SwapQuoteRequest) {
         params.set('buyTokenPercentageFee', new BigNumber(request.buyTokenPercentageFee).dividedBy(100).toFixed())
     if (request.includedSources) params.set('includedSources', request.includedSources.join())
     if (request.excludedSources) params.set('excludedSources', request.excludedSources.join())
+
     const response = await fetch(`${ZRX_BASE_URL}/swap/v1/quote?${params.toString()}`)
+
     const response_ = (await response.json()) as SwapQuoteResponse | SwapErrorResponse
 
     const validationErrorResponse = response_ as SwapValidationErrorResponse
