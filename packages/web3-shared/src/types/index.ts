@@ -201,6 +201,8 @@ export enum EthereumTokenType {
 // Learn more for a full list of supported JSON RPC methods
 // https://eth.wiki/json-rpc/API#json-rpc-methods
 export enum EthereumMethodType {
+    WATCH_ASSET = 'wallet_watchAsset',
+    WATCH_ASSET_LEGACY = 'metamask_watchAsset',
     PERSONAL_SIGN = 'personal_sign',
     WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
@@ -215,8 +217,29 @@ export enum EthereumMethodType {
     ETH_ESTIMATE_GAS = 'eth_estimateGas',
     ETH_CALL = 'eth_call',
     ETH_SIGN = 'eth_sign',
+    ETH_DECRYPT = 'eth_decrypt',
+    ETH_SIGN_TYPED_DATA = 'eth_signTypedData',
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
     ETH_GET_LOGS = 'eth_getLogs',
+    ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
+}
+
+export enum EthereumTransactionType {
+    CANCEL = 'cancel',
+    RETRY = 'retry', // speed up
+    TOKEN_APPROVE = 'approve',
+    TOKEN_TRANSFER = 'transfer',
+    TOKEN_TRANSFER_FROM = 'transferFrom',
+    SEND_ETHER = 'sendEther',
+    CONTRACT_INTERACTION = 'contractInteraction',
+    CONTRACT_DEPLOYMENT = 'contractDeployment',
+
+    // some special RPC methods
+    SIGN = 'eth_sign',
+    SIGN_TYPED_DATA = 'eth_signTypedData',
+    SIGN_PERSONAL = 'personal_sign',
+    ETH_DECRYPT = 'eth_decrypt',
+    ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
 }
 
 export enum TransactionEventType {
