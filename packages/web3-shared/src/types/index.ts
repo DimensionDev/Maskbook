@@ -106,6 +106,7 @@ export interface ERC721ContractDetailed extends ERC721Token {
     name: string
     symbol: string
     baseURI?: string
+    iconURL?: string
 }
 
 export interface ERC721TokenInfo {

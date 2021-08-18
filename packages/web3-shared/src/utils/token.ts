@@ -56,6 +56,7 @@ export function createERC721ContractDetailed(
     name: string,
     symbol: string,
     baseURI?: string,
+    iconURL?: string,
 ): ERC721ContractDetailed {
     return {
         type: EthereumTokenType.ERC721,
@@ -64,6 +65,7 @@ export function createERC721ContractDetailed(
         name,
         symbol,
         baseURI,
+        iconURL,
     }
 }
 

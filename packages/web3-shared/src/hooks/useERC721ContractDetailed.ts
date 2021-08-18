@@ -5,19 +5,28 @@ import { useChainId } from './useChainId'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { createERC721ContractDetailed, safeNonPayableTransactionCall } from '../utils'
 import type { ERC721 } from '../../../web3-contracts/types/ERC721'
+import { useOpenseaAPIConstants } from '../constants'
 
 export function useERC721ContractDetailed(address: string) {
     const chainId = useChainId()
+    const { GET_CONTRACT_URL } = useOpenseaAPIConstants()
     const erc721TokenContract = useERC721TokenContract(address)
     return useAsyncRetry(async () => {
         if (!EthereumAddress.isValid(address) || !erc721TokenContract) return
-        return getERC721ContractDetailed(address, chainId, erc721TokenContract)
+        if (!GET_CONTRACT_URL) return getERC721ContractDetailedFromChain(address, chainId, erc721TokenContract)
+        const contractDetailedFromOpensea = await getERC721ContractDetailedFromOpensea(
+            address,
+            chainId,
+            GET_CONTRACT_URL,
+        )
+
+        return contractDetailedFromOpensea ?? getERC721ContractDetailedFromChain(address, chainId, erc721TokenContract)
     }, [chainId, erc721TokenContract, address])
 }
 
 const lazyBlank = Promise.resolve('')
 
-async function getERC721ContractDetailed(address: string, chainId: ChainId, erc721TokenContract: ERC721) {
+async function getERC721ContractDetailedFromChain(address: string, chainId: ChainId, erc721TokenContract: ERC721) {
     const results = await Promise.allSettled([
         safeNonPayableTransactionCall(erc721TokenContract.methods.name()) ?? lazyBlank,
         safeNonPayableTransactionCall(erc721TokenContract.methods.symbol()) ?? lazyBlank,
@@ -28,4 +37,19 @@ async function getERC721ContractDetailed(address: string, chainId: ChainId, erc7
     ) as string[]
 
     return createERC721ContractDetailed(chainId, address, name, symbol, baseURI)
+}
+
+async function getERC721ContractDetailedFromOpensea(address: string, chainId: ChainId, getContractApiUrl: string) {
+    const response = await fetch(`${getContractApiUrl}/${address}`)
+    type openseaContractData = {
+        name: string
+        symbol: string
+        image_url: string
+    }
+    if (response.ok) {
+        const data: openseaContractData = await response.json()
+        console.log({ data })
+        return createERC721ContractDetailed(chainId, address, data.name, data.symbol, undefined, data.image_url)
+    }
+    return null
 }
