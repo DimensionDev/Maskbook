@@ -1,7 +1,7 @@
 import { NetworkType } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { first } from 'lodash-es'
-import { BIPS_BASE, ZRX_BASE_URL } from '../../constants'
+import { BIPS_BASE, ZRX_BASE_URL, ZRX_URL_BSC, ZRX_URL_POLYGON } from '../../constants'
 import type {
     SwapErrorResponse,
     SwapQuoteRequest,
@@ -12,8 +12,8 @@ import type {
 
 const zrxLink: Record<NetworkType, string> = {
     [NetworkType.Arbitrum]: '',
-    [NetworkType.Binance]: ZRX_BASE_URL.replace(/(.{8})/, '$1bsc.'),
-    [NetworkType.Polygon]: ZRX_BASE_URL.replace(/(.{8})/, '$1polygon.'),
+    [NetworkType.Binance]: ZRX_URL_BSC,
+    [NetworkType.Polygon]: ZRX_URL_POLYGON,
     [NetworkType.Ethereum]: ZRX_BASE_URL,
 }
 
