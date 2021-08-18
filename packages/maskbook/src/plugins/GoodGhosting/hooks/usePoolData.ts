@@ -1,5 +1,6 @@
 import { useChainId, useERC20TokenContract } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
+import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { DAI, WETH } from '../constants'
@@ -14,6 +15,7 @@ export function usePoolData(info: GoodGhostingInfo) {
     const adaiContract = useERC20TokenContract(info.adaiTokenAddress)
     const incentivesContract = useGoodGhostingIncentiveContract()
     const chainId = useChainId()
+    const [currentData, setCurrentData] = useState<LendingPoolData>()
 
     const asyncResult = useAsyncRetry(async () => {
         if (!contract || !lendingPoolContract || !adaiContract || !incentivesContract) return {}
@@ -28,17 +30,22 @@ export function usePoolData(info: GoodGhostingInfo) {
         const poolAPY = rawADaiAPY.dividedBy(10 ** 27).multipliedBy(100)
 
         const poolEarnings = info.gameHasEnded
-            ? info.totalGameInterest
+            ? new BigNumber(info.totalGameInterest)
             : new BigNumber(totalAdai).minus(new BigNumber(info.totalGamePrincipal))
 
-        return {
+        const data = {
             reward,
             poolAPY,
             poolEarnings,
         }
-    })
+        setCurrentData(data)
+        return data
+    }, [info.gameHasEnded, info.totalGameInterest, info.totalGamePrincipal])
 
-    return asyncResult as AsyncStateRetry<LendingPoolData>
+    return {
+        ...asyncResult,
+        value: asyncResult.value || currentData,
+    } as AsyncStateRetry<LendingPoolData>
 }
 
 export function useGameToken() {
