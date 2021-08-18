@@ -63,6 +63,10 @@ export interface BackupJSONFileVersion2 {
         /** @deprecated */
         recipientGroups: never[] // Array<GroupIdentifier.toText()>
         foundAt: number // Unix timestamp
+        encryptBy?: string // PersonaIdentifier.toText()
+        url?: string
+        summary?: string
+        interestedMeta?: string // encoded by MessagePack
     }>
     wallets: Array<{
         address: string

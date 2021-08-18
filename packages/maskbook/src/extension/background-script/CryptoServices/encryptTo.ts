@@ -2,7 +2,7 @@ import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import { GunAPI as Gun2 } from '../../../network/gun'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
-import { queryPrivateKey, queryLocalKey } from '../../../database'
+import { queryPrivateKey, queryLocalKey, queryProfile } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { getNetworkWorker } from '../../../social-network/worker'
@@ -42,6 +42,7 @@ export async function encryptTo(
     if (publicShared) to = []
     const [recipients, toKey] = await prepareRecipientDetail(to)
 
+    const usingPersona = await queryProfile(whoAmI)
     const minePrivateKey = await queryPrivateKey(whoAmI)
     if (!minePrivateKey) throw new TypeError('Not inited yet')
     const stringifiedContent = Alpha38.typedMessageStringify(content)
@@ -85,6 +86,7 @@ export async function encryptTo(
         postCryptoKey: postAESKey,
         recipients: recipients,
         foundAt: new Date(),
+        encryptBy: usingPersona.linkedPersona?.identifier,
     }
     if (Flags.v2_enabled) {
         if (isTypedMessageText(content)) {
