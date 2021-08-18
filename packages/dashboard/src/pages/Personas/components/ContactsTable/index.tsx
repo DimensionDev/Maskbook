@@ -114,7 +114,6 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
         const t = useDashboardI18N()
         const classes = useStyles()
 
-        console.log(page)
         return (
             <>
                 <TableContainer className={classes.container}>
