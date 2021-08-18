@@ -1,5 +1,11 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { FungibleTokenDetailed, isNative, useBlockNumber, useTokenConstants } from '@masknet/web3-shared'
+import {
+    FungibleTokenDetailed,
+    isNative,
+    useBlockNumber,
+    useNetworkType,
+    useTokenConstants,
+} from '@masknet/web3-shared'
 import { difference } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
@@ -17,7 +23,7 @@ export function useTrade(
 ) {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const blockNumber = useBlockNumber()
-
+    const networkType = useNetworkType()
     const slippage = useSlippageTolerance()
     const { pools } = useTradeProviderSettings()
     return useAsyncRetry(async () => {
@@ -27,7 +33,7 @@ export function useTrade(
         if (outputAmount === '0' && !isExactIn) return null
         const sellToken = isNative(inputToken.address) ? 'ETH' : inputToken.address
         const buyToken = isNative(outputToken.address) ? 'ETH' : outputToken.address
-        return PluginTraderRPC.swapQuote({
+        return PluginTraderRPC.swapQuote(networkType, {
             sellToken,
             buyToken,
             sellAmount: isExactIn ? inputAmount : void 0,
