@@ -92,6 +92,7 @@ export async function addRecentTransaction(address: string, hash: string) {
         ? {
               ...chunk_,
               updatedAt: now,
+              // if the new transaction list is over the max size, then remove the overflow part
               transactions: transactions.slice(-MAX_RECENT_TRANSACTIONS_SIZE),
           }
         : {
@@ -103,7 +104,7 @@ export async function addRecentTransaction(address: string, hash: string) {
               transactions: [transactionIntoDB],
           }
 
-    // remove overflow transactions from the cache
+    // we also need to remove overflow transactions from the cache
     transactions
         .slice(0, -MAX_RECENT_TRANSACTIONS_SIZE)
         .forEach((x) => getTransactionReceiptWithCache.cache.delete(x.hash))
