@@ -130,19 +130,21 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                             <SuccessIcon sx={{ fontSize: 54 }} />
                             <SuccessTitle>{t.wallets_create_successfully_title()}</SuccessTitle>
                             <Box style={{ width: '100%' }}>
-                                <Typography className={classes.addressTitle}>Your wallet address</Typography>
+                                <Typography className={classes.addressTitle}>
+                                    {t.create_wallet_your_wallet_address()}
+                                </Typography>
                             </Box>
                             <Box className={classes.address}>
                                 {address}
                                 <CopyIcon className={classes.copy} onClick={() => onCopy(address)} />
                             </Box>
                             <Button fullWidth className={classes.button} onClick={onDoneClick}>
-                                Done
+                                {t.create_wallet_done()}
                             </Button>
                         </>
                     ) : (
                         <>
-                            <Typography className={classes.title}>Verify Mnemonic words</Typography>
+                            <Typography className={classes.title}>{t.create_wallet_verify_words()}</Typography>
                             <Box className={classes.confirm}>
                                 <DesktopMnemonicConfirm
                                     indexes={indexes}
@@ -156,7 +158,7 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                                 className={classes.button}
                                 disabled={!matched}
                                 onClick={onSubmit}>
-                                Verify
+                                {t.verify()}
                             </LoadingButton>
                         </>
                     )}

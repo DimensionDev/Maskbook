@@ -2,7 +2,7 @@ import { createIcon } from '../utils'
 
 export const MasksIcon = createIcon(
     'MasksIcon',
-    <>
+    <g>
         <rect
             x="3.594"
             y="13.04"
@@ -52,6 +52,6 @@ export const MasksIcon = createIcon(
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
         </defs>
-    </>,
+    </g>,
     '0 0 24 24',
 )

@@ -64,7 +64,7 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-export const CreateMnemonic = memo(() => {
+const CreateMnemonic = memo(() => {
     const location = useLocation()
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
@@ -142,17 +142,19 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
             </div>
             <Box className={classes.controller}>
                 <Button color="secondary" className={classes.button}>
-                    Cancel
+                    {t.cancel()}
                 </Button>
                 <Button className={classes.button} onClick={onVerifyClick}>
-                    Verify
+                    {t.verify()}
                 </Button>
             </Box>
             {open ? (
                 <Alert severity="error" onClose={() => setOpen(false)} className={classes.alert}>
-                    Do not forget to save your mnemonic phrase. You will need this to access your wallet.
+                    {t.create_wallet_mnemonic_tip()}
                 </Alert>
             ) : null}
         </div>
     )
 })
+
+export default CreateMnemonic

@@ -10,7 +10,7 @@ import AbstractTab, { AbstractTabProps } from '../../../../components/shared/Abs
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
 import type { FC } from 'react'
-import { useWalletHD } from '../../../../web3/hooks/useWalletHD'
+import { useWalletHD } from '../../../../plugins/Wallet/hooks/useWalletHD'
 
 const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({
     wrapper: {

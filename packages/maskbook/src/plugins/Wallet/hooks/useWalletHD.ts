@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { WalletRPC } from '../../plugins/Wallet/messages'
+import { WalletRPC } from '../messages'
 import { first } from 'lodash-es'
 import { useWallet } from '@masknet/web3-shared'
 

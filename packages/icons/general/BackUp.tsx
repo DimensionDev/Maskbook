@@ -2,7 +2,7 @@ import { createIcon } from '../utils'
 
 export const BackUpIcon = createIcon(
     'BackUpIcon',
-    <>
+    <g>
         <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -41,6 +41,6 @@ export const BackUpIcon = createIcon(
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
         </defs>
-    </>,
+    </g>,
     '0 0 20 20',
 )

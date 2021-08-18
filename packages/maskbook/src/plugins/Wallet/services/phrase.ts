@@ -123,7 +123,7 @@ export async function queryDerivableWalletFromPhrase(
     path = HD_PATH_WITHOUT_INDEX_ETHEREUM,
 ) {
     const result = []
-    for (let i = pageSize * (page - 1); i < pageSize * page; i += 1) {
+    for (let i = pageSize * (page - 1); i < pageSize * page && i < MAX_DERIVE_COUNT; i += 1) {
         const derivedWallet = await wallet.recoverWalletFromMnemonicWords(mnemonic, passphrase, `${path}/${i}`)
         const balance = await getBalance(derivedWallet.address)
         result.push({
@@ -157,7 +157,7 @@ export async function deriveWalletFromIndex(mnemonic: string[], passphrase: stri
     })
 
     // update the largest index
-    if (index + 1 > phrase.index) {
+    if (index + 1 > phrase.index && index + 1 < MAX_DERIVE_COUNT) {
         await updatePhrase({
             id: phrase.id,
             index: index + 1,

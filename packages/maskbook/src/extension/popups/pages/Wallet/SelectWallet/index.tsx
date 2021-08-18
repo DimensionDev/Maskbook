@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 import { Button, List, ListItem, ListItemText, makeStyles, Typography } from '@material-ui/core'
 import { WalletHeader } from '../components/WalletHeader'
 import { WalletInfo } from '../components/WalletInfo'
-import { ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
+import { isSameAddress, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
 import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
@@ -66,7 +66,10 @@ const SelectWallet = memo(() => {
     const wallet = useWallet()
     const wallets = useWallets(ProviderType.Maskbook)
 
-    const walletList = useMemo(() => wallets.filter((item) => item.address !== wallet?.address), [wallet, wallets])
+    const walletList = useMemo(
+        () => wallets.filter((item) => isSameAddress(item.address, wallet?.address)),
+        [wallet, wallets],
+    )
 
     return (
         <>

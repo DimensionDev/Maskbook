@@ -3,7 +3,7 @@ import { Button, makeStyles, Typography } from '@material-ui/core'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { StyledInput } from '../../../components/StyledInput'
 import { useHistory } from 'react-router-dom'
-import { useWalletHD } from '../../../../../web3/hooks/useWalletHD'
+import { useWalletHD } from '../../../../../plugins/Wallet/hooks/useWalletHD'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 

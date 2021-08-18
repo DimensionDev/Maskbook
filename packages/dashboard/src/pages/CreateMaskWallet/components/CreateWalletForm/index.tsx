@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 import { MaskColorVar } from '@masknet/theme'
+import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -58,7 +59,8 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-export const CreateWalletForm = memo(() => {
+const CreateWalletForm = memo(() => {
+    const t = useDashboardI18N()
     const [open, setOpen] = useState(true)
     const classes = useStyles()
     const navigate = useNavigate()
@@ -71,14 +73,14 @@ export const CreateWalletForm = memo(() => {
                     .string()
                     .min(8)
                     .max(20)
-                    .refine((input) => /[A-Z]/.test(input), 'Must contain an uppercase character')
-                    .refine((input) => /[a-z]/.test(input), 'Must contain a lowercase character')
-                    .refine((input) => /\d/.test(input), 'Must contain a number')
-                    .refine((input) => /[^\dA-Za-z]/.test(input), 'Must contain a special character'),
+                    .refine((input) => /[A-Z]/.test(input), t.create_wallet_password_uppercase_tip())
+                    .refine((input) => /[a-z]/.test(input), t.create_wallet_password_lowercase_tip())
+                    .refine((input) => /\d/.test(input), t.create_wallet_password_number_tip())
+                    .refine((input) => /[^\dA-Za-z]/.test(input), t.create_wallet_password_special_tip()),
                 confirm: zod.string().min(8).max(20),
             })
             .refine((data) => data.password === data.confirm, {
-                message: "Passwords don't match",
+                message: t.create_wallet_password_match_tip(),
                 path: ['confirm'],
             })
     }, [])
@@ -108,10 +110,10 @@ export const CreateWalletForm = memo(() => {
 
     return (
         <div className={classes.container}>
-            <Typography className={classes.title}>Create a wallet</Typography>
+            <Typography className={classes.title}>{t.create_wallet_form_title()}</Typography>
             <form className={classes.form}>
                 <Box>
-                    <Typography className={classes.label}>Wallet Name</Typography>
+                    <Typography className={classes.label}>{t.create_wallet_wallet_name()}</Typography>
                     <Controller
                         render={({ field }) => (
                             <TextField
@@ -119,7 +121,7 @@ export const CreateWalletForm = memo(() => {
                                 error={!!errors.name?.message}
                                 helperText={errors.name?.message}
                                 variant="filled"
-                                placeholder="Enter 1-12 characters"
+                                placeholder={t.create_wallet_name_placeholder()}
                                 className={classes.input}
                                 InputProps={{ disableUnderline: true }}
                             />
@@ -129,7 +131,7 @@ export const CreateWalletForm = memo(() => {
                     />
                 </Box>
                 <Box style={{ marginTop: 24 }}>
-                    <Typography className={classes.label}>Payment Password</Typography>
+                    <Typography className={classes.label}>{t.create_wallet_payment_password()}</Typography>
                     <Controller
                         control={control}
                         render={({ field }) => (
@@ -137,7 +139,7 @@ export const CreateWalletForm = memo(() => {
                                 {...field}
                                 type="password"
                                 variant="filled"
-                                placeholder="Payment Password"
+                                placeholder={t.create_wallet_payment_password()}
                                 error={!!errors.password?.message}
                                 helperText={errors.password?.message}
                                 className={classes.input}
@@ -154,7 +156,7 @@ export const CreateWalletForm = memo(() => {
                                 helperText={errors.confirm?.message}
                                 type="password"
                                 variant="filled"
-                                placeholder="Re-enter the payment password"
+                                placeholder={t.create_wallet_re_enter_payment_password()}
                                 className={classes.input}
                                 InputProps={{ disableUnderline: true }}
                             />
@@ -163,24 +165,23 @@ export const CreateWalletForm = memo(() => {
                         control={control}
                     />
                 </Box>
-                <Typography className={classes.tips}>
-                    The password must be between 8 and 20 characters and contains at least a number, a uppercase letter,
-                    a lowercase letter and a special character.
-                </Typography>
+                <Typography className={classes.tips}>{t.create_wallet_payment_password_tip()}</Typography>
                 <Box className={classes.controller}>
-                    <Button color="secondary" className={classes.button}>
-                        Cancel
+                    <Button color="secondary" className={classes.button} onClick={() => navigate(-1)}>
+                        {t.cancel()}
                     </Button>
                     <Button className={classes.button} onClick={onSubmit}>
-                        Next
+                        {t.next()}
                     </Button>
                 </Box>
                 {open ? (
                     <Alert severity="error" onClose={() => setOpen(false)} className={classes.alert}>
-                        Do not forget to save your mnemonic phrase. You will need this to access your wallet.
+                        {t.create_wallet_mnemonic_tip()}
                     </Alert>
                 ) : null}
             </form>
         </div>
     )
 })
+
+export default CreateWalletForm

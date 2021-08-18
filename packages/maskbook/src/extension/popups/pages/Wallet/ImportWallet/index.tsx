@@ -253,10 +253,7 @@ const ImportWallet = memo(() => {
                         control={control}
                     />
                 </div>
-                <Typography className={classes.tips}>
-                    Payment Password must be a combination of 2 categories out of numbers, letters and special
-                    characters with a length of 8-20 characters.
-                </Typography>
+                <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>
             </form>
             <TabContext value={currentTab}>
                 <Tabs

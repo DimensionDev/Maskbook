@@ -2,7 +2,7 @@ import { createIcon } from '../utils'
 
 export const TrashIcon = createIcon(
     'TrashIcon',
-    <>
+    <g>
         <g filter="url(#filter0_b)">
             <path
                 d="M3.333 9.246c0-.964.824-1.746 1.84-1.746h9.655c1.015 0 1.839.782 1.839 1.746v5.675c0 .964-.824 1.746-1.84 1.746H5.173c-1.015 0-1.839-.782-1.839-1.746V9.246z"
@@ -49,6 +49,6 @@ export const TrashIcon = createIcon(
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
         </defs>
-    </>,
+    </g>,
     '0 0 20 20',
 )

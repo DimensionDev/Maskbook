@@ -2,7 +2,7 @@ import { createIcon } from '../utils'
 
 export const InteractionCircleIcon = createIcon(
     'InteractionIcon',
-    <>
+    <g>
         <path
             d="M10.833 18.667a8.333 8.333 0 100-16.667 8.333 8.333 0 000 16.667z"
             strokeWidth="1.25"
@@ -22,6 +22,6 @@ export const InteractionCircleIcon = createIcon(
             strokeLinecap="round"
             strokeLinejoin="round"
         />
-    </>,
+    </g>,
     '0 0 20 20',
 )

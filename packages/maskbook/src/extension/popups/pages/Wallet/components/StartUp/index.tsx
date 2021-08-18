@@ -67,7 +67,7 @@ export const WalletStartUp = memo(() => {
     const onEnterCreateWallet = useCallback(() => {
         browser.tabs.create({
             active: true,
-            url: browser.runtime.getURL('/next.html#/create-mask-wallet/form'),
+            url: browser.runtime.getURL('/next.html#/create-mask-wallet'),
         })
     }, [])
 
