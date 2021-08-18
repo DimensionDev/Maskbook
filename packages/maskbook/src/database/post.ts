@@ -297,6 +297,12 @@ export interface PostRecord {
      * For others post, it is when you see it first time.
      */
     foundAt: Date
+    /** The URL of this post */
+    url?: string
+    /** Summary of this post (maybe front 20 chars). */
+    summary?: string
+    /** Interested metadata contained in this post. */
+    interestedMeta?: ReadonlyMap<string, unknown>
 }
 
 interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients'> {
