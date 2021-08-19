@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { makeStyles, Link, Tab, Tabs, Theme } from '@material-ui/core'
-import { useI18N, useSettingsSwticher, useValueRef } from '../../../../utils'
+import { useI18N, useSettingsSwitcher, useValueRef } from '../../../../utils'
 import type { TagType } from '../../types'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
@@ -146,7 +146,7 @@ export function TraderView(props: TraderViewProps) {
     //#endregion
 
     //#region current data provider switcher
-    const DataProviderSwitcher = useSettingsSwticher(
+    const DataProviderSwitcher = useSettingsSwitcher(
         currentDataProviderSettings,
         dataProviders,
         resolveDataProviderName,

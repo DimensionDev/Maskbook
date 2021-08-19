@@ -361,7 +361,7 @@
     "plugin_wallet_on_connect_in_firefox": "Connect",
     "plugin_wallet_return_mobile_wallet_options": "Return to Mobile Wallet Options",
     "plugin_wallet_view_qr_code": "View QR Code",
-    "plugin_wallet_switch_network": "Swtich to {{network}} Network",
+    "plugin_wallet_switch_network": "Switch to {{network}} Network",
     "plugin_wallet_switch_network_under_going": "Switching to {{network}} Network……",
     "plugin_wallet_not_availabe_on": "Not available on {{network}} Network.",
     "plugin_wallet_connect_wallet": "Connect Wallet",
