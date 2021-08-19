@@ -20,6 +20,7 @@ export interface PostContextSNSActions {
      * @returns a list of candidates of payload string.
      */
     payloadDecoder?(postContent: string): string[]
+    getURLFromPostIdentifier?(post: PostIdentifier): URL | null
 }
 export interface PostContextAuthor {
     readonly nickname: Subscription<string | null>
@@ -29,7 +30,6 @@ export interface PostContextAuthor {
     readonly postBy: Subscription<ProfileIdentifier>
     // TODO: rename to id
     readonly postID: Subscription<string | null>
-    readonly url: Subscription<URL | null>
 }
 export interface PostContextComment {
     readonly commentsSelector: LiveSelector<HTMLElement, false>
@@ -72,6 +72,7 @@ export interface PostContext extends PostContextAuthor {
     /** Auto computed */
     // TODO: rename to identifier
     readonly postIdentifier: Subscription<null | PostIdentifier<ProfileIdentifier>>
+    readonly url: Subscription<URL | null>
     // Meta
     // TODO: rename to mentionedLinks
     readonly postMentionedLinks: Subscription<string[]>

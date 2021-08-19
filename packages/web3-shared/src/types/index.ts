@@ -101,21 +101,31 @@ export interface ERC721Token {
     address: string
     chainId: ChainId
 }
-export interface ERC721TokenDetailed extends ERC721Token {
+
+export interface ERC721ContractDetailed extends ERC721Token {
     name: string
     symbol: string
-    tokenId: string
     baseURI?: string
-    tokenURI?: string
+    iconURL?: string
 }
 
-export interface ERC721TokenAssetDetailed extends ERC721TokenDetailed {
-    asset?: {
-        name?: string
-        description?: string
-        image?: string
-    }
+export interface ERC721TokenInfo {
+    name?: string
+    description?: string
+    image?: string
+    owner?: string
 }
+
+export interface ERC721TokenDetailed {
+    tokenId: string
+    info: ERC721TokenInfo
+    contractDetailed: ERC721ContractDetailed
+}
+
+export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
+    record_id: string
+}
+
 //#endregion
 
 //#region ERC1155
@@ -160,7 +170,7 @@ interface TokenDetailedMap {
 }
 
 interface TokenAssetDetailedMap {
-    [EthereumTokenType.ERC721]: ERC721TokenAssetDetailed
+    [EthereumTokenType.ERC721]: ERC721TokenDetailed
     [EthereumTokenType.ERC1155]: ERC1155TokenAssetDetailed
 }
 

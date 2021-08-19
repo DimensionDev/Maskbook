@@ -1,7 +1,7 @@
 import { story } from '@masknet/storybook-shared'
 import { action } from '@storybook/addon-actions'
 import { CollectibleListUI as C } from '../../../src/pages/Wallets/components/CollectibleList'
-import { ChainId, createERC721Token, CollectibleProvider } from '@masknet/web3-shared'
+import { ChainId, CollectibleProvider } from '@masknet/web3-shared'
 
 const { meta, of } = story(C)
 
@@ -17,6 +17,6 @@ export const CollectibleList = of({
         showPagination: true,
         chainId: ChainId.Mainnet,
         provider: CollectibleProvider.OPENSEAN,
-        dataSource: [createERC721Token(ChainId.Mainnet, '', '', '', '')],
+        dataSource: [],
     },
 })

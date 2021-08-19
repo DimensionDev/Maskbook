@@ -5,7 +5,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ListingByPriceCard } from './ListingByPriceCard'
 import { ListingByHighestBidCard } from './ListingByHighestBidCard'
 import type { useAsset } from '../hooks/useAsset'
-import { useChainId, useTokenWatched } from '@masknet/web3-shared'
+import { useChainId, useFungibleTokenWatched } from '@masknet/web3-shared'
 import { first } from 'lodash-es'
 
 const useStyles = makeStyles((theme) => {
@@ -41,7 +41,7 @@ export function PostListingDialog(props: PostListingDialogProps) {
     const classes = useStyles()
 
     const chainId = useChainId()
-    const tokenWatched = useTokenWatched(selectedPaymentToken)
+    const tokenWatched = useFungibleTokenWatched(selectedPaymentToken)
 
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
