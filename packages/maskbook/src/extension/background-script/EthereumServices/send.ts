@@ -24,13 +24,14 @@ import {
 } from '../../../plugins/Wallet/settings'
 import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../utils'
+import { getJsonRpcComputed } from './rpc'
 
 export interface SendOverrides {
     chainId?: ChainId
     account?: string
     providerType?: ProviderType
     rpc?: string
-    description?: string
+    skipConfirmation?: boolean
 }
 
 function parseGasPrice(price: string | undefined) {
@@ -51,12 +52,25 @@ export async function INTERNAL_send(
         account = currentAccountSettings.value,
         providerType = currentProviderSettings.value,
         rpc,
-        description,
+        skipConfirmation = false
     }: SendOverrides = {},
 ) {
     if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
         console.table(payload)
         console.debug(new Error().stack)
+    }
+
+    // some rpc methods need to be confirmed by the user
+    if (Flags.v2_enabled && !skipConfirmation) {
+        const rpcComputed = await getJsonRpcComputed(payload)
+        if (rpcComputed) {
+            // TODO:
+            // pull the popup up to let the user to confirm the rpc
+
+            console.log('DEBUG: RPC computed')
+            console.log(rpcComputed)
+            return
+        }
     }
 
     const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null

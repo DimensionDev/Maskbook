@@ -6,9 +6,19 @@ import type {
     PastLogsOptions,
     Log,
 } from 'web3-core'
-import { ChainId, EthereumChainDetailed, EthereumMethodType } from '@masknet/web3-shared'
+import { ChainId, EthereumChainDetailed, EthereumMethodType, EthereumTokenType } from '@masknet/web3-shared'
 import { request } from './request'
 import type { SendOverrides } from './send'
+
+export async function getCode(address: string, overrides?: SendOverrides) {
+    return request<string>(
+        {
+            method: EthereumMethodType.ETH_GET_CODE,
+            params: [address, 'latest'],
+        },
+        overrides,
+    )
+}
 
 export async function getGasPrice(overrides?: SendOverrides) {
     return request<string>(
