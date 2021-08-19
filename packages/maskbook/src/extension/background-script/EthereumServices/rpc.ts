@@ -131,7 +131,9 @@ export async function getJsonRpcComputed(payload: JsonRpcPayload): Promise<Ether
     }
 }
 
-export async function getSendTransactionRpcComputed(tx: EthereumTransactionConfig): Promise<EthereumRpcComputed | undefined> {
+export async function getSendTransactionRpcComputed(
+    tx: EthereumTransactionConfig,
+): Promise<EthereumRpcComputed | undefined> {
     const data = getData(tx)
     const to = getTo(tx)
     const signature = getFunctionSignature(tx)

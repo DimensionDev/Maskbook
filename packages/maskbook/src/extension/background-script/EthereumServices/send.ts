@@ -40,7 +40,7 @@ function parseGasPrice(price: string | undefined) {
 }
 
 function isRpcNeedToBeComfirmed(payload: JsonRpcPayload) {
-    return  [
+    return [
         EthereumMethodType.ETH_SIGN,
         EthereumMethodType.PERSONAL_SIGN,
         EthereumMethodType.ETH_SIGN_TYPED_DATA,
@@ -64,7 +64,7 @@ export async function INTERNAL_send(
         account = currentAccountSettings.value,
         providerType = currentProviderSettings.value,
         rpc,
-        skipConfirmation = false
+        skipConfirmation = false,
     }: SendOverrides = {},
 ) {
     if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
@@ -87,7 +87,11 @@ export async function INTERNAL_send(
             return
         }
 
-        window.open('chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/popups.html#/wallet/approve', '', 'resizable,scrollbars,status,width=310,height=540')
+        window.open(
+            'chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/popups.html#/wallet/approve',
+            '',
+            'resizable,scrollbars,status,width=310,height=540',
+        )
         return
     }
 

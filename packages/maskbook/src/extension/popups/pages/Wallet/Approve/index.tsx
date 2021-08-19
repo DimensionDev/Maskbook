@@ -4,7 +4,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
 
 const Approve = memo(() => {
-    const {value} = useAsyncRetry(async () => {
+    const { value } = useAsyncRetry(async () => {
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
         const computedPayload = await Services.Ethereum.getJsonRpcComputed(payload)
@@ -15,12 +15,8 @@ const Approve = memo(() => {
     })
     return (
         <>
-            <pre>
-                {JSON.stringify(value?.payload, null, 2)}
-            </pre>
-            <pre>
-                {JSON.stringify(value?.computedPayload, null, 2)}
-            </pre>
+            <pre>{JSON.stringify(value?.payload, null, 2)}</pre>
+            <pre>{JSON.stringify(value?.computedPayload, null, 2)}</pre>
         </>
     )
 })

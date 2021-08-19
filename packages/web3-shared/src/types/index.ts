@@ -321,18 +321,18 @@ export type EthereumRpcComputed =
           data: string
       }
     | {
-        type: EthereumRpcType.SIGN_TYPED_DATA
+          type: EthereumRpcType.SIGN_TYPED_DATA
 
-        /**
-         * the sign to address
-         */
-        to: string
+          /**
+           * the sign to address
+           */
+          to: string
 
-        /**
-         * typed data
-         */
-        data: any
-    }
+          /**
+           * typed data
+           */
+          data: any
+      }
     | {
           type: EthereumRpcType.ETH_GET_ENCRYPTION_PUBLIC_KEY
 
