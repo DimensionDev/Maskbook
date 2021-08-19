@@ -262,6 +262,7 @@
     "wallet_rename": "crwdns4489:0crwdne4489:0",
     "wallet_add_nft_address": "crwdns4491:0crwdne4491:0",
     "wallet_add_nft_invalid_address": "crwdns4493:0crwdne4493:0",
+    "wallet_add_nft_invalid_owner": "",
     "wallet_add_nft_address_placeholder": "crwdns4495:0crwdne4495:0",
     "wallet_add_nft_id": "crwdns4497:0crwdne4497:0",
     "wallet_add_nft_id_placeholder": "crwdns4499:0crwdne4499:0",

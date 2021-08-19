@@ -22,9 +22,7 @@ export function useERC721TokenDetailed(
             GET_SINGLE_ASSET_URL,
         )
 
-        return (
-            tokenDetailedFromOpensea ?? getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
-        )
+        return tokenDetailedFromOpensea
     }, [erc721TokenContract, tokenId])
 }
 
@@ -35,16 +33,23 @@ async function getERC721TokenDetailedFromOpensea(
 ) {
     const response = await fetch(`${apiUrl}/${contractDetailed.address}/${tokenId}`)
     type openseaTokenData = {
-        name: string | null
-        description: string | null
-        image_url: string | null
+        name: string
+        description: string
+        image_url: string
+        top_ownerships: { owner: { address: string } }[]
     }
 
     if (response.ok) {
-        const { name, description, image_url }: openseaTokenData = await response.json()
+        const data: openseaTokenData = await response.json()
+        console.log({ data })
         return createERC721Token(
             contractDetailed,
-            { name: name ?? undefined, description: description ?? undefined, image: image_url ?? undefined },
+            {
+                name: data.name,
+                description: data.description,
+                image: data.image_url,
+                owner: data.top_ownerships[0].owner.address,
+            },
             tokenId,
         )
     }
@@ -58,11 +63,14 @@ async function getERC721TokenDetailedFromChain(
 ) {
     if (!contractDetailed) return
     const tokenURI = await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenURI(tokenId))
+    const owner = await safeNonPayableTransactionCall(erc721TokenContract.methods.ownerOf(tokenId))
     const asset = await getERC721TokenAssetFromChain(tokenURI)
-    return createERC721Token(contractDetailed, asset ?? {}, tokenId)
+    const tokenInfo = { owner, ...asset }
+    return createERC721Token(contractDetailed, tokenInfo, tokenId)
 }
 
 const BASE64_PREFIX = 'data:application/json;base64,'
+// Todo: replace this temporary proxy.
 const CORS_PROXY = 'https://whispering-harbor-49523.herokuapp.com'
 async function getERC721TokenAssetFromChain(tokenURI?: string) {
     if (!tokenURI) return

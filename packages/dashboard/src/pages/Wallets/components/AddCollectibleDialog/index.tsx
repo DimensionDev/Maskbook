@@ -24,7 +24,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     const [address, setAddress] = useState('')
 
     const wallet = useWallet()
-    // Todo: please refactor this component according to dashboard 1.0 Add Asset:
+    // Todo: The current implement does not work, please refactor this component according to dashboard 1.0 Add Asset:
     // Todo: maskbook/src/extension/options-page/DashboardDialogs/Wallet/AddERC721Token.tsx
     // const tokenDetailed = useERC721TokenDetailed(address)
     // const assetDetailed = useERC721TokenAssetDetailed(tokenDetailed.value)

@@ -262,6 +262,7 @@
     "wallet_rename": "Rename Wallet",
     "wallet_add_nft_address": "To Address",
     "wallet_add_nft_invalid_address": "Invalid Address",
+    "wallet_add_nft_invalid_owner": "The collectible does not exist or belong to you.",
     "wallet_add_nft_address_placeholder": "To Address",
     "wallet_add_nft_id": "ID",
     "wallet_add_nft_id_placeholder": "Enter the collectible ID",
