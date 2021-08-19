@@ -1,15 +1,15 @@
-import { AbiCoder } from 'web3-eth-abi'
+import * as ABICoder from 'web3-eth-abi'
 import {
     EthereumRpcComputed,
     EthereumTransactionConfig,
     EthereumRpcType,
-    EthereumTokenType,
     EthereumMethodType,
 } from '@masknet/web3-shared'
 import { getCode } from './network'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 
-const abiCoder = new AbiCoder()
+// fix the type eror
+const coder = ABICoder as unknown as ABICoder.AbiCoder
 
 const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 
@@ -60,7 +60,7 @@ const BUILT_IN_CONTRACT_INTERACTION_ABI_LIST = [
     },
 ].map((x) => ({
     ...x,
-    signature: abiCoder.encodeFunctionSignature(`${x.name}(${x.prameters.join(',')})`),
+    signature: coder.encodeFunctionSignature(`${x.name}(${x.prameters.join(',')})`),
 }))
 
 function isEmptyHex(hex: string) {
@@ -146,7 +146,7 @@ export async function getSendTransactionRpcComputed(tx: EthereumTransactionConfi
                 return {
                     type: EthereumRpcType.CONTRACT_INTERACTION,
                     name: abi.name,
-                    parameters: abiCoder.decodeParameters(abi.prameters, parameters ?? ''),
+                    parameters: coder.decodeParameters(abi.prameters, parameters ?? ''),
                     _tx: tx,
                 }
             } catch {

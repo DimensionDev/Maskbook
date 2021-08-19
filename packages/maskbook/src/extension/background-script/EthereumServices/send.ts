@@ -25,6 +25,7 @@ import {
 import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../utils'
 import { getJsonRpcComputed } from './rpc'
+import { WalletRPC } from '../../../plugins/Wallet/messages'
 
 export interface SendOverrides {
     chainId?: ChainId
@@ -36,6 +37,17 @@ export interface SendOverrides {
 
 function parseGasPrice(price: string | undefined) {
     return Number.parseInt(price ?? '0x0', 16)
+}
+
+function isRpcNeedToBeComfirmed(payload: JsonRpcPayload) {
+    return  [
+        EthereumMethodType.ETH_SIGN,
+        EthereumMethodType.PERSONAL_SIGN,
+        EthereumMethodType.ETH_SIGN_TYPED_DATA,
+        EthereumMethodType.ETH_DECRYPT,
+        EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
+        EthereumMethodType.ETH_SEND_TRANSACTION,
+    ].includes(payload.method as EthereumMethodType)
 }
 
 /**
@@ -61,16 +73,22 @@ export async function INTERNAL_send(
     }
 
     // some rpc methods need to be confirmed by the user
-    if (Flags.v2_enabled && !skipConfirmation) {
-        const rpcComputed = await getJsonRpcComputed(payload)
-        if (rpcComputed) {
-            // TODO:
-            // pull the popup up to let the user to confirm the rpc
+    if (!skipConfirmation && isRpcNeedToBeComfirmed(payload)) {
+        // TODO:
+        // pull the popup up to let the user to confirm the rpc
 
-            console.log('DEBUG: RPC computed')
-            console.log(rpcComputed)
+        console.log('DEBUG: RPC computed')
+        console.log(await getJsonRpcComputed(payload))
+
+        try {
+            await WalletRPC.pushUnconfirmedRequest(payload)
+        } catch (error: any) {
+            callback(error)
             return
         }
+
+        window.open('chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/popups.html#/wallet/approve', '', 'resizable,scrollbars,status,width=310,height=540')
+        return
     }
 
     const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null

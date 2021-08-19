@@ -5,6 +5,7 @@ import type {
     ERC20TokenRecordInDatabase,
     PhraseRecordInDatabase,
     TransactionChunkRecordInDatabase,
+    UnconfirmedRequestChunkRecordInDatabase,
     WalletRecordInDatabase,
 } from './types'
 import type { ERC721TokenRecordInDatabase } from '@masknet/web3-shared'
@@ -14,7 +15,7 @@ function path<T>(x: T) {
 }
 
 export const createWalletDBAccess = createDBAccess(() => {
-    return openDB<WalletDB>('maskbook-plugin-wallet', 8, {
+    return openDB<WalletDB>('maskbook-plugin-wallet', 10, {
         async upgrade(db, oldVersion, newVersion, tx) {
             function v0_v1() {
                 db.createObjectStore('ERC20Token', { keyPath: path<keyof ERC20TokenRecordInDatabase>('address') })
@@ -33,9 +34,14 @@ export const createWalletDBAccess = createDBAccess(() => {
                 })
             }
             function v8_v9() {
-                const pluginStore = 'PluginStore'
-                db.objectStoreNames.contains(pluginStore as any) && db.deleteObjectStore(pluginStore as any)
+                // const pluginStore = 'PluginStore'
+                // db.objectStoreNames.contains(pluginStore as any) && db.deleteObjectStore(pluginStore as any)
                 // Version 9 is not using currently. Add your new changes here and upgrade version to 9 please.
+            }
+            function v9_v10() {
+                db.createObjectStore('UnconfirmedRequestChunk', {
+                    keyPath: path<keyof UnconfirmedRequestChunkRecordInDatabase>('record_id'),
+                })
             }
 
             if (oldVersion < 1) v0_v1()
@@ -43,6 +49,7 @@ export const createWalletDBAccess = createDBAccess(() => {
             if (oldVersion < 7) v6_v7()
             if (oldVersion < 8) v7_v8()
             if (oldVersion < 9) v8_v9()
+            if (oldVersion < 10) v9_v10()
         },
     })
 })
@@ -59,6 +66,10 @@ export interface WalletDB extends DBSchema {
     }
     TransactionChunk: {
         value: TransactionChunkRecordInDatabase
+        key: string
+    }
+    UnconfirmedRequestChunk: {
+        value: UnconfirmedRequestChunkRecordInDatabase
         key: string
     }
     ERC20Token: {
