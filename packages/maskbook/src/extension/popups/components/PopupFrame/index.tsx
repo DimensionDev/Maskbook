@@ -87,7 +87,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
             <Paper elevation={0}>
                 <Box className={classes.header}>
                     <Box className={classes.left}>
-                        {excludePath || history.length > 1 ? (
+                        {excludePath || history.length === 1 ? (
                             <MiniMaskIcon />
                         ) : (
                             <ArrowBackIcon onClick={history.goBack} style={{ fill: '#ffffff', cursor: 'pointer' }} />

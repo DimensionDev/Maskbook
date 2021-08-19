@@ -19,6 +19,7 @@ const AddToken = lazy(() => import('./AddToken'))
 const TokenDetail = lazy(() => import('./TokenDetail'))
 const SignRequest = lazy(() => import('./SignRequest'))
 const GasSetting = lazy(() => import('./GasSetting'))
+const Transfer = lazy(() => import('./Transfer'))
 
 export default function Wallet() {
     const wallet = useWallet()
@@ -57,6 +58,7 @@ export default function Wallet() {
                 <Route path={PopupRoutes.WalletSignRequest} children={<SignRequest />} />
                 <Route path={PopupRoutes.GasSetting} children={<GasSetting />} />
                 <Route path={PopupRoutes.TokenDetail} children={<TokenDetail />} exact />
+                <Route path={PopupRoutes.Transfer} children={<Transfer />} exact />
             </Switch>
         </WalletContext.Provider>
     )

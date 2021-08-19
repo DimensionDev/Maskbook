@@ -8,6 +8,8 @@ import { getTokenUSDValue } from '../../../../../plugins/Wallet/helpers'
 import { ArrowDownCircle, ArrowUpCircle } from 'react-feather'
 import { InteractionCircleIcon } from '@masknet/icons'
 import { useI18N } from '../../../../../utils'
+import { useHistory } from 'react-router'
+import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()({
     content: {
@@ -52,6 +54,7 @@ const useStyles = makeStyles()({
 const TokenDetail = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const history = useHistory()
     const { currentToken } = useContainer(WalletContext)
 
     const openLabPage = useCallback(() => {
@@ -88,7 +91,7 @@ const TokenDetail = memo(() => {
                         <ArrowDownCircle className={classes.icon} />
                         <Typography className={classes.text}>{t('popups_wallet_token_buy')}</Typography>
                     </div>
-                    <div>
+                    <div onClick={() => history.push(PopupRoutes.Transfer)}>
                         <ArrowUpCircle className={classes.icon} />
                         <Typography className={classes.text}>{t('popups_wallet_token_send')}</Typography>
                     </div>
