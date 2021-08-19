@@ -2,12 +2,6 @@ import { PageFrame } from '../../components/DashboardFrame'
 import SettingCard from './components/SettingCard'
 import SettingItem from './components/SettingItem'
 
-import LanguageIcon from '@material-ui/icons/Language'
-import PaletteIcon from '@material-ui/icons/Palette'
-import SyncIcon from '@material-ui/icons/Sync'
-import SaveIcon from '@material-ui/icons/Save'
-import SaveAltIcon from '@material-ui/icons/SaveAlt'
-
 import { useDashboardI18N } from '../../locales'
 
 import PasswordSettingItem from './components/PasswordSettingItem'
@@ -22,6 +16,13 @@ import MobileSyncSetting from './components/MobileSyncSetting'
 
 import { PasswordVerifiedProvider } from './hooks/VerifyPasswordContext'
 import { UserProvider } from './hooks/UserContext'
+import {
+    SettingsAppearanceIcon,
+    SettingsBackupIcon,
+    SettingsLanguageIcon,
+    SettingsRestoreIcon,
+    SettingsSyncIcon,
+} from '@masknet/icons'
 
 export default function Settings() {
     const t = useDashboardI18N()
@@ -32,19 +33,19 @@ export default function Settings() {
                 <PasswordVerifiedProvider>
                     <SettingCard title={t.settings_general()}>
                         <SettingItem
-                            icon={<LanguageIcon />}
+                            icon={<SettingsLanguageIcon />}
                             title={t.settings_language_title()}
                             desc={t.settings_language_desc()}>
                             <LanguageSetting />
                         </SettingItem>
                         <SettingItem
-                            icon={<PaletteIcon />}
+                            icon={<SettingsAppearanceIcon />}
                             title={t.settings_appearance_title()}
                             desc={t.settings_appearance_desc()}>
                             <AppearanceSetting />
                         </SettingItem>
                         <SettingItem
-                            icon={<SyncIcon />}
+                            icon={<SettingsSyncIcon />}
                             title={t.settings_sync_with_mobile_title()}
                             desc={t.settings_sync_with_mobile_desc()}>
                             <MobileSyncSetting />
@@ -53,13 +54,13 @@ export default function Settings() {
 
                     <SettingCard title={t.settings_backup_recovery()}>
                         <SettingItem
-                            icon={<SaveIcon />}
+                            icon={<SettingsBackupIcon />}
                             title={t.settings_global_backup_title()}
                             desc={t.settings_global_backup_desc()}>
                             <BackupSetting />
                         </SettingItem>
                         <SettingItem
-                            icon={<SaveAltIcon />}
+                            icon={<SettingsRestoreIcon />}
                             title={t.settings_restore_database_title()}
                             desc={t.settings_restore_database_desc()}>
                             <RestoreSetting />

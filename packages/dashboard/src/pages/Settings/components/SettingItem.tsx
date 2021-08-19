@@ -22,7 +22,7 @@ const IconWarpper = styled(ListItemIcon)(({ theme }) => ({
     borderRadius: '50%',
     background: MaskColorVar.infoBackground,
     marginRight: theme.spacing(3),
-    color: MaskColorVar.primary,
+    color: 'transparent',
 }))
 
 const TextWrapper = styled(ListItemText)(({ theme }) => ({
