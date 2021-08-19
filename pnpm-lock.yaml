@@ -651,6 +651,7 @@ importers:
       react-draggable: 4.4.3
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> fix: prices
 =======
 <<<<<<< HEAD
@@ -672,12 +673,18 @@ importers:
       react-highlight-words: 0.17.0_react@18.0.0-alpha-aecb3b6d1
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
+=======
+      react-feather: 2.0.9_react@18.0.0-alpha-aecb3b6d1
+      react-highlight-words: 0.17.0_react@18.0.0-alpha-aecb3b6d1
+      react-hook-form: 7.10.1_react@18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: pnpm-lock
       react-middle-ellipsis: 1.2.1_f991c289939c8299bed5e4a6a5a79a62
       react-router: 5.2.1_react@18.0.0-alpha-aecb3b6d1
       react-router-dom: 5.2.1_react@18.0.0-alpha-aecb3b6d1
       react-use: 17.3.1_f991c289939c8299bed5e4a6a5a79a62
       react-virtualized-auto-sizer: 1.0.6_f991c289939c8299bed5e4a6a5a79a62
       react-window: 1.8.6_f991c289939c8299bed5e4a6a5a79a62
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> feat: three tabs added to the market view
@@ -720,7 +727,12 @@ importers:
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+=======
+=======
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
       remarkable: 2.0.1
       rss3-next: 0.6.17_typescript@4.4.4
       safari-14-idb-fix: 2.0.3
@@ -734,10 +746,27 @@ importers:
       urlcat: 2.0.4
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
 =======
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
+<<<<<<< HEAD
+      use-subscription: 1.5.1
+=======
+=======
+>>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
+<<<<<<< HEAD
+      use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
+=======
+=======
+>>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       use-subscription: 1.5.1
 =======
@@ -746,16 +775,6 @@ importers:
 <<<<<<< HEAD
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
 =======
-=======
->>>>>>> fix: conflicts
-<<<<<<< HEAD
-      use-subscription: 1.5.1
-=======
-=======
->>>>>>> fix: conflicts
-<<<<<<< HEAD
-      use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
-=======
 <<<<<<< HEAD
       use-subscription: 1.5.1
 =======
@@ -837,7 +856,13 @@ importers:
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
 >>>>>>> fix: conflicts
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+=======
+=======
+      use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
       uuid: 8.3.2
       wallet.ts: 1.0.1
       web-ext-types: 3.2.1
@@ -860,6 +885,7 @@ importers:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12_typescript@4.4.4
 =======
 =======
@@ -872,6 +898,8 @@ importers:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12
 =======
@@ -885,6 +913,8 @@ importers:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12_typescript@4.4.3
 >>>>>>> feat: initial setup for augur
@@ -904,6 +934,8 @@ importers:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12
 =======
@@ -917,6 +949,8 @@ importers:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12_typescript@4.4.2
 >>>>>>> feat: initial setup for augur
@@ -985,12 +1019,22 @@ importers:
 =======
       '@swc/core': 1.2.78
 =======
+=======
+      '@dimensiondev/webextension-shim': 0.0.3-20210708053012-57a254d_typescript@4.4.1-rc
+      '@pmmmwh/react-refresh-webpack-plugin': 0.5.0-rc.2_9887a51875e98b62f97fee0e343d0d8a
+      '@sinonjs/text-encoding': 0.7.1
+>>>>>>> fix: pnpm-lock
       '@swc/core': 1.2.77
->>>>>>> fix: undo unwanted changes
       '@testing-library/react-hooks': 7.0.1_1959de3a9153879cff3acd96b46ed70f
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+=======
+=======
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
       '@types/enzyme': 3.10.9
       '@types/enzyme-adapter-react-16': 1.0.6
       '@types/expect-puppeteer': 4.4.6
@@ -1027,6 +1071,7 @@ importers:
 =======
 >>>>>>> fix: conflicts and bugs
       '@types/webpack-dev-server': 3.11.5
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1068,6 +1113,10 @@ importers:
       '@typescript-eslint/parser': 4.29.1_f8ed5431742f75332c3083279db44140
 >>>>>>> fix: undo unwanted changes
 >>>>>>> fix: undo unwanted changes
+=======
+      '@typescript-eslint/eslint-plugin': 4.29.1_9e650468d3ce62d57e2df2f2fad149b2
+      '@typescript-eslint/parser': 4.29.1_f8ed5431742f75332c3083279db44140
+>>>>>>> fix: pnpm-lock
       babel-loader: 8.2.2_webpack@5.50.0
 >>>>>>> fix: conflicts
       chrome-launcher: 0.14.0
@@ -1091,6 +1140,7 @@ importers:
 >>>>>>> fix: conflicts
       file-loader: 6.2.0_webpack@5.50.0
       html-webpack-plugin: 5.3.2_webpack@5.50.0
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       jest: 27.0.6_ts-node@10.2.0
@@ -1157,9 +1207,14 @@ importers:
 <<<<<<< HEAD
 =======
 =======
+=======
+>>>>>>> fix: pnpm-lock
       jest: 27.0.6_ts-node@10.2.0
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
       jest-environment-jsdom-fourteen: 1.0.1
       jest-esm-transformer: 1.0.0
       jest-junit: 12.2.0
@@ -1169,6 +1224,7 @@ importers:
       openzeppelin-solidity: 3.4.1
       react-devtools-core: 4.18.0
       react-refresh: 0.10.0
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1192,6 +1248,8 @@ importers:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       react-test-renderer: 17.0.2
 =======
@@ -1203,6 +1261,8 @@ importers:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       react-test-renderer: 17.0.2_react@18.0.0-alpha-aecb3b6d1
 <<<<<<< HEAD
@@ -1240,19 +1300,13 @@ importers:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
       react-test-renderer: 17.0.2_react@18.0.0-alpha-aecb3b6d1
-      rimraf: 3.0.2
       source-map-loader: 3.0.0_webpack@5.50.0
       swc-loader: 0.1.14_webpack@5.50.0
-<<<<<<< HEAD
-      ts-jest: 27.0.4_@types+jest@26.0.24+jest@27.0.6
-      type-coverage: 2.18.0
-<<<<<<< HEAD
->>>>>>> feat: initial setup for augur
-=======
       ts-jest: 27.0.4_2b1bb99c65ce8fc8eda3ccb6cb24befc
       type-coverage: 2.18.0_typescript@4.4.1-rc
->>>>>>> fix: conflicts
       webpack: 5.50.0_webpack-cli@4.7.2
       webpack-cli: 4.7.2_2f87bc69d24ff610f8f32a7541f06226
       webpack-dev-server: 3.11.2_webpack-cli@4.7.2+webpack@5.50.0
@@ -4763,6 +4817,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@dimensiondev/webextension-shim/0.0.3-20210823035705-4257e12_typescript@4.4.4:
 =======
 =======
@@ -4771,6 +4826,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@dimensiondev/webextension-shim/0.0.3-20210823035705-4257e12:
 =======
@@ -4780,6 +4837,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@dimensiondev/webextension-shim/0.0.3-20210823035705-4257e12_typescript@4.4.3:
 =======
@@ -4789,6 +4848,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@dimensiondev/webextension-shim/0.0.3-20210823035705-4257e12:
 =======
@@ -4798,6 +4859,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@dimensiondev/webextension-shim/0.0.3-20210823035705-4257e12_typescript@4.4.2:
 >>>>>>> feat: three tabs added to the market view
@@ -4824,8 +4887,9 @@ packages:
   /@dimensiondev/webextension-shim/0.0.3-20210708053012-57a254d_typescript@4.3.5:
 >>>>>>> fix: conflicts and bugs
 =======
+=======
+>>>>>>> fix: pnpm-lock
   /@dimensiondev/webextension-shim/0.0.3-20210708053012-57a254d_typescript@4.4.1-rc:
->>>>>>> fix: conflicts
     resolution: {integrity: sha512-0O0Nc3j2Vxo9Gfvgeq8pWuMHKMSU3tDjRnzE0U5oWvYoY+ZO61NniKp4xf/C+J6Py6lhQFutjd2tqlporqRwlw==, tarball: download/@dimensiondev/webextension-shim/0.0.3-20210708053012-57a254d/a2ee1bed40822a7f6b9c60ce4296930c9bab00828e82637aa56060498a135ac7}
 >>>>>>> feat: three tabs added to the market view
     hasBin: true
@@ -4839,6 +4903,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typescript: 4.4.4
 =======
 <<<<<<< HEAD
@@ -4848,6 +4913,8 @@ packages:
 =======
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
 =======
 >>>>>>> fix: prices
@@ -4857,9 +4924,13 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       typescript: 4.4.3
 =======
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
 =======
 =======
@@ -4875,6 +4946,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       typescript: 4.4.2
 =======
@@ -4928,7 +5001,13 @@ packages:
       typescript: 4.4.1-rc
 >>>>>>> fix: conflicts
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+=======
+=======
+      typescript: 4.4.1-rc
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
       web-ext-types: 3.2.1
     dev: true
 
@@ -5832,6 +5911,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@jest/core/27.2.0_ts-node@10.2.1:
     resolution: {integrity: sha512-E/2NHhq+VMo18DpKkoty8Sjey8Kps5Cqa88A8NP757s6JjYqPdioMuyUBhDiIOGCdQByEp0ou3jskkTszMS0nw==}
 =======
@@ -5845,6 +5925,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@jest/core/27.1.0:
 =======
@@ -5858,6 +5940,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@jest/core/27.1.0_ts-node@10.2.1:
 >>>>>>> feat: initial setup for augur
@@ -5899,8 +5983,9 @@ packages:
   /@jest/core/27.0.6_ts-node@10.1.0:
 >>>>>>> fix: conflicts
 =======
+=======
+>>>>>>> fix: pnpm-lock
   /@jest/core/27.0.6_ts-node@10.2.0:
->>>>>>> fix: conflicts
     resolution: {integrity: sha512-SsYBm3yhqOn5ZLJCtccaBcvD/ccTLCeuDv8U41WJH/V1MW5eKUkeMHT9U+Pw/v1m1AIWlnIW/eM2XzQr0rEmow==}
 <<<<<<< HEAD
 =======
@@ -5965,15 +6050,7 @@ packages:
 =======
       graceful-fs: 4.2.6
       jest-changed-files: 27.0.6
-<<<<<<< HEAD
-<<<<<<< HEAD
       jest-config: 27.0.6_ts-node@10.2.0
-=======
-      jest-config: 27.0.6_ts-node@10.1.0
->>>>>>> fix: conflicts
-=======
-      jest-config: 27.0.6_ts-node@10.2.0
->>>>>>> fix: conflicts
       jest-haste-map: 27.0.6
       jest-message-util: 27.0.6
       jest-regex-util: 27.0.6
@@ -13401,6 +13478,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       react-error-boundary: 3.1.3
       react-test-renderer: 17.0.2
 =======
@@ -13437,10 +13515,13 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       react-error-boundary: 3.1.3_react@18.0.0-alpha-aecb3b6d1
       react-test-renderer: 17.0.2_react@18.0.0-alpha-aecb3b6d1
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -13495,6 +13576,8 @@ packages:
 =======
 >>>>>>> fix: conflicts
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
     dev: true
 
 >>>>>>> feat: initial setup for augur
@@ -14589,6 +14672,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@typescript-eslint/eslint-plugin/4.31.1_160ac4995e3ab15f365de9f1ef076662:
 =======
 =======
@@ -14603,6 +14687,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@typescript-eslint/eslint-plugin/4.31.1_@typescript-eslint+parser@4.31.1:
 =======
@@ -14618,6 +14704,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@typescript-eslint/eslint-plugin/4.31.1_e2d3c88d378335c4183365c112128ce9:
 >>>>>>> feat: initial setup for augur
@@ -14636,9 +14724,13 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@typescript-eslint/eslint-plugin/4.30.0_@typescript-eslint+parser@4.30.0:
 =======
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@typescript-eslint/eslint-plugin/4.30.0_8a8a2d3eaa9257455a03c16dce5f55b3:
     resolution: {integrity: sha512-NgAnqk55RQ/SD+tZFD9aPwNSeHmDHHe5rtUyhIq0ZeCWZEvo4DK9rYz7v9HDuQZFvn320Ot+AikaCKMFKLlD0g==}
@@ -14734,9 +14826,10 @@ packages:
     resolution: {integrity: sha512-x4EMgn4BTfVd9+Z+r+6rmWxoAzBaapt4QFqE+d8L8sUtYZYLDTK6VG/y/SMMWA5t1/BVU5Kf+20rX4PtWzUYZg==}
 >>>>>>> fix: conflicts
 =======
+=======
+>>>>>>> fix: pnpm-lock
   /@typescript-eslint/eslint-plugin/4.29.1_9e650468d3ce62d57e2df2f2fad149b2:
     resolution: {integrity: sha512-AHqIU+SqZZgBEiWOrtN94ldR3ZUABV5dUG94j8Nms9rQnHFc8fvDOue/58K4CFz6r8OtDDc35Pw9NQPWo0Ayrw==}
->>>>>>> fix: undo unwanted changes
     engines: {node: ^10.12.0 || >=12.0.0}
     peerDependencies:
       '@typescript-eslint/parser': ^4.0.0
@@ -14746,6 +14839,7 @@ packages:
       typescript:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -14771,6 +14865,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       '@typescript-eslint/experimental-utils': 4.31.1
       '@typescript-eslint/parser': 4.31.1
@@ -14789,6 +14885,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       '@typescript-eslint/experimental-utils': 4.31.1_eslint@7.32.0+typescript@4.4.3
       '@typescript-eslint/parser': 4.31.1_eslint@7.32.0+typescript@4.4.3
@@ -14808,12 +14906,16 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       '@typescript-eslint/experimental-utils': 4.30.0
       '@typescript-eslint/parser': 4.30.0
 =======
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       '@typescript-eslint/experimental-utils': 4.30.0_eslint@7.32.0+typescript@4.4.2
       '@typescript-eslint/parser': 4.30.0_eslint@7.32.0+typescript@4.4.2
@@ -15359,24 +15461,65 @@ packages:
       '@typescript-eslint/types': 4.29.2
       '@typescript-eslint/typescript-estree': 4.29.2_typescript@4.4.1-rc
 =======
+=======
+      '@typescript-eslint/experimental-utils': 4.29.1_f8ed5431742f75332c3083279db44140
+      '@typescript-eslint/parser': 4.29.1_f8ed5431742f75332c3083279db44140
+      '@typescript-eslint/scope-manager': 4.29.1
+      debug: 4.3.2
+      eslint: 7.32.0
+      functional-red-black-tree: 1.0.1
+      regexpp: 3.2.0
+      semver: 7.3.5
+      tsutils: 3.21.0_typescript@4.4.1-rc
+      typescript: 4.4.1-rc
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /@typescript-eslint/experimental-utils/4.29.1_f8ed5431742f75332c3083279db44140:
+    resolution: {integrity: sha512-kl6QG6qpzZthfd2bzPNSJB2YcZpNOrP6r9jueXupcZHnL74WiuSjaft7WSu17J9+ae9zTlk0KJMXPUj0daBxMw==}
+    engines: {node: ^10.12.0 || >=12.0.0}
+    peerDependencies:
+      eslint: '*'
+    dependencies:
+>>>>>>> fix: pnpm-lock
       '@types/json-schema': 7.0.9
       '@typescript-eslint/scope-manager': 4.29.1
       '@typescript-eslint/types': 4.29.1
       '@typescript-eslint/typescript-estree': 4.29.1_typescript@4.4.1-rc
+<<<<<<< HEAD
 >>>>>>> fix: undo unwanted changes
       eslint: 7.32.0
       eslint-scope: 5.1.1
       eslint-utils: 3.0.0_eslint@7.32.0
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+=======
+=======
+=======
+=======
+=======
+      eslint: 7.32.0
+      eslint-scope: 5.1.1
+      eslint-utils: 3.0.0_eslint@7.32.0
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
     transitivePeerDependencies:
       - supports-color
       - typescript
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -15398,6 +15541,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@typescript-eslint/parser/4.31.1:
 =======
@@ -15413,6 +15558,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@typescript-eslint/parser/4.31.1_eslint@7.32.0+typescript@4.4.3:
 >>>>>>> feat: initial setup for augur
@@ -15431,6 +15578,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@typescript-eslint/parser/4.30.0:
 =======
@@ -15446,6 +15595,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@typescript-eslint/parser/4.30.0_eslint@7.32.0+typescript@4.4.2:
 >>>>>>> feat: initial setup for augur
@@ -15540,7 +15691,14 @@ packages:
     resolution: {integrity: sha512-3fL5iN20hzX3Q4OkG7QEPFjZV2qsVGiDhEwwh+EkmE/w7oteiOvUNzmpu5eSwGJX/anCryONltJ3WDmAzAoCMg==}
 >>>>>>> fix: undo unwanted changes
 >>>>>>> fix: undo unwanted changes
+<<<<<<< HEAD
 >>>>>>> fix: undo unwanted changes
+=======
+=======
+  /@typescript-eslint/parser/4.29.1_f8ed5431742f75332c3083279db44140:
+    resolution: {integrity: sha512-3fL5iN20hzX3Q4OkG7QEPFjZV2qsVGiDhEwwh+EkmE/w7oteiOvUNzmpu5eSwGJX/anCryONltJ3WDmAzAoCMg==}
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
     engines: {node: ^10.12.0 || >=12.0.0}
     peerDependencies:
       eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
@@ -15549,6 +15707,7 @@ packages:
       typescript:
         optional: true
     dependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -15572,6 +15731,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       '@typescript-eslint/scope-manager': 4.30.0
       '@typescript-eslint/types': 4.30.0
@@ -15696,14 +15857,14 @@ packages:
       '@typescript-eslint/types': 4.29.2
       '@typescript-eslint/typescript-estree': 4.29.2_typescript@4.4.1-rc
 =======
+=======
+>>>>>>> fix: pnpm-lock
       '@typescript-eslint/scope-manager': 4.29.1
       '@typescript-eslint/types': 4.29.1
       '@typescript-eslint/typescript-estree': 4.29.1_typescript@4.4.1-rc
->>>>>>> fix: undo unwanted changes
       debug: 4.3.2
       eslint: 7.32.0
       typescript: 4.4.1-rc
->>>>>>> fix: conflicts
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -15766,6 +15927,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /@typescript-eslint/typescript-estree/4.31.1_typescript@4.4.4:
 =======
 =======
@@ -15780,6 +15942,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@typescript-eslint/typescript-estree/4.31.1:
 =======
@@ -15795,6 +15959,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@typescript-eslint/typescript-estree/4.31.1_typescript@4.4.3:
 >>>>>>> feat: initial setup for augur
@@ -15811,6 +15977,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@typescript-eslint/typescript-estree/4.30.0:
 =======
@@ -15826,6 +15994,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /@typescript-eslint/typescript-estree/4.30.0_typescript@4.4.2:
 >>>>>>> feat: initial setup for augur
@@ -15915,6 +16085,10 @@ packages:
     resolution: {integrity: sha512-lIkkrR9E4lwZkzPiRDNq0xdC3f2iVCUjw/7WPJ4S2Sl6C3nRWkeE1YXCQ0+KsiaQRbpY16jNaokdWnm9aUIsfw==}
 >>>>>>> fix: undo unwanted changes
 >>>>>>> fix: undo unwanted changes
+=======
+  /@typescript-eslint/typescript-estree/4.29.1_typescript@4.4.1-rc:
+    resolution: {integrity: sha512-lIkkrR9E4lwZkzPiRDNq0xdC3f2iVCUjw/7WPJ4S2Sl6C3nRWkeE1YXCQ0+KsiaQRbpY16jNaokdWnm9aUIsfw==}
+>>>>>>> fix: pnpm-lock
     engines: {node: ^10.12.0 || >=12.0.0}
     peerDependencies:
       typescript: '*'
@@ -15952,6 +16126,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       tsutils: 3.21.0_typescript@4.4.4
       typescript: 4.4.4
 =======
@@ -15961,6 +16136,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       tsutils: 3.21.0
 =======
@@ -15970,6 +16147,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       tsutils: 3.21.0_typescript@4.4.3
       typescript: 4.4.3
@@ -15980,6 +16159,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       tsutils: 3.21.0
 =======
@@ -15989,6 +16170,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       tsutils: 3.21.0_typescript@4.4.2
       typescript: 4.4.2
@@ -16063,10 +16246,26 @@ packages:
       typescript: 4.4.1-rc
 >>>>>>> fix: conflicts
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+=======
+=======
+=======
+=======
+=======
+      tsutils: 3.21.0_typescript@4.4.1-rc
+      typescript: 4.4.1-rc
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -18330,6 +18529,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       caniuse-lite: 1.0.30001265
       electron-to-chromium: 1.3.865
 =======
@@ -18337,6 +18537,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       caniuse-lite: 1.0.30001261
       electron-to-chromium: 1.3.853
@@ -18345,6 +18547,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       caniuse-lite: 1.0.30001255
       electron-to-chromium: 1.3.830
@@ -18353,6 +18557,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       caniuse-lite: 1.0.30001252
       electron-to-chromium: 1.3.826
@@ -18361,6 +18567,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       caniuse-lite: 1.0.30001251
 <<<<<<< HEAD
@@ -18401,10 +18609,26 @@ packages:
       electron-to-chromium: 1.3.807
 >>>>>>> fix: undo unwanted changes
 >>>>>>> fix: undo unwanted changes
+<<<<<<< HEAD
 >>>>>>> fix: undo unwanted changes
+<<<<<<< HEAD
 >>>>>>> fix: undo unwanted changes
+<<<<<<< HEAD
 >>>>>>> fix: undo unwanted changes
+<<<<<<< HEAD
 >>>>>>> fix: undo unwanted changes
+=======
+=======
+=======
+=======
+=======
+      caniuse-lite: 1.0.30001251
+      electron-to-chromium: 1.3.807
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
     dev: false
 
   /browserslist/4.14.2:
@@ -20635,20 +20859,18 @@ packages:
 =======
   /electron-to-chromium/1.3.792:
     resolution: {integrity: sha512-RM2O2xrNarM7Cs+XF/OE2qX/aBROyOZqqgP+8FXMXSuWuUqCfUUzg7NytQrzZU3aSqk1Qq6zqnVkJsbfMkIatg==}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     dev: true
 
-<<<<<<< HEAD
   /electron-to-chromium/1.3.806:
     resolution: {integrity: sha512-AH/otJLAAecgyrYp0XK1DPiGVWcOgwPeJBOLeuFQ5l//vhQhwC9u6d+GijClqJAmsHG4XDue81ndSQPohUu0xA==}
+<<<<<<< HEAD
 <<<<<<< HEAD
 
   /electron-to-chromium/1.3.826:
     resolution: {integrity: sha512-bpLc4QU4B8PYmdO4MSu2ZBTMD8lAaEXRS43C09lB31BvYwuk9UxgBRXbY5OJBw7VuMGcg2MZG5FyTaP9u4PQnw==}
 =======
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
     dev: true
 
@@ -20664,10 +20886,13 @@ packages:
   /electron-to-chromium/1.3.806:
     resolution: {integrity: sha512-AH/otJLAAecgyrYp0XK1DPiGVWcOgwPeJBOLeuFQ5l//vhQhwC9u6d+GijClqJAmsHG4XDue81ndSQPohUu0xA==}
 >>>>>>> fix: undo unwanted changes
+=======
+>>>>>>> fix: pnpm-lock
     dev: true
 
   /electron-to-chromium/1.3.807:
     resolution: {integrity: sha512-p8uxxg2a23zRsvQ2uwA/OOI+O4BQxzaR7YKMIGGGQCpYmkFX2CVF5f0/hxLMV7yCr7nnJViCwHLhPfs52rIYCA==}
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
   /electron-to-chromium/1.3.805:
@@ -20684,8 +20909,17 @@ packages:
     dev: false
 >>>>>>> fix: recreate pnpm-lock
 >>>>>>> fix: recreate pnpm-lock
+<<<<<<< HEAD
 >>>>>>> fix: recreate pnpm-lock
+<<<<<<< HEAD
 >>>>>>> fix: recreate pnpm-lock
+=======
+=======
+=======
+    dev: false
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
 
   /electron-to-chromium/1.3.865:
     resolution: {integrity: sha512-okGcCKfihgGlaROMFNPQ6eaU3bk9Xa68rLYSnVD2PyIqM5B/vyQoXCpB3p1HI3AXio097ROVBlSO4JZVilUWuA==}
@@ -21419,6 +21653,7 @@ packages:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -21455,6 +21690,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
   /eslint-utils/3.0.0_eslint@7.32.0:
     resolution: {integrity: sha512-uuQC43IGctw68pJA1RgbQS8/NP7rch6Cwd4j3ZBtgo4/8Flj4eGE7ZYSZRN3iq5pVUv6GPdW5Z1RFleo84uLDA==}
     engines: {node: ^10.0.0 || ^12.0.0 || >= 14.0.0}
@@ -23993,8 +24230,11 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       call-bind: 1.0.2
+<<<<<<< HEAD
     dev: true
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 
   /is-arguments/1.1.1:
     resolution: {integrity: sha512-8Q7EARjzEnKpt/PCD7e1cgUS0a6X8u5tdSiMqXhojOdoV9TsMsiO+9VLC5vAmO8N7/GmXn7yjR8qnA6bVAEzfA==}
@@ -24740,6 +24980,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /jest-cli/27.2.0_ts-node@10.2.1:
     resolution: {integrity: sha512-bq1X/B/b1kT9y1zIFMEW3GFRX1HEhFybiqKdbxM+j11XMMYSbU9WezfyWIhrSOmPT+iODLATVjfsCnbQs7cfIA==}
 =======
@@ -24753,6 +24994,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /jest-cli/27.1.0:
 =======
@@ -24766,6 +25009,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /jest-cli/27.1.0_ts-node@10.2.1:
 >>>>>>> feat: initial setup for augur
@@ -24807,8 +25052,9 @@ packages:
   /jest-cli/27.0.6_ts-node@10.1.0:
 >>>>>>> fix: conflicts
 =======
+=======
+>>>>>>> fix: pnpm-lock
   /jest-cli/27.0.6_ts-node@10.2.0:
->>>>>>> fix: conflicts
     resolution: {integrity: sha512-qUUVlGb9fdKir3RDE+B10ULI+LQrz+MCflEH2UJyoUjoHHCbxDrMxSzjQAPUMsic4SncI62ofYCcAvW6+6rhhg==}
 <<<<<<< HEAD
 =======
@@ -24842,6 +25088,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@jest/core': 27.2.0_ts-node@10.2.1
       '@jest/test-result': 27.2.0
       '@jest/types': 27.1.1
@@ -24856,6 +25103,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       '@jest/core': 27.1.0
 =======
@@ -24869,6 +25118,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       '@jest/core': 27.1.0_ts-node@10.2.1
 >>>>>>> feat: initial setup for augur
@@ -24913,8 +25164,9 @@ packages:
       '@jest/core': 27.0.6_ts-node@10.1.0
 >>>>>>> fix: conflicts
 =======
+=======
+>>>>>>> fix: pnpm-lock
       '@jest/core': 27.0.6_ts-node@10.2.0
->>>>>>> fix: conflicts
       '@jest/test-result': 27.0.6
       '@jest/types': 27.0.6
       chalk: 4.1.1
@@ -24922,6 +25174,7 @@ packages:
       exit: 0.1.2
       graceful-fs: 4.2.8
       import-local: 3.0.2
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -24942,6 +25195,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       jest-config: 27.1.0
 =======
@@ -24955,6 +25210,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       jest-config: 27.1.0_ts-node@10.2.1
 >>>>>>> feat: initial setup for augur
@@ -25019,7 +25276,15 @@ packages:
 =======
 =======
 >>>>>>> fix: conflicts and bugs
+<<<<<<< HEAD
 >>>>>>> fix: conflicts and bugs
+=======
+=======
+      jest-config: 27.0.6_ts-node@10.2.0
+      jest-util: 27.0.6
+      jest-validate: 27.0.6
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
       prompts: 2.4.1
       yargs: 16.2.0
     transitivePeerDependencies:
@@ -25030,6 +25295,7 @@ packages:
       - utf-8-validate
     dev: true
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -25049,6 +25315,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /jest-config/27.1.0:
 =======
@@ -25062,6 +25330,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /jest-config/27.1.0_ts-node@10.2.1:
 >>>>>>> feat: initial setup for augur
@@ -25103,8 +25373,9 @@ packages:
   /jest-config/27.0.6_ts-node@10.1.0:
 >>>>>>> fix: conflicts
 =======
+=======
+>>>>>>> fix: pnpm-lock
   /jest-config/27.0.6_ts-node@10.2.0:
->>>>>>> fix: conflicts
     resolution: {integrity: sha512-JZRR3I1Plr2YxPBhgqRspDE2S5zprbga3swYNrvY3HfQGu7p/GjyLOqwrYad97tX3U3mzT53TPHVmozacfP/3w==}
 <<<<<<< HEAD
 =======
@@ -25217,6 +25488,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       ts-node: 10.2.0_typescript@4.4.1-rc
 =======
 <<<<<<< HEAD
@@ -25313,9 +25585,14 @@ packages:
 <<<<<<< HEAD
 =======
 =======
+=======
+>>>>>>> fix: pnpm-lock
       ts-node: 10.2.0_typescript@4.4.1-rc
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -25906,6 +26183,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /jest-worker/27.2.0:
     resolution: {integrity: sha512-laB0ZVIBz+voh/QQy9dmUuuDsadixeerrKqyVpgPz+CCWiOYjOBabUXHIXZhsdvkWbLqSHbgkAHWl5cg24Q6RA==}
     engines: {node: '>= 10.13.0'}
@@ -25928,6 +26206,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /jest/27.1.0:
 =======
@@ -25941,6 +26221,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /jest/27.1.0_ts-node@10.2.1:
 >>>>>>> feat: initial setup for augur
@@ -25982,8 +26264,9 @@ packages:
   /jest/27.0.6_ts-node@10.1.0:
 >>>>>>> fix: conflicts
 =======
+=======
+>>>>>>> fix: pnpm-lock
   /jest/27.0.6_ts-node@10.2.0:
->>>>>>> fix: conflicts
     resolution: {integrity: sha512-EjV8aETrsD0wHl7CKMibKwQNQc3gIRBXlTikBmmHUeVMKaPFxdcUIBfoDqTSXDoGJIivAYGqCWVlzCSaVjPQsA==}
 <<<<<<< HEAD
 =======
@@ -26017,6 +26300,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@jest/core': 27.2.0_ts-node@10.2.1
       import-local: 3.0.2
       jest-cli: 27.2.0_ts-node@10.2.1
@@ -26031,6 +26315,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       '@jest/core': 27.1.0
       import-local: 3.0.2
@@ -26046,6 +26332,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       '@jest/core': 27.1.0_ts-node@10.2.1
       import-local: 3.0.2
@@ -26171,8 +26459,19 @@ packages:
       jest-cli: 27.0.6_ts-node@10.2.0
 >>>>>>> fix: conflicts
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+=======
+=======
+=======
+      '@jest/core': 27.0.6_ts-node@10.2.0
+      import-local: 3.0.2
+      jest-cli: 27.0.6_ts-node@10.2.0
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -27536,6 +27835,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /nano-base32/1.0.1:
     resolution: {integrity: sha1-ulSMh578+5DaHE2eCX20pGySVe8=}
     dev: false
@@ -27651,6 +27951,8 @@ packages:
 =======
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
   /nano-css/5.3.1_f991c289939c8299bed5e4a6a5a79a62:
     resolution: {integrity: sha512-ENPIyNzANQRyYVvb62ajDd7PAyIgS2LIUnT9ewih4yrXSZX4hKoUwssy8WjUH++kEOA5wUTMgNnV7ko5n34kUA==}
 >>>>>>> feat: initial setup for augur
@@ -29699,6 +30001,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> feat: three tabs added to the market view
@@ -29708,6 +30011,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /react-error-boundary/3.1.3:
 =======
@@ -29748,6 +30053,9 @@ packages:
   /react-error-boundary/3.1.3_react@18.0.0-alpha-aecb3b6d1:
 >>>>>>> fix: conflicts
 >>>>>>> fix: conflicts
+=======
+  /react-error-boundary/3.1.3_react@18.0.0-alpha-aecb3b6d1:
+>>>>>>> fix: pnpm-lock
     resolution: {integrity: sha512-A+F9HHy9fvt9t8SNDlonq01prnU8AmkjvGKV4kk8seB9kU3xMEO8J/PQlLVmoOIDODl5U2kufSBs4vrWIqhsAA==}
     engines: {node: '>=10', npm: '>=6'}
     peerDependencies:
@@ -29763,6 +30071,7 @@ packages:
 =======
 >>>>>>> fix: conflicts and bugs
       '@babel/runtime': 7.14.8
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       react: 18.0.0-alpha-aecb3b6d1
@@ -29809,8 +30118,9 @@ packages:
 >>>>>>> fix: conflicts and bugs
 >>>>>>> fix: conflicts and bugs
 =======
+=======
+>>>>>>> fix: pnpm-lock
       react: 18.0.0-alpha-aecb3b6d1
->>>>>>> fix: conflicts
     dev: true
 
 >>>>>>> feat: initial setup for augur
@@ -29873,12 +30183,15 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       react: 18.0.0-alpha-aecb3b6d1
 =======
 =======
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
     dev: false
 
@@ -29891,6 +30204,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       react: 18.0.0-alpha-aecb3b6d1
 >>>>>>> feat: three tabs added to the market view
@@ -29904,6 +30219,8 @@ packages:
 >>>>>>> fix: prices
 =======
 >>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
     dev: false
 
@@ -29919,6 +30236,9 @@ packages:
       react: 18.0.0-alpha-aecb3b6d1
 <<<<<<< HEAD
 >>>>>>> feat: three tabs added to the market view
+=======
+      react: 18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: pnpm-lock
     dev: false
 
 <<<<<<< HEAD
@@ -29931,13 +30251,6 @@ packages:
       react: ^16.8.0 || ^17
     dependencies:
       react: 18.0.0-alpha-aecb3b6d1
-=======
->>>>>>> feat: three tabs added to the market view
-=======
->>>>>>> fix: prices
-=======
-      react: 18.0.0-alpha-aecb3b6d1
->>>>>>> fix: conflicts and bugs
     dev: false
 
   /react-hook-form/7.12.0_react@18.0.0-alpha-aecb3b6d1:
@@ -30515,6 +30828,7 @@ packages:
     peerDependencies:
       react: '*'
       tslib: '*'
+<<<<<<< HEAD
     dependencies:
       react: 18.0.0-alpha-aecb3b6d1
 <<<<<<< HEAD
@@ -30596,44 +30910,14 @@ packages:
     peerDependencies:
       react: ^16.8.0  || ^17.0.0
       react-dom: ^16.8.0  || ^17.0.0
+=======
+>>>>>>> fix: pnpm-lock
     dependencies:
-<<<<<<< HEAD
-      '@types/js-cookie': 2.2.7
-=======
-      '@types/js-cookie': 2.2.6
->>>>>>> fix: prices
-      '@xobotyi/scrollbar-width': 1.9.5
-      copy-to-clipboard: 3.3.1
-      fast-deep-equal: 3.1.3
-      fast-shallow-equal: 1.0.0
-      js-cookie: 2.2.1
-      nano-css: 5.3.1
-<<<<<<< HEAD
-      react-universal-interface: 0.6.2_tslib@2.3.0
-=======
-      react-universal-interface: 0.6.2_tslib@2.2.0
->>>>>>> fix: prices
-      resize-observer-polyfill: 1.5.1
-      screenfull: 5.1.0
-      set-harmonic-interval: 1.0.1
-      throttle-debounce: 3.0.1
-      ts-easing: 0.2.0
-<<<<<<< HEAD
+      react: 18.0.0-alpha-aecb3b6d1
       tslib: 2.3.0
-=======
-      tslib: 2.2.0
->>>>>>> fix: prices
-=======
->>>>>>> fix: conflicts and bugs
     dev: false
 
->>>>>>> feat: initial setup for augur
   /react-use/17.2.4_f991c289939c8299bed5e4a6a5a79a62:
-=======
-  /react-use/17.2.4:
->>>>>>> feat: initial setup for augur
-=======
->>>>>>> fix: conflicts
     resolution: {integrity: sha512-vQGpsAM0F5UIlshw5UI8ULGPS4yn5rm7/qvn3T1Gnkrz7YRMEEMh+ynKcmRloOyiIeLvKWiQjMiwRGtdbgs5qQ==}
 >>>>>>> feat: initial setup for augur
     peerDependencies:
@@ -30740,34 +31024,25 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-    dependencies:
-      react: 18.0.0-alpha-aecb3b6d1
-      react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
-=======
-<<<<<<< HEAD
-=======
-=======
->>>>>>> fix: prices
-=======
->>>>>>> fix: conflicts and bugs
-=======
->>>>>>> fix: conflicts
-<<<<<<< HEAD
-=======
->>>>>>> feat: three tabs added to the market view
-=======
->>>>>>> feat: three tabs added to the market view
-=======
->>>>>>> fix: prices
-=======
->>>>>>> fix: conflicts and bugs
-=======
->>>>>>> fix: conflicts
 <<<<<<< HEAD
     dependencies:
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
 =======
+<<<<<<< HEAD
+>>>>>>> fix: pnpm-lock
+=======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> fix: prices
+=======
+>>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
+<<<<<<< HEAD
+=======
+>>>>>>> feat: three tabs added to the market view
 =======
 >>>>>>> feat: three tabs added to the market view
 =======
@@ -30776,6 +31051,23 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
+<<<<<<< HEAD
+    dependencies:
+      react: 18.0.0-alpha-aecb3b6d1
+      react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
+=======
+=======
+>>>>>>> feat: three tabs added to the market view
+=======
+>>>>>>> fix: prices
+=======
+>>>>>>> fix: conflicts and bugs
+=======
+>>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
 >>>>>>> feat: initial setup for augur
     dev: false
@@ -30911,9 +31203,23 @@ packages:
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
 >>>>>>> fix: conflicts
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+=======
+=======
+=======
+=======
+    dependencies:
+      react: 18.0.0-alpha-aecb3b6d1
+      react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
     dev: false
 
   /react-window/1.8.6_f991c289939c8299bed5e4a6a5a79a62:
@@ -33423,6 +33729,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> feat: initial setup for augur
 =======
 <<<<<<< HEAD
@@ -33439,6 +33746,9 @@ packages:
 =======
 <<<<<<< HEAD
 >>>>>>> fix: conflicts
+=======
+<<<<<<< HEAD
+>>>>>>> fix: pnpm-lock
   /ts-interface-checker/0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
@@ -33502,8 +33812,9 @@ packages:
   /ts-jest/27.0.4_52cc4273aa16028085013af47e479e10:
 >>>>>>> fix: conflicts
 =======
+=======
+>>>>>>> fix: pnpm-lock
   /ts-jest/27.0.4_2b1bb99c65ce8fc8eda3ccb6cb24befc:
->>>>>>> fix: conflicts
     resolution: {integrity: sha512-c4E1ECy9Xz2WGfTMyHbSaArlIva7Wi2p43QOMmCqjSSjHP06KXv+aT+eSY+yZMuqsMi3k7pyGsGj2q5oSl5WfQ==}
 <<<<<<< HEAD
 =======
@@ -33543,6 +33854,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       jest: 27.2.0_ts-node@10.2.1
       jest-util: 27.2.0
 =======
@@ -33556,6 +33868,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       jest: 27.1.0
 =======
@@ -33569,6 +33883,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       jest: 27.1.0_ts-node@10.2.1
 >>>>>>> feat: initial setup for augur
@@ -33610,8 +33926,9 @@ packages:
       jest: 27.0.6_ts-node@10.1.0
 >>>>>>> fix: conflicts
 =======
+=======
+>>>>>>> fix: pnpm-lock
       jest: 27.0.6_ts-node@10.2.0
->>>>>>> fix: conflicts
       jest-util: 27.0.6
 <<<<<<< HEAD
 =======
@@ -33641,6 +33958,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       typescript: 4.4.4
 =======
 =======
@@ -33653,6 +33971,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       typescript: 4.4.3
 =======
@@ -33661,6 +33981,9 @@ packages:
 =======
 >>>>>>> fix: prices
 =======
+<<<<<<< HEAD
+>>>>>>> fix: pnpm-lock
+=======
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
@@ -33679,6 +34002,8 @@ packages:
 >>>>>>> fix: conflicts
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       typescript: 4.4.2
 >>>>>>> feat: initial setup for augur
@@ -33728,8 +34053,9 @@ packages:
       typescript: 4.3.5
 >>>>>>> fix: conflicts
 =======
+=======
+>>>>>>> fix: pnpm-lock
       typescript: 4.4.1-rc
->>>>>>> fix: conflicts
       yargs-parser: 20.2.9
     dev: true
 
@@ -34019,6 +34345,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /tsutils/3.21.0_typescript@4.4.4:
 =======
 =======
@@ -34027,6 +34354,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /tsutils/3.21.0:
 =======
@@ -34036,6 +34365,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /tsutils/3.21.0_typescript@4.4.3:
 =======
@@ -34045,6 +34376,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /tsutils/3.21.0:
 =======
@@ -34054,6 +34387,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /tsutils/3.21.0_typescript@4.4.2:
 =======
@@ -34123,16 +34458,32 @@ packages:
   /tsutils/3.21.0_typescript@4.4.1-rc:
 >>>>>>> fix: conflicts
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+=======
+=======
+=======
+=======
+=======
+  /tsutils/3.21.0_typescript@4.4.1-rc:
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
     engines: {node: '>= 6'}
     peerDependencies:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
     dependencies:
       tslib: 1.14.1
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -34146,6 +34497,8 @@ packages:
 =======
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
 =======
 >>>>>>> fix: prices
@@ -34155,6 +34508,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       typescript: 4.4.3
 =======
@@ -34164,6 +34519,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
 =======
 >>>>>>> fix: prices
@@ -34173,6 +34530,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       typescript: 4.4.2
 =======
@@ -34218,7 +34577,13 @@ packages:
       typescript: 4.4.1-rc
 >>>>>>> fix: conflicts
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+=======
+=======
+      typescript: 4.4.1-rc
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
     dev: true
 >>>>>>> feat: three tabs added to the market view
 >>>>>>> feat: three tabs added to the market view
@@ -34267,6 +34632,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /type-coverage-core/2.18.2:
 =======
 =======
@@ -34275,6 +34641,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
   /type-coverage-core/2.18.2_typescript@4.4.2:
 >>>>>>> feat: three tabs added to the market view
@@ -34298,8 +34666,9 @@ packages:
   /type-coverage-core/2.17.5_typescript@4.3.5:
 >>>>>>> fix: conflicts and bugs
 =======
+=======
+>>>>>>> fix: pnpm-lock
   /type-coverage-core/2.17.5_typescript@4.4.1-rc:
->>>>>>> fix: conflicts
     resolution: {integrity: sha512-FfkH2kIgQkkgC47V2WHJZWBbjYjMw2ZpQRdRGTcMBAnkijmRCp9I1LpOuI+Gv4MDtniRLnkAo8htGGt2iExFgA==}
 >>>>>>> feat: three tabs added to the market view
     peerDependencies:
@@ -34321,27 +34690,11 @@ packages:
 =======
 >>>>>>> fix: conflicts and bugs
       tslib: 2.3.0
-<<<<<<< HEAD
-<<<<<<< HEAD
       tsutils: 3.21.0_typescript@4.4.1-rc
       typescript: 4.4.1-rc
     dev: true
 
   /type-coverage/2.18.0_typescript@4.4.1-rc:
-=======
-      tsutils: 3.21.0_typescript@4.3.5
-      typescript: 4.3.5
-    dev: true
-
-  /type-coverage/2.18.0_typescript@4.3.5:
->>>>>>> fix: conflicts
-=======
-      tsutils: 3.21.0_typescript@4.4.1-rc
-      typescript: 4.4.1-rc
-    dev: true
-
-  /type-coverage/2.18.0_typescript@4.4.1-rc:
->>>>>>> fix: conflicts
     resolution: {integrity: sha512-SAyrR6Xl7GfHNcXU8Y3wSnJfGftdCvf/b2JlJJtt7gt74T0dCF077/ukhlLjI/MsWmRCxW8k8x/d4AjrFiLSpQ==}
 <<<<<<< HEAD
 =======
@@ -34366,6 +34719,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       type-coverage-core: 2.18.2
 =======
 =======
@@ -34374,6 +34728,8 @@ packages:
 >>>>>>> fix: conflicts and bugs
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
 <<<<<<< HEAD
       type-coverage-core: 2.18.2_typescript@4.4.2
 =======
@@ -34416,7 +34772,13 @@ packages:
       type-coverage-core: 2.17.5_typescript@4.4.1-rc
 >>>>>>> fix: conflicts
 >>>>>>> fix: conflicts
+<<<<<<< HEAD
 >>>>>>> fix: conflicts
+=======
+=======
+      type-coverage-core: 2.17.5_typescript@4.4.1-rc
+>>>>>>> fix: pnpm-lock
+>>>>>>> fix: pnpm-lock
     transitivePeerDependencies:
       - typescript
 >>>>>>> feat: three tabs added to the market view
@@ -34460,7 +34822,7 @@ packages:
     engines: {node: '>= 0.6'}
     dependencies:
       media-typer: 0.3.0
-      mime-types: 2.1.32
+      mime-types: 2.1.31
 
   /type/1.2.0:
     resolution: {integrity: sha512-+5nt5AAniqsCnu2cEQQdpzCAh33kVx8n0VoFidKpB1dVVLAN/F+bgVOqOJqOnEnrhp222clB5p3vUlD+1QAnfg==}
@@ -35151,6 +35513,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   /use-subscription/1.5.1:
 =======
 =======
@@ -35217,6 +35580,8 @@ packages:
 =======
 =======
 >>>>>>> fix: conflicts
+=======
+>>>>>>> fix: pnpm-lock
   /use-subscription/1.5.1_react@18.0.0-alpha-aecb3b6d1:
     resolution: {integrity: sha512-Xv2a1P/yReAjAbhylMfFplFKj9GssgTwN7RlcTxBujFQcloStWNDQdc4g4NRWH9xS4i/FDk04vQBptAXoF3VcA==}
     peerDependencies:
@@ -35267,9 +35632,15 @@ packages:
     resolution: {integrity: sha512-bxZ9qtSlGUWSOy9Qa9Xgk11kSslpuZwaxCg4sNIDj6FLucDab2JxnHwyNTCpHMtK1MjoQiWQ6DiUMZYbSrO+Sw==}
     dependencies:
       inherits: 2.0.4
+<<<<<<< HEAD
       is-arguments: 1.1.1
       is-generator-function: 1.0.10
       is-typed-array: 1.1.8
+=======
+      is-arguments: 1.1.0
+      is-generator-function: 1.0.9
+      is-typed-array: 1.1.5
+>>>>>>> fix: pnpm-lock
       safe-buffer: 5.2.1
       which-typed-array: 1.1.7
 
