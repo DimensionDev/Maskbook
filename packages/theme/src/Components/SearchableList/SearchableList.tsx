@@ -2,7 +2,7 @@ import { ReactNode, useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
-import { InputAdornment, TextField, Typography } from '@material-ui/core'
+import { InputAdornment, TextField } from '@material-ui/core'
 import { makeStyles } from '../../makeStyles'
 import { Search } from '@material-ui/icons'
 import { MaskColorVar } from '../../constants'
@@ -24,7 +24,7 @@ export interface MaskSearchableListProps<T> {
     /** The callback when clicked someone list item */
     onSelect(selected: T): void
     /** The hook when search */
-    onSearch?(data: T[], key: string): T[]
+    onSearch?(key: string): void
 }
 
 /**
@@ -65,17 +65,22 @@ export function SearchableList<T>({
                 minMatchCharLength: 1,
                 keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : []),
             }),
-        [data],
+        [data, searchKey],
     )
     //#endregion
 
     //#region create searched data
     const readyToRenderData = useMemo(() => {
-        if (!keyword) return data
-        const filtered = [...(onSearch ? onSearch(data, keyword) : []), ...fuse.search(keyword).map((x: any) => x.item)]
+        if (!keyword || onSearch) return data
+        const filtered = [...fuse.search(keyword).map((x: any) => x.item)]
         return itemKey ? uniqBy(filtered, (x) => x[itemKey]) : filtered
     }, [keyword, fuse, data])
     //#endregion
+
+    const handleSearch = (word: string) => {
+        setKeyword(word)
+        onSearch?.(word)
+    }
 
     return (
         <div className={classes.container}>
@@ -91,13 +96,9 @@ export function SearchableList<T>({
                         </InputAdornment>
                     ),
                 }}
-                onChange={(e) => setKeyword(e.currentTarget.value)}
+                onChange={(e) => handleSearch(e.currentTarget.value)}
             />
-            {placeholder && (
-                <Typography className={classes.placeholder} color="textSecondary">
-                    {placeholder}
-                </Typography>
-            )}
+            {placeholder}
             {!placeholder && (
                 <div className={classes.list}>
                     <FixedSizeList
@@ -141,12 +142,5 @@ const useStyles = makeStyles()((theme) => ({
             borderRadius: '4px',
             backgroundColor: MaskColorVar.normalBackground,
         },
-    },
-    placeholder: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '300px',
-        fontSize: 16,
     },
 }))

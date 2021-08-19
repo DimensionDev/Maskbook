@@ -23,10 +23,10 @@ export const AddTokenDialog = memo<AddTokenDialogProps>(({ open, onClose }) => {
                     <Tab sx={{ width: '50%' }} label="Custom Token" value={tabs.customToken} />
                 </TabList>
                 <TabPanel value={tabs.searchToken}>
-                    <AddCustomToken onClose={onClose} />
+                    <AddTokenFromList />
                 </TabPanel>
                 <TabPanel value={tabs.customToken}>
-                    <AddTokenFromList />
+                    <AddCustomToken onClose={onClose} />
                 </TabPanel>
             </TabContext>
         </MaskDialog>
