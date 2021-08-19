@@ -1,4 +1,4 @@
-import { MaskDialog, CountdownButton, useSnackbar, MaskTextField } from '@masknet/theme'
+import { MaskDialog, CountdownButton, useSnackbar, MaskTextField, MaskColorVar } from '@masknet/theme'
 import { MenuItem, Select, Box } from '@material-ui/core'
 import { useDashboardI18N } from '../../../../locales'
 import { useState, useContext, useMemo, useEffect } from 'react'
@@ -65,7 +65,12 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
     return (
         <MaskDialog title="Cloud Backup" open={open} onClose={onClose}>
             <Box sx={{ padding: '10px 24px 24px' }}>
-                <Select value={mode} onChange={(event) => setMode(event.target.value)} fullWidth size="small">
+                <Select
+                    value={mode}
+                    onChange={(event) => setMode(event.target.value)}
+                    fullWidth
+                    size="small"
+                    sx={{ background: MaskColorVar.normalBackground }}>
                     {user.email ? <MenuItem value={user.email}>{user.email}</MenuItem> : null}
                     {user.phone ? <MenuItem value={user.phone}>{user.phone}</MenuItem> : null}
                 </Select>
