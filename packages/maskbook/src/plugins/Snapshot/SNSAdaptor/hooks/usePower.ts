@@ -21,7 +21,6 @@ export function usePower(identifier: ProposalIdentifier) {
             identifier.space,
             proposal.strategies,
         )
-        console.log({ scores })
         return scores[0]![account]!
     }, [blockNumber, account])
 }
