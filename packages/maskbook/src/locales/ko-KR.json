@@ -127,6 +127,7 @@
     "browser_action_enter_dashboard": "대시보드로 들어가기",
     "browser_action_connect_wallet": "월렛 연결하기",
     "browser_action_setup_first_persona": "첫 번째 페르소나 만들기",
+    "popups_initial_tips": "",
     "profiles": "프로필",
     "posts": "게시물",
     "post_dialog__button": "",
