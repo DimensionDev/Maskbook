@@ -73,7 +73,7 @@ export const TokenAssets = memo(() => {
                             }>
                             +{' '}
                             {activeTab === AssetTab.Token
-                                ? t.wallets_assets_custom_token()
+                                ? t.wallets_add_token()
                                 : t.wallets_assets_custom_collectible()}
                         </Button>
                     </Box>
