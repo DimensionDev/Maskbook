@@ -17,7 +17,7 @@ export function DashboardWalletAddERC721TokenDialog(props: WrappedDialogProps<Wa
 
     const { value: contractDetailed, loading: loadingContract } = useERC721ContractDetailed(address)
     const { value: tokenDetailed, loading: loadingToken } = useERC721TokenDetailed(contractDetailed, tokenId)
-    console.log({ tokenDetailed })
+
     const loading = loadingContract || loadingToken
 
     const onSubmit = useSnackbarCallback(

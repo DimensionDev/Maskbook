@@ -41,7 +41,7 @@ async function getERC721TokenDetailedFromOpensea(
 
     if (response.ok) {
         const data: openseaTokenData = await response.json()
-        console.log({ data })
+
         return createERC721Token(
             contractDetailed,
             {
