@@ -18,7 +18,7 @@ export function usePoolData(info: GoodGhostingInfo) {
     const [currentData, setCurrentData] = useState<LendingPoolData>()
 
     const asyncResult = useAsyncRetry(async () => {
-        if (!contract || !lendingPoolContract || !adaiContract || !incentivesContract) return {}
+        if (!contract || !lendingPoolContract || !adaiContract || !incentivesContract) return
 
         const [reward, totalAdai, reserveData] = await Promise.all([
             incentivesContract.methods.getRewardsBalance([info.adaiTokenAddress], info.contractAddress).call(),
@@ -33,7 +33,7 @@ export function usePoolData(info: GoodGhostingInfo) {
             ? new BigNumber(info.totalGameInterest)
             : new BigNumber(totalAdai).minus(info.totalGamePrincipal)
 
-        const data = {
+        const data: LendingPoolData = {
             reward,
             poolAPY,
             poolEarnings,
