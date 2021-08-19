@@ -3,12 +3,12 @@ import {
     Asset,
     ChainId,
     CollectibleProvider,
-    createERC1155Token,
     createERC20Token,
     createERC721Token,
     createNativeToken,
     CurrencyType,
     EthereumTokenType,
+    ERC721TokenDetailed,
     formatEthereumAddress,
     getChainIdFromName,
     getTokenConstants,
@@ -39,46 +39,29 @@ export async function getAssetsListNFT(
     provider: CollectibleProvider,
     page?: number,
     size?: number,
-) {
+): Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }> {
     if (provider === CollectibleProvider.OPENSEAN) {
         const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size })
         return {
             assets: assets
                 .filter((x) => ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name))
-                .map((x) => {
-                    switch (x.asset_contract.schema_name) {
-                        case 'ERC721':
-                            return createERC721Token(
-                                ChainId.Mainnet,
-                                x.token_id,
-                                x.asset_contract.address,
-                                x.asset_contract.name,
-                                x.asset_contract.symbol,
-                                '',
-                                '',
-                                {
-                                    name: x.name,
-                                    description: x.description,
-                                    image: x.image_url ?? x.image_preview_url ?? '',
-                                },
-                            )
-                        case 'ERC1155':
-                            return createERC1155Token(
-                                ChainId.Mainnet,
-                                x.token_id,
-                                x.asset_contract.address,
-                                x.asset_contract.name,
-                                '',
-                                {
-                                    name: x.name,
-                                    description: x.description,
-                                    image: x.image_url ?? x.image_preview_url ?? '',
-                                },
-                            )
-                        default:
-                            unreachable(x.asset_contract.schema_name)
-                    }
-                }),
+                .map((x) =>
+                    createERC721Token(
+                        {
+                            chainId: ChainId.Mainnet,
+                            type: EthereumTokenType.ERC721,
+                            name: x.asset_contract.name,
+                            symbol: x.asset_contract.symbol,
+                            address: x.asset_contract.address,
+                        },
+                        {
+                            name: x.name,
+                            description: x.description,
+                            image: x.image_url ?? x.image_preview_url ?? '',
+                        },
+                        x.token_id,
+                    ),
+                ),
             hasNextPage: assets.length === size,
         }
     }
