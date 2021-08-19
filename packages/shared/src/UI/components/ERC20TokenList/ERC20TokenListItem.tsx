@@ -1,5 +1,6 @@
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { Button, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
+import classNames from 'classnames'
 import {
     Asset,
     ERC20TokenDetailed,
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     name: {
         display: 'block',
         lineHeight: '20px',
-        fontSize: 14,
+        fontSize: 12,
     },
     secondary: {
         fontSize: 14,
@@ -47,8 +48,17 @@ const useStyles = makeStyles((theme: Theme) => ({
         lineHeight: '20px',
         fontSize: 14,
     },
-    importButton: {
-        borderRadius: '30px',
+    import: {
+        '&:before': {
+            content: '""',
+            display: 'inline-block',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'rgba(250, 250, 250, 0.3)',
+        },
     },
 }))
 
@@ -89,18 +99,21 @@ export const getERC20TokenListItem =
                     <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURI={logoURI} />
                 </ListItemIcon>
                 <ListItemText classes={{ primary: classes.text }}>
-                    <Typography className={classes.primary} color="textPrimary" component="span">
+                    <Typography
+                        className={classNames(classes.primary, isNotAdded ? classes.import : '')}
+                        color="textPrimary"
+                        component="span">
                         <span className={classes.symbol}>{symbol}</span>
                         <span className={classes.name}>
                             {name}
                             {isAdded && <span> • Added By User</span>}
                         </span>
                     </Typography>
-                    <Typography className={classes.secondary} color="textSecondary" component="span">
+                    <Typography sx={{ fontSize: 14 }} color="textSecondary" component="span">
                         {!isNotAdded ? (
                             <span>{formatBalance(data.balance, token.decimals)}</span>
                         ) : (
-                            <Button className={classes.importButton} color="primary" onClick={onImport} size="small">
+                            <Button variant="rounded" color="primary" onClick={onImport} size="small">
                                 Import
                             </Button>
                         )}
