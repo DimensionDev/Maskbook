@@ -2,6 +2,8 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import {
     FungibleTokenDetailed,
     isNative,
+    isSameAddress,
+    NetworkType,
     useBlockNumber,
     useNetworkType,
     useTokenConstants,
@@ -13,6 +15,13 @@ import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy, ZrxTradePool } from '../../types'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance'
 import { useTradeProviderSettings } from '../useTradeSettings'
+
+function enableSwap(networkType: NetworkType, ether_address: string, sellToken: string, buyToken: string) {
+    if (networkType === NetworkType.Polygon) {
+        if (sellToken === 'ETH' || buyToken === 'ETH') return false
+    }
+    return !isSameAddress(sellToken, ether_address) && !isSameAddress(buyToken, ether_address)
+}
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -26,6 +35,8 @@ export function useTrade(
     const networkType = useNetworkType()
     const slippage = useSlippageTolerance()
     const { pools } = useTradeProviderSettings()
+    const { ETHER_ADDRESS } = useTokenConstants()
+
     return useAsyncRetry(async () => {
         if (!inputToken || !outputToken) return null
         const isExactIn = strategy === TradeStrategy.ExactIn
@@ -33,6 +44,7 @@ export function useTrade(
         if (outputAmount === '0' && !isExactIn) return null
         const sellToken = isNative(inputToken.address) ? 'ETH' : inputToken.address
         const buyToken = isNative(outputToken.address) ? 'ETH' : outputToken.address
+        if (!enableSwap(networkType, ETHER_ADDRESS ?? '', sellToken, buyToken)) return null
         return PluginTraderRPC.swapQuote(networkType, {
             sellToken,
             buyToken,
@@ -55,5 +67,7 @@ export function useTrade(
         slippage,
         pools.length,
         blockNumber, // refresh api each block
+        networkType,
+        ETHER_ADDRESS,
     ])
 }
