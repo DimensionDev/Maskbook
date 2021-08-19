@@ -8,6 +8,8 @@ import { Box } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import LoadingButton from '@material-ui/lab/LoadingButton'
 import { VerifyCodeRequest, fetchUploadLink, uploadBackupValue } from '../../api'
+import formatDateTime from 'date-fns/format'
+
 export interface BackupDialogProps {
     local?: boolean
     params?: VerifyCodeRequest
@@ -27,7 +29,7 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
         wallet: false,
     })
     const title = local ? t.settings_local_backup() : t.settings_cloud_backup()
-    const { user } = useContext(UserContext)
+    const { user, updateUser } = useContext(UserContext)
 
     const { value, loading } = useAsync(() => Services.Welcome.generateBackupPreviewInfo())
 
@@ -70,6 +72,12 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
                     snackbar.enqueueSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
                 })
             }
+
+            updateUser({
+                backupMethod: local ? 'local' : 'cloud',
+                backupAt: formatDateTime(new Date(), 'yyyy-MM-dd HH:mm'),
+            })
+
             onClose()
         } catch {
             snackbar.enqueueSnackbar(t.settings_alert_backup_fail(), { variant: 'error' })

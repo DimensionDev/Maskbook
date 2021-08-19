@@ -5,6 +5,8 @@ export interface User {
     backupPassword: string | null
     email: string | null
     phone: string | null
+    backupMethod: string | null
+    backupAt: string | null
 }
 
 export interface UserContext {
@@ -18,6 +20,8 @@ export const UserContext = createContext<UserContext>({
         backupPassword: '',
         email: '',
         phone: '',
+        backupMethod: '',
+        backupAt: '',
     },
     updateUser: () => {
         throw new Error('Context not provided.')
@@ -34,6 +38,8 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
         backupPassword: localStorage.getItem('backupPassword'),
         email: localStorage.getItem('email'),
         phone: localStorage.getItem('phone'),
+        backupMethod: localStorage.getItem('backupMethod'),
+        backupAt: localStorage.getItem('backupAt'),
     })
 
     const [callback, setCallback] = useState<[VerifyPasswordSet] | null>(null)
@@ -44,6 +50,8 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
         localStorage.setItem('backupPassword', updated.backupPassword || '')
         localStorage.setItem('email', updated.email || '')
         localStorage.setItem('phone', updated.phone || '')
+        localStorage.setItem('backupMethod', updated.backupMethod || '')
+        localStorage.setItem('backupAt', updated.backupAt || '')
     }
 
     const ensurePasswordSet = (f: VerifyPasswordSet) => {

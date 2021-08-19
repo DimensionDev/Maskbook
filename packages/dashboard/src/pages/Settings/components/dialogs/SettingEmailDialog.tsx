@@ -9,9 +9,9 @@ import { CountdownButton, MaskTextField, useSnackbar } from '@masknet/theme'
 
 const useStyles = makeStyles({
     container: {
-        minHeight: '180px',
-        paddingLeft: '20px',
-        paddingRight: '20px',
+        minHeight: 180,
+        paddingLeft: 20,
+        paddingRight: 20,
     },
 })
 
