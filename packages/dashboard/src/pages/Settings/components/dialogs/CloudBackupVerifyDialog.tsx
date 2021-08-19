@@ -1,9 +1,8 @@
-import { MaskDialog } from '@masknet/theme'
-import { MenuItem, Select, TextField, Box } from '@material-ui/core'
+import { MaskDialog, CountdownButton, useSnackbar, MaskTextField } from '@masknet/theme'
+import { MenuItem, Select, Box } from '@material-ui/core'
 import { useDashboardI18N } from '../../../../locales'
 import { useState, useContext, useMemo, useEffect } from 'react'
 import { UserContext } from '../../hooks/UserContext'
-import CountdownButton from '../../../../components/CountdownButton'
 import { fetchDownloadLink, sendCode, VerifyCodeRequest } from '../../api'
 import type { BackupFileInfo, AccountValidationType } from '../../type'
 import { LoadingButton } from '@material-ui/lab'
@@ -20,6 +19,7 @@ export interface CloudBackupVerifyDialogProps {
 }
 
 export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVerifyDialogProps) {
+    const snackbar = useSnackbar()
     const t = useDashboardI18N()
     const { user } = useContext(UserContext)
     const [mode, setMode] = useState((user.email ?? user.phone) || '')
@@ -34,8 +34,14 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
         }
     }, [mode, code])
 
-    const sendVerifyCode = () => {
-        sendCode(params)
+    const sendVerifyCode = async () => {
+        const res = await sendCode(params).catch((error) =>
+            snackbar.enqueueSnackbar(error.message, { variant: 'error' }),
+        )
+
+        if (res) {
+            snackbar.enqueueSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
+        }
     }
 
     const [{ loading }, handleNext] = useAsyncFn(async () => {
@@ -65,7 +71,7 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
                 </Select>
 
                 <Box sx={{ display: 'flex', paddingTop: '24px', alignItems: 'flex-start' }}>
-                    <TextField
+                    <MaskTextField
                         size="small"
                         sx={{ flex: 1, marginRight: '24px' }}
                         value={code}
@@ -79,7 +85,7 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
                 </Box>
 
                 <LoadingButton fullWidth sx={{ marginTop: '24px' }} onClick={handleNext} loading={loading}>
-                    Next
+                    {t.next()}
                 </LoadingButton>
             </Box>
         </MaskDialog>

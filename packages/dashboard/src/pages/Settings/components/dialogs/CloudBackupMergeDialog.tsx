@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { MaskDialog } from '@masknet/theme'
+import { MaskDialog, useSnackbar } from '@masknet/theme'
 import { Box, TextField } from '@material-ui/core'
 import LoadingButton from '@material-ui/lab/LoadingButton'
 import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard'
@@ -20,6 +20,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose }: CloudBa
     const [backupPassword, setBackupPassword] = useState('')
     const [incorrectBackupPassword, setIncorrectBackupPassword] = useState(false)
     const t = useDashboardI18N()
+    const snackbar = useSnackbar()
 
     const [{ loading }, handleMerge] = useAsyncFn(async () => {
         try {
@@ -30,7 +31,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose }: CloudBa
                 await Services.Welcome.checkPermissionsAndRestore(data.id)
             }
             onClose()
-            // TODO: show success tip
+            snackbar.enqueueSnackbar(t.settings_alert_merge_success(), { variant: 'success' })
             console.log('merge success')
         } catch (error) {
             setIncorrectBackupPassword(true)

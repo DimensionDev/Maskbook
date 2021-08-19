@@ -1,11 +1,11 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
 import { useContext, useState } from 'react'
-import { Box, TextField, Typography, makeStyles } from '@material-ui/core'
+import { Box, Typography, makeStyles } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
 import { sendCode, verifyCode } from '../../api'
 import { phoneRegexp } from '../../regexp'
-import { CountdownButton } from '@masknet/theme'
+import { CountdownButton, MaskTextField, useSnackbar } from '@masknet/theme'
 
 const useStyles = makeStyles({
     container: {
@@ -21,6 +21,7 @@ interface SettingPhoneNumberDialogProps {
 }
 
 export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhoneNumberDialogProps) {
+    const snackbar = useSnackbar()
     const t = useDashboardI18N()
     const classes = useStyles()
     const { user, updateUser } = useContext(UserContext)
@@ -62,6 +63,11 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                     setCode('')
                     setStep(1)
                 } else {
+                    const msg = user.phone
+                        ? t.settings_alert_phone_number_updated()
+                        : t.settings_alert_phone_number_set()
+                    snackbar.enqueueSnackbar(msg, { variant: 'success' })
+
                     updateUser({ phone: `${countryCode} ${phone}` })
                     onClose()
                 }
@@ -81,6 +87,12 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
             account: countryCode + phone,
             type: 'phone',
         })
+            .then(() => {
+                snackbar.enqueueSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
+            })
+            .catch((error) => {
+                snackbar.enqueueSnackbar(error.message, { variant: 'error' })
+            })
     }
 
     return (
@@ -89,27 +101,27 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
             maxWidth="xs"
             open={open}
             onClose={handleClose}
-            onConfirm={handleConfirm}>
+            onConfirm={handleConfirm}
+            confirmText={step === 1 ? t.next() : t.confirm()}>
             {step === 1 ? (
                 <Box
                     className={classes.container}
                     sx={{ display: 'flex', alignItems: 'flex-start', paddingTop: '48px' }}>
-                    <TextField
+                    <MaskTextField
                         value={countryCode}
                         onChange={handleCountryCodeChange}
-                        variant="outlined"
                         placeholder="+86"
-                        sx={{ marginRight: '10px', width: '120px' }}
+                        sx={{ marginRight: '10px', width: '60px' }}
                     />
-                    <TextField
+                    <MaskTextField
                         fullWidth
+                        sx={{ flex: 1 }}
                         value={phone}
                         onChange={(event) => setPhone(event.target.value)}
                         onBlur={validCheck}
                         type="text"
-                        variant="outlined"
                         error={invalidPhone}
-                        helperText={invalidPhone ? 'The phone number is incorrect.' : ''}
+                        helperText={invalidPhone ? t.settings_dialogs_incorrect_phone() : ''}
                     />
                 </Box>
             ) : (
@@ -119,13 +131,13 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                         {countryCode} {phone}
                     </Typography>
                     <Box sx={{ display: 'flex', paddingTop: '10px', alignItems: 'flex-start' }}>
-                        <TextField
+                        <MaskTextField
                             size="small"
                             sx={{ flex: 1, marginRight: '10px' }}
                             value={code}
                             onChange={(event) => setCode(event.target.value)}
                             error={invalidCode}
-                            helperText={invalidCode ? t.settings_dialogs_incorrect_phone() : ''}
+                            helperText={invalidCode ? t.settings_dialogs_incorrect_code() : ''}
                         />
                         <CountdownButton
                             size="medium"

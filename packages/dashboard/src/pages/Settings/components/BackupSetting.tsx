@@ -71,11 +71,14 @@ export default function BackupSetting() {
                 onClose={() => setShowDialog({ ...showDialog, mode: false })}
                 onSelect={onSelectMode}
             />
-            <CloudBackupVerifyDialog
-                open={showDialog.verify}
-                onClose={() => setShowDialog({ ...showDialog, verify: false })}
-                onNext={handleVerified}
-            />
+            {showDialog.verify ? (
+                <CloudBackupVerifyDialog
+                    open={showDialog.verify}
+                    onClose={() => setShowDialog({ ...showDialog, verify: false })}
+                    onNext={handleVerified}
+                />
+            ) : null}
+
             {cloudFileInfo && params ? (
                 <>
                     <CloudBackupPreviewDialog

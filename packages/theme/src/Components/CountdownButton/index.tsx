@@ -17,10 +17,16 @@ export function CountdownButton(props: CountdownButtonProps) {
 
     useEffect(() => {
         if (countdown) {
-            setTimeout(() => {
+            const timer = setTimeout(() => {
                 setCountdown(countdown - 1)
             }, 1000)
+
+            return () => {
+                clearTimeout(timer)
+            }
         }
+
+        return () => {}
     }, [countdown])
 
     return (

@@ -3,8 +3,8 @@ import { Services } from '../../../../API'
 import { useAsync } from 'react-use'
 import BackupContentSelector, { BackupContentCheckedStatus } from '../BackupContentSelector'
 import { useDashboardI18N } from '../../../../locales'
-import { MaskDialog } from '@masknet/theme'
-import { Box, TextField } from '@material-ui/core'
+import { MaskDialog, MaskTextField, useSnackbar } from '@masknet/theme'
+import { Box } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import LoadingButton from '@material-ui/lab/LoadingButton'
 import { VerifyCodeRequest, fetchUploadLink, uploadBackupValue } from '../../api'
@@ -16,6 +16,7 @@ export interface BackupDialogProps {
 }
 
 export default function BackupDialog({ local = true, params, open, onClose }: BackupDialogProps) {
+    const snackbar = useSnackbar()
     const t = useDashboardI18N()
     const [backupPassword, setBackupPassword] = useState('')
     const [paymentPassword, setPaymentPassword] = useState('')
@@ -25,7 +26,7 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
         base: true,
         wallet: false,
     })
-    const title = local ? 'Local Backup' : 'Cloud Backup'
+    const title = local ? t.settings_local_backup() : t.settings_cloud_backup()
     const { user } = useContext(UserContext)
 
     const { value, loading } = useAsync(() => Services.Welcome.generateBackupPreviewInfo())
@@ -65,15 +66,13 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
                     JSON.stringify(file),
                 )
 
-                const res = await uploadBackupValue(uploadUrl, encrypted)
-                console.log(res)
+                uploadBackupValue(uploadUrl, encrypted).then(() => {
+                    snackbar.enqueueSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
+                })
             }
             onClose()
         } catch {
-            // TODO: show snack bar
-            // enqueueSnackbar(t('set_up_backup_fail'), {
-            //     variant: 'error',
-            // })
+            snackbar.enqueueSnackbar(t.settings_alert_backup_fail(), { variant: 'error' })
         }
     }
 
@@ -97,26 +96,24 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
             <Box sx={{ padding: '0 24px 24px' }}>
                 {value ? <BackupContentSelector json={value} onChange={handleContentChange} /> : null}
 
-                <TextField
+                <MaskTextField
                     fullWidth
                     value={backupPassword}
                     onChange={(event) => setBackupPassword(event.target.value)}
                     type="password"
-                    label={t.settings_label_backup_password()}
-                    variant="outlined"
+                    placeholder={t.settings_label_backup_password()}
                     sx={{ marginBottom: '24px' }}
                     error={incorrectBackupPassword}
                     helperText={incorrectBackupPassword ? t.settings_dialogs_incorrect_password() : ''}
                 />
 
                 {showPassword.wallet ? (
-                    <TextField
+                    <MaskTextField
                         fullWidth
                         value={paymentPassword}
                         onChange={(event) => setPaymentPassword(event.target.value)}
                         type="password"
-                        label={t.settings_label_payment_password()}
-                        variant="outlined"
+                        placeholder={t.settings_label_payment_password()}
                         sx={{ marginBottom: '24px' }}
                         error={incorrectPaymentPassword}
                         helperText={incorrectPaymentPassword ? t.settings_dialogs_incorrect_password() : ''}
