@@ -3,20 +3,20 @@ import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShad
 import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { PostReplacer, PostReplacerProps } from '../../../components/InjectedComponents/PostReplacer'
 import type { PostInfo } from '../../PostInfo'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { noop } from 'lodash-es'
 
 export function injectPostReplacer<T extends string>(
     config: injectPostReplacerConfig = {},
     additionalPropsToPostReplacer: (classes: Record<T, string>) => Partial<PostReplacerProps> = () => ({}),
-    useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
+    useCustomStyles: (props?: any) => { classes: Record<T, string> } = makeStyles()({}) as any,
 ) {
     const PostReplacerDefault = memo(function PostReplacerDefault(props: {
         zipPost: PostReplacerProps['zip']
         unZipPost: PostReplacerProps['unzip']
     }) {
-        const classes = useCustomStyles()
+        const { classes } = useCustomStyles()
         const additionalProps = additionalPropsToPostReplacer(classes)
         return <PostReplacer {...additionalProps} zip={props.zipPost} unzip={props.unZipPost} />
     })

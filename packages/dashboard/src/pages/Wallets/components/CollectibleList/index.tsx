@@ -3,8 +3,7 @@ import { Box, makeStyles, TablePagination } from '@material-ui/core'
 import {
     ChainId,
     CollectibleProvider,
-    ERC1155TokenAssetDetailed,
-    ERC721TokenAssetDetailed,
+    ERC721TokenDetailed,
     EthereumTokenType,
     formatEthereumAddress,
     useAccount,
@@ -56,12 +55,10 @@ export const CollectibleList = memo(() => {
     const { collectibles = [], hasNextPage } = value
 
     const dataSource = collectibles.filter((x) => {
-        const key = `${formatEthereumAddress(x.address)}_${x.tokenId}`
-        switch (x.type) {
+        const key = `${formatEthereumAddress(x.contractDetailed.address)}_${x.tokenId}`
+        switch (x.contractDetailed.type) {
             case EthereumTokenType.ERC721:
                 return wallet?.erc721_token_blacklist ? !wallet?.erc721_token_blacklist.has(key) : true
-            case EthereumTokenType.ERC1155:
-                return wallet?.erc1155_token_blacklist ? !wallet?.erc1155_token_blacklist.has(key) : true
             default:
                 return false
         }
@@ -91,7 +88,7 @@ export interface CollectibleListUIProps {
     showPagination: boolean
     chainId: ChainId
     provider: CollectibleProvider
-    dataSource: (ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed)[]
+    dataSource: ERC721TokenDetailed[]
 }
 
 export const CollectibleListUI = memo<CollectibleListUIProps>(

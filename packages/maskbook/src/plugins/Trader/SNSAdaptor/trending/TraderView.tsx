@@ -20,7 +20,7 @@ import { TrendingViewDeck } from './TrendingViewDeck'
 import { currentDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType, useTokenDetailed, useChainIdValid } from '@masknet/web3-shared'
+import { EthereumTokenType, useFungibleTokenDetailed, useChainIdValid } from '@masknet/web3-shared'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 
@@ -121,7 +121,7 @@ export function TraderView(props: TraderViewProps) {
         value: tokenDetailed,
         error: tokenDetailedError,
         loading: loadingTokenDetailed,
-    } = useTokenDetailed(
+    } = useFungibleTokenDetailed(
         trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
         trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.contract_address ?? '',
     )

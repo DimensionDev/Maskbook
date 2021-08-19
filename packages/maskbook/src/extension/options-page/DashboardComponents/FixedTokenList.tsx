@@ -1,6 +1,7 @@
 import {
     currySameAddress,
     FungibleTokenDetailed,
+    makeSortAssertFn,
     makeSortTokenFn,
     useAccount,
     useAssetsByTokenList,
@@ -8,6 +9,7 @@ import {
     useERC20TokenDetailed,
     useERC20TokensDetailedFromTokenLists,
     useEthereumConstants,
+    useTrustedERC20Tokens,
 } from '@masknet/web3-shared'
 import { makeStyles, Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
@@ -36,6 +38,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
     const chainId = useChainId()
+    const trustedERC20Tokens = useTrustedERC20Tokens()
 
     const {
         keyword,
@@ -51,7 +54,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
     const { ERC20_TOKEN_LISTS } = useEthereumConstants()
 
     const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
-        useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS, keyword)
+        useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS, keyword, trustedERC20Tokens)
 
     //#region add token by address
     const matchedTokenAddress = useMemo(() => {
@@ -79,10 +82,12 @@ export function FixedTokenList(props: FixedTokenListProps) {
 
     const renderAssets =
         !account || assetsError || assetsLoading
-            ? renderTokens
+            ? [...renderTokens]
                   .sort(makeSortTokenFn(chainId, { isMaskBoost: true }))
                   .map((token) => ({ token: token, balance: null }))
-            : assets
+            : !!keyword
+            ? assets
+            : [...assets].sort(makeSortAssertFn(chainId, { isMaskBoost: true }))
 
     //#region UI helpers
     const renderPlaceholder = (message: string) => (

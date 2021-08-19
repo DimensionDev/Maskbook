@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon'
 import { makeStyles } from '@material-ui/core'
-import { formatEthereumAddress, formatBalance, useTokenDetailed, EthereumTokenType } from '@masknet/web3-shared'
+import { formatEthereumAddress, formatBalance, useFungibleTokenDetailed, EthereumTokenType } from '@masknet/web3-shared'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
@@ -61,7 +61,10 @@ interface BadgeProps {
 }
 function Badge({ payload }: BadgeProps) {
     const classes = useStyles()
-    const { value: tokenDetailed, loading: loadingToken } = useTokenDetailed(EthereumTokenType.ERC20, payload.token)
+    const { value: tokenDetailed, loading: loadingToken } = useFungibleTokenDetailed(
+        EthereumTokenType.ERC20,
+        payload.token,
+    )
     const balance = formatBalance(payload.total, tokenDetailed?.decimals)
     const symbol = tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
     const sellerName = payload.seller.name

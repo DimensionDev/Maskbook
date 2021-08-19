@@ -16,6 +16,7 @@
     "@hookform/resolvers": "^2.6.0",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-example": "workspace:*",
+    "@masknet/plugin-wallet": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/public-api": "workspace:*",
     "@masknet/shared": "workspace:*",

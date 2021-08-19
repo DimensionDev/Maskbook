@@ -1,6 +1,19 @@
 import type { ThirdPartyPopupContextIdentifier } from '../../plugins/External/popup-context'
 
 export enum DialogRoutes {
+    Root = '/',
+    Wallet = '/wallet',
+    ImportWallet = '/wallet/import',
+    AddDeriveWallet = '/wallet/addDerive',
+    WalletSettings = '/wallet/settings',
+    WalletRename = '/wallet/rename',
+    DeleteWallet = '/wallet/delete',
+    CreateWallet = '/wallet/create',
+    SelectWallet = '/wallet/select',
+    BackupWallet = '/wallet/backup',
+    AddToken = '/wallet/addToken',
+    TokenDetail = '/wallet/tokenDetail',
+    Personas = '/personas',
     PermissionAwareRedirect = '/redirect',
     RequestPermission = '/request-permission',
     ThirdPartyRequestPermission = '/3rd-request-permission',

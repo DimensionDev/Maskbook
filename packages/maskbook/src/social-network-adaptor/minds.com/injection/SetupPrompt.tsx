@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { startWatch } from '../../../utils/watcher'
@@ -26,17 +26,17 @@ function injectSetupPrompt<T>(ls: LiveSelector<T, true>, signal: AbortSignal) {
     })
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     buttonText: {
         margin: 0,
     },
     content: {
         marginRight: 5,
     },
-}))
+})
 
 const MindsNotSetupYet = () => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <NotSetupYetPrompt
             classes={{
