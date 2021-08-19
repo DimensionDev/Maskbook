@@ -243,6 +243,7 @@
     "wallet_rename": "ウォレット名を変更",
     "wallet_add_nft_address": "追加するアドレス",
     "wallet_add_nft_invalid_address": "無効のアドレス",
+    "wallet_add_nft_invalid_owner": "",
     "wallet_add_nft_address_placeholder": "追加するアドレス",
     "wallet_add_nft_id_placeholder": "コレクションの ID を入力",
     "wallet_assets": "資産",

@@ -29,7 +29,7 @@ export function usePoolData(info: GoodGhostingInfo) {
 
         const poolEarnings = info.gameHasEnded
             ? info.totalGameInterest
-            : new BigNumber(totalAdai).minus(new BigNumber(info.totalGamePrincipal))
+            : new BigNumber(totalAdai).minus(info.totalGamePrincipal)
 
         return {
             reward,

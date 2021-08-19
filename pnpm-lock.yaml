@@ -8942,10 +8942,6 @@ packages:
   /@types/node/12.20.17:
     resolution: {integrity: sha512-so8EHl4S6MmatPS0f9sE1ND94/ocbcEshW5OpyYthRqeRpiYyW2uXYTo/84kmfdfeNrDycARkvuiXl6nO40NGg==}
 
-  /@types/node/12.20.19:
-    resolution: {integrity: sha512-niAuZrwrjKck4+XhoCw6AAVQBENHftpXw9F4ryk66fTgYaKQ53R4FI7c9vUGGw5vQis1HKBHDR1gcYI/Bq1xvw==}
-    dev: false
-
   /@types/node/14.17.6:
     resolution: {integrity: sha512-iBxsxU7eswQDGhlr3AiamBxOssaYxbM+NKXVil8jg9yFXvrfEFbDumLD/2dMTB+zYyg7w+Xjt8yuxfdbUHAtcQ==}
     dev: true
@@ -11704,7 +11700,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001251
-      electron-to-chromium: 1.3.807
+      electron-to-chromium: 1.3.806
     dev: false
 
   /browserslist/4.14.2:
@@ -13868,11 +13864,6 @@ packages:
 
   /electron-to-chromium/1.3.806:
     resolution: {integrity: sha512-AH/otJLAAecgyrYp0XK1DPiGVWcOgwPeJBOLeuFQ5l//vhQhwC9u6d+GijClqJAmsHG4XDue81ndSQPohUu0xA==}
-    dev: true
-
-  /electron-to-chromium/1.3.807:
-    resolution: {integrity: sha512-p8uxxg2a23zRsvQ2uwA/OOI+O4BQxzaR7YKMIGGGQCpYmkFX2CVF5f0/hxLMV7yCr7nnJViCwHLhPfs52rIYCA==}
-    dev: false
 
   /element-resize-detector/1.2.3:
     resolution: {integrity: sha512-+dhNzUgLpq9ol5tyhoG7YLoXL3ssjfFW+0gpszXPwRU6NjGr1fVHMEAF8fVzIiRJq57Nre0RFeIjJwI8Nh2NmQ==}
@@ -17151,6 +17142,7 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       call-bind: 1.0.2
+    dev: true
 
   /is-arguments/1.1.1:
     resolution: {integrity: sha512-8Q7EARjzEnKpt/PCD7e1cgUS0a6X8u5tdSiMqXhojOdoV9TsMsiO+9VLC5vAmO8N7/GmXn7yjR8qnA6bVAEzfA==}
@@ -24442,7 +24434,7 @@ packages:
       mkdirp-promise: 5.0.1
       mock-fs: 4.14.0
       setimmediate: 1.0.5
-      tar: 4.4.17
+      tar: 4.4.15
       xhr-request: 1.1.0
     dev: false
 
@@ -24526,8 +24518,8 @@ packages:
       through: 2.3.8
     dev: false
 
-  /tar/4.4.17:
-    resolution: {integrity: sha512-q7OwXq6NTdcYIa+k58nEMV3j1euhDhGCs/VRw9ymx/PbH0jtIM2+VTgDE/BW3rbLkrBUXs5fzEKgic5oUciu7g==}
+  /tar/4.4.15:
+    resolution: {integrity: sha512-ItbufpujXkry7bHH9NpQyTXPbJ72iTlXgkBAYsAjDXk3Ds8t/3NfO5P4xZGy7u+sYuQUbimgzswX4uQIEeNVOA==}
     engines: {node: '>=4.5'}
     dependencies:
       chownr: 1.1.4
@@ -25265,7 +25257,7 @@ packages:
     engines: {node: '>= 0.6'}
     dependencies:
       media-typer: 0.3.0
-      mime-types: 2.1.31
+      mime-types: 2.1.32
 
   /type/1.2.0:
     resolution: {integrity: sha512-+5nt5AAniqsCnu2cEQQdpzCAh33kVx8n0VoFidKpB1dVVLAN/F+bgVOqOJqOnEnrhp222clB5p3vUlD+1QAnfg==}
@@ -25773,7 +25765,7 @@ packages:
     resolution: {integrity: sha512-bxZ9qtSlGUWSOy9Qa9Xgk11kSslpuZwaxCg4sNIDj6FLucDab2JxnHwyNTCpHMtK1MjoQiWQ6DiUMZYbSrO+Sw==}
     dependencies:
       inherits: 2.0.4
-      is-arguments: 1.1.0
+      is-arguments: 1.1.1
       is-generator-function: 1.0.9
       is-typed-array: 1.1.5
       safe-buffer: 5.2.1
@@ -26087,7 +26079,7 @@ packages:
     engines: {node: '>=8.0.0'}
     requiresBuild: true
     dependencies:
-      '@types/node': 12.20.19
+      '@types/node': 12.20.17
       got: 9.6.0
       swarm-js: 0.1.40
     dev: false
@@ -26199,7 +26191,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       '@types/bn.js': 4.11.6
-      '@types/node': 12.20.19
+      '@types/node': 12.20.17
       bignumber.js: 9.0.1
       web3-core-helpers: 1.5.2
       web3-core-method: 1.5.2
@@ -26346,7 +26338,7 @@ packages:
     resolution: {integrity: sha512-nH5N2GiVC0C5XeMEKU16PeFP3Hb3hkPvlR6Tf9WQ+pE+jw1c8eaXBO1CJQLr15ikhUF3s94ICyHcfjzkDsmRbA==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      '@types/node': 12.20.19
+      '@types/node': 12.20.17
       web3-core: 1.5.2
       web3-core-helpers: 1.5.2
       web3-core-method: 1.5.2

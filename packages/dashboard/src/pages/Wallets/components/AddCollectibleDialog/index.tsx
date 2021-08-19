@@ -2,8 +2,7 @@ import { memo, useMemo, useState } from 'react'
 import { MaskColorVar, MaskDialog } from '@masknet/theme'
 import { useSnackbarCallback } from '@masknet/shared'
 import { Box, Button, DialogActions, DialogContent, makeStyles, TextField } from '@material-ui/core'
-import { useERC721TokenAssetDetailed, useERC721TokenDetailed, useWallet } from '@masknet/web3-shared'
-import { PluginServices } from '../../../../API'
+import { useWallet } from '@masknet/web3-shared'
 import { EthereumAddress } from 'wallet.ts'
 import { useDashboardI18N } from '../../../../locales'
 
@@ -25,21 +24,23 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     const [address, setAddress] = useState('')
 
     const wallet = useWallet()
-    const tokenDetailed = useERC721TokenDetailed(address)
-    const assetDetailed = useERC721TokenAssetDetailed(tokenDetailed.value)
+    // Todo: The current implement does not work, please refactor this component according to dashboard 1.0 Add Asset:
+    // Todo: maskbook/src/extension/options-page/DashboardDialogs/Wallet/AddERC721Token.tsx
+    // const tokenDetailed = useERC721TokenDetailed(address)
+    // const assetDetailed = useERC721TokenAssetDetailed(tokenDetailed.value)
 
     const onSubmit = useSnackbarCallback({
         executor: async () => {
-            if (!tokenDetailed.value || !assetDetailed.value || !wallet) return
-            await Promise.all([
-                PluginServices.Wallet.addERC721Token({
-                    ...tokenDetailed.value,
-                    asset: assetDetailed.value,
-                }),
-                PluginServices.Wallet.trustERC721Token(wallet.address, tokenDetailed.value),
-            ])
+            // if (!tokenDetailed.value || !assetDetailed.value || !wallet) return
+            // await Promise.all([
+            //     PluginServices.Wallet.addERC721Token({
+            //         ...tokenDetailed.value,
+            //         asset: assetDetailed.value,
+            //     }),
+            //     PluginServices.Wallet.trustERC721Token(wallet.address, tokenDetailed.value),
+            // ])
         },
-        deps: [wallet, tokenDetailed, assetDetailed],
+        deps: [wallet],
         onSuccess: onClose,
     })
 

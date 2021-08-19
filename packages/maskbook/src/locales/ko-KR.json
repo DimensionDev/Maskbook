@@ -242,6 +242,7 @@
     "wallet_rename": "월렛 이름 바꾸기",
     "wallet_add_nft_address": "주소로",
     "wallet_add_nft_invalid_address": "무효 주소",
+    "wallet_add_nft_invalid_owner": "",
     "wallet_add_nft_address_placeholder": "주소로",
     "wallet_add_nft_id": "아이디",
     "wallet_add_nft_id_placeholder": "수집품 아이디 입력",

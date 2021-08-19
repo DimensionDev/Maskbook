@@ -1,10 +1,4 @@
-import {
-    ERC1155TokenAssetDetailed,
-    ERC721TokenAssetDetailed,
-    ChainId,
-    CollectibleProvider,
-    resolveCollectibleLink,
-} from '@masknet/web3-shared'
+import { ERC721TokenDetailed, ChainId, CollectibleProvider, resolveCollectibleLink } from '@masknet/web3-shared'
 import { memo } from 'react'
 import { Link, makeStyles, Typography } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
@@ -38,22 +32,22 @@ const useStyles = makeStyles(() => ({
 export interface CollectibleCardProps {
     chainId: ChainId
     provider: CollectibleProvider
-    token: ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed
+    token: ERC721TokenDetailed
 }
 
 export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, token }) => {
     const classes = useStyles()
 
-    return token.asset?.image ? (
+    return token.info.image ? (
         <div className={classes.card}>
             <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(chainId, provider, token)}>
                 <div className={classes.imgContainer}>
-                    <img src={token.asset.image} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+                    <img src={token.info.image} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
                 </div>
             </Link>
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
-                    {token.asset?.name ?? token.name}
+                    {token.info.name}
                 </Typography>
             </div>
         </div>
