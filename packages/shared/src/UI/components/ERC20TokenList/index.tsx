@@ -12,6 +12,7 @@ import {
     useERC20TokenDetailed,
     useERC20TokensDetailedFromTokenLists,
     useEthereumConstants,
+    useNativeTokenDetailed,
     useTrustedERC20Tokens,
     useWeb3State,
 } from '@masknet/web3-shared'
@@ -37,6 +38,7 @@ const Placeholder = memo(({ message }: { message: string }) => (
 export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     const { account, chainId } = useWeb3State()
     const trustedERC20Tokens = useTrustedERC20Tokens()
+    const { value: nativeToken } = useNativeTokenDetailed()
     const [keyword, setKeyword] = useState('')
 
     const {
@@ -48,11 +50,14 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     } = props
 
     // todo: set
-    const [address, setAddress] = useState('')
     const { ERC20_TOKEN_LISTS } = useEthereumConstants()
 
     const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
-        useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS, keyword, trustedERC20Tokens)
+        useERC20TokensDetailedFromTokenLists(
+            ERC20_TOKEN_LISTS,
+            keyword,
+            nativeToken ? [...trustedERC20Tokens, nativeToken] : trustedERC20Tokens,
+        )
 
     //#region add token by address
     const matchedTokenAddress = useMemo(() => {

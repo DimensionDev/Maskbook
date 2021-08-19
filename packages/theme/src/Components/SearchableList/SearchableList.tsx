@@ -7,6 +7,7 @@ import { makeStyles } from '../../makeStyles'
 import { Search } from '@material-ui/icons'
 import { MaskColorVar } from '../../constants'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
+import { MaskTextField } from '../TextField'
 
 export interface MaskSearchableListProps<T> {
     /** The list data should be render */
@@ -84,7 +85,7 @@ export function SearchableList<T>({
 
     return (
         <div className={classes.container}>
-            <TextField
+            <MaskTextField
                 className={classes.textField}
                 placeholder="Search"
                 autoFocus
