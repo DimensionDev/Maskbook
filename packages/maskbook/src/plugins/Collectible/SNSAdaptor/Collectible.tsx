@@ -19,7 +19,7 @@ import formatDateTime from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
-import { useI18N, useSettingsSwticher } from '../../../utils'
+import { useI18N, useSettingsSwitcher } from '../../../utils'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
@@ -150,7 +150,7 @@ export function Collectible(props: CollectibleProps) {
     //#endregion
 
     //#region provider switcher
-    const CollectibleProviderSwitcher = useSettingsSwticher(
+    const CollectibleProviderSwitcher = useSettingsSwitcher(
         currentCollectibleProviderSettings,
         getEnumAsArray(CollectibleProvider).map((x) => x.value),
         resolveCollectibleProviderName,
