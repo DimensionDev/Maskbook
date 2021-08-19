@@ -1,28 +1,73 @@
-import ConfirmDialog from '../../../../components/ConfirmDialog'
-import { ChangeEvent, useState } from 'react'
-import { Checkbox, FormControlLabel } from '@material-ui/core'
+import { useContext, useMemo, useState, useEffect } from 'react'
 import { Services } from '../../../../API'
 import { useAsync } from 'react-use'
-import BackupPreviewCard from '../BackupPreviewCard'
+import BackupContentSelector, { BackupContentCheckedStatus } from '../BackupContentSelector'
 import { useDashboardI18N } from '../../../../locales'
-
+import { MaskDialog } from '@masknet/theme'
+import { Box, TextField } from '@material-ui/core'
+import { UserContext } from '../../hooks/UserContext'
+import LoadingButton from '@material-ui/lab/LoadingButton'
+import { VerifyCodeRequest, fetchUploadLink, uploadBackupValue } from '../../api'
 export interface BackupDialogProps {
+    local?: boolean
+    params?: VerifyCodeRequest
     open: boolean
     onClose(): void
 }
 
-export default function BackupDialog({ open, onClose }: BackupDialogProps) {
+export default function BackupDialog({ local = true, params, open, onClose }: BackupDialogProps) {
     const t = useDashboardI18N()
-    const [checked, setChecked] = useState(true)
+    const [backupPassword, setBackupPassword] = useState('')
+    const [paymentPassword, setPaymentPassword] = useState('')
+    const [incorrectBackupPassword, setIncorrectBackupPassword] = useState(false)
+    const [incorrectPaymentPassword, setIncorrectPaymentPassword] = useState(false)
+    const [showPassword, setShowPassword] = useState({
+        base: true,
+        wallet: false,
+    })
+    const title = local ? 'Local Backup' : 'Cloud Backup'
+    const { user } = useContext(UserContext)
 
     const { value, loading } = useAsync(() => Services.Welcome.generateBackupPreviewInfo())
 
     const handleClose = () => {
         onClose()
     }
-    const handleConfirm = async () => {
+    const handleBackup = async () => {
+        if (backupPassword !== user.backupPassword) {
+            setIncorrectBackupPassword(true)
+            return
+        }
+
+        if (showPassword.wallet) {
+            // TODO: verify payment password
+        }
+
         try {
-            await Services.Welcome.createBackupFile({ download: true, onlyBackupWhoAmI: false })
+            const file = await Services.Welcome.createBackupFile({
+                noPosts: !showPassword.base,
+                noPersonas: !showPassword.base,
+                noProfiles: !showPassword.base,
+                noWallets: !showPassword.wallet,
+                download: local,
+                onlyBackupWhoAmI: false,
+            })
+
+            if (!local && params) {
+                const abstract = file.personas
+                    .filter((x) => x.nickname)
+                    .map((x) => x.nickname)
+                    .join(', ')
+                const uploadUrl = await fetchUploadLink({ ...params, abstract })
+                const encrypted = await Services.Crypto.encryptBackup(
+                    backupPassword,
+                    params.account,
+                    JSON.stringify(file),
+                )
+
+                const res = await uploadBackupValue(uploadUrl, encrypted)
+                console.log(res)
+            }
             onClose()
         } catch {
             // TODO: show snack bar
@@ -32,25 +77,56 @@ export default function BackupDialog({ open, onClose }: BackupDialogProps) {
         }
     }
 
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setChecked(event.target.checked)
+    const handleContentChange = ({ baseChecked, walletChecked }: BackupContentCheckedStatus) => {
+        setShowPassword({
+            base: baseChecked,
+            wallet: walletChecked,
+        })
     }
 
+    const backupDisabled = useMemo(() => {
+        return !backupPassword || loading
+    }, [backupPassword, loading])
+
+    useEffect(() => {
+        setIncorrectBackupPassword(false)
+    }, [backupPassword])
+
     return (
-        <ConfirmDialog
-            title={t.settings_global_backup_title()}
-            confirmText={t.settings_button_backup()}
-            open={open}
-            confirmDisabled={loading}
-            onClose={handleClose}
-            onConfirm={handleConfirm}>
-            <div style={{ flex: 1 }}>
-                {value ? <BackupPreviewCard json={value} /> : null}
-                <FormControlLabel
-                    control={<Checkbox checked={checked} onChange={handleChange} />}
-                    label="Encrypt with account password"
+        <MaskDialog maxWidth="xs" title={title} open={open} onClose={handleClose}>
+            <Box sx={{ padding: '0 24px 24px' }}>
+                {value ? <BackupContentSelector json={value} onChange={handleContentChange} /> : null}
+
+                <TextField
+                    fullWidth
+                    value={backupPassword}
+                    onChange={(event) => setBackupPassword(event.target.value)}
+                    type="password"
+                    label={t.settings_label_backup_password()}
+                    variant="outlined"
+                    sx={{ marginBottom: '24px' }}
+                    error={incorrectBackupPassword}
+                    helperText={incorrectBackupPassword ? t.settings_dialogs_incorrect_password() : ''}
                 />
-            </div>
-        </ConfirmDialog>
+
+                {showPassword.wallet ? (
+                    <TextField
+                        fullWidth
+                        value={paymentPassword}
+                        onChange={(event) => setPaymentPassword(event.target.value)}
+                        type="password"
+                        label={t.settings_label_payment_password()}
+                        variant="outlined"
+                        sx={{ marginBottom: '24px' }}
+                        error={incorrectPaymentPassword}
+                        helperText={incorrectPaymentPassword ? t.settings_dialogs_incorrect_password() : ''}
+                    />
+                ) : null}
+
+                <LoadingButton fullWidth disabled={backupDisabled} onClick={handleBackup} loading={loading}>
+                    {t.settings_button_backup()}
+                </LoadingButton>
+            </Box>
+        </MaskDialog>
     )
 }

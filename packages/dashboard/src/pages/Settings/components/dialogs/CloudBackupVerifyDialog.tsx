@@ -1,15 +1,22 @@
 import { MaskDialog } from '@masknet/theme'
-import { MenuItem, Select, TextField, Box, Button } from '@material-ui/core'
+import { MenuItem, Select, TextField, Box } from '@material-ui/core'
 import { useDashboardI18N } from '../../../../locales'
-import { useState, useContext } from 'react'
+import { useState, useContext, useMemo, useEffect } from 'react'
 import { UserContext } from '../../hooks/UserContext'
 import CountdownButton from '../../../../components/CountdownButton'
-import { fetchDownloadLink, sendCode } from '../../api'
-import type { BackupFileInfo } from '../../type'
+import { fetchDownloadLink, sendCode, VerifyCodeRequest } from '../../api'
+import type { BackupFileInfo, AccountValidationType } from '../../type'
+import { LoadingButton } from '@material-ui/lab'
+import { useAsyncFn } from 'react-use'
+
+export interface VerifyNextData {
+    fileInfo?: BackupFileInfo
+    params: VerifyCodeRequest
+}
 export interface CloudBackupVerifyDialogProps {
     open: boolean
     onClose(): void
-    onNext(file: BackupFileInfo | undefined): void
+    onNext(data: VerifyNextData): void
 }
 
 export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVerifyDialogProps) {
@@ -19,30 +26,35 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
     const [code, setCode] = useState('')
     const [invalidCode, setInvalidCode] = useState(false)
 
-    const sendVerifyCode = () => {
-        sendCode({
+    const params = useMemo(() => {
+        return {
             account: mode,
-            type: /@/.test(mode) ? 'email' : 'phone',
-        })
+            type: (/@/.test(mode) ? 'email' : 'phone') as AccountValidationType,
+            code,
+        }
+    }, [mode, code])
+
+    const sendVerifyCode = () => {
+        sendCode(params)
     }
 
-    const handleNext = async () => {
-        const res = await fetchDownloadLink({
-            account: mode,
-            type: /@/.test(mode) ? 'email' : 'phone',
-            code,
-        }).catch((error) => {
+    const [{ loading }, handleNext] = useAsyncFn(async () => {
+        const res = await fetchDownloadLink(params).catch((error) => {
             if (error.status === 400) {
                 setInvalidCode(true)
             } else if (error.status === 404) {
-                onNext(undefined)
+                onNext({ params })
             }
         })
 
         if (res) {
-            onNext(res)
+            onNext({ fileInfo: res, params })
         }
-    }
+    }, [params])
+
+    useEffect(() => {
+        setInvalidCode(false)
+    }, [code])
 
     return (
         <MaskDialog title="Cloud Backup" open={open} onClose={onClose}>
@@ -66,9 +78,9 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
                     </CountdownButton>
                 </Box>
 
-                <Button fullWidth sx={{ marginTop: '24px' }} onClick={handleNext}>
+                <LoadingButton fullWidth sx={{ marginTop: '24px' }} onClick={handleNext} loading={loading}>
                     Next
-                </Button>
+                </LoadingButton>
             </Box>
         </MaskDialog>
     )

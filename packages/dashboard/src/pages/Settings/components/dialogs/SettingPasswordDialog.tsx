@@ -8,9 +8,10 @@ import { passwordRegexp } from '../../regexp'
 interface SettingPasswordDialogProps {
     open: boolean
     onClose(): void
+    onSet?: () => void
 }
 
-export default function SettingPasswordDialog({ open, onClose }: SettingPasswordDialogProps) {
+export default function SettingPasswordDialog({ open, onClose, onSet }: SettingPasswordDialogProps) {
     const t = useDashboardI18N()
     const { user, updateUser } = useContext(UserContext)
     const [incorrectPassword, setIncorrectPassword] = useState(false)
@@ -38,6 +39,7 @@ export default function SettingPasswordDialog({ open, onClose }: SettingPassword
 
         if (passwordValid && matched) {
             updateUser({ backupPassword: newPassword })
+            onSet?.()
             onClose()
         }
     }
@@ -92,8 +94,8 @@ export default function SettingPasswordDialog({ open, onClose }: SettingPassword
                     type="password"
                     label={
                         user.backupPassword
-                            ? t.settings_label_backup_password()
-                            : t.settings_label_new_backup_password()
+                            ? t.settings_label_new_backup_password()
+                            : t.settings_label_backup_password()
                     }
                     variant="outlined"
                     sx={{ marginBottom: '10px' }}

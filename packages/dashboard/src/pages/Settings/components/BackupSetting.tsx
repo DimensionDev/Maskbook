@@ -2,52 +2,96 @@ import SettingButton from './SettingButton'
 import { useState, useContext } from 'react'
 import BackupDialog from './dialogs/BackupDialog'
 import BackupModeSelectDialog from './dialogs/BackupModeSelectDialog'
-import { PasswordVerifiedContext } from '../hooks/VerifyPasswordContext'
+import { CloudBackupPreviewDialog, Action } from './dialogs/CloudBackupPreviewDialog'
+import { CloudBackupMergeDialog } from './dialogs/CloudBackupMergeDialog'
 import { useDashboardI18N } from '../../../locales'
-import { CloudBackupVerifyDialog, FileInfo } from './dialogs/CloudBackupVerifyDialog'
+import { CloudBackupVerifyDialog, VerifyNextData } from './dialogs/CloudBackupVerifyDialog'
+import { UserContext } from '../hooks/UserContext'
+import type { VerifyCodeRequest } from '../api'
+import type { BackupFileInfo } from '../type'
 
 export default function BackupSetting() {
     const t = useDashboardI18N()
-    const { ensurePasswordVerified } = useContext(PasswordVerifiedContext)
-    const [openBackup, setOpenBackup] = useState(false)
-    const [openModeSelect, setOpenModeSelect] = useState(false)
-    const [openCloudVerify, setOpenCloudVerify] = useState(false)
+    const { ensurePasswordSet } = useContext(UserContext)
+    const [showDialog, setShowDialog] = useState({
+        backup: false,
+        mode: false,
+        verify: false,
+        preview: false,
+        merge: false,
+    })
+    const [localMode, setLocalMode] = useState(true)
+    const [params, setParams] = useState<VerifyCodeRequest | undefined>(undefined)
+    const [cloudFileInfo, setCloudFileInfo] = useState<BackupFileInfo | undefined>(undefined)
+
     const onBackup = () => {
-        // ensurePasswordVerified(() => setOpenBackup(true))
-        setOpenModeSelect(true)
+        ensurePasswordSet(() => setShowDialog({ ...showDialog, mode: true }))
     }
 
-    const onClose = () => {
-        setOpenBackup(false)
-    }
-
-    const onSelectMode = (mode: string) => {
-        console.log('mode', mode)
-        setOpenModeSelect(false)
-
+    const onSelectMode = (mode: 'local' | 'cloud') => {
         if (mode === 'cloud') {
-            setOpenCloudVerify(true)
+            setLocalMode(false)
+            setShowDialog({ ...showDialog, mode: false, verify: true })
+        } else {
+            setLocalMode(true)
+            setShowDialog({ ...showDialog, mode: false, backup: true })
         }
     }
 
-    const handleUploaded = (fileInfo: FileInfo | undefined) => {
-        console.log(fileInfo)
+    const handleVerified = ({ fileInfo, params }: VerifyNextData) => {
+        setParams(params)
+
+        if (fileInfo) {
+            setCloudFileInfo(fileInfo)
+            setShowDialog({ ...showDialog, verify: false, preview: true })
+        } else {
+            setShowDialog({ ...showDialog, verify: false, backup: true })
+        }
+    }
+
+    const handleAction = (action: Action) => {
+        if (action === 'merge') {
+            setShowDialog({ ...showDialog, preview: false, merge: true })
+        } else {
+            setShowDialog({ ...showDialog, preview: false, backup: true })
+        }
     }
 
     return (
         <>
             <SettingButton onClick={onBackup}>{t.settings_button_backup()}</SettingButton>
-            <BackupDialog open={openBackup} onClose={onClose} />
+            <BackupDialog
+                local={localMode}
+                params={params}
+                open={showDialog.backup}
+                onClose={() => setShowDialog({ ...showDialog, backup: false })}
+            />
             <BackupModeSelectDialog
-                open={openModeSelect}
-                onClose={() => setOpenModeSelect(false)}
+                open={showDialog.mode}
+                onClose={() => setShowDialog({ ...showDialog, mode: false })}
                 onSelect={onSelectMode}
             />
             <CloudBackupVerifyDialog
-                open={openCloudVerify}
-                onClose={() => setOpenCloudVerify(false)}
-                onNext={handleUploaded}
+                open={showDialog.verify}
+                onClose={() => setShowDialog({ ...showDialog, verify: false })}
+                onNext={handleVerified}
             />
+            {cloudFileInfo && params ? (
+                <>
+                    <CloudBackupPreviewDialog
+                        info={cloudFileInfo}
+                        open={showDialog.preview}
+                        onSelect={handleAction}
+                        onClose={() => setShowDialog({ ...showDialog, preview: false })}
+                    />
+                    <CloudBackupMergeDialog
+                        account={params.account}
+                        info={cloudFileInfo}
+                        open={showDialog.merge}
+                        onClose={() => setShowDialog({ ...showDialog, merge: false })}
+                    />
+                </>
+            ) : null}
         </>
     )
 }

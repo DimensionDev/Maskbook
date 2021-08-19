@@ -1,4 +1,5 @@
 import { createContext, useState, PropsWithChildren } from 'react'
+import SettingPasswordDialog from '../components/dialogs/SettingPasswordDialog'
 
 export interface User {
     backupPassword: string | null
@@ -9,6 +10,7 @@ export interface User {
 export interface UserContext {
     user: User
     updateUser: (user: Partial<User>) => void
+    ensurePasswordSet: (onSet: VerifyPasswordSet) => void
 }
 
 export const UserContext = createContext<UserContext>({
@@ -20,7 +22,12 @@ export const UserContext = createContext<UserContext>({
     updateUser: () => {
         throw new Error('Context not provided.')
     },
+    ensurePasswordSet: () => {
+        throw new Error('Context not provided.')
+    },
 })
+
+export type VerifyPasswordSet = () => void
 
 export function UserProvider({ children }: PropsWithChildren<{}>) {
     const [user, setUser] = useState({
@@ -28,6 +35,8 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
         email: localStorage.getItem('email'),
         phone: localStorage.getItem('phone'),
     })
+
+    const [callback, setCallback] = useState<[VerifyPasswordSet] | null>(null)
 
     const updateUser = (obj: Partial<User>) => {
         const updated = { ...user, ...obj }
@@ -37,5 +46,19 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
         localStorage.setItem('phone', updated.phone || '')
     }
 
-    return <UserContext.Provider value={{ user, updateUser }}>{children}</UserContext.Provider>
+    const ensurePasswordSet = (f: VerifyPasswordSet) => {
+        if (user.backupPassword) f()
+        else setCallback([f])
+    }
+
+    const onSet = () => {
+        callback?.[0]?.()
+    }
+
+    return (
+        <UserContext.Provider value={{ user, updateUser, ensurePasswordSet }}>
+            {children}
+            <SettingPasswordDialog open={!!callback} onSet={onSet} onClose={() => setCallback(null)} />
+        </UserContext.Provider>
+    )
 }
