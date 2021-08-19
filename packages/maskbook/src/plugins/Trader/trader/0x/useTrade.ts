@@ -7,6 +7,7 @@ import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy, ZrxTradePool } from '../../types'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance'
 import { useTradeProviderSettings } from '../useTradeSettings'
+import { currentNetworkSettings } from '../../../Wallet/settings'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -27,18 +28,21 @@ export function useTrade(
         if (outputAmount === '0' && !isExactIn) return null
         const sellToken = isNative(inputToken.address) ? 'ETH' : inputToken.address
         const buyToken = isNative(outputToken.address) ? 'ETH' : outputToken.address
-        return PluginTraderRPC.swapQuote({
-            sellToken,
-            buyToken,
-            sellAmount: isExactIn ? inputAmount : void 0,
-            buyAmount: isExactIn ? void 0 : outputAmount,
-            slippagePercentage: slippage,
-            excludedSources: difference(
-                getEnumAsArray(ZrxTradePool).map((x) => x.value),
-                pools,
-            ),
-            affiliateAddress: ZRX_AFFILIATE_ADDRESS,
-        })
+        return PluginTraderRPC.swapQuote(
+            {
+                sellToken,
+                buyToken,
+                sellAmount: isExactIn ? inputAmount : void 0,
+                buyAmount: isExactIn ? void 0 : outputAmount,
+                slippagePercentage: slippage,
+                excludedSources: difference(
+                    getEnumAsArray(ZrxTradePool).map((x) => x.value),
+                    pools,
+                ),
+                affiliateAddress: ZRX_AFFILIATE_ADDRESS,
+            },
+            currentNetworkSettings.value,
+        )
     }, [
         NATIVE_TOKEN_ADDRESS,
         strategy,
