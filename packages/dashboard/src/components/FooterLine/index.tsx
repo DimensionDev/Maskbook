@@ -15,22 +15,23 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: '40px 0',
     },
     ol: {
-        justifyContent: 'center',
+        justifyContent: 'space-around',
     },
     footerLink: {
         display: 'inline-flex',
-        borderRadius: '0',
+        padding: theme.spacing(0.5),
+        borderRadius: 0,
         whiteSpace: 'nowrap',
-        padding: '4px 20px',
+        verticalAlign: 'middle',
     },
     separator: {
         color: getMaskColor(theme).lineLight,
     },
     closeButton: {
-        color: theme.palette.text.secondary,
         position: 'absolute',
-        right: 12,
-        top: 0,
+        right: theme.spacing(2.5),
+        top: theme.spacing(1),
+        color: theme.palette.text.secondary,
     },
 }))
 

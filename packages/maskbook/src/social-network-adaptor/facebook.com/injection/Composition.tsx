@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
+import { Composition } from '../../../components/CompositionDialog/Composition'
 import { isMobileFacebook } from '../utils/isMobile'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { MaskMessage } from '../../../utils/messages'
@@ -25,13 +25,13 @@ export function injectCompositionFacebook(signal: AbortSignal) {
 }
 function UI() {
     const onHintButtonClicked = useCallback(
-        () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'popup', open: true }),
+        () => MaskMessage.events.requestComposition.sendToLocal({ reason: 'popup', open: true }),
         [],
     )
     return (
         <span style={{ display: 'block', padding: 0, marginTop: 0 }}>
             <PostDialogHint onHintButtonClicked={onHintButtonClicked} />
-            <PostDialog reason="popup" />
+            <Composition type="popup" />
         </span>
     )
 }

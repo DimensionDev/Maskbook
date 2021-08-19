@@ -169,8 +169,7 @@ export namespace SocialNetworkUI {
             open?(content: TypedMessage, options?: MaskCompositionDialogOpenOptions): void
         }
         export interface MaskCompositionDialogOpenOptions {
-            onlyMySelf?: boolean
-            shareToEveryOne?: boolean
+            target?: 'E2E' | 'Everyone'
         }
         export interface NativeCommentBox {
             appendText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void
@@ -242,7 +241,7 @@ export namespace SocialNetworkUI {
             InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps, InjectedDialogClassKey>
         }
         export interface ComponentOverwriteConfig<Props extends { classes?: any }, Classes extends string> {
-            classes?: () => Partial<ClassNameMap<Classes>>
+            classes?: () => { classes: Partial<ClassNameMap<Classes>> }
             props?: (props: Props) => Props
         }
         export interface I18NOverwrite {

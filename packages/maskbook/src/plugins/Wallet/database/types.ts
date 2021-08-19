@@ -13,29 +13,6 @@ export interface ERC20TokenRecord {
     symbol: string
 }
 
-export interface ERC721TokenRecord {
-    /** contract address */
-    address: string
-    /** eth chain id */
-    chainId: ChainId
-    /** token name */
-    name: string
-    /** token symbol */
-    symbol: string
-    /** token id */
-    tokenId: string
-    /** base uri */
-    baseURI?: string
-    /** asset uri */
-    tokenURI?: string
-    /** asset name */
-    assetName?: string
-    /** asset description */
-    assetDescription?: string
-    /** asset img uri */
-    assetImage?: string
-}
-
 export interface ERC1155TokenRecord {
     /** contract address */
     address: string
@@ -114,10 +91,6 @@ export interface TransactionChunkRecord {
 }
 
 export interface ERC20TokenRecordInDatabase extends ERC20TokenRecord {}
-
-export interface ERC721TokenRecordInDatabase extends ERC721TokenRecord {
-    record_id: string
-}
 
 export interface ERC1155TokenRecordInDatabase extends ERC1155TokenRecord {
     record_id: string
