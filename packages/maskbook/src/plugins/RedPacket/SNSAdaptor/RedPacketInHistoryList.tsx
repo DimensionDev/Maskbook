@@ -179,7 +179,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t('plugin_red_packet_history_total_amount', {
-                                    amount: formatBalance(new BigNumber(history.total), history.token.decimals, 6),
+                                    amount: formatBalance(history.total, history.token.decimals, 6),
                                     symbol: history.token.symbol,
                                 })}
                             </Typography>
@@ -241,9 +241,9 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     span: <span className={classes.span} />,
                                 }}
                                 values={{
-                                    amount: formatBalance(new BigNumber(history.total), history.token.decimals, 6),
+                                    amount: formatBalance(history.total, history.token.decimals, 6),
                                     claimedAmount: formatBalance(
-                                        new BigNumber(history.total).minus(new BigNumber(history.total_remaining)),
+                                        new BigNumber(history.total).minus(history.total_remaining),
                                         history.token.decimals,
                                         6,
                                     ),
