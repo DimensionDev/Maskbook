@@ -4,12 +4,12 @@ import { DialogActions, DialogContent, DialogProps, TextField, Chip, Button } fr
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { useI18N } from '../../../utils'
 import { graphEndpointKeyVal, pluginMetaKey } from '../constants'
 import type { UnlockLocks } from '../types'
 import { PuginUnlockProtocolRPC } from '../messages'
 import { SelectRecipientsUnlockDialogUI } from './SelectRecipientsUnlockDialog'
+import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 
 interface UnlockProtocolDialogProps extends withClasses<'wrapper'> {
     open: boolean
@@ -27,6 +27,7 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
     const [currentUnlockTarget, setCurrentUnlockTarget] = useState<UnlockLocks[]>(() => [])
     const [availableUnlockTarget, setAvailableUnlockTarget] = useState<UnlockLocks[]>(() => [])
     const { children } = props
+    const { attachMetadata, dropMetadata } = useCompositionContext()
     useEffect(() => {
         for (const [key, url] of Object.entries(graphEndpointKeyVal)) {
             PuginUnlockProtocolRPC.getLocks(address, key.toString())
@@ -70,11 +71,11 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                             unlockLocks: uploadData.unlockLocks,
                             post: encres.encrypted,
                         }
-                        editActivatedPostMetadata((next) =>
-                            data
-                                ? next.set(pluginMetaKey, JSON.parse(JSON.stringify(data)))
-                                : next.delete(pluginMetaKey),
-                        )
+                        if (data) {
+                            attachMetadata(pluginMetaKey, JSON.parse(JSON.stringify(data)))
+                        } else {
+                            dropMetadata(pluginMetaKey)
+                        }
                         props.onClose()
                     } else {
                         return
