@@ -3,7 +3,8 @@ import { flatten, uniq } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
 import { getMaskColor, useSnackbar, VariantType } from '@masknet/theme'
 import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
-import { makeStyles, DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@material-ui/core'
+import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     formatBalance,
     TransactionStateType,
@@ -24,7 +25,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { useLayoutEffect } from 'react'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     wrapper: {
         padding: theme.spacing(4),
     },
@@ -192,7 +193,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     // Todo: Remove the code after the period that old ITO is being used and continues to be used for a while
     const { value: swappedTokensOld, loading: loadingOld, retry: retryOld } = useClaimablePools(chainId, true)
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { enqueueSnackbar } = useSnackbar()
     const popEnqueueSnackbar = useCallback(
         (variant: VariantType) =>
@@ -383,7 +384,7 @@ interface ContentProps {
 
 function Content(props: ContentProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { onClaimButtonClick, swappedTokens, claimablePids, chainId } = props
     return (
         <>
@@ -429,7 +430,7 @@ interface SwappedTokensProps {
 
 function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const theme = useTheme()
 
     return swappedToken.token ? (
