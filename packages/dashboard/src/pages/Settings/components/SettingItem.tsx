@@ -39,7 +39,7 @@ export default function SettingItem(props: SettingItemProps) {
     return (
         <ListItem sx={{ paddingLeft: 0 }}>
             <IconWarpper>{icon}</IconWarpper>
-            <TextWrapper primary={title} secondary={desc} className={error ? 'error' : ''} />
+            <TextWrapper primary={title} secondary={desc} className={error ? 'error' : undefined} />
             {props.children}
         </ListItem>
     )
