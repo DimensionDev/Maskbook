@@ -14,12 +14,17 @@
                     { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." },
                     {
                         "name": "@material-ui/core",
-                        "importNames": ["makeStyles"],
+                        "importNames": ["makeStyles", "withStyles"],
                         "message": "Please use makeStyles from @masknet/theme instead."
                     },
                     {
                         "name": "@material-ui/core/styles",
-                        "importNames": ["makeStyles"],
+                        "importNames": ["makeStyles", "withStyles"],
+                        "message": "Please use makeStyles from @masknet/theme instead."
+                    },
+                    {
+                        "name": "@material-ui/styles",
+                        "importNames": ["makeStyles", "withStyles"],
                         "message": "Please use makeStyles from @masknet/theme instead."
                     }
                 ]
