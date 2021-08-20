@@ -1,8 +1,18 @@
 // This interface uses by-name style JSON RPC.
+/**
+ * Methods starts with "SNSAdaptor_" can only be called in SNS Adaptor.
+ * Other methods can only be called in the background page.
+ */
+type ProfileIdentifier_string = string
+type PersonaIdentifier_string = string
 export interface MaskNetworkAPIs {
+    /**
+     * Echo the message back.
+     */
     web_echo<T>(params: { echo: T }): Promise<T>
     /**
-     * @returns A fully quantified URL in forms of "holoflows-extension://...." or "moz-extension://...." (based on the platform)
+     * @returns A fully quantified URL in forms of
+     * "holoflows-extension://...." or "moz-extension://...." (based on the platform)
      */
     getDashboardURL(): Promise<string>
 
@@ -20,35 +30,39 @@ export interface MaskNetworkAPIs {
     settings_getLaunchPageSettings(): Promise<LaunchPage>
     settings_getTheme(): Promise<Appearance>
     settings_setTheme(params: { theme: Appearance }): Promise<void>
-    settings_getLanguage(): Promise<Language>
-    settings_setLanguage(params: { language: Language }): Promise<void>
+    settings_getLanguage(): Promise<LanguageOptions>
+    settings_setLanguage(params: { language: LanguageOptions }): Promise<void>
     settings_createBackupJson(params: Partial<BackupOptions>): Promise<unknown>
     settings_getBackupPreviewInfo(params: { backupInfo: string }): Promise<BackupPreview | undefined>
     settings_restoreBackup(params: { backupInfo: string }): Promise<void>
     persona_createPersonaByMnemonic(params: { mnemonic: string; nickname: string; password: string }): Promise<Persona>
-    persona_queryPersonas(params: { identifier?: string; hasPrivateKey: boolean }): Promise<Persona[]>
+    persona_queryPersonas(params: { identifier?: PersonaIdentifier_string; hasPrivateKey: boolean }): Promise<Persona[]>
     persona_queryMyPersonas(params: { network?: string }): Promise<Persona[]>
-    persona_updatePersonaInfo(params: { identifier: string; data: { nickname: string } }): Promise<void>
-    persona_removePersona(params: { identifier: string }): Promise<void>
+    persona_updatePersonaInfo(params: {
+        identifier: PersonaIdentifier_string
+        data: { nickname: string }
+    }): Promise<void>
+    persona_removePersona(params: { identifier: PersonaIdentifier_string }): Promise<void>
     persona_restoreFromJson(params: { backup: string }): Promise<void>
     persona_restoreFromBase64(params: { backup: string }): Promise<void>
     persona_connectProfile(params: {
         network: string
         profileUsername: string
-        personaIdentifier: string
+        personaIdentifier: PersonaIdentifier_string
     }): Promise<void>
-    persona_disconnectProfile(params: { identifier: string }): Promise<void>
-    persona_backupMnemonic(params: { identifier: string }): Promise<string | undefined>
-    persona_backupBase64(params: { identifier: string }): Promise<string>
-    persona_backupJson(params: { identifier: string }): Promise<unknown>
-    persona_backupPrivateKey(params: { identifier: string }): Promise<string | undefined>
+    persona_disconnectProfile(params: { identifier: ProfileIdentifier_string }): Promise<void>
+    persona_backupMnemonic(params: { identifier: PersonaIdentifier_string }): Promise<string | undefined>
+    persona_backupBase64(params: { identifier: PersonaIdentifier_string }): Promise<string>
+    persona_backupJson(params: { identifier: PersonaIdentifier_string }): Promise<unknown>
+    persona_backupPrivateKey(params: { identifier: PersonaIdentifier_string }): Promise<string | undefined>
     profile_queryProfiles(params: { network: string }): Promise<Profile[]>
     profile_queryMyProfile(params: { network: string }): Promise<Profile[]>
     profile_updateProfileInfo(params: {
-        identifier: string
+        identifier: ProfileIdentifier_string
         data: { nickname?: string; avatarURL?: string }
     }): Promise<void>
-    profile_removeProfile(params: { identifier: string }): Promise<void>
+    profile_removeProfile(params: { identifier: ProfileIdentifier_string }): Promise<void>
+    SNSAdaptor_getCurrentDetectedProfile(): Promise<ProfileIdentifier_string | undefined>
 }
 
 export interface Profile {
@@ -97,13 +111,6 @@ export enum Appearance {
     default = 'default',
     light = 'light',
     dark = 'dark',
-}
-
-export enum Language {
-    zh = 'zh',
-    en = 'en',
-    ko = 'ko',
-    ja = 'ja',
 }
 
 export enum LaunchPage {

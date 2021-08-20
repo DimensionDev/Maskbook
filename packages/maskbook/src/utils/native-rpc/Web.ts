@@ -1,14 +1,15 @@
+import stringify from 'json-stable-stringify'
 import { MaskNetworkAPIs, NetworkType } from '@masknet/public-api'
-import Services from '../../extension/service'
+import { encodeArrayBuffer, encodeText, unreachable } from '@dimensiondev/kit'
+import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
+import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
 import { definedSocialNetworkWorkers } from '../../social-network/define'
 import { launchPageSettings } from '../../settings/settings'
-import stringify from 'json-stable-stringify'
-import { encodeArrayBuffer, encodeText, unreachable } from '@dimensiondev/kit'
-import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
+import Services from '../../extension/service'
 import type { Persona, Profile } from '../../database'
 
 const stringToIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
-const personaFomatter = (p: Persona) => {
+const personaFormatter = (p: Persona) => {
     const profiles = {}
 
     for (const [key, value] of p.linkedProfiles) {
@@ -108,18 +109,18 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
     persona_createPersonaByMnemonic: async ({ mnemonic, nickname, password }) => {
         const x = await Services.Identity.restoreFromMnemonicWords(mnemonic, nickname, password)
-        return personaFomatter(x)
+        return personaFormatter(x)
     },
     persona_queryPersonas: async ({ identifier, hasPrivateKey }) => {
         const id = identifier ? stringToIdentifier(identifier) : undefined
         const result = await Services.Identity.queryPersonas(id, hasPrivateKey)
 
-        return result?.map(personaFomatter)
+        return result?.map(personaFormatter)
     },
     persona_queryMyPersonas: async ({ network }) => {
         const result = await Services.Identity.queryMyPersonas(network)
 
-        return result?.map(personaFomatter)
+        return result?.map(personaFormatter)
     },
     persona_updatePersonaInfo: ({ identifier, data }) => {
         const { nickname } = data
@@ -198,4 +199,27 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
 
         await Services.Identity.removeProfile(id)
     },
+    async SNSAdaptor_getCurrentDetectedProfile() {
+        const { activatedSocialNetworkUI } = await import('../../social-network')
+        return activatedSocialNetworkUI.collecting.identityProvider?.lastRecognized.value.identifier.toText()
+    },
 }
+
+function wrapWithAssert(env: Environment, f: Function) {
+    return (...args: any[]) => {
+        assertEnvironment(env)
+        return f(...args)
+    }
+}
+try {
+    for (const _key in MaskNetworkAPI) {
+        const key = _key as keyof MaskNetworkAPIs
+        const f: Function = MaskNetworkAPI[key]
+
+        if (key.startsWith('SNSAdaptor_')) {
+            MaskNetworkAPI[key] = wrapWithAssert(Environment.ContentScript, f)
+        } else {
+            MaskNetworkAPI[key] = wrapWithAssert(Environment.ManifestBackground, f)
+        }
+    }
+} catch {}
