@@ -1,4 +1,5 @@
-import { Grid, makeStyles, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import isBefore from 'date-fns/isBefore'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import formatDuration from 'date-fns/formatDuration'
@@ -9,7 +10,7 @@ import type { GoodGhostingInfo } from '../types'
 import { isEndOfTimeline, getNextTimelineIndex } from '../utils'
 import { GameAction } from './GameAction'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     timer: {
         textAlign: 'center',
         display: 'inline-block',
@@ -28,7 +29,7 @@ interface TimelineTimerProps {
 }
 
 export function TimelineTimer(props: TimelineTimerProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
 
     const timeline = useTimeline(props.info)
