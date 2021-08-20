@@ -1,6 +1,6 @@
-import { makeStyles, Card, CardContent } from '@material-ui/core'
-
-const useStyles = makeStyles((theme) => {
+import { Card, CardContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
@@ -18,8 +18,7 @@ export interface SnapshotTabProps {
 }
 
 export function SnapshotTab(props: SnapshotTabProps) {
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <Card className={classes.root} elevation={0}>
             <CardContent className={classes.content}>{props.children}</CardContent>
