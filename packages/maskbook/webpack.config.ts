@@ -97,17 +97,18 @@ function config(opts: {
                 // Monorepo building speed optimization
                 // Those packages are also installed as dependencies so they appears in node_modules
                 // By aliasing them to the original position, we can speed up the compile because there is no need to wait tsc build them to the dist folder.
-                '@masknet/dashboard': require.resolve('../dashboard/src/entry.tsx'),
-                '@masknet/shared': require.resolve('../shared/src/index.ts'),
-                '@masknet/shared-base': require.resolve('../shared-base/src/index.ts'),
-                '@masknet/theme/constants': require.resolve('../theme/src/constants.ts'),
-                '@masknet/theme': require.resolve('../theme/src/theme.ts'),
+                '@masknet/dashboard$': src('../dashboard/src/entry.tsx'),
+                '@masknet/shared': src('../shared/src/'),
+                '@masknet/shared-base': src('../shared-base/src/'),
+                '@masknet/theme$': src('../theme/src/theme.ts'),
+                '@masknet/theme': src('../theme/src/'),
                 '@masknet/icons': require.resolve('../icons/index.ts'),
-                '@masknet/plugin-infra': require.resolve('../plugin-infra/src/index.ts'),
-                '@masknet/plugin-example': require.resolve('../plugins/example/src/index.ts'),
-                '@masknet/plugin-wallet': require.resolve('../plugins/Wallet/src/index.ts'),
-                '@masknet/external-plugin-previewer': require.resolve('../external-plugin-previewer/src/index.tsx'),
-                '@masknet/web3-shared': require.resolve('../web3-shared/src/index.ts'),
+                '@masknet/plugin-infra': src('../plugin-infra/src/'),
+                '@masknet/plugin-example': src('../plugins/example/src/'),
+                '@masknet/plugin-wallet': src('../plugins/Wallet/src/'),
+                '@masknet/external-plugin-previewer': src('../external-plugin-previewer/src/'),
+                '@masknet/web3-shared': src('../web3-shared/src/'),
+                '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
             },
             // Polyfill those Node built-ins
             fallback: {
@@ -202,7 +203,7 @@ function config(opts: {
                 cacheGroups: {
                     // per-npm-package splitting
                     defaultVendors: {
-                        test: /[\\/]node_modules[\\/]/,
+                        test: /[/\\]node_modules[/\\]/,
                         name(module) {
                             const path = (module.context as string)
                                 .replace(/\\/g, '/')
@@ -245,7 +246,6 @@ function config(opts: {
             // Have to write disk cause plugin cannot be loaded over network
             writeToDisk: true,
             compress: false,
-            hot: !disableHMR,
             hotOnly: !disableHMR,
             port: hmrPort,
             // WDS does not support chrome-extension:// browser-extension://
@@ -328,7 +328,6 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
             popups: withBrowserPolyfill(src('./src/extension/popups/render.tsx')),
         }
         if (isManifestV3) delete main.entry['background-script']
-        if (mode === 'production') delete main.entry['dashboard-next']
         for (const entry in main.entry) {
             main.entry[entry] = iOSWebExtensionShimHack(...toArray(main.entry[entry] as any))
         }
@@ -338,9 +337,8 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
             getHTMLPlugin({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
             getHTMLPlugin({ chunks: ['debug'], filename: 'debug.html' }),
             getHTMLPlugin({ chunks: ['popups'], filename: 'popups.html' }),
+            getHTMLPlugin({ chunks: ['dashboard-next'], filename: 'next.html' }),
         ) // generate pages for each entry
-        if (mode === 'development')
-            main.plugins!.push(getHTMLPlugin({ chunks: ['dashboard-next'], filename: 'next.html' }))
         if (!isManifestV3)
             main.plugins!.push(getHTMLPlugin({ chunks: ['background-service'], filename: 'background.html' }))
     }
@@ -411,7 +409,7 @@ function getCompilationInfo(argv: any) {
 
     //#region build time flags
     let isReproducibleBuild = !!argv.reproducible
-    let isProfile = !!argv.profile
+    const isProfile = !!argv.profile
     let webExtensionFirefoxLaunchVariant = 'firefox-desktop' as 'firefox-desktop' | 'firefox-android'
     //#endregion
 
@@ -435,7 +433,7 @@ function getCompilationInfo(argv: any) {
     let resolution: 'desktop' | 'mobile' = 'desktop'
     let build: 'stable' | 'beta' | 'insider' = 'stable'
     let manifest: 2 | 3 = 2
-    let readonlyCache = !!argv.readonlyCache
+    const readonlyCache = !!argv.readonlyCache
 
     //#region Manifest V3
     if (argv['manifest-v3']) {

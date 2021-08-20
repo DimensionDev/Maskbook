@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PLUGIN_DESCRIPTION, PLUGIN_ICON, PLUGIN_IDENTIFIER, PLUGIN_NAME } from './constants'
-import en from './locales/en.json'
+import { languages } from './locales'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_IDENTIFIER,
@@ -14,5 +14,5 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
     },
     management: { alwaysOn: true },
-    i18n: { en },
+    i18n: languages,
 }

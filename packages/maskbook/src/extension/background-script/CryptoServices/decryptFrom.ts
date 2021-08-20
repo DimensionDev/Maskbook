@@ -6,7 +6,7 @@ import { deconstructPayload, Payload } from '../../../utils/type-transform/Paylo
 import { i18n } from '../../../utils/i18n-next'
 import { queryPersonaRecord, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
-import { queryPostDB, updatePostDB } from '../../../database/post'
+import { PostRecord, queryPostDB, updatePostDB } from '../../../database/post'
 import { getNetworkWorker, getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { cryptoProviderTable } from './cryptoProviderTable'
 import type { PersonaRecord } from '../../../database/Persona/Persona.db'
@@ -15,7 +15,7 @@ import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 import { DecryptFailedReason } from '../../../utils/constants'
 import { asyncIteratorWithResult, memorizeAsyncGenerator } from '../../../utils/type-transform/asyncIteratorHelpers'
 import { delay } from '../../../utils/utils'
-import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
+import type { AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 import { decodeImageUrl } from '../SteganographyService'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import stringify from 'json-stable-stringify'
@@ -128,7 +128,8 @@ async function* decryptFromPayloadWithProgress_raw(
     author: ProfileIdentifier,
     authorNetworkHint: string,
     whoAmI: ProfileIdentifier,
-    publicShared: undefined | boolean,
+    publicShared: boolean,
+    discoverURL: string | undefined,
 ): ReturnOfDecryptPostContentWithProgress {
     const cacheKey = stringify(post)
     if (successDecryptionCache.has(cacheKey)) return successDecryptionCache.get(cacheKey)!
@@ -152,7 +153,7 @@ async function* decryptFromPayloadWithProgress_raw(
         yield { type: 'progress', progress: 'payload_decrypted', decryptedPayloadForImage: data, internal: true }
         yield { type: 'progress', progress: 'iv_decrypted', iv: iv, internal: true }
         // ? Early emit the cache.
-        const [cachedPostResult, setPostCache] = await decryptFromCache(data, author)
+        const [cachedPostResult, setPostCache] = await decryptFromCache(data, author, discoverURL)
         if (cachedPostResult) {
             yield makeProgress(makeSuccessResult(cachedPostResult, ['post_key_cached']))
         }
@@ -201,12 +202,12 @@ async function* decryptFromPayloadWithProgress_raw(
          * ? then try to go through a normal decrypt process
          */
         try {
-            const a = decryptAsAuthor(author, minePublic)
-            const b = decryptAsAuthor(whoAmI, minePublic)
+            const a = decryptAsAuthor(author)
+            const b = decryptAsAuthor(whoAmI)
             // ! Don't remove the await
             return await a.catch(() => b)
-        } catch (e) {
-            lastError = e
+        } catch (error) {
+            lastError = error
         }
 
         if (author.equals(whoAmI)) {
@@ -235,16 +236,16 @@ async function* decryptFromPayloadWithProgress_raw(
         try {
             // ! Do not remove the await here.
             return await decryptWith(aesKeyEncrypted)
-        } catch (e) {
-            if (e.message === i18n.t('service_not_share_target')) {
-                console.debug(e)
+        } catch (error) {
+            if (error instanceof Error && error.message === i18n.t('service_not_share_target')) {
+                console.debug(error)
                 // TODO: Replace this error with:
                 // You do not have the necessary private key to decrypt this message.
                 // What to do next: You can ask your friend to visit your profile page, so that their Mask extension will detect and add you to recipients.
                 // ? after the auto-share with friends is done.
-                yield makeError(e)
+                yield makeError(error)
             } else {
-                return handleDOMException(e)
+                return handleDOMException(error)
             }
         }
 
@@ -261,8 +262,8 @@ async function* decryptFromPayloadWithProgress_raw(
             console.log('New key received, trying', aes)
             try {
                 return await decryptWith(aes)
-            } catch (e) {
-                console.debug(e)
+            } catch (error) {
+                console.debug(error)
             }
         }
         return makeError(i18n.t('service_not_share_target'))
@@ -288,7 +289,7 @@ async function* decryptFromPayloadWithProgress_raw(
             return makeSuccessResult(content, ['normal_decrypted'])
         }
 
-        async function decryptAsAuthor(authorIdentifier: ProfileIdentifier, authorPublic: EC_Public_JsonWebKey) {
+        async function decryptAsAuthor(authorIdentifier: ProfileIdentifier) {
             const localKey = sharePublic ? publicSharedAESKey : await queryLocalKey(authorIdentifier)
             if (!localKey) throw new Error(`Local key for identity ${authorIdentifier.toText()} not found`)
             const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByMyself({
@@ -312,33 +313,33 @@ async function* decryptFromImageUrlWithProgress_raw(
     author: ProfileIdentifier,
     authorNetworkHint: string,
     whoAmI: ProfileIdentifier,
-    publicShared?: boolean,
+    publicShared: boolean,
+    discoverURL: string | undefined,
 ): ReturnOfDecryptPostContentWithProgress {
     if (successDecryptionCache.has(url)) return successDecryptionCache.get(url)!
     yield makeProgress('decode_post', true)
     const post = await decodeImageUrl(url, {
         pass: author.toText(),
     })
-    if (post.indexOf('🎼') !== 0 && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
+    if (!post.startsWith('🎼') && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
         return makeError(i18n.t('service_decode_image_payload_failed'), true)
     const worker = await Result.wrapAsync(() => getNetworkWorker(author))
     if (worker.err) return makeError(worker.val as Error)
     const payload = deconstructPayload(post, await decodeTextPayloadWorker(author))
     if (payload.err) return makeError(payload.val)
-    return yield* decryptFromText(payload.val, author, authorNetworkHint, whoAmI, publicShared)
+    return yield* decryptFromText(payload.val, author, authorNetworkHint, whoAmI, publicShared, discoverURL)
 }
 
 export const decryptFromText = memorizeAsyncGenerator(
     decryptFromPayloadWithProgress_raw,
-    (encrypted, author, authorNetworkHint, whoAmI, publicShared = undefined) =>
-        JSON.stringify([encrypted, author.toText(), authorNetworkHint, whoAmI.toText(), publicShared]),
+    (encrypted, author, _, whoAmI) =>
+        JSON.stringify([encrypted.iv, encrypted.encryptedText, author.toText(), whoAmI.toText()]),
     1000 * 30,
 )
 
 export const decryptFromImageUrl = memorizeAsyncGenerator(
     decryptFromImageUrlWithProgress_raw,
-    (url, author, authorNetworkHint, whoAmI, publicShared = undefined) =>
-        JSON.stringify([url, author.toText(), authorNetworkHint, whoAmI.toText(), publicShared]),
+    (url, author, _, whoAmI) => JSON.stringify([url, author.toText(), whoAmI.toText()]),
     1000 * 30,
 )
 
@@ -385,27 +386,29 @@ async function* findAuthorPublicKey(
                 .catch(() => null)
         }
     }
-    if (author && author.publicKey) return author
+    if (author?.publicKey) return author
     return 'out of chance'
 }
 
-async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
+async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier, discoverURL: string | undefined) {
     const { encryptedText, iv, version } = postPayload
     const cryptoProvider = version === -40 ? Alpha40 : Alpha39
 
     const postIdentifier = new PostIVIdentifier(by.network, iv)
     const cachedKey = await queryPostDB(postIdentifier)
-    const setCache = (postAESKey: AESJsonWebKey) => {
-        updatePostDB(
-            {
-                identifier: postIdentifier,
-                postCryptoKey: postAESKey,
-                postBy: by,
-            },
-            'append',
-        )
+    if (cachedKey && !cachedKey.url && discoverURL) {
+        await updatePostDB({ identifier: postIdentifier, url: discoverURL }, 'append')
     }
-    if (cachedKey && cachedKey.postCryptoKey) {
+    const setCache = (postAESKey: AESJsonWebKey) => {
+        const postUpdate: Partial<PostRecord> & Pick<PostRecord, 'identifier'> = {
+            identifier: postIdentifier,
+            postCryptoKey: postAESKey,
+            postBy: by,
+        }
+        if (discoverURL) postUpdate.url = discoverURL
+        updatePostDB(postUpdate, 'append')
+    }
+    if (cachedKey?.postCryptoKey) {
         try {
             const result = decodeText(
                 await cryptoProvider.decryptWithAES({

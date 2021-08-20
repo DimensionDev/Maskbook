@@ -1,6 +1,7 @@
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
 import { formatWeiToGwei, GasNow, useEtherPrice } from '@masknet/web3-shared'
-import { DialogContent, List, ListItem, makeStyles, Skeleton, TextField, Theme, Typography } from '@material-ui/core'
+import { DialogContent, List, ListItem, Skeleton, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
@@ -12,7 +13,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { currentGasNowSettings, currentGasPriceSettings } from '../settings'
 import { WalletMessages } from '../../Wallet/messages'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {},
     list: {
         display: 'flex',
@@ -86,7 +87,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export function GasNowDialog() {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     const gasNow = useValueRef(currentGasNowSettings)
     const rapidGasFirstCache = useMemo(() => gasNow?.rapid, [])
@@ -134,7 +135,7 @@ export function GasNowDialog() {
     }, [customGasToWei, options, select])
 
     const onConfrim = useCallback(() => {
-        currentGasPriceSettings.value = select == 2 ? customGasToWei.toNumber() : options[select].gasPrice
+        currentGasPriceSettings.value = select === 2 ? customGasToWei.toNumber() : options[select].gasPrice
         const type = options[select].type as keyof GasNow
         setDialog({ open: false, type })
     }, [customGasToWei, options, select, setDialog])
@@ -163,7 +164,7 @@ export function GasNowDialog() {
                             {gasNow || i === 2 ? (
                                 <>
                                     <div>
-                                        {i == 2 ? (
+                                        {i === 2 ? (
                                             <div className={classes.gweiBox}>
                                                 <TextField
                                                     className={classes.customInput}
@@ -199,7 +200,7 @@ export function GasNowDialog() {
                                         ) : null}
                                     </div>
                                     <Typography color="textPrimary">
-                                        {i == 2 ? customEstimateTime : option.time}
+                                        {i === 2 ? customEstimateTime : option.time}
                                     </Typography>
                                 </>
                             ) : (

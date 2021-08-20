@@ -70,16 +70,18 @@ async function fetchInjectedScript() {
         .then(JSON.stringify)}
     document.documentElement.appendChild(script)
 }`
-    } catch (e) {
-        console.error(e)
+    } catch (error) {
+        console.error(error)
         return `console.log('Injected script failed to load.')`
     }
 }
 function HandleError(arg: unknown): (reason: Error) => void {
-    return (e) => {
+    return (error) => {
         const ignoredErrorMessages = ['non-structured-clonable data', 'No tab with id']
-        if (ignoredErrorMessages.some((x) => e.message.includes(x))) {
+        if (ignoredErrorMessages.some((x) => error.message.includes(x))) {
             // It's okay we don't need the result, happened on Firefox
-        } else console.error('Inject error', e.message, arg, ...Object.entries(e))
+        } else {
+            console.error('Inject error', error.message, arg, ...Object.entries(error))
+        }
     }
 }

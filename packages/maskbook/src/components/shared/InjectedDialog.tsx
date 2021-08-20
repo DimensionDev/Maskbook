@@ -6,19 +6,19 @@ import {
     DialogProps,
     DialogTitle,
     IconButton,
-    makeStyles,
     Typography,
     useTheme,
     Dialog,
     useMediaQuery,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Children, cloneElement } from 'react'
 import { useI18N, usePortalShadowRoot } from '../../utils'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
 import { ErrorBoundary, useStylesExtends, mergeClasses } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../social-network'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
         borderBottom: `1px solid ${theme.palette.divider}`,
@@ -39,9 +39,8 @@ export type InjectedDialogClassKey =
     | 'dialogCloseButton'
     | 'dialogBackdropRoot'
 
-export interface InjectedDialogProps
-    extends withClasses<InjectedDialogClassKey>,
-        Omit<DialogProps, 'onClose' | 'title' | 'classes'> {
+export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'title' | 'classes'> {
+    classes?: Partial<Record<InjectedDialogClassKey, string>>
     onClose?(): void
     title?: React.ReactChild
     disableBackdropClick?: boolean
@@ -49,7 +48,6 @@ export interface InjectedDialogProps
 }
 
 export function InjectedDialog(props: InjectedDialogProps) {
-    const classes = useStyles()
     const overwrite = activatedSocialNetworkUI.customization.componentOverwrite || {}
     props = overwrite.InjectedDialog?.props?.(props) ?? props
     const {
@@ -59,8 +57,9 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogTitle,
         dialogTitleTypography,
         dialogBackdropRoot,
+        container,
         ...dialogClasses
-    } = useStylesExtends(classes, props, overwrite.InjectedDialog?.classes)
+    } = useStylesExtends(useStyles(), props, overwrite.InjectedDialog?.classes)
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
 
     const { children, open, disableBackdropClick, disableArrowBack, onClose, title, ...rest } = props

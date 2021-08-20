@@ -8,8 +8,8 @@ import {
     DialogContent,
     DialogActions,
     CircularProgress,
-    makeStyles,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import millify from 'millify'
 import OpenInNew from '@material-ui/icons/OpenInNew'
 import { resolveBlockLinkOnExplorer, ChainId } from '@masknet/web3-shared'
@@ -19,7 +19,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { InfoField } from './InformationCard'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     card: {
         padding: 0,
         border: `solid 1px ${theme.palette.divider}`,
@@ -61,8 +61,8 @@ interface VoteConfirmDialogProps {
 export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
     const { open, onClose, onVoteConfirm, choiceText, message, power = 0, loading } = props
     const { t } = useI18N()
-    const classes = useStyles()
 
+    const { classes } = useStyles()
     return (
         <InjectedDialog
             open={open}

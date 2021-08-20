@@ -12,6 +12,7 @@
         "constructor-super": "error",
         "dot-notation": "error",
         "eqeqeq": "error",
+        "no-var": "error",
         "no-bitwise": "error",
         "no-debugger": "error",
         "no-eval": "error",

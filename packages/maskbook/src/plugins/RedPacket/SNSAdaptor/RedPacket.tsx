@@ -8,10 +8,12 @@ import {
     TransactionStateType,
     useAccount,
     useChainIdValid,
-    useTokenDetailed,
+    useFungibleTokenDetailed,
     useNetworkType,
+    useWeb3,
 } from '@masknet/web3-shared'
-import { Box, Card, makeStyles, Skeleton, Typography } from '@material-ui/core'
+import { Box, Card, Skeleton, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { useCallback, useEffect } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
@@ -28,7 +30,7 @@ import { useRefundCallback } from './hooks/useRefundCallback'
 import type { RedPacketAvailability, RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         borderRadius: theme.spacing(1),
         padding: theme.spacing(2),
@@ -138,9 +140,9 @@ export function RedPacket(props: RedPacketProps) {
     const { payload } = props
 
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     // context
+    const web3 = useWeb3()
     const account = useAccount()
     const chainIdValid = useChainIdValid()
     const networkType = useNetworkType()
@@ -151,7 +153,7 @@ export function RedPacket(props: RedPacketProps) {
         computed: availabilityComputed,
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, payload)
-    const { value: tokenDetailed } = useTokenDetailed(payload.token_type, payload.token?.address ?? '')
+    const { value: tokenDetailed } = useFungibleTokenDetailed(payload.token_type, payload.token?.address ?? '')
     const token = payload.token ?? tokenDetailed
     //#ednregion
 
@@ -176,11 +178,12 @@ export function RedPacket(props: RedPacketProps) {
                 : '',
         )
         .toString()
+
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
         payload.contract_version,
         account,
         payload.rpid,
-        payload.password,
+        payload.contract_version > 3 ? web3.eth.accounts.sign(account, payload.password).signature : payload.password,
     )
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
         payload.contract_version,

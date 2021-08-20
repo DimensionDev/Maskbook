@@ -17,7 +17,12 @@ import {
     currentPortfolioDataProviderSettings,
     currentProviderSettings,
 } from '../plugins/Wallet/settings'
-import { currentDataProviderSettings } from '../plugins/Trader/settings'
+import {
+    currentDataProviderSettings,
+    ethereumNetworkTradeProviderSettings,
+    polygonNetworkTradeProviderSettings,
+    binanceNetworkTradeProviderSettings,
+} from '../plugins/Trader/settings'
 
 export function ToBeListened() {
     return {
@@ -36,6 +41,9 @@ export function ToBeListened() {
         currentPortfolioDataProviderSettings,
         currentCollectibleDataProviderSettings,
         currentPersonaIdentifier,
+        ethereumNetworkTradeProviderSettings,
+        polygonNetworkTradeProviderSettings,
+        binanceNetworkTradeProviderSettings,
     }
 }
 export type SettingsEventName = ReturnType<typeof ToBeListened>

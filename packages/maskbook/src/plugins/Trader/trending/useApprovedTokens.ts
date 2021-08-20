@@ -23,7 +23,7 @@ export function useApprovedTokens(token_address: string | undefined) {
         try {
             if (!tokens) approvedTokensFromUniSwap.value = stringify([])
             else setApprovedTokens(JSON.parse(tokens))
-        } catch (e) {
+        } catch {
             setApprovedTokens([])
         }
     }, [tokens])

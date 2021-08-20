@@ -1,7 +1,6 @@
 import {
     EthereumTokenType,
     isSameAddress,
-    TokenListsState,
     useAssetsFromChain,
     useERC20TokensDetailedFromTokenLists,
     useEthereumConstants,
@@ -14,7 +13,8 @@ import { useMemo } from 'react'
 export function useERC20TokensDetailed() {
     const { ERC20_TOKEN_LISTS } = useEthereumConstants()
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
-    const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS)
+    const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
+        useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS)
 
     //#region mask token
     const { MASK_ADDRESS } = useTokenConstants()
@@ -43,7 +43,7 @@ export function useERC20TokensDetailed() {
 
     return {
         value: assetsDetailedChain,
-        loading: state !== TokenListsState.READY || assetsDetailedChainLoading,
+        loading: erc20TokensDetailedLoading || assetsDetailedChainLoading,
         error: assetsDetailedChainError,
     }
 }

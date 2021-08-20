@@ -36,13 +36,13 @@ export function createGlobalState<T>(f: () => Promise<T>, subscribe: (callback: 
         return f()
             .then(
                 (val) => {
-                    data.version++
+                    data.version += 1
                     data.data = val
                     data.error = undefined
                 },
-                (err) => {
-                    data.version++
-                    data.error = err
+                (error) => {
+                    data.version += 1
+                    data.error = error
                 },
             )
             .finally(callback)

@@ -1,5 +1,12 @@
-import { formatBalance, useChainId, useERC20TokenDetailed } from '@masknet/web3-shared'
-import { Button, makeStyles, Typography } from '@material-ui/core'
+import {
+    formatBalance,
+    resolveTransactionLinkOnExplorer,
+    TransactionStateType,
+    useChainId,
+    useERC20TokenDetailed,
+} from '@masknet/web3-shared'
+import { Button, Typography, Link } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'
 import { useJoinGame, useMakeDeposit, useWithdraw } from '../hooks/useGameActions'
@@ -7,8 +14,9 @@ import type { GoodGhostingInfo } from '../types'
 import { DAI } from '../constants'
 import { GameActionDialog } from './GameActionDialog'
 import { useGameToken } from '../hooks/usePoolData'
+import { isGameActionError } from '../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     button: {
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(1),
@@ -23,7 +31,7 @@ export function GameAction(props: GameActionProps) {
     const chainId = useChainId()
     const gameToken = useGameToken()
 
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
 
     const { canJoinGame, joinGame } = useJoinGame(props.info)
@@ -32,25 +40,41 @@ export function GameAction(props: GameActionProps) {
 
     const [openDialog, setOpenDialog] = useState(false)
     const [buttonEnabled, setButtonEnabled] = useState(true)
-    const [errorMessage, setErrorMessage] = useState('')
+    const [errorState, setErrorState] = useState<{ message?: string; link?: string }>({})
     const {
         value: tokenDetailed,
         loading: loadingToken,
-        retry: retryToken,
         error: errorToken,
-    } = useERC20TokenDetailed(DAI[chainId].address)
+    } = useERC20TokenDetailed(DAI[chainId]?.address)
 
     if (loadingToken || errorToken) return <></>
 
     const buttonAction = async (action: () => Promise<void>) => {
         setButtonEnabled(false)
         setOpenDialog(false)
-        setErrorMessage('')
+        setErrorState({})
         try {
             await action()
             props.info.refresh()
         } catch (error) {
-            setErrorMessage(t('error_unknown'))
+            if (isGameActionError(error) && error.transactionHash) {
+                const link = resolveTransactionLinkOnExplorer(chainId, error.transactionHash)
+                if (error.gameActionStatus === TransactionStateType.CONFIRMED) {
+                    setErrorState({
+                        message: t('plugin_good_ghosting_tx_fail'),
+                        link,
+                    })
+                } else {
+                    setErrorState({
+                        message: t('plugin_good_ghosting_tx_timeout'),
+                        link,
+                    })
+                }
+            } else {
+                setErrorState({
+                    message: t('plugin_good_ghosting_something_went_wrong'),
+                })
+            }
         } finally {
             setButtonEnabled(true)
         }
@@ -110,9 +134,14 @@ export function GameAction(props: GameActionProps) {
                     onClick={() => setOpenDialog(true)}>
                     {buttonMethod.text}
                 </Button>
-                <Typography variant="body1" color="warning">
-                    {errorMessage}
+                <Typography variant="body1" color="textPrimary">
+                    {errorState.message}
                 </Typography>
+                {errorState.link && (
+                    <Link color="primary" target="_blank" rel="noopener noreferrer" href={errorState.link}>
+                        <Typography variant="subtitle1">{t('plugin_good_ghosting_view_on_explorer')}</Typography>
+                    </Link>
+                )}
             </>
         )
     } else return <></>

@@ -24,7 +24,7 @@ export function TraderDialog() {
     })
 
     const { value: tradeProviders = [] } = useAvailableTraderProviders(TagType.CASH, 'MASK')
-    const tradeProvider = useCurrentTradeProvider(tradeProviders)
+    const tradeProvider = useCurrentTradeProvider()
     const tradeContext = useTradeContext(tradeProvider)
 
     const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {

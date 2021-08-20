@@ -1,5 +1,6 @@
 import { useState, useCallback, CSSProperties } from 'react'
-import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@material-ui/core'
+import { ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import type { Profile } from '../../../database'
 import { ProfileInList } from './ProfileInList'
@@ -14,7 +15,7 @@ export interface SelectProfileUIProps extends withClasses<'root'> {
     onSetSelected(selected: Profile[]): void
     disabled?: boolean
 }
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     selectedArea: {
         flexDirection: 'row',
         flexWrap: 'wrap',
@@ -38,7 +39,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
         return true
     })
     const listAfterSearch = listBeforeSearch.filter((x) => {
-        if (frozenSelected && frozenSelected.find((y) => x.identifier.equals(y.identifier))) return false
+        if (frozenSelected.find((y) => x.identifier.equals(y.identifier))) return false
         if (search === '') return true
         return (
             !!x.identifier.userId.toLowerCase().match(search.toLowerCase()) ||

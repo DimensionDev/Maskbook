@@ -167,7 +167,9 @@ class Twitter implements SNS {
             if (closeButton) {
                 try {
                     await closeButton.click()
-                } catch (e) {}
+                } catch {
+                    // ignore
+                }
                 await page.waitForTimeout(500)
             }
         }

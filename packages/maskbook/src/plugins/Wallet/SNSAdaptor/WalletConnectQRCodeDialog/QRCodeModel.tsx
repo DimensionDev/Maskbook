@@ -1,8 +1,9 @@
-import { Grid, makeStyles, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import { QRCode } from '@masknet/shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -13,10 +14,12 @@ const useStyles = makeStyles((theme) => ({
     onCopy: { marginTop: theme.spacing(1) },
 }))
 
-export const QRCodeModel: React.FC<{ uri: string }> = ({ uri }) => {
+export const QRCodeModel: React.FC<{
+    uri: string
+}> = ({ uri }) => {
     const { t } = useI18N()
-    const classes = useStyles()
 
+    const { classes } = useStyles()
     const style: React.CSSProperties = {
         width: '80%',
         display: 'block',

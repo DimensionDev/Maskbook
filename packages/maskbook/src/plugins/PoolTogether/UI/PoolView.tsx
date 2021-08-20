@@ -1,18 +1,19 @@
+import { first } from 'lodash-es'
 import type { Pool } from '../types'
-import { makeStyles, Typography, Grid, CircularProgress, Button } from '@material-ui/core'
+import { Typography, Grid, CircularProgress, Button } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useChainId, useERC20TokenDetailed } from '@masknet/web3-shared'
 import { RefreshIcon } from '@masknet/icons'
 import { usePoolURL } from '../hooks/usePoolURL'
 import { CountdownView } from './CountdownView'
-import { ONE_DAY_SECONDS, ONE_WEEK_SECONDS } from '../constants'
 import { PluginPoolTogetherMessages } from '../messages'
 import { useCallback, useEffect, useState } from 'react'
-import { calculateNextPrize, calculateSecondsRemaining } from '../utils'
+import { calculateNextPrize, calculateSecondsRemaining, getPrizePeriod } from '../utils'
 import { NetworkView } from './NetworkView'
 import { useI18N } from '../../../utils'
 import { TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(1, 2),
         alignItems: 'stretch',
@@ -82,7 +83,6 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: theme.spacing(1),
         padding: theme.spacing(0, 0.5),
     },
-
     metaPrize: {
         marginTop: theme.spacing(1),
         padding: theme.spacing(1),
@@ -161,7 +161,7 @@ interface PoolProps {
 
 export function PoolView(props: PoolProps) {
     const { pool } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
 
     const poolURL = usePoolURL(pool)
@@ -182,13 +182,7 @@ export function PoolView(props: PoolProps) {
     const prizePeriodSeconds = Number.parseInt(pool.config.prizePeriodSeconds, 10)
     useEffect(() => {
         setPrize(calculateNextPrize(pool))
-        setPeriod(
-            prizePeriodSeconds == ONE_DAY_SECONDS
-                ? 'Daily'
-                : prizePeriodSeconds == ONE_WEEK_SECONDS
-                ? 'Weekly'
-                : 'Custom Period',
-        )
+        setPeriod(getPrizePeriod(t, prizePeriodSeconds))
     }, [pool])
     //#endregion
 
@@ -228,6 +222,8 @@ export function PoolView(props: PoolProps) {
             </Typography>
         )
     }
+    const tokenFaucet = first(pool.tokenFaucets)
+    const tokenFaucetDripToken = first(pool.tokens.tokenFaucetDripTokens)
 
     return (
         <Grid container direction="row" className={classes.root}>
@@ -267,18 +263,16 @@ export function PoolView(props: PoolProps) {
                 </Grid>
                 <Grid container item className={classes.info}>
                     <Grid item>
-                        {pool.tokenFaucets.length !== 0 &&
-                        !!pool.tokens.tokenFaucetDripTokens &&
-                        pool.tokens.tokenFaucetDripTokens?.length !== 0 ? (
+                        {tokenFaucet && tokenFaucetDripToken ? (
                             <Typography className={classes.apr} fontSize="0.7rem" variant="subtitle2">
                                 <TokenIcon
-                                    address={pool.tokens.tokenFaucetDripTokens[0].address}
-                                    name={pool.tokens.tokenFaucetDripTokens[0].symbol}
+                                    address={tokenFaucetDripToken.address}
+                                    name={tokenFaucetDripToken.symbol}
                                     classes={{ icon: classes.poolIcon }}
                                 />
                                 {t('plugin_pooltogether_apr', {
-                                    apr: pool.tokenFaucets[0].apr.toFixed(2),
-                                    token: pool.tokens.tokenFaucetDripTokens[0].symbol,
+                                    apr: tokenFaucet.apr?.toFixed(2) ?? 0,
+                                    token: tokenFaucetDripToken.symbol,
                                 })}
                             </Typography>
                         ) : null}

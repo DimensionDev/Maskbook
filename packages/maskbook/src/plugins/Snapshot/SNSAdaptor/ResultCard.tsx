@@ -1,6 +1,7 @@
 import { useContext, useRef, useEffect, useState, useMemo } from 'react'
 import classNames from 'classnames'
-import { makeStyles, Box, List, ListItem, Typography, LinearProgress, withStyles, Button } from '@material-ui/core'
+import { Box, List, ListItem, Typography, LinearProgress, withStyles, Button } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ShadowRootTooltip, useI18N } from '../../../utils'
 import millify from 'millify'
 import { SnapshotContext } from '../context'
@@ -15,7 +16,7 @@ import { LoadingCard } from './LoadingCard'
 
 const choiceMaxWidth = 240
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         list: {
             display: 'flex',
@@ -73,10 +74,12 @@ function Content() {
     const {
         payload: { results },
     } = useResults(identifier)
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     const listRef = useRef<HTMLSpanElement[]>([])
-    const [tooltipsVisible, setTooltipsVisible] = useState<readonly boolean[]>(new Array(results.length).fill(false))
+    const [tooltipsVisible, setTooltipsVisible] = useState<readonly boolean[]>(
+        Array.from<boolean>({ length: results.length }).fill(false),
+    )
 
     useEffect(() => {
         setTooltipsVisible(listRef.current.map((element) => (element.offsetWidth === choiceMaxWidth ? true : false)))
@@ -84,14 +87,13 @@ function Content() {
 
     const dataForCsv = useMemo(
         () =>
-            Object.entries(votes).map((vote) => ({
-                address: vote[0],
-                choice: vote[1].msg.payload.choice,
-                balance: vote[1].balance,
-                timestamp: vote[1].msg.timestamp,
-                dateUtc: new Date(Number.parseInt(vote[1].msg.timestamp, 10) * 1e3).toUTCString(),
-                authorIpfsHash: vote[1].authorIpfsHash,
-                relayerIpfsHash: vote[1].relayerIpfsHash,
+            votes.map((vote) => ({
+                address: vote.address,
+                choice: vote.choiceIndex,
+                balance: vote.balance,
+                timestamp: vote.timestamp,
+                dateUtc: new Date(vote.timestamp * 1000).toUTCString(),
+                authorIpfsHash: vote.authorIpfsHash,
             })),
         [votes],
     )
@@ -126,9 +128,9 @@ function Content() {
                                 title={
                                     <Typography color="textPrimary" className={classes.ellipsisText}>
                                         {result.powerDetail.reduce((sum, cur, i) => {
-                                            return `${sum} ${i === 0 ? '' : '+'} ${
+                                            const name =
                                                 millify(cur.power, { precision: 2, lowercase: true }) + ' ' + cur.name
-                                            }`
+                                            return `${sum} ${i === 0 ? '' : '+'} ${name}`
                                         }, '')}
                                     </Typography>
                                 }

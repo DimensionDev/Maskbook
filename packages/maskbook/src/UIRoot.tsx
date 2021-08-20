@@ -8,20 +8,23 @@ import i18nNextInstance from './utils/i18n-next'
 import { useClassicMaskTheme } from './utils/theme'
 import { Web3Context } from './web3/context'
 import { buildInfoMarkdown } from './extension/background-script/Jobs/PrintBuildFlags'
+import { Suspense } from 'react'
 
 export function MaskUIRootWithinShadow(JSX: JSX.Element) {
     return (
-        <Web3Provider value={Web3Context}>
-            <I18nextProvider i18n={i18nNextInstance}>
-                <ErrorBoundaryBuildInfoContext.Provider value={buildInfoMarkdown}>
-                    <ErrorBoundary>
-                        <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                            {JSX}
-                        </SnackbarProvider>
-                    </ErrorBoundary>
-                </ErrorBoundaryBuildInfoContext.Provider>
-            </I18nextProvider>
-        </Web3Provider>
+        <Suspense fallback={null}>
+            <Web3Provider value={Web3Context}>
+                <I18nextProvider i18n={i18nNextInstance}>
+                    <ErrorBoundaryBuildInfoContext.Provider value={buildInfoMarkdown}>
+                        <ErrorBoundary>
+                            <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                                {JSX}
+                            </SnackbarProvider>
+                        </ErrorBoundary>
+                    </ErrorBoundaryBuildInfoContext.Provider>
+                </I18nextProvider>
+            </Web3Provider>
+        </Suspense>
     )
 }
 

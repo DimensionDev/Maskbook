@@ -1,23 +1,15 @@
 import { useCopyToClipboard } from 'react-use'
-import {
-    makeStyles,
-    TableContainer,
-    Paper,
-    Table,
-    TableRow,
-    TableCell,
-    TableBody,
-    Typography,
-    IconButton,
-} from '@material-ui/core'
+import { TableContainer, Paper, Table, TableRow, TableCell, TableBody, Typography, IconButton } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
-import type { DataProvider, Trending } from '../../types'
+import type { Trending } from '../../types'
+import type { DataProvider } from '@masknet/public-api'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import { Linking } from './Linking'
 import { FormattedAddress } from '@masknet/shared'
 import { CoinMetadataTags } from './CoinMetadataTags'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
     },
@@ -54,8 +46,8 @@ export interface CoinMetadataTableProps {
 
 export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const { dataProvider, trending } = props
-    const classes = useStyles()
 
+    const { classes } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopyAddress = useSnackbarCallback(async () => {
         if (!trending.coin.contract_address) return

@@ -3,7 +3,6 @@ import { useUpdateEffect } from 'react-use'
 import {
     Box,
     Button,
-    makeStyles,
     Skeleton,
     Table,
     TableBody,
@@ -13,21 +12,20 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core'
-import { useAccount, useChainId } from '@masknet/web3-shared'
-import { useTransactions } from '../../../../plugins/Wallet/hooks/useTransactions'
+import { makeStyles } from '@masknet/theme'
+import { useAccount, useChainId, useTransactions, FilterTransactionType } from '@masknet/web3-shared'
 import { Row } from './Row'
-import { FilterTransactionType } from '../../../../plugins/Wallet/types'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     fixed: { height: 'calc(100% - 52px)' },
-}))
+})
 
 export interface TransactionListProps {
     transactionType: FilterTransactionType
 }
 
 export function TransactionList({ transactionType }: TransactionListProps) {
-    const styles = useStyles()
+    const { classes: styles } = useStyles()
     const chainId = useChainId()
     const account = useAccount()
     const [page, setPage] = useState(0)
@@ -55,13 +53,15 @@ export function TransactionList({ transactionType }: TransactionListProps) {
         return (
             <Table>
                 <TableBody>
-                    {new Array(3).fill(0).map((_, i) => (
-                        <TableRow key={i}>
-                            <TableCell>
-                                <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                    {Array.from({ length: 3 })
+                        .fill(0)
+                        .map((_, i) => (
+                            <TableRow key={i}>
+                                <TableCell>
+                                    <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
+                                </TableCell>
+                            </TableRow>
+                        ))}
                 </TableBody>
             </Table>
         )

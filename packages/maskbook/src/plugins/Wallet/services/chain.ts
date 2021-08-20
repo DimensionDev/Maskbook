@@ -32,7 +32,7 @@ export async function updateChainState() {
             getBlockNumber(),
             wallet ? getBalance(wallet.address) : currentBalanceSettings.value,
         ])
-    } catch (error) {
+    } catch {
         // do nothing
     } finally {
         // reset the polling if chain state updated successfully

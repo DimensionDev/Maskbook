@@ -1,13 +1,15 @@
 import { useCallback } from 'react'
-import { makeStyles, Box, Card, Typography, Button, Grid, Avatar } from '@material-ui/core'
+import { Box, Card, Typography, Button, Grid, Avatar } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useGrant } from '../hooks/useGrant'
 import { PluginGitcoinMessages } from '../messages'
+import urlcat from 'urlcat'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
     },
@@ -73,7 +75,7 @@ interface PreviewCardProps {
 
 export function PreviewCard(props: PreviewCardProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.id)
 
     //#region the donation dialog
@@ -145,7 +147,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         color="primary"
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={`https://gitcoin.co${grant.url}`}>
+                        href={urlcat('https://gitcoin.co', grant.url)}>
                         {t('plugin_gitcoin_view_on')}
                     </Button>
                 </Grid>

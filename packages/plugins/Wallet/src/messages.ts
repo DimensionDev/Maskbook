@@ -77,6 +77,16 @@ export type WalletRenameDialogEvent = {
     wallet: Wallet | null
 }
 
+export type WalletRiskWarningDialogEvent =
+    | {
+          open: true
+          wallet?: Wallet
+      }
+    | {
+          open: false
+          type: 'cancel' | 'confirm'
+      }
+
 export type WalletConnectQRCodeDialogEvent =
     | {
           open: true
@@ -171,11 +181,19 @@ export interface WalletMessage {
      */
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
 
+    /**
+     * Wallet Risk Warning dialog
+     */
+    walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
+
     walletsUpdated: void
     phrasesUpdated: void
+    transactionsUpdated: void
     erc20TokensUpdated: void
     erc721TokensUpdated: void
     erc1155TokensUpdated: void
+    /** true: Now locked; false: Now unlocked */
+    walletLockStatusUpdated: boolean
     rpc: unknown
 }
 

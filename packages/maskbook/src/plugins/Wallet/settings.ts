@@ -41,17 +41,6 @@ export const currentProviderSettings = createGlobalSettings<ProviderType>(
 )
 
 /**
- * Is Metamask Locked
- */
-export const currentIsMetamaskLockedSettings = createGlobalSettings<boolean>(
-    `${PLUGIN_IDENTIFIER}+isMetamaskLocked`,
-    true,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
-
-/**
  * The default portfolio data provider
  */
 export const currentPortfolioDataProviderSettings = createGlobalSettings<PortfolioProvider>(
@@ -137,5 +126,11 @@ export const currentEtherPriceSettings = createGlobalSettings<number>(`${PLUGIN_
 
 const effect = startEffects(import.meta.webpackHot)
 
-effect(() => connectGasNow())
+effect(() => {
+    try {
+        return connectGasNow()
+    } catch {
+        return () => {}
+    }
+})
 effect(() => trackEtherPrice())

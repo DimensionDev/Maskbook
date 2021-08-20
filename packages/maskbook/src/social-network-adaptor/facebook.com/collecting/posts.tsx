@@ -70,7 +70,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 .map((x) => x.parentElement)
                 .querySelectorAll('textarea')
                 .map((x) => x.parentElement)
-                .filter((x) => x.innerHTML.indexOf('comment') !== -1)
+                .filter((x) => x.innerHTML.includes('comment'))
 
             const commentBoxSelector = isMobileFacebook ? commentBoxSelectorMobile : commentBoxSelectorPC
 
@@ -169,7 +169,7 @@ function getMetadataImages(node: DOMProxy): string[] {
     const imgUrls = isMobileFacebook
         ? (getComputedStyle(imgNodes[0]).backgroundImage || '')
               .slice(4, -1)
-              .replace(/['"]/g, '')
+              .replace(/["']/g, '')
               .split(',')
               .filter(Boolean)
         : Array.from(imgNodes)

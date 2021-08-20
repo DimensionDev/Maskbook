@@ -80,7 +80,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
                     : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
             ])
-        } catch (e) {
+        } catch {
             throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
         }
     }, [account, isAllowed, providerType, expectedChainId])
@@ -94,8 +94,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     // is the actual chain id a valid one even if it does not match with the expected one?
     const isValid = props?.isValidChainId?.(actualChainId, expectedChainId) ?? false
-
-    if (isMatched || isValid) return <>{props.children}</>
 
     if (!account)
         return (
@@ -112,6 +110,8 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 </ActionButton>
             </Box>
         )
+
+    if (isMatched || isValid) return <>{props.children}</>
 
     if (!isAllowed)
         return (

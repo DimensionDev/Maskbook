@@ -1,6 +1,5 @@
 import { ChangeEvent, useState, useCallback, useMemo } from 'react'
 import {
-    makeStyles,
     DialogContent,
     Box,
     Checkbox,
@@ -11,6 +10,7 @@ import {
     Typography,
     Link,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useSnackbar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { useAccount } from '@masknet/web3-shared'
@@ -25,7 +25,7 @@ import { PluginCollectibleRPC } from '../messages'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         content: {
             padding: 0,
@@ -65,7 +65,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const isVerified = asset?.value?.is_verified ?? false
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
     const account = useAccount()
@@ -83,12 +83,14 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                 accountAddress: account,
                 recipientAddress: account,
             })
-        } catch (e) {
-            enqueueSnackbar(e.message, {
-                variant: 'error',
-                preventDuplicate: true,
-            })
-            throw e
+        } catch (error) {
+            if (error instanceof Error) {
+                enqueueSnackbar(error.message, {
+                    variant: 'error',
+                    preventDuplicate: true,
+                })
+            }
+            throw error
         }
     }, [asset?.value, account, enqueueSnackbar])
 

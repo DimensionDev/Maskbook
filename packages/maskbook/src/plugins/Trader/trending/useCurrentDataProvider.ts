@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { DataProvider } from '../types'
+import { DataProvider } from '@masknet/public-api'
 import { useValueRef } from '@masknet/shared'
 import { currentDataProviderSettings } from '../settings'
 

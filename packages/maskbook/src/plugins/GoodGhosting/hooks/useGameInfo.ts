@@ -3,27 +3,31 @@ import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
-import type { GoodGhostingInfo, Player, TimelineEvent } from '../types'
+import type { GameMetaData, GoodGhostingInfo, Player, TimelineEvent } from '../types'
 import { ZERO_ADDRESS } from '../constants'
 import { useI18N } from '../../../utils'
 import addSeconds from 'date-fns/addSeconds'
 
-export function useGameContractAddress() {
+export function useGameContractAddress(id: string) {
     const { GOOD_GHOSTING_CONTRACT_ADDRESS_FILE } = useGoodGhostingConstants()
 
-    const asyncResult = useAsyncRetry(async (): Promise<{ contractAddress?: string }> => {
-        if (!GOOD_GHOSTING_CONTRACT_ADDRESS_FILE) return {}
+    const asyncResult = useAsyncRetry(async (): Promise<GameMetaData> => {
+        if (!GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
+            return {
+                contractAddress: '',
+            }
 
         const response = await fetch(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
         const data = await response.text()
-        return data ? JSON.parse(data) : {}
-    }, [GOOD_GHOSTING_CONTRACT_ADDRESS_FILE])
+        const gameData = data ? JSON.parse(data) : {}
+        return gameData[id] || gameData.default || {}
+    }, [id, GOOD_GHOSTING_CONTRACT_ADDRESS_FILE])
 
     return asyncResult
 }
 
-export function useGameInfo(contractAddress: string) {
-    const contract = useGoodGhostingContract(contractAddress)
+export function useGameInfo(gameData: GameMetaData) {
+    const contract = useGoodGhostingContract(gameData.contractAddress)
     const account = useAccount()
     const { names, callDatas } = useMemo(() => {
         const names = [
@@ -33,6 +37,7 @@ export function useGameInfo(contractAddress: string) {
             'lastSegment',
             'segmentLength',
             'getNumberOfPlayers',
+            'maxPlayersCount',
             'totalGameInterest',
             'totalGamePrincipal',
             'adaiToken',
@@ -41,12 +46,12 @@ export function useGameInfo(contractAddress: string) {
         ] as any
         return {
             names: [...names, 'players'],
-            callDatas: [...Array(names.length).fill([]), [account]],
+            callDatas: [...Array(names.length).fill([]), [account || ZERO_ADDRESS]],
         }
     }, [account])
 
     const [results, calls, _, callback] = useSingleContractMultipleData(contract, names, callDatas)
-    const asyncResult = useAsyncRetry(() => callback(calls), [calls, callback])
+    const asyncResult = useAsyncRetry(() => callback(calls), [calls])
 
     const gameInfo = useMemo(() => {
         if (!contract || !results.length) return
@@ -59,6 +64,7 @@ export function useGameInfo(contractAddress: string) {
             lastSegment,
             segmentLength,
             numberOfPlayers,
+            maxPlayersCount,
             totalGameInterest,
             totalGamePrincipal,
             adaiToken,
@@ -75,20 +81,21 @@ export function useGameInfo(contractAddress: string) {
         const player = currentPlayer as any as Player
 
         return {
-            contractAddress,
+            ...gameData,
             segmentPayment,
             firstSegmentStart: Number.parseInt(firstSegmentStart, 10),
             currentSegment: Number.parseInt(currentSegment, 10),
             lastSegment: Number.parseInt(lastSegment, 10),
             segmentLength: Number.parseInt(segmentLength, 10),
             numberOfPlayers: Number.parseInt(numberOfPlayers, 10),
+            maxPlayersCount: Number.parseInt(maxPlayersCount, 10),
             totalGameInterest,
             totalGamePrincipal,
             adaiTokenAddress: adaiToken,
             lendingPoolAddress: lendingPool,
             earlyWithdrawalFee,
             currentPlayer: player && player.addr !== ZERO_ADDRESS ? player : undefined,
-            gameHasEnded: Number.parseInt(currentSegment, 10) >= Number.parseInt(lastSegment, 10),
+            gameHasEnded: Number.parseInt(currentSegment, 10) > Number.parseInt(lastSegment, 10),
             refresh: asyncResult.retry,
         } as GoodGhostingInfo
     }, [results, contract])
@@ -147,7 +154,7 @@ export function useTimeline(info: GoodGhostingInfo) {
         if (!startTime || !roundDuration || !numberOfRounds) return []
         const initialDate = new Date(startTime * 1000)
         const rounds: TimelineEvent[] = []
-        for (let i = 0; i <= numberOfRounds; i++) {
+        for (let i = 0; i <= numberOfRounds; i += 1) {
             rounds.push({
                 date: addSeconds(initialDate, roundDuration * i),
                 ...getTimelineEvent(i, numberOfRounds),

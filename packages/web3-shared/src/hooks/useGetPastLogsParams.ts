@@ -11,14 +11,14 @@ export function useGetPastLogsParams(
 ) {
     if (!fromBlock || fromBlock > currentBlock) return []
     let count = 1
-    let queryParams = []
+    const queryParams = []
     while (fromBlock + count * maxBlockRange < currentBlock) {
         queryParams.push({
             fromBlock: toHex(fromBlock + (count - 1) * maxBlockRange),
             toBlock: toHex(fromBlock + count * maxBlockRange),
             ...params,
         })
-        count++
+        count += 1
     }
     queryParams.push({
         fromBlock: toHex(fromBlock + (count - 1) * maxBlockRange),

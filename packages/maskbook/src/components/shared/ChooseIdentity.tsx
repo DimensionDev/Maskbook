@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import type { Profile } from '../../database'
 import { List, Accordion, AccordionSummary } from '@material-ui/core'
@@ -10,7 +10,7 @@ import { ProfileIdentifier } from '../../database/type'
 import { currentSelectedIdentity } from '../../settings/settings'
 import { useStylesExtends } from '@masknet/shared'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     root: {
         width: '100%',
         lineHeight: 1.75,
@@ -33,7 +33,7 @@ const useStyles = makeStyles({
     },
 })
 
-const useAccordionSummaryStyle = makeStyles({
+const useAccordionSummaryStyle = makeStyles()({
     root: {
         padding: 0,
     },

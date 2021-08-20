@@ -11,4 +11,5 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'insider',
     },
+    experimentalMark: true,
 }

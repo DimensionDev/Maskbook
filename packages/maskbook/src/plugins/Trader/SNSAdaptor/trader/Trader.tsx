@@ -1,9 +1,8 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { Trade } from '@uniswap/v2-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
-
 import {
     ChainId,
     createERC20Token,
@@ -23,8 +22,9 @@ import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
 import { TradeSummary } from './TradeSummary'
 import { ConfirmDialog } from './ConfirmDialog'
 import { TradeActionType } from '../../trader/useTradeState'
-import { Coin, SwapResponse, TokenPanelType, TradeComputed, TradeProvider } from '../../types'
-import { TradePairViewer } from '../uniswap/TradePairViewer'
+import { Coin, SwapResponse, SwapRouteData, TokenPanelType, TradeComputed, TradeProvider } from '../../types'
+import { TradePairViewer as UniswapPairViewer } from '../uniswap/TradePairViewer'
+import { TradePairViewer as DODOPairViewer } from '../dodo/TradePairViewer'
 import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -36,7 +36,7 @@ import { TradeContext } from '../../trader/useTradeContext'
 import { PluginTraderRPC } from '../../messages'
 import { delay } from '../../../../utils'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             display: 'flex',
@@ -70,7 +70,7 @@ export function Trader(props: TraderProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const context = useContext(TradeContext)
-    const provider = context?.TYPE ?? TradeProvider.UNISWAP
+    const provider = context?.TYPE ?? TradeProvider.UNISWAP_V2
 
     //#region trade state
     const {
@@ -312,7 +312,7 @@ export function Trader(props: TraderProps) {
                         inputToken={inputToken}
                         outputToken={outputToken}
                     />
-                    {context?.IS_UNISWAP_LIKE ? (
+                    {context?.IS_UNISWAP_V2_LIKE ? (
                         <UniswapTradeRoute classes={{ root: classes.router }} trade={tradeComputed} />
                     ) : null}
                     {[TradeProvider.BALANCER].includes(provider) ? (
@@ -321,11 +321,14 @@ export function Trader(props: TraderProps) {
                             trade={tradeComputed as TradeComputed<SwapResponse>}
                         />
                     ) : null}
-                    {context?.IS_UNISWAP_LIKE ? (
-                        <TradePairViewer
+                    {context?.IS_UNISWAP_V2_LIKE ? (
+                        <UniswapPairViewer
                             trade={tradeComputed as TradeComputed<Trade<Currency, Currency, TradeType>>}
                             provider={provider}
                         />
+                    ) : null}
+                    {TradeProvider.DODO === provider ? (
+                        <DODOPairViewer trade={tradeComputed as TradeComputed<SwapRouteData>} provider={provider} />
                     ) : null}
                 </>
             ) : null}

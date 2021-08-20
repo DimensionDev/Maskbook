@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/prefer-enum-initializers */
+
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
@@ -318,7 +320,7 @@ export function encodeRegionCode(codes: RegionCode[]) {
 export function decodeRegionCode(str: string): RegionCode[] {
     str = str.toUpperCase()
 
-    const isReverse = str[0] === '-'
+    const isReverse = str.startsWith('-')
 
     const codes = str
         .slice(1)

@@ -1,14 +1,6 @@
 import { useCallback, useState } from 'react'
-import {
-    makeStyles,
-    Theme,
-    Typography,
-    DialogContent,
-    DialogActions,
-    Button,
-    CircularProgress,
-    Link,
-} from '@material-ui/core'
+import { Typography, DialogContent, DialogActions, Button, CircularProgress, Link } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import WarningIcon from '@material-ui/icons/Warning'
 import DoneIcon from '@material-ui/icons/Done'
 import {
@@ -23,7 +15,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { JSON_RPC_ErrorCode } from '../constants'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         textAlign: 'center',
         display: 'flex',
@@ -144,6 +136,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                                     : state.error.message.includes('User denied transaction signature.')
                                     ? t('plugin_wallet_transaction_rejected')
                                     : state.error.code === JSON_RPC_ErrorCode.INTERNAL_ERROR ||
+                                      state.error.message.includes(`"code":${JSON_RPC_ErrorCode.INTERNAL_ERROR}`) ||
                                       (state.error.code &&
                                           state.error.code <= JSON_RPC_ErrorCode.SERVER_ERROR_RANGE_START &&
                                           state.error.code >= JSON_RPC_ErrorCode.SERVER_ERROR_RANGE_END)
