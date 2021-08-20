@@ -1,6 +1,7 @@
 import { useContext, useRef, useEffect, useState, useMemo } from 'react'
 import classNames from 'classnames'
-import { makeStyles, Box, List, ListItem, Typography, LinearProgress, withStyles, Button } from '@material-ui/core'
+import { Box, List, ListItem, Typography, LinearProgress, withStyles, Button } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ShadowRootTooltip, useI18N } from '../../../utils'
 import millify from 'millify'
 import { SnapshotContext } from '../context'
@@ -15,7 +16,7 @@ import { LoadingCard } from './LoadingCard'
 
 const choiceMaxWidth = 240
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         list: {
             display: 'flex',
@@ -73,7 +74,7 @@ function Content() {
     const {
         payload: { results },
     } = useResults(identifier)
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     const listRef = useRef<HTMLSpanElement[]>([])
     const [tooltipsVisible, setTooltipsVisible] = useState<readonly boolean[]>(
@@ -91,7 +92,7 @@ function Content() {
                 choice: vote.choiceIndex,
                 balance: vote.balance,
                 timestamp: vote.timestamp,
-                dateUtc: new Date(vote.timestamp * 1e3).toUTCString(),
+                dateUtc: new Date(vote.timestamp * 1000).toUTCString(),
                 authorIpfsHash: vote.authorIpfsHash,
             })),
         [votes],

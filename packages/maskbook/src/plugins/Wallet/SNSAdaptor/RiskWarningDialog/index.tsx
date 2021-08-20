@@ -1,4 +1,5 @@
-import { Avatar, Button, DialogActions, DialogContent, makeStyles, Paper, Typography } from '@material-ui/core'
+import { Avatar, Button, DialogActions, DialogContent, Paper, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../../utils'
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh'
@@ -11,7 +12,7 @@ import classnames from 'classnames'
 import { Trans } from 'react-i18next'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     paper: {
         paddingTop: theme.spacing(2),
         paddingLeft: theme.spacing(1),
@@ -55,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function WalletRiskWarningDialog() {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const account = useAccount()
     const { enqueueSnackbar } = useSnackbar()
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.walletRiskWarningDialogUpdated)

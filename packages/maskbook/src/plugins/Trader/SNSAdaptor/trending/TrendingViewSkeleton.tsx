@@ -1,17 +1,16 @@
-import { makeStyles, CardHeader, CardContent, CardActions, Skeleton } from '@material-ui/core'
+import { CardHeader, CardContent, CardActions, Skeleton } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 
-const useStyles = makeStyles((theme) => {
-    return {
-        content: {
-            paddingTop: 0,
-            paddingBottom: 0,
-        },
-        footer: {
-            justifyContent: 'space-between',
-        },
-    }
+const useStyles = makeStyles()({
+    content: {
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
+    footer: {
+        justifyContent: 'space-between',
+    },
 })
 
 export interface TrendingViewSkeletonProps extends withClasses<'content' | 'footer'> {

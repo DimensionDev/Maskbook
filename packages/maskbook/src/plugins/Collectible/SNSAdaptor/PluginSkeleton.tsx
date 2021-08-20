@@ -1,6 +1,7 @@
-import { Skeleton, makeStyles } from '@material-ui/core'
+import { Skeleton } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         skeleton: {
             margin: theme.spacing(2),
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export function PluginSkeleton() {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <>
             {Array.from({ length: 2 })

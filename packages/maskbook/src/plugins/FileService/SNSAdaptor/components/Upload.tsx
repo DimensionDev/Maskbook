@@ -1,6 +1,7 @@
 import { Attachment } from '@dimensiondev/common-protocols'
 import { blobToArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
-import { Checkbox, FormControlLabel, Link, makeStyles, Typography } from '@material-ui/core'
+import { Checkbox, FormControlLabel, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-es'
 import { useState } from 'react'
 import { Trans } from 'react-i18next'
@@ -13,7 +14,7 @@ import { PluginFileServiceRPC } from '../../Worker/rpc'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -54,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const Upload: React.FC = () => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const history = useHistory()
     const [encrypted, setEncrypted] = useState(true)
     const [useCDN, setUseCDN] = useState(false)
