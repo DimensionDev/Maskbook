@@ -1,7 +1,7 @@
 import { memo } from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         padding: theme.spacing(3.125),
         display: 'flex',
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const FeaturePromotions = memo(() => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <div className={classes.container}>
             <img className={classes.img} src={new URL('./SendRedPacket.png', import.meta.url).toString()} />

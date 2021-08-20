@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import {
     useChainId,
-    useTokenDetailed,
+    useFungibleTokenDetailed,
     EthereumTokenType,
     FungibleTokenDetailed,
     FungibleToken,
@@ -40,7 +40,7 @@ export function PostInspector(props: PostInspectorProps) {
         value: tokenDetailed,
         loading: _loadingToken,
         retry: retryToken,
-    } = useTokenDetailed(
+    } = useFungibleTokenDetailed(
         EthereumTokenType.ERC20,
         typeof token === 'string' ? (token as string) : (token as FungibleTokenDetailed).address,
     )

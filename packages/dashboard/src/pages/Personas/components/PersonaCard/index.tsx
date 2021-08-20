@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { SettingsIcon } from '@masknet/icons'
 import { IconButton, MenuItem, Typography } from '@material-ui/core'
@@ -12,7 +12,7 @@ import { RenameDialog } from '../RenameDialog'
 import type { SocialNetwork } from '../../api'
 import classNames from 'classnames'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     card: {
         borderRadius: Number(theme.shape.borderRadius) * 3,
         backgroundColor: MaskColorVar.primaryBackground,
@@ -87,7 +87,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
     const { nickname, active = false, definedSocialNetworks, identifier, profiles } = props
     const { onConnect, onDisconnect, onClick, onRename } = props
     const t = useDashboardI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [menu, openMenu] = useMenu(

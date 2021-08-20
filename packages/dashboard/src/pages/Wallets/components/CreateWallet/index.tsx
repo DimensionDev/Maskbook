@@ -1,4 +1,5 @@
-import { Button, experimentalStyled as styled, FilledInput, makeStyles, Tab, Typography } from '@material-ui/core'
+import { Button, experimentalStyled as styled, FilledInput, Tab, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ButtonGroupTabList, MaskColorVar, useTabs } from '@masknet/theme'
 import { memo } from 'react'
 import { RefreshIcon } from '@masknet/icons'
@@ -67,19 +68,18 @@ const PrivateKeyInput = styled(FilledInput)(
 `,
 )
 
-const useTabPanelStyles = makeStyles(() => ({
+const useTabPanelStyles = makeStyles()({
     root: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         padding: 0,
     },
-}))
+})
 
 export const CreateWallet = memo(() => {
     const t = useDashboardI18N()
-
-    const panelStyles = useTabPanelStyles()
+    const { classes: panelStyles } = useTabPanelStyles()
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'json', 'privateKey')
     return (
         <Container>

@@ -11,6 +11,7 @@ const PrivacyPolicy = lazy(() => import('./PrivacyPolicy'))
 const Welcome = lazy(() => import('./Welcome'))
 const Personas = lazy(() => import('./Personas'))
 const Settings = lazy(() => import('./Settings'))
+const CreateWallet = lazy(() => import('./CreateMaskWallet'))
 const Labs = lazy(() => import('./Labs'))
 
 export function Pages() {
@@ -26,6 +27,7 @@ export function Pages() {
                 <Route path={`${RoutePaths.Wallets}/*`} element={frame(<Wallets />)} />
                 <Route path={RoutePaths.Settings} element={frame(<Settings />)} />
                 <Route path={RoutePaths.Labs} element={frame(<Labs />)} />
+                <Route path={`${RoutePaths.CreateMaskWallet}/*`} element={<CreateWallet />} />
                 <Route element={<Navigate to={RoutePaths.Personas} />} />
             </Routes>
         </Suspense>
