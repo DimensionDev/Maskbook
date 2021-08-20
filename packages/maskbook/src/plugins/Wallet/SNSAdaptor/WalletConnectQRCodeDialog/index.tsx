@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
+import { Button, DialogActions, DialogContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../messages'
@@ -9,7 +10,7 @@ import { SafariPlatform } from './SafariPlatform'
 import { FirefoxPlatform } from './FirefoxPlatform'
 import { QRCodeModel } from './QRCodeModel'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -23,8 +24,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         height: '30%',
     },
-}))
-
+})
 export const WalletConnectQRCodeDialog: React.FC = () => {
     const [uri, setURI] = useState('')
 
@@ -59,7 +59,7 @@ interface QRCodeDialogProps {
 
 export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({ uri, open, onClose, mode }) => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [qrMode, setQRMode] = useState(false)
     const PlatformSelector: React.FC = () => {
         if (!uri) {

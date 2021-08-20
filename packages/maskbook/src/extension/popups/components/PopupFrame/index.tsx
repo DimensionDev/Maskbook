@@ -1,5 +1,6 @@
 import { memo } from 'react'
-import { Box, makeStyles, Paper, withStyles } from '@material-ui/core'
+import { Box, Paper, withStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
 import { DialogRoutes } from '../../index'
@@ -22,7 +23,7 @@ const GlobalCss = withStyles({
     },
 })(() => null)
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         height: 474,
         overflow: 'auto',
@@ -68,7 +69,7 @@ export interface PopupFrameProps extends React.PropsWithChildren<{}> {}
 export const PopupFrame = memo<PopupFrameProps>((props) => {
     const { t } = useI18N()
     const history = useHistory()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const personas = useMyPersonas()
 
     const matchWallet = useRouteMatch({

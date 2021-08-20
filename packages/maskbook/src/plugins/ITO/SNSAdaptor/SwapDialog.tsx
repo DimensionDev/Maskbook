@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
-import { CircularProgress, makeStyles, Slider, Typography } from '@material-ui/core'
-
+import { CircularProgress, Slider, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -32,7 +32,7 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { useQualificationVerify } from './hooks/useQualificationVerify'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     button: {
         marginTop: theme.spacing(1.5),
     },

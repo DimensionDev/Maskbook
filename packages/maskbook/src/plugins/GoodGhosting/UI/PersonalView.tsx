@@ -5,7 +5,8 @@ import {
     TransactionStateType,
     useChainId,
 } from '@masknet/web3-shared'
-import { makeStyles, Grid, Typography, Button, Link } from '@material-ui/core'
+import { Grid, Typography, Button, Link } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'
 import { useEarlyWithdraw } from '../hooks/useGameActions'
@@ -15,7 +16,7 @@ import { getPlayerStatus, isGameActionError, PlayerStatus } from '../utils'
 import BigNumber from 'bignumber.js'
 import { FormattedBalance } from '@masknet/shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     infoRow: {
         paddingBottom: theme.spacing(1),
     },
@@ -42,7 +43,7 @@ interface PersonalViewProps {
 
 export function PersonalView(props: PersonalViewProps) {
     const chainId = useChainId()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     const gameToken = useGameToken()
     const { canEarlyWithdraw, earlyWithdraw } = useEarlyWithdraw(props.info)

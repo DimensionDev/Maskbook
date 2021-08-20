@@ -8,7 +8,8 @@ import {
     useAccount,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import { DialogContent, makeStyles } from '@material-ui/core'
+import { DialogContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -28,7 +29,7 @@ import { useInvestCallback } from '../hooks/useInvestCallback'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     paper: {
         width: '450px !important',
     },
@@ -53,8 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function InvestDialog() {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const [id] = useState(uuid())
     const [pool, setPool] = useState<Pool>()
     const [token, setToken] = useState<FungibleTokenDetailed>()

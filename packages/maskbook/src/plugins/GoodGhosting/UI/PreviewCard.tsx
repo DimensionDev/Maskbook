@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Tab, Tabs, makeStyles, Card, Typography, Button, Box } from '@material-ui/core'
+import { Tab, Tabs, Card, Typography, Button, Box } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { TimelineView } from './TimelineView'
 import { GameStatsView } from './GameStatsView'
@@ -11,7 +12,7 @@ import { usePoolData } from '../hooks/usePoolData'
 import { useOtherPlayerInfo } from '../hooks/useOtherPlayerInfo'
 import { TimelineTimer } from './TimelineTimer'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
     },
@@ -93,7 +94,7 @@ interface PreviewCardWithGameInfoProps {
 }
 
 function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [activeTab, setActiveTab] = useState(GoodGhostingTab.Game)
 
     const finDataResult = usePoolData(props.info)

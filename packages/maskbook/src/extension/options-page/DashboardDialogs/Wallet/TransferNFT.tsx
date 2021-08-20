@@ -1,4 +1,5 @@
-import { Button, makeStyles, TextField } from '@material-ui/core'
+import { Button, TextField } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import {
@@ -15,7 +16,7 @@ import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 
-const useTransferDialogStylesNFT = makeStyles((theme) => ({
+const useTransferDialogStylesNFT = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(1),
     },
@@ -34,7 +35,7 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
     const { onClose } = props
 
     const { t } = useI18N()
-    const classes = useTransferDialogStylesNFT()
+    const { classes } = useTransferDialogStylesNFT()
 
     const [address, setAddress] = useState('')
     const { collectiblesRetry } = useContext(CollectibleContext)

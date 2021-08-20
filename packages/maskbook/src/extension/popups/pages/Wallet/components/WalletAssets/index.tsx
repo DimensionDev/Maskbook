@@ -1,5 +1,6 @@
 import { memo, useState } from 'react'
-import { Button, makeStyles, Tab, Tabs } from '@material-ui/core'
+import { Button, Tab, Tabs } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { WalletHeader } from '../WalletHeader'
 import { WalletInfo } from '../WalletInfo'
 import { TabContext, TabPanel } from '@material-ui/lab'
@@ -11,7 +12,7 @@ import { DialogRoutes } from '../../../../index'
 import { ActivityList } from '../ActivityList'
 import { useI18N } from '../../../../../../utils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     content: {
         flex: 1,
         backgroundColor: '#F7F9FA',
@@ -32,7 +33,7 @@ const useStyles = makeStyles(() => ({
         padding: '9px 0',
         borderRadius: 20,
     },
-}))
+})
 
 const StyledTabs = withStyles({
     root: {
@@ -81,7 +82,7 @@ export interface WalletAssetsUIProps {
 
 export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [currentTab, setCurrentTab] = useState(WalletTabs.Assets)
 
     return (
