@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress, formatBalance, useFungibleTokenDetailed, EthereumTokenType } from '@masknet/web3-shared'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
@@ -13,7 +13,7 @@ import { set } from 'lodash-es'
 import { ToolIconURLs } from '../../../resources/tool-icon'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
@@ -60,7 +60,7 @@ interface BadgeProps {
     payload: JSON_PayloadComposeMask
 }
 function Badge({ payload }: BadgeProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { value: tokenDetailed, loading: loadingToken } = useFungibleTokenDetailed(
         EthereumTokenType.ERC20,
         payload.token,
