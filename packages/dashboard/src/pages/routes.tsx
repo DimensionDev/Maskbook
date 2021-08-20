@@ -21,7 +21,7 @@ export function Pages() {
                 <NoPersonaGuardRoute path={RoutePaths.Welcome} element={<Welcome />} redirectTo={RoutePaths.Personas} />
                 <Route path={RoutePaths.Setup} element={<Setup />} />
                 <Route path={`${RoutePaths.SignUp}/*`} element={<SignUp />} />
-                <NoPersonaGuardRoute path={RoutePaths.SignIn} element={<SignIn />} redirectTo={RoutePaths.Personas} />
+                <Route path={RoutePaths.SignIn} element={<SignIn />} />
                 <Route path={RoutePaths.PrivacyPolicy} element={<PrivacyPolicy />} />
                 <Route path={RoutePaths.Personas} element={frame(<Personas />)} />
                 <Route path={`${RoutePaths.Wallets}/*`} element={frame(<Wallets />)} />
