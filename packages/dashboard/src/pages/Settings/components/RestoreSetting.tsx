@@ -11,9 +11,5 @@ export default function RestoreSetting() {
         navigate(RoutePaths.SignIn)
     }
 
-    return (
-        <>
-            <SettingButton onClick={onRecovery}>{t.settings_button_recovery()}</SettingButton>
-        </>
-    )
+    return <SettingButton onClick={onRecovery}>{t.settings_button_recovery()}</SettingButton>
 }

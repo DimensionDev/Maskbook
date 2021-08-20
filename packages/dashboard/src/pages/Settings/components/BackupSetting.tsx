@@ -60,12 +60,15 @@ export default function BackupSetting() {
     return (
         <>
             <SettingButton onClick={onBackup}>{t.settings_button_backup()}</SettingButton>
-            <BackupDialog
-                local={localMode}
-                params={params}
-                open={showDialog.backup}
-                onClose={() => setShowDialog({ ...showDialog, backup: false })}
-            />
+            {showDialog.backup ? (
+                <BackupDialog
+                    local={localMode}
+                    params={params}
+                    open={showDialog.backup}
+                    onClose={() => setShowDialog({ ...showDialog, backup: false })}
+                />
+            ) : null}
+
             <BackupModeSelectDialog
                 open={showDialog.mode}
                 onClose={() => setShowDialog({ ...showDialog, mode: false })}

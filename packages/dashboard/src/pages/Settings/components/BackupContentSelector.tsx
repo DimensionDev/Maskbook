@@ -100,6 +100,7 @@ export default function BackupContentSelector({ json, onChange }: BackupContentS
                     <Checkbox
                         checked={walletChecked}
                         onChange={(event) => setWalletChecked(event.target.checked)}
+                        disabled={!json.wallets}
                         name="wallet"
                     />
                 </CheckboxContainer>
