@@ -1,8 +1,8 @@
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { useRemarkable } from './hooks/useRemarkable'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         color: 'inherit',
         fontSize: 'inherit',

@@ -2,22 +2,34 @@
 import type { ClassNameMap } from '@material-ui/styles'
 // Priority: classes from props > configHooks > defaultStyles
 export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
+    defaultStyles: { classes?: ClassNameMap<InternalKeys> },
+    props: { classes?: Partial<ClassNameMap<OverwrittenKeys>> },
+    useConfigHooks?: () => { classes: Partial<ClassNameMap<OverwrittenKeys>> } | Partial<ClassNameMap<OverwrittenKeys>>,
+): ClassNameMap<InternalKeys> & Partial<ClassNameMap<OverwrittenKeys>>
+export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
     defaultStyles: ClassNameMap<InternalKeys>,
     props: { classes?: Partial<ClassNameMap<OverwrittenKeys>> },
-    useConfigHooks?: () => Partial<ClassNameMap<OverwrittenKeys>>,
+    useConfigHooks?: () => { classes: Partial<ClassNameMap<OverwrittenKeys>> } | Partial<ClassNameMap<OverwrittenKeys>>,
+): ClassNameMap<InternalKeys> & Partial<ClassNameMap<OverwrittenKeys>>
+export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
+    defaultStyles: { classes?: ClassNameMap<InternalKeys> } | ClassNameMap<InternalKeys>,
+    props: { classes?: Partial<ClassNameMap<OverwrittenKeys>> },
+    useConfigHooks?: () => { classes: Partial<ClassNameMap<OverwrittenKeys>> } | Partial<ClassNameMap<OverwrittenKeys>>,
 ): ClassNameMap<InternalKeys> & Partial<ClassNameMap<OverwrittenKeys>> {
     // Note: this is a React hooks
-    const configOverwrite = useConfigHooks?.()
+    const configOverwrite = useConfigHooks?.() || ({} as any)
+    const overwriteResult: ClassNameMap<InternalKeys> =
+        'classes' in configOverwrite ? configOverwrite.classes : configOverwrite
     const propsOverwrite = props.classes
-    return mergeClasses<any>(defaultStyles, configOverwrite, propsOverwrite) as any
+    const result: ClassNameMap<InternalKeys> =
+        'classes' in defaultStyles ? defaultStyles.classes : (defaultStyles as any)
+    return mergeClasses(result, overwriteResult, propsOverwrite) as any
 }
 
-export function mergeClasses<T extends string>(
-    ...args: (Partial<Record<T, string>> | undefined)[]
-): Partial<Record<T, string>> {
+export function mergeClasses(...args: (Partial<ClassNameMap<string>> | undefined)[]): Partial<ClassNameMap<string>> {
     args = args.filter(Boolean)
     if (args.length === 1) return args[0]!
-    const result = {} as Partial<Record<T, string>>
+    const result = {} as Partial<ClassNameMap<string>>
     for (const current of args) {
         if (!current) continue
         for (const key in current) {

@@ -1,16 +1,17 @@
 /* eslint-disable no-restricted-imports */
 import { promises as fs, readdirSync } from 'fs'
-import { difference, keys, uniq, without } from 'lodash'
+import { difference, keys, uniq } from 'lodash'
 import { resolve, relative } from 'path'
-import { EXTENSION_SOURCE, ROOT_PATH } from '../utils'
+import { EXTENSION_SOURCE, ROOT_PATH, walk } from '../utils'
 import { getUsedKeys } from './ast'
 
-export const LOCALE_PATH = resolve(EXTENSION_SOURCE, '_locales')
-// only allow ISO 639-1 two-letter code for locale directory name
-export const LOCALE_NAMES = readdirSync(LOCALE_PATH).filter((name) => /^[a-z]{2}$/.test(name))
+export const LOCALE_PATH = resolve(EXTENSION_SOURCE, 'locales')
+export const LOCALE_NAMES = readdirSync(LOCALE_PATH)
+    .filter((name) => name.endsWith('.json'))
+    .map((x) => x.slice(0, -5))
 
 export function getMessagePath(name: string) {
-    return resolve(LOCALE_PATH, name, 'messages.json')
+    return resolve(LOCALE_PATH, name + '.json')
 }
 
 export function getLocaleRelativePath(...paths: string[]) {
@@ -27,36 +28,12 @@ export async function writeMessages(name: string, messages: unknown) {
 
 export async function findAllUsedKeys() {
     const usedKeys: string[] = []
-    for await (const file of walk(EXTENSION_SOURCE)) {
+    for await (const file of walk(EXTENSION_SOURCE, /\.(tsx?)$/)) {
         usedKeys.push(...getUsedKeys(await fs.readFile(file, 'utf-8')))
     }
     return uniq(usedKeys)
 }
 
 export async function findAllUnusedKeys() {
-    return difference(keys(await readMessages('en')), await findAllUsedKeys())
-}
-
-export async function findAllUnsyncedLocales(locales = without(LOCALE_NAMES, 'en')) {
-    const names = keys(await readMessages('en'))
-    const record: Record<string, string[]> = {}
-    for (const name of locales) {
-        const nextKeys = keys(await readMessages(name))
-        const diffKeys = difference(names, nextKeys)
-        if (diffKeys.length) {
-            record[name] = diffKeys
-        }
-    }
-    return record
-}
-
-async function* walk(dir: string): AsyncIterableIterator<string> {
-    for await (const dirent of await fs.opendir(dir)) {
-        const entry = resolve(dir, dirent.name)
-        if (dirent.isDirectory()) {
-            yield* walk(entry)
-        } else if (dirent.isFile() && /\.(tsx?)$/.test(entry)) {
-            yield entry
-        }
-    }
+    return difference(keys(await readMessages('en-US')), await findAllUsedKeys())
 }

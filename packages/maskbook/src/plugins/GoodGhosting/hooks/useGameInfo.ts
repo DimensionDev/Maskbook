@@ -46,12 +46,12 @@ export function useGameInfo(gameData: GameMetaData) {
         ] as any
         return {
             names: [...names, 'players'],
-            callDatas: [...Array(names.length).fill([]), [account]],
+            callDatas: [...Array(names.length).fill([]), [account || ZERO_ADDRESS]],
         }
     }, [account])
 
     const [results, calls, _, callback] = useSingleContractMultipleData(contract, names, callDatas)
-    const asyncResult = useAsyncRetry(() => callback(calls), [calls, callback])
+    const asyncResult = useAsyncRetry(() => callback(calls), [calls])
 
     const gameInfo = useMemo(() => {
         if (!contract || !results.length) return

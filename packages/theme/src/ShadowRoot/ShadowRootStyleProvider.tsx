@@ -36,15 +36,15 @@ class EmotionInformativeSheetsRegistry {
 }
 class JSSInformativeSheetsRegistry extends JSSSheetsRegistry {
     reg = new Informative()
-    add(...args: Parameters<JSSSheetsRegistry['add']>) {
+    override add(...args: Parameters<JSSSheetsRegistry['add']>) {
         super.add(...args)
         this.reg.inform()
     }
-    reset(...args: Parameters<JSSSheetsRegistry['reset']>) {
+    override reset(...args: Parameters<JSSSheetsRegistry['reset']>) {
         super.reset(...args)
         this.reg.inform()
     }
-    remove(...args: Parameters<JSSSheetsRegistry['remove']>) {
+    override remove(...args: Parameters<JSSSheetsRegistry['remove']>) {
         super.remove(...args)
         this.reg.inform()
     }
@@ -122,7 +122,7 @@ function init({ shadow, onHeadCreate }: ShadowRootStyleProviderProps) {
     //#region Emotion
     const EmotionInsertionPoint = head.appendChild(createElement('div', 'emotion-area'))
     // emotion doesn't allow numbers appears in the key
-    const instanceID = Math.random().toString(36).slice(2).replace(/[0-9]/g, 'x')
+    const instanceID = Math.random().toString(36).slice(2).replace(/\d/g, 'x')
     const emotionCache = createEmotionCache({
         container: EmotionInsertionPoint,
         key: 'emo-' + instanceID,

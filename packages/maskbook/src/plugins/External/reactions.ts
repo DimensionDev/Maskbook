@@ -1,5 +1,4 @@
 import { makeTypedMessageText } from '../../protocols/typed-message'
-import { editActivatedPostMetadata } from '../../protocols/typed-message/global-state'
 import { MaskMessage, startEffect } from '../../utils'
 import { isLocalContext } from './popup-context'
 
@@ -13,15 +12,15 @@ startEffect(module.hot, () =>
 startEffect(module.hot, () =>
     MaskMessage.events.thirdPartySetPayload.on((data) => {
         if (!isLocalContext(data.context)) return
-        editActivatedPostMetadata((meta) => {
-            for (const [key, value] of Object.entries(data.payload)) {
-                meta.set(key, value)
-            }
-        })
-        MaskMessage.events.compositionUpdated.sendToLocal({
+        const meta = new Map<string, unknown>()
+        for (const [key, value] of Object.entries(data.payload)) {
+            meta.set(key, value)
+        }
+
+        MaskMessage.events.requestComposition.sendToLocal({
             open: true,
             reason: 'popup',
-            content: makeTypedMessageText(data.appendText),
+            content: makeTypedMessageText(data.appendText, meta),
         })
     }),
 )

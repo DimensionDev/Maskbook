@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useMemo, useState } from 'react'
 import { Alert, Box, Button, IconButton, MenuItem, Tab, Tabs } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import AddIcon from '@material-ui/icons/Add'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
@@ -24,7 +24,7 @@ import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         height: '100%',
         display: 'flex',
@@ -74,12 +74,11 @@ interface WalletContentProps {
 
 export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ wallet }, ref) => {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const history = useHistory()
     const location = useLocation()
 
-    const color = useColorStyles()
+    const { classes: color } = useColorStyles()
     const xsMatched = useMatchXS()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
@@ -126,13 +125,13 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                 <Check className={classes.checkIcon} fontSize="small" />
             ) : null}
         </MenuItem>,
-        <MenuItem key="Sent" onClick={() => setTransactionType(FilterTransactionType.SENT)}>
+        <MenuItem key="send" onClick={() => setTransactionType(FilterTransactionType.SEND)}>
             {t('sent_transactions')}
-            {transactionType === FilterTransactionType.SENT ? (
+            {transactionType === FilterTransactionType.SEND ? (
                 <Check className={classes.checkIcon} fontSize="small" />
             ) : null}
         </MenuItem>,
-        <MenuItem key="Received" onClick={() => setTransactionType(FilterTransactionType.RECEIVE)}>
+        <MenuItem key="receive" onClick={() => setTransactionType(FilterTransactionType.RECEIVE)}>
             {t('received_transactions')}
             {transactionType === FilterTransactionType.RECEIVE ? (
                 <Check className={classes.checkIcon} fontSize="small" />

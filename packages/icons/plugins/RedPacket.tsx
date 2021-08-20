@@ -3,7 +3,7 @@ import type { SvgIcon } from '@material-ui/core'
 
 export const RedPacketIcon: typeof SvgIcon = createIcon(
     'RedPacket',
-    <>
+    <g>
         <path d="M5.604 7.227S4.68 4.563 15.08 4.563s9.474 2.664 9.474 2.664v1.148H5.604V7.227z" fill="#DB1919" />
         <path
             d="M21.862 6.298a2.784 2.784 0 11-5.569 0 2.784 2.784 0 015.569 0z"
@@ -40,6 +40,6 @@ export const RedPacketIcon: typeof SvgIcon = createIcon(
             d="M5.604 7.301S9.12 8.356 15.06 8.356c5.94 0 9.493-1.055 9.493-1.055V25.25a1 1 0 01-1 1H6.604a1 1 0 01-1-1V7.3z"
             fill="#F93737"
         />
-    </>,
+    </g>,
     '0 0 28 28',
 )

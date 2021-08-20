@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { Box, Grid, makeStyles, Typography } from '@material-ui/core'
+import { Box, Grid, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { useInterval } from 'react-use'
 import { ONE_SECOND } from '../constants'
 import { DarkColor } from '@masknet/theme/constants'
 import intervalToDuration from 'date-fns/intervalToDuration'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignSelf: 'center',
@@ -58,7 +59,7 @@ export const CountdownView = (props: CountdownProps) => {
 
     const { days, hours, minutes, seconds } = intervalToDuration({ start: 0, end: secs * 1000 })
 
-    if (secs === 0 || (days === 0 && hours === 0 && minutes === 0 && seconds === 0)) {
+    if (secs <= 0 || (days === 0 && hours === 0 && minutes === 0 && seconds === 0)) {
         return (
             <Typography variant="h6" color={DarkColor.textSecondary} className={classes.end}>
                 {msgOnEnd}

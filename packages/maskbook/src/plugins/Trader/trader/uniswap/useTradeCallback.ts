@@ -1,37 +1,42 @@
 import { useCallback, useState } from 'react'
-import type { Currency, TradeType } from '@uniswap/sdk-core'
-import type { SwapParameters, Trade } from '@uniswap/v2-sdk'
-import type { RouterV2 } from '@masknet/web3-contracts/types/RouterV2'
-import { TransactionState, TransactionStateType, TransactionEventType, useAccount } from '@masknet/web3-shared'
+import BigNumber from 'bignumber.js'
+import type { SwapParameters } from '@uniswap/v2-sdk'
+import { TransactionState, TransactionStateType, useAccount } from '@masknet/web3-shared'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
-import { SLIPPAGE_TOLERANCE_DEFAULT, DEFAULT_TRANSACTION_DEADLINE } from '../../constants'
-import type { TradeComputed } from '../../types'
-
-interface SuccessfulCall {
-    parameters: SwapParameters
-    gasEstimated: number
-}
+import { SLIPPAGE_DEFAULT } from '../../constants'
+import type { SwapCall, Trade, TradeComputed } from '../../types'
+import Services from '../../../../extension/service'
+import { swapErrorToUserReadableMessage } from '../../helpers'
 
 interface FailedCall {
     parameters: SwapParameters
     error: Error
 }
 
-export function useTradeCallback(
-    trade: TradeComputed<Trade<Currency, Currency, TradeType>> | null,
-    routerV2Contract: RouterV2 | null,
-    allowedSlippage = SLIPPAGE_TOLERANCE_DEFAULT,
-    ddl = DEFAULT_TRANSACTION_DEADLINE,
-) {
+interface SwapCallEstimate {
+    call: SwapCall
+}
+
+interface SuccessfulCall extends SwapCallEstimate {
+    call: SwapCall
+    gasEstimate: BigNumber
+}
+
+interface FailedCall extends SwapCallEstimate {
+    call: SwapCall
+    error: Error
+}
+
+export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlippage = SLIPPAGE_DEFAULT) {
     const account = useAccount()
-    const tradeParameters = useTradeParameters(trade, allowedSlippage, ddl)
+    const tradeParameters = useTradeParameters(trade, allowedSlippage)
 
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })
 
     const tradeCallback = useCallback(async () => {
-        if (!routerV2Contract) {
+        if (!tradeParameters.length) {
             setTradeState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -44,98 +49,111 @@ export function useTradeCallback(
         })
 
         // step 1: estimate each trade parameter
-        const estimatedCalls = await Promise.all(
+        const estimatedCalls: SwapCallEstimate[] = await Promise.all(
             tradeParameters.map(async (x) => {
-                const { methodName, args, value } = x
-                const config = !value || /^0x0*$/.test(value) ? {} : { value }
+                const { address, calldata, value } = x
+                const config = {
+                    from: account,
+                    to: address,
+                    data: calldata,
+                    ...(!value || /^0x0*$/.test(value) ? {} : { value }),
+                }
 
-                // @ts-ignore
-                const tx = routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args)
-
-                return tx
-                    .estimateGas({
-                        from: account,
-                        to: routerV2Contract.options.address,
-                        ...config,
+                return Services.Ethereum.estimateGas(config)
+                    .then((gasEstimate) => {
+                        return {
+                            call: x,
+                            gasEstimate: new BigNumber(gasEstimate),
+                        }
                     })
-                    .then(
-                        (gasEstimated) =>
-                            ({
-                                parameters: x,
-                                gasEstimated,
-                            } as SuccessfulCall),
-                    )
-                    .catch(() => {
-                        return tx
-                            .call({
-                                from: account,
-                                to: routerV2Contract.options.address,
-                                ...config,
+                    .catch((error) => {
+                        return Services.Ethereum.call(config)
+                            .then(() => {
+                                return {
+                                    call: x,
+                                    error: new Error('Gas estimate failed.'),
+                                }
                             })
-                            .then(
-                                () =>
-                                    ({
-                                        parameters: x,
-                                        error: new Error('Unexpected issue with estimating the gas. Please try again.'),
-                                    } as FailedCall),
-                            )
-                            .catch(
-                                (error) =>
-                                    ({
-                                        parameters: x,
-                                        error,
-                                    } as FailedCall),
-                            )
+                            .catch((error) => {
+                                return {
+                                    call: x,
+                                    error: new Error(swapErrorToUserReadableMessage(error)),
+                                }
+                            })
                     })
             }),
         )
 
-        // step 2: validate estimation
-        const successfulCall = estimatedCalls.find(
-            (x, i, list): x is SuccessfulCall =>
-                ('gasEstimated' in x && i === list.length - 1) || (list[i + 1] && 'gasEstimated' in list[i + 1]),
+        // a successful estimation is a bignumber gas estimate and the next call is also a bignumber gas estimate
+        let bestCallOption: SuccessfulCall | SwapCallEstimate | undefined = estimatedCalls.find(
+            (el, ix, list): el is SuccessfulCall =>
+                'gasEstimate' in el && (ix === list.length - 1 || 'gasEstimate' in list[ix + 1]),
         )
-        if (!successfulCall) {
-            const failedCalls = estimatedCalls.filter((x): x is FailedCall => 'error' in x)
-            setTradeState({
-                type: TransactionStateType.FAILED,
-                error:
-                    failedCalls.length > 0 ? failedCalls[failedCalls.length - 1].error : new Error('Unexpected error'),
-            })
-            return
+
+        // check if any calls errored with a recognizable error
+        if (!bestCallOption) {
+            const errorCalls = estimatedCalls.filter((call): call is FailedCall => 'error' in call)
+            if (errorCalls.length > 0) {
+                setTradeState({
+                    type: TransactionStateType.FAILED,
+                    error: errorCalls[errorCalls.length - 1].error,
+                })
+                return
+            }
+            const firstNoErrorCall = estimatedCalls.find((call): call is SwapCallEstimate => !('error' in call))
+            if (!firstNoErrorCall) {
+                setTradeState({
+                    type: TransactionStateType.FAILED,
+                    error: new Error('Unexpected error. Could not estimate gas for the swap.'),
+                })
+                return
+            }
+            bestCallOption = firstNoErrorCall
         }
 
-        // send transaction and wait for hash
-        return new Promise<string>((resolve, reject) => {
-            const {
-                gasEstimated,
-                parameters: { methodName, args, value },
-            } = successfulCall
-            const config = !value || /^0x0*$/.test(value) ? {} : { value }
+        return new Promise<string>(async (resolve, reject) => {
+            if (!bestCallOption) {
+                setTradeState({
+                    type: TransactionStateType.FAILED,
+                    error: new Error('Bad call options.'),
+                })
+                return
+            }
 
-            // @ts-ignore
-            routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](...args)
-                .send({
-                    ...config,
+            const {
+                call: { address, calldata, value },
+            } = bestCallOption
+
+            try {
+                const hash = await Services.Ethereum.sendTransaction({
                     from: account,
-                    gas: gasEstimated,
+                    to: address,
+                    data: calldata,
+                    ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
+                    ...(!value || /^0x0*$/.test(value) ? {} : { value }),
                 })
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setTradeState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve(hash)
+                setTradeState({
+                    type: TransactionStateType.HASH,
+                    hash,
                 })
-                .on(TransactionEventType.ERROR, (error) => {
+                resolve(hash)
+            } catch (error) {
+                if ((error as any)?.code) {
+                    const error_ = new Error('Transaction rejected.')
                     setTradeState({
                         type: TransactionStateType.FAILED,
-                        error,
+                        error: error_,
                     })
-                    reject(error)
-                })
+                    reject(error_)
+                } else {
+                    setTradeState({
+                        type: TransactionStateType.FAILED,
+                        error: new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`),
+                    })
+                }
+            }
         })
-    }, [account, tradeParameters, routerV2Contract])
+    }, [account, tradeParameters])
 
     const resetCallback = useCallback(() => {
         setTradeState({

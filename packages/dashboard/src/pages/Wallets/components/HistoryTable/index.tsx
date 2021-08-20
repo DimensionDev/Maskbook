@@ -4,7 +4,6 @@ import { useUpdateEffect } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import {
     Box,
-    makeStyles,
     Table,
     TableBody,
     TableCell,
@@ -13,13 +12,14 @@ import {
     TablePagination,
     TableRow,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { LoadingPlaceholder } from '../LoadingPlacholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { HistoryTableRow } from '../HistoryTableRow'
 import { noop } from 'lodash-es'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         height: 'calc(100% - 58px)',
         display: 'flex',
@@ -94,9 +94,7 @@ export interface HistoryTableUIProps {
 export const HistoryTableUI = memo<HistoryTableUIProps>(
     ({ isLoading, isEmpty, dataSource, page, onPageChange, hasNextPage }) => {
         const t = useDashboardI18N()
-
-        const classes = useStyles()
-
+        const { classes } = useStyles()
         return (
             <>
                 <TableContainer className={classes.container}>

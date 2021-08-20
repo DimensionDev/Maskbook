@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { useI18N, useValueRef } from '../../../utils'
 import PluginCard, { PluginCardProps } from '../DashboardComponents/PluginCard'
 
@@ -7,7 +7,7 @@ import { useRegisteredPlugins } from '@masknet/plugin-infra'
 import { currentPluginEnabledStatus } from '../../../settings/settings'
 import { usePluginI18NField } from '../../../plugin-infra/I18NFieldRender'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         maxWidth: 360,
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DashboardSettingsRouter() {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const plugins = useRegisteredPlugins()
     const field = usePluginI18NField()
 

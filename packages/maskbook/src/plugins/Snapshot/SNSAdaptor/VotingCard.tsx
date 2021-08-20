@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import classNames from 'classnames'
-import { Button, makeStyles } from '@material-ui/core'
+import { Button } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { SnapshotContext } from '../context'
 import { useAccount } from '@masknet/web3-shared'
@@ -13,7 +14,7 @@ import { VoteConfirmDialog } from './VoteConfirmDialog'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 import { useRetry } from './hooks/useRetry'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         button: {
             width: '80%',
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => {
 
 export function VotingCard() {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const identifier = useContext(SnapshotContext)
     const {
         payload: { message },

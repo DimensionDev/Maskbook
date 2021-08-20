@@ -1,30 +1,61 @@
 import { memo, useCallback, useState } from 'react'
-import { Alert, Collapse, IconButton, experimentalStyled as styled, Typography } from '@material-ui/core'
+import { Alert, alertClasses, Collapse, experimentalStyled as styled, IconButton } from '@material-ui/core'
 import { Close as CloseIcon } from '@material-ui/icons'
-import { MaskColorVar } from '@masknet/theme'
-import { useDashboardI18N } from '../../locales'
+import { getMaskColor, MaskColorVar } from '@masknet/theme'
+import { InfoIcon } from '@masknet/icons'
 
-const InfoAlert = styled(Alert)`
-    background-color: ${MaskColorVar.infoBackground};
-`
+const InfoAlert = styled(Alert)(({ theme }) => ({
+    [`&  > .${alertClasses.message}`]: {
+        display: 'flex',
+        alignItems: 'center',
+        lineHeight: '16px',
+        color: `${MaskColorVar.secondaryInfoText}`,
+        fontSize: `${theme.typography.caption.fontSize}`,
+    },
+    [`&  > .${alertClasses.icon}`]: {
+        alignItems: 'center',
+    },
+    [`&  > .${alertClasses.action}`]: {
+        alignItems: 'center',
+    },
+    // standard
+    [`&.${alertClasses.standardInfo}`]: {
+        backgroundColor: `${getMaskColor(theme).infoBackground}`,
+    },
+    [`&.${alertClasses.standardInfo} .${alertClasses.icon}`]: {
+        color: `${getMaskColor(theme).secondaryInfoText}`,
+    },
+    [`&.${alertClasses.standardInfo} .${alertClasses.action}`]: {
+        color: `${getMaskColor(theme).secondaryInfoText}`,
+    },
+    // error
+    [`&.${alertClasses.standardError}`]: {
+        backgroundColor: `${MaskColorVar.redMain.alpha(0.15)}`,
+    },
+    [`&.${alertClasses.standardError} .${alertClasses.icon}`]: {
+        color: `${getMaskColor(theme).redMain}`,
+    },
+    [`&.${alertClasses.standardError} .${alertClasses.action}`]: {
+        color: `${getMaskColor(theme).redMain}`,
+    },
+    [`&.${alertClasses.standardError} .${alertClasses.message}`]: {
+        color: `${getMaskColor(theme).redMain}`,
+    },
+}))
 
-const AlertTypography = styled(Typography)(
-    ({ theme }) => `
-    color: ${MaskColorVar.secondaryInfoText};
-    font-size: ${theme.typography.caption.fontSize};
-    line-height: 16px;
-`,
-)
+export interface MaskAlertProps {
+    description: string
+    type?: 'error' | 'info'
+}
 
-export const MaskAlert = memo(() => {
+export const MaskAlert = memo(({ description, type = 'info' }: MaskAlertProps) => {
     const [openAlert, setOpenAlert] = useState(true)
-
-    const t = useDashboardI18N()
 
     return (
         <Collapse in={openAlert}>
             <InfoAlert
-                severity="info"
+                icon={<InfoIcon />}
+                severity={type}
                 action={
                     <IconButton
                         aria-label="close"
@@ -34,7 +65,7 @@ export const MaskAlert = memo(() => {
                         <CloseIcon fontSize="inherit" />
                     </IconButton>
                 }>
-                <AlertTypography>{t.wallets_create_wallet_alert()}</AlertTypography>
+                {description}
             </InfoAlert>
         </Collapse>
     )

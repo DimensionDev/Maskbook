@@ -1,20 +1,19 @@
 import { useCallback, useState } from 'react'
-import { useAsync } from 'react-use'
 import { CreditCard as CreditCardIcon } from 'react-feather'
-import { first } from 'lodash-es'
-import { Box, Checkbox, FormControlLabel, makeStyles, TextField, Theme, Typography } from '@material-ui/core'
+import { Box, Checkbox, FormControlLabel, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN, useI18N, checkInputLengthExceed } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../../../plugins/Wallet/constants'
-import { useWallet } from '@masknet/web3-shared'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
 import type { FC } from 'react'
+import { useWalletHD } from '../../../../plugins/Wallet/hooks/useWalletHD'
 
-const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({
+const useWalletImportDialogStyle = makeStyles()((theme) => ({
     wrapper: {
         width: 550,
     },
@@ -28,7 +27,6 @@ const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({
         fontWeight: 500,
         textAlign: 'center',
         backgroundColor: theme.palette.mode === 'dark' ? '#17191D' : '#EFF5FF',
-
         padding: '8px 22px',
         margin: theme.spacing(1, 0, 0),
         borderRadius: '4px',
@@ -43,8 +41,7 @@ const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({
 export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     const { t } = useI18N()
     const state = useState(0)
-    const classes = useWalletImportDialogStyle()
-
+    const { classes } = useWalletImportDialogStyle()
     const hdWallet = useWalletHD()
 
     // wallet name
@@ -271,17 +268,6 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
             />
         </DashboardDialogCore>
     )
-}
-
-/** Return the wallet with mnemonic words */
-function useWalletHD() {
-    const selectedWallet = useWallet()?.address
-    return useAsync(async () => {
-        const selected = await WalletRPC.getWallet(selectedWallet)
-        if (selected?.mnemonic.length) return selected
-        const all = await WalletRPC.getWallets()
-        return first(all.filter((x) => x.mnemonic.length).sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime()))
-    }, [selectedWallet]).value
 }
 
 const WalletName: FC<{ name: string; onChange(name: string): void }> = ({ name, onChange }) => {

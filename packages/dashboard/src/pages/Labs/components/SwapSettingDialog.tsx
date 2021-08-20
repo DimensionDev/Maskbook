@@ -17,7 +17,7 @@ export interface SettingDialogProps {
 }
 export default function SwapSettingDialog({ open, onClose }: SettingDialogProps) {
     const ethOptions = [
-        { label: 'UniSwap V2', value: TradeProvider.UNISWAP },
+        { label: 'UniSwap V2', value: TradeProvider.UNISWAP_V2 },
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: 'SashimiSwap', value: TradeProvider.SASHIMISWAP },
         { label: 'Ox', value: TradeProvider.ZRX },

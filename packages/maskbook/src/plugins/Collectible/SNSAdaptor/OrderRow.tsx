@@ -1,4 +1,5 @@
-import { Avatar, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Avatar, Link, TableCell, TableRow, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { CollectibleProvider, NFTOrder } from '../types'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import BigNumber from 'bignumber.js'
@@ -8,7 +9,7 @@ import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
 import urlcat from 'urlcat'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         account: {
             display: 'flex',
@@ -53,7 +54,7 @@ interface IRowProps {
 }
 
 export function OrderRow({ order, isDifferenceToken }: IRowProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { provider } = CollectibleState.useContainer()
     const address = order.makerAccount?.user?.username ?? order.makerAccount?.address ?? ''
     return (

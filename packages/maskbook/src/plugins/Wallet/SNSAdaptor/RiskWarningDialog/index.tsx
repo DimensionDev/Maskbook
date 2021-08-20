@@ -1,4 +1,5 @@
-import { Avatar, Button, DialogActions, DialogContent, makeStyles, Paper, Typography } from '@material-ui/core'
+import { Avatar, Button, DialogActions, DialogContent, Paper, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../../utils'
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh'
@@ -9,8 +10,9 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { useAccount } from '@masknet/web3-shared'
 import classnames from 'classnames'
 import { Trans } from 'react-i18next'
+import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     paper: {
         paddingTop: theme.spacing(2),
         paddingLeft: theme.spacing(1),
@@ -54,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function WalletRiskWarningDialog() {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const account = useAccount()
     const { enqueueSnackbar } = useSnackbar()
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.walletRiskWarningDialogUpdated)
@@ -114,9 +116,21 @@ export function WalletRiskWarningDialog() {
                     size="large">
                     {t('cancel')}
                 </Button>
-                <Button className={classes.button} fullWidth variant="contained" size="large" onClick={onConfirm}>
-                    {t('confirm')}
-                </Button>
+                <ActionButtonPromise
+                    className={classes.button}
+                    variant="contained"
+                    fullWidth
+                    disabled={!account}
+                    size="large"
+                    init={t('confirm')}
+                    waiting={t('wallet_risk_confirm_confirming')}
+                    failed={t('wallet_risk_confirm_failed')}
+                    executor={onConfirm}
+                    completeIcon={null}
+                    failIcon={null}
+                    failedOnClick="use executor"
+                    complete={t('done')}
+                />
             </DialogActions>
         </InjectedDialog>
     )
