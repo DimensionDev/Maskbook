@@ -1,21 +1,13 @@
-import { experimentalStyled as styled, Typography } from '@material-ui/core'
+import { experimentalStyled as styled, Grid, Typography } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
-const Container = styled('div')`
-    display: inline-grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 24px 28px;
-    & > * {
-        min-width: 60px;
-        min-height: 28px;
-    }
-`
 
 const WordCard = styled(Typography)(
     ({ theme }) => `
+    padding: ${theme.spacing(1)};
     border-radius: 6px;
-    color: ${MaskColorVar.primary};
-    font-size: ${theme.typography.caption.fontSize};
-    background-color: ${theme.palette.background.paper};
+    color: ${theme.palette.mode === 'dark' ? MaskColorVar.textPrimary : MaskColorVar.textLink};
+    font-size: 14;
+    background-color: ${MaskColorVar.blue.alpha(0.1)};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -25,14 +17,16 @@ const WordCard = styled(Typography)(
 export interface MnemonicRevealProps {
     words: string[]
 }
-// TODO: Select to copy all
+
 export function MnemonicReveal(props: MnemonicRevealProps) {
     const { words } = props
     return (
-        <Container>
+        <Grid container spacing={2}>
             {words.map((item, index) => (
-                <WordCard key={index + item}>{item}</WordCard>
+                <Grid item xs={3} key={index + item}>
+                    <WordCard>{item}</WordCard>
+                </Grid>
             ))}
-        </Container>
+        </Grid>
     )
 }

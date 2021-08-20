@@ -6,8 +6,6 @@ import type {
     ERC1155TokenRecordInDatabase,
     ERC20TokenRecord,
     ERC20TokenRecordInDatabase,
-    ERC721TokenRecord,
-    ERC721TokenRecordInDatabase,
     PhraseRecord,
     PhraseRecordInDatabase,
     TransactionChunkRecord,
@@ -15,7 +13,13 @@ import type {
     WalletRecord,
     WalletRecordInDatabase,
 } from '../database/types'
-import { ChainId, formatEthereumAddress, getChainIdFromName } from '@masknet/web3-shared'
+import {
+    ChainId,
+    formatEthereumAddress,
+    getChainIdFromName,
+    ERC721TokenDetailed,
+    ERC721TokenRecordInDatabase,
+} from '@masknet/web3-shared'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatEthereumAddress(address))
@@ -64,17 +68,17 @@ export function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
     return record
 }
 
-export function ERC721TokenRecordIntoDB(x: ERC721TokenRecord) {
+export function ERC721TokenRecordIntoDB(x: ERC721TokenDetailed) {
     const record: ERC721TokenRecordInDatabase = {
         ...x,
         // NFT cannot be divided and store each token separately
-        record_id: `${formatEthereumAddress(x.address)}_${x.tokenId}`,
+        record_id: `${formatEthereumAddress(x.contractDetailed.address)}_${x.tokenId}`,
     }
     return record
 }
 
 export function ERC721TokenRecordOutDB(x: ERC721TokenRecordInDatabase) {
-    const record: ERC721TokenRecord = omit(x, 'record_id')
+    const record: ERC721TokenDetailed = omit(x, 'record_id')
     return record
 }
 

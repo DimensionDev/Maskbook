@@ -1,5 +1,5 @@
-import { Box, InputBase, makeStyles, Theme } from '@material-ui/core'
-import classNames from 'classnames'
+import { Box, InputBase } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { Database as DatabaseIcon } from 'react-feather'
@@ -17,11 +17,11 @@ import AbstractTab, { AbstractTabProps } from '../../../../components/shared/Abs
 import ActionButton from '../../DashboardComponents/ActionButton'
 import { RestoreFromBackupBox } from '../../DashboardComponents/RestoreFromBackupBox'
 import { DashboardDialogWrapper } from '../Base'
-import { useDatabaseStyles } from './style'
 
-const useSelectBackupStyles = makeStyles((theme: Theme) => ({
+const useSelectBackupStyles = makeStyles()((theme) => ({
     root: {
         marginTop: theme.spacing(-3),
+        width: '100%',
     },
     input: {
         width: '100%',
@@ -46,8 +46,7 @@ interface SelectBackupProps {
 
 export function SelectBackup({ onConfirm }: SelectBackupProps) {
     const { t } = useI18N()
-    const classes = useDatabaseStyles()
-    const selectBackupClasses = useSelectBackupStyles()
+    const { classes } = useSelectBackupStyles()
     const { enqueueSnackbar } = useSnackbar()
 
     const [file, setFile] = useState<File | null>(null)
@@ -77,7 +76,7 @@ export function SelectBackup({ onConfirm }: SelectBackupProps) {
                 label: t('restore_database_text'),
                 children: (
                     <InputBase
-                        className={selectBackupClasses.input}
+                        className={classes.input}
                         placeholder={t('dashboard_paste_database_backup_hint')}
                         inputRef={(input: HTMLInputElement) => input?.focus()}
                         multiline
@@ -126,7 +125,7 @@ export function SelectBackup({ onConfirm }: SelectBackupProps) {
             secondary={t('set_up_restore_hint')}
             footer={
                 <Box
-                    className={classNames(classes.root, selectBackupClasses.root)}
+                    className={classes.root}
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',
@@ -141,7 +140,7 @@ export function SelectBackup({ onConfirm }: SelectBackupProps) {
                         <AbstractTab {...tabProps} />
                     </Box>
                     <ActionButton
-                        className={selectBackupClasses.button}
+                        className={classes.button}
                         variant="contained"
                         disabled={
                             (!(state[0] === 0 && backupValue) && !(state[0] === 1 && textValue)) ||

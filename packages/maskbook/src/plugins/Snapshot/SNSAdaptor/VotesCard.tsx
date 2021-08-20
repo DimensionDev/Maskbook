@@ -5,7 +5,8 @@ import {
     useChainId,
     formatPercentage,
 } from '@masknet/web3-shared'
-import { Avatar, Badge, Box, Link, List, ListItem, makeStyles, Typography } from '@material-ui/core'
+import { Avatar, Badge, Box, Link, List, ListItem, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import millify from 'millify'
 import { useContext } from 'react'
@@ -18,7 +19,7 @@ import { LoadingCard } from './LoadingCard'
 import { LoadingFailCard } from './LoadingFailCard'
 import { SnapshotCard } from './SnapshotCard'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         list: {
             display: 'flex',
@@ -76,7 +77,7 @@ function Content() {
     const chainId = useChainId()
     const identifier = useContext(SnapshotContext)
     const { payload: votes } = useVotes(identifier)
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
 
     return (

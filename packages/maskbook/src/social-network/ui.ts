@@ -157,9 +157,12 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     async function activateSNSAdaptorPluginOnStart() {
         const plugin = await Services.Settings.shouldActivatePluginOnSNSStart()
         if (!plugin) return
-        MaskMessage.events.compositionUpdated.sendToLocal({ open: true, reason: 'timeline' })
         await delay(500)
-        MaskMessage.events.activatePluginCompositionEntry.sendToLocal(plugin)
+        MaskMessage.events.requestComposition.sendToLocal({
+            open: true,
+            reason: 'timeline',
+            options: { startupPlugin: plugin },
+        })
     }
 }
 

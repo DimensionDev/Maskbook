@@ -1,11 +1,12 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef, or } from '@masknet/shared'
 import { safeUnreachable } from '@dimensiondev/kit'
-import { Appearance, Language } from '@masknet/theme'
+import { Appearance } from '@masknet/theme'
+import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
 import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@material-ui/core'
 import { blue, green, grey, orange, red } from '@material-ui/core/colors'
-import { jaJP, koKR, zhTW } from '@material-ui/core/locale/index'
-import { makeStyles } from '@material-ui/core/styles'
+import { jaJP, koKR, zhTW, zhCN, esES, itIT, ruRU, faIR, frFR } from '@material-ui/core/locale/index'
+import { makeStyles } from '@masknet/theme'
 import type { Theme, ThemeOptions } from '@material-ui/core/styles/createTheme'
 import { cloneDeep, merge } from 'lodash-es'
 import { useMemo, useRef } from 'react'
@@ -99,8 +100,15 @@ const baseTheme = (theme: 'dark' | 'light') => {
 const MaskbookLightTheme = unstable_createMuiStrictModeTheme(baseTheme('light'))
 const MaskbookDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))
 
-export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Language }) {
-    const language = opt?.language ?? languageSettings.value
+export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: SupportedLanguages }) {
+    let language = opt?.language
+    if (!language) {
+        const settings = languageSettings.value
+        // TODO:
+        if (settings === LanguageOptions.__auto__) language = SupportedLanguages.enUS
+        else language = settings as any
+    }
+    if (!language) language = SupportedLanguages.enUS
     const preference = opt?.appearance ?? appearanceSettings.value
 
     // Priority:
@@ -117,22 +125,42 @@ export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Lan
     }
     const baseTheme = isDark ? MaskbookDarkTheme : MaskbookLightTheme
     switch (language) {
-        case Language.en:
+        case SupportedLanguages.enUS:
             return baseTheme
-        case Language.ja:
+        case SupportedLanguages.jaJP:
             return unstable_createMuiStrictModeTheme(baseTheme, jaJP)
-        case Language.ko:
+        case SupportedLanguages.koKR:
             return unstable_createMuiStrictModeTheme(baseTheme, koKR)
-        case Language.zh:
+        case SupportedLanguages.zhTW:
             return unstable_createMuiStrictModeTheme(baseTheme, zhTW)
+        case SupportedLanguages.zhCN:
+            return unstable_createMuiStrictModeTheme(baseTheme, zhCN)
+        case SupportedLanguages.ruRU:
+            return unstable_createMuiStrictModeTheme(baseTheme, ruRU)
+        case SupportedLanguages.itIT:
+            return unstable_createMuiStrictModeTheme(baseTheme, itIT)
+        case SupportedLanguages.esES:
+            return unstable_createMuiStrictModeTheme(baseTheme, esES)
+        case SupportedLanguages.frFR:
+            return unstable_createMuiStrictModeTheme(baseTheme, frFR)
+        // TODO: it should be a RTL theme.
+        case SupportedLanguages.faIR:
+            return unstable_createMuiStrictModeTheme(baseTheme, faIR)
         default:
             safeUnreachable(language)
             return baseTheme
     }
 }
 // We're developing a new theme in the theme/ package
-export function useClassicMaskTheme(opt?: { appearance?: Appearance; language?: Language }) {
-    const language = or(opt?.language, useValueRef(languageSettings))
+export function useClassicMaskTheme(opt?: { appearance?: Appearance; language?: SupportedLanguages }) {
+    const langSettingsValue = useValueRef(languageSettings)
+    let language = opt?.language
+    if (!language) {
+        // TODO:
+        if (langSettingsValue === LanguageOptions.__auto__) language = SupportedLanguages.enUS
+        else language = langSettingsValue as any
+    }
+
     const appearance = or(opt?.appearance, useValueRef(appearanceSettings))
     const systemPreference = useMediaQuery('(prefers-color-scheme: dark)')
     const paletteProvider = useRef(
@@ -142,7 +170,9 @@ export function useClassicMaskTheme(opt?: { appearance?: Appearance; language?: 
     return useMemo(() => getMaskbookTheme({ appearance, language }), [language, appearance, systemPreference, palette])
 }
 
-export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
+export const useColorStyles: (params: void) => {
+    classes: Record<'error' | 'success' | 'info', string>
+} = makeStyles()((theme: typeof MaskbookDarkTheme) => {
     const dark = theme.palette.mode === 'dark'
     return {
         error: {
@@ -156,8 +186,9 @@ export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
         },
     }
 })
-
-export const useErrorStyles = makeStyles((theme) => {
+export const useErrorStyles: (params: void) => {
+    classes: Record<'containedPrimary' | 'outlinedPrimary', string>
+} = makeStyles()((theme) => {
     const dark = theme.palette.mode === 'dark'
     return {
         containedPrimary: {

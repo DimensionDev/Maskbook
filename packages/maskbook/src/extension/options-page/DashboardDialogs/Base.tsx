@@ -4,18 +4,17 @@ import {
     DialogProps,
     Dialog,
     IconButton,
-    makeStyles,
     DialogContent,
     Typography,
     SvgIconProps,
     IconButtonProps,
-    Theme,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
 import { extendsTheme, useClassicMaskTheme, useMatchXS } from '../../../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         userSelect: 'none',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -36,7 +35,7 @@ export interface DashboardDialogCoreProps extends DialogProps {
 export function DashboardDialogCore(props: DashboardDialogCoreProps) {
     const { fullScreen, children, CloseIconProps, CloseButtonProps, ...dialogProps } = props
 
-    const classes = useStyles()
+    const { classes } = useStyles()
     const xsMatched = useMatchXS()
 
     return (
@@ -109,17 +108,13 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
     return [renderedComponent, showModal, showStatefulModal]
 }
 
-const useDashboardDialogWrapperStyles = makeStyles<
-    Theme,
-    DashboardDialogWrapperProps,
-    'wrapper' | 'header' | 'content' | 'footer' | 'primary' | 'secondary' | 'confineSecondary'
->((theme) => ({
+const useDashboardDialogWrapperStyles = makeStyles<DashboardDialogWrapperProps>()((theme, props) => ({
     wrapper: {
         display: 'flex',
         flexDirection: 'column',
         maxWidth: '100%',
-        width: (props) => (props.size === 'small' ? 280 : 440),
-        padding: (props) => (props.size === 'small' ? '40px 24px !important' : '40px 36px !important'),
+        width: props.size === 'small' ? 280 : 440,
+        padding: props.size === 'small' ? '40px 24px !important' : '40px 36px !important',
         margin: '0 auto',
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
@@ -156,8 +151,8 @@ const useDashboardDialogWrapperStyles = makeStyles<
         marginBottom: 18,
     },
     confineSecondary: {
-        paddingLeft: (props) => (props.size === 'small' ? 24 : 46),
-        paddingRight: (props) => (props.size === 'small' ? 24 : 46),
+        paddingLeft: props.size === 'small' ? 24 : 46,
+        paddingRight: props.size === 'small' ? 24 : 46,
     },
 }))
 
@@ -191,7 +186,6 @@ const dialogTheme = extendsTheme((theme) => ({
                 root: {
                     marginTop: theme.spacing(2),
                     marginBottom: 0,
-
                     '&:first-child': {
                         marginTop: 0,
                     },
@@ -247,7 +241,7 @@ interface DashboardDialogWrapperProps extends withClasses<'wrapper'> {
 
 export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
     const { size, icon, iconColor, primary, secondary, constraintSecondary = true, content, footer } = props
-    const classes = useDashboardDialogWrapperStyles(props)
+    const { classes } = useDashboardDialogWrapperStyles(props)
     return (
         <ThemeProvider theme={dialogTheme}>
             <DialogContent className={classes.wrapper}>

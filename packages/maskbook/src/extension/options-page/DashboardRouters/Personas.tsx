@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import DashboardRouterContainer from './Container'
-import { Button, makeStyles, ThemeProvider } from '@material-ui/core'
+import { Button, ThemeProvider } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import AddIcon from '@material-ui/icons/Add'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import RestoreIcon from '@material-ui/icons/Restore'
@@ -10,11 +11,10 @@ import { DashboardPersonaCreateDialog, DashboardImportPersonaDialog } from '../D
 import { useModal } from '../DashboardDialogs/Base'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         alignItems: 'baseline',
         padding: theme.spacing(3, 0),
-
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -59,7 +59,7 @@ const personasTheme = extendsTheme((theme) => ({
 
 export default function DashboardPersonasRouter() {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const personas = useMyPersonas()
 
     const [createPersona, openCreatePersona] = useModal(DashboardPersonaCreateDialog)

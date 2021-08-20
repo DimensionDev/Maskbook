@@ -1,4 +1,5 @@
-import { makeStyles, Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@material-ui/core'
+import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { Order } from 'opensea-js/lib/types'
 import { Image } from '../../../components/shared/Image'
 import { useChainId } from '@masknet/web3-shared'
@@ -6,7 +7,7 @@ import type { useAsset } from '../hooks/useAsset'
 import { resolveAssetLinkOnOpenSea } from '../pipes'
 import { useI18N } from '../../../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     itemInfo: {
         display: 'flex',
         alignItems: 'center',
@@ -24,8 +25,7 @@ export function CheckoutOrder(props: CheckoutOrderProps) {
     const { t } = useI18N()
     const { asset } = props
     const order = asset?.value?.order_ as Order | undefined
-
-    const classes = useStyles()
+    const { classes } = useStyles()
     const chainId = useChainId()
 
     if (!asset?.value) return null

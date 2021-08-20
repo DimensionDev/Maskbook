@@ -1,9 +1,10 @@
-import { Box, Divider, makeStyles } from '@material-ui/core'
+import { Box, Divider } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 import { AirdropClaimCard } from './AirdropClaimCard'
 import { AirdropCheckCard } from './AirdropCheckCard'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     root: {
         background: 'linear-gradient(90deg, #2174F6 0%, #00C6FB 100%)',
         borderRadius: 10,
@@ -12,7 +13,7 @@ const useStyles = makeStyles(() => ({
     divider: {
         borderBottom: '1px dashed rgba(255,255,255, 0.5)',
     },
-}))
+})
 
 export interface AirdropCardProps {
     token?: ERC20TokenDetailed
@@ -22,8 +23,7 @@ export interface AirdropCardProps {
 
 export function AirdropCard(props: AirdropCardProps) {
     const { token, onUpdateAmount, onUpdateBalance } = props
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <Box className={classes.root}>
             <AirdropClaimCard token={token} onUpdateAmount={onUpdateAmount} onUpdateBalance={onUpdateBalance} />

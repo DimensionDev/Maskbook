@@ -1,5 +1,6 @@
 import { resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared'
-import { Avatar, Button, Grid, Link, makeStyles, Typography } from '@material-ui/core'
+import { Avatar, Button, Grid, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import { Trans } from 'react-i18next'
@@ -9,7 +10,7 @@ import { useAvatar } from '../hooks/useManager'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
     },
@@ -59,8 +60,7 @@ interface PoolDeckProps {
 
 export function PoolViewDeck(props: PoolDeckProps) {
     const { pool, inputTokens, link } = props
-
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
 
     const blockie = useAvatar(pool.managerAddress)

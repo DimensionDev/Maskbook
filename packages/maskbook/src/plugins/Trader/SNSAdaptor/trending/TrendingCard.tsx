@@ -1,9 +1,10 @@
-import { Card, makeStyles } from '@material-ui/core'
+import { Card } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isTwitter as isTwitterF } from '../../../../social-network-adaptor/twitter.com/base'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     const isTwitter = isTwitterF(activatedSocialNetworkUI)
     return {
         root: {

@@ -1,6 +1,6 @@
 import { pick, noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ChainId, createERC721Token, PortfolioProvider, ProviderType } from '@masknet/web3-shared'
+import { ChainId, PortfolioProvider, ProviderType } from '@masknet/web3-shared'
 import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Wallet, Web3ProviderType } from '@masknet/web3-shared'
 import { Messages, PluginMessages, PluginServices, Services } from '../API'
 
@@ -122,18 +122,7 @@ async function getERC20TokensPaged(index: number, count: number, query?: string)
 }
 
 async function getERC721TokensPaged(index: number, count: number, query?: string) {
-    const raw = await PluginServices.Wallet.getERC721TokensPaged(index, count, query)
-    return raw.map((x) =>
-        createERC721Token(x.chainId, x.tokenId, x.address, x.name, x.symbol, x.baseURI, x.tokenURI, {
-            name: x.assetName,
-            description: x.assetDescription,
-            image: x.assetImage,
-        }),
-    )
-}
-
-async function getERC721Tokens() {
-    return []
+    return PluginServices.Wallet.getERC721TokensPaged(index, count, query)
 }
 
 function createSubscriptionFromAsync<T>(

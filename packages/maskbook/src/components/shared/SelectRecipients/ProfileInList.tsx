@@ -49,7 +49,7 @@ export function ProfileInList(props: ProfileInListProps) {
             disabled={props.disabled}
             {...props.ListItemProps}
             className={classNames(classes.root, props.ListItemProps?.className)}>
-            <Checkbox checked={props.checked} color="primary" {...props.CheckboxProps} />
+            <Checkbox checked={!!props.checked} color="primary" {...props.CheckboxProps} />
             <ListItemAvatar>
                 <Avatar person={profile} />
             </ListItemAvatar>
