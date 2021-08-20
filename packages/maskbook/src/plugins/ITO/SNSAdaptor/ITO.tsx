@@ -17,7 +17,8 @@ import {
     ZERO,
     isGreaterThan,
 } from '@masknet/web3-shared'
-import { Box, Card, Grid, Link, makeStyles, Theme, Typography } from '@material-ui/core'
+import { Box, Card, Grid, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
@@ -51,13 +52,12 @@ interface StyleProps {
     titleLength?: number
     tokenNumber?: number
 }
-
-const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
         position: 'relative',
         color: theme.palette.common.white,
         flexDirection: 'column',
-        height: (props: StyleProps) => (props.tokenNumber! > 4 ? 425 : 405),
+        height: props.tokenNumber! > 4 ? 425 : 405,
         minHeight: 405,
         boxSizing: 'border-box',
         backgroundAttachment: 'local',
@@ -78,7 +78,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
         maxWidth: 470,
     },
     title: {
-        fontSize: (props: StyleProps) => (props.titleLength! > 31 ? '1.3rem' : '1.6rem'),
+        fontSize: props.titleLength! > 31 ? '1.3rem' : '1.6rem',
         fontWeight: 'bold',
         marginBottom: 4,
         marginRight: 4,
@@ -183,7 +183,7 @@ interface TokenItemProps {
 }
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
-    const classes = useStyles({})
+    const { classes } = useStyles({})
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     return (
@@ -234,8 +234,7 @@ export function ITO(props: ITO_Props) {
             : message.split(MSG_DELIMITER)[0]
     const title = message.split(MSG_DELIMITER)[1] ?? message
     const regions = message.split(MSG_DELIMITER)[2] ?? defaultRegions
-    const classes = useStyles({ titleLength: getTextUILength(title), tokenNumber: exchange_tokens.length })
-
+    const { classes } = useStyles({ titleLength: getTextUILength(title), tokenNumber: exchange_tokens.length })
     //#region token detailed
     const {
         value: availability,
@@ -737,8 +736,7 @@ export function ITO(props: ITO_Props) {
 export function ITO_Loading() {
     const { t } = useI18N()
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
-    const classes = useStyles({})
-
+    const { classes } = useStyles({})
     return (
         <div>
             <Card
@@ -755,7 +753,7 @@ export function ITO_Loading() {
 
 export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }) {
     const { t } = useI18N()
-    const classes = useStyles({})
+    const { classes } = useStyles({})
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     return (
         <Card

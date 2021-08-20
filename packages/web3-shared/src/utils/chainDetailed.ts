@@ -51,6 +51,11 @@ export function getChainName(chainId: ChainId) {
     return chainDetailed?.name ?? 'Unknown Network'
 }
 
+export function getChainShortName(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    return chainDetailed?.shortName ?? 'Unknown Network'
+}
+
 export function getChainFullName(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     return chainDetailed?.fullName ?? 'Unknown Network'

@@ -1,4 +1,5 @@
-import { makeStyles, Box } from '@material-ui/core'
+import { Box } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -8,7 +9,7 @@ import { PostListingDialog } from './PostListingDialog'
 import { CheckoutDialog } from './CheckoutDialog'
 import { useAccount } from '@masknet/web3-shared'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             marginLeft: theme.spacing(-0.5),
@@ -25,8 +26,7 @@ export interface ActionBarProps {}
 
 export function ActionBar(props: ActionBarProps) {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const account = useAccount()
     const { asset, token } = CollectibleState.useContainer()
 

@@ -1,8 +1,9 @@
-import { Box, makeStyles } from '@material-ui/core'
+import { Box } from '@material-ui/core'
+import { makeStyles } from '../../makeStyles'
 import { MaskTextField } from '../TextField'
 import { ChangeEvent, ReactNode, useState } from 'react'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     country: {
         width: '120px',
         marginRight: '10px',
@@ -39,7 +40,7 @@ export const PhoneNumberField = ({
     phoneErrorMessage = 'The phone number is incorrect.',
     onChange,
 }: PhoneNumberFieldProps) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [phone, setPhone] = useState<string>(value.phone)
     const [countryCode, setCountryCode] = useState<string>(value.country)
     const [invalidPhone, setInvalidPhone] = useState(false)

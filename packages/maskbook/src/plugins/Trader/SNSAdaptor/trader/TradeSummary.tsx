@@ -1,15 +1,7 @@
 import { useContext, useState } from 'react'
 import BigNumber from 'bignumber.js'
-import {
-    IconButton,
-    List,
-    ListItem,
-    ListItemSecondaryAction,
-    ListItemText,
-    makeStyles,
-    Paper,
-    Typography,
-} from '@material-ui/core'
+import { IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Paper, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import LoopIcon from '@material-ui/icons/Loop'
 import { formatBalance, formatPercentage, isGreaterThan, pow10, FungibleTokenDetailed } from '@masknet/web3-shared'
 import { ONE_BIPS } from '../../constants'
@@ -24,7 +16,7 @@ type SummaryRecord = {
     children?: React.ReactNode
 } | null
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         boxSizing: 'border-box',

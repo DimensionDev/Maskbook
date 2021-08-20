@@ -1,11 +1,12 @@
-import { makeStyles, Typography, List } from '@material-ui/core'
+import { Typography, List } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { RedPacketJSONPayload } from '../types'
 import { useAccount, useChainId } from '@masknet/web3-shared'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory'
 import { useEffect } from 'react'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()({
     root: {
         display: 'flex',
         width: '100%',
@@ -16,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     placeholder: {
         textAlign: 'center',
     },
-}))
+})
 
 interface RedPacketHistoryListProps {
     onSelect: (payload: RedPacketJSONPayload) => void
@@ -25,7 +26,7 @@ interface RedPacketHistoryListProps {
 
 export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     const { onSelect, onClose } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const account = useAccount()
     const chainId = useChainId()
     const { value: histories, loading, retry } = useRedPacketHistory(account, chainId)
