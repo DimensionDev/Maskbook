@@ -10,8 +10,8 @@ import { useTradeProviderSettings } from '../useTradeSettings'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 import { safeUnreachable } from '@dimensiondev/kit'
 
-export function setTokenNativeNetwork(networkType: NetworkType){
-    switch(networkType){
+export function setTokenNativeNetwork(networkType: NetworkType) {
+    switch (networkType) {
         case NetworkType.Ethereum:
             return 'ETH'
         case NetworkType.Binance:
