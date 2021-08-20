@@ -1,6 +1,7 @@
 import { memo, useCallback } from 'react'
 import type { Asset } from '@masknet/web3-shared'
-import { List, ListItem, ListItemText, makeStyles } from '@material-ui/core'
+import { List, ListItem, ListItemText } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ArrowRightIcon } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'
 import { useContainer } from 'unstated-next'
@@ -8,7 +9,7 @@ import { WalletContext } from '../../hooks/useWalletContext'
 import { useHistory } from 'react-router'
 import { DialogRoutes } from '../../../../index'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     list: {
         backgroundColor: '#ffffff',
         padding: 0,
@@ -33,7 +34,7 @@ const useStyles = makeStyles(() => ({
     symbol: {
         color: '#1C68F3',
     },
-}))
+})
 
 export const AssetsList = memo(() => {
     const history = useHistory()
@@ -51,7 +52,7 @@ export interface AssetsListUIProps {
 }
 
 export const AssetsListUI = memo<AssetsListUIProps>(({ dataSource, onItemClick }) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <List dense className={classes.list}>
             {dataSource.map((asset, index) => {

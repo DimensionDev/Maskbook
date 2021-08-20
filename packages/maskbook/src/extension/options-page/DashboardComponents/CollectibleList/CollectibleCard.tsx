@@ -1,4 +1,5 @@
-import { Card, Link, makeStyles } from '@material-ui/core'
+import { Card, Link } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     Wallet,
     useChainId,
@@ -10,7 +11,7 @@ import { Image } from '../../../../components/shared/Image'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
@@ -42,7 +43,7 @@ export interface CollectibleCardProps {
 
 export function CollectibleCard(props: CollectibleCardProps) {
     const { wallet, token, provider, readonly } = props
-    const classes = useStyles(props)
+    const { classes } = useStyles()
     const chainId = useChainId()
 
     return (

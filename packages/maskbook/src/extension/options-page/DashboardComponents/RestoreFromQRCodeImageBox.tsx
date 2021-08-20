@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { useDropArea } from 'react-use'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { RestoreBox } from './RestoreBox'
 import { useStylesExtends } from '@masknet/shared'
 import { QRCodeImageScanner } from './QRCodeImageScanner'
 import { blobToDataURL } from '@dimensiondev/kit'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         height: 112,

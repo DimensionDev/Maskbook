@@ -1,5 +1,6 @@
 import { memo, useCallback } from 'react'
-import { makeStyles, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
@@ -8,7 +9,7 @@ import { ArrowDownCircle, ArrowUpCircle } from 'react-feather'
 import { InteractionCircleIcon } from '@masknet/icons'
 import { useI18N } from '../../../../../utils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     content: {
         display: 'flex',
         flexDirection: 'column',
@@ -46,11 +47,11 @@ const useStyles = makeStyles(() => ({
         stroke: '#1C68F3',
         fill: 'none',
     },
-}))
+})
 
 const TokenDetail = memo(() => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { currentToken } = useContainer(WalletContext)
 
     const openLabPage = useCallback(() => {

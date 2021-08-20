@@ -1,8 +1,9 @@
-import React, { ReactNode, useMemo, useState } from 'react'
+import { ReactNode, useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
-import { InputAdornment, makeStyles, TextField, Typography } from '@material-ui/core'
+import { InputAdornment, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '../../makeStyles'
 import { Search } from '@material-ui/icons'
 import { MaskColorVar } from '../../constants'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
@@ -43,7 +44,7 @@ export interface MaskSearchableListProps<T> {
  *      />
  * )
  */
-export const SearchableList = <T,>({
+export function SearchableList<T>({
     itemKey,
     data,
     placeholder,
@@ -52,10 +53,9 @@ export const SearchableList = <T,>({
     searchKey,
     itemRender,
     FixedSizeListProps,
-}: MaskSearchableListProps<T>) => {
+}: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     //#region fuse
     const fuse = useMemo(
         () =>
@@ -118,8 +118,7 @@ export const SearchableList = <T,>({
         </div>
     )
 }
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         paddingBottom: theme.spacing(4),
     },

@@ -1,10 +1,11 @@
 import { memo } from 'react'
-import { Alert, AlertTitle, Box, makeStyles, Typography } from '@material-ui/core'
+import { Alert, AlertTitle, Box, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ImportWalletIcon, MasksIcon } from '@masknet/icons'
 import { EnterDashboard } from '../../../../components/EnterDashboard'
 import { useI18N } from '../../../../../../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         flex: 1,
         display: 'flex',
@@ -47,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const PersonaStartUp = memo(() => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <Box className={classes.container}>
             <Alert icon={false} severity="info" className={classes.alert}>

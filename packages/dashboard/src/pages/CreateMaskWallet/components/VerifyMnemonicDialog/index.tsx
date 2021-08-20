@@ -1,5 +1,6 @@
 import { memo } from 'react'
-import { Box, makeStyles, Typography, experimentalStyled as styled, Button } from '@material-ui/core'
+import { Box, Typography, experimentalStyled as styled, Button } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { LoadingButton } from '@material-ui/lab'
 import { MaskColorVar, MaskDialog } from '@masknet/theme'
 import { useSnackbarCallback } from '@masknet/shared'
@@ -10,7 +11,7 @@ import { useCopyToClipboard } from 'react-use'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()({
     container: {
         padding: '40px 60px',
         display: 'flex',
@@ -49,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
         cursor: 'pointer',
         stroke: '#111432',
     },
-}))
+})
 
 const SuccessTitle = styled(Typography)(({ theme }) => ({
     fontSize: theme.typography.h5.fontSize,
@@ -120,8 +121,7 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
         onDoneClick,
     }) => {
         const t = useDashboardI18N()
-        const classes = useStyles()
-
+        const { classes } = useStyles()
         return (
             <MaskDialog title="Verification" open={open} onClose={!address ? onClose : undefined} maxWidth="md">
                 <div className={classes.container}>

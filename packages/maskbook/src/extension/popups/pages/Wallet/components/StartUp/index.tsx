@@ -1,5 +1,6 @@
 import { memo, useCallback } from 'react'
-import { Alert, AlertTitle, Box, makeStyles, Typography } from '@material-ui/core'
+import { Alert, AlertTitle, Box, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Link } from 'react-router-dom'
 import { MaskWalletIcon, ImportWalletIcon } from '@masknet/icons'
 import { EnterDashboard } from '../../../../components/EnterDashboard'
@@ -7,7 +8,7 @@ import { NetworkSelector } from '../../../../components/NetworkSelector'
 import { DialogRoutes } from '../../../../index'
 import { useI18N } from '../../../../../../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         flex: 1,
         display: 'flex',
@@ -63,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const WalletStartUp = memo(() => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const onEnterCreateWallet = useCallback(() => {
         browser.tabs.create({
             active: true,

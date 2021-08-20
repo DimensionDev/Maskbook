@@ -1,5 +1,6 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
-import { makeStyles, InputAdornment } from '@material-ui/core'
+import { InputAdornment } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { v4 as uuid } from 'uuid'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
@@ -12,12 +13,12 @@ import {
 } from './hooks/useExchangeTokenAmountstate'
 import { ExchangeTokenPanel } from './ExchangeTokenPanel'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()({
     arrow: {
         display: 'flex',
         justifyContent: 'center',
     },
-}))
+})
 
 export interface ExchangeTokenPanelGroupProps {
     token: FungibleTokenDetailed | undefined
@@ -26,7 +27,7 @@ export interface ExchangeTokenPanelGroupProps {
 }
 
 export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     const { onTokenAmountChange } = props
     const [selectedTokensAddress, setSelectedTokensAddress] = useState<string[]>([])

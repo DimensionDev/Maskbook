@@ -1,11 +1,12 @@
 import { memo, useEffect, useRef, useState } from 'react'
-import { makeStyles, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useDropArea } from 'react-use'
 import { File as FileIcon } from '@masknet/icons'
 import { blobToText } from '@dimensiondev/kit'
 import { useI18N } from '../../../../../../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         paddingTop: 10,
     },
@@ -44,7 +45,7 @@ export interface JsonFileBox {
 
 export const JsonFileBox = memo<JsonFileBox>(({ onChange }) => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const inputRef = useRef<HTMLInputElement>(null)
     const [file, setFile] = useState<File | null>()
 

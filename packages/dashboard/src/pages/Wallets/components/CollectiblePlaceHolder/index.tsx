@@ -1,9 +1,9 @@
 import { memo } from 'react'
 import { MiniMaskIcon } from '@masknet/icons'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     container: {
         borderRadius: 8,
         width: 140,
@@ -23,10 +23,10 @@ const useStyles = makeStyles(() => ({
         flex: 1,
         backgroundColor: MaskColorVar.infoBackground,
     },
-}))
+})
 
 export const CollectiblePlaceholder = memo(() => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <div className={classes.container}>
             <div className={classes.placeholder}>

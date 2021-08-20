@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
-import { DialogContent, makeStyles } from '@material-ui/core'
+import { DialogContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog, delay, useSnackbarCallback } from '@masknet/shared'
 import { WalletMessages, WalletRPC } from '../../messages'
@@ -15,7 +16,7 @@ enum CreateWalletStep {
     Verify = 1,
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(5, 4.5),
     },
@@ -73,8 +74,8 @@ const useStyles = makeStyles((theme) => ({
 
 export function CreateWalletDialog() {
     const { t } = useI18N()
-    const classes = useStyles()
 
+    const { classes } = useStyles()
     const [step, setStep] = useState(CreateWalletStep.NameAndWords)
     const [name, setName] = useState('')
 

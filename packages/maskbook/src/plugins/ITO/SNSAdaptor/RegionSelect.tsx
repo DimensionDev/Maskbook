@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, forwardRef, useImperativeHandle } from 'react'
 import type { InputBaseComponentProps } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { useDebounce } from 'react-use'
 import {
     Typography,
@@ -24,7 +24,7 @@ export interface RegionSelectProps extends InputBaseComponentProps {
     onRegionChange: (codes: RegionCode[]) => void
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         width: '100%',
@@ -65,8 +65,7 @@ const useStyles = makeStyles((theme) => ({
 // TODO fix TextField focus style
 export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }: RegionSelectProps, ref) => {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const allRegions = useRegionList()
     const isAll = value.length === allRegions.length
     const valueMap = new Map(value.map((code) => [code, true]))

@@ -1,4 +1,5 @@
-import { Tab, Tabs, Box, makeStyles, Typography, IconButton } from '@material-ui/core'
+import { Tab, Tabs, Box, Typography, IconButton } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
 import { useEffect, useState } from 'react'
 import { capitalize } from 'lodash-es'
@@ -13,7 +14,7 @@ import type { PersonaInformation } from '@masknet/shared'
 import { ContentContainer } from '../../components/ContentContainer'
 import { PersonaContent } from './components/PersonaContent'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     tabPanel: {
         padding: 0,
         flex: 1,
@@ -54,7 +55,7 @@ function firstProfileNetwork(x: PersonaInformation | undefined) {
     return x?.linkedProfiles[0]?.identifier?.network
 }
 function Personas() {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const t = useDashboardI18N()
     const { drawerOpen, toggleDrawer, personas, currentPersona, connectPersona, definedSocialNetworks } =
         PersonaContext.useContainer()

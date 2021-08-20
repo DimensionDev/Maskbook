@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import qr from 'qrcode'
 import { useEffect, useRef, useState } from 'react'
 import { Typography } from '@material-ui/core'
@@ -16,7 +16,7 @@ interface QRProps {
 }
 
 const CACHE_SCOPE = 'qrcode'
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     text: {
         paddingTop: 50,
     },
@@ -31,8 +31,7 @@ export function QRCode({ text, options = {}, canvasProps }: QRProps) {
     const ref = useRef<HTMLCanvasElement | null>(null)
     const [error, setError] = useState(false)
     const image = SessionStorageCache.get(CACHE_SCOPE, text)
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     useEffect(() => {
         if (!ref.current || error) return
 

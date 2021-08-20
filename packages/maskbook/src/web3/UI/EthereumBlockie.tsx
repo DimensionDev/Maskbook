@@ -1,8 +1,9 @@
 import { useBlockie } from '@masknet/web3-shared'
-import { Avatar, AvatarProps, makeStyles } from '@material-ui/core'
+import { Avatar, AvatarProps } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 16,
         height: 16,

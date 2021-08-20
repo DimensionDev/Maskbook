@@ -1,18 +1,9 @@
 import { memo } from 'react'
-import {
-    Table,
-    TableCell,
-    TableHead,
-    TableRow,
-    makeStyles,
-    Typography,
-    TableBody,
-    Button,
-    Skeleton,
-} from '@material-ui/core'
+import { Table, TableCell, TableHead, TableRow, Typography, TableBody, Button, Skeleton } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     header: {
         backgroundColor: '#F7F9FA',
         padding: '14px 0',
@@ -31,7 +22,7 @@ const useStyles = makeStyles(() => ({
         minWidth: 0,
         padding: '0 5px',
     },
-}))
+})
 
 export interface DeriveWalletTableProps {
     loading: boolean
@@ -40,8 +31,7 @@ export interface DeriveWalletTableProps {
 }
 
 export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSource, onAdd }) => {
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <Table size="small" padding="none">
             <TableHead>

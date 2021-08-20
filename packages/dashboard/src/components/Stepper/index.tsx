@@ -1,14 +1,15 @@
 import type { ReactElement, ReactNode } from 'react'
 import React, { Children, cloneElement, isValidElement, useEffect, useState } from 'react'
 import { useMap } from 'react-use'
-import { Box, makeStyles } from '@material-ui/core'
+import { Box } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()({
     hidden: {
         position: 'absolute',
         left: 10000,
     },
-}))
+})
 
 export interface StepCommonProps {
     toStep: (stepName: string, params?: any) => void
@@ -39,7 +40,7 @@ interface StepperProps {
 }
 export const Stepper = (props: StepperProps) => {
     const { defaultStep, transition, step } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [currentStep, setCurrentStep] = useState(defaultStep)
     const [currentTransition, setCurrentTransition] = useState(transition?.render)
 
