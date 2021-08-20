@@ -40,7 +40,7 @@ function parseGasPrice(price: string | undefined) {
     return Number.parseInt(price ?? '0x0', 16)
 }
 
-function isRpcNeedToBeComfirmed(payload: JsonRpcPayload) {
+function isRpcNeedToBeConfirmed(payload: JsonRpcPayload) {
     return [
         EthereumMethodType.ETH_SIGN,
         EthereumMethodType.PERSONAL_SIGN,
@@ -74,7 +74,7 @@ export async function INTERNAL_send(
     }
 
     // some rpc methods need to be confirmed by the user
-    if (!skipConfirmation && isRpcNeedToBeComfirmed(payload)) {
+    if (!skipConfirmation && isRpcNeedToBeConfirmed(payload)) {
         // TODO:
         // pull the popup up to let the user to confirm the rpc
 
@@ -88,18 +88,23 @@ export async function INTERNAL_send(
             return
         }
 
-        window.open(
-            `${browser.runtime.getURL(
-                `popup.html#${
-                    payload.method === EthereumMethodType.ETH_SEND_TRANSACTION
-                        ? DialogRoutes.GasSetting
-                        : DialogRoutes.WalletApprove
-                }`,
-            )}`,
-            '',
-            'resizable,scrollbars,status,width=310,height=540',
-        )
-        return
+        let target = ''
+
+        //TODO: Maybe there are other cases
+        switch (payload.method) {
+            case EthereumMethodType.ETH_SEND_TRANSACTION:
+                target = `popups.html#${DialogRoutes.GasSetting}`
+                break
+            case EthereumMethodType.PERSONAL_SIGN:
+                target = `popups.html#${DialogRoutes.WalletSignRequest}`
+                break
+            default:
+                break
+        }
+
+        if (target) {
+            window.open(browser.runtime.getURL(target), '', 'resizable,scrollbars,status,width=310,height=540')
+        }
     }
 
     const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null

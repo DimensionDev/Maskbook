@@ -4,7 +4,7 @@ import type { SvgIcon } from '@material-ui/core'
 export const MiniMaskIcon: typeof SvgIcon = createPaletteAwareIcon(
     'MiniMask',
     <g>
-        <g opacity="0.5" clipPath="url(#miniMask_clip0)">
+        <g clipPath="url(#miniMask_clip0)">
             <path
                 fillRule="evenodd"
                 clipRule="evenodd"
