@@ -1,13 +1,14 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { useSnackbar } from '@masknet/theme'
-import { makeStyles, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { isNil } from 'lodash-es'
 import { UploadCloud } from 'react-feather'
 import { useDropArea } from 'react-use'
 import { useI18N } from '../../../../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     label: {
         display: 'flex',
         flexDirection: 'column',
@@ -76,7 +77,7 @@ interface Props {
 
 export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const snackbar = useSnackbar()
     const [bond, { over }] = useDropArea({
         onFiles(files) {

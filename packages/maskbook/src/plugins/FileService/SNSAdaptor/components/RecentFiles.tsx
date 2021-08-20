@@ -1,4 +1,5 @@
-import { Button, List, ListItem, ListItemIcon, ListItemText, makeStyles, Typography } from '@material-ui/core'
+import { Button, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import { File } from 'react-feather'
 import { useHistory } from 'react-router'
@@ -6,7 +7,7 @@ import { useI18N } from '../../../../utils'
 import { FileRouter } from '../../constants'
 import type { FileInfo } from '../../types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         userSelect: 'none',
         display: 'flex',
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const useItemStyles = makeStyles({
+const useItemStyles = makeStyles()({
     root: {
         padding: 0,
         paddingBottom: 10,
@@ -40,13 +41,13 @@ const useItemStyles = makeStyles({
     },
 })
 
-const useItemIconStyles = makeStyles({
+const useItemIconStyles = makeStyles()({
     root: {
         minWidth: 32,
     },
 })
 
-const useItemTextStyles = makeStyles((theme) => ({
+const useItemTextStyles = makeStyles()((theme) => ({
     root: {
         margin: 0,
         marginLeft: 3,
@@ -74,10 +75,10 @@ interface Props {
 export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
     const { t } = useI18N()
     const history = useHistory()
-    const classes = useStyles()
-    const itemClasses = useItemStyles()
-    const itemIconClasses = useItemIconStyles()
-    const itemTextClasses = useItemTextStyles()
+    const { classes } = useStyles()
+    const { classes: itemClasses } = useItemStyles()
+    const { classes: itemIconClasses } = useItemIconStyles()
+    const { classes: itemTextClasses } = useItemTextStyles()
     const onClick = (info: FileInfo) => () => {
         history.replace(FileRouter.uploaded, info)
     }

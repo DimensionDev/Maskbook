@@ -1,8 +1,9 @@
 import { formatFileSize } from '@dimensiondev/kit'
-import { makeStyles, Typography, LinearProgress, Box } from '@material-ui/core'
+import { Typography, LinearProgress, Box } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     container: {
         height: 250,
         flexDirection: 'column',
@@ -40,7 +41,7 @@ interface Props {
 
 export const ProgressBar: React.FC<Props> = (props) => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { startedAt, fileSize, sendSize } = props
     const value = (sendSize / fileSize) * 100
     const elapsed = (Date.now() - startedAt) / 1000

@@ -1,4 +1,5 @@
-import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
+import { Button, DialogActions, DialogContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-es'
 import { useSnackbar } from '@masknet/theme'
 import { useState } from 'react'
@@ -14,7 +15,7 @@ interface Props extends InjectedDialogProps {
     onClose: () => void
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     actions: {
         alignSelf: 'center',
     },
@@ -29,7 +30,7 @@ const useStyles = makeStyles({
 })
 const FileServiceDialog: React.FC<Props> = (props) => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const snackbar = useSnackbar()
     const [uploading, setUploading] = useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = useState<FileInfo | null>(null)
