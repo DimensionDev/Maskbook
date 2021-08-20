@@ -143,21 +143,11 @@ export function DecryptPost(props: DecryptPostProps) {
         if (deconstructedPayload.ok)
             makeProgress(
                 'post text',
-                ServicesWithProgress.decryptFromText(
-                    deconstructedPayload.val,
-                    postBy,
-                    whoAmI.network,
-                    whoAmI,
-                    sharedPublic,
-                    postURL,
-                ),
+                ServicesWithProgress.decryptFromText(deconstructedPayload.val, postBy, whoAmI.network, whoAmI, postURL),
             )
         postMetadataImages.forEach((url) => {
             if (signal.signal.aborted) return
-            makeProgress(
-                url,
-                ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI.network, whoAmI, false, postURL),
-            )
+            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI.network, whoAmI, postURL))
         })
         return () => signal.abort()
     }, [
@@ -166,7 +156,6 @@ export function DecryptPost(props: DecryptPostProps) {
         (deconstructedPayload.val as Payload)?.encryptedText,
         postBy.toText(),
         postMetadataImages.join(),
-        sharedPublic,
         whoAmI.toText(),
     ])
 

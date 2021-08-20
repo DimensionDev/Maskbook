@@ -128,7 +128,6 @@ async function* decryptFromPayloadWithProgress_raw(
     author: ProfileIdentifier,
     authorNetworkHint: string,
     whoAmI: ProfileIdentifier,
-    publicShared: boolean,
     discoverURL: string | undefined,
 ): ReturnOfDecryptPostContentWithProgress {
     const cacheKey = stringify(post)
@@ -142,7 +141,7 @@ async function* decryptFromPayloadWithProgress_raw(
 
     const data = post
     const { version } = data
-    const sharePublic = publicShared ?? (data.version === -38 ? data.sharedPublic ?? false : false)
+    const sharePublic = data.version === -38 ? data.sharedPublic ?? false : false
 
     if (version === -40 || version === -39 || version === -38) {
         const { encryptedText, iv, version } = data
@@ -313,7 +312,6 @@ async function* decryptFromImageUrlWithProgress_raw(
     author: ProfileIdentifier,
     authorNetworkHint: string,
     whoAmI: ProfileIdentifier,
-    publicShared: boolean,
     discoverURL: string | undefined,
 ): ReturnOfDecryptPostContentWithProgress {
     if (successDecryptionCache.has(url)) return successDecryptionCache.get(url)!
@@ -327,7 +325,7 @@ async function* decryptFromImageUrlWithProgress_raw(
     if (worker.err) return makeError(worker.val as Error)
     const payload = deconstructPayload(post, await decodeTextPayloadWorker(author))
     if (payload.err) return makeError(payload.val)
-    return yield* decryptFromText(payload.val, author, authorNetworkHint, whoAmI, publicShared, discoverURL)
+    return yield* decryptFromText(payload.val, author, authorNetworkHint, whoAmI, discoverURL)
 }
 
 export const decryptFromText = memorizeAsyncGenerator(
