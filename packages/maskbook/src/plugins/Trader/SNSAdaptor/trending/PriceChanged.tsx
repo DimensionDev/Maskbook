@@ -1,26 +1,24 @@
 import classNames from 'classnames'
 import { useColorStyles } from '../../../../utils/theme'
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 
-const useStyles = makeStyles((theme: Theme) => {
-    return {
-        root: {
-            fontSize: 'inherit',
-            position: 'relative',
-        },
-        icon: {
-            top: 0,
-            bottom: 0,
-            margin: 'auto',
-            position: 'absolute',
-            verticalAlign: 'middle',
-        },
-        value: {
-            marginLeft: 20,
-        },
-    }
+const useStyles = makeStyles()({
+    root: {
+        fontSize: 'inherit',
+        position: 'relative',
+    },
+    icon: {
+        top: 0,
+        bottom: 0,
+        margin: 'auto',
+        position: 'absolute',
+        verticalAlign: 'middle',
+    },
+    value: {
+        marginLeft: 20,
+    },
 })
 
 export interface PriceChangedProps {
@@ -29,7 +27,7 @@ export interface PriceChangedProps {
 
 export function PriceChanged(props: PriceChangedProps) {
     const { classes: color } = useColorStyles()
-    const classes = useStyles()
+    const { classes } = useStyles()
     if (props.amount === 0) return null
     return (
         <span className={classNames(classes.root, props.amount > 0 ? color.success : color.error)}>
