@@ -6,6 +6,7 @@ import { IdentifierMap } from './IdentifierMap'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from './helpers/openDB'
 import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
 import { CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
+import { ECKeyIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 
 type UpgradeKnowledge = { version: 4; data: Map<string, AESJsonWebKey> } | undefined
 const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
@@ -34,6 +35,10 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                 }
                 type Version5PostRecord = Omit<Version4PostRecord, 'postCryptoKey'> & {
                     postCryptoKey?: AESJsonWebKey
+                    encryptBy?: PrototypeLess<PersonaIdentifier>
+                    url?: string
+                    summary?: string
+                    interestedMeta?: ReadonlyMap<string, unknown>
                 }
                 /**
                  * A type assert that make sure a and b are the same type
@@ -237,7 +242,7 @@ export async function deletePostCryptoKeyDB(record: PostIVIdentifier, t?: PostTr
 
 //#region db in and out
 function postOutDB(db: PostDBRecord): PostRecord {
-    const { identifier, foundAt, postBy, recipients, postCryptoKey } = db
+    const { identifier, foundAt, postBy, recipients, postCryptoKey, encryptBy, interestedMeta, summary, url } = db
     for (const detail of recipients.values()) {
         detail.reason.forEach((x) => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
     }
@@ -247,6 +252,10 @@ function postOutDB(db: PostDBRecord): PostRecord {
         recipients: new IdentifierMap(recipients, ProfileIdentifier),
         foundAt: foundAt,
         postCryptoKey: postCryptoKey,
+        encryptBy: restorePrototype(encryptBy, ECKeyIdentifier.prototype),
+        interestedMeta,
+        summary,
+        url,
     }
 }
 function postToDB(out: PostRecord): PostDBRecord {
@@ -297,12 +306,20 @@ export interface PostRecord {
      * For others post, it is when you see it first time.
      */
     foundAt: Date
+    encryptBy?: PersonaIdentifier
+    /** The URL of this post */
+    url?: string
+    /** Summary of this post (maybe front 20 chars). */
+    summary?: string
+    /** Interested metadata contained in this post. */
+    interestedMeta?: ReadonlyMap<string, unknown>
 }
 
-interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients'> {
+interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients' | 'encryptBy'> {
     postBy: PrototypeLess<ProfileIdentifier>
     identifier: string
     recipients: Map<string, RecipientDetail>
+    encryptBy?: PrototypeLess<PersonaIdentifier>
 }
 
 interface PostDB extends DBSchema {

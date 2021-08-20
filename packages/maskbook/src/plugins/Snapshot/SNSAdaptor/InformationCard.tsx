@@ -72,13 +72,13 @@ export function InformationCard(props: InformationCardProps) {
     } = useProposal(identifier.id)
 
     const { start, end, snapshot } = message.payload
-
+    const strategies = message.payload.metadata.strategies ?? proposal.strategies
     return (
         <SnapshotCard title={t('plugin_snapshot_info_title')}>
             <Typography component="div">
                 <InfoField title={t('plugin_snapshot_info_strategy')}>
                     <Box sx={{ display: 'flex' }}>
-                        {message.payload.metadata.strategies
+                        {strategies
                             .filter((strategy) => Boolean(strategy.params.address))
                             .map((strategy, i) => (
                                 <Link

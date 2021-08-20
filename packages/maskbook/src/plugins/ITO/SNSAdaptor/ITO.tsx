@@ -15,6 +15,7 @@ import {
     useChainIdValid,
     useTokenConstants,
     ZERO,
+    isGreaterThan,
 } from '@masknet/web3-shared'
 import { Box, Card, Grid, Link, makeStyles, Theme, Typography } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
@@ -279,8 +280,7 @@ export function ITO(props: ITO_Props) {
     //#region buy info
     const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
-        chainId === payload.chain_id &&
-        (new BigNumber(availability ? availability.swapped : 0).isGreaterThan(0) || Boolean(availability?.claimed))
+        chainId === payload.chain_id && (isGreaterThan(availability?.swapped ?? 0, 0) || Boolean(availability?.claimed))
 
     const shareSuccessLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(

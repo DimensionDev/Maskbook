@@ -14,7 +14,13 @@ import {
 import { first } from 'lodash-es'
 import { useSnackbar } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
-import { FungibleTokenDetailed, EthereumTokenType, useAccount, isNative, useTokenWatched } from '@masknet/web3-shared'
+import {
+    FungibleTokenDetailed,
+    EthereumTokenType,
+    useAccount,
+    isNative,
+    useFungibleTokenWatched,
+} from '@masknet/web3-shared'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -81,7 +87,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
 
-    const { amount, token, balance, setAmount, setToken } = useTokenWatched(selectedPaymentToken)
+    const { amount, token, balance, setAmount, setToken } = useFungibleTokenWatched(selectedPaymentToken)
 
     const onMakeOffer = useCallback(async () => {
         if (!asset?.value) return

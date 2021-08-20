@@ -1,8 +1,9 @@
 import { useRef, useEffect } from 'react'
 import { useQRCodeImageScan } from '../../../utils/hooks/useQRCodeImageScan'
-import { CircularProgress, makeStyles, Theme } from '@material-ui/core'
+import { CircularProgress } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()({
     progress: {
         maxWidth: 64,
         maxHeight: 64,
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         maxWidth: 64,
         maxHeight: 64,
     },
-}))
+})
 
 export interface QRCodeImageScanner
     extends React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLImageElement>, HTMLImageElement> {
@@ -22,7 +23,7 @@ export interface QRCodeImageScanner
 }
 
 export function QRCodeImageScanner({ src, onScan, onError }: QRCodeImageScanner) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const imageRef = useRef<HTMLImageElement | null>(null)
     const { value, loading, error } = useQRCodeImageScan(imageRef)
 

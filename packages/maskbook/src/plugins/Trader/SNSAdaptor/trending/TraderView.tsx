@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { makeStyles, Link, Tab, Tabs, Theme } from '@material-ui/core'
-import { useI18N, useSettingsSwticher, useValueRef } from '../../../../utils'
+import { useI18N, useSettingsSwitcher, useValueRef } from '../../../../utils'
 import type { TagType } from '../../types'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
@@ -20,7 +20,7 @@ import { TrendingViewDeck } from './TrendingViewDeck'
 import { currentDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType, useTokenDetailed, useChainIdValid } from '@masknet/web3-shared'
+import { EthereumTokenType, useFungibleTokenDetailed, useChainIdValid } from '@masknet/web3-shared'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 
@@ -121,7 +121,7 @@ export function TraderView(props: TraderViewProps) {
         value: tokenDetailed,
         error: tokenDetailedError,
         loading: loadingTokenDetailed,
-    } = useTokenDetailed(
+    } = useFungibleTokenDetailed(
         trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
         trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.contract_address ?? '',
     )
@@ -146,7 +146,7 @@ export function TraderView(props: TraderViewProps) {
     //#endregion
 
     //#region current data provider switcher
-    const DataProviderSwitcher = useSettingsSwticher(
+    const DataProviderSwitcher = useSettingsSwitcher(
         currentDataProviderSettings,
         dataProviders,
         resolveDataProviderName,

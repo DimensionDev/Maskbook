@@ -38,7 +38,7 @@ export async function stats() {
 
     const per = (100 * (new_.size / (old.size + new_.size))).toPrecision(2)
     for (const each of old) console.log(each.replaceAll('\\\\', '/'))
-    console.log(`${new_.size} files migrated, ${old.size} need to migrate. ${per} completed.`)
+    console.log(`${new_.size} files migrated, ${old.size} need to migrate. ${per}% completed.`)
 }
 stats.displayName = 'makeStyles-stats'
 stats.description = 'Count how many makeStyles needs to be migrated'
@@ -175,7 +175,7 @@ function migrateWorker(source: string) {
                                 !createPrinter().printNode(EmitHint.Unspecified, a.body, sf).includes('theme')
                             ) {
                                 const [s, ...r] = a.body.statements
-                                if (r.length === 0 && isReturnStatement(s)) a = s.expression!
+                                if (r.length === 0 && s && isReturnStatement(s)) a = s.expression!
                             }
                         } else if (a.parameters.length === 0) {
                             a = a.body

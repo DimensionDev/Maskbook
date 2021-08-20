@@ -8,7 +8,7 @@ import {
     TransactionStateType,
     useAccount,
     useChainIdValid,
-    useTokenDetailed,
+    useFungibleTokenDetailed,
     useNetworkType,
     useWeb3,
 } from '@masknet/web3-shared'
@@ -153,7 +153,7 @@ export function RedPacket(props: RedPacketProps) {
         computed: availabilityComputed,
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, payload)
-    const { value: tokenDetailed } = useTokenDetailed(payload.token_type, payload.token?.address ?? '')
+    const { value: tokenDetailed } = useFungibleTokenDetailed(payload.token_type, payload.token?.address ?? '')
     const token = payload.token ?? tokenDetailed
     //#ednregion
 

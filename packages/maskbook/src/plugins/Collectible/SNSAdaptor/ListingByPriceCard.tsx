@@ -18,7 +18,7 @@ import {
     isGreaterThan,
     isNative,
     isZero,
-    TokenWatched,
+    FungibleTokenWatched,
     useAccount,
 } from '@masknet/web3-shared'
 import formatDateTime from 'date-fns/format'
@@ -61,7 +61,7 @@ export interface ListingByPriceCardProps {
     open: boolean
     onClose: () => void
     asset?: ReturnType<typeof useAsset>
-    tokenWatched: TokenWatched
+    tokenWatched: FungibleTokenWatched
     paymentTokens: FungibleTokenDetailed[]
 }
 

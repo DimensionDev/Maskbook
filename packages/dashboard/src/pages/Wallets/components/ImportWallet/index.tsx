@@ -1,5 +1,6 @@
 import { memo } from 'react'
-import { Button, experimentalStyled as styled, makeStyles, FilledInput, Tab } from '@material-ui/core'
+import { Button, experimentalStyled as styled, FilledInput, Tab } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ButtonGroupTabList, useTabs } from '@masknet/theme'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
 import { MaskAlert } from '../../../../components/MaskAlert'
@@ -49,7 +50,7 @@ const PasswordInput = styled(FilledInput)(
 `,
 )
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     tabs: { width: 582, justifyContent: 'center' },
     panels: {
         display: 'flex',
@@ -63,8 +64,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const ImportWallet = memo(() => {
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const t = useDashboardI18N()
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'json', 'privateKey')
     const tabPanelClasses = { root: classes.panels }

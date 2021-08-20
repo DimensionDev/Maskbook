@@ -96,7 +96,7 @@ export function DecryptPost(props: DecryptPostProps) {
     // pass 1:
     // decrypt post content and image attachments
     const decryptedPayloadForImageAlpha38 = decryptedPayloadForImage?.version === -38 ? decryptedPayloadForImage : null
-    const sharedPublic = usePostInfoSharedPublic() || decryptedPayloadForImageAlpha38?.sharedPublic
+    const sharedPublic = usePostInfoSharedPublic() || decryptedPayloadForImageAlpha38?.sharedPublic || false
 
     useEffect(() => {
         const signal = new AbortController()
@@ -139,6 +139,7 @@ export function DecryptPost(props: DecryptPostProps) {
             }
         }
 
+        const postURL = current.url.getCurrentValue()?.toString()
         if (deconstructedPayload.ok)
             makeProgress(
                 'post text',
@@ -148,11 +149,15 @@ export function DecryptPost(props: DecryptPostProps) {
                     whoAmI.network,
                     whoAmI,
                     sharedPublic,
+                    postURL,
                 ),
             )
         postMetadataImages.forEach((url) => {
             if (signal.signal.aborted) return
-            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI.network, whoAmI, undefined))
+            makeProgress(
+                url,
+                ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI.network, whoAmI, false, postURL),
+            )
         })
         return () => signal.abort()
     }, [
