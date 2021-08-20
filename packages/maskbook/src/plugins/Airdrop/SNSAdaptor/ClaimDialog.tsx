@@ -1,9 +1,10 @@
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
-import { DialogContent, Box, Theme, makeStyles, DialogActions, Button, Typography } from '@material-ui/core'
+import { DialogContent, Box, DialogActions, Button, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { TokenIcon, useStylesExtends } from '@masknet/shared'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(5, 5, 10),
     },
