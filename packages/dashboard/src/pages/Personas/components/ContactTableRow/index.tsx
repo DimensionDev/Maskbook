@@ -1,6 +1,7 @@
 import type { RelationProfile } from '@masknet/shared'
 import { memo, useCallback } from 'react'
-import { Box, TableCell, TableRow, Typography, makeStyles, Avatar, useTheme, Button } from '@material-ui/core'
+import { Box, TableCell, TableRow, Typography, Avatar, useTheme, Button } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { StarIcon, MaskNetworkIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import { Services } from '../../../../API'
@@ -9,7 +10,7 @@ import { generateContactAvatarColor } from '../../../../utils/generateContactAva
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     favorite: {
         marginLeft: 16,
         marginRight: 26,
@@ -40,7 +41,7 @@ const useStyles = makeStyles(() => ({
         fontSize: 12,
         color: MaskColorVar.normalText,
     },
-}))
+})
 
 export interface ContactTableRowProps {
     contact: RelationProfile
@@ -91,7 +92,7 @@ export interface ContactTableRowUIProps extends Omit<ContactTableRowProps, 'netw
 export const ContactTableRowUI = memo<ContactTableRowUIProps>(
     ({ contact, index, handleClickStar, handleClickInvite, theme }) => {
         const t = useDashboardI18N()
-        const classes = useStyles()
+        const { classes } = useStyles()
         const [first, last] = contact.name.split(' ')
 
         return (

@@ -7,11 +7,11 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    makeStyles,
     TableBody,
     Box,
     TablePagination,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { ContactTableRow } from '../ContactTableRow'
 import { EmptyContactPlaceholder } from '../EmptyContactPlaceholder'
@@ -20,7 +20,7 @@ import { sortBy } from 'lodash-es'
 import { useDashboardI18N } from '../../../../locales'
 import { Messages } from '../../../../API'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         height: '100%',
         display: 'flex',
@@ -112,8 +112,7 @@ export interface ContactsTableUIProps extends ContactsTableProps {
 export const ContactsTableUI = memo<ContactsTableUIProps>(
     ({ showPagination, page, onPageChange, network, dataSource, isEmpty, isLoading }) => {
         const t = useDashboardI18N()
-        const classes = useStyles()
-
+        const { classes } = useStyles()
         return (
             <>
                 <TableContainer className={classes.container}>

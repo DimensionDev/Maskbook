@@ -1,12 +1,13 @@
 import { memo } from 'react'
-import { makeStyles, Box, Typography, Link, Button, FilledInput } from '@material-ui/core'
+import { Box, Typography, Link, Button, FilledInput } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { EmptyIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import { DashboardTrans } from '../../../../locales/i18n_generated'
 import { useCopyToClipboard } from 'react-use'
 import { useSnackbarCallback } from '@masknet/shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         width: '100%',
         height: '100%',
@@ -58,7 +59,7 @@ export interface EmptyContactPlaceholderUIProps {
 }
 
 export const EmptyContactPlaceholderUI = memo<EmptyContactPlaceholderUIProps>(({ onCopy }) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <Box className={classes.container}>
             <EmptyIcon className={classes.icon} />

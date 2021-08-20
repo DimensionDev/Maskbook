@@ -1,10 +1,10 @@
 import { memo, useState } from 'react'
 import { ButtonGroupTabList } from '@masknet/theme'
-import { Box, Tab, makeStyles } from '@material-ui/core'
+import { Box, Tab } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { ContactsTable } from '../ContactsTable'
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()({
     container: {
         flex: 1,
         height: '100%',
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
         overflow: 'scroll',
     },
-}))
+})
 
 enum PersonaContentTab {
     POST = 'POST',
@@ -24,9 +24,8 @@ enum PersonaContentTab {
 export interface PersonaContentProps {
     network: string
 }
-
 export const PersonaContent = memo<PersonaContentProps>(({ network }) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [tab, setTab] = useState<string>(PersonaContentTab.POST)
 
     return (
