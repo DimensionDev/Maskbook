@@ -7,7 +7,7 @@
     "about_dialog_license": "증명서:",
     "add_to_key_store_success": "해당 공개 키가 이미 키스토어에서 추가되었습니다",
     "add_token": "토큰 추가",
-    "add_token_search_hint": "토큰 검색",
+    "add_token_search_hint": "",
     "add_asset": "자산 추가",
     "additional_post_box__encrypted_post_pre": "#mask_io로 이 게시물을 해독하기. {{encrypted}}",
     "additional_post_box__steganography_post_pre": "암호화된 이미지입니다. 📪🔑 mask.io 설치하고 해독하세요. {{random}}",
