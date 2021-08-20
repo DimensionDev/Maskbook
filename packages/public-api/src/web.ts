@@ -20,8 +20,8 @@ export interface MaskNetworkAPIs {
     settings_getLaunchPageSettings(): Promise<LaunchPage>
     settings_getTheme(): Promise<Appearance>
     settings_setTheme(params: { theme: Appearance }): Promise<void>
-    settings_getLanguage(): Promise<Language>
-    settings_setLanguage(params: { language: Language }): Promise<void>
+    settings_getLanguage(): Promise<LanguageOptions>
+    settings_setLanguage(params: { language: LanguageOptions }): Promise<void>
     settings_createBackupJson(params: Partial<BackupOptions>): Promise<unknown>
     settings_getBackupPreviewInfo(params: { backupInfo: string }): Promise<BackupPreview | undefined>
     settings_restoreBackup(params: { backupInfo: string }): Promise<void>
@@ -97,13 +97,6 @@ export enum Appearance {
     default = 'default',
     light = 'light',
     dark = 'dark',
-}
-
-export enum Language {
-    zh = 'zh',
-    en = 'en',
-    ko = 'ko',
-    ja = 'ja',
 }
 
 export enum LaunchPage {

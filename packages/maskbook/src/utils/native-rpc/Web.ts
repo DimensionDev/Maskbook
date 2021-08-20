@@ -8,7 +8,7 @@ import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-
 import type { Persona, Profile } from '../../database'
 
 const stringToIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
-const personaFomatter = (p: Persona) => {
+const personaFormatter = (p: Persona) => {
     const profiles = {}
 
     for (const [key, value] of p.linkedProfiles) {
@@ -108,18 +108,18 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
     persona_createPersonaByMnemonic: async ({ mnemonic, nickname, password }) => {
         const x = await Services.Identity.restoreFromMnemonicWords(mnemonic, nickname, password)
-        return personaFomatter(x)
+        return personaFormatter(x)
     },
     persona_queryPersonas: async ({ identifier, hasPrivateKey }) => {
         const id = identifier ? stringToIdentifier(identifier) : undefined
         const result = await Services.Identity.queryPersonas(id, hasPrivateKey)
 
-        return result?.map(personaFomatter)
+        return result?.map(personaFormatter)
     },
     persona_queryMyPersonas: async ({ network }) => {
         const result = await Services.Identity.queryMyPersonas(network)
 
-        return result?.map(personaFomatter)
+        return result?.map(personaFormatter)
     },
     persona_updatePersonaInfo: ({ identifier, data }) => {
         const { nickname } = data
