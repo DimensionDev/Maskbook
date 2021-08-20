@@ -1,16 +1,16 @@
-import { ImageList, ImageListItem, makeStyles, SvgIconProps } from '@material-ui/core'
+import { ImageList, ImageListItem, SvgIconProps } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { map } from 'lodash-es'
 import { createElement } from 'react'
 import { useI18N } from '../../../../utils'
 import { Provider } from '../Provider'
 import { IMTokenIcon, MetaMaskIcon, RainbowIcon, TrustIcon } from './Icons'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     container: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' },
     grid: { width: '100%' },
     icon: { fontSize: 45 },
-}))
-
+})
 interface WalletProvider {
     name: string
     logo: React.ComponentType<SvgIconProps>
@@ -26,7 +26,7 @@ const providers: WalletProvider[] = [
 
 export const SafariPlatform: React.FC<{ uri: string }> = ({ uri }) => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const makeConnect = (link: string) => () => {
         const url = new URL(link)
         url.searchParams.set('uri', uri)

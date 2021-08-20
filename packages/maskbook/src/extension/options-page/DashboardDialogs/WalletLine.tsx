@@ -1,8 +1,8 @@
-import { FormControl, Typography, Theme, Divider } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { FormControl, Typography, Divider } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     text: {
         fontWeight: 500,
     },
@@ -32,7 +32,7 @@ interface WalletLineProps {
 
 // TODO: abstract common line
 export default function WalletLine(props: WalletLineProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { line1, line2, invert, action, onClick } = props
 
     return (

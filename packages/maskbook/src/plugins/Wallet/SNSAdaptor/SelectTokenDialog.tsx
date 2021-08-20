@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
-import { makeStyles, Theme, DialogContent } from '@material-ui/core'
+import { DialogContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { FungibleTokenDetailed, useNativeTokenDetailed, useChainDetailed } from '@masknet/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
@@ -8,7 +9,7 @@ import { delay, useI18N } from '../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     list: {
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {

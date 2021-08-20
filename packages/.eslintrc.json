@@ -11,7 +11,17 @@
                 "paths": [
                     { "name": "lodash", "message": "Please use lodash-es instead." },
                     { "name": "date-fns", "message": "Please use date-fns/{submodule} instead." },
-                    { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." }
+                    { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." },
+                    {
+                        "name": "@material-ui/core",
+                        "importNames": ["makeStyles"],
+                        "message": "Please use makeStyles from @masknet/theme instead."
+                    },
+                    {
+                        "name": "@material-ui/core/styles",
+                        "importNames": ["makeStyles"],
+                        "message": "Please use makeStyles from @masknet/theme instead."
+                    }
                 ]
             }
         ],

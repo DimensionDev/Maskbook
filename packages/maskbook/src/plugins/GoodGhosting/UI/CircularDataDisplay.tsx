@@ -1,6 +1,7 @@
-import { makeStyles, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         textAlign: 'center',
     },
@@ -36,7 +37,7 @@ interface CircularDataDisplayProps {
 }
 
 export function CircularDataDisplay(props: CircularDataDisplayProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <div className={classes.root}>
             <Typography className={classes.header} variant="h6" color="textPrimary">

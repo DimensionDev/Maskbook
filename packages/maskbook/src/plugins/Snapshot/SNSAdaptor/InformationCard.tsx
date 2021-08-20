@@ -5,7 +5,8 @@ import {
     resolveIPFSLink,
     useChainId,
 } from '@masknet/web3-shared'
-import { Avatar, Box, Link, makeStyles, Typography } from '@material-ui/core'
+import { Avatar, Box, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import OpenInNew from '@material-ui/icons/OpenInNew'
 import formatDateTime from 'date-fns/format'
 import { useContext } from 'react'
@@ -23,7 +24,7 @@ export interface InfoFieldProps {
     children: React.ReactNode
 }
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         field: {
             display: 'flex',
@@ -49,8 +50,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export function InfoField(props: InfoFieldProps) {
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <div className={classes.field}>
             <div>
@@ -62,7 +62,7 @@ export function InfoField(props: InfoFieldProps) {
 }
 
 export function InformationCard(props: InformationCardProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     const chainId = useChainId()
 

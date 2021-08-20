@@ -1,6 +1,5 @@
 import { ChangeEvent, useState, useCallback, useMemo, useEffect } from 'react'
 import {
-    makeStyles,
     DialogContent,
     Box,
     Checkbox,
@@ -11,6 +10,7 @@ import {
     Typography,
     Link,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-es'
 import { useSnackbar } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
@@ -36,7 +36,7 @@ import { toAsset, toUnixTimestamp } from '../helpers'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { Trans } from 'react-i18next'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         content: {
             padding: 0,
@@ -78,7 +78,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const selectedPaymentToken = first(paymentTokens)
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
     const account = useAccount()
