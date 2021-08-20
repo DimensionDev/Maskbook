@@ -1,5 +1,6 @@
 import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared'
-import { Grid, Link, makeStyles, Paper, Typography } from '@material-ui/core'
+import { Grid, Link, Paper, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { isNative } from 'lodash-es'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { Flags, useI18N } from '../../../utils'
@@ -10,7 +11,7 @@ import { FormattedBalance } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     link: {
         display: 'flex',
         marginLeft: theme.spacing(0.5),
@@ -65,7 +66,7 @@ export interface ConfirmRedPacketFormProps {
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const { t } = useI18N()
     const { onBack, settings, onCreate, onClose } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const chainId = useChainId()
     const paramsResult = useCreateParams(settings, 4)
 
