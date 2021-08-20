@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { Box, Grid, makeStyles, Typography } from '@material-ui/core'
+import { Box, Grid, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { useInterval } from 'react-use'
 import { ONE_SECOND } from '../constants'
 import { DarkColor } from '@masknet/theme/constants'
 import intervalToDuration from 'date-fns/intervalToDuration'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignSelf: 'center',

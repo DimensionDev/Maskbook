@@ -9,7 +9,8 @@ import {
     useAccount,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import { DialogContent, Grid, makeStyles, Typography } from '@material-ui/core'
+import { DialogContent, Grid, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -30,7 +31,7 @@ import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
 import { calculateOdds, getPrizePeriod } from '../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         margin: theme.spacing(2, 0),
         backgroundColor: '#1a083a',
@@ -79,8 +80,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function DepositDialog() {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const [id] = useState(uuid())
     const [pool, setPool] = useState<Pool>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
