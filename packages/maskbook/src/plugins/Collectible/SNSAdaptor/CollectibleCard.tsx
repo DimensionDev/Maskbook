@@ -7,7 +7,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
     const { children } = props
     const classes = props.classes
     return (
-        <Card className={classes.root} elevation={0}>
+        <Card className={classes?.root} elevation={0}>
             {children}
         </Card>
     )
