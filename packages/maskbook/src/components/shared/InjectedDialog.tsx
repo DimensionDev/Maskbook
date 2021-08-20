@@ -93,6 +93,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 {title ? (
                     <DialogTitle classes={{ root: dialogTitle }}>
                         <IconButton
+                            size="large"
                             classes={{ root: dialogCloseButton }}
                             aria-label={t('post_dialog__dismiss_aria')}
                             onClick={onClose}>

@@ -131,7 +131,12 @@ export const FooterLine = memo(() => {
             </Breadcrumbs>
             <AboutDialog open={isOpen} title="" onClose={() => setOpen(false)}>
                 <About />
-                <IconButton className={classes.closeButton} onClick={() => setOpen(false)} edge="end" color="inherit">
+                <IconButton
+                    size="large"
+                    className={classes.closeButton}
+                    onClick={() => setOpen(false)}
+                    edge="end"
+                    color="inherit">
                     <Close />
                 </IconButton>
             </AboutDialog>

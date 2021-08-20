@@ -46,7 +46,7 @@ export const CustomSnackbarProvider = memo(({ children }) => {
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             hideIconVariant={true}
             action={(key) => (
-                <IconButton onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
+                <IconButton size="large" onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
                     <CloseIcon color="inherit" />
                 </IconButton>
             )}

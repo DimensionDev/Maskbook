@@ -16,12 +16,12 @@ export interface MaskDialogTitleProps {
 export const MaskDialogTitle = memo((props: MaskDialogTitleProps) => {
     const { children, onBack, onClose } = props
     const backButton = onBack ? (
-        <IconButton onClick={onBack} edge="start" color="inherit" sx={{ marginRight: '8px' }}>
+        <IconButton size="large" onClick={onBack} edge="start" color="inherit" sx={{ marginRight: '8px' }}>
             <ArrowBack />
         </IconButton>
     ) : null
     const closeButton = onClose ? (
-        <IconButton onClick={onClose} edge="end" color="inherit">
+        <IconButton size="large" onClick={onClose} edge="end" color="inherit">
             <Close />
         </IconButton>
     ) : null

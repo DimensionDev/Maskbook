@@ -166,7 +166,9 @@ export const PageFrame = memo((props: PageFrameProps) => {
                 <Toolbar classes={{ gutters: classes.toolbarGutters }}>
                     {!isLargeScreen && (
                         <MaskLogo item container alignItems="center">
-                            <MenuButton onClick={toggleDrawer}>{drawerOpen ? <CloseIcon /> : <MenuIcon />}</MenuButton>
+                            <MenuButton size="large" onClick={toggleDrawer}>
+                                {drawerOpen ? <CloseIcon /> : <MenuIcon />}
+                            </MenuButton>
                             <MaskNotSquareIcon />
                         </MaskLogo>
                     )}

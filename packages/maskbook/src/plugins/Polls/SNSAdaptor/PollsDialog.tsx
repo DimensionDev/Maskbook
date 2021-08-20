@@ -162,7 +162,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                             />
                         </FormControl>
                     ))}
-                    <IconButton onClick={addNewOption} classes={{ root: classes.addButton }}>
+                    <IconButton size="large" onClick={addNewOption} classes={{ root: classes.addButton }}>
                         <AddIcon color="primary" />
                     </IconButton>
                 </div>

@@ -44,7 +44,7 @@ export function SearchInput({ label, onChange }: SearchInputProps) {
                 </Typography>
             ) : null}
             <Paper component="form" className={classes.search} elevation={0}>
-                <IconButton className={classes.iconButton} aria-label="label">
+                <IconButton size="large" className={classes.iconButton} aria-label="label">
                     <SearchIcon />
                 </IconButton>
                 <InputBase

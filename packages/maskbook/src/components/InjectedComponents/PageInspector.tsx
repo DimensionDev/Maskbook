@@ -36,7 +36,7 @@ export function PageInspector(props: PageInspectorProps) {
                         <Button color="inherit" onClick={() => [clearTimeout(timeout), close(), autoPasteFailed(data)]}>
                             {t('auto_paste_failed_snackbar_action')}
                         </Button>
-                        <IconButton aria-label="Close" onClick={close}>
+                        <IconButton size="large" aria-label="Close" onClick={close}>
                             <Close />
                         </IconButton>
                     </>
