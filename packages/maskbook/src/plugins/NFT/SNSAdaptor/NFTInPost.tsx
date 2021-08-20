@@ -9,7 +9,7 @@ import { openseaAssetsApiUrl } from '../constants'
 export default function NFTInPost(props: NFTInPostProps) {
     const tokenDetailsResponse = useAsync(
         async function () {
-            let updatedTokenDetails: TokenDetails = {}
+            const updatedTokenDetails: TokenDetails = {}
             const [address, tokenId] = parseNftUrl(props.nftUrl)
 
             // if nftUrl is invalid

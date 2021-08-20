@@ -65,11 +65,11 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     traits: openSeaResponse.traits,
                     safelist_request_status: openSeaResponse.collection?.safelist_request_status ?? '',
                     description: openSeaResponse.description,
-                    name: openSeaResponse.name,
+                    name: openSeaResponse.name ?? openSeaResponse.collection.name,
                     collection_name: openSeaResponse.collection.name,
                     animation_url: openSeaResponse.animation_url,
                     end_time: desktopOrder
-                        ? toDate(Number.parseInt(desktopOrder.listingTime as unknown as string))
+                        ? toDate(Number.parseInt(desktopOrder.listingTime as unknown as string, 10))
                         : null,
                     order_payment_tokens: desktopOrder?.paymentTokenContract
                         ? [toTokenDetailed(chainId, desktopOrder.paymentTokenContract)]

@@ -1,12 +1,12 @@
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { INTERNAL_send } from './send'
+import { INTERNAL_send, SendOverrides } from './send'
 
 let id = 0
 
-export async function request<T extends unknown>(requestArguments: RequestArguments, rpc?: string) {
+export async function request<T extends unknown>(requestArguments: RequestArguments, overrides?: SendOverrides) {
     return new Promise<T>((resolve, reject) => {
-        id++
+        id += 1
         INTERNAL_send(
             {
                 jsonrpc: '2.0',
@@ -18,7 +18,7 @@ export async function request<T extends unknown>(requestArguments: RequestArgume
                 if (error || response?.error) reject(error ?? response?.error)
                 else resolve(response?.result)
             },
-            rpc,
+            overrides,
         )
     })
 }
@@ -27,7 +27,7 @@ export async function requestSend(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
 ) {
-    id++
+    id += 1
     await INTERNAL_send(
         {
             ...payload,

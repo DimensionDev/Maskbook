@@ -1,14 +1,13 @@
-import { useState } from 'react'
-import { DialogContent, IconButton, makeStyles } from '@material-ui/core'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { DialogContent, IconButton } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import CloseIcon from '@material-ui/icons/Close'
-import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { PluginTransakMessages } from '../messages'
+import { useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useTransakURL } from '../hooks/useTransakURL'
+import { PluginTransakMessages } from '../messages'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     dialogPaper: {
         width: '500px !important',
     },
@@ -36,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
 export interface BuyTokenDialogProps extends withClasses<never | 'root'> {}
 
 export function BuyTokenDialog(props: BuyTokenDialogProps) {
-    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const [code, setCode] = useState('ETH')
@@ -47,15 +45,12 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
     })
 
     //#region remote controlled buy token dialog
-    const { open, closeDialog } = useRemoteControlledDialog(
-        PluginTransakMessages.events.buyTokenDialogUpdated,
-        (ev) => {
-            if (ev.open) {
-                setCode(ev.code ?? 'ETH')
-                setAddress(ev.address)
-            }
-        },
-    )
+    const { open, closeDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated, (ev) => {
+        if (ev.open) {
+            setCode(ev.code ?? 'ETH')
+            setAddress(ev.address)
+        }
+    })
     //#endregion
 
     return (

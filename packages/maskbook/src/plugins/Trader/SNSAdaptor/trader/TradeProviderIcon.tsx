@@ -1,17 +1,18 @@
 import { unreachable } from '@dimensiondev/kit'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { BalancerIcon } from '../../../../resources/BalancerIcon'
 import { SashimiSwapIcon } from '../../../../resources/SashimiSwapIcon'
 import { SushiSwapIcon } from '../../../../resources/SushiSwapIcon'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { ZRXIcon } from '../../../../resources/ZRXIcon'
+import { DODOIcon } from '../../../../resources/DODOIcon'
 import { resolveTradeProviderName } from '../../pipes'
 import { TradeProvider } from '../../types'
 
 const quickswapIcon = new URL('../../../../resources/quickswap.png', import.meta.url).toString()
 const pancakeswapIcon = new URL('../../../../resources/pancakeswap.png', import.meta.url).toString()
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 16,
         height: 16,
@@ -23,9 +24,11 @@ export interface TradeProviderIconProps {
 }
 
 export function TradeProviderIcon(props: TradeProviderIconProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     switch (props.provider) {
-        case TradeProvider.UNISWAP:
+        case TradeProvider.UNISWAP_V2:
+            return <UniswapIcon classes={{ root: classes.icon }} />
+        case TradeProvider.UNISWAP_V3:
             return <UniswapIcon classes={{ root: classes.icon }} />
         case TradeProvider.ZRX:
             return <ZRXIcon classes={{ root: classes.icon }} />
@@ -51,6 +54,8 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
                     className={classes.icon}
                 />
             )
+        case TradeProvider.DODO:
+            return <DODOIcon classes={{ root: classes.icon }} />
         default:
             unreachable(props.provider)
     }

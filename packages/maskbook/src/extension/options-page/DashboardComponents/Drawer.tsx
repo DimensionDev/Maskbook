@@ -1,16 +1,17 @@
 import { Fragment } from 'react'
+import { Linkedin as LinkedinIcon, Smile as SmileIcon } from 'react-feather'
 import classNames from 'classnames'
 import { List, ListItem, ListItemIcon, ListItemText, Typography, Box, Divider } from '@material-ui/core'
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { Link, useRouteMatch } from 'react-router-dom'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
 import { useI18N, useMatchXS, extendsTheme } from '../../../utils'
 import Logo from './MaskbookLogo'
 import { Carousel } from './Carousel'
 import { makeNewBugIssueURL } from '../../debug-page/issue'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     drawer: {
         height: '100%',
         display: 'grid',
@@ -118,7 +119,7 @@ interface DrawerProps {
 
 export default function Drawer(props: DrawerProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const match = useRouteMatch('/:param/')
     const forSetupPurpose = match?.url.includes('/setup')
     const xsMatched = useMatchXS()
@@ -128,6 +129,10 @@ export default function Drawer(props: DrawerProps) {
     const onFeedback = () => {
         // see #3384
         open('https://forms.gle/Tb26MEcE3kLar6CFA')
+    }
+
+    const onJoin = () => {
+        open('https://www.linkedin.com/company/masknetwork/jobs/')
     }
 
     const onDebugPage = (event: React.MouseEvent) => {
@@ -190,10 +195,29 @@ export default function Drawer(props: DrawerProps) {
                                 <ListItem
                                     className={classNames(classes.drawerItem, classes.drawerFeedback)}
                                     button
+                                    onClick={onJoin}>
+                                    <ListItemIcon
+                                        className={classes.drawerItemIcon}
+                                        children={<LinkedinIcon width={22} height={22} />}
+                                    />
+                                    <ListItemText
+                                        className={classes.drawerItemText}
+                                        primary={t('join_us')}
+                                        primaryTypographyProps={{ className: classes.drawerItemTextPrimary }}
+                                    />
+                                    {xsMatched ? (
+                                        <ListItemIcon>
+                                            <ChevronRightIcon color="action" />
+                                        </ListItemIcon>
+                                    ) : null}
+                                </ListItem>
+                                <ListItem
+                                    className={classNames(classes.drawerItem, classes.drawerFeedback)}
+                                    button
                                     onClick={onFeedback}>
                                     <ListItemIcon
                                         className={classes.drawerItemIcon}
-                                        children={<SentimentSatisfiedOutlinedIcon fontSize="small" />}
+                                        children={<SmileIcon width={22} height={22} />}
                                     />
                                     <ListItemText
                                         className={classes.drawerItemText}

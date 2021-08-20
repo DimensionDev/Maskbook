@@ -1,12 +1,12 @@
 import { forwardRef, useCallback, useMemo, useState } from 'react'
 import { Alert, Box, Button, IconButton, MenuItem, Tab, Tabs } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import AddIcon from '@material-ui/icons/Add'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Check from '@material-ui/icons/Check'
-import { Wallet, useChainIdValid } from '@masknet/web3-shared'
+import { Wallet, useChainIdValid, useChainDetailed, FilterTransactionType } from '@masknet/web3-shared'
 import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddERC20TokenDialog,
@@ -23,9 +23,8 @@ import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
-import { FilterTransactionType } from '../../../plugins/Wallet/types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         height: '100%',
         display: 'flex',
@@ -75,14 +74,14 @@ interface WalletContentProps {
 
 export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ wallet }, ref) => {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const history = useHistory()
     const location = useLocation()
 
-    const color = useColorStyles()
+    const { classes: color } = useColorStyles()
     const xsMatched = useMatchXS()
     const chainIdValid = useChainIdValid()
+    const chainDetailed = useChainDetailed()
 
     const [transactionType, setTransactionType] = useState<FilterTransactionType>(FilterTransactionType.ALL)
 
@@ -126,13 +125,13 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                 <Check className={classes.checkIcon} fontSize="small" />
             ) : null}
         </MenuItem>,
-        <MenuItem key="Sent" onClick={() => setTransactionType(FilterTransactionType.SEND)}>
+        <MenuItem key="send" onClick={() => setTransactionType(FilterTransactionType.SEND)}>
             {t('sent_transactions')}
             {transactionType === FilterTransactionType.SEND ? (
                 <Check className={classes.checkIcon} fontSize="small" />
             ) : null}
         </MenuItem>,
-        <MenuItem key="Received" onClick={() => setTransactionType(FilterTransactionType.RECEIVE)}>
+        <MenuItem key="receive" onClick={() => setTransactionType(FilterTransactionType.RECEIVE)}>
             {t('received_transactions')}
             {transactionType === FilterTransactionType.RECEIVE ? (
                 <Check className={classes.checkIcon} fontSize="small" />
@@ -141,7 +140,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     ])
 
     //#region remote controlled buy dialog
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.events.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
     //#endregion
 
     //#region tab
@@ -267,6 +266,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                                 setBuyDialog({
                                     open: true,
                                     address: wallet.address,
+                                    code: chainDetailed?.nativeCurrency.symbol,
                                 })
                             }}
                             startIcon={<MonetizationOnOutlinedIcon />}>

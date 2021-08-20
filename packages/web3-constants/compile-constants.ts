@@ -1,14 +1,26 @@
 import { promises as fs } from 'fs'
 import path from 'path'
-import { run } from '../cli/utils'
+import { run } from '../web3-contracts/utils'
 
 const DATA_PATH = path.join(__dirname, 'data')
 
-const chainNames = ['Mainnet', 'Ropsten', 'Rinkeby', 'Kovan', 'Gorli', 'BSC', 'BSCT', 'Matic', 'Mumbai']
+const chainNames = [
+    'Mainnet',
+    'Ropsten',
+    'Rinkeby',
+    'Kovan',
+    'Gorli',
+    'BSC',
+    'BSCT',
+    'Matic',
+    'Mumbai',
+    'Arbitrum',
+    'Arbitrum_Rinkeby',
+]
 
 async function main() {
     // format files
-    run(DATA_PATH, 'npx', 'prettier', '--write', '*')
+    run(undefined, 'npx', 'prettier', '--write', DATA_PATH)
 
     // fix constants
     for (const file of await fs.readdir(DATA_PATH)) {

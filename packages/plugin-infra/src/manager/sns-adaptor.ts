@@ -20,7 +20,7 @@ export function useActivatedPluginsSNSAdaptor() {
 export function useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet() {
     const chainId = useChainId()
     const plugins = useActivatedPluginsSNSAdaptor()
-    return plugins.reduce((acc: { [key: string]: boolean }, cur) => {
+    return plugins.reduce<Record<string, boolean>>((acc, cur) => {
         const operatingSupportedChains = cur.enableRequirement.web3?.operatingSupportedChains
         acc[cur.ID] = !Boolean(operatingSupportedChains) || Boolean(operatingSupportedChains?.includes(chainId))
         return acc

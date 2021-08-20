@@ -37,13 +37,9 @@
     },
     {
         "anonymous": false,
-        "inputs": [{ "indexed": true, "internalType": "address", "name": "cToken", "type": "address" }],
-        "name": "CompoundPrizePoolInitialized",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [{ "indexed": true, "internalType": "address", "name": "token", "type": "address" }],
+        "inputs": [
+            { "indexed": true, "internalType": "contract ControlledTokenInterface", "name": "token", "type": "address" }
+        ],
         "name": "ControlledTokenAdded",
         "type": "event"
     },
@@ -92,7 +88,6 @@
     {
         "anonymous": false,
         "inputs": [
-            { "indexed": false, "internalType": "address", "name": "trustedForwarder", "type": "address" },
             { "indexed": false, "internalType": "address", "name": "reserveRegistry", "type": "address" },
             { "indexed": false, "internalType": "uint256", "name": "maxExitFeeMantissa", "type": "uint256" },
             { "indexed": false, "internalType": "uint256", "name": "maxTimelockDuration", "type": "uint256" }
@@ -151,6 +146,12 @@
     },
     {
         "anonymous": false,
+        "inputs": [{ "indexed": true, "internalType": "address", "name": "stakeToken", "type": "address" }],
+        "name": "StakePrizePoolInitialized",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
         "inputs": [
             { "indexed": true, "internalType": "address", "name": "operator", "type": "address" },
             { "indexed": true, "internalType": "address", "name": "to", "type": "address" },
@@ -198,13 +199,6 @@
         "name": "accountedBalance",
         "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [{ "internalType": "address", "name": "_controlledToken", "type": "address" }],
-        "name": "addControlledToken",
-        "outputs": [],
-        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -276,13 +270,6 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "cToken",
-        "outputs": [{ "internalType": "contract CTokenInterface", "name": "", "type": "address" }],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             { "internalType": "address", "name": "from", "type": "address" },
             { "internalType": "address", "name": "controlledToken", "type": "address" },
@@ -332,6 +319,16 @@
         "type": "function"
     },
     {
+        "inputs": [
+            { "internalType": "contract ICompLike", "name": "compLike", "type": "address" },
+            { "internalType": "address", "name": "to", "type": "address" }
+        ],
+        "name": "compLikeDelegate",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [{ "internalType": "address", "name": "controlledToken", "type": "address" }],
         "name": "creditPlanOf",
         "outputs": [
@@ -366,9 +363,8 @@
     },
     {
         "inputs": [
-            { "internalType": "address", "name": "_trustedForwarder", "type": "address" },
             { "internalType": "contract RegistryInterface", "name": "_reserveRegistry", "type": "address" },
-            { "internalType": "address[]", "name": "_controlledTokens", "type": "address[]" },
+            { "internalType": "contract ControlledTokenInterface[]", "name": "_controlledTokens", "type": "address[]" },
             { "internalType": "uint256", "name": "_maxExitFeeMantissa", "type": "uint256" },
             { "internalType": "uint256", "name": "_maxTimelockDuration", "type": "uint256" }
         ],
@@ -379,23 +375,15 @@
     },
     {
         "inputs": [
-            { "internalType": "address", "name": "_trustedForwarder", "type": "address" },
             { "internalType": "contract RegistryInterface", "name": "_reserveRegistry", "type": "address" },
-            { "internalType": "address[]", "name": "_controlledTokens", "type": "address[]" },
+            { "internalType": "contract ControlledTokenInterface[]", "name": "_controlledTokens", "type": "address[]" },
             { "internalType": "uint256", "name": "_maxExitFeeMantissa", "type": "uint256" },
             { "internalType": "uint256", "name": "_maxTimelockDuration", "type": "uint256" },
-            { "internalType": "contract CTokenInterface", "name": "_cToken", "type": "address" }
+            { "internalType": "contract IERC20Upgradeable", "name": "_stakeToken", "type": "address" }
         ],
         "name": "initialize",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [{ "internalType": "address", "name": "forwarder", "type": "address" }],
-        "name": "isTrustedForwarder",
-        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -515,7 +503,7 @@
     {
         "inputs": [],
         "name": "token",
-        "outputs": [{ "internalType": "contract IERC20", "name": "", "type": "address" }],
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
         "stateMutability": "view",
         "type": "function"
     },
@@ -542,20 +530,6 @@
         "name": "transferOwnership",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "trustedForwarder",
-        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "versionRecipient",
-        "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
-        "stateMutability": "view",
         "type": "function"
     },
     {

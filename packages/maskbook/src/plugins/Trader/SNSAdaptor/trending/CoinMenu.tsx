@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { makeStyles, Typography, MenuItem } from '@material-ui/core'
+import { Typography, MenuItem } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ShadowRootMenu } from '../../../../utils/shadow-root/ShadowRootComponents'
 import type { Coin } from '../../types'
 
-const useStyles = makeStyles((theme) => ({
-    name: {},
+const useStyles = makeStyles()((theme) => ({
     symbol: {
         color: theme.palette.text.secondary,
         fontSize: 12,
@@ -27,7 +27,7 @@ export interface CoinMenuProps {
 export function CoinMenu(props: CoinMenuProps) {
     const { options, selectedIndex = -1, children, onChange } = props
 
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const onOpen = (event: React.MouseEvent<HTMLDivElement>) => setAnchorEl(event.currentTarget)
     const onSelect = (option: CoinMenuOption) => {
@@ -47,7 +47,7 @@ export function CoinMenu(props: CoinMenuProps) {
                 {options.map((x, i) => (
                     <MenuItem selected={selectedIndex === i} key={x.value} onClick={() => onSelect(x)}>
                         <Typography>
-                            <span className={classes.name}>{x.coin.name}</span>
+                            <span>{x.coin.name}</span>
                             <span className={classes.symbol}>({x.coin.symbol})</span>
                         </Typography>
                     </MenuItem>

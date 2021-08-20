@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
-import { Grid, makeStyles, Paper, Typography, useTheme } from '@material-ui/core'
-import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
+import { Grid, Paper, Typography, useTheme } from '@material-ui/core'
+import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import {
     formatBalance,
     formatWeiToGwei,
@@ -14,10 +14,7 @@ import {
 import { useI18N } from '../../utils'
 import { Image } from '../../components/shared/Image'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { useStylesExtends } from '../../components/custom-ui-helper'
 import { currentGasNowSettings } from '../../plugins/Wallet/settings'
-
-const useStyles = makeStyles(() => {})
 
 interface TxFeeEstimationProps extends withClasses<'label' | 'button' | 'data' | 'gasEstimation'> {
     gas?: number
@@ -30,7 +27,7 @@ export function TxFeeEstimation(props: TxFeeEstimationProps) {
     const theme = useTheme()
     const { gas } = props
     const _gasPrice = useGasPrice()
-    const classes = useStylesExtends(useStyles(), props)
+    const classes = useStylesExtends({}, props)
     const gasNow = useValueRef(currentGasNowSettings)
     const [type, setType] = useState<keyof GasNow>('fast')
     const chainId = useChainId()

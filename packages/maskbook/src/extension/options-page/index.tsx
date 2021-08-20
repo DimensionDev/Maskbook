@@ -4,8 +4,7 @@ import '../../setup.ui'
 import { useState } from 'react'
 import { useAsync } from 'react-use'
 import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
-
+import { makeStyles } from '@masknet/theme'
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined'
@@ -13,7 +12,7 @@ import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import PowerIcon from '@material-ui/icons/Power'
 import { HashRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom'
 
-import { useI18N, SSRRenderer, Flags, useMatchXS } from '../../utils'
+import { useI18N, createNormalReactRoot, Flags, useMatchXS } from '../../utils'
 
 import FooterLine from './DashboardComponents/FooterLine'
 import Drawer from './DashboardComponents/Drawer'
@@ -38,7 +37,7 @@ import { MaskUIRoot } from '../../UIRoot'
 import { createInjectHooksRenderer, startPluginDashboard, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     const dark = theme.palette.mode === 'dark'
     return {
         root: {
@@ -111,7 +110,7 @@ const useStyles = makeStyles((theme) => {
 
 function DashboardUI() {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const history = useHistory<unknown>()
     const xsMatched = useMatchXS()
     const routers = (
@@ -221,5 +220,5 @@ export function Dashboard() {
     )
 }
 
-export default SSRRenderer(<Dashboard />)
+export default createNormalReactRoot(<Dashboard />)
 startPluginDashboard(createPluginHost())

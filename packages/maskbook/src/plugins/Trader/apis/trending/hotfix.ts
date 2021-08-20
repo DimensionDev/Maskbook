@@ -1,5 +1,6 @@
 import { NetworkType } from '@masknet/web3-shared'
-import { DataProvider, TagType } from '../../types'
+import { TagType } from '../../types'
+import { DataProvider } from '@masknet/public-api'
 import MIRRORED_TOKENS from './mirrored_tokens.json'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
@@ -27,9 +28,7 @@ const BLACKLIST_MAP: {
 
 const KEYWORD_ALIAS_MAP: {
     [key in DataProvider]: {
-        [key in NetworkType]?: {
-            [key: string]: string
-        }
+        [key in NetworkType]?: Record<string, string>
     }
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
@@ -47,9 +46,7 @@ const KEYWORD_ALIAS_MAP: {
 
 const KEYWORK_ID_MAP: {
     [key in DataProvider]: {
-        [key in NetworkType]?: {
-            [key: string]: string
-        }
+        [key in NetworkType]?: Record<string, string>
     }
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
@@ -68,9 +65,7 @@ const KEYWORK_ID_MAP: {
 
 const ID_ADDRESS_MAP: {
     [key in DataProvider]: {
-        [key in NetworkType]?: {
-            [key: string]: string
-        }
+        [key in NetworkType]?: Record<string, string>
     }
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
@@ -78,20 +73,22 @@ const ID_ADDRESS_MAP: {
             '6747': '0x32a7c02e79c4ea1008dd6564b35f131428673c41', // CRUST
             '8536': '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074', // MASK
         },
+        [NetworkType.Polygon]: {
+            '8536': '0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7', // MASK
+        },
     },
     [DataProvider.COIN_GECKO]: {
         [NetworkType.Ethereum]: {
             'crust-network': '0x32a7c02e79c4ea1008dd6564b35f131428673c41', // CRUST
         },
+        [NetworkType.Polygon]: {
+            'mask-network': '0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7', // MASK
+        },
     },
     [DataProvider.UNISWAP_INFO]: {},
 }
 
-const ID_NETWORK_MAP: {
-    [key in DataProvider]: {
-        [key: string]: NetworkType
-    }
-} = {
+const ID_NETWORK_MAP: Record<DataProvider, Record<string, NetworkType>> = {
     [DataProvider.COIN_GECKO]: {
         ethereum: NetworkType.Ethereum,
         'binance-smart-chain': NetworkType.Binance,

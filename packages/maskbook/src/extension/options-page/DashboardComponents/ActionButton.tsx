@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
-import { Button, CircularProgress, makeStyles } from '@material-ui/core'
+import { Button, CircularProgress } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { ButtonProps } from '@material-ui/core/Button'
 import CheckIcon from '@material-ui/icons/Check'
 import ErrorIcon from '@material-ui/icons/Error'
@@ -9,12 +10,6 @@ import { useDebounce, useAsyncFn } from 'react-use'
 import { useErrorStyles } from '../../../utils/theme'
 
 const circle = <CircularProgress color="inherit" size={18} />
-
-enum ThrottledButtonState {
-    Normal = 1,
-    Clicked,
-    Loading,
-}
 
 interface DebounceButtonProps extends Omit<ButtonProps, 'color' | 'onClick'> {
     color?: ButtonProps['color'] | 'danger'
@@ -100,7 +95,7 @@ interface ActionButtonPromiseProps extends ButtonProps {
 }
 type ActionButtonPromiseState = 'init' | 'complete' | 'wait' | 'fail'
 export function ActionButtonPromise(props: ActionButtonPromiseProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const {
         executor,
         complete,
@@ -158,7 +153,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
         )
     return <Button {...b} children={init} onClick={run} />
 }
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     success: {
         backgroundColor: green[500],
         '&:hover': {

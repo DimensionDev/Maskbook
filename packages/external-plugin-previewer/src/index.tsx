@@ -8,15 +8,15 @@ export function MaskExternalPluginPreviewRenderer({ pluginBase, payload, script,
     const [dom, setDOM] = useState<HTMLDivElement | null>(null)
     useEffect(() => {
         if (!dom) return
-        dom.setAttribute('data-plugin', pluginBase)
+        dom.dataset.plugin = pluginBase
         // This is safe. ef template does not allow any form of dynamic code execute in the template.
         try {
             const RemoteContent = create(template)
             const instance = new RemoteContent({ $data: { payload } })
             instance.$mount({ target: dom })
             return () => instance.$destroy()
-        } catch (e) {
-            onError?.(e)
+        } catch (error: any) {
+            onError?.(error)
         }
         return
     }, [dom, onError, payload, template, pluginBase])

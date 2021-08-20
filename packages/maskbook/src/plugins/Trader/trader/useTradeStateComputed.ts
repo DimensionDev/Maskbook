@@ -1,5 +1,5 @@
 import { formatBalance } from '@masknet/web3-shared'
-import { TradeProvider, TradeStrategy } from '../types'
+import { TradeStrategy, TradeProvider } from '../types'
 import { useTradeComputed } from './useTradeComputed'
 import { useTradeState } from './useTradeState'
 

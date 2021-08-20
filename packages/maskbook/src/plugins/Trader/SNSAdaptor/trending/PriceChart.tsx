@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { makeStyles, Theme, CircularProgress, Typography } from '@material-ui/core'
+import { CircularProgress, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat } from '../../types'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
 import { usePriceLineChart } from '../../../hooks/usePriceLineChart'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 
 const DEFAULT_DIMENSION: Dimension = {
     top: 32,
@@ -17,11 +18,11 @@ const DEFAULT_DIMENSION: Dimension = {
     height: 200,
 }
 
-const useStyles = makeStyles((theme: Theme) => {
+const useStyles = makeStyles<PriceChartProps>()((theme, { stats, coin }) => {
     return {
         root: {
             position: 'relative',
-            cursor: ({ stats, coin }: PriceChartProps) => (stats.length && coin?.platform_url ? 'pointer' : 'default'),
+            cursor: stats.length && coin?.platform_url ? 'pointer' : 'default',
         },
         svg: {
             display: 'block',

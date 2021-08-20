@@ -1,7 +1,7 @@
 import { setDOMImpl } from 'ef.js'
 import type {} from 'react/next'
 import type {} from 'react-dom/next'
-import { createReactRootShadowedPartial, ReactRootShadowed } from '@masknet/shared'
+import { createReactRootShadowedPartial, ReactRootShadowed } from '@masknet/theme'
 import * as Components from './Components'
 
 const createReactRootShadowed = createReactRootShadowedPartial({
@@ -25,7 +25,7 @@ function createElement(element: string, options: ElementCreationOptions) {
     const isValid = _ !== unknown
     const [nativeTag, Component] = _
     const DOM = document.createElement(nativeTag)
-    DOM.setAttribute('data-kind', element)
+    DOM.dataset.kind = element
 
     const shadow = DOM.attachShadow({ mode: 'open' })
 

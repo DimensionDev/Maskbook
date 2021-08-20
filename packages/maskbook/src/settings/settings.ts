@@ -1,8 +1,9 @@
 import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
-import i18nNextInstance, { i18n } from '../utils/i18n-next'
+import { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { LaunchPage } from './types'
-import { Appearance, Language } from '@masknet/theme'
+import { Appearance } from '@masknet/theme'
+import { LanguageOptions } from '@masknet/public-api'
 
 /**
  * Does the debug mode on
@@ -11,18 +12,6 @@ export const debugModeSetting = createGlobalSettings<boolean>('debugMode', false
     primary: () => i18n.t('settings_enable_debug'),
     secondary: () => i18n.t('settings_enable_debug_desc'),
 })
-
-/**
- * Never open a new tab in the background
- */
-export const disableOpenNewTabInBackgroundSettings = createGlobalSettings<boolean>(
-    'disable automated tab task open new tab',
-    true,
-    {
-        primary: () => i18n.t('settings_ancient_post_compatibility_mode'),
-        secondary: () => i18n.t('settings_ancient_post_compatibility_mode_desc'),
-    },
-)
 
 /**
  * Whether if create substitute post for all posts
@@ -40,18 +29,11 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
 //#endregion
 
 //#region language
-const lang: string = i18nNextInstance.language
-export const languageSettings = createGlobalSettings<Language>(
-    'language',
-    lang in Language ? (lang as Language) : Language.en,
-    { primary: () => i18n.t('settings_language'), secondary: () => i18n.t('settings_language_secondary') },
-)
-//#endregion
-
-export const enableGroupSharingSettings = createGlobalSettings<boolean>('experimental/group-sharing@sept2020', false, {
-    primary: () => 'Experimental: Enable group sharing',
-    secondary: () => '(Unstable) Automatically share posts to a group',
+export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__, {
+    primary: () => i18n.t('settings_language'),
+    secondary: () => i18n.t('settings_language_secondary'),
 })
+//#endregion
 
 //#region network setting
 
@@ -72,6 +54,12 @@ export const currentSelectedIdentity: NetworkSettings<string> = createNetworkSet
 export const currentSetupGuideStatus: NetworkSettings<string> = createNetworkSettings('currentSetupGuideStatus', '')
 // This is a misuse of concept "NetworkSettings" as "namespaced settings"
 // The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884
+/**
+ * ! DO NOT use this directly to query the plugin status !
+ *
+ * use `useActivatedPluginsSNSAdaptor().find((x) => x.ID === PLUGIN_ID)` or
+ * `useActivatedPluginsDashboard().find((x) => x.ID === PLUGIN_ID)` instead
+ */
 export const currentPluginEnabledStatus: NetworkSettings<boolean> = createNetworkSettings('pluginsEnabled', true)
 export const currentImportingBackup = createGlobalSettings<boolean>('importingBackup', false, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
@@ -95,4 +83,12 @@ export const currentPersonaIdentifier = createGlobalSettings<string>('currentPer
 sideEffect.then(() => {
     // reset it to false after Mask startup
     currentImportingBackup.value = false
+
+    // Migrate language settings
+    const lng: string = languageSettings.value
+    if (lng === 'en') languageSettings.value = LanguageOptions.enUS
+    else if (lng === 'zh') languageSettings.value = LanguageOptions.zhCN
+    else if (lng === 'ja') languageSettings.value = LanguageOptions.jaJP
+    else if (lng === 'ko') languageSettings.value = LanguageOptions.koKR
+    else languageSettings.value = LanguageOptions.__auto__
 })

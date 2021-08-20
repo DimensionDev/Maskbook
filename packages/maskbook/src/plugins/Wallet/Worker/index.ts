@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { base } from '../base'
+import { base } from '@masknet/plugin-wallet'
 import '../messages'
 
 const worker: Plugin.Worker.Definition = {

@@ -1,11 +1,10 @@
 import { useState, useCallback } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import { Theme, IconButton } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
+import { IconButton } from '@material-ui/core'
 import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { setStorage } from '../../utils/browser.storage'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { DashboardRoute } from '../../extension/options-page/Route'
 import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
 import { useMount } from 'react-use'
@@ -22,17 +21,15 @@ interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'acti
               onChange(nextValue: string): void
           }
 }
-const useStyles = makeStyles((theme: Theme) => {
-    return {
-        buttonText: {
-            width: 38,
-            height: 38,
-            margin: '10px 0',
-        },
-        span: {
-            paddingLeft: 8,
-        },
-    }
+const useStyles = makeStyles()({
+    buttonText: {
+        width: 38,
+        height: 38,
+        margin: '10px 0',
+    },
+    span: {
+        paddingLeft: 8,
+    },
 })
 
 export function BannerUI(props: BannerUIProps) {
@@ -59,7 +56,6 @@ export function Banner(props: BannerProps) {
             nextStep ?? console.warn('You must provide one of networkIdentifier or nextStep.onClick')
             return
         }
-        setStorage(networkIdentifier, { forceDisplayWelcome: false })
         Services.Welcome.openOptionsPage(DashboardRoute.Setup)
     }, [networkIdentifier, nextStep])
     const defaultUserName = networkIdentifier

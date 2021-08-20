@@ -4,16 +4,15 @@ import { useSnackbar } from '@masknet/theme'
 import classNames from 'classnames'
 import {
     Typography,
-    Theme,
     TextField,
     Fade,
     Checkbox,
     Link as MuiLink,
-    makeStyles,
     ThemeProvider,
     InputBase,
     FormControlLabel,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { green } from '@material-ui/core/colors'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
 
@@ -39,7 +38,7 @@ import { Identifier, ECKeyIdentifier } from '../../../database/type'
 import { useMyPersonas, useMyUninitializedPersonas } from '../../../components/DataSource/useMyPersonas'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { DashboardRoute } from '../Route'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import type { Persona } from '../../../database'
 import { RestoreFromQRCodeImageBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'
 import { RestoreFromBackupBox } from '../DashboardComponents/RestoreFromBackupBox'
@@ -48,7 +47,7 @@ import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQR
 import { SetupStep } from '../SetupStep'
 
 //#region setup form
-const useSetupFormStyles = makeStyles((theme) => ({
+const useSetupFormStyles = makeStyles()((theme) => ({
     wrapper: {
         flex: 1,
         display: 'flex',
@@ -120,7 +119,7 @@ const useSetupFormStyles = makeStyles((theme) => ({
     },
 }))
 
-interface SetupFormProps extends withClasses<never> {
+interface SetupFormProps extends withClasses<'form'> {
     primary: string
     secondary?: string
     content?: React.ReactNode
@@ -153,7 +152,7 @@ function SetupForm(props: SetupFormProps) {
 //#endregion
 
 //#region consent data collection
-const useConsentDataCollectionStyles = makeStyles((theme) => ({
+const useConsentDataCollectionStyles = makeStyles()((theme) => ({
     form: {
         color: theme.palette.text.primary,
         fontSize: 16,
@@ -174,8 +173,7 @@ const useConsentDataCollectionStyles = makeStyles((theme) => ({
 
 export function ConsentDataCollection() {
     const { t } = useI18N()
-    const setupFormClasses = useSetupFormStyles()
-    const consentDataCollection = useConsentDataCollectionStyles()
+    const { classes: consentDataCollection } = useConsentDataCollectionStyles()
     const [checked, setChecked] = useState(false)
     return (
         <SetupForm
@@ -224,16 +222,15 @@ export function ConsentDataCollection() {
 //#endregion
 
 //#region create persona
-const userCreatePersonaStyles = makeStyles((theme) => ({
+const userCreatePersonaStyles = makeStyles()({
     form: {
         minHeight: 130,
     },
-}))
-
+})
 export function CreatePersona() {
     const { t } = useI18N()
-    const setupFormClasses = useSetupFormStyles()
-    const createPersonaClasses = userCreatePersonaStyles()
+    const { classes: setupFormClasses } = useSetupFormStyles()
+    const { classes: createPersonaClasses } = userCreatePersonaStyles()
     const [name, setName] = useState('')
     const history = useHistory<unknown>()
 
@@ -249,37 +246,35 @@ export function CreatePersona() {
             primary={t('set_up_create_persona')}
             secondary={t('set_up_create_persona_hint')}
             content={
-                <>
-                    <TextField
-                        required
-                        autoFocus
-                        className={setupFormClasses.input}
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                e.preventDefault()
-                                if (!checkInputLengthExceed(name) && name.length > 0) {
-                                    createPersonaAndNext()
-                                }
+                <TextField
+                    required
+                    autoFocus
+                    className={setupFormClasses.input}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault()
+                            if (!checkInputLengthExceed(name) && name.length > 0) {
+                                createPersonaAndNext()
                             }
-                        }}
-                        label={t('name')}
-                        helperText={
-                            checkInputLengthExceed(name)
-                                ? t('input_length_exceed_prompt', {
-                                      name: t('persona_name').toLowerCase(),
-                                      length: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                                  })
-                                : undefined
                         }
-                        inputProps={{
-                            'data-testid': 'username_input',
-                            maxLength: WALLET_OR_PERSONA_NAME_MAX_LEN,
-                        }}
-                        variant="outlined"
-                    />
-                </>
+                    }}
+                    label={t('name')}
+                    helperText={
+                        checkInputLengthExceed(name)
+                            ? t('input_length_exceed_prompt', {
+                                  name: t('persona_name').toLowerCase(),
+                                  length: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                              })
+                            : undefined
+                    }
+                    inputProps={{
+                        'data-testid': 'username_input',
+                        maxLength: WALLET_OR_PERSONA_NAME_MAX_LEN,
+                    }}
+                    variant="outlined"
+                />
             }
             actions={
                 <>
@@ -309,7 +304,7 @@ export function CreatePersona() {
 //#endregion
 
 //#region connect network
-const useProviderLineStyle = makeStyles((theme: Theme) => ({
+const useProviderLineStyle = makeStyles()((theme) => ({
     text: {
         border: `solid 1px ${theme.palette.divider}`,
         borderRadius: 3,
@@ -318,8 +313,8 @@ const useProviderLineStyle = makeStyles((theme: Theme) => ({
 
 export function ConnectNetwork() {
     const { t } = useI18N()
-    const classes = useSetupFormStyles()
-    const providerLineClasses = useProviderLineStyle()
+    const { classes } = useSetupFormStyles()
+    const { classes: providerLineClasses } = useProviderLineStyle()
     const history = useHistory<unknown>()
 
     const [persona, setPersona] = useState<Persona | null>(null)
@@ -390,7 +385,7 @@ export function ConnectNetwork() {
 //#endregion
 
 //#region restore
-const useRestoreDatabaseStyle = makeStyles((theme) => ({
+const useRestoreDatabaseStyle = makeStyles()((theme) => ({
     file: {
         display: 'none',
     },
@@ -423,8 +418,8 @@ const useRestoreDatabaseStyle = makeStyles((theme) => ({
 export function RestoreDatabase() {
     const { t } = useI18N()
     const history = useHistory<unknown>()
-    const classes = useSetupFormStyles()
-    const restoreDatabaseClasses = useRestoreDatabaseStyle()
+    const { classes } = useSetupFormStyles()
+    const { classes: restoreDatabaseClasses } = useRestoreDatabaseStyle()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
     const [file, setFile] = useState<File | null>(null)
@@ -456,7 +451,7 @@ export function RestoreDatabase() {
                     <InputBase
                         className={restoreDatabaseClasses.input}
                         placeholder={t('dashboard_paste_database_backup_hint')}
-                        inputRef={(input: HTMLInputElement) => input && input.focus()}
+                        inputRef={(input: HTMLInputElement) => input?.focus()}
                         multiline
                         value={textValue}
                         onChange={(e) => setTextValue(e.target.value)}
@@ -491,7 +486,7 @@ export function RestoreDatabase() {
             restoreParams.append('uuid', restoreId)
             await Services.Welcome.setUnconfirmedBackup(restoreId, json)
             history.push(`${SetupStep.RestoreDatabaseConfirmation}?${restoreParams.toString()}`)
-        } catch (e) {
+        } catch {
             enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
         }
     }
@@ -542,9 +537,7 @@ export function RestoreDatabaseAdvance() {
     const { t } = useI18N()
     const { enqueueSnackbar } = useSnackbar()
     const history = useHistory<unknown>()
-
-    const classes = useSetupFormStyles()
-
+    const { classes } = useSetupFormStyles()
     const [nickname, setNickname] = useState('')
     const [mnemonicWordsValue, setMnemonicWordsValue] = useState('')
     const [password, setPassword] = useState('')
@@ -569,7 +562,7 @@ export function RestoreDatabaseAdvance() {
             } else {
                 failToRestore()
             }
-        } catch (e) {
+        } catch {
             failToRestore()
         }
     }
@@ -691,10 +684,8 @@ export function RestoreDatabaseAdvance() {
                                     : Services.Identity.restoreFromBackup(scannedValue))
 
                                 importPersona(persona)
-                            } catch (e) {
-                                enqueueSnackbar(t('set_up_advance_restore_fail'), {
-                                    variant: 'error',
-                                })
+                            } catch {
+                                enqueueSnackbar(t('set_up_advance_restore_fail'), { variant: 'error' })
                             }
                         }}
                         data-testid="import_button">
@@ -715,7 +706,7 @@ export function RestoreDatabaseAdvance() {
 //#endregion
 
 //#region restore database confirmation
-const useRestoreDatabaseConfirmationStyles = makeStyles((theme: Theme) => ({
+const useRestoreDatabaseConfirmationStyles = makeStyles()((theme) => ({
     databasePreviewCardTable: {
         width: 432,
         border: `solid 1px ${theme.palette.divider}`,
@@ -740,10 +731,10 @@ const useRestoreDatabaseConfirmationStyles = makeStyles((theme: Theme) => ({
 
 export function RestoreDatabaseConfirmation() {
     const { t } = useI18N()
-    const classes = useSetupFormStyles()
-    const restoreDatabaseConfirmationClasses = useRestoreDatabaseConfirmationStyles()
+    const { classes } = useSetupFormStyles()
+    const { classes: restoreDatabaseConfirmationClasses } = useRestoreDatabaseConfirmationStyles()
     const history = useHistory<unknown>()
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { uuid } = useQueryParams(['uuid'])
     const [imported, setImported] = useState<boolean | 'loading'>(false)
@@ -753,13 +744,11 @@ export function RestoreDatabaseConfirmation() {
     const personas = backup?.personas.length ?? 0
     const profiles = backup?.profiles.length ?? 0
     const posts = backup?.posts.length ?? 0
-    const contacts = backup?.userGroups.length ?? 0
     const wallets = backup?.wallets.length ?? 0
     const records = [
         { type: DatabaseRecordType.Persona, length: personas, checked: imported === true },
         { type: DatabaseRecordType.Profile, length: profiles, checked: imported === true },
         { type: DatabaseRecordType.Post, length: posts, checked: imported === true },
-        { type: DatabaseRecordType.Group, length: contacts, checked: imported === true },
         { type: DatabaseRecordType.Wallet, length: wallets, checked: imported === true },
     ]
 
@@ -779,7 +768,7 @@ export function RestoreDatabaseConfirmation() {
                 setImported('loading')
                 await Services.Welcome.confirmBackup(uuid)
                 setImported(true)
-            } catch (e) {
+            } catch {
                 failToRestore()
                 setImported(false)
             }

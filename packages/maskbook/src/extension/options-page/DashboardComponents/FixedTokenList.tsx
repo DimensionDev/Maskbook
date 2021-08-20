@@ -1,29 +1,24 @@
 import {
     currySameAddress,
-    EthereumTokenType,
     FungibleTokenDetailed,
-    isSameAddress,
-    TokenListsState,
+    makeSortAssertFn,
+    makeSortTokenFn,
     useAccount,
-    useAssetsFromChain,
+    useAssetsByTokenList,
+    useChainId,
+    useERC20TokenDetailed,
     useERC20TokensDetailedFromTokenLists,
     useEthereumConstants,
-    useTokenConstants,
+    useTrustedERC20Tokens,
 } from '@masknet/web3-shared'
-import { makeStyles, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { TokenInList } from './TokenInList'
 import { EthereumAddress } from 'wallet.ts'
-
-const useStyles = makeStyles((theme) => ({
-    list: {},
-    placeholder: {},
-}))
-
-export interface FixedTokenListProps extends withClasses<never> {
+export interface FixedTokenListProps extends withClasses<'list' | 'placeholder'> {
     keyword?: string
     whitelist?: string[]
     blacklist?: string[]
@@ -34,8 +29,10 @@ export interface FixedTokenListProps extends withClasses<never> {
 }
 
 export function FixedTokenList(props: FixedTokenListProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const classes = useStylesExtends({}, props)
     const account = useAccount()
+    const chainId = useChainId()
+    const trustedERC20Tokens = useTrustedERC20Tokens()
 
     const {
         keyword,
@@ -49,12 +46,17 @@ export function FixedTokenList(props: FixedTokenListProps) {
 
     const [address, setAddress] = useState('')
     const { ERC20_TOKEN_LISTS } = useEthereumConstants()
-    const { MASK_ADDRESS } = useTokenConstants()
 
-    const { state, tokensDetailed: erc20TokensDetailed } = useERC20TokensDetailedFromTokenLists(
-        ERC20_TOKEN_LISTS,
-        keyword,
-    )
+    const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
+        useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS, keyword, trustedERC20Tokens)
+
+    //#region add token by address
+    const matchedTokenAddress = useMemo(() => {
+        if (!keyword || !EthereumAddress.isValid(keyword) || erc20TokensDetailed.length) return
+        return keyword
+    }, [keyword, erc20TokensDetailed.length])
+    const { value: searchedToken, loading: searchedTokenLoading } = useERC20TokenDetailed(matchedTokenAddress ?? '')
+    //#endregion
 
     const filteredTokens = erc20TokensDetailed.filter(
         (token) =>
@@ -62,32 +64,24 @@ export function FixedTokenList(props: FixedTokenListProps) {
             (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
     )
 
-    const commonTokenSort = (a: FungibleTokenDetailed, b: FungibleTokenDetailed) => {
-        if (a.type === EthereumTokenType.Native) return -1
-        if (b.type === EthereumTokenType.Native) return 1
-        if (isSameAddress(a.address, MASK_ADDRESS ?? '')) return -1
-        if (isSameAddress(b.address, MASK_ADDRESS ?? '')) return 1
-        return 0
-    }
-
-    const renderTokens = uniqBy([...tokens, ...filteredTokens], (x) => x.address.toLowerCase())
+    const renderTokens = uniqBy([...tokens, ...filteredTokens, ...(searchedToken ? [searchedToken] : [])], (x) =>
+        x.address.toLowerCase(),
+    )
 
     const {
-        loading: loadingAssets,
         value: assets,
-        error,
-    } = useAssetsFromChain(renderTokens.filter((x) => EthereumAddress.isValid(x.address)))
+        loading: assetsLoading,
+        error: assetsError,
+    } = useAssetsByTokenList(renderTokens.filter((x) => EthereumAddress.isValid(x.address)))
 
     const renderAssets =
-        error || !account || loadingAssets
-            ? renderTokens.sort(commonTokenSort).map((token) => ({ token: token, balance: null }))
-            : assets.sort((a, b) => {
-                  const tokenOrder = commonTokenSort(a.token, b.token)
-                  if (tokenOrder !== 0) return tokenOrder
-                  if (a.balance > b.balance) return -1
-                  if (a.balance < b.balance) return 1
-                  return 0
-              })
+        !account || assetsError || assetsLoading
+            ? [...renderTokens]
+                  .sort(makeSortTokenFn(chainId, { isMaskBoost: true }))
+                  .map((token) => ({ token: token, balance: null }))
+            : !!keyword
+            ? assets
+            : [...assets].sort(makeSortAssertFn(chainId, { isMaskBoost: true }))
 
     //#region UI helpers
     const renderPlaceholder = (message: string) => (
@@ -97,9 +91,11 @@ export function FixedTokenList(props: FixedTokenListProps) {
     )
     //#endregion
 
-    if (state === TokenListsState.LOADING_TOKEN_LISTS) return renderPlaceholder('Loading token lists...')
-    if (state === TokenListsState.LOADING_SEARCHED_TOKEN) return renderPlaceholder('Loading token...')
-    if (!renderAssets.length) return renderPlaceholder('No token found')
+    if (erc20TokensDetailedLoading) return renderPlaceholder('Loading token lists...')
+    if (searchedTokenLoading) return renderPlaceholder('Loading token...')
+    if (assetsLoading) return renderPlaceholder('Loading token assets...')
+    if (!renderAssets.length)
+        return renderPlaceholder('No results or contract address does not meet the query criteria.')
 
     return (
         <FixedSizeList

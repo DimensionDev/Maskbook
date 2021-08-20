@@ -1,7 +1,3 @@
-import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
-import { usernameValidator } from './user'
-import { i18n } from '../../../utils/i18n-next'
-
 export const twitterUrl = {
     hostIdentifier: 'twitter.com',
     hostLeadingUrl: 'https://twitter.com',
@@ -10,17 +6,6 @@ export const twitterUrl = {
 
 export const hostLeadingUrlAutoTwitter = (isMobile: boolean) =>
     isMobile ? twitterUrl.hostLeadingUrlMobile : twitterUrl.hostLeadingUrl
-
-export const getPostUrlAtTwitter = (post: PostIdentifier<ProfileIdentifier>, isMobile: boolean = false) => {
-    if (!usernameValidator(post.identifier.userId)) throw new Error(i18n.t('service_username_invalid'))
-    return `${hostLeadingUrlAutoTwitter(isMobile)}/${post.identifier.userId}/status/${post.postId}`
-}
-
-export const getProfileUrlAtTwitter = (self: ProfileIdentifier, isMobile: boolean = false) => {
-    return isMobile
-        ? `${hostLeadingUrlAutoTwitter(isMobile)}/account`
-        : `${hostLeadingUrlAutoTwitter(isMobile)}/${self.userId}`
-}
 
 // more about twitter photo url formating: https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/entities-object#photo_format
 export const canonifyImgUrl = (url: string) => {

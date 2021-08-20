@@ -1,16 +1,16 @@
 import { resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared'
-import { Avatar, Button, Grid, Link, makeStyles, Typography } from '@material-ui/core'
+import { Avatar, Button, Grid, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useAvatar } from '../hooks/useManager'
-import { usePoolURL } from '../hooks/useUrl'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
     },
@@ -55,28 +55,26 @@ const useStyles = makeStyles((theme) => ({
 interface PoolDeckProps {
     pool: Pool
     inputTokens: string[] | undefined
+    link: string
 }
 
 export function PoolViewDeck(props: PoolDeckProps) {
-    const { pool, inputTokens } = props
-
-    const classes = useStyles()
+    const { pool, inputTokens, link } = props
+    const { classes } = useStyles()
     const { t } = useI18N()
 
     const blockie = useAvatar(pool.managerAddress)
     const chainId = useChainId()
-    const poolUrl = usePoolURL(pool.address)
 
     //#region manager share
     const managerShare = new BigNumber(pool.balanceOfManager)
         .dividedBy(pool.totalSupply)
         .multipliedBy(100)
         .integerValue(BigNumber.ROUND_UP)
-
     //#endregion
 
     //#region the invest dialog
-    const { setDialog: openInvestDialog } = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated)
+    const { setDialog: openInvestDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated)
     const onInvest = useCallback(() => {
         if (!pool || !inputTokens) return
         openInvestDialog({
@@ -84,19 +82,19 @@ export function PoolViewDeck(props: PoolDeckProps) {
             pool: pool,
             tokens: inputTokens,
         })
-    }, [pool, openInvestDialog])
+    }, [pool, inputTokens, openInvestDialog])
     //#endregion
 
     return (
         <Grid container className={classes.meta} direction="row">
             <Grid item alignSelf="center" xs={2}>
-                <Link target="_blank" rel="noopener noreferrer" href={poolUrl}>
+                <Link target="_blank" rel="noopener noreferrer" href={link}>
                     <Avatar src={blockie} className={classes.avatar} />
                 </Link>
             </Grid>
             <Grid item xs={6}>
                 <div className={classes.title}>
-                    <Link color="primary" target="_blank" rel="noopener noreferrer" href={poolUrl}>
+                    <Link color="primary" target="_blank" rel="noopener noreferrer" href={link}>
                         <Typography variant="h6">{pool.name.toUpperCase()}</Typography>
                     </Link>
                 </div>
@@ -122,15 +120,19 @@ export function PoolViewDeck(props: PoolDeckProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body2" color="textSecondary" className={classes.text}>
-                            <Trans
-                                i18nKey="plugin_dhedge_manager_share"
-                                components={{
-                                    share: <span />,
-                                }}
-                                values={{
-                                    managerShare: managerShare,
-                                }}
-                            />
+                            {managerShare.isLessThanOrEqualTo(50) ? (
+                                <Trans
+                                    i18nKey="plugin_dhedge_manager_share"
+                                    components={{
+                                        share: <span />,
+                                    }}
+                                    values={{
+                                        managerShare: managerShare,
+                                    }}
+                                />
+                            ) : (
+                                t('plugin_dhedge_manager_share_more_than_50')
+                            )}
                         </Typography>
                     </Grid>
                 </Grid>

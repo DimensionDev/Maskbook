@@ -1,9 +1,10 @@
-import { makeStyles, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { DashboardDialogCore, WrappedDialogProps } from './Base'
 import { useI18N, delay } from '../../../utils'
 import { QRCodeVideoScanner } from '../DashboardComponents/QRCodeVideoScanner'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'relative',
     },
@@ -51,8 +52,7 @@ export function QRCodeVideoScannerDialog(props: WrappedDialogProps) {
     const { deviceId, onScan, onError } = props.ComponentProps! as QRCodeVideoScannerDialogProps
 
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <DashboardDialogCore
             {...props}

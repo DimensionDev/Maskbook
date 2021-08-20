@@ -1,45 +1,53 @@
-import { isNil } from 'lodash-es'
+import { NetworkType, pow10, PortfolioProvider } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
+import { isNil } from 'lodash-es'
+import * as DeBankAPI from '../apis/debank'
+import * as ZerionApi from '../apis/zerion'
+import { resolveDebankChainName, resolveDebankTransactionType, resolveZerionTransactionsScopeName } from '../pipes'
 import {
     DebankTransactionDirection,
     HistoryResponse,
-    PortfolioProvider,
     Transaction,
     ZerionRBDTransactionType,
     ZerionTransactionItem,
     ZerionTransactionStatus,
 } from '../types'
-import * as DeBankAPI from '../apis/debank'
-import * as ZerionApi from '../apis/zerion'
-import { NetworkType, pow10 } from '@masknet/web3-shared'
 
 export async function getTransactionList(
     address: string,
     network: NetworkType,
     provider: PortfolioProvider,
     page?: number,
+    size = 30,
 ): Promise<{
     transactions: Transaction[]
     hasNextPage: boolean
 }> {
     if (provider === PortfolioProvider.DEBANK) {
-        const { data, error_code } = await DeBankAPI.getTransactionList(address, network)
+        const name = resolveDebankChainName(network)
+        if (!name)
+            return {
+                transactions: [],
+                hasNextPage: false,
+            }
+        const { data, error_code } = await DeBankAPI.getTransactionList(address, name)
         if (error_code !== 0) throw new Error('Fail to load transactions.')
         return {
             transactions: fromDeBank(data),
             hasNextPage: false,
         }
     } else if (provider === PortfolioProvider.ZERION) {
-        if (network !== NetworkType.Ethereum)
+        const scope = resolveZerionTransactionsScopeName(network)
+        if (!scope)
             return {
                 transactions: [],
                 hasNextPage: false,
             }
-        const { payload, meta } = await ZerionApi.getTransactionList(address, page)
+        const { payload, meta } = await ZerionApi.getTransactionList(address, scope, page)
         if (meta.status !== 'ok') throw new Error('Fail to load transactions.')
         return {
             transactions: fromZerion(payload.transactions),
-            hasNextPage: payload.transactions.length === 30,
+            hasNextPage: payload.transactions.length === size,
         }
     }
     return {
@@ -86,7 +94,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['da
                 gasFee: transaction.tx
                     ? { eth: transaction.tx.eth_gas_fee, usd: transaction.tx.usd_gas_fee }
                     : undefined,
-                transactionType: transaction.cate_id,
+                transactionType: resolveDebankTransactionType(transaction.cate_id),
             }
         })
 }

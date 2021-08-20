@@ -9,15 +9,16 @@ import {
     useITOConstants,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import { Box, CircularProgress, makeStyles, TextField, Typography } from '@material-ui/core'
+import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import CheckIcon from '@material-ui/icons/Check'
 import UnCheckIcon from '@material-ui/icons/Close'
 import classNames from 'classnames'
-import { format as formatDateTime } from 'date-fns'
+import formatDateTime from 'date-fns/format'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { sliceTextByUILength, useI18N } from '../../../utils'
@@ -32,7 +33,7 @@ import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     line: {
         margin: theme.spacing(1),
         paddingBottom: theme.spacing(2),
@@ -162,7 +163,7 @@ export function CreateForm(props: CreateFormProps) {
     const onTotalOfPerWalletChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
         const total = ev.currentTarget.value
         if (total === '') setTotalOfPerWallet('')
-        if (/^\d+[\.]?\d*$/.test(total)) {
+        if (/^\d+\.?\d*$/.test(total)) {
             setTotalOfPerWallet(total)
         }
     }, [])

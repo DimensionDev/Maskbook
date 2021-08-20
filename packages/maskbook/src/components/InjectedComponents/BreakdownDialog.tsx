@@ -1,15 +1,14 @@
 import { useState } from 'react'
 import { DialogContent, Typography } from '@material-ui/core'
 import { InjectedDialog, InjectedDialogProps } from '../shared/InjectedDialog'
-import { makeStyles } from '@material-ui/core/styles'
-import { useStylesExtends } from '../custom-ui-helper'
+import { makeStyles } from '@masknet/theme'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
-import { FormattedBalance } from '@masknet/shared'
+import { FormattedBalance, useStylesExtends } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
 import { ITO_Card } from '../../plugins/ITO/SNSAdaptor/ITO_Card'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     dialogPaper: {
         background: 'linear-gradient(180.43deg, #04277B 26.69%, #6B94F2 99.57%)',
     },
@@ -50,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-interface BreakdownDialogUIProps extends withClasses<never>, InjectedDialogProps {
+interface BreakdownDialogUIProps extends InjectedDialogProps {
     token: ERC20TokenDetailed
     balance: string
     onUpdateBalance: () => void

@@ -5,10 +5,9 @@
     "tasks": [
         {
             "type": "npm",
-            "script": "ts",
+            "script": "codegen",
             "problemMatcher": ["$tsc-watch"],
             "label": "Background TypeScript compiler",
-            "detail": "dev -- echo Starting TypeScript compiler...",
             "isBackground": true,
             "group": "build",
             "presentation": {

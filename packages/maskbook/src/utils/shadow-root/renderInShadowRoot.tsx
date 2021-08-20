@@ -2,7 +2,7 @@ import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 import { applyMaskColorVars } from '@masknet/theme'
 import { appearanceSettings } from '../../settings/settings'
 import { getMaskbookTheme } from '../theme'
-import { createReactRootShadowedPartial, disableJSSDisconnectedWarning, setupPortalShadowRoot } from '@masknet/shared'
+import { createReactRootShadowedPartial, disableJSSDisconnectedWarning, setupPortalShadowRoot } from '@masknet/theme'
 import { untilDomLoaded } from '../dom'
 import { Flags } from '../flags'
 import { MaskInShadow } from './MaskInShadow'
@@ -16,7 +16,6 @@ const captureEvents: (keyof HTMLElementEventMap)[] = [
     'drag',
     'dragend',
     'dragenter',
-    'dragexit',
     'dragleave',
     'dragover',
     'dragstart',

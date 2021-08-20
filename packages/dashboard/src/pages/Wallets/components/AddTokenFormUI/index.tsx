@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { useDashboardI18N } from '../../../../locales'
-import { Button, DialogActions, DialogContent, makeStyles, TextField } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, TextField } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 import { useFormContext, Controller } from 'react-hook-form'
 
@@ -10,7 +11,7 @@ export interface AddTokenFormUIProps {
     token?: ERC20TokenDetailed
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(3.5, 5, 5),
         minWidth: 600,
@@ -42,8 +43,7 @@ type AddTokenFormData = {
 
 export const AddTokenFormUI = memo<AddTokenFormUIProps>(({ token, onClose, onNext }) => {
     const t = useDashboardI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const {
         formState: { errors, isValid },
     } = useFormContext<AddTokenFormData>()

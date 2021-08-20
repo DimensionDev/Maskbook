@@ -1,9 +1,17 @@
 import type { PostRecord, RecipientDetail, RecipientReason } from '../../../../../database/post'
 import type { BackupJSONFileLatest } from '../latest'
 import type { RecipientReasonJSON } from '../version-2'
-import { GroupIdentifier, Identifier, PostIVIdentifier, ProfileIdentifier } from '../../../../../database/type'
+import {
+    ECKeyIdentifier,
+    GroupIdentifier,
+    Identifier,
+    PostIVIdentifier,
+    ProfileIdentifier,
+} from '../../../../../database/type'
 import { IdentifierMap } from '../../../../../database/IdentifierMap'
-import { unreachable } from '@dimensiondev/kit'
+import { encodeArrayBuffer, decodeArrayBuffer, unreachable } from '@dimensiondev/kit'
+import { encode, decode } from '@msgpack/msgpack'
+import type { TypedMessage } from '@masknet/shared-base'
 
 export function PostRecordToJSONFormat(post: PostRecord): BackupJSONFileLatest['posts'][0] {
     return {
@@ -11,7 +19,7 @@ export function PostRecordToJSONFormat(post: PostRecord): BackupJSONFileLatest['
         foundAt: post.foundAt.getTime(),
         identifier: post.identifier.toText(),
         postBy: post.postBy.toText(),
-        recipientGroups: post.recipientGroups.map((x) => x.toText()),
+        recipientGroups: [],
         recipients: Array.from(post.recipients).map(
             ([identifier, detail]): [string, { reason: RecipientReasonJSON[] }] => [
                 identifier.toText(),
@@ -20,6 +28,10 @@ export function PostRecordToJSONFormat(post: PostRecord): BackupJSONFileLatest['
                 },
             ],
         ),
+        encryptBy: post.encryptBy?.toText(),
+        interestedMeta: MetaToJson(post.interestedMeta),
+        summary: post.summary,
+        url: post.url,
     }
 }
 
@@ -29,7 +41,6 @@ export function PostRecordFromJSONFormat(post: BackupJSONFileLatest['posts'][0])
         foundAt: new Date(post.foundAt),
         identifier: Identifier.fromString(post.identifier, PostIVIdentifier).unwrap(),
         postBy: Identifier.fromString(post.postBy, ProfileIdentifier).unwrap(),
-        recipientGroups: post.recipientGroups.map((x) => Identifier.fromString(x, GroupIdentifier).unwrap()),
         recipients: new IdentifierMap<ProfileIdentifier, RecipientDetail>(
             new Map<string, RecipientDetail>(
                 post.recipients.map(([x, y]) => [
@@ -38,6 +49,10 @@ export function PostRecordFromJSONFormat(post: BackupJSONFileLatest['posts'][0])
                 ]),
             ),
         ),
+        encryptBy: post.encryptBy ? Identifier.fromString(post.encryptBy, ECKeyIdentifier).unwrap() : undefined,
+        interestedMeta: MetaFromJson(post.interestedMeta),
+        summary: post.summary,
+        url: post.url,
     }
 }
 
@@ -56,4 +71,15 @@ function RecipientReasonFromJSON(y: RecipientReasonJSON): RecipientReason {
             group: Identifier.fromString(y.group, GroupIdentifier).unwrap(),
         }
     return unreachable(y)
+}
+function MetaToJson(meta: undefined | TypedMessage['meta']): undefined | string {
+    if (!meta) return undefined
+    const obj = Object.fromEntries(meta)
+    return encodeArrayBuffer(encode(obj))
+}
+function MetaFromJson(meta: string | undefined): undefined | TypedMessage['meta'] {
+    if (!meta) return undefined
+    const raw = decode(decodeArrayBuffer(meta))
+    if (typeof raw !== 'object' || !raw) return undefined
+    return new Map(Object.entries(raw))
 }

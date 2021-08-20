@@ -16,8 +16,8 @@ export function pollingTask(
         let stop = false
         try {
             stop = await task()
-        } catch (e) {
-            console.error(e)
+        } catch (error) {
+            console.error(error)
         }
         if (!stop) resetTask()
     }

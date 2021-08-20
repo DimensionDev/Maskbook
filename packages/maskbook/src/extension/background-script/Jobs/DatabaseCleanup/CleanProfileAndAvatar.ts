@@ -1,11 +1,11 @@
 import { createAvatarDBAccess, queryAvatarOutdatedDB, deleteAvatarsDB } from '../../../../database/avatar'
 import { createTransaction } from '../../../../database/helpers/openDB'
 import { consistentPersonaDBWriteAccess } from '../../../../database/Persona/Persona.db'
-import { Identifier, ProfileIdentifier, GroupIdentifier } from '../../../../database/type'
+import { Identifier, ProfileIdentifier } from '../../../../database/type'
 import { IdentifierMap } from '../../../../database/IdentifierMap'
 import { untilDocumentReady } from '../../../../utils'
 
-async function cleanAvatarDB(anotherList: IdentifierMap<ProfileIdentifier | GroupIdentifier, undefined>) {
+async function cleanAvatarDB(anotherList: IdentifierMap<ProfileIdentifier, undefined>) {
     const t = createTransaction(await createAvatarDBAccess(), 'readwrite')('avatars', 'metadata')
     const outdated = await queryAvatarOutdatedDB('lastAccessTime', t)
     for (const each of outdated) {
@@ -19,11 +19,7 @@ export default async function cleanProfileWithNoLinkedPersona(signal: AbortSigna
     const timeout = setTimeout(cleanProfileWithNoLinkedPersona, 1000 * 60 * 60 * 24 /** 1 day */)
     signal.addEventListener('abort', () => clearTimeout(timeout))
 
-    const cleanedList = new IdentifierMap<ProfileIdentifier | GroupIdentifier, undefined>(
-        new Map(),
-        ProfileIdentifier,
-        GroupIdentifier,
-    )
+    const cleanedList = new IdentifierMap<ProfileIdentifier, undefined>(new Map(), ProfileIdentifier)
     const expired = new Date(Date.now() - 1000 * 60 * 60 * 24 * 14 /** days */)
     await consistentPersonaDBWriteAccess(async (t) => {
         if (signal.aborted) throw new Error('Abort')

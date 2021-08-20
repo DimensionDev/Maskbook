@@ -109,7 +109,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         let signedPassword = ''
         try {
             signedPassword = await web3.eth.personal.sign(password, account, '')
-        } catch (e) {
+        } catch {
             signedPassword = ''
         }
         if (!signedPassword) {
@@ -280,8 +280,8 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
             .estimateGas({
                 from: account,
             })
-            .catch((err: Error) => {
-                gasError = err
+            .catch((error: Error) => {
+                gasError = error
             })) as number | undefined
 
         return { gas, params, paramsObj, gasError }
