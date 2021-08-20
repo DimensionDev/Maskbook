@@ -7,7 +7,7 @@ import {
     Grid,
     IconButton,
     Drawer,
-    experimentalStyled as styled,
+    styled,
     Box,
     paperClasses,
 } from '@material-ui/core'

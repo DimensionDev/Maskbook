@@ -1,5 +1,5 @@
 import { Box, Button, IconButton, Typography } from '@material-ui/core'
-import { Alert, AlertTitle, experimentalStyled as styled } from '@material-ui/core'
+import { Alert, AlertTitle, styled } from '@material-ui/core'
 import { useMemo, useState } from 'react'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'

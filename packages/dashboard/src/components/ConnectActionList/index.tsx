@@ -1,4 +1,4 @@
-import { experimentalStyled as styled, listItemClasses } from '@material-ui/core'
+import { styled, listItemClasses } from '@material-ui/core'
 
 export const ConnectActionList = styled('ul')(({ theme }) => ({
     display: 'flex',

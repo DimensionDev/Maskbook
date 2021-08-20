@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { styled } from '@material-ui/core/styles'
 import { Button, Typography } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
 

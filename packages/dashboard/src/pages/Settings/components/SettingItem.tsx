@@ -1,10 +1,4 @@
-import {
-    ListItem,
-    ListItemText,
-    ListItemIcon,
-    experimentalStyled as styled,
-    listItemTextClasses,
-} from '@material-ui/core'
+import { ListItem, ListItemText, ListItemIcon, styled, listItemTextClasses } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
 
 export interface SettingItemProps extends React.PropsWithChildren<{}> {

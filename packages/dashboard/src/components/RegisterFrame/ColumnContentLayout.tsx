@@ -1,5 +1,5 @@
 import { RestoreIcon, RestoreBlueIcon, SignUpAccountIcon } from '@masknet/icons'
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { styled } from '@material-ui/core/styles'
 
 export const ColumnContentLayout = styled('div')(
     ({ theme }) => `

@@ -1,7 +1,7 @@
 import { SearchableList } from '../../src/Components/SearchableList'
 import { DialogContent } from '@material-ui/core'
 import { MaskDialog } from '../../src/Components'
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { styled } from '@material-ui/core/styles'
 
 const demoData: IDemoData[] = [
     { address: 'ETH' },

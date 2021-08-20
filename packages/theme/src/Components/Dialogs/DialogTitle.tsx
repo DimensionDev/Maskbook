@@ -1,4 +1,4 @@
-import { DialogTitle, IconButton, Typography, Box, experimentalStyled as styled } from '@material-ui/core'
+import { DialogTitle, IconButton, Typography, Box, styled } from '@material-ui/core'
 import { Close, ArrowBack } from '@material-ui/icons'
 import { memo } from 'react'
 
@@ -26,9 +26,9 @@ export const MaskDialogTitle = memo((props: MaskDialogTitleProps) => {
         </IconButton>
     ) : null
     return (
-        <Title disableTypography>
+        <Title>
             {backButton}
-            <Typography component="h2" variant="h6">
+            <Typography component="span" variant="h6">
                 {children}
             </Typography>
             <Box sx={{ flex: 1 }} />

@@ -1,5 +1,5 @@
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { styled } from '@material-ui/core/styles'
 import { Box, Button, Card, Container, Stack, Typography } from '@material-ui/core'
 import type { ReactNode } from 'react'
 import { SignUpAccountIcon, RestoreIcon } from '@masknet/icons'

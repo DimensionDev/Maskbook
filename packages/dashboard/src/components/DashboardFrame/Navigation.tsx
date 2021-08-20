@@ -6,7 +6,7 @@ import {
     Collapse,
     Theme,
     useMediaQuery,
-    experimentalStyled as styled,
+    styled,
     listItemClasses,
     listItemIconClasses,
     ListItemProps,

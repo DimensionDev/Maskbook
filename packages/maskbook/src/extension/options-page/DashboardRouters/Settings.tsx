@@ -1,5 +1,6 @@
 import { useRef } from 'react'
-import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
+import { Typography, Card, List, Paper, ListItemText, ListItemIcon } from '@material-ui/core'
+import ListItemButton from '@material-ui/core/ListItemButton'
 import { ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { makeStyles } from '@masknet/theme'
 import { Appearance } from '@masknet/theme'
@@ -203,13 +204,13 @@ export default function DashboardSettingsRouter() {
                         <Card elevation={0}>
                             <List className={classes.list} disablePadding>
                                 {Flags.v2_enabled && (
-                                    <ListItem button onClick={() => (location.href = '/next.html')}>
+                                    <ListItemButton onClick={() => (location.href = '/next.html')}>
                                         <ListItemIcon children={<NewIcon />} />
                                         <ListItemText
                                             primary="Open new dashboard (integrated) (dev-only)"
                                             secondary="/packages/dashboard/"
                                         />
-                                    </ListItem>
+                                    </ListItemButton>
                                 )}
                                 <SettingsUIEnum
                                     classes={listStyle}

@@ -1,4 +1,4 @@
-import { experimentalStyled as styled } from '@material-ui/core'
+import { styled } from '@material-ui/core'
 import { useHref, useNavigate } from 'react-router'
 import { Breadcrumbs, Dialog, IconButton, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'

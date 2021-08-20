@@ -1,4 +1,4 @@
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { styled } from '@material-ui/core/styles'
 import { StartupActionList, StartupActionListItem } from '../../components/StartupActionList'
 import { MaskWalletIcon, ImportWalletIcon, CloudLinkIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'

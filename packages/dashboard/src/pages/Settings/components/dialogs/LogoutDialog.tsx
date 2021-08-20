@@ -1,12 +1,5 @@
 import { MaskDialog } from '@masknet/theme'
-import {
-    Button,
-    buttonClasses,
-    DialogContent,
-    Typography,
-    experimentalStyled as styled,
-    DialogActions,
-} from '@material-ui/core'
+import { Button, buttonClasses, DialogContent, Typography, styled, DialogActions } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import { useContext } from 'react'
 import { useDashboardI18N } from '../../../../locales'

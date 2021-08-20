@@ -4,13 +4,13 @@ import {
     List,
     Checkbox,
     ListSubheader,
-    ListItem,
     ListItemText,
     ListItemIcon,
     Card,
     CardContent,
     CardActions,
 } from '@material-ui/core'
+import ListItemButton from '@material-ui/core/ListItemButton'
 import { useMap } from 'react-use'
 import type { ExternalPluginLoadDetails } from '../types'
 
@@ -38,12 +38,12 @@ export function UnknownPluginLoadRequestUI({ plugins, onConfirm }: UnknownPlugin
                         <ListSubheader>New unknown Mask plugins found. Do you want to load them?</ListSubheader>
                     }>
                     {plugins.map((x) => (
-                        <ListItem dense button onClick={() => set(x.url, !get(x.url))} key={x.url}>
+                        <ListItemButton dense onClick={() => set(x.url, !get(x.url))} key={x.url}>
                             <ListItemIcon>
                                 <Checkbox disableRipple edge="start" tabIndex={-1} checked={!!get(x.url)} />
                             </ListItemIcon>
                             <ListItemText primary={x.url} />
-                        </ListItem>
+                        </ListItemButton>
                     ))}
                 </List>
             </CardContent>

@@ -8,7 +8,7 @@ import {
     Radio,
     RadioGroup,
     useRadioGroup,
-    experimentalStyled as styled,
+    styled,
 } from '@material-ui/core'
 
 interface option {

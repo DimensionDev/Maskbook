@@ -1,13 +1,13 @@
 import {
-    ListItem,
     ListItemText,
     ListItemIcon,
     ListItemSecondaryAction,
     Button,
     ButtonProps,
-    experimentalStyled as styled,
+    styled,
     Typography,
 } from '@material-ui/core'
+import ListItemButton from '@material-ui/core/ListItemButton'
 import { memo, useLayoutEffect, useRef } from 'react'
 import { MaskColorVar } from '@masknet/theme'
 
@@ -35,7 +35,7 @@ export const StartupActionListItem = memo((props: StartupActionListItemProps) =>
         ;(child as HTMLElement).style.paddingRight = `${width + 10}px`
     })
     return (
-        <Container button ref={listRef}>
+        <Container ref={listRef}>
             <ListItemIconContainer>{icon}</ListItemIconContainer>
             <ListItemText
                 primary={
@@ -58,7 +58,7 @@ export const StartupActionListItem = memo((props: StartupActionListItemProps) =>
     )
 })
 
-const Container = styled(ListItem)`
+const Container = styled(ListItemButton)`
     border: 1px solid ${MaskColorVar.border};
     border-radius: 6px;
 `

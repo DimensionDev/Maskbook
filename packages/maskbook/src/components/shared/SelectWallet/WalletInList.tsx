@@ -1,4 +1,5 @@
-import { Avatar, ListItem, ListItemAvatar, ListItemIcon, ListItemText, ListTypeMap } from '@material-ui/core'
+import { Avatar, ListItemAvatar, ListItemIcon, ListItemText, ListTypeMap } from '@material-ui/core'
+import ListItemButton from '@material-ui/core/ListItemButton'
 import { makeStyles } from '@masknet/theme'
 import CheckIcon from '@material-ui/icons/Check'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
@@ -37,7 +38,7 @@ export function WalletInList(props: WalletInListProps) {
     const blockie = useBlockie(wallet.address)
 
     return (
-        <ListItem button disabled={disabled} onClick={onClick} {...ListItemProps}>
+        <ListItemButton disabled={disabled} onClick={onClick} {...ListItemProps}>
             <ListItemAvatar>
                 <Avatar src={blockie} />
             </ListItemAvatar>
@@ -58,6 +59,6 @@ export function WalletInList(props: WalletInListProps) {
                     <CheckIcon fontSize="small" />
                 </ListItemIcon>
             ) : null}
-        </ListItem>
+        </ListItemButton>
     )
 }

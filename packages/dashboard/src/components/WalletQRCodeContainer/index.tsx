@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { experimentalStyled as styled } from '@material-ui/core'
+import { styled } from '@material-ui/core'
 
 const QRCodeContainer = styled('div')(
     ({ width, height, border: { borderWidth, borderHeight } }: WalletQRCodeProps) => `

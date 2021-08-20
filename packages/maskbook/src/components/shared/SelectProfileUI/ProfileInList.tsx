@@ -1,5 +1,6 @@
 import { memo } from 'react'
-import { ListItem, ListItemAvatar, ListItemText } from '@material-ui/core'
+import { ListItemAvatar, ListItemText } from '@material-ui/core'
+import ListItemButton from '@material-ui/core/ListItemButton'
 import { makeStyles } from '@masknet/theme'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import type { ListItemTypeMap } from '@material-ui/core/ListItem'
@@ -35,7 +36,7 @@ export const ProfileInList = memo<ProfileInListProps>((props) => {
     const name = props.item.nickname || props.item.identifier.userId
 
     return (
-        <ListItem button disabled={disabled} onClick={onClick} {...listItemProps}>
+        <ListItemButton disabled={disabled} onClick={onClick} {...listItemProps}>
             <ListItemAvatar>
                 <Avatar person={props.item} />
             </ListItemAvatar>
@@ -48,6 +49,6 @@ export const ProfileInList = memo<ProfileInListProps>((props) => {
                 primary={name}
                 secondary={props.item.linkedPersona?.fingerprint.toLowerCase()}
             />
-        </ListItem>
+        </ListItemButton>
     )
 })

@@ -1,4 +1,4 @@
-import { Button, ButtonProps, experimentalStyled as styled } from '@material-ui/core'
+import { Button, ButtonProps, styled } from '@material-ui/core'
 import { forwardRef } from 'react'
 
 const TabButtonWrap = styled(Button)(({ theme }) => ({
