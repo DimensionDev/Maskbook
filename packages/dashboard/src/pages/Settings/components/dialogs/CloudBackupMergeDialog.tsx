@@ -43,7 +43,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose }: CloudBa
     }, [backupPassword])
 
     return (
-        <MaskDialog maxWidth="xs" title="Cloud Backup" open={open} onClose={onClose}>
+        <MaskDialog maxWidth="xs" title={t.settings_cloud_backup()} open={open} onClose={onClose}>
             <Box sx={{ padding: '0 24px 24px' }}>
                 <BackupInfoCard info={info} />
                 <TextField
@@ -59,7 +59,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose }: CloudBa
                 />
 
                 <LoadingButton fullWidth onClick={handleMerge} loading={loading} disabled={incorrectBackupPassword}>
-                    Merge to local data
+                    {t.settings_dialogs_merge_to_local_data()}
                 </LoadingButton>
             </Box>
         </MaskDialog>

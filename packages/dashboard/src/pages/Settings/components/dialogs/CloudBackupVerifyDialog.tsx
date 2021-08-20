@@ -63,7 +63,7 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
     }, [code])
 
     return (
-        <MaskDialog title="Cloud Backup" open={open} onClose={onClose}>
+        <MaskDialog title={t.settings_cloud_backup()} open={open} onClose={onClose}>
             <Box sx={{ padding: '10px 24px 24px' }}>
                 <Select
                     value={mode}
