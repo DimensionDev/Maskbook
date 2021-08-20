@@ -1,5 +1,5 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { FungibleTokenDetailed, isNative, useBlockNumber, useTokenConstants } from '@masknet/web3-shared'
+import { NetworkType, FungibleTokenDetailed, isNative, useBlockNumber, useTokenConstants } from '@masknet/web3-shared'
 import { difference } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
@@ -8,6 +8,23 @@ import { TradeStrategy, ZrxTradePool } from '../../types'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance'
 import { useTradeProviderSettings } from '../useTradeSettings'
 import { currentNetworkSettings } from '../../../Wallet/settings'
+import { safeUnreachable } from '@dimensiondev/kit'
+
+export function setTokenNativeNetwork(networkType: NetworkType){
+    switch(networkType){
+        case NetworkType.Ethereum:
+            return 'ETH'
+        case NetworkType.Binance:
+            return 'BSC'
+        case NetworkType.Polygon:
+            return 'MATIC'
+        case NetworkType.Arbitrum:
+            return ''
+        default:
+            safeUnreachable(networkType)
+            return ''
+    }
+}
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -26,8 +43,9 @@ export function useTrade(
         const isExactIn = strategy === TradeStrategy.ExactIn
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
-        const sellToken = isNative(inputToken.address) ? 'ETH' : inputToken.address
-        const buyToken = isNative(outputToken.address) ? 'ETH' : outputToken.address
+
+        const sellToken = isNative(inputToken.address) ? setTokenNativeNetwork(currentNetworkSettings.value) : inputToken.address
+        const buyToken = isNative(outputToken.address) ? setTokenNativeNetwork(currentNetworkSettings.value) : outputToken.address
         return PluginTraderRPC.swapQuote(
             {
                 sellToken,
