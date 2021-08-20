@@ -1,5 +1,6 @@
 import { cloneElement } from 'react'
-import { makeStyles, Typography, Divider, Fade, Fab, PropTypes, Theme } from '@material-ui/core'
+import { Typography, Divider, Fade, Fab, PropTypes } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import { Flags } from '../../../utils/flags'
@@ -34,34 +35,14 @@ interface DashboardRouterContainerProps {
 }
 
 const FAB_COLORS: PropTypes.Color[] = ['primary', 'secondary', 'default']
-
-const useStyles = makeStyles<
-    Theme,
-    { isSetup: boolean },
-    | 'wrapper'
-    | 'placeholder'
-    | 'scroller'
-    | 'scrollerCompact'
-    | 'title'
-    | 'titleContent'
-    | 'FloatingIcon'
-    | 'titlePlaceholder'
-    | 'content'
-    | 'contentPadded'
-    | 'divider'
-    | 'dividerPadded'
-    | 'dividerCompact'
-    | 'buttons'
-    | 'floatButtonContainer'
-    | 'floatingButton'
->((theme) => ({
+const useStyles = makeStyles<{ isSetup: boolean }>()((theme, props) => ({
     wrapper: {
         flex: 1,
         width: '100%',
         height: '100%',
         [theme.breakpoints.up('sm')]: {
             display: Flags.has_native_nav_bar ? 'inline' : 'grid',
-            gridTemplateRows: (props) => (props.isSetup ? '1fr' : '[titleAction] 0fr [divider] 0fr [content] auto'),
+            gridTemplateRows: props.isSetup ? '1fr' : '[titleAction] 0fr [divider] 0fr [content] auto',
         },
     },
     placeholder: {
@@ -190,7 +171,7 @@ const useStyles = makeStyles<
 export default function DashboardRouterContainer(props: DashboardRouterContainerProps) {
     const { title, actions, children, padded, empty, compact = false, floatingButtons = [] } = props
     const isSetup = location.hash.includes('/setup')
-    const classes = useStyles({
+    const { classes } = useStyles({
         isSetup,
     })
     const xsMatched = useMatchXS()

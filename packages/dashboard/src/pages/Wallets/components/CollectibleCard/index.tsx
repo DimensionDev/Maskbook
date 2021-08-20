@@ -1,10 +1,11 @@
 import { ERC721TokenDetailed, ChainId, CollectibleProvider, resolveCollectibleLink } from '@masknet/web3-shared'
 import { memo } from 'react'
-import { Link, makeStyles, Typography } from '@material-ui/core'
+import { Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     card: {
         borderRadius: 8,
         width: 140,
@@ -27,7 +28,7 @@ const useStyles = makeStyles(() => ({
         overflow: 'hidden',
         fontSize: 12,
     },
-}))
+})
 
 export interface CollectibleCardProps {
     chainId: ChainId
@@ -36,8 +37,7 @@ export interface CollectibleCardProps {
 }
 
 export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, token }) => {
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return token.info.image ? (
         <div className={classes.card}>
             <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(chainId, provider, token)}>

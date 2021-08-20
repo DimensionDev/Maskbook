@@ -1,7 +1,8 @@
-import { Typography, Paper, makeStyles } from '@material-ui/core'
+import { Typography, Paper } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { TokenDetails } from '../types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
@@ -29,8 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function NFTCardUI(props: TokenDetails) {
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <Paper className={classes.root}>
             {props.imageUrl && <img src={props.imageUrl.toString()} className={classes.media} />}

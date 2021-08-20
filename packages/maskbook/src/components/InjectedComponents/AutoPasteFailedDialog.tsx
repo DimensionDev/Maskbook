@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N, MaskMessages, useMatchXS, useQueryNavigatorPermission } from '../../utils'
 import formatDateTime from 'date-fns/format'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import {
     DialogActions,
     DialogContent,
@@ -28,7 +28,7 @@ export interface AutoPasteFailedDialogProps extends withClasses<never> {
     onClose: () => void
     data: MaskMessages['autoPasteFailed']
 }
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     title: { marginLeft: theme.spacing(1) },
     paper: { border: '1px solid white' },
 }))

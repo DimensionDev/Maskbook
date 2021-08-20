@@ -1,4 +1,5 @@
-import { IconButton, InputAdornment, makeStyles, TextField, Theme } from '@material-ui/core'
+import { IconButton, InputAdornment, TextField } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../../utils'
@@ -6,7 +7,7 @@ import { QRCode } from '@masknet/shared'
 import type { Wallet } from '@masknet/web3-shared'
 import { useSnackbarCallback } from '../Base'
 
-const useReceiveTabStyles = makeStyles((theme: Theme) => ({
+const useReceiveTabStyles = makeStyles()((theme) => ({
     qr: {
         marginTop: theme.spacing(2),
         display: 'flex',
@@ -26,8 +27,7 @@ interface ReceiveTabProps {
 export function ReceiveTab(props: ReceiveTabProps) {
     const { wallet } = props
     const { t } = useI18N()
-    const classes = useReceiveTabStyles()
-
+    const { classes } = useReceiveTabStyles()
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
     return (

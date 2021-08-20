@@ -13,7 +13,6 @@ import {
     Box,
     Card,
     LinearProgress,
-    makeStyles,
     Paper,
     Table,
     TableBody,
@@ -23,6 +22,7 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -36,7 +36,7 @@ import { ITO_Status, JSON_PayloadInMask, PoolSubgraph } from '../types'
 import { useDestructCallback } from './hooks/useDestructCallback'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     top: {
         width: '100%',
         boxSizing: 'border-box',
@@ -114,7 +114,7 @@ export interface PoolInListProps extends PoolSubgraph {
 
 export function PoolInList(props: PoolInListProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onRetry } = props
 
     //#region withdraw

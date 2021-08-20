@@ -1,5 +1,6 @@
 import { memo, useCallback, useState } from 'react'
-import { Button, makeStyles, Tab, Tabs, Typography } from '@material-ui/core'
+import { Button, Tab, Tabs, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { withStyles } from '@material-ui/styles'
 import { TabContext, TabPanel } from '@material-ui/lab'
@@ -10,7 +11,7 @@ import { useAsync } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     header: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -69,7 +70,7 @@ const useStyles = makeStyles(() => ({
         fontSize: 12,
         lineHeight: '14px',
     },
-}))
+})
 
 const StyledTabs = withStyles({
     root: {
@@ -109,7 +110,7 @@ enum BackupTabs {
 
 const BackupWallet = memo(() => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const wallet = useWallet()
     const [confirmed, setConfirmed] = useState(false)
     const [currentTab, setCurrentTab] = useState(BackupTabs.JsonFile)

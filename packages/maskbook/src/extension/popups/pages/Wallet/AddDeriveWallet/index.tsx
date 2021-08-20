@@ -1,5 +1,6 @@
 import { memo, useCallback, useState } from 'react'
-import { Button, makeStyles, Typography } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import { useLocation } from 'react-router-dom'
@@ -9,7 +10,7 @@ import { DeriveWalletTable } from '../components/DeriveWalletTable'
 import { currySameAddress, useWallets } from '@masknet/web3-shared'
 import { useI18N } from '../../../../../utils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     container: {
         padding: '16px 10px',
     },
@@ -44,12 +45,12 @@ const useStyles = makeStyles(() => ({
         fontSize: 14,
         lineHeight: '20px',
     },
-}))
+})
 
 const AddDeriveWallet = memo(() => {
     const { t } = useI18N()
     const location = useLocation()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const wallets = useWallets()
     const mnemonic = new URLSearchParams(location.search).get('mnemonic')
     const [page, setPage] = useState(0)

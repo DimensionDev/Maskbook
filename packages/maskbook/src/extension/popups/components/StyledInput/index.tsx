@@ -1,8 +1,9 @@
 import { forwardRef, memo } from 'react'
-import { TextFieldProps, makeStyles, TextField } from '@material-ui/core'
+import { TextFieldProps, TextField } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     textField: {
         width: '100%',
     },
@@ -13,7 +14,7 @@ const useStyles = makeStyles(() => ({
         padding: '11px 9px',
         fontSize: 12,
     },
-}))
+})
 
 export const StyledInput = memo(
     forwardRef<{}, TextFieldProps>((props, ref) => {

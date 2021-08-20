@@ -1,8 +1,9 @@
-import { TableContainer, Table, makeStyles, Theme, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core'
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { Market } from '../../types'
 import { PriceChanged } from './PriceChanged'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -27,7 +28,7 @@ export interface PriceChangedTableProps {
 }
 
 export function PriceChangedTable({ market }: PriceChangedTableProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const records: Record[] = [
         {
             name: '1h',

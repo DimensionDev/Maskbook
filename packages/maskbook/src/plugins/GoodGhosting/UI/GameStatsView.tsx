@@ -1,5 +1,6 @@
 import { formatBalance } from '@masknet/web3-shared'
-import { makeStyles, Grid, Typography, Box, Button } from '@material-ui/core'
+import { Grid, Typography, Box, Button } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import type { GoodGhostingInfo, LendingPoolData } from '../types'
 import { CircularDataDisplay } from './CircularDataDisplay'
@@ -8,7 +9,7 @@ import { useGameToken, useRewardToken } from '../hooks/usePoolData'
 import { useI18N } from '../../../utils'
 import { getReadableInterval } from '../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     infoRow: {
         paddingBottom: theme.spacing(1),
     },
@@ -31,13 +32,13 @@ interface GameStatsViewProps {
 }
 
 export function GameStatsView(props: GameStatsViewProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { value: financialData, loading, error, retry } = props.finDataResult
     const gameToken = useGameToken()
     const rewardToken = useRewardToken()
     const { t } = useI18N()
 
-    if (loading) {
+    if (loading && !financialData) {
         return (
             <Typography variant="h6" color="textSecondary">
                 Loading game stats
@@ -53,10 +54,8 @@ export function GameStatsView(props: GameStatsViewProps) {
             </Box>
         )
     }
-
     const gameLengthFormatted = getReadableInterval(props.info.segmentLength * (props.info.lastSegment + 1))
     const segmentLengthFormatted = getReadableInterval(props.info.segmentLength)
-
     return (
         <>
             <Grid className={classes.infoRow} container spacing={2}>

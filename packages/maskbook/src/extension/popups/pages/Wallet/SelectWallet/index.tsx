@@ -1,5 +1,6 @@
 import { memo, useMemo } from 'react'
-import { Button, List, ListItem, ListItemText, makeStyles, Typography } from '@material-ui/core'
+import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { WalletHeader } from '../components/WalletHeader'
 import { WalletInfo } from '../components/WalletInfo'
 import { isSameAddress, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
@@ -9,7 +10,7 @@ import { useHistory } from 'react-router-dom'
 import { DialogRoutes } from '../../../index'
 import { useI18N } from '../../../../../utils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     content: {
         flex: 1,
         backgroundColor: '#F7F9FA',
@@ -57,11 +58,11 @@ const useStyles = makeStyles(() => ({
         fontSize: 14,
         lineHeight: '20px',
     },
-}))
+})
 
 const SelectWallet = memo(() => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const history = useHistory()
     const wallet = useWallet()
     const wallets = useWallets(ProviderType.Maskbook)
