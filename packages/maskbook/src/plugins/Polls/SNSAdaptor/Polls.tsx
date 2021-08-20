@@ -1,4 +1,5 @@
-import { makeStyles, Card, Typography, CircularProgress, List, ListItem } from '@material-ui/core'
+import { Card, Typography, CircularProgress, List, ListItem } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import isValid from 'date-fns/isValid'
 import formatDistance from 'date-fns/formatDistance'
 import { zhTW, enUS, ja, zhCN, ko, es, ru, it, faIR, fr } from 'date-fns/locale'
@@ -8,7 +9,7 @@ import { PollStatus } from '../types'
 import { SupportedLanguages } from '@masknet/public-api'
 import { safeUnreachable } from '@dimensiondev/kit'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     card: {
         borderRadius: theme.spacing(1),
         margin: theme.spacing(2, 0),
@@ -65,7 +66,7 @@ interface PollCardProps {
 
 export function PollCardUI(props: PollCardProps) {
     const { poll, onClick, vote, status } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const isClosed = Date.now() > poll.end_time ? true : false
     const { t } = useI18N()
     const lang = useLanguage()

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import {
-    makeStyles,
     DialogContent,
     Typography,
     IconButton,
@@ -13,6 +12,7 @@ import {
     Divider,
     CircularProgress,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import AddIcon from '@material-ui/icons/Add'
 import addDate from 'date-fns/add'
 import { usePortalShadowRoot } from '@masknet/theme'
@@ -28,7 +28,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { PluginPollRPC } from '../messages'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 
-const useNewPollStyles = makeStyles((theme) => ({
+const useNewPollStyles = makeStyles()((theme) => ({
     menuPaper: {
         height: 200,
     },
@@ -237,18 +237,6 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
         </div>
     )
 }
-
-const useStyles = makeStyles((theme) => {
-    ;({
-        title: {
-            marginLeft: 6,
-        },
-        container: {
-            width: '100%',
-        },
-    })
-})
-
 interface PollsDialogProps extends withClasses<'wrapper'> {
     open: boolean
     onClose: () => void
