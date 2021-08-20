@@ -44,8 +44,12 @@ export function useTrade(
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
 
-        const sellToken = isNative(inputToken.address) ? setTokenNativeNetwork(currentNetworkSettings.value) : inputToken.address
-        const buyToken = isNative(outputToken.address) ? setTokenNativeNetwork(currentNetworkSettings.value) : outputToken.address
+        const sellToken = isNative(inputToken.address)
+            ? setTokenNativeNetwork(currentNetworkSettings.value)
+            : inputToken.address
+        const buyToken = isNative(outputToken.address)
+            ? setTokenNativeNetwork(currentNetworkSettings.value)
+            : outputToken.address
         return PluginTraderRPC.swapQuote(
             {
                 sellToken,
