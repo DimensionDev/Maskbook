@@ -23,10 +23,10 @@ export function useResults(identifier: ProposalIdentifier) {
 
 async function Suspender(identifier: ProposalIdentifier) {
     const {
-        payload: { message },
+        payload: { message, proposal },
     } = useProposal(identifier.id)
     const { payload: votes } = useVotes(identifier)
-    const strategies = message.payload.metadata.strategies
+    const strategies = message.payload.metadata.strategies ?? proposal.strategies
     const powerOfChoices = message.payload.choices.map((_choice, i) =>
         voteForChoice(votes, i).reduce((a, b) => {
             if (b.choiceIndex) {
@@ -47,7 +47,7 @@ async function Suspender(identifier: ProposalIdentifier) {
         power: p,
         powerDetail: powerDetailOfChoices[i].map((inner_p, pI) => ({
             power: strategies.length === 1 ? p : inner_p,
-            name: message.payload.metadata.strategies[pI].params.symbol,
+            name: strategies[pI].params.symbol,
         })),
         percentage: totalPower === 0 ? 0 : (p / totalPower) * 100,
     }))
