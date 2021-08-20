@@ -37,7 +37,7 @@ export function GameStatsView(props: GameStatsViewProps) {
     const rewardToken = useRewardToken()
     const { t } = useI18N()
 
-    if (loading) {
+    if (loading && !financialData) {
         return (
             <Typography variant="h6" color="textSecondary">
                 Loading game stats
