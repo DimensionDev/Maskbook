@@ -1,5 +1,6 @@
 import { memo } from 'react'
-import { Box, Button, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Box, Button, TableCell, TableRow, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { Asset, CurrencyType, formatBalance, formatCurrency, getTokenUSDValue, pow10 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
@@ -8,7 +9,7 @@ import { RoutePaths } from '../../../../type'
 import { useDashboardI18N } from '../../../../locales'
 import { TokenIcon } from '@masknet/shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 36,
         height: 36,
@@ -29,7 +30,7 @@ export interface TokenTableRowProps {
 
 export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
     const t = useDashboardI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const navigate = useNavigate()
     return (
         <TableRow>

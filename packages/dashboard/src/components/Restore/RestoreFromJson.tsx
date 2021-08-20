@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAsync } from 'react-use'
-import { Box, Button, Card, makeStyles } from '@material-ui/core'
+import { Box, Button, Card } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar, useSnackbar } from '@masknet/theme'
 import { Services } from '../../API'
@@ -11,7 +12,7 @@ import { ButtonGroup } from '../RegisterFrame/ButtonGroup'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         border: `solid 1px ${theme.palette.divider}`,
         width: '100%',
@@ -34,7 +35,7 @@ export interface RestoreFromJsonProps {}
 
 export function RestoreFromJson(props: RestoreFromJsonProps) {
     const t = useDashboardI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar()
 

@@ -4,7 +4,7 @@ import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShad
 import { PostDialogIcon } from '../../../components/InjectedComponents/PostDialogIcon'
 import { MaskMessage } from '../../../utils/messages'
 import { isCompose, isMobile } from '../utils/postBox'
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { startWatch } from '../../../utils/watcher'
 
 export function injectPostDialogIconAtTwitter(signal: AbortSignal) {
@@ -21,8 +21,7 @@ function renderPostDialogIconTo<T>(ls: LiveSelector<T, true>, signal: AbortSigna
 
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<PostDialogIconAtTwitter />)
 }
-
-const useTwitterMaskbookIcon = makeStyles((theme: Theme) => ({
+const useTwitterMaskbookIcon = makeStyles()((theme) => ({
     root: {
         width: 38,
         height: 38,
@@ -32,7 +31,7 @@ const useTwitterMaskbookIcon = makeStyles((theme: Theme) => ({
 }))
 
 function PostDialogIconAtTwitter() {
-    const classes = useTwitterMaskbookIcon()
-    const onIconClicked = () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'timeline', open: true })
+    const { classes } = useTwitterMaskbookIcon()
+    const onIconClicked = () => MaskMessage.events.requestComposition.sendToLocal({ reason: 'timeline', open: true })
     return <PostDialogIcon classes={classes} onClick={onIconClicked} />
 }

@@ -1,6 +1,7 @@
-import { experimentalStyled as styled, makeStyles } from '@material-ui/core/styles'
+import { experimentalStyled as styled } from '@material-ui/core'
 import { useHref, useNavigate } from 'react-router'
-import { Breadcrumbs, Dialog, IconButton, Link, Theme, Typography } from '@material-ui/core'
+import { Breadcrumbs, Dialog, IconButton, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { memo, useState } from 'react'
 import { About } from './About'
@@ -10,27 +11,28 @@ import { getMaskColor } from '@masknet/theme'
 import links from './links.json'
 import { RoutePaths } from '../../type'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     navRoot: {
         padding: '40px 0',
     },
     ol: {
-        justifyContent: 'center',
+        justifyContent: 'space-around',
     },
     footerLink: {
         display: 'inline-flex',
-        borderRadius: '0',
+        padding: theme.spacing(0.5),
+        borderRadius: 0,
         whiteSpace: 'nowrap',
-        padding: '4px 20px',
+        verticalAlign: 'middle',
     },
     separator: {
         color: getMaskColor(theme).lineLight,
     },
     closeButton: {
-        color: theme.palette.text.secondary,
         position: 'absolute',
-        right: 12,
-        top: 0,
+        right: theme.spacing(2.5),
+        top: theme.spacing(1),
+        color: theme.palette.text.secondary,
     },
 }))
 
@@ -43,7 +45,7 @@ type FooterLinkBaseProps = React.PropsWithChildren<{ title?: string }>
 type FooterLinkAnchorProps = FooterLinkBaseProps & { href: string }
 
 function FooterLinkExternal(props: FooterLinkAnchorProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <Link
             underline="none"
@@ -61,7 +63,7 @@ function FooterLinkExternal(props: FooterLinkAnchorProps) {
 
 type FooterLinkLinkProps = FooterLinkBaseProps & { to: string }
 function FooterLinkTo(props: FooterLinkLinkProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const href = useHref(props.to)
     const navigate = useNavigate()
 
@@ -81,7 +83,7 @@ function FooterLinkTo(props: FooterLinkLinkProps) {
 
 type FooterLinkAnchorButtonProps = FooterLinkBaseProps & { onClick(e: React.MouseEvent<HTMLAnchorElement>): void }
 function FooterLinkButton(props: FooterLinkAnchorButtonProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <Link
             underline="none"
@@ -99,7 +101,7 @@ function FooterLinkButton(props: FooterLinkAnchorButtonProps) {
 
 export const FooterLine = memo(() => {
     const t = useDashboardI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [isOpen, setOpen] = useState(false)
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
 

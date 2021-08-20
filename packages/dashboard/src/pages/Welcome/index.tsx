@@ -92,7 +92,7 @@ interface WelcomeUIProps {
     cancelHandler(): void
 }
 
-const WelcomeUI = memo(
+export const WelcomeUI = memo(
     ({ privacyPolicyURL, iframeLoadHandler, agreeHandler, cancelHandler, iframeRef }: WelcomeUIProps) => {
         const t = useDashboardI18N()
         return (

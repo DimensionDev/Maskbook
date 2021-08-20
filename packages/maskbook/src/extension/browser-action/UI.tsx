@@ -1,7 +1,8 @@
 import { useCallback, memo } from 'react'
 import { noop } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
-import { makeStyles, Theme, withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { Button, Paper, Typography, Box } from '@material-ui/core'
 import { useI18N, delay, Flags } from '../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -27,7 +28,7 @@ const GlobalCss = withStyles({
     },
 })(() => null)
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         lineHeight: 1.75,
         padding: 20,
@@ -54,7 +55,6 @@ const useStyles = makeStyles((theme: Theme) => ({
         fontSize: 16,
         fontWeight: 500,
     },
-    description: {},
     divider: {
         marginBottom: theme.spacing(2),
     },
@@ -67,8 +67,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function BrowserActionUI() {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const ui = activatedSocialNetworkUI
     const identities = useMyIdentities()
 
@@ -131,16 +130,13 @@ function BrowserActionUI() {
                         }}>
                         <Typography className={classes.title}>{t('browser_action_notifications')}</Typography>
                     </Box>
-                    <Typography className={classes.description} color="textSecondary" variant="body2">
+                    <Typography color="textSecondary" variant="body2">
                         {t('browser_action_notifications_description', {
                             sns: ui.networkIdentifier,
                         })}
                     </Typography>
 
-                    <Box
-                        sx={{
-                            display: 'flex',
-                        }}>
+                    <Box sx={{ display: 'flex' }}>
                         <Button
                             className={classes.button}
                             variant="text"

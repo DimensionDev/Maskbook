@@ -249,5 +249,20 @@
     "register_restore_backups_hint": "Please click or drag the file here",
     "register_restore_backups_file": "File",
     "register_restore_backups_text": "Text",
-    "register_restore_backups_tabs": "Restore Backup Tabs"
+    "register_restore_backups_tabs": "Restore Backup Tabs",
+    "create_wallet_mnemonic_tip": "Do not forget to save your mnemonic phrase. You will need this to access your wallet.",
+    "create_wallet_password_uppercase_tip": "Must contain an uppercase character",
+    "create_wallet_password_lowercase_tip": "Must contain a lowercase character",
+    "create_wallet_password_number_tip": "Must contain a number",
+    "create_wallet_password_special_tip": "Must contain a special character",
+    "create_wallet_password_match_tip": "Passwords don't match",
+    "create_wallet_name_placeholder": "Enter 1-12 characters",
+    "create_wallet_form_title": "Create a wallet",
+    "create_wallet_wallet_name": "Wallet Name",
+    "create_wallet_payment_password": "Payment Password",
+    "create_wallet_re_enter_payment_password": "Re-enter the payment password",
+    "create_wallet_payment_password_tip": "The password must be between 8 and 20 characters and contains at least a number, an uppercase letter,\n a lowercase letter and a special character.",
+    "create_wallet_your_wallet_address": "Your wallet address",
+    "create_wallet_done": "Done",
+    "create_wallet_verify_words": "Verify mnemonic words"
 }
