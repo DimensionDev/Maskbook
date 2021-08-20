@@ -53,6 +53,7 @@ export const WETH_ONLY: ERC20AgainstToken = {
     [ChainId.Rinkeby]: [WETH[ChainId.Rinkeby]],
     [ChainId.Kovan]: [WETH[ChainId.Kovan]],
     [ChainId.Gorli]: [WETH[ChainId.Gorli]],
+    [ChainId.xDai]: [WETH[ChainId.xDai]],
     [ChainId.BSC]: [WETH[ChainId.BSC]],
     [ChainId.BSCT]: [WETH[ChainId.BSCT]],
     [ChainId.Matic]: [WETH[ChainId.Matic]],

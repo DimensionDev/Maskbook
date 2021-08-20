@@ -7,6 +7,7 @@ import { paywallUrl } from '../constants'
 import { renderWithUnlockProtocolMetadata, UnlockProtocolMetadataReader } from '../helpers'
 import { useAccount, useChainId } from '@masknet/web3-shared'
 import { PuginUnlockProtocolRPC } from '../messages'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 interface UnlockProtocolInPostProps {
     message: TypedMessage
@@ -61,14 +62,16 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                 setContent(t('plugin_unlockprotocol_connect_wallet'))
             }
         }
-    }, useState(useAccount()))
+    }, [useChainId(), useAccount()])
     if (!!content) {
         const jsx = message
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
                       <>
                           <MaskbookPluginWrapper width={300} pluginName="Unlock Protocol">
-                              {content}
+                              <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
+                                  {content}
+                              </EthereumChainBoundary>
                           </MaskbookPluginWrapper>
                       </>
                   )
@@ -83,6 +86,8 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                       <MaskbookPluginWrapper width={300} pluginName="Unlock Protocol">
                           <>
                               <text>"You don't have access to this content"</text>
+                              <br />
+                              <text>"Please look for and buy and active lock"</text>
                               <br />
                               <Button target="_blank" href={redirurl}>
                                   Buy Lock
