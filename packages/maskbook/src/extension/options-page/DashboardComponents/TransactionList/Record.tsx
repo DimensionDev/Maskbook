@@ -1,11 +1,12 @@
-import { makeStyles, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { FC } from 'react'
 import { TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
 import type { Transaction } from '../../../../plugins/Wallet/types'
 import { DebankTransactionDirection, ZerionTransactionDirection } from '../../../../plugins/Wallet/types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: { display: 'flex', alignItems: 'center' },
     direction: { marginLeft: theme.spacing(0.5), marginRight: theme.spacing(0.5) },
     amount: { marginRight: theme.spacing(0.5) },
@@ -14,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const Record: FC<{ pair: Transaction['pairs'][number] }> = ({ pair }) => {
-    const styles = useStyles()
+    const { classes: styles } = useStyles()
     return (
         <Typography
             component="section"

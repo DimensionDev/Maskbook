@@ -249,5 +249,20 @@
     "register_restore_backups_hint": "crwdns1957:0crwdne1957:0",
     "register_restore_backups_file": "crwdns1959:0crwdne1959:0",
     "register_restore_backups_text": "crwdns1961:0crwdne1961:0",
-    "register_restore_backups_tabs": "crwdns1963:0crwdne1963:0"
+    "register_restore_backups_tabs": "crwdns1963:0crwdne1963:0",
+    "create_wallet_mnemonic_tip": "crwdns7725:0crwdne7725:0",
+    "create_wallet_password_uppercase_tip": "crwdns7727:0crwdne7727:0",
+    "create_wallet_password_lowercase_tip": "crwdns7729:0crwdne7729:0",
+    "create_wallet_password_number_tip": "crwdns7731:0crwdne7731:0",
+    "create_wallet_password_special_tip": "crwdns7733:0crwdne7733:0",
+    "create_wallet_password_match_tip": "crwdns7735:0crwdne7735:0",
+    "create_wallet_name_placeholder": "crwdns7737:0crwdne7737:0",
+    "create_wallet_form_title": "crwdns7739:0crwdne7739:0",
+    "create_wallet_wallet_name": "crwdns7741:0crwdne7741:0",
+    "create_wallet_payment_password": "crwdns7743:0crwdne7743:0",
+    "create_wallet_re_enter_payment_password": "crwdns7745:0crwdne7745:0",
+    "create_wallet_payment_password_tip": "crwdns7747:0crwdne7747:0",
+    "create_wallet_your_wallet_address": "crwdns7749:0crwdne7749:0",
+    "create_wallet_done": "crwdns7751:0crwdne7751:0",
+    "create_wallet_verify_words": "crwdns7753:0crwdne7753:0"
 }

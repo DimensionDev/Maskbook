@@ -2,14 +2,15 @@ import { useContext } from 'react'
 import { ExternalLink } from 'react-feather'
 import type { Trade } from '@uniswap/v2-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
-import { Link, makeStyles, Typography } from '@material-ui/core'
+import { Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { resolveTradePairLink } from '../../pipes'
 import type { TradeComputed, TradeProvider } from '../../types'
 import { TradeContext } from '../../trader/useTradeContext'
 import { getPairAddress } from '../../helpers'
 import { useNetworkType } from '@masknet/web3-shared'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             border: `1px solid ${theme.palette.divider}`,
@@ -35,7 +36,7 @@ export interface TradePairViewerProps {
 
 export function TradePairViewer(props: TradePairViewerProps) {
     const { trade, provider } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const networkType = useNetworkType()
 
     const context = useContext(TradeContext)

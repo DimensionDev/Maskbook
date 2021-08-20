@@ -1,19 +1,18 @@
 import { memo } from 'react'
-import { makeStyles, TableFooter, TablePagination, TableRow } from '@material-ui/core'
+import { TableFooter, TablePagination, TableRow } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 
-const useStyles = makeStyles((theme) => {
-    return {
-        spacer: {
-            flex: 0,
-        },
-        toolbar: {
-            minHeight: 'unset',
-            paddingLeft: 16,
-        },
-        actions: {
-            marginLeft: 0,
-        },
-    }
+const useStyles = makeStyles()({
+    spacer: {
+        flex: 0,
+    },
+    toolbar: {
+        minHeight: 'unset',
+        paddingLeft: 16,
+    },
+    actions: {
+        marginLeft: 0,
+    },
 })
 
 export interface TableListPaginationProps {
@@ -27,7 +26,7 @@ export interface TableListPaginationProps {
 
 export const TableListPagination = memo(
     ({ handlePrevClick, handleNextClick, prevDisabled, nextDisabled, page, pageCount }: TableListPaginationProps) => {
-        const classes = useStyles()
+        const { classes } = useStyles()
         return (
             <TableFooter>
                 <TableRow>

@@ -8,8 +8,10 @@ import {
     ChainId,
     CurrencyType,
     ERC1155TokenAssetDetailed,
+    ERC721ContractDetailed,
+    ERC721TokenInfo,
+    ERC721TokenDetailed,
     ERC20TokenDetailed,
-    ERC721TokenAssetDetailed,
     EthereumTokenType,
     FungibleTokenDetailed,
     NativeTokenDetailed,
@@ -48,26 +50,34 @@ export function createERC20Token(
     }
 }
 
-export function createERC721Token(
+export function createERC721ContractDetailed(
     chainId: ChainId,
-    tokenId: string,
     address: string,
     name: string,
     symbol: string,
     baseURI?: string,
-    tokenURI?: string,
-    asset?: ERC721TokenAssetDetailed['asset'],
-): ERC721TokenAssetDetailed {
+    iconURL?: string,
+): ERC721ContractDetailed {
     return {
         type: EthereumTokenType.ERC721,
         chainId,
-        tokenId,
         address,
         name,
         symbol,
         baseURI,
-        tokenURI,
-        asset,
+        iconURL,
+    }
+}
+
+export function createERC721Token(
+    contractDetailed: ERC721ContractDetailed,
+    info: ERC721TokenInfo,
+    tokenId: string,
+): ERC721TokenDetailed {
+    return {
+        contractDetailed,
+        info,
+        tokenId,
     }
 }
 

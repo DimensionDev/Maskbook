@@ -1,7 +1,8 @@
 import { memo } from 'react'
 import formatDateTime from 'date-fns/format'
 import type { Transaction } from '@masknet/web3-shared'
-import { Box, TableCell, TableRow, Typography, makeStyles, Link } from '@material-ui/core'
+import { Box, TableCell, TableRow, Typography, Link } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
     DebankTransactionDirection,
@@ -15,7 +16,7 @@ import { MaskColorVar } from '@masknet/theme'
 import classNames from 'classnames'
 import { formatEthereumAddress } from '@masknet/web3-shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     type: {
         marginLeft: 14,
     },
@@ -57,7 +58,7 @@ export interface HistoryTableRowUIProps extends HistoryTableRowProps {
 }
 
 export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, chainId }) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <TableRow>
             <TableCell className={classes.cell} align="center" variant="body">

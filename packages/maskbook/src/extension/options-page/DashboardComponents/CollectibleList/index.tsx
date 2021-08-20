@@ -4,8 +4,7 @@ import { useStylesExtends, useValueRef } from '@masknet/shared'
 import {
     ChainId,
     CollectibleProvider,
-    ERC1155TokenAssetDetailed,
-    ERC721TokenAssetDetailed,
+    ERC721TokenDetailed,
     EthereumTokenType,
     formatEthereumAddress,
     useAccount,
@@ -13,16 +12,18 @@ import {
     useCollectibles,
     Wallet,
 } from '@masknet/web3-shared'
-import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
+import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
+import { WalletMessages } from '../../../../plugins/Wallet/messages'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
 }>(null!)
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'grid',
         flexWrap: 'wrap',
@@ -73,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 interface CollectibleListUIProps extends withClasses<'empty' | 'button'> {
     provider: CollectibleProvider
     wallet?: Wallet
-    collectibles: (ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed)[]
+    collectibles: ERC721TokenDetailed[]
     loading: boolean
     collectiblesRetry: () => void
     error: Error | undefined
@@ -102,6 +103,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
+    WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry)
     if (loading)
         return (
             <Box className={classes.root}>
@@ -141,7 +143,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                                 <CollectibleCard token={x} provider={provider} wallet={wallet} readonly={readonly} />
                                 <div className={classes.description}>
                                     <Typography className={classes.name} color="textSecondary" variant="body2">
-                                        {x.asset?.name ?? x.name}
+                                        {x.info.name}
                                     </Typography>
                                 </div>
                             </div>
@@ -239,12 +241,13 @@ export function CollectibleList({ wallet, readonly }: CollectibleListProps) {
     }, [account, provider])
 
     const dataSource = collectibles.filter((x) => {
-        const key = `${formatEthereumAddress(x.address)}_${x.tokenId}`
-        switch (x.type) {
+        const key = `${formatEthereumAddress(x.contractDetailed.address)}_${x.tokenId}`
+        switch (x.contractDetailed.type) {
             case EthereumTokenType.ERC721:
                 return wallet.erc721_token_blacklist ? !wallet.erc721_token_blacklist.has(key) : true
-            case EthereumTokenType.ERC1155:
-                return wallet.erc1155_token_blacklist ? !wallet.erc1155_token_blacklist.has(key) : true
+            // wallet.erc1155_token_blacklist is still unused, comment it now.
+            // case EthereumTokenType.ERC1155:
+            //     return wallet.erc1155_token_blacklist ? !wallet.erc1155_token_blacklist.has(key) : true
             default:
                 return false
         }
@@ -254,7 +257,7 @@ export function CollectibleList({ wallet, readonly }: CollectibleListProps) {
         <CollectibleListUI
             provider={provider}
             wallet={wallet}
-            collectibles={dataSource}
+            collectibles={collectibles}
             loading={collectiblesLoading}
             error={collectiblesError}
             collectiblesRetry={collectiblesRetry}

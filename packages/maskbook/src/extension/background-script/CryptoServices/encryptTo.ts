@@ -2,16 +2,17 @@ import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import { GunAPI as Gun2 } from '../../../network/gun'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
-import { queryPrivateKey, queryLocalKey } from '../../../database'
+import { queryPrivateKey, queryLocalKey, queryProfile } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { getNetworkWorker } from '../../../social-network/worker'
-import { createPostDB } from '../../../database/post'
+import { createPostDB, PostRecord } from '../../../database/post'
 import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 import { i18n } from '../../../utils/i18n-next'
-import type { TypedMessage } from '../../../protocols/typed-message'
+import { isTypedMessageText, TypedMessage, TypedMessageText } from '../../../protocols/typed-message'
 import { encodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
+import { Flags } from '../../../utils'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -41,6 +42,7 @@ export async function encryptTo(
     if (publicShared) to = []
     const [recipients, toKey] = await prepareRecipientDetail(to)
 
+    const usingPersona = await queryProfile(whoAmI)
     const minePrivateKey = await queryPrivateKey(whoAmI)
     if (!minePrivateKey) throw new TypeError('Not inited yet')
     const stringifiedContent = Alpha38.typedMessageStringify(content)
@@ -78,13 +80,21 @@ export async function encryptTo(
 
     payload.signature = '_'
 
-    await createPostDB({
+    const newPostRecord: PostRecord = {
         identifier: new PostIVIdentifier(whoAmI.network, payload.iv),
         postBy: whoAmI,
         postCryptoKey: postAESKey,
         recipients: recipients,
         foundAt: new Date(),
-    })
+        encryptBy: usingPersona.linkedPersona?.identifier,
+    }
+    if (Flags.v2_enabled) {
+        if (isTypedMessageText(content)) {
+            newPostRecord.summary = getSummary(content)
+            newPostRecord.interestedMeta = content.meta
+        }
+    }
+    await createPostDB(newPostRecord)
 
     const postAESKeyToken = encodeArrayBuffer(iv)
     const worker = await getNetworkWorker(whoAmI)!
@@ -103,4 +113,19 @@ export async function publishPostAESKey(iv: string) {
     if (!info[1].length) return
     // Use the latest payload version here since we do not accept new post for older version.
     return Gun2.publishPostAESKeyOnGun2(-38, iv, ...info)
+}
+function getSummary(content: TypedMessageText) {
+    let result = ''
+    // UTF-8 aware summary
+    if (Intl.Segmenter) {
+        // it seems like using "en" can also split the word correctly.
+        const seg = new Intl.Segmenter('en')
+        for (const word of seg.segment(content.content)) {
+            if (result.length >= 20) break
+            result += word.segment
+        }
+    } else {
+        result = result.slice(0, 20)
+    }
+    return result
 }

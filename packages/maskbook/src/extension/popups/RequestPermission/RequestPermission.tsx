@@ -1,6 +1,4 @@
 import {
-    makeStyles,
-    Theme,
     Button,
     Card,
     List,
@@ -11,8 +9,9 @@ import {
     DialogActions,
     DialogContent,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         margin: theme.spacing(2, 2, 2, 2),
     },
@@ -22,7 +21,7 @@ export interface RequestPermissionProps extends browser.permissions.Permissions 
     onCancel(): void
 }
 export function RequestPermission(props: RequestPermissionProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { origins, permissions } = props
     return (
         <Card className={classes.root}>
