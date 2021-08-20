@@ -17,6 +17,7 @@ const BackupWallet = lazy(() => import('./BackupWallet'))
 const AddToken = lazy(() => import('./AddToken'))
 const TokenDetail = lazy(() => import('./TokenDetail'))
 const Approve = lazy(() => import('./Approve'))
+const GasSetting = lazy(() => import('./GasSetting'))
 
 export default function Wallet() {
     const wallet = useWallet()
@@ -38,6 +39,7 @@ export default function Wallet() {
                 <Route path={DialogRoutes.BackupWallet} children={<BackupWallet />} exact />
                 <Route path={DialogRoutes.AddToken} children={<AddToken />} exact />
                 <Route path={DialogRoutes.WalletApprove} children={<Approve />} />
+                <Route path={DialogRoutes.GasSetting} children={<GasSetting />} />
                 <Route path={DialogRoutes.TokenDetail} children={<TokenDetail />} exact />
             </Switch>
         </WalletContext.Provider>

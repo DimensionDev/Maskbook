@@ -26,6 +26,7 @@ import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../utils'
 import { getJsonRpcComputed } from './rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
+import { DialogRoutes } from '../../popups'
 
 export interface SendOverrides {
     chainId?: ChainId
@@ -88,7 +89,13 @@ export async function INTERNAL_send(
         }
 
         window.open(
-            'chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/popups.html#/wallet/approve',
+            `${browser.runtime.getURL(
+                `popup.html#${
+                    payload.method === EthereumMethodType.ETH_SEND_TRANSACTION
+                        ? DialogRoutes.GasSetting
+                        : DialogRoutes.WalletApprove
+                }`,
+            )}`,
             '',
             'resizable,scrollbars,status,width=310,height=540',
         )
