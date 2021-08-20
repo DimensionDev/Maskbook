@@ -11,19 +11,13 @@ import {
     useEthereumConstants,
     useTrustedERC20Tokens,
 } from '@masknet/web3-shared'
-import { makeStyles, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
 import { useState, useMemo } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { useStylesExtends } from '@masknet/shared'
 import { TokenInList } from './TokenInList'
 import { EthereumAddress } from 'wallet.ts'
-
-const useStyles = makeStyles((theme) => ({
-    list: {},
-    placeholder: {},
-}))
-
 export interface FixedTokenListProps extends withClasses<'list' | 'placeholder'> {
     keyword?: string
     whitelist?: string[]
@@ -35,7 +29,7 @@ export interface FixedTokenListProps extends withClasses<'list' | 'placeholder'>
 }
 
 export function FixedTokenList(props: FixedTokenListProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const classes = useStylesExtends({}, props)
     const account = useAccount()
     const chainId = useChainId()
     const trustedERC20Tokens = useTrustedERC20Tokens()

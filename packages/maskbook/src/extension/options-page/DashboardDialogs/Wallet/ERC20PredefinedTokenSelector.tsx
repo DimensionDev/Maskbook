@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Box, makeStyles } from '@material-ui/core'
+import { Box } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { EthereumTokenType, ERC20TokenDetailed } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
 import { FixedTokenList } from '../../DashboardComponents/FixedTokenList'
 import { SearchInput } from '../../DashboardComponents/SearchInput'
 
-const useERC20PredefinedTokenSelectorStyles = makeStyles((theme) => ({
+const useERC20PredefinedTokenSelectorStyles = makeStyles()((theme) => ({
     list: {
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
@@ -26,8 +27,7 @@ interface ERC20PredefinedTokenSelectorProps {
 
 export function ERC20PredefinedTokenSelector(props: ERC20PredefinedTokenSelectorProps) {
     const { t } = useI18N()
-    const classes = useERC20PredefinedTokenSelectorStyles()
-
+    const { classes } = useERC20PredefinedTokenSelectorStyles()
     const { onTokenChange, excludeTokens = [] } = props
     const [keyword, setKeyword] = useState('')
 

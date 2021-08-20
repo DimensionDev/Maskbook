@@ -1,12 +1,13 @@
 import classNames from 'classnames'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
-import { makeStyles, Table, TableBody, TableCell, TableRow, Theme, Typography } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '@masknet/shared'
 
-const useDatabasePreviewCardStyles = makeStyles((theme: Theme) => ({
+const useDatabasePreviewCardStyles = makeStyles()((theme) => ({
     table: {
         borderCollapse: 'unset',
     },
