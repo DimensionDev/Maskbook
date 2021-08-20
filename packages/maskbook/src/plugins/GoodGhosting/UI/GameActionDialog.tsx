@@ -1,11 +1,12 @@
 import { Box, Button, DialogContent, DialogActions, makeStyles, Typography } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { ERC20TokenDetailed, formatBalance } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, formatBalance, useERC20TokenBalance } from '@masknet/web3-shared'
 import type { GoodGhostingInfo } from '../types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useI18N } from '../../../utils'
 import { useGameToken } from '../hooks/usePoolData'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -22,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
     actionText: {
         textAlign: 'center',
         marginBottom: theme.spacing(5),
+    },
+    actionSection: {
+        textAlign: 'center',
+        width: '100%',
     },
 }))
 
@@ -43,13 +48,56 @@ export function GameActionDialog(props: GameActionDialogProps) {
     const gameToken = useGameToken()
     const { t } = useI18N()
 
+    const {
+        value: tokenBalance = '0',
+        loading: loadingTokenBalance,
+        error: errorTokenBalance,
+        retry: retryLoadTokenBalance,
+    } = useERC20TokenBalance(gameToken.address)
+
+    const hasSufficientBalance =
+        !loadingTokenBalance &&
+        !errorTokenBalance &&
+        new BigNumber(tokenBalance).isGreaterThanOrEqualTo(info.segmentPayment)
+
     let action = (
-        <Button classes={{ root: classes.button }} color="primary" variant="contained" fullWidth onClick={onAction}>
-            {actionText}
-        </Button>
+        <div className={classes.actionSection}>
+            <Button
+                classes={{ root: classes.button }}
+                color="primary"
+                variant="contained"
+                fullWidth
+                disabled={needsApprove && !hasSufficientBalance}
+                onClick={onAction}>
+                {actionText}
+            </Button>
+            {needsApprove && !hasSufficientBalance && (
+                <Typography variant="subtitle1" color={loadingTokenBalance ? 'textSecondary' : 'red'}>
+                    {loadingTokenBalance
+                        ? t('plugin_good_ghosting_checking_balance')
+                        : t('plugin_good_ghosting_insufficient_balance', {
+                              amount: formatBalance(info.segmentPayment, gameToken.decimals),
+                              token: gameToken.symbol,
+                          })}
+                </Typography>
+            )}
+        </div>
     )
 
     if (needsApprove) {
+        if (errorTokenBalance) {
+            action = (
+                <Button
+                    classes={{ root: classes.button }}
+                    color="primary"
+                    variant="contained"
+                    fullWidth
+                    onClick={retryLoadTokenBalance}>
+                    {t('plugin_good_ghosting_balance_error')}
+                </Button>
+            )
+        }
+
         action = (
             <EthereumERC20TokenApprovedBoundary
                 amount={info.segmentPayment}

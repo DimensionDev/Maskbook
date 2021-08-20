@@ -46,9 +46,9 @@ export const LightColor = {
     textLight: '#A6A9B6',
     lightestBackground: '#FFFFFF',
     linkText: '#1C68F3',
-
     twitter: '#2CA4EF',
     facebook: '#4267B2',
+    white: '#ffffff',
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
@@ -97,9 +97,9 @@ export const DarkColor: typeof LightColor = {
     textLight: '#A6A9B6',
     lightestBackground: '#212422',
     linkText: '#ffffff',
-
     twitter: '#2CA4EF',
     facebook: '#4267B2',
+    white: '#ffffff',
 }
 
 export type Color = typeof LightColor

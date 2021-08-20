@@ -10,6 +10,7 @@ import {
     DialogContent,
     makeStyles,
     Paper,
+    Switch,
     Typography,
 } from '@material-ui/core'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
@@ -19,15 +20,17 @@ import { TradeProvider, ZrxTradePool } from '../../types'
 import { SelectPoolPanel } from './SelectPoolPanel'
 import { SlippageSlider } from './SlippageSlider'
 import {
-    currentSlippageTolerance,
+    currentSingleHopOnlySettings,
+    currentSlippageSettings,
     currentTradeProviderSettings,
     getCurrentTradeProviderGeneralSettings,
 } from '../../settings'
-import { SLIPPAGE_TOLERANCE_DEFAULT } from '../../constants'
+import { SLIPPAGE_DEFAULT } from '../../constants'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { PluginTraderMessages } from '../../messages'
 import stringify from 'json-stable-stringify'
 import { useTradeProviderSettings } from '../../trader/useTradeSettings'
+import { useSingleHopOnly } from '../../trader/uniswap/useSingleHopOnly'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -57,7 +60,8 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const provider = useValueRef(currentTradeProviderSettings)
-    const slippage = useValueRef(currentSlippageTolerance)
+    const slippage = useValueRef(currentSlippageSettings)
+    const singleHopOnly = useSingleHopOnly()
     const { pools } = useTradeProviderSettings(provider)
 
     //#region remote controlled dialog
@@ -65,8 +69,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
     //#endregion
 
     const onReset = useCallback(() => {
-        currentTradeProviderSettings.value = TradeProvider.UNISWAP
-        currentSlippageTolerance.value = SLIPPAGE_TOLERANCE_DEFAULT
+        currentSlippageSettings.value = SLIPPAGE_DEFAULT
         if (provider === TradeProvider.ZRX)
             getCurrentTradeProviderGeneralSettings(provider).value = stringify({
                 pools: getEnumAsArray(ZrxTradePool).map((x) => x.value),
@@ -90,11 +93,29 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                     <SlippageSlider
                                         value={slippage}
                                         onChange={(tolerance) => {
-                                            currentSlippageTolerance.value = tolerance
+                                            currentSlippageSettings.value = tolerance
                                         }}
                                     />
                                 </AccordionDetails>
                             </Accordion>
+                            {provider === TradeProvider.UNISWAP_V3 ? (
+                                <Accordion className={classes.accordion} elevation={0} expanded={false}>
+                                    <AccordionSummary>
+                                        <Typography className={classes.heading}>
+                                            {t('plugin_trader_single_hop_only')}
+                                        </Typography>
+                                        <Switch
+                                            color="primary"
+                                            size="small"
+                                            checked={singleHopOnly}
+                                            onChange={(ev) => {
+                                                ev.stopPropagation()
+                                                currentSingleHopOnlySettings.value = ev.target.checked
+                                            }}
+                                        />
+                                    </AccordionSummary>
+                                </Accordion>
+                            ) : null}
                             {provider === TradeProvider.ZRX ? (
                                 <Accordion className={classes.accordion} elevation={0}>
                                     <AccordionSummary>

@@ -21,6 +21,7 @@ export interface BackupPreview {
     contacts: number
     files: number
     wallets: number
+    createdAt: number
 }
 
 /**
@@ -48,5 +49,6 @@ export function getBackupPreviewInfo(json: BackupJSONFileLatest): BackupPreview 
         contacts: json.profiles.length,
         files: 0, // TODO: file
         wallets: json.wallets.length,
+        createdAt: json._meta_.createdAt,
     }
 }

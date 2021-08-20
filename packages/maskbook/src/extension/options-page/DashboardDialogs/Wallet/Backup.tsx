@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { CreditCard as CreditCardIcon } from 'react-feather'
 import { useAsync } from 'react-use'
 import { Flags, useI18N } from '../../../../utils'
@@ -7,16 +7,16 @@ import ShowcaseBox from '../../DashboardComponents/ShowcaseBox'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import type { WalletProps } from './types'
 
-const useBackupDialogStyles = makeStyles((theme: Theme) => ({
+const useBackupDialogStyles = makeStyles()({
     section: {
         textAlign: 'left',
     },
-}))
+})
 
 export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
-    const classes = useBackupDialogStyles()
+    const { classes } = useBackupDialogStyles()
     const { value: [privateKeyInHex, mnemonic] = ['', []] } = useAsync(async () => {
         if (!wallet) return
         const record = await WalletRPC.getWallet(wallet.address)

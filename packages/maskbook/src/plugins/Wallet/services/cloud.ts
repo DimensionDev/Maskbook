@@ -27,6 +27,6 @@ const sendRiskWarningConfirm = (address: string, pluginId?: string) =>
     })
 
 export const confirmRiskWarning = async (address: string, pluginId?: string) => {
-    const result = await sendRiskWarningConfirm(address, pluginId)
-    if (result.ok) await setRiskWarningConfirmed(address, true)
+    await setRiskWarningConfirmed(address, true)
+    await sendRiskWarningConfirm(address, pluginId)
 }

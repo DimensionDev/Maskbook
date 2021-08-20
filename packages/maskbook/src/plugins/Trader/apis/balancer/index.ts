@@ -66,11 +66,11 @@ export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALA
 
     // compose routes
     // learn more: https://github.com/balancer-labs/balancer-frontend/blob/develop/src/components/swap/Routing.vue
-    const totalSwapAmount = swaps.reduce((total, rawHops) => total.plus(rawHops[0].swapAmount || '0'), ZERO)
+    const totalSwapAmount = swaps.reduce((total, rawHops) => total.plus(first(rawHops)?.swapAmount || '0'), ZERO)
 
     const pools = sor.onChainCache.pools
     const routes = swaps.map((rawHops) => {
-        const swapAmount = new BigNumber(rawHops[0].swapAmount || '0')
+        const swapAmount = new BigNumber(first(rawHops)?.swapAmount || '0')
         const share = swapAmount.div(totalSwapAmount).toNumber()
         const hops = rawHops.map((rawHop) => {
             const { swapAmount } = rawHop

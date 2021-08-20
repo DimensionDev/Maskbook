@@ -3,8 +3,8 @@
     "version": 1,
     "list": [
         {
-            "input": "./packages/maskbook/src/_locales/en/messages.json",
-            "output": "./packages/maskbook/src/_locales/en/i18n_generated",
+            "input": "./packages/maskbook/src/locales/en-US.json",
+            "output": "./packages/maskbook/src/locales/i18n_generated",
             "parser": "i18next",
             "generator": {
                 "type": "i18next/react-hooks",
@@ -15,19 +15,31 @@
             }
         },
         {
-            "input": "./packages/shared/src/locales/en.json",
+            "input": "./packages/maskbook/src/social-network-adaptor/twitter.com/locales/en-US.json",
+            "output": "./packages/maskbook/src/social-network-adaptor/twitter.com/locales/i18n_generated",
+            "parser": "i18next",
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useDO_NOT_USE",
+                "namespace": "DO_NOT_USE",
+                "trans": "DO_NOT_USE_TRANSLATOR",
+                "sourceMap": false
+            }
+        },
+        {
+            "input": "./packages/shared/src/locales/en-US.json",
             "output": "./packages/shared/src/locales/i18n_generated",
             "parser": "i18next",
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useMaskThemeI18N",
-                "namespace": "theme",
-                "trans": "ThemeTrans",
+                "hooks": "useSharedI18N",
+                "namespace": "shared",
+                "trans": "SharedTrans",
                 "sourceMap": "inline"
             }
         },
         {
-            "input": "./packages/dashboard/src/locales/en.json",
+            "input": "./packages/dashboard/src/locales/en-US.json",
             "output": "./packages/dashboard/src/locales/i18n_generated",
             "parser": "i18next",
             "generator": {
@@ -39,7 +51,7 @@
             }
         },
         {
-            "input": "./packages/plugins/example/src/locales/en.json",
+            "input": "./packages/plugins/example/src/locales/en-US.json",
             "output": "./packages/plugins/example/src/locales/i18n_generated",
             "parser": "i18next",
             "generator": {
@@ -51,7 +63,7 @@
             }
         },
         {
-            "input": "./packages/plugins/Wallet/src/locales/en.json",
+            "input": "./packages/plugins/Wallet/src/locales/en-US.json",
             "output": "./packages/plugins/Wallet/src/locales/i18n_generated",
             "parser": "i18next",
             "generator": {

@@ -3,13 +3,12 @@ import type { Subscription } from 'use-subscription'
 import type {
     ChainId,
     ERC20TokenDetailed,
+    ERC721TokenDetailed,
     NetworkType,
     ProviderType,
     Wallet,
     PortfolioProvider,
     Asset,
-    ERC721TokenAssetDetailed,
-    ERC1155TokenAssetDetailed,
     CollectibleProvider,
     Transaction,
 } from '../types'
@@ -38,8 +37,8 @@ export interface Web3ProviderType {
         provider: CollectibleProvider,
         page?: number,
         size?: number,
-    ) => Promise<{ assets: (ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed)[]; hasNextPage: boolean }>
-    getERC721TokensPaged: (index: number, count: number, query?: string) => Promise<ERC721TokenAssetDetailed[]>
+    ) => Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }>
+    getERC721TokensPaged: (index: number, count: number, query?: string) => Promise<ERC721TokenDetailed[]>
     getTransactionList: (
         address: string,
         network: NetworkType,
