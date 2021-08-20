@@ -8,10 +8,10 @@ import {
     CardContent,
     Checkbox,
     FormControlLabel,
-    makeStyles,
     TextField,
     Typography,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
@@ -31,7 +31,7 @@ import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
 import type { useAsset } from '../hooks/useAsset'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         content: {},
         footer: {
@@ -70,7 +70,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const { amount, token, balance, setAmount, setToken } = tokenWatched
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
     const account = useAccount()
