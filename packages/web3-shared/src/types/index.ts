@@ -237,9 +237,6 @@ export enum EthereumRpcType {
     UNKNOWN = 'unknown',
     CANCEL = 'cancel',
     RETRY = 'retry', // speed up
-    TOKEN_APPROVE = 'approve',
-    TOKEN_TRANSFER = 'transfer',
-    TOKEN_TRANSFER_FROM = 'transferFrom',
     SEND_ETHER = 'sendEther',
     CONTRACT_INTERACTION = 'contractInteraction',
     CONTRACT_DEPLOYMENT = 'contractDeployment',
