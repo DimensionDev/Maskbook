@@ -1,12 +1,13 @@
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
-import { DialogContent, IconButton, makeStyles } from '@material-ui/core'
+import { DialogContent, IconButton } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import CloseIcon from '@material-ui/icons/Close'
 import { useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useTransakURL } from '../hooks/useTransakURL'
 import { PluginTransakMessages } from '../messages'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     dialogPaper: {
         width: '500px !important',
     },
