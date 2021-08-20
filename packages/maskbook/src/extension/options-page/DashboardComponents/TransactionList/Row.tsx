@@ -1,18 +1,20 @@
 import type { FC } from 'react'
 import classNames from 'classnames'
 import { isNil } from 'lodash-es'
-import { Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Link, TableCell, TableRow, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { resolveLinkOnExplorer, ChainId, useChainDetailed } from '@masknet/web3-shared'
 import { Record } from './Record'
 import { useI18N } from '../../../../utils'
 import type { Transaction } from '../../../../plugins/Wallet/types'
+import urlcat from 'urlcat'
 
 interface Props {
     chainId: ChainId
     transaction: Transaction
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     failed: { opacity: 0.3 },
     hidden: { visibility: 'hidden' },
     overflow: {
@@ -24,10 +26,10 @@ const useStyles = makeStyles(() => ({
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
     },
-}))
+})
 
 export const Row: FC<Props> = ({ transaction, chainId }) => {
-    const styles = useStyles()
+    const { classes: styles } = useStyles()
     const { t } = useI18N()
     const chainDetailed = useChainDetailed()
     return (
@@ -76,7 +78,7 @@ interface AddressProps {
 }
 
 const Address: FC<AddressProps> = ({ id, mode, chainId }) => {
-    const href = `${resolveLinkOnExplorer(chainId)}/${mode}/${id}`
+    const href = urlcat(resolveLinkOnExplorer(chainId), '/:mode/:id', { mode, id })
     return id ? (
         <Link target={id} href={href}>
             <span>{id?.slice(0, 5)}</span>

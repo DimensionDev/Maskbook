@@ -1,4 +1,4 @@
-import { getTokenConstants } from '../constants'
+import { getRedPacketConstants, getTokenConstants } from '../constants'
 
 export function isSameAddress(addrA: string = '', addrB: string = '') {
     if (!addrA || !addrB) return false
@@ -22,3 +22,30 @@ export const isDAI = currySameAddress(getTokenConstants().DAI_ADDRESS)
 export const isOKB = currySameAddress(getTokenConstants().OKB_ADDRESS)
 
 export const isNative = currySameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS)
+
+export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
+    const {
+        HAPPY_RED_PACKET_ADDRESS_V1,
+        HAPPY_RED_PACKET_ADDRESS_V2,
+        HAPPY_RED_PACKET_ADDRESS_V3,
+        HAPPY_RED_PACKET_ADDRESS_V4,
+    } = getRedPacketConstants()
+
+    switch (version) {
+        case 1:
+            return isSameAddress(HAPPY_RED_PACKET_ADDRESS_V1, address)
+        case 2:
+            return isSameAddress(HAPPY_RED_PACKET_ADDRESS_V2, address)
+        case 3:
+            return isSameAddress(HAPPY_RED_PACKET_ADDRESS_V3, address)
+        case 4:
+            return isSameAddress(HAPPY_RED_PACKET_ADDRESS_V4, address)
+        default:
+            return (
+                isSameAddress(HAPPY_RED_PACKET_ADDRESS_V1, address) ||
+                isSameAddress(HAPPY_RED_PACKET_ADDRESS_V2, address) ||
+                isSameAddress(HAPPY_RED_PACKET_ADDRESS_V3, address) ||
+                isSameAddress(HAPPY_RED_PACKET_ADDRESS_V4, address)
+            )
+    }
+}

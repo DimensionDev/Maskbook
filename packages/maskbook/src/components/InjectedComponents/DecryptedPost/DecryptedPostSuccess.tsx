@@ -2,10 +2,10 @@ import { memo } from 'react'
 import { useI18N } from '../../../utils'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
 import { useShareMenu } from '../SelectPeopleDialog'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { Link } from '@material-ui/core'
 import type { Profile } from '../../../database'
-import { useStylesExtends } from '../../custom-ui-helper'
+import { useStylesExtends } from '@masknet/shared'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import type { ProfileIdentifier } from '../../../database/type'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
@@ -25,7 +25,7 @@ export interface DecryptPostSuccessProps extends withClasses<never> {
     postedBy?: ProfileIdentifier
 }
 
-const useSuccessStyles = makeStyles((theme) => {
+const useSuccessStyles = makeStyles()((theme) => {
     return {
         header: { display: 'flex', alignItems: 'center' },
         addRecipientsLink: { cursor: 'pointer', marginLeft: theme.spacing(1) },

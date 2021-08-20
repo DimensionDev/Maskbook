@@ -8,7 +8,8 @@ import {
     useAccount,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import { DialogContent, makeStyles } from '@material-ui/core'
+import { DialogContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -28,7 +29,7 @@ import { useInvestCallback } from '../hooks/useInvestCallback'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     paper: {
         width: '450px !important',
     },
@@ -53,8 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function InvestDialog() {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const [id] = useState(uuid())
     const [pool, setPool] = useState<Pool>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
@@ -64,7 +64,7 @@ export function InvestDialog() {
     const account = useAccount()
 
     //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.events.InvestDialogUpdated, (ev) => {
+    const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated, (ev) => {
         if (ev.open) {
             setPool(ev.pool)
             setAllowedTokens(ev.tokens)
@@ -117,7 +117,7 @@ export function InvestDialog() {
 
     //#region Swap
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
-        PluginTraderMessages.events.swapDialogUpdated,
+        PluginTraderMessages.swapDialogUpdated,
         useCallback(
             (ev) => {
                 if (!ev.open) {
@@ -150,7 +150,7 @@ export function InvestDialog() {
         .getShareLinkURL?.(
             token
                 ? [
-                      `I just invested ${formatBalance(amount, 6)} ${cashTag}${token.symbol} in ${
+                      `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${
                           pool?.name
                       }. Follow @realMaskbook (mask.io) to invest dHEDGE pools.`,
                       '#mask_io',
@@ -221,17 +221,17 @@ export function InvestDialog() {
                             }}
                         />
                     </form>
-                    {isZero(tokenBalance) ? (
-                        <ActionButton
-                            className={classes.button}
-                            fullWidth
-                            onClick={openSwap}
-                            variant="contained"
-                            loading={loadingTokenBalance}>
-                            {t('plugin_dhedge_buy_token', { symbol: token?.symbol })}
-                        </ActionButton>
-                    ) : (
-                        <EthereumWalletConnectedBoundary>
+                    <EthereumWalletConnectedBoundary>
+                        {isZero(tokenBalance) ? (
+                            <ActionButton
+                                className={classes.button}
+                                fullWidth
+                                onClick={openSwap}
+                                variant="contained"
+                                loading={loadingTokenBalance}>
+                                {t('plugin_dhedge_buy_token', { symbol: token?.symbol })}
+                            </ActionButton>
+                        ) : (
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
                                 spender={pool.address}
@@ -246,8 +246,8 @@ export function InvestDialog() {
                                     {validationMessage || t('plugin_dhedge_invest')}
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>
-                        </EthereumWalletConnectedBoundary>
-                    )}
+                        )}
+                    </EthereumWalletConnectedBoundary>
                 </DialogContent>
             </InjectedDialog>
         </div>

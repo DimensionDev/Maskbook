@@ -4,6 +4,7 @@ import { Checkbox, FormControlLabel } from '@material-ui/core'
 import { Services } from '../../../../API'
 import { useAsync } from 'react-use'
 import BackupPreviewCard from '../BackupPreviewCard'
+import { useDashboardI18N } from '../../../../locales'
 
 export interface BackupDialogProps {
     open: boolean
@@ -11,6 +12,7 @@ export interface BackupDialogProps {
 }
 
 export default function BackupDialog({ open, onClose }: BackupDialogProps) {
+    const t = useDashboardI18N()
     const [checked, setChecked] = useState(true)
 
     const { value, loading } = useAsync(() => Services.Welcome.generateBackupPreviewInfo())
@@ -22,7 +24,7 @@ export default function BackupDialog({ open, onClose }: BackupDialogProps) {
         try {
             await Services.Welcome.createBackupFile({ download: true, onlyBackupWhoAmI: false })
             onClose()
-        } catch (e) {
+        } catch {
             // TODO: show snack bar
             // enqueueSnackbar(t('set_up_backup_fail'), {
             //     variant: 'error',
@@ -36,8 +38,8 @@ export default function BackupDialog({ open, onClose }: BackupDialogProps) {
 
     return (
         <ConfirmDialog
-            title="Global Backup"
-            confirmText="Backup"
+            title={t.settings_global_backup_title()}
+            confirmText={t.settings_button_backup()}
             open={open}
             confirmDisabled={loading}
             onClose={handleClose}

@@ -1,6 +1,7 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { truncate } from 'lodash-es'
+import { ToolIconURLs } from '../../../resources/tool-icon'
 import { base } from '../base'
 import { META_KEY_1, META_KEY_2 } from '../constants'
 import { FileInfoMetadataReader } from '../helpers'
@@ -23,6 +24,10 @@ const definition: Plugin.SNSAdaptor.Definition = {
     CompositionDialogEntry: {
         label: '📃 File Service',
         dialog: FileServiceDialog,
+    },
+    ToolbarEntry: {
+        ...ToolIconURLs.files,
+        onClick: 'openCompositionEntry',
     },
 }
 

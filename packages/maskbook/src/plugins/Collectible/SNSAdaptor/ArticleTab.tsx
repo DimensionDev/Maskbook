@@ -1,21 +1,20 @@
 import type { FC } from 'react'
-import { makeStyles, Link } from '@material-ui/core'
+import { Link } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Video } from '../../../components/shared/Video'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 
-const useStyles = makeStyles((theme) => {
-    return {
-        body: {
-            display: 'flex',
-            justifyContent: 'center',
-        },
-        player: {
-            maxWidth: '100%',
-            maxHeight: '100%',
-            border: 'none',
-        },
-    }
+const useStyles = makeStyles()({
+    body: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    player: {
+        maxWidth: '100%',
+        maxHeight: '100%',
+        border: 'none',
+    },
 })
 
 interface AssetPlayerProps {
@@ -25,7 +24,7 @@ interface AssetPlayerProps {
 
 // opensea supports: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB, GLTF.
 const AssetPlayer: FC<AssetPlayerProps> = ({ src, alt }) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     if (!src) {
         return null
     }
@@ -40,7 +39,7 @@ const AssetPlayer: FC<AssetPlayerProps> = ({ src, alt }) => {
 export interface ArticleTabProps {}
 
 export function ArticleTab(props: ArticleTabProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { asset } = CollectibleState.useContainer()
 
     if (!asset.value) return null

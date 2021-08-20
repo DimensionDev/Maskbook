@@ -16,7 +16,7 @@ export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type
 }
 
 export const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor =>
-    isTypedMessageAnchor(m) && ['cash', 'hash'].includes(m.category) && !/#[\w\d]+lbp$/i.test(m.content)
+    isTypedMessageAnchor(m) && ['cash', 'hash'].includes(m.category) && !/#\w+lbp$/i.test(m.content)
 export function makeTypedMessageCashTrending(message: TypedMessageAnchor) {
     return {
         ...message,
@@ -45,7 +45,7 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
                 const dataProviders = await PluginTraderRPC.getAvailableDataProviders(type, name)
                 const tradeProviders = await PluginTraderRPC.getAvailableTraderProviders(type, name)
                 if (!dataProviders.length) return
-                PluginTraderMessages.events.cashTagObserved.sendToLocal({
+                PluginTraderMessages.cashTagObserved.sendToLocal({
                     name,
                     type,
                     element,

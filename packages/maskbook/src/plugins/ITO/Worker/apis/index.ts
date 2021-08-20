@@ -1,4 +1,4 @@
-import { getITOConstants } from '@masknet/web3-shared'
+import { ChainId, getITOConstants } from '@masknet/web3-shared'
 import stringify from 'json-stable-stringify'
 import { first, omit } from 'lodash-es'
 import { currentChainIdSettings } from '../../../Wallet/settings'
@@ -48,8 +48,8 @@ const POOL_FIELDS = `
     }
 `
 
-async function fetchFromMarketSubgraph<T>(query: string) {
-    const subgraphURL = getITOConstants(currentChainIdSettings.value).SUBGRAPH_URL
+async function fetchFromMarketSubgraph<T>(query: string, chainId?: ChainId) {
+    const subgraphURL = getITOConstants(chainId ? chainId : currentChainIdSettings.value).SUBGRAPH_URL
     if (!subgraphURL) return null
     const response = await fetch(subgraphURL, {
         method: 'POST',
@@ -173,7 +173,7 @@ export async function getAllPoolsAsSeller(address: string, page: number) {
     })
 }
 
-export async function getAllPoolsAsBuyer(address: string) {
+export async function getAllPoolsAsBuyer(address: string, chainId: ChainId) {
     const data = await fetchFromMarketSubgraph<{
         buyInfos: {
             pool: JSON_PayloadOutMask & {
@@ -181,7 +181,8 @@ export async function getAllPoolsAsBuyer(address: string) {
                 exchange_out_volumes: string[]
             }
         }[]
-    }>(`
+    }>(
+        `
     {
         buyInfos (where: { buyer: "${address.toLowerCase()}" }) {
             pool {
@@ -191,7 +192,9 @@ export async function getAllPoolsAsBuyer(address: string) {
             }
         }
     }
-    `)
+    `,
+        chainId,
+    )
     if (!data?.buyInfos) return []
     return data.buyInfos.map((x) => {
         const pool = payloadIntoMask(omit(x.pool, ['exchange_in_volumes', 'exchange_out_volumes']))

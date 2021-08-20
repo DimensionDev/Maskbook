@@ -6,7 +6,8 @@ import {
     useChainIdValid,
     useWallet,
 } from '@masknet/web3-shared'
-import { Button, DialogActions, DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import ErrorIcon from '@material-ui/icons/Error'
 import classNames from 'classnames'
 import { useCallback } from 'react'
@@ -20,8 +21,9 @@ import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { currentProviderSettings } from '../../settings'
 import { RecentTransactionList } from './RecentTransactionList'
+import { getMaskColor } from '@masknet/theme'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(2, 4, 3),
     },
@@ -29,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 3),
         marginBottom: theme.spacing(2),
         display: 'flex',
-        backgroundColor: theme.palette.mode === 'dark' ? '#17191D' : '#F7F9FA',
+        backgroundColor: getMaskColor(theme).twitterBackground,
         borderRadius: 8,
         alignItems: 'center',
     },
@@ -94,8 +96,8 @@ export interface WalletStatusDialogProps {}
 
 export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { t } = useI18N()
-    const classes = useStyles()
 
+    const { classes } = useStyles()
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     const selectedWallet = useWallet()

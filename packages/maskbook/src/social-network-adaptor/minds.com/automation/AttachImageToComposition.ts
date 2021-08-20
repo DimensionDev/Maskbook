@@ -11,7 +11,8 @@ export function pasteImageToCompositionMinds() {
         { recover, relatedTextPayload }: SocialNetworkUI.AutomationCapabilities.NativeCompositionAttachImageOptions,
     ) {
         const image = typeof url === 'string' ? await downloadUrl(url) : url
-        let data = [new ClipboardItem({ [image.type]: image })]
+        // @ts-expect-error https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1029#issuecomment-898868750
+        const data = [new ClipboardItem({ [image.type]: image })]
         await navigator.clipboard.write(data)
         composerModalTextAreaSelector().evaluate()?.focus()
         document.execCommand('paste')

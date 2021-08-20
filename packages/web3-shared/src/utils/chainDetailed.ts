@@ -13,6 +13,11 @@ export function isChainIdMainnet(chainId: ChainId) {
     return chainDetailed?.network === 'mainnet'
 }
 
+export function isEIP1159Supported(chainId: ChainId) {
+    const features = getChainDetailed(chainId)?.features ?? []
+    return features.includes('EIP1159')
+}
+
 export function getChainDetailed(chainId = ChainId.Mainnet) {
     return CHAINS.find((x) => x.chainId === chainId)
 }
@@ -46,6 +51,11 @@ export function getChainName(chainId: ChainId) {
     return chainDetailed?.name ?? 'Unknown Network'
 }
 
+export function getChainShortName(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    return chainDetailed?.shortName ?? 'Unknown Network'
+}
+
 export function getChainFullName(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     return chainDetailed?.fullName ?? 'Unknown Network'
@@ -72,6 +82,8 @@ export function getChainIdFromNetworkType(networkType: NetworkType) {
             return ChainId.BSC
         case NetworkType.Polygon:
             return ChainId.Matic
+        case NetworkType.Arbitrum:
+            return ChainId.Arbitrum
         default:
             safeUnreachable(networkType)
             return ChainId.Mainnet
@@ -87,6 +99,8 @@ export function getNetworkTypeFromChainId(chainId: ChainId) {
             return NetworkType.Binance
         case 'Matic':
             return NetworkType.Polygon
+        case 'Arbitrum':
+            return NetworkType.Arbitrum
         default:
             return
     }

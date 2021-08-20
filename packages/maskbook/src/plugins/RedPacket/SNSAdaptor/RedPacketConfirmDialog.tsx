@@ -1,11 +1,6 @@
-import {
-    formatBalance,
-    resolveTokenLinkOnExplorer,
-    useChainId,
-    useNetworkType,
-    NetworkType,
-} from '@masknet/web3-shared'
-import { Grid, Link, makeStyles, Paper, Typography } from '@material-ui/core'
+import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared'
+import { Grid, Link, Paper, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { isNative } from 'lodash-es'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { Flags, useI18N } from '../../../utils'
@@ -16,7 +11,7 @@ import { FormattedBalance } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     link: {
         display: 'flex',
         marginLeft: theme.spacing(0.5),
@@ -65,17 +60,15 @@ export interface ConfirmRedPacketFormProps {
     onBack: () => void
     onCreate: () => void
     onClose: () => void
-    settings?: Omit<RedPacketSettings, 'password'>
+    settings?: RedPacketSettings
 }
 
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const { t } = useI18N()
     const { onBack, settings, onCreate, onClose } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const chainId = useChainId()
-    const networkType = useNetworkType()
-    const contract_version = networkType === NetworkType.Ethereum ? 2 : 3
-    const paramsResult = useCreateParams(settings, contract_version)
+    const paramsResult = useCreateParams(settings, 4)
 
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()

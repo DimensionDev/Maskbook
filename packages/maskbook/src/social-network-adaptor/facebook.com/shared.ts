@@ -5,6 +5,11 @@ import { PostIdentifier, ProfileIdentifier } from '@masknet/shared'
 import { deconstructPayload } from '../../utils'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
 
+const getPostURL = (post: PostIdentifier): URL | null => {
+    if (post.identifier instanceof ProfileIdentifier)
+        return new URL(getPostUrlAtFacebook(post as PostIdentifier<ProfileIdentifier>))
+    return null
+}
 export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
     ...facebookBase,
     utils: {
@@ -12,11 +17,7 @@ export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
         isValidUsername: (v) => !!isValidFacebookUsername(v),
         publicKeyEncoding: undefined,
         textPayloadPostProcessor: undefined,
-        getPostURL(post) {
-            if (post.identifier instanceof ProfileIdentifier)
-                return new URL(getPostUrlAtFacebook(post as PostIdentifier<ProfileIdentifier>))
-            return null
-        },
+        getPostURL,
         getShareLinkURL(message) {
             const url = new URL('https://www.facebook.com/sharer/sharer.php')
             url.searchParams.set('quote', message)
@@ -25,6 +26,7 @@ export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
             payloadParser: deconstructPayload,
+            getURLFromPostIdentifier: getPostURL,
         }),
     },
 }

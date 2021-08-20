@@ -10,9 +10,7 @@ if (typeof globalThis.EventTarget?.call === 'function') {
 function shim() {
     globalThis.EventTarget = new Proxy(EventTarget, {
         construct() {
-            // Obviously an HTMLElement is a EventTarget,
-            // TODO: but we need to find another side-effect free subclass of EventTarget because DOM is not available in the WorkerGlobalScope
-            return document.createElement('div')
+            return new AbortController().signal
         },
     })
 }

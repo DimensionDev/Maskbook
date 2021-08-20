@@ -8,7 +8,9 @@
         "BSC": "",
         "BSCT": "",
         "Matic": "",
-        "Mumbai": ""
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
         "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
@@ -19,7 +21,9 @@
         "BSC": "",
         "BSCT": "",
         "Matic": "",
-        "Mumbai": ""
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
     },
     "GITCOIN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -30,7 +34,9 @@
         "BSC": "",
         "BSCT": "",
         "Matic": "",
-        "Mumbai": ""
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
         "Mainnet": 5,
@@ -41,6 +47,8 @@
         "BSC": 5,
         "BSCT": 5,
         "Matic": 5,
-        "Mumbai": 5
+        "Mumbai": 5,
+        "Arbitrum": 0,
+        "Arbitrum_Rinkeby": 0
     }
 }

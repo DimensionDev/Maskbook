@@ -10,12 +10,12 @@ import { PersonaRecordFromJSONFormat } from '../../../utils/type-transform/Backu
 import { ProfileRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
 import { createOrUpdatePostDB } from '../../../database/post'
-import { GroupRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
-import { createOrUpdateUserGroupDatabase } from '../../../database/group'
 import { i18n } from '../../../utils/i18n-next'
 import { currentImportingBackup } from '../../../settings/settings'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { importNewWallet } from '../../../plugins/Wallet/services'
+import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra'
+import { Result } from 'ts-results'
 
 /**
  * Restore the backup
@@ -60,10 +60,34 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
             await createOrUpdatePostDB(PostRecordFromJSONFormat(x), 'append')
         }
 
-        for (const x of data.userGroups) {
-            const rec = GroupRecordFromJSONFormat(x)
-            await createOrUpdateUserGroupDatabase(rec, 'append')
+        const plugins = [...activatedPluginsWorker]
+        const works = new Set<Promise<Result<void, unknown>>>()
+        for (const [pluginID, item] of Object.entries(data.plugin || {})) {
+            const plugin = plugins.find((x) => x.ID === pluginID)
+            // should we warn user here?
+            if (!plugin) {
+                if ([...registeredPluginIDs].includes(pluginID))
+                    console.warn(`[@masknet/plugin-infra] Found a backup of a not enabled plugin ${plugin}`, item)
+                else console.warn(`[@masknet/plugin-infra] Found an unknown plugin backup of ${plugin}`, item)
+                continue
+            }
+
+            const f = plugin.backup?.onRestore
+            if (!f) {
+                console.warn(
+                    `[@masknet/plugin-infra] Found a backup of plugin ${plugin} but it did not register a onRestore callback.`,
+                    item,
+                )
+                continue
+            }
+            const x = Result.wrapAsync(async () => {
+                const x = await f(item)
+                if (x.err) console.error(`[@masknet/plugin-infra] Plugin ${plugin} failed to restore its backup.`, item)
+                return x.unwrap()
+            })
+            works.add(x)
         }
+        await Promise.all(works)
     } finally {
         currentImportingBackup.value = false
     }

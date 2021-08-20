@@ -7,6 +7,7 @@ import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { PhraseRecordIntoDB, PhraseRecordOutDB } from './helpers'
 import * as wallet from './wallet'
+import { getBalance } from '../../../extension/background-script/EthereumService'
 
 export async function getPhrases() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Phrase')
@@ -110,5 +111,57 @@ export async function deriveWalletFromPhrase(
         return address
     }
     throw new Error('Derive too many times.')
+}
+//#endregion
+
+//#region Query derivable wallet addresses
+export async function queryDerivableWalletFromPhrase(
+    mnemonic: string[],
+    passphrase: string,
+    page: number,
+    pageSize = 10,
+    path = HD_PATH_WITHOUT_INDEX_ETHEREUM,
+) {
+    const result = []
+    for (let i = pageSize * (page - 1); i < pageSize * page && i < MAX_DERIVE_COUNT; i += 1) {
+        const derivedWallet = await wallet.recoverWalletFromMnemonicWords(mnemonic, passphrase, `${path}/${i}`)
+        const balance = await getBalance(derivedWallet.address)
+        result.push({
+            ...derivedWallet,
+            balance,
+        })
+    }
+
+    return result
+}
+//#endregion
+
+//#region derive a new wallet from specified index
+export async function deriveWalletFromIndex(mnemonic: string[], passphrase: string, index: number) {
+    // find or create phrase
+    let phrase = await getPhrase((record) => record.mnemonic.join(' ') === mnemonic.join(' '))
+    if (!phrase) {
+        phrase = await addPhrase({
+            mnemonic,
+            passphrase,
+            path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
+        })
+    }
+
+    // create a wallet from mnemonic
+    await wallet.importNewWallet({
+        name: `Account${index + 1}`,
+        path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}`,
+        mnemonic: phrase.mnemonic,
+        passphrase: phrase.passphrase,
+    })
+
+    // update the largest index
+    if (index + 1 > phrase.index && index + 1 < MAX_DERIVE_COUNT) {
+        await updatePhrase({
+            id: phrase.id,
+            index: index + 1,
+        })
+    }
 }
 //#endregion

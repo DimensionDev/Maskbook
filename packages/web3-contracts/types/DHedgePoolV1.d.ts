@@ -140,9 +140,9 @@ export type Withdrawal = ContractEventLog<{
     7: string
 }>
 
-export interface DHedgePool extends BaseContract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): DHedgePool
-    clone(): DHedgePool
+export interface DHedgePoolV1 extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): DHedgePoolV1
+    clone(): DHedgePoolV1
     methods: {
         addMember(member: string): NonPayableTransactionObject<void>
 

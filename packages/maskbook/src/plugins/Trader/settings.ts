@@ -2,19 +2,27 @@ import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import stringify from 'json-stable-stringify'
 import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
-import { PLUGIN_IDENTIFIER, SLIPPAGE_TOLERANCE_DEFAULT } from './constants'
-import { DataProvider, TradeProvider, ZrxTradePool } from './types'
+import { PLUGIN_IDENTIFIER, SLIPPAGE_DEFAULT } from './constants'
+import { ZrxTradePool } from './types'
+import { DataProvider, TradeProvider } from '@masknet/public-api'
 
 /**
  * The slippage tolerance of trader
  */
-export const currentSlippageTolerance = createGlobalSettings<number>(
+export const currentSlippageSettings = createGlobalSettings<number>(
     `${PLUGIN_IDENTIFIER}+slippageTolerance`,
-    SLIPPAGE_TOLERANCE_DEFAULT,
+    SLIPPAGE_DEFAULT,
     {
         primary: () => '',
     },
 )
+
+/**
+ * Single Hop
+ */
+export const currentSingleHopOnlySettings = createGlobalSettings<boolean>(`${PLUGIN_IDENTIFIER}+singleHopOnly`, false, {
+    primary: () => '',
+})
 
 /**
  * The default data provider
@@ -33,11 +41,35 @@ export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
  */
 export const currentTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_IDENTIFIER}+tradeProvider`,
-    TradeProvider.UNISWAP,
+    TradeProvider.UNISWAP_V2,
     {
         primary: () => i18n.t('plugin_trader_settings_trade_provider_primary'),
         secondary: () => i18n.t('plugin_trader_settings_trade_provider_secondary'),
     },
+)
+
+export const ethereumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+ethereum+tradeProvider`,
+    TradeProvider.UNISWAP_V2,
+    { primary: () => '' },
+)
+
+export const polygonNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+polygon+tradeProvider`,
+    TradeProvider.QUICKSWAP,
+    { primary: () => '' },
+)
+
+export const binanceNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+binance+tradeProvider`,
+    TradeProvider.PANCAKESWAP,
+    { primary: () => '' },
+)
+
+export const arbitrumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+arbitrum+tradeProvider`,
+    TradeProvider.UNISWAP_V3,
+    { primary: () => '' },
 )
 
 //#region trade provider general settings
@@ -45,7 +77,8 @@ export interface TradeProviderSettings {
     pools: ZrxTradePool[]
 }
 
-const uniswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+uniswap`, '')
+const uniswapV2Settings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+uniswap+v2`, '')
+const uniswapV3Settings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+uniswap+v3`, '')
 const zrxSettings = createInternalSettings<string>(
     `${PLUGIN_IDENTIFIER}+tradeProvider+zrx`,
     stringify({
@@ -57,14 +90,17 @@ const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}
 const qucikswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
 const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+pancakeswap`, '')
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+balancer`, '')
+const dodoSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+dodo`, '')
 
 /**
  * The general settings of specific tarde provider
  */
 export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvider) {
     switch (tradeProvider) {
-        case TradeProvider.UNISWAP:
-            return uniswapSettings
+        case TradeProvider.UNISWAP_V2:
+            return uniswapV2Settings
+        case TradeProvider.UNISWAP_V3:
+            return uniswapV3Settings
         case TradeProvider.ZRX:
             return zrxSettings
         case TradeProvider.SUSHISWAP:
@@ -77,6 +113,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return pancakeswapSettings
         case TradeProvider.BALANCER:
             return balancerSettings
+        case TradeProvider.DODO:
+            return dodoSettings
         default:
             unreachable(tradeProvider)
     }

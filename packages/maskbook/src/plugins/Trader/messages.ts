@@ -1,8 +1,7 @@
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import type { TagType, DataProvider, TradeProvider } from './types'
-import { createPluginMessage } from '../utils/createPluginMessage'
+import type { TagType } from './types'
+import type { DataProvider, TradeProvider } from '@masknet/public-api'
+import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
 import { PLUGIN_IDENTIFIER } from './constants'
-import { createPluginRPC } from '../utils/createPluginRPC'
 import type { TraderProps } from './SNSAdaptor/trader/Trader'
 
 interface CashTagEvent {
@@ -51,10 +50,5 @@ export interface TraderMessage {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const PluginTraderMessages: WebExtensionMessage<TraderMessage> =
-    createPluginMessage<TraderMessage>(PLUGIN_IDENTIFIER)
-export const PluginTraderRPC = createPluginRPC(
-    PLUGIN_IDENTIFIER,
-    () => import('./services'),
-    PluginTraderMessages.events.rpc,
-)
+export const PluginTraderMessages: PluginMessageEmitter<TraderMessage> = createPluginMessage(PLUGIN_IDENTIFIER)
+export const PluginTraderRPC = createPluginRPC(PLUGIN_IDENTIFIER, () => import('./services'), PluginTraderMessages.rpc)

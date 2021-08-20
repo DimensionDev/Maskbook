@@ -4,7 +4,6 @@ import {
     Button,
     Chip,
     IconButton,
-    makeStyles,
     Skeleton,
     Table,
     TableBody,
@@ -12,14 +11,14 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Theme,
     Typography,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import type { Asset } from '@masknet/web3-shared'
+import { Asset, useTrustedERC20Tokens } from '@masknet/web3-shared'
 import {
     CurrencyType,
     currySameAddress,
@@ -33,19 +32,12 @@ import {
     useStableTokensDebank,
     Wallet,
 } from '@masknet/web3-shared'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { FormattedCurrency, TokenIcon, useValueRef } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon, useStylesExtends } from '@masknet/shared'
 import { useI18N, useMatchXS } from '../../../utils'
 import { ActionsBarFT } from './ActionsBarFT'
-import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
-import { currentEtherPriceSettings } from '../../../plugins/Wallet/settings'
 
-const useStyles = makeStyles<
-    Theme,
-    { isMobile: boolean },
-    'container' | 'head' | 'cell' | 'record' | 'coin' | 'name' | 'chain' | 'price' | 'more' | 'lessButton'
->((theme) => ({
+const useStyles = makeStyles<{ isMobile: boolean }>()((theme, { isMobile }) => ({
     container: {
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -56,31 +48,31 @@ const useStyles = makeStyles<
         backgroundColor: theme.palette.mode === 'light' ? theme.palette.common.white : 'var(--drawerBody)',
     },
     cell: {
-        paddingLeft: ({ isMobile }) => (isMobile ? theme.spacing(0.5) : theme.spacing(2)),
-        paddingRight: ({ isMobile }) => (isMobile ? theme.spacing(0.5) : theme.spacing(1.5)),
-        fontSize: ({ isMobile }) => (isMobile ? '0.8rem' : '0.875rem'),
+        paddingLeft: isMobile ? theme.spacing(0.5) : theme.spacing(2),
+        paddingRight: isMobile ? theme.spacing(0.5) : theme.spacing(1.5),
+        fontSize: isMobile ? '0.8rem' : '0.875rem',
         whiteSpace: 'nowrap',
     },
     record: {
         display: 'flex',
     },
     coin: {
-        width: ({ isMobile }) => (isMobile ? 20 : 24),
-        height: ({ isMobile }) => (isMobile ? 20 : 24),
+        width: isMobile ? 20 : 24,
+        height: isMobile ? 20 : 24,
     },
     name: {
         marginLeft: theme.spacing(1),
-        fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
+        fontSize: isMobile ? '0.9rem' : '1rem',
     },
     chain: {
         marginLeft: theme.spacing(1),
     },
     price: {
-        fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
+        fontSize: isMobile ? '0.9rem' : '1rem',
     },
     more: {
         color: theme.palette.text.primary,
-        fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
+        fontSize: isMobile ? '0.9rem' : '1rem',
     },
     lessButton: {
         display: 'flex',
@@ -103,12 +95,6 @@ function ViewDetailed(props: ViewDetailedProps) {
 
     const stableTokens = useStableTokensDebank()
     const chainDetailed = useChainDetailed()
-
-    const etherPrice = useValueRef(currentEtherPriceSettings)
-
-    console.log({
-        etherPrice,
-    })
 
     if (!chainDetailed) return null
 
@@ -188,7 +174,7 @@ function ViewDetailed(props: ViewDetailedProps) {
 //#region wallet asset table
 const MIN_VALUE = 5
 
-export interface WalletAssetsTableProps extends withClasses<never> {
+export interface WalletAssetsTableProps extends withClasses<'container'> {
     wallet: Wallet
 }
 
@@ -206,7 +192,7 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
         ...(isMobile ? [] : ['']),
     ] as const
 
-    const erc20Tokens = useTrustedERC20TokensFromDB()
+    const erc20Tokens = useTrustedERC20Tokens()
     const {
         value: detailedTokens,
         error: detailedTokensError,
@@ -263,25 +249,52 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
                     </TableHead>
                     <TableBody>
                         {detailedTokensLoading
-                            ? new Array(3).fill(0).map((_, i) => (
-                                  <TableRow className={classes.cell} key={i}>
-                                      <TableCell>
-                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
-                                      </TableCell>
-                                      <TableCell>
-                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
-                                      </TableCell>
-                                      <TableCell>
-                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
-                                      </TableCell>
-                                      <TableCell>
-                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
-                                      </TableCell>
-                                      <TableCell>
-                                          <Skeleton animation="wave" variant="rectangular" width="100%" height={30} />
-                                      </TableCell>
-                                  </TableRow>
-                              ))
+                            ? Array.from({ length: 3 })
+                                  .fill(0)
+                                  .map((_, i) => (
+                                      <TableRow className={classes.cell} key={i}>
+                                          <TableCell>
+                                              <Skeleton
+                                                  animation="wave"
+                                                  variant="rectangular"
+                                                  width="100%"
+                                                  height={30}
+                                              />
+                                          </TableCell>
+                                          <TableCell>
+                                              <Skeleton
+                                                  animation="wave"
+                                                  variant="rectangular"
+                                                  width="100%"
+                                                  height={30}
+                                              />
+                                          </TableCell>
+                                          <TableCell>
+                                              <Skeleton
+                                                  animation="wave"
+                                                  variant="rectangular"
+                                                  width="100%"
+                                                  height={30}
+                                              />
+                                          </TableCell>
+                                          <TableCell>
+                                              <Skeleton
+                                                  animation="wave"
+                                                  variant="rectangular"
+                                                  width="100%"
+                                                  height={30}
+                                              />
+                                          </TableCell>
+                                          <TableCell>
+                                              <Skeleton
+                                                  animation="wave"
+                                                  variant="rectangular"
+                                                  width="100%"
+                                                  height={30}
+                                              />
+                                          </TableCell>
+                                      </TableRow>
+                                  ))
                             : (more ? detailedTokens : viewDetailedTokens).map((y, idx) => (
                                   <ViewDetailed key={idx} asset={y} wallet={wallet} />
                               ))}

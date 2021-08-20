@@ -1,11 +1,9 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import {
-    makeStyles,
     Paper,
     Typography,
     TextField,
-    Theme,
     ThemeProvider,
     InputAdornment,
     LinearProgress,
@@ -13,7 +11,9 @@ import {
     IconButton,
     Box,
     useMediaQuery,
+    Theme,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { ArrowRight } from 'react-feather'
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
@@ -89,7 +89,7 @@ const wizardTheme = extendsTheme((theme: Theme) => ({
     },
 }))
 
-const useWizardDialogStyles = makeStyles((theme) => ({
+const useWizardDialogStyles = makeStyles()((theme) => ({
     root: {
         padding: '56px 20px 48px',
         position: 'relative',
@@ -177,25 +177,23 @@ const useWizardDialogStyles = makeStyles((theme) => ({
     },
 }))
 
-const useStyles = makeStyles((theme: Theme) => {
-    return {
-        root: {
-            alignItems: 'center',
-        },
-        content: {
-            marginRight: 16,
-        },
-        footer: {
-            marginLeft: 0,
-            marginTop: 0,
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'column',
-        },
-        tip: {},
-    }
+const useStyles = makeStyles()({
+    root: {
+        alignItems: 'center',
+    },
+    content: {
+        marginRight: 16,
+    },
+    footer: {
+        marginLeft: 0,
+        marginTop: 0,
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+    },
+    tip: {},
 })
 
 interface ContentUIProps {
@@ -206,7 +204,7 @@ interface ContentUIProps {
 }
 
 function ContentUI(props: ContentUIProps) {
-    const classes = useStyles(props)
+    const { classes } = useStyles()
     const xsMatch = useMatchXS()
     const onlyXS = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
     switch (props.dialogType) {
@@ -257,7 +255,7 @@ interface WizardDialogProps {
 function WizardDialog(props: WizardDialogProps) {
     const { t } = useI18N()
     const { title, dialogType, optional = false, completion, status, content, tip, footer, onBack, onClose } = props
-    const classes = useWizardDialogStyles(props)
+    const { classes } = useWizardDialogStyles()
     const onlyXS = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
 
     return (
@@ -320,7 +318,7 @@ function WizardDialog(props: WizardDialogProps) {
 //#endregion
 
 //#region find username
-const useFindUsernameStyles = makeStyles((theme) => ({
+const useFindUsernameStyles = makeStyles()((theme) => ({
     input: {
         marginTop: '45px !important',
         marginBottom: 24,
@@ -350,8 +348,8 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
     const ui = activatedSocialNetworkUI
     const gotoProfilePageImpl = ui.automation.redirect?.profilePage
 
-    const classes = useWizardDialogStyles()
-    const findUsernameClasses = useFindUsernameStyles()
+    const { classes } = useWizardDialogStyles()
+    const { classes: findUsernameClasses } = useFindUsernameStyles()
     const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
         e.stopPropagation()
         if (e.key !== 'Enter') return
@@ -441,7 +439,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
 //#endregion
 
 //#region say hello world
-const useSayHelloWorldStyles = makeStyles((theme) => ({
+const useSayHelloWorldStyles = makeStyles()((theme) => ({
     primary: {
         marginTop: 24,
         marginBottom: 16,
@@ -460,8 +458,8 @@ interface SayHelloWorldProps extends Partial<WizardDialogProps> {
 
 function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayHelloWorldProps) {
     const { t } = useI18N()
-    const classes = useWizardDialogStyles()
-    const sayHelloWorldClasses = useSayHelloWorldStyles()
+    const { classes } = useWizardDialogStyles()
+    const { classes: sayHelloWorldClasses } = useSayHelloWorldStyles()
     const xsOnly = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
 
     return (
@@ -618,7 +616,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         const content = t('setup_guide_say_hello_content')
         copyToClipboard(content)
         ui.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
-            shareToEveryOne: true,
+            target: 'Everyone',
         })
     }
     const onClose = () => {
@@ -655,7 +653,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 //#endregion
 
 //#region setup guide
-const useSetupGuideStyles = makeStyles((theme: Theme) => ({
+const useSetupGuideStyles = makeStyles()({
     root: {
         position: 'fixed',
         zIndex: 9999,
@@ -663,11 +661,11 @@ const useSetupGuideStyles = makeStyles((theme: Theme) => ({
         top: '2em',
         right: '2em',
     },
-}))
+})
 export interface SetupGuideProps extends SetupGuideUIProps {}
 
 export function SetupGuide(props: SetupGuideProps) {
-    const classes = useSetupGuideStyles()
+    const { classes } = useSetupGuideStyles()
     return (
         <div className={classes.root}>
             <SetupGuideUI {...props} />

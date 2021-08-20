@@ -2,9 +2,10 @@
 # webpack config.resolve.alias
 packages:
   - 'packages/empty'
-  - 'packages/cli'
+  - 'packages/scripts'
   - 'packages/dashboard'
   - 'packages/maskbook'
+  - 'packages/public-api'
   - 'packages/shared-base'
   - 'packages/shared'
   - 'packages/web3-constants'
@@ -15,4 +16,5 @@ packages:
   - 'packages/icons'
   - 'packages/plugin-infra'
   - 'packages/plugins/example'
+  - 'packages/plugins/Wallet'
   - 'packages/external-plugin-previewer'

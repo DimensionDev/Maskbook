@@ -1,4 +1,5 @@
-import { Button, makeStyles, TextField } from '@material-ui/core'
+import { Button, TextField } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
@@ -20,7 +21,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 
-const useTransferTabStyles = makeStyles((theme) => ({
+const useTransferTabStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(1),
     },
@@ -47,8 +48,7 @@ export function TransferTab(props: TransferTabProps) {
     const { token, onClose } = props
 
     const { t } = useI18N()
-    const classes = useTransferTabStyles()
-
+    const { classes } = useTransferTabStyles()
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
@@ -62,7 +62,7 @@ export function TransferTab(props: TransferTabProps) {
     const onChangeAmount = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
         const _amount = ev.currentTarget.value
         if (_amount === '') setAmount('')
-        if (/^\d+[\.]?\d*$/.test(_amount)) setAmount(_amount)
+        if (/^\d+\.?\d*$/.test(_amount)) setAmount(_amount)
     }, [])
 
     //#region transfer tokens

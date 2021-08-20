@@ -10,18 +10,18 @@ import {
     useNativeTokenDetailed,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import { DialogContent, Link, makeStyles, Typography } from '@material-ui/core'
+import { DialogContent, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -29,7 +29,7 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { PluginGitcoinMessages } from '../messages'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     paper: {
         width: '450px !important',
     },
@@ -69,7 +69,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region remote controlled dialog
     const { open, closeDialog: closeDonationDialog } = useRemoteControlledDialog(
-        PluginGitcoinMessages.events.donationDialogUpdated,
+        PluginGitcoinMessages.donationDialogUpdated,
         (ev) => {
             if (!ev.open) return
             setTitle(ev.title)

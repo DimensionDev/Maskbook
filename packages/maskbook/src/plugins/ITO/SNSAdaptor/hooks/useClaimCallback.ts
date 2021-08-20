@@ -2,7 +2,6 @@ import { useCallback } from 'react'
 import stringify from 'json-stable-stringify'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import {
-    isZero,
     TransactionEventType,
     TransactionStateType,
     useAccount,
@@ -10,22 +9,25 @@ import {
     useGasPrice,
     useNonce,
     useTransactionState,
+    useITOConstants,
+    isSameAddress,
 } from '@masknet/web3-shared'
 import { useITO_Contract } from './useITO_Contract'
+import { checkAvailability } from '../../Worker/apis/checkAvailability'
 
-export function useClaimCallback(pids: string[], contractAddress?: string) {
+export function useClaimCallback(pids: string[], contractAddress: string | undefined) {
     const nonce = useNonce()
     const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
+    const { ITO_CONTRACT_ADDRESS } = useITOConstants()
     const { contract: ITO_Contract } = useITO_Contract(contractAddress)
     const [claimState, setClaimState] = useTransactionState()
 
+    const isV1 = isSameAddress(ITO_CONTRACT_ADDRESS ?? '', contractAddress)
     const claimCallback = useCallback(async () => {
-        if (!ITO_Contract || pids.length === 0) {
-            setClaimState({
-                type: TransactionStateType.UNKNOWN,
-            })
+        if (!ITO_Contract || !contractAddress || pids.length === 0) {
+            setClaimState({ type: TransactionStateType.UNKNOWN })
             return
         }
         // start waiting for provider to confirm tx
@@ -36,14 +38,9 @@ export function useClaimCallback(pids: string[], contractAddress?: string) {
         // check if already claimed
         try {
             const availabilityList = await Promise.all(
-                pids.map((pid) =>
-                    ITO_Contract.methods.check_availability(pid).call({
-                        from: account,
-                    }),
-                ),
+                pids.map((pid) => checkAvailability(pid, account, contractAddress, chainId, isV1)),
             )
-
-            const isClaimed = availabilityList.some((availability) => isZero(availability.swapped))
+            const isClaimed = availabilityList.some((availability) => availability.claimed)
 
             if (isClaimed) {
                 setClaimState({
@@ -52,7 +49,7 @@ export function useClaimCallback(pids: string[], contractAddress?: string) {
                 })
                 return
             }
-        } catch (e) {
+        } catch {
             setClaimState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Failed to check availability.'),
@@ -65,14 +62,9 @@ export function useClaimCallback(pids: string[], contractAddress?: string) {
             from: account,
             gas: await ITO_Contract.methods
                 .claim(pids)
-                .estimateGas({
-                    from: account,
-                })
+                .estimateGas({ from: account })
                 .catch((error) => {
-                    setClaimState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
+                    setClaimState({ type: TransactionStateType.FAILED, error })
                     throw error
                 }),
             gasPrice,
@@ -113,12 +105,10 @@ export function useClaimCallback(pids: string[], contractAddress?: string) {
                     reject(error)
                 })
         })
-    }, [account, chainId, ITO_Contract, stringify(pids)])
+    }, [account, chainId, ITO_Contract, stringify(pids), isV1])
 
     const resetCallback = useCallback(() => {
-        setClaimState({
-            type: TransactionStateType.UNKNOWN,
-        })
+        setClaimState({ type: TransactionStateType.UNKNOWN })
     }, [])
 
     return [claimState, claimCallback, resetCallback] as const

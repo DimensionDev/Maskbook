@@ -5,23 +5,23 @@ import {
     getBackupPreviewInfo,
 } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { queryPersonasDB, queryProfilesDB } from '../../../database/Persona/Persona.db'
-import { queryUserGroupsDatabase } from '../../../database/group'
 import { queryPostsDB } from '../../../database/post'
 import { PersonaRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
-import { GroupRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
-import { ProfileIdentifier, PersonaIdentifier, Identifier } from '../../../database/type'
+import { Identifier, PersonaIdentifier, ProfileIdentifier } from '../../../database/type'
 import { getWallets } from '../../../plugins/Wallet/services'
 import { WalletRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
+import { activatedPluginsWorker } from '@masknet/plugin-infra'
+import { timeout } from '@masknet/shared'
 
 export type { BackupPreview } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 export interface BackupOptions {
     noPosts: boolean
-    noUserGroups: boolean
     noWallets: boolean
     noPersonas: boolean
     noProfiles: boolean
+    noPlugins: boolean
     hasPrivateKeyOnly: boolean
     filter: { type: 'persona'; wanted: PersonaIdentifier[] }
 }
@@ -30,7 +30,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     const posts: BackupJSONFileLatest['posts'] = []
     const wallets: BackupJSONFileLatest['wallets'] = []
     const profiles: BackupJSONFileLatest['profiles'] = []
-    const userGroups: BackupJSONFileLatest['userGroups'] = []
+    const plugins: NonNullable<BackupJSONFileLatest['plugin']> = {}
 
     if (!opts.filter) {
         if (!opts.noPersonas) await backupPersonas()
@@ -46,11 +46,11 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         )
         if (!opts.noProfiles) await backProfiles(wantedProfiles)
     }
-    if (!opts.noUserGroups) await backupAllUserGroups()
     if (!opts.noPosts) await backupAllPosts()
     if (!opts.noWallets) await backupAllWallets()
+    if (!opts.noPlugins) await backupAllPlugins()
 
-    return {
+    const file: BackupJSONFileLatest = {
         _meta_: {
             createdAt: Date.now(),
             maskbookVersion: browser.runtime.getManifest().version,
@@ -62,15 +62,13 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         posts,
         wallets,
         profiles,
-        userGroups,
+        userGroups: [],
     }
+    if (Object.keys(plugins).length) file.plugin = plugins
+    return file
 
     async function backupAllPosts() {
         posts.push(...(await queryPostsDB(() => true)).map(PostRecordToJSONFormat))
-    }
-
-    async function backupAllUserGroups() {
-        userGroups.push(...(await queryUserGroupsDatabase(() => true)).map(GroupRecordToJSONFormat))
     }
 
     async function backProfiles(of?: ProfileIdentifier[]) {
@@ -101,6 +99,29 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     async function backupAllWallets() {
         const wallets_ = (await getWallets(ProviderType.Maskbook)).map(WalletRecordToJSONFormat)
         wallets.push(...wallets_)
+    }
+
+    async function backupAllPlugins() {
+        await Promise.all(
+            [...activatedPluginsWorker]
+                // generate backup
+                .map(async (plugin) => {
+                    const backupCreator = plugin.backup?.onBackup
+                    if (!backupCreator) return
+
+                    async function backupPlugin() {
+                        const result = await timeout(backupCreator!(), 3000)
+                        if (result.none) return
+                        // We limit the plugin contributed backups must be simple objects.
+                        // We may allow plugin to store binary if we're moving to binary backup format like messagepack.
+                        plugins[plugin.ID] = result.map(JSON.stringify).map(JSON.parse).val
+                    }
+                    if (process.env.NODE_ENV === 'development') return backupPlugin()
+                    return backupPlugin().catch((error) =>
+                        console.error(`[@masknet/plugin-infra] Plugin ${plugin.ID} failed to backup`, error),
+                    )
+                }),
+        )
     }
 }
 

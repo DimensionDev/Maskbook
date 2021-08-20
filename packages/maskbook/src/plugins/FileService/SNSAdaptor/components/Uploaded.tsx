@@ -1,5 +1,6 @@
 import { formatFileSize } from '@dimensiondev/kit'
-import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
+import { Button, Grid, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import { useEffect } from 'react'
 import { File } from 'react-feather'
@@ -10,7 +11,7 @@ import { FileRouter } from '../../constants'
 import type { FileInfo } from '../../types'
 import { FileName } from './FileName'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     container: {
         height: 250,
         flexDirection: 'column',
@@ -46,7 +47,7 @@ const useStyles = makeStyles({
 
 export const Uploaded: React.FC = () => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const history = useHistory()
     const { onInsert } = useExchange()
     const { state } = useLocation<FileInfo>()

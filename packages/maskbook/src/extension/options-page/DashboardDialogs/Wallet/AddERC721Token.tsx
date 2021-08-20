@@ -1,40 +1,54 @@
-import { TextField } from '@material-ui/core'
-import { useMemo, useState } from 'react'
+import { TextField, CircularProgress } from '@material-ui/core'
+import { useMemo, useState, useEffect } from 'react'
 import { Octagon as OctagonIcon } from 'react-feather'
 import { EthereumAddress } from 'wallet.ts'
 import { useI18N } from '../../../../utils'
+import {
+    useERC721TokenDetailedCallback,
+    useERC721ContractDetailed,
+    useAccount,
+    isSameAddress,
+} from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
-import { useERC721TokenAssetDetailed, useERC721TokenDetailed } from '@masknet/web3-shared'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
 import type { WalletProps } from './types'
 
 export function DashboardWalletAddERC721TokenDialog(props: WrappedDialogProps<WalletProps>) {
-    const { wallet } = props.ComponentProps!
-
     const { t } = useI18N()
-    const [tokenId, setTokenId] = useState('')
     const [address, setAddress] = useState('')
+    const account = useAccount()
 
-    const tokenDetailed = useERC721TokenDetailed(address)
-    const assetDetailed = useERC721TokenAssetDetailed(tokenDetailed.value)
+    const { value: contractDetailed, loading } = useERC721ContractDetailed(address)
+    const [loadingToken, setLoadingToken] = useState(false)
+    const [loadingTokenFailMessage, setLoadingTokenFailMessage] = useState('')
+    const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contractDetailed)
+
+    useEffect(() => {
+        setLoadingTokenFailMessage('')
+    }, [tokenId, address])
 
     const onSubmit = useSnackbarCallback(
         async () => {
-            if (!tokenDetailed.value || !assetDetailed.value) return
-            await WalletRPC.addERC721Token({
-                ...tokenDetailed.value,
-                asset: assetDetailed.value,
-            })
+            setLoadingToken(true)
+            const _tokenDetailed = await erc721TokenDetailedCallback()
+            setLoadingToken(false)
+            if ((_tokenDetailed && !isSameAddress(_tokenDetailed.info.owner, account)) || !_tokenDetailed) {
+                setLoadingTokenFailMessage(t('wallet_add_nft_invalid_owner'))
+                throw new Error(t('wallet_add_nft_invalid_owner'))
+            } else {
+                await WalletRPC.addERC721Token(_tokenDetailed)
+                props.onClose()
+            }
         },
-        [tokenDetailed, assetDetailed],
-        props.onClose,
+        [setLoadingToken, props.onClose],
+        () => void 0,
     )
 
     const validationMessage = useMemo(() => {
-        if (EthereumAddress.isValid(address)) return t('wallet_add_nft_invalid_address')
+        if (!EthereumAddress.isValid(address)) return t('wallet_add_nft_invalid_address')
         return ''
-    }, [address, tokenId])
+    }, [address])
 
     return (
         <DashboardDialogCore {...props}>
@@ -61,10 +75,18 @@ export function DashboardWalletAddERC721TokenDialog(props: WrappedDialogProps<Wa
                 }
                 footer={
                     <DebounceButton
-                        disabled={!!validationMessage || !address || !tokenId || tokenDetailed.loading}
+                        disabled={
+                            !!validationMessage ||
+                            !!loadingTokenFailMessage ||
+                            !address ||
+                            !tokenId ||
+                            !contractDetailed ||
+                            loading
+                        }
                         variant="contained"
                         onClick={onSubmit}>
-                        {validationMessage || t('add_asset')}
+                        {loadingToken ? <CircularProgress size={16} /> : null}
+                        {validationMessage || loadingTokenFailMessage || t('add_asset')}
                     </DebounceButton>
                 }
             />

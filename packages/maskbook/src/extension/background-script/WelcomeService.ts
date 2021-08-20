@@ -4,14 +4,11 @@ import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-
 import { createPersonaByJsonWebKey } from '../../database'
 import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Persona.db'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import type { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
-import { generateBackupJSON, BackupOptions } from './WelcomeServices/generateBackupJSON'
-import { exclusiveTasks } from '../content-script/tasks'
+import type { PersonaIdentifier, ProfileIdentifier } from '../../database/type'
+import { BackupOptions, generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { saveAsFileFromBuffer } from './HelperService'
 import type { DashboardRoute } from '../options-page/Route'
-export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
-export * from './WelcomeServices/restoreBackup'
 import {
     BackupJSONFileLatest,
     getBackupPreviewInfo,
@@ -22,6 +19,9 @@ import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { decompressBackupFile, extraPermissions, requestPermissions } from '../../utils'
 import { v4 as uuid } from 'uuid'
 import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
+
+export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
+export * from './WelcomeServices/restoreBackup'
 assertEnvironment(Environment.ManifestBackground)
 
 /**
@@ -98,9 +98,10 @@ async function createBackupInfo<T>(obj: T) {
 }
 
 export async function openOptionsPage(route?: DashboardRoute, search?: string) {
-    return exclusiveTasks(
-        browser.runtime.getURL(route ? `/index.html#${route}${search ? `?${search}` : ''}` : '/index.html'),
-    ).noop()
+    return browser.tabs.create({
+        active: true,
+        url: browser.runtime.getURL(route ? `/index.html#${route}${search ? `?${search}` : ''}` : '/index.html'),
+    })
 }
 
 export { createPersonaByMnemonic } from '../../database'

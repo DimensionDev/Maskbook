@@ -1,8 +1,9 @@
 import { createIcon } from '../utils'
+import type { SvgIcon } from '@material-ui/core'
 
-export const InteractionIcon = createIcon(
+export const InteractionIcon: typeof SvgIcon = createIcon(
     'InteractionIcon',
-    <>
+    <g>
         <path
             d="M14.1667 0.832031L17.5 4.16536L14.1667 7.4987"
             strokeWidth="1.25"
@@ -27,6 +28,6 @@ export const InteractionIcon = createIcon(
             strokeLinecap="round"
             strokeLinejoin="round"
         />
-    </>,
+    </g>,
     '0 0 20 20',
 )

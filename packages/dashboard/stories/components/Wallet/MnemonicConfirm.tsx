@@ -8,5 +8,20 @@ export default meta({
     argTypes: actions('onChange'),
 })
 export const MnemonicConfirm = of({
-    args: {},
+    args: {
+        puzzleWords: [
+            'bright',
+            'darkness',
+            'emo',
+            'nature',
+            'ocean',
+            'pink',
+            'primary',
+            'purple',
+            'sage',
+            'sky',
+            'sunshine',
+            'white',
+        ],
+    },
 })

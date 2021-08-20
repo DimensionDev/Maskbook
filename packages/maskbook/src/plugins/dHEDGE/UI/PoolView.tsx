@@ -1,26 +1,17 @@
 import { RefreshIcon } from '@masknet/icons'
 import { useChainId } from '@masknet/web3-shared'
-import {
-    Card,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Link,
-    makeStyles,
-    Paper,
-    Tab,
-    Tabs,
-    Typography,
-} from '@material-ui/core'
+import { Card, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import React, { useState } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool'
 import { PerformanceChart } from './PerformanceChart'
 import { PoolStats } from './PoolStats'
 import { PoolViewDeck } from './PoolViewDeck'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         boxShadow: 'none',
@@ -101,11 +92,12 @@ const useStyles = makeStyles((theme) => ({
 
 interface PoolViewProps {
     address?: string
+    link: string
 }
 
 export function PoolView(props: PoolViewProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const currentChainId = useChainId()
 
     //#region allowed tokens
@@ -152,55 +144,57 @@ export function PoolView(props: PoolViewProps) {
         )
 
     return (
-        <Card className={classes.root} elevation={0}>
-            <CardHeader subheader={<PoolViewDeck pool={pool} inputTokens={allowedTokens} />} />
-            <CardContent className={classes.content}>
-                <Tabs
-                    className={classes.tabs}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    variant="fullWidth"
-                    value={tabIndex}
-                    onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
-                    TabIndicatorProps={{
-                        style: {
-                            display: 'none',
-                        },
-                    }}>
-                    {tabs}
-                </Tabs>
-                <Paper className={classes.body}>
-                    {tabIndex === 0 ? <PoolStats pool={pool} /> : null}
-                    {tabIndex === 1 ? <PerformanceChart pool={pool} /> : null}
-                </Paper>
-            </CardContent>
-            <CardActions className={classes.footer}>
-                <Typography className={classes.footnote} variant="subtitle2">
-                    <span>{t('plugin_powered_by')} </span>
-                    <Link
-                        className={classes.footLink}
-                        color="textSecondary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title="Mask"
-                        href="https://mask.io">
-                        <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
-                    </Link>
-                </Typography>
-                <Typography className={classes.footnote} variant="subtitle2">
-                    <span>Supported by</span>
-                    <Link
-                        className={classes.footLink}
-                        target="_blank"
-                        color="textSecondary"
-                        rel="noopener noreferrer"
-                        title="dHEDGE"
-                        href="https://dhedge.org">
-                        <img className={classes.dhedge} src="https://app.dhedge.org/favicon.ico" />
-                        dHEDGE
-                    </Link>
-                </Typography>
-            </CardActions>
-        </Card>
+        <EthereumChainBoundary chainId={pool.chainId}>
+            <Card className={classes.root} elevation={0}>
+                <CardHeader subheader={<PoolViewDeck pool={pool} inputTokens={allowedTokens} link={props.link} />} />
+                <CardContent className={classes.content}>
+                    <Tabs
+                        className={classes.tabs}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="fullWidth"
+                        value={tabIndex}
+                        onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
+                        TabIndicatorProps={{
+                            style: {
+                                display: 'none',
+                            },
+                        }}>
+                        {tabs}
+                    </Tabs>
+                    <Paper className={classes.body}>
+                        {tabIndex === 0 ? <PoolStats pool={pool} /> : null}
+                        {tabIndex === 1 ? <PerformanceChart pool={pool} /> : null}
+                    </Paper>
+                </CardContent>
+                <CardActions className={classes.footer}>
+                    <Typography className={classes.footnote} variant="subtitle2">
+                        <span>{t('plugin_powered_by')} </span>
+                        <Link
+                            className={classes.footLink}
+                            color="textSecondary"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Mask"
+                            href="https://mask.io">
+                            <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
+                        </Link>
+                    </Typography>
+                    <Typography className={classes.footnote} variant="subtitle2">
+                        <span>Supported by</span>
+                        <Link
+                            className={classes.footLink}
+                            target="_blank"
+                            color="textSecondary"
+                            rel="noopener noreferrer"
+                            title="dHEDGE"
+                            href="https://dhedge.org">
+                            <img className={classes.dhedge} src="https://app.dhedge.org/favicon.ico" />
+                            dHEDGE
+                        </Link>
+                    </Typography>
+                </CardActions>
+            </Card>
+        </EthereumChainBoundary>
     )
 }

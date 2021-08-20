@@ -1,5 +1,6 @@
+import { ChainId, createERC20Tokens, getChainDetailed, ONE } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
-import { ChainId, createERC20Tokens, ERC20TokenDetailed, getChainDetailed, ONE } from '@masknet/web3-shared'
+import type { ERC20AgainstToken } from './types'
 
 export const USDC = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDC', 6)
 export const USDT = createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)
@@ -36,6 +37,8 @@ export const YFI = createERC20Tokens('YFI_ADDRESS', 'Yearn', 'YFI', 18)
 export const BTCB = createERC20Tokens('BTCB_ADDRESS', 'Binance BTC', 'BTCB', 18)
 export const CAKE = createERC20Tokens('CAKE_ADDRESS', 'PancakeSwap Token', 'CAKE', 18)
 export const maUSDC = createERC20Tokens('maUSDC_ADDRESS', 'Matic Aave interest bearing USDC', 'maUSDC', 6)
+export const NFTX = createERC20Tokens('NFTX_ADDRESS', 'NFTX', 'NFTX', 18)
+export const STETH = createERC20Tokens('stETH_ADDRESS', 'stakedETH', 'stETH', 18)
 
 export const WETH = createERC20Tokens(
     'WETH_ADDRESS',
@@ -44,9 +47,7 @@ export const WETH = createERC20Tokens(
     18,
 )
 
-export const WETH_ONLY: {
-    readonly [chainId in ChainId]: ERC20TokenDetailed[]
-} = {
+export const WETH_ONLY: ERC20AgainstToken = {
     [ChainId.Mainnet]: [WETH[ChainId.Mainnet]],
     [ChainId.Ropsten]: [WETH[ChainId.Ropsten]],
     [ChainId.Rinkeby]: [WETH[ChainId.Rinkeby]],
@@ -56,16 +57,19 @@ export const WETH_ONLY: {
     [ChainId.BSCT]: [WETH[ChainId.BSCT]],
     [ChainId.Matic]: [WETH[ChainId.Matic]],
     [ChainId.Mumbai]: [WETH[ChainId.Mumbai]],
+    [ChainId.Arbitrum]: [],
+    [ChainId.Arbitrum_Rinkeby]: [],
 }
 
 export const BIPS_BASE = new BigNumber(10000)
 export const ONE_BIPS = ONE.dividedBy(BIPS_BASE)
 
-export const SLIPPAGE_TOLERANCE_MIN = 10 // bips
-export const SLIPPAGE_TOLERANCE_DEFAULT = 50 // bips
-export const SLIPPAGE_TOLERANCE_MAX = 500 // bips
+export const SLIPPAGE_MIN = 10 // bips
+export const SLIPPAGE_DEFAULT = 50 // bips
+export const SLIPPAGE_MAX = 1000 // bips
 
-export const DEFAULT_TRANSACTION_DEADLINE = 20 /* minutes */ * 60 /* seconds */
+export const DEFAULT_TRANSACTION_DEADLINE = 30 /* minutes */ * 60 /* seconds */
+export const L2_TRANSACTION_DEADLINE = 60 /* minutes */ * 5 /* seconds */
 
 export const PRICE_IMPACT_LOW = 100 // 1%
 export const PRICE_IMPACT_MEDIUM = 300 // 3%

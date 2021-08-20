@@ -1,10 +1,9 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared'
-import { ERC1155TokenDetailed, EthereumTokenType } from '@masknet/web3-shared'
+import { ERC1155TokenDetailed, EthereumTokenType, useWallet } from '@masknet/web3-shared'
 import type { ERC1155TokenRecord } from '../database/types'
 import { ERC1155TokenArrayComparer } from '../helpers'
 import { WalletMessages, WalletRPC } from '../messages'
-import { useWallet } from './useWallet'
 
 //#region cache service query result
 const erc1155TokensRef = new ValueRef<ERC1155TokenRecord[]>([], ERC1155TokenArrayComparer)

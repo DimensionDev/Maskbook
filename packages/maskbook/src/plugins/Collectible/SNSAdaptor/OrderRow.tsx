@@ -1,4 +1,5 @@
-import { Avatar, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Avatar, Link, TableCell, TableRow, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { CollectibleProvider, NFTOrder } from '../types'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import BigNumber from 'bignumber.js'
@@ -6,8 +7,9 @@ import { ChainId, isZero, resolveAddressLinkOnExplorer } from '@masknet/web3-sha
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
+import urlcat from 'urlcat'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         account: {
             display: 'flex',
@@ -51,18 +53,16 @@ interface IRowProps {
     acceptable?: boolean
 }
 
-export function OrderRow({ order, isDifferenceToken, acceptable }: IRowProps) {
-    const classes = useStyles()
+export function OrderRow({ order, isDifferenceToken }: IRowProps) {
+    const { classes } = useStyles()
     const { provider } = CollectibleState.useContainer()
-
+    const address = order.makerAccount?.user?.username ?? order.makerAccount?.address ?? ''
     return (
         <TableRow>
             <TableCell>
                 <Link
-                    href={`https://opensea.io/accounts/${
-                        order.makerAccount?.user?.username ?? order.makerAccount?.address ?? ''
-                    }`}
-                    title={order.makerAccount?.user?.username ?? order.makerAccount?.address ?? ''}
+                    href={urlcat('https://opensea.io/accounts/:address', { address })}
+                    title={address}
                     target="_blank"
                     className={classes.account}
                     rel="noopener noreferrer">

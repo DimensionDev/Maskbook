@@ -1,8 +1,10 @@
 import { useEffect, useCallback } from 'react'
 import { Button } from '@material-ui/core'
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import AddIcon from '@material-ui/icons/Add'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
+import { useWallet } from '@masknet/web3-shared'
 import { useI18N, useQueryParams, Flags, extendsTheme } from '../../../utils'
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
@@ -11,7 +13,6 @@ import {
     DashboardWalletAddERC20TokenDialog,
     DashboardWalletErrorDialog,
 } from '../DashboardDialogs/Wallet'
-import { useWallet } from '../../../plugins/Wallet/hooks/useWallet'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 
@@ -43,7 +44,7 @@ const walletsTheme = extendsTheme((theme) => ({
 }))
 //#endregion
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
@@ -73,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DashboardWalletsRouter() {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { create, error } = useQueryParams(['create', 'error', 'rpid'])
 
     const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)

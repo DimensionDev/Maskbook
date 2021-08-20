@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
+import { Button, DialogActions, DialogContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { ProviderType, useWallets, useWallet, NetworkType } from '@masknet/web3-shared'
 import { delay, useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { WalletMessages, WalletRPC } from '../messages'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import Services from '../../../extension/service'
@@ -13,12 +13,12 @@ import { DashboardRoute } from '../../../extension/options-page/Route'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useState } from 'react'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()({
     content: {
         padding: 0,
         minHeight: 300,
     },
-}))
+})
 
 interface SelectWalletDialogUIProps extends withClasses<never> {}
 
@@ -42,6 +42,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
             closeDialog()
             await WalletRPC.updateAccount({
                 account: address,
+                chainId: undefined,
                 providerType: ProviderType.Maskbook,
                 networkType,
             })

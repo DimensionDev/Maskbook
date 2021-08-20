@@ -1,22 +1,23 @@
 import { useState } from 'react'
 import classNames from 'classnames'
-import { Typography, Link, Checkbox, makeStyles, FormControlLabel } from '@material-ui/core'
-import { FormattedAddress } from '@masknet/shared'
+import { Checkbox, FormControlLabel, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
+import { FormattedAddress, TokenIcon, useStylesExtends } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { useStylesExtends } from '../../../components/custom-ui-helper'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon } from '@masknet/shared'
 import {
-    resolveLinkOnExplorer,
-    FungibleTokenDetailed,
     ChainId,
-    useNetworkType,
+    FungibleTokenDetailed,
+    resolveLinkOnExplorer,
     resolveNetworkName,
     useERC20TokenDetailedFromTokenLists,
+    useNetworkType,
 } from '@masknet/web3-shared'
 import { SwapStatus } from './SwapGuide'
+import { getMaskColor } from '@masknet/theme'
+import urlcat from 'urlcat'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     reminderText: {
         color: '#FF5555',
         marginTop: theme.spacing(1),
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     },
     wrapper: {
         padding: theme.spacing(2),
-        background: theme.palette.mode === 'dark' ? '#17191D' : '#F7F9FA',
+        background: getMaskColor(theme).twitterBackground,
         borderRadius: theme.shape.borderRadius,
     },
     tokenWrapper: {
@@ -166,7 +167,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         target="_blank"
                         className={classes.tokenLink}
                         rel="noopener noreferrer"
-                        href={`${resolveLinkOnExplorer(chainId)}/token/${token.address}`}>
+                        href={urlcat(resolveLinkOnExplorer(chainId), '/token/:address', { address: token.address })}>
                         <Typography variant="body2">
                             <FormattedAddress address={token.address} size={4} /> ({t('plugin_ito_view_on_explorer')})
                         </Typography>

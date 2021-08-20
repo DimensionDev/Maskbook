@@ -1,9 +1,7 @@
-import { makeStyles, Theme } from '@material-ui/core'
-import { useI18N } from '../../../utils'
+import { makeStyles } from '@masknet/theme'
 import type { Pool } from '../types'
 import { PoolView } from './PoolView'
-
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         position: 'relative',
@@ -19,10 +17,7 @@ interface PoolsProps {
 
 export function PoolsView(props: PoolsProps) {
     const { pools } = props
-
-    const classes = useStyles()
-    const { t } = useI18N()
-
+    const { classes } = useStyles()
     return (
         <div className={classes.root}>
             {pools.map((pool) => (

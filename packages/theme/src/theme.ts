@@ -1,3 +1,4 @@
+/// <reference path="./global.d.ts" />
 import { createTheme, PaletteMode, ThemeOptions, useMediaQuery } from '@material-ui/core'
 import * as Changes from './changes'
 import * as Components from './component-changes'
@@ -32,8 +33,10 @@ function MaskTheme(mode: PaletteMode) {
 }
 export const MaskLightTheme = MaskTheme('light')
 export const MaskDarkTheme = MaskTheme('dark')
+export * from './makeStyles'
 export * from './Components/index'
 export * from './hooks/index'
+export * from './ShadowRoot'
 export { getMaskColor, useMaskColor, MaskColorVar, applyMaskColorVars } from './constants'
 
 const query = '(prefers-color-scheme: dark)'
@@ -48,11 +51,4 @@ export enum Appearance {
     default = 'default',
     light = 'light',
     dark = 'dark',
-}
-
-export enum Language {
-    zh = 'zh',
-    en = 'en',
-    ko = 'ko',
-    ja = 'ja',
 }

@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useReducer, useState } from 'react'
-import { makeTypedMessageTuple, TypedMessageTuple } from '@masknet/shared'
+import { makeTypedMessageTuple, TypedMessageTuple, or } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 
 import { delay } from '../../../utils/utils'
@@ -17,7 +17,6 @@ import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
 import { usePostClaimedAuthor, usePostInfoDetails, usePostInfoSharedPublic } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { or } from '../../custom-ui-helper'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 import type { Payload } from '../../../utils/type-transform/Payload'
 
@@ -97,7 +96,7 @@ export function DecryptPost(props: DecryptPostProps) {
     // pass 1:
     // decrypt post content and image attachments
     const decryptedPayloadForImageAlpha38 = decryptedPayloadForImage?.version === -38 ? decryptedPayloadForImage : null
-    const sharedPublic = usePostInfoSharedPublic() || decryptedPayloadForImageAlpha38?.sharedPublic
+    const sharedPublic = usePostInfoSharedPublic() || decryptedPayloadForImageAlpha38?.sharedPublic || false
 
     useEffect(() => {
         const signal = new AbortController()
@@ -140,6 +139,7 @@ export function DecryptPost(props: DecryptPostProps) {
             }
         }
 
+        const postURL = current.url.getCurrentValue()?.toString()
         if (deconstructedPayload.ok)
             makeProgress(
                 'post text',
@@ -149,11 +149,15 @@ export function DecryptPost(props: DecryptPostProps) {
                     whoAmI.network,
                     whoAmI,
                     sharedPublic,
+                    postURL,
                 ),
             )
         postMetadataImages.forEach((url) => {
             if (signal.signal.aborted) return
-            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI.network, whoAmI, undefined))
+            makeProgress(
+                url,
+                ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI.network, whoAmI, false, postURL),
+            )
         })
         return () => signal.abort()
     }, [

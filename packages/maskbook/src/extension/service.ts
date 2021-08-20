@@ -9,8 +9,7 @@ import {
     EventBasedChannel,
 } from 'async-call-rpc/full'
 import { isEnvironment, Environment, WebExtensionMessage, MessageTarget } from '@dimensiondev/holoflows-kit'
-import { serializer } from '@masknet/shared'
-import { getLocalImplementation } from '../utils/getLocalImplementation'
+import { serializer, getLocalImplementation } from '@masknet/shared'
 
 const SERVICE_HMR_EVENT = 'service-hmr'
 const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services' })
@@ -26,7 +25,6 @@ const log: AsyncCallOptions['log'] = {
 export const Services = {
     Crypto: add(() => import('./background-script/CryptoService'), 'Crypto'),
     Identity: add(() => import('./background-script/IdentityService'), 'Identity'),
-    UserGroup: add(() => import('./background-script/UserGroupService'), 'UserGroup'),
     Welcome: add(() => import('./background-script/WelcomeService'), 'Welcome'),
     Steganography: add(() => import('./background-script/SteganographyService'), 'Steganography'),
     Helper: add(() => import('./background-script/HelperService'), 'Helper'),
@@ -44,7 +42,6 @@ if (import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
         [
             './background-script/CryptoService',
             './background-script/IdentityService',
-            './background-script/UserGroupService',
             './background-script/WelcomeService',
             './background-script/SteganographyService',
             './background-script/HelperService',
@@ -66,7 +63,7 @@ if (import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
  * @param generator Is the service is a generator?
  */
 function add<T>(impl: () => Promise<T>, key: string, generator = false): T {
-    let channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(MessageTarget.Broadcast)
+    const channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(MessageTarget.Broadcast)
 
     const isBackground = isEnvironment(Environment.ManifestBackground)
     const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any

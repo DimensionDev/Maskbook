@@ -13,13 +13,13 @@ import { gun2 } from '../version.2'
  */
 interface ApplicationStateInGunVersion1 {
     maskbook: {
-        users: {
-            // User ID
-            [userID: string]: {
-                /** @deprecated if you want to read it, cast it to string */
-                provePostId: never
-            }
-        }
+        // This section is no longer used but we leave the type here to avoid future collisions
+        // users: {
+        //     [userID: string]: {
+        //         /** @deprecated if you want to read it, cast it to string */
+        //         provePostId: never
+        //     }
+        // }
         posts: {
             // Post salt
             [salt: string]: {
@@ -42,7 +42,7 @@ export const gun1 = (gun2 as any as ReturnType<typeof typeHelper>).get('maskbook
  */
 export async function queryVersion1PostAESKey(salt: string, myUsername: string) {
     const result = await gun1.get('posts').get(salt).get(myUsername).then!()
-    if (result && result.encryptedKey && result.salt) return result
+    if (result?.encryptedKey && result.salt) return result
     return undefined
 }
 export async function getVersion1PostByHash(postSalt: string) {

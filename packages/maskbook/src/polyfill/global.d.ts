@@ -9,16 +9,11 @@ declare namespace Intl {
         constructor(locales?: string, options?: Partial<ListFormatOptions>)
         format(str: string[]): string
     }
-}
-
-declare module '@ungap/promise-all-settled' {
-    const AllSettledPolyfill: typeof Promise.allSettled
-    export default AllSettledPolyfill
-}
-
-declare module 'string.prototype.matchall' {
-    const shimAPI: {
-        shim(): void
+    export interface SegmenterOptions {
+        granularity?: 'grapheme' | 'word' | 'sentence'
     }
-    export default shimAPI
+    export class Segmenter {
+        constructor(lang: string, options?: SegmenterOptions)
+        segment(word: string): Iterable<{ segment: string; index: number; input: string; isWordLike: boolean }>
+    }
 }

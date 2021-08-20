@@ -1,4 +1,5 @@
-import { makeStyles, Typography, ThemeProvider, SnackbarContent } from '@material-ui/core'
+import { Typography, ThemeProvider, SnackbarContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../social-network'
 import { MaskbookIcon } from '../resources/MaskbookIcon'
 import { Suspense, useRef } from 'react'
@@ -9,10 +10,10 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     width?: number
 }
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         card: {
-            marginTop: theme.spacing(1),
+            margin: theme.spacing(2, 0),
             width: '100%',
             boxSizing: 'border-box',
             border: `1px solid ${theme.palette.divider}`,
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export default function MaskbookPluginWrapper(props: PluginWrapperProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { pluginName, children } = props
     const useStableTheme = useRef(activatedSocialNetworkUI.customization.useTheme).current
     // eslint-disable-next-line react-hooks/rules-of-hooks

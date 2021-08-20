@@ -1,4 +1,4 @@
-import { ProfileIdentifier, GroupIdentifier, PostIdentifier } from '../../../database/type'
+import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import { isMobileFacebook } from './isMobile'
 import { i18n } from '../../../utils/i18n-next'
 
@@ -11,7 +11,7 @@ export function isValidFacebookUsername(name: string) {
     // Avoid common mistake
     if (name === 'photo.php') return null
     const n = name.toLowerCase().replace(/\./g, '')
-    if (n.match(/^[a-z0-9]{5,}$/)) {
+    if (n.match(/^[\da-z]{5,}$/)) {
         return n
     }
     return null
@@ -32,8 +32,7 @@ export function getPostUrlAtFacebook(post: PostIdentifier<ProfileIdentifier>) {
 /**
  * Normalize profile url
  */
-export function getProfilePageUrlAtFacebook(user: ProfileIdentifier | GroupIdentifier) {
-    if (user instanceof GroupIdentifier) throw new Error('Not implemented')
+export function getProfilePageUrlAtFacebook(user: ProfileIdentifier) {
     if (user.network !== 'facebook.com') throw new Error('Wrong origin')
 
     const host = getFacebookHostName()

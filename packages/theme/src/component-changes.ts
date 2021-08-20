@@ -37,6 +37,17 @@ export const Button: Theme = (mode, colors): ThemeOptions => ({
                 },
             },
             variants: [
+                // new variant for rounded button
+                {
+                    props: { variant: 'rounded' },
+                    style: {
+                        borderRadius: '24px',
+                        backgroundColor: button.main(),
+                        color: button.contrast(),
+                        '&:hover': { backgroundColor: button.main() },
+                        '&[disabled]': { backgroundColor: button.main(), color: button.contrast() },
+                    },
+                },
                 {
                     props: { variant: 'contained' },
                     style: {
@@ -143,6 +154,14 @@ export const Card: Theme = (mode, colors) => ({
                     props: { variant: 'outlined' },
                     style: {
                         border: `1px solid ${colors.lineLight}`,
+                    },
+                },
+                {
+                    props: { variant: 'background' },
+                    style: {
+                        padding: 8,
+                        border: 'none',
+                        background: mode === 'dark' ? colors.lightBackground : colors.normalBackground,
                     },
                 },
             ],

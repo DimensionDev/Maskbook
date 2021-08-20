@@ -1,6 +1,7 @@
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { formatBalance } from '@masknet/web3-shared'
-import { Box, makeStyles, Theme, Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 
 export interface TokenPanelProps {
@@ -8,7 +9,7 @@ export interface TokenPanelProps {
     token: FungibleTokenDetailed
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(1, 0),
     },
@@ -32,8 +33,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export function TokenPanel(props: TokenPanelProps) {
     const { amount, token } = props
-    const classes = useStyles()
 
+    const { classes } = useStyles()
     return (
         <Box
             className={classes.root}
