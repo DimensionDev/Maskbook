@@ -75,7 +75,7 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                     db.createObjectStore('relations', { keyPath: ['linked', 'profile'] })
                     transaction
                         .objectStore('relations')
-                        .createIndex('linked, profile, favor', ['linked', 'profile', 'favor'], { unique: false })
+                        .createIndex('linked, profile, favor', ['linked', 'profile', 'favor'], { unique: true })
                 }
                 if (oldVersion < 1) return v0_v1()
                 if (oldVersion < 2) v1_v2()
