@@ -1,4 +1,5 @@
-import { makeStyles, Box, Card, CircularProgress, Typography, Paper } from '@material-ui/core'
+import { Box, Card, CircularProgress, Typography, Paper } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { resolveProviderName, ProviderType } from '@masknet/web3-shared'
 import { ProviderIcon } from '../../../../components/shared/ProviderIcon'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
@@ -7,8 +8,7 @@ import { useStylesExtends } from '@masknet/shared'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { getMaskColor } from '@masknet/theme'
 
-const useStyles = makeStyles((theme) => ({
-    root: {},
+const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(2, 4, 3),
         borderRadius: 8,
@@ -34,7 +34,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     return (
-        <Paper className={classes.root} elevation={0}>
+        <Paper elevation={0}>
             <Card className={classes.content} elevation={0}>
                 <Box display="flex" alignItems="center">
                     <ProviderIcon providerType={providerType} />
