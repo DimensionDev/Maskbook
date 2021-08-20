@@ -6,7 +6,7 @@ import { MaskWalletIcon, EditIcon } from '@masknet/icons'
 import { CopyIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
-import { DialogRoutes } from '../../../../index'
+import { PopupRoutes } from '../../../../index'
 import { useWallet } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()({
@@ -64,8 +64,8 @@ export const WalletInfo = memo(() => {
         <WalletInfoUI
             name={wallet.name ?? ''}
             address={wallet.address}
-            onEditClick={() => history.push(DialogRoutes.WalletRename)}
-            onSettingClick={() => history.push(DialogRoutes.WalletSettings)}
+            onEditClick={() => history.push(PopupRoutes.WalletRename)}
+            onSettingClick={() => history.push(PopupRoutes.WalletSettings)}
         />
     )
 })
