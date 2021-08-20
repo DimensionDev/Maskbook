@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { makeStyles, Box } from '@material-ui/core'
+import { Box } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
 import PluginItem, { PluginItemPlaceHodler } from './components/PluginItem'
 import {
@@ -24,7 +25,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { Services } from '../../API'
 import { PLUGIN_IDS } from './constants'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
     },
@@ -38,9 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Plugins() {
     const t = useDashboardI18N()
-
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const [openTrendSetting, setOpenTrendSetting] = useState(false)
     const [openSwapSetting, setOpenSwapSetting] = useState(false)
     const [pluginStatus, setPluginStatus] = useState({

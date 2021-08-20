@@ -79,6 +79,13 @@ export function editMetadata(
 ): NonNullable<TypedMessage['meta']> {
     return produce(metadata || new Map(), (e) => void edit(e))
 }
+export function editTypedMessageMeta<T extends TypedMessage>(
+    typedMessage: T,
+    edit: (meta: NonNullable<Draft<TypedMessage['meta']>>) => void,
+): T {
+    const meta = editMetadata(typedMessage.meta, edit)
+    return { ...typedMessage, meta: meta.size === 0 ? undefined : meta }
+}
 
 /**
  * Render with metadata

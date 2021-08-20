@@ -28,7 +28,7 @@ export function useOtherPlayerInfo(info: GoodGhostingInfo) {
         loading: addressLoading,
         error: addressError,
         retry: addressRetry,
-    } = useAsyncRetry(() => addressCallback(addressCalls), [addressCalls, addressCallback])
+    } = useAsyncRetry(() => addressCallback(addressCalls), [addressCalls])
 
     const { playerNames, playerCallDatas } = useMemo(
         () => ({
@@ -50,7 +50,7 @@ export function useOtherPlayerInfo(info: GoodGhostingInfo) {
         loading: playerLoading,
         error: playerError,
         retry: playerRetry,
-    } = useAsyncRetry(() => playerCallback(playerCalls), [playerCalls, playerCallback])
+    } = useAsyncRetry(() => playerCallback(playerCalls), [playerCalls])
 
     const players: Player[] = useMemo(() => playerResults.map((res) => res.value), [playerResults])
 

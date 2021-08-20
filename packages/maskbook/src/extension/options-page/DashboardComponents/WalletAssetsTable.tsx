@@ -4,7 +4,6 @@ import {
     Button,
     Chip,
     IconButton,
-    makeStyles,
     Skeleton,
     Table,
     TableBody,
@@ -12,9 +11,9 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Theme,
     Typography,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
@@ -38,11 +37,7 @@ import { useI18N, useMatchXS } from '../../../utils'
 import { ActionsBarFT } from './ActionsBarFT'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
 
-const useStyles = makeStyles<
-    Theme,
-    { isMobile: boolean },
-    'container' | 'head' | 'cell' | 'record' | 'coin' | 'name' | 'chain' | 'price' | 'more' | 'lessButton'
->((theme) => ({
+const useStyles = makeStyles<{ isMobile: boolean }>()((theme, { isMobile }) => ({
     container: {
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -53,31 +48,31 @@ const useStyles = makeStyles<
         backgroundColor: theme.palette.mode === 'light' ? theme.palette.common.white : 'var(--drawerBody)',
     },
     cell: {
-        paddingLeft: ({ isMobile }) => (isMobile ? theme.spacing(0.5) : theme.spacing(2)),
-        paddingRight: ({ isMobile }) => (isMobile ? theme.spacing(0.5) : theme.spacing(1.5)),
-        fontSize: ({ isMobile }) => (isMobile ? '0.8rem' : '0.875rem'),
+        paddingLeft: isMobile ? theme.spacing(0.5) : theme.spacing(2),
+        paddingRight: isMobile ? theme.spacing(0.5) : theme.spacing(1.5),
+        fontSize: isMobile ? '0.8rem' : '0.875rem',
         whiteSpace: 'nowrap',
     },
     record: {
         display: 'flex',
     },
     coin: {
-        width: ({ isMobile }) => (isMobile ? 20 : 24),
-        height: ({ isMobile }) => (isMobile ? 20 : 24),
+        width: isMobile ? 20 : 24,
+        height: isMobile ? 20 : 24,
     },
     name: {
         marginLeft: theme.spacing(1),
-        fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
+        fontSize: isMobile ? '0.9rem' : '1rem',
     },
     chain: {
         marginLeft: theme.spacing(1),
     },
     price: {
-        fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
+        fontSize: isMobile ? '0.9rem' : '1rem',
     },
     more: {
         color: theme.palette.text.primary,
-        fontSize: ({ isMobile }) => (isMobile ? '0.9rem' : '1rem'),
+        fontSize: isMobile ? '0.9rem' : '1rem',
     },
     lessButton: {
         display: 'flex',

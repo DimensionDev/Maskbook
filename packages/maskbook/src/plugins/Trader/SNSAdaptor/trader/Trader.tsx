@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { Trade } from '@uniswap/v2-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
 import {
@@ -36,7 +36,7 @@ import { TradeContext } from '../../trader/useTradeContext'
 import { PluginTraderRPC } from '../../messages'
 import { delay } from '../../../../utils'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             display: 'flex',

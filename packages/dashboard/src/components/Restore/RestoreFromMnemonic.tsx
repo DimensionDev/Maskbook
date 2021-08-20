@@ -1,6 +1,7 @@
 import { DesktopMnemonicConfirm } from '../Mnemonic'
 import { useList } from 'react-use'
-import { Box, Button, makeStyles, Typography } from '@material-ui/core'
+import { Box, Button, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { some } from 'lodash-es'
 import { MaskAlert } from '../MaskAlert'
@@ -12,7 +13,7 @@ import { useNavigate } from 'react-router'
 import { useState } from 'react'
 import { getMaskColor } from '@masknet/theme'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     error: {
         marginTop: theme.spacing(1),
         paddingLeft: theme.spacing(1),
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const RestoreFromMnemonic = () => {
     const navigate = useNavigate()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [error, setError] = useState('')
     const { changeCurrentPersona } = PersonaContext.useContainer()
     const t = useDashboardI18N()

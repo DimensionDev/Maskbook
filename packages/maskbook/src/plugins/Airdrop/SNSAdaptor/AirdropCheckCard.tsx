@@ -1,11 +1,12 @@
-import { Box, makeStyles, TextField, Typography } from '@material-ui/core'
+import { Box, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useState, useCallback } from 'react'
 import { useStylesExtends } from '@masknet/shared'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2.5),
         marginBottom: theme.spacing(1.5),

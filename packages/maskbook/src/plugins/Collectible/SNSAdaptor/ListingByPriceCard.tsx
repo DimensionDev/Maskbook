@@ -8,17 +8,17 @@ import {
     CardContent,
     Checkbox,
     FormControlLabel,
-    makeStyles,
     TextField,
     Typography,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
     isGreaterThan,
     isNative,
     isZero,
-    TokenWatched,
+    FungibleTokenWatched,
     useAccount,
 } from '@masknet/web3-shared'
 import formatDateTime from 'date-fns/format'
@@ -31,7 +31,7 @@ import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
 import type { useAsset } from '../hooks/useAsset'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         content: {},
         footer: {
@@ -61,7 +61,7 @@ export interface ListingByPriceCardProps {
     open: boolean
     onClose: () => void
     asset?: ReturnType<typeof useAsset>
-    tokenWatched: TokenWatched
+    tokenWatched: FungibleTokenWatched
     paymentTokens: FungibleTokenDetailed[]
 }
 
@@ -70,7 +70,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const { amount, token, balance, setAmount, setToken } = tokenWatched
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
     const account = useAccount()

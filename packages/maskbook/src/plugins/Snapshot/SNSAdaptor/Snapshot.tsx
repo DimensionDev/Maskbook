@@ -1,11 +1,12 @@
 import { useState, useContext } from 'react'
-import { makeStyles, Box, Card, CardHeader, CardContent, Typography, Tab, Tabs, Chip, Paper } from '@material-ui/core'
+import { Box, Card, CardHeader, CardContent, Typography, Tab, Tabs, Chip, Paper } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { SnapshotContext } from '../context'
 import { useProposal } from './hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             '--contentHeight': '400px',
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme) => {
 })
 
 export function Snapshot() {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const identifier = useContext(SnapshotContext)
     const {
         payload: { proposal, message },

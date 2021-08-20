@@ -1,11 +1,12 @@
 import { formatFileSize } from '@dimensiondev/kit'
-import { makeStyles, Paper, Typography } from '@material-ui/core'
+import { Paper, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { DownloadCloud, File } from 'react-feather'
 import { useI18N } from '../../../utils'
 import { CopyableCode } from './components/Copyable'
 import type { FileInfo } from '../types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function Preview({ info }: { info: FileInfo }) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const fileKey = info.key ? (
         <Typography component="p" color="textPrimary">
             {t('plugin_file_service_file_key')} <CopyableCode className={classes.code}>{info.key}</CopyableCode>
