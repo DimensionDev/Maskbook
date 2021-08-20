@@ -1,8 +1,9 @@
-import { makeStyles, Typography, Card, ButtonBase, ButtonBaseProps } from '@material-ui/core'
+import { Typography, Card, ButtonBase, ButtonBaseProps } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { getMaskColor } from '@masknet/theme'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         textAlign: 'center',
     },

@@ -2,7 +2,7 @@ export enum RoutePaths {
     Welcome = '/welcome',
     Setup = '/setup',
     SignUp = '/sign-up',
-    Login = '/login',
+    SignIn = '/sign-in',
     PrivacyPolicy = '/privacy-policy',
     Personas = '/personas',
     Wallets = '/wallets',
@@ -11,6 +11,9 @@ export enum RoutePaths {
     WalletsRedPacket = '/wallets/red-packet',
     WalletsSell = '/wallets/sell',
     WalletsHistory = '/wallets/history',
+    CreateMaskWallet = '/create-mask-wallet',
+    CreateMaskWalletForm = '/create-mask-wallet/form',
+    CreateMaskWalletMnemonic = '/create-mask-wallet/mnemonic',
     Settings = '/settings',
     Labs = '/labs',
 }

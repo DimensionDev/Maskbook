@@ -1,4 +1,5 @@
-import { makeStyles, Button } from '@material-ui/core'
+import { Button } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { isDarkTheme } from '../../../utils/theme-tools'
 import * as TweetAPI from '../apis/index'
 import { ETHIcon } from '../icons/ETH'
@@ -6,7 +7,7 @@ import { VCentIconLight, VCentIconDark } from '../icons/VCent'
 import { VALUABLES_VCENT_URL } from '../constants'
 import { useAsync } from 'react-use'
 
-const useStyle = makeStyles((theme) => ({
+const useStyle = makeStyles()((theme) => ({
     root: {
         marginTop: 20,
     },
@@ -71,8 +72,7 @@ const useStyle = makeStyles((theme) => ({
 }))
 
 export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) {
-    const classes = useStyle()
-
+    const { classes } = useStyle()
     const tweet: TweetAPI.TweetData | undefined = useAsync(() => TweetAPI.getTweetData(tweetAddress), [tweetAddress])
         .value?.[0]
 

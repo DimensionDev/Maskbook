@@ -1,15 +1,17 @@
 /* eslint-disable no-restricted-imports */
 import { promises as fs, readdirSync } from 'fs'
-import { difference, keys, uniq, without } from 'lodash'
+import { difference, keys, uniq } from 'lodash'
 import { resolve, relative } from 'path'
 import { EXTENSION_SOURCE, ROOT_PATH, walk } from '../utils'
 import { getUsedKeys } from './ast'
 
-export const LOCALE_PATH = resolve(EXTENSION_SOURCE, '_locales')
-export const LOCALE_NAMES = readdirSync(LOCALE_PATH).filter((name) => /^[a-zA-Z-]+$/.test(name))
+export const LOCALE_PATH = resolve(EXTENSION_SOURCE, 'locales')
+export const LOCALE_NAMES = readdirSync(LOCALE_PATH)
+    .filter((name) => name.endsWith('.json'))
+    .map((x) => x.slice(0, -5))
 
 export function getMessagePath(name: string) {
-    return resolve(LOCALE_PATH, name, 'messages.json')
+    return resolve(LOCALE_PATH, name + '.json')
 }
 
 export function getLocaleRelativePath(...paths: string[]) {

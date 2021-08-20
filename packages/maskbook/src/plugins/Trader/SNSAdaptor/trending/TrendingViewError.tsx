@@ -1,8 +1,9 @@
-import { makeStyles, Typography, CardContent, Theme, Box } from '@material-ui/core'
+import { Typography, CardContent, Box } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { AlertCircle } from 'react-feather'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         paddingTop: 0,
         paddingBottom: 0,
@@ -28,7 +29,7 @@ export interface TrendingViewErrorProps {
 
 export function TrendingViewError(props: TrendingViewErrorProps) {
     const { message, reaction, TrendingCardProps } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <TrendingCard {...TrendingCardProps}>
             <CardContent className={classes.content}>

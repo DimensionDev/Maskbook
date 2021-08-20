@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Pool } from '../types'
-import { Divider, Grid, makeStyles, Typography } from '@material-ui/core'
+import { Divider, Grid, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { formatAmountPostfix } from '../utils'
 import { MaskColorVar } from '@masknet/theme'
@@ -11,7 +12,7 @@ import { formatBalance } from '@masknet/web3-shared'
 
 const DIGIT_LENGTH = 18
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
         paddingTop: theme.spacing(1),
@@ -45,8 +46,7 @@ interface PoolStatsProps {
 
 export function PoolStats(props: PoolStatsProps) {
     const { pool } = props
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     //#region process stats
     const valueManaged = formatAmountPostfix(formatBalance(pool?.totalValue, DIGIT_LENGTH))
     const lifeTimeReturn = new BigNumber(formatBalance(pool.performance, DIGIT_LENGTH)).minus(1).multipliedBy(100)

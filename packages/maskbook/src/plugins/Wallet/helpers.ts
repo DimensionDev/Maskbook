@@ -1,12 +1,6 @@
-import { Asset, isSameAddress, CurrencyType } from '@masknet/web3-shared'
+import { Asset, isSameAddress, CurrencyType, ERC721TokenDetailed } from '@masknet/web3-shared'
 import stringify from 'json-stable-stringify'
-import type {
-    WalletRecord,
-    ERC20TokenRecord,
-    ERC721TokenRecord,
-    ERC1155TokenRecord,
-    PhraseRecord,
-} from './database/types'
+import type { WalletRecord, ERC20TokenRecord, ERC1155TokenRecord, PhraseRecord } from './database/types'
 
 function serializeWalletRecord(record: WalletRecord) {
     return stringify({
@@ -50,12 +44,12 @@ export function ERC20TokenArrayComparer(a: ERC20TokenRecord[], b: ERC20TokenReco
     return a.every((token, index) => ERC20TokenComparer(token, b[index]))
 }
 
-export function ERC721TokenComparer(a: ERC721TokenRecord | null, b: ERC721TokenRecord | null) {
+export function ERC721TokenComparer(a: ERC721TokenDetailed | null, b: ERC721TokenDetailed | null) {
     if (!a || !b) return false
     return a.tokenId === b.tokenId
 }
 
-export function ERC721TokenArrayComparer(a: ERC721TokenRecord[], b: ERC721TokenRecord[]) {
+export function ERC721TokenArrayComparer(a: ERC721TokenDetailed[], b: ERC721TokenDetailed[]) {
     if (a.length !== b.length) return false
     return a.every((token, index) => ERC721TokenComparer(token, b[index]))
 }

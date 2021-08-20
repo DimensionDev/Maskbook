@@ -1,5 +1,5 @@
 import { Typography, IconButton, Link } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { capitalize } from 'lodash-es'
 import LinkOffIcon from '@material-ui/icons/LinkOff'
@@ -10,7 +10,7 @@ import { useStylesExtends } from '@masknet/shared'
 import { facebookDomain } from '../../../social-network-adaptor/facebook.com/utils/isMobile'
 import { twitterDomain } from '../../../social-network-adaptor/twitter.com/utils/isMobile'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     title: {
         fontWeight: 500,
         fontSize: 12,

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { Button, CircularProgress, DialogActions, DialogContent } from '@material-ui/core'
 import { useI18N } from '../../utils'
 import { SelectProfileUI } from '../shared/SelectProfileUI'
@@ -14,7 +14,7 @@ export interface SelectProfileDialogProps extends withClasses<never> {
     onClose: () => void
     onSelect: (people: Profile[]) => Promise<void>
 }
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     title: { paddingBottom: 0 },
     content: { padding: '0 12px' },
     progress: { marginRight: 6 },

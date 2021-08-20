@@ -3,15 +3,14 @@ import { ToolboxHint } from '../../../components/InjectedComponents/ToolboxHint'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { toolBoxInSideBarSelector } from '../utils/selector'
 import { startWatch } from '../../../utils/watcher'
-import { makeStyles } from '@material-ui/core'
-
+import { makeStyles } from '@masknet/theme'
 export function injectToolboxHintAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(toolBoxInSideBarSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ToolboxHintAtTwitter />)
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     wrapper: {
         paddingTop: 4,
         paddingBottom: 4,
@@ -47,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function ToolboxHintAtTwitter() {
-    const classes = useStyles()
+    const { classes } = useStyles()
     // Todo: add click handler
     return (
         <ToolboxHint
