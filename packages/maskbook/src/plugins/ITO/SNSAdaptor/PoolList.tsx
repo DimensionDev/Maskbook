@@ -1,12 +1,13 @@
 import { useAccount } from '@masknet/web3-shared'
-import { Box, CircularProgress, makeStyles, Typography } from '@material-ui/core'
+import { Box, CircularProgress, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useAllPoolsAsSeller } from './hooks/useAllPoolsAsSeller'
 import { useScrollBottomEvent } from '@masknet/shared'
 import type { JSON_PayloadInMask } from '../types'
 import { PoolInList } from './PoolInList'
 import { useRef, useState, useCallback } from 'react'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         height: '100%',
@@ -28,7 +29,7 @@ export interface PoolListProps {
 }
 
 export function PoolList(props: PoolListProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const account = useAccount()
     const [page, setPage] = useState(0)
     const { value = { loadMore: true, pools: [] }, loading, retry } = useAllPoolsAsSeller(account, page)

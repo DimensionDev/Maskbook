@@ -1,4 +1,5 @@
-import { Box, Paper, Link, makeStyles, Typography } from '@material-ui/core'
+import { Box, Paper, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
@@ -8,7 +9,7 @@ import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea } from '../pipes'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         content: {
             paddingTop: 0,
@@ -58,8 +59,7 @@ export interface TokenTabProps {}
 
 export function TokenTab(props: TokenTabProps) {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const chainId = useChainId()
     const { token, asset } = CollectibleState.useContainer()
 

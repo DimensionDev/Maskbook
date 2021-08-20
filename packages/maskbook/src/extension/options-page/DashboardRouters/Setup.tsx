@@ -4,16 +4,15 @@ import { useSnackbar } from '@masknet/theme'
 import classNames from 'classnames'
 import {
     Typography,
-    Theme,
     TextField,
     Fade,
     Checkbox,
     Link as MuiLink,
-    makeStyles,
     ThemeProvider,
     InputBase,
     FormControlLabel,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { green } from '@material-ui/core/colors'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
 
@@ -48,7 +47,7 @@ import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQR
 import { SetupStep } from '../SetupStep'
 
 //#region setup form
-const useSetupFormStyles = makeStyles((theme) => ({
+const useSetupFormStyles = makeStyles()((theme) => ({
     wrapper: {
         flex: 1,
         display: 'flex',
@@ -153,7 +152,7 @@ function SetupForm(props: SetupFormProps) {
 //#endregion
 
 //#region consent data collection
-const useConsentDataCollectionStyles = makeStyles((theme) => ({
+const useConsentDataCollectionStyles = makeStyles()((theme) => ({
     form: {
         color: theme.palette.text.primary,
         fontSize: 16,
@@ -174,8 +173,7 @@ const useConsentDataCollectionStyles = makeStyles((theme) => ({
 
 export function ConsentDataCollection() {
     const { t } = useI18N()
-    const setupFormClasses = useSetupFormStyles()
-    const consentDataCollection = useConsentDataCollectionStyles()
+    const { classes: consentDataCollection } = useConsentDataCollectionStyles()
     const [checked, setChecked] = useState(false)
     return (
         <SetupForm
@@ -224,16 +222,15 @@ export function ConsentDataCollection() {
 //#endregion
 
 //#region create persona
-const userCreatePersonaStyles = makeStyles((theme) => ({
+const userCreatePersonaStyles = makeStyles()({
     form: {
         minHeight: 130,
     },
-}))
-
+})
 export function CreatePersona() {
     const { t } = useI18N()
-    const setupFormClasses = useSetupFormStyles()
-    const createPersonaClasses = userCreatePersonaStyles()
+    const { classes: setupFormClasses } = useSetupFormStyles()
+    const { classes: createPersonaClasses } = userCreatePersonaStyles()
     const [name, setName] = useState('')
     const history = useHistory<unknown>()
 
@@ -307,7 +304,7 @@ export function CreatePersona() {
 //#endregion
 
 //#region connect network
-const useProviderLineStyle = makeStyles((theme: Theme) => ({
+const useProviderLineStyle = makeStyles()((theme) => ({
     text: {
         border: `solid 1px ${theme.palette.divider}`,
         borderRadius: 3,
@@ -316,8 +313,8 @@ const useProviderLineStyle = makeStyles((theme: Theme) => ({
 
 export function ConnectNetwork() {
     const { t } = useI18N()
-    const classes = useSetupFormStyles()
-    const providerLineClasses = useProviderLineStyle()
+    const { classes } = useSetupFormStyles()
+    const { classes: providerLineClasses } = useProviderLineStyle()
     const history = useHistory<unknown>()
 
     const [persona, setPersona] = useState<Persona | null>(null)
@@ -388,7 +385,7 @@ export function ConnectNetwork() {
 //#endregion
 
 //#region restore
-const useRestoreDatabaseStyle = makeStyles((theme) => ({
+const useRestoreDatabaseStyle = makeStyles()((theme) => ({
     file: {
         display: 'none',
     },
@@ -421,8 +418,8 @@ const useRestoreDatabaseStyle = makeStyles((theme) => ({
 export function RestoreDatabase() {
     const { t } = useI18N()
     const history = useHistory<unknown>()
-    const classes = useSetupFormStyles()
-    const restoreDatabaseClasses = useRestoreDatabaseStyle()
+    const { classes } = useSetupFormStyles()
+    const { classes: restoreDatabaseClasses } = useRestoreDatabaseStyle()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
     const [file, setFile] = useState<File | null>(null)
@@ -540,9 +537,7 @@ export function RestoreDatabaseAdvance() {
     const { t } = useI18N()
     const { enqueueSnackbar } = useSnackbar()
     const history = useHistory<unknown>()
-
-    const classes = useSetupFormStyles()
-
+    const { classes } = useSetupFormStyles()
     const [nickname, setNickname] = useState('')
     const [mnemonicWordsValue, setMnemonicWordsValue] = useState('')
     const [password, setPassword] = useState('')
@@ -711,7 +706,7 @@ export function RestoreDatabaseAdvance() {
 //#endregion
 
 //#region restore database confirmation
-const useRestoreDatabaseConfirmationStyles = makeStyles((theme: Theme) => ({
+const useRestoreDatabaseConfirmationStyles = makeStyles()((theme) => ({
     databasePreviewCardTable: {
         width: 432,
         border: `solid 1px ${theme.palette.divider}`,
@@ -736,8 +731,8 @@ const useRestoreDatabaseConfirmationStyles = makeStyles((theme: Theme) => ({
 
 export function RestoreDatabaseConfirmation() {
     const { t } = useI18N()
-    const classes = useSetupFormStyles()
-    const restoreDatabaseConfirmationClasses = useRestoreDatabaseConfirmationStyles()
+    const { classes } = useSetupFormStyles()
+    const { classes: restoreDatabaseConfirmationClasses } = useRestoreDatabaseConfirmationStyles()
     const history = useHistory<unknown>()
     const { enqueueSnackbar } = useSnackbar()
 

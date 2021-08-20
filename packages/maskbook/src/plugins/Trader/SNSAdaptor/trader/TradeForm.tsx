@@ -2,7 +2,8 @@ import { useMemo } from 'react'
 import classNames from 'classnames'
 import { noop } from 'lodash-es'
 import BigNumber from 'bignumber.js'
-import { IconButton, makeStyles, Typography } from '@material-ui/core'
+import { IconButton, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import TuneIcon from '@material-ui/icons/Tune'
 import RefreshOutlined from '@material-ui/icons/RefreshOutlined'
@@ -21,7 +22,7 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/Ethereum
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { MINIMUM_AMOUNT } from '../../constants'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         form: {
             marginTop: theme.spacing(2),
