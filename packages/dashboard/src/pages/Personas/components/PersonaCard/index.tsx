@@ -165,3 +165,5 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
         </div>
     )
 })
+
+export * as PersonaRowCard from './Row'

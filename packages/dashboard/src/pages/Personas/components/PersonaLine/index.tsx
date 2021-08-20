@@ -1,62 +1,92 @@
-import { memo, MouseEvent } from 'react'
-import { Link, Typography } from '@material-ui/core'
+import { memo, MouseEvent, ReactNode } from 'react'
+import { Box, Link, Typography } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
+import { FacebookColoredIcon, MindsIcon, TwitterColoredIcon } from '@masknet/icons'
+import { makeStyles } from '@material-ui/core/styles'
 
+const useStyles = makeStyles((theme) => ({
+    connect: {
+        '& svg': {
+            fontSize: '18px',
+            marginRight: theme.spacing(1.5),
+        },
+    },
+}))
 export interface UnconnectedPersonaLineProps {
     onConnect: () => void
     networkIdentifier: string
 }
 
+// todo: merge
+const ICON_MAPPING: Record<string, ReactNode> = {
+    'facebook.com': <FacebookColoredIcon />,
+    'twitter.com': <TwitterColoredIcon />,
+    'minds.com': <MindsIcon />,
+}
+
 export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onConnect, networkIdentifier }) => {
     const t = useDashboardI18N()
+    const classes = useStyles()
+
     return (
-        <Link
-            underline="none"
-            onClick={(e: MouseEvent) => {
-                e.stopPropagation()
-                onConnect()
-            }}
-            sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                width: '100%',
-                cursor: 'pointer',
-            }}>
-            <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>
-                {t.personas_connect_to({ internalName: networkIdentifier })}
-            </Typography>
-        </Link>
+        <Box className={classes.connect} sx={{ display: 'flex', alignItems: 'center' }}>
+            <Link
+                underline="none"
+                onClick={(e: MouseEvent) => {
+                    e.stopPropagation()
+                    onConnect()
+                }}
+                sx={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                }}>
+                {ICON_MAPPING[networkIdentifier]}
+                <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>
+                    {t.personas_connect_to({ internalName: networkIdentifier })}
+                </Typography>
+            </Link>
+        </Box>
     )
 })
 
 export interface ConnectedPersonaLineProps {
     onDisconnect: () => void
     userId: string
+    networkIdentifier: string
 }
 
-export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(({ userId, onDisconnect }) => {
+export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(({ userId, onDisconnect, networkIdentifier }) => {
     const t = useDashboardI18N()
+    const classes = useStyles()
+
     return (
-        <Link
-            underline="none"
-            sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                width: '100%',
-            }}>
-            <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>
-                {userId}
-            </Typography>
+        <Box className={classes.connect} sx={{ display: 'flex', alignItems: 'center' }}>
             <Link
-                component="button"
-                variant="caption"
-                onClick={(e: MouseEvent) => {
-                    e.stopPropagation()
-                    onDisconnect()
+                underline="none"
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    width: '100%',
                 }}>
-                {t.personas_disconnect()}
+                <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                    {ICON_MAPPING[networkIdentifier]}
+                    <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>
+                        @{userId}
+                    </Typography>
+                </Box>
+                <Link
+                    component="button"
+                    variant="caption"
+                    onClick={(e: MouseEvent) => {
+                        e.stopPropagation()
+                        onDisconnect()
+                    }}>
+                    {t.personas_disconnect()}
+                </Link>
             </Link>
-        </Link>
+        </Box>
     )
 })
