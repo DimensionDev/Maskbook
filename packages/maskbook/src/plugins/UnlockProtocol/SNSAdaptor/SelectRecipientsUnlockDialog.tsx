@@ -1,25 +1,10 @@
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import Fuse from 'fuse.js'
-import {
-    makeStyles,
-    InputBase,
-    DialogContent,
-    List,
-    ListItem,
-    ListItemText,
-    DialogActions,
-    Button,
-} from '@material-ui/core'
+import { InputBase, DialogContent, List, ListItem, ListItemText, DialogActions, Button } from '@material-ui/core'
 import { useState, useMemo } from 'react'
 import type { UnlockLocks } from '../types'
 import { LockInList } from './LockInList'
 import { useI18N } from '../../../utils'
-
-const useStyles = makeStyles((theme) => ({
-    content: {
-        padding: '0 !important',
-    },
-}))
 
 export interface SelectRecipientsUnlockDialogUIProps extends withClasses<never> {
     open: boolean
