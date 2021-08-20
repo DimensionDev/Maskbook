@@ -1,15 +1,6 @@
 import { useMemo, useState } from 'react'
-import {
-    makeStyles,
-    Typography,
-    Grid,
-    Switch,
-    SwitchClassKey,
-    SwitchProps,
-    withStyles,
-    Button,
-    Link,
-} from '@material-ui/core'
+import { Typography, Grid, Switch, SwitchClassKey, SwitchProps, withStyles, Button, Link } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import type { AmmOutcome, Market } from '../types'
 import { useI18N } from '../../../utils'
@@ -100,7 +91,7 @@ const AugurSwitch = withStyles((theme) => ({
     )
 })
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         alignItems: 'center',
     },

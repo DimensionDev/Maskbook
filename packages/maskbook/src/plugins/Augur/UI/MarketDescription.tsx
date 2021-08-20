@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Grid, makeStyles, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import type { Market } from '../types'
 import { getResolutionRules } from '../utils'
@@ -10,7 +11,7 @@ import DOMPurify from 'isomorphic-dompurify'
 import { InfoCell } from './InfoCell'
 import { useI18N } from '../../../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
         paddingTop: theme.spacing(1),
@@ -52,7 +53,7 @@ interface MarketDescriptionProps {
 
 export const MarketDescription = (props: MarketDescriptionProps) => {
     const { market, collateral } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     const description = getResolutionRules(market).join('\n\n')
     const cleanDescription = DOMPurify.sanitize(description)

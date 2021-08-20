@@ -11,7 +11,8 @@ import {
     useAccount,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import { DialogContent, IconButton, makeStyles, Typography } from '@material-ui/core'
+import { DialogContent, IconButton, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -36,7 +37,7 @@ import { useAmmExchange } from '../hooks/useAmmExchange'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { currentSlippageSettings } from '../../Trader/settings'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     paper: {
         width: '450px !important',
     },
@@ -91,8 +92,7 @@ interface BuyDialogProps {
 export function BuyDialog(props: BuyDialogProps) {
     const { open, onClose, market, outcome, token } = props
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const [inputAmount, setInputAmount] = useState('')
     const [significant, setSignificant] = useState(4)
 

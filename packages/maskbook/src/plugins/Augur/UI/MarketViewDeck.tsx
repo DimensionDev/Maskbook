@@ -1,8 +1,9 @@
-import { Grid, Link, makeStyles, Typography } from '@material-ui/core'
+import { Grid, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { Market } from '../types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     meta: {
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
@@ -27,7 +28,7 @@ interface MarketDeckProps {
 export const MarketViewDeck = (props: MarketDeckProps) => {
     const { market } = props
 
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
 
     return (

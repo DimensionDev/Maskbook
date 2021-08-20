@@ -5,13 +5,13 @@ import {
     CardActions,
     CardContent,
     Link,
-    makeStyles,
     Paper,
     Tab,
     Tabs,
     Typography,
     CircularProgress,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import React, { useState } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -23,7 +23,7 @@ import { useFetchMarket } from '../hooks/useMarket'
 import { useAmmOutcomes } from '../hooks/useAmmOutcomes'
 import { useERC20TokenDetailed } from '@masknet/web3-shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         boxShadow: 'none',
@@ -113,7 +113,7 @@ export function MarketView(props: MarketViewProps) {
     const { address, id, link } = props
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
 
     //#region tabs
     const [tabIndex, setTabIndex] = useState(0)
