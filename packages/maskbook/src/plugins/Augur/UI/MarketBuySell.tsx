@@ -165,7 +165,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
     const { market, ammOutcomes, cashToken } = props
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [isBuy, setIsBuy] = useState(true)
     const [selectedOutcome, setSelectedOutcome] = useState<AmmOutcome>()
     const [buyDialogOpen, setBuyDialogOpen] = useState(false)
