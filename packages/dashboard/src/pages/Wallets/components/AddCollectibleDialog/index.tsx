@@ -1,11 +1,8 @@
 import { memo, useEffect, useState } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { useSnackbarCallback } from '@masknet/shared'
-import { Box, Button, DialogActions, DialogContent, TextField } from '@material-ui/core'
+import { Box, Button, DialogActions, DialogContent } from '@material-ui/core'
 import { useWallet } from '@masknet/web3-shared'
-import { Box, Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
-import { useERC721TokenAssetDetailed, useERC721TokenDetailed, useWallet } from '@masknet/web3-shared'
-import { PluginServices } from '../../../../API'
 import { EthereumAddress } from 'wallet.ts'
 import { useDashboardI18N } from '../../../../locales'
 import { z } from 'zod'
@@ -16,7 +13,6 @@ export interface AddCollectibleDialogProps {
     open: boolean
     onClose: () => void
 }
-
 
 type FormInputs = {
     address: string
