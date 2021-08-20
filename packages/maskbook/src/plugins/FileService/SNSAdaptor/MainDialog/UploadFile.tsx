@@ -1,7 +1,8 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { UploadFileIcon } from '@masknet/icons'
 import { useSnackbar } from '@masknet/theme'
-import { Button, experimentalStyled as styled, makeStyles, Typography } from '@material-ui/core'
+import { Button, experimentalStyled as styled, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { memo, useCallback, useState } from 'react'
 import { useDropArea } from 'react-use'
@@ -10,7 +11,7 @@ import { MAX_FILE_SIZE } from '../../constants'
 import { ArweaveCheckButtons } from './Arweave'
 import { UploadFilesList } from './FileList'
 
-const useUploadFileStyles = makeStyles((theme) => ({
+const useUploadFileStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
@@ -45,7 +46,7 @@ const Container = styled('div')`
 `
 
 export const UploadFile = memo<UploadFileProps>(({ onFile }) => {
-    const classes = useUploadFileStyles()
+    const { classes } = useUploadFileStyles()
     const { t } = useI18N()
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const snackbar = useSnackbar()
@@ -73,8 +74,8 @@ export const UploadFile = memo<UploadFileProps>(({ onFile }) => {
         if (!files) {
             onError(101)
         } else {
-            let _files: File[] = []
-            for (let i = 0; i < files.length; i++) {
+            const _files: File[] = []
+            for (let i = 0; i < files.length; i += 1) {
                 _files.push(files.item(i)!)
             }
             setSelectedFiles(_files)

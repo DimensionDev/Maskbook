@@ -1,7 +1,8 @@
-import { makeStyles, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     name: {
         fontSize: 16,
     },
@@ -12,7 +13,7 @@ export interface FilePathProps {
 }
 
 export const FilePath = memo<FilePathProps>(({ name }) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <Typography variant="body1" className={classes.name}>
             {name}

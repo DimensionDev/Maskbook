@@ -1,9 +1,9 @@
 import { formatFileSize } from '@dimensiondev/kit'
-import { experimentalStyled as styled, LinearProgress, Link, makeStyles, Typography } from '@material-ui/core'
+import { experimentalStyled as styled, LinearProgress, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 
-const useStyles = makeStyles((theme) => ({
-    file: {},
+const useStyles = makeStyles()((theme) => ({
     info: {
         padding: theme.spacing(1),
         display: 'flex',
@@ -21,16 +21,14 @@ export interface UploadFileProgressProps {
 }
 
 export const UploadFileProgress = memo<UploadFileProgressProps>(({ file, sendSize = 0 }) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const value = (sendSize ?? 0 / (file?.size ?? 1)) * 100
     return (
         <>
             {file ? (
                 <Container>
                     <div className={classes.info}>
-                        <Typography variant="body2" className={classes.file}>
-                            {file?.name ?? 'abc.txt'}
-                        </Typography>
+                        <Typography variant="body2">{file?.name ?? 'abc.txt'}</Typography>
                         <Typography variant="body2">
                             {formatFileSize(sendSize)}/{formatFileSize(file?.size ?? 0)}
                         </Typography>

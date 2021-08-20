@@ -1,8 +1,9 @@
 import { NewFolderIcon, UploadFileIcon } from '@masknet/icons'
-import { makeStyles, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     section: {
         display: 'flex',
         flexDirection: 'column',
@@ -21,8 +22,7 @@ const useStyles = makeStyles((theme) => ({
 export interface UploadFileButtonsProps {}
 
 export const UploadFileButtons = memo<UploadFileButtonsProps>(() => {
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <section className={classes.section}>
             <div className={classes.item}>
