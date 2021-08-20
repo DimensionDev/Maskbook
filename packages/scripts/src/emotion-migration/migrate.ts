@@ -67,7 +67,7 @@ function containsMakeStylesFrom(source: string, target: string = '@material-ui/c
     )
     return file.statements
         .filter(isImportDeclaration)
-        .filter((x) => (x.moduleSpecifier as Identifier).text === target)
+        .filter((x) => (x.moduleSpecifier as Identifier).text.startsWith(target))
         .find((x) => x.importClause?.getText(file).includes('makeStyles'))
 }
 
@@ -86,7 +86,7 @@ function migrateWorker(source: string) {
             return visitEachChild(sf, visitor, context) as SourceFile
             function visitor(node: Node): VisitResult<Node> {
                 if (isImportDeclaration(node)) {
-                    if ((node.moduleSpecifier as StringLiteral).text !== '@material-ui/core') return node
+                    if (!(node.moduleSpecifier as StringLiteral).text.startsWith('@material-ui/core')) return node
                     const result = visitEachChild(node, visitor, context)
                     if (!append) return result
                     append = false

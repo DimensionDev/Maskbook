@@ -28,7 +28,7 @@ export interface PriceChangedProps {
 }
 
 export function PriceChanged(props: PriceChangedProps) {
-    const color = useColorStyles()
+    const { classes: color } = useColorStyles()
     const classes = useStyles()
     if (props.amount === 0) return null
     return (
