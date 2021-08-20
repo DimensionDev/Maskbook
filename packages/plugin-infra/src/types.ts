@@ -274,7 +274,6 @@ export namespace Plugin.Dashboard {
 /** This part runs in the background page */
 export namespace Plugin.Worker {
     export interface Definition extends Shared.DefinitionDeferred {
-        /** TODO: this functionality has not be done yet. */
         backup?: BackupHandler
     }
     export interface BackupHandler {

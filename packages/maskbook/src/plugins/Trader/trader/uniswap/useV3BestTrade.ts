@@ -6,7 +6,8 @@ import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
 import { encodeRouteToPath, Route, Trade } from '@uniswap/v3-sdk'
 import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract'
 import { useAllV3Routes } from './useAllV3Routes'
-import { MulticalStateType, useSingleContractMultipleData } from '@masknet/web3-shared'
+import { useSingleContractMultipleData } from '@masknet/web3-shared'
+import { DEFAULT_MULTICALL_GAS_LIMIT } from '../../constants'
 
 export enum V3TradeState {
     LOADING = 0,
@@ -37,16 +38,19 @@ export function useV3BestTradeExactIn(
         )
     }, [amountIn, routes])
 
-    const [quotesResults, quotesCalls, quotesState, quotesCallback] = useSingleContractMultipleData(
+    const [quotesResults, quotesCalls, , quotesCallback] = useSingleContractMultipleData(
         quoterContract,
         Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),
         quoteExactInInputs,
+        DEFAULT_MULTICALL_GAS_LIMIT,
     )
-    const asyncResult = useAsyncRetry(
-        () => quotesCallback(quotesCalls),
-        [quoterContract, quotesCalls.map((x) => x.join()).join()],
-    )
-    const asyncBestTrade = useMemo(() => {
+    const {
+        loading: quotesLoading,
+        error: quotesError,
+        retry: quotesRetry,
+    } = useAsyncRetry(() => quotesCallback(quotesCalls), [quoterContract, quotesCalls.map((x) => x.join()).join()])
+
+    const asyncBestTrade = (() => {
         if (!amountIn || !currencyOut) {
             return {
                 value: undefined,
@@ -54,37 +58,42 @@ export function useV3BestTradeExactIn(
                 error: new Error('Invalid trade info.'),
             }
         }
-        if (routesLoading || quotesState.type === MulticalStateType.PENDING) {
+        if (routesLoading || quotesLoading || (routes.length && !quotesResults.length && !quotesError)) {
             return {
                 value: undefined,
                 loading: true,
                 error: undefined,
             }
         }
+        const { bestRoute, amountOut } = quotesResults
+            .filter((x) => x.succeed)
+            .reduce(
+                (
+                    currentBest: { bestRoute: Route<Currency, Currency> | null; amountOut: string | null },
+                    { value },
+                    i,
+                ) => {
+                    if (!value) return currentBest
 
-        const { bestRoute, amountOut } = quotesResults.reduce(
-            (currentBest: { bestRoute: Route<Currency, Currency> | null; amountOut: string | null }, { value }, i) => {
-                if (!value) return currentBest
-
-                if (currentBest.amountOut === null) {
-                    return {
-                        bestRoute: routes[i],
-                        amountOut: value,
+                    if (currentBest.amountOut === null) {
+                        return {
+                            bestRoute: routes[i],
+                            amountOut: value,
+                        }
+                    } else if (new BigNumber(currentBest.amountOut).lt(value)) {
+                        return {
+                            bestRoute: routes[i],
+                            amountOut: value,
+                        }
                     }
-                } else if (new BigNumber(currentBest.amountOut).lt(value)) {
-                    return {
-                        bestRoute: routes[i],
-                        amountOut: value,
-                    }
-                }
 
-                return currentBest
-            },
-            {
-                bestRoute: null,
-                amountOut: null,
-            },
-        )
+                    return currentBest
+                },
+                {
+                    bestRoute: null,
+                    amountOut: null,
+                },
+            )
 
         if (!bestRoute || !amountOut) {
             return {
@@ -104,11 +113,11 @@ export function useV3BestTradeExactIn(
             loading: false,
             error: undefined,
         }
-    }, [amountIn, currencyOut, quotesResults, routes, routesLoading])
+    })()
 
     return {
         ...asyncBestTrade,
-        retry: asyncResult.retry,
+        retry: quotesRetry,
     }
 }
 
@@ -133,16 +142,18 @@ export function useV3BestTradeExactOut(
         )
     }, [amountOut, routes])
 
-    const [quotesResults, quotesCalls, quotesState, quotesCallback] = useSingleContractMultipleData(
+    const [quotesResults, quotesCalls, , quotesCallback] = useSingleContractMultipleData(
         quoterContract,
         Array.from<'quoteExactOutput'>({ length: quoteExactOutInputs.length }).fill('quoteExactOutput'),
         quoteExactOutInputs,
+        DEFAULT_MULTICALL_GAS_LIMIT,
     )
-    const asyncResult = useAsyncRetry(
-        () => quotesCallback(quotesCalls),
-        [quotesCallback, quotesCalls.map((x) => x.join()).join()],
-    )
-    const asyncBestTrade = useMemo(() => {
+    const {
+        loading: quotesLoading,
+        error: quotesError,
+        retry: quotesRetry,
+    } = useAsyncRetry(() => quotesCallback(quotesCalls), [quotesCallback, quotesCalls.map((x) => x.join()).join()])
+    const asyncBestTrade = (() => {
         if (!amountOut || !currencyIn || quotesResults.some(({ error }) => !!error)) {
             return {
                 value: undefined,
@@ -150,38 +161,42 @@ export function useV3BestTradeExactOut(
                 error: new Error('Invalid trade info.'),
             }
         }
-
-        if (routesLoading || quotesState.type === MulticalStateType.PENDING) {
+        if (routesLoading || quotesLoading || (routes.length && !quotesResults.length && !quotesError)) {
             return {
                 value: undefined,
                 loading: true,
                 error: undefined,
             }
         }
+        const { bestRoute, amountIn } = quotesResults
+            .filter((x) => x.succeed)
+            .reduce(
+                (
+                    currentBest: { bestRoute: Route<Currency, Currency> | null; amountIn: string | null },
+                    { value },
+                    i,
+                ) => {
+                    if (!value) return currentBest
 
-        const { bestRoute, amountIn } = quotesResults.reduce(
-            (currentBest: { bestRoute: Route<Currency, Currency> | null; amountIn: string | null }, { value }, i) => {
-                if (!value) return currentBest
-
-                if (currentBest.amountIn === null) {
-                    return {
-                        bestRoute: routes[i],
-                        amountIn: value,
+                    if (currentBest.amountIn === null) {
+                        return {
+                            bestRoute: routes[i],
+                            amountIn: value,
+                        }
+                    } else if (new BigNumber(currentBest.amountIn).gt(value)) {
+                        return {
+                            bestRoute: routes[i],
+                            amountIn: value,
+                        }
                     }
-                } else if (new BigNumber(currentBest.amountIn).gt(value)) {
-                    return {
-                        bestRoute: routes[i],
-                        amountIn: value,
-                    }
-                }
 
-                return currentBest
-            },
-            {
-                bestRoute: null,
-                amountIn: null,
-            },
-        )
+                    return currentBest
+                },
+                {
+                    bestRoute: null,
+                    amountIn: null,
+                },
+            )
 
         if (!bestRoute || !amountIn) {
             return {
@@ -201,10 +216,10 @@ export function useV3BestTradeExactOut(
             loading: false,
             error: undefined,
         }
-    }, [amountOut, currencyIn, quotesResults, routes, routesLoading])
+    })()
 
     return {
         ...asyncBestTrade,
-        retry: asyncResult.retry,
+        retry: quotesRetry,
     }
 }

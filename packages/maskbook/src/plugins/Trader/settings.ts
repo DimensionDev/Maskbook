@@ -49,7 +49,7 @@ export const currentTradeProviderSettings = createGlobalSettings<TradeProvider>(
 )
 
 export const ethereumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_IDENTIFIER}+eth+tradeProvider`,
+    `${PLUGIN_IDENTIFIER}+ethereum+tradeProvider`,
     TradeProvider.UNISWAP_V2,
     { primary: () => '' },
 )
@@ -61,8 +61,14 @@ export const polygonNetworkTradeProviderSettings = createGlobalSettings<TradePro
 )
 
 export const binanceNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_IDENTIFIER}+bsc+tradeProvider`,
+    `${PLUGIN_IDENTIFIER}+binance+tradeProvider`,
     TradeProvider.PANCAKESWAP,
+    { primary: () => '' },
+)
+
+export const arbitrumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+arbitrum+tradeProvider`,
+    TradeProvider.UNISWAP_V3,
     { primary: () => '' },
 )
 

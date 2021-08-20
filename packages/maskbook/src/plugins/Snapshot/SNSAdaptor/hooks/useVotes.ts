@@ -20,8 +20,15 @@ async function Suspender(identifier: ProposalIdentifier) {
     } = useProposal(identifier.id)
 
     const voters = proposal.votes.map((v) => v.voter)
-    const scores = await PluginSnapshotRPC.getScores(message, voters, blockNumber, proposal.network)
-
+    const scores = await PluginSnapshotRPC.getScores(
+        message,
+        voters,
+        blockNumber,
+        proposal.network,
+        identifier.space,
+        proposal.strategies,
+    )
+    const strategies = message.payload.metadata.strategies ?? proposal.strategies
     const profiles = await PluginSnapshotRPC.fetch3BoxProfiles(voters)
     const profileEntries = Object.fromEntries(profiles.map((p) => [p.contract_address, p]))
     return proposal.votes
@@ -47,8 +54,8 @@ async function Suspender(identifier: ProposalIdentifier) {
                 address: v.voter,
                 authorIpfsHash: v.id,
                 balance: scores.reduce((a, b) => a + (b[v.voter.toLowerCase()] ? b[v.voter.toLowerCase()] : 0), 0),
-                scores: message.payload.metadata.strategies.map((_strategy, i) => scores[i][v.voter] || 0),
-                strategySymbol: message.payload.metadata.strategies[0].params.symbol,
+                scores: strategies.map((_strategy, i) => scores[i][v.voter] || 0),
+                strategySymbol: strategies[0].params.symbol,
                 authorName: profileEntries[v.voter.toLowerCase()]?.name,
                 authorAvatar: profileEntries[v.voter.toLowerCase()]?.image,
                 timestamp: v.created,

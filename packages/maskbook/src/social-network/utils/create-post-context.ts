@@ -78,9 +78,21 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             nickname: opt.nickname,
             postBy: opt.postBy,
             postID: opt.postID,
-            url: opt.url,
         }
         const transformedPostContent = new ValueRef(makeTypedMessageTupleFromList(), isTypedMessageEqual)
+        const postIdentifier = debug({
+            getCurrentValue: () => {
+                const by = opt.postBy.getCurrentValue()
+                const id = opt.postID.getCurrentValue()
+                if (by.isUnknown || id === null) return null
+                return new PostIdentifier(by, id)
+            },
+            subscribe: (sub) => {
+                const a = opt.postBy.subscribe(sub)
+                const b = opt.postID.subscribe(sub)
+                return () => void [a(), b()]
+            },
+        })
         return {
             ...author,
 
@@ -94,18 +106,14 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             commentBoxSelector: opt.comments?.commentBoxSelector,
             commentsSelector: opt.comments?.commentsSelector,
 
-            postIdentifier: debug({
+            postIdentifier,
+            url: debug({
                 getCurrentValue: () => {
-                    const by = opt.postBy.getCurrentValue()
-                    const id = opt.postID.getCurrentValue()
-                    if (by.isUnknown || id === null) return null
-                    return new PostIdentifier(by, id)
+                    const id = postIdentifier.getCurrentValue()
+                    if (id) return create.getURLFromPostIdentifier?.(id) || null
+                    return null
                 },
-                subscribe: (sub) => {
-                    const a = opt.postBy.subscribe(sub)
-                    const b = opt.postID.subscribe(sub)
-                    return () => void [a(), b()]
-                },
+                subscribe: (sub) => postIdentifier.subscribe(sub),
             }),
 
             postMentionedLinks: linksSubscribe,
@@ -148,7 +156,6 @@ export function createRefsForCreatePostContext() {
         nickname: SubscriptionFromValueRef(nickname),
         postBy: SubscriptionFromValueRef(postBy),
         postID: SubscriptionFromValueRef(postID),
-        url: SubscriptionFromValueRef(url),
         rawMessage: SubscriptionFromValueRef(postMessage),
         postImagesProvider: debug({
             getCurrentValue: () => [...postMetadataImages],
@@ -165,7 +172,6 @@ export function createRefsForCreatePostContext() {
         nickname,
         postBy,
         postID,
-        url,
         postMessage,
         postMetadataMentionedLinks,
         postMetadataImages,

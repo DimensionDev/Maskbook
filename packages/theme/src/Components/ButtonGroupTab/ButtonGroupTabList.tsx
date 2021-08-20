@@ -14,20 +14,19 @@ export interface ButtonGroupTabListProps
  * Warning: Only a few "value" and "label" props on the @material-ui <Tab> component will work.
  *
  * @example
- * enum Tabs { One = 'One', Two = 'Two', Three = 'Three' }
- * const [state, setState] = useState(Tabs.One as string)
- * return (
- *      <TabContext value={String(state)}>
- *          <ButtonGroupTabList onChange={(e, v) => setState(v)} aria-label="My tab?">
- *              <Tab value={Tabs.One} label="One" />
- *              <Tab value={Tabs.Two} label="Two" />
- *              <Tab value={Tabs.Three} label="Three" />
+ *  const [currentTab, onChange, tabs, setTab] = useTab('tab1', 'tab2', 'tab3')
+ *  return (
+ *      <TabContext value={currentTab}>
+ *          <ButtonGroupTabList onChange={onChange}>
+ *              <Tab label="Item One" value={tabs.tab1} />
+ *              <Tab label="Item Two" value={tabs.tab2} />
+ *              <Tab label="Item Three" value={tabs.tab3} />
  *          </ButtonGroupTabList>
- *          <TabPanel value={Tabs.One}>Tab One</TabPanel>
- *          <TabPanel value={Tabs.Two}>Tab Two</TabPanel>
- *          <TabPanel value={Tabs.Three}>Tab Three</TabPanel>
+ *          <TabPanel value={tabs.tab1}>Item One</TabPanel>
+ *          <TabPanel value={tabs.tab2}>Item Two</TabPanel>
+ *          <TabPanel value={tabs.tab3}>Item Three</TabPanel>
  *      </TabContext>
- * )
+ *  )
  */
 export const ButtonGroupTabList = forwardRef<HTMLDivElement, ButtonGroupTabListProps>((props, ref) => {
     const context = useTabContext()

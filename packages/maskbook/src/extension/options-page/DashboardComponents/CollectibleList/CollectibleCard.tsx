@@ -1,9 +1,9 @@
-import { Card, Link, makeStyles } from '@material-ui/core'
+import { Card, Link } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     Wallet,
     useChainId,
-    ERC1155TokenAssetDetailed,
-    ERC721TokenAssetDetailed,
+    ERC721TokenDetailed,
     resolveCollectibleLink,
     CollectibleProvider,
 } from '@masknet/web3-shared'
@@ -11,7 +11,7 @@ import { Image } from '../../../../components/shared/Image'
 import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
@@ -37,13 +37,13 @@ const useStyles = makeStyles((theme) => ({
 export interface CollectibleCardProps {
     provider: CollectibleProvider
     wallet?: Wallet
-    token: ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed
+    token: ERC721TokenDetailed
     readonly?: boolean
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
     const { wallet, token, provider, readonly } = props
-    const classes = useStyles(props)
+    const { classes } = useStyles()
     const chainId = useChainId()
 
     return (
@@ -52,13 +52,13 @@ export function CollectibleCard(props: CollectibleCardProps) {
                 {readonly || !wallet ? null : (
                     <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                 )}
-                {token.asset?.image ? (
+                {token.info.image ? (
                     <Image
                         component="img"
                         width={160}
                         height={220}
                         style={{ objectFit: 'contain' }}
-                        src={token.asset.image}
+                        src={token.info.image}
                     />
                 ) : (
                     <MaskbookIconOutlined className={classes.placeholder} />

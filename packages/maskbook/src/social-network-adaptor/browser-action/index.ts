@@ -5,7 +5,9 @@ import { IdentifierMap } from '../../database/IdentifierMap'
 const base: SocialNetwork.Base = {
     networkIdentifier: 'localhost',
     declarativePermissions: { origins: [] },
-    shouldActivate() {
+    shouldActivate(location) {
+        //TODO: replace this line to Env assert
+        if (location.pathname === '/popups.html') return true
         return isEnvironment(Environment.ManifestAction)
     },
 }

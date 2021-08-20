@@ -1,9 +1,10 @@
-import { makeStyles, useTheme } from '@material-ui/core'
+import { useTheme } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
 import { useStylesExtends } from '@masknet/shared'
 import ActionButton from './ActionButton'
 
-const useStyle = makeStyles((theme) => ({
+const useStyle = makeStyles()((theme) => ({
     root: {
         color: theme.palette.text.hint,
         whiteSpace: 'pre-line',
