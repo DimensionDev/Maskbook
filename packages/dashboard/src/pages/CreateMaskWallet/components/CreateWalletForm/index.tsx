@@ -1,5 +1,6 @@
 import { memo, useMemo, useState } from 'react'
-import { Alert, Box, Button, makeStyles, TextField, Typography } from '@material-ui/core'
+import { Alert, Box, Button, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -8,7 +9,7 @@ import { RoutePaths } from '../../../../type'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     container: {
         padding: '120px 18%',
         display: 'flex',
@@ -57,12 +58,12 @@ const useStyles = makeStyles(() => ({
         marginTop: 24,
         padding: 24,
     },
-}))
+})
 
 const CreateWalletForm = memo(() => {
     const t = useDashboardI18N()
     const [open, setOpen] = useState(true)
-    const classes = useStyles()
+    const { classes } = useStyles()
     const navigate = useNavigate()
 
     const schema = useMemo(() => {
