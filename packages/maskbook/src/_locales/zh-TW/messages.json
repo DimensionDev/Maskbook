@@ -7,7 +7,7 @@
     "about_dialog_license": "授權：",
     "add_to_key_store_success": "公開金鑰已添加到金鑰庫",
     "add_token": "新增代幣",
-    "add_token_search_hint": "搜尋 ERC20 代幣",
+    "add_token_search_hint": "",
     "add_asset": "新增資產",
     "additional_post_box__encrypted_post_pre": "使用 #mask_io 解密這篇貼文！ {{encrypted}}",
     "additional_post_box__encrypted_post_pre_red_packet_twitter": "用 #mask_io @realMaskbook 開啟紅包 {{encrypted}}",
