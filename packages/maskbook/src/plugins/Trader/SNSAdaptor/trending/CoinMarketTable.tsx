@@ -1,19 +1,10 @@
-import {
-    makeStyles,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Typography,
-} from '@material-ui/core'
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { Trending } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
     },
@@ -24,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
             display: 'none',
         },
     },
-    table: {},
     head: {
         padding: 0,
         border: 'none',
@@ -42,11 +32,11 @@ export interface CoinMarketTableProps {
 
 export function CoinMarketTable(props: CoinMarketTableProps) {
     const { trending, dataProvider } = props
-    const classes = useStyles()
 
+    const { classes } = useStyles()
     return (
         <TableContainer className={classes.container} component={Paper} elevation={0}>
-            <Table className={classes.table}>
+            <Table>
                 <TableHead>
                     <TableRow>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (

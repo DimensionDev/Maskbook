@@ -1,8 +1,8 @@
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { Trader, TraderProps } from './Trader'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',

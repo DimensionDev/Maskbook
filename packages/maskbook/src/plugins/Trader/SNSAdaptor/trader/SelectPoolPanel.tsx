@@ -1,11 +1,12 @@
 import { useCallback } from 'react'
 import { difference } from 'lodash-es'
-import { Checkbox, FormControlLabel, makeStyles } from '@material-ui/core'
+import { Checkbox, FormControlLabel } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ZrxTradePool } from '../../types'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { resolveZrxTradePoolName } from '../../pipes'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             display: 'flex',
@@ -27,8 +28,8 @@ export interface SelectPoolPanelProps {
 
 export function SelectPoolPanel(props: SelectPoolPanelProps) {
     const { value } = props
-    const classes = useStyles()
 
+    const { classes } = useStyles()
     const onChange = useCallback(
         (ev: React.ChangeEvent<HTMLInputElement>) => {
             const pool = ev.target.name as ZrxTradePool

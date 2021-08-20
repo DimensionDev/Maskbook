@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
-import { Avatar, Button, CardContent, CardHeader, IconButton, makeStyles, Paper, Typography } from '@material-ui/core'
+import { Avatar, Button, CardContent, CardHeader, IconButton, Paper, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import stringify from 'json-stable-stringify'
@@ -26,7 +27,7 @@ import { CoinSaftyAlert } from './CoinSaftyAlert'
 import { PLUGIN_IDENTIFIER as TRANSAK_PLUGIN_ID } from '../../../Transak/constants'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
@@ -45,7 +46,6 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             position: 'relative',
         },
-        body: {},
         headline: {
             display: 'flex',
             alignItems: 'center',

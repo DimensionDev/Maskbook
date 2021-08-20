@@ -1,9 +1,10 @@
-import { Chip, DialogContent, makeStyles } from '@material-ui/core'
+import { Chip, DialogContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { Linking } from './Linking'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     tag: {
         marginRight: theme.spacing(1),
     },
@@ -17,7 +18,7 @@ export interface CoinMetadataTagsProps {
 }
 
 export function CoinMetadataTags(props: CoinMetadataTagsProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { tags } = props
     const [open, setOpen] = useState(false)
 
@@ -63,7 +64,7 @@ interface TagsDialogProps {
 
 function TagsDialog(props: TagsDialogProps) {
     const { open, tags, onClose } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <>
             {tags ? (

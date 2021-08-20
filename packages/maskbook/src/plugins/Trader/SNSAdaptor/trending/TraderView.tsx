@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { makeStyles, Link, Tab, Tabs, Theme } from '@material-ui/core'
+import { Link, Tab, Tabs } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N, useSettingsSwitcher, useValueRef } from '../../../../utils'
 import type { TagType } from '../../types'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
@@ -24,7 +25,7 @@ import { EthereumTokenType, useFungibleTokenDetailed, useChainIdValid } from '@m
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 
-const useStyles = makeStyles<Theme, { isPopper: boolean }>((theme) => {
+const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
         root: {
             width: '100%',
@@ -35,7 +36,6 @@ const useStyles = makeStyles<Theme, { isPopper: boolean }>((theme) => {
                 display: 'none',
             },
         },
-        header: {},
         body: {
             minHeight: 303,
             overflow: 'hidden',
@@ -51,19 +51,19 @@ const useStyles = makeStyles<Theme, { isPopper: boolean }>((theme) => {
             borderBottom: `solid 1px ${theme.palette.divider}`,
         },
         tabs: {
-            height: (props) => (props.isPopper ? 35 : 'auto'),
+            height: props.isPopper ? 35 : 'auto',
             width: '100%',
             minHeight: 'unset',
 
-            borderTop: (props) => (props.isPopper ? 'unset' : `solid 1px ${theme.palette.divider}`),
-            borderBottom: (props) => (props.isPopper ? 'unset' : `solid 1px ${theme.palette.divider}`),
+            borderTop: props.isPopper ? 'unset' : `solid 1px ${theme.palette.divider}`,
+            borderBottom: props.isPopper ? 'unset' : `solid 1px ${theme.palette.divider}`,
         },
         content: {
             padding: 0,
             border: 'none',
         },
         tab: {
-            height: (props) => (props.isPopper ? 35 : 'auto'),
+            height: props.isPopper ? 35 : 'auto',
             minHeight: 'unset',
             minWidth: 'unset',
         },
@@ -89,8 +89,8 @@ export function TraderView(props: TraderViewProps) {
     const { name, tagType, dataProviders, tradeProviders, isPopper = true } = props
 
     const { t } = useI18N()
-    const classes = useStyles({ isPopper })
 
+    const { classes } = useStyles({ isPopper })
     const dataProvider = useCurrentDataProvider(dataProviders)
     const tradeProvider = useCurrentTradeProvider()
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
@@ -220,7 +220,6 @@ export function TraderView(props: TraderViewProps) {
         <TradeContext.Provider value={tradeContext}>
             <TrendingViewDeck
                 classes={{
-                    header: classes.header,
                     body: isPopper ? classes.body : '',
                     footer: isPopper ? '' : classes.footer,
                     content: isPopper ? '' : classes.content,

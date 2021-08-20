@@ -1,15 +1,6 @@
 import classNames from 'classnames'
-import {
-    Breadcrumbs,
-    makeStyles,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-} from '@material-ui/core'
+import { Breadcrumbs, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { formatPercentage } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
@@ -17,7 +8,7 @@ import { useStylesExtends } from '@masknet/shared'
 import type { SwapResponse, TradeComputed } from '../../types'
 import { TradeRouteHop } from './TradeRouteHop'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         '&::-webkit-scrollbar': {
             display: 'none',
