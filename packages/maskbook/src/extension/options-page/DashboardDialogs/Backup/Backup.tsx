@@ -7,11 +7,23 @@ import Services from '../../../service'
 import ActionButton from '../../DashboardComponents/ActionButton'
 import { DatabasePreviewCard, DatabaseRecordType } from '../../DashboardComponents/DatabasePreviewCard'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
-import { useDatabaseStyles } from './style'
+import { makeStyles } from '@masknet/theme'
+
+const useDatabaseStyles = makeStyles()({
+    dashboardPreviewCardTable: {
+        paddingLeft: 28,
+        paddingRight: 28,
+        marginTop: 2,
+        marginBottom: 28,
+    },
+    buttonText: {
+        color: '#fff',
+    },
+})
 
 export function DashboardBackupDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
-    const classes = useDatabaseStyles()
+    const { classes } = useDatabaseStyles()
     const { enqueueSnackbar } = useSnackbar()
 
     const { value, loading } = useAsync(() => Services.Welcome.generateBackupJSON())
@@ -48,11 +60,11 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
                 secondary={t('dashboard_backup_database_hint')}
                 footer={
                     <Box
-                        className={classes.root}
                         sx={{
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
+                            width: '100%',
                         }}>
                         <DatabasePreviewCard
                             classes={{ table: classes.dashboardPreviewCardTable }}

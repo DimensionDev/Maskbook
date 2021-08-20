@@ -1,9 +1,10 @@
 import type { FC } from 'react'
-import { Box, Button, Card, makeStyles, TextField, Typography } from '@material-ui/core'
+import { Box, Button, Card, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { useI18N } from '../../../../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     bottom: {
         display: 'flex',
         alignItems: 'center',
@@ -50,7 +51,7 @@ export const StepVerify: FC<StepVerifyProps> = ({
     onUpdateAnswerWords,
     onSubmit,
 }) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     return (
         <Box>

@@ -1,10 +1,10 @@
 import type { BigNumber } from 'bignumber.js'
 import { FC, Fragment } from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { formatBalance, formatCurrency, formatEthereumAddress } from '@masknet/web3-shared'
 import { useStylesExtends } from '../UI/UIHelper/custom-ui-helper'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     balance: {
         marginRight: theme.spacing(0.5),
     },

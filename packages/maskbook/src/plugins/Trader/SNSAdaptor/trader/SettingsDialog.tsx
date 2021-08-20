@@ -8,11 +8,11 @@ import {
     CardActions,
     CardContent,
     DialogContent,
-    makeStyles,
     Paper,
     Switch,
     Typography,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { useI18N } from '../../../../utils'
@@ -32,9 +32,8 @@ import stringify from 'json-stable-stringify'
 import { useTradeProviderSettings } from '../../trader/useTradeSettings'
 import { useSingleHopOnly } from '../../trader/uniswap/useSingleHopOnly'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
-        content: {},
         footer: {
             display: 'flex',
             justifyContent: 'flex-end',
@@ -43,7 +42,6 @@ const useStyles = makeStyles((theme) => {
         heading: {
             flex: 1,
         },
-        subheading: {},
         accordion: {
             backgroundColor: theme.palette.background.default,
         },
@@ -78,7 +76,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
 
     return (
         <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_trader_swap_settings')} maxWidth="xs">
-            <DialogContent className={classes.content}>
+            <DialogContent>
                 <Paper component="section" elevation={0}>
                     <Card elevation={0}>
                         <CardContent>
@@ -87,7 +85,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                     <Typography className={classes.heading}>
                                         {t('plugin_trader_slipage_tolerance')}
                                     </Typography>
-                                    <Typography className={classes.subheading}>{slippage / 100}%</Typography>
+                                    <Typography>{slippage / 100}%</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails className={classes.details}>
                                     <SlippageSlider
@@ -120,7 +118,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                 <Accordion className={classes.accordion} elevation={0}>
                                     <AccordionSummary>
                                         <Typography className={classes.heading}>Exchanges</Typography>
-                                        <Typography className={classes.subheading}>{pools.length}</Typography>
+                                        <Typography>{pools.length}</Typography>
                                     </AccordionSummary>
                                     <AccordionDetails className={classes.details}>
                                         <SelectPoolPanel
