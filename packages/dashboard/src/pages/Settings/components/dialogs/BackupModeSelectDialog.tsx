@@ -1,11 +1,12 @@
 import { MaskColorVar, MaskDialog } from '@masknet/theme'
-import { Box, makeStyles, Tooltip, Typography } from '@material-ui/core'
+import { Box, Tooltip, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { LocalBackupIcon, CloudBackupIcon } from '@masknet/icons'
 import { useContext } from 'react'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     container: {
         display: 'flex',
         height: '220px',
@@ -46,8 +47,7 @@ const useStyles = makeStyles(() => ({
         left: 0,
         background: 'rgba(255,255,255,.5)',
     },
-}))
-
+})
 export interface BackupModeSelectDialogProps {
     open: boolean
     onClose(): void
@@ -56,7 +56,7 @@ export interface BackupModeSelectDialogProps {
 
 export default function BackupModeSelectDialog({ open, onClose, onSelect }: BackupModeSelectDialogProps) {
     const t = useDashboardI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { user } = useContext(UserContext)
     return (
         <MaskDialog title={t.settings_button_backup()} open={open} onClose={onClose}>
