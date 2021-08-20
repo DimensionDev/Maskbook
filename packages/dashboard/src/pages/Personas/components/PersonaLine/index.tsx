@@ -3,9 +3,9 @@ import { Box, Link, Typography } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { FacebookColoredIcon, MindsIcon, TwitterColoredIcon } from '@masknet/icons'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     connect: {
         '& svg': {
             fontSize: '18px',
@@ -27,8 +27,7 @@ const ICON_MAPPING: Record<string, ReactNode> = {
 
 export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onConnect, networkIdentifier }) => {
     const t = useDashboardI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <Box className={classes.connect} sx={{ display: 'flex', alignItems: 'center' }}>
             <Link
@@ -59,8 +58,7 @@ export interface ConnectedPersonaLineProps {
 
 export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(({ userId, onDisconnect, networkIdentifier }) => {
     const t = useDashboardI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <Box className={classes.connect} sx={{ display: 'flex', alignItems: 'center' }}>
             <Link

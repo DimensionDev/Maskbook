@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { AuthorIcon, SettingsIcon } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@material-ui/core'
@@ -13,7 +13,7 @@ import type { SocialNetwork } from '../../api'
 import { useAccount } from '@masknet/web3-shared'
 import { PublicKeyIcon } from '@masknet/icons'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     setting: {
         fontSize: 18,
         padding: 0,
@@ -70,7 +70,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { onConnect, onDisconnect, onRename } = props
 
     const t = useDashboardI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [menu, openMenu] = useMenu(
