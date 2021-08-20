@@ -1,7 +1,14 @@
+import type { JsonRpcPayload, JsonRpcResponse } from './types'
+
 /**
  * APIs that both Android and iOS implements and have the same API signature
  */
-export interface SharedNativeAPIs {}
+export interface SharedNativeAPIs {
+    /**
+     * Send Ethereum JSON RPC
+     */
+    send(payload: JsonRpcPayload): Promise<JsonRpcResponse>
+}
 /**
  * APIs that only implemented by iOS Mask Network
  */
