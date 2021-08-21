@@ -4,6 +4,7 @@ import {
     EthereumTransactionConfig,
     EthereumRpcType,
     EthereumMethodType,
+    getChainDetailedCAIP,
 } from '@masknet/web3-shared'
 import { getCode } from './network'
 import type { JsonRpcPayload } from 'web3-core-helpers'
@@ -94,6 +95,7 @@ function getFunctionParameters(tx: EthereumTransactionConfig) {
 
 export async function getJsonRpcComputed(payload: JsonRpcPayload): Promise<EthereumRpcComputed | undefined> {
     switch (payload.method) {
+        // sign & decrypt message
         case EthereumMethodType.ETH_SIGN:
             return {
                 type: EthereumRpcType.SIGN,
@@ -123,9 +125,31 @@ export async function getJsonRpcComputed(payload: JsonRpcPayload): Promise<Ether
                 type: EthereumRpcType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
                 account: payload.params[0],
             }
+
+        // asset
+        case EthereumMethodType.WATCH_ASSET:
+        case EthereumMethodType.WATCH_ASSET_LEGACY:
+            return {
+                type: EthereumRpcType.WATCH_ASSET,
+                asset: payload.params[0],
+            }
+
+        // wallet
+        case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
+            return {
+                type: EthereumRpcType.WALLET_ADD_ETHEREUM_CHAIN,
+                chain: getChainDetailedCAIP(Number.parseInt(payload.params[0], 16)),
+            }
+        case EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN:
+            return {
+                type: EthereumRpcType.WALLET_ADD_ETHEREUM_CHAIN,
+                chain: payload.params[0],
+            }
+
+        // contract interation
         case EthereumMethodType.ETH_SEND_TRANSACTION:
-            const config = payload.params[0] as EthereumTransactionConfig
-            return getSendTransactionRpcComputed(config)
+            return getSendTransactionRpcComputed(payload.params[0])
+
         default:
             return
     }

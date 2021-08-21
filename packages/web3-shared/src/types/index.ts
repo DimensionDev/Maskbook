@@ -180,6 +180,16 @@ export type EthereumTokenDetailedType<T extends EthereumTokenType> = TokenDetail
 export type TokenAssetDetailedType<T extends EthereumTokenType.ERC721 | EthereumTokenType.ERC1155> =
     TokenAssetDetailedMap[T]
 
+// Learn more: https://eips.ethereum.org/EIPS/eip-747
+export interface EthereumAssetDetailed {
+    type: string // ERC20
+    options: {
+        address: string
+        symbol?: string
+        decimals?: number
+        image?: string
+    }
+}
 export interface EthereumChainDetailed {
     chainId: string // A 0x-prefixed hexadecimal string
     chainName: string
@@ -234,14 +244,23 @@ export type EthereumTransactionConfig = TransactionConfig_ & {
 
 // RPC need to be confirmed by the user
 export enum EthereumRpcType {
-    UNKNOWN = 'unknown',
+    // transaction
     CANCEL = 'cancel',
     RETRY = 'retry', // speed up
+
+    // contract interaction
     SEND_ETHER = 'sendEther',
     CONTRACT_INTERACTION = 'contractInteraction',
     CONTRACT_DEPLOYMENT = 'contractDeployment',
 
-    // some special RPC methods
+    // asset
+    WATCH_ASSET = 'wallet_watchAsset',
+
+    // wallet
+    WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
+    WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
+
+    // sign & decrypt message
     SIGN = 'eth_sign',
     SIGN_TYPED_DATA = 'eth_signTypedData',
     SIGN_PERSONAL = 'personal_sign',
@@ -351,6 +370,22 @@ export type EthereumRpcComputed =
            * the secret message
            */
           secret: string
+      }
+    | {
+          type: EthereumRpcType.WALLET_ADD_ETHEREUM_CHAIN | EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN
+
+          /**
+           * the chain detailed
+           */
+          chain?: EthereumChainDetailed
+      }
+    | {
+          type: EthereumRpcType.WATCH_ASSET
+
+          /**
+           * the asset detailed
+           */
+          asset: EthereumAssetDetailed
       }
 
 export enum TransactionEventType {
