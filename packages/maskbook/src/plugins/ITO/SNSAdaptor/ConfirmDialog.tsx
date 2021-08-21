@@ -262,7 +262,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     <>
                         <Grid item xs={6}>
                             <Paper className={classes.label}>
-                                <Typography>{t('plugin_ito_region_comfirm_label')}</Typography>
+                                <Typography>{t('plugin_ito_region_confirm_label')}</Typography>
                             </Paper>
                         </Grid>
                         <Grid item xs={6}>

@@ -51,7 +51,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
             props.onClose()
             return
         }
-        snackbar.enqueueSnackbar(t('plugin_file_service_uploading_on_cancal'))
+        snackbar.enqueueSnackbar(t('plugin_file_service_uploading_on_cancel'))
     }
     return (
         <InjectedDialog open={props.open} title={t('plugin_file_service_display_name')} onClose={onDecline}>
