@@ -324,7 +324,7 @@ export type EthereumRpcComputed =
           _tx: EthereumTransactionConfig
       }
     | {
-          type: EthereumRpcType.SIGN | EthereumRpcType.SIGN_PERSONAL
+          type: EthereumRpcType.SIGN
 
           /**
            * the sign to address
