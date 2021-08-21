@@ -1,6 +1,5 @@
-import { MaskColorVar } from '@masknet/theme'
+import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
 import { useDashboardI18N } from '../../../locales'
 import formatDateTime from 'date-fns/format'
@@ -15,7 +14,7 @@ export interface BackupPreview {
     createdAt?: number
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()(() => ({
     root: {
         padding: '19px 24px 9px',
         minHeight: 205,
@@ -40,7 +39,7 @@ export interface Props {
 
 export default function BackupPreviewCard({ json }: Props) {
     const t = useDashboardI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
 
     const records = [
         {
