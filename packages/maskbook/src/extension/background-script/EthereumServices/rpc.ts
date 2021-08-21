@@ -132,12 +132,12 @@ export async function getJsonRpcComputed(payload: JsonRpcPayload): Promise<Ether
         // wallet
         case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
             return {
-                type: EthereumRpcType.WALLET_ADD_ETHEREUM_CHAIN,
+                type: EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN,
                 chain: getChainDetailedCAIP(Number.parseInt(payload.params[0], 16)),
             }
         case EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN:
             return {
-                type: EthereumRpcType.WALLET_ADD_ETHEREUM_CHAIN,
+                type: EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN,
                 chain: payload.params[0],
             }
 

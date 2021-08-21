@@ -257,7 +257,6 @@ export enum EthereumRpcType {
     WATCH_ASSET = 'wallet_watchAsset',
 
     // wallet
-    WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
 
     // sign & decrypt message
@@ -371,7 +370,7 @@ export type EthereumRpcComputed =
           secret: string
       }
     | {
-          type: EthereumRpcType.WALLET_ADD_ETHEREUM_CHAIN | EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN
+          type: EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN
 
           /**
            * the chain detailed
