@@ -66,7 +66,7 @@ const SignRequest = memo(() => {
     const wallet = useWallet()
 
     const { data, address } = useMemo(() => {
-        if (value?.computedPayload?.type === EthereumRpcType.SIGN_PERSONAL) {
+        if (value?.computedPayload?.type === EthereumRpcType.SIGN) {
             return {
                 address: value.computedPayload.to,
                 data: value.computedPayload.data,
