@@ -50,8 +50,8 @@ export interface MaskNetworkAPIs {
     }): Promise<void>
     profile_removeProfile(params: { identifier: string }): Promise<void>
 
-    wallet_emitAccountUpdated(params: { account: string }): Promise<void>
-    wallet_emitChainIdUpdated(params: { chainId: number }): Promise<void>
+    wallet_updateEthereumAccount(params: { account: string }): Promise<void>
+    wallet_updateEthereumChainId(params: { chainId: number }): Promise<void>
 }
 
 export interface Profile {

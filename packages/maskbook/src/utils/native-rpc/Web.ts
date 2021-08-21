@@ -201,13 +201,13 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
 
         await Services.Identity.removeProfile(id)
     },
-    wallet_emitAccountUpdated: async ({ account }) => {
+    wallet_updateEthereumAccount: async ({ account }) => {
         await WalletRPC.updateAccount({
             account,
         })
         await WalletMessages.events.walletsUpdated.sendToAll()
     },
-    wallet_emitChainIdUpdated: async ({ chainId }) => {
+    wallet_updateEthereumChainId: async ({ chainId }) => {
         await WalletRPC.updateAccount({
             chainId,
             providerType: ProviderType.Maskbook,

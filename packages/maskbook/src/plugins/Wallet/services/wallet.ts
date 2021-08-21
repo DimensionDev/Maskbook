@@ -2,6 +2,7 @@ import * as bip39 from 'bip39'
 import { EthereumAddress, HDKey } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
+import { first } from 'lodash-es'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import type { WalletRecord } from '../database/types'
@@ -14,7 +15,6 @@ import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
 import { updateAccount } from './account'
 import { hasNativeAPI } from '../../../utils/native-rpc'
 import { getAccounts } from '../../../extension/background-script/EthereumService'
-import { first } from 'lodash'
 
 function sortWallet(a: WalletRecord, b: WalletRecord) {
     const address = currentAccountSettings.value
