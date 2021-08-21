@@ -1,13 +1,6 @@
 import { TabList, TabPanel, TabContext, tabPanelClasses } from '@material-ui/lab'
-import {
-    Tab,
-    experimentalStyled as styled,
-    tabClasses,
-    tabsClasses,
-    InputBase,
-    inputBaseClasses,
-} from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import { Tab, styled, tabClasses, tabsClasses, InputBase, inputBaseClasses } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { useAsync } from 'react-use'
 import ConfirmDialog from '../../../../components/ConfirmDialog'
@@ -17,7 +10,7 @@ import { Services } from '../../../../API'
 import BackupPreviewCard from '../BackupPreviewCard'
 import type { BackupPreview } from '../BackupPreviewCard'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()(() => ({
     container: { flex: 1 },
     hide: { display: 'none' },
 }))
@@ -71,7 +64,7 @@ export interface RestoreDialogProps {
 }
 
 export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     // tab switch
     const [tab, setTab] = useState('file')
     // paste text
