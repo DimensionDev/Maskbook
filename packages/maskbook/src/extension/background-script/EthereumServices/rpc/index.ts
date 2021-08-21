@@ -6,62 +6,26 @@ import {
     EthereumMethodType,
     getChainDetailedCAIP,
 } from '@masknet/web3-shared'
-import { getCode } from './network'
+import { getCode } from '../network'
 import type { JsonRpcPayload } from 'web3-core-helpers'
+import ABI_LIST from './abi_list.json'
+
+type AbiItem = {
+    name: string
+    parameters: {
+        name: string
+        type: string
+    }[]
+}
 
 // fix the type eror
 const coder = ABICoder as unknown as ABICoder.AbiCoder
 
 const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 
-const BUILT_IN_CONTRACT_INTERACTION_ABI_LIST = [
-    // ERC20 contract
-    {
-        name: 'approve',
-        prameters: [
-            {
-                name: 'spender',
-                type: 'address',
-            },
-            {
-                name: 'value',
-                type: 'uint256',
-            },
-        ],
-    },
-    {
-        name: 'transfer',
-        prameters: [
-            {
-                name: 'to',
-                type: 'address',
-            },
-            {
-                name: 'value',
-                type: 'uint256',
-            },
-        ],
-    },
-    {
-        name: 'transferFrom',
-        prameters: [
-            {
-                name: 'from',
-                type: 'address',
-            },
-            {
-                name: 'to',
-                type: 'address',
-            },
-            {
-                name: 'value',
-                type: 'uint256',
-            },
-        ],
-    },
-].map((x) => ({
+const ABI_LIST_WITH_SIGNATURE = (ABI_LIST as AbiItem[]).map((x) => ({
     ...x,
-    signature: coder.encodeFunctionSignature(`${x.name}(${x.prameters.join(',')})`),
+    signature: coder.encodeFunctionSignature(`${x.name}(${x.parameters.join(',')})`),
 }))
 
 function isEmptyHex(hex: string) {
@@ -162,14 +126,14 @@ export async function getSendTransactionRpcComputed(
 
     if (data) {
         // contract interaction
-        const abi = BUILT_IN_CONTRACT_INTERACTION_ABI_LIST.find((x) => x.signature === signature)
+        const abi = ABI_LIST_WITH_SIGNATURE.find((x) => x.signature === signature)
 
         if (abi) {
             try {
                 return {
                     type: EthereumRpcType.CONTRACT_INTERACTION,
                     name: abi.name,
-                    parameters: coder.decodeParameters(abi.prameters, parameters ?? ''),
+                    parameters: coder.decodeParameters(abi.parameters, parameters ?? ''),
                     _tx: tx,
                 }
             } catch {
