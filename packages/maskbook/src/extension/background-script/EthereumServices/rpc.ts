@@ -97,14 +97,9 @@ export async function getJsonRpcComputed(payload: JsonRpcPayload): Promise<Ether
     switch (payload.method) {
         // sign & decrypt message
         case EthereumMethodType.ETH_SIGN:
-            return {
-                type: EthereumRpcType.SIGN,
-                to: payload.params[1],
-                data: payload.params[0],
-            }
         case EthereumMethodType.PERSONAL_SIGN:
             return {
-                type: EthereumRpcType.SIGN_PERSONAL,
+                type: EthereumRpcType.SIGN,
                 to: payload.params[1],
                 data: payload.params[0],
             }

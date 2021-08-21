@@ -263,7 +263,6 @@ export enum EthereumRpcType {
     // sign & decrypt message
     SIGN = 'eth_sign',
     SIGN_TYPED_DATA = 'eth_signTypedData',
-    SIGN_PERSONAL = 'personal_sign',
     ETH_DECRYPT = 'eth_decrypt',
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
 }
