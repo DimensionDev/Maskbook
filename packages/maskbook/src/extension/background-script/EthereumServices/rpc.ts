@@ -95,7 +95,7 @@ function getFunctionParameters(tx: EthereumTransactionConfig) {
 
 export async function getJsonRpcComputed(payload: JsonRpcPayload): Promise<EthereumRpcComputed | undefined> {
     switch (payload.method) {
-        // sign & decrypt message
+        // sign
         case EthereumMethodType.ETH_SIGN:
         case EthereumMethodType.PERSONAL_SIGN:
             return {
@@ -109,6 +109,8 @@ export async function getJsonRpcComputed(payload: JsonRpcPayload): Promise<Ether
                 to: payload.params[1],
                 data: payload.params[0],
             }
+
+        // decrypt
         case EthereumMethodType.ETH_DECRYPT:
             return {
                 type: EthereumRpcType.ETH_DECRYPT,

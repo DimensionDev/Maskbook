@@ -259,9 +259,11 @@ export enum EthereumRpcType {
     // wallet
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
 
-    // sign & decrypt message
+    // sign
     SIGN = 'eth_sign',
     SIGN_TYPED_DATA = 'eth_signTypedData',
+
+    // decrypt
     ETH_DECRYPT = 'eth_decrypt',
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
 }
