@@ -6,6 +6,9 @@ import stringify from 'json-stable-stringify'
 import { encodeArrayBuffer, encodeText, unreachable } from '@dimensiondev/kit'
 import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { Persona, Profile } from '../../database'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { WalletRPC } from '../../plugins/Wallet/messages'
+import { ProviderType } from '@masknet/web3-shared'
 
 const stringToIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const personaFormatter = (p: Persona) => {
@@ -197,5 +200,17 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         if (!(id instanceof ProfileIdentifier)) throw new Error('invalid identifier')
 
         await Services.Identity.removeProfile(id)
+    },
+    wallet_emitAccountUpdated: async ({ account }) => {
+        await WalletRPC.updateAccount({
+            account,
+        })
+        await WalletMessages.events.walletsUpdated.sendToAll()
+    },
+    wallet_emitChainIdUpdated: async ({ chainId }) => {
+        await WalletRPC.updateAccount({
+            chainId,
+            providerType: ProviderType.Maskbook,
+        })
     },
 }
