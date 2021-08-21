@@ -18,7 +18,6 @@ importers:
       '@material-ui/core': 5.0.0-alpha.34
       '@material-ui/icons': 5.0.0-alpha.34
       '@material-ui/lab': 5.0.0-alpha.34
-      '@material-ui/styles': 5.0.0-alpha.33
       '@material-ui/system': 5.0.0-alpha.34
       '@nice-labs/git-rev': ^3.5.0
       '@types/react': ^17.0.14
@@ -38,7 +37,6 @@ importers:
       husky: ^7.0.1
       i18next: ^20.3.4
       idb: 5.0.8
-      jss: 10.5.1
       lint-staged: ^11.1.0
       npm-run-all: ^4.1.5
       only-allow: ^1.0.0
@@ -58,14 +56,12 @@ importers:
       '@material-ui/core': 5.0.0-alpha.34_9573e673e44e76d42dfd8ee27e505b8d
       '@material-ui/icons': 5.0.0-alpha.34_efa8ffa3c203b59b265bc9823f7fd1dd
       '@material-ui/lab': 5.0.0-alpha.34_2f3cefec971b3b570e9b1ca691f643e0
-      '@material-ui/styles': 5.0.0-alpha.33_010541d7fdfc8cbcdd915345c89295c8
       '@material-ui/system': 5.0.0-alpha.34_873b6ee332b32a0534335ea366866a4e
       '@types/react': 17.0.15
       '@types/react-dom': 17.0.9
       '@types/web': 0.0.16
       i18next: 20.3.5
       idb: 5.0.8
-      jss: 10.5.1
       react: 18.0.0-alpha-aecb3b6d1
       react-dom: 18.0.0-alpha-aecb3b6d1_react@18.0.0-alpha-aecb3b6d1
       react-i18next: 11.11.4_60622d171f398e74ebbb8933ef6c3c06
@@ -206,7 +202,10 @@ importers:
 
   packages/icons:
     specifiers:
+      '@emotion/server': ^11.4.0
       snowpack: ^3.8.3
+    dependencies:
+      '@emotion/server': 11.4.0
     devDependencies:
       snowpack: 3.8.3
 

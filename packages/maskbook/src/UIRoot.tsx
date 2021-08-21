@@ -1,5 +1,4 @@
 import { I18nextProvider } from 'react-i18next'
-import { StylesProvider } from '@material-ui/styles'
 import { CssBaseline, StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { Web3Provider } from '@masknet/web3-shared'
 import { SnackbarProvider } from '@masknet/theme'
@@ -32,12 +31,10 @@ export function MaskUIRootWithinShadow(JSX: JSX.Element) {
 export function MaskUIRoot(JSX: JSX.Element) {
     return MaskUIRootWithinShadow(
         <StyledEngineProvider injectFirst>
-            <StylesProvider>
-                <ThemeProvider theme={useClassicMaskTheme()}>
-                    <CssBaseline />
-                    {JSX}
-                </ThemeProvider>
-            </StylesProvider>
+            <ThemeProvider theme={useClassicMaskTheme()}>
+                <CssBaseline />
+                {JSX}
+            </ThemeProvider>
         </StyledEngineProvider>,
     )
 }

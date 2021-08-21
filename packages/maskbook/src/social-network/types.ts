@@ -14,8 +14,8 @@ import type { PostInfo } from './PostInfo'
 import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
 import type { TypedMessage } from '../protocols/typed-message'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
-import type { ClassNameMap } from '@material-ui/styles'
 
+type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Don't define values in namespaces
 export namespace SocialNetwork {
     export interface PayloadEncoding {

@@ -5,7 +5,6 @@ export type {
     RenderInShadowRootConfig,
     ReactRootShadowed,
 } from './createReactRootShadowed'
-export { disableJSSDisconnectedWarning } from './hacks'
 export {
     usePortalShadowRoot,
     setupPortalShadowRoot,
