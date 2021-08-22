@@ -7,7 +7,7 @@ import { isSameAddress, ProviderType, useWallet, useWallets } from '@masknet/web
 import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
-import { DialogRoutes } from '../../../index'
+import { PopupRoutes } from '../../../index'
 import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles()({
@@ -103,7 +103,7 @@ const SelectWallet = memo(() => {
                 <Button
                     variant="contained"
                     className={classes.button}
-                    onClick={() => history.push(DialogRoutes.CreateWallet)}>
+                    onClick={() => history.push(PopupRoutes.CreateWallet)}>
                     {t('import')}
                 </Button>
             </div>

@@ -7,7 +7,7 @@ import { TabContext, TabPanel } from '@material-ui/lab'
 import { EnterDashboard } from '../../../../components/EnterDashboard'
 import { AssetsList } from '../AssetsList'
 import { useHistory } from 'react-router-dom'
-import { DialogRoutes } from '../../../../index'
+import { PopupRoutes } from '../../../../index'
 import { ActivityList } from '../ActivityList'
 import { useI18N } from '../../../../../../utils'
 
@@ -72,7 +72,7 @@ enum WalletTabs {
 
 export const WalletAssets = memo(() => {
     const history = useHistory()
-    return <WalletAssetsUI onAddTokenClick={() => history.push(DialogRoutes.AddToken)} />
+    return <WalletAssetsUI onAddTokenClick={() => history.push(PopupRoutes.AddToken)} />
 })
 
 export interface WalletAssetsUIProps {
