@@ -7,11 +7,15 @@ import { createWalletDBAccess } from '../database/Wallet.db'
 const MAX_UNCONFIRMED_REQUESTS_SIZE = 5
 const MAIN_RECORD_ID = '0'
 
+function requestSorter(a: JsonRpcPayload, z: JsonRpcPayload) {
+    return (a.id as number) ?? 0 - (z.id as number) ?? 0
+}
+
 export async function getUncofirmedRequests() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('UnconfirmedRequestChunk')
     const chunk = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
     if (!chunk) return []
-    return chunk.requests.slice(0, MAX_UNCONFIRMED_REQUESTS_SIZE) ?? []
+    return chunk.requests.slice(0, MAX_UNCONFIRMED_REQUESTS_SIZE).sort(requestSorter)
 }
 
 export async function topUnconfirmedRequest() {
@@ -23,7 +27,7 @@ export async function popUnconfirmedRequest() {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
 
     const chunk_ = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
-    const requests = (chunk_?.requests ?? []).sort((a, z) => (a.id as number) ?? 0 - (z.id as number) ?? 0)
+    const requests = (chunk_?.requests ?? []).sort(requestSorter)
     if (!chunk_) return
     if (!requests.length) return
 
@@ -46,8 +50,7 @@ export async function pushUnconfirmedRequest(payload: JsonRpcPayload) {
     const requests = chunk_?.requests ?? []
 
     // validate if it's still possible to push a new request
-    if (requests.length >= MAX_UNCONFIRMED_REQUESTS_SIZE) throw new Error('Unable to add more request.')
-    if (requests.some((x) => x.method === payload.method)) throw new Error('Already exists.')
+    if (requests.length >= MAX_UNCONFIRMED_REQUESTS_SIZE) throw new Error('Unable to add more requests.')
 
     const chunk = chunk_
         ? {
@@ -63,6 +66,7 @@ export async function pushUnconfirmedRequest(payload: JsonRpcPayload) {
           }
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
     WalletMessages.events.requestsUpdated.sendToAll(undefined)
+    return payload
 }
 
 export async function deleteUnconfirmedRequest(payload: JsonRpcPayload) {
@@ -81,6 +85,7 @@ export async function deleteUnconfirmedRequest(payload: JsonRpcPayload) {
     }
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
     WalletMessages.events.requestsUpdated.sendToAll(undefined)
+    return payload
 }
 
 export async function clearUnconfirmedRequests() {

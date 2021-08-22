@@ -74,7 +74,7 @@ export async function INTERNAL_send(
     }
 
     // some rpc methods need to be confirmed by the user
-    if (Flags.v2_enabled && !skipConfirmation && isRpcNeedToBeConfirmed(payload)) {
+    if (Flags.v2_enabled && !skipConfirmation && isRpcNeedToBeConfirmed(payload) && providerType === ProviderType.Maskbook) {
         // TODO:
         // pull the popup up to let the user to confirm the rpc
 
