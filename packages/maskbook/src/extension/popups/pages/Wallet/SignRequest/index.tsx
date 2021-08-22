@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { useUnConfirmedRequest } from '../hooks/useUnConfirmedRequest'
+import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@material-ui/core'
 import { useI18N } from '../../../../../utils'
@@ -62,7 +62,7 @@ const useStyles = makeStyles()(() => ({
 const SignRequest = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { value } = useUnConfirmedRequest()
+    const { value } = useUnconfirmedRequest()
     const wallet = useWallet()
 
     const { data, address } = useMemo(() => {

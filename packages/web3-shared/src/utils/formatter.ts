@@ -102,6 +102,6 @@ export function formatWeiToGwei(value: BigNumber.Value) {
     return new BigNumber(value).idiv(10 ** 9)
 }
 
-export function formatWeiToEth(value: BigNumber.Value) {
+export function formatWeiToEther(value: BigNumber.Value) {
     return new BigNumber(value).div(new BigNumber(10 ** 18))
 }

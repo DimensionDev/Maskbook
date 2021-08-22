@@ -2,7 +2,7 @@ import { useAsyncRetry } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
 
-export const useUnConfirmedRequest = () => {
+export const useUnconfirmedRequest = () => {
     return useAsyncRetry(async () => {
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return

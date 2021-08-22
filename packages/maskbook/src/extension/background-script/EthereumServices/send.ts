@@ -24,7 +24,6 @@ import {
 } from '../../../plugins/Wallet/settings'
 import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../utils'
-import { getJsonRpcComputed } from './rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { DialogRoutes } from '../../popups'
 
@@ -74,13 +73,12 @@ export async function INTERNAL_send(
     }
 
     // some rpc methods need to be confirmed by the user
-    if (Flags.v2_enabled && !skipConfirmation && isRpcNeedToBeConfirmed(payload) && providerType === ProviderType.Maskbook) {
-        // TODO:
-        // pull the popup up to let the user to confirm the rpc
-
-        console.log('DEBUG: RPC computed')
-        console.log(await getJsonRpcComputed(payload))
-
+    if (
+        Flags.v2_enabled &&
+        !skipConfirmation &&
+        isRpcNeedToBeConfirmed(payload) &&
+        providerType === ProviderType.Maskbook
+    ) {
         try {
             await WalletRPC.pushUnconfirmedRequest(payload)
         } catch (error: any) {

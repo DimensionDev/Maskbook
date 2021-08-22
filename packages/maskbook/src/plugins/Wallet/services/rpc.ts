@@ -11,7 +11,7 @@ function requestSorter(a: JsonRpcPayload, z: JsonRpcPayload) {
     return (a.id as number) ?? 0 - (z.id as number) ?? 0
 }
 
-export async function getUncofirmedRequests() {
+export async function getUnconfirmedRequests() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('UnconfirmedRequestChunk')
     const chunk = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
     if (!chunk) return []
@@ -19,7 +19,7 @@ export async function getUncofirmedRequests() {
 }
 
 export async function topUnconfirmedRequest() {
-    return first(await getUncofirmedRequests())
+    return first(await getUnconfirmedRequests())
 }
 
 export async function popUnconfirmedRequest() {
