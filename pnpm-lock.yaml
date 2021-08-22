@@ -712,7 +712,7 @@ importers:
       classnames: ^2.3.1
       fuse.js: ^6.4.6
       lodash-es: ^4.17.20
-      notistack: 1.0.6-next.1
+      notistack: 1.0.6-next.2
       react-window: ^1.8.6
       storybook-addon-matrix: ^1.6.0
       tinycolor2: ^1.4.2
@@ -723,7 +723,7 @@ importers:
       classnames: 2.3.1
       fuse.js: 6.4.6
       lodash-es: 4.17.21
-      notistack: 1.0.6-next.1_cf73e4bbad84f0dc17e9fbe13d1f5003
+      notistack: 1.0.6-next.2_2bafb7a15616b0e6b032876a69294dcb
       react-window: 1.8.6_f991c289939c8299bed5e4a6a5a79a62
       tinycolor2: 1.4.2
       tss-react: 0.6.0_bef0d66e98e8cc6f9687bc5bf9034690
@@ -20285,13 +20285,22 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /notistack/1.0.6-next.1_cf73e4bbad84f0dc17e9fbe13d1f5003:
-    resolution: {integrity: sha512-deshn1cnse70pRFKuDC4mKUohjspAF3KjyjoolAFLCNGlFpjpBgHcFR8+gnO4XV0ijuXVz+oDfzBAdw/YMtkkg==}
+  /notistack/1.0.6-next.2_2bafb7a15616b0e6b032876a69294dcb:
+    resolution: {integrity: sha512-ilyy7W2R7NZQG3xVe2fFkF39JtrnwkGS6CR+VekDI5aYLf+umvDrmImqs+R0WZc498C3HERFXxPOVNooPBKm0g==}
     peerDependencies:
-      '@material-ui/core': ^5.0.0-alpha.15
+      '@emotion/react': ^11.4.1
+      '@emotion/styled': ^11.3.0
+      '@material-ui/core': ^5.0.0-beta.4
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
+    peerDependenciesMeta:
+      '@emotion/react':
+        optional: true
+      '@emotion/styled':
+        optional: true
     dependencies:
+      '@emotion/react': 11.4.1_010541d7fdfc8cbcdd915345c89295c8
+      '@emotion/styled': 11.3.0_6ab2aa4a60cb3b32dba32c44ea3f6a9c
       '@material-ui/core': 5.0.0-beta.4_9573e673e44e76d42dfd8ee27e505b8d
       clsx: 1.1.1
       hoist-non-react-statics: 3.3.2
