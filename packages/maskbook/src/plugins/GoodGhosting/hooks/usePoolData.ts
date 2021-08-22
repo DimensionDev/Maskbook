@@ -48,7 +48,7 @@ export function useRewardToken() {
     return WETH[chainId]
 }
 
-export function usePoolAssets() {
+export function usePoolAssets(): AsyncStateRetry<GameAssets> {
     const gameToken = useGameToken()
     const rewardToken = useRewardToken()
 

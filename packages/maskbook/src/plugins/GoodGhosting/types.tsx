@@ -1,4 +1,5 @@
 import type { Asset, TransactionStateType } from '@masknet/web3-shared'
+import type BigNumber from 'bignumber.js'
 
 export interface GameMetaData {
     contractAddress: string
@@ -51,6 +52,12 @@ export interface LendingPoolData {
     incentives: string
     totalAdai: string
     reward: string
+}
+
+export interface GameFinancialData {
+    poolAPY: BigNumber
+    poolEarnings: BigNumber
+    extraRewards: BigNumber
 }
 
 export interface GameAssets {

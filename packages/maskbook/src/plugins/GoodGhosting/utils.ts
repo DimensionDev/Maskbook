@@ -1,6 +1,7 @@
 import type {
     GameActionError,
     GameAssets,
+    GameFinancialData,
     GoodGhostingInfo,
     LendingPoolData,
     Player,
@@ -129,5 +130,5 @@ export function getGameFinancialData(
         extraRewards: info.gameHasEnded
             ? new BigNumber(playerStandings.winning).multipliedBy(info.rewardsPerPlayer)
             : new BigNumber(poolData.reward).plus(poolData.incentives),
-    }
+    } as GameFinancialData
 }
