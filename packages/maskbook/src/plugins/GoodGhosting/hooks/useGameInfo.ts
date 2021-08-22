@@ -43,6 +43,7 @@ export function useGameInfo(gameData: GameMetaData) {
             'adaiToken',
             'lendingPool',
             'earlyWithdrawalFee',
+            'rewardsPerPlayer',
         ] as any
         return {
             names: [...names, 'players'],
@@ -70,6 +71,7 @@ export function useGameInfo(gameData: GameMetaData) {
             adaiToken,
             lendingPool,
             earlyWithdrawalFee,
+            rewardsPerPlayer,
             currentPlayer,
         ] = results.map((x) => {
             if (x.error) failedToGetInfo = true
@@ -83,6 +85,7 @@ export function useGameInfo(gameData: GameMetaData) {
         return {
             ...gameData,
             segmentPayment,
+            rewardsPerPlayer,
             firstSegmentStart: Number.parseInt(firstSegmentStart, 10),
             currentSegment: Number.parseInt(currentSegment, 10),
             lastSegment: Number.parseInt(lastSegment, 10),

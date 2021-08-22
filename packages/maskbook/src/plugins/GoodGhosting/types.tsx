@@ -1,5 +1,4 @@
-import type BigNumber from 'bignumber.js'
-import type { TransactionStateType } from '@masknet/web3-shared'
+import type { Asset, TransactionStateType } from '@masknet/web3-shared'
 
 export interface GameMetaData {
     contractAddress: string
@@ -19,6 +18,7 @@ interface GoodGhostingBaseInfo {
     adaiTokenAddress: string
     lendingPoolAddress: string
     earlyWithdrawalFee: string
+    rewardsPerPlayer: string
     currentPlayer: Player | undefined
     gameHasEnded: boolean
     refresh: () => void
@@ -48,9 +48,14 @@ export interface TimelineEvent {
 }
 
 export interface LendingPoolData {
+    incentives: string
+    totalAdai: string
     reward: string
-    poolAPY: BigNumber
-    poolEarnings: BigNumber
+}
+
+export interface GameAssets {
+    gameAsset: Asset
+    rewardAsset: Asset
 }
 
 export interface GameActionError {

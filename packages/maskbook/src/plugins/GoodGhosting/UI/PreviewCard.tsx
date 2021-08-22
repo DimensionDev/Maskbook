@@ -8,7 +8,7 @@ import { OtherPlayersView } from './OtherPlayersView'
 import { PersonalView } from './PersonalView'
 import { useGameContractAddress, useGameInfo } from '../hooks/useGameInfo'
 import type { GameMetaData, GoodGhostingInfo } from '../types'
-import { usePoolData } from '../hooks/usePoolData'
+import { usePoolAssets, usePoolData } from '../hooks/usePoolData'
 import { useOtherPlayerInfo } from '../hooks/useOtherPlayerInfo'
 import { TimelineTimer } from './TimelineTimer'
 
@@ -99,6 +99,7 @@ function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
 
     const finDataResult = usePoolData(props.info)
     const otherPlayerResult = useOtherPlayerInfo(props.info)
+    const poolAssetsResult = usePoolAssets()
 
     const tabs = [GoodGhostingTab.Game, GoodGhostingTab.Timeline, GoodGhostingTab.Everyone]
     if (props.info.currentPlayer) tabs.push(GoodGhostingTab.Personal)
@@ -118,7 +119,12 @@ function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
                     ))}
                 </Tabs>
                 <TabPanel value={GoodGhostingTab.Game} sx={{ flex: 1 }}>
-                    <GameStatsView info={props.info} finDataResult={finDataResult} />
+                    <GameStatsView
+                        info={props.info}
+                        finDataResult={finDataResult}
+                        otherPlayerResult={otherPlayerResult}
+                        poolAssetsResult={poolAssetsResult}
+                    />
                 </TabPanel>
                 <TabPanel value={GoodGhostingTab.Timeline} sx={{ flex: 1 }}>
                     <TimelineView info={props.info} />
