@@ -1,4 +1,4 @@
-import { DialogRoutes, getRouteURLWithNoParam } from '..'
+import { PopupRoutes, getRouteURLWithNoParam } from '..'
 import type { ThirdPartyPluginPermission } from '../../background-script/ThirdPartyPlugin/types'
 
 export function constructThirdPartyRequestPermissionURL(
@@ -8,5 +8,5 @@ export function constructThirdPartyRequestPermissionURL(
     const params = new URLSearchParams()
     params.set('plugin', pluginManifestURL)
     for (const x of permissions) params.append('permission', String(x))
-    return getRouteURLWithNoParam(DialogRoutes.ThirdPartyRequestPermission) + '?' + params.toString()
+    return getRouteURLWithNoParam(PopupRoutes.ThirdPartyRequestPermission) + '?' + params.toString()
 }

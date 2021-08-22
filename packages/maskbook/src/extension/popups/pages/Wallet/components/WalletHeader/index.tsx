@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { SettingIcon } from '@masknet/icons'
 import { NetworkSelector } from '../../../../components/NetworkSelector'
 import { useHistory } from 'react-router'
-import { DialogRoutes } from '../../../../index'
+import { PopupRoutes } from '../../../../index'
 
 const useStyles = makeStyles()({
     container: {
@@ -28,7 +28,7 @@ export const WalletHeader = memo(() => {
         <div>
             <div className={classes.container}>
                 <NetworkSelector />
-                <SettingIcon className={classes.setting} onClick={() => history.push(DialogRoutes.SelectWallet)} />
+                <SettingIcon className={classes.setting} onClick={() => history.push(PopupRoutes.SelectWallet)} />
             </div>
         </div>
     )
