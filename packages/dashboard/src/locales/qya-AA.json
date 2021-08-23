@@ -12,6 +12,7 @@
     "verify": "crwdns7571:0crwdne7571:0",
     "go_back": "crwdns7573:0crwdne7573:0",
     "connect": "crwdns7575:0crwdne7575:0",
+    "restore": "crwdns7835:0crwdne7835:0",
     "about_dialog_license": "crwdns1625:0crwdne1625:0",
     "footer_bounty_list": "crwdns1627:0crwdne1627:0",
     "about_dialog_source_code": "crwdns1629:0crwdne1629:0",
