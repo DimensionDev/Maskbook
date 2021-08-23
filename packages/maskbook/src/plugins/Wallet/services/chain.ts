@@ -27,10 +27,9 @@ export async function updateChainState() {
 
     // update chain state
     try {
-        const wallet = await getWallet()
         ;[currentBlockNumberSettings.value, currentBalanceSettings.value] = await Promise.all([
             getBlockNumber(),
-            wallet ? getBalance(wallet.address) : currentBalanceSettings.value,
+            currentAccountSettings.value ? getBalance(currentAccountSettings.value) : currentBalanceSettings.value,
         ])
     } catch {
         // do nothing
