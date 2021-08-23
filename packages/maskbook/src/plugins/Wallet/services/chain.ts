@@ -3,7 +3,6 @@ import { pollingTask } from '@masknet/shared'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
 import { startEffects } from '../../../utils'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
-import { getWallet } from './wallet'
 import {
     currentAccountSettings,
     currentBalanceSettings,
