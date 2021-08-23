@@ -9,6 +9,7 @@ import { InjectedDialog } from '../shared/InjectedDialog'
 import { CompositionDialogUI, CompositionRef } from './CompositionUI'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest'
 import { useSubmit } from './useSubmit'
+import { DialogStackingProvider } from '@masknet/theme'
 
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
@@ -39,25 +40,27 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
     return (
-        <InjectedDialog keepMounted open={open} onClose={onClose} title={t('post_dialog__title')}>
-            <DialogContent>
-                <CompositionDialogUI
-                    ref={UI}
-                    {...useCompositionClipboardRequest(requireClipboardPermission || false)}
-                    disabledRecipients={disableE2E ? 'E2E' : undefined}
-                    recipients={useRecipientsList()}
-                    maxLength={560}
-                    onSubmit={useSubmit(onClose)}
-                    onChange={(message) => {
-                        // TODO: move into the plugin system
-                        const hasRedPacket = RedPacketMetadataReader(message.meta).ok
-                        const shouldDisableE2E = hasRedPacket
-                        setDisableE2E(shouldDisableE2E)
-                    }}
-                    supportImageEncoding={networkSupport?.text ?? false}
-                    supportTextEncoding={networkSupport?.image ?? false}
-                />
-            </DialogContent>
-        </InjectedDialog>
+        <DialogStackingProvider>
+            <InjectedDialog keepMounted open={open} onClose={onClose} title={t('post_dialog__title')}>
+                <DialogContent>
+                    <CompositionDialogUI
+                        ref={UI}
+                        {...useCompositionClipboardRequest(requireClipboardPermission || false)}
+                        disabledRecipients={disableE2E ? 'E2E' : undefined}
+                        recipients={useRecipientsList()}
+                        maxLength={560}
+                        onSubmit={useSubmit(onClose)}
+                        onChange={(message) => {
+                            // TODO: move into the plugin system
+                            const hasRedPacket = RedPacketMetadataReader(message.meta).ok
+                            const shouldDisableE2E = hasRedPacket
+                            setDisableE2E(shouldDisableE2E)
+                        }}
+                        supportImageEncoding={networkSupport?.text ?? false}
+                        supportTextEncoding={networkSupport?.image ?? false}
+                    />
+                </DialogContent>
+            </InjectedDialog>
+        </DialogStackingProvider>
     )
 }
