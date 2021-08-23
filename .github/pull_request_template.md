@@ -1,1 +1,2 @@
-<!-- Please refer to the related issue with closes #<issue-id> -->
+<!-- Please refer to the related issue id -->
+<!-- closes # -->
