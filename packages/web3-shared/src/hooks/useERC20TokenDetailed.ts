@@ -77,6 +77,7 @@ async function getERC20TokenDetailed(
     const [name, nameBytes32, symbol, symbolBytes32, decimals] = results.map((result) =>
         result.status === 'fulfilled' ? result.value : '',
     ) as string[]
+
     return createERC20Token(
         chainId,
         address,
