@@ -17,7 +17,7 @@ const useStyles = makeStyles()({
 })
 
 enum PersonaContentTab {
-    POST = 'POST',
+    Posts = 'POST',
     Contacts = 'Contacts',
 }
 
@@ -26,16 +26,16 @@ export interface PersonaContentProps {
 }
 export const PersonaContent = memo<PersonaContentProps>(({ network }) => {
     const { classes } = useStyles()
-    const [tab, setTab] = useState<string>(PersonaContentTab.POST)
+    const [tab, setTab] = useState<string>(PersonaContentTab.Posts)
 
     return (
         <Box className={classes.container}>
             <TabContext value={String(tab)}>
                 <ButtonGroupTabList onChange={(e, v) => setTab(v)} aria-label="persona-post-contacts-button-group">
-                    <Tab value={PersonaContentTab.POST} label="POST" />
+                    <Tab value={PersonaContentTab.Posts} label="Posts" />
                     <Tab value={PersonaContentTab.Contacts} label="Contacts" />
                 </ButtonGroupTabList>
-                <TabPanel value={PersonaContentTab.POST} className={classes.tab}>
+                <TabPanel value={PersonaContentTab.Posts} className={classes.tab}>
                     Post
                 </TabPanel>
                 <TabPanel value={PersonaContentTab.Contacts} className={classes.tab}>

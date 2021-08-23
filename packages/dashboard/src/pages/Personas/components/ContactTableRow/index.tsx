@@ -1,6 +1,6 @@
 import type { RelationProfile } from '@masknet/shared'
 import { memo, useCallback } from 'react'
-import { Box, TableCell, TableRow, Typography, Avatar, useTheme, Button } from '@material-ui/core'
+import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { StarIcon, MaskNetworkIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
@@ -9,6 +9,8 @@ import { useDashboardI18N } from '../../../../locales'
 import { generateContactAvatarColor } from '../../../../utils/generateContactAvatarColor'
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact'
 import { PersonaContext } from '../../hooks/usePersonaContext'
+import { useAsyncFn } from 'react-use'
+import { LoadingButton } from '@material-ui/lab'
 
 const useStyles = makeStyles()({
     favorite: {
@@ -65,8 +67,8 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
         }
     }, [contact, currentPersona])
 
-    const handleClickInvite = useCallback(() => {
-        Services.Helper.openNewWindowAndPasteShareContent(
+    const [{ loading }, handleClickInvite] = useAsyncFn(async () => {
+        return Services.Helper.openNewWindowAndPasteShareContent(
             network,
             t.personas_invite_post({ identifier: contact.identifier.userId }),
         )
@@ -77,6 +79,7 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
             handleClickInvite={handleClickInvite}
             handleClickStar={handleClickStar}
             theme={theme}
+            loading={loading}
             contact={contact}
             index={index}
         />
@@ -86,11 +89,12 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
 export interface ContactTableRowUIProps extends Omit<ContactTableRowProps, 'network'> {
     handleClickInvite(): void
     handleClickStar(): void
+    loading: boolean
     theme: 'light' | 'dark'
 }
 
 export const ContactTableRowUI = memo<ContactTableRowUIProps>(
-    ({ contact, index, handleClickStar, handleClickInvite, theme }) => {
+    ({ contact, index, handleClickStar, handleClickInvite, theme, loading }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
         const [first, last] = contact.name.split(' ')
@@ -133,9 +137,14 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                 </TableCell>
                 <TableCell align="center">
                     {!contact.fingerprint ? (
-                        <Button color="secondary" size="small" className={classes.button} onClick={handleClickInvite}>
+                        <LoadingButton
+                            loading={loading}
+                            color="secondary"
+                            size="small"
+                            className={classes.button}
+                            onClick={handleClickInvite}>
                             {t.personas_contacts_invite()}
-                        </Button>
+                        </LoadingButton>
                     ) : null}
                 </TableCell>
             </TableRow>
