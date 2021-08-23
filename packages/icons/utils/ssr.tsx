@@ -50,7 +50,7 @@ function render() {
                     <main id="menus">
                         <IconPreview icons={Menus} title="Menus" />
                     </main>
-                    <main id="menus">
+                    <main id="settings">
                         <IconPreview icons={Settings} title="Settings" />
                     </main>
                 </body>
