@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Route, Switch, Redirect } from 'react-router'
 import { HashRouter } from 'react-router-dom'
 import { MaskUIRoot } from '../../UIRoot'
-import { DialogRoutes } from '.'
+import { PopupRoutes } from '.'
 import { createNormalReactRoot } from '../../utils'
 import '../../social-network-adaptor/browser-action'
 
@@ -23,21 +23,21 @@ function Dialogs() {
             <HashRouter>
                 <Suspense fallback="">
                     <Switch>
-                        <Route path={DialogRoutes.Wallet} children={frame(<Wallet />)} />
-                        <Route path={DialogRoutes.Personas} children={frame(<Personas />)} exact />
-                        <Route path={DialogRoutes.RequestPermission} exact>
+                        <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
+                        <Route path={PopupRoutes.Personas} children={frame(<Personas />)} exact />
+                        <Route path={PopupRoutes.RequestPermission} exact>
                             <RequestPermissionPage />
                         </Route>
-                        <Route path={DialogRoutes.PermissionAwareRedirect} exact>
+                        <Route path={PopupRoutes.PermissionAwareRedirect} exact>
                             <PermissionAwareRedirect />
                         </Route>
-                        <Route path={DialogRoutes.ThirdPartyRequestPermission} exact>
+                        <Route path={PopupRoutes.ThirdPartyRequestPermission} exact>
                             <ThirdPartyRequestPermission />
                         </Route>
-                        <Route path={DialogRoutes.SignRequest} exact>
+                        <Route path={PopupRoutes.SignRequest} exact>
                             <SignRequest />
                         </Route>
-                        <Route children={<Redirect to={DialogRoutes.Wallet} />} />
+                        <Route children={<Redirect to={PopupRoutes.Wallet} />} />
                     </Switch>
                 </Suspense>
             </HashRouter>

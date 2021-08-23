@@ -16,7 +16,7 @@ const Labs = lazy(() => import('./Labs'))
 
 export function Pages() {
     return (
-        <Suspense fallback="loading...">
+        <Suspense fallback={null}>
             <Routes>
                 <NoPersonaGuardRoute path={RoutePaths.Welcome} element={<Welcome />} redirectTo={RoutePaths.Personas} />
                 <Route path={RoutePaths.Setup} element={<Setup />} />
