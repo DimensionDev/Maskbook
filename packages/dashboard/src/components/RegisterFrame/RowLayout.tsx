@@ -2,8 +2,9 @@ import { MaskBannerIcon } from '@masknet/icons'
 import { styled } from '@material-ui/core/styles'
 import { memo } from 'react'
 import { LightColor } from '@masknet/theme/constants'
+import { Container } from '@material-ui/core'
 
-const Container = styled('div')(
+const LayoutContainer = styled('div')(
     ({ theme }) => `
     display: flex;
     position: absolute;
@@ -24,7 +25,8 @@ const LeftSide = styled('div')(
 const RightContent = styled('div')(
     ({ theme }) => `
     flex: 1;
-    width: 70%;
+    display: flex;
+    justify-content: center;
     background: ${theme.palette.mode === 'dark' ? LightColor.textPrimary : theme.palette.common};
 `,
 )
@@ -33,11 +35,13 @@ interface RowLayoutProps extends React.PropsWithChildren<{}> {}
 
 export const RowLayout = memo(({ children }: RowLayoutProps) => {
     return (
-        <Container>
+        <LayoutContainer>
             <LeftSide>
                 <MaskBannerIcon />
             </LeftSide>
-            <RightContent>{children}</RightContent>
-        </Container>
+            <RightContent>
+                <Container maxWidth="md">{children}</Container>
+            </RightContent>
+        </LayoutContainer>
     )
 })
