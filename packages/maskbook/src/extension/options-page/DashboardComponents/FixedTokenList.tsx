@@ -6,13 +6,14 @@ import {
     useAccount,
     useAssetsByTokenList,
     useChainId,
+    useERC20TokenDetailed,
     useERC20TokensDetailedFromTokenLists,
     useEthereumConstants,
     useTrustedERC20Tokens,
 } from '@masknet/web3-shared'
 import { Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { useStylesExtends } from '@masknet/shared'
 import { TokenInList } from './TokenInList'
@@ -49,13 +50,30 @@ export function FixedTokenList(props: FixedTokenListProps) {
     const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
         useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS, keyword, trustedERC20Tokens)
 
+    //#region add token by address
+    const matchedTokenAddress = useMemo(() => {
+        if (!keyword || !EthereumAddress.isValid(keyword) || erc20TokensDetailed.length) return
+        return keyword
+    }, [keyword, erc20TokensDetailed.length])
+    const { value: searchedToken, loading: searchedTokenLoading } = useERC20TokenDetailed(matchedTokenAddress ?? '')
+    //#endregion
+
+    console.log(searchedToken)
+
     const filteredTokens = erc20TokensDetailed.filter(
         (token) =>
             (!includeTokens.length || includeTokens.some(currySameAddress(token.address))) &&
             (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
     )
 
-    const renderTokens = uniqBy([...tokens, ...filteredTokens], (x) => x.address.toLowerCase())
+    const renderTokens = uniqBy(
+        [
+            ...tokens,
+            ...filteredTokens,
+            ...(searchedToken && searchedToken.name !== 'Unknown Token' ? [searchedToken] : []),
+        ],
+        (x) => x.address.toLowerCase(),
+    )
 
     const {
         value: assets,
@@ -82,6 +100,7 @@ export function FixedTokenList(props: FixedTokenListProps) {
 
     if (erc20TokensDetailedLoading) return renderPlaceholder('Loading token lists...')
     if (assetsLoading) return renderPlaceholder('Loading token assets...')
+    if (searchedTokenLoading) return renderPlaceholder('Loading token...')
     if (!renderAssets.length)
         return renderPlaceholder('No results or contract address does not meet the query criteria.')
 
