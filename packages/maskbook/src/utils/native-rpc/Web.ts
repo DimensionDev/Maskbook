@@ -7,6 +7,9 @@ import { definedSocialNetworkWorkers } from '../../social-network/define'
 import { launchPageSettings } from '../../settings/settings'
 import Services from '../../extension/service'
 import type { Persona, Profile } from '../../database'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { WalletRPC } from '../../plugins/Wallet/messages'
+import { ProviderType } from '@masknet/web3-shared'
 
 const stringToIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const personaFormatter = (p: Persona) => {
@@ -199,6 +202,18 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
 
         await Services.Identity.removeProfile(id)
     },
+    wallet_updateEthereumAccount: async ({ account }) => {
+        await WalletRPC.updateAccount({
+            account,
+        })
+        await WalletMessages.events.walletsUpdated.sendToAll()
+    },
+    wallet_updateEthereumChainId: async ({ chainId }) => {
+        await WalletRPC.updateAccount({
+            chainId,
+            providerType: ProviderType.Maskbook,
+        })
+    },
     async SNSAdaptor_getCurrentDetectedProfile() {
         const { activatedSocialNetworkUI } = await import('../../social-network')
         return activatedSocialNetworkUI.collecting.identityProvider?.lastRecognized.value.identifier.toText()
@@ -211,6 +226,7 @@ function wrapWithAssert(env: Environment, f: Function) {
         return f(...args)
     }
 }
+
 try {
     for (const _key in MaskNetworkAPI) {
         const key = _key as keyof MaskNetworkAPIs
