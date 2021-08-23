@@ -1,7 +1,8 @@
 import { useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
-import { Box, ListItem, makeStyles, Theme, Typography } from '@material-ui/core'
+import { Box, ListItem, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { RedPacketHistory, RedPacketJSONPayload, RedPacketStatus } from '../types'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -15,7 +16,7 @@ import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useRefundCallback } from './hooks/useRefundCallback'
 import { WalletMessages } from '../../Wallet/messages'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     primary: {
         display: 'flex',
         alignItems: 'center',
@@ -108,7 +109,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const account = useAccount()
     const { history, onSelect, onClose } = props
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const {
         value: availability,
         computed: { canRefund, canSend, listOfStatus },

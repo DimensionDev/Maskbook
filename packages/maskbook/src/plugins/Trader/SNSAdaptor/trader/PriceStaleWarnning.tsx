@@ -1,8 +1,9 @@
-import { Paper, Box, Typography, Button, makeStyles, Theme } from '@material-ui/core'
+import { Paper, Box, Typography, Button } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import WarningIcon from '@material-ui/icons/Warning'
 import { useStylesExtends } from '@masknet/shared'
 
-const useStyles = makeStyles((theme: Theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             margin: theme.spacing(2, 'auto'),

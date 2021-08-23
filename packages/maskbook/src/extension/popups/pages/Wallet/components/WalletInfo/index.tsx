@@ -1,14 +1,15 @@
 import { memo } from 'react'
-import { makeStyles, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { MoreHoriz } from '@material-ui/icons'
 import { MaskWalletIcon, EditIcon } from '@masknet/icons'
 import { CopyIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
-import { DialogRoutes } from '../../../../index'
+import { PopupRoutes } from '../../../../index'
 import { useWallet } from '@masknet/web3-shared'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     container: {
         padding: '12px 10px',
         display: 'flex',
@@ -53,7 +54,7 @@ const useStyles = makeStyles(() => ({
         height: 24,
         marginRight: 4,
     },
-}))
+})
 
 export const WalletInfo = memo(() => {
     const wallet = useWallet()
@@ -63,8 +64,8 @@ export const WalletInfo = memo(() => {
         <WalletInfoUI
             name={wallet.name ?? ''}
             address={wallet.address}
-            onEditClick={() => history.push(DialogRoutes.WalletRename)}
-            onSettingClick={() => history.push(DialogRoutes.WalletSettings)}
+            onEditClick={() => history.push(PopupRoutes.WalletRename)}
+            onSettingClick={() => history.push(PopupRoutes.WalletSettings)}
         />
     )
 })
@@ -77,8 +78,7 @@ export interface WalletInfoUIProps {
 }
 
 export const WalletInfoUI = memo<WalletInfoUIProps>(({ name, address, onSettingClick, onEditClick }) => {
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <div className={classes.container}>
             <div className={classes.left}>

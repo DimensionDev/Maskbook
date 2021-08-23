@@ -38,7 +38,7 @@ export async function stats() {
 
     const per = (100 * (new_.size / (old.size + new_.size))).toPrecision(2)
     for (const each of old) console.log(each.replaceAll('\\\\', '/'))
-    console.log(`${new_.size} files migrated, ${old.size} need to migrate. ${per} completed.`)
+    console.log(`${new_.size} files migrated, ${old.size} need to migrate. ${per}% completed.`)
 }
 stats.displayName = 'makeStyles-stats'
 stats.description = 'Count how many makeStyles needs to be migrated'
@@ -67,7 +67,7 @@ function containsMakeStylesFrom(source: string, target: string = '@material-ui/c
     )
     return file.statements
         .filter(isImportDeclaration)
-        .filter((x) => (x.moduleSpecifier as Identifier).text === target)
+        .filter((x) => (x.moduleSpecifier as Identifier).text.startsWith(target))
         .find((x) => x.importClause?.getText(file).includes('makeStyles'))
 }
 
@@ -86,7 +86,7 @@ function migrateWorker(source: string) {
             return visitEachChild(sf, visitor, context) as SourceFile
             function visitor(node: Node): VisitResult<Node> {
                 if (isImportDeclaration(node)) {
-                    if ((node.moduleSpecifier as StringLiteral).text !== '@material-ui/core') return node
+                    if (!(node.moduleSpecifier as StringLiteral).text.startsWith('@material-ui/core')) return node
                     const result = visitEachChild(node, visitor, context)
                     if (!append) return result
                     append = false
@@ -175,7 +175,7 @@ function migrateWorker(source: string) {
                                 !createPrinter().printNode(EmitHint.Unspecified, a.body, sf).includes('theme')
                             ) {
                                 const [s, ...r] = a.body.statements
-                                if (r.length === 0 && isReturnStatement(s)) a = s.expression!
+                                if (r.length === 0 && s && isReturnStatement(s)) a = s.expression!
                             }
                         } else if (a.parameters.length === 0) {
                             a = a.body

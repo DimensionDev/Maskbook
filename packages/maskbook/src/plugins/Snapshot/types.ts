@@ -27,6 +27,7 @@ export interface Proposal {
     isStart: boolean
     isEnd: boolean
     status: string
+    strategies: Strategy[]
     authorName: string | null
     authorAvatar: string | null
     network: string

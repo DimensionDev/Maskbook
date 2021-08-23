@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import { Theme, IconButton } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
+import { IconButton } from '@material-ui/core'
 import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -21,17 +21,15 @@ interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'acti
               onChange(nextValue: string): void
           }
 }
-const useStyles = makeStyles((theme: Theme) => {
-    return {
-        buttonText: {
-            width: 38,
-            height: 38,
-            margin: '10px 0',
-        },
-        span: {
-            paddingLeft: 8,
-        },
-    }
+const useStyles = makeStyles()({
+    buttonText: {
+        width: 38,
+        height: 38,
+        margin: '10px 0',
+    },
+    span: {
+        paddingLeft: 8,
+    },
 })
 
 export function BannerUI(props: BannerUIProps) {

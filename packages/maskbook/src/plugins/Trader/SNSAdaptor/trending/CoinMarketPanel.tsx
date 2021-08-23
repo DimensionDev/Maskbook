@@ -1,10 +1,10 @@
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { Trending } from '../../types'
 import type { DataProvider } from '@masknet/public-api'
 import { CoinMarketTable } from './CoinMarketTable'
 import { CoinMetadataTable } from './CoinMetadataTable'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
     },
@@ -17,8 +17,8 @@ export interface CoinMarketPanelProps {
 
 export function CoinMarketPanel(props: CoinMarketPanelProps) {
     const { dataProvider, trending } = props
-    const classes = useStyles()
 
+    const { classes } = useStyles()
     return (
         <div className={classes.root}>
             <CoinMetadataTable dataProvider={dataProvider} trending={trending} />

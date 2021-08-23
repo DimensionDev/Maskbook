@@ -1,11 +1,11 @@
 import { memo } from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { SettingIcon } from '@masknet/icons'
 import { NetworkSelector } from '../../../../components/NetworkSelector'
 import { useHistory } from 'react-router'
-import { DialogRoutes } from '../../../../index'
+import { PopupRoutes } from '../../../../index'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     container: {
         padding: 10,
         display: 'flex',
@@ -18,17 +18,17 @@ const useStyles = makeStyles(() => ({
         cursor: 'pointer',
         fontSize: 18,
     },
-}))
+})
 
 export const WalletHeader = memo(() => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const history = useHistory()
 
     return (
         <div>
             <div className={classes.container}>
                 <NetworkSelector />
-                <SettingIcon className={classes.setting} onClick={() => history.push(DialogRoutes.SelectWallet)} />
+                <SettingIcon className={classes.setting} onClick={() => history.push(PopupRoutes.SelectWallet)} />
             </div>
         </div>
     )

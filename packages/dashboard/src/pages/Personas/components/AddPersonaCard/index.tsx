@@ -1,10 +1,11 @@
 import { memo, useState } from 'react'
-import { makeStyles, Button, TextField } from '@material-ui/core'
+import { Button, TextField } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { isPersonaNameLengthValid, PERSONA_NAME_MAX_LENGTH } from '../../../../utils/checkLengthExceed'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'grid',
         borderRadius: Number(theme.shape.borderRadius) * 2,
@@ -27,8 +28,7 @@ export interface AddPersonaCardProps {
 export const AddPersonaCard = memo<AddPersonaCardProps>(({ onConfirm, onCancel }) => {
     const t = useDashboardI18N()
     const [name, setName] = useState('')
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <div className={classes.container}>
             {/* TODO: add color prop */}

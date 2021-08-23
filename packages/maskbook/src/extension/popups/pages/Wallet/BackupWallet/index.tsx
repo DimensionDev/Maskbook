@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react'
-import { Button, makeStyles, Tab, Tabs, Typography } from '@material-ui/core'
+import { Button, Tab, Tabs, Typography, experimentalStyled as styled, tabsClasses, tabClasses } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
-import { withStyles } from '@material-ui/styles'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { StyledInput } from '../../../components/StyledInput'
 import { File as FileIcon } from '@masknet/icons'
@@ -10,7 +10,7 @@ import { useAsync } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     header: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -69,38 +69,38 @@ const useStyles = makeStyles(() => ({
         fontSize: 12,
         lineHeight: '14px',
     },
-}))
+})
 
-const StyledTabs = withStyles({
-    root: {
-        minHeight: 'unset',
-        backgroundColor: '#F7F9FA',
-        paddingTop: 6,
-    },
-    indicator: {
-        display: 'none',
-    },
-    flexContainer: {
-        justifyContent: 'center',
-    },
-})(Tabs)
+const StyledTabs = styled(Tabs)`
+    &.${tabsClasses.root} {
+        min-height: unset;
+        background-color: #f7f9fa;
+        padding-top: 6px;
+    }
+    &.${tabsClasses.indicator} {
+        display: none;
+    }
+    &.${tabsClasses.flexContainer} {
+        justify-content: center;
+    }
+`
 
-const StyledTab = withStyles({
-    root: {
-        fontSize: 12,
-        lineHeight: '16px',
-        minHeight: 'unset',
-        minWidth: 145,
-        padding: '7px 0',
-        backgroundColor: '#F7F9FA',
-        borderRadius: '4px 4px 0px 0px',
-        color: '#15181B',
-    },
-    selected: {
-        backgroundColor: '#ffffff',
-        fontWeight: 500,
-    },
-})(Tab)
+const StyledTab = styled(Tab)`
+    &.${tabClasses.root} {
+        font-size: 12px;
+        line-height: 16px;
+        min-height: unset;
+        min-width: 145px;
+        padding: 7px 0;
+        background-color: #f7f9fa;
+        border-radius: 4px 4px 0px 0px;
+        color: #15181b;
+    }
+    &.${tabClasses.selected} {
+        background-color: white;
+        font-weight: 500;
+    }
+`
 
 enum BackupTabs {
     JsonFile = 'Json File',
@@ -109,7 +109,7 @@ enum BackupTabs {
 
 const BackupWallet = memo(() => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const wallet = useWallet()
     const [confirmed, setConfirmed] = useState(false)
     const [currentTab, setCurrentTab] = useState(BackupTabs.JsonFile)

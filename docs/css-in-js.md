@@ -7,9 +7,6 @@ maintainer:
 
 # CSS in JS guide in Mask Network
 
-> &#9888; Migration from `@material-ui/core` to `tss-react` in progress.
-> Please use `makeStyles` exported from `@masknet/theme` instead of `@material-ui/core`.
-
 ## General guides
 
 - ✅ For recommendations
@@ -23,9 +20,6 @@ maintainer:
   Choose the fit one based on your need.
 - 🚫 DO NOT use mystery abbreviations in the `sx` properties, e.g. `<Box sx={{ p: 5 }} />`
   (DON'T) but `<Box sx={{ padding: 5 }}>` (DO, easier to read).
-- 🚫 DO NOT mix two styling solution together. It may cause unknown bugs.
-  FYI: `makeStyles` (from `@material-ui/core`) is `JSS`,
-  `Box`, `sx`, `makeStyles` (from `@masknet/theme`) and `styled` are `@emotion`.
 
 ## Guides on the `makeStyles` style
 
@@ -34,14 +28,6 @@ const useStyle = makeStyles<Props>()((theme) => ({
   root: { margin: theme.spacing(4) },
 }))
 ```
-
-### ✅ Use `makeStyles` from `@masknet/theme` package in the project
-
-This is the recommended way.
-
-### &#9888; Use `makeStyles` from `@material-ui/core` package in the project
-
-This is deprecated. Migration in process.
 
 ### Change style of MUI components
 
@@ -61,24 +47,20 @@ const Title = style.div`
 
 ### ✅ &#9888; You can use `styled component` in the project
 
-#### &#9888; You may want to use "object style" when it involves dynamic styles
-
-Not suggested: _Potential_ performance lost.
-
-Not enforcement because it is not confirmed.
+#### 🚫 DO NOT use dynamic styles
 
 ```js
-// ⚠ Not so good
+// 🚫 Bad
 const Title = style(Typography)(
   ({ theme }) => `
     marign-left: ${theme.spacing(4)};
 `,
 )
 
-// ✅ OK
-const Title = style(Typography)(({ theme }) => {
-  marginLeft: theme.spacing(4)
-})
+// 🚫 Bad
+const Title = style(Typography)(({ theme }) => ({
+  marginLeft: theme.spacing(4),
+}))
 ```
 
 ### 🚫 Direct selector to the deeper elements of the library

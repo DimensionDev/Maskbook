@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
-import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
+import { IconButton, MenuItem } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { Wallet, ERC721TokenDetailed, EthereumTokenType, useChainIdValid } from '@masknet/web3-shared'
 import { useMenu, useI18N } from '../../../utils'
@@ -7,7 +8,7 @@ import { useStylesExtends } from '@masknet/shared'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogNFT } from '../DashboardDialogs/Wallet'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     more: {
         color: theme.palette.text.primary,
     },

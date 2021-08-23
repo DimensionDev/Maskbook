@@ -1,5 +1,6 @@
 import { memo } from 'react'
-import { makeStyles, Tab } from '@material-ui/core'
+import { Tab } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ButtonGroupTabList, useTabs } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { RestoreFromJson } from './RestoreFromJson'
@@ -9,7 +10,7 @@ import { RestoreFromPrivateKey } from './RestoreFromPrivateKey'
 import { RestoreBlueLogo, SignUpAccountLogo } from '../RegisterFrame/ColumnContentLayout'
 import { TabContext, TabPanel } from '@material-ui/lab'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     tabs: {
         width: '100%',
         display: 'flex',
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const Restore = memo(() => {
     const t = useDashboardI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'json', 'cloud')
     const tabPanelClasses = { root: classes.panels }
 

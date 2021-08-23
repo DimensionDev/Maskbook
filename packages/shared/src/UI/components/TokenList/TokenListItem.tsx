@@ -1,11 +1,11 @@
-import { makeStyles, Theme } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { ListItem, ListItemText, Typography, ListItemIcon, Button } from '@material-ui/core'
 import { Asset, formatBalance } from '@masknet/web3-shared'
 import { TokenIcon } from '../TokenIcon'
 import type { MaskSearchableListItemProps } from '@masknet/theme'
 
 // todo: change Typography from global theme
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 36,
         height: 36,
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export function TokenListItem({ data, onSelect }: MaskSearchableListItemProps<Asset & { isAddedToken: boolean }>) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const token = data.token
 
     if (!token) return null

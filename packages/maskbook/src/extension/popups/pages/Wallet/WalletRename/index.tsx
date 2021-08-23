@@ -1,12 +1,13 @@
 import { memo, useCallback, useState } from 'react'
-import { Button, makeStyles, Typography } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { StyledInput } from '../../../components/StyledInput'
 import { useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useHistory } from 'react-router'
 import { useI18N } from '../../../../../utils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     header: {
         padding: '10px 16px',
         backgroundColor: '#EFF5FF',
@@ -27,12 +28,12 @@ const useStyles = makeStyles(() => ({
         padding: '9px 0',
         borderRadius: 20,
     },
-}))
+})
 
 const WalletRename = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const wallet = useWallet()
     const [name, setName] = useState('')
     const renameWallet = useCallback(async () => {

@@ -1,5 +1,6 @@
 import { memo, useCallback, useState } from 'react'
-import { Alert, Box, Button, makeStyles, Typography } from '@material-ui/core'
+import { Alert, Box, Button, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { RefreshIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
@@ -14,7 +15,7 @@ import { RoutePaths } from '../../../../type'
 // Private key at m/purpose'/coin_type'/account'/change
 export const HD_PATH_WITHOUT_INDEX_ETHEREUM = "m/44'/60'/0'/0"
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     container: {
         padding: '120px 18%',
         display: 'flex',
@@ -62,7 +63,7 @@ const useStyles = makeStyles(() => ({
         padding: 24,
         width: '100%',
     },
-}))
+})
 
 const CreateMnemonic = memo(() => {
     const location = useLocation()
@@ -124,8 +125,7 @@ export interface CreateMnemonicUIProps {
 
 export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshWords, onVerifyClick }) => {
     const t = useDashboardI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const [open, setOpen] = useState(true)
 
     return (

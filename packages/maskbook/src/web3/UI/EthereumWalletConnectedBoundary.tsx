@@ -1,4 +1,5 @@
-import { Grid, makeStyles } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
@@ -7,7 +8,7 @@ import { useI18N } from '../../utils'
 import { isZero, useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared'
 import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     button: {
         marginTop: theme.spacing(1.5),
     },

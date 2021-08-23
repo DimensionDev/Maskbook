@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
+import { Button, DialogActions, DialogContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { ProviderType, useWallets, useWallet, NetworkType } from '@masknet/web3-shared'
 import { delay, useI18N } from '../../../utils'
@@ -12,12 +13,12 @@ import { DashboardRoute } from '../../../extension/options-page/Route'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useState } from 'react'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()({
     content: {
         padding: 0,
         minHeight: 300,
     },
-}))
+})
 
 interface SelectWalletDialogUIProps extends withClasses<never> {}
 

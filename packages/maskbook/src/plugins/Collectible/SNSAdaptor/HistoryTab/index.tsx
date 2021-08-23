@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { Button, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import { CollectibleTab } from '../CollectibleTab'
 import { CollectibleState } from '../../hooks/useCollectibleState'
@@ -8,7 +9,7 @@ import { CollectibleProvider } from '../../types'
 import { TableListPagination } from '../Pagination'
 import { LoadingTable } from '../LoadingTable'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             overflow: 'auto',
@@ -37,8 +38,7 @@ export interface HistoryTabProps {}
 
 export function HistoryTab(props: HistoryTabProps) {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const { provider, events, eventPage, setEventPage } = CollectibleState.useContainer()
 
     //#region If there is a different asset, the unit price and quantity should be displayed

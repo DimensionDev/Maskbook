@@ -3,7 +3,6 @@ import { useUpdateEffect } from 'react-use'
 import {
     Box,
     Button,
-    makeStyles,
     Skeleton,
     Table,
     TableBody,
@@ -13,19 +12,20 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useAccount, useChainId, useTransactions, FilterTransactionType } from '@masknet/web3-shared'
 import { Row } from './Row'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     fixed: { height: 'calc(100% - 52px)' },
-}))
+})
 
 export interface TransactionListProps {
     transactionType: FilterTransactionType
 }
 
 export function TransactionList({ transactionType }: TransactionListProps) {
-    const styles = useStyles()
+    const { classes: styles } = useStyles()
     const chainId = useChainId()
     const account = useAccount()
     const [page, setPage] = useState(0)

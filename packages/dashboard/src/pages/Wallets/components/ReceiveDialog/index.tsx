@@ -2,13 +2,14 @@ import { memo } from 'react'
 import { useDashboardI18N } from '../../../../locales'
 import { MaskColorVar, MaskDialog } from '@masknet/theme'
 import { QRCode, useSnackbarCallback } from '@masknet/shared'
-import { DialogContent, Typography, makeStyles, DialogActions, Button } from '@material-ui/core'
+import { DialogContent, Typography, DialogActions, Button } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
 import { useCopyToClipboard } from 'react-use'
 import { useCurrentSelectedWalletNetwork } from '../../api'
 import { NetworkType, resolveNetworkAddress } from '@masknet/web3-shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     paper: {
         width: '100%',
     },
@@ -53,7 +54,7 @@ export interface ReceiveDialogUIProps extends ReceiveDialogProps {
 
 export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
     ({ open, currentNetworkType, chainName, onClose, walletAddress }) => {
-        const classes = useStyles()
+        const { classes } = useStyles()
         const t = useDashboardI18N()
         const [, copyToClipboard] = useCopyToClipboard()
         const copyWalletAddress = useSnackbarCallback({

@@ -1,10 +1,11 @@
 import { ExternalLink } from 'react-feather'
-import { Link, makeStyles, Typography } from '@material-ui/core'
+import { Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { resolveTradePairLink } from '../../pipes'
 import type { SwapRouteData, TradeComputed, TradeProvider } from '../../types'
 import { useNetworkType } from '@masknet/web3-shared'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             border: `1px solid ${theme.palette.divider}`,
@@ -30,7 +31,7 @@ export interface TradePairViewerProps {
 
 export function TradePairViewer(props: TradePairViewerProps) {
     const { trade, provider } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const networkType = useNetworkType()
 
     if (!trade.trade_?.fromTokenSymbol || !trade.trade_?.toTokenSymbol) return null

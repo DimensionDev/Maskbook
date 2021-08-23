@@ -1,13 +1,14 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
 import { useContext, useState } from 'react'
-import { Box, TextField, Typography, makeStyles } from '@material-ui/core'
+import { Box, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
 import { sendCode, verifyCode } from '../../api'
 import { phoneRegexp } from '../../regexp'
 import { CountdownButton } from '@masknet/theme'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     container: {
         minHeight: '200px',
         paddingLeft: '20px',
@@ -22,7 +23,7 @@ interface SettingPhoneNumberDialogProps {
 
 export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhoneNumberDialogProps) {
     const t = useDashboardI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { user, updateUser } = useContext(UserContext)
     const [step, setStep] = useState(user.phone ? 0 : 1)
     const [countryCode, setCountryCode] = useState(user.phone ? user.phone.split(' ')[0] : '')

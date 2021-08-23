@@ -1,5 +1,6 @@
 import classNames from 'classnames'
-import { makeStyles, Theme, Chip, ChipProps, CircularProgress } from '@material-ui/core'
+import { Chip, ChipProps, CircularProgress } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ErrorIcon from '@material-ui/icons/Error'
 import { noop } from 'lodash-es'
@@ -7,7 +8,7 @@ import { TokenIcon } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { useI18N } from '../../utils'
 
-const useStyles = makeStyles((theme: Theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         chip: {
             border: 'none',
@@ -35,8 +36,7 @@ export interface SelectTokenChipProps {
 export function SelectTokenChip(props: SelectTokenChipProps) {
     const { t } = useI18N()
     const { token, error, loading = false, readonly = false, ChipProps } = props
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     if (loading)
         return (
             <Chip

@@ -1,5 +1,6 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react'
-import { Box, makeStyles, TablePagination } from '@material-ui/core'
+import { Box, TablePagination } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
     CollectibleProvider,
@@ -17,7 +18,7 @@ import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     container: {
         padding: '24px 26px 0px',
         height: 'calc(100% - 58px)',
@@ -37,7 +38,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
-}))
+})
 
 export const CollectibleList = memo(() => {
     const [page, setPage] = useState(0)
@@ -94,8 +95,7 @@ export interface CollectibleListUIProps {
 export const CollectibleListUI = memo<CollectibleListUIProps>(
     ({ page, onPageChange, isLoading, isEmpty, hasNextPage, showPagination, chainId, provider, dataSource }) => {
         const t = useDashboardI18N()
-        const classes = useStyles()
-
+        const { classes } = useStyles()
         return (
             <>
                 <Box className={classes.container}>

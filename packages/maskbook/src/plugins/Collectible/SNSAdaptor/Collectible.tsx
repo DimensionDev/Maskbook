@@ -7,19 +7,19 @@ import {
     CardContent,
     CardHeader,
     Link,
-    makeStyles,
     Paper,
     Tab,
     Tabs,
     Typography,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { findIndex } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
-import { useI18N, useSettingsSwticher } from '../../../utils'
+import { useI18N, useSettingsSwitcher } from '../../../utils'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
@@ -39,7 +39,7 @@ import { useChainId } from '@masknet/web3-shared'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
@@ -137,8 +137,7 @@ export interface CollectibleProps {}
 
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const chainId = useChainId()
     const { asset, provider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
@@ -150,7 +149,7 @@ export function Collectible(props: CollectibleProps) {
     //#endregion
 
     //#region provider switcher
-    const CollectibleProviderSwitcher = useSettingsSwticher(
+    const CollectibleProviderSwitcher = useSettingsSwitcher(
         currentCollectibleProviderSettings,
         getEnumAsArray(CollectibleProvider).map((x) => x.value),
         resolveCollectibleProviderName,

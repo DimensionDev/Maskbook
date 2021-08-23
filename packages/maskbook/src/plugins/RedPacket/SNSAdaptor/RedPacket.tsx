@@ -12,7 +12,8 @@ import {
     useNetworkType,
     useWeb3,
 } from '@masknet/web3-shared'
-import { Box, Card, makeStyles, Skeleton, Typography } from '@material-ui/core'
+import { Box, Card, Skeleton, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { useCallback, useEffect } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
@@ -29,7 +30,7 @@ import { useRefundCallback } from './hooks/useRefundCallback'
 import type { RedPacketAvailability, RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         borderRadius: theme.spacing(1),
         padding: theme.spacing(2),
@@ -139,8 +140,7 @@ export function RedPacket(props: RedPacketProps) {
     const { payload } = props
 
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     // context
     const web3 = useWeb3()
     const account = useAccount()

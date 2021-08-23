@@ -1,5 +1,13 @@
 import ss from '@dimensiondev/snapshot.js'
-import type { Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess, RawVote } from '../../types'
+import type {
+    Proposal,
+    Profile3Box,
+    ProposalMessage,
+    ProposalIdentifier,
+    VoteSuccess,
+    RawVote,
+    Strategy,
+} from '../../types'
 import Services from '../../../../extension/service'
 import { resolveIPFSLink } from '@masknet/web3-shared'
 import { transform } from 'lodash-es'
@@ -8,9 +16,9 @@ export async function fetchProposal(id: string) {
     const response = await fetch(resolveIPFSLink(id), {
         method: 'GET',
     })
-    const { network, votes } = await fetchProposalFromGraphql(id)
+    const { network, votes, strategies } = await fetchProposalFromGraphql(id)
     const result = await response.json()
-    return { ...result, network, votes } as Proposal
+    return { ...result, network, strategies, votes } as Proposal
 }
 
 async function fetchProposalFromGraphql(id: string) {
@@ -24,6 +32,10 @@ async function fetchProposalFromGraphql(id: string) {
             query: `query Proposal($id: String!) {
                 proposal(id: $id) {
                     network
+                    strategies {
+                      name
+                      params
+                    }
                 }
                 votes(first: 10000, where: { proposal: $id }) {
                     id
@@ -41,6 +53,7 @@ async function fetchProposalFromGraphql(id: string) {
         data: {
             proposal: {
                 network: string
+                strategies: Strategy[]
             }
             votes: RawVote[]
         }
@@ -48,7 +61,7 @@ async function fetchProposalFromGraphql(id: string) {
 
     const { data }: Res = await response.json()
 
-    return { votes: data.votes, network: data.proposal.network }
+    return { votes: data.votes, network: data.proposal.network, strategies: data.proposal.strategies }
 }
 
 export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Box[]> {
@@ -66,16 +79,22 @@ export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Bo
     return profiles ?? []
 }
 
-export async function getScores(message: ProposalMessage, voters: string[], blockNumber: number, _network: string) {
-    const spaceKey = message.space
-    const strategies = message.payload.metadata.strategies
+export async function getScores(
+    message: ProposalMessage,
+    voters: string[],
+    blockNumber: number,
+    _network: string,
+    space: string,
+    _strategies: Strategy[],
+) {
+    const strategies = message.payload.metadata.strategies ?? _strategies
     // Sometimes `message.payload.metadata.network` is absent, this is maybe a snapshot api issue.
     const network = message.payload.metadata.network ?? _network
     const provider = ss.utils.getProvider(network)
     const snapshot = Number(message.payload.snapshot)
     const blockTag = snapshot > blockNumber ? 'latest' : snapshot
     const scores: { [key in string]: number }[] = await ss.utils.getScores(
-        spaceKey,
+        space,
         strategies,
         network,
         provider,

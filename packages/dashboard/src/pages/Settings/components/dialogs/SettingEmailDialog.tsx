@@ -1,13 +1,14 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
 import { useContext, useState } from 'react'
-import { Box, TextField, Typography, makeStyles } from '@material-ui/core'
+import { Box, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
 import { sendCode, verifyCode } from '../../api'
 import { emailRegexp } from '../../regexp'
 import { CountdownButton } from '@masknet/theme'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     container: {
         minHeight: '200px',
         paddingLeft: '20px',
@@ -22,7 +23,7 @@ interface SettingEmailDialogProps {
 
 export default function SettingEmailDialog({ open, onClose }: SettingEmailDialogProps) {
     const t = useDashboardI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { user, updateUser } = useContext(UserContext)
     const [step, setStep] = useState(user.email ? 0 : 1)
     const [email, setEmail] = useState(user.email ?? '')

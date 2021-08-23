@@ -12,7 +12,8 @@ import {
     useCollectibles,
     Wallet,
 } from '@masknet/web3-shared'
-import { Box, Button, makeStyles, Skeleton, TablePagination, Typography } from '@material-ui/core'
+import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
@@ -22,7 +23,7 @@ export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
 }>(null!)
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'grid',
         flexWrap: 'wrap',

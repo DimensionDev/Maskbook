@@ -1,7 +1,8 @@
-import { makeStyles, Theme, Link, Typography } from '@material-ui/core'
+import { Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { resolveDaysName } from '../../pipes'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         top: 0,
         right: 0,
@@ -37,7 +38,7 @@ export interface PriceChartDaysControlProps {
 }
 
 export function PriceChartDaysControl(props: PriceChartDaysControlProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <div className={classes.root}>
             {[

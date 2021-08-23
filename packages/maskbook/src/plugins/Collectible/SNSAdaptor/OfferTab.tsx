@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { Button, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
@@ -10,7 +11,7 @@ import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
 import { isZero, useAccount } from '@masknet/web3-shared'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             overflow: 'auto',
@@ -37,8 +38,7 @@ const useStyles = makeStyles((theme) => {
 
 export function OfferTab() {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const account = useAccount()
     const { asset, token, provider, offers, offerPage, setOfferPage } = CollectibleState.useContainer()
 

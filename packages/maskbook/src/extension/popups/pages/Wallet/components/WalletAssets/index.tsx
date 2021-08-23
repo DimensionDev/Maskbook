@@ -1,17 +1,17 @@
 import { memo, useState } from 'react'
-import { Button, makeStyles, Tab, Tabs } from '@material-ui/core'
+import { Button, Tab, Tabs, experimentalStyled as styled, tabClasses, tabsClasses } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { WalletHeader } from '../WalletHeader'
 import { WalletInfo } from '../WalletInfo'
 import { TabContext, TabPanel } from '@material-ui/lab'
-import { withStyles } from '@material-ui/styles'
 import { EnterDashboard } from '../../../../components/EnterDashboard'
 import { AssetsList } from '../AssetsList'
 import { useHistory } from 'react-router-dom'
-import { DialogRoutes } from '../../../../index'
+import { PopupRoutes } from '../../../../index'
 import { ActivityList } from '../ActivityList'
 import { useI18N } from '../../../../../../utils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     content: {
         flex: 1,
         backgroundColor: '#F7F9FA',
@@ -32,38 +32,38 @@ const useStyles = makeStyles(() => ({
         padding: '9px 0',
         borderRadius: 20,
     },
-}))
+})
 
-const StyledTabs = withStyles({
-    root: {
-        minHeight: 'unset',
-        backgroundColor: '#F7F9FA',
-        paddingTop: 6,
-    },
-    indicator: {
-        display: 'none',
-    },
-    flexContainer: {
-        justifyContent: 'center',
-    },
-})(Tabs)
+const StyledTabs = styled(Tabs)`
+    &.${tabsClasses.root} {
+        min-height: unset;
+        background-color: #f7f9fa;
+        padding-top: 6px;
+    }
+    &.${tabsClasses.indicator} {
+        display: none;
+    }
+    &.${tabsClasses.flexContainer} {
+        justify-content: center;
+    }
+`
 
-const StyledTab = withStyles({
-    root: {
-        fontSize: 12,
-        lineHeight: '16px',
-        minHeight: 'unset',
-        minWidth: 145,
-        padding: '7px 0',
-        backgroundColor: '#F7F9FA',
-        borderRadius: '4px 4px 0px 0px',
-        color: '#15181B',
-    },
-    selected: {
-        backgroundColor: '#ffffff',
-        fontWeight: 500,
-    },
-})(Tab)
+const StyledTab = styled(Tab)`
+    &.${tabClasses.root} {
+        font-size: 12px;
+        line-height: 16px;
+        min-height: unset;
+        min-width: 145px;
+        padding: 7px 0;
+        background-color: #f7f9fa;
+        border-radius: 4px 4px 0px 0px;
+        color: #15181b;
+    }
+    &.${tabClasses.selected} {
+        background-color: white;
+        font-weight: 500;
+    }
+`
 
 enum WalletTabs {
     Assets = 'Assets',
@@ -72,7 +72,7 @@ enum WalletTabs {
 
 export const WalletAssets = memo(() => {
     const history = useHistory()
-    return <WalletAssetsUI onAddTokenClick={() => history.push(DialogRoutes.AddToken)} />
+    return <WalletAssetsUI onAddTokenClick={() => history.push(PopupRoutes.AddToken)} />
 })
 
 export interface WalletAssetsUIProps {
@@ -81,7 +81,7 @@ export interface WalletAssetsUIProps {
 
 export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [currentTab, setCurrentTab] = useState(WalletTabs.Assets)
 
     return (

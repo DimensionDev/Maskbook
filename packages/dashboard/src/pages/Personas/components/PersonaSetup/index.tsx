@@ -1,10 +1,11 @@
 import { memo } from 'react'
-import { Button, makeStyles, Typography } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { LinkIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -32,7 +33,7 @@ export interface PersonaSetupProps {
     onConnect: () => void
 }
 export const PersonaSetup = memo(({ networkIdentifier, onConnect }: PersonaSetupProps) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const t = useDashboardI18N()
     return (
         <div className={classes.container}>

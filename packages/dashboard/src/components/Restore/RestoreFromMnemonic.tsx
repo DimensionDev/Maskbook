@@ -1,10 +1,11 @@
 import { DesktopMnemonicConfirm } from '../Mnemonic'
 import { useList } from 'react-use'
-import { Box, Button, makeStyles, Typography } from '@material-ui/core'
+import { Box, Button, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { some } from 'lodash-es'
 import { MaskAlert } from '../MaskAlert'
-import { ButtonGroup } from '../RegisterFrame/ButtonGroup'
+import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { Services } from '../../API'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { RoutePaths } from '../../type'
@@ -12,7 +13,7 @@ import { useNavigate } from 'react-router'
 import { useState } from 'react'
 import { getMaskColor } from '@masknet/theme'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     error: {
         marginTop: theme.spacing(1),
         paddingLeft: theme.spacing(1),
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const RestoreFromMnemonic = () => {
     const navigate = useNavigate()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [error, setError] = useState('')
     const { changeCurrentPersona } = PersonaContext.useContainer()
     const t = useDashboardI18N()
@@ -59,21 +60,15 @@ export const RestoreFromMnemonic = () => {
                     </Typography>
                 )}
             </Box>
-            <ButtonGroup>
-                <Button
-                    variant="rounded"
-                    color="secondary"
-                    onClick={() => navigate(RoutePaths.Setup, { replace: true })}>
-                    {t.back()}
-                </Button>
+            <ButtonContainer>
                 <Button
                     variant="rounded"
                     color="primary"
                     onClick={handleImport}
                     disabled={some(values, (value) => !value)}>
-                    {t.wallets_import_wallet_import()}
+                    {t.confirm()}
                 </Button>
-            </ButtonGroup>
+            </ButtonContainer>
             <Box sx={{ marginTop: '35px' }}>
                 <MaskAlert description={t.sign_in_account_identity_warning()} />
             </Box>

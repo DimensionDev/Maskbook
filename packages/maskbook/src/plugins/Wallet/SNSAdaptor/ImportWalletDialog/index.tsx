@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
-import { Box, Button, DialogContent, makeStyles, TextField, DialogActions } from '@material-ui/core'
+import { Box, Button, DialogContent, TextField, DialogActions } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
@@ -10,7 +11,7 @@ import { WalletMessages, WalletRPC } from '../../messages'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../constants'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(4, 5, 1),
     },

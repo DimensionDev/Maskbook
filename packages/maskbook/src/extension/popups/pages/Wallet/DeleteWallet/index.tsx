@@ -1,5 +1,6 @@
 import { memo, useCallback, useState } from 'react'
-import { Button, makeStyles, Typography } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { WalletInfo } from '../components/WalletInfo'
 import { WarningIcon } from '@masknet/icons'
 import { StyledInput } from '../../../components/StyledInput'
@@ -8,7 +9,7 @@ import { useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     content: {
         flex: 1,
         padding: '16px 16px 0 16px',
@@ -62,14 +63,14 @@ const useStyles = makeStyles(() => ({
         lineHeight: '20px',
         backgroundColor: '#FF5F5F',
     },
-}))
+})
 
 //TODO: password confirm
 const DeleteWallet = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
     const wallet = useWallet()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [password, setPassword] = useState('')
 
     const onConfirm = useCallback(async () => {

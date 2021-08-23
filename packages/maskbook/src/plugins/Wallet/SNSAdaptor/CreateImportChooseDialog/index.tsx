@@ -1,11 +1,12 @@
-import { Box, Button, DialogContent, makeStyles, Typography } from '@material-ui/core'
+import { Box, Button, DialogContent, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Image } from '../../../../components/shared/Image'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { WalletMessages } from '../../messages'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(5, 4.5),
     },

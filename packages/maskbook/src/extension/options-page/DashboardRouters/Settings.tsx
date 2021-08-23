@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
-import { makeStyles, ThemeProvider, useTheme } from '@material-ui/core/styles'
+import { ThemeProvider, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { getEnumAsObject } from '@masknet/shared'
@@ -49,7 +50,7 @@ import { useCurrentDataProvider } from '../../../plugins/Trader/trending/useCurr
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { safeUnreachable } from '@dimensiondev/kit'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         maxWidth: 360,
@@ -168,7 +169,7 @@ export default function DashboardSettingsRouter() {
         return t('dashboard')
     }).current
 
-    const classes = useStyles()
+    const { classes } = useStyles()
     const theme = useTheme()
     const elevation = theme.palette.mode === 'dark' ? 1 : 0
 

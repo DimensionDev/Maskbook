@@ -6,7 +6,7 @@ import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
 import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@material-ui/core'
 import { blue, green, grey, orange, red } from '@material-ui/core/colors'
 import { jaJP, koKR, zhTW, zhCN, esES, itIT, ruRU, faIR, frFR } from '@material-ui/core/locale/index'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import type { Theme, ThemeOptions } from '@material-ui/core/styles/createTheme'
 import { cloneDeep, merge } from 'lodash-es'
 import { useMemo, useRef } from 'react'
@@ -170,7 +170,9 @@ export function useClassicMaskTheme(opt?: { appearance?: Appearance; language?: 
     return useMemo(() => getMaskbookTheme({ appearance, language }), [language, appearance, systemPreference, palette])
 }
 
-export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
+export const useColorStyles: (params: void) => {
+    classes: Record<'error' | 'success' | 'info', string>
+} = makeStyles()((theme: typeof MaskbookDarkTheme) => {
     const dark = theme.palette.mode === 'dark'
     return {
         error: {
@@ -184,8 +186,9 @@ export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
         },
     }
 })
-
-export const useErrorStyles = makeStyles((theme) => {
+export const useErrorStyles: (params: void) => {
+    classes: Record<'containedPrimary' | 'outlinedPrimary', string>
+} = makeStyles()((theme) => {
     const dark = theme.palette.mode === 'dark'
     return {
         containedPrimary: {

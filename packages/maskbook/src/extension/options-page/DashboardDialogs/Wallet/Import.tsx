@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import { CreditCard as CreditCardIcon } from 'react-feather'
-import { Box, Checkbox, FormControlLabel, makeStyles, TextField, Theme, Typography } from '@material-ui/core'
+import { Box, Checkbox, FormControlLabel, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN, useI18N, checkInputLengthExceed } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -12,7 +13,7 @@ import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, Wrapp
 import type { FC } from 'react'
 import { useWalletHD } from '../../../../plugins/Wallet/hooks/useWalletHD'
 
-const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({
+const useWalletImportDialogStyle = makeStyles()((theme) => ({
     wrapper: {
         width: 550,
     },
@@ -26,7 +27,6 @@ const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({
         fontWeight: 500,
         textAlign: 'center',
         backgroundColor: theme.palette.mode === 'dark' ? '#17191D' : '#EFF5FF',
-
         padding: '8px 22px',
         margin: theme.spacing(1, 0, 0),
         borderRadius: '4px',
@@ -41,8 +41,7 @@ const useWalletImportDialogStyle = makeStyles((theme: Theme) => ({
 export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     const { t } = useI18N()
     const state = useState(0)
-    const classes = useWalletImportDialogStyle()
-
+    const { classes } = useWalletImportDialogStyle()
     const hdWallet = useWalletHD()
 
     // wallet name

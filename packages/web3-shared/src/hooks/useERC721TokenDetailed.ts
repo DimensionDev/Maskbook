@@ -22,11 +22,13 @@ export function useERC721TokenDetailed(
             GET_SINGLE_ASSET_URL,
         )
 
-        return tokenDetailedFromOpensea
+        return (
+            tokenDetailedFromOpensea ?? getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
+        )
     }, [erc721TokenContract, tokenId])
 }
 
-async function getERC721TokenDetailedFromOpensea(
+export async function getERC721TokenDetailedFromOpensea(
     contractDetailed: ERC721ContractDetailed,
     tokenId: string,
     apiUrl: string,
@@ -56,7 +58,7 @@ async function getERC721TokenDetailedFromOpensea(
     return null
 }
 
-async function getERC721TokenDetailedFromChain(
+export async function getERC721TokenDetailedFromChain(
     contractDetailed: ERC721ContractDetailed,
     erc721TokenContract: ERC721,
     tokenId: string,

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { Card, List, ListItem, ListItemIcon, ListItemText, Paper } from '@material-ui/core'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import DescriptionIcon from '@material-ui/icons/Description'
 import FingerprintIcon from '@material-ui/icons/Fingerprint'
 
@@ -10,7 +10,7 @@ import { useI18N } from '../../../utils'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from './Base'
 import { DebounceButton } from '../DashboardComponents/ActionButton'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     logo: {
         fontSize: 30,
     },
@@ -47,9 +47,7 @@ interface PluginProps {
 //#region persona create dialog
 export function DashboardPluginDetailDialog({ ComponentProps, ...rest }: WrappedDialogProps<PluginProps>) {
     const { t } = useI18N()
-    const classes = useStyles()
-
-    const theme = useTheme()
+    const { classes } = useStyles()
 
     const metaFields = useMemo(() => {
         if (!ComponentProps?.id || !ComponentProps?.name) {

@@ -9,7 +9,8 @@ import {
     useITOConstants,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import { Box, CircularProgress, makeStyles, TextField, Typography } from '@material-ui/core'
+import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import CheckIcon from '@material-ui/icons/Check'
 import UnCheckIcon from '@material-ui/icons/Close'
 import classNames from 'classnames'
@@ -32,7 +33,7 @@ import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     line: {
         margin: theme.spacing(1),
         paddingBottom: theme.spacing(2),

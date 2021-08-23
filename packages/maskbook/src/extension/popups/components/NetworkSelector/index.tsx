@@ -1,5 +1,6 @@
 import { memo, useCallback } from 'react'
-import { Box, makeStyles, MenuItem, Typography } from '@material-ui/core'
+import { Box, MenuItem, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../utils'
 import {
     ChainId,
@@ -21,7 +22,7 @@ const networks = [
     Flags.polygon_enabled ? NetworkType.Polygon : undefined,
 ].filter(Boolean) as NetworkType[]
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         minWidth: 140,
         backgroundColor: theme.palette.primary.main,
@@ -69,8 +70,7 @@ export interface NetworkSelectorUIProps {
 }
 
 export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentChainId, onChainChange }) => {
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const [menu, openMenu] = useMenu(
         ...(Flags.support_eth_network_switch
             ? getEnumAsArray(ChainId).map(({ value: chainId }) => {

@@ -6,7 +6,8 @@ import {
     isSameAddress,
     useTokenConstants,
 } from '@masknet/web3-shared'
-import { DialogContent, makeStyles } from '@material-ui/core'
+import { DialogContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
@@ -22,8 +23,7 @@ export enum SwapStatus {
     Share = 2,
     Unlock = 3,
 }
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
         flexDirection: 'column',
@@ -65,7 +65,7 @@ export function SwapGuide(props: SwapGuideProps) {
             retryPayload()
         })
     }, [retryPayload, startTransition, onClose])
-    const classes = useStyles()
+    const { classes } = useStyles()
     const maxSwapAmount = useMemo(() => BigNumber.min(payload.limit, total_remaining), [payload.limit, total_remaining])
     const initAmount = ZERO
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)

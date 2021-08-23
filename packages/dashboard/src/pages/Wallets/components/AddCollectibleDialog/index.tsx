@@ -1,7 +1,7 @@
 import { memo, useMemo, useState } from 'react'
-import { MaskColorVar, MaskDialog } from '@masknet/theme'
+import { MaskDialog } from '@masknet/theme'
 import { useSnackbarCallback } from '@masknet/shared'
-import { Box, Button, DialogActions, DialogContent, makeStyles, TextField } from '@material-ui/core'
+import { Box, Button, DialogActions, DialogContent, TextField } from '@material-ui/core'
 import { useWallet } from '@masknet/web3-shared'
 import { EthereumAddress } from 'wallet.ts'
 import { useDashboardI18N } from '../../../../locales'
@@ -10,15 +10,6 @@ export interface AddCollectibleDialogProps {
     open: boolean
     onClose: () => void
 }
-
-const useStyles = makeStyles((theme) => ({
-    title: {
-        fontSize: theme.typography.pxToRem(12),
-        color: MaskColorVar.textPrimary,
-        fontWeight: 500,
-        marginBottom: 10,
-    },
-}))
 
 export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose }) => {
     const [address, setAddress] = useState('')

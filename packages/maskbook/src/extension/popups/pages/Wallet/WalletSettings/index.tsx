@@ -1,14 +1,15 @@
 import { WalletHeader } from '../components/WalletHeader'
 import { WalletInfo } from '../components/WalletInfo'
-import { List, ListItem, ListItemText, makeStyles } from '@material-ui/core'
+import { List, ListItem, ListItemText } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { EnterDashboard } from '../../../components/EnterDashboard'
 import { BackUpIcon, CloudLinkIcon, TrashIcon } from '@masknet/icons'
 import { memo } from 'react'
 import { useHistory } from 'react-router-dom'
-import { DialogRoutes } from '../../../index'
+import { PopupRoutes } from '../../../index'
 import { useI18N } from '../../../../../utils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     content: {
         flex: 1,
         backgroundColor: '#F7F9FA',
@@ -34,24 +35,23 @@ const useStyles = makeStyles(() => ({
     icon: {
         fontSize: 20,
     },
-}))
+})
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <>
             <WalletHeader />
             <WalletInfo />
             <div className={classes.content}>
                 <List dense className={classes.list}>
-                    <ListItem className={classes.item} onClick={() => history.push(DialogRoutes.BackupWallet)}>
+                    <ListItem className={classes.item} onClick={() => history.push(PopupRoutes.BackupWallet)}>
                         <BackUpIcon className={classes.icon} />
                         <ListItemText className={classes.text}>{t('popups_wallet_backup_wallet')}</ListItemText>
                     </ListItem>
-                    <ListItem className={classes.item} onClick={() => history.push(DialogRoutes.DeleteWallet)}>
+                    <ListItem className={classes.item} onClick={() => history.push(PopupRoutes.DeleteWallet)}>
                         <TrashIcon className={classes.icon} />
                         <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
                     </ListItem>

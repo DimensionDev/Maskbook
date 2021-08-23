@@ -5,7 +5,8 @@ import {
     useChainId,
     useERC20TokenDetailed,
 } from '@masknet/web3-shared'
-import { Button, makeStyles, Typography, Link } from '@material-ui/core'
+import { Button, Typography, Link } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'
 import { useJoinGame, useMakeDeposit, useWithdraw } from '../hooks/useGameActions'
@@ -15,7 +16,7 @@ import { GameActionDialog } from './GameActionDialog'
 import { useGameToken } from '../hooks/usePoolData'
 import { isGameActionError } from '../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     button: {
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(1),
@@ -30,7 +31,7 @@ export function GameAction(props: GameActionProps) {
     const chainId = useChainId()
     const gameToken = useGameToken()
 
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
 
     const { canJoinGame, joinGame } = useJoinGame(props.info)

@@ -1,13 +1,10 @@
-/// <reference path="./global.d.ts" />
-import { createTheme, PaletteMode, ThemeOptions, useMediaQuery, useTheme } from '@material-ui/core'
+/// <reference path="../extended.d.ts" />
+import { createTheme, PaletteMode, ThemeOptions, useMediaQuery } from '@material-ui/core'
 import * as Changes from './changes'
 import * as Components from './component-changes'
 import { merge } from 'lodash-es'
 import type { PaletteOptions } from '@material-ui/core/styles/createPalette'
 import { DarkColor, LightColor, Color } from './constants'
-
-import { createMakeStyles } from 'tss-react'
-export const { makeStyles } = createMakeStyles({ useTheme })
 
 const color = (mode: PaletteMode, color: Color): PaletteOptions => ({
     mode,
@@ -36,6 +33,7 @@ function MaskTheme(mode: PaletteMode) {
 }
 export const MaskLightTheme = MaskTheme('light')
 export const MaskDarkTheme = MaskTheme('dark')
+export * from './makeStyles'
 export * from './Components/index'
 export * from './hooks/index'
 export * from './ShadowRoot'

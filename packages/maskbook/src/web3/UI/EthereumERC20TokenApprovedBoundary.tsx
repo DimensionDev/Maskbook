@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 import { useSnackbar } from '@masknet/theme'
-import { Grid, makeStyles } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     ApproveStateType,
     ERC20TokenDetailed,
@@ -12,7 +13,7 @@ import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     button: {
         flexDirection: 'column',
         position: 'relative',
@@ -43,7 +44,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     const { amount, spender, token, children = null } = props
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =

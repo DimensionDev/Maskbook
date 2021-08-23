@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { makeStyles, DialogContent, Tab, Tabs } from '@material-ui/core'
+import { DialogContent, Tab, Tabs } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ListingByPriceCard } from './ListingByPriceCard'
@@ -8,7 +9,7 @@ import type { useAsset } from '../hooks/useAsset'
 import { useChainId, useFungibleTokenWatched } from '@masknet/web3-shared'
 import { first } from 'lodash-es'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         content: {
             padding: 0,
@@ -18,8 +19,6 @@ const useStyles = makeStyles((theme) => {
             justifyContent: 'flex-end',
             padding: theme.spacing(0, 2, 2),
         },
-
-        label: {},
         button: {
             marginTop: theme.spacing(1.5),
         },
@@ -38,8 +37,7 @@ export function PostListingDialog(props: PostListingDialogProps) {
     const selectedPaymentToken = first(paymentTokens)
 
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const chainId = useChainId()
     const tokenWatched = useFungibleTokenWatched(selectedPaymentToken)
 

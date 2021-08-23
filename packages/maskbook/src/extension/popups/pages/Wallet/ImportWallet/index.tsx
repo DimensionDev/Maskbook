@@ -1,5 +1,6 @@
 import { memo, useMemo, useState } from 'react'
-import { makeStyles, Tab, Tabs, TextField, Typography } from '@material-ui/core'
+import { Tab, Tabs, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useForm, Controller } from 'react-hook-form'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -7,7 +8,7 @@ import { NetworkSelector } from '../../../components/NetworkSelector'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { LoadingButton, TabContext, TabPanel } from '@material-ui/lab'
 import { useHistory } from 'react-router-dom'
-import { DialogRoutes } from '../../../index'
+import { PopupRoutes } from '../../../index'
 import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
@@ -16,7 +17,7 @@ import { useSnackbar } from '@masknet/theme'
 import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()({
     container: {
         padding: '16px 10px',
     },
@@ -86,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '9px 10px',
         borderRadius: 20,
     },
-}))
+})
 
 enum ImportWalletTab {
     Mnemonic = 'Mnemonic',
@@ -98,7 +99,7 @@ const ImportWallet = memo(() => {
     const { t } = useI18N()
     const { enqueueSnackbar } = useSnackbar()
     const history = useHistory()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [currentTab, setCurrentTab] = useState(ImportWalletTab.Mnemonic)
     const [mnemonic, setMnemonic] = useState('')
     const [keyStoreContent, setKeyStoreContent] = useState('')
@@ -145,7 +146,7 @@ const ImportWallet = memo(() => {
                 case ImportWalletTab.Mnemonic:
                     const params = query({ mnemonic })
                     history.replace({
-                        pathname: DialogRoutes.AddDeriveWallet,
+                        pathname: PopupRoutes.AddDeriveWallet,
                         search: `?${params}`,
                     })
                     break

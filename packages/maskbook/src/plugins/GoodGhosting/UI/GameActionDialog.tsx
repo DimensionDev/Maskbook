@@ -1,4 +1,5 @@
-import { Box, Button, DialogContent, DialogActions, makeStyles, Typography } from '@material-ui/core'
+import { Box, Button, DialogContent, DialogActions, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { ERC20TokenDetailed, formatBalance, useERC20TokenBalance } from '@masknet/web3-shared'
@@ -8,7 +9,7 @@ import { useI18N } from '../../../utils'
 import { useGameToken } from '../hooks/usePoolData'
 import BigNumber from 'bignumber.js'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         width: '100%',
         display: 'flex',
@@ -44,7 +45,7 @@ interface GameActionDialogProps {
 
 export function GameActionDialog(props: GameActionDialogProps) {
     const { open, onAction, onClose, bodyText, titleText, actionText, token, info, needsApprove } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const gameToken = useGameToken()
     const { t } = useI18N()
 

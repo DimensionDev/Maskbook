@@ -1,5 +1,6 @@
 import { memo, useCallback, useMemo } from 'react'
-import { Button, makeStyles, Typography } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     Asset,
     currySameAddress,
@@ -15,7 +16,7 @@ import { TokenList } from '@masknet/shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     header: {
         padding: '10px 16px',
         backgroundColor: '#EFF5FF',
@@ -43,11 +44,11 @@ const useStyles = makeStyles(() => ({
         lineHeight: '20px',
         backgroundColor: '#F7F9FA',
     },
-}))
+})
 
 const AddToken = memo(() => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const wallet = useWallet()
     const { ERC20_TOKEN_LISTS } = useEthereumConstants()
     const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =

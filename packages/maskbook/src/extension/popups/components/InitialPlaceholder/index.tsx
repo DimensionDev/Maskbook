@@ -1,12 +1,13 @@
 import { memo } from 'react'
-import { makeStyles, Box, Button, Typography } from '@material-ui/core'
+import { Box, Button, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useEnterDashboard } from '../../hook/useEnterDashboard'
 import { useRouteMatch } from 'react-router-dom'
-import { DialogRoutes } from '../../index'
+import { PopupRoutes } from '../../index'
 import { MasksIcon, MaskWalletIcon } from '@masknet/icons'
 import { useI18N } from '../../../../utils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     container: {
         flex: 1,
         display: 'flex',
@@ -28,12 +29,12 @@ const useStyles = makeStyles(() => ({
         lineHeight: 1.5,
         borderRadius: 20,
     },
-}))
+})
 
 export const InitialPlaceholder = memo(() => {
     const { t } = useI18N()
-    const classes = useStyles()
-    const matchWallet = useRouteMatch(DialogRoutes.Wallet)
+    const { classes } = useStyles()
+    const matchWallet = useRouteMatch(PopupRoutes.Wallet)
     const onEnter = useEnterDashboard()
 
     return (

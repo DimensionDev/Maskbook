@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
 import { useDropArea } from 'react-use'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '@masknet/shared'
 import { RestoreBox } from './RestoreBox'
 import { blobToText } from '@dimensiondev/kit'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         border: `solid 1px ${theme.palette.divider}`,
         height: 176,
