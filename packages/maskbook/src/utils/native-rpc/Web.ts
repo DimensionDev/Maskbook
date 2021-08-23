@@ -11,7 +11,8 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared'
 
-const stringToIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
+const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
+const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
 const personaFormatter = (p: Persona) => {
     const profiles = {}
 
@@ -115,7 +116,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return personaFormatter(x)
     },
     persona_queryPersonas: async ({ identifier, hasPrivateKey }) => {
-        const id = identifier ? stringToIdentifier(identifier) : undefined
+        const id = identifier ? stringToPersonaIdentifier(identifier) : undefined
         const result = await Services.Identity.queryPersonas(id, hasPrivateKey)
 
         return result?.map(personaFormatter)
@@ -127,10 +128,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
     persona_updatePersonaInfo: ({ identifier, data }) => {
         const { nickname } = data
-        return Services.Identity.renamePersona(stringToIdentifier(identifier), nickname)
+        return Services.Identity.renamePersona(stringToPersonaIdentifier(identifier), nickname)
     },
     persona_removePersona: ({ identifier }) =>
-        Services.Identity.deletePersona(stringToIdentifier(identifier), 'delete even with private'),
+        Services.Identity.deletePersona(stringToPersonaIdentifier(identifier), 'delete even with private'),
     persona_restoreFromJson: async ({ backup }) => {
         const result = await Services.Identity.restoreFromBackup(backup)
 
@@ -142,9 +143,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         if (!result) throw new Error('invalid base64')
     },
     persona_connectProfile: async ({ profileIdentifier, personaIdentifier }) => {
-        const profileId = ProfileIdentifier.fromString(profileIdentifier)
-        if (!(profileId instanceof ProfileIdentifier)) throw new Error('invalid identifier')
-        const identifier = stringToIdentifier(personaIdentifier)
+        const profileId = stringToProfileIdentifier(profileIdentifier)
+        const identifier = stringToPersonaIdentifier(personaIdentifier)
         await Services.Identity.attachProfile(profileId, identifier, {
             connectionConfirmState: 'confirmed',
         })
@@ -154,16 +154,14 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         await Services.Identity.setupPersona(persona.identifier)
     },
     persona_disconnectProfile: async ({ identifier }) => {
-        const id = ProfileIdentifier.fromString(identifier)
-        if (!(id instanceof ProfileIdentifier)) throw new Error('invalid identifier')
-        await Services.Identity.detachProfile(id)
+        await Services.Identity.detachProfile(stringToProfileIdentifier(identifier))
     },
     persona_backupMnemonic: async ({ identifier }) => {
-        const persona = await Services.Identity.queryPersona(stringToIdentifier(identifier))
+        const persona = await Services.Identity.queryPersona(stringToPersonaIdentifier(identifier))
         return persona.mnemonic?.words
     },
     persona_backupJson: async ({ identifier }) => {
-        const persona = await Services.Identity.queryPersona(stringToIdentifier(identifier))
+        const persona = await Services.Identity.queryPersona(stringToPersonaIdentifier(identifier))
         return Services.Welcome.generateBackupJSON({
             noPosts: true,
             noWallets: true,
@@ -175,7 +173,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return encodeArrayBuffer(encodeText(JSON.stringify(file)))
     },
     persona_backupPrivateKey: async ({ identifier }) => {
-        const privateKey = await Services.Identity.backupPersonaPrivateKey(stringToIdentifier(identifier))
+        const privateKey = await Services.Identity.backupPersonaPrivateKey(stringToPersonaIdentifier(identifier))
         if (privateKey) {
             return JSON.stringify(privateKey)
         }
@@ -193,16 +191,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return result?.map(profileFormatter)
     },
     profile_updateProfileInfo: async ({ identifier, data }) => {
-        const id = ProfileIdentifier.fromString(identifier)
-        if (!(id instanceof ProfileIdentifier)) throw new Error('invalid identifier')
-
-        await Services.Identity.updateProfileInfo(id, data)
+        await Services.Identity.updateProfileInfo(stringToProfileIdentifier(identifier), data)
     },
     profile_removeProfile: async ({ identifier }) => {
-        const id = ProfileIdentifier.fromString(identifier)
-        if (!(id instanceof ProfileIdentifier)) throw new Error('invalid identifier')
-
-        await Services.Identity.removeProfile(id)
+        await Services.Identity.removeProfile(stringToProfileIdentifier(identifier))
     },
     wallet_updateEthereumAccount: async ({ account }) => {
         await WalletRPC.updateAccount({
