@@ -1,7 +1,9 @@
 import { createIcon } from '../utils'
-export const CloudBackupIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const CloudBackupIcon: typeof SvgIcon = createIcon(
     'CloudBackupIcon',
-    <>
+    <g>
         <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -44,6 +46,6 @@ export const CloudBackupIcon = createIcon(
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
         </defs>
-    </>,
+    </g>,
     '0 0 60 60',
 )

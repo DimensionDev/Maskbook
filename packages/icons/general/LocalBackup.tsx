@@ -1,7 +1,9 @@
 import { createIcon } from '../utils'
-export const LocalBackupIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const LocalBackupIcon: typeof SvgIcon = createIcon(
     'LocalBackupIcon',
-    <>
+    <g>
         <g filter="url(#filter0_b)">
             <path
                 d="M10.666 29.587c0-3.085 2.635-5.587 5.886-5.587h30.896c3.25 0 5.885 2.502 5.885 5.587v18.159c0 3.086-2.635 5.587-5.885 5.587H16.552c-3.25 0-5.886-2.501-5.886-5.587V29.587z"
@@ -64,6 +66,6 @@ export const LocalBackupIcon = createIcon(
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
         </defs>
-    </>,
+    </g>,
     '0 0 60 60',
 )
