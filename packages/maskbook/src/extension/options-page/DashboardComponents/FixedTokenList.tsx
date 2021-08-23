@@ -58,8 +58,6 @@ export function FixedTokenList(props: FixedTokenListProps) {
     const { value: searchedToken, loading: searchedTokenLoading } = useERC20TokenDetailed(matchedTokenAddress ?? '')
     //#endregion
 
-    console.log(searchedToken)
-
     const filteredTokens = erc20TokensDetailed.filter(
         (token) =>
             (!includeTokens.length || includeTokens.some(currySameAddress(token.address))) &&
@@ -70,7 +68,9 @@ export function FixedTokenList(props: FixedTokenListProps) {
         [
             ...tokens,
             ...filteredTokens,
-            ...(searchedToken && searchedToken.name !== 'Unknown Token' ? [searchedToken] : []),
+            ...(searchedToken && searchedToken.name !== 'Unknown Token' && searchedToken.symbol !== 'Unknown'
+                ? [searchedToken]
+                : []),
         ],
         (x) => x.address.toLowerCase(),
     )
