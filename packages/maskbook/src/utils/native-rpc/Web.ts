@@ -141,9 +141,11 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
 
         if (!result) throw new Error('invalid base64')
     },
-    persona_connectProfile: async ({ network, profileUsername, personaIdentifier }) => {
+    persona_connectProfile: async ({ profileIdentifier, personaIdentifier }) => {
+        const profileId = ProfileIdentifier.fromString(profileIdentifier)
+        if (!(profileId instanceof ProfileIdentifier)) throw new Error('invalid identifier')
         const identifier = stringToIdentifier(personaIdentifier)
-        await Services.Identity.attachProfile(new ProfileIdentifier(network, profileUsername), identifier, {
+        await Services.Identity.attachProfile(profileId, identifier, {
             connectionConfirmState: 'confirmed',
         })
 
@@ -206,7 +208,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         await WalletRPC.updateAccount({
             account,
         })
-        await WalletMessages.events.walletsUpdated.sendToAll()
+        WalletMessages.events.walletsUpdated.sendToAll()
     },
     wallet_updateEthereumChainId: async ({ chainId }) => {
         await WalletRPC.updateAccount({
