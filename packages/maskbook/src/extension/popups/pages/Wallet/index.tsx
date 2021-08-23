@@ -1,10 +1,11 @@
 import { WalletStartUp } from './components/StartUp'
-import { useWallet, useWallets } from '@masknet/web3-shared'
+import { EthereumRpcType, useWallet, useWallets } from '@masknet/web3-shared'
 import { WalletAssets } from './components/WalletAssets'
-import { Route, Switch } from 'react-router-dom'
-import { lazy } from 'react'
+import { Route, Switch, useHistory } from 'react-router-dom'
+import { lazy, useEffect } from 'react'
 import { PopupRoutes } from '../../index'
 import { WalletContext } from './hooks/useWalletContext'
+import { useUnconfirmedRequest } from './hooks/useUnConfirmedRequest'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -22,6 +23,21 @@ const GasSetting = lazy(() => import('./GasSetting'))
 export default function Wallet() {
     const wallet = useWallet()
     const wallets = useWallets()
+
+    const history = useHistory()
+    const { value } = useUnconfirmedRequest()
+
+    useEffect(() => {
+        if (value?.computedPayload) {
+            switch (value.computedPayload.type) {
+                case EthereumRpcType.SIGN:
+                    history.push(PopupRoutes.WalletSignRequest)
+                    break
+                default:
+                    break
+            }
+        }
+    }, [value])
 
     return (
         <WalletContext.Provider>

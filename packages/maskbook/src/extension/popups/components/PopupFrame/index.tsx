@@ -77,7 +77,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     const personas = useMyPersonas()
 
     const excludePath = useRouteMatch({
-        path: [PopupRoutes.Wallet, PopupRoutes.Personas, PopupRoutes.GasSetting, DialogRoutes.WalletSignRequest],
+        path: [PopupRoutes.Wallet, PopupRoutes.Personas, PopupRoutes.GasSetting, PopupRoutes.WalletSignRequest],
         exact: true,
     })
 

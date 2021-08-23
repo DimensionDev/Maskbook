@@ -25,7 +25,7 @@ import {
 import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../utils'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
-import { DialogRoutes } from '../../popups'
+import { PopupRoutes } from '../../popups'
 
 export interface SendOverrides {
     chainId?: ChainId
@@ -86,23 +86,11 @@ export async function INTERNAL_send(
             return
         }
 
-        let target = ''
-
-        //TODO: Maybe there are other cases
-        switch (payload.method) {
-            case EthereumMethodType.ETH_SEND_TRANSACTION:
-                target = `popups.html#${DialogRoutes.GasSetting}`
-                break
-            case EthereumMethodType.PERSONAL_SIGN:
-                target = `popups.html#${DialogRoutes.WalletSignRequest}`
-                break
-            default:
-                break
-        }
-
-        if (target) {
-            window.open(browser.runtime.getURL(target), '', 'resizable,scrollbars,status,width=310,height=540')
-        }
+        window.open(
+            browser.runtime.getURL(`popups.html${PopupRoutes.Wallet}`),
+            '',
+            'resizable,scrollbars,status,width=310,height=540',
+        )
     }
 
     const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null
