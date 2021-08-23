@@ -1,6 +1,6 @@
 import { memo, MouseEvent, ReactNode } from 'react'
 import { Box, Link, Typography } from '@material-ui/core'
-import { MaskColorVar } from '@masknet/theme'
+import { getMaskColor, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { FacebookColoredIcon, MindsIcon, TwitterColoredIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
@@ -51,40 +51,56 @@ export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onCon
 })
 
 export interface ConnectedPersonaLineProps {
+    onConnect: () => void
     onDisconnect: () => void
     userId: string
     networkIdentifier: string
 }
 
-export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(({ userId, onDisconnect, networkIdentifier }) => {
-    const t = useDashboardI18N()
-    const { classes } = useStyles()
-    return (
-        <Box className={classes.connect} sx={{ display: 'flex', alignItems: 'center' }}>
-            <Link
-                underline="none"
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    width: '100%',
-                }}>
-                <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
-                    {ICON_MAPPING[networkIdentifier]}
-                    <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>
-                        @{userId}
-                    </Typography>
-                </Box>
+export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
+    ({ userId, onConnect, onDisconnect, networkIdentifier }) => {
+        const t = useDashboardI18N()
+        const { classes } = useStyles()
+        return (
+            <Box className={classes.connect} sx={{ display: 'flex', alignItems: 'center' }}>
                 <Link
-                    component="button"
-                    variant="caption"
-                    onClick={(e: MouseEvent) => {
-                        e.stopPropagation()
-                        onDisconnect()
+                    underline="none"
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        width: '100%',
                     }}>
-                    {t.personas_disconnect()}
+                    <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                        {ICON_MAPPING[networkIdentifier]}
+                        <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>
+                            @{userId}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Link
+                            component="button"
+                            variant="caption"
+                            sx={{ mr: 1 }}
+                            onClick={(e: MouseEvent) => {
+                                e.stopPropagation()
+                                onConnect()
+                            }}>
+                            {t.personas_add()}
+                        </Link>
+                        <Link
+                            sx={{ color: (theme) => getMaskColor(theme).redMain }}
+                            component="button"
+                            variant="caption"
+                            onClick={(e: MouseEvent) => {
+                                e.stopPropagation()
+                                onDisconnect()
+                            }}>
+                            {t.personas_disconnect()}
+                        </Link>
+                    </Box>
                 </Link>
-            </Link>
-        </Box>
-    )
-})
+            </Box>
+        )
+    },
+)

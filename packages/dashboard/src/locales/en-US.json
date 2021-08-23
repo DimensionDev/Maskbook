@@ -157,6 +157,7 @@
     "personas_back_up": "Back Up",
     "personas_connect_to": "Connect to {{internalName}}",
     "personas_disconnect": "Disconnect",
+    "personas_add": "Add",
     "personas_rename": "Rename",
     "personas_invite_post": "@{{identifier}} Hi, would you please download Mask so that we can share our posts with encryption? #mask_io install http://mask.io",
     "personas_empty_contact_tips": "You don’t have any contacts with Mask Network installed yet. Invite your friends to download <i>{{name}}</i>.",

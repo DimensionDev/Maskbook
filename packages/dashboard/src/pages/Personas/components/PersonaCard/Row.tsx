@@ -118,6 +118,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                             return (
                                 <Box key={networkIdentifier} sx={{ mt: 1 }}>
                                     <ConnectedPersonaLine
+                                        onConnect={() => onConnect(identifier, networkIdentifier)}
                                         onDisconnect={() => onDisconnect(profile.identifier)}
                                         userId={profile.identifier.userId}
                                         networkIdentifier={networkIdentifier}
