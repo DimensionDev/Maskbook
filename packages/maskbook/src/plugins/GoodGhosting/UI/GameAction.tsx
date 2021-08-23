@@ -45,7 +45,7 @@ export function GameAction(props: GameActionProps) {
         value: tokenDetailed,
         loading: loadingToken,
         error: errorToken,
-    } = useERC20TokenDetailed(DAI[chainId].address)
+    } = useERC20TokenDetailed(DAI[chainId]?.address)
 
     if (loadingToken || errorToken) return <></>
 

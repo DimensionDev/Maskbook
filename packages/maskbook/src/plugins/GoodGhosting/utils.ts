@@ -96,7 +96,7 @@ export function getGameFinancialData(
 ) {
     const rawPoolInterest = new BigNumber(poolData.totalAdai).isZero()
         ? new BigNumber(0)
-        : new BigNumber(poolData.totalAdai).minus(new BigNumber(info.totalGamePrincipal))
+        : new BigNumber(poolData.totalAdai).minus(info.totalGamePrincipal)
     const gameInterest = new BigNumber(info.gameHasEnded ? info.totalGameInterest : rawPoolInterest).multipliedBy(
         assets.gameAsset.price ? assets.gameAsset.price[CurrencyType.USD] : 1,
     )
