@@ -1,4 +1,3 @@
-import { safeUnreachable } from '@dimensiondev/kit'
 import CHAINS from '../assets/chains.json'
 import { getRPCConstants } from '../constants'
 import { ChainId, NetworkType } from '../types'
@@ -85,8 +84,7 @@ export function getChainIdFromNetworkType(networkType: NetworkType) {
         case NetworkType.Arbitrum:
             return ChainId.Arbitrum
         default:
-            safeUnreachable(networkType)
-            return ChainId.Mainnet
+            return
     }
 }
 

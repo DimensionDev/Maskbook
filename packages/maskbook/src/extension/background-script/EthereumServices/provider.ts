@@ -44,8 +44,8 @@ export async function connectMaskbook() {
     }
 }
 
-export async function connectCustomNetwork() {
-    const { accounts, chainId } = await CustomNetwork.requestAccounts()
+export async function connectCustomNetwork(chainId_?: number) {
+    const { accounts, chainId } = await CustomNetwork.requestAccounts(chainId_)
     return {
         account: first(accounts),
         chainId,

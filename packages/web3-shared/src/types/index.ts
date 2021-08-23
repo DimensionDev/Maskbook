@@ -37,6 +37,7 @@ export enum ProviderType {
     WalletConnect = 'WalletConnect',
     CustomNetwork = 'CustomNetwork',
 }
+
 // If you change this enum, please sync it to packages/public-api/src/web.ts
 // (it's a breaking change. Please notify the iOS and Android dev)
 export enum NetworkType {

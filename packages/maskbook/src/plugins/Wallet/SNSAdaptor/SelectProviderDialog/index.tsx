@@ -4,8 +4,10 @@ import { makeStyles } from '@masknet/theme'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
+import { getMaskColor } from '@masknet/theme'
 import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
 import {
+    ChainId,
     getChainIdFromNetworkType,
     NetworkType,
     ProviderType,
@@ -25,8 +27,9 @@ import { DashboardRoute } from '../../../../extension/options-page/Route'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { NetworkIcon } from '../../../../components/shared/NetworkIcon'
 import { currentNetworkSettings, currentProviderSettings } from '../../settings'
+import { useCustomNetworks } from '../../hooks/useCustomNetworks'
 import { Flags } from '../../../../utils'
-import { getMaskColor } from '@masknet/theme'
+import { HelpOutlined } from '@material-ui/icons'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -150,6 +153,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     )
     //#endregion
 
+    const { value: customNetworks } = useCustomNetworks()
     const wallets = useWallets(ProviderType.Maskbook)
     const selectedNetworkType = useValueRef(currentNetworkSettings)
     const selectedProviderType = useValueRef(currentProviderSettings)
@@ -163,10 +167,16 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     //#endregion
 
     const onConnectProvider = useCallback(
-        async (providerType: ProviderType) => {
+        async ({
+            expectedChainId,
+            expectedProviderType,
+        }: {
+            expectedChainId?: ChainId
+            expectedProviderType: ProviderType
+        }) => {
             closeDialog()
 
-            switch (providerType) {
+            switch (expectedProviderType) {
                 case ProviderType.Maskbook:
                     // choose a wallet
                     if (wallets.length > 0) {
@@ -185,20 +195,26 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                 case ProviderType.WalletConnect:
                     if (
                         !account ||
-                        providerType !== selectedProviderType ||
+                        expectedProviderType !== selectedProviderType ||
                         getChainIdFromNetworkType(undeterminedNetworkType) !== chainId
                     ) {
                         setConnectWalletDialog({
                             open: true,
-                            providerType,
+                            providerType: expectedProviderType,
                             networkType: undeterminedNetworkType,
                         })
                     }
                     break
                 case ProviderType.CustomNetwork:
-                    throw new Error('To be implemented.')
+                    if (!account || expectedProviderType !== selectedProviderType) {
+                        setConnectWalletDialog({
+                            open: true,
+                            chainId: expectedChainId,
+                        })
+                    }
+                    break
                 default:
-                    unreachable(providerType)
+                    unreachable(expectedProviderType)
             }
         },
         [
@@ -253,7 +269,11 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             <Provider
                                 logo={<MaskbookIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
                                 name="Mask Network"
-                                onClick={() => onConnectProvider(ProviderType.Maskbook)}
+                                onClick={() =>
+                                    onConnectProvider({
+                                        expectedProviderType: ProviderType.Maskbook,
+                                    })
+                                }
                             />
                         </ImageListItem>
                         {Flags.metamask_support_enabled ? (
@@ -261,7 +281,11 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                 <Provider
                                     logo={<MetaMaskIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
                                     name="MetaMask"
-                                    onClick={() => onConnectProvider(ProviderType.MetaMask)}
+                                    onClick={() =>
+                                        onConnectProvider({
+                                            expectedProviderType: ProviderType.MetaMask,
+                                        })
+                                    }
                                 />
                             </ImageListItem>
                         ) : null}
@@ -269,9 +293,27 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             <Provider
                                 logo={<WalletConnectIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
                                 name="WalletConnect"
-                                onClick={() => onConnectProvider(ProviderType.WalletConnect)}
+                                onClick={() =>
+                                    onConnectProvider({
+                                        expectedProviderType: ProviderType.WalletConnect,
+                                    })
+                                }
                             />
                         </ImageListItem>
+                        {customNetworks?.map((x) => (
+                            <ImageListItem key={x.chainId}>
+                                <Provider
+                                    logo={<HelpOutlined />}
+                                    name={x.chainName}
+                                    onClick={() =>
+                                        onConnectProvider({
+                                            expectedChainId: Number.parseInt(x.chainId, 16),
+                                            expectedProviderType: ProviderType.CustomNetwork,
+                                        })
+                                    }
+                                />
+                            </ImageListItem>
+                        ))}
                     </ImageList>
                 </Box>
             </DialogContent>

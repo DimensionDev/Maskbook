@@ -83,7 +83,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentChainId,
               })
             : networks.map((network) => {
                   const chainId = getChainIdFromNetworkType(network)
-
+                  if (!chainId) return null
                   return (
                       <MenuItem key={network} onClick={() => onChainChange(chainId)}>
                           <ChainIcon chainId={chainId} />

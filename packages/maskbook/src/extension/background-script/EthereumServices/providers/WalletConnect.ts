@@ -52,7 +52,7 @@ export async function sendCustomRequest(payload: IJsonRpcRequest) {
 
 // Wrap promise as PromiEvent because WalletConnect returns transaction hash only
 // docs: https://docs.walletconnect.org/client-api
-export function createWeb3({ chainId = currentChainIdSettings.value }: { chainId?: ChainId } = {}) {
+export function createWeb3({ chainId = currentChainIdSettings.value } = {}) {
     return Maskbook.createWeb3({
         chainId,
     })

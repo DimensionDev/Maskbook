@@ -94,7 +94,7 @@ export async function INTERNAL_send(
     }
 
     const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null
-    const web3 = createWeb3({
+    const web3 = await createWeb3({
         chainId,
         privKeys: wallet?._private_key_ ? [wallet._private_key_] : [],
         providerType,
@@ -139,14 +139,26 @@ export async function INTERNAL_send(
                 )
                 break
             case ProviderType.WalletConnect:
-                callback(null, {
-                    jsonrpc: '2.0',
-                    id: payload.id as number,
-                    result: await WalletConnect.signPersonalMessage(data, address, ''),
-                })
+                try {
+                    const result = await WalletConnect.signPersonalMessage(data, address, '')
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result,
+                    })
+                } catch (error) {
+                    if (error instanceof Error) callback(error)
+                }
                 break
             case ProviderType.CustomNetwork:
-                throw new Error('To be implemented.')
+                provider?.send(
+                    {
+                        ...payload,
+                        params: [data, address, ''],
+                    },
+                    callback,
+                )
+                break
             default:
                 safeUnreachable(providerType)
         }
@@ -211,7 +223,11 @@ export async function INTERNAL_send(
                 handleRecentTransaction(account, response)
                 break
             case ProviderType.CustomNetwork:
-                throw new Error('To be implemented.')
+                provider?.send(payload, (error, response) => {
+                    callback(error, response)
+                    handleRecentTransaction(account, response)
+                })
+                break
             default:
                 safeUnreachable(providerType)
         }
