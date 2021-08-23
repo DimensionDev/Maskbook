@@ -35,6 +35,12 @@ export const languageSettings = createGlobalSettings<LanguageOptions>('language'
 })
 //#endregion
 
+//#region avatar
+export const avatarSettings = createGlobalSettings<string>('avatar', '', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+//#endregion
+
 //#region network setting
 
 /**

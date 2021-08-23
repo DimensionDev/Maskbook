@@ -1,7 +1,7 @@
 import { memo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
-import { AuthorIcon, SettingsIcon } from '@masknet/icons'
+import { SettingsIcon } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@material-ui/core'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
 import { PersonaIdentifier, ProfileIdentifier, ProfileInformation, useMenu } from '@masknet/shared'
@@ -12,6 +12,9 @@ import { RenameDialog } from '../RenameDialog'
 import type { SocialNetwork } from '../../api'
 import { useAccount } from '@masknet/web3-shared'
 import { PublicKeyIcon } from '@masknet/icons'
+import { useToggle } from 'react-use'
+import { UploadAvatarDialog } from '../UploadAvatarDialog'
+import { MaskAvatar } from '../../../../components/MaskAvatar'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -22,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         top: '-1rem',
     },
     icon: {
+        cursor: 'pointer',
         '&>svg': {
             fontSize: '96px',
         },
@@ -68,6 +72,7 @@ export interface PersonaRowCardUIProps {
 export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { account, nickname, definedSocialNetworks, identifier, profiles } = props
     const { onConnect, onDisconnect, onRename } = props
+    const [avatarOn, toggleAvatar] = useToggle(false)
 
     const t = useDashboardI18N()
     const { classes } = useStyles()
@@ -82,6 +87,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
 
     return (
         <Stack direction="row" alignItems="center" justifyContent="space-around" position="relative">
+            <UploadAvatarDialog open={avatarOn} onClose={() => toggleAvatar(false)} />
             <IconButton
                 onClick={(e) => {
                     e.stopPropagation()
@@ -91,8 +97,8 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                 <SettingsIcon fontSize="inherit" style={{ fill: MaskColorVar.textPrimary }} />
             </IconButton>
             <Stack direction="row" alignItems="center" justifyContent="center" flex={1}>
-                <Box textAlign="center" className={classes.icon}>
-                    <AuthorIcon />
+                <Box textAlign="center" className={classes.icon} onClick={() => toggleAvatar(true)}>
+                    <MaskAvatar size={96} />
                     <Typography variant="body1" sx={{ cursor: 'pointer' }}>
                         {nickname}
                     </Typography>

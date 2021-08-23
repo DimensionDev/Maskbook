@@ -1,12 +1,11 @@
-import { Tab, Tabs, Box, Typography, IconButton, Stack, Paper } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { Box, IconButton, Paper, Stack, Tab, Tabs, Typography } from '@material-ui/core'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
 import { useEffect, useState } from 'react'
 import { capitalize } from 'lodash-es'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { PersonaSetup } from './components/PersonaSetup'
-import { AuthorIcon, ArrowDownRound, ArrowUpRound } from '@masknet/icons'
-import { MaskColorVar } from '@masknet/theme'
+import { ArrowDownRound, ArrowUpRound } from '@masknet/icons'
 import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaContext } from './hooks/usePersonaContext'
 import { useDashboardI18N } from '../../locales'
@@ -14,16 +13,12 @@ import type { PersonaInformation } from '@masknet/shared'
 import { ContentContainer } from '../../components/ContentContainer'
 import { PersonaContent } from './components/PersonaContent'
 import { PersonaRowCard } from './components/PersonaCard/Row'
+import { MaskAvatar } from '../../components/MaskAvatar'
 
 const useStyles = makeStyles()((theme) => ({
     tabPanel: {
         padding: 0,
         flex: 1,
-    },
-    author: {
-        fill: MaskColorVar.secondaryBackground,
-        width: 36,
-        height: 36,
     },
     iconButton: {
         padding: 0,
@@ -75,7 +70,7 @@ function Personas() {
             noBackgroundFill={true}
             primaryAction={
                 <Box display="flex" alignItems="center">
-                    <AuthorIcon onClick={toggleDrawer} className={classes.author} />
+                    <MaskAvatar onClick={toggleDrawer} />
                     <Typography className={classes.nickname}>{currentPersona?.nickname}</Typography>
                     <IconButton onClick={toggleDrawer} size="small" className={classes.iconButton}>
                         {drawerOpen ? (

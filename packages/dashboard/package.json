@@ -34,6 +34,7 @@
     "i18next-browser-languagedetector": "^6.1.2",
     "json-stable-stringify": "^1.0.1",
     "lodash-es": "^4.17.21",
+    "react-avatar-editor": "^12.0.0",
     "react-hook-form": "^7.14.2",
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
@@ -54,6 +55,7 @@
     "@storybook/addons": "^6.3.7",
     "@storybook/react": "^6.3.7",
     "@storybook/theming": "^6.3.7",
+    "@types/react-avatar-editor": "^10.3.6",
     "@types/snowpack-env": "^2.3.4",
     "babel-loader": "^8.2.2",
     "snowpack": "^3.8.8"
