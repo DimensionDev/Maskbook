@@ -63,7 +63,7 @@ export const DashboardFrame = memo((props: DashboardFrameProps) => {
                     </LeftContainer>
                 )}
                 <Grid container direction="column" item xs={isLargeScreen ? 10 : 12}>
-                    <Suspense fallback="Loading...">
+                    <Suspense fallback={null}>
                         <ErrorBoundary>{props.children}</ErrorBoundary>
                     </Suspense>
                 </Grid>

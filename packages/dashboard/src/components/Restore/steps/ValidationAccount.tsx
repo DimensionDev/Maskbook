@@ -4,7 +4,7 @@ import { useAsyncFn } from 'react-use'
 import { sendCode } from '../../../pages/Settings/api'
 import { SendingCodeField } from '@masknet/theme'
 import { Button, Typography } from '@material-ui/core'
-import { ButtonGroup } from '../../RegisterFrame/ButtonGroup'
+import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
 import type { StepCommonProps } from '../../Stepper'
 import { ValidationCodeStep } from './Commont'
 import type { AccountValidationType, BackupFileInfo } from '../../../pages/Settings/type'
@@ -47,14 +47,11 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
                 errorMessage={sendCodeError?.message || error}
                 onSend={handleSendCodeFn}
             />
-            <ButtonGroup>
-                <Button variant="rounded" color="secondary" onClick={() => toStep(ValidationCodeStep.EmailInput)}>
-                    {t.cancel()}
-                </Button>
+            <ButtonContainer>
                 <Button variant="rounded" color="primary" onClick={handleNext} disabled={!account || !code}>
                     {t.next()}
                 </Button>
-            </ButtonGroup>
+            </ButtonContainer>
         </>
     )
 }
