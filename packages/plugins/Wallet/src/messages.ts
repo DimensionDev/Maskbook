@@ -188,6 +188,7 @@ export interface WalletMessage {
 
     walletsUpdated: void
     phrasesUpdated: void
+    customNetworkUpdated: void
     transactionsUpdated: void
     requestsUpdated: void
     erc20TokensUpdated: void

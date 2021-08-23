@@ -3,6 +3,7 @@ import { createDBAccess } from '../../../database/helpers/openDB'
 import type {
     ERC1155TokenRecordInDatabase,
     ERC20TokenRecordInDatabase,
+    CustomNetworkRecordInDatabase,
     PhraseRecordInDatabase,
     TransactionChunkRecordInDatabase,
     UnconfirmedRequestChunkRecordInDatabase,
@@ -36,8 +37,12 @@ export const createWalletDBAccess = createDBAccess(() => {
             function v8_v9() {
                 const pluginStore = 'PluginStore'
                 db.objectStoreNames.contains(pluginStore as any) && db.deleteObjectStore(pluginStore as any)
+
                 db.createObjectStore('UnconfirmedRequestChunk', {
                     keyPath: path<keyof UnconfirmedRequestChunkRecordInDatabase>('record_id'),
+                })
+                db.createObjectStore('CustomNetwork', {
+                    keyPath: path<keyof CustomNetworkRecordInDatabase>('record_id'),
                 })
             }
 
@@ -51,7 +56,6 @@ export const createWalletDBAccess = createDBAccess(() => {
 })
 
 export interface WalletDB extends DBSchema {
-    // the object store "PluginStore" has been removed.
     Phrase: {
         value: PhraseRecordInDatabase
         key: string
@@ -78,6 +82,10 @@ export interface WalletDB extends DBSchema {
     }
     ERC1155Token: {
         value: ERC1155TokenRecordInDatabase
+        key: string
+    }
+    CustomNetwork: {
+        value: CustomNetworkRecordInDatabase
         key: string
     }
 }

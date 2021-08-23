@@ -6,6 +6,8 @@ import type {
     ERC1155TokenRecordInDatabase,
     ERC20TokenRecord,
     ERC20TokenRecordInDatabase,
+    CustomNetworkRecord,
+    CustomNetworkRecordInDatabase,
     PhraseRecord,
     PhraseRecordInDatabase,
     TransactionChunkRecord,
@@ -106,5 +108,18 @@ export function TransactionChunkRecordIntoDB(x: TransactionChunkRecord) {
 
 export function TransactionChunkRecordOutDB(x: TransactionChunkRecordInDatabase) {
     const record: TransactionChunkRecord = omit(x, 'record_id')
+    return record
+}
+
+export function CustomNetworkIntoDB(x: CustomNetworkRecord) {
+    const record: CustomNetworkRecordInDatabase = {
+        ...x,
+        record_id: x.chainId,
+    }
+    return record
+}
+
+export function CustomNetworkOutDB(x: CustomNetworkRecordInDatabase) {
+    const record: CustomNetworkRecord = omit(x, 'record_id')
     return record
 }
