@@ -29,7 +29,7 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
     const params = useMemo(() => {
         return {
             account: mode,
-            type: (/@/.test(mode) ? 'email' : 'phone') as AccountValidationType,
+            type: (mode.includes('@') ? 'email' : 'phone') as AccountValidationType,
             code,
         }
     }, [mode, code])
