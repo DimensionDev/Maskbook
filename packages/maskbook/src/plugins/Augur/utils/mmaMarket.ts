@@ -1,3 +1,4 @@
+import { isSameAddress } from '@masknet/web3-shared'
 import { MMA_MARKET_TYPE, NO_CONTEST_OUTCOME_ID } from '../constants'
 import type { MarketTitle, Outcome, Sport } from '../types'
 
@@ -122,7 +123,7 @@ const decodeOutcomes = (
             name: getOutcomeName(i, homeTeam, awayTeam, sportsMarketType), // todo: derive outcome name using market data
             symbol: shareToken,
             isInvalid: i === NO_CONTEST_OUTCOME_ID,
-            isWinner: hasWinner && shareToken === winner ? true : false,
+            isWinner: hasWinner && isSameAddress(shareToken, winner) ? true : false,
             isFinalNumerator: false, // need to translate final numerator payout hash to outcome
             shareToken,
         } as Outcome

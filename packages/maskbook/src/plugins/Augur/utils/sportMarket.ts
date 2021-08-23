@@ -9,6 +9,7 @@ import {
     NO_CONTEST_TIE,
 } from '../constants'
 import { getFullTeamName } from '.'
+import { isSameAddress } from '@masknet/web3-shared'
 
 export const deriveSportMarketInfo = (
     address: string,
@@ -181,7 +182,7 @@ const decodeOutcomes = (
             name: getOutcomeName(i, sportId, homeTeam, awayTeam, sportsMarketType, line),
             symbol: shareToken,
             isInvalid: i === NO_CONTEST_OUTCOME_ID,
-            isWinner: hasWinner && shareToken === winner ? true : false,
+            isWinner: hasWinner && isSameAddress(shareToken, winner) ? true : false,
             isFinalNumerator: false, // need to translate final numerator payout hash to outcome
             shareToken,
         } as Outcome
