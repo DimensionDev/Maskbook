@@ -93,7 +93,8 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
             handleSubmit,
             setError,
             watch,
-            formState: { errors },
+            reset,
+            formState: { errors, isSubmitting },
         } = useForm<FormInputs>({
             resolver: zodResolver(schema),
             defaultValues: { address: '', tokenId: '' },
@@ -119,8 +120,13 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
             })
         }
 
+        const handleClose = () => {
+            reset()
+            onClose()
+        }
+
         return (
-            <MaskDialog open={open} title={t.wallets_add_collectible()} onClose={onClose}>
+            <MaskDialog open={open} title={t.wallets_add_collectible()} onClose={handleClose}>
                 <form onSubmit={handleFormSubmit}>
                     <DialogContent>
                         <Box>
@@ -158,7 +164,7 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
                         <Button sx={{ minWidth: 100 }} variant="outlined" color="primary" onClick={onClose}>
                             {t.cancel()}
                         </Button>
-                        <Button sx={{ minWidth: 100 }} color="primary" type="submit">
+                        <Button disabled={isSubmitting} sx={{ minWidth: 100 }} color="primary" type="submit">
                             {t.wallets_collectible_add()}
                         </Button>
                     </DialogActions>
