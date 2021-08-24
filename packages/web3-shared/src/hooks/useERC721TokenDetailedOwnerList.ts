@@ -6,13 +6,20 @@ import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import { safeNonPayableTransactionCall } from '../utils'
 import type { ERC721ContractDetailed, ERC721TokenDetailed } from '../types'
 import { getERC721TokenDetailedFromChain } from './useERC721TokenDetailed'
+import { useRef } from 'react'
+import { min } from 'lodash-es'
 
 export const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
 
-export function useERC721TokenDetailedOwnerList(contractDetailed: ERC721ContractDetailed | undefined, owner: string) {
+export function useERC721TokenDetailedOwnerList(
+    contractDetailed: ERC721ContractDetailed | undefined,
+    owner: string,
+    offset: number,
+) {
     const { GET_ASSETS_URL } = useOpenseaAPIConstants()
     const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
-    return useAsyncRetry(async () => {
+    const allListRef = useRef<ERC721TokenDetailed[]>([])
+    const asyncRetry = useAsyncRetry(async () => {
         if (
             !erc721TokenContract ||
             !contractDetailed?.address ||
@@ -21,27 +28,40 @@ export function useERC721TokenDetailedOwnerList(contractDetailed: ERC721Contract
         )
             return
 
-        if (!GET_ASSETS_URL)
-            return getERC721TokenDetailedOwnerListFromChain(erc721TokenContract, contractDetailed, owner)
+        let lists: ERC721TokenDetailed[]
+
+        if (!GET_ASSETS_URL) {
+            lists = await getERC721TokenDetailedOwnerListFromChain(erc721TokenContract, contractDetailed, owner, offset)
+            allListRef.current = allListRef.current.concat(lists)
+            return { tokenDetailedOwnerList: allListRef.current, loadMore: lists.length > 0 }
+        }
 
         const tokenDetailedOwnerListFromOpensea = await getERC721TokenDetailedOwnerListFromOpensea(
             contractDetailed,
             owner,
             GET_ASSETS_URL,
+            offset,
         )
 
-        return (
+        lists =
             tokenDetailedOwnerListFromOpensea ??
-            getERC721TokenDetailedOwnerListFromChain(erc721TokenContract, contractDetailed, owner)
-        )
-    }, [GET_ASSETS_URL, contractDetailed, owner])
+            (await getERC721TokenDetailedOwnerListFromChain(erc721TokenContract, contractDetailed, owner, offset))
+
+        allListRef.current = allListRef.current.concat(lists)
+
+        return { tokenDetailedOwnerList: allListRef.current, loadMore: lists.length > 0 }
+    }, [GET_ASSETS_URL, contractDetailed, owner, offset])
+    const clearTokenDetailedOwnerList = () => (allListRef.current = [])
+    return { asyncRetry, clearTokenDetailedOwnerList }
 }
 
 async function getERC721TokenDetailedOwnerListFromChain(
     erc721TokenContract: ERC721,
     contractDetailed: ERC721ContractDetailed,
     owner: string,
+    offset: number,
 ) {
+    const queryLimit = 10
     const isEnumerable = await safeNonPayableTransactionCall(
         erc721TokenContract.methods.supportsInterface(ERC721_ENUMERABLE_INTERFACE_ID),
     )
@@ -50,8 +70,10 @@ async function getERC721TokenDetailedOwnerListFromChain(
 
     if (!isEnumerable || !balance) return []
 
-    const allRequest = Array.from({ length: Number(balance) }).map(async (_v, i) => {
-        const tokenId = await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenOfOwnerByIndex(owner, i))
+    const allRequest = Array.from({ length: min([Number(balance), queryLimit])! }).map(async (_v, i) => {
+        const tokenId = await safeNonPayableTransactionCall(
+            erc721TokenContract.methods.tokenOfOwnerByIndex(owner, i + offset * queryLimit),
+        )
 
         if (tokenId) {
             const tokenDetailed = await getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
@@ -72,8 +94,11 @@ async function getERC721TokenDetailedOwnerListFromOpensea(
     contractDetailed: ERC721ContractDetailed,
     owner: string,
     apiURL: string,
+    offset: number,
 ) {
-    const response = await fetch(`${apiURL}?owner=${owner}&asset_contract_address=${contractDetailed.address}`)
+    const response = await fetch(
+        `${apiURL}?owner=${owner}&asset_contract_address=${contractDetailed.address}&limit=50&offset=${offset * 50}`,
+    )
     type DataType = {
         image_url: string
         name: string
