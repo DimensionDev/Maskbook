@@ -76,13 +76,8 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     const { classes } = useStyles()
     const personas = useMyPersonas()
 
-    const matchWallet = useRouteMatch({
-        path: PopupRoutes.Wallet,
-        exact: true,
-    })
-
-    const matchPersona = useRouteMatch({
-        path: PopupRoutes.Personas,
+    const excludePath = useRouteMatch({
+        path: [PopupRoutes.Wallet, PopupRoutes.Personas, PopupRoutes.GasSetting, PopupRoutes.WalletSignRequest],
         exact: true,
     })
 
@@ -92,7 +87,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
             <Paper elevation={0}>
                 <Box className={classes.header}>
                     <Box className={classes.left}>
-                        {matchWallet || matchPersona ? (
+                        {excludePath || history.length > 1 ? (
                             <MiniMaskIcon />
                         ) : (
                             <ArrowBackIcon onClick={history.goBack} style={{ fill: '#ffffff', cursor: 'pointer' }} />

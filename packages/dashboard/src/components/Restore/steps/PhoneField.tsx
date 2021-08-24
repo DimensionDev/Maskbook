@@ -1,7 +1,7 @@
 import { useDashboardI18N } from '../../../locales'
 import { memo, useState } from 'react'
 import { PhoneNumberField } from '@masknet/theme'
-import { ButtonGroup } from '../../RegisterFrame/ButtonGroup'
+import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
 import { Button } from '@material-ui/core'
 import { Label, ValidationCodeStep } from './Commont'
 import type { StepCommonProps } from '../../Stepper'
@@ -20,10 +20,7 @@ export const PhoneField = memo(({ toStep }: StepCommonProps) => {
                     phone: '',
                 }}
             />
-            <ButtonGroup>
-                <Button variant="rounded" color="secondary" onClick={() => {}}>
-                    {t.cancel()}
-                </Button>
+            <ButtonContainer>
                 <Button
                     variant="rounded"
                     color="primary"
@@ -31,7 +28,7 @@ export const PhoneField = memo(({ toStep }: StepCommonProps) => {
                     disabled={!account}>
                     {t.next()}
                 </Button>
-            </ButtonGroup>
+            </ButtonContainer>
         </>
     )
 })
