@@ -1,3 +1,4 @@
+import type { TransactionConfig as TransactionConfig_ } from 'web3-core'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
 
 export enum CurrencyType {
@@ -182,6 +183,16 @@ export type EthereumTokenDetailedType<T extends EthereumTokenType> = TokenDetail
 export type TokenAssetDetailedType<T extends EthereumTokenType.ERC721 | EthereumTokenType.ERC1155> =
     TokenAssetDetailedMap[T]
 
+// Learn more: https://eips.ethereum.org/EIPS/eip-747
+export interface EthereumAssetDetailed {
+    type: string // ERC20
+    options: {
+        address: string
+        symbol?: string
+        decimals?: number
+        image?: string
+    }
+}
 export interface EthereumChainDetailed {
     chainId: string // A 0x-prefixed hexadecimal string
     chainName: string
@@ -204,11 +215,14 @@ export enum EthereumTokenType {
 // Learn more for a full list of supported JSON RPC methods
 // https://eth.wiki/json-rpc/API#json-rpc-methods
 export enum EthereumMethodType {
+    WATCH_ASSET = 'wallet_watchAsset',
+    WATCH_ASSET_LEGACY = 'metamask_watchAsset',
     PERSONAL_SIGN = 'personal_sign',
     WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
+    ETH_GET_CODE = 'eth_getCode',
     ETH_GAS_PRICE = 'eth_gasPrice',
     ETH_BLOCK_NUMBER = 'eth_blockNumber',
     ETH_GET_BALANCE = 'eth_getBalance',
@@ -218,9 +232,164 @@ export enum EthereumMethodType {
     ETH_ESTIMATE_GAS = 'eth_estimateGas',
     ETH_CALL = 'eth_call',
     ETH_SIGN = 'eth_sign',
+    ETH_DECRYPT = 'eth_decrypt',
+    ETH_SIGN_TYPED_DATA = 'eth_signTypedData',
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
     ETH_GET_LOGS = 'eth_getLogs',
+    ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
 }
+
+export type EthereumTransactionConfig = TransactionConfig_ & {
+    // EIP1159
+    maxFeePerGas?: string
+    maxPriorityFeePerGas?: string
+}
+
+// RPC need to be confirmed by the user
+export enum EthereumRpcType {
+    // transaction
+    CANCEL = 'cancel',
+    RETRY = 'retry', // speed up
+
+    // contract interaction
+    SEND_ETHER = 'sendEther',
+    CONTRACT_INTERACTION = 'contractInteraction',
+    CONTRACT_DEPLOYMENT = 'contractDeployment',
+
+    // asset
+    WATCH_ASSET = 'wallet_watchAsset',
+
+    // wallet
+    WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
+
+    // sign
+    SIGN = 'eth_sign',
+    SIGN_TYPED_DATA = 'eth_signTypedData',
+
+    // decrypt
+    ETH_DECRYPT = 'eth_decrypt',
+    ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
+}
+
+export type EthereumRpcComputed =
+    | {
+          type: EthereumRpcType.CANCEL | EthereumRpcType.RETRY
+
+          /**
+           * The replacemnet transaction
+           */
+          tx: EthereumTransactionConfig
+
+          /**
+           * The original transaction config
+           */
+          _tx: EthereumTransactionConfig
+      }
+    | {
+          type: EthereumRpcType.SEND_ETHER
+
+          /**
+           * The original transaction config
+           */
+          _tx: EthereumTransactionConfig
+      }
+    | {
+          type: EthereumRpcType.CONTRACT_DEPLOYMENT
+
+          /**
+           * code in bytes
+           */
+          code: string
+
+          /**
+           * The original transaction config
+           */
+          _tx: EthereumTransactionConfig
+      }
+    | {
+          type: EthereumRpcType.CONTRACT_INTERACTION
+
+          /**
+           * the method type name of the invoked contract
+           */
+          name: string
+
+          /**
+           * parameters in an array of bytes (only built-in abis)
+           */
+          parameters?: {
+              [key in string]?: string
+          }
+
+          /**
+           * The original transaction config
+           */
+          _tx: EthereumTransactionConfig
+      }
+    | {
+          type: EthereumRpcType.SIGN
+
+          /**
+           * the sign to address
+           */
+          to: string
+
+          /**
+           * the original message
+           */
+          data: string
+      }
+    | {
+          type: EthereumRpcType.SIGN_TYPED_DATA
+
+          /**
+           * the sign to address
+           */
+          to: string
+
+          /**
+           * typed data
+           */
+          data: any
+      }
+    | {
+          type: EthereumRpcType.ETH_GET_ENCRYPTION_PUBLIC_KEY
+
+          /**
+           * the account address
+           */
+          account: string
+      }
+    | {
+          type: EthereumRpcType.ETH_DECRYPT
+
+          /**
+           * the decrypt to address
+           * Learn more: https://docs.metamask.io/guide/rpc-api.html#eth-decrypt
+           */
+          to: string
+
+          /**
+           * the secret message
+           */
+          secret: string
+      }
+    | {
+          type: EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN
+
+          /**
+           * the chain detailed
+           */
+          chain?: EthereumChainDetailed
+      }
+    | {
+          type: EthereumRpcType.WATCH_ASSET
+
+          /**
+           * the asset detailed
+           */
+          asset: EthereumAssetDetailed
+      }
 
 export enum TransactionEventType {
     TRANSACTION_HASH = 'transactionHash',

@@ -125,6 +125,7 @@
     "web3-core": "1.5.2",
     "web3-core-helpers": "1.5.2",
     "web3-eth": "1.5.2",
+    "web3-eth-abi": "1.5.2",
     "web3-eth-contract": "1.5.2",
     "web3-eth-personal": "1.5.2",
     "web3-utils": "1.5.2",
