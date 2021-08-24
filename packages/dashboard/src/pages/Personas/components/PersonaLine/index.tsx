@@ -1,9 +1,9 @@
-import { memo, MouseEvent, ReactNode } from 'react'
+import { memo, MouseEvent } from 'react'
 import { Box, Link, Typography } from '@material-ui/core'
 import { getMaskColor, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
-import { FacebookColoredIcon, MindsIcon, TwitterColoredIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
+import { SOCIAL_MEDIA_ICON_MAPPING } from '../../../../constants'
 
 const useStyles = makeStyles()((theme) => ({
     connect: {
@@ -16,13 +16,6 @@ const useStyles = makeStyles()((theme) => ({
 export interface UnconnectedPersonaLineProps {
     onConnect: () => void
     networkIdentifier: string
-}
-
-// todo: merge
-const ICON_MAPPING: Record<string, ReactNode> = {
-    'facebook.com': <FacebookColoredIcon />,
-    'twitter.com': <TwitterColoredIcon />,
-    'minds.com': <MindsIcon />,
 }
 
 export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onConnect, networkIdentifier }) => {
@@ -41,7 +34,7 @@ export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onCon
                     alignItems: 'center',
                     cursor: 'pointer',
                 }}>
-                {ICON_MAPPING[networkIdentifier]}
+                {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
                 <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>
                     {t.personas_connect_to({ internalName: networkIdentifier })}
                 </Typography>
@@ -72,7 +65,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                         width: '100%',
                     }}>
                     <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
-                        {ICON_MAPPING[networkIdentifier]}
+                        {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
                         <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>
                             @{userId}
                         </Typography>
