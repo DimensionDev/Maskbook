@@ -8,7 +8,7 @@ import { Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { MaskAlert } from '../MaskAlert'
 import FileUpload from '../FileUpload'
-import { ButtonGroup } from '../RegisterFrame/ButtonGroup'
+import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
 
@@ -69,15 +69,6 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
         }
     }
 
-    const handleCancel = () => {
-        if (restoreStatus !== RestoreStatus.WaitingInput) {
-            setRestoreStatus(RestoreStatus.WaitingInput)
-            setBackupValue('')
-        } else {
-            navigate(-1)
-        }
-    }
-
     return (
         <>
             <Box sx={{ width: '100%' }}>
@@ -89,18 +80,15 @@ export function RestoreFromJson(props: RestoreFromJsonProps) {
                 )}
                 {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
             </Box>
-            <ButtonGroup>
-                <Button variant="rounded" color="secondary" onClick={handleCancel}>
-                    {t.wallets_import_wallet_cancel()}
-                </Button>
+            <ButtonContainer>
                 <Button
                     variant="rounded"
                     color="primary"
                     onClick={restoreDB}
                     disabled={restoreStatus !== RestoreStatus.Verified}>
-                    {t.wallets_import_wallet_import()}
+                    {restoreStatus === RestoreStatus.WaitingInput ? t.next() : t.restore()}
                 </Button>
-            </ButtonGroup>
+            </ButtonContainer>
             <Box sx={{ marginTop: '35px', width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_local_backup_warning()} />
             </Box>
