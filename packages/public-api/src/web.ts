@@ -46,8 +46,7 @@ export interface MaskNetworkAPIs {
     persona_restoreFromJson(params: { backup: string }): Promise<void>
     persona_restoreFromBase64(params: { backup: string }): Promise<void>
     persona_connectProfile(params: {
-        network: string
-        profileUsername: string
+        profileIdentifier: ProfileIdentifier_string
         personaIdentifier: PersonaIdentifier_string
     }): Promise<void>
     persona_disconnectProfile(params: { identifier: ProfileIdentifier_string }): Promise<void>
