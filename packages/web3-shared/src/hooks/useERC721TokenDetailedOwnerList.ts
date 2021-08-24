@@ -97,12 +97,13 @@ async function getERC721TokenDetailedOwnerListFromOpensea(
     apiURL: string,
     offset: number,
 ) {
+    const limit = 50
     const response = await fetch(
         urlcat(apiURL, {
             owner,
             asset_contract_address: contractDetailed.address,
-            limit: '50',
-            offset: String(offset * 50),
+            limit,
+            offset: offset * limit,
         }),
     )
     type DataType = {
@@ -114,16 +115,15 @@ async function getERC721TokenDetailedOwnerListFromOpensea(
         const { assets }: { assets: DataType[] } = await response.json()
 
         return assets.map(
-            (asset) =>
-                ({
-                    tokenId: asset.token_id,
-                    contractDetailed,
-                    info: {
-                        name: asset.name,
-                        image: asset.image_url,
-                        owner,
-                    },
-                } as ERC721TokenDetailed),
+            (asset): ERC721TokenDetailed => ({
+                tokenId: asset.token_id,
+                contractDetailed,
+                info: {
+                    name: asset.name,
+                    image: asset.image_url,
+                    owner,
+                },
+            }),
         )
     }
     return []
