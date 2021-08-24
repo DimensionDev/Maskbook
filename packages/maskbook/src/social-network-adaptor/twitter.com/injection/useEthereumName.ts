@@ -1,4 +1,4 @@
-import { useResolveEns } from '@masknet/web3-shared'
+import { useResolution, useResolveEns } from '@masknet/web3-shared'
 import { useEffect, useMemo, useState } from 'react'
 
 const ENS_RE = /[\w#%+.:=@~-]{1,256}\.[\d()A-Za-z]{1,6}\b([\w#%&()+./:=?@~-]*)?/
@@ -30,6 +30,7 @@ export function useEthereumAddress(nickanme: string, twitterId: string, bio: str
     const [addr, setAddr] = useState<string | undefined>()
     const name = useEthereumName(nickanme, twitterId, bio)
     const ens_addr = useResolveEns(name).value
+    const _ens_addr = useResolution(name).value
 
     useEffect(() => {
         setAddr('')
@@ -37,5 +38,5 @@ export function useEthereumAddress(nickanme: string, twitterId: string, bio: str
         if (matched) setAddr(matched[0])
     }, [bio])
 
-    return ens_addr ?? addr
+    return ens_addr ?? _ens_addr ?? addr
 }
