@@ -26,14 +26,12 @@ obj.File = create(
 obj.ImageData = create(
     (x): x is ImageData => x instanceof ImageData,
     async (img) => ({ width: img.width, height: img.height, data: await toBlobURL(new Blob([img.data])) }),
-    async (img) =>
-        new ImageData(
-            await fromBlobURL(img.data)
-                .then((x) => x.arrayBuffer())
-                .then((x) => new Uint8ClampedArray(x)),
-            img.width,
-            img.height,
-        ),
+    async (img) => {
+        const image: Uint8ClampedArray = await fromBlobURL(img.data)
+            .then((x) => x.arrayBuffer())
+            .then((x) => new Uint8ClampedArray(x))
+        return new ImageData(image, img.width, img.height)
+    },
 )
 
 export default obj
