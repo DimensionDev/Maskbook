@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ThemeProvider, StyledEngineProvider, Box } from '@material-ui/core'
-import { MaskDarkTheme, MaskLightTheme, applyMaskColorVars } from '../src/theme'
+import { MaskDarkTheme, MaskLightTheme, applyMaskColorVars } from '../src/index'
 import { withMatrix } from 'storybook-addon-matrix'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
 import i18n from 'i18next'
