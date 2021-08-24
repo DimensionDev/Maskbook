@@ -6,7 +6,7 @@ import { EnterDashboard } from '../../../components/EnterDashboard'
 import { BackUpIcon, CloudLinkIcon, TrashIcon } from '@masknet/icons'
 import { memo } from 'react'
 import { useHistory } from 'react-router-dom'
-import { DialogRoutes } from '../../../index'
+import { PopupRoutes } from '../../../index'
 import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles()({
@@ -47,11 +47,11 @@ const WalletSettings = memo(() => {
             <WalletInfo />
             <div className={classes.content}>
                 <List dense className={classes.list}>
-                    <ListItem className={classes.item} onClick={() => history.push(DialogRoutes.BackupWallet)}>
+                    <ListItem className={classes.item} onClick={() => history.push(PopupRoutes.BackupWallet)}>
                         <BackUpIcon className={classes.icon} />
                         <ListItemText className={classes.text}>{t('popups_wallet_backup_wallet')}</ListItemText>
                     </ListItem>
-                    <ListItem className={classes.item} onClick={() => history.push(DialogRoutes.DeleteWallet)}>
+                    <ListItem className={classes.item} onClick={() => history.push(PopupRoutes.DeleteWallet)}>
                         <TrashIcon className={classes.icon} />
                         <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
                     </ListItem>

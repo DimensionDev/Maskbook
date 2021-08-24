@@ -100,7 +100,6 @@ function config(opts: {
                 '@masknet/dashboard$': src('../dashboard/src/entry.tsx'),
                 '@masknet/shared': src('../shared/src/'),
                 '@masknet/shared-base': src('../shared-base/src/'),
-                '@masknet/theme$': src('../theme/src/theme.ts'),
                 '@masknet/theme': src('../theme/src/'),
                 '@masknet/icons': require.resolve('../icons/index.ts'),
                 '@masknet/plugin-infra': src('../plugin-infra/src/'),
