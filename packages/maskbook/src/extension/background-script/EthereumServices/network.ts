@@ -19,6 +19,16 @@ export async function getAccounts(overrides?: SendOverrides) {
     )
 }
 
+export async function getCode(address: string, overrides?: SendOverrides) {
+    return request<string>(
+        {
+            method: EthereumMethodType.ETH_GET_CODE,
+            params: [address, 'latest'],
+        },
+        overrides,
+    )
+}
+
 export async function getGasPrice(overrides?: SendOverrides) {
     return request<string>(
         {

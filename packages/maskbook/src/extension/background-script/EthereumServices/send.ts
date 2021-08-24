@@ -1,7 +1,14 @@
 import { EthereumAddress } from 'wallet.ts'
-import type { HttpProvider, TransactionConfig } from 'web3-core'
+import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { addGasMargin, ChainId, EthereumMethodType, isEIP1159Supported, ProviderType } from '@masknet/web3-shared'
+import {
+    addGasMargin,
+    ChainId,
+    EthereumMethodType,
+    EthereumTransactionConfig,
+    isEIP1159Supported,
+    ProviderType,
+} from '@masknet/web3-shared'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/kit'
 import * as MetaMask from './providers/MetaMask'
@@ -18,16 +25,30 @@ import {
 import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../utils'
 import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
+import { WalletRPC } from '../../../plugins/Wallet/messages'
+import { PopupRoutes } from '../../popups'
 
 export interface SendOverrides {
     chainId?: ChainId
     account?: string
     providerType?: ProviderType
     rpc?: string
+    skipConfirmation?: boolean
 }
 
 function parseGasPrice(price: string | undefined) {
     return Number.parseInt(price ?? '0x0', 16)
+}
+
+function isRpcNeedToBeConfirmed(payload: JsonRpcPayload) {
+    return [
+        EthereumMethodType.ETH_SIGN,
+        EthereumMethodType.PERSONAL_SIGN,
+        EthereumMethodType.ETH_SIGN_TYPED_DATA,
+        EthereumMethodType.ETH_DECRYPT,
+        EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
+        EthereumMethodType.ETH_SEND_TRANSACTION,
+    ].includes(payload.method as EthereumMethodType)
 }
 
 /**
@@ -44,6 +65,7 @@ export async function INTERNAL_send(
         account = currentAccountSettings.value,
         providerType = currentProviderSettings.value,
         rpc,
+        skipConfirmation = false,
     }: SendOverrides = {},
 ) {
     if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
@@ -67,6 +89,27 @@ export async function INTERNAL_send(
             }
         }
         return
+    }
+
+    // some rpc methods need to be confirmed by the user
+    if (
+        Flags.v2_enabled &&
+        !skipConfirmation &&
+        isRpcNeedToBeConfirmed(payload) &&
+        providerType === ProviderType.Maskbook
+    ) {
+        try {
+            await WalletRPC.pushUnconfirmedRequest(payload)
+        } catch (error: any) {
+            callback(error)
+            return
+        }
+
+        window.open(
+            browser.runtime.getURL(`popups.html${PopupRoutes.Wallet}`),
+            '',
+            'resizable,scrollbars,status,width=310,height=540',
+        )
     }
 
     const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null
@@ -129,13 +172,7 @@ export async function INTERNAL_send(
     }
 
     async function sendTransaction() {
-        const [config] = payload.params as [
-            TransactionConfig & {
-                // EIP1159
-                maxFeePerGas?: string
-                maxPriorityFeePerGas?: string
-            },
-        ]
+        const [config] = payload.params as [EthereumTransactionConfig]
 
         // add nonce
         if (providerType === ProviderType.Maskbook && config.from) config.nonce = await getNonce(config.from as string)
