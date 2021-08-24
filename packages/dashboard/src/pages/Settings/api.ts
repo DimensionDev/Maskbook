@@ -24,7 +24,6 @@ export const [useBinanceNetworkTradeProvider] = createGlobalState(
     Messages.events.binanceNetworkTradeProviderSettings.on,
 )
 
-const API_HOST = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com'
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 
 interface BackupBaseRequest {
@@ -48,7 +47,7 @@ const withErrorMiddleware =
     async (res: Response) => {
         const result = await handler(res)
         if (!res.ok) {
-            return Promise.reject<T>(result)
+            return Promise.reject<T>({ status: res.status, ...result })
         }
         return Promise.resolve<T>(result)
     }
@@ -105,8 +104,8 @@ export const fetchDownloadLink = ({ account, code, type }: VerifyCodeRequest) =>
 }
 
 export const verifyCode = ({ account, type, code }: VerifyCodeRequest) => {
-    return fetchBackupInstance('v1/backup', {
-        method: 'PUT',
+    return fetchBackupInstance('v1/backup/validate_code', {
+        method: 'POST',
         body: JSON.stringify({
             account,
             account_type: type,
