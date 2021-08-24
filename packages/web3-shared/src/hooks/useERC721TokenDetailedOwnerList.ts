@@ -96,9 +96,13 @@ async function getERC721TokenDetailedOwnerListFromOpensea(
     apiURL: string,
     offset: number,
 ) {
-    const response = await fetch(
-        `${apiURL}?owner=${owner}&asset_contract_address=${contractDetailed.address}&limit=50&offset=${offset * 50}`,
-    )
+    const params = new URLSearchParams()
+    params.append('owner', owner)
+    params.append('asset_contract_address', contractDetailed.address)
+    params.append('limit', '50')
+    params.append('offset', String(offset * 50))
+
+    const response = await fetch(`${apiURL}?${params.toString()}`)
     type DataType = {
         image_url: string
         name: string
