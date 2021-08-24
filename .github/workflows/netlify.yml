@@ -7,7 +7,7 @@ on:
     branches: [master, develop, released]
 
 jobs:
-  build:
+  netlify:
     runs-on: ubuntu-20.04
     env:
       NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
