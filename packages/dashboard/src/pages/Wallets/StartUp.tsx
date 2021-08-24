@@ -3,6 +3,8 @@ import { CloudLinkIcon, ImportWalletIcon, MaskWalletIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { Paper, Stack, Box } from '@material-ui/core'
 import { ActionCard } from '../../components/ActionCard'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { PluginMessages } from '../../API'
 
 const Container = styled('div')`
     display: flex;
@@ -14,6 +16,10 @@ const Container = styled('div')`
 
 export function StartUp() {
     const t = useDashboardI18N()
+    const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
+        PluginMessages.Wallet.events.selectProviderDialogUpdated,
+    )
+
     return (
         <Container>
             <Paper variant="background" sx={{ width: '100%', height: '100%' }}>
@@ -46,7 +52,7 @@ export function StartUp() {
                             action={{
                                 type: 'primary',
                                 text: t.wallets_startup_connect_action(),
-                                handler: () => {},
+                                handler: openConnectWalletDialog,
                             }}
                         />
                     </Box>
