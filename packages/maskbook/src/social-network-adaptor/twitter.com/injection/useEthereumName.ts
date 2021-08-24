@@ -1,7 +1,7 @@
 import { useResolveEns } from '@masknet/web3-shared'
 import { useEffect, useMemo, useState } from 'react'
 
-const ENS_RE = /[\w#%+.:=@~-]{1,256}\.(eth|zil|kred|xyz|luxe|crypto|nft|blockchain|bitcoin|coin|wallet|888|dao|x)\b/
+const ENS_RE = /[\w#%+.:=@~-]{1,256}\.(eth|kred|xyz|luxe)\b/
 const ENS_RE_FULL = new RegExp(`^${ENS_RE.source}$`)
 const ADDRESS = /0x[\dA-Fa-f]{40}/
 
