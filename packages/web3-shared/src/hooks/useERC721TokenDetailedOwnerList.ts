@@ -8,6 +8,7 @@ import type { ERC721ContractDetailed, ERC721TokenDetailed } from '../types'
 import { getERC721TokenDetailedFromChain } from './useERC721TokenDetailed'
 import { useRef } from 'react'
 import { min } from 'lodash-es'
+import urlcat from 'urlcat'
 
 export const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
 
@@ -96,13 +97,14 @@ async function getERC721TokenDetailedOwnerListFromOpensea(
     apiURL: string,
     offset: number,
 ) {
-    const params = new URLSearchParams()
-    params.append('owner', owner)
-    params.append('asset_contract_address', contractDetailed.address)
-    params.append('limit', '50')
-    params.append('offset', String(offset * 50))
-
-    const response = await fetch(`${apiURL}?${params.toString()}`)
+    const response = await fetch(
+        urlcat(apiURL, {
+            owner,
+            asset_contract_address: contractDetailed.address,
+            limit: '50',
+            offset: String(offset * 50),
+        }),
+    )
     type DataType = {
         image_url: string
         name: string
