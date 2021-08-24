@@ -2,8 +2,9 @@ import { Button, ButtonProps, experimentalStyled as styled } from '@material-ui/
 import { forwardRef } from 'react'
 
 const TabButtonWrap = styled(Button)(({ theme }) => ({
-    paddingLeft: theme.spacing(4),
-    paddingRight: theme.spacing(4),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    flex: 1,
 }))
 export interface ButtonTabProps extends React.PropsWithChildren<Omit<ButtonProps, 'onChange' | 'value' | 'selected'>> {
     value: string

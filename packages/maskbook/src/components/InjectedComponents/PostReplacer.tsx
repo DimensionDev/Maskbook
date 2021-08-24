@@ -6,14 +6,13 @@ import {
     makeTypedMessageTuple,
     useValueRef,
 } from '@masknet/shared'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { Result } from 'ts-results'
 import { allPostReplacementSettings } from '../../settings/settings'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
-
-const useStlyes = makeStyles({
+const useStyles = makeStyles()({
     root: {
         overflowWrap: 'break-word',
     },
@@ -25,7 +24,7 @@ export interface PostReplacerProps {
 }
 
 export function PostReplacer(props: PostReplacerProps) {
-    const classes = useStlyes()
+    const { classes } = useStyles()
     const postMessage = usePostInfoDetails.postMessage()
     const postPayload = usePostInfoDetails.postPayload()
     const allPostReplacement = useValueRef(allPostReplacementSettings)

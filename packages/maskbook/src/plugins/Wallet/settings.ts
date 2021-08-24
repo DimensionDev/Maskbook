@@ -41,17 +41,6 @@ export const currentProviderSettings = createGlobalSettings<ProviderType>(
 )
 
 /**
- * Is Metamask Locked
- */
-export const currentIsMetamaskLockedSettings = createGlobalSettings<boolean>(
-    `${PLUGIN_IDENTIFIER}+isMetamaskLocked`,
-    true,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
-
-/**
  * The default portfolio data provider
  */
 export const currentPortfolioDataProviderSettings = createGlobalSettings<PortfolioProvider>(

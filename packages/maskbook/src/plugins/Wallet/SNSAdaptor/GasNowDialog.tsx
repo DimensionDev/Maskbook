@@ -1,6 +1,7 @@
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
 import { formatWeiToGwei, GasNow, useEtherPrice } from '@masknet/web3-shared'
-import { DialogContent, List, ListItem, makeStyles, Skeleton, TextField, Theme, Typography } from '@material-ui/core'
+import { DialogContent, List, ListItem, Skeleton, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
@@ -12,7 +13,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { currentGasNowSettings, currentGasPriceSettings } from '../settings'
 import { WalletMessages } from '../../Wallet/messages'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {},
     list: {
         display: 'flex',
@@ -86,7 +87,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export function GasNowDialog() {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     const gasNow = useValueRef(currentGasNowSettings)
     const rapidGasFirstCache = useMemo(() => gasNow?.rapid, [])

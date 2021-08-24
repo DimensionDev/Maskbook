@@ -1,11 +1,12 @@
-import { makeStyles, Grid, Box, Typography, Button } from '@material-ui/core'
+import { Grid, Box, Typography, Button } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useI18N } from '../../../utils'
 import type { GoodGhostingInfo, Player } from '../types'
 import { getPlayerStandings } from '../utils'
 import { CircularDataDisplay } from './CircularDataDisplay'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     infoRow: {
         paddingBottom: theme.spacing(1),
     },
@@ -28,7 +29,7 @@ interface OtherPlayersViewProps {
 }
 
 export function OtherPlayersView(props: OtherPlayersViewProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     const { value: players, loading, error, retry } = props.otherPlayerResult
 

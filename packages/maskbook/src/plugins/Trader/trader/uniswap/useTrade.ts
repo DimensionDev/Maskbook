@@ -1,9 +1,10 @@
 import { isZero, useChainId, FungibleTokenDetailed } from '@masknet/web3-shared'
-import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
 import { TradeStrategy } from '../../types'
-import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2Trade'
+import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
+import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade'
+import { useV3BestTradeExactIn, useV3BestTradeExactOut } from './useV3BestTrade'
 
-export function useTrade(
+function useTrade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
@@ -12,6 +13,12 @@ export function useTrade(
 ) {
     const isExactIn = strategy === TradeStrategy.ExactIn
     const isTradable = !isZero(inputAmount) || !isZero(outputAmount)
+    const isNotAvailable =
+        !isTradable ||
+        !inputToken ||
+        !outputToken ||
+        (inputAmount === '0' && isExactIn) ||
+        (outputAmount === '0' && !isExactIn)
 
     const chainId = useChainId()
     const inputCurrency = toUniswapCurrency(chainId, inputToken)
@@ -21,31 +28,81 @@ export function useTrade(
         isExactIn ? inputToken : outputToken,
         isExactIn ? inputAmount : outputAmount,
     )
-
-    const { value: bestTradeExactIn, ...asyncResultExactIn } = useV2BestTradeExactIn(
-        isExactIn ? tradeAmount : undefined,
-        outputCurrency,
-    )
-    const { value: bestTradeExactOut, ...asyncResultExactOut } = useV2BestTradeExactOut(
+    return {
+        isNotAvailable,
+        isExactIn,
+        tradeAmount,
         inputCurrency,
-        !isExactIn ? tradeAmount : undefined,
+        outputCurrency,
+    }
+}
+
+export function useV2Trade(
+    strategy: TradeStrategy = TradeStrategy.ExactIn,
+    inputAmount: string,
+    outputAmount: string,
+    inputToken?: FungibleTokenDetailed,
+    outputToken?: FungibleTokenDetailed,
+) {
+    const { isNotAvailable, isExactIn, tradeAmount, inputCurrency, outputCurrency } = useTrade(
+        strategy,
+        inputAmount,
+        outputAmount,
+        inputToken,
+        outputToken,
     )
 
-    if (
-        !isTradable ||
-        !inputToken ||
-        !outputToken ||
-        (inputAmount === '0' && isExactIn) ||
-        (outputAmount === '0' && !isExactIn)
-    )
+    //#region v2
+    const v2BestTradeExactIn = useV2BestTradeExactIn(isExactIn ? tradeAmount : undefined, outputCurrency)
+    const v2BestTradeExactOut = useV2BestTradeExactOut(inputCurrency, !isExactIn ? tradeAmount : undefined)
+    //#endregion
+
+    const v2Trade = isExactIn ? v2BestTradeExactIn : v2BestTradeExactOut
+
+    if (isNotAvailable)
         return {
-            ...(isExactIn ? asyncResultExactIn : asyncResultExactOut),
+            ...v2Trade,
             error: undefined,
             loading: false,
             value: null,
         }
     return {
-        ...(isExactIn ? asyncResultExactIn : asyncResultExactOut),
-        value: isExactIn ? bestTradeExactIn : bestTradeExactOut,
+        ...v2Trade,
+        value: v2Trade.value,
+    }
+}
+
+export function useV3Trade(
+    strategy: TradeStrategy = TradeStrategy.ExactIn,
+    inputAmount: string,
+    outputAmount: string,
+    inputToken?: FungibleTokenDetailed,
+    outputToken?: FungibleTokenDetailed,
+) {
+    const { isNotAvailable, isExactIn, tradeAmount, inputCurrency, outputCurrency } = useTrade(
+        strategy,
+        inputAmount,
+        outputAmount,
+        inputToken,
+        outputToken,
+    )
+
+    //#region v2
+    const v3BestTradeExactIn = useV3BestTradeExactIn(isExactIn ? tradeAmount : undefined, outputCurrency)
+    const v3BestTradeExactOut = useV3BestTradeExactOut(inputCurrency, !isExactIn ? tradeAmount : undefined)
+    //#endregion
+
+    const v3Trade = isExactIn ? v3BestTradeExactIn : v3BestTradeExactOut
+
+    if (isNotAvailable)
+        return {
+            ...v3Trade,
+            error: undefined,
+            loading: false,
+            value: null,
+        }
+    return {
+        ...v3Trade,
+        value: v3Trade.value ?? null,
     }
 }

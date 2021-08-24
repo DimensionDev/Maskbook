@@ -1,9 +1,10 @@
 import { createPaletteAwareIcon } from '../utils'
+import type { SvgIcon } from '@material-ui/core'
 
-export const MiniMaskIcon = createPaletteAwareIcon(
+export const MiniMaskIcon: typeof SvgIcon = createPaletteAwareIcon(
     'MiniMask',
-    <>
-        <g opacity="0.5" clipPath="url(#miniMask_clip0)">
+    <g>
+        <g clipPath="url(#miniMask_clip0)">
             <path
                 fillRule="evenodd"
                 clipRule="evenodd"
@@ -22,8 +23,8 @@ export const MiniMaskIcon = createPaletteAwareIcon(
                 <rect width="47.8304" height="48" fill="white" transform="translate(0.0849609 0.519531)" />
             </clipPath>
         </defs>
-    </>,
-    <>
+    </g>,
+    <g>
         <g opacity="0.5" clipPath="url(#miniMask_clip0)">
             <path
                 fillRule="evenodd"
@@ -43,6 +44,6 @@ export const MiniMaskIcon = createPaletteAwareIcon(
                 <rect width="47.8304" height="48" fill="white" transform="translate(0.0849609 0.519531)" />
             </clipPath>
         </defs>
-    </>,
+    </g>,
     '0 0 48 48',
 )

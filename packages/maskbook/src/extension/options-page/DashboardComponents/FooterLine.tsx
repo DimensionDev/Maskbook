@@ -1,11 +1,11 @@
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { Link } from 'react-router-dom'
-import { Breadcrumbs, Theme, Typography, Link as MuiLink } from '@material-ui/core'
+import { Breadcrumbs, Typography, Link as MuiLink } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 import { DashboardAboutDialog } from '../DashboardDialogs/About'
 import { useModal } from '../DashboardDialogs/Base'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()({
     footerButtons: {
         '& ol': {
             justifyContent: 'center',
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
             fontSize: 12,
         },
     },
-}))
+})
 
 type FooterLinkBaseProps = { title?: string }
 type FooterLinkLinkProps = FooterLinkBaseProps & { to: string }
@@ -28,7 +28,7 @@ type FooterLinkAnchorButtonProps = FooterLinkBaseProps & { onClick(e: React.Mous
 type FooterLinkProps = FooterLinkLinkProps | FooterLinkAnchorProps | FooterLinkAnchorButtonProps
 
 const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const children = <Typography variant="body2">{props.children}</Typography>
     if ('href' in props)
         return (
@@ -63,7 +63,7 @@ const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
 
 export default function FooterLine() {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [aboutDialog, openAboutDialog] = useModal(DashboardAboutDialog)
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
     const openVersionLink = (event: React.MouseEvent) => {

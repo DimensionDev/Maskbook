@@ -41,7 +41,8 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
     })(current, signal)
 }
 function matches(input: string) {
-    return /maskbook\.com/i.test(input) && /Make Privacy Protected Again/i.test(input)
+    input = input.toLowerCase()
+    return input.includes('maskbook.com') && input.includes('make privacy protected again')
 }
 
 function hideDOM(a: HTMLElement) {

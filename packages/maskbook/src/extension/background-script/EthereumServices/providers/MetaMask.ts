@@ -4,18 +4,14 @@ import { first } from 'lodash-es'
 import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
 import { ChainId, ProviderType } from '@masknet/web3-shared'
 import { resetAccount, updateAccount } from '../../../../plugins/Wallet/services'
-import {
-    currentChainIdSettings,
-    currentIsMetamaskLockedSettings,
-    currentProviderSettings,
-} from '../../../../plugins/Wallet/settings'
+import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 
 let provider: MetaMaskInpageProvider | null = null
 let web3: Web3 | null = null
 
 async function onAccountsChanged(accounts: string[]) {
-    currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked()) && accounts.length === 0
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
+    if (!accounts.length) return
     await updateAccount({
         account: first(accounts),
         providerType: ProviderType.MetaMask,
@@ -25,7 +21,6 @@ async function onAccountsChanged(accounts: string[]) {
 }
 
 async function onChainIdChanged(id: string) {
-    currentIsMetamaskLockedSettings.value = !(await provider!._metamask?.isUnlocked())
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
 
     // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
@@ -38,7 +33,7 @@ async function onChainIdChanged(id: string) {
 }
 
 async function onError(error: string) {
-    if (typeof error !== 'string' || !/Lost Connection to MetaMask/i.test(error)) return
+    if (typeof error !== 'string' || !error.toLowerCase().includes('Lost Connection to MetaMask'.toLowerCase())) return
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
     await resetAccount({
         providerType: ProviderType.MetaMask,
@@ -66,10 +61,35 @@ export function createWeb3() {
 
 export async function requestAccounts() {
     const web3 = createWeb3()
-    const accounts = await web3.eth.requestAccounts()
     const chainId = await web3.eth.getChainId()
+    const accounts = await web3.eth.requestAccounts()
     return {
         chainId,
         accounts,
+    }
+}
+
+export async function ensureConnectedAndUnlocked() {
+    const web3 = createWeb3()
+    try {
+        const accounts = await web3.eth.requestAccounts()
+        throw accounts
+    } catch (error: string[] | any) {
+        const accounts = error
+        if (Array.isArray(accounts)) {
+            if (accounts.length === 0) throw new Error('MetaMask is locked or it has not connected any accounts.')
+            else if (accounts.length > 0) return // valid
+        }
+        // Any other error means failed to connect MetaMask
+        throw new Error('Failed to connect MetaMask.')
+    }
+}
+
+export async function isUnlocked() {
+    try {
+        // it's an experimental API. we should not depend on.
+        return provider?._metamask?.isUnlocked() ?? false
+    } catch {
+        return false
     }
 }

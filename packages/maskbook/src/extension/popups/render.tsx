@@ -1,36 +1,51 @@
-import type {} from 'react/next'
-import type {} from 'react-dom/next'
-
 import { lazy, Suspense } from 'react'
-import { Route, Switch } from 'react-router'
+import { Route, Switch, Redirect } from 'react-router'
 import { HashRouter } from 'react-router-dom'
-import ReactDOM from 'react-dom'
 import { MaskUIRoot } from '../../UIRoot'
-import { DialogRoutes } from '.'
+import { PopupRoutes } from '.'
+import { createNormalReactRoot } from '../../utils'
+import '../../social-network-adaptor/browser-action'
 
-const root = document.createElement('div')
-document.body.insertBefore(root, document.body.children[0] || null)
-ReactDOM.createRoot(root).render(<Dialogs />)
+import { Web3Provider } from '@masknet/web3-shared'
+import { Web3Context } from '../../web3/context'
+import { PopupFrame } from './components/PopupFrame'
 
+const Wallet = lazy(() => import('./pages/Wallet'))
+const Personas = lazy(() => import('./pages/Personas'))
 const RequestPermissionPage = lazy(() => import('./RequestPermission'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission'))
+const SignRequest = lazy(() => import('./SignRequest'))
+
 function Dialogs() {
     return MaskUIRoot(
-        <Suspense fallback="">
+        <Web3Provider value={Web3Context}>
             <HashRouter>
-                <Switch>
-                    <Route path={DialogRoutes.RequestPermission} exact>
-                        <RequestPermissionPage />
-                    </Route>
-                    <Route path={DialogRoutes.PermissionAwareRedirect} exact>
-                        <PermissionAwareRedirect />
-                    </Route>
-                    <Route path={DialogRoutes.ThirdPartyRequestPermission} exact>
-                        <ThirdPartyRequestPermission />
-                    </Route>
-                </Switch>
+                <Suspense fallback="">
+                    <Switch>
+                        <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
+                        <Route path={PopupRoutes.Personas} children={frame(<Personas />)} exact />
+                        <Route path={PopupRoutes.RequestPermission} exact>
+                            <RequestPermissionPage />
+                        </Route>
+                        <Route path={PopupRoutes.PermissionAwareRedirect} exact>
+                            <PermissionAwareRedirect />
+                        </Route>
+                        <Route path={PopupRoutes.ThirdPartyRequestPermission} exact>
+                            <ThirdPartyRequestPermission />
+                        </Route>
+                        <Route path={PopupRoutes.SignRequest} exact>
+                            <SignRequest />
+                        </Route>
+                        <Route children={<Redirect to={PopupRoutes.Wallet} />} />
+                    </Switch>
+                </Suspense>
             </HashRouter>
-        </Suspense>,
+        </Web3Provider>,
     )
+}
+createNormalReactRoot(<Dialogs />)
+
+function frame(x: React.ReactNode) {
+    return <PopupFrame children={x} />
 }

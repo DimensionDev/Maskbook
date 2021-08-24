@@ -1,20 +1,21 @@
-import { Button, DialogActions, DialogContent, makeStyles } from '@material-ui/core'
+import { Button, DialogActions, DialogContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-es'
 import { useSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
-import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { Entry } from './components'
 import { META_KEY_2 } from '../constants'
 import { Exchange } from './hooks/Exchange'
 import type { FileInfo } from '../types'
+import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 
 interface Props extends InjectedDialogProps {
     onClose: () => void
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     actions: {
         alignSelf: 'center',
     },
@@ -29,22 +30,20 @@ const useStyles = makeStyles({
 })
 const FileServiceDialog: React.FC<Props> = (props) => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const snackbar = useSnackbar()
     const [uploading, setUploading] = useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = useState<FileInfo | null>(null)
+    const { attachMetadata, dropMetadata } = useCompositionContext()
     const onInsert = () => {
         if (isNil(selectedFileInfo)) {
             return
         }
-        editActivatedPostMetadata((next) => {
-            if (selectedFileInfo) {
-                // Make a Date become string
-                next.set(META_KEY_2, JSON.parse(JSON.stringify(selectedFileInfo)))
-            } else {
-                next.delete(META_KEY_2)
-            }
-        })
+        if (selectedFileInfo) {
+            attachMetadata(META_KEY_2, JSON.parse(JSON.stringify(selectedFileInfo)))
+        } else {
+            dropMetadata(META_KEY_2)
+        }
         props.onClose()
     }
     const onDecline = () => {

@@ -1,5 +1,6 @@
 import { DiscordIcon, MaskBlueIcon, MaskGreyIcon, MaskTextIcon, MaskTextNightlyIcon } from '@masknet/icons'
-import { Avatar, IconButton, Link, makeStyles, Typography } from '@material-ui/core'
+import { Avatar, IconButton, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import FacebookIcon from '@material-ui/icons/Facebook'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import TelegramIcon from '@material-ui/icons/Telegram'
@@ -11,7 +12,7 @@ import { getMaskColor } from '@masknet/theme'
 import links from './links.json'
 import { ABOUT_DIALOG_BACKGROUND } from '../../assets'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     wrapper: {
         width: 580,
         minHeight: 660,
@@ -74,8 +75,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const IconContainer = styled('div')(
-    ({ theme }) => `
+const IconContainer = styled('div')(`
     width: 100%;
     height: 100%;
 
@@ -83,8 +83,8 @@ const IconContainer = styled('div')(
         width: 100%;
         height: 100%;
     }
-`,
-)
+`)
+
 const TextIconContainer = styled('div')(
     ({ theme }) => `
     padding: ${theme.spacing(1)} 0;
@@ -109,7 +109,7 @@ const MaskIcon = () => (process.env.NODE_ENV === 'production' ? <MaskBlueIcon />
 const MaskTitleIcon = () => (process.env.NODE_ENV === 'production' ? <MaskTextIcon /> : <MaskTextNightlyIcon />)
 
 export function About() {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const t = useDashboardI18N()
     return (
         <>

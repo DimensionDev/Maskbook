@@ -1,5 +1,5 @@
 {
-    "UNISWAP_ROUTER_ADDRESS": {
+    "UNISWAP_V2_ROUTER_ADDRESS": {
         "Mainnet": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
         "Ropsten": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
         "Rinkeby": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
@@ -12,7 +12,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": ""
     },
-    "UNISWAP_FACTORY_ADDRESS": {
+    "UNISWAP_V2_FACTORY_ADDRESS": {
         "Mainnet": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
         "Ropsten": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
         "Rinkeby": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
@@ -25,7 +25,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": ""
     },
-    "UNISWAP_THEGRAPH": {
+    "UNISWAP_V2_THEGRAPH": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
         "Ropsten": "",
         "Rinkeby": "",
@@ -38,12 +38,77 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": ""
     },
-    "UNISWAP_INIT_CODE_HASH": {
+    "UNISWAP_V2_INIT_CODE_HASH": {
         "Mainnet": "0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f",
         "Ropsten": "0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f",
         "Rinkeby": "0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f",
         "Kovan": "0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f",
         "Gorli": "0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
+    },
+    "UNISWAP_SWAP_ROUTER_ADDRESS": {
+        "Mainnet": "0xe592427a0aece92de3edee1f18e0157c05861564",
+        "Ropsten": "0xe592427a0aece92de3edee1f18e0157c05861564",
+        "Rinkeby": "0xe592427a0aece92de3edee1f18e0157c05861564",
+        "Kovan": "0xe592427a0aece92de3edee1f18e0157c05861564",
+        "Gorli": "0xe592427a0aece92de3edee1f18e0157c05861564",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "0xE592427A0AEce92De3Edee1F18E0157C05861564",
+        "Arbitrum_Rinkeby": "0xE592427A0AEce92De3Edee1F18E0157C05861564"
+    },
+    "UNISWAP_V3_FACTORY_ADDRESS": {
+        "Mainnet": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "Ropsten": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "Rinkeby": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "Kovan": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "Gorli": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "Arbitrum_Rinkeby": "0x1F98431c8aD98523631AE4a59f267346ea31F984"
+    },
+    "UNISWAP_V3_QUOTER_ADDRESS": {
+        "Mainnet": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+        "Ropsten": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+        "Rinkeby": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+        "Kovan": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+        "Gorli": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+        "Arbitrum_Rinkeby": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6"
+    },
+    "UNISWAP_V3_THEGRAPH": {
+        "Mainnet": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
+        "Ropsten": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
+        "Rinkeby": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
+        "Kovan": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
+        "Gorli": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
+        "Arbitrum_Rinkeby": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3"
+    },
+    "UNISWAP_V3_INIT_CODE_HASH": {
+        "Mainnet": "0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54",
+        "Ropsten": "0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54",
+        "Rinkeby": "0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54",
+        "Kovan": "0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54",
+        "Gorli": "0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54",
         "BSC": "",
         "BSCT": "",
         "Matic": "",

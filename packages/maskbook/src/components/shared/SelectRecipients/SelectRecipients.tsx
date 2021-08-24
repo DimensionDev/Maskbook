@@ -1,4 +1,5 @@
-import { makeStyles, Box, Chip } from '@material-ui/core'
+import { Box, Chip } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import AddIcon from '@material-ui/icons/Add'
 import { useState } from 'react'
 import { difference } from 'lodash-es'
@@ -7,7 +8,7 @@ import type { Profile } from '../../../database'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     root: {
         display: 'inline-flex',
         flexWrap: 'wrap',
@@ -22,13 +23,12 @@ export interface SelectRecipientsUIProps {
     hideSelectAll?: boolean
     hideSelectNone?: boolean
     onSetSelected(selected: Profile[]): void
-    children?: React.ReactNode
 }
 
 export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const { t } = useI18N()
-    const classes = useStyles()
-    const { items, selected, onSetSelected, children } = props
+    const { classes } = useStyles()
+    const { items, selected, onSetSelected } = props
     const currentIdentity = useCurrentIdentity()
     const profileItems = items.filter(
         (x) => !x.identifier.equals(currentIdentity?.identifier) && x.linkedPersona?.fingerprint,
@@ -37,9 +37,8 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
 
     return (
         <Box className={classes.root}>
-            {children}
             <Chip
-                label={t('post_dialog__select_specific_friends_title', {
+                label={t('post_dialog__select_specific_e2e_target_title', {
                     selected: new Set([...selected.map((x) => x.identifier.toText())]).size,
                 })}
                 avatar={<AddIcon />}

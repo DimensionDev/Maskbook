@@ -1,6 +1,7 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef, useStylesExtends } from '@masknet/shared'
-import { Chip, makeStyles } from '@material-ui/core'
+import { Chip } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { ChipProps } from '@material-ui/core/Chip'
 import Lock from '@material-ui/icons/Lock'
 import { useEffect } from 'react'
@@ -9,7 +10,7 @@ import Services from '../../extension/service'
 import { extractTextFromTypedMessage } from '../../protocols/typed-message'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 
-const useStyle = makeStyles({
+const useStyle = makeStyles()({
     root: {
         height: 'auto',
         padding: '6px',

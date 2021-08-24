@@ -1,7 +1,9 @@
 import { createIcon } from '../utils'
-export const LinkIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const LinkIcon: typeof SvgIcon = createIcon(
     'Link',
-    <>
+    <g>
         <path
             d="M16 19.25C16.5368 19.9676 17.2217 20.5614 18.0082 20.9911C18.7947 21.4208 19.6644 21.6764 20.5583 21.7404C21.4522 21.8044 22.3495 21.6754 23.1892 21.3622C24.0289 21.049 24.7914 20.5588 25.425 19.925L29.175 16.175C30.3135 14.9962 30.9435 13.4174 30.9292 11.7787C30.915 10.14 30.2577 8.57239 29.0989 7.41359C27.9401 6.25479 26.3725 5.59748 24.7338 5.58324C23.095 5.569 21.5163 6.19897 20.3375 7.33746L18.1875 9.47496"
             strokeWidth="1.25"
@@ -16,6 +18,6 @@ export const LinkIcon = createIcon(
             strokeLinejoin="round"
             stroke="currentColor"
         />
-    </>,
+    </g>,
     '0 0 20 20',
 )

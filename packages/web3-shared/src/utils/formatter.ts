@@ -59,7 +59,7 @@ export function formatEthereumAddress(address: string, size = 0) {
 }
 
 export function formatKeccakHash(hash: string, size = 0) {
-    if (!/0x[\w\d]{64}/.test(hash)) return hash
+    if (!/0x\w{64}/.test(hash)) return hash
     if (size === 0) return hash
     return `${hash.substr(0, 2 + size)}...${hash.substr(-size)}`
 }
@@ -100,4 +100,8 @@ export function formatAmountPrecision(
 
 export function formatWeiToGwei(value: BigNumber.Value) {
     return new BigNumber(value).idiv(10 ** 9)
+}
+
+export function formatWeiToEther(value: BigNumber.Value) {
+    return new BigNumber(value).div(new BigNumber(10 ** 18))
 }

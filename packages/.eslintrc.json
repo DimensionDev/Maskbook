@@ -3,7 +3,7 @@
     "parser": "@typescript-eslint/parser",
     "parserOptions": { "ecmaVersion": 7, "sourceType": "module", "project": "./tsconfig.eslint.json" },
     "extends": ["../.eslintrc.json", "plugin:import/typescript"],
-    "plugins": ["@typescript-eslint", "unused-imports", "lodash", "import", "react-hooks", "react"],
+    "plugins": ["@typescript-eslint", "unused-imports", "lodash", "import", "unicorn", "react", "react-hooks"],
     "rules": {
         "no-restricted-imports": [
             "error",
@@ -11,7 +11,22 @@
                 "paths": [
                     { "name": "lodash", "message": "Please use lodash-es instead." },
                     { "name": "date-fns", "message": "Please use date-fns/{submodule} instead." },
-                    { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." }
+                    { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." },
+                    {
+                        "name": "@material-ui/core",
+                        "importNames": ["makeStyles", "withStyles"],
+                        "message": "Please use makeStyles from @masknet/theme instead."
+                    },
+                    {
+                        "name": "@material-ui/core/styles",
+                        "importNames": ["makeStyles", "withStyles"],
+                        "message": "Please use makeStyles from @masknet/theme instead."
+                    },
+                    {
+                        "name": "@material-ui/styles",
+                        "importNames": ["makeStyles", "withStyles"],
+                        "message": "Please use makeStyles from @masknet/theme instead."
+                    }
                 ]
             }
         ],
@@ -25,6 +40,15 @@
         "import/no-deprecated": "warn",
         "lodash/import-scope": ["error", "member"],
         "unused-imports/no-unused-imports-ts": "warn",
+        "unicorn/better-regex": "error",
+        "unicorn/catch-error-name": ["error", { "ignore": ["^err$"] }],
+        "unicorn/no-instanceof-array": "error",
+        "unicorn/no-new-array": "error",
+        "unicorn/no-new-buffer": "error",
+        "unicorn/prefer-add-event-listener": "error",
+        "unicorn/prefer-date-now": "error",
+        "unicorn/prefer-dom-node-dataset": "error",
+        "unicorn/throw-new-error": "error",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/no-for-in-array": "error",
         "@typescript-eslint/no-implied-eval": "error",

@@ -3,6 +3,8 @@ export type SocketNameSpace = {
     socket: SocketIOClient.Socket
 }
 
+export type SocketRequestAssetScope = 'assets' | 'bsc-assets' | 'polygon-assets'
+
 export type SocketRequestBody = {
     scope: string[]
     payload: Record<string, any>
@@ -60,8 +62,22 @@ export interface ZerionAsset {
     price?: ZerionPrice
 }
 
+export interface ZerionCovalentAsset {
+    asset_code: string
+    name: string
+    symbol: string
+    decimals: number
+    icon_url?: string
+    value: number
+}
+
 export interface ZerionAddressAsset {
     asset: ZerionAsset
+    quantity: string
+}
+
+export interface ZerionAddressCovalentAsset {
+    asset: ZerionCovalentAsset
     quantity: string
 }
 
@@ -112,6 +128,12 @@ export interface ZerionTransactionResponseBody extends SocketResponseBody {
     }
 }
 
+type ZerionAssetResponseBodyPayload = {
+    assets: Record<string, ZerionAddressAsset>
+    'bsc-assets': Record<string, ZerionAddressCovalentAsset>
+    'polygon-assets': Record<string, ZerionAddressCovalentAsset>
+}
+
 export interface ZerionAssetResponseBody extends SocketResponseBody {
     meta: {
         address: string
@@ -120,7 +142,5 @@ export interface ZerionAssetResponseBody extends SocketResponseBody {
         currency: string
         status: string
     }
-    payload: {
-        assets: Record<string, ZerionAddressAsset>
-    }
+    payload: Partial<ZerionAssetResponseBodyPayload>
 }

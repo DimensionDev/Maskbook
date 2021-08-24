@@ -1,4 +1,4 @@
-import { useRef, useEffect, forwardRef, useState } from 'react'
+import { useRef, useEffect, forwardRef, useState, createContext, useContext } from 'react'
 import { useCurrentShadowRootStyles } from './index'
 import type { PopperProps } from '@material-ui/core'
 
@@ -20,6 +20,9 @@ export function setupPortalShadowRoot(
     mountingPoint = shadow.appendChild(document.createElement('div'))
 }
 
+/** usePortalShadowRoot under this context does not do anything. (And it will return an empty container). */
+export const NoEffectUsePortalShadowRootContext = createContext(false)
+
 /**
  * Render to a React Portal in to the page needs this hook. It will provide a wrapped container that provides ShadowRoot isolation and CSS support for it.
  *
@@ -36,8 +39,15 @@ export function setupPortalShadowRoot(
  *      />
  * ))
  */
-export function usePortalShadowRoot(renderer: (container: HTMLDivElement) => JSX.Element) {
+export function usePortalShadowRoot(renderer: (container: HTMLDivElement | undefined) => JSX.Element) {
+    // we ignore the changes on this property during multiple render
+    // so we can violates the React hooks rule and still be safe.
+    const disabled = useRef(useContext(NoEffectUsePortalShadowRootContext)).current
+    if (disabled) return renderer(undefined)
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [findMountingShadowRef, setRef] = useState<HTMLSpanElement | null>(null)
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const doms = useSideEffectRef(() => {
         const root = document.createElement('div')
         const container = root.appendChild(document.createElement('div'))

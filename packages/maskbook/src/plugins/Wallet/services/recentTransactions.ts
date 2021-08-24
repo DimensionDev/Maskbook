@@ -1,12 +1,15 @@
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { formatEthereumAddress, isSameAddress, TransactionStateType, TransactionStatusType } from '@masknet/web3-shared'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { getTransactionReceipt } from '../../../extension/background-script/EthereumService'
+import { memoizePromise } from '../../../utils'
 import type { TransactionRecord } from '../database/types'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { currentChainIdSettings } from '../settings'
 import { TransactionChunkRecordIntoDB, TransactionChunkRecordOutDB } from './helpers'
 
-const MAX_RECENT_TRANSACTIONS_SIZE = 5
+const MAX_RECENT_TRANSACTIONS_SIZE = 10
+const getTransactionReceiptWithCache = memoizePromise(getTransactionReceipt, (hash: string) => hash)
 
 function getRecordId(address: string) {
     return `${currentChainIdSettings.value}_${formatEthereumAddress(address)}`
@@ -24,7 +27,7 @@ export async function getRecentTransactionsFromChain(address: string) {
     const receipts = await Promise.all(
         transactions
             .filter((x) => x.status === TransactionStatusType.NOT_DEPEND)
-            .map((x) => getTransactionReceipt(x.hash)),
+            .map((x) => getTransactionReceiptWithCache(x.hash)),
     )
     return transactions.map((x) => {
         const receipt = receipts.find((y) => y?.transactionHash === x.hash)
@@ -56,6 +59,7 @@ export async function updateTransactions(updates: Map<string, TransactionRecord[
             }),
         )
     }
+    WalletMessages.events.transactionsUpdated.sendToAll(undefined)
 }
 
 export async function clearRecentTransactions(address: string) {
@@ -64,6 +68,8 @@ export async function clearRecentTransactions(address: string) {
         if (!isSameAddress(x.value.address, address)) continue
         x.delete()
     }
+    getTransactionReceiptWithCache.cache.clear()
+    WalletMessages.events.transactionsUpdated.sendToAll(undefined)
 }
 
 export async function addRecentTransaction(address: string, hash: string) {
@@ -81,11 +87,13 @@ export async function addRecentTransaction(address: string, hash: string) {
 
     // compose chunk record
     const chunk_ = await t.objectStore('TransactionChunk').get(recordId)
+    const transactions = chunk_?.transactions.concat(transactionIntoDB) ?? []
     const chunk = chunk_
         ? {
               ...chunk_,
               updatedAt: now,
-              transactions: chunk_.transactions.concat(transactionIntoDB).slice(-MAX_RECENT_TRANSACTIONS_SIZE),
+              // if the new transaction list is over the max size, then remove the overflow part
+              transactions: transactions.slice(-MAX_RECENT_TRANSACTIONS_SIZE),
           }
         : {
               address,
@@ -96,6 +104,12 @@ export async function addRecentTransaction(address: string, hash: string) {
               transactions: [transactionIntoDB],
           }
 
+    // we also need to remove overflow transactions from the cache
+    transactions
+        .slice(0, -MAX_RECENT_TRANSACTIONS_SIZE)
+        .forEach((x) => getTransactionReceiptWithCache.cache.delete(x.hash))
+
     // write the new transaction into DB
     await t.objectStore('TransactionChunk').put(chunk)
+    WalletMessages.events.transactionsUpdated.sendToAll(undefined)
 }

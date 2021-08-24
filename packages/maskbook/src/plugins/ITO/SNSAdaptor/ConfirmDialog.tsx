@@ -10,7 +10,8 @@ import {
     useChainId,
     useITOConstants,
 } from '@masknet/web3-shared'
-import { Card, Grid, IconButton, Link, makeStyles, Paper, Typography } from '@material-ui/core'
+import { Card, Grid, IconButton, Link, Paper, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@material-ui/icons/Launch'
 import RepeatIcon from '@material-ui/icons/Repeat'
 import formatDateTime from 'date-fns/format'
@@ -21,15 +22,14 @@ import { TxFeeEstimation } from '../../../web3/UI/TxFeeEstimation'
 import { PoolSettings, useFillParams } from './hooks/useFill'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion'
 
-const useSwapItemStyles = makeStyles((theme) => ({
+const useSwapItemStyles = makeStyles()({
     root: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
-    icon: {},
-}))
+})
 interface SwapItemProps {
     token?: FungibleTokenDetailed
     swapAmount?: string
@@ -39,7 +39,7 @@ interface SwapItemProps {
 function SwapItem(props: SwapItemProps) {
     const { token, swap, swapAmount } = props
     const [exchange, setExchange] = useState(false)
-    const classes = useSwapItemStyles()
+    const { classes } = useSwapItemStyles()
     const { t } = useI18N()
 
     const amount_ = formatBalance(swapAmount || '0', swap?.decimals)
@@ -53,7 +53,7 @@ function SwapItem(props: SwapItemProps) {
                     amount: exchange ? ONE.dividedBy(amount_).toFixed() : amount_,
                 })}
             </Typography>
-            <div className={classes.icon} onClick={() => setExchange(!exchange)}>
+            <div onClick={() => setExchange(!exchange)}>
                 <IconButton>
                     <RepeatIcon fontSize="small" />
                 </IconButton>
@@ -61,8 +61,7 @@ function SwapItem(props: SwapItemProps) {
         </div>
     )
 }
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         flexGrow: 1,
     },
@@ -114,7 +113,7 @@ export interface ConfirmDialogProps {
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
     const { poolSettings, onDone, onBack, onClose } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     const chainId = useChainId()
     const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()

@@ -1,6 +1,8 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
-import React, { useState } from 'react'
-import { TextField } from '@material-ui/core'
+import React, { useContext, useState } from 'react'
+import { Box, TextField } from '@material-ui/core'
+import { UserContext } from '../../hooks/UserContext'
+import { useDashboardI18N } from '../../../../locales'
 
 interface VerifyPasswordDialogProps {
     open: boolean
@@ -9,8 +11,8 @@ interface VerifyPasswordDialogProps {
 }
 
 export default function VerifyPasswordDialog({ open, onVerified, onClose }: VerifyPasswordDialogProps) {
-    // TODO: get password
-    const savedPassword = 'mask'
+    const t = useDashboardI18N()
+    const { user } = useContext(UserContext)
     const [passwordMismatched, setMatchState] = useState(false)
     const [password, setPassword] = useState('')
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,7 +24,7 @@ export default function VerifyPasswordDialog({ open, onVerified, onClose }: Veri
         onClose()
     }
     const handleConfirm = () => {
-        const matched = savedPassword === password
+        const matched = user.backupPassword === password
         setMatchState(!matched)
 
         if (matched) {
@@ -32,17 +34,23 @@ export default function VerifyPasswordDialog({ open, onVerified, onClose }: Veri
     }
 
     return (
-        <ConfirmDialog title="Verify Your Password" open={open} onClose={handleClose} onConfirm={handleConfirm}>
-            <TextField
-                fullWidth
-                value={password}
-                onChange={handleChange}
-                type="password"
-                label="Password"
-                variant="outlined"
-                error={passwordMismatched}
-                helperText={passwordMismatched ? 'Incorrect password' : ''}
-            />
+        <ConfirmDialog
+            title={t.settings_dialogs_verify_backup_password()}
+            open={open}
+            onClose={handleClose}
+            onConfirm={handleConfirm}>
+            <Box sx={{ minHeight: '168px', padding: '0 90px', display: 'flex', alignItems: 'center' }}>
+                <TextField
+                    fullWidth
+                    value={password}
+                    onChange={handleChange}
+                    type="password"
+                    label={t.settings_label_backup_password()}
+                    variant="outlined"
+                    error={passwordMismatched}
+                    helperText={passwordMismatched ? 'Incorrect password' : ''}
+                />
+            </Box>
         </ConfirmDialog>
     )
 }

@@ -1,5 +1,10 @@
 import { TypedMessage, makeTypedMessageText, isTypedMessageText } from '../protocols/typed-message'
 import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
+import { CryptoWorker } from '../modules/workers'
+import { encodeArrayBuffer, encodeText } from '../utils'
+import { derive_AES_GCM_256_Key_From_PBKDF2 } from '../modules/CryptoAlgorithm/helper'
+import { decodeText } from '../utils/type-transform/String-ArrayBuffer'
+import { decryptWithAES, encryptWithAES } from './crypto-alpha-40'
 export * from './crypto-alpha-39'
 
 // @ts-ignore
@@ -33,3 +38,23 @@ export function typedMessageParse(x: string) {
     } catch {}
     return makeTypedMessageText(x)
 }
+
+//#region Backup
+async function getBackupKey(password: string, account: string) {
+    const pbkdf2 = await CryptoWorker.import_pbkdf2(encodeText(password + account))
+    return derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText(account + password))
+}
+
+export async function encryptBackup(password: string, account: string, message: string) {
+    const aesKey = await getBackupKey(password, account)
+    const { content } = await encryptWithAES({ content: message, aesKey, iv: encodeText(account + password) })
+    return encodeArrayBuffer(content)
+}
+
+export async function decryptBackup(password: string, account: string, message: string) {
+    const aesKey = await getBackupKey(password, account)
+    const buffer = await decryptWithAES({ encrypted: message as string, aesKey, iv: encodeText(account + password) })
+
+    return decodeText(buffer)
+}
+//#endregion

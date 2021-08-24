@@ -14,25 +14,26 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { InjectedDialog } from './InjectedDialog'
 import { Autocomplete } from '@material-ui/core'
-import { editMetadata, isDataMatchJSONSchema, metadataSchemaStoreReadonly } from '../../protocols/typed-message'
+import { isDataMatchJSONSchema, metadataSchemaStoreReadonly } from '../../protocols/typed-message'
 import { ShadowRootPopper } from '../../utils/shadow-root/ShadowRootComponents'
 import { useState } from 'react'
 
 export interface DebugMetadataInspectorProps {
     meta: ReadonlyMap<string, any>
     onExit: () => void
-    onNewMetadata?(newMeta: ReadonlyMap<string, any>): void
+    onNewMeta?(meta: string, value: unknown): void
+    onDeleteMeta?(meta: string): void
 }
 
 export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
-    const { meta, onExit, onNewMetadata } = props
+    const { meta, onExit, onDeleteMeta, onNewMeta } = props
     const [field, setField] = useState('')
     const [content, setContent] = useState('{}')
 
     const knownMetadata = [...metadataSchemaStoreReadonly.keys()]
     const result = isValid(content)
     const isInvalid = result !== true
-    const editor = onNewMetadata ? (
+    const editor = onNewMeta ? (
         <Card variant="outlined">
             <CardContent>
                 <Typography color="textSecondary" gutterBottom>
@@ -40,6 +41,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                 </Typography>
                 <form>
                     <Autocomplete
+                        sx={{ marginBottom: 2 }}
                         autoComplete
                         freeSolo
                         options={knownMetadata}
@@ -56,7 +58,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                                 fullWidth
                                 label="Metadata Key"
                                 margin="normal"
-                                variant="outlined"
+                                variant="standard"
                             />
                         )}
                     />
@@ -72,13 +74,13 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                         autoCorrect="off"
                         error={isInvalid}
                         helperText={<span style={{ whiteSpace: 'pre-wrap' }}>{result}</span>}
-                        variant="outlined"
+                        variant="standard"
                     />
                 </form>
             </CardContent>
             <CardActions>
                 <Button
-                    onClick={() => onNewMetadata(editMetadata(meta, (meta) => meta.set(field, JSON.parse(content))))}
+                    onClick={() => onNewMeta(field, JSON.parse(content))}
                     size="small"
                     variant="contained"
                     disabled={isInvalid || field?.length <= 3}>
@@ -100,38 +102,36 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
         <InjectedDialog open title="Debug: Metadata Inspector" onClose={onExit}>
             <DialogContent>
                 {editor}
-                {[...props.meta].map(([key, content]) => {
-                    const editButton = onNewMetadata ? (
-                        <>
-                            <Button
-                                variant="contained"
-                                size="small"
-                                color="secondary"
-                                onClick={() => {
-                                    setField(key)
-                                    setContent(JSON.stringify(content, undefined, 4))
-                                }}>
-                                Edit
-                            </Button>
-                            <Button
-                                variant="text"
-                                size="small"
-                                color="secondary"
-                                onClick={() => onNewMetadata(editMetadata(meta, (meta) => meta.delete(key)))}>
-                                Delete
-                            </Button>
-                        </>
-                    ) : null
+                {[...meta].map(([key, content]) => {
                     return (
                         <Accordion key={key}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                 <Typography style={{ alignSelf: 'center' }}>{key}</Typography>
-                                <Box
-                                    sx={{
-                                        flex: 1,
-                                    }}
-                                />
-                                <Typography onClick={(e) => e.stopPropagation()}>{editButton}</Typography>
+                                <Box sx={{ flex: 1 }} />
+                                <Typography onClick={(e) => e.stopPropagation()}>
+                                    {onNewMeta ? (
+                                        <Button
+                                            variant="contained"
+                                            size="small"
+                                            color="secondary"
+                                            onClick={() => {
+                                                setField(key)
+                                                setContent(JSON.stringify(content, undefined, 4))
+                                            }}>
+                                            Edit
+                                        </Button>
+                                    ) : null}
+
+                                    {onDeleteMeta ? (
+                                        <Button
+                                            variant="text"
+                                            size="small"
+                                            color="secondary"
+                                            onClick={() => onDeleteMeta(key)}>
+                                            Delete
+                                        </Button>
+                                    ) : null}
+                                </Typography>
                             </AccordionSummary>
                             <AccordionDetails style={{ display: 'flex' }}>
                                 <Typography

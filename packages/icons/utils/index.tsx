@@ -14,7 +14,7 @@ export type SvgIconRaw = JSX.Element | ((theme: Theme) => JSX.Element)
  * @param defaultSize Only use this when the icon is not square. Unit: px
  * @returns A component that same type as icons from @material-ui/icons
  */
-export function createIcon(name: string, svg: SvgIconRaw, viewBox?: string, defaultSize?: Size) {
+export function createIcon(name: string, svg: SvgIconRaw, viewBox?: string, defaultSize?: Size): typeof SvgIcon {
     const [width, height] = defaultSize || []
     if (width === height && typeof width === 'number') throw new Error('Only define this when the icon is not a square')
     type Component = ((props: SvgIconProps, ref: ForwardedRef<SVGSVGElement>) => JSX.Element) & {

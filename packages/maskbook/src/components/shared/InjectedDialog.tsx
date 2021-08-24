@@ -6,19 +6,19 @@ import {
     DialogProps,
     DialogTitle,
     IconButton,
-    makeStyles,
     Typography,
     useTheme,
     Dialog,
     useMediaQuery,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Children, cloneElement } from 'react'
 import { useI18N, usePortalShadowRoot } from '../../utils'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
 import { ErrorBoundary, useStylesExtends, mergeClasses } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../social-network'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
         borderBottom: `1px solid ${theme.palette.divider}`,

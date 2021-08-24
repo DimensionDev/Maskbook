@@ -1,14 +1,15 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { useMemo, Suspense } from 'react'
-import { Skeleton, makeStyles } from '@material-ui/core'
+import { Skeleton } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { PostInspector } from './PostInspector'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 import { parseURL } from '@masknet/shared'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         skeleton: {
             margin: theme.spacing(2),
@@ -20,23 +21,25 @@ const useStyles = makeStyles((theme) => {
 })
 
 const isSnaphotURL = (x: string): boolean =>
-    /^https:\/\/(?:www.)?snapshot.(org|page)\/#\/(.*?)\/proposal\/[A-Za-z0-9]+$/.test(x)
+    /^https:\/\/(?:www.)?snapshot.(org|page)\/#\/(.*?)\/proposal\/[\dA-Za-z]+$/.test(x)
 
 function Renderer({ url }: { url: string }) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <MaskbookPluginWrapper pluginName="Snapshot">
             <Suspense
-                fallback={new Array(2).fill(0).map((_, i) => (
-                    <Skeleton
-                        key={i}
-                        className={classes.skeleton}
-                        animation="wave"
-                        variant="rectangular"
-                        width={i === 0 ? '80%' : '60%'}
-                        height={15}
-                    />
-                ))}>
+                fallback={Array.from({ length: 2 })
+                    .fill(0)
+                    .map((_, i) => (
+                        <Skeleton
+                            key={i}
+                            className={classes.skeleton}
+                            animation="wave"
+                            variant="rectangular"
+                            width={i === 0 ? '80%' : '60%'}
+                            height={15}
+                        />
+                    ))}>
                 <PostInspector url={url} />
             </Suspense>
         </MaskbookPluginWrapper>

@@ -1,17 +1,7 @@
 import { RefreshIcon } from '@masknet/icons'
 import { useChainId } from '@masknet/web3-shared'
-import {
-    Card,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Link,
-    makeStyles,
-    Paper,
-    Tab,
-    Tabs,
-    Typography,
-} from '@material-ui/core'
+import { Card, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import React, { useState } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -21,7 +11,7 @@ import { PerformanceChart } from './PerformanceChart'
 import { PoolStats } from './PoolStats'
 import { PoolViewDeck } from './PoolViewDeck'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         boxShadow: 'none',
@@ -107,7 +97,7 @@ interface PoolViewProps {
 
 export function PoolView(props: PoolViewProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const currentChainId = useChainId()
 
     //#region allowed tokens

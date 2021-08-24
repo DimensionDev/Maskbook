@@ -7,6 +7,6 @@ export function useERC20TokenBytes32Contract(address?: string) {
     return useContract<ERC20Bytes32>(address, ERC20Bytes32ABI as AbiItem[])
 }
 
-export function useERC20TokenBytes32Contracts(listOfAddress: string[], rpc: string) {
-    return useContracts<ERC20Bytes32>(listOfAddress, ERC20Bytes32ABI as AbiItem[], rpc)
+export function useERC20TokenBytes32Contracts(listOfAddress: string[], readonly = false) {
+    return useContracts<ERC20Bytes32>(listOfAddress, ERC20Bytes32ABI as AbiItem[], readonly)
 }

@@ -5,20 +5,19 @@ import { WalletMessages, WalletRPC } from '../messages'
 
 export const useWalletRiskWarningDialog = () => {
     const account = useAccount()
-    const [confirmed, setConfirmed] = useState(false)
+    const [isConfirmed, setIsConfirmed] = useState(false)
 
-    const fetchRiskWarningStatus = () =>
-        WalletRPC.getRiskWarningConfirmed(account).then((confirmed) => setConfirmed(confirmed ?? false))
+    const fetchRiskWarningStatus = () => {
+        if (!account) setIsConfirmed(false)
+        else WalletRPC.getRiskWarningConfirmed(account).then((confirmed) => setIsConfirmed(confirmed ?? false))
+    }
 
     const { openDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletRiskWarningDialogUpdated,
         fetchRiskWarningStatus,
     )
 
-    useEffect(() => {
-        if (!account) setConfirmed(false)
-        else fetchRiskWarningStatus()
-    }, [account])
+    useEffect(fetchRiskWarningStatus, [account])
 
-    return { isConfirmed: confirmed, openDialog }
+    return { isConfirmed, openDialog }
 }

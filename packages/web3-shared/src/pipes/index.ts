@@ -5,7 +5,7 @@ import {
     ERC721Token,
     NativeToken,
     NetworkType,
-    NonFungibleTokenDetailed,
+    ERC721TokenDetailed,
     ProviderType,
     CollectibleProvider,
 } from '../types'
@@ -82,6 +82,10 @@ export function resolveChainColor(chainId: ChainId) {
             return 'rgb(246, 195, 67)'
         case ChainId.Gorli:
             return 'rgb(48, 153, 242)'
+        case ChainId.BSCT:
+            return 'rgb(240, 185, 10)'
+        case ChainId.Mumbai:
+            return 'rgb(130, 71, 229)'
         default:
             return 'rgb(214, 217, 220)'
     }
@@ -126,7 +130,7 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: Colle
 export function resolveCollectibleLink(
     chainId: ChainId,
     provider: CollectibleProvider,
-    { address, tokenId }: NonFungibleTokenDetailed,
+    { contractDetailed: { address }, tokenId }: ERC721TokenDetailed,
 ) {
     switch (provider) {
         case CollectibleProvider.OPENSEAN:

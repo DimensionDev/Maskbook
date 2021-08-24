@@ -18,7 +18,11 @@ function createProfileIdentifier() {
 }
 
 function createArrayBuffer(length: number) {
-    return new Uint8Array(new Array(length).fill(0).map(() => Math.round(Math.random() * 256))).buffer
+    return new Uint8Array(
+        Array.from({ length })
+            .fill(0)
+            .map(() => Math.round(Math.random() * 256)),
+    ).buffer
 }
 
 test('storeAvatarDB & queryAvatarDB', async () => {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { makeStyles, Box, FormControl, Select, MenuItem, Button } from '@material-ui/core'
+import { Box, FormControl, Select, MenuItem, Button } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import CropFreeIcon from '@material-ui/icons/CropFree'
 import { useModal } from '../DashboardDialogs/Base'
 import { QRCodeVideoScannerDialog } from '../DashboardDialogs/Setup'
@@ -9,7 +10,7 @@ import { useVideoDevices } from '../../../utils/hooks/useVideoDevices'
 import { nativeAPI } from '../../../utils/native-rpc'
 import { NativeQRScanner } from '../../../components/shared/qrcode'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         marginTop: theme.spacing(2),
     },

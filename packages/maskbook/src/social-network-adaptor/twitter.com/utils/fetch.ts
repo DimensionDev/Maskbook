@@ -48,7 +48,7 @@ const serializeToText = (node: ChildNode): string => {
             if (childNode.nodeValue) snippets.push(childNode.nodeValue)
         } else if (childNode.nodeName === 'IMG') {
             const img = childNode as HTMLImageElement
-            const matched = (img.getAttribute('src') ?? '').match(/emoji\/v2\/svg\/([\d\w]+)\.svg/) ?? []
+            const matched = (img.getAttribute('src') ?? '').match(/emoji\/v2\/svg\/(\w+)\.svg/) ?? []
             if (matched[1]) snippets.push(String.fromCodePoint(Number.parseInt(`0x${matched[1]}`, 16)))
         } else if (childNode.childNodes.length) snippets.push(serializeToText(childNode))
     }
@@ -143,7 +143,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
         } else if (node instanceof HTMLImageElement) {
             const image = node
             const src = image.getAttribute('src')
-            const matched = src?.match(/emoji\/v2\/svg\/([\d\w\-]+)\.svg/)
+            const matched = src?.match(/emoji\/v2\/svg\/([\w\-]+)\.svg/)
             if (matched?.[1]) {
                 const codePoints = matched[1].split('-').map((x) => Number.parseInt(`0x${x}`, 16))
                 return makeTypedMessageText(String.fromCodePoint(...codePoints))

@@ -6,8 +6,8 @@ export class LoadingFailCard extends Component<{ title: string; retry: () => voi
     static getDerivedStateFromError(error: unknown) {
         return { error }
     }
-    state: { error: Error | null } = { error: null }
-    render() {
+    override state: { error: Error | null } = { error: null }
+    override render() {
         if (this.state.error) {
             return this.props.isFullPluginDown ? (
                 <>

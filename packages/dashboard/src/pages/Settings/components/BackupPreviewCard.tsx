@@ -1,7 +1,9 @@
 import { MaskColorVar } from '@masknet/theme'
 import { Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
+import { useDashboardI18N } from '../../../locales'
+import formatDateTime from 'date-fns/format'
 export interface BackupPreview {
     email?: string
     personas: number
@@ -10,22 +12,25 @@ export interface BackupPreview {
     contacts: number
     files: number
     wallets: number
+    createdAt?: number
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()(() => ({
     root: {
         padding: '19px 24px 9px',
         minHeight: 205,
         borderRadius: 8,
         background: MaskColorVar.infoBackground,
+        width: '100%',
     },
     item: {
         paddingBottom: 10,
         display: 'flex',
         justifyContent: 'space-between',
+        fontSize: 14,
     },
     sub: {
-        paddingLeft: 60,
+        paddingLeft: 30,
     },
 }))
 
@@ -34,40 +39,41 @@ export interface Props {
 }
 
 export default function BackupPreviewCard({ json }: Props) {
-    const classes = useStyles()
+    const t = useDashboardI18N()
+    const { classes } = useStyles()
 
     const records = [
         {
-            name: 'Account',
-            value: json.email,
-        },
-        {
-            name: 'Personas',
+            name: t.settings_backup_preview_personas(),
             value: json.personas,
         },
         {
-            name: 'Associated account',
+            name: t.settings_backup_preview_associated_account(),
             value: json.accounts,
             sub: true,
         },
         {
-            name: 'Encrypted Post',
+            name: t.settings_backup_preview_posts(),
             value: json.posts,
             sub: true,
         },
         {
-            name: 'Contacts',
+            name: t.settings_backup_preview_contacts(),
             value: json.contacts,
             sub: true,
         },
         {
-            name: 'File',
+            name: t.settings_backup_preview_fils(),
             value: json.files,
             sub: true,
         },
         {
-            name: 'Local Wallet',
+            name: t.settings_backup_preview_wallets(),
             value: json.wallets,
+        },
+        {
+            name: t.settings_backup_preview_created_at(),
+            value: json.createdAt ? formatDateTime(json.createdAt, 'MM-dd-yyyy HH:mm:ss') : '',
         },
     ]
 
@@ -75,8 +81,8 @@ export default function BackupPreviewCard({ json }: Props) {
         <div className={classes.root}>
             {records.map((record, idx) => (
                 <div className={classNames(classes.item, record.sub ? classes.sub : '')} key={idx}>
-                    <Typography>{record.name}</Typography>
-                    <Typography>{record.value}</Typography>
+                    <Typography variant="body2">{record.name}</Typography>
+                    <Typography variant="body2">{record.value}</Typography>
                 </div>
             ))}
         </div>

@@ -1,5 +1,6 @@
 import type { ChangeEvent } from 'react'
-import { makeStyles, FormGroup, FormLabel, FormControlLabel, Checkbox } from '@material-ui/core'
+import { FormGroup, FormLabel, FormControlLabel, Checkbox } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 
 export enum SettingField {
@@ -16,8 +17,7 @@ export interface AdvanceSettingProps {
     advanceSettingData: AdvanceSettingData
     setAdvanceSettingData: React.Dispatch<React.SetStateAction<AdvanceSettingData>>
 }
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         border: 0,
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export function AdvanceSetting({ advanceSettingData, setAdvanceSettingData }: AdvanceSettingProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
 
     const handleAdvanceSettingToggle = (event: ChangeEvent<HTMLInputElement>) => {

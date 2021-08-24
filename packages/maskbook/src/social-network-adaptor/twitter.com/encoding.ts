@@ -5,7 +5,7 @@ const ICAO9303Checksum = {
         return `${input}${(
             input
                 .toUpperCase()
-                .replace(/[+=\/]/g, '0')
+                .replace(/[+/=]/g, '0')
                 .split('')
                 .map((d, i) => parseInt(d, 36) * [7, 3, 1][i % 3])
                 .reduce((l, r) => l + r, 0) % 19
@@ -31,7 +31,7 @@ export const twitterEncoding = {
      */
     publicKeyEncoder: (text: string) => `🎭${ICAO9303Checksum.encode(text)}🎭`,
     publicKeyDecoder: (text: string): string[] => {
-        const r = regexMatchAll(text, /([\dA-Za-z+=\/]{20,60})/)
+        const r = regexMatchAll(text, /([\d+/=A-Za-z]{20,60})/)
         if (isNull(r)) {
             return []
         }
@@ -68,6 +68,8 @@ export const twitterEncoding = {
             return [
                 `🎼${batchReplace(
                     payload
+                        // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/1476
+                        // eslint-disable-next-line unicorn/better-regex
                         .replace(/^PostData_v\d=/i, '')
                         .replace(/^%20/, '')
                         .replace(/%40$/, ''),

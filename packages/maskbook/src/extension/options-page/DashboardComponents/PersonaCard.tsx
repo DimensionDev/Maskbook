@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import Typography from '@material-ui/core/Typography'
 import { MenuItem, Card, IconButton } from '@material-ui/core'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
@@ -19,7 +19,7 @@ interface Props {
     persona: Persona
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     card: {
         padding: theme.spacing(4, 3, 5, 3),
         boxShadow:
@@ -49,9 +49,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PersonaCard({ persona }: Props) {
     const { t } = useI18N()
-    const classes = useStyles()
-    const color = useColorStyles()
-
+    const { classes } = useStyles()
+    const { classes: color } = useColorStyles()
     const [deletePersona, openDeletePersona] = useModal(DashboardPersonaDeleteConfirmDialog, { persona })
     const [backupPersona, openBackupPersona] = useModal(DashboardPersonaBackupDialog, { persona })
     const [renamePersona, openRenamePersona] = useModal(DashboardPersonaRenameDialog, { persona })

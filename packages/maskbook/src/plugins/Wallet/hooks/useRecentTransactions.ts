@@ -1,21 +1,37 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAsyncRetry, useInterval } from 'react-use'
-import { useAccount, useChainId } from '@masknet/web3-shared'
+import { TransactionStatusType, useAccount, useChainId } from '@masknet/web3-shared'
 import { WalletRPC } from '../messages'
+import { WalletMessages } from '@masknet/plugin-wallet'
 
 const UPDATE_TRANSACTION_LATENCY = 30 /* seconds */ * 1000 /* milliseconds  */
 
-export function useRecentTransactions() {
+async function getTransactions(account: string, status?: TransactionStatusType) {
+    if (!account) return []
+    const transactions = await WalletRPC.getRecentTransactionsFromChain(account)
+    return transactions.filter((x) => (typeof status !== 'undefined' ? x.status === status : true))
+}
+
+export function useRecentTransactions(status?: TransactionStatusType) {
     const account = useAccount()
     const chainId = useChainId()
     const [flag, setFlag] = useState(false)
 
-    // update transaction status intervally
-    useInterval(() => setFlag((x) => !x), UPDATE_TRANSACTION_LATENCY)
+    // update transactions status intervally
+    const [delay, setDelay] = useState(0)
+    useInterval(() => setFlag((x) => !x), delay)
+
+    // update transactions by message center
+    useEffect(() => WalletMessages.events.transactionsUpdated.on(() => setFlag((x) => !x)), [setFlag])
 
     return useAsyncRetry(async () => {
-        if (!account) return []
-        const transactions = await WalletRPC.getRecentTransactionsFromChain(account)
-        return transactions
-    }, [account, flag, chainId])
+        try {
+            setDelay(0)
+            return getTransactions(account, status)
+        } catch (error) {
+            throw error
+        } finally {
+            setDelay(UPDATE_TRANSACTION_LATENCY)
+        }
+    }, [account, status, flag, chainId])
 }

@@ -3,7 +3,7 @@ import type { SvgIcon } from '@material-ui/core'
 
 export const GitcoinIcon: typeof SvgIcon = createIcon(
     'Gitcoin',
-    <>
+    <g>
         <path d="M18.244 13.541l1.661 3.274-1.265 5.36-3.003-2.454.531-3.93 2.076-2.25z" fill="#fff" />
         <path
             d="M13.807 12.44a.627.627 0 01-.627-.627V6.879a.626.626 0 111.255 0v4.934a.639.639 0 01-.628.627z"
@@ -44,6 +44,6 @@ export const GitcoinIcon: typeof SvgIcon = createIcon(
             d="M10.836 14.17a.626.626 0 01-.627-.628V6.879a.633.633 0 01.637-.618c.338.01.608.28.618.618v6.663c0 .347-.28.627-.628.627z"
             fill="#15003E"
         />
-    </>,
+    </g>,
     '0 0 28 28',
 )

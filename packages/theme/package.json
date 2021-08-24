@@ -4,11 +4,11 @@
   "description": "@material-ui/core theme of design system of Mask Network",
   "type": "module",
   "exports": {
-    ".": "./dist/src/theme.js",
+    ".": "./dist/src/index.js",
     "./constants": "./dist/src/constants.js"
   },
-  "main": "./dist/src/theme.js",
-  "types": "./dist/src/theme.d.ts",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "scripts": {
     "build-storybook": "build -- build-storybook",
     "start": "dev -- start-storybook -p 6006"
@@ -21,10 +21,11 @@
     "notistack": "1.0.6-next.1",
     "react-window": "^1.8.6",
     "tinycolor2": "^1.4.2",
+    "tss-react": "^0.6.0",
     "use-subscription": "^1.5.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.6",
+    "@babel/core": "^7.15.0",
     "@storybook/addon-actions": "^6.3.5",
     "@storybook/addon-essentials": "^6.3.5",
     "@storybook/addon-links": "^6.3.5",

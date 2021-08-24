@@ -5,13 +5,13 @@ import {
     Select,
     experimentalStyled as styled,
     Typography,
-    makeStyles,
     FilledInput,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { useDashboardI18N } from '../../locales'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         // TODO: mobile
         width: 380,
@@ -30,12 +30,16 @@ const useStyles = makeStyles((theme) => ({
 
 // TODO: actions, and icon may be an img url
 export interface CreateWalletFormProps {
-    options: { label: string; icon: React.ReactNode; value: number }[]
+    options: {
+        label: string
+        icon: React.ReactNode
+        value: number
+    }[]
 }
 
 export function CreateWalletForm(props: CreateWalletFormProps) {
     const { options } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [selected, setSelected] = useState()
 
     const t = useDashboardI18N()

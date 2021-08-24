@@ -4,34 +4,26 @@ import { initReactI18next, useTranslation as useTranslation_, UseTranslationOpti
 import type { TOptions } from 'i18next'
 import { useEffect } from 'react'
 import { useUpdate } from 'react-use'
-import type en from '../_locales/en/messages.json'
+import type en from '../locales/en-US.json'
 import i18nNextInstance from './i18n-next'
 import { languageSettings } from '../settings/settings'
+import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
+import { languages } from '../locales'
 
 i18nNextInstance.use(initReactI18next)
 
-type Namespaces = {
-    default: typeof en
-}
-
-export type I18NFunction<TInterpolationMap extends object = typeof en> = <TKeys extends keyof TInterpolationMap>(
+export type I18NFunction = <TKeys extends keyof typeof en>(
     key: TKeys | TKeys[],
     // defaultValue?: string,
     options?: TOptions | string,
-) => TInterpolationMap[TKeys]
+) => typeof en[TKeys]
 
 /**
  * Enhanced version of useTranslation
- * @param ns Namespace
  * @param opt Options
  */
-export function useI18N<NS extends keyof Namespaces = 'default'>(
-    _ns?: NS,
-    opt?: UseTranslationOptions,
-    // The [F, i18n, boolean] case is not recommend because i18n ally doesn't recognize that if the name is not "t"
-): /** [F<Namespaces[NS]>, i18n, boolean] &  */
-{
-    t: I18NFunction<Namespaces[NS]>
+export function useI18N(opt?: UseTranslationOptions): {
+    t: I18NFunction
     i18n: i18n
     ready: boolean
 } {
@@ -44,9 +36,24 @@ export function useI18N<NS extends keyof Namespaces = 'default'>(
             return () => document.removeEventListener('i18n-hmr', update)
         }, [])
     }
-    return useTranslation_(undefined, opt)
+    return useTranslation_('mask', opt)
 }
 
-languageSettings.addListener((next) => {
-    i18nNextInstance.changeLanguage(next)
+export function useLanguage(): SupportedLanguages {
+    const { i18n } = useTranslation_()
+    const lang = i18n.language
+    if (lang in SupportedLanguages) return lang as any
+    return SupportedLanguages.enUS
+}
+
+languageSettings.addListener((next): void => {
+    if (next === LanguageOptions.__auto__) {
+        const result: string[] = i18nNextInstance.services.languageDetector.detect()
+        for (const lng of result) {
+            if (lng in languages) return void i18nNextInstance.changeLanguage(lng)
+        }
+        i18nNextInstance.changeLanguage(LanguageOptions.enUS)
+    } else {
+        i18nNextInstance.changeLanguage(next)
+    }
 })

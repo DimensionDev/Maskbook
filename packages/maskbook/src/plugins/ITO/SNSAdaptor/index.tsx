@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon'
-import { makeStyles } from '@material-ui/core'
-import { formatEthereumAddress, formatBalance, useTokenDetailed, EthereumTokenType } from '@masknet/web3-shared'
+import { makeStyles } from '@masknet/theme'
+import { formatEthereumAddress, formatBalance, useFungibleTokenDetailed, EthereumTokenType } from '@masknet/web3-shared'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
@@ -11,8 +11,9 @@ import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-es'
 import { ToolIconURLs } from '../../../resources/tool-icon'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
@@ -30,7 +31,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!payload.ok) return null
         return (
             <MaskbookPluginWrapper pluginName="ITO">
-                <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
+                <EthereumChainBoundary chainId={payload.val.chain_id}>
+                    <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
+                </EthereumChainBoundary>
             </MaskbookPluginWrapper>
         )
     },
@@ -57,8 +60,11 @@ interface BadgeProps {
     payload: JSON_PayloadComposeMask
 }
 function Badge({ payload }: BadgeProps) {
-    const classes = useStyles()
-    const { value: tokenDetailed, loading: loadingToken } = useTokenDetailed(EthereumTokenType.ERC20, payload.token)
+    const { classes } = useStyles()
+    const { value: tokenDetailed, loading: loadingToken } = useFungibleTokenDetailed(
+        EthereumTokenType.ERC20,
+        payload.token,
+    )
     const balance = formatBalance(payload.total, tokenDetailed?.decimals)
     const symbol = tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
     const sellerName = payload.seller.name

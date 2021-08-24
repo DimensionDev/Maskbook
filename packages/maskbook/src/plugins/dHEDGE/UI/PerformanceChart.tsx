@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { makeStyles, Theme, CircularProgress, Typography } from '@material-ui/core'
+import { CircularProgress, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { useLineChart } from '../../hooks/useLineChart'
 import { Period, Pool } from '../types'
@@ -18,8 +19,7 @@ const DEFAULT_DIMENSION: Dimension = {
     width: 598,
     height: 200,
 }
-
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'relative',
         padding: theme.spacing(2),
@@ -52,8 +52,7 @@ interface PerformanceChartProps {
 
 export function PerformanceChart(props: PerformanceChartProps) {
     const { pool } = props
-
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
 
     const rootRef = useRef<HTMLDivElement>(null)

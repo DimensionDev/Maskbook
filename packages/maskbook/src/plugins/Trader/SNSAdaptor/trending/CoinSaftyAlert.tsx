@@ -1,10 +1,11 @@
-import { Alert, AlertTitle, Box, Button, Link, makeStyles, Paper } from '@material-ui/core'
+import { Alert, AlertTitle, Box, Button, Link, Paper } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import type { Coin } from '../../types'
 import { useApprovedTokens } from '../../trending/useApprovedTokens'
 import { resolveTokenLinkOnExplorer, ChainId, EthereumTokenType } from '@masknet/web3-shared'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             padding: theme.spacing(0, 2, 2, 2),
@@ -29,7 +30,7 @@ export function CoinSaftyAlert(props: CoinSaftyAlertProps) {
     const { coin } = props
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { approvedTokens, onApprove } = useApprovedTokens(coin.contract_address)
 
     if (!coin.contract_address) return null

@@ -33,7 +33,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
 }
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
-    let [id = ''] = props.url.match(/pools\/([a-zA-Z0-9_ ]+)/) ?? []
+    let [id = ''] = props.url.match(/pools\/([\w ]+)/) ?? []
     if (id) {
         id = id.replace('pools/', '')
     }

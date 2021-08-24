@@ -16,7 +16,7 @@ export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type
 }
 
 export const isCashTagMessage = (m: TypedMessage): m is TypedMessageAnchor =>
-    isTypedMessageAnchor(m) && ['cash', 'hash'].includes(m.category) && !/#[\w\d]+lbp$/i.test(m.content)
+    isTypedMessageAnchor(m) && ['cash', 'hash'].includes(m.category) && !/#\w+lbp$/i.test(m.content)
 export function makeTypedMessageCashTrending(message: TypedMessageAnchor) {
     return {
         ...message,

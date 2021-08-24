@@ -1,6 +1,7 @@
 import { ChangeEvent, useCallback } from 'react'
 import classNames from 'classnames'
-import { makeStyles, Theme, ListItem, ListItemText, Checkbox, ListItemAvatar } from '@material-ui/core'
+import { ListItem, ListItemText, Checkbox, ListItemAvatar } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
 import { useStylesExtends } from '@masknet/shared'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
@@ -9,7 +10,7 @@ import { Avatar } from '../../../utils/components/Avatar'
 import type { CheckboxProps } from '@material-ui/core/Checkbox'
 import type { ListItemTypeMap } from '@material-ui/core/ListItem'
 
-const useStyle = makeStyles((theme: Theme) => ({
+const useStyle = makeStyles()({
     root: {
         cursor: 'pointer',
         paddingLeft: 8,
@@ -24,7 +25,7 @@ const useStyle = makeStyles((theme: Theme) => ({
         color: 'inherit',
         fontWeight: 'bold',
     },
-}))
+})
 
 export interface ProfileInListProps extends withClasses<never> {
     item: Profile
@@ -48,7 +49,7 @@ export function ProfileInList(props: ProfileInListProps) {
             disabled={props.disabled}
             {...props.ListItemProps}
             className={classNames(classes.root, props.ListItemProps?.className)}>
-            <Checkbox checked={props.checked} color="primary" {...props.CheckboxProps} />
+            <Checkbox checked={!!props.checked} color="primary" {...props.CheckboxProps} />
             <ListItemAvatar>
                 <Avatar person={profile} />
             </ListItemAvatar>

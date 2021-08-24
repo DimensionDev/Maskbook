@@ -89,6 +89,7 @@ export interface Prize {
     prizePeriodStartedAt: AmountUnformatted
     prizePeriodRemainingSeconds: AmountUnformatted
     prizePeriodSeconds: AmountUnformatted
+    prizePeriodEndAt: string
     estimatedRemainingBlocksToPrize: string
     estimatedRemainingBlocksToPrizeUnformatted: AmountUnformatted
     yield?: Yield

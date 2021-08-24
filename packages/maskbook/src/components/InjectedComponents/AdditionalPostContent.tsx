@@ -1,4 +1,5 @@
-import { makeStyles, Typography, Card, Theme, Box, CircularProgress, CircularProgressProps } from '@material-ui/core'
+import { Typography, Card, Box, CircularProgress, CircularProgressProps } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import classNames from 'classnames'
 import { TypedMessage, makeTypedMessageText } from '../../protocols/typed-message'
@@ -25,7 +26,7 @@ export interface AdditionalContentProps
     /** Can handle typed message or normal string */
     message?: TypedMessage | string
 }
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: { boxSizing: 'border-box', width: '100%', backgroundColor: 'transparent', borderColor: 'transparent' },
     title: { display: 'flex', alignItems: 'center' },
     icon: { paddingRight: theme.spacing(0.75), display: 'flex', width: 20, height: 20 },

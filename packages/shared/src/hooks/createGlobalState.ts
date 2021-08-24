@@ -40,9 +40,9 @@ export function createGlobalState<T>(f: () => Promise<T>, subscribe: (callback: 
                     data.data = val
                     data.error = undefined
                 },
-                (err) => {
+                (error) => {
                     data.version += 1
-                    data.error = err
+                    data.error = error
                 },
             )
             .finally(callback)

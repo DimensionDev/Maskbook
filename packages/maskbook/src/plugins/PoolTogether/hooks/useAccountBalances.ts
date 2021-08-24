@@ -19,7 +19,7 @@ export function useAccountBalance(pools: Pool[]) {
 
     const [results, calls, _, callback] = useMutlipleContractSingleData(
         ticketContracts,
-        new Array(ticketContracts.length).fill('balanceOf'),
+        Array.from<'balanceOf'>({ length: ticketContracts.length }).fill('balanceOf'),
         [account || ZERO_ADDRESS],
     )
     const asyncResults = useAsyncRetry(() => callback(calls), [calls])

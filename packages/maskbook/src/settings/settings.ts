@@ -1,8 +1,9 @@
 import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
-import i18nNextInstance, { i18n } from '../utils/i18n-next'
+import { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { LaunchPage } from './types'
-import { Appearance, Language } from '@masknet/theme'
+import { Appearance } from '@masknet/theme'
+import { LanguageOptions } from '@masknet/public-api'
 
 /**
  * Does the debug mode on
@@ -28,12 +29,10 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
 //#endregion
 
 //#region language
-const lang: string = i18nNextInstance.language
-export const languageSettings = createGlobalSettings<Language>(
-    'language',
-    lang in Language ? (lang as Language) : Language.en,
-    { primary: () => i18n.t('settings_language'), secondary: () => i18n.t('settings_language_secondary') },
-)
+export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__, {
+    primary: () => i18n.t('settings_language'),
+    secondary: () => i18n.t('settings_language_secondary'),
+})
 //#endregion
 
 //#region network setting
@@ -84,4 +83,12 @@ export const currentPersonaIdentifier = createGlobalSettings<string>('currentPer
 sideEffect.then(() => {
     // reset it to false after Mask startup
     currentImportingBackup.value = false
+
+    // Migrate language settings
+    const lng: string = languageSettings.value
+    if (lng === 'en') languageSettings.value = LanguageOptions.enUS
+    else if (lng === 'zh') languageSettings.value = LanguageOptions.zhCN
+    else if (lng === 'ja') languageSettings.value = LanguageOptions.jaJP
+    else if (lng === 'ko') languageSettings.value = LanguageOptions.koKR
+    else languageSettings.value = LanguageOptions.__auto__
 })

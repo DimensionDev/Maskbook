@@ -7,3 +7,5 @@ async function render(id: string, Icons: Promise<IconPreviewProps['icons']>, nam
 render('#brands', import('../brands'), 'brand icons (./brands)')
 render('#general', import('../general'), 'general icons (./general)')
 render('#plugins', import('../plugins'), 'general icons (./plugins)')
+render('#menus', import('../menus'), 'general icons (./menus)')
+render('#settings', import('../menus'), 'general icons (./settings)')

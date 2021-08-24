@@ -1,22 +1,20 @@
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { OpenSeaIcon } from '../../../resources/OpenSeaIcon'
 import { RaribleIcon } from '../../../resources/RaribleIcon'
 import { unreachable } from '@dimensiondev/kit'
 import { CollectibleProvider } from '../types'
 
-const useStyles = makeStyles((theme) => {
-    return {
-        opensea: {
-            width: 16,
-            height: 16,
-            verticalAlign: 'bottom',
-        },
-        rarible: {
-            width: 16,
-            height: 16,
-            verticalAlign: 'bottom',
-        },
-    }
+const useStyles = makeStyles()({
+    opensea: {
+        width: 16,
+        height: 16,
+        verticalAlign: 'bottom',
+    },
+    rarible: {
+        width: 16,
+        height: 16,
+        verticalAlign: 'bottom',
+    },
 })
 
 export interface CollectibleProviderIconProps {
@@ -24,8 +22,7 @@ export interface CollectibleProviderIconProps {
 }
 
 export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     switch (props.provider) {
         case CollectibleProvider.OPENSEA:
             return <OpenSeaIcon classes={{ root: classes.opensea }} viewBox="0 0 16 16" />

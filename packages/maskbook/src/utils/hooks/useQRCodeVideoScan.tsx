@@ -8,7 +8,7 @@ import '../../components/QRScanner/ShapeDetectionPolyfill'
 
 export async function getBackVideoDeviceId() {
     const devices = filter(await navigator.mediaDevices.enumerateDevices(), ({ kind }) => kind === 'videoinput')
-    const back = find(devices, ({ label }) => !/Front/i.test(label) && /Back|Rear/i.test(label))
+    const back = find(devices, ({ label }) => !/front/i.test(label) && /back|rear/i.test(label))
     return (back ?? first(devices))?.deviceId ?? null
 }
 

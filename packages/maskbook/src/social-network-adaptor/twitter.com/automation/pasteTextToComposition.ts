@@ -53,5 +53,5 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
         setTimeout(() => {
             abortCtr.abort()
         }, timeout)
-        worker(abortCtr).then(undefined, (e) => fail(e))
+        worker(abortCtr).then(undefined, (error) => fail(error))
     }

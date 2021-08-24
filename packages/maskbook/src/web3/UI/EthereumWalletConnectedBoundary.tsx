@@ -1,16 +1,14 @@
-import { Grid, makeStyles } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { useCallback } from 'react'
-import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
-import Services from '../../extension/service'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { currentIsMetamaskLockedSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
-import { isZero, ProviderType, useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared'
+import { isZero, useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared'
 import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     button: {
         marginTop: theme.spacing(1.5),
     },
@@ -41,14 +39,6 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     )
     //#endregion
 
-    //#region metamask
-    const providerType = useValueRef(currentProviderSettings)
-    const currentIsMetamaskLocked = useValueRef(currentIsMetamaskLockedSettings)
-    const onConnectMetaMask = useCallback(async () => {
-        await Services.Ethereum.connectMetaMask()
-    }, [])
-    //#endregion
-
     if (!account)
         return (
             <Grid container>
@@ -73,20 +63,6 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                     size="large"
                     onClick={openRiskWarningDialog}>
                     {t('plugin_wallet_confirm_risk_warning')}
-                </ActionButton>
-            </Grid>
-        )
-
-    if (providerType === ProviderType.MetaMask && currentIsMetamaskLocked)
-        return (
-            <Grid container>
-                <ActionButton
-                    className={classNames(classes.button, classes.unlockMetaMask)}
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    onClick={onConnectMetaMask}>
-                    {t('plugin_wallet_unlock_metamask')}
                 </ActionButton>
             </Grid>
         )

@@ -3,6 +3,7 @@ import {
     ethereumNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
     binanceNetworkTradeProviderSettings,
+    arbitrumNetworkTradeProviderSettings,
 } from '../settings'
 import { TradeProvider } from '../types'
 import { getNetworkTypeFromChainId } from '@masknet/web3-shared'
@@ -15,8 +16,9 @@ export function useCurrentTradeProvider() {
     const ethNetworkTradeProvider = useValueRef(ethereumNetworkTradeProviderSettings)
     const polygonNetworkTradeProvider = useValueRef(polygonNetworkTradeProviderSettings)
     const binanceNetworkTradeProvider = useValueRef(binanceNetworkTradeProviderSettings)
+    const arbitrumNetworkTradeProvider = useValueRef(arbitrumNetworkTradeProviderSettings)
 
-    if (!networkType) return TradeProvider.UNISWAP
+    if (!networkType) return TradeProvider.UNISWAP_V2
     switch (networkType) {
         case NetworkType.Ethereum:
             return ethNetworkTradeProvider
@@ -25,7 +27,7 @@ export function useCurrentTradeProvider() {
         case NetworkType.Binance:
             return binanceNetworkTradeProvider
         case NetworkType.Arbitrum:
-            throw new Error('TODO')
+            return arbitrumNetworkTradeProvider
         default:
             unreachable(networkType)
     }

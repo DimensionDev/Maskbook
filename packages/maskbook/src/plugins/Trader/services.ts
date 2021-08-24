@@ -30,7 +30,7 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
                 currentDataProviderSettings.value = DataProvider.COIN_GECKO
             break
         case NetworkType.Arbitrum:
-            currentTradeProviderSettings.value = TradeProvider.UNISWAP
+            currentTradeProviderSettings.value = TradeProvider.UNISWAP_V2
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
             break

@@ -1,10 +1,11 @@
 import { ChainId, getChainDetailed, getNetworkTypeFromChainId } from '@masknet/web3-shared'
-import { makeStyles, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { NetworkIcon } from '../../../components/shared/NetworkIcon'
 import { getNetworkColor } from '../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',

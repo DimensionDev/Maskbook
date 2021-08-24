@@ -13,7 +13,8 @@ import {
     useWeb3,
 } from '@masknet/web3-shared'
 import { omit } from 'lodash-es'
-import { FormControl, InputLabel, makeStyles, MenuItem, MenuProps, Select, TextField } from '@material-ui/core'
+import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -29,7 +30,7 @@ import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES
 import type { RedPacketJSONPayload } from '../types'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     line: {
         display: 'flex',
         margin: theme.spacing(1),
@@ -112,7 +113,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
     const [shares, setShares] = useState<number | ''>(origin?.shares || RED_PACKET_DEFAULT_SHARES)
     const onShareChange = useCallback(
         (ev: ChangeEvent<HTMLInputElement>) => {
-            const shares_ = ev.currentTarget.value.replace(/[,\.]/g, '')
+            const shares_ = ev.currentTarget.value.replace(/[,.]/g, '')
             if (shares_ === '') setShares('')
             else if (/^[1-9]+\d*$/.test(shares_)) {
                 const parsed = Number.parseInt(shares_, 10)

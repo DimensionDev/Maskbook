@@ -25,7 +25,7 @@ function createElement(element: string, options: ElementCreationOptions) {
     const isValid = _ !== unknown
     const [nativeTag, Component] = _
     const DOM = document.createElement(nativeTag)
-    DOM.setAttribute('data-kind', element)
+    DOM.dataset.kind = element
 
     const shadow = DOM.attachShadow({ mode: 'open' })
 

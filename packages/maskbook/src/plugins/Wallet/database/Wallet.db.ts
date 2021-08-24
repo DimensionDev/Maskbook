@@ -3,34 +3,23 @@ import { createDBAccess } from '../../../database/helpers/openDB'
 import type {
     ERC1155TokenRecordInDatabase,
     ERC20TokenRecordInDatabase,
-    ERC721TokenRecordInDatabase,
     PhraseRecordInDatabase,
     TransactionChunkRecordInDatabase,
+    UnconfirmedRequestChunkRecordInDatabase,
     WalletRecordInDatabase,
 } from './types'
-import { sideEffect } from '../../../utils/side-effects'
-import { migratePluginDatabase } from './migrate.plugins'
+import type { ERC721TokenRecordInDatabase } from '@masknet/web3-shared'
 
 function path<T>(x: T) {
     return x
 }
 
 export const createWalletDBAccess = createDBAccess(() => {
-    return openDB<WalletDB>('maskbook-plugin-wallet', 8, {
+    return openDB<WalletDB>('maskbook-plugin-wallet', 9, {
         async upgrade(db, oldVersion, newVersion, tx) {
             function v0_v1() {
                 db.createObjectStore('ERC20Token', { keyPath: path<keyof ERC20TokenRecordInDatabase>('address') })
                 db.createObjectStore('Wallet', { keyPath: path<keyof WalletRecordInDatabase>('address') })
-            }
-            function v2_v3() {
-                const os = db.createObjectStore('PluginStore', { keyPath: 'record_id' })
-                // @ts-ignore
-                os.createIndex('0', 'index0')
-                // @ts-ignore
-                os.createIndex('1', 'index1')
-                // @ts-ignore
-                os.createIndex('2', 'index2')
-                os.createIndex('plugin_id', 'plugin_id')
             }
             function v5_v6() {
                 db.createObjectStore('ERC721Token', { keyPath: path<keyof ERC721TokenRecordInDatabase>('record_id') })
@@ -44,32 +33,25 @@ export const createWalletDBAccess = createDBAccess(() => {
                     keyPath: path<keyof TransactionChunkRecordInDatabase>('record_id'),
                 })
             }
+            function v8_v9() {
+                const pluginStore = 'PluginStore'
+                db.objectStoreNames.contains(pluginStore as any) && db.deleteObjectStore(pluginStore as any)
+                db.createObjectStore('UnconfirmedRequestChunk', {
+                    keyPath: path<keyof UnconfirmedRequestChunkRecordInDatabase>('record_id'),
+                })
+            }
 
             if (oldVersion < 1) v0_v1()
-            if (oldVersion < 3) v2_v3()
             if (oldVersion < 6) v5_v6()
             if (oldVersion < 7) v6_v7()
             if (oldVersion < 8) v7_v8()
+            if (oldVersion < 9) v8_v9()
         },
     })
 })
 
-sideEffect.then(migratePluginDatabase)
-export interface WalletDB<Data = unknown, Indexes extends [IDBValidKey?, IDBValidKey?, IDBValidKey?] = []>
-    extends DBSchema {
-    // @ts-ignore
-    PluginStore: {
-        value: {
-            plugin_id: string
-            value: Data
-            record_id: string
-            '0'?: Indexes[0]
-            '1'?: Indexes[1]
-            '2'?: Indexes[2]
-        }
-        key: string
-        indexes: Indexes & { plugin_id: string }
-    }
+export interface WalletDB extends DBSchema {
+    // the object store "PluginStore" has been removed.
     Phrase: {
         value: PhraseRecordInDatabase
         key: string
@@ -80,6 +62,10 @@ export interface WalletDB<Data = unknown, Indexes extends [IDBValidKey?, IDBVali
     }
     TransactionChunk: {
         value: TransactionChunkRecordInDatabase
+        key: string
+    }
+    UnconfirmedRequestChunk: {
+        value: UnconfirmedRequestChunkRecordInDatabase
         key: string
     }
     ERC20Token: {

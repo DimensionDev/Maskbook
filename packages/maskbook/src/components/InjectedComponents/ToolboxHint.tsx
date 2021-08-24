@@ -1,4 +1,5 @@
-import { makeStyles, MenuItem, MenuItemProps, Typography } from '@material-ui/core'
+import { CircularProgress, MenuItem, MenuItemProps, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import {
     useAccount,
@@ -7,6 +8,7 @@ import {
     useChainIdValid,
     useWallet,
     formatEthereumAddress,
+    TransactionStatusType,
 } from '@masknet/web3-shared'
 import {
     useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
@@ -17,11 +19,11 @@ import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIc
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
 import { useMenu } from '../../utils/hooks/useMenu'
-import { useCallback } from 'react'
+import { forwardRef, useRef, useCallback } from 'react'
 import { MaskMessage } from '../../utils/messages'
 import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
 import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
-import { useControlledDialog } from '../../plugins/Collectible/SNSAdaptor/useControlledDialog'
+import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
@@ -31,11 +33,11 @@ import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
 import { useI18N } from '../../utils'
 import { base as ITO_Plugin } from '../../plugins/ITO/base'
-import { forwardRef, useRef } from 'react'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
+import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     paper: {
         borderRadius: 4,
         transform: 'translateY(-150px) !important',
@@ -83,7 +85,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
-        fontWeight: 700,
         fontSize: 20,
         marginLeft: 22,
         lineHeight: 1.35,
@@ -122,6 +123,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface ToolboxHintProps extends withClasses<'wrapper' | 'menuItem' | 'title' | 'text' | 'button' | 'icon'> {}
+
 export function ToolboxHint(props: ToolboxHintProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -132,9 +134,22 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const chainDetailed = useChainDetailed()
     const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
 
+    //#region recent pending transactions
+    const { value: pendingTransactions = [], retry: retryTransactions } = useRecentTransactions(
+        TransactionStatusType.NOT_DEPEND,
+    )
+    //#endregion
+
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
-        () => MaskMessage.events.compositionUpdated.sendToLocal({ reason: 'timeline', open: true }),
+        (id?: string) =>
+            MaskMessage.events.requestComposition.sendToLocal({
+                reason: 'timeline',
+                open: true,
+                options: {
+                    startupPlugin: id,
+                },
+            }),
         [],
     )
     //#endregion
@@ -173,7 +188,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#endregion
 
     const items: ToolboxItemDescriptor[] = [
-        { ...ToolIconURLs.encryptedmsg, onClick: openEncryptedMessage },
+        { ...ToolIconURLs.encryptedmsg, onClick: () => openEncryptedMessage() },
         {
             ...ToolIconURLs.token,
             onClick: openBuyCurrency,
@@ -187,7 +202,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
         {
             ...ToolIconURLs.claim,
             onClick: onClaimAllDialogOpen,
-            hide: operatingSupportedChainMapping[ITO_Plugin.ID],
+            hide: !operatingSupportedChainMapping[ITO_Plugin.ID],
         },
     ]
 
@@ -198,10 +213,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
         let onClick: () => void
         if (onClickRaw === 'openCompositionEntry') {
-            onClick = () => {
-                openEncryptedMessage()
-                setTimeout(() => MaskMessage.events.activatePluginCompositionEntry.sendToLocal(plugin.ID))
-            }
+            onClick = () => openEncryptedMessage(plugin.ID)
         } else {
             safeUnreachable(onClickRaw)
             onClick = () => {}
@@ -235,6 +247,22 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
 
+    function renderButtonText() {
+        if (!account) return t('plugin_wallet_on_connect')
+        if (!chainIdValid) return t('plugin_wallet_wrong_network')
+        if (pendingTransactions.length <= 0) return formatEthereumAddress(account, 4)
+        return (
+            <>
+                <span>
+                    {t('plugin_wallet_pending_transactions', {
+                        count: pendingTransactions.length,
+                    })}
+                </span>
+                <CircularProgress sx={{ marginLeft: 1.5 }} thickness={6} size={20} color="inherit" />
+            </>
+        )
+    }
+
     return (
         <>
             <div className={classes.wrapper} onClick={openMenu}>
@@ -250,11 +278,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                     {isWalletValid ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} size={24} />}
 
                     <Typography className={classes.title}>
-                        {account
-                            ? chainIdValid
-                                ? formatEthereumAddress(account, 4)
-                                : t('plugin_wallet_wrong_network')
-                            : t('plugin_wallet_on_connect')}
+                        {renderButtonText()}
                         {account && chainIdValid && chainDetailed?.network !== 'mainnet' ? (
                             <FiberManualRecordIcon
                                 className={classes.chainIcon}
@@ -284,7 +308,7 @@ interface ToolboxItemDescriptor {
 // TODO: this should be rendered in the ErrorBoundary
 const ToolboxItem = forwardRef<any, MenuItemProps & ToolboxItemDescriptor>((props, ref) => {
     const { image, label, hide, priority, useShouldDisplay, ...rest } = props
-    const classes = useStyles()
+    const { classes } = useStyles()
     const shouldDisplay = useRef(useShouldDisplay || (() => true)).current() && !hide
 
     if (!shouldDisplay) return null

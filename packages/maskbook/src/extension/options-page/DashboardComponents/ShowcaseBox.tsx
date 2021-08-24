@@ -1,10 +1,11 @@
 import { useRef } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { Paper, Typography, makeStyles, TypographyProps } from '@material-ui/core'
+import { Paper, Typography, TypographyProps } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useSnackbar } from '@masknet/theme'
 import { selectElementContents, useI18N, useMatchXS } from '../../../utils'
 
-const useStyle = makeStyles((theme) => ({
+const useStyle = makeStyles()((theme) => ({
     title: {
         fontSize: 12,
         lineHeight: 1.75,
@@ -38,7 +39,7 @@ export interface ShowcaseBoxProps {
 
 export default function ShowcaseBox(props: ShowcaseBoxProps) {
     const { t } = useI18N()
-    const classes = useStyle()
+    const { classes } = useStyle()
     const { title, children, TitleProps, ContentProps } = props
     const ref = useRef<HTMLDivElement>(null)
     const xsMatch = useMatchXS()

@@ -6,17 +6,16 @@ import {
     Card,
     Checkbox,
     FormControlLabel,
-    makeStyles,
     useTheme,
     TextField,
     Typography,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import classNames from 'classnames'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { WALLET_OR_PERSONA_NAME_MAX_LEN, checkInputLengthExceed, useI18N } from '../../../../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     top: {
         display: 'flex',
         alignItems: 'center',
@@ -80,7 +79,7 @@ export const StepNameAndWords: FC<StepStepNameAndWordsProps> = ({
     onRefreshWords,
     onSubmit,
 }) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const theme = useTheme()
     const { t } = useI18N()
     const [confirmed, setConfirmed] = useState(false)
@@ -143,9 +142,9 @@ export const StepNameAndWords: FC<StepStepNameAndWordsProps> = ({
                 }
             />
             <Box className={classes.bottom}>
-                <ActionButton variant="contained" fullWidth disabled={!name || !confirmed} onClick={onSubmit}>
+                <Button variant="contained" fullWidth disabled={!name || !confirmed} onClick={onSubmit}>
                     {t('plugin_wallet_setup_create')}
-                </ActionButton>
+                </Button>
             </Box>
             <Box className={classes.warning}>
                 <Alert severity="info" color="warning">

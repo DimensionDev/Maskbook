@@ -13,6 +13,11 @@ export function isChainIdMainnet(chainId: ChainId) {
     return chainDetailed?.network === 'mainnet'
 }
 
+export function isEIP1159Supported(chainId: ChainId) {
+    const features = getChainDetailed(chainId)?.features ?? []
+    return features.includes('EIP1159')
+}
+
 export function getChainDetailed(chainId = ChainId.Mainnet) {
     return CHAINS.find((x) => x.chainId === chainId)
 }
@@ -44,6 +49,11 @@ export function getChainRPC(chainId: ChainId, seed: number) {
 export function getChainName(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     return chainDetailed?.name ?? 'Unknown Network'
+}
+
+export function getChainShortName(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    return chainDetailed?.shortName ?? 'Unknown Network'
 }
 
 export function getChainFullName(chainId: ChainId) {

@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { injectCommentBoxDefaultFactory } from '../../../social-network/defaults'
 import { pasteToCommentBoxMinds } from '../automation/pasteToCommentBoxMinds'
 
@@ -10,7 +10,7 @@ export default function injectCommentBoxAtMinds() {
                 classes,
             },
         }),
-        makeStyles((theme) => ({
+        makeStyles()((theme) => ({
             root: {
                 fontSize: 16,
                 background: 'transparent',

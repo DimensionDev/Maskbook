@@ -13,7 +13,7 @@ export namespace Plugin {
      * ```ts
      * const loader = {
      *     load: () => import('./code'),
-     *     hotModuleReload: hot => import.meta.webpackHot?.accept('./code', () => hot(import('./code')))
+     *     hotModuleReload: hot => import.meta.webpackHot && import.meta.webpackHot.accept('./code', () => hot(import('./code')))
      * }
      * ```
      *
@@ -32,7 +32,7 @@ export namespace Plugin {
         /**
          * This provides the functionality for hot module reload on the plugin.
          * When the callback is called, the old instance of the plugin will be unloaded, then the new instance will be init.
-         * @example hotModuleReload: hot => import.meta.webpackHot?.accept('./path', () => hot(import('./path')))
+         * @example hotModuleReload: hot => import.meta.webpackHot && import.meta.webpackHot.accept('./path', () => hot(import('./path')))
          */
         hotModuleReload(onHot: (hot: Promise<{ default: DeferredModule }>) => void): void
     }
@@ -274,7 +274,6 @@ export namespace Plugin.Dashboard {
 /** This part runs in the background page */
 export namespace Plugin.Worker {
     export interface Definition extends Shared.DefinitionDeferred {
-        /** TODO: this functionality has not be done yet. */
         backup?: BackupHandler
     }
     export interface BackupHandler {

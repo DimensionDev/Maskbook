@@ -5,7 +5,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import { useContext } from 'react'
 import { ErrorBoundaryBuildInfoContext, ErrorBoundaryError } from './context'
-import { useMaskThemeI18N } from '../../../locales'
+import { useSharedI18N } from '../../../locales'
 
 export type CrashUIProps = ErrorBoundaryError & {
     /** Type of the Error */
@@ -20,7 +20,7 @@ export type CrashUIProps = ErrorBoundaryError & {
 }
 export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
     const context = useContext(ErrorBoundaryBuildInfoContext)
-    const t = useMaskThemeI18N()
+    const t = useSharedI18N()
 
     const [showStack, setShowStack] = useState(false)
 

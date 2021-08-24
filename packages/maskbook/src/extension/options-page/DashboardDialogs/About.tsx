@@ -1,4 +1,5 @@
-import { Avatar, IconButton, Link, makeStyles, SvgIcon, SvgIconProps, Typography } from '@material-ui/core'
+import { Avatar, IconButton, Link, SvgIcon, SvgIconProps, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import FacebookIcon from '@material-ui/icons/Facebook'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import TelegramIcon from '@material-ui/icons/Telegram'
@@ -6,7 +7,7 @@ import TwitterIcon from '@material-ui/icons/Twitter'
 import { useI18N } from '../../../utils'
 import { DashboardDialogCore, WrappedDialogProps } from './Base'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     wrapper: {
         width: 580,
         height: 660,
@@ -90,7 +91,7 @@ const brands: Record<string, React.ReactNode> = {
 
 export function DashboardAboutDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
     const makeTitle = () => {
         if (process.env.NODE_ENV === 'production') {

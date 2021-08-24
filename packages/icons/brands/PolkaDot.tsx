@@ -1,7 +1,9 @@
 import { createIcon } from '../utils'
-export const PolkaDotIcon = createIcon(
+import type { SvgIcon } from '@material-ui/core'
+
+export const PolkaDotIcon: typeof SvgIcon = createIcon(
     'PolkaDot',
-    <>
+    <g>
         <path
             d="M0 12C0 5.373 5.373 0 12 0h24c6.627 0 12 5.373 12 12v24c0 6.627-5.373 12-12 12H12C5.373 48 0 42.627 0 36V12z"
             fill="#fff"
@@ -11,6 +13,6 @@ export const PolkaDotIcon = createIcon(
             fill="#231F20"
         />
         <circle cx="29" cy="37" r="3" fill="#D32F79" />
-    </>,
+    </g>,
     '0 0 48 48',
 )

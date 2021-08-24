@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { useDashboardI18N } from '../../../../locales'
-import { Box, Button, DialogActions, DialogContent, makeStyles, Stack, Typography } from '@material-ui/core'
+import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 import { TokenIcon } from '@masknet/shared'
 import { useFormContext } from 'react-hook-form'
@@ -12,7 +13,7 @@ export interface AddTokenConfirmUIProps {
     balance?: string
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     actions: {
         padding: theme.spacing(1, 5, 6.75, 5),
         display: 'grid',
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const AddTokenConfirmUI = memo<AddTokenConfirmUIProps>(({ token, balance, onBack, onConfirm }) => {
     const t = useDashboardI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { getValues } = useFormContext()
 
     return (

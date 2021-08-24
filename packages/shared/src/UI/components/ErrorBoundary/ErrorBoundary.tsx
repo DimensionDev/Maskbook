@@ -17,8 +17,8 @@ export class ErrorBoundary extends Component<Partial<CrashUIProps>> {
     static getDerivedStateFromError(error: unknown) {
         return { error }
     }
-    state: { error: Error | null } = { error: null }
-    render() {
+    override state: { error: Error | null } = { error: null }
+    override render() {
         if (!this.state.error) return <>{this.props.children}</>
         return (
             <CrashUI
@@ -37,7 +37,7 @@ export class ErrorBoundary extends Component<Partial<CrashUIProps>> {
             stack = String(this.state.error!.stack!) || '<stack not available>'
             stack = stack.replace(/webpack-internal:.+node_modules\//g, 'npm:')
             // remove webpack-internal:///
-            stack = stack.replace(/webpack-internal:\/\/\//g, '')
+            stack = stack.replace(/webpack-internal:\/{3}/g, '')
         } catch {}
         try {
             type = String(this.state.error!.name!) || '<type not available>'

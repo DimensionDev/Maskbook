@@ -5,7 +5,8 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
 import { currentPluginEnabledStatus } from '../settings/settings'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { MaskMessage } from '../utils'
+// Do not export from '../utils/' to prevent initialization failure
+import { MaskMessage } from '../utils/messages'
 import i18nNextInstance from '../utils/i18n-next'
 import { createI18NBundle } from '@masknet/shared'
 

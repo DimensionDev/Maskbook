@@ -1,7 +1,7 @@
-import type { SocialNetworkUI } from '../../index'
+import { activatedSocialNetworkUI, SocialNetworkUI } from '../../index'
 import { untilDocumentReady } from '../../../utils/dom'
 import { MaskMessage } from '../../../utils/messages'
-import { downloadUrl, pasteImageToActiveElements } from '../../../utils/utils'
+import { delay, downloadUrl, pasteImageToActiveElements } from '../../../utils/utils'
 
 export function pasteImageToCompositionDefault(hasSucceed: () => Promise<boolean> | boolean) {
     return async function (
@@ -10,6 +10,12 @@ export function pasteImageToCompositionDefault(hasSucceed: () => Promise<boolean
     ) {
         const image = typeof url === 'string' ? await downloadUrl(url) : url
         await untilDocumentReady()
+        if (relatedTextPayload) {
+            activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.(relatedTextPayload, {
+                recover: false,
+            })
+            await delay(500)
+        }
         await pasteImageToActiveElements(image)
 
         if (await hasSucceed()) return

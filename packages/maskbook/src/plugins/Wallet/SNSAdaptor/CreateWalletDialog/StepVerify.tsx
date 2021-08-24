@@ -1,10 +1,10 @@
 import type { FC } from 'react'
-import { Box, Card, makeStyles, TextField, Typography } from '@material-ui/core'
+import { Box, Button, Card, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     bottom: {
         display: 'flex',
         alignItems: 'center',
@@ -51,7 +51,7 @@ export const StepVerify: FC<StepVerifyProps> = ({
     onUpdateAnswerWords,
     onSubmit,
 }) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     return (
         <Box>
@@ -73,7 +73,7 @@ export const StepVerify: FC<StepVerifyProps> = ({
                 ))}
             </Card>
             <Box className={classes.bottom}>
-                <ActionButton
+                <Button
                     fullWidth
                     color="primary"
                     variant="text"
@@ -82,10 +82,10 @@ export const StepVerify: FC<StepVerifyProps> = ({
                         marginRight: 16,
                     }}>
                     {t('plugin_wallet_setup_back')}
-                </ActionButton>
-                <ActionButton variant="contained" fullWidth disabled={!wordsMatched} onClick={onSubmit}>
+                </Button>
+                <Button variant="contained" fullWidth disabled={!wordsMatched} onClick={onSubmit}>
                     {t('plugin_wallet_setup_verify')}
-                </ActionButton>
+                </Button>
             </Box>
         </Box>
     )

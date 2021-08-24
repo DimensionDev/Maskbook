@@ -1,17 +1,17 @@
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { MetaMaskIcon } from '../../resources/MetaMaskIcon'
 import { WalletConnectIcon } from '../../resources/WalletConnectIcon'
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ProviderType } from '@masknet/web3-shared'
 import { useStylesExtends } from '@masknet/shared'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()({
     icon: {
         fontSize: 40,
         width: 40,
         height: 40,
     },
-}))
+})
 
 export interface ProviderIconProps extends withClasses<'icon'> {
     size?: number

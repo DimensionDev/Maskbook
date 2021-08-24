@@ -9,7 +9,8 @@ import {
     useAccount,
     useTokenBalance,
 } from '@masknet/web3-shared'
-import { DialogContent, Grid, makeStyles, Typography } from '@material-ui/core'
+import { DialogContent, Grid, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -28,9 +29,9 @@ import { ADDRESS_ZERO } from '../constants'
 import { useDepositCallback } from '../hooks/useDepositCallback'
 import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
-import { calculateOdds } from '../utils'
+import { calculateOdds, getPrizePeriod } from '../utils'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         margin: theme.spacing(2, 0),
         backgroundColor: '#1a083a',
@@ -79,8 +80,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function DepositDialog() {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const [id] = useState(uuid())
     const [pool, setPool] = useState<Pool>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
@@ -244,6 +244,8 @@ export function DepositDialog() {
     }, [account, amount.toFixed(), token, tokenBalance])
     //#endregion
 
+    const prizePeriodSeconds = Number.parseInt(pool?.config.prizePeriodSeconds ?? '', 10)
+
     if (!token || !pool) return null
 
     return (
@@ -269,17 +271,17 @@ export function DepositDialog() {
                             }}
                         />
                     </form>
-                    {isZero(tokenBalance) ? (
-                        <ActionButton
-                            className={classes.button}
-                            fullWidth
-                            onClick={openSwap}
-                            variant="contained"
-                            loading={loadingTokenBalance}>
-                            {t('plugin_pooltogether_buy', { symbol: token.symbol })}
-                        </ActionButton>
-                    ) : (
-                        <EthereumWalletConnectedBoundary>
+                    <EthereumWalletConnectedBoundary>
+                        {isZero(tokenBalance) ? (
+                            <ActionButton
+                                className={classes.button}
+                                fullWidth
+                                onClick={openSwap}
+                                variant="contained"
+                                loading={loadingTokenBalance}>
+                                {t('plugin_pooltogether_buy', { symbol: token.symbol })}
+                            </ActionButton>
+                        ) : (
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
                                 spender={pool.prizePool.address}
@@ -294,8 +296,8 @@ export function DepositDialog() {
                                     {validationMessage || t('plugin_pooltogether_deposit')}
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>
-                        </EthereumWalletConnectedBoundary>
-                    )}
+                        )}
+                    </EthereumWalletConnectedBoundary>
                     {odds ? (
                         <Grid container direction="column" className={classes.odds}>
                             <Grid item>
@@ -305,7 +307,10 @@ export function DepositDialog() {
                             </Grid>
                             <Grid item>
                                 <Typography variant="body2" fontWeight="fontWeightBold" className={classes.oddsValue}>
-                                    {t('plugin_pooltogether_odds_value', { value: odds.toLocaleString() })}
+                                    {t('plugin_pooltogether_odds_value', {
+                                        value: odds.toLocaleString(),
+                                        period: getPrizePeriod(t, prizePeriodSeconds),
+                                    })}
                                 </Typography>
                             </Grid>
                         </Grid>

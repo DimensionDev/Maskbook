@@ -16,7 +16,11 @@ export function checkPermissionApiUsability(type?: typeof q[number]) {
     return r as Required<typeof r>
 }
 
-export function useQueryNavigatorPermission(needRequest: boolean, name: PermissionName): PermissionState {
+// TODO: 'clipboard-write' is not listed in https://w3c.github.io/permissions/#enumdef-permissionname
+// We should make sure if those code are still working.
+export type Permissions = PermissionName | 'camera' | 'clipboard-write'
+
+export function useQueryNavigatorPermission(needRequest: boolean, name: Permissions): PermissionState {
     const [permission, updatePermission] = useState<PermissionState>('prompt')
 
     useEffect(() => {
@@ -30,6 +34,7 @@ export function useQueryNavigatorPermission(needRequest: boolean, name: Permissi
 
         if (checkPermissionApiUsability('query')) {
             navigator.permissions
+                // @ts-expect-error https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1029#issuecomment-898868275
                 .query({ name })
                 .then((p) => {
                     permissionStatus = p
@@ -43,6 +48,7 @@ export function useQueryNavigatorPermission(needRequest: boolean, name: Permissi
                 })
         } else if (checkPermissionApiUsability('request')) {
             navigator.permissions
+                // @ts-expect-error https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1029#issuecomment-898868275
                 .request({ name })
                 .then((p) => {
                     updatePermission(p.state)

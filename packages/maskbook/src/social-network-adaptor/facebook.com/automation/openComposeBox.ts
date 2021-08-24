@@ -1,5 +1,5 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessage, CompositionRequest } from '../../../utils/messages'
 import { i18n } from '../../../utils/i18n-next'
 import { delay } from '../../../utils/utils'
 import { untilDocumentReady } from '../../../utils/dom'
@@ -37,10 +37,7 @@ const nativeComposeDialogIndicatorSelector = () =>
 
 export async function taskOpenComposeBoxFacebook(
     content: string | TypedMessage,
-    options?: {
-        onlyMySelf?: boolean
-        shareToEveryOne?: boolean
-    },
+    options?: CompositionRequest['options'],
 ) {
     await untilDocumentReady()
     await delay(800)
@@ -60,7 +57,7 @@ export async function taskOpenComposeBoxFacebook(
     }
 
     await delay(800)
-    MaskMessage.events.compositionUpdated.sendToLocal({
+    MaskMessage.events.requestComposition.sendToLocal({
         reason: 'popup',
         open: true,
         content: typeof content === 'string' ? makeTypedMessageText(content) : content,

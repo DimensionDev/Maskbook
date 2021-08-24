@@ -1,14 +1,15 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/constants'
 import { formatBalance } from '@masknet/web3-shared'
-import { CircularProgress, Grid, Link, makeStyles, Typography } from '@material-ui/core'
+import { CircularProgress, Grid, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { COMMINUTY_URL } from '../constants'
 import { useAccountBalance } from '../hooks/useAccountBalances'
 import type { Pool } from '../types'
 import { AccountPool } from './AccountPool'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         boxShadow: 'none',
         border: `solid 1px ${theme.palette.divider}`,
@@ -63,8 +64,7 @@ export function Account(props: AccountProps) {
     const { pools } = props
 
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const { value: balances = [], loading, retry, error } = useAccountBalance(pools)
 
     if (loading) {

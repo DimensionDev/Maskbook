@@ -1,30 +1,38 @@
 import * as bip39 from 'bip39'
-import { queryProfilesWithQuery, personaRecordToPersona, storeAvatar, queryProfile } from '../../database'
-import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
-import type { Profile, Persona } from '../../database/Persona/types'
+import { personaRecordToPersona, queryPersona, queryProfile, queryProfilesWithQuery, storeAvatar } from '../../database'
 import {
-    queryPersonaDB,
-    deleteProfileDB,
-    queryPersonasDB,
-    queryProfilesDB,
-    createProfileDB,
+    ECKeyIdentifier,
+    ECKeyIdentifierFromJsonWebKey,
+    Identifier,
+    PersonaIdentifier,
+    ProfileIdentifier,
+} from '../../database/type'
+import type { Persona, Profile } from '../../database/Persona/types'
+import {
     attachProfileDB,
+    consistentPersonaDBWriteAccess,
+    createOrUpdateProfileDB,
+    createProfileDB,
+    deleteProfileDB,
     LinkedProfileDetails,
     ProfileRecord,
-    createOrUpdateProfileDB,
-    consistentPersonaDBWriteAccess,
+    queryPersonaDB,
+    queryPersonasDB,
+    queryProfilesDB,
 } from '../../database/Persona/Persona.db'
-import { queryPersona } from '../../database'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
-import { decodeText, decodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
+import { decodeArrayBuffer, decodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { PersonaInformation, ProfileInformation } from '@masknet/shared'
+import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+
 assertEnvironment(Environment.ManifestBackground)
 
+export { validateMnemonic } from '../../utils/mnemonic-code'
 export { storeAvatar, queryAvatarDataURL } from '../../database'
 
 //#region Profile
@@ -67,7 +75,20 @@ export function removeProfile(id: ProfileIdentifier): Promise<void> {
 //#endregion
 
 //#region Persona
-export { queryPersona, createPersonaByMnemonic, renamePersona } from '../../database'
+export {
+    queryPersona,
+    createPersonaByMnemonic,
+    createPersonaByMnemonicV2,
+    renamePersona,
+    queryPersonaByPrivateKey,
+    queryPrivateKey,
+} from '../../database'
+
+export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
+    const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
+    const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey, 'private')
+    return queryPersonaDB(identifier)
+}
 export async function queryPersonas(identifier?: PersonaIdentifier, requirePrivateKey = false): Promise<Persona[]> {
     if (typeof identifier === 'undefined')
         return (await queryPersonasDB((k) => (requirePrivateKey ? !!k.privateKey : true))).map(personaRecordToPersona)
@@ -176,3 +197,5 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
         // the profile already exists
     }
 }
+
+export * from './IdentityServices/sign'

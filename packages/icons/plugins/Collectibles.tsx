@@ -3,7 +3,7 @@ import type { SvgIcon } from '@material-ui/core'
 
 export const CollectiblesIcon: typeof SvgIcon = createIcon(
     'Collectibles',
-    <>
+    <g>
         <g filter="url(#filter0_b)">
             <path d="M13.4 25.2a.933.933 0 101.867 0 .933.933 0 00-1.867 0z" fill="#fff" />
         </g>
@@ -226,6 +226,6 @@ export const CollectiblesIcon: typeof SvgIcon = createIcon(
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
         </defs>
-    </>,
+    </g>,
     '0 0 28 28',
 )

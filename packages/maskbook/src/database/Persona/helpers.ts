@@ -21,13 +21,18 @@ import {
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
 import { queryAvatarDataURL } from '../helpers/avatar'
-import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import {
+    generate_ECDH_256k1_KeyPair_ByMnemonicWord,
+    generate_ECDH_256k1_KeyPair_ByMnemonicWord_V2,
+} from '../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import type {
     EC_Public_JsonWebKey,
     AESJsonWebKey,
     EC_Private_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
+import { decompressSecp256k1Key } from '../../utils'
+
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
     const persona = rec.linkedPersona
@@ -144,6 +149,12 @@ export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
 }
 
+export async function queryPersonaByPrivateKey(privateKeyString: string) {
+    const privateKey = decompressSecp256k1Key(privateKeyString, 'private')
+    const identifier = ECKeyIdentifierFromJsonWebKey(privateKey, 'private')
+    return queryPersona(identifier)
+}
+
 export function queryPersonaRecord(i: ProfileIdentifier | PersonaIdentifier): Promise<PersonaRecord | null> {
     return i instanceof ProfileIdentifier ? queryPersonaByProfileDB(i) : queryPersonaDB(i)
 }
@@ -164,6 +175,23 @@ export async function createPersonaByMnemonic(
     password: string,
 ): Promise<PersonaIdentifier> {
     const { key, mnemonicRecord: mnemonic } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
+    const { privateKey, publicKey } = key
+    const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
+    return createPersonaByJsonWebKey({
+        privateKey,
+        publicKey,
+        localKey,
+        mnemonic,
+        nickname,
+        uninitialized: true,
+    })
+}
+
+export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: string | undefined, password: string) {
+    const { key, mnemonicRecord: mnemonic } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord_V2(
+        mnemonicWord,
+        password,
+    )
     const { privateKey, publicKey } = key
     const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
     return createPersonaByJsonWebKey({
@@ -239,4 +267,9 @@ export async function queryLocalKey(i: ProfileIdentifier | PersonaIdentifier): P
     } else {
         return (await queryPersonaDB(i))?.localKey ?? null
     }
+}
+function cover_ECDH_256k1_KeyPair_ByMnemonicWord(
+    password: string,
+): { key: any; mnemonicRecord: any } | PromiseLike<{ key: any; mnemonicRecord: any }> {
+    throw new Error('Function not implemented.')
 }

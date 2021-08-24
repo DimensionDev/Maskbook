@@ -1,9 +1,9 @@
-import { Button, makeStyles, TextField } from '@material-ui/core'
+import { Button, TextField } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import {
-    ERC1155TokenAssetDetailed,
-    ERC721TokenAssetDetailed,
+    ERC721TokenDetailed,
     formatEthereumAddress,
     TransactionStateType,
     useTokenTransferCallback,
@@ -16,7 +16,7 @@ import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 
-const useTransferDialogStylesNFT = makeStyles((theme) => ({
+const useTransferDialogStylesNFT = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(1),
     },
@@ -30,22 +30,20 @@ const useTransferDialogStylesNFT = makeStyles((theme) => ({
     },
 }))
 
-export function DashboardWalletTransferDialogNFT(
-    props: WrappedDialogProps<{ token: ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed }>,
-) {
+export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ token: ERC721TokenDetailed }>) {
     const { token } = props.ComponentProps!
     const { onClose } = props
 
     const { t } = useI18N()
-    const classes = useTransferDialogStylesNFT()
+    const { classes } = useTransferDialogStylesNFT()
 
     const [address, setAddress] = useState('')
     const { collectiblesRetry } = useContext(CollectibleContext)
 
     //#region transfer tokens
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
-        token.type,
-        token.address,
+        token.contractDetailed.type,
+        token.contractDetailed.address,
         token.tokenId,
         address,
     )
@@ -76,7 +74,7 @@ export function DashboardWalletTransferDialogNFT(
         setTransactionDialog({
             open: true,
             state: transferState,
-            summary: `Transfer ${token.name} to ${formatEthereumAddress(address, 4)}.`,
+            summary: `Transfer ${token.info.name} to ${formatEthereumAddress(address, 4)}.`,
         })
     }, [transferState /* update tx dialog only if state changed */])
     //#endregion
@@ -94,13 +92,13 @@ export function DashboardWalletTransferDialogNFT(
             <DashboardDialogWrapper
                 primary={t('wallet_transfer_title')}
                 icon={
-                    token.asset?.image ? (
+                    token.info.image ? (
                         <Image
                             component="img"
                             width={160}
                             height={220}
                             style={{ objectFit: 'contain' }}
-                            src={token.asset.image}
+                            src={token.info.image}
                         />
                     ) : (
                         <MaskbookIconOutlined className={classes.placeholder} />

@@ -1,13 +1,14 @@
 import { forwardRef } from 'react'
 import { useSnackbar, SnackbarProvider } from '@masknet/theme'
-import { makeStyles, useTheme } from '@material-ui/core'
+import { useTheme } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()({
     root: {
         width: 795,
         height: 48,
     },
-}))
+})
 
 export interface DashboardSnackbarProps {
     key: string | number
@@ -18,7 +19,7 @@ export interface DashboardSnackbarProps {
 export const DashboardSnackbar = forwardRef<HTMLDivElement, DashboardSnackbarProps>(
     (props: DashboardSnackbarProps, ref) => {
         const { key, message } = props
-        const classes = useStyles()
+        const { classes } = useStyles()
         const { closeSnackbar } = useSnackbar()
         const theme = useTheme()
         return (

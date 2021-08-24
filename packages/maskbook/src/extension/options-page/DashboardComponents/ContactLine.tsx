@@ -1,5 +1,5 @@
 import { Typography, IconButton, MenuItem, ListItem, ListItemTypeMap } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import type { Profile } from '../../../database'
 import { Avatar, useMenu, useI18N, useMatchXS } from '../../../utils'
@@ -7,7 +7,7 @@ import { useModal } from '../DashboardDialogs/Base'
 import { DashboardContactDialog, DashboardContactDeleteConfirmDialog } from '../DashboardDialogs/Contact'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     line: {
         display: 'flex',
         alignItems: 'center',
@@ -55,7 +55,7 @@ interface ContactLineProps extends Partial<DefaultComponentProps<ListItemTypeMap
 
 export function ContactLine(props: ContactLineProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { contact, onUpdated, onDeleted, ...rest } = props
     const [contactDialog, openContactDialog] = useModal(DashboardContactDialog, { contact, onUpdated })
     const xsMatched = useMatchXS()

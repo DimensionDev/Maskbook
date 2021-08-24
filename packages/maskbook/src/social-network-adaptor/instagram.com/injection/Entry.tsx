@@ -1,8 +1,9 @@
 import { Fab, experimentalStyled as styled } from '@material-ui/core'
 import { Create } from '@material-ui/icons'
-import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
+import { Composition } from '../../../components/CompositionDialog/Composition'
 import { useState, useEffect } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { MaskMessage } from '../../../utils'
 
 const Container = styled('div')`
     position: fixed;
@@ -11,7 +12,6 @@ const Container = styled('div')`
 `
 const appearsWith = '[data-testid="new-post-button"]'
 export function Entry() {
-    const open = useState(false)
     const [display, setDisplay] = useState(!!document.querySelector(appearsWith))
     useEffect(() => {
         const watch = new MutationObserverWatcher(
@@ -27,11 +27,15 @@ export function Entry() {
     if (!display) return null
     return (
         <Container>
-            <Fab variant="extended" onClick={() => open[1](true)}>
+            <Fab
+                variant="extended"
+                onClick={() => {
+                    MaskMessage.events.requestComposition.sendToLocal({ open: true, reason: 'timeline' })
+                }}>
                 <Create />
                 Create with Mask
             </Fab>
-            <PostDialog open={open} />
+            <Composition type="timeline" />
         </Container>
     )
 }

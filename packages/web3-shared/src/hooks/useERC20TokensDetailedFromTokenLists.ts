@@ -1,72 +1,61 @@
 import { useMemo } from 'react'
-import { useAsync } from 'react-use'
+import { useAsyncRetry } from 'react-use'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import Fuse from 'fuse.js'
 import { EthereumAddress } from 'wallet.ts'
 import { useWeb3Context } from '../context'
 import { useChainId } from './useChainId'
 import { currySameAddress } from '../utils'
-import { EthereumTokenType } from '../types'
-import { useERC20TokenDetailed } from './useERC20TokenDetailed'
+import type { ERC20TokenDetailed } from '../types'
 
-export enum TokenListsState {
-    READY = 0,
-    LOADING_TOKEN_LISTS = 1,
-    LOADING_SEARCHED_TOKEN = 2,
-}
-
-export function useERC20TokensDetailedFromTokenLists(lists?: string[], keyword: string = '') {
+export function useERC20TokensDetailedFromTokenLists(
+    lists?: string[],
+    keyword: string = '',
+    additionalTokens: ERC20TokenDetailed[] = [],
+): AsyncStateRetry<ERC20TokenDetailed[]> {
     //#region fetch token lists
     const chainId = useChainId()
     const { fetchERC20TokensFromTokenLists } = useWeb3Context()
-    const { value: allTokens = [], loading: loadingAllTokens } = useAsync(
+    const { value: tokensFromList = [], ...asyncResult } = useAsyncRetry(
         async () => (!lists || lists.length === 0 ? [] : fetchERC20TokensFromTokenLists(lists, chainId)),
         [chainId, lists?.sort().join()],
     )
     //#endregion
-
     //#region fuse
     const fuse = useMemo(
         () =>
-            new Fuse(allTokens, {
+            new Fuse([...additionalTokens, ...tokensFromList], {
                 shouldSort: true,
                 threshold: 0.45,
-                minMatchCharLength: 1,
+                minMatchCharLength: 3,
                 keys: [
                     { name: 'name', weight: 0.5 },
-                    { name: 'symbol', weight: 0.5 },
+                    { name: 'symbol', weight: 1 },
                 ],
             }),
-        [allTokens],
+        [tokensFromList, additionalTokens],
     )
     //#endregion
 
     //#region create searched tokens
     const searchedTokens = useMemo(() => {
-        if (!keyword) return allTokens
+        const allToken = [...additionalTokens, ...tokensFromList]
+        if (!keyword) return allToken
+
         return [
-            ...(EthereumAddress.isValid(keyword) ? allTokens.filter(currySameAddress(keyword)) : []),
+            ...(EthereumAddress.isValid(keyword) ? allToken.filter(currySameAddress(keyword)) : []),
             ...fuse.search(keyword).map((x) => x.item),
         ]
-    }, [keyword, fuse, allTokens])
+    }, [keyword, fuse, tokensFromList, additionalTokens])
     //#endregion
 
-    //#region add token by address
-    const matchedToken = useMemo(() => {
-        if (!keyword || !EthereumAddress.isValid(keyword) || searchedTokens.length) return
+    if (!asyncResult.error)
         return {
-            type: EthereumTokenType.ERC20,
-            address: keyword,
+            ...asyncResult,
+            value: searchedTokens,
         }
-    }, [keyword, searchedTokens.length])
-    const { value: searchedToken, loading: loadingSearchedToken } = useERC20TokenDetailed(matchedToken?.address ?? '')
-    //#endregion
-
     return {
-        state: loadingAllTokens
-            ? TokenListsState.LOADING_TOKEN_LISTS
-            : loadingSearchedToken
-            ? TokenListsState.LOADING_SEARCHED_TOKEN
-            : TokenListsState.READY,
-        tokensDetailed: searchedTokens.length ? searchedTokens : searchedToken ? [searchedToken] : [],
+        ...asyncResult,
+        value: undefined,
     }
 }

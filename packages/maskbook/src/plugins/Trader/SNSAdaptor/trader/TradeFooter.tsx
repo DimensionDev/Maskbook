@@ -1,5 +1,6 @@
 import type { FC } from 'react'
-import { CardActions, Link, makeStyles, Typography } from '@material-ui/core'
+import { CardActions, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { MaskbookTextIcon } from '../../../../resources/MaskbookIcon'
@@ -10,7 +11,7 @@ import { TradeProviderIcon } from './TradeProviderIcon'
 import { FootnoteMenu, FootnoteMenuOption } from './FootnoteMenu'
 import { useI18N } from '../../../../utils'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         footer: {
             justifyContent: 'space-between',

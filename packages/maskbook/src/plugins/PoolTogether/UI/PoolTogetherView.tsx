@@ -1,18 +1,8 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/constants'
 import { usePoolTogetherConstants } from '@masknet/web3-shared'
-import {
-    Card,
-    CardActions,
-    CardContent,
-    CircularProgress,
-    Link,
-    makeStyles,
-    Paper,
-    Tab,
-    Tabs,
-    Typography,
-} from '@material-ui/core'
+import { Card, CardActions, CardContent, CircularProgress, Link, Paper, Tab, Tabs, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
@@ -23,7 +13,7 @@ import type { Pool } from '../types'
 import { Account } from './Account'
 import { PoolsView } from './PoolsView'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         // width: '100%',
         boxShadow: 'none',
@@ -118,7 +108,7 @@ interface PoolTogetherViewProps {}
 
 export function PoolTogetherView(props: PoolTogetherViewProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [pools, setPools] = useState<Pool[]>([])
 
     //#region pools

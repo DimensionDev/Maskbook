@@ -1,20 +1,12 @@
-import {
-    Avatar,
-    ListItem,
-    ListItemAvatar,
-    ListItemIcon,
-    ListItemText,
-    ListTypeMap,
-    makeStyles,
-    Theme,
-} from '@material-ui/core'
+import { Avatar, ListItem, ListItemAvatar, ListItemIcon, ListItemText, ListTypeMap } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import CheckIcon from '@material-ui/icons/Check'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import { formatEthereumAddress, useBlockie, Wallet } from '@masknet/web3-shared'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '@masknet/shared'
 
-const useStyle = makeStyles((theme: Theme) => ({
+const useStyle = makeStyles()((theme) => ({
     root: {
         display: 'inline-grid',
     },

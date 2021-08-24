@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSnackbar } from '@masknet/theme'
-import { Card, CardActions, CardContent, makeStyles } from '@material-ui/core'
+import { Card, CardActions, CardContent } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
     isLessThan,
     isNative,
     isZero,
-    TokenWatched,
+    FungibleTokenWatched,
     useAccount,
 } from '@masknet/web3-shared'
 import formatDateTime from 'date-fns/format'
@@ -20,32 +21,29 @@ import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
 
-const useStyles = makeStyles((theme) => {
-    return {
-        content: {},
-        footer: {
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: theme.spacing(0, 2, 2),
+const useStyles = makeStyles()((theme) => ({
+    footer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        padding: theme.spacing(0, 2, 2),
+    },
+    panel: {
+        marginTop: theme.spacing(2),
+        '&:first-child': {
+            marginTop: 0,
         },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
-        },
-        label: {},
-        button: {
-            marginTop: theme.spacing(1.5),
-        },
-    }
-})
+    },
+    label: {},
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
+}))
 
 export interface ListingByHighestBidCardProps {
     open: boolean
     onClose: () => void
     asset?: ReturnType<typeof useAsset>
-    tokenWatched: TokenWatched
+    tokenWatched: FungibleTokenWatched
     paymentTokens: FungibleTokenDetailed[]
 }
 
@@ -54,7 +52,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const { amount, token, balance, setAmount, setToken } = tokenWatched
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
     const account = useAccount()
