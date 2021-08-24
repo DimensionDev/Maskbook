@@ -17,7 +17,7 @@ import RefreshIcon from '@material-ui/icons/Refresh'
 import { memo, useState } from 'react'
 import { some } from 'lodash-es'
 import { useSnackbar } from '@masknet/theme'
-import { ButtonGroup } from '../../../components/RegisterFrame/ButtonGroup'
+import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
 
 enum CreateWalletStep {
     NameAndWords = 0,
@@ -61,29 +61,23 @@ export const MnemonicRevealForm = memo(() => {
                         <Stack
                             direction="row"
                             justifyContent="flex-end"
-                            sx={{ marginBottom: (theme) => theme.spacing(4) }}>
+                            sx={{ marginBottom: (theme) => theme.spacing(2) }}>
                             <Button variant="text" startIcon={<RefreshIcon />} onClick={refreshCallback}>
                                 {t.refresh()}
                             </Button>
                         </Stack>
                         <MnemonicReveal words={words} />
-                        <ButtonGroup>
-                            <Button
-                                variant="rounded"
-                                color="secondary"
-                                onClick={() => navigate(RoutePaths.Setup, { replace: true })}>
-                                {t.back()}
-                            </Button>
+                        <ButtonContainer>
                             <Button variant="rounded" color="primary" onClick={() => setStep(CreateWalletStep.Verify)}>
                                 {t.verify()}
                             </Button>
-                        </ButtonGroup>
+                        </ButtonContainer>
                     </>
                 )}
                 {step === CreateWalletStep.Verify && (
                     <>
                         <DesktopMnemonicConfirm indexes={indexes} puzzleWords={puzzleWords} onChange={answerCallback} />
-                        <ButtonGroup>
+                        <ButtonContainer>
                             <Button variant="rounded" color="secondary" onClick={onBack}>
                                 {t.back()}
                             </Button>
@@ -95,7 +89,7 @@ export const MnemonicRevealForm = memo(() => {
                                 onClick={onSubmit}>
                                 {t.confirm()}
                             </Button>
-                        </ButtonGroup>
+                        </ButtonContainer>
                     </>
                 )}
                 <MaskAlert description={t.create_account_identity_warning()} type="error" />
