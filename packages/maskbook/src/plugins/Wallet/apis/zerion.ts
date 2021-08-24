@@ -20,7 +20,7 @@ function createSocket() {
         query: {
             api_token: ZERION_TOKEN,
         },
-        // disable the auto reconection
+        // disable the auto reconnection
         reconnection: false,
     }))
 }
