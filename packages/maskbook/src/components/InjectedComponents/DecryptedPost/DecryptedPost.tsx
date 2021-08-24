@@ -157,7 +157,6 @@ export function DecryptPost(props: DecryptPostProps) {
         (deconstructedPayload.val as Payload)?.encryptedText,
         postBy.toText(),
         postMetadataImages.join(),
-        sharedPublic,
         currentIdentity.toText(),
     ])
 
