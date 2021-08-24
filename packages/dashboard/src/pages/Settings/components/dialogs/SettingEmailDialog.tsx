@@ -45,12 +45,14 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
                 account: email,
                 type: 'email',
                 code,
+            }).catch((err) => {
+                if (err.status === 400) {
+                    // incorrect code
+                    setInvalidCode(true)
+                }
             })
 
-            if (result.message) {
-                // incorrect code
-                setInvalidCode(true)
-            } else {
+            if (result) {
                 if (step === 0) {
                     // original email verified
                     setEmail('')
