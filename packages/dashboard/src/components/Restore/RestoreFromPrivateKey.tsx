@@ -3,7 +3,7 @@ import { MaskTextField } from '@masknet/theme'
 import { Box, Button } from '@material-ui/core'
 import { useDashboardI18N } from '../../locales'
 import { MaskAlert } from '../MaskAlert'
-import { ButtonGroup } from '../RegisterFrame/ButtonGroup'
+import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Services } from '../../API'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
@@ -67,14 +67,11 @@ export const RestoreFromPrivateKey = memo(() => {
                             name="privateKey"
                         />
                     </Box>
-                    <ButtonGroup>
-                        <Button variant="rounded" color="secondary">
-                            {t.cancel()}
-                        </Button>
+                    <ButtonContainer>
                         <Button variant="rounded" color="primary" type="submit">
-                            {t.next()}
+                            {t.confirm()}
                         </Button>
-                    </ButtonGroup>
+                    </ButtonContainer>
                 </form>
             </Box>
             <Box sx={{ marginTop: '35px' }}>

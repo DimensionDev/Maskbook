@@ -1,4 +1,4 @@
-import { parallel, series, src, dest } from 'gulp'
+import { series, src, dest } from 'gulp'
 import { createBuildStorybook6, NETLIFY_PATH, PKG_PATH, shell, task } from '../utils'
 import { resolve } from 'path'
 import { codegen } from '../codegen'
@@ -36,5 +36,5 @@ const icons = series(
         return from.pipe(to)
     },
 )
-export const buildNetlify = series(codegen, parallel(icons, dashboardSB, themeSB /* , dashboard */))
-task(buildNetlify, 'build-ci-netlify', 'Build for Netlify CI')
+export const buildNetlify = series(codegen, icons, dashboardSB, themeSB)
+task(buildNetlify, 'build-ci-netlify', 'Build for Netlify')

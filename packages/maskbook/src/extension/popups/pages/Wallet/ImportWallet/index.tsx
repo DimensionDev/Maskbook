@@ -8,7 +8,7 @@ import { NetworkSelector } from '../../../components/NetworkSelector'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { LoadingButton, TabContext, TabPanel } from '@material-ui/lab'
 import { useHistory } from 'react-router-dom'
-import { DialogRoutes } from '../../../index'
+import { PopupRoutes } from '../../../index'
 import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
@@ -146,7 +146,7 @@ const ImportWallet = memo(() => {
                 case ImportWalletTab.Mnemonic:
                     const params = query({ mnemonic })
                     history.replace({
-                        pathname: DialogRoutes.AddDeriveWallet,
+                        pathname: PopupRoutes.AddDeriveWallet,
                         search: `?${params}`,
                     })
                     break

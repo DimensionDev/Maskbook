@@ -6,7 +6,7 @@ import { CodeValidation } from './CodeValidation'
 import { fetchBackupValue } from '../../pages/Settings/api'
 import { Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
-import { ButtonGroup } from '../RegisterFrame/ButtonGroup'
+import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { useSnackbar } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router'
@@ -95,14 +95,11 @@ export const RestoreFromCloud = memo(() => {
                             <Box sx={{ width: '100%' }}>
                                 <BackupPreviewCard json={backupJson} />
                             </Box>
-                            <ButtonGroup>
-                                <Button variant="rounded" color="secondary" onClick={() => {}}>
-                                    {t.cancel()}
-                                </Button>
+                            <ButtonContainer>
                                 <Button variant="rounded" color="primary" onClick={onRestore}>
-                                    {t.register_restore_backups_confirm()}
+                                    {t.restore()}
                                 </Button>
-                            </ButtonGroup>
+                            </ButtonContainer>
                         </>
                     )}
                 </Step>

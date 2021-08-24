@@ -7,7 +7,7 @@ import { TokenIcon, FormattedBalance } from '@masknet/shared'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../../hooks/useWalletContext'
 import { useHistory } from 'react-router'
-import { DialogRoutes } from '../../../../index'
+import { PopupRoutes } from '../../../../index'
 
 const useStyles = makeStyles()({
     list: {
@@ -41,7 +41,7 @@ export const AssetsList = memo(() => {
     const { assets, setCurrentToken } = useContainer(WalletContext)
     const onItemClick = useCallback((asset: Asset) => {
         setCurrentToken(asset)
-        history.push(DialogRoutes.TokenDetail)
+        history.push(PopupRoutes.TokenDetail)
     }, [])
     return <AssetsListUI dataSource={assets} onItemClick={onItemClick} />
 })
