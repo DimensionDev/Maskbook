@@ -1,7 +1,7 @@
 import { series, src, dest } from 'gulp'
 import { createBuildStorybook6, NETLIFY_PATH, PKG_PATH, shell, task } from '../utils'
 import { resolve } from 'path'
-import { i18nCodegen } from '../codegen'
+import { codegen } from '../codegen'
 const SNOWPACK_PATH = resolve(NETLIFY_PATH, 'snowpack')
 const STATIC_PATH = resolve(NETLIFY_PATH, 'storybook-static')
 
@@ -36,5 +36,5 @@ const icons = series(
         return from.pipe(to)
     },
 )
-export const buildNetlify = series(i18nCodegen, icons, dashboardSB, themeSB)
+export const buildNetlify = series(codegen, icons, dashboardSB, themeSB)
 task(buildNetlify, 'build-ci-netlify', 'Build for Netlify')
