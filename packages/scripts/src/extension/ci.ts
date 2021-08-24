@@ -6,6 +6,7 @@ import { dest, src, series, parallel, TaskFunction } from 'gulp'
 import { BUILD_PATH, ROOT_PATH, task } from '../utils'
 import { codegen } from '../codegen'
 import path from 'path'
+import { buildNetlify } from '../netlify'
 
 export const ciBuild = series(
     printBranchName,
@@ -28,6 +29,7 @@ export const ciBuild = series(
             'Maskbook.chromium-beta.zip',
         ),
     ),
+    buildNetlify,
 )
 task(ciBuild, 'build-ci', 'Build the extension on CI')
 function buildTarget(name: string, options: ExtensionBuildArgs, outFile: string) {
