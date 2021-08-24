@@ -7,10 +7,9 @@ on:
     branches: [master, develop, released]
 
 jobs:
-  build:
+  netlify:
     runs-on: ubuntu-20.04
     env:
-      WEB3_CONSTANTS_RPC: ${{ secrets.WEB3_CONSTANTS_RPC }}
       NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
     steps:
       - name: Get cache date
@@ -43,40 +42,23 @@ jobs:
       - name: Restore Webpack cache
         uses: actions/cache@v2
         with:
-          path: packages/maskbook/node_modules/.cache/webpack
-          key: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          path: |
+            packages/dashboard/node_modules/.cache/
+            packages/theme/node_modules/.cache/
+          key: ${{ runner.os }}-netlify-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
           # Not fallback to different dependencies. Webpack seems like have bug.
           # An example caused by the webpack cache bug: https://github.com/facebook/react/issues/21587
-          restore-keys: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-netlify-${{ hashFiles('pnpm-lock.yaml') }}
       - run: npx pnpm install
-      - run: npx gulp build-ci
-      - name: Upload `Maskbook.base.zip`
-        uses: actions/upload-artifact@v2
+      - run: npx gulp build-ci-netlify
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.2
         with:
-          name: Maskbook.base.zip
-          path: Maskbook.base.zip
-      - name: Upload `Maskbook.iOS.zip`
-        uses: actions/upload-artifact@v2
-        with:
-          name: Maskbook.iOS.zip
-          path: Maskbook.iOS.zip
-      - name: Upload `Maskbook.chromium.zip`
-        uses: actions/upload-artifact@v2
-        with:
-          name: Maskbook.chromium.zip
-          path: Maskbook.chromium.zip
-      - name: Upload `Maskbook.chromium-beta.zip`
-        uses: actions/upload-artifact@v2
-        with:
-          name: Maskbook.chromium-beta.zip
-          path: Maskbook.chromium-beta.zip
-      - name: Upload `Maskbook.firefox.zip`
-        uses: actions/upload-artifact@v2
-        with:
-          name: Maskbook.firefox.zip
-          path: Maskbook.firefox.zip
-      - name: Upload `Maskbook.gecko.zip`
-        uses: actions/upload-artifact@v2
-        with:
-          name: Maskbook.gecko.zip
-          path: Maskbook.gecko.zip
+          publish-dir: './packages/netlify/'
+          production-branch: develop
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
