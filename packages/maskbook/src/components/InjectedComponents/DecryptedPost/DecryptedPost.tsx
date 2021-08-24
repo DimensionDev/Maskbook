@@ -134,7 +134,6 @@ export function DecryptPost(props: DecryptPostProps) {
                     postBy,
                     currentIdentity.network,
                     currentIdentity,
-                    sharedPublic,
                     postURL,
                 ),
             )
@@ -147,7 +146,6 @@ export function DecryptPost(props: DecryptPostProps) {
                     postBy,
                     currentIdentity.network,
                     currentIdentity,
-                    false,
                     postURL,
                 ),
             )

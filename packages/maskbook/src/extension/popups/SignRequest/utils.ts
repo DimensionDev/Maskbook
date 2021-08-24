@@ -1,4 +1,4 @@
-import { getRouteURLWithNoParam, PopupRoutes } from '..'
+import { PopupRoutes, getRouteURLWithNoParam } from '..'
 import urlcat from 'urlcat'
 
 export interface SignRequest {
