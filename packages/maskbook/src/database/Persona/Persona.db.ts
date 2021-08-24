@@ -75,7 +75,7 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                     db.createObjectStore('relations', { keyPath: ['linked', 'profile'] })
                     transaction
                         .objectStore('relations')
-                        .createIndex('linked, profile, favor', ['linked', 'profile', 'favor'], { unique: false })
+                        .createIndex('linked, profile, favor', ['linked', 'profile', 'favor'], { unique: true })
                 }
                 if (oldVersion < 1) return v0_v1()
                 if (oldVersion < 2) v1_v2()
@@ -530,9 +530,14 @@ export async function queryRelationsPagedDB(
 
     for await (const cursor of t.objectStore('relations').index('linked, profile, favor').iterate()) {
         if (cursor.value.linked !== linked.toText()) continue
-        if (firstRecord && options.after && options.after.profile.toText() !== cursor?.value.profile) {
+        if (
+            firstRecord &&
+            options.after &&
+            options.after.linked.toText() !== cursor?.value.linked &&
+            options.after.profile.toText() !== cursor?.value.profile
+        ) {
             // @ts-ignore
-            cursor.continue([options.after.linked.toText(), options.after.profile.toText(), `${options.after.favor}`])
+            cursor.continue([options.after.linked, options.after.profile, options.after.favor])
             firstRecord = false
             continue
         }

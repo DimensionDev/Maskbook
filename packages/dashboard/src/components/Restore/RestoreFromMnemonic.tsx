@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { some } from 'lodash-es'
 import { MaskAlert } from '../MaskAlert'
-import { ButtonGroup } from '../RegisterFrame/ButtonGroup'
+import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { Services } from '../../API'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { RoutePaths } from '../../type'
@@ -60,21 +60,15 @@ export const RestoreFromMnemonic = () => {
                     </Typography>
                 )}
             </Box>
-            <ButtonGroup>
-                <Button
-                    variant="rounded"
-                    color="secondary"
-                    onClick={() => navigate(RoutePaths.Setup, { replace: true })}>
-                    {t.back()}
-                </Button>
+            <ButtonContainer>
                 <Button
                     variant="rounded"
                     color="primary"
                     onClick={handleImport}
                     disabled={some(values, (value) => !value)}>
-                    {t.wallets_import_wallet_import()}
+                    {t.confirm()}
                 </Button>
-            </ButtonGroup>
+            </ButtonContainer>
             <Box sx={{ marginTop: '35px' }}>
                 <MaskAlert description={t.sign_in_account_identity_warning()} />
             </Box>
