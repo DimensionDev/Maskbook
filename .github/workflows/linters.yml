@@ -14,10 +14,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
-      - name: Prettier
-        uses: creyD/prettier_action@v3.3
-        with:
-          dry: true
+      - run: npx prettier --list-different .
   locale-kit:
     runs-on: ubuntu-20.04
     steps:
