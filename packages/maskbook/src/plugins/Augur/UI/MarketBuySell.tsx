@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Typography, Grid, Switch, SwitchClassKey, SwitchProps, withStyles, Button, Link } from '@material-ui/core'
+import { Typography, Grid, SwitchClassKey, SwitchProps, Button, Link, Switch } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import type { AmmOutcome, Market } from '../types'
@@ -16,79 +16,63 @@ interface Props extends SwitchProps {
     classes: Styles
 }
 
-const AugurSwitch = withStyles((theme) => ({
-    root: {
-        width: 170,
-        height: 50,
-        padding: 0,
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-        borderRadius: '.5rem',
-        border: `solid 1px ${theme.palette.divider}`,
-        fontSize: '1.25rem',
-    },
-    switchBase: {
-        padding: 0,
-        color: '#15171a',
-        borderColor: 'transparent',
-        marginLeft: 1,
-        marginTop: 1,
-        '&:after': {
-            content: "'Buy'",
-            color: '#fff',
-            position: 'absolute',
+const useSwitchStyle = makeStyles()((theme) => {
+    return {
+        root: {
+            width: 170,
+            height: 50,
+            padding: 0,
+            marginTop: theme.spacing(1),
+            marginBottom: theme.spacing(1),
+            borderRadius: '.5rem',
+            border: `solid 1px ${theme.palette.divider}`,
+            fontSize: '1.25rem',
         },
-        '&$checked': {
+        switchBase: {
+            padding: 0,
+            color: '#15171a',
+            borderColor: 'transparent',
+            marginLeft: 1,
+            marginTop: 1,
             '&:after': {
-                content: "'Sell'",
+                content: "'Buy'",
                 color: '#fff',
                 position: 'absolute',
             },
-            color: '#15171a',
-            transform: 'translateX(100%)',
-            marginLeft: -1,
-            '& + $track': {
-                backgroundColor: 'transparent',
+            '&$checked': {
+                '&:after': {
+                    content: "'Sell'",
+                    color: '#fff',
+                    position: 'absolute',
+                },
+                color: '#15171a',
+                transform: 'translateX(100%)',
+                marginLeft: -1,
+                '& + $track': {
+                    backgroundColor: 'transparent',
+                },
             },
         },
-    },
-    thumb: {
-        width: 84,
-        height: 46,
-        borderRadius: '.5rem',
-    },
-    track: {
-        borderRadius: '.5rem',
-        backgroundColor: 'transparent',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        opacity: 0.5,
-        '&:before': {
-            content: "'Buy'",
+        thumb: {
+            width: 84,
+            height: 46,
+            borderRadius: '.5rem',
         },
-        '&:after': {
-            content: "'Sell'",
+        track: {
+            borderRadius: '.5rem',
+            backgroundColor: 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            opacity: 0.5,
+            '&:before': {
+                content: "'Buy'",
+            },
+            '&:after': {
+                content: "'Sell'",
+            },
         },
-    },
-
-    checked: {},
-    focusVisible: {},
-}))(({ classes, ...props }: Props) => {
-    return (
-        <Switch
-            focusVisibleClassName={classes.focusVisible}
-            disableRipple
-            classes={{
-                root: classes.root,
-                switchBase: classes.switchBase,
-                thumb: classes.thumb,
-                track: classes.track,
-                checked: classes.checked,
-            }}
-            {...props}
-        />
-    )
+    }
 })
 
 const useStyles = makeStyles()((theme) => ({
@@ -166,6 +150,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
 
     const { t } = useI18N()
     const { classes } = useStyles()
+    const { classes: switchClasses } = useSwitchStyle()
     const [isBuy, setIsBuy] = useState(true)
     const [selectedOutcome, setSelectedOutcome] = useState<AmmOutcome>()
     const [buyDialogOpen, setBuyDialogOpen] = useState(false)
@@ -197,7 +182,18 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                     className={`${classes.head} ${classes.spacing}`}>
                     <Grid item>
                         <Typography variant="h6" color="textPrimary">
-                            <AugurSwitch checked={!isBuy} onChange={() => setIsBuy((x) => !x)} name="buySell" />
+                            <Switch
+                                disableRipple
+                                classes={{
+                                    root: switchClasses.root,
+                                    switchBase: switchClasses.switchBase,
+                                    thumb: switchClasses.thumb,
+                                    track: switchClasses.track,
+                                }}
+                                checked={!isBuy}
+                                onChange={() => setIsBuy((x) => !x)}
+                                name="buySell"
+                            />
                         </Typography>
                     </Grid>
                     <Grid item container direction="column" alignItems="flex-end">
