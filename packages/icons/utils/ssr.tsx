@@ -9,6 +9,8 @@ import * as General from '../general'
 import * as Brands from '../brands'
 import * as Plugins from '../plugins'
 import * as Menus from '../menus'
+import * as Settings from '../settings'
+
 const require = createRequire(import.meta.url)
 const createCache: typeof import('@emotion/cache').default = require('@emotion/cache')
 const createEmotionServer: typeof import('@emotion/server/create-instance').default =
@@ -49,6 +51,9 @@ function render() {
             </main>
             <main id="menus">
                 <IconPreview icons={Menus} title="Menus" />
+            </main>
+            <main id="settings">
+                <IconPreview icons={Settings} title="Settings" />
             </main>
         </CacheProvider>,
     )

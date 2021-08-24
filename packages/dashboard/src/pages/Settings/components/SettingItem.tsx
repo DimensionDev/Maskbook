@@ -16,7 +16,7 @@ const IconWarpper = styled(ListItemIcon)(({ theme }) => ({
     borderRadius: '50%',
     background: MaskColorVar.infoBackground,
     marginRight: theme.spacing(3),
-    color: MaskColorVar.primary,
+    color: 'transparent',
 }))
 
 const TextWrapper = styled(ListItemText)(({ theme }) => ({
@@ -33,7 +33,7 @@ export default function SettingItem(props: SettingItemProps) {
     return (
         <ListItem sx={{ paddingLeft: 0 }}>
             <IconWarpper>{icon}</IconWarpper>
-            <TextWrapper primary={title} secondary={desc} className={error ? 'error' : ''} />
+            <TextWrapper primary={title} secondary={desc} className={error ? 'error' : undefined} />
             {props.children}
         </ListItem>
     )
