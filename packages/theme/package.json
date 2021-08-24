@@ -22,6 +22,7 @@
     "react-window": "^1.8.6",
     "tinycolor2": "^1.4.2",
     "tss-react": "^0.6.0",
+    "unstated-next": "^1.1.0",
     "use-subscription": "^1.5.1"
   },
   "devDependencies": {
