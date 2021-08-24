@@ -16,6 +16,10 @@ import {
     deleteProfileDB,
     LinkedProfileDetails,
     ProfileRecord,
+    createRelationDB,
+    updateRelationDB,
+    queryRelationsPagedDB,
+    RelationRecord,
     queryPersonaDB,
     queryPersonasDB,
     queryProfilesDB,
@@ -28,6 +32,7 @@ import { decompressBackupFile } from '../../utils/type-transform/BackupFileShort
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared'
+import { getCurrentPersonaIdentifier } from './SettingsService'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 
 assertEnvironment(Environment.ManifestBackground)
@@ -40,6 +45,10 @@ export { queryProfile, queryProfilePaged } from '../../database'
 
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)
+}
+
+export function queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]) {
+    return queryProfilesWithQuery((record) => identifiers.some((x) => record.identifier.equals(x)))
 }
 export async function queryMyProfiles(network?: string): Promise<Profile[]> {
     const myPersonas = (await queryMyPersonas(network)).filter((x) => !x.uninitialized)
@@ -179,6 +188,39 @@ export async function attachProfile(
 export { detachProfileDB as detachProfile } from '../../database/Persona/Persona.db'
 //#endregion
 
+//#region Relation
+export async function createNewRelation(profile: ProfileIdentifier, linked: PersonaIdentifier) {
+    await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked, favor: 0 }, t))
+}
+
+export async function queryRelationPaged(
+    options: {
+        network: string
+        after?: RelationRecord
+    },
+    count: number,
+): Promise<RelationRecord[]> {
+    const currentPersona = await getCurrentPersonaIdentifier()
+    if (currentPersona) {
+        return queryRelationsPagedDB(currentPersona, options, count)
+    }
+
+    return []
+}
+
+export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: 0 | 1) {
+    await consistentPersonaDBWriteAccess((t) =>
+        updateRelationDB(
+            {
+                profile,
+                linked,
+                favor,
+            },
+            t,
+        ),
+    )
+}
+//#endregion
 /**
  * In older version of Mask, identity is marked as `ProfileIdentifier(network, '$unknown')` or `ProfileIdentifier(network, '$self')`. After upgrading to the newer version of Mask, Mask will try to find the current user in that network and call this function to replace old identifier into a "resolved" identity.
  * @param identifier The resolved identity

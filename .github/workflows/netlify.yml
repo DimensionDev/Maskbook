@@ -1,0 +1,65 @@
+name: Build
+
+on:
+  push:
+    branches: [master, develop, released]
+  pull_request:
+    branches: [master, develop, released]
+
+jobs:
+  netlify:
+    runs-on: ubuntu-20.04
+    env:
+      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+    steps:
+      - name: Get cache date
+        id: get-date
+        run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+      - name: Restore pnpm cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-node-
+      - name: Restore TypeScript incremental build cache
+        uses: actions/cache@v2
+        with:
+          path: packages/**/dist
+          # actions/cache will not upload changes in cache if primary key hits
+          # by adding date to the primary key, we can ensure the cache updates on the first build of the day
+          key: ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          # Allow fallback to cache of different dependencies but not allowing fallback to different tsconfig
+          # because that might indicates a structural/flags changes in tsc emit.
+          restore-keys: |
+            ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}
+      - name: Restore Webpack cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            packages/dashboard/node_modules/.cache/
+            packages/theme/node_modules/.cache/
+          key: ${{ runner.os }}-netlify-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          # Not fallback to different dependencies. Webpack seems like have bug.
+          # An example caused by the webpack cache bug: https://github.com/facebook/react/issues/21587
+          restore-keys: ${{ runner.os }}-netlify-${{ hashFiles('pnpm-lock.yaml') }}
+      - run: npx pnpm install
+      - run: npx gulp build-ci-netlify
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: './packages/netlify/'
+          production-branch: develop
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-commit-comment: false
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
