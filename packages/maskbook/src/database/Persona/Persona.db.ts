@@ -536,7 +536,8 @@ export async function queryRelationsPagedDB(
             options.after.linked.toText() !== cursor?.value.linked &&
             options.after.profile.toText() !== cursor?.value.profile
         ) {
-            cursor.continue([options.after.linked, options.after.profile, options.after.favor].join(', '))
+            // @ts-ignore
+            cursor.continue([options.after.linked, options.after.profile, options.after.favor])
             firstRecord = false
             continue
         }
