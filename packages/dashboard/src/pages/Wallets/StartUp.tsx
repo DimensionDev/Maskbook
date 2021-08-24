@@ -1,7 +1,8 @@
 import { styled } from '@material-ui/core/styles'
-import { StartupActionList, StartupActionListItem } from '../../components/StartupActionList'
-import { MaskWalletIcon, ImportWalletIcon, CloudLinkIcon } from '@masknet/icons'
+import { CloudLinkIcon, ImportWalletIcon, MaskWalletIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
+import { Paper, Stack, Box } from '@material-ui/core'
+import { ActionCard } from '../../components/ActionCard'
 
 const Container = styled('div')`
     display: flex;
@@ -15,29 +16,42 @@ export function StartUp() {
     const t = useDashboardI18N()
     return (
         <Container>
-            <StartupActionList>
-                <StartupActionListItem
-                    icon={<MaskWalletIcon fontSize="inherit" />}
-                    title={t.wallets_startup_create()}
-                    description={t.wallets_startup_create_desc()}
-                    action={t.wallets_startup_create_action()}
-                    onClick={() => {}}
-                />
-                <StartupActionListItem
-                    icon={<ImportWalletIcon fontSize="inherit" />}
-                    title={t.wallets_startup_import()}
-                    description={t.wallets_startup_import_desc()}
-                    action={t.wallets_startup_import_action()}
-                    onClick={() => {}}
-                />
-                <StartupActionListItem
-                    icon={<CloudLinkIcon fontSize="inherit" />}
-                    title={t.wallets_startup_connect()}
-                    description={t.wallets_startup_connect_desc()}
-                    action={t.wallets_startup_connect_action()}
-                    onClick={() => {}}
-                />
-            </StartupActionList>
+            <Paper variant="background" sx={{ width: '100%', height: '100%' }}>
+                <Stack justifyContent="center" height="100%" alignItems="center">
+                    <Box>
+                        <ActionCard
+                            title={t.wallets_startup_create()}
+                            icon={<MaskWalletIcon fontSize="inherit" />}
+                            subtitle={t.wallets_startup_create_desc()}
+                            action={{
+                                type: 'primary',
+                                text: t.wallets_startup_create_action(),
+                                handler: () => {},
+                            }}
+                        />
+                        <ActionCard
+                            title={t.wallets_startup_create()}
+                            icon={<ImportWalletIcon fontSize="inherit" />}
+                            subtitle={t.wallets_startup_create_desc()}
+                            action={{
+                                type: 'primary',
+                                text: t.wallets_startup_create_action(),
+                                handler: () => {},
+                            }}
+                        />
+                        <ActionCard
+                            title={t.wallets_startup_connect()}
+                            icon={<CloudLinkIcon fontSize="inherit" />}
+                            subtitle={t.wallets_startup_connect_desc()}
+                            action={{
+                                type: 'primary',
+                                text: t.wallets_startup_connect_action(),
+                                handler: () => {},
+                            }}
+                        />
+                    </Box>
+                </Stack>
+            </Paper>
         </Container>
     )
 }
