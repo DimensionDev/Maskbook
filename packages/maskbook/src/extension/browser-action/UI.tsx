@@ -1,9 +1,8 @@
 import { useCallback, memo } from 'react'
 import { noop } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
-import { withStyles } from '@material-ui/core/styles'
 import { makeStyles } from '@masknet/theme'
-import { Button, Paper, Typography, Box } from '@material-ui/core'
+import { Button, Paper, Typography, Box, GlobalStyles } from '@material-ui/core'
 import { useI18N, delay, Flags } from '../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -13,20 +12,24 @@ import { MaskUIRoot } from '../../UIRoot'
 import { useMyIdentities } from '../../components/DataSource/useActivatedUI'
 import { hasSNSAdaptorPermission, requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
 
-const GlobalCss = withStyles({
-    '@global': {
-        body: {
-            overflowX: 'hidden',
-            margin: '0 auto',
-            width: 340,
-            maxWidth: '100%',
-            backgroundColor: 'transparent',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-    },
-})(() => null)
+function GlobalCss() {
+    return (
+        <GlobalStyles
+            styles={{
+                body: {
+                    overflowX: 'hidden',
+                    margin: '0 auto',
+                    width: 340,
+                    maxWidth: '100%',
+                    backgroundColor: 'transparent',
+                    '&::-webkit-scrollbar': {
+                        display: 'none',
+                    },
+                },
+            }}
+        />
+    )
+}
 
 const useStyles = makeStyles()((theme) => ({
     container: {

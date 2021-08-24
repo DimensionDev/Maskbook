@@ -18,10 +18,14 @@ async function migrationV1_V2() {
     migrationDone = true
 }
 
-export async function getRecentFiles() {
+export async function getAllFiles() {
     await migrationV1_V2()
     const files: FileInfo[] = await asyncIteratorToArray(Database.iterate('file'))
-    files.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    return files.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+}
+
+export async function getRecentFiles() {
+    const files = await getAllFiles()
     return files.slice(0, 4)
 }
 

@@ -1,27 +1,31 @@
 import { memo } from 'react'
-import { Box, Paper, withStyles } from '@material-ui/core'
+import { Box, Paper, GlobalStyles } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
-import { DialogRoutes } from '../../index'
+import { PopupRoutes } from '../../index'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { InitialPlaceholder } from '../InitialPlaceholder'
 import { useI18N } from '../../../../utils'
 
-const GlobalCss = withStyles({
-    '@global': {
-        body: {
-            overflowX: 'hidden',
-            margin: '0 auto',
-            width: 310,
-            maxWidth: '100%',
-            backgroundColor: 'transparent',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-    },
-})(() => null)
+function GlobalCss() {
+    return (
+        <GlobalStyles
+            styles={{
+                body: {
+                    overflowX: 'hidden',
+                    margin: '0 auto',
+                    width: 310,
+                    maxWidth: '100%',
+                    backgroundColor: 'transparent',
+                    '&::-webkit-scrollbar': {
+                        display: 'none',
+                    },
+                },
+            }}
+        />
+    )
+}
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -72,13 +76,8 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     const { classes } = useStyles()
     const personas = useMyPersonas()
 
-    const matchWallet = useRouteMatch({
-        path: DialogRoutes.Wallet,
-        exact: true,
-    })
-
-    const matchPersona = useRouteMatch({
-        path: DialogRoutes.Personas,
+    const excludePath = useRouteMatch({
+        path: [PopupRoutes.Wallet, PopupRoutes.Personas, PopupRoutes.GasSetting, PopupRoutes.WalletSignRequest],
         exact: true,
     })
 
@@ -88,7 +87,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
             <Paper elevation={0}>
                 <Box className={classes.header}>
                     <Box className={classes.left}>
-                        {matchWallet || matchPersona ? (
+                        {excludePath || history.length > 1 ? (
                             <MiniMaskIcon />
                         ) : (
                             <ArrowBackIcon onClick={history.goBack} style={{ fill: '#ffffff', cursor: 'pointer' }} />
@@ -97,12 +96,12 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                     <Box className={classes.right}>
                         <NavLink
                             style={{ marginRight: 5 }}
-                            to={DialogRoutes.Wallet}
+                            to={PopupRoutes.Wallet}
                             className={classes.nav}
                             activeClassName={classes.active}>
                             {t('wallets')}
                         </NavLink>
-                        <NavLink to={DialogRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
+                        <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
                             {t('personas')}
                         </NavLink>
                     </Box>

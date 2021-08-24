@@ -1,8 +1,8 @@
 import SettingButton from './SettingButton'
 import { UserContext } from '../hooks/UserContext'
 import { useContext, useState } from 'react'
-import { useDashboardI18N } from '../../../locales'
 import SettingPhoneNumberDialog from './dialogs/SettingPhoneNumberDialog'
+import { useDashboardI18N } from '../../../locales'
 
 export default function PhoneNumberSetting() {
     const t = useDashboardI18N()

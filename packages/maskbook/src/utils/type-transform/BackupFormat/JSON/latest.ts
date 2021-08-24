@@ -12,9 +12,9 @@ import {
     upgradeFromBackupJSONFileVersion1,
     patchNonBreakingUpgradeForBackupJSONFileVersion2,
 } from './version-2'
+import { FileServicePluginID } from '../../../../plugins/FileService/constants'
 
 export interface BackupPreview {
-    email?: string
     personas: number
     accounts: number
     posts: number
@@ -42,12 +42,11 @@ export function UpgradeBackupJSONFile(json: object, identity?: ProfileIdentifier
 
 export function getBackupPreviewInfo(json: BackupJSONFileLatest): BackupPreview {
     return {
-        email: 'alice@example.com', // TODO: email
         personas: json.personas.length,
         accounts: json.personas.reduce((a, b) => a + b.linkedProfiles.length, 0),
         posts: json.posts.length,
         contacts: json.profiles.length,
-        files: 0, // TODO: file
+        files: json.plugin?.[FileServicePluginID]?.length || 0,
         wallets: json.wallets.length,
         createdAt: json._meta_.createdAt,
     }
