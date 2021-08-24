@@ -9,3 +9,5 @@ export * from './utils'
 export * from './crypto/JWKType'
 export * from './Persona/type'
 export * from './Persona/type'
+
+const    a = {}
