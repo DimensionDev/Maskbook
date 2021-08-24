@@ -1,25 +1,15 @@
-import { useContext, useState } from 'react'
-import RestoreDialog from './dialogs/RestoreDialog'
 import SettingButton from './SettingButton'
-import { PasswordVerifiedContext } from '../hooks/VerifyPasswordContext'
 import { useDashboardI18N } from '../../../locales'
+import { useNavigate } from 'react-router-dom'
+import { RoutePaths } from '../../../type'
 
 export default function RestoreSetting() {
     const t = useDashboardI18N()
-    const { ensurePasswordVerified } = useContext(PasswordVerifiedContext)
-    const [openRestore, setOpenRestore] = useState(false)
+    const navigate = useNavigate()
+
     const onRecovery = () => {
-        ensurePasswordVerified(() => setOpenRestore(true))
+        navigate(RoutePaths.SignIn)
     }
 
-    const onClose = () => {
-        setOpenRestore(false)
-    }
-
-    return (
-        <>
-            <SettingButton onClick={onRecovery}>{t.settings_button_recovery()}</SettingButton>
-            <RestoreDialog open={openRestore} onClose={onClose} />
-        </>
-    )
+    return <SettingButton onClick={onRecovery}>{t.settings_button_recovery()}</SettingButton>
 }
