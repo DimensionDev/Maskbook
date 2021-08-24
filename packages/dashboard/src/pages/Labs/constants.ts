@@ -1,4 +1,5 @@
 export const PLUGIN_IDS = {
+    ITO: 'com.maskbook.ito',
     FILE_SERVICE: 'com.maskbook.fileservice',
     GITCOIN: 'co.gitcoin',
     DHEDGE: 'co.dhedge',
