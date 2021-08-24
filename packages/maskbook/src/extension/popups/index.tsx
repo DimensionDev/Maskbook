@@ -1,6 +1,6 @@
 import type { ThirdPartyPopupContextIdentifier } from '../../plugins/External/popup-context'
 
-export enum DialogRoutes {
+export enum PopupRoutes {
     Root = '/',
     Wallet = '/wallet',
     ImportWallet = '/wallet/import',
@@ -12,6 +12,8 @@ export enum DialogRoutes {
     SelectWallet = '/wallet/select',
     BackupWallet = '/wallet/backup',
     AddToken = '/wallet/addToken',
+    WalletSignRequest = '/wallet/sign',
+    GasSetting = '/wallet/gas',
     TokenDetail = '/wallet/tokenDetail',
     Personas = '/personas',
     PermissionAwareRedirect = '/redirect',
@@ -20,12 +22,12 @@ export enum DialogRoutes {
     SignRequest = '/sign-request',
 }
 
-export function getRouteURLWithNoParam(kind: DialogRoutes) {
+export function getRouteURLWithNoParam(kind: PopupRoutes) {
     return browser.runtime.getURL(`/popups.html#${kind}`)
 }
 export function PermissionAwareRedirectOf(url: string, context: ThirdPartyPopupContextIdentifier) {
     return (
-        getRouteURLWithNoParam(DialogRoutes.PermissionAwareRedirect) +
+        getRouteURLWithNoParam(PopupRoutes.PermissionAwareRedirect) +
         `?url=${encodeURIComponent(url)}&context=${context}`
     )
 }

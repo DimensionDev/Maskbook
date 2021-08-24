@@ -3,6 +3,10 @@ declare global {
         interface ButtonPropsVariantOverrides {
             rounded: true
         }
+        interface ButtonPropsColorOverrides {
+            warning: true
+            error: true
+        }
     }
     module '@material-ui/core/Paper' {
         interface PaperPropsVariantOverrides {
