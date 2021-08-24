@@ -1,7 +1,10 @@
-import { memoizePromise } from '../../utils/memoize'
-import { constructRequestPermissionURL } from '../popups'
+import { memoizePromise } from '../../../utils/memoize'
+import { constructRequestPermissionURL } from '../../popups'
+
+export * from './storage'
 
 const cache = new Map<string, string>()
+
 export const resolveTCOLink = memoizePromise(
     async (u: string) => {
         if (!u.startsWith('https://t.co/')) return null

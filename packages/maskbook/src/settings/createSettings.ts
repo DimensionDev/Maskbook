@@ -1,7 +1,7 @@
 import { ValueRef, isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+import Services from '../extension/service'
 import { MaskMessage } from '../utils/messages'
 import { defer } from '../utils/utils'
-import Services from '../extension/service'
 
 export interface SettingsTexts {
     primary: () => string
@@ -23,10 +23,11 @@ const lastEventId: Map<string, number> = new Map()
 if (isEnvironment(Environment.ManifestBackground)) {
     MaskMessage.events.createInternalSettingsChanged.on(async (payload) => {
         const { id, key, value, initial } = payload
-        const stored = await Services.Storage.getStorage(key)
-        if (!initial || (initial && typeof stored === 'undefined')) await Services.Storage.setStorage(key, value)
 
-        const updated = await Services.Storage.getStorage(key)
+        const stored = await Services.Helper.getStorage(key)
+        if (!initial || (initial && typeof stored === 'undefined')) await Services.Helper.setStorage(key, value)
+
+        const updated = await Services.Helper.getStorage(key)
         if (typeof updated === 'undefined') return
         MaskMessage.events.createInternalSettingsUpdated.sendToAll({
             id,

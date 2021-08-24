@@ -18,7 +18,7 @@ const independentRef = {
             Services.Identity.queryMyPersonas().then((p) => {
                 independentRef.myPersonasRef.value = p.filter((x) => !x.uninitialized)
                 independentRef.myUninitializedPersonasRef.value = p.filter((x) => x.uninitialized)
-                Services.Storage.setStorage<boolean>(
+                Services.Helper.setStorage<boolean>(
                     'mobileIsMyPersonasInitialized',
                     independentRef.myPersonasRef.value.length > 0,
                 )
