@@ -14,7 +14,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
-      - run: npx prettier --list-different .
+      - name: Prettier
+        uses: creyD/prettier_action@v3.3
+        with:
+          dry: true
   locale-kit:
     runs-on: ubuntu-20.04
     steps:
@@ -26,7 +29,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm install
       - run: npx gulp locale-kit
@@ -45,9 +48,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
-      - name: compiled dist cache
+      - name: Restore TypeScript incremental build cache
         uses: actions/cache@v2
         with:
           path: packages/**/dist
@@ -72,7 +75,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm install
       - run: npm run lint:ci -- --max-warnings=0

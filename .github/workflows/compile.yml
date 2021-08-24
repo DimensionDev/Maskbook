@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       WEB3_CONSTANTS_RPC: ${{ secrets.WEB3_CONSTANTS_RPC }}
+      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
     steps:
       - name: Get cache date
         id: get-date
@@ -21,28 +22,35 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
       - uses: actions/setup-node@v2
-      - name: pnpm cache
+      - name: Restore pnpm cache
         uses: actions/cache@v2
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
-      - name: compiled dist cache
+      - name: Restore TypeScript incremental build cache
         uses: actions/cache@v2
         with:
           path: packages/**/dist
+          # actions/cache will not upload changes in cache if primary key hits
+          # by adding date to the primary key, we can ensure the cache updates on the first build of the day
           key: ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          # Allow fallback to cache of different dependencies but not allowing fallback to different tsconfig
+          # because that might indicates a structural/flags changes in tsc emit.
           restore-keys: |
             ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
             ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}
-      - name: maskbook webpack cache
+      - name: Restore Webpack cache
         uses: actions/cache@v2
         with:
-          path: packages/maskbook/node_modules/.cache/webpack
-          key: ${{ runner.os }}-webpack-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          path: |
+            packages/maskbook/node_modules/.cache/webpack
+            packages/dashboard/node_modules/.cache/
+            packages/theme/node_modules/.cache/
+          key: ${{ runner.os }}-webpack-v2-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
           # Not fallback to different dependencies. Webpack seems like have bug.
           # An example caused by the webpack cache bug: https://github.com/facebook/react/issues/21587
-          restore-keys: ${{ runner.os }}-webpack-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-webpack-v2-${{ hashFiles('pnpm-lock.yaml') }}
       - run: npx pnpm install
       - run: npx gulp build-ci
       - name: Upload `Maskbook.base.zip`

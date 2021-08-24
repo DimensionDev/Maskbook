@@ -35,5 +35,12 @@ const icons = series(
         return from.pipe(to)
     },
 )
-export const buildNetlify = series(icons, dashboardSB, themeSB /* , dashboard */)
+const _ = series(icons, dashboardSB, themeSB)
+export const buildNetlify = process.env.CI
+    ? process.env.NETLIFY_SITE_ID
+        ? _
+        : async function () {
+              console.log("Skip Netlify CI builds with environment that don't have NETLIFY_SITE_ID env.")
+          }
+    : _
 task(buildNetlify, 'build-ci-netlify', 'Build for Netlify')
