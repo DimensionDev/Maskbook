@@ -9,8 +9,6 @@
     "@masknet/web3-contracts": "workspace:*",
     "@unstoppabledomains/resolution": "^5.0.1",
     "bignumber.js": "9.0.1",
-    "bip44-constants": "^8.0.5",
-    "content-hash": "^2.5.2",
     "ethereum-blockies": "^0.1.1",
     "fuse.js": "^6.4.6",
     "lodash-es": "^4.17.21",
