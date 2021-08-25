@@ -229,7 +229,8 @@
         "nativeCurrency": {
             "name": "Arbitrum Ether",
             "symbol": "ARETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "faucets": [],
         "features": [],
