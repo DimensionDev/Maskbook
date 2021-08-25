@@ -22,7 +22,6 @@ interface DashboardRouterContainerProps {
     compact?: boolean
 
     /**
-     * (mobile only)
      * fab on the right bottom position of page
      */
     floatingButtons?: { icon: React.ReactElement; handler: () => void }[]
@@ -152,7 +151,7 @@ const useStyles = makeStyles<{ isSetup: boolean }>()((theme, props) => ({
     buttons: {
         display: 'flex',
         '& > *': {
-            margin: theme.spacing(0, 1),
+            marginLeft: theme.spacing(1) + '!important',
         },
     },
     floatButtonContainer: {
