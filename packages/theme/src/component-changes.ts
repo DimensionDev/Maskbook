@@ -199,6 +199,11 @@ export const Tabs: Theme = () => ({
         },
     },
 })
+export const Link: Theme = () => ({
+    components: {
+        MuiLink: { defaultProps: { underline: 'hover' } },
+    },
+})
 
 export const Typography: Theme = (mode, colors) => ({
     components: {

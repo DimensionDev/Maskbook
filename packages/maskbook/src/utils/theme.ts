@@ -45,6 +45,7 @@ const base: ThemeOptions = {
         },
     },
     components: {
+        MuiLink: { defaultProps: { underline: 'hover' } },
         MuiButton: {
             styleOverrides: {
                 root: {
