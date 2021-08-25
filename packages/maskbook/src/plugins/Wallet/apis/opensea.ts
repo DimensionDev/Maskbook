@@ -118,7 +118,6 @@ export interface AssetsListResponse {
 export async function getAssetsList(from: string, opts: { chainId?: ChainId; page?: number; size?: number }) {
     const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
     const params = new URLSearchParams()
-    params.append('exclude_currencies', 'true')
     params.append('owner', from.toLowerCase())
     params.append('limit', String(size))
     params.append('offset', String(size * page))
