@@ -1,15 +1,19 @@
 import { memo, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
-import { EthereumRpcType, formatWeiToEther } from '@masknet/web3-shared'
+import { EthereumRpcType, formatWeiToEther, useERC20TokenDetailed, useNativeTokenDetailed } from '@masknet/web3-shared'
 import { Typography, Link, Button } from '@material-ui/core'
 import { useI18N } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { LoadingButton } from '@material-ui/lab'
-import { useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
+import { FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { fetchTokenPrice } from '../../../../../plugins/Wallet/apis/coingecko'
+import BigNumber from 'bignumber.js'
+import { getAllCoins } from '../../../../../plugins/Trader/apis/coingecko'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -43,10 +47,12 @@ const useStyles = makeStyles()(() => ({
     },
     content: {
         flex: 1,
+        padding: '0 10px',
     },
     item: {
         display: 'flex',
         justifyContent: 'space-between',
+        alignItems: 'center',
     },
     label: {
         fontSize: 12,
@@ -65,6 +71,25 @@ const useStyles = makeStyles()(() => ({
         fontSize: 14,
         lineHeight: '20px',
     },
+    tokenIcon: {
+        width: 24,
+        height: 24,
+    },
+    amount: {
+        flex: 1,
+        fontSize: 18,
+        color: '#15181B',
+        lineHeight: '24px',
+        fontWeight: 500,
+        margin: '0 10px',
+    },
+    gasPrice: {
+        fontSize: 12,
+        lineHeight: '16px',
+        display: 'flex',
+        alignItems: 'center',
+        color: '#15181B',
+    },
 }))
 
 const ContractInteraction = memo(() => {
@@ -73,25 +98,66 @@ const ContractInteraction = memo(() => {
     const history = useHistory()
     const { value } = useUnconfirmedRequest()
 
-    const { spender, to, gasPrice } = useMemo(() => {
+    const { spender, to, gasPrice, amount } = useMemo(() => {
         if (
             value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
             value.computedPayload.name === 'approve'
         ) {
             const spender = value.computedPayload.parameters?.spender
+            const amount = value.computedPayload.parameters?.value
+
             const { gasPrice, to } = value.computedPayload._tx
             return {
                 spender,
                 gasPrice,
                 to,
+                amount,
             }
         }
         return {
             spender: '',
             gasPrice: 0,
             to: '',
+            amount: 0,
         }
     }, [value])
+
+    const { value: token } = useERC20TokenDetailed(to)
+    const { value: nativeToken } = useNativeTokenDetailed()
+
+    const { value: tokenPrices } = useAsync(async () => {
+        const coinList = await getAllCoins()
+
+        const tokenId = coinList?.find((coin) => coin.symbol === token?.symbol)?.id
+        const nativeTokenId = coinList?.find((coin) => coin.symbol === nativeToken?.symbol)?.id
+
+        if (!tokenId || !nativeTokenId)
+            return {
+                tokenPRice: 0,
+                nativeTokenPrice: 0,
+            }
+
+        const tokenPrice = await fetchTokenPrice(tokenId)
+        const nativeTokenPrice = await fetchTokenPrice(nativeTokenId)
+
+        return {
+            tokenPrice,
+            nativeTokenPrice,
+        }
+    }, [token, nativeToken])
+
+    const { tokenValueUSD, totalUSD } = useMemo(() => {
+        const tokenValueUSD = new BigNumber(amount ?? 0).times(tokenPrices?.tokenPrice ?? 0).toString()
+
+        const totalUSD = formatWeiToEther(gasPrice as number)
+            .times(tokenPrices?.nativeTokenPrice ?? 0)
+            .plus(tokenValueUSD)
+
+        return {
+            tokenValueUSD,
+            totalUSD,
+        }
+    }, [tokenPrices, gasPrice, amount])
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (value) {
@@ -110,35 +176,45 @@ const ContractInteraction = memo(() => {
                 </Typography>
             </div>
             <div className={classes.content}>
+                <div className={classes.item} style={{ marginTop: 20, marginBottom: 30 }}>
+                    <TokenIcon address={to ?? ''} classes={{ icon: classes.tokenIcon }} />
+                    <Typography className={classes.amount}>{amount}</Typography>
+                    <Typography>
+                        <FormattedCurrency value={tokenValueUSD} sign="$" />
+                    </Typography>
+                </div>
                 <div className={classes.item}>
                     <Typography className={classes.label}>{t('popups_wallet_contract_interaction_gas_fee')}</Typography>
-                    <Typography>
-                        {formatWeiToEther(gasPrice as number)} ETH
+                    <Typography className={classes.gasPrice}>
+                        <span>
+                            {formatWeiToEther(gasPrice as number).toString()} {nativeToken?.symbol}
+                        </span>
                         <Link
                             component="button"
                             onClick={() => history.push(PopupRoutes.GasSetting)}
-                            style={{ marginLeft: 10 }}>
+                            style={{ marginLeft: 10, fontSize: 'inherit', lineHeight: 'inherit' }}>
                             {t('popups_wallet_contract_interaction_edit')}
                         </Link>
                     </Typography>
                 </div>
-
-                <div className={classes.controller}>
-                    <Button
-                        variant="contained"
-                        className={classes.button}
-                        style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
-                        onClick={() => window.close()}>
-                        {t('cancel')}
-                    </Button>
-                    <LoadingButton
-                        loading={loading}
-                        variant="contained"
-                        className={classes.button}
-                        onClick={handleConfirm}>
-                        {t('confirm')}
-                    </LoadingButton>
+                <div className={classes.item} style={{ marginTop: 10 }}>
+                    <Typography className={classes.label}>{t('popups_wallet_contract_interaction_total')}</Typography>
+                    <Typography className={classes.gasPrice}>
+                        <FormattedCurrency value={totalUSD} sign="$" />
+                    </Typography>
                 </div>
+            </div>
+            <div className={classes.controller}>
+                <Button
+                    variant="contained"
+                    className={classes.button}
+                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
+                    onClick={() => window.close()}>
+                    {t('cancel')}
+                </Button>
+                <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
+                    {t('confirm')}
+                </LoadingButton>
             </div>
         </main>
     )
