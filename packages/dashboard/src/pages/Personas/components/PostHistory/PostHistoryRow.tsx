@@ -18,9 +18,11 @@ interface PostHistoryRowProps {
         url?: string
         summary?: string
         interestedMeta?: ReadonlyMap<string, unknown>
-        recipients: {
-            __raw_map__: ReadonlyMap<string, unknown>
-        }
+        recipients:
+            | 'everyone'
+            | {
+                  __raw_map__: ReadonlyMap<string, unknown>
+              }
     }
 }
 
@@ -32,15 +34,17 @@ export const PostHistoryRow = memo(({ post }: PostHistoryRowProps) => {
         return SUPPORT_PLUGIN[plugin] ?? <MessageIcon sx={{ width: 48, height: 48 }} />
     }, [post.interestedMeta])
 
-    const recipients = useMemo(() => {
-        const {
-            recipients: { __raw_map__: raws },
-        } = post
+    const allRecipients = useMemo(() => {
+        const { recipients } = post
+        if (recipients === 'everyone') return ['Everyone']
 
-        return [...raws.keys()].map((x) => x.replace(/^.*\//, ''))
+        const { __raw_map__: raws } = recipients
+        const keys = [...raws.keys()]
+
+        return keys.length ? keys.map((x) => x.replace(/^.*\//, '@')) : ['Myself']
     }, [post.recipients])
 
-    return <PostHistoryRowUI icon={postIcon} recipients={recipients} post={post} />
+    return <PostHistoryRowUI icon={postIcon} recipients={allRecipients} post={post} />
 })
 
 interface PostHistoryRowUIProps extends PostHistoryRowProps {
@@ -61,9 +65,9 @@ const PostHistoryRowUI = memo<PostHistoryRowUIProps>(({ post, icon, recipients }
                     {post.summary}
                 </Typography>
                 <Typography component="p" variant="body2" sx={{ color: (theme) => getMaskColor(theme).textSecondary }}>
-                    {recipients.map((r) => (
-                        <Typography component="span" variant="body2" sx={{ mr: 1 }}>
-                            @{r}
+                    {recipients.map((recipient) => (
+                        <Typography key={recipient} component="span" variant="body2" sx={{ mr: 1 }}>
+                            {recipient}
                         </Typography>
                     ))}
                 </Typography>

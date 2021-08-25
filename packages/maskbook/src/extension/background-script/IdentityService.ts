@@ -46,6 +46,7 @@ import type { EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } fr
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { MaskMessage } from '../../utils'
+import { orderBy } from 'lodash-es'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -205,7 +206,8 @@ export { queryPostsDB } from '../../database'
 
 export async function queryPostHistoryByIdentifiers(netwrok: string, useIds: string[]) {
     const posts = await queryPostsDB(netwrok)
-    return posts.filter((x) => useIds.includes(x.postBy.userId))
+    const orderedPosts = orderBy(posts, (x) => x.foundAt, 'desc')
+    return orderedPosts.filter((x) => x.summary && x.url && useIds.includes(x.postBy.userId))
 }
 //#endregion
 
