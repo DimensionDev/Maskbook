@@ -204,10 +204,27 @@ export { detachProfileDB as detachProfile } from '../../database/Persona/Persona
 //#region Post
 export { queryPostsDB } from '../../database'
 
-export async function queryPostHistoryByIdentifiers(netwrok: string, useIds: string[]) {
-    const posts = await queryPostsDB(netwrok)
-    const orderedPosts = orderBy(posts, (x) => x.foundAt, 'desc')
-    return orderedPosts.filter((x) => x.summary && x.url && useIds.includes(x.postBy.userId))
+export async function queryPagedPostHistoryByIdentifiers(
+    network: string,
+    useIds: string[],
+    page: number,
+    size: number,
+) {
+    const posts = await queryPostsDB(network)
+    const conditionPosts = orderBy(posts, (x) => x.foundAt, 'desc').filter(
+        (x) => x.summary && x.url && useIds.includes(x.postBy.userId),
+    )
+    const totalPages = Math.ceil(conditionPosts.length / size)
+    const currentPage = page >= totalPages ? totalPages : page
+    console.log(currentPage)
+
+    return {
+        total: conditionPosts.length,
+        pages: totalPages,
+        currentPage: currentPage,
+        haveNext: currentPage !== totalPages,
+        data: conditionPosts.slice((currentPage - 1) * size, currentPage * size),
+    }
 }
 //#endregion
 
