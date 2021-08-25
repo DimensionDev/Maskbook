@@ -84,7 +84,7 @@ export async function encryptTo(
         identifier: new PostIVIdentifier(whoAmI.network, payload.iv),
         postBy: whoAmI,
         postCryptoKey: postAESKey,
-        recipients: recipients,
+        recipients: publicShared ? 'everyone' : recipients,
         foundAt: new Date(),
         encryptBy: usingPersona.linkedPersona?.identifier,
     }
