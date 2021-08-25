@@ -185,6 +185,21 @@ export const Paper: Theme = (mode, colors) => ({
     },
 })
 
+export const Tabs: Theme = () => ({
+    components: {
+        MuiTab: {
+            styleOverrides: {
+                root: {
+                    // up-sm
+                    '@media screen and (min-width: 600px)': {
+                        minWidth: 160,
+                    },
+                },
+            },
+        },
+    },
+})
+
 export const Typography: Theme = (mode, colors) => ({
     components: {
         MuiTypography: {

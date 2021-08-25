@@ -58,7 +58,16 @@ const base: ThemeOptions = {
             },
         },
         MuiTab: {
-            styleOverrides: { root: { textTransform: 'unset', padding: '0' } },
+            styleOverrides: {
+                root: {
+                    textTransform: 'unset',
+                    padding: '0',
+                    // up-sm
+                    '@media screen and (min-width: 600px)': {
+                        minWidth: 160,
+                    },
+                },
+            },
         },
         MuiDialog: {
             styleOverrides: {
