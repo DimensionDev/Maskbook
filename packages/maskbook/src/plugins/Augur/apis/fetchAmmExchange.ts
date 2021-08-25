@@ -47,7 +47,7 @@ export async function fetchAmmExchange(address: string, id: string, url: string)
     )
 
     ammExchange.totalVolume = ammExchange.trades.reduce(
-        (accumulator, currentValue): BigNumber => accumulator.plus(currentValue.collateral.abs()),
+        (accumulator, currentValue): BigNumber => accumulator.plus(currentValue.collateral?.abs() ?? 0),
         new BigNumber(0),
     )
     const now = new Date()
@@ -55,7 +55,7 @@ export async function fetchAmmExchange(address: string, id: string, url: string)
     ammExchange.volume24hr = ammExchange.trades
         .filter((x) => x.timestamp > timestamps24hrAgo)
         .reduce(
-            (accumulator, currentValue): BigNumber => accumulator.plus(currentValue.collateral.abs()),
+            (accumulator, currentValue): BigNumber => accumulator.plus(currentValue.collateral?.abs() ?? 0),
             new BigNumber(0),
         )
 

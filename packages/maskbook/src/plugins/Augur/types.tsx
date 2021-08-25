@@ -126,7 +126,8 @@ export interface Liquidity {
 
 export interface Trade {
     outcome: number
-    collateral: BigNumber
+    price?: number
+    collateral?: BigNumber
     timestamp: number
 }
 
@@ -141,3 +142,12 @@ export interface EstimateTradeResult {
     outcomeShareTokensIn?: string[]
     maxSellAmount?: string
 }
+
+export enum Period {
+    H24 = '24hr',
+    D7 = '7d',
+    D30 = '30d',
+    ALL = 'All Time',
+}
+
+export type Stat = [number | string, number]

@@ -22,6 +22,7 @@ import { MarketBuySell } from './MarketBuySell'
 import { useFetchMarket } from '../hooks/useMarket'
 import { useAmmOutcomes } from '../hooks/useAmmOutcomes'
 import { useERC20TokenDetailed } from '@masknet/web3-shared'
+import { ChartView } from './ChartView'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -120,6 +121,7 @@ export function MarketView(props: MarketViewProps) {
     const tabs = [
         <Tab className={classes.tab} key="buysell" label={t('plugin_augur_tab_buysell')} />,
         <Tab className={classes.tab} key="description" label={t('plugin_augur_tab_description')} />,
+        <Tab className={classes.tab} key="chart" label={t('plugin_dhedge_tab_chart')} />,
     ].filter(Boolean)
     //#endregion
 
@@ -188,6 +190,7 @@ export function MarketView(props: MarketViewProps) {
                         <MarketBuySell market={market} ammOutcomes={ammOutcomes} cashToken={cashToken} />
                     ) : null}
                     {tabIndex === 1 ? <MarketDescription market={market} collateral={cashToken} /> : null}
+                    {tabIndex === 2 ? <ChartView market={market} /> : null}
                 </Paper>
             </CardContent>
             <CardActions className={classes.footer}>
