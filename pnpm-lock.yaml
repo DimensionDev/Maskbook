@@ -768,9 +768,11 @@ importers:
   packages/web3-shared:
     specifiers:
       '@dimensiondev/kit': '=0.0.0-20210630045432-e05621c'
+      '@ensdomains/address-encoder': ^0.2.6
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-contracts': workspace:*
       '@types/use-subscription': ^1.0.0
+      '@unstoppabledomains/resolution': ^5.0.1
       bignumber.js: 9.0.1
       ethereum-blockies: ^0.1.1
       fuse.js: ^6.4.6
@@ -785,16 +787,18 @@ importers:
       web3-utils: ^1.3.6
     dependencies:
       '@dimensiondev/kit': 0.0.0-20210630045432-e05621c
+      '@ensdomains/address-encoder': 0.2.6
       '@masknet/web3-constants': link:../web3-constants
       '@masknet/web3-contracts': link:../web3-contracts
+      '@unstoppabledomains/resolution': 5.0.1
       bignumber.js: 9.0.1
       ethereum-blockies: 0.1.1
       fuse.js: 6.4.6
       lodash-es: 4.17.21
-      react-use: 17.2.4_f991c289939c8299bed5e4a6a5a79a62
+      react-use: 17.2.4
       unstated-next: 1.1.0
       urlcat: 2.0.4
-      use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
+      use-subscription: 1.5.1
       wallet.ts: 1.0.1
       web3: 1.4.0
       web3-core: 1.4.0
@@ -4856,6 +4860,20 @@ packages:
 
   /@emotion/weak-memoize/0.2.5:
     resolution: {integrity: sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==}
+
+  /@ensdomains/address-encoder/0.2.6:
+    resolution: {integrity: sha512-b0jtq3vx1xxUJRwS9zJMy5SVtH1ixIS18gHm3tFyBR1ehsk/lK80nCoV1lJi0KXgQ/2RD+/KYoWlW5CNZG7AAw==}
+    dependencies:
+      bech32: 1.1.4
+      blakejs: 1.1.1
+      bn.js: 4.12.0
+      bs58: 4.0.1
+      crypto-addr-codec: 0.1.7
+      js-sha512: 0.8.0
+      nano-base32: 1.0.1
+      ripemd160: 2.0.2
+      sha3: 2.1.4
+    dev: false
 
   /@eslint/eslintrc/0.4.3:
     resolution: {integrity: sha512-J6KFFz5QCYUJq3pf0mjEcCJVERbzv71PUIDczuh9JkwGEzced6CO5ADLHB1rbf/+oPBtoPfMYNOpGDzCANlbXw==}
@@ -9359,6 +9377,20 @@ packages:
       tiny-warning: 1.0.3
     dev: false
 
+  /@unstoppabledomains/resolution/5.0.1:
+    resolution: {integrity: sha512-l98JuI2zvzA6Vx4CMIaYJvhhjiSBywWe3floRtxQJ4U5yMs3Rxwn0OrzD8Rd/zCPgRI7W/toU+rqSFEpQyFjsw==}
+    hasBin: true
+    dependencies:
+      '@ethersproject/abi': 5.4.0
+      bn.js: 4.12.0
+      commander: 4.1.1
+      elliptic: 6.5.4
+      ethereum-ens-network-map: 1.0.2
+      js-sha256: 0.9.0
+      js-sha3: 0.8.0
+      node-fetch: 2.6.1
+    dev: false
+
   /@walletconnect/browser-utils/1.4.1:
     resolution: {integrity: sha512-ONrkPSI/27o1Wj8kUwE0uUZFk0GDCDQBJy614GsrhcwuQwJEW/B+nXPQ+Ca/4WvQySM5hWVHp1gO1kozSUkh3A==}
     dependencies:
@@ -11365,6 +11397,11 @@ packages:
       open: 7.4.2
     dev: true
 
+  /big-integer/1.6.36:
+    resolution: {integrity: sha512-t70bfa7HYEA1D9idDbmuv7YbsbVkQ+Hp+8KFSul4aE5e/i1bjCNIRYJZlA8Q8p0r9T8cF/RVvwUgRA//FydEyg==}
+    engines: {node: '>=0.6'}
+    dev: false
+
   /big-integer/1.6.48:
     resolution: {integrity: sha512-j51egjPa7/i+RdiRuJbPdJ2FIUYYPhvYLjzoYbcMMm62ooO6F94fETG4MTs46zPAF9Brs04OajboA/qTGuz78w==}
     engines: {node: '>=0.6'}
@@ -12418,7 +12455,6 @@ packages:
   /commander/4.1.1:
     resolution: {integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==}
     engines: {node: '>= 6'}
-    dev: true
 
   /commander/5.1.0:
     resolution: {integrity: sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==}
@@ -12801,6 +12837,18 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
+
+  /crypto-addr-codec/0.1.7:
+    resolution: {integrity: sha512-X4hzfBzNhy4mAc3UpiXEC/L0jo5E8wAa9unsnA8nNXYzXjCcGk83hfC5avJWCSGT8V91xMnAS9AKMHmjw5+XCg==}
+    dependencies:
+      base-x: 3.0.8
+      big-integer: 1.6.36
+      blakejs: 1.1.1
+      bs58: 4.0.1
+      ripemd160-min: 0.0.6
+      safe-buffer: 5.2.1
+      sha3: 2.1.4
+    dev: false
 
   /crypto-browserify/3.12.0:
     resolution: {integrity: sha512-fz4spIh+znjO2VjL+IdhEpRJ3YN6sMzITSBijk6FK2UvTqruSQW+/cCZTSNsMiZNvUeq0CqurF+dAbyiGOY6Wg==}
@@ -14688,6 +14736,10 @@ packages:
       scrypt-js: 3.0.1
       secp256k1: 4.0.2
       setimmediate: 1.0.5
+    dev: false
+
+  /ethereum-ens-network-map/1.0.2:
+    resolution: {integrity: sha512-5qwJ5n3YhjSpE6O/WEBXCAb2nagUgyagJ6C0lGUBWC4LjKp/rRzD+pwtDJ6KCiITFEAoX4eIrWOjRy0Sylq5Hg==}
     dev: false
 
   /ethereumjs-abi/0.6.8:
@@ -18426,6 +18478,10 @@ packages:
     resolution: {integrity: sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==}
     dev: false
 
+  /js-sha256/0.9.0:
+    resolution: {integrity: sha512-sga3MHh9sgQN2+pJ9VYZ+1LPwXOxuBJBA5nrR5/ofPfuiJBE2hnjsaN8se8JznOmGLN2p49Pe5U/ttafcs/apA==}
+    dev: false
+
   /js-sha3/0.5.7:
     resolution: {integrity: sha1-DU/9gALVMzqrr0oj7tL2N0yfKOc=}
 
@@ -18439,6 +18495,10 @@ packages:
 
   /js-sha3/0.8.0:
     resolution: {integrity: sha512-gF1cRrHhIzNfToc802P800N8PpXS+evLLXfsVpowqmAFR9uwbi89WvXg2QspOmXL8QL86J4T1EpFu+yUkwJY3Q==}
+
+  /js-sha512/0.8.0:
+    resolution: {integrity: sha512-PWsmefG6Jkodqt+ePTvBZCSMFgN7Clckjd0O7su3I0+BW2QWUTJNzjktHsztGLhncP2h8mcF9V9Y2Ha59pAViQ==}
+    dev: false
 
   /js-string-escape/1.0.1:
     resolution: {integrity: sha1-4mJbrbwNZ8dTPp7cEGjFh65BN+8=}
@@ -19960,6 +20020,26 @@ packages:
 
   /nan/2.14.2:
     resolution: {integrity: sha512-M2ufzIiINKCuDfBSAUr1vWQ+vuVcA9kqx8JJUsbQi6yf1uGRyb7HfpdfUr5qLXf3B/t8dPvcjhKMmlfnP47EzQ==}
+
+  /nano-base32/1.0.1:
+    resolution: {integrity: sha1-ulSMh578+5DaHE2eCX20pGySVe8=}
+    dev: false
+
+  /nano-css/5.3.1:
+    resolution: {integrity: sha512-ENPIyNzANQRyYVvb62ajDd7PAyIgS2LIUnT9ewih4yrXSZX4hKoUwssy8WjUH++kEOA5wUTMgNnV7ko5n34kUA==}
+    peerDependencies:
+      react: '*'
+      react-dom: '*'
+    dependencies:
+      css-tree: 1.1.3
+      csstype: 3.0.8
+      fastest-stable-stringify: 2.0.2
+      inline-style-prefixer: 6.0.0
+      rtl-css-js: 1.14.1
+      sourcemap-codec: 1.4.8
+      stacktrace-js: 2.0.2
+      stylis: 4.0.10
+    dev: false
 
   /nano-css/5.3.1_f991c289939c8299bed5e4a6a5a79a62:
     resolution: {integrity: sha512-ENPIyNzANQRyYVvb62ajDd7PAyIgS2LIUnT9ewih4yrXSZX4hKoUwssy8WjUH++kEOA5wUTMgNnV7ko5n34kUA==}
@@ -22194,6 +22274,37 @@ packages:
       tslib: 2.3.0
     dev: false
 
+  /react-universal-interface/0.6.2_tslib@2.3.0:
+    resolution: {integrity: sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==}
+    peerDependencies:
+      react: '*'
+      tslib: '*'
+    dependencies:
+      tslib: 2.3.0
+    dev: false
+
+  /react-use/17.2.4:
+    resolution: {integrity: sha512-vQGpsAM0F5UIlshw5UI8ULGPS4yn5rm7/qvn3T1Gnkrz7YRMEEMh+ynKcmRloOyiIeLvKWiQjMiwRGtdbgs5qQ==}
+    peerDependencies:
+      react: ^16.8.0  || ^17.0.0
+      react-dom: ^16.8.0  || ^17.0.0
+    dependencies:
+      '@types/js-cookie': 2.2.7
+      '@xobotyi/scrollbar-width': 1.9.5
+      copy-to-clipboard: 3.3.1
+      fast-deep-equal: 3.1.3
+      fast-shallow-equal: 1.0.0
+      js-cookie: 2.2.1
+      nano-css: 5.3.1
+      react-universal-interface: 0.6.2_tslib@2.3.0
+      resize-observer-polyfill: 1.5.1
+      screenfull: 5.1.0
+      set-harmonic-interval: 1.0.1
+      throttle-debounce: 3.0.1
+      ts-easing: 0.2.0
+      tslib: 2.3.0
+    dev: false
+
   /react-use/17.2.4_f991c289939c8299bed5e4a6a5a79a62:
     resolution: {integrity: sha512-vQGpsAM0F5UIlshw5UI8ULGPS4yn5rm7/qvn3T1Gnkrz7YRMEEMh+ynKcmRloOyiIeLvKWiQjMiwRGtdbgs5qQ==}
     peerDependencies:
@@ -22914,6 +23025,11 @@ packages:
       glob: 7.1.7
     dev: true
 
+  /ripemd160-min/0.0.6:
+    resolution: {integrity: sha512-+GcJgQivhs6S9qvLogusiTcS9kQUfgR75whKuy5jIhuiOfQuJ8fjqxV6EGD5duH1Y/FawFUMtMhyeq3Fbnib8A==}
+    engines: {node: '>=8'}
+    dev: false
+
   /ripemd160/2.0.2:
     resolution: {integrity: sha512-ii4iagi25WusVoiC4B4lq7pbXfAp3D9v5CwfkY33vffw2+pkDjY1D8GaN7spsxvCSx8dkPqOZCEZyfxcmJG2IA==}
     dependencies:
@@ -23310,6 +23426,12 @@ packages:
     dependencies:
       inherits: 2.0.4
       safe-buffer: 5.2.1
+
+  /sha3/2.1.4:
+    resolution: {integrity: sha512-S8cNxbyb0UGUM2VhRD4Poe5N58gJnJsLJ5vC7FYWGUmGhcsj4++WaIOBFVDxlG0W3To6xBuiRh+i0Qp2oNCOtg==}
+    dependencies:
+      buffer: 6.0.3
+    dev: false
 
   /shallow-clone/0.1.2:
     resolution: {integrity: sha1-WQnodLp3EG1zrEFM/sH/yofZcGA=}
@@ -25521,6 +25643,14 @@ packages:
       react: 18.0.0-alpha-aecb3b6d1
       use-isomorphic-layout-effect: 1.1.1_010541d7fdfc8cbcdd915345c89295c8
     dev: true
+
+  /use-subscription/1.5.1:
+    resolution: {integrity: sha512-Xv2a1P/yReAjAbhylMfFplFKj9GssgTwN7RlcTxBujFQcloStWNDQdc4g4NRWH9xS4i/FDk04vQBptAXoF3VcA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0
+    dependencies:
+      object-assign: 4.1.1
+    dev: false
 
   /use-subscription/1.5.1_react@18.0.0-alpha-aecb3b6d1:
     resolution: {integrity: sha512-Xv2a1P/yReAjAbhylMfFplFKj9GssgTwN7RlcTxBujFQcloStWNDQdc4g4NRWH9xS4i/FDk04vQBptAXoF3VcA==}
