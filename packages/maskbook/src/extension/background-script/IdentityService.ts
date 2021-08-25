@@ -6,6 +6,7 @@ import {
     queryAvatarDataURL,
     queryPersona,
     queryPersonaRecord,
+    queryPostsDB,
     queryProfile,
     queryProfilesWithQuery,
     storeAvatar,
@@ -197,6 +198,15 @@ export async function attachProfile(
     return attachProfileDB(source, target, data)
 }
 export { detachProfileDB as detachProfile } from '../../database/Persona/Persona.db'
+//#endregion
+
+//#region Post
+export { queryPostsDB } from '../../database'
+
+export async function queryPostHistoryByIdentifiers(netwrok: string, useIds: string[]) {
+    const posts = await queryPostsDB(netwrok)
+    return posts.filter((x) => useIds.includes(x.postBy.userId))
+}
 //#endregion
 
 //#region Relation
