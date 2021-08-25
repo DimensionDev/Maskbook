@@ -57,3 +57,11 @@ export * from './useMnemonicWordsPuzzle'
 export * from './useGetPastLogsParams'
 export * from './useChainColor'
 export * from './useResolveEns'
+export * from './useResolveUns'
+
+// wallet plugin related
+export * from './useWallet'
+export * from './useWallets'
+export * from './useERC20Tokens'
+export * from './useERC20TokensPaged'
+export * from './useTrustedERC20Tokens'
