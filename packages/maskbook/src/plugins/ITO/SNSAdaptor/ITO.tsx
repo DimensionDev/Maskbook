@@ -259,6 +259,7 @@ export function ITO(props: ITO_Props) {
         !isRegionRestrict || !currentRegion || (!loadingRegion && allowRegions.includes(currentRegion.code))
 
     //#region if qualified
+    type Qual_V2 = { qualified: boolean; errorMsg: string }
     const {
         value: ifQualified = false,
         loading: loadingIfQualified,
@@ -670,14 +671,20 @@ export function ITO(props: ITO_Props) {
                             </ActionButton>
                         </Grid>
                     </Grid>
-                ) : !ifQualified ? (
+                ) : !ifQualified || !(ifQualified as Qual_V2).qualified ? (
                     <ActionButton
                         onClick={retryIfQualified}
                         loading={loadingIfQualified}
                         variant="contained"
                         size="large"
                         className={classes.actionButton}>
-                        {t(loadingIfQualified ? 'plugin_ito_qualification_loading' : 'plugin_ito_qualification_failed')}
+                        {loadingIfQualified
+                            ? t('plugin_ito_qualification_loading')
+                            : !ifQualified
+                            ? t('plugin_ito_qualification_failed')
+                            : !(ifQualified as Qual_V2).qualified
+                            ? (ifQualified as Qual_V2).errorMsg
+                            : null}
                     </ActionButton>
                 ) : listOfStatus.includes(ITO_Status.expired) ? (
                     <ActionButton
