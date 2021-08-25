@@ -7,7 +7,7 @@ import { safeNonPayableTransactionCall } from '../utils'
 import type { ERC721ContractDetailed, ERC721TokenDetailed } from '../types'
 import { getERC721TokenDetailedFromChain } from './useERC721TokenDetailed'
 import { useRef } from 'react'
-import { min } from 'lodash-es'
+import { min, uniqBy } from 'lodash-es'
 import urlcat from 'urlcat'
 
 export const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
@@ -33,7 +33,7 @@ export function useERC721TokenDetailedOwnerList(
 
         if (!GET_ASSETS_URL) {
             lists = await getERC721TokenDetailedOwnerListFromChain(erc721TokenContract, contractDetailed, owner, offset)
-            allListRef.current = allListRef.current.concat(lists)
+            allListRef.current = uniqBy<ERC721TokenDetailed>([...allListRef.current, ...lists], 'tokenId')
             return { tokenDetailedOwnerList: allListRef.current, loadMore: lists.length > 0 }
         }
 

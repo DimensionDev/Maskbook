@@ -1,19 +1,19 @@
 import { useMemo } from 'react'
 import { compact } from 'lodash-es'
 import { isSameAddress, useChainId, getChainIdFromName, ChainId } from '@masknet/web3-shared'
-import { RedPacketJSONPayload, RedPacketStatus, RedPacketAvailability } from '../../types'
-import { useAvailability } from './useAvailability'
+import { NftRedPacketJSONPayload, RedPacketStatus } from '../../types'
+import { useAvailabilityNftRedPacket } from './useAvailabilityNftRedPacket'
 
 /**
  * Fetch the red packet info from the chain
  * @param payload
  */
-export function useAvailabilityComputed(account: string, payload: RedPacketJSONPayload) {
+export function useNftAvailabilityComputed(account: string, payload: NftRedPacketJSONPayload) {
     const chainId = useChainId()
-    const asyncResult = useAvailability(1, account, payload?.rpid)
+    const asyncResult = useAvailabilityNftRedPacket(payload?.rpid, account)
 
     const result = asyncResult
-    const availability = result.value as RedPacketAvailability
+    const availability = result.value
 
     return useMemo(() => {
         if (!availability) {
@@ -22,7 +22,6 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
                 payload,
                 computed: {
                     canClaim: false,
-                    canRefund: false,
                     listOfStatus: [] as RedPacketStatus[],
                 },
             }
@@ -30,9 +29,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
 
         const isEmpty = availability.balance === '0'
         const isExpired = availability.expired
-        const isClaimed = availability.claimed_amount ? availability.claimed_amount !== '0' : availability.ifclaimed
-        const isRefunded =
-            isEmpty && Number.parseInt(availability.claimed, 10) < Number.parseInt(availability.total, 10)
+        const isClaimed = availability.isClaimed
         const isCreator = isSameAddress(payload?.sender.address ?? '', account)
         const parsedChainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
         return {
@@ -40,12 +37,10 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             computed: {
                 canFetch: parsedChainId === chainId,
                 canClaim: !isExpired && !isEmpty && !isClaimed && parsedChainId === chainId && payload.password,
-                canRefund: isExpired && !isEmpty && isCreator && parsedChainId === chainId,
-                canSend: !isEmpty && !isExpired && !isRefunded && isCreator && parsedChainId === chainId,
+                canSend: !isEmpty && !isExpired && isCreator && parsedChainId === chainId,
                 listOfStatus: compact([
                     isClaimed ? RedPacketStatus.claimed : undefined,
                     isEmpty ? RedPacketStatus.empty : undefined,
-                    isRefunded ? RedPacketStatus.refunded : undefined,
                     isExpired ? RedPacketStatus.expired : undefined,
                 ]),
             },

@@ -13,7 +13,7 @@ import {
     useERC721TokenDetailedOwnerList,
     useAccount,
     useChainId,
-    useRedPacketNftConstants,
+    useNftRedPacketConstants,
 } from '@masknet/web3-shared'
 import CloseIcon from '@material-ui/icons/Close'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
@@ -153,12 +153,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     const addOffset = useCallback(() => (loadMore ? setOffset(offset + 1) : void 0), [offset, loadMore])
 
-    const removeToken = useCallback(
-        (token: ERC721TokenDetailed) => {
-            setExistTokenDetailedList(existTokenDetailedList.filter((t) => t.tokenId !== token.tokenId))
-        },
-        [existTokenDetailedList, setExistTokenDetailedList],
-    )
+    const removeToken = useCallback((token: ERC721TokenDetailed) => {
+        setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))
+    }, [])
 
     const clearToken = useCallback(() => {
         setOffset(0)
@@ -179,12 +176,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         clearContract()
     }, [chainId])
 
-    const { RED_PACKET_NFT_ADDRESS } = useRedPacketNftConstants()
+    const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants()
 
     const validationMessage = useMemo(() => {
         if (existTokenDetailedList.length === 0) return t('plugin_wallet_select_a_token')
         return ''
-    }, [existTokenDetailedList])
+    }, [existTokenDetailedList.length])
 
     return (
         <>

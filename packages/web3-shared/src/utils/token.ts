@@ -78,6 +78,9 @@ export function createERC721Token(
         contractDetailed,
         info,
         tokenId,
+        name: info.name ?? '',
+        address: contractDetailed.address,
+        logoURI: '',
     }
 }
 

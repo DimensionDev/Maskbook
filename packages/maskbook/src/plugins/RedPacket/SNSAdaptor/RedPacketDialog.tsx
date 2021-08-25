@@ -4,11 +4,11 @@ import { usePortalShadowRoot, makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { RedPacketJSONPayload, DialogTabs, RedPacketRecord } from '../types'
+import { RedPacketJSONPayload, DialogTabs, RedPacketRecord, NftRedPacketJSONPayload } from '../types'
 import { RedPacketRPC } from '../messages'
 import { RedPacketMetaKey } from '../constants'
 import { RedPacketCreateNew } from './RedPacketCreateNew'
-import { RedPacketHistoryList } from './RedPacketHistoryList'
+import { RedPacketPast } from './RedPacketPast'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import Services from '../../../extension/service'
 import Web3Utils from 'web3-utils'
@@ -74,12 +74,15 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }, [props, state])
 
     const onCreateOrSelect = useCallback(
-        async (payload: RedPacketJSONPayload) => {
+        async (payload: RedPacketJSONPayload | NftRedPacketJSONPayload) => {
             if (payload.password === '') {
                 if (payload.contract_version === 1) {
                     alert('Unable to share a red packet without a password. But you can still withdraw the red packet.')
                     payload.password = prompt('Please enter the password of the red packet:', '') ?? ''
-                } else if (payload.contract_version > 1 && payload.contract_version < 4) {
+                } else if (
+                    (payload.contract_version > 1 && payload.contract_version < 4) ||
+                    payload.token_type === EthereumTokenType.ERC721
+                ) {
                     // just sign out the password if it is lost.
                     payload.password = await Services.Ethereum.personalSign(
                         Web3Utils.sha3(payload.sender.message) ?? '',
@@ -233,7 +236,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             },
             {
                 label: t('plugin_red_packet_select_existing'),
-                children: <RedPacketHistoryList onSelect={onCreateOrSelect} onClose={onClose} />,
+                children: <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />,
                 sx: { p: 0 },
             },
         ],
