@@ -4,7 +4,7 @@ import { useDashboardI18N } from '../../locales'
 import { Paper, Stack, Box } from '@material-ui/core'
 import { ActionCard } from '../../components/ActionCard'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { PluginMessages } from '../../API'
+import { PluginMessages, Services } from '../../API'
 
 const Container = styled('div')`
     display: flex;
@@ -32,7 +32,7 @@ export function StartUp() {
                             action={{
                                 type: 'primary',
                                 text: t.wallets_startup_create_action(),
-                                handler: () => {},
+                                handler: () => Services.Helper.openInternalPage('next.html#/create-mask-wallet'),
                             }}
                         />
                         <ActionCard
@@ -42,7 +42,7 @@ export function StartUp() {
                             action={{
                                 type: 'primary',
                                 text: t.wallets_startup_create_action(),
-                                handler: () => {},
+                                handler: () => Services.Helper.openPopupsWindow('/wallet/import'),
                             }}
                         />
                         <ActionCard
