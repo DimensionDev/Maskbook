@@ -43,6 +43,7 @@ import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import urlcat from 'urlcat'
+import { startCase } from 'lodash-es'
 
 export interface IconProps {
     size?: number
@@ -683,7 +684,7 @@ export function ITO(props: ITO_Props) {
                             : !ifQualified
                             ? t('plugin_ito_qualification_failed')
                             : !(ifQualified as Qual_V2).qualified
-                            ? (ifQualified as Qual_V2).errorMsg
+                            ? startCase((ifQualified as Qual_V2).errorMsg)
                             : null}
                     </ActionButton>
                 ) : listOfStatus.includes(ITO_Status.expired) ? (
