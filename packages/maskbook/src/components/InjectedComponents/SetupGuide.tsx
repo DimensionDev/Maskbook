@@ -398,6 +398,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                         />
                         {gotoProfilePageImpl && xsOnly ? (
                             <IconButton
+                                size="large"
                                 className={findUsernameClasses.button}
                                 color={username ? 'primary' : 'default'}
                                 disabled={!username}>

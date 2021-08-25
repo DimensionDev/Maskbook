@@ -54,7 +54,7 @@ function SwapItem(props: SwapItemProps) {
                 })}
             </Typography>
             <div onClick={() => setExchange(!exchange)}>
-                <IconButton>
+                <IconButton size="large">
                     <RepeatIcon fontSize="small" />
                 </IconButton>
             </div>

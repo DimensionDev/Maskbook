@@ -142,12 +142,12 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
                 {...props.TokenAmountPanelProps}
             />
             {showAdd ? (
-                <IconButton onClick={onAdd} className={classes.button}>
+                <IconButton size="large" onClick={onAdd} className={classes.button}>
                     <AddIcon color="primary" />
                 </IconButton>
             ) : null}
             {showRemove ? (
-                <IconButton onClick={onRemove} className={classes.button}>
+                <IconButton size="large" onClick={onRemove} className={classes.button}>
                     <RemoveIcon color="secondary" />
                 </IconButton>
             ) : null}

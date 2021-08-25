@@ -1,4 +1,4 @@
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { styled } from '@material-ui/core/styles'
 import { FooterLine } from '../FooterLine'
 import { Paper, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'

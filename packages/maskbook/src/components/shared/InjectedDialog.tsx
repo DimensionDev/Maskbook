@@ -27,7 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: 6,
         verticalAlign: 'middle',
     },
-    dialogBackdropRoot: {},
 }))
 
 export type InjectedDialogClassKey =
@@ -94,6 +93,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 {title ? (
                     <DialogTitle classes={{ root: dialogTitle }}>
                         <IconButton
+                            size="large"
                             classes={{ root: dialogCloseButton }}
                             aria-label={t('post_dialog__dismiss_aria')}
                             onClick={onClose}>
@@ -116,13 +116,16 @@ function CopyElementWithNewProps<T>(
     // @ts-ignore
     extraClasses: T['classes'],
 ) {
+    let hasDividersSet = false
     return (
-        Children.map(children, (child: any) =>
-            child?.type === Target
-                ? cloneElement(child, {
-                      classes: mergeClasses(extraClasses, child.props.classes),
-                  } as DialogContentProps)
-                : null,
-        ) || []
+        Children.map(children, (child: any) => {
+            const target = child?.type
+            if (target !== Target) return null
+            const props = {
+                classes: mergeClasses(extraClasses, child.props.classes),
+            } as DialogContentProps
+            if (target === DialogContent && !hasDividersSet) props.dividers = hasDividersSet = true
+            return cloneElement(child, props)
+        }) || []
     ).filter(Boolean)
 }

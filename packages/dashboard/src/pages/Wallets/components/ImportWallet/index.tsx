@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Button, experimentalStyled as styled, FilledInput, Tab } from '@material-ui/core'
+import { Button, styled, FilledInput, Tab } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { ButtonGroupTabList, useTabs } from '@masknet/theme'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'

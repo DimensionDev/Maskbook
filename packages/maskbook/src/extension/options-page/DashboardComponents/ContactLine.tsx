@@ -1,4 +1,5 @@
-import { Typography, IconButton, MenuItem, ListItem, ListItemTypeMap } from '@material-ui/core'
+import { Typography, IconButton, MenuItem, ListItemTypeMap } from '@material-ui/core'
+import ListItemButton from '@material-ui/core/ListItemButton'
 import { makeStyles } from '@masknet/theme'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import type { Profile } from '../../../database'
@@ -70,7 +71,7 @@ export function ContactLine(props: ContactLineProps) {
     return (
         <>
             {/* // TODO: Use standard ListItemAvatar, ListItemText and ListItemSecondaryAction instead of custom one. */}
-            <ListItem button selected={false} onClick={openContactDialog} className={classes.line} {...rest}>
+            <ListItemButton selected={false} onClick={openContactDialog} className={classes.line} {...rest}>
                 <Avatar className={classes.avatar} person={contact} />
                 <Typography className={classes.user}>{contact.nickname || contact.identifier.userId}</Typography>
                 <Typography className={classes.provider}>@{contact.identifier.network}</Typography>
@@ -88,7 +89,7 @@ export function ContactLine(props: ContactLineProps) {
                     }}>
                     <MoreHorizIcon />
                 </IconButton>
-            </ListItem>
+            </ListItemButton>
             {menu}
             {contactDialog}
             {deleteContactConfirmDialog}

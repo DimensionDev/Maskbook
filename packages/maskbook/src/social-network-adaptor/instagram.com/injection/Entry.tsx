@@ -1,4 +1,4 @@
-import { Fab, experimentalStyled as styled } from '@material-ui/core'
+import { Fab, styled } from '@material-ui/core'
 import { Create } from '@material-ui/icons'
 import { Composition } from '../../../components/CompositionDialog/Composition'
 import { useState, useEffect } from 'react'
