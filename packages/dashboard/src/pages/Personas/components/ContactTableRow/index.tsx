@@ -2,7 +2,7 @@ import type { RelationProfile } from '@masknet/shared'
 import { memo, useCallback } from 'react'
 import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { StarIcon, MaskNetworkIcon } from '@masknet/icons'
+import { StarIcon, MaskBlueIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import { Services } from '../../../../API'
 import { useDashboardI18N } from '../../../../locales'
@@ -127,7 +127,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                                 {first[0]}
                                 {(last || '')[0]}
                             </Avatar>
-                            {contact.fingerprint ? <MaskNetworkIcon className={classes.maskIcon} /> : null}
+                            {contact.fingerprint ? <MaskBlueIcon className={classes.maskIcon} /> : null}
                         </Box>
                         <Box className={classes.info}>
                             <Typography>{contact.name}</Typography>
