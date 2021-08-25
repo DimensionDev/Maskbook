@@ -1,13 +1,7 @@
 import path from 'path'
 import fs, { promises } from 'fs'
 
-import webpack, {
-    Configuration,
-    HotModuleReplacementPlugin,
-    ProvidePlugin,
-    DefinePlugin,
-    EnvironmentPlugin,
-} from 'webpack'
+import { Configuration, HotModuleReplacementPlugin, ProvidePlugin, DefinePlugin, EnvironmentPlugin } from 'webpack'
 // Merge declaration of Configuration defined in webpack
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 
@@ -20,13 +14,12 @@ import CopyPlugin from 'copy-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
 import WebExtensionTarget from 'webpack-target-webextension'
 import ManifestPlugin from 'webpack-extension-manifest-plugin'
+import { ReadonlyCachePlugin } from './miscs/ReadonlyCachePlugin'
 //#endregion
 
 import git from '@nice-labs/git-rev'
-import rimraf from 'rimraf'
 
 import * as modifiers from './miscs/manifest-modifiers'
-import { promisify } from 'util'
 
 const src = (file: string) => path.join(__dirname, file)
 const root = (file: string) => path.join(__dirname, '../../', file)
@@ -98,6 +91,7 @@ function config(opts: {
                 // Those packages are also installed as dependencies so they appears in node_modules
                 // By aliasing them to the original position, we can speed up the compile because there is no need to wait tsc build them to the dist folder.
                 '@masknet/dashboard$': src('../dashboard/src/entry.tsx'),
+                '@masknet/injected-script': src('../injected-script/src/sdk'),
                 '@masknet/shared': src('../shared/src/'),
                 '@masknet/shared-base': src('../shared-base/src/'),
                 '@masknet/theme': src('../theme/src/'),
@@ -236,9 +230,7 @@ function config(opts: {
             hotUpdateMainFilename: 'hot.[runtime].[fullhash].json',
             globalObject: 'globalThis',
             publicPath: '/',
-            // clean: undefined,
-            // do not use output.clean
-            // we're using multiple configs (main and injected script), that will cause injected script output get removed when the main config starts to build.
+            clean: mode === 'production',
         },
         ignoreWarnings: [/Failed to parse source map/],
         // @ts-ignore
@@ -294,25 +286,18 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
             ? argv.outputPath
             : root(argv.outputPath)
         : defaultDist
-    if (mode === 'production') await promisify(rimraf)(dist)
     const disableHMR = Boolean(process.env.NO_HMR)
     const isManifestV3 = target.runtimeEnv.manifest === 3
 
     const shared = { mode, target, dist, isProfile: target.isProfile, readonlyCache: target.readonlyCache }
     const main = config({ ...shared, disableHMR, name: 'main' })
     const manifestV3 = config({ ...shared, disableHMR: true, name: 'background-worker', hmrPort: 35938 })
-    const injectedScript = config({
-        ...shared,
-        disableHMR: true,
-        name: 'injected-script',
-        noEval: true,
-        hmrPort: 35939,
-    })
     // Modify Main
     {
         main.plugins!.push(
             new (WebExtensionTarget as any)(), // See https://github.com/crimx/webpack-target-webextension,
             new CopyPlugin({ patterns: [{ from: publicDir, to: dist }] }),
+            new CopyPlugin({ patterns: [{ from: src('../injected-script/dist/injected-script.js'), to: dist }] }),
             getManifestPlugin(),
             ...getBuildNotificationPlugins(),
         )
@@ -350,16 +335,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
         // ? Service workers must registered at the / root
         manifestV3.output!.filename = 'manifest-v3.entry.js'
     }
-    // Modify injectedScript
-    {
-        injectedScript.entry = { 'injected-script': src('./src/extension/injected-script/index.ts') }
-        injectedScript.optimization!.splitChunks = false
-    }
-    if (mode === 'production') return [main, isManifestV3 && manifestV3, injectedScript].filter(nonNullable)
-    // @ts-ignore
-    delete injectedScript.devServer
-    // TODO: multiple config seems doesn't work well therefore we start the watch mode webpack compiler manually, ignore the build message currently
-    webpack(injectedScript).watch(watchOptions, () => {})
+    if (mode === 'production') return [main, isManifestV3 && manifestV3].filter(nonNullable)
     return main
 
     function withReactDevTools(...x: string[]) {
@@ -539,17 +515,3 @@ promises.readdir(path.join(__dirname, '../../dist')).then(
     },
     () => {},
 )
-
-class ReadonlyCachePlugin {
-    apply(compiler: webpack.Compiler) {
-        compiler.cache.hooks.store.intercept({
-            register: (tapInfo) => {
-                return {
-                    name: ReadonlyCachePlugin.name,
-                    type: tapInfo.type,
-                    fn: function preventCacheStore() {},
-                }
-            },
-        })
-    }
-}

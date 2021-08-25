@@ -2,18 +2,21 @@ import yargs, { Argv } from 'yargs'
 import { spawn } from 'child_process'
 import { compact } from 'lodash'
 import { resolve } from 'path'
-import { PKG_PATH, task, watchTask } from '../utils'
+import { awaitChildProcess, PKG_PATH, watchTask } from '../utils'
+import { buildInjectedScript, watchInjectedScript } from './injected-scripts'
 
 const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base'] as const
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'manifest-v3', 'readonlyCache', 'progress'] as const
 
-export function extension(f?: Function | ExtensionBuildArgs) {
-    if (typeof f === 'function') return webpack('build')
-    return webpack('build', f)
+export async function extension(f?: Function | ExtensionBuildArgs) {
+    await buildInjectedScript()
+    if (typeof f === 'function') return awaitChildProcess(webpack('build'))
+    return awaitChildProcess(webpack('build', f))
 }
-export function extensionWatch(f?: Function | ExtensionBuildArgs) {
-    if (typeof f === 'function') return webpack('dev')
-    return webpack('dev', f)
+export async function extensionWatch(f?: Function | ExtensionBuildArgs) {
+    watchInjectedScript()
+    if (typeof f === 'function') return awaitChildProcess(webpack('dev'))
+    return awaitChildProcess(webpack('dev', f))
 }
 watchTask(extension, extensionWatch, 'webpack', 'Build Mask Network extension', {
     '[Warning]': 'For normal development, use task "dev" or "build"',

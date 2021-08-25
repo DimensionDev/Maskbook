@@ -18,7 +18,8 @@
     { "path": "../icons" },
     { "path": "../plugin-infra" },
     { "path": "../plugins/Wallet" },
-    { "path": "../external-plugin-previewer" }
+    { "path": "../external-plugin-previewer" },
+    { "path": "../injected-script" }
   ],
   "ts-node": {
     "transpileOnly": true,
