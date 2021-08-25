@@ -55,12 +55,11 @@ export interface MaskNetworkAPIs {
     persona_backupJson(params: { identifier: PersonaIdentifier_string }): Promise<unknown>
     persona_backupPrivateKey(params: { identifier: PersonaIdentifier_string }): Promise<string | undefined>
     profile_queryProfiles(params: { network: string }): Promise<Profile[]>
-    profile_queryMyProfile(params: { network: string }): Promise<Profile[]>
+    profile_queryMyProfiles(params: { network: string }): Promise<Profile[]>
     profile_updateProfileInfo(params: {
         identifier: ProfileIdentifier_string
         data: { nickname?: string; avatarURL?: string }
     }): Promise<void>
-    profile_removeProfile(params: { identifier: string }): Promise<void>
     profile_removeProfile(params: { identifier: ProfileIdentifier_string }): Promise<void>
     wallet_updateEthereumAccount(params: { account: string }): Promise<void>
     wallet_updateEthereumChainId(params: { chainId: number }): Promise<void>
