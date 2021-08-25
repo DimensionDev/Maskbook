@@ -126,8 +126,6 @@ function getStyle() {
 
 export function EnhancedProfileTabAtTwitter() {
     const style = getStyle()
-    console.log('--------')
-    console.log(style)
     const { classes } = useStyles(style)
     return (
         <EnhancedProfileTab classes={classes} reset={reset} clear={clear} children={<div className={classes.line} />} />
