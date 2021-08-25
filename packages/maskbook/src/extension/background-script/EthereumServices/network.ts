@@ -45,7 +45,7 @@ export async function getBlockNumber(overrides?: SendOverrides) {
         },
         overrides,
     )
-    return Number.parseInt(blockNumber, 16)
+    return Number.parseInt(blockNumber, 16) || 0
 }
 
 export async function getBalance(address: string, overrides?: SendOverrides) {
@@ -86,7 +86,7 @@ export async function getTransactionCount(address: string, overrides?: SendOverr
         },
         overrides,
     )
-    return Number.parseInt(count, 16)
+    return Number.parseInt(count, 16) || 0
 }
 
 export async function call(config: TransactionConfig, overrides?: SendOverrides) {
@@ -107,7 +107,7 @@ export async function estimateGas(config: TransactionConfig, overrides?: SendOve
         },
         overrides,
     )
-    return Number.parseInt(gas, 16)
+    return Number.parseInt(gas, 16) || 0
 }
 
 export async function sign(dataToSign: string, address: string, overrides?: SendOverrides) {

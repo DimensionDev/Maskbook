@@ -106,6 +106,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                         {nickname}
                     </Typography>
                     <IconButton
+                        size="large"
                         onClick={(e) => {
                             e.stopPropagation()
                             openMenu(e)

@@ -33,12 +33,13 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                 type Version4PostRecord = Omit<Version3PostRecord, 'recipients'> & {
                     recipients: Map<string, Version3RecipientDetail>
                 }
-                type Version5PostRecord = Omit<Version4PostRecord, 'postCryptoKey'> & {
+                type Version5PostRecord = Omit<Version4PostRecord, 'postCryptoKey' | 'recipients'> & {
                     postCryptoKey?: AESJsonWebKey
                     encryptBy?: PrototypeLess<PersonaIdentifier>
                     url?: string
                     summary?: string
                     interestedMeta?: ReadonlyMap<string, unknown>
+                    recipients: true | Map<string, Version3RecipientDetail>
                 }
                 /**
                  * A type assert that make sure a and b are the same type
@@ -186,16 +187,20 @@ export async function updatePostDB(
         mode === 'override' ? postToDB(nextRecord).recipients : postToDB(currentRecord).recipients
     if (mode === 'append') {
         if (updateRecord.recipients) {
-            for (const [id, patchDetail] of updateRecord.recipients) {
-                const idText = id.toText()
-                if (nextRecipients.has(idText)) {
-                    const { reason, ...rest } = patchDetail
-                    const nextDetail = nextRecipients.get(idText)!
-                    Object.assign(nextDetail, rest)
-                    nextDetail.reason = [...nextDetail.reason, ...patchDetail.reason]
-                } else {
-                    nextRecipients.set(idText, patchDetail)
+            if (typeof updateRecord.recipients === 'object' && typeof nextRecipients === 'object') {
+                for (const [id, patchDetail] of updateRecord.recipients) {
+                    const idText = id.toText()
+                    if (nextRecipients.has(idText)) {
+                        const { reason, ...rest } = patchDetail
+                        const nextDetail = nextRecipients.get(idText)!
+                        Object.assign(nextDetail, rest)
+                        nextDetail.reason = [...nextDetail.reason, ...patchDetail.reason]
+                    } else {
+                        nextRecipients.set(idText, patchDetail)
+                    }
                 }
+            } else {
+                nextRecord.recipients = 'everyone'
             }
         }
     }
@@ -243,13 +248,15 @@ export async function deletePostCryptoKeyDB(record: PostIVIdentifier, t?: PostTr
 //#region db in and out
 function postOutDB(db: PostDBRecord): PostRecord {
     const { identifier, foundAt, postBy, recipients, postCryptoKey, encryptBy, interestedMeta, summary, url } = db
-    for (const detail of recipients.values()) {
-        detail.reason.forEach((x) => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
+    if (typeof recipients === 'object') {
+        for (const detail of recipients.values()) {
+            detail.reason.forEach((x) => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
+        }
     }
     return {
         identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(),
         postBy: restorePrototype(postBy, ProfileIdentifier.prototype),
-        recipients: new IdentifierMap(recipients, ProfileIdentifier),
+        recipients: recipients === true ? 'everyone' : new IdentifierMap(recipients, ProfileIdentifier),
         foundAt: foundAt,
         postCryptoKey: postCryptoKey,
         encryptBy: restorePrototype(encryptBy, ECKeyIdentifier.prototype),
@@ -262,7 +269,7 @@ function postToDB(out: PostRecord): PostDBRecord {
     return {
         ...out,
         identifier: out.identifier.toText(),
-        recipients: out.recipients.__raw_map__,
+        recipients: out.recipients === 'everyone' ? true : out.recipients.__raw_map__,
     }
 }
 //#endregion
@@ -297,7 +304,7 @@ export interface PostRecord {
     /**
      * Receivers
      */
-    recipients: IdentifierMap<ProfileIdentifier, RecipientDetail>
+    recipients: 'everyone' | IdentifierMap<ProfileIdentifier, RecipientDetail>
     /** @deprecated */
     recipientGroups?: unknown
     /**
@@ -318,7 +325,7 @@ export interface PostRecord {
 interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients' | 'encryptBy'> {
     postBy: PrototypeLess<ProfileIdentifier>
     identifier: string
-    recipients: Map<string, RecipientDetail>
+    recipients: true | Map<string, RecipientDetail>
     encryptBy?: PrototypeLess<PersonaIdentifier>
 }
 

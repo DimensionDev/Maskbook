@@ -52,11 +52,14 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                 account: countryCode + phone,
                 type: 'phone',
                 code,
+            }).catch((err) => {
+                if (err.status === 400) {
+                    // incorrect code
+                    setInvalidCode(true)
+                }
             })
 
-            if (result.message) {
-                setInvalidCode(true)
-            } else {
+            if (result) {
                 if (step === 0) {
                     // original email verified
                     setCountryCode('')

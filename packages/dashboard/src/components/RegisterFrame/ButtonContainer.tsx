@@ -1,4 +1,4 @@
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { styled } from '@material-ui/core/styles'
 import { buttonClasses, Stack } from '@material-ui/core'
 import type { PropsWithChildren } from 'react'
 

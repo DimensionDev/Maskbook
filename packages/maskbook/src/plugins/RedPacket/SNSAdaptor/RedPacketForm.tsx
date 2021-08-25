@@ -181,7 +181,13 @@ export function RedPacketForm(props: RedPacketFormProps) {
                             setRawAmount('0')
                             setIsRandom(e.target.value as number)
                         }}
-                        MenuProps={props.SelectMenuProps}>
+                        MenuProps={{
+                            anchorOrigin: {
+                                vertical: 'top',
+                                horizontal: 'left',
+                            },
+                            ...props.SelectMenuProps,
+                        }}>
                         <MenuItem value={0}>{t('plugin_red_packet_average')}</MenuItem>
                         <MenuItem value={1}>{t('plugin_red_packet_random')}</MenuItem>
                     </Select>
