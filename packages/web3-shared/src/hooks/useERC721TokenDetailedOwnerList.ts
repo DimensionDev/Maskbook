@@ -76,12 +76,12 @@ async function getERC721TokenDetailedOwnerListFromChain(
             erc721TokenContract.methods.tokenOfOwnerByIndex(owner, i + offset * queryLimit),
         )
 
-        if (tokenId) {
-            const tokenDetailed = await getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
-            return tokenDetailed
+        if (!tokenId) {
+            return
         }
 
-        return
+        const tokenDetailed = await getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
+        return tokenDetailed
     })
 
     const tokenDetailedOwnerList = (await Promise.allSettled(allRequest))
