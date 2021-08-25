@@ -61,7 +61,7 @@
         "BSCT": "",
         "Matic": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-polygon",
         "Mumbai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mumbai",
-        "Arbitrum": "https://thegraph.com/legacy-explorer/subgraph/dimensiondev/mask-red-packet-arbitrum-one",
+        "Arbitrum": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-arbitrum-one",
         "Arbitrum_Rinkeby": ""
     }
 }
