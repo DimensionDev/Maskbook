@@ -104,6 +104,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 onClick={async () => {
                                     if (!data.image) return
                                     await navigator.clipboard.write([
+                                        // @ts-expect-error https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1029#issuecomment-898868750
                                         new ClipboardItem({ [data.image.type]: data.image }),
                                     ])
                                     enqueueSnackbar(t('copy_success_of_image'), {
