@@ -2,12 +2,17 @@ import { Resolution } from '@unstoppabledomains/resolution'
 import { useAsyncRetry } from 'react-use'
 import { useChainId } from '.'
 
-export function useResolveUns(ens: string) {
+export function useResolveUns(uns: string) {
     const chainId = useChainId()
-    const resolution = new Resolution()
 
     return useAsyncRetry(async () => {
-        const result = await resolution.records(ens, ['crypto.ETH.address'])
-        return result['crypto.ETH.address']
-    }, [ens, chainId])
+        if (!uns) return ''
+        return resolve(uns)
+    }, [uns, chainId])
+}
+
+async function resolve(uns: string) {
+    const resolution = new Resolution()
+    const result = await resolution.records(uns, ['crypto.ETH.address'])
+    return result['crypto.ETH.address']
 }
