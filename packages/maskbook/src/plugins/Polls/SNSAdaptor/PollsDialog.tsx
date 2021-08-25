@@ -125,6 +125,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                 variant="standard"
                 MenuProps={{
                     container,
+                    anchorOrigin: { horizontal: 'left', vertical: 'bottom' },
                     classes: { paper: classes.menuPaper },
                 }}
                 value={defaultIndex}

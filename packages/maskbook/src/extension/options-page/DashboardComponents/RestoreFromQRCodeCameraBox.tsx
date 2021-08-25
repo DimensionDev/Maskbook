@@ -4,7 +4,6 @@ import { makeStyles } from '@masknet/theme'
 import CropFreeIcon from '@material-ui/icons/CropFree'
 import { useModal } from '../DashboardDialogs/Base'
 import { QRCodeVideoScannerDialog } from '../DashboardDialogs/Setup'
-import { usePortalShadowRoot } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { useVideoDevices } from '../../../utils/hooks/useVideoDevices'
 import { nativeAPI } from '../../../utils/native-rpc'
@@ -60,22 +59,19 @@ export const RestoreFromQRCodeCameraBox =
                           justifyContent: 'space-between',
                       }}>
                       <FormControl className={classes.formControl} variant="filled">
-                          {usePortalShadowRoot((container) => (
-                              <Select
-                                  value={selectedDeviceId}
-                                  variant="outlined"
-                                  MenuProps={{
-                                      container,
-                                      classes: { paper: classes.menuPaper },
-                                  }}
-                                  onChange={(e) => setSelectedDeviceId(e.target.value as string)}>
-                                  {filteredDevices.map(({ deviceId, label }) => (
-                                      <MenuItem key={deviceId} value={deviceId}>
-                                          {label}
-                                      </MenuItem>
-                                  ))}
-                              </Select>
-                          ))}
+                          <Select
+                              value={selectedDeviceId}
+                              variant="outlined"
+                              MenuProps={{
+                                  classes: { paper: classes.menuPaper },
+                              }}
+                              onChange={(e) => setSelectedDeviceId(e.target.value as string)}>
+                              {filteredDevices.map(({ deviceId, label }) => (
+                                  <MenuItem key={deviceId} value={deviceId}>
+                                      {label}
+                                  </MenuItem>
+                              ))}
+                          </Select>
                       </FormControl>
                       <Button
                           className={classes.button}
