@@ -80,8 +80,7 @@ async function getERC721TokenDetailedOwnerListFromChain(
             return
         }
 
-        const tokenDetailed = await getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
-        return tokenDetailed
+        return getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
     })
 
     const tokenDetailedOwnerList = (await Promise.allSettled(allRequest))
