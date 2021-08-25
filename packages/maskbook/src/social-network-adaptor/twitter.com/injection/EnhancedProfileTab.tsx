@@ -44,7 +44,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         alignItems: 'center',
         textAlign: 'center',
         padding: props.padding,
-        fontWeight: 700,
         color: props.color,
         font: props.font,
         fontSize: props.fontSize,
@@ -53,7 +52,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         },
     },
     selected: {
-        color: props.hover,
+        color: `${props.hover} !important`,
+        fontWeight: 700,
     },
     line: {
         dispaly: 'inline-flex',
