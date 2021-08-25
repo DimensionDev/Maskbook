@@ -15,6 +15,7 @@ export enum PopupRoutes {
     WalletSignRequest = '/wallet/sign',
     GasSetting = '/wallet/gas',
     TokenDetail = '/wallet/tokenDetail',
+    ContractInteraction = '/wallet/contract-interaction',
     Personas = '/personas',
     PermissionAwareRedirect = '/redirect',
     RequestPermission = '/request-permission',

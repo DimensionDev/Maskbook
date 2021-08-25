@@ -95,7 +95,7 @@ const SignRequest = memo(() => {
                 </Typography>
             </div>
             <Typography className={classes.secondary} style={{ marginTop: 20 }}>
-                Message:
+                {t('popups_wallet_signature_request_message')}:
             </Typography>
             <Typography className={classes.message}>{data}</Typography>
             <div className={classes.controller}>
