@@ -2,7 +2,7 @@ import { Resolution } from '@unstoppabledomains/resolution'
 import { useAsyncRetry } from 'react-use'
 import { useChainId } from '.'
 
-export function useResolution(ens: string) {
+export function useResolveUns(ens: string) {
     const chainId = useChainId()
     const resolution = new Resolution()
 
