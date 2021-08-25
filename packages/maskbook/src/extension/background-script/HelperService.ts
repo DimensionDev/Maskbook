@@ -69,16 +69,16 @@ export function queryPermission(permission: browser.permissions.Permissions) {
     return browser.permissions.contains(permission)
 }
 
-export function openPopupsWindow() {
+export function openPopupsWindow(route?: string) {
     if (!!navigator.userAgent.match(/Chrome/)) {
         window.open(
-            browser.runtime.getURL(`popups.html#${PopupRoutes.Wallet}`),
+            browser.runtime.getURL(`popups.html#${route ?? PopupRoutes.Wallet}`),
             '',
             'resizable,scrollbars,status,width=310,height=540',
         )
     } else {
         browser.windows.create({
-            url: browser.runtime.getURL(`popups.html#${PopupRoutes.Wallet}`),
+            url: browser.runtime.getURL(`popups.html#${route ?? PopupRoutes.Wallet}`),
             width: 310,
             height: 540,
             type: 'popup',
