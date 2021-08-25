@@ -14,9 +14,10 @@ export async function getSharedListOfPost(
     postBy: ProfileIdentifier,
 ): Promise<Profile[]> {
     const ids = new Set<string>()
-    const nameInDB = ((await queryPostDB(new PostIVIdentifier(postBy.network, postSalt))) || { recipients: {} })
-        .recipients
-    Object.keys(nameInDB).forEach((x) => ids.add(x))
+    const nameInDB = (await queryPostDB(new PostIVIdentifier(postBy.network, postSalt)))?.recipients
+    if (nameInDB === 'everyone') return []
+    if (!nameInDB) return []
+    nameInDB.forEach((_, x) => ids.add(x.toText()))
     if (version === -40) {
         // eslint-disable-next-line import/no-deprecated
         const post = await GunAPI.getVersion1PostByHash(postSalt)
