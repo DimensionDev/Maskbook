@@ -83,7 +83,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                             <Accordion className={classes.accordion} elevation={0}>
                                 <AccordionSummary>
                                     <Typography className={classes.heading}>
-                                        {t('plugin_trader_slipage_tolerance')}
+                                        {t('plugin_trader_slippage_tolerance')}
                                     </Typography>
                                     <Typography>{slippage / 100}%</Typography>
                                 </AccordionSummary>

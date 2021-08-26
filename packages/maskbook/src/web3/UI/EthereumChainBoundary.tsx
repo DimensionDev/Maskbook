@@ -118,7 +118,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             <Box display="flex" flexDirection="column" alignItems="center" sx={{ paddingTop: 1, paddingBottom: 1 }}>
                 <Typography color="textPrimary">
                     <span>
-                        {t('plugin_wallet_not_availabe_on', {
+                        {t('plugin_wallet_not_available_on', {
                             network: actualNetwork,
                         })}
                     </span>
@@ -131,7 +131,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             {!noSwitchNetworkTip ? (
                 <Typography color="textPrimary">
                     <span>
-                        {t('plugin_wallet_not_availabe_on', {
+                        {t('plugin_wallet_not_available_on', {
                             network: actualNetwork,
                         })}
                     </span>
