@@ -9,12 +9,11 @@ import {
     useTokenConstants,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
-import { head, uniqBy } from 'lodash-es'
+import { first, head, uniqBy } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import { OpenSeaAccountURL } from '../constants'
-import { toDate, toRaribleImage, toTokenDetailed, toTokenIdentifier } from '../helpers'
+import { toDate, toTokenDetailed, toTokenIdentifier } from '../helpers'
 import { PluginCollectibleRPC } from '../messages'
-import { resolveRaribleUserNetwork } from '../pipes'
 import { CollectibleProvider, CollectibleToken } from '../types'
 import { getOrderUnitPrice } from '../utils'
 
@@ -84,47 +83,44 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                 }
             case CollectibleProvider.RARIBLE:
                 const raribleResponse = await PluginCollectibleRPC.getNFTItem(token.contractAddress, token.tokenId)
+                const owner = first(raribleResponse?.owners)
+                const creator = first(raribleResponse?.creators)
                 return {
                     is_order_weth: false,
                     is_collection_weth: false,
                     is_verified: false,
                     is_owner: false,
                     is_auction: false,
-                    image_url:
-                        raribleResponse.properties.imagePreview ?? toRaribleImage(raribleResponse.properties.image),
-                    asset_contract: {
-                        ...raribleResponse.assetContract,
-                        schemaName: raribleResponse.assetContract.standard,
-                        description: raribleResponse.assetContract.description,
-                    },
-                    owner: raribleResponse.owner
+                    image_url: raribleResponse?.meta.image.url.PREVIEW,
+                    asset_contract: null,
+                    owner: owner
                         ? {
-                              address: raribleResponse.owner.id,
-                              profile_img_url: toRaribleImage(raribleResponse.owner.image),
-                              user: { username: raribleResponse.owner.name },
-                              link: `${resolveRaribleUserNetwork(chainId)}${raribleResponse.owner.id ?? ''}`,
+                              address: owner,
+                              profile_img_url: '',
+                              user: { username: owner },
+                              link: '',
                           }
                         : null,
-                    creator: raribleResponse.creator
+                    creator: creator
                         ? {
-                              address: raribleResponse.creator.id,
-                              profile_img_url: toRaribleImage(raribleResponse.creator.image),
-                              user: { username: raribleResponse.creator.name },
-                              link: `${resolveRaribleUserNetwork(chainId)}${raribleResponse.creator.id ?? ''}`,
+                              address: creator.account,
+                              profile_img_url: '',
+                              user: { username: creator.account },
+                              link: '',
                           }
                         : null,
-                    traits: raribleResponse.properties.attributes.map(({ key, value }) => ({ trait_type: key, value })),
-                    description: raribleResponse.properties.description,
-                    name: raribleResponse.properties.name,
+                    traits: raribleResponse?.meta.attributes.map(({ key, value }) => ({ trait_type: key, value })),
+                    description: raribleResponse?.meta.description ?? '',
+                    name: raribleResponse?.meta.name ?? 'Unkown',
                     collection_name: '',
-                    animation_url: raribleResponse.properties.animationUrl,
-                    current_price: raribleResponse.item.offer?.buyPriceEth,
+                    animation_url: raribleResponse.meta.animation?.url.PREVIEW,
+                    current_price: 0,
                     current_symbol: 'ETH',
                     end_time: null,
                     order_payment_tokens: [] as FungibleTokenDetailed[],
                     offer_payment_tokens: [] as FungibleTokenDetailed[],
                     order_: null,
-                    slug: raribleResponse.assetContract.shortUrl,
+                    slug: '',
                     response_: raribleResponse,
                 }
             default:
