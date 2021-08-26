@@ -91,7 +91,7 @@ function config(opts: {
                 // Those packages are also installed as dependencies so they appears in node_modules
                 // By aliasing them to the original position, we can speed up the compile because there is no need to wait tsc build them to the dist folder.
                 '@masknet/dashboard$': src('../dashboard/src/entry.tsx'),
-                '@masknet/injected-script': src('../injected-script/src/sdk'),
+                '@masknet/injected-script': src('../injected-script/sdk'),
                 '@masknet/shared': src('../shared/src/'),
                 '@masknet/shared-base': src('../shared-base/src/'),
                 '@masknet/theme': src('../theme/src/'),

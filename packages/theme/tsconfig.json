@@ -1,13 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./",
-    "outDir": "./dist/",
-    "resolveJsonModule": true
+    "rootDir": "./src",
+    "outDir": "./dist/src/",
+    "tsBuildInfoFile": "./dist/src.tsbuildinfo"
   },
-  "include": ["./src/", "./stories", "extended.d.ts"],
-  "references": [{ "path": "../storybook-shared/" }],
-  "ts-node": {
-    "compilerOptions": { "module": "CommonJS" }
-  }
+  "include": ["./src"],
+  "references": []
 }

@@ -1,12 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist/",
-    "stripInternal": true
-  },
-  "include": ["./**/*.tsx", "./**/*.ts"],
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": { "module": "CommonJS" }
+    "outDir": "./dist/"
   }
 }
