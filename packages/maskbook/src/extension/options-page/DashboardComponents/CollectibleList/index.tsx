@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-interface CollectibleListUIProps extends withClasses<'empty' | 'button'> {
+interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'> {
     provider: CollectibleProvider
     wallet?: Wallet
     collectibles: (ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed)[]

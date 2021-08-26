@@ -255,6 +255,11 @@ export interface Asset {
     logoURI?: string
 }
 
+export enum DomainProvider {
+    ENS = 'ENS',
+    UNS = 'UNS',
+}
+
 export enum PortfolioProvider {
     ZERION = 0,
     DEBANK = 1,
