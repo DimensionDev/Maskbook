@@ -11,10 +11,12 @@ const data: Partial<Navigator> = {
     // navigator.userAgentData
 }
 if (location.hostname.endsWith('instagram.com')) {
-    const proto = Object.getPrototypeOf(navigator)
+    const proto = Object.getPrototypeOf(window.navigator)
     const desc = Object.getOwnPropertyDescriptors(proto)
     for (const key in desc) {
-        if (key in data) desc[key].get = () => (data as any)[key]
+        // TODO: should this function f being xray-unwrapped?
+        const f = () => data[key as keyof Navigator]
+        if (key in data) desc[key].get = f
         else delete desc[key]
     }
     delete proto.userAgentData

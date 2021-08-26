@@ -1,8 +1,9 @@
-import { constructUnXrayedFilesFromUintLike, overwriteFunctionOnXRayObject, un_xray_DOM } from './utils'
-export async function instagramUpload(url: string) {
-    // let's not to defensive for now. I'll not check the reliability of this whole bunch of things.
+import type { InternalEvents } from '../../shared'
+import { constructXrayUnwrappedFilesFromUintLike, overwriteFunctionOnXRayObject, unwrapXRay_DOMObject } from '../utils'
+// TODO: This file is not audited
+export async function instagramUpload(url: InternalEvents['instagramUpload'][0]) {
     const result = await window.fetch(url).then((x) => x.arrayBuffer())
-    const file = constructUnXrayedFilesFromUintLike('image/jpeg', 'image.jpg', new Uint8Array(result))
+    const file = constructXrayUnwrappedFilesFromUintLike('image/jpeg', 'image.jpg', new Uint8Array(result))
 
     const target = document.querySelectorAll('input')
     const postButton = document.querySelector<HTMLElement>('[data-testid="new-post-button"]')
@@ -13,7 +14,7 @@ export async function instagramUpload(url: string) {
             if (done) {
                 _target.apply(thisArg, args)
             }
-            const raw = un_xray_DOM(input)
+            const raw = unwrapXRay_DOMObject(input)
             for (const x of Object.keys(raw)) {
                 // Old react for __reactEventHandlers, new for __reactProps
                 if (x.startsWith('__reactEventHandlers') || x.startsWith('__reactProps')) {

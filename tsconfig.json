@@ -1,18 +1,9 @@
 {
   "references": [
+    // Only list top-level projects here
     { "path": "./e2e/" },
     { "path": "./packages/maskbook/" },
-    { "path": "./packages/public-api/" },
-    { "path": "./packages/theme/" },
-    { "path": "./packages/dashboard/" },
-    { "path": "./packages/shared-base/" },
-    { "path": "./packages/shared/" },
-    { "path": "./packages/web3-shared/" },
-    { "path": "./packages/storybook-shared/" },
-    { "path": "./packages/icons/" },
-    { "path": "./packages/plugin-infra" },
-    { "path": "./packages/plugins/" },
-    { "path": "./packages/external-plugin-previewer" }
+    { "path": "./packages/dashboard/" }
   ],
   "compilerOptions": {
     // Classification follows https://www.typescriptlang.org/tsconfig

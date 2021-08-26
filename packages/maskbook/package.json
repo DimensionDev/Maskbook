@@ -21,6 +21,7 @@
     "@ethersproject/solidity": "^5.0.4",
     "@ethersproject/strings": "^5.1.0",
     "@hookform/resolvers": "2.6.0",
+    "@masknet/injected-script": "workspace:*",
     "@masknet/dashboard": "workspace:*",
     "@masknet/external-plugin-previewer": "workspace:*",
     "@masknet/icons": "workspace:*",

@@ -1,6 +1,7 @@
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { MaskMessage } from '../../../utils/messages'
-import { delay, dispatchCustomEvents, selectElementContents } from '../../../utils/utils'
+import { delay, selectElementContents } from '../../../utils/utils'
+import { pasteText } from '@masknet/injected-script'
 
 export async function pasteToCommentBoxMinds(encryptedComment: string, current: PostInfo, dom: HTMLElement | null) {
     const fail = () => {
@@ -11,7 +12,7 @@ export async function pasteToCommentBoxMinds(encryptedComment: string, current: 
     const input = root.querySelector('[contenteditable]')
     if (!input) return fail()
     selectElementContents(input)
-    dispatchCustomEvents(input, 'paste', encryptedComment)
+    pasteText(encryptedComment)
     await delay(200)
     if (!root.innerText.includes(encryptedComment)) return fail()
 }

@@ -4,7 +4,7 @@ import { instagramBase } from './base'
 import { IdentityProviderInstagram } from './collecting/identity-provider'
 import { PostProviderInstagram } from './collecting/posts'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults'
-import { dispatchCustomEvents } from '../../utils/utils'
+import { pasteInstagram } from '@masknet/injected-script'
 import { injectPostInspectorInstagram } from './injection/post-inspector'
 import { newPostCompositionInstagram } from './injection/newPostComposition'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
@@ -15,7 +15,7 @@ const define: SocialNetworkUI.Definition = {
         nativeCompositionDialog: {
             attachImage(url, options) {
                 if (url instanceof Blob) url = URL.createObjectURL(url)
-                dispatchCustomEvents(null, 'instagramUpload', url)
+                pasteInstagram(url)
             },
         },
     },

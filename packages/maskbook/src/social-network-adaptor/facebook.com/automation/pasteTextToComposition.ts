@@ -1,9 +1,10 @@
 import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { dispatchCustomEvents, delay, timeout } from '../../../utils/utils'
+import { delay, timeout } from '../../../utils/utils'
 import { isMobileFacebook } from '../utils/isMobile'
 import type { SocialNetworkUI } from '../../../social-network/types'
 import { untilDocumentReady } from '../../../utils/dom'
 import { MaskMessage } from '../../../utils/messages'
+import { inputText, pasteText } from '@masknet/injected-script'
 
 async function openPostDialogFacebook() {
     await untilDocumentReady()
@@ -84,8 +85,8 @@ export async function pasteTextToCompositionFacebook(
         const [element] = activated.evaluate()
         element.focus()
         await delay(100)
-        if ('value' in document.activeElement!) dispatchCustomEvents(element, 'input', text)
-        else dispatchCustomEvents(element, 'paste', text)
+        if ('value' in document.activeElement!) inputText(text)
+        else pasteText(text)
         await delay(400)
         if (isMobileFacebook) {
             const e = document.querySelector<HTMLDivElement | HTMLTextAreaElement>('.mentions-placeholder')
