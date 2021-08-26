@@ -58,32 +58,30 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     if (!show || !address_) return null
     return (
         <>
-            {
-                <Box className={classes.note} display="flex" alignItems="center" justifyContent="flex-end">
-                    <Typography color="textPrimary" component="span">
-                        Current display of {addressENS ? 'ENS' : addressUNS ? 'UNS' : 'address'}:{' '}
-                        <Link
-                            href={resolveAddressLinkOnExplorer(chainId, address_)}
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            {addressENS || addressUNS ? name : formatEthereumAddress(address ?? '', 4)}
-                        </Link>
-                    </Typography>
-                    <Typography
-                        sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
-                        color="textPrimary"
-                        component="span"
-                        title={[
-                            'Binding Rule',
-                            '1. Their Twitter nickname is their ENS',
-                            '2. Their Twitter bio contains ENS',
-                            '3. Their Twitter bio contains a validated address',
-                            '4. Their Twitter id + “.eth” form their ENS',
-                        ].join('\n')}>
-                        <InfoOutlinedIcon color="inherit" fontSize="small" />
-                    </Typography>
-                </Box>
-            }
+            <Box className={classes.note} display="flex" alignItems="center" justifyContent="flex-end">
+                <Typography color="textPrimary" component="span">
+                    Current display of {addressENS ? 'ENS' : addressUNS ? 'UNS' : 'address'}:{' '}
+                    <Link
+                        href={resolveAddressLinkOnExplorer(chainId, address_)}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        {addressENS || addressUNS ? name : formatEthereumAddress(address ?? '', 4)}
+                    </Link>
+                </Typography>
+                <Typography
+                    sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
+                    color="textPrimary"
+                    component="span"
+                    title={[
+                        'Binding Rule',
+                        '1. Their Twitter nickname is their ENS',
+                        '2. Their Twitter bio contains ENS',
+                        '3. Their Twitter bio contains a validated address',
+                        '4. Their Twitter id + “.eth” form their ENS',
+                    ].join('\n')}>
+                    <InfoOutlinedIcon color="inherit" fontSize="small" />
+                </Typography>
+            </Box>
             <CollectibleListAddress
                 classes={{
                     button: classes.button,
