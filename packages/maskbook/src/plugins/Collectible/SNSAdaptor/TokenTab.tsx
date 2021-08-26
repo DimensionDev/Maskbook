@@ -126,7 +126,7 @@ export function TokenTab(props: TokenTabProps) {
                 </Box>
             ) : null}
 
-            {asset.value.asset_contract.name && asset.value.asset_contract?.description ? (
+            {asset.value.asset_contract ? (
                 <Box className={classes.container}>
                     <Typography variant="body1" sx={{ marginBottom: 1 }}>
                         {t('plugin_collectible_about')} {asset.value.asset_contract.name}
