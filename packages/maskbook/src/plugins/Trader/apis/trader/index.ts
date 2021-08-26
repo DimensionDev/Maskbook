@@ -18,9 +18,9 @@ export async function getAvailableTraderProviders(type?: TagType, keyword?: stri
                 TradeProvider.DODO,
             ]
         case NetworkType.Polygon:
-            return [TradeProvider.QUICKSWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO]
+            return [TradeProvider.QUICKSWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO, TradeProvider.ZRX]
         case NetworkType.Binance:
-            return [TradeProvider.PANCAKESWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO]
+            return [TradeProvider.PANCAKESWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO, TradeProvider.ZRX]
         case NetworkType.Arbitrum:
             return [TradeProvider.UNISWAP_V3]
         default:

@@ -73,14 +73,27 @@ export function resolveTradeProviderName(tradeProvider: TradeProvider) {
     }
 }
 
-export function resolveTradeProviderLink(tradeProvider: TradeProvider) {
+export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkType: NetworkType) {
     switch (tradeProvider) {
         case TradeProvider.UNISWAP_V2:
             return 'https://uniswap.org/'
         case TradeProvider.UNISWAP_V3:
             return 'https://uniswap.org/'
         case TradeProvider.ZRX:
-            return 'https://0x.org/'
+            switch (networkType) {
+                case NetworkType.Ethereum:
+                    return 'https://api.0x.org/'
+                case NetworkType.Binance:
+                    return 'https://bsc.api.0x.org/'
+                case NetworkType.Polygon:
+                    return 'https://polygon.api.0x.org/'
+                case NetworkType.Arbitrum:
+                    return ''
+                default:
+                    safeUnreachable(networkType)
+                    return ''
+            }
+
         case TradeProvider.SUSHISWAP:
             return 'https://sushiswapclassic.org/'
         case TradeProvider.SASHIMISWAP:
