@@ -9,6 +9,14 @@ import { useEthereumAddress } from '../../social-network-adaptor/twitter.com/inj
 import { MaskMessage } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 
+const RULE_TIP = [
+    'Binding Rule',
+    '1. Their Twitter nickname is their ENS',
+    '2. Their Twitter bio contains ENS',
+    '3. Their Twitter bio contains a validated address',
+    '4. Their Twitter id + “.eth” form their ENS',
+].join('\n')
+
 const useStyles = makeStyles()((theme) => ({
     note: {
         padding: theme.spacing(1),
@@ -72,13 +80,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                     sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
                     color="textPrimary"
                     component="span"
-                    title={[
-                        'Binding Rule',
-                        '1. Their Twitter nickname is their ENS',
-                        '2. Their Twitter bio contains ENS',
-                        '3. Their Twitter bio contains a validated address',
-                        '4. Their Twitter id + “.eth” form their ENS',
-                    ].join('\n')}>
+                    title={RULE_TIP}>
                     <InfoOutlinedIcon color="inherit" fontSize="small" />
                 </Typography>
             </Box>
