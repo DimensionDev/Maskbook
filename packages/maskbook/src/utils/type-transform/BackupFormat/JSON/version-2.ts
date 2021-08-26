@@ -59,7 +59,7 @@ export interface BackupJSONFileVersion2 {
         postBy: string // ProfileIdentifier.toText()
         identifier: string // PostIVIdentifier.toText()
         postCryptoKey?: AESJsonWebKey
-        recipients: [/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }][]
+        recipients: 'everyone' | [/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }][]
         /** @deprecated */
         recipientGroups: never[] // Array<GroupIdentifier.toText()>
         foundAt: number // Unix timestamp

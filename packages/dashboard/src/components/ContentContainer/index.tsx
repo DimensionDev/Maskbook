@@ -1,4 +1,4 @@
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { styled } from '@material-ui/core/styles'
 import { MaskColorVar } from '@masknet/theme'
 
 export const ContentContainer = styled('div')(({ theme }) => ({

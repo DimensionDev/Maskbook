@@ -1,7 +1,6 @@
 import { memoizePromise } from '../../utils/memoize'
-import { constructRequestPermissionURL } from '../popups'
 import { getNetworkWorker } from '../../social-network/worker'
-// import { exclusiveTasks } from '../content-script/tasks'
+import { constructRequestPermissionURL, PopupRoutes } from '../popups'
 
 const cache = new Map<string, string>()
 export const resolveTCOLink = memoizePromise(
@@ -69,6 +68,23 @@ export async function requestBrowserPermission(permission: browser.permissions.P
 
 export function queryPermission(permission: browser.permissions.Permissions) {
     return browser.permissions.contains(permission)
+}
+
+export function openPopupsWindow(route?: string) {
+    if (!!navigator.userAgent.match(/Chrome/)) {
+        window.open(
+            browser.runtime.getURL(`popups.html#${route ?? PopupRoutes.Wallet}`),
+            '',
+            'resizable,scrollbars,status,width=310,height=540',
+        )
+    } else {
+        browser.windows.create({
+            url: browser.runtime.getURL(`popups.html#${route ?? PopupRoutes.Wallet}`),
+            width: 310,
+            height: 540,
+            type: 'popup',
+        })
+    }
 }
 
 export async function openNewWindowAndPasteShareContent(SNSIdentifier: string, post: string) {

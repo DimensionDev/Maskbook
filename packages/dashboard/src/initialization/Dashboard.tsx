@@ -1,6 +1,5 @@
 import { HashRouter } from 'react-router-dom'
 import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@material-ui/core'
-import { StylesProvider } from '@material-ui/styles'
 import {
     CustomSnackbarProvider,
     MaskLightTheme,
@@ -41,21 +40,19 @@ export default function DashboardRoot() {
             <Web3Provider value={Web3Context}>
                 <I18nextProvider i18n={i18n}>
                     <StyledEngineProvider injectFirst>
-                        <StylesProvider>
-                            <ThemeProvider theme={theme}>
-                                <PersonaContext.Provider>
-                                    <ErrorBoundary>
-                                        <CssBaseline />
-                                        <CustomSnackbarProvider>
-                                            <HashRouter>
-                                                <Pages />
-                                            </HashRouter>
-                                            <PluginRender />
-                                        </CustomSnackbarProvider>
-                                    </ErrorBoundary>
-                                </PersonaContext.Provider>
-                            </ThemeProvider>
-                        </StylesProvider>
+                        <ThemeProvider theme={theme}>
+                            <PersonaContext.Provider>
+                                <ErrorBoundary>
+                                    <CssBaseline />
+                                    <CustomSnackbarProvider>
+                                        <HashRouter>
+                                            <Pages />
+                                        </HashRouter>
+                                        <PluginRender />
+                                    </CustomSnackbarProvider>
+                                </ErrorBoundary>
+                            </PersonaContext.Provider>
+                        </ThemeProvider>
                     </StyledEngineProvider>
                 </I18nextProvider>
             </Web3Provider>

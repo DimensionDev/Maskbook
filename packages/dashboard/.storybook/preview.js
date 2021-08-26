@@ -1,6 +1,5 @@
 import React from 'react'
 import { ThemeProvider, StyledEngineProvider } from '@material-ui/core'
-import { StylesProvider } from '@material-ui/styles'
 import { MaskLightTheme, applyMaskColorVars, CustomSnackbarProvider } from '@masknet/theme'
 import { addMaskSharedI18N, fallbackLng } from '@masknet/shared'
 import { withMatrix } from 'storybook-addon-matrix'
@@ -23,15 +22,13 @@ export const decorators = [
     withMatrix,
     (Story) => (
         <StyledEngineProvider injectFirst>
-            <StylesProvider>
-                <ThemeProvider theme={MaskLightTheme}>
-                    <I18nextProvider i18n={i18n}>
-                        <CustomSnackbarProvider>
-                            <Story />
-                        </CustomSnackbarProvider>
-                    </I18nextProvider>
-                </ThemeProvider>
-            </StylesProvider>
+            <ThemeProvider theme={MaskLightTheme}>
+                <I18nextProvider i18n={i18n}>
+                    <CustomSnackbarProvider>
+                        <Story />
+                    </CustomSnackbarProvider>
+                </I18nextProvider>
+            </ThemeProvider>
         </StyledEngineProvider>
     ),
 ]

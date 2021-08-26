@@ -1,4 +1,5 @@
 import { merge } from 'lodash-es'
+import { timeout } from '@masknet/shared-base'
 
 class MutexStorage<T extends browser.storage.StorageValue> {
     private tasks: (() => void)[] = []
@@ -24,7 +25,7 @@ class MutexStorage<T extends browser.storage.StorageValue> {
             const run = async () => {
                 try {
                     this.lock()
-                    const stored = await browser.storage.local.get(key)
+                    const stored = await timeout(browser.storage.local.get(key), 3000, `Get ${key} timeout.`)
                     callback(null, (stored ?? {})[key] as T)
                 } catch (error: any) {
                     callback(error)
@@ -45,7 +46,7 @@ class MutexStorage<T extends browser.storage.StorageValue> {
             const run = async () => {
                 try {
                     this.lock()
-                    await browser.storage.local.set({ [key]: value })
+                    await timeout(browser.storage.local.set({ [key]: value }), 3000, `Set ${key} to ${value} timeout.`)
                     callback(null)
                 } catch (error: any) {
                     callback(error)

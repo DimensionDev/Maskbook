@@ -1,5 +1,5 @@
 import { memo, useCallback, useState } from 'react'
-import { Button, Tab, Tabs, Typography, experimentalStyled as styled, tabsClasses, tabClasses } from '@material-ui/core'
+import { Button, Tab, Tabs, Typography, styled, tabsClasses, tabClasses } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { TabContext, TabPanel } from '@material-ui/lab'

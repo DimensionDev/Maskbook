@@ -107,6 +107,7 @@ function config(opts: {
                 '@masknet/plugin-wallet': src('../plugins/Wallet/src/'),
                 '@masknet/external-plugin-previewer': src('../external-plugin-previewer/src/'),
                 '@masknet/web3-shared': src('../web3-shared/src/'),
+                '@masknet/public-api': src('../public-api/src/'),
                 '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
             },
             // Polyfill those Node built-ins
