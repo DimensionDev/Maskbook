@@ -80,6 +80,11 @@ export function SwapGuide(props: SwapGuideProps) {
         [SwapStatus.Share]: t('plugin_ito_dialog_swap_share_title'),
     }
 
+    const closeDialog = useCallback(() => {
+        setTokenAmount(initAmount)
+        return status === SwapStatus.Share ? onCloseShareDialog() : onClose()
+    }, [status, initAmount, onCloseShareDialog, onClose, setTokenAmount])
+
     useEffect(() => {
         onUpdate(isBuyer ? SwapStatus.Share : SwapStatus.Remind)
     }, [account, isBuyer, chainId, payload.chain_id])
@@ -88,7 +93,7 @@ export function SwapGuide(props: SwapGuideProps) {
         <InjectedDialog
             open={open}
             title={SwapTitle[status]}
-            onClose={status === SwapStatus.Share ? onCloseShareDialog : onClose}
+            onClose={closeDialog}
             maxWidth={SwapStatus.Swap || status === SwapStatus.Unlock ? 'xs' : 'sm'}>
             <DialogContent className={classes.content}>
                 {(() => {
