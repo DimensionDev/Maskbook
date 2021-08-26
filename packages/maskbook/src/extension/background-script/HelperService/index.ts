@@ -95,3 +95,10 @@ export function openPopupsWindow(route?: string) {
         })
     }
 }
+
+export function openInternalPage(path: string) {
+    browser.tabs.create({
+        active: true,
+        url: browser.runtime.getURL(path),
+    })
+}

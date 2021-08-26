@@ -1,10 +1,9 @@
 import { Box, Card, CircularProgress, Typography, Paper } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { resolveProviderName, ProviderType } from '@masknet/web3-shared'
-import { ProviderIcon } from '../../../../components/shared/ProviderIcon'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
-import { useStylesExtends } from '@masknet/shared'
+import { ProviderIcon, useStylesExtends } from '@masknet/shared'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { getMaskColor } from '@masknet/theme'
 

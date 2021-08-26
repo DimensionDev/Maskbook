@@ -9,11 +9,11 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../type'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { useDashboardI18N } from '../../../locales'
-import { SetupActionCard } from '../../Setup'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 import { upperFirst } from 'lodash-es'
 import { FacebookColoredIcon, MindsIcon, TwitterColoredIcon } from '@masknet/icons'
 import { Button, Stack } from '@material-ui/core'
+import { ActionCard } from '../../../components/ActionCard'
 
 const ICON_MAPPING = [
     {
@@ -62,7 +62,7 @@ export const ConnectSocialMedia = () => {
                         </Button>
                     </Stack>
                     {ICON_MAPPING.map((d) => (
-                        <SetupActionCard
+                        <ActionCard
                             key={d.type}
                             title={t.create_account_connect_social_media({ type: upperFirst(d.type) })}
                             icon={d.icon}
