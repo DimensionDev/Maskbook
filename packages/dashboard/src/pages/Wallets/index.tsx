@@ -1,4 +1,4 @@
-import { Box, Button } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
 import { getTokenUSDValue, useAssets, useTrustedERC20Tokens, useWallet, useWallets } from '@masknet/web3-shared'
 import { StartUp } from './StartUp'
@@ -13,6 +13,7 @@ import { ReceiveDialog } from './components/ReceiveDialog'
 import { RoutePaths } from '../../type'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../API'
+import { WalletStateBar } from './components/WalletStateBar'
 
 function Wallets() {
     const wallet = useWallet()
@@ -41,7 +42,7 @@ function Wallets() {
         <PageFrame
             title={wallets.length === 0 ? 'Create a Wallet' : 'Market'}
             noBackgroundFill
-            primaryAction={<Button>Connect Wallet</Button>}>
+            primaryAction={<WalletStateBar />}>
             {wallets.length === 0 ? (
                 <StartUp />
             ) : (

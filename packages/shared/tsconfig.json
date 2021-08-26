@@ -9,5 +9,10 @@
   "ts-node": {
     "compilerOptions": { "module": "CommonJS" }
   },
-  "references": [{ "path": "../web3-shared" }, { "path": "../theme" }, { "path": "../shared-base" }]
+  "references": [
+    { "path": "../web3-shared" },
+    { "path": "../theme" },
+    { "path": "../shared-base" },
+    { "path": "../icons" }
+  ]
 }
