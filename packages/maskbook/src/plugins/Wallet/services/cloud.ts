@@ -1,4 +1,4 @@
-import { getStorage, setStorage } from '../../../extension/background-script/StorageService'
+import { getStorage, setStorage } from '../../../extension/background-script/HelperService/storage'
 
 const HOST_MAP = {
     production: 'https://backup.mask.io/api',

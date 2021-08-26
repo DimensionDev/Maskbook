@@ -1,8 +1,11 @@
-import { memoizePromise } from '../../utils/memoize'
-import { getNetworkWorker } from '../../social-network/worker'
-import { constructRequestPermissionURL, PopupRoutes } from '../popups'
+import { memoizePromise } from '../../../utils'
+import { getNetworkWorker } from '../../../social-network'
+import { constructRequestPermissionURL, PopupRoutes } from '../../popups'
+
+export * from './storage'
 
 const cache = new Map<string, string>()
+
 export const resolveTCOLink = memoizePromise(
     async (u: string) => {
         if (!u.startsWith('https://t.co/')) return null
