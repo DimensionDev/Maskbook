@@ -30,7 +30,14 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             setOpen(open)
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
-            if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin)
+            if (options?.startupPlugin) {
+                setTimeout(() => {
+                    // HACK: Because of we're using DialogStackingProvider,
+                    // we need to avoid opening multiple dialogs in the same time to make them
+                    // stacked in the right order.
+                    UI.current?.startPlugin(options.startupPlugin!)
+                }, 200)
+            }
         })
     }, [type])
     //#endregion

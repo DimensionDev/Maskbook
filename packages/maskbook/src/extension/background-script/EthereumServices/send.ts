@@ -26,7 +26,7 @@ import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../utils'
 import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
-import { PopupRoutes } from '../../popups'
+import { openPopupsWindow } from '../HelperService'
 
 export interface SendOverrides {
     chainId?: ChainId
@@ -105,11 +105,7 @@ export async function INTERNAL_send(
             return
         }
 
-        window.open(
-            browser.runtime.getURL(`popups.html${PopupRoutes.Wallet}`),
-            '',
-            'resizable,scrollbars,status,width=310,height=540',
-        )
+        openPopupsWindow()
     }
 
     const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null

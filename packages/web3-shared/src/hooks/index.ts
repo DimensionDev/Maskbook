@@ -51,6 +51,7 @@ export * from './useMnemonicWordsPuzzle'
 export * from './useGetPastLogsParams'
 export * from './useChainColor'
 export * from './useResolveEns'
+export * from './useResolveUns'
 
 // wallet plugin related
 export * from './useWallet'

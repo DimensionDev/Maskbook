@@ -4,8 +4,10 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/kit": "=0.0.0-20210630045432-e05621c",
+    "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
+    "@unstoppabledomains/resolution": "^5.0.1",
     "bignumber.js": "9.0.1",
     "ethereum-blockies": "^0.1.1",
     "fuse.js": "^6.4.6",
