@@ -15,24 +15,12 @@ import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles()((theme) => ({
-    network: {
+    bar: {
         minWidth: 80,
         borderRadius: 30,
-        textAlign: 'center',
         lineHeight: '28px',
         height: '28px',
-    },
-    pending: {
-        minWidth: 80,
-        borderRadius: 30,
-        verticalAlign: 'middle',
-        lineHeight: '28px',
-        height: '28px',
-        background: MaskColorVar.orangeMain.alpha(0.1),
-        color: MaskColorVar.orangeMain,
-        '&>svg': {
-            color: MaskColorVar.orangeMain,
-        },
+        cursor: 'pointer',
     },
     dot: {
         position: 'relative',
@@ -61,7 +49,7 @@ export const WalletStateBar = memo(() => {
     )
 
     if (!wallet) {
-        return <Button onClick={openConnectWalletDialog}>Connect Wallet</Button>
+        return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
     }
     return (
         <Stack justifyContent="center" direction="row" alignItems="center">
@@ -71,7 +59,7 @@ export const WalletStateBar = memo(() => {
                 justifyContent="center"
                 sx={{ background: chainColor.replace(')', ', 0.1)'), px: 2, mr: 1 }}
                 color={chainColor}
-                className={classes.network}
+                className={classes.bar}
                 onClick={openConnectWalletDialog}>
                 <Typography component="span" sx={{ background: chainColor }} className={classes.dot} />
                 <Typography component="span" fontSize={12}>
@@ -83,18 +71,18 @@ export const WalletStateBar = memo(() => {
                     direction="row"
                     alignItems="center"
                     justifyContent="center"
-                    sx={{ px: 2 }}
-                    className={classes.pending}>
-                    <LoadingIcon sx={{ fontSize: 12, mr: 0.8 }} />
+                    sx={{ px: 2, background: MaskColorVar.orangeMain.alpha(0.1), color: MaskColorVar.orangeMain }}
+                    className={classes.bar}>
+                    <LoadingIcon sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
                     <Typography component="span" fontSize={12} display="inline-block">
                         {t.wallet_transactions_pending()}
                     </Typography>
                 </Stack>
             )}
-            <Box mr={1}>
+            <Stack mx={1} justifyContent="center">
                 <ProviderIcon providerType={providerType} />
-            </Box>
-            <Box>
+            </Stack>
+            <Box sx={{ userSelect: 'none' }}>
                 <Box fontSize={16}>{wallet.name}</Box>
                 <Box fontSize={12}>
                     <FormattedAddress address={wallet.address} size={10} />
