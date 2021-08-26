@@ -382,7 +382,9 @@ export function ITO(props: ITO_Props) {
 
     useEffect(() => {
         const timeToExpired = endTime - Date.now()
-        if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired)) return
+
+        if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired) || timeToExpired > 1000 * 60 * 60 * 24)
+            return
 
         const timer = setTimeout(() => {
             setOpenClaimDialog(false)
