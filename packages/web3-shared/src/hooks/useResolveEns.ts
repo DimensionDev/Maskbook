@@ -2,7 +2,7 @@ import { useAsyncRetry } from 'react-use'
 import { useChainId } from '.'
 import { useWeb3 } from './useWeb3'
 
-export function useResolveEns(name: string) {
+export function useResolveENS(name: string) {
     const web3 = useWeb3()
     const chainId = useChainId()
 

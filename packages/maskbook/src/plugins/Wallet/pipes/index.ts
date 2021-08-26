@@ -1,6 +1,17 @@
 import { safeUnreachable, unreachable } from '@dimensiondev/kit'
-import { ChainId, FilterTransactionType, NetworkType, PortfolioProvider } from '@masknet/web3-shared'
+import { ChainId, DomainProvider, FilterTransactionType, NetworkType, PortfolioProvider } from '@masknet/web3-shared'
 import type { SocketRequestAssetScope } from '../types'
+
+export function resolveDomainProviderName(provider: DomainProvider) {
+    switch (provider) {
+        case DomainProvider.ENS:
+            return 'ENS'
+        case DomainProvider.UNS:
+            return 'UNS'
+        default:
+            unreachable(provider)
+    }
+}
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
     switch (provider) {
