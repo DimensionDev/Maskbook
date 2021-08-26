@@ -26,10 +26,10 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
 
     // compose transaction config
     const config = useMemo(() => {
-        if (!account || !tradeComputed?.trade_ || chainId !== ChainId.Mainnet) return null
+        if (!account || !tradeComputed?.trade_ || ![ChainId.Mainnet, ChainId.BSC, ChainId.Matic].includes(chainId)) return null
         return {
             from: account,
-            ...pick(tradeComputed.trade_, ['to', 'data', 'value', 'gas']),
+            ...pick(tradeComputed.trade_, ['to', 'data', 'value', 'gas', 'gasPrice']),
         } as TransactionConfig
     }, [account, tradeComputed])
 
@@ -50,14 +50,6 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
         // compose transaction config
         const config_ = {
             ...config,
-            gas: await web3.eth.estimateGas(config).catch((error) => {
-                setTradeState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
-                throw error
-            }),
-            gasPrice,
             nonce,
         }
 

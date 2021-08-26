@@ -37,11 +37,12 @@ export interface EthereumERC20TokenApprovedBoundaryProps {
     amount: string
     spender?: string
     token?: ERC20TokenDetailed
+    fallback?: React.ReactNode
     children?: React.ReactNode | ((allowance: string) => React.ReactNode)
 }
 
 export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenApprovedBoundaryProps) {
-    const { amount, spender, token, children = null } = props
+    const { amount, spender, token, children = null, fallback } = props
 
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -69,7 +70,9 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     if (approveStateType === ApproveStateType.UNKNOWN)
         return (
             <Grid container>
-                <ActionButton className={classes.button} fullWidth variant="contained" size="large" loading disabled />
+                <ActionButton className={classes.button} fullWidth variant="contained" size="large" disabled>
+                    {fallback ?? 'Enter an amount'}
+                </ActionButton>
             </Grid>
         )
     if (approveStateType === ApproveStateType.FAILED)
