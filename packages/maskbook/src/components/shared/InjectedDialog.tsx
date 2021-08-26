@@ -105,6 +105,9 @@ export function InjectedDialog(props: InjectedDialogProps) {
                         </Typography>
                     </DialogTitle>
                 ) : null}
+                {/* There is a .MuiDialogTitle+.MuiDialogContent selector that provides paddingTop: 0 */}
+                {/* Add an empty span here to revert this effect. */}
+                <span />
                 {content}
                 {actions}
             </ErrorBoundary>
