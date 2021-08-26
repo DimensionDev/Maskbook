@@ -11,6 +11,7 @@ async function getTransactions(account: string, status?: TransactionStatusType) 
     return transactions.filter((x) => (typeof status !== 'undefined' ? x.status === status : true))
 }
 
+// todo: should merge in plugin infra package when plugin infra ready
 export function useRecentTransactions(status?: TransactionStatusType) {
     const account = useAccount()
     const chainId = useChainId()
