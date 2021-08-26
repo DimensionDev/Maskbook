@@ -39,28 +39,16 @@ const useSwitchStyle = makeStyles()((theme) => {
                 color: '#fff',
                 position: 'absolute',
             },
-            '&$checked': {
-                '&:after': {
-                    content: "'Sell'",
-                    color: '#fff',
-                    position: 'absolute',
-                },
-                color: '#15171a',
-                transform: 'translateX(100%)',
-                marginLeft: -1,
-                '& + $track': {
-                    backgroundColor: 'transparent',
-                },
-            },
         },
         thumb: {
             width: 84,
             height: 46,
             borderRadius: '.5rem',
+            backgroundColor: '#15171a',
         },
         track: {
             borderRadius: '.5rem',
-            backgroundColor: 'transparent',
+            backgroundColor: 'transparent !important',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-around',
@@ -71,6 +59,16 @@ const useSwitchStyle = makeStyles()((theme) => {
             '&:after': {
                 content: "'Sell'",
             },
+        },
+        checked: {
+            '&:after': {
+                content: "'Sell'",
+                color: '#fff',
+                position: 'absolute',
+            },
+            color: '#15171a',
+            transform: 'translateX(100%) !important',
+            marginLeft: -1,
         },
     }
 })
@@ -187,6 +185,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                                 classes={{
                                     root: switchClasses.root,
                                     switchBase: switchClasses.switchBase,
+                                    checked: switchClasses.checked,
                                     thumb: switchClasses.thumb,
                                     track: switchClasses.track,
                                 }}
