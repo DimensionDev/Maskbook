@@ -1,7 +1,8 @@
 {
   "name": "@masknet/storybook-shared",
   "private": true,
-  "types": "./index.d.ts",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
   "devDependencies": {
     "@storybook/addons": "^6.3.5",
     "@storybook/react": "^6.3.5"

@@ -1,0 +1,10 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/shared",
+    "tsBuildInfoFile": "../dist/shared.tsbuildinfo"
+  },
+  "files": ["./index.ts"],
+  "references": []
+}

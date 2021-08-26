@@ -3,7 +3,11 @@
     // Only list top-level projects here
     { "path": "./e2e/" },
     { "path": "./packages/maskbook/" },
-    { "path": "./packages/dashboard/" }
+    { "path": "./packages/injected-script/main" },
+    { "path": "./packages/dashboard" },
+    // Storybooks are considered as a "project" not depended by any other project
+    { "path": "./packages/dashboard/stories" },
+    { "path": "./packages/theme/stories" }
   ],
   "compilerOptions": {
     // Classification follows https://www.typescriptlang.org/tsconfig

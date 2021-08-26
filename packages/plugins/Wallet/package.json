@@ -11,6 +11,11 @@
       "import": "./dist/components.js"
     }
   },
+  "typesVersions": {
+    "*": {
+      "components": ["./dist/components.d.ts"]
+    }
+  },
   "dependencies": {
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared": "workspace:*",
