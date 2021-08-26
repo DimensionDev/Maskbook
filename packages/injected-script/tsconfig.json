@@ -1,11 +1,6 @@
 {
-  // This is the top-most file because "sdk" is the public project of this package.
   "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "rootDir": "./sdk/",
-    "outDir": "./dist/sdk",
-    "tsBuildInfoFile": "./dist/sdk.tsbuildinfo"
-  },
-  "references": [{ "path": "./shared/" }],
-  "include": ["./sdk/"]
+  "compilerOptions": {},
+  "files": [],
+  "references": [{ "path": "./sdk/" }]
 }
