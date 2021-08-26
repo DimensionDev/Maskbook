@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
     paper: {
         // material-ui toolbar height
         top: `64px`,
-        padding: theme.spacing(3.75, 3.75, 0, 3.75),
+        padding: theme.spacing(3.75, 3.75, 11.25, 3.75),
         background: MaskColorVar.suspensionBackground,
         '& > *': {
             marginTop: theme.spacing(1.5),
@@ -102,7 +102,13 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                     )
                 })}
                 {showAddPersonaCard && (
-                    <AddPersonaCard onConfirm={onCreatePersona} onCancel={() => setShowAddPersonaCard(false)} />
+                    <AddPersonaCard
+                        onConfirm={(nickName) => {
+                            onCreatePersona(nickName)
+                            setShowAddPersonaCard(false)
+                        }}
+                        onCancel={() => setShowAddPersonaCard(false)}
+                    />
                 )}
                 <Box className={classes.buttons}>
                     <Button onClick={() => setShowAddPersonaCard(true)}>{t.personas_add_persona()}</Button>

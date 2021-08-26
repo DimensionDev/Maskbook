@@ -1,4 +1,5 @@
-import { memoizePromise } from '../../../utils/memoize'
+import { memoizePromise } from '../../../utils'
+import { getNetworkWorker } from '../../../social-network'
 import { constructRequestPermissionURL, PopupRoutes } from '../../popups'
 
 export * from './storage'
@@ -87,4 +88,10 @@ export function openPopupsWindow(route?: string) {
             type: 'popup',
         })
     }
+}
+
+export async function openNewWindowAndPasteShareContent(SNSIdentifier: string, post: string) {
+    const url = (await getNetworkWorker(SNSIdentifier)).utils.getShareLinkURL?.(post)
+    if (!url) return
+    browser.tabs.create({ active: true, url: url.toString() })
 }

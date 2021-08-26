@@ -12,6 +12,7 @@ import { PersonaContext } from './hooks/usePersonaContext'
 import { useDashboardI18N } from '../../locales'
 import type { PersonaInformation } from '@masknet/shared'
 import { ContentContainer } from '../../components/ContentContainer'
+import { PersonaContent } from './components/PersonaContent'
 
 const useStyles = makeStyles()((theme) => ({
     tabPanel: {
@@ -41,6 +42,12 @@ const useStyles = makeStyles()((theme) => ({
     nickname: {
         margin: theme.spacing(0, 1.5),
         lineHeight: 1.375,
+    },
+    tab: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
     },
 }))
 
@@ -77,7 +84,7 @@ function Personas() {
                     </IconButton>
                 </Box>
             }>
-            <ContentContainer>
+            <ContentContainer style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <TabContext value={activeTab}>
                     <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
                         {definedSocialNetworks.map(({ networkIdentifier }) => (
@@ -94,9 +101,21 @@ function Personas() {
                         const profile = currentPersona.linkedProfiles.find(
                             (x) => x.identifier.network === networkIdentifier,
                         )
-                        if (profile) return <TabPanel key={networkIdentifier} value={networkIdentifier} />
+                        if (profile)
+                            return (
+                                <TabPanel
+                                    key={networkIdentifier}
+                                    value={networkIdentifier}
+                                    className={activeTab === networkIdentifier ? classes.tab : undefined}>
+                                    <PersonaContent network={networkIdentifier} />
+                                </TabPanel>
+                            )
                         return (
-                            <TabPanel key={networkIdentifier} value={networkIdentifier} sx={{ flex: 1 }}>
+                            <TabPanel
+                                key={networkIdentifier}
+                                value={networkIdentifier}
+                                sx={{ flex: 1 }}
+                                className={activeTab === networkIdentifier ? classes.tab : undefined}>
                                 <PersonaSetup
                                     networkIdentifier={networkIdentifier}
                                     onConnect={() => connectPersona(currentPersona.identifier, networkIdentifier)}

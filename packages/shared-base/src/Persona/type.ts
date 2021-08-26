@@ -14,3 +14,17 @@ export interface ProfileInformation {
     nickname?: string
     identifier: ProfileIdentifier
 }
+export interface RelationProfile {
+    favorite?: number
+    avatar?: string
+    name: string
+    fingerprint?: string
+    identifier: ProfileIdentifier
+}
+
+export interface Relation {
+    profile: ProfileIdentifier
+    linked: PersonaIdentifier
+    favor: 0 | 1
+    network: string
+}
