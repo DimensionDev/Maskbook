@@ -24,6 +24,7 @@ import {
 } from '../../../plugins/Wallet/settings'
 import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../utils'
+import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { openPopupsWindow } from '../HelperService'
 
@@ -70,6 +71,24 @@ export async function INTERNAL_send(
     if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
         console.table(payload)
         console.debug(new Error().stack)
+    }
+
+    // for a native app, we leverage RPC flows to the native app
+    if (hasNativeAPI && nativeAPI) {
+        try {
+            const response = await nativeAPI.api.send(payload)
+            callback(null, response)
+            if (payload.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
+                handleNonce(account, null, response)
+                handleRecentTransaction(account, response)
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                callback(error, undefined)
+                handleNonce(account, error, undefined)
+            }
+        }
+        return
     }
 
     // some rpc methods need to be confirmed by the user

@@ -1,6 +1,9 @@
 import { merge } from 'lodash-es'
 import { timeout } from '@masknet/shared-base'
 
+/**
+ * Make sure that the storage is used serially.
+ */
 class MutexStorage<T extends browser.storage.StorageValue> {
     private tasks: (() => void)[] = []
     private locked: boolean = false
