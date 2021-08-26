@@ -383,6 +383,9 @@ export function ITO(props: ITO_Props) {
     useEffect(() => {
         const timeToExpired = endTime - Date.now()
 
+        // https://stackoverflow.com/questions/3468607/why-does-settimeout-break-for-large-millisecond-delay-values
+        // SetTimeout using a 32 bit int to store the delay so the max value allowed would be 2147483647.
+        // Meanwhile, no need to refresh ITO card when expired time is a large value (more than one day).
         if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired) || timeToExpired > 1000 * 60 * 60 * 24)
             return
 
