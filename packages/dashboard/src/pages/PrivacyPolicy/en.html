@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+        />
+        <style>
+            body {
+                font-family: PingFang SC, system-ui, serif;
+            }
+
+            ol {
+                list-style: none;
+                counter-reset: li;
+            }
+
+            ol li:before {
+                position: absolute;
+                content: counter(li) '. ';
+                display: inline-block;
+                width: 1em;
+                margin-left: -1.5em;
+                color: #7b8192;
+                font-size: 14px;
+            }
+
+            .sub li:before {
+                content: counter(li, lower-alpha) '. ';
+            }
+
+            .sub-sub li:before {
+                content: counter(li, lower-roman) '. ';
+            }
+
+            li {
+                position: relative;
+                counter-increment: li;
+                margin: 1em;
+            }
+
+            h3 {
+                margin: 36px 0;
+                font-weight: 500;
+                font-size: 24px;
+                line-height: 30px;
+                text-align: center;
+            }
+
+            h6 {
+                margin: 24px 0;
+                font-size: 14px;
+                line-height: 20px;
+                font-weight: normal;
+            }
+
+            p {
+                margin: 0;
+                font-size: 14px;
+                line-height: 20px;
+                color: #7b8192;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <section>
+                <h3>Mask Network 服务协议beta</h3>
+            </section>
+            <h6>尊敬的用户</h6>
+        </main>
+    </body>
+</html>

@@ -35,7 +35,7 @@ export default function Welcome() {
     const mode = useAppearance()
     const navigate = useNavigate()
 
-    const privacyPolicyURL = new URL(`./en.html`, import.meta.url).toString()
+    const agreementContentPageURL = new URL(`./en.html`, import.meta.url).toString()
     const privacyPolicyDocument = useMemo(() => () => iframeRef?.current?.contentWindow?.document, [iframeRef])
 
     useEffect(
@@ -79,7 +79,7 @@ export default function Welcome() {
     return (
         <WelcomeUI
             iframeRef={iframeRef}
-            privacyPolicyURL={privacyPolicyURL}
+            privacyPolicyURL={agreementContentPageURL}
             iframeLoadHandler={handleIFrameLoad}
             agreeHandler={() => navigate(RoutePaths.Setup)}
             cancelHandler={() => window.close()}
