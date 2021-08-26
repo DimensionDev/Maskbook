@@ -73,6 +73,12 @@ export function queryPermission(permission: browser.permissions.Permissions) {
     return browser.permissions.contains(permission)
 }
 
+export async function createNewWindowAndPasteShareContent(SNSIdentifier: string, post: string) {
+    const url = (await getNetworkWorker(SNSIdentifier)).utils.getShareLinkURL?.(post)
+    if (!url) return
+    browser.tabs.create({ active: true, url: url.toString() })
+}
+
 export function openPopupsWindow(route?: string) {
     if (!!navigator.userAgent.match(/Chrome/)) {
         window.open(
@@ -88,10 +94,4 @@ export function openPopupsWindow(route?: string) {
             type: 'popup',
         })
     }
-}
-
-export async function openNewWindowAndPasteShareContent(SNSIdentifier: string, post: string) {
-    const url = (await getNetworkWorker(SNSIdentifier)).utils.getShareLinkURL?.(post)
-    if (!url) return
-    browser.tabs.create({ active: true, url: url.toString() })
 }
