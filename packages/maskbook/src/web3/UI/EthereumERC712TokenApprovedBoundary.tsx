@@ -20,7 +20,7 @@ export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'a
     operator: string | undefined
 }
 
-export function EthereumERC712TokenApprovedBoundary(props: EthereumERC712TokenApprovedBoundaryProps) {
+export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenApprovedBoundaryProps) {
     const { owner, contractAddress, operator, children, validationMessage: _validationMessage } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
