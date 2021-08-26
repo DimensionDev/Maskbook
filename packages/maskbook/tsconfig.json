@@ -19,7 +19,7 @@
     { "path": "../plugin-infra" },
     { "path": "../plugins/Wallet" },
     { "path": "../external-plugin-previewer" },
-    { "path": "../injected-script" }
+    { "path": "../injected-script/sdk" }
   ],
   "ts-node": {
     "transpileOnly": true,
