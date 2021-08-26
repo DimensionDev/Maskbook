@@ -36,12 +36,12 @@ export function StartUp() {
                             }}
                         />
                         <ActionCard
-                            title={t.wallets_startup_create()}
+                            title={t.wallets_startup_import()}
                             icon={<ImportWalletIcon fontSize="inherit" />}
-                            subtitle={t.wallets_startup_create_desc()}
+                            subtitle={t.wallets_startup_import_desc()}
                             action={{
                                 type: 'primary',
-                                text: t.wallets_startup_create_action(),
+                                text: t.wallets_startup_import_action(),
                                 handler: () => Services.Helper.openPopupsWindow('/wallet/import'),
                             }}
                         />
