@@ -1,7 +1,7 @@
 import { useStylesExtends } from '@masknet/shared'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { formatEthereumAddress, resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared'
-import { Box, Link, Tooltip, Typography } from '@material-ui/core'
+import { Box, Link, Typography } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { useState, useEffect } from 'react'
 import { CollectibleListAddress } from '../../extension/options-page/DashboardComponents/CollectibleList'
