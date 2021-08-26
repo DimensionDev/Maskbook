@@ -17,6 +17,7 @@ import { Trans } from 'react-i18next'
 import { findIndex } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
+import isAfter from 'date-fns/isAfter'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { useI18N, useSettingsSwitcher } from '../../../utils'
@@ -184,6 +185,8 @@ export function Collectible(props: CollectibleProps) {
         <Tab className={classes.tab} key="history" label={t('plugin_collectible_history')} />,
     ]
 
+    const endDate = asset.value?.end_time
+
     return (
         <>
             <CollectibleCard classes={classes}>
@@ -301,11 +304,11 @@ export function Collectible(props: CollectibleProps) {
                     </div>
                 </CardActions>
             </CollectibleCard>
-            {asset.value?.end_time && isValidDate(asset.value.end_time) && (
+            {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) && (
                 <Box sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
                         {t('plugin_collectible_sale_end', {
-                            time: formatDateTime(asset.value.end_time, 'yyyy-MM-dd HH:mm:ss'),
+                            time: formatDateTime(endDate, 'yyyy-MM-dd HH:mm:ss'),
                         })}
                     </Typography>
                 </Box>
