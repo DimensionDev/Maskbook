@@ -48,8 +48,8 @@
         "BSCT": 0,
         "Matic": 16516643,
         "Mumbai": 0,
-        "Arbitrum": 0,
-        "Arbitrum_Rinkeby": 0
+        "Arbitrum": 102022,
+        "Arbitrum_Rinkeby": 708696
     },
     "DEFAULT_QUALIFICATION_ADDRESS": {
         "Mainnet": "0x81b6ae377e360dcad63611846a2516f4ba8c88ac",
