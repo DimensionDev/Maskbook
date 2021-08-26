@@ -15,11 +15,11 @@ export function setTokenNativeNetwork(networkType: NetworkType) {
         case NetworkType.Ethereum:
             return 'ETH'
         case NetworkType.Binance:
-            return 'BSC'
+            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Polygon:
-            return 'MATIC'
+            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Arbitrum:
-            return ''
+            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         default:
             safeUnreachable(networkType)
             return ''
