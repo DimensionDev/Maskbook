@@ -236,7 +236,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 sx: { p: 0 },
             },
         ],
-        index: 1,
         state,
     }
 
