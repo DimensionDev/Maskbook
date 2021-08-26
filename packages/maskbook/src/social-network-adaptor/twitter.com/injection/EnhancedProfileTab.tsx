@@ -83,8 +83,10 @@ function clear() {
 
     const eleEmpty = searchProfileEmptySelector().evaluate()
     if (eleEmpty) eleEmpty.style.display = 'none'
+
+    // set display: none will change the height of the original element
     const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) elePage.style.display = 'none'
+    if (elePage) elePage.style.visibility = 'hidden'
 }
 
 function reset() {

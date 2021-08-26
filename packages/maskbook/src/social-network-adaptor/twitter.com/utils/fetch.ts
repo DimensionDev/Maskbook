@@ -1,5 +1,4 @@
 import { regexMatch } from '../../../utils/utils'
-import { notNullable } from '../../../utils/assert'
 import { defaultTo, flattenDeep } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
 import { canonifyImgUrl } from './url'
@@ -55,72 +54,54 @@ const serializeToText = (node: ChildNode): string => {
     return snippets.join('')
 }
 
-const isMobilePost = (node: HTMLElement) => {
-    return node.classList.contains('tweet') ?? node.classList.contains('main-tweet')
-}
-
 export const postIdParser = (node: HTMLElement) => {
-    if (isMobilePost(node)) {
-        const idNode = node.querySelector<HTMLAnchorElement>('.tweet-text')
-        return idNode ? idNode.getAttribute('data-id') ?? undefined : undefined
-    } else {
-        const idNode = defaultTo(
-            node.children[1]?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
-            defaultTo(
-                node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
-                node.closest('article > div')?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
-            ),
-        )
-        const isRetweet = !!node.querySelector('[data-testid=socialContext]')
-        const pid = idNode ? parseId(idNode.href) : parseId(location.href)
-        // You can't retweet a tweet or a retweet, but only cancel retweeting
-        return isRetweet ? `retweet:${pid}` : pid
-    }
+    const idNode = defaultTo(
+        node.children[1]?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+        defaultTo(
+            node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+            node.closest('article > div')?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+        ),
+    )
+    const isRetweet = !!node.querySelector('[data-testid=socialContext]')
+    const pid = idNode ? parseId(idNode.href) : parseId(location.href)
+    // You can't retweet a tweet or a retweet, but only cancel retweeting
+    return isRetweet ? `retweet:${pid}` : pid
 }
 
 export const postNameParser = (node: HTMLElement) => {
-    if (isMobilePost(node)) {
-        return parseNameArea(notNullable(node.querySelector<HTMLTableCellElement>('.user-info')).innerText)
-    } else {
-        const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
+    const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
 
-        // type 1:
-        // normal tweet
-        const anchorElement = tweetElement.querySelectorAll<HTMLAnchorElement>('a[role="link"]')[1]
-        const nameInUniqueAnchorTweet = collectNodeText(anchorElement)
+    // type 1:
+    // normal tweet
+    const anchorElement = tweetElement.querySelectorAll<HTMLAnchorElement>('a[role="link"]')[1]
+    const nameInUniqueAnchorTweet = collectNodeText(anchorElement)
 
-        // type 2:
-        const nameInDoubleAnchorsTweet = Array.from(
-            tweetElement.children[1]?.querySelectorAll<HTMLAnchorElement>('a[data-focusable="true"]') ?? [],
-        )
-            .map(serializeToText)
-            .join('')
+    // type 2:
+    const nameInDoubleAnchorsTweet = Array.from(
+        tweetElement.children[1]?.querySelectorAll<HTMLAnchorElement>('a[data-focusable="true"]') ?? [],
+    )
+        .map(serializeToText)
+        .join('')
 
-        // type 3:
-        // parse name in quoted tweet
-        const nameElementInQuoted = nthChild(tweetElement, 0, 0, 0, 0, 0)
-        const nameInQuoteTweet = nameElementInQuoted ? serializeToText(nameElementInQuoted) : ''
-        return (
-            [nameInUniqueAnchorTweet, nameInDoubleAnchorsTweet, nameInQuoteTweet]
-                .filter(Boolean)
-                .map(parseNameArea)
-                .find((r) => r.name && r.handle) ?? {
-                name: '',
-                handle: '',
-            }
-        )
-    }
+    // type 3:
+    // parse name in quoted tweet
+    const nameElementInQuoted = nthChild(tweetElement, 0, 0, 0, 0, 0)
+    const nameInQuoteTweet = nameElementInQuoted ? serializeToText(nameElementInQuoted) : ''
+    return (
+        [nameInUniqueAnchorTweet, nameInDoubleAnchorsTweet, nameInQuoteTweet]
+            .filter(Boolean)
+            .map(parseNameArea)
+            .find((r) => r.name && r.handle) ?? {
+            name: '',
+            handle: '',
+        }
+    )
 }
 
 export const postAvatarParser = (node: HTMLElement) => {
-    if (isMobilePost(node)) {
-        const avatarElement = node.querySelector<HTMLImageElement>('.avatar img')
-        return avatarElement ? avatarElement.src : undefined
-    } else {
-        const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
-        const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
-        return avatarElement ? avatarElement.src : undefined
-    }
+    const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
+    const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
+    return avatarElement ? avatarElement.src : undefined
 }
 
 export const postContentMessageParser = (node: HTMLElement) => {
@@ -162,8 +143,6 @@ export const postContentMessageParser = (node: HTMLElement) => {
 }
 
 export const postImagesParser = async (node: HTMLElement): Promise<string[]> => {
-    // TODO: Support steganography in legacy twitter
-    if (isMobilePost(node)) return []
     const isQuotedTweet = !!node.closest('div[role="link"]')
     const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
     if (!imgNodes.length) return []
