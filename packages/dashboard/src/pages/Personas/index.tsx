@@ -12,7 +12,6 @@ import { useDashboardI18N } from '../../locales'
 import type { PersonaInformation } from '@masknet/shared'
 import { ContentContainer } from '../../components/ContentContainer'
 import { PersonaContent } from './components/PersonaContent'
-import { PostHistory } from './components/PostHistory'
 import { PersonaRowCard } from './components/PersonaCard/Row'
 import { MaskAvatar } from '../../components/MaskAvatar'
 
@@ -114,10 +113,9 @@ function Personas() {
                                     key={networkIdentifier}
                                     value={networkIdentifier}
                                     className={activeTab === networkIdentifier ? classes.tab : undefined}>
-                                    <PersonaContent network={networkIdentifier} />
-                                    <PostHistory
-                                        useIds={getUserIds(networkIdentifier) ?? []}
+                                    <PersonaContent
                                         network={networkIdentifier}
+                                        useIds={getUserIds(networkIdentifier) ?? []}
                                     />
                                 </TabPanel>
                             )
