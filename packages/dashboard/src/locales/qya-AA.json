@@ -63,6 +63,7 @@
     "settings": "crwdns1663:0crwdne1663:0",
     "done": "crwdns1665:0crwdne1665:0",
     "labs": "crwdns1667:0crwdne1667:0",
+    "wallet_transactions_pending": "crwdns7921:0crwdne7921:0",
     "wallets_startup_create": "crwdns1669:0crwdne1669:0",
     "wallets_startup_create_desc": "crwdns1671:0crwdne1671:0",
     "wallets_startup_create_action": "crwdns1673:0crwdne1673:0",
