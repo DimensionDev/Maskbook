@@ -270,7 +270,6 @@ export const updateCurrentPersonaAvatar = async (avatar: string) => {
 
 export const getCurrentPersonaAvatar = async () => {
     const identifier = await getCurrentPersonaIdentifier()
-    console.log(identifier?.toText())
     return getStorage<string>(`persona_avatar+${identifier?.toText()}`)
 }
 //#endregion
