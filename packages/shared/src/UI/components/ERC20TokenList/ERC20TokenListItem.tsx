@@ -1,4 +1,4 @@
-import { Button, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
+import { ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import {
     Asset,
@@ -14,6 +14,8 @@ import type { MaskSearchableListItemProps } from '@masknet/theme'
 import { some } from 'lodash-es'
 import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
+import { MaskLoadingButton } from '@masknet/theme'
+import { LoadingIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -113,9 +115,15 @@ export const getERC20TokenListItem =
                         {!isNotAdded ? (
                             <span>{formatBalance(data.balance, token.decimals)}</span>
                         ) : (
-                            <Button variant="rounded" color="primary" onClick={onImport} size="small">
+                            <MaskLoadingButton
+                                variant="rounded"
+                                color="primary"
+                                onClick={onImport}
+                                size="small"
+                                clearStyle
+                                loadingIndicator={<LoadingIcon sx={{ fontSize: 16 }} />}>
                                 Import
-                            </Button>
+                            </MaskLoadingButton>
                         )}
                     </Typography>
                 </ListItemText>
