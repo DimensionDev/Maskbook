@@ -279,7 +279,6 @@ importers:
       '@types/react-virtualized-auto-sizer': ^1.0.1
       '@types/react-window': ^1.8.4
       '@types/remarkable': ^2.0.3
-      '@types/rimraf': ^3.0.1
       '@types/socket.io-client': ^1.4.36
       '@types/tiny-secp256k1': ^1.0.0
       '@types/use-subscription': ^1.0.0
@@ -360,7 +359,6 @@ importers:
       react-virtualized-auto-sizer: ^1.0.2
       react-window: ^1.8.6
       remarkable: ^2.0.1
-      rimraf: ^3.0.2
       scrypt-js: ^3.0.1
       socket.io-client: 2.4.0
       source-map-loader: ^3.0.0
@@ -535,7 +533,6 @@ importers:
       '@types/jest-environment-puppeteer': 4.4.1
       '@types/puppeteer': 5.4.4
       '@types/remarkable': 2.0.3
-      '@types/rimraf': 3.0.1
       '@types/socket.io-client': 1.4.36
       '@types/webpack-dev-server': 3.11.5
       '@typescript-eslint/eslint-plugin': 4.29.1_9e650468d3ce62d57e2df2f2fad149b2
@@ -560,7 +557,6 @@ importers:
       react-devtools-core: 4.14.0
       react-refresh: 0.10.0
       react-test-renderer: 17.0.2_react@18.0.0-alpha-aecb3b6d1
-      rimraf: 3.0.2
       source-map-loader: 3.0.0_webpack@5.50.0
       swc-loader: 0.1.14_webpack@5.50.0
       ts-jest: 27.0.4_2b1bb99c65ce8fc8eda3ccb6cb24befc
@@ -623,15 +619,19 @@ importers:
       '@types/inquirer': ^7.3.3
       '@types/lodash': ^4.14.171
       '@types/proper-lockfile': ^4.1.2
+      '@types/rimraf': ^3.0.2
       gulp-zip: ^5.1.0
       lodash: ^4.17.21
       proper-lockfile: ^4.1.1
+      rimraf: ^3.0.2
       ts-node: ^10.2.0
       yargs: ^17.0.1
     dependencies:
+      '@types/rimraf': 3.0.2
       gulp-zip: 5.1.0_gulp@4.0.2
       lodash: 4.17.21
       proper-lockfile: 4.1.2
+      rimraf: 3.0.2
       yargs: 17.0.1
     devDependencies:
       '@types/gulp': 4.0.9
@@ -8685,8 +8685,7 @@ packages:
     resolution: {integrity: sha512-w+LsMxKyYQm347Otw+IfBXOv9UWVjpHpCDdbBMt8Kz/xbvCYNjP+0qPh91Km3iKfSRLBB0P7fAMf0KHrPu+MyA==}
     dependencies:
       '@types/minimatch': 3.0.5
-      '@types/node': 16.4.3
-    dev: true
+      '@types/node': 16.6.1
 
   /@types/graceful-fs/4.1.5:
     resolution: {integrity: sha512-anKkLmZZ+xm4p8JWBf4hElkM4XR+EZeA2M9BAkkTldmcyDY4mbdIJnRghDJH3Ov5ooY7/UAoENtmdMSkaAd7Cw==}
@@ -8862,7 +8861,6 @@ packages:
 
   /@types/minimatch/3.0.5:
     resolution: {integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==}
-    dev: true
 
   /@types/minimist/1.2.2:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
@@ -9060,12 +9058,12 @@ packages:
     resolution: {integrity: sha512-xoDlM2S4ortawSWORYqsdU+2rxdh4LRW9ytc3zmT37RIKQh6IHyKwwtKhKis9ah8ol07DCkZxPt8BBvPjC6v4g==}
     dev: true
 
-  /@types/rimraf/3.0.1:
-    resolution: {integrity: sha512-CAoSlbco40aKZ0CkelBF2g3JeN6aioRaTVnqSX5pWsn/WApm6IDxI4e4tD9D0dY/meCkyyleP1IQDVN13F4maA==}
+  /@types/rimraf/3.0.2:
+    resolution: {integrity: sha512-F3OznnSLAUxFrCEu/L5PY8+ny8DtcFRjx7fZZ9bycvXRi3KPTRS9HOitGZwvPg0juRhXFWIeKX58cnX5YqLohQ==}
     dependencies:
       '@types/glob': 7.1.4
-      '@types/node': 16.4.3
-    dev: true
+      '@types/node': 16.6.1
+    dev: false
 
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
@@ -23031,7 +23029,6 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.1.7
-    dev: true
 
   /ripemd160-min/0.0.6:
     resolution: {integrity: sha512-+GcJgQivhs6S9qvLogusiTcS9kQUfgR75whKuy5jIhuiOfQuJ8fjqxV6EGD5duH1Y/FawFUMtMhyeq3Fbnib8A==}
