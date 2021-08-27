@@ -8,6 +8,7 @@ export type { Web3ProviderType } from './type'
 
 export const Web3ProviderContext = createContext<Web3ProviderType>(null!)
 
+/** @internal */
 export function useWeb3Context() {
     const context = useContext(Web3ProviderContext)
     if (!context) throw new Error('This hook should be used in a provider.')

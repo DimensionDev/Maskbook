@@ -1,4 +1,3 @@
-import { makeStyles, Theme } from '@material-ui/core/styles'
 import { Button, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import {
@@ -7,15 +6,16 @@ import {
     formatBalance,
     FungibleTokenDetailed,
     isSameAddress,
-    useWeb3Context,
+    useAddERC20TokenCallback,
+    useTrustERC20TokenCallback,
 } from '@masknet/web3-shared'
 import { TokenIcon } from '../TokenIcon'
 import type { MaskSearchableListItemProps } from '@masknet/theme'
 import { some } from 'lodash-es'
 import { useCallback } from 'react'
+import { makeStyles } from '@masknet/theme'
 
-// todo: change Typography from global theme
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 36,
         height: 36,
@@ -65,8 +65,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 export const getERC20TokenListItem =
     (addedTokens: FungibleTokenDetailed[], externalTokens: FungibleTokenDetailed[], account?: string) =>
     ({ data, onSelect }: MaskSearchableListItemProps<Asset>) => {
-        const classes = useStyles()
-        const { addERC20Token, trustERC20Token } = useWeb3Context()
+        const { classes } = useStyles()
+        const [, addERC20Token] = useAddERC20TokenCallback()
+        const [, trustERC20Token] = useTrustERC20TokenCallback()
         const token = data.token
 
         if (!token) return null
@@ -76,8 +77,6 @@ export const getERC20TokenListItem =
 
         const onImport = useCallback(
             async (event: React.MouseEvent<HTMLButtonElement>) => {
-                console.log(token)
-                console.log(account)
                 event.stopPropagation()
                 if (!token || !account) return
                 await Promise.all([

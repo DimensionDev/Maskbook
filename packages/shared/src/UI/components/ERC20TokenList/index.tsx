@@ -8,13 +8,14 @@ import {
     isValidAddress,
     makeSortAssertFn,
     makeSortTokenFn,
+    useAccount,
     useAssetsByTokenList,
+    useChainId,
     useERC20TokenDetailed,
     useERC20TokensDetailedFromTokenLists,
     useEthereumConstants,
     useNativeTokenDetailed,
     useTrustedERC20Tokens,
-    useWeb3State,
 } from '@masknet/web3-shared'
 import { SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@material-ui/core'
@@ -36,7 +37,8 @@ const Placeholder = memo(({ message }: { message: string }) => (
 ))
 
 export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
-    const { account, chainId } = useWeb3State()
+    const account = useAccount()
+    const chainId = useChainId()
     const trustedERC20Tokens = useTrustedERC20Tokens()
     const { value: nativeToken } = useNativeTokenDetailed()
     const [keyword, setKeyword] = useState('')
@@ -49,7 +51,6 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
         onSelect,
     } = props
 
-    // todo: set
     const { ERC20_TOKEN_LISTS } = useEthereumConstants()
 
     const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
