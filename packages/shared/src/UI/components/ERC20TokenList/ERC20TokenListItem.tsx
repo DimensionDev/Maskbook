@@ -21,6 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 36,
     },
     list: {
+        maxHeight: '100%',
         paddingLeft: theme.spacing(1),
     },
     text: {

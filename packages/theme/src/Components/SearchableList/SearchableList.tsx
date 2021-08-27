@@ -2,7 +2,7 @@ import { ReactNode, useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
-import { InputAdornment, TextField } from '@material-ui/core'
+import { InputAdornment } from '@material-ui/core'
 import { makeStyles } from '../../makeStyles'
 import { Search } from '@material-ui/icons'
 import { MaskColorVar } from '../../constants'
@@ -53,10 +53,11 @@ export function SearchableList<T>({
     onSearch,
     searchKey,
     itemRender,
-    FixedSizeListProps,
+    FixedSizeListProps = {},
 }: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
     const { classes } = useStyles()
+    const { height, itemSize, ...rest } = FixedSizeListProps
     //#region fuse
     const fuse = useMemo(
         () =>
@@ -86,7 +87,6 @@ export function SearchableList<T>({
     return (
         <div className={classes.container}>
             <MaskTextField
-                className={classes.textField}
                 placeholder="Search"
                 autoFocus
                 fullWidth
@@ -104,15 +104,15 @@ export function SearchableList<T>({
                 <div className={classes.list}>
                     <FixedSizeList
                         width="100%"
-                        height={300}
+                        height={height ?? 300}
                         overscanCount={5}
-                        itemSize={60}
+                        itemSize={itemSize ?? 60}
                         itemData={{
                             dataSet: readyToRenderData,
                             onSelect: onSelect,
                         }}
                         itemCount={readyToRenderData.length}
-                        {...FixedSizeListProps}>
+                        {...rest}>
                         {(props) => <MaskSearchableItemInList<T> {...props}>{itemRender}</MaskSearchableItemInList>}
                     </FixedSizeList>
                 </div>
@@ -121,15 +121,7 @@ export function SearchableList<T>({
     )
 }
 const useStyles = makeStyles()((theme) => ({
-    container: {
-        paddingBottom: theme.spacing(4),
-    },
-    textField: {
-        '&>div': {
-            borderRadius: theme.spacing(1),
-            background: MaskColorVar.normalBackground,
-        },
-    },
+    container: {},
     list: {
         marginTop: theme.spacing(1),
         '& > div::-webkit-scrollbar': {
@@ -145,3 +137,5 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
+
+export interface MaskFixedSizeListProps extends FixedSizeListProps {}

@@ -40,6 +40,7 @@ const useStyles = makeStyles()((theme) => ({
             theme.palette.mode === 'dark' ? getMaskColor(theme).lightBackground : getMaskColor(theme).normalBackground,
         fontSize: 12,
         lineHeight: '16px',
+        borderRadius: 6,
         [`&.${formHelperTextClasses.error}`]: {
             boxShadow: `0 0 0 ${theme.spacing(0.5)} ${MaskColorVar.redMain.alpha(0.2)}`,
             border: `1px solid ${MaskColorVar.redMain.alpha(0.8)}`,

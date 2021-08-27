@@ -17,7 +17,7 @@ import {
     useNativeTokenDetailed,
     useTrustedERC20Tokens,
 } from '@masknet/web3-shared'
-import { SearchableList } from '@masknet/theme'
+import { MaskFixedSizeListProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@material-ui/core'
 
 export interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
@@ -26,6 +26,7 @@ export interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'>
     tokens?: FungibleTokenDetailed[]
     selectedTokens?: string[]
     onSelect?(token: FungibleTokenDetailed | null): void
+    FixedSizeListProps?: Partial<MaskFixedSizeListProps>
 }
 
 const Placeholder = memo(({ message }: { message: string }) => (
@@ -49,6 +50,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
         selectedTokens = [],
         tokens = [],
         onSelect,
+        FixedSizeListProps,
     } = props
 
     const { ERC20_TOKEN_LISTS } = useEthereumConstants()
@@ -110,6 +112,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
             searchKey={['token.address', 'token.symbol', 'token.name']}
             itemRender={getERC20TokenListItem(trustedERC20Tokens, searchedToken ? [searchedToken] : [], account)}
             placeholder={getPlaceHolder()}
+            FixedSizeListProps={FixedSizeListProps}
         />
     )
 })
