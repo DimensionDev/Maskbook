@@ -1,3 +1,22 @@
 {
-    "about": "알아보기"
+    "about": "알아보기",
+    "wallets": "월렛",
+    "personas": "나의 페르소나",
+    "persona": "페르소나",
+    "refresh": "새로고침",
+    "next": "다음",
+    "cancel": "취소",
+    "back": "뒤로",
+    "agree": "동의",
+    "confirm": "확인",
+    "verify": "인증",
+    "go_back": "돌아가기",
+    "connect": "연결",
+    "searching": "검색 중...",
+    "restore": "복원하기",
+    "about_dialog_license": "라이센스: ",
+    "footer_bounty_list": "상금 리스트",
+    "about_dialog_source_code": "소스 코드: ",
+    "about_dialog_feedback": "피드백: ",
+    "about_dialog_touch": "연락하기"
 }
