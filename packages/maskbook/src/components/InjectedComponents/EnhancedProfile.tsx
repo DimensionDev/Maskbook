@@ -18,6 +18,13 @@ const RULE_TIP = [
 ].join('\n')
 
 const useStyles = makeStyles()((theme) => ({
+    root: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1,
+    },
     note: {
         padding: theme.spacing(1),
         textAlign: 'right',
@@ -77,7 +84,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     return (
         <>
             {show ? (
-                <>
+                <div className={classes.root}>
                     <Box className={classes.note} display="flex" alignItems="center" justifyContent="flex-end">
                         <Typography color="textPrimary" component="span">
                             Current display of {addressENS ? 'ENS' : addressUNS ? 'UNS' : 'address'}:{' '}
@@ -97,7 +104,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                         </Typography>
                     </Box>
                     <CollectibleListAddress classes={classes} address={address_} />
-                </>
+                </div>
             ) : null}
         </>
     )

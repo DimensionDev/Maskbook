@@ -7,6 +7,11 @@
     ".": "./dist/src/index.js",
     "./constants": "./dist/src/constants.js"
   },
+  "typesVersions": {
+    "*": {
+      "constants": ["./dist/src/constants.d.ts"]
+    }
+  },
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "scripts": {
