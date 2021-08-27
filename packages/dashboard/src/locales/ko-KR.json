@@ -18,5 +18,11 @@
     "footer_bounty_list": "상금 리스트",
     "about_dialog_source_code": "소스 코드: ",
     "about_dialog_feedback": "피드백: ",
-    "about_dialog_touch": "연락하기"
+    "about_dialog_touch": "연락하기",
+    "about_dialog_description": "Mask Network는 새롭고 오픈한 인터넷으로 통하는 포털이다. Mask를 통해 소셜 네트워크에서 암호화 게시글을 공유할 수도 있다. 레드 패킷 보내기, 암호화폐 구매, 파일 서비스 등 기능도 지원한다.",
+    "setup_page_title": "환영합니다",
+    "setup_page_description": "소셜 네트워크에서 개시글과 체팅을 암호화하고 친구만 해독할 수 있다.",
+    "setup_page_create_account_title": "아이디 만들기",
+    "setup_page_create_account_subtitle": "계정과 데이터의 로컬 스토리지",
+    "setup_page_create_account_button": "만들기"
 }
