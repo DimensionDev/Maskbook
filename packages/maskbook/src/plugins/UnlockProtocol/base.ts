@@ -7,7 +7,7 @@ export const base: Plugin.Shared.Definition = {
     icon: pluginIcon,
     name: { fallback: pluginName },
     description: { fallback: pluginDescription },
-    publisher: { name: { fallback: 'Unlock Protocol' }, link: 'https://unlock-protocol.com/' },
+    publisher: { name: { fallback: 'Zubin Choudhary' }, link: 'https://www.iamzub.in' },
     enableRequirement: {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },

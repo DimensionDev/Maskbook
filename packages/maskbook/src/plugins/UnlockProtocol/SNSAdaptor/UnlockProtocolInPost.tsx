@@ -1,5 +1,5 @@
 import type { TypedMessage } from '../../../protocols/typed-message'
-import { Button } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
@@ -17,8 +17,8 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
     const { t } = useI18N()
     const { message } = props
     const [content, setContent] = useState('')
-    const [address, setAddress] = useState(useAccount())
-    const [chain, setChain] = useState(useChainId())
+    const address = useAccount()
+    const chain = useChainId()
     const [redirurl, setRedirurl] = useState('')
 
     useEffect(() => {
@@ -59,10 +59,10 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                     setRedirurl(paywallUrl + encodeURI(JSON.stringify(data)))
                 })
             } else {
-                setContent(t('plugin_unlockprotocol_connect_wallet'))
+                setContent('Loading...')
             }
         }
-    }, [useChainId(), useAccount()])
+    }, [chain, address])
     if (!!content) {
         const jsx = message
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
@@ -70,7 +70,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                       <>
                           <MaskbookPluginWrapper width={300} pluginName="Unlock Protocol">
                               <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
-                                  {content}
+                                  <Typography color="textPrimary">{content}</Typography>
                               </EthereumChainBoundary>
                           </MaskbookPluginWrapper>
                       </>
@@ -85,9 +85,9 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                   return (
                       <MaskbookPluginWrapper width={300} pluginName="Unlock Protocol">
                           <>
-                              <text>"You don't have access to this content"</text>
+                              <Typography color="textPrimary">"You don't have access to this content"</Typography>
                               <br />
-                              <text>"Please look for and buy and active lock"</text>
+                              <Typography color="textPrimary">"Please look for and buy an active lock"</Typography>
                               <br />
                               <Button target="_blank" href={redirurl}>
                                   Buy Lock
@@ -105,7 +105,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                   return (
                       <MaskbookPluginWrapper width={300} pluginName="Unlock Protocol">
                           <>
-                              <text>"Loading..."</text>
+                              <Typography color="textPrimary">"Loading..."</Typography>
                               <br />
                           </>
                       </MaskbookPluginWrapper>
