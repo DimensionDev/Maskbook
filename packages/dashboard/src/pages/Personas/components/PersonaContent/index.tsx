@@ -24,9 +24,9 @@ enum PersonaContentTab {
 
 export interface PersonaContentProps {
     network: string
-    useIds: string[]
+    userIds: string[]
 }
-export const PersonaContent = memo<PersonaContentProps>(({ network, useIds }) => {
+export const PersonaContent = memo<PersonaContentProps>(({ network, userIds }) => {
     const { classes } = useStyles()
     const [tab, setTab] = useState<string>(PersonaContentTab.Posts)
 
@@ -38,7 +38,7 @@ export const PersonaContent = memo<PersonaContentProps>(({ network, useIds }) =>
                     <Tab value={PersonaContentTab.Contacts} label="Contacts" />
                 </ButtonGroupTabList>
                 <TabPanel value={PersonaContentTab.Posts} className={classes.tab}>
-                    <PostHistory useIds={useIds} network={network} />
+                    <PostHistory useIds={userIds} network={network} />
                 </TabPanel>
                 <TabPanel value={PersonaContentTab.Contacts} className={classes.tab}>
                     <ContactsTable network={network} />

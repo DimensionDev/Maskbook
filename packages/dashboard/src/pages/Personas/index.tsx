@@ -115,7 +115,7 @@ function Personas() {
                                     className={activeTab === networkIdentifier ? classes.tab : undefined}>
                                     <PersonaContent
                                         network={networkIdentifier}
-                                        useIds={getUserIds(networkIdentifier) ?? []}
+                                        userIds={getUserIds(networkIdentifier) ?? []}
                                     />
                                 </TabPanel>
                             )
