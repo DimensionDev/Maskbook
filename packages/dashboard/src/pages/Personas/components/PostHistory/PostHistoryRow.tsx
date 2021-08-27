@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@material-ui/core'
 import { memo, ReactNode, useMemo } from 'react'
-import { FileMessageIcon, ITOIcon, MessageIcon, RedPacketIcon } from '@masknet/icons'
+import { FileMessageIcon, ITOIcon, MessageIcon, RedPacketIcon, PollIcon } from '@masknet/icons'
 import { getMaskColor } from '@masknet/theme'
 import { Services } from '../../../../API'
 
@@ -11,6 +11,7 @@ const SUPPORT_PLUGIN: Record<string, ReactNode> = {
     'com.maskbook.red_packet:1': <RedPacketIcon sx={{ width: 48, height: 48 }} />,
     'com.maskbook.ito:1': <ITOIcon sx={{ width: 48, height: 48 }} />,
     'com.maskbook.ito:2': <ITOIcon sx={{ width: 48, height: 48 }} />,
+    'com.maskbook.poll:1': <PollIcon sx={{ width: 48, height: 48 }} />,
 }
 
 interface PostHistoryRowProps {
