@@ -58,8 +58,6 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                     })
                     setRedirurl(paywallUrl + encodeURI(JSON.stringify(data)))
                 })
-            } else {
-                setContent('Loading...')
             }
         }
     }, [chain, address])
@@ -104,10 +102,10 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
                       <MaskbookPluginWrapper width={300} pluginName="Unlock Protocol">
-                          <>
+                          <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
                               <Typography color="textPrimary">"Loading..."</Typography>
                               <br />
-                          </>
+                          </EthereumChainBoundary>
                       </MaskbookPluginWrapper>
                   )
               })
