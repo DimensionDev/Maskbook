@@ -168,6 +168,7 @@
     "personas_contacts_operation": "Operation",
     "personas_contacts_invite": "Invite",
     "personas_post_is_empty": "You haven't created any post yet.",
+    "personas_post_create": "Create Post",
     "settings_general": "General",
     "settings_backup_recovery": "Backup & Recovery",
     "settings_local_backup": "Local Backup",

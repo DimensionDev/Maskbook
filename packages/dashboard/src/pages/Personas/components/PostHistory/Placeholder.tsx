@@ -1,7 +1,9 @@
 import { memo } from 'react'
-import { Box, Stack, Typography } from '@material-ui/core'
+import { Box, Button, Stack, Typography } from '@material-ui/core'
 import { EmptyIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
+import { Services } from '../../../../API'
+import urlcat from 'urlcat'
 
 interface PlaceholderProps {
     network: string
@@ -9,6 +11,10 @@ interface PlaceholderProps {
 
 export const Placeholder = memo<PlaceholderProps>(({ network }) => {
     const t = useDashboardI18N()
+    const url = urlcat('https://www.:network', { network: network })
+
+    const handleClick = () => Services.Settings.openSNSAndActivatePlugin(url, 'none')
+
     return (
         <Stack height="100%" alignItems="center" justifyContent="center">
             <Box textAlign="center">
@@ -16,6 +22,7 @@ export const Placeholder = memo<PlaceholderProps>(({ network }) => {
                 <Typography variant="body2" mb={3}>
                     {t.personas_post_is_empty()}
                 </Typography>
+                <Button onClick={handleClick}>{t.personas_post_create()}</Button>
             </Box>
         </Stack>
     )
