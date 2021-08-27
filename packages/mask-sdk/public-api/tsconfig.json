@@ -2,16 +2,12 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "./",
-    // Non-regular module settings.
-    "outFile": "../dist/public-api.d.ts",
-    "module": "None",
+    "outDir": "../dist/public-api/",
     "tsBuildInfoFile": "../dist/public-api.tsbuildinfo",
-    "isolatedModules": false,
     "skipLibCheck": false,
-    "resolveJsonModule": false,
     "emitDeclarationOnly": true,
     "types": ["@types/web"]
   },
-  "files": ["index.ts", "mask-login.ts", "mask-wallet.ts", "mask-external-plugin.ts"],
+  "include": ["./"],
   "references": []
 }

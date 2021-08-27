@@ -1,7 +1,10 @@
 import { spawn } from 'child_process'
 import { ROOT_PATH } from '.'
+import { relative } from 'path'
+import { underline, greenBright, bold } from 'chalk'
 
 function cwdShell(e: string, args: string[], cwd: string) {
+    console.log(bold(relative(ROOT_PATH, cwd)), greenBright`$`, underline(`${e} ${args.join(' ')}`))
     return spawn(e, args, {
         cwd: cwd,
         stdio: 'inherit',

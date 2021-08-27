@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "devDependencies": {
+    "@microsoft/api-documenter": "^7.13.41",
+    "@microsoft/api-extractor": "^7.18.7",
     "@rollup/plugin-sucrase": "^4.0.0",
     "rollup": "^2.56.3",
     "rollup-plugin-terser": "^7.0.2"

@@ -1,8 +1,7 @@
-declare namespace Mask {
-    /**
-     * Mask Login is following the same API as WebAuthn.
-     *
-     * @since SDK=0
-     */
-    // export const credentials: CredentialsContainer
-}
+/**
+ * Mask Login is following the same API as WebAuthn.
+ *
+ * @public
+ * @remarks Since API=0
+ */
+export declare const credentials: CredentialsContainer
