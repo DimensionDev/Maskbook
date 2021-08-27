@@ -1,5 +1,5 @@
 import { Box, Pagination, Stack } from '@material-ui/core'
-import { usePosts } from '../../hooks/usePosts'
+import { usePostHistory } from '../../hooks/usePostHistory'
 import { PostHistoryRow } from './PostHistoryRow'
 import { memo, useState } from 'react'
 import { Placeholder } from './Placeholder'
@@ -11,7 +11,7 @@ interface PostHistoryProps {
 
 export const PostHistory = memo(({ useIds, network }: PostHistoryProps) => {
     const [page, setPage] = useState(1)
-    const { value } = usePosts(network, useIds, page)
+    const { value } = usePostHistory(network, useIds, page)
 
     if (!value?.data.length) return <Placeholder network={network} />
 
