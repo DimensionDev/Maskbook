@@ -91,7 +91,7 @@ function Personas() {
                             <Tab
                                 key={networkIdentifier}
                                 value={networkIdentifier}
-                                // They should be localizedh
+                                // They should be localized
                                 label={capitalize(networkIdentifier.replace('.com', ''))}
                             />
                         ))}

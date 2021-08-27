@@ -45,7 +45,6 @@ import { getCurrentPersonaIdentifier } from './SettingsService'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { getStorage, setStorage } from './HelperService'
 import { MaskMessage } from '../../utils'
-import { currentPersonaIdentifier } from '../../settings/settings'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -262,9 +261,11 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
 //#region avatar
 export const updateCurrentPersonaAvatar = async (avatar: string) => {
     const identifier = await getCurrentPersonaIdentifier()
-    await setStorage(`persona_avatar+${identifier?.toText()}`, avatar)
 
-    MaskMessage.events.personaAvatarChanged.sendToAll({ reason: 'update', of: currentPersonaIdentifier.value })
+    if (identifier) {
+        await setStorage(`persona_avatar+${identifier?.toText()}`, avatar)
+        MaskMessage.events.personaAvatarChanged.sendToAll({ reason: 'update', of: identifier?.toText() })
+    }
 }
 
 export const getCurrentPersonaAvatar = async () => {
