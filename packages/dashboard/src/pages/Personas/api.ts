@@ -24,3 +24,11 @@ export const [useAppearance] = createGlobalState(Services.Settings.getTheme, (x)
 export const [useCurrentPersonaIdentifier] = createGlobalState(Services.Settings.getCurrentPersonaIdentifier, (x) =>
     Messages.events.currentPersonaIdentifier.on(x),
 )
+
+export const [usePersonaAvatar] = createGlobalState(Services.Identity.getCurrentPersonaAvatar, (x) => {
+    const a = Messages.events.currentPersonaIdentifier.on(x)
+    const b = Messages.events.personaAvatarChanged.on(x)
+    return () => void [a(), b()]
+})
+
+export const updatePersonaAvatar = Services.Identity.updateCurrentPersonaAvatar

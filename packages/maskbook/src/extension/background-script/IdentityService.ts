@@ -22,16 +22,16 @@ import {
     consistentPersonaDBWriteAccess,
     createOrUpdateProfileDB,
     createProfileDB,
+    createRelationDB,
     deleteProfileDB,
     LinkedProfileDetails,
     ProfileRecord,
-    createRelationDB,
-    updateRelationDB,
-    queryRelationsPagedDB,
-    RelationRecord,
     queryPersonaDB,
     queryPersonasDB,
     queryProfilesDB,
+    queryRelationsPagedDB,
+    RelationRecord,
+    updateRelationDB,
 } from '../../database/Persona/Persona.db'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
@@ -43,6 +43,9 @@ import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared'
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import { getStorage, setStorage } from './HelperService'
+import { MaskMessage } from '../../utils'
+import { currentPersonaIdentifier } from '../../settings/settings'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -254,6 +257,22 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
         // the profile already exists
     }
 }
+//#endregion
+
+//#region avatar
+export const updateCurrentPersonaAvatar = async (avatar: string) => {
+    const identifier = await getCurrentPersonaIdentifier()
+    await setStorage(`persona_avatar+${identifier?.toText()}`, avatar)
+
+    MaskMessage.events.personaAvatarChanged.sendToAll({ reason: 'update', of: currentPersonaIdentifier.value })
+}
+
+export const getCurrentPersonaAvatar = async () => {
+    const identifier = await getCurrentPersonaIdentifier()
+    console.log(identifier?.toText())
+    return getStorage<string>(`persona_avatar+${identifier?.toText()}`)
+}
+//#endregion
 
 //#region Export & Import Private key
 export async function exportPersonaPrivateKey(identifier: PersonaIdentifier) {

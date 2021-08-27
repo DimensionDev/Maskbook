@@ -1,8 +1,8 @@
-import { useAvatar } from '../../pages/Settings/api'
 import { Avatar } from '@material-ui/core'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { AuthorIcon } from '@masknet/icons'
 import { memo } from 'react'
+import { usePersonaAvatar } from '../../pages/Personas/api'
 
 const useStyles = makeStyles()((theme) => ({
     author: {
@@ -18,8 +18,12 @@ interface MaskAvatarProps {
 
 export const MaskAvatar = memo<MaskAvatarProps>(({ size = 36, onClick }) => {
     const { classes } = useStyles()
-    const avatar = useAvatar()
-    const commonProps = { sx: { width: size, height: size }, onClick: onClick, className: classes.author }
+    const avatar = usePersonaAvatar()
+    const commonProps = {
+        sx: { width: size, height: size, display: 'inline-block' },
+        onClick: onClick,
+        className: classes.author,
+    }
 
     if (!avatar) {
         return <AuthorIcon {...commonProps} />

@@ -5,7 +5,6 @@ import {
     languageSettings,
     debugModeSetting,
     currentPersonaIdentifier,
-    avatarSettings,
 } from './settings'
 import {
     currentAccountSettings,
@@ -30,7 +29,6 @@ export function ToBeListened() {
         allPostReplacementSettings,
         appearanceSettings,
         languageSettings,
-        avatarSettings,
         debugModeSetting,
         currentChainIdSettings,
         currentBalanceSettings,

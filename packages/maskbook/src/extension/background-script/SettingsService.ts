@@ -5,7 +5,6 @@ import {
     appearanceSettings,
     currentPersonaIdentifier,
     languageSettings,
-    avatarSettings,
     currentPluginEnabledStatus,
 } from '../../settings/settings'
 import {
@@ -42,7 +41,6 @@ function create<T>(settings: InternalSettings<T>) {
 }
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
-export const [getAvatar, setAvatar] = create(avatarSettings)
 export const [getChainId, setChainId] = create(currentChainIdSettings)
 export const [getBalance, setBalance] = create(currentBalanceSettings)
 export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)

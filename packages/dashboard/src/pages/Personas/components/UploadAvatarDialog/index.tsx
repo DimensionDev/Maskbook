@@ -1,11 +1,11 @@
 import { MaskDialog } from '@masknet/theme'
 import { Box, Button, DialogContent, Slider } from '@material-ui/core'
-import { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
 import { useStateList } from 'react-use'
 import FileUpload from '../../../../components/FileUpload'
-import { Services } from '../../../../API'
 import { useDashboardI18N } from '../../../../locales'
+import { updatePersonaAvatar } from '../../api'
 
 interface UploadAvatarDialogProps {
     open: boolean
@@ -17,21 +17,30 @@ const uploadSteps = ['upload', 'pick']
 export const UploadAvatarDialog = memo<UploadAvatarDialogProps>(({ open, onClose }) => {
     const t = useDashboardI18N()
 
-    const { state: step, next } = useStateList(uploadSteps)
+    const { state: step, next, setStateAt } = useStateList(uploadSteps)
     const [file, setFile] = useState<File>()
     const [scale, setScale] = useState(1)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
 
-    const onSave = () => {
+    const handleClose = useCallback(() => {
+        setFile(undefined)
+        setScale(1)
+        setStateAt(0)
+
+        onClose()
+    }, [])
+
+    const onSave = useCallback(() => {
         if (!editor) return
 
         const canvas = editor.getImage()
-        Services.Settings.setAvatar(canvas.toDataURL())
-        onClose()
-    }
+        updatePersonaAvatar(canvas.toDataURL())
+
+        handleClose()
+    }, [editor, handleClose])
 
     return (
-        <MaskDialog open={open} title={t.personas_upload_avatar()} onClose={onClose}>
+        <MaskDialog open={open} title={t.personas_upload_avatar()} onClose={handleClose}>
             <DialogContent>
                 {step === 'upload' && (
                     <Box sx={{ mb: 2 }}>
