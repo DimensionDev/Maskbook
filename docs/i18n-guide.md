@@ -1,20 +1,14 @@
 # Internationalization Guide (i18n guide)
 
-## WARNING
-
-Stop accepting translation class pull request
+> We're currently not accepting new language support in Mask Network.
 
 ## Submit community translation
 
-<https://crowdin.com/project/mask-network>
-
-or
-
-We hope you join our [Discord server](https://discord.gg/4SVXvj7)
+Welcome to <https://crowdin.com/project/mask-network> or you can join our [Discord server](https://discord.gg/4SVXvj7)
 
 ## Caveats
 
-1. We using [ISO 639-1][iso-639-1] two-letter code for locale directory name
+1. We using [ISO 639-1][iso-639-1] two-letter code for locale file names.
 
 2. Add a new language new support
 
