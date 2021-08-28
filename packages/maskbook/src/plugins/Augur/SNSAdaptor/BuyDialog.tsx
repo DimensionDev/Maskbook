@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     section: {
         textAlign: 'center',
-        margin: `${theme.spacing(1)}px auto`,
+        margin: `${theme.spacing(1)} auto`,
     },
     status: {
         marginTop: theme.spacing(0.5),

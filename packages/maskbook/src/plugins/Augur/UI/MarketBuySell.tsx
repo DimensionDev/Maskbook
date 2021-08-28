@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Typography, Grid, SwitchClassKey, SwitchProps, Button, Link, Switch } from '@material-ui/core'
+import { Typography, Grid, SwitchClassKey, SwitchProps, Button, Switch } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import type { AmmOutcome, Market } from '../types'
@@ -7,6 +7,7 @@ import { useI18N } from '../../../utils'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { BuyDialog } from '../SNSAdaptor/BuyDialog'
 import { SellDialog } from '../SNSAdaptor/SellDialog'
+import { LiquidityDialog } from '../SNSAdaptor/LiquidityDialog'
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
     focusVisible?: string
@@ -135,6 +136,9 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: theme.spacing(0),
         paddingBottom: theme.spacing(1),
     },
+    label: {
+        flexDirection: 'column',
+    },
 }))
 
 interface MarketBuySellProps {
@@ -153,6 +157,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
     const [selectedOutcome, setSelectedOutcome] = useState<AmmOutcome>()
     const [buyDialogOpen, setBuyDialogOpen] = useState(false)
     const [sellDialogOpen, setSellDialogOpen] = useState(false)
+    const [liquidityDialogOpen, setLiquidityDialogOpen] = useState(false)
 
     const validationMessage = useMemo(() => {
         if (!selectedOutcome) return t('plugin_augur_select_outcome')
@@ -247,11 +252,18 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                     </Grid>
                 ) : null}
                 <Grid item className={classes.link}>
-                    <Link color="primary" target="_blank" rel="noopener noreferrer" href={market.link}>
-                        <Typography color="textPrimary">
+                    <Button
+                        variant="outlined"
+                        fullWidth
+                        classes={{ label: classes.label }}
+                        onClick={() => setLiquidityDialogOpen(true)}>
+                        <Typography color="primary">
                             {!market.hasWinner ? t('plugin_augur_add_liquidity') : t('plugin_augur_remove_liquidity')}
                         </Typography>
-                    </Link>
+                        <Typography color="textSecondary" variant="caption">
+                            {t('plugin_augur_liquidity_button_caption')}
+                        </Typography>
+                    </Button>
                 </Grid>
             </Grid>
             <BuyDialog
@@ -267,6 +279,11 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                 outcome={selectedOutcome}
                 cashToken={cashToken}
                 onClose={() => setSellDialogOpen(false)}
+            />
+            <LiquidityDialog
+                open={liquidityDialogOpen}
+                outcome={selectedOutcome}
+                onClose={() => setLiquidityDialogOpen(false)}
             />
         </div>
     )
