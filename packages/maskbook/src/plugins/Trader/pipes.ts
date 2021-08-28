@@ -242,5 +242,5 @@ export function resolveZrxTradePoolName(swapSource: ZrxTradePool) {
         [ZrxTradePool.WaultSwap]: 'WaultSwap',
         [ZrxTradePool.xSigma]: 'xSigma',
     }
-    return SWAP_SOURCE_NAME_MAP[swapSource] ?? 'Unknwn'
+    return SWAP_SOURCE_NAME_MAP[swapSource] ?? 'Unknown'
 }
