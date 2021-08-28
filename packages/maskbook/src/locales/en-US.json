@@ -292,6 +292,8 @@
     "wallet_transfer_error_address_absence": "Enter recipient address",
     "wallet_transfer_error_invalid_address": "Invalid recipient address",
     "wallet_transfer_error_insufficent_balance": "Insufficient {{symbol}} balance",
+    "wallet_transfer_error_gasPrice_absence": "Enter a gas price",
+    "wallet_transfer_error_gasLimit_absence": "Enter a gas limit",
     "wallet_import_keystore_label": "Keystore JSON",
     "wallet_import_keystore_content_label": "Ethereum Keystore JSON",
     "wallet_import_keystore_content_placeholder": "Paste the Keystore JSON here…",
