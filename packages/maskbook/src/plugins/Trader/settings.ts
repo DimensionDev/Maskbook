@@ -1,9 +1,8 @@
-import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
-import stringify from 'json-stable-stringify'
+import { unreachable } from '@dimensiondev/kit'
 import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
 import { PLUGIN_IDENTIFIER, SLIPPAGE_DEFAULT } from './constants'
-import { ZrxTradePool } from './types'
+import type { ZrxTradePool } from './types'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 
 /**
@@ -79,12 +78,7 @@ export interface TradeProviderSettings {
 
 const uniswapV2Settings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+uniswap+v2`, '')
 const uniswapV3Settings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+uniswap+v3`, '')
-const zrxSettings = createInternalSettings<string>(
-    `${PLUGIN_IDENTIFIER}+tradeProvider+zrx`,
-    stringify({
-        pools: getEnumAsArray(ZrxTradePool).map((x) => x.value),
-    }),
-)
+const zrxSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+zrx`, '')
 const sushiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sushiswap`, '')
 const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sashimiswap`, '')
 const qucikswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')

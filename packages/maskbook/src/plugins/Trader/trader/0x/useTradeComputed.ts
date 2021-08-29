@@ -14,15 +14,14 @@ export function useTradeComputed(
         if (!trade) return null
         if (!inputToken || !outputToken) return null
         const inputAmount = new BigNumber(trade.sellAmount)
-        const executionPrice = new BigNumber(trade.buyTokenToEthRate).dividedBy(trade.sellTokenToEthRate)
-        const outputAmount = inputAmount.multipliedBy(executionPrice).dp(0)
+        const outputAmount = new BigNumber(trade.buyAmount)
         return {
             strategy,
             inputToken,
             outputToken,
             inputAmount,
             outputAmount,
-            executionPrice,
+            executionPrice: new BigNumber(trade.price),
             fee: new BigNumber(trade.minimumProtocolFee),
             maximumSold: new BigNumber(trade.sellAmount),
             minimumReceived: outputAmount,
