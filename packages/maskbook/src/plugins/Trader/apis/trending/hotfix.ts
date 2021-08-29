@@ -93,11 +93,13 @@ const ID_NETWORK_MAP: Record<DataProvider, Record<string, NetworkType>> = {
         ethereum: NetworkType.Ethereum,
         'binance-smart-chain': NetworkType.Binance,
         'polygon-pos': NetworkType.Polygon,
+        xdai: NetworkType.xDai,
     },
     [DataProvider.COIN_MARKET_CAP]: {
         '1027': NetworkType.Ethereum,
         '1839': NetworkType.Binance,
         '3890': NetworkType.Polygon,
+        '5601': NetworkType.xDai,
     },
     [DataProvider.UNISWAP_INFO]: {},
 }

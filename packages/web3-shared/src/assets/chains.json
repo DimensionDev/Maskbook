@@ -984,8 +984,8 @@
         "networkId": 99
     },
     {
-        "name": "xDAI Chain",
-        "chain": "XDAI",
+        "name": "xDai Chain",
+        "chain": "xDai",
         "network": "mainnet",
         "rpc": [
             "https://rpc.xdaichain.com",
@@ -998,9 +998,9 @@
         ],
         "faucets": [],
         "features": [],
-        "nativeCurrency": { "name": "xDAI", "symbol": "xDAI", "decimals": 18 },
-        "infoURL": "https://forum.poa.network/c/xdai-chain",
-        "shortName": "xdai",
+        "nativeCurrency": { "name": "xDai", "symbol": "xDai", "decimals": 18 },
+        "infoURL": "https://blockscout.com/xdai/mainnet",
+        "shortName": "xDai",
         "chainId": 100,
         "networkId": 100,
         "slip44": 700

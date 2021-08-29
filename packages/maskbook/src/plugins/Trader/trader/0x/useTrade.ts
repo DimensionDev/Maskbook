@@ -19,6 +19,8 @@ export function setTokenNativeNetwork(networkType: NetworkType) {
             return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Arbitrum:
             return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        case NetworkType.xDai:
+            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         default:
             safeUnreachable(networkType)
             return ''

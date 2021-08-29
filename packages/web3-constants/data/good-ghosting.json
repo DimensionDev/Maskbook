@@ -10,7 +10,8 @@
         "Matic": "https://raw.githubusercontent.com/Good-Ghosting/mask-plugin-integration/master/games.json",
         "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     },
     "GOOD_GHOSTING_INCENTIVES_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -23,6 +24,7 @@
         "Matic": "0x357D51124f59836DeD84c8a1730D72B749d8BC23",
         "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     }
 }

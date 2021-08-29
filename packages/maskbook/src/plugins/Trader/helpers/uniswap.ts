@@ -12,7 +12,7 @@ import {
     isSameAddress,
     isGreaterThan,
 } from '@masknet/web3-shared'
-import { ONE_HUNDRED_PERCENT, WETH, ZERO_PERCENT } from '../constants'
+import { ONE_HUNDRED_PERCENT, WNATIVE, ZERO_PERCENT } from '../constants'
 
 export function swapErrorToUserReadableMessage(error: any): string {
     let reason: string | undefined
@@ -63,7 +63,7 @@ export function toUniswapPercent(numerator: number, denominator: number) {
 export function toUniswapCurrency(chainId: ChainId, token?: FungibleTokenDetailed): Currency | undefined {
     if (!token) return
     const extendedEther = ExtendedEther.onChain(chainId)
-    const weth = toUniswapToken(chainId, WETH[chainId])
+    const weth = toUniswapToken(chainId, WNATIVE[chainId])
     if (weth && isSameAddress(token.address, weth.address)) return weth
     return token.type === EthereumTokenType.Native ? extendedEther : toUniswapToken(chainId, token)
 }
@@ -143,7 +143,7 @@ export function isTradeBetter(
 
 export class ExtendedEther extends Ether {
     public override get wrapped(): Token {
-        if (this.chainId in WETH) return ExtendedEther.wrapEther(this.chainId)
+        if (this.chainId in WNATIVE) return ExtendedEther.wrapEther(this.chainId)
         throw new Error('Unsupported chain ID')
     }
 
@@ -154,6 +154,6 @@ export class ExtendedEther extends Ether {
     }
 
     public static wrapEther: (chainID: ChainId) => Token = memoize((chainId: ChainId) =>
-        toUniswapToken(chainId, WETH[chainId]),
+        toUniswapToken(chainId, WNATIVE[chainId]),
     )
 }

@@ -126,6 +126,7 @@ export enum NetworkType {
     Binance = 'Binance',
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
+    xDai = 'xDai',
 }
 
 export enum DataProvider {
