@@ -1,7 +1,17 @@
 import { ERC20TokenDetailed, EthereumTokenType, formatBalance, useTokenBalance } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useEffect, useMemo, useState } from 'react'
-import { DialogContent, Typography, Grid, InputBase, InputAdornment, Button, Divider } from '@material-ui/core'
+import {
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    Typography,
+    Grid,
+    InputBase,
+    InputAdornment,
+    Button,
+    Divider,
+} from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -45,6 +55,13 @@ const useStyles = makeStyles()((theme) => ({
     divider: {
         marginTop: `-${theme.spacing(1)}`,
         marginBottom: `-${theme.spacing(1)}`,
+    },
+    button: {
+        margin: theme.spacing(1.5, 0),
+        padding: 12,
+    },
+    footer: {
+        marginTop: theme.spacing(1.5),
     },
 }))
 
@@ -108,7 +125,7 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
             className={classes.root}
             open={open}
             onClose={onDialogClose}
-            title="Add Liquidity"
+            title={t('plugin_augur_add_liquidity')}
             maxWidth="xs">
             <DialogContent>
                 <>
@@ -145,11 +162,33 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
                             </Grid>
                         </Grid>
                         <Typography variant="body1" color="textPrimary">
-                            You'll receive
+                            {t('plugin_augur_you_receive')}
                         </Typography>
-                        <Button variant="contained" fullWidth color="primary">
-                            Add
-                        </Button>
+                        <Grid container justifyContent="space-between">
+                            <Grid item>
+                                <Typography variant="body1" color="textSecondary">
+                                    LP Tokens
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography variant="body1" color="textSecondary">
+                                    -
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <DialogActions>
+                            <Button variant="contained" fullWidth color="primary" className={classes.button}>
+                                Add
+                            </Button>
+                        </DialogActions>
+                        <Divider />
+                        <DialogContentText classes={{ root: classes.footer }}>
+                            By adding liquidity you'll earn 1.50% of all trades on this market proportional to your
+                            share of the pool. Fees are added to the pool, accrue in real time and can be claimed by
+                            withdrawing your liquidity.
+                            <br />
+                            <b>Remove liquidity before the winning outcome is known to prevent any loss of funds.</b>
+                        </DialogContentText>
                     </div>
                 </>
             </DialogContent>

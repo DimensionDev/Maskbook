@@ -981,5 +981,6 @@
     "plugin_augur_remove_liquidity": "Remove Liquidity",
     "plugin_augur_liquidity_button_caption": "Earn Fees As A Liquidity Provider",
     "plugin_augur_share": "I just bought {{amount}} {{cashTag}}{{symbol}} share of {{outcome}}, can I win?\nFollow @realMaskbook (mask.io) to bet on Augur's markets.\n#mask_io #augur",
-    "plugin_augur_insufficient_balance": "Insufficient Balance"
+    "plugin_augur_insufficient_balance": "Insufficient Balance",
+    "plugin_augur_you_receive": "You'll receive"
 }
