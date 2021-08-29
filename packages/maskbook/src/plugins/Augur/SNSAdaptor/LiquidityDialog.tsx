@@ -1,7 +1,7 @@
 import { ERC20TokenDetailed, EthereumTokenType, formatBalance, useTokenBalance } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useEffect, useMemo, useState } from 'react'
-import { DialogContent, Typography, Grid, InputBase, Button } from '@material-ui/core'
+import { DialogContent, Typography, Grid, InputBase, InputAdornment, Button, Divider } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -41,6 +41,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         textAlign: 'right',
+    },
+    divider: {
+        marginTop: `-${theme.spacing(1)}`,
+        marginBottom: `-${theme.spacing(1)}`,
     },
 }))
 
@@ -95,7 +99,7 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
         onClose()
     }
 
-    const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeInput1 = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInput1(e.target.value)
     }
 
@@ -123,36 +127,20 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
                         </Typography>
                         <Grid container direction="column" className={`${classes.spacing} ${classes.predictions}`}>
                             <Grid item container justifyContent="space-between">
-                                <Grid item flex={4}>
+                                <Grid item flex={7}>
                                     <Typography variant="body2">Name1</Typography>
                                 </Grid>
-                                <Grid item flex={1} style={{ borderLeft: '1px' }}>
+                                <Divider orientation="vertical" flexItem classes={{ root: classes.divider }} />
+                                <Grid item flex={1}>
                                     <InputBase
-                                        value={input1}
-                                        placeholder="$0.0"
-                                        onChange={onChangeInput}
+                                        value="0.25"
+                                        // value={input1}
+                                        readOnly
+                                        placeholder="0.0"
+                                        startAdornment={<InputAdornment position="end">$</InputAdornment>}
+                                        onChange={onChangeInput1}
                                         classes={{ root: classes.inputBase, input: classes.input }}
                                     />
-                                </Grid>
-                            </Grid>
-                            <Grid item container justifyContent="space-between">
-                                <Grid item flex={4}>
-                                    <Typography variant="body2">Name2</Typography>
-                                </Grid>
-                                <Grid item flex={1}>
-                                    <Typography variant="body2" align="right">
-                                        $0.2
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                            <Grid item container justifyContent="space-between">
-                                <Grid item flex={4}>
-                                    <Typography variant="body2">Name3</Typography>
-                                </Grid>
-                                <Grid item flex={1}>
-                                    <Typography variant="body2" align="right">
-                                        $
-                                    </Typography>
                                 </Grid>
                             </Grid>
                         </Grid>
