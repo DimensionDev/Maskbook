@@ -71,41 +71,34 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
 
     const { name, addressENS, addressUNS, address } = useEthereumAddress(nickname, twitterId, bioDescription)
     const address_ = addressENS ?? addressUNS ?? address ?? ''
+    if (!show) return null
     if (!address_)
         return (
-            <>
-                {show ? (
-                    <Box className={classes.text} display="flex" alignItems="center" justifyContent="center">
-                        <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
-                    </Box>
-                ) : null}
-            </>
+            <Box className={classes.text} display="flex" alignItems="center" justifyContent="center">
+                <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
+            </Box>
         )
     return (
-        <>
-            {show ? (
-                <div className={classes.root}>
-                    <Box className={classes.note} display="flex" alignItems="center" justifyContent="flex-end">
-                        <Typography color="textPrimary" component="span">
-                            Current display of {addressENS ? 'ENS' : addressUNS ? 'UNS' : 'address'}:{' '}
-                            <Link
-                                href={resolveAddressLinkOnExplorer(chainId, address_)}
-                                target="_blank"
-                                rel="noopener noreferrer">
-                                {addressENS || addressUNS ? name : formatEthereumAddress(address ?? '', 4)}
-                            </Link>
-                        </Typography>
-                        <Typography
-                            sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
-                            color="textPrimary"
-                            component="span"
-                            title={RULE_TIP}>
-                            <InfoOutlinedIcon color="inherit" fontSize="small" />
-                        </Typography>
-                    </Box>
-                    <CollectibleListAddress classes={classes} address={address_} />
-                </div>
-            ) : null}
-        </>
+        <div className={classes.root}>
+            <Box className={classes.note} display="flex" alignItems="center" justifyContent="flex-end">
+                <Typography color="textPrimary" component="span">
+                    Current display of {addressENS ? 'ENS' : addressUNS ? 'UNS' : 'address'}:{' '}
+                    <Link
+                        href={resolveAddressLinkOnExplorer(chainId, address_)}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        {addressENS || addressUNS ? name : formatEthereumAddress(address ?? '', 4)}
+                    </Link>
+                </Typography>
+                <Typography
+                    sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
+                    color="textPrimary"
+                    component="span"
+                    title={RULE_TIP}>
+                    <InfoOutlinedIcon color="inherit" fontSize="small" />
+                </Typography>
+            </Box>
+            <CollectibleListAddress classes={classes} address={address_} />
+        </div>
     )
 }
