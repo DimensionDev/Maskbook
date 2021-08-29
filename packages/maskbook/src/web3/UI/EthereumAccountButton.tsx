@@ -90,7 +90,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
                 startIcon={
                     account && chainIdValid ? (
                         <WalletIcon size={18} badgeSize={9} />
-                ) : (
+                    ) : (
                         <InfoOutlinedIcon fontSize="medium" />
                     )
                 }

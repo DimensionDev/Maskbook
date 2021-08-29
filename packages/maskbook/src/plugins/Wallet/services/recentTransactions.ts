@@ -42,7 +42,8 @@ export async function getRecentTransactionsFromChain(address: string) {
     // if the status is not depend, then clean the cache in order to fetch receipt again in the next round
     transactions.forEach((x, i) => {
         const receipt = receipts[i]
-        if (!receipt || getReceiptStatus(receipt) !== TransactionStatusType.NOT_DEPEND) getTransactionReceiptWithCache.cache.delete(x.hash)
+        if (!receipt || getReceiptStatus(receipt) !== TransactionStatusType.NOT_DEPEND)
+            getTransactionReceiptWithCache.cache.delete(x.hash)
     })
     return transactions.map((x) => {
         const receipt = receipts.find((y) => y?.transactionHash === x.hash)
