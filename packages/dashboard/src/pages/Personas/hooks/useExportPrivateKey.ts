@@ -5,5 +5,5 @@ import { Services } from '../../../API'
 export function useExportPrivateKey(identifier: PersonaIdentifier) {
     return useAsync(async () => {
         return Services.Identity.exportPersonaPrivateKey(identifier)
-    })
+    }, [identifier])
 }

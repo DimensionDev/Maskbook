@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 import type { PersonaIdentifier } from '@masknet/shared'
 import { useExportPrivateKey } from '../../hooks/useExportPrivateKey'
+import { useCopyToClipboard } from 'react-use'
 
 export interface ExportPrivateKeyDialogProps {
     open: boolean
@@ -16,7 +17,18 @@ export interface ExportPrivateKeyDialogProps {
 export const ExportPrivateKeyDialog = memo<ExportPrivateKeyDialogProps>(({ open, onClose, identifier }) => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
+    const [state, copyToClipboard] = useCopyToClipboard()
     const { value: privateKey } = useExportPrivateKey(identifier)
+
+    const getCopyButtonText = () => {
+        if (state.value) {
+            return t.personas_export_persona_copy_success()
+        }
+        if (state.error?.message) {
+            return t.personas_export_persona_copy_failed()
+        }
+        return t.personas_export_persona_copy()
+    }
 
     return (
         <MaskDialog open={open} title={t.personas_export_persona()} onClose={onClose}>
@@ -35,8 +47,10 @@ export const ExportPrivateKeyDialog = memo<ExportPrivateKeyDialogProps>(({ open,
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button color="secondary">{t.personas_cancel()}</Button>
-                <Button>{t.personas_confirm()}</Button>
+                <Button color="secondary" onClick={onClose}>
+                    {t.personas_cancel()}
+                </Button>
+                <Button onClick={() => copyToClipboard(privateKey ?? '')}>{getCopyButtonText()}</Button>
             </DialogActions>
         </MaskDialog>
     )
