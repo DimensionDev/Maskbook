@@ -23,7 +23,7 @@ import { IdentifierMap } from '../IdentifierMap'
 import { queryAvatarDataURL } from '../helpers/avatar'
 import {
     generate_ECDH_256k1_KeyPair_ByMnemonicWord,
-    generate_ECDH_256k1_KeyPair_ByMnemonicWord_V2,
+    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
 } from '../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import type {
@@ -31,7 +31,7 @@ import type {
     AESJsonWebKey,
     EC_Private_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
-import { decompressSecp256k1Key } from '../../utils'
+import { validateMnemonic } from 'bip39'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -154,12 +154,6 @@ export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
 }
 
-export async function queryPersonaByPrivateKey(privateKeyString: string) {
-    const privateKey = decompressSecp256k1Key(privateKeyString, 'private')
-    const identifier = ECKeyIdentifierFromJsonWebKey(privateKey, 'private')
-    return queryPersona(identifier)
-}
-
 export function queryPersonaRecord(i: ProfileIdentifier | PersonaIdentifier): Promise<PersonaRecord | null> {
     return i instanceof ProfileIdentifier ? queryPersonaByProfileDB(i) : queryPersonaDB(i)
 }
@@ -193,10 +187,11 @@ export async function createPersonaByMnemonic(
 }
 
 export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: string | undefined, password: string) {
-    const { key, mnemonicRecord: mnemonic } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord_V2(
-        mnemonicWord,
-        password,
-    )
+    const verify = validateMnemonic(mnemonicWord)
+    if (!verify) {
+        throw new Error('Verify error')
+    }
+    const { key, mnemonicRecord: mnemonic } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWord, password)
     const { privateKey, publicKey } = key
     const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
     return createPersonaByJsonWebKey({

@@ -1,5 +1,5 @@
 import { encrypt1ToN, decryptMessage1ToNByMyself, decryptMessage1ToNByOther } from '../crypto-alpha-40'
-import { decodeText } from '../../utils/type-transform/String-ArrayBuffer'
+import { decodeText } from '@dimensiondev/kit'
 import { CryptoWorker } from '../../modules/workers'
 
 async function test1toN(msg: string = Math.random().toString()) {

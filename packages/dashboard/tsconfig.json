@@ -13,6 +13,7 @@
     { "path": "../web3-shared/" },
     { "path": "../icons/" },
     { "path": "../plugin-infra" },
-    { "path": "../plugins/Wallet/" }
+    { "path": "../plugins/Wallet/" },
+    { "path": "../backup-format/" }
   ]
 }
