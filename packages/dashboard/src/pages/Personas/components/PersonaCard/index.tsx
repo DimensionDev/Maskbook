@@ -11,6 +11,7 @@ import { PersonaContext } from '../../hooks/usePersonaContext'
 import { RenameDialog } from '../RenameDialog'
 import type { SocialNetwork } from '../../api'
 import classNames from 'classnames'
+import { ExportPrivateKeyDialog } from '../ExportPrivateKeyDialog'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -90,8 +91,11 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
     const { classes } = useStyles()
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+    const [exportPrivateKeyDialogOpen, setExportPrivateKeyDialogOpen] = useState(false)
+
     const [menu, openMenu] = useMenu(
         <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
+        <MenuItem onClick={() => setExportPrivateKeyDialogOpen(true)}>{t.personas_export_private()}</MenuItem>,
         <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
             {t.personas_delete()}
         </MenuItem>,
@@ -152,6 +156,11 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
                 nickname={nickname}
+            />
+            <ExportPrivateKeyDialog
+                open={exportPrivateKeyDialogOpen}
+                identifier={identifier}
+                onClose={() => setExportPrivateKeyDialogOpen(false)}
             />
         </div>
     )
