@@ -2,9 +2,38 @@
     "type": "object",
     "additionalProperties": true,
     "properties": {
-        "rpid": {
+        "id": {
             "type": "string",
-            "title": "rpid"
+            "title": "id"
+        },
+        "duration": {
+            "type": "number",
+            "title": "duration"
+        },
+        "message": {
+            "type": "string",
+            "title": "message"
+        },
+        "senderName": {
+            "type": "string",
+            "title": "senderName"
+        },
+        "contractName": {
+            "type": "string",
+            "title": "contractName"
+        },
+        "contractAddress": {
+            "type": "string",
+            "title": "contractAddress"
+        },
+        "privateKey": {
+            "type": "string",
+            "title": "privateKey"
+        },
+        "chainId": {
+            "type": "number",
+            "title": "chainId"
         }
-    }
+    },
+    "required": ["id", "duration", "message", "senderName", "contractName", "contractAddress", "privateKey", "chainId"]
 }

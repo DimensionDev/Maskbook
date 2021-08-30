@@ -242,7 +242,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     contract={contract}
                     open={openConfirmDialog}
                     tokenList={existTokenDetailedList}
-                    onClose={() => setOpenConfirmDialog(false)}
+                    onBack={() => setOpenConfirmDialog(false)}
+                    onClose={onClose}
                 />
             ) : null}
         </>

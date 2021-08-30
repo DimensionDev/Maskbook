@@ -1,7 +1,7 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, useAccount, useChainIdValid } from '@masknet/web3-shared'
+import { useAccount, useChainIdValid } from '@masknet/web3-shared'
 import { Box } from '@material-ui/core'
 import { useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -36,7 +36,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     //#endregion
 
     return (
-        <EthereumChainBoundary chainId={ChainId.Mainnet}>
+        <EthereumChainBoundary chainId={payload.chainId}>
             <RedPacketNftUI claim={true} />
             <EthereumWalletConnectedBoundary>
                 <Box className={classes.actions}>

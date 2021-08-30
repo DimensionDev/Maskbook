@@ -8,7 +8,10 @@ import {
     useAccount,
     ERC721ContractDetailed,
     ERC721TokenDetailed,
+    useWeb3,
+    TransactionStateType,
 } from '@masknet/web3-shared'
+import type { TransactionReceipt } from 'web3-core'
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@material-ui/core'
@@ -16,7 +19,12 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import LaunchIcon from '@material-ui/icons/Launch'
 import { useI18N } from '../../../utils'
-
+import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
+import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useMemo, useCallback, useEffect } from 'react'
+import { useSnackbar } from '@masknet/theme'
+import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+import { RedPacketNftMetaKey } from '../constants'
 const useStyles = makeStyles()((theme) => ({
     root: {
         fontSize: 16,
@@ -121,6 +129,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 export interface RedpacketNftConfirmDialogProps {
     open: boolean
+    onBack: () => void
     onClose: () => void
     contract: ERC721ContractDetailed
     tokenList: ERC721TokenDetailed[]
@@ -128,21 +137,74 @@ export interface RedpacketNftConfirmDialogProps {
 }
 export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps) {
     const { classes } = useStyles()
-    const { open, onClose, message, contract, tokenList } = props
+    const { open, onBack, onClose, message, contract, tokenList } = props
     const wallet = useWallet()
     const account = useAccount()
     const chainId = useChainId()
+    const web3 = useWeb3()
+    const { attachMetadata } = useCompositionContext()
+
     const { t } = useI18N()
+    const { address: publicKey, privateKey } = useMemo(() => web3.eth.accounts.create(), [])
+    const duration = 60 * 60 * 24
+    const currentIdentity = useCurrentIdentity()
+    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
+    const tokenIdList = tokenList.map((value) => value.tokenId)
+    const [createState, createCallback, resetCallback] = useCreateNftRedpacketCallback(
+        duration,
+        message,
+        senderName,
+        contract.address,
+        tokenIdList,
+    )
+    const isSending = createState.type === TransactionStateType.WAIT_FOR_CONFIRMING
+    const { enqueueSnackbar } = useSnackbar()
+    const onSendTx = useCallback(() => createCallback(publicKey), [publicKey])
+    const onSendPost = useCallback(
+        (id: string) => {
+            attachMetadata(RedPacketNftMetaKey, {
+                id,
+                duration,
+                message,
+                senderName,
+                contractName: contract.name,
+                contractAddress: contract.address,
+                privateKey,
+                chainId: contract.chainId,
+            })
+        },
+        [duration, message, senderName, contract, privateKey],
+    )
+    useEffect(() => {
+        if (
+            ![TransactionStateType.CONFIRMED, TransactionStateType.RECEIPT, TransactionStateType.FAILED].includes(
+                createState.type,
+            )
+        ) {
+            return
+        }
 
-    const nfts: { img: string; name: string }[] = Array.from({ length: 10 })
+        if (createState.type === TransactionStateType.FAILED) {
+            enqueueSnackbar(t('plugin_wallet_transaction_rejected'), { variant: 'error' })
+        } else {
+            const { receipt } = createState as {
+                type: TransactionStateType.CONFIRMED
+                receipt: TransactionReceipt
+            }
 
-    nfts.fill({
-        img: new URL('./assets/nft.png', import.meta.url).toString(),
-        name: 'Token',
-    })
+            const { id } = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
+                id: string
+            }
+            onSendPost(id)
+            enqueueSnackbar(t('plugin_wallet_transaction_confirmed'), { variant: 'success' })
+            onClose()
+        }
+
+        resetCallback()
+    }, [createState, onSendPost])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('confirm')} maxWidth="xs">
+        <InjectedDialog open={open} onClose={onBack} title={t('confirm')} maxWidth="xs">
             <DialogContent className={classes.root}>
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
@@ -237,7 +299,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         <Button
                             className={classNames(classes.button, classes.cancelButton)}
                             fullWidth
-                            onClick={onClose}
+                            onClick={onBack}
                             size="large"
                             variant="contained">
                             {t('cancel')}
@@ -252,6 +314,9 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             <ActionButton
                                 variant="contained"
                                 size="large"
+                                loading={isSending}
+                                disabled={isSending}
+                                onClick={onSendTx}
                                 className={classNames(classes.button, classes.sendButton)}
                                 fullWidth>
                                 {t('plugin_red_packet_send_symbol', {

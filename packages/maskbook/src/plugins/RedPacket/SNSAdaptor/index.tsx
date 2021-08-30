@@ -41,7 +41,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     CompositionDialogMetadataBadgeRender: new Map([
         [
             RedPacketMetaKey,
-            (payload: RedPacketJSONPayload) => {
+            (_payload) => {
+                const payload = _payload as RedPacketJSONPayload
                 const chainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
                 const chainDetailed = getChainDetailed(chainId)
                 const tokenDetailed =
@@ -53,7 +54,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         ],
         [
             RedPacketNftMetaKey,
-            (_payload: RedPacketNftJSONPayload) => {
+            (_payload) => {
+                const payload = _payload as RedPacketNftJSONPayload
                 return 'A Red Packet with NFT'
             },
         ],

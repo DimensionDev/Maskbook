@@ -129,7 +129,14 @@ export interface RedPacketHistory extends RedPacketSubgraphInMask {
 
 //#region nft red packet
 export interface RedPacketNftJSONPayload {
-    rpid: string
+    id: string
+    duration: number
+    message: string
+    senderName: string
+    contractName: string
+    contractAddress: string
+    privateKey: string
+    chainId: ChainId
 }
 //#endregion
 
