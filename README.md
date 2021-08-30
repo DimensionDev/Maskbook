@@ -13,7 +13,7 @@
 [![FOSSA Status][badge-fossa]][fossa]
 [![Crowdin][badge-crowdin]][crowdin]
 
-Mask Network (originally named as Maskbook) is a portal to the new, open internet.
+Mask Network is a portal to the new, open internet.
 With Mask Network, you can send encrypted posts to your friends,
 participate in cryptocurrencies lucky-draws, and share encrypted files on the platforms you are already using.
 
