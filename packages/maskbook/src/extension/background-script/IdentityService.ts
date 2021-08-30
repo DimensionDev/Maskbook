@@ -44,7 +44,7 @@ import { decompressBackupFile } from '../../utils/type-transform/BackupFileShort
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared'
 import { getCurrentPersonaIdentifier } from './SettingsService'
-import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import { recover_ECDH_256k1_KeyPair_ByMnemonicWord_V2 } from '../../utils/mnemonic-code'
 import { MaskMessage } from '../../utils'
 import type { PostIVIdentifier } from '@masknet/shared-base'
 
@@ -107,7 +107,7 @@ export {
 } from '../../database'
 
 export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
-    const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
+    const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord_V2(mnemonic, password)
     const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey, 'private')
     return queryPersonaDB(identifier)
 }
@@ -171,6 +171,8 @@ export async function restoreFromMnemonicWords(
     const identifier = await restoreNewIdentityWithMnemonicWord(mnemonicWords, password, {
         nickname,
     })
+
+    console.log(identifier)
     return queryPersona(identifier)
 }
 export async function restoreFromBase64(base64: string): Promise<Persona | null> {
