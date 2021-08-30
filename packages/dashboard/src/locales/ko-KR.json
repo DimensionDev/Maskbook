@@ -132,5 +132,12 @@
     "settings_global_backup_title": "글로벌 백업",
     "settings_global_backup_desc": "로컬 백업과 클라우드 백업을 제공합니다.",
     "settings_global_backup_last": "가장 최근 백업은 {{backupAt}} 에서 수행되었습니다. 백업 방법: {{backupMethod}}.",
-    "settings_restore_database_title": "데이터베이스 복원"
+    "settings_restore_database_title": "데이터베이스 복원",
+    "settings_restore_database_desc": "이전의 데이터베이스 백업에서 복원하기",
+    "settigns_email_title": "이메일",
+    "settigns_email_desc": "이메일을 연동하세요",
+    "settings_change_passowrd_title": "비밀번호 백업",
+    "settings_change_passowrd_desc": "비밀번호 백업 변경",
+    "settings_change_passowrd_not_set": "비밀번호 백업이 설정되지 않습니다.",
+    "settings_phone_number_title": "전화번호"
 }
