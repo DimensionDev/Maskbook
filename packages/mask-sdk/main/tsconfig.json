@@ -2,11 +2,11 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "./",
-    "outDir": "../dist/public-api/",
-    "tsBuildInfoFile": "../dist/public-api.tsbuildinfo",
+    "outDir": "../dist/main/",
+    "tsBuildInfoFile": "../dist/main.tsbuildinfo",
     "emitDeclarationOnly": true,
     "types": ["@types/web"]
   },
   "include": ["./"],
-  "references": []
+  "references": [{ "path": "../public-api" }, { "path": "../server" }]
 }

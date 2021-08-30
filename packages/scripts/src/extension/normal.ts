@@ -4,17 +4,20 @@ import { compact } from 'lodash'
 import { resolve } from 'path'
 import { awaitChildProcess, PKG_PATH, watchTask } from '../utils'
 import { buildInjectedScript, watchInjectedScript } from './injected-scripts'
+import { buildMaskSDK, watchMaskSDK } from './mask-sdk'
 
 const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base'] as const
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'manifest-v3', 'readonlyCache', 'progress'] as const
 
 export async function extension(f?: Function | ExtensionBuildArgs) {
     await buildInjectedScript()
+    await buildMaskSDK()
     if (typeof f === 'function') return awaitChildProcess(webpack('build'))
     return awaitChildProcess(webpack('build', f))
 }
 export async function extensionWatch(f?: Function | ExtensionBuildArgs) {
     watchInjectedScript()
+    watchMaskSDK()
     if (typeof f === 'function') return awaitChildProcess(webpack('dev'))
     return awaitChildProcess(webpack('dev', f))
 }
