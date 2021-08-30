@@ -3,8 +3,8 @@ import { MenuItem, Select, Box } from '@material-ui/core'
 import { useDashboardI18N } from '../../../../locales'
 import { useState, useContext, useMemo, useEffect } from 'react'
 import { UserContext } from '../../hooks/UserContext'
-import { fetchDownloadLink, sendCode, VerifyCodeRequest } from '../../api'
-import type { BackupFileInfo, AccountValidationType } from '../../type'
+import { fetchDownloadLink, sendCode, useLanguage, VerifyCodeRequest } from '../../api'
+import { BackupFileInfo, AccountType, Scenario, Locale } from '../../type'
 import { LoadingButton } from '@material-ui/lab'
 import { useAsyncFn } from 'react-use'
 
@@ -19,6 +19,7 @@ export interface CloudBackupVerifyDialogProps {
 }
 
 export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVerifyDialogProps) {
+    const language = useLanguage()
     const snackbar = useSnackbar()
     const t = useDashboardI18N()
     const { user } = useContext(UserContext)
@@ -29,7 +30,9 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
     const params = useMemo(() => {
         return {
             account: mode,
-            type: (mode.includes('@') ? 'email' : 'phone') as AccountValidationType,
+            type: mode.includes('@') ? AccountType.email : AccountType.phone,
+            scenario: Scenario.backup,
+            locale: language.includes('zh') ? Locale.zh : Locale.en,
             code,
         }
     }, [mode, code])
