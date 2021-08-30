@@ -83,46 +83,6 @@ export const MarketDescription = (props: MarketDescriptionProps) => {
                     symbol={collateral.symbol ?? ''}
                     precision={DESCRIPTION_PRECISION}
                 />
-                {/* <Grid item container direction="column" justifyContent="center">
-                    <Grid item>
-                        <Typography variant="body2" color="textSecondary" align="center">
-                            <Trans i18nKey="plugin_augur_total_volume" />
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Typography variant="body2" align="center">
-                            {market.ammExchange
-                                ? rawToFixed(
-                                      market.ammExchange.totalVolume.toString(),
-                                      collateral.decimals,
-                                      DESCRIPTION_PRECISION,
-                                  ) +
-                                  ' ' +
-                                  collateral.symbol
-                                : '-'}
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Grid item container direction="column" justifyContent="center">
-                    <Grid item>
-                        <Typography variant="body2" color="textSecondary" align="center">
-                            <Trans i18nKey="plugin_augur_liquidity" />
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Typography variant="body2" align="center">
-                            {market.ammExchange
-                                ? rawToFixed(
-                                      market.ammExchange.totalLiquidity.toString(),
-                                      collateral.decimals,
-                                      DESCRIPTION_PRECISION,
-                                  ) +
-                                  ' ' +
-                                  collateral.symbol
-                                : '-'}
-                        </Typography>
-                    </Grid>
-                </Grid> */}
             </Grid>
 
             {cleanDescription ? (

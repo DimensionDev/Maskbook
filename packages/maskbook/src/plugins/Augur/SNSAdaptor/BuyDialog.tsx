@@ -254,7 +254,7 @@ export function BuyDialog(props: BuyDialogProps) {
     }, [buyState /* update tx dialog only if state changed */])
     //#endregion
 
-    //#region submit button1
+    //#region submit button
     const validationMessage = useMemo(() => {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (!amount || amount.isZero()) return t('plugin_dhedge_enter_an_amount')

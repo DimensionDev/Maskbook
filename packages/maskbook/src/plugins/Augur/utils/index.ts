@@ -1,6 +1,6 @@
 import { SportsInterface, Team, Market, AmmExchange, AmmOutcome, EstimateTradeResult, SportMarketType } from '../types'
-import { BigNumber as BN } from 'bignumber.js'
-import { SWAP_FEE_DECIMALS } from '../constants'
+import BigNumber, { BigNumber as BN } from 'bignumber.js'
+import { MINIMUM_BALANCE, SWAP_FEE_DECIMALS } from '../constants'
 import { formatAmount, formatBalance, FungibleTokenDetailed } from '@masknet/web3-shared'
 import { calcSellCompleteSets, estimateBuy } from './bmath'
 import Sports from '../constants/sports'
@@ -125,6 +125,14 @@ export const getResolutionRules = (market: Market): string[] => {
         return []
     const { sport, sportsMarketType } = market
     return sportsResolutionRules[sport.sportId as keyof typeof sportsResolutionRules]?.types[sportsMarketType]
+}
+
+export const significantOfAmount = (amount: BigNumber) => {
+    if (amount.isGreaterThanOrEqualTo(MINIMUM_BALANCE * 1000)) return 4
+    if (amount.isGreaterThanOrEqualTo(MINIMUM_BALANCE * 100)) return 3
+    if (amount.isGreaterThanOrEqualTo(MINIMUM_BALANCE * 10)) return 2
+    if (amount.isGreaterThanOrEqualTo(MINIMUM_BALANCE)) return 1
+    return 4
 }
 
 const sportsResolutionRules = {

@@ -8,6 +8,7 @@ import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { BuyDialog } from '../SNSAdaptor/BuyDialog'
 import { SellDialog } from '../SNSAdaptor/SellDialog'
 import { LiquidityDialog } from '../SNSAdaptor/LiquidityDialog'
+import { OUTCOME_PRICE_PRECISION } from '../constants'
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
     focusVisible?: string
@@ -233,7 +234,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                                     <Typography variant="body2">
                                         {outcome.rate.isZero() && !market.hasWinner
                                             ? '-'
-                                            : '$' + outcome.rate.toFixed(2)}
+                                            : '$' + outcome.rate.toFixed(OUTCOME_PRICE_PRECISION)}
                                     </Typography>
                                 </Grid>
                             )
@@ -282,7 +283,9 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
             />
             <LiquidityDialog
                 open={liquidityDialogOpen}
-                outcome={selectedOutcome}
+                market={market}
+                token={cashToken}
+                ammOutcomes={ammOutcomes}
                 onClose={() => setLiquidityDialogOpen(false)}
             />
         </div>

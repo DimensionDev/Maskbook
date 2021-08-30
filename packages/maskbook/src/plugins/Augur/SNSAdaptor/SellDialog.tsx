@@ -25,7 +25,7 @@ import { WalletMessages } from '../../Wallet/messages'
 import type { AmmOutcome, Market } from '../types'
 import { BALANCE_DECIMALS, MINIMUM_BALANCE, SHARE_DECIMALS } from '../constants'
 import { useSellCallback } from '../hooks/useSellCallback'
-import { estimateSellTrade, getRawFee } from '../utils'
+import { estimateSellTrade, getRawFee, significantOfAmount } from '../utils'
 import { useAmmExchange } from '../hooks/useAmmExchange'
 import { RefreshIcon } from '@masknet/icons'
 
@@ -136,10 +136,7 @@ export function SellDialog(props: SellDialogProps) {
     // calc the significant
     useEffect(() => {
         const formattedBalance = new BigNumber(formatBalance(tokenBalance, token?.decimals ?? 0))
-        if (formattedBalance.isGreaterThanOrEqualTo(MINIMUM_BALANCE)) setSignificant(1)
-        if (formattedBalance.isGreaterThanOrEqualTo(MINIMUM_BALANCE * 10)) setSignificant(2)
-        if (formattedBalance.isGreaterThanOrEqualTo(MINIMUM_BALANCE * 100)) setSignificant(3)
-        if (formattedBalance.isGreaterThanOrEqualTo(MINIMUM_BALANCE * 1000)) setSignificant(4)
+        setSignificant(significantOfAmount(formattedBalance))
     }, [tokenBalance])
     //#endregion
 

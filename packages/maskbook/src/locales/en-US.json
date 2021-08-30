@@ -982,5 +982,8 @@
     "plugin_augur_liquidity_button_caption": "Earn Fees As A Liquidity Provider",
     "plugin_augur_share": "I just bought {{amount}} {{cashTag}}{{symbol}} share of {{outcome}}, can I win?\nFollow @realMaskbook (mask.io) to bet on Augur's markets.\n#mask_io #augur",
     "plugin_augur_insufficient_balance": "Insufficient Balance",
-    "plugin_augur_you_receive": "You'll receive"
+    "plugin_augur_you_receive": "You'll receive",
+    "plugin_augur_lp_tokens": "LP Tokens",
+    "plugin_augur_current_prices": "Current Prices",
+    "plugin_augur_add_liquidity_footer": "By adding liquidity you'll earn 1.50% of all trades on this market proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.<br/><strong>Remove liquidity before the winning outcome is known to prevent any loss of funds.</strong>"
 }
