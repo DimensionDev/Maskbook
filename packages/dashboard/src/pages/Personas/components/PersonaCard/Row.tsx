@@ -87,7 +87,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
 
     return (
         <Stack direction="row" alignItems="center" justifyContent="space-around" position="relative">
-            <UploadAvatarDialog open={avatarOn} onClose={() => toggleAvatar(false)} />
+            {avatarOn && <UploadAvatarDialog open={avatarOn} onClose={() => toggleAvatar(false)} />}
             <IconButton
                 onClick={(e) => {
                     e.stopPropagation()

@@ -17,18 +17,10 @@ const uploadSteps = ['upload', 'pick']
 export const UploadAvatarDialog = memo<UploadAvatarDialogProps>(({ open, onClose }) => {
     const t = useDashboardI18N()
 
-    const { state: step, next, setStateAt } = useStateList(uploadSteps)
+    const { state: step, next } = useStateList(uploadSteps)
     const [file, setFile] = useState<File>()
     const [scale, setScale] = useState(1)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
-
-    const handleClose = useCallback(() => {
-        setFile(undefined)
-        setScale(1)
-        setStateAt(0)
-
-        onClose()
-    }, [])
 
     const onSave = useCallback(() => {
         if (!editor) return
@@ -36,12 +28,12 @@ export const UploadAvatarDialog = memo<UploadAvatarDialogProps>(({ open, onClose
         const canvas = editor.getImage()
         updatePersonaAvatar(canvas.toDataURL())
 
-        handleClose()
-    }, [editor, handleClose])
+        onClose()
+    }, [editor])
 
     return (
-        <MaskDialog open={open} title={t.personas_upload_avatar()} onClose={handleClose}>
-            <DialogContent>
+        <MaskDialog open={open} title={t.personas_upload_avatar()} onClose={onClose}>
+            <DialogContent sx={{ width: 440 }}>
                 {step === 'upload' && (
                     <Box sx={{ mb: 2 }}>
                         <FileUpload
