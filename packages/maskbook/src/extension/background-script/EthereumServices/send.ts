@@ -1,4 +1,5 @@
 import { EthereumAddress } from 'wallet.ts'
+import { first } from 'lodash-es'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
@@ -38,6 +39,19 @@ export interface SendOverrides {
 
 function parseGasPrice(price: string | undefined) {
     return Number.parseInt(price ?? '0x0', 16)
+}
+
+function getChainIdFromPayload(payload: JsonRpcPayload) {
+    switch (payload.method) {
+        // here are methods that contracts may emit
+        case EthereumMethodType.ETH_CALL:
+        case EthereumMethodType.ETH_ESTIMATE_GAS:
+        case EthereumMethodType.ETH_SEND_TRANSACTION:
+            const config = first(payload.params) as { chainId?: string } | undefined
+            return typeof config?.chainId === 'string' ? Number.parseInt(config.chainId, 16) || undefined : undefined
+        default:
+            return undefined
+    }
 }
 
 function isRpcNeedToBeConfirmed(payload: JsonRpcPayload) {
@@ -110,7 +124,7 @@ export async function INTERNAL_send(
 
     const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null
     const web3 = createWeb3({
-        chainId,
+        chainId: getChainIdFromPayload(payload) ?? chainId,
         privKeys: wallet?._private_key_ ? [wallet._private_key_] : [],
         providerType,
     })
