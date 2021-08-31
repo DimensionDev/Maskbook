@@ -41,7 +41,7 @@ export function useFetchMarket(address: string, id: string, link: string, cache:
             const homeTeam = getTeam(teamSportsMarket.homeTeamId, sportId)
             const awayTeam = getTeam(teamSportsMarket.awayTeamId, sportId)
             const marketType = teamSportsMarket.marketType
-            const score = teamSportsMarket.score
+            const overUnderTotal = teamSportsMarket.overUnderTotal
             const winner = teamSportsMarket.winner ?? ''
             const hasWinner = !!winner && !new BigNumber(winner).isZero()
             const endDate = new Date(Number.parseInt(teamSportsMarket.endTime, 10) * 1000)
@@ -58,7 +58,7 @@ export function useFetchMarket(address: string, id: string, link: string, cache:
                 sport,
                 marketType,
                 shareTokens,
-                score,
+                overUnderTotal,
                 winner,
                 hasWinner,
             )

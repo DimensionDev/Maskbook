@@ -9,7 +9,7 @@ export async function fetchMarketInfo(address: string, id: string, url: string) 
                     awayTeamId
                     endTime
                     winner
-                    score
+                    overUnderTotal
                     marketType
                 }
                 mmaMarket {

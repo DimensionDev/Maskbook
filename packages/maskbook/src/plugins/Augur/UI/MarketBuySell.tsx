@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Typography, Grid, SwitchClassKey, SwitchProps, Button, Switch } from '@material-ui/core'
+import { Typography, Grid, SwitchClassKey, Button, Switch } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import type { AmmOutcome, Market } from '../types'
@@ -12,10 +12,6 @@ import { OUTCOME_PRICE_PRECISION } from '../constants'
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
     focusVisible?: string
-}
-
-interface Props extends SwitchProps {
-    classes: Styles
 }
 
 const useSwitchStyle = makeStyles()((theme) => {
@@ -139,6 +135,9 @@ const useStyles = makeStyles()((theme) => ({
     label: {
         flexDirection: 'column',
     },
+    buttons: {
+        marginBottom: theme.spacing(1),
+    },
 }))
 
 interface MarketBuySellProps {
@@ -241,7 +240,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                         })}
                 </Grid>
                 {!market.hasWinner ? (
-                    <Grid container>
+                    <Grid container className={classes.buttons}>
                         <Grid item className={classes.actions} xs={6}>
                             <Button
                                 variant="contained"
@@ -256,7 +255,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                             <Button
                                 variant="outlined"
                                 fullWidth
-                                classes={{ label: classes.label }}
+                                className={classes.label}
                                 onClick={() => setLiquidityDialogOpen(true)}>
                                 <Typography color="primary">
                                     {!market.hasWinner

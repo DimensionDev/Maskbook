@@ -43,7 +43,7 @@ export interface TeamSportsMarket {
     awayTeamId: string
     endTime: string
     winner: string | null
-    score: string
+    overUnderTotal: string
     marketType: string
 }
 
