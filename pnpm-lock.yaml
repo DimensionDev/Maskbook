@@ -359,6 +359,7 @@ importers:
       react-virtualized-auto-sizer: ^1.0.2
       react-window: ^1.8.6
       remarkable: ^2.0.1
+      safari-14-idb-fix: ^1.0.4
       scrypt-js: ^3.0.1
       socket.io-client: 2.4.0
       source-map-loader: ^3.0.0
@@ -496,6 +497,7 @@ importers:
       react-virtualized-auto-sizer: 1.0.5_f991c289939c8299bed5e4a6a5a79a62
       react-window: 1.8.6_f991c289939c8299bed5e4a6a5a79a62
       remarkable: 2.0.1
+      safari-14-idb-fix: 1.0.4
       scrypt-js: 3.0.1
       socket.io-client: 2.4.0
       stream-browserify: 3.0.0
@@ -23128,6 +23130,10 @@ packages:
     dependencies:
       tslib: 1.14.1
     dev: true
+
+  /safari-14-idb-fix/1.0.4:
+    resolution: {integrity: sha512-4+Y2baQdgJpzu84d0QjySl70Kyygzf0pepVg8NVg4NnQEPpfC91fAn0baNvtStlCjUUxxiu0BOMiafa98fRRuA==}
+    dev: false
 
   /safe-buffer/5.1.1:
     resolution: {integrity: sha512-kKvNJn6Mm93gAczWVJg7wH+wGYWNrDHdWvpUmHyEsgCtIwwo3bqPtV4tR5tuPaUhTOo/kvhVwd8XwwOllGYkbg==}
