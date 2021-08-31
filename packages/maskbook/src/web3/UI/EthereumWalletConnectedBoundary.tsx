@@ -57,7 +57,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
         return (
             <Grid container>
                 <ActionButton
-                    className={classNames(classes.button, classes.connectWallet)}
+                    className={classNames(classes.connectWallet)}
                     fullWidth
                     variant="contained"
                     size="large"

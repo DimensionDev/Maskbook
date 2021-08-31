@@ -433,7 +433,7 @@
     "plugin_red_packet_history_send": "Send",
     "plugin_red_packet_nft_send_tip": "You can get the rest of your collection back after 24 hours of sending.",
     "plugin_red_packet_nft_account_name": "Wallet account",
-    "plugin_red_packet_nft_arrached_message": "Arrached Message",
+    "plugin_red_packet_nft_attached_message": "Attached Message",
     "plugin_red_packet_nft_total_amount": "Total Amount",
     "plugin_gitcoin_readme": "By using this service, you will also be contributing 5% of your contribution to the <fund>Gitcoin grants development fund</fund>.",
     "plugin_gitcoin_readme_fund_link": "https://gitcoin.co/grants/86/gitcoin-sustainability-fund",

@@ -3,7 +3,9 @@ import { Card, CardContent, CardHeader, CardMedia, Link, Typography } from '@mat
 import LaunchIcon from '@material-ui/icons/Launch'
 import { useCallback, useState } from 'react'
 import { RedPacketNftShareDialog } from './RedPacketNftShare'
+import { resolveAddressLinkOnExplorer } from '@masknet/web3-shared'
 import { makeStyles } from '@masknet/theme'
+import type { RedPacketNftJSONPayload } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -51,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
 
     link: {
         display: 'flex',
-        marginLeft: theme.spacing(0.5),
+        cursor: 'pointer',
         '&>:first-child': {
             marginRight: theme.spacing(1),
         },
@@ -60,32 +62,37 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface RedPacketNftUIProps {
     claim?: boolean
+    payload: RedPacketNftJSONPayload
 }
 
 export function RedPacketNftUI(props: RedPacketNftUIProps) {
     const { classes } = useStyles()
-    const { claim } = props
+    const { claim, payload } = props
     const [open, setOpen] = useState(false)
 
     const onClose = useCallback(() => {
         setOpen(false)
     }, [])
 
-    const onClick = useCallback(() => {
-        setOpen(true)
-    }, [])
+    const openAddressLinkOnExplorer = useCallback(() => {
+        window.open(
+            resolveAddressLinkOnExplorer(payload.chainId, payload.contractAddress),
+            '_blank',
+            'noopener noreferrer',
+        )
+    }, [payload])
     return (
         <>
             <Card className={classes.card} component="article" elevation={0}>
                 <CardHeader
                     className={classes.title}
-                    title="100th anniversary of the Mona Lisa"
+                    title={payload.message}
                     subheader={
-                        <div className={classes.link}>
+                        <div className={classes.link} onClick={openAddressLinkOnExplorer}>
                             <Typography variant="body2" color="textPrimary">
-                                100th LISA
+                                {payload.contractName}
                             </Typography>
-                            <Link color="textPrimary" target="_blank" rel="noopener noreferrer" onClick={onClick}>
+                            <Link color="textPrimary" target="_blank" rel="noopener noreferrer">
                                 <LaunchIcon fontSize="small" />
                             </Link>
                         </div>
@@ -101,7 +108,7 @@ export function RedPacketNftUI(props: RedPacketNftUIProps) {
                             : getAssetAsBlobURL(new URL('./assets/nft.gift.jpg', import.meta.url))
                     }
                     title="nft icon">
-                    {!claim ? <Typography className={classes.remain}>5 Collectibles</Typography> : null}
+                    {!claim ? <Typography className={classes.remain}>3/5 Collectibles</Typography> : null}
                 </CardMedia>
                 {claim ? (
                     <Typography variant="body1" className={classes.claim}>
@@ -117,7 +124,7 @@ export function RedPacketNftUI(props: RedPacketNftUIProps) {
                     <Link href="https://mask.io/" target="_blank" rel="noopener noreferrer" color="textPrimary">
                         Mask.io
                     </Link>
-                    <Typography variant="body1">From: @Pineapple</Typography>
+                    <Typography variant="body1">From: @{payload.senderName}</Typography>
                 </div>
             </Card>
             <RedPacketNftShareDialog open={open} onClose={onClose} />

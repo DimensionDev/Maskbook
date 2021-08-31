@@ -2,7 +2,6 @@ import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent } from '@material-ui/core'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils'
-import { RedPacketNftUI } from './RedPacketUI'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -24,9 +23,7 @@ export function RedPacketNftShareDialog(props: RedPacketNftShareDialogProps) {
 
     return (
         <InjectedDialog open={open} title={t('plugin_ito_dialog_swap_share_title')} onClose={onClose}>
-            <DialogContent>
-                <RedPacketNftUI claim={true} />
-            </DialogContent>
+            <DialogContent />
             <DialogActions>
                 <Button variant="contained" color="primary" className={classes.button} onClick={onShare}>
                     {t('plugin_ito_dialog_swap_share_title')}

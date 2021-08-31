@@ -157,6 +157,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         contract.address,
         tokenIdList,
     )
+
     const isSending = createState.type === TransactionStateType.WAIT_FOR_CONFIRMING
     const { enqueueSnackbar } = useSnackbar()
     const onSendTx = useCallback(() => createCallback(publicKey), [publicKey])
@@ -169,6 +170,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 senderName,
                 contractName: contract.name,
                 contractAddress: contract.address,
+                contractTokenURI: contract.iconURL ?? '',
                 privateKey,
                 chainId: contract.chainId,
             })
@@ -234,7 +236,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                     </Grid>
                     <Grid item xs={6}>
                         <Typography variant="body1" color="textPrimary" className={classNames(classes.text)}>
-                            {t('plugin_red_packet_nft_arrached_message')}
+                            {t('plugin_red_packet_nft_attached_message')}
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>

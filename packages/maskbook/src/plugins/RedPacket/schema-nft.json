@@ -33,7 +33,21 @@
         "chainId": {
             "type": "number",
             "title": "chainId"
+        },
+        "contractTokenURI": {
+            "type": "string",
+            "title": "contractTokenURI"
         }
     },
-    "required": ["id", "duration", "message", "senderName", "contractName", "contractAddress", "privateKey", "chainId"]
+    "required": [
+        "id",
+        "duration",
+        "message",
+        "senderName",
+        "contractName",
+        "contractAddress",
+        "privateKey",
+        "chainId",
+        "contractTokenURI"
+    ]
 }
