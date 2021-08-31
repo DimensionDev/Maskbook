@@ -31,7 +31,7 @@ export function useOrders(provider: CollectibleProvider, token?: CollectibleToke
                         paymentTokenContract: order.paymentTokenContract,
                         hash: order.hash,
                         unitPrice,
-                        paytmenToken: order.paymentToken,
+                        paymentToken: order.paymentToken,
                         makerAccount: {
                             user: {
                                 username: order.makerAccount?.user?.username,
