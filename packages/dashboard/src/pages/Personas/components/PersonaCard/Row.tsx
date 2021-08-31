@@ -10,7 +10,6 @@ import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { RenameDialog } from '../RenameDialog'
 import type { SocialNetwork } from '../../api'
-import { useAccount } from '@masknet/web3-shared'
 import { PublicKeyIcon } from '@masknet/icons'
 import { useToggle } from 'react-use'
 import { UploadAvatarDialog } from '../UploadAvatarDialog'
@@ -41,13 +40,11 @@ const useStyles = makeStyles()((theme) => ({
 export const PersonaRowCard = memo(() => {
     const { currentPersona, connectPersona, disconnectPersona, renamePersona, definedSocialNetworks } =
         PersonaContext.useContainer()
-    const account = useAccount()
 
     if (!currentPersona) return null
 
     return (
         <PersonaRowCardUI
-            account={account}
             nickname={currentPersona.nickname}
             identifier={currentPersona.identifier}
             profiles={currentPersona.linkedProfiles}
@@ -60,7 +57,6 @@ export const PersonaRowCard = memo(() => {
 })
 
 export interface PersonaRowCardUIProps {
-    account: string
     nickname?: string
     identifier: PersonaIdentifier
     profiles: ProfileInformation[]
@@ -71,7 +67,7 @@ export interface PersonaRowCardUIProps {
 }
 
 export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
-    const { account, nickname, definedSocialNetworks, identifier, profiles } = props
+    const { nickname, definedSocialNetworks, identifier, profiles } = props
     const { onConnect, onDisconnect, onRename } = props
     const [avatarOn, toggleAvatar] = useToggle(false)
 
@@ -118,7 +114,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         <PublicKeyIcon />
                     </Box>
                     <Typography variant="body1" sx={{ fontSize: 13 }} component="span">
-                        {account}
+                        {identifier.compressedPoint}
                     </Typography>
                 </Box>
                 <Box>

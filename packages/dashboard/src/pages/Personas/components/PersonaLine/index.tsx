@@ -36,7 +36,7 @@ export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onCon
                 }}>
                 {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
                 <Typography variant="caption">
-                    <Button variant="text" sx={{ fontSize: 12, p: 0 }}>
+                    <Button variant="text" sx={{ fontSize: 13, p: 0 }}>
                         {t.personas_connect_to({ internalName: networkIdentifier })}
                     </Button>
                 </Typography>
@@ -68,7 +68,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                     }}>
                     <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
                         {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
-                        <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>
+                        <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary, fontSize: 13 }}>
                             @{userId}
                         </Typography>
                     </Box>
