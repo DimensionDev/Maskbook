@@ -15,6 +15,7 @@ import { PublicKeyIcon } from '@masknet/icons'
 import { useToggle } from 'react-use'
 import { UploadAvatarDialog } from '../UploadAvatarDialog'
 import { MaskAvatar } from '../../../../components/MaskAvatar'
+import { ExportPrivateKeyDialog } from '../ExportPrivateKeyDialog'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -78,8 +79,11 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { classes } = useStyles()
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+    const [exportPrivateKeyDialogOpen, setExportPrivateKeyDialogOpen] = useState(false)
+
     const [menu, openMenu] = useMenu(
         <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
+        <MenuItem onClick={() => setExportPrivateKeyDialogOpen(true)}>{t.personas_export_private()}</MenuItem>,
         <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
             {t.personas_delete()}
         </MenuItem>,
@@ -159,6 +163,11 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
                 nickname={nickname}
+            />
+            <ExportPrivateKeyDialog
+                open={exportPrivateKeyDialogOpen}
+                identifier={identifier}
+                onClose={() => setExportPrivateKeyDialogOpen(false)}
             />
         </Stack>
     )
