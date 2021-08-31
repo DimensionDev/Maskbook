@@ -46,5 +46,31 @@
         "Mumbai": "",
         "Arbitrum": "0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB",
         "Arbitrum_Rinkeby": "0xa501c031958F579dB7676fF1CE78AD305794d579"
+    },
+    "ENS_REGISTRAR_ADDRESS": {
+        "Mainnet": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+        "Ropsten": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+        "Rinkeby": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+        "Kovan": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+        "Gorli": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
+    },
+    "ENS_REVERSE_RECORDS_ADDRESS": {
+        "Mainnet": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
+        "Ropsten": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
+        "Rinkeby": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
+        "Kovan": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
+        "Gorli": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
     }
 }

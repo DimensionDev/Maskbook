@@ -42,7 +42,7 @@ export function getChainDetailedCAIP(chainId = ChainId.Mainnet) {
 
 export function getChainRPC(chainId: ChainId, seed: number) {
     const { RPC, RPC_WEIGHTS } = getRPCConstants(chainId)
-    if (!RPC || !RPC_WEIGHTS) throw new Error('Unknown chain id.')
+    if (!RPC || !RPC_WEIGHTS) throw new Error(`Unknown chain id: ${chainId}.`)
     return RPC[RPC_WEIGHTS[seed]]
 }
 
