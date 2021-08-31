@@ -426,6 +426,8 @@
     "plugin_red_packet_history_total_amount": "crwdns4779:0{{amount}}crwdnd4779:0{{symbol}}crwdne4779:0",
     "plugin_red_packet_history_total_claimed_amount": "crwdns4781:0{{claimedAmount}}crwdnd4781:0{{amount}}crwdnd4781:0{{symbol}}crwdne4781:0",
     "plugin_red_packet_history_claimed": "crwdns4783:0{{claimedShares}}crwdnd4783:0{{shares}}crwdne4783:0",
+    "plugin_red_packet_completed": "",
+    "plugin_red_packet_expired": "",
     "plugin_red_packet_history_split_mode": "crwdns4785:0{{mode}}crwdne4785:0",
     "plugin_red_packet_history_send": "crwdns4787:0crwdne4787:0",
     "plugin_gitcoin_readme": "crwdns4789:0crwdne4789:0",

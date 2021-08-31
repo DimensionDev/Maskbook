@@ -137,9 +137,9 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         top: 0,
-        borderRadius: 4,
-        width: 530,
-        height: 345,
+        borderRadius: 6,
+        width: '100%',
+        height: '100%',
     },
     hide: {
         opacity: 0,
@@ -213,7 +213,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             : undefined,
         availability?.claimed_id,
     )
-    console.log({ availability, erc721TokenDetailed })
+
     if (!availability || loading)
         return (
             <EthereumChainBoundary chainId={payload.chainId}>
@@ -311,7 +311,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         />
                         <div className={classNames(classes.badge, classes.whiteText)}>
                             <Typography variant="body2" className={classes.badgeText}>
-                                {availability.expired ? 'Expired' : 'Completed'}
+                                {availability.expired
+                                    ? t('plugin_red_packet_expired')
+                                    : t('plugin_red_packet_completed')}
                             </Typography>
                         </div>
                     </Card>

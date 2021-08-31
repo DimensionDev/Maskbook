@@ -435,6 +435,8 @@
     "plugin_red_packet_nft_account_name": "Wallet account",
     "plugin_red_packet_nft_attached_message": "Attached Message",
     "plugin_red_packet_nft_total_amount": "Total Amount",
+    "plugin_red_packet_completed": "Completed",
+    "plugin_red_packet_expired": "Expired",
     "plugin_gitcoin_readme": "By using this service, you will also be contributing 5% of your contribution to the <fund>Gitcoin grants development fund</fund>.",
     "plugin_gitcoin_readme_fund_link": "https://gitcoin.co/grants/86/gitcoin-sustainability-fund",
     "plugin_gitcoin_select_a_token": "Select a token",

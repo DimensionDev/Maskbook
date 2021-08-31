@@ -364,6 +364,8 @@
     "plugin_red_packet_history_total_amount": "",
     "plugin_red_packet_history_total_claimed_amount": "",
     "plugin_red_packet_history_claimed": "",
+    "plugin_red_packet_completed": "",
+    "plugin_red_packet_expired": "",
     "plugin_red_packet_history_split_mode": "",
     "plugin_red_packet_history_send": "",
     "plugin_red_packet_nft_send_tip": "",
