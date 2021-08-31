@@ -1,6 +1,6 @@
 // import { TextField } from '@dimensiondev/maskbook-theme/src/component-changes'
 import { useAccount, useChainId } from '@masknet/web3-shared'
-import { DialogActions, DialogContent, DialogProps, TextField, Chip, Button } from '@material-ui/core'
+import { DialogActions, DialogContent, DialogProps, Chip, Button, InputBase } from '@material-ui/core'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -90,11 +90,12 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
     return (
         <InjectedDialog open={props.open} onClose={props.onClose} title={t('plugin_unlockprotocol_title')}>
             <DialogContent>
-                <TextField
+                <InputBase
                     id="outlined-multiline-static"
-                    label={t('plugin_unlockprotocol_submit_post')}
+                    placeholder={t('post_dialog__placeholder')}
                     rows={4}
-                    variant="outlined"
+                    // variant="outlined"
+                    multiline
                     fullWidth
                     onChange={(e) => setCurrentUnlockPost(e.target.value)}
                 />

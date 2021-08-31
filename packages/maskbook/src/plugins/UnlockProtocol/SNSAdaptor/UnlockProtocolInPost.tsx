@@ -68,7 +68,9 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                       <>
                           <MaskbookPluginWrapper width={300} pluginName="Unlock Protocol">
                               <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
-                                  <Typography color="textPrimary">{content}</Typography>
+                                  <Typography color="textPrimary">
+                                      <pre>{content}</pre>
+                                  </Typography>
                               </EthereumChainBoundary>
                           </MaskbookPluginWrapper>
                       </>
