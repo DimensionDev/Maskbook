@@ -1,5 +1,14 @@
 import * as bip39 from 'bip39'
-import { personaRecordToPersona, queryPersona, queryProfile, queryProfilesWithQuery, storeAvatar } from '../../database'
+import { encode } from '@msgpack/msgpack'
+import { encodeArrayBuffer } from '@dimensiondev/kit'
+import {
+    personaRecordToPersona,
+    queryPersona,
+    queryPersonaRecord,
+    queryProfile,
+    queryProfilesWithQuery,
+    storeAvatar,
+} from '../../database'
 import {
     ECKeyIdentifier,
     ECKeyIdentifierFromJsonWebKey,
@@ -245,5 +254,15 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
         // the profile already exists
     }
 }
+
+//#region Export & Import Private key
+export async function exportPersonaPrivateKey(identifier: PersonaIdentifier) {
+    const profile = await queryPersonaRecord(identifier)
+    if (!profile?.privateKey) return ''
+
+    const encodePrivateKey = encode(profile.privateKey)
+    return encodeArrayBuffer(encodePrivateKey)
+}
+//#endregion
 
 export * from './IdentityServices/sign'
