@@ -1,5 +1,5 @@
 import { memo, MouseEvent } from 'react'
-import { Box, Link, Typography } from '@material-ui/core'
+import { Box, Button, Link, Typography } from '@material-ui/core'
 import { getMaskColor, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { makeStyles } from '@masknet/theme'
@@ -35,8 +35,10 @@ export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onCon
                     cursor: 'pointer',
                 }}>
                 {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
-                <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary }}>
-                    {t.personas_connect_to({ internalName: networkIdentifier })}
+                <Typography variant="caption">
+                    <Button variant="text" sx={{ fontSize: 12, p: 0 }}>
+                        {t.personas_connect_to({ internalName: networkIdentifier })}
+                    </Button>
                 </Typography>
             </Link>
         </Box>
