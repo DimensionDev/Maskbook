@@ -27,6 +27,10 @@ export function fetch(url: string) {
     return globalThis.fetch(url).then((x) => x.blob())
 }
 
+export function fetchJson(url: string) {
+    return globalThis.fetch(url).then((x) => x.json())
+}
+
 export function saveAsFileFromUrl(url: string, fileName = '') {
     browser.downloads.download({
         url,
