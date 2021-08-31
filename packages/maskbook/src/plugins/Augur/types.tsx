@@ -1,5 +1,4 @@
 import type BigNumber from 'bignumber.js'
-import type { AbiInput, AbiOutput, AbiType, StateMutabilityType } from 'web3-utils'
 
 export interface Team {
     teamId: number
@@ -90,6 +89,7 @@ export interface Market {
     ammExchange?: AmmExchange
     marketType: MarketType
     dirtyAmmExchnage?: boolean
+    initialOdds: string[]
 }
 
 export enum SportMarketType {
@@ -150,12 +150,19 @@ export interface LpAoumnt {
     hide: boolean
 }
 
+export enum LiquidityActionType {
+    Add = 'add',
+    Create = 'create',
+    Remove = 'remove',
+}
+
 export interface LiquidityBreakdown {
     amount?: string
     minAmounts?: LpAoumnt[]
     poolPct?: string
     lpTokens?: string
     cashAmount?: string
+    type: LiquidityActionType
 }
 
 export enum Period {
@@ -166,15 +173,3 @@ export enum Period {
 }
 
 export type Stat = [number | string, number]
-
-export interface EthersAbiItem {
-    anonymous?: boolean
-    constant?: boolean
-    inputs?: AbiInput[]
-    name?: string
-    outputs?: AbiOutput[]
-    payable?: boolean
-    stateMutability?: StateMutabilityType
-    type: AbiType
-    gas?: string
-}

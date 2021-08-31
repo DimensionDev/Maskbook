@@ -96,7 +96,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     predictions: {
         gridGap: '.5rem',
-        marginBottom: theme.spacing(1),
         '& > .MuiGrid-item': {
             cursor: 'pointer',
             padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
@@ -146,10 +145,11 @@ interface MarketBuySellProps {
     market: Market
     ammOutcomes: AmmOutcome[]
     cashToken: FungibleTokenDetailed
+    onConfirm?: () => void
 }
 
 export const MarketBuySell = (props: MarketBuySellProps) => {
-    const { market, ammOutcomes, cashToken } = props
+    const { market, ammOutcomes, cashToken, onConfirm } = props
 
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -241,31 +241,35 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                         })}
                 </Grid>
                 {!market.hasWinner ? (
-                    <Grid item className={classes.actions}>
-                        <Button
-                            variant="contained"
-                            fullWidth
-                            color="primary"
-                            disabled={!!validationMessage}
-                            onClick={isBuy ? () => setBuyDialogOpen(true) : () => setSellDialogOpen(true)}>
-                            {validationMessage ? validationMessage : isBuy ? t('buy') : t('sell')}
-                        </Button>
+                    <Grid container>
+                        <Grid item className={classes.actions} xs={6}>
+                            <Button
+                                variant="contained"
+                                fullWidth
+                                color="primary"
+                                disabled={!!validationMessage}
+                                onClick={isBuy ? () => setBuyDialogOpen(true) : () => setSellDialogOpen(true)}>
+                                {validationMessage ? validationMessage : isBuy ? t('buy') : t('sell')}
+                            </Button>
+                        </Grid>
+                        <Grid item className={classes.actions} xs={6}>
+                            <Button
+                                variant="outlined"
+                                fullWidth
+                                classes={{ label: classes.label }}
+                                onClick={() => setLiquidityDialogOpen(true)}>
+                                <Typography color="primary">
+                                    {!market.hasWinner
+                                        ? t('plugin_augur_add_liquidity')
+                                        : t('plugin_augur_remove_liquidity')}
+                                </Typography>
+                                <Typography color="textSecondary" variant="caption">
+                                    {t('plugin_augur_liquidity_button_caption')}
+                                </Typography>
+                            </Button>
+                        </Grid>
                     </Grid>
                 ) : null}
-                <Grid item className={classes.link}>
-                    <Button
-                        variant="outlined"
-                        fullWidth
-                        classes={{ label: classes.label }}
-                        onClick={() => setLiquidityDialogOpen(true)}>
-                        <Typography color="primary">
-                            {!market.hasWinner ? t('plugin_augur_add_liquidity') : t('plugin_augur_remove_liquidity')}
-                        </Typography>
-                        <Typography color="textSecondary" variant="caption">
-                            {t('plugin_augur_liquidity_button_caption')}
-                        </Typography>
-                    </Button>
-                </Grid>
             </Grid>
             <BuyDialog
                 open={buyDialogOpen}
@@ -287,6 +291,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                 token={cashToken}
                 ammOutcomes={ammOutcomes}
                 onClose={() => setLiquidityDialogOpen(false)}
+                onConfirm={onConfirm}
             />
         </div>
     )

@@ -984,6 +984,9 @@
     "plugin_augur_insufficient_balance": "Insufficient Balance",
     "plugin_augur_you_receive": "You'll receive",
     "plugin_augur_lp_tokens": "LP Tokens",
+    "plugin_augur_pool_share_pct": "Your Share Of The Pool",
     "plugin_augur_current_prices": "Current Prices",
+    "plugin_augur_balance_wrong": "Failed to get balance",
+    "plugin_dhedge_low_initial_lp": "Minimum is {{amount}} {{symbol}}",
     "plugin_augur_add_liquidity_footer": "By adding liquidity you'll earn 1.50% of all trades on this market proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.<br/><strong>Remove liquidity before the winning outcome is known to prevent any loss of funds.</strong>"
 }

@@ -25,7 +25,6 @@ export async function fetchMarketInfo(address: string, id: string, url: string) 
                     endTime
                     winner
                     marketType
-
                 }
             }
         }`,

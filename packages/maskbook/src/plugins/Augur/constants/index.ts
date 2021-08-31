@@ -37,3 +37,4 @@ export const DESCRIPTION_PRECISION = 2
 export const OUTCOME_PRICE_PRECISION = 2
 export const MINIMUM_BALANCE = 1 / 10 ** BALANCE_DECIMALS
 export const DUST_POSITION_AMOUNT_ON_CHAIN = new BigNumber('0.0001').times(10 ** 18)
+export const MINIMUM_INITIAL_LP = 100

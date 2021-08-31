@@ -125,7 +125,7 @@ export function MarketView(props: MarketViewProps) {
     ].filter(Boolean)
     //#endregion
 
-    const { value: market, loading, error, retry } = useFetchMarket(address, id, link)
+    const { value: market, loading, error, retry } = useFetchMarket(address, id, link, 'no-cache')
     const {
         value: ammOutcomes,
         loading: loadingAmmOutcomes,
@@ -187,7 +187,12 @@ export function MarketView(props: MarketViewProps) {
                 </Tabs>
                 <Paper className={classes.body}>
                     {tabIndex === 0 ? (
-                        <MarketBuySell market={market} ammOutcomes={ammOutcomes} cashToken={cashToken} />
+                        <MarketBuySell
+                            market={market}
+                            ammOutcomes={ammOutcomes}
+                            cashToken={cashToken}
+                            onConfirm={retry}
+                        />
                     ) : null}
                     {tabIndex === 1 ? <MarketDescription market={market} collateral={cashToken} /> : null}
                     {tabIndex === 2 ? <ChartView market={market} /> : null}

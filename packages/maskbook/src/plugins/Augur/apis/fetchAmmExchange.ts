@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import type { AmmExchange } from '../types'
 
-export async function fetchAmmExchange(address: string, id: string, url: string) {
+export async function fetchAmmExchange(address: string, id: string, url: string, cache: RequestCache = 'default') {
     const body = {
         query: `{
             market(id: "${address + '-' + id}") {
@@ -20,6 +20,7 @@ export async function fetchAmmExchange(address: string, id: string, url: string)
         body: JSON.stringify(body),
         method: 'POST',
         mode: 'cors',
+        cache: cache,
         credentials: 'omit',
     })
     const rawAmmExchange = (await response.json())?.data.market

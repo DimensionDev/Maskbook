@@ -11,7 +11,7 @@ import { getSport, getTeam } from '../utils'
 import { deriveMmaMarketInfo } from '../utils/mmaMarket'
 import { deriveSportMarketInfo } from '../utils/sportMarket'
 
-export function useFetchMarket(address: string, id: string, link: string) {
+export function useFetchMarket(address: string, id: string, link: string, cache: RequestCache = 'default') {
     const { AMM_FACTORY_ADDRESS, GRAPH_URL } = useAugurConstants()
     const ammMarekFactoryContract = useAmmFactory(AMM_FACTORY_ADDRESS ?? '')
     const sportLinkMarekFactoryContract = useSportsLinkMarketFactory(address)
@@ -28,7 +28,7 @@ export function useFetchMarket(address: string, id: string, link: string) {
         }
 
         const swapFee = formatBalance(new BigNumber(rawSwapFee).multipliedBy(100).toFixed(2), SWAP_FEE_DECIMALS)
-        const ammExchange = await PluginAugurRPC.fetchAmmExchange(address, id, GRAPH_URL)
+        const ammExchange = await PluginAugurRPC.fetchAmmExchange(address, id, GRAPH_URL, cache)
         const marketInfo = await PluginAugurRPC.fetchMarketInfo(address, id, GRAPH_URL)
 
         if (!swapFee || !marketInfo) return
@@ -45,7 +45,9 @@ export function useFetchMarket(address: string, id: string, link: string) {
             const winner = teamSportsMarket.winner ?? ''
             const hasWinner = !!winner && !new BigNumber(winner).isZero()
             const endDate = new Date(Number.parseInt(teamSportsMarket.endTime, 10) * 1000)
-            const [, shareTokens, , , , , ,] = await sportLinkMarekFactoryContract.methods.getMarket(id).call()
+            const [, shareTokens, , , , , , , initialOdds] = await sportLinkMarekFactoryContract.methods
+                .getMarket(id)
+                .call()
 
             const market = deriveSportMarketInfo(
                 address,
@@ -63,6 +65,7 @@ export function useFetchMarket(address: string, id: string, link: string) {
             return {
                 ...market,
                 marketType: MarketType.Sport,
+                initialOdds,
                 swapFee,
                 collateral,
                 link,
@@ -77,7 +80,7 @@ export function useFetchMarket(address: string, id: string, link: string) {
             const winner = mmaMarket.winner ?? ''
             const hasWinner = !!winner && !new BigNumber(winner).isZero()
             const endDate = new Date(Number.parseInt(mmaMarket.endTime, 10) * 1000)
-            const [, shareTokens, , , , , ,] = await mmaMarekFactoryContract.methods.getMarket(id).call()
+            const [, shareTokens, , , , , , , initialOdds] = await mmaMarekFactoryContract.methods.getMarket(id).call()
 
             const market = deriveMmaMarketInfo(
                 address,
@@ -96,6 +99,7 @@ export function useFetchMarket(address: string, id: string, link: string) {
             return {
                 ...market,
                 marketType: MarketType.Mma,
+                initialOdds,
                 swapFee,
                 collateral,
                 link,

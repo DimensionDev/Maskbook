@@ -1,7 +1,7 @@
 import { SportsInterface, Team, Market, AmmExchange, AmmOutcome, EstimateTradeResult, SportMarketType } from '../types'
-import BigNumber, { BigNumber as BN } from 'bignumber.js'
+import { BigNumber as BN } from 'bignumber.js'
 import { MINIMUM_BALANCE, SWAP_FEE_DECIMALS } from '../constants'
-import { formatAmount, formatBalance, FungibleTokenDetailed } from '@masknet/web3-shared'
+import { formatAmount, formatBalance, FungibleTokenDetailed, ZERO } from '@masknet/web3-shared'
 import { calcSellCompleteSets, estimateBuy } from './bmath'
 import Sports from '../constants/sports'
 
@@ -127,12 +127,41 @@ export const getResolutionRules = (market: Market): string[] => {
     return sportsResolutionRules[sport.sportId as keyof typeof sportsResolutionRules]?.types[sportsMarketType]
 }
 
-export const significantOfAmount = (amount: BigNumber) => {
+export const significantOfAmount = (amount: BN) => {
     if (amount.isGreaterThanOrEqualTo(MINIMUM_BALANCE * 1000)) return 4
     if (amount.isGreaterThanOrEqualTo(MINIMUM_BALANCE * 100)) return 3
     if (amount.isGreaterThanOrEqualTo(MINIMUM_BALANCE * 10)) return 2
     if (amount.isGreaterThanOrEqualTo(MINIMUM_BALANCE)) return 1
     return 4
+}
+
+const calculatePrices = (
+    market: { outcomes: AmmOutcome[]; hasWinner: boolean },
+    ratios: string[] = [],
+    weights: string[] = [],
+): string[] => {
+    let outcomePrices: string[] = []
+    if (!market) {
+        return []
+    }
+    const { outcomes, hasWinner } = market
+    if (hasWinner) {
+        return outcomes.map((outcome) => (outcome.isWinner ? '1' : '0'))
+    }
+    //price[0] = ratio[0] / sum(ratio)
+    const base = ratios.length > 0 ? ratios : weights
+    if (base.length > 0) {
+        const sum = base.reduce((p, r) => p.plus(new BN(String(r))), ZERO)
+        outcomePrices = base.map((r) => new BN(String(r)).div(sum).toFixed())
+    }
+    return outcomePrices
+}
+
+export const calcPricesFromOdds = (initialOdds: string[], outcomes: AmmOutcome[]) => {
+    // convert odds to prices and set prices on outcomes
+    const outcomePrices = calculatePrices({ outcomes, hasWinner: false }, initialOdds, [])
+    const populatedOutcomes = outcomes.map((o, i) => ({ ...o, rate: new BN(outcomePrices[i]) }))
+    return populatedOutcomes
 }
 
 const sportsResolutionRules = {
