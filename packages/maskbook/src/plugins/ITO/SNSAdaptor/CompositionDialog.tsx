@@ -16,7 +16,6 @@ import Services from '../../../extension/service'
 import { formatBalance, useChainId, useAccount, TransactionStateType, useITOConstants } from '@masknet/web3-shared'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
-import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-es'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
@@ -49,8 +48,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const onBack = useCallback(() => {
         if (step === ITOCreateFormPageStep.ConfirmItoPage) setStep(ITOCreateFormPageStep.NewItoPage)
-        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
-    }, [step, currentGasPriceSettings])
+    }, [step])
     //#endregion
 
     const [poolSettings, setPoolSettings] = useState<PoolSettings>()
@@ -59,8 +57,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings)
     const onDone = useCallback(() => {
         fillCallback()
-        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
-    }, [fillCallback, currentGasPriceSettings])
+    }, [fillCallback])
     //#endregion
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -173,11 +170,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
         setStep(ITOCreateFormPageStep.NewItoPage)
         setPoolSettings(undefined)
         setValue(DialogTabs.create)
-        // After close this tx dialog, it should set the gas price to zero
-        //  to let Metamask to determine the gas price for the further tx.
-        currentGasPriceSettings.value = 0
         props.onClose()
-    }, [props, state, currentGasPriceSettings])
+    }, [props, state])
 
     const tabProps: AbstractTabProps = {
         tabs: [
