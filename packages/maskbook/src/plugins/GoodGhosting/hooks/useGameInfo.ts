@@ -7,6 +7,7 @@ import type { GameMetaData, GoodGhostingInfo, Player, TimelineEvent } from '../t
 import { ZERO_ADDRESS } from '../constants'
 import { useI18N } from '../../../utils'
 import addSeconds from 'date-fns/addSeconds'
+import Services from '../../../extension/service'
 
 export function useGameContractAddress(id: string) {
     const { GOOD_GHOSTING_CONTRACT_ADDRESS_FILE } = useGoodGhostingConstants()
@@ -17,10 +18,8 @@ export function useGameContractAddress(id: string) {
                 contractAddress: '',
             }
 
-        const response = await fetch(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
-        const data = await response.text()
-        const gameData = data ? JSON.parse(data) : {}
-        return gameData[id] || gameData.default || {}
+        const gameData = await Services.Helper.fetchJson(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
+        return gameData?.[id] || gameData?.default || {}
     }, [id, GOOD_GHOSTING_CONTRACT_ADDRESS_FILE])
 
     return asyncResult
