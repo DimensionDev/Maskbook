@@ -31,7 +31,6 @@ import type {
     AESJsonWebKey,
     EC_Private_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
-import { decompressSecp256k1Key } from '../../utils'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -152,12 +151,6 @@ export async function setupPersona(id: PersonaIdentifier) {
 
 export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
-}
-
-export async function queryPersonaByPrivateKey(privateKeyString: string) {
-    const privateKey = decompressSecp256k1Key(privateKeyString, 'private')
-    const identifier = ECKeyIdentifierFromJsonWebKey(privateKey, 'private')
-    return queryPersona(identifier)
 }
 
 export function queryPersonaRecord(i: ProfileIdentifier | PersonaIdentifier): Promise<PersonaRecord | null> {
