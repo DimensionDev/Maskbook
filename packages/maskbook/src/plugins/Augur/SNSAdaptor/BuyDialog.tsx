@@ -335,7 +335,7 @@ export function BuyDialog(props: BuyDialogProps) {
                         <div className={classes.section}>
                             <div className={classes.status}>
                                 <Typography className={classes.label} color="textSecondary" variant="body2">
-                                    {t('plugin_trader_slipage_tolerance')}{' '}
+                                    {t('plugin_trader_slippage_tolerance')}{' '}
                                     {formatPercentage(toBips(currentSlippageSettings.value))}
                                 </Typography>
                                 <IconButton className={classes.icon} size="small" onClick={openSettingDialog}>
