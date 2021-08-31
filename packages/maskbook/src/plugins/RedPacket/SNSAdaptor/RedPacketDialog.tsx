@@ -23,7 +23,6 @@ import {
     useRedPacketConstants,
 } from '@masknet/web3-shared'
 import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
-import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit } from 'lodash-es'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
@@ -57,7 +56,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         setSettings(undefined)
         const [, setValue] = state
         setValue(DialogTabs.create)
-        currentGasPriceSettings.value = 0
         props.onClose()
     }, [props, state])
 
@@ -195,11 +193,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
     const onBack = useCallback(() => {
         if (step === CreateRedPacketPageStep.ConfirmPage) setStep(CreateRedPacketPageStep.NewRedPacketPage)
-        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
     }, [step])
     const onNext = useCallback(() => {
         if (step === CreateRedPacketPageStep.NewRedPacketPage) setStep(CreateRedPacketPageStep.ConfirmPage)
-        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
     }, [step])
 
     const onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
