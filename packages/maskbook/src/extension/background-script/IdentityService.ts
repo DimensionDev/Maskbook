@@ -1,7 +1,8 @@
 import * as bip39 from 'bip39'
-import { encode, decode } from '@msgpack/msgpack'
-import { blobToArrayBuffer, encodeArrayBuffer, decodeArrayBuffer as decodeArray } from '@dimensiondev/kit'
+import { decode, encode } from '@msgpack/msgpack'
+import { decodeArrayBuffer as decodeArray, encodeArrayBuffer } from '@dimensiondev/kit'
 import {
+    createPersonaByJsonWebKey,
     personaRecordToPersona,
     queryAvatarDataURL,
     queryPersona,
@@ -42,12 +43,12 @@ import { decodeArrayBuffer, decodeText } from '../../utils/type-transform/String
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import type { EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared'
+import type { EC_JsonWebKey, EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared'
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord_V2 } from '../../utils/mnemonic-code'
 import { MaskMessage } from '../../utils'
 import type { PostIVIdentifier } from '@masknet/shared-base'
-import type { EC_JsonWebKey } from '@masknet/shared'
+import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -316,7 +317,17 @@ export async function queryPersonaByPrivateKey(privateKeyString: string) {
     const privateKey = decode(decodeArray(privateKeyString)) as EC_JsonWebKey
     const identifier = ECKeyIdentifierFromJsonWebKey(privateKey, 'public')
 
-    return queryPersona(identifier)
+    const persona = await queryPersonaDB(identifier)
+    if (persona) return personaRecordToPersona(persona)
+
+    return null
+}
+
+export async function createPersonaByPrivateKey(privateKeyString: string, nickname: string) {
+    const privateKey = decode(decodeArray(privateKeyString)) as EC_JsonWebKey
+    const key = await split_ec_k256_keypair_into_pub_priv(privateKey)
+
+    return createPersonaByJsonWebKey({ privateKey: key.privateKey, publicKey: key.publicKey, nickname })
 }
 //#endregion
 
