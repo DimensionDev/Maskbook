@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { MaskTextField } from '@masknet/theme'
 import {
@@ -13,9 +13,10 @@ import { Box, Button, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
 import { useSnackbarCallback } from '@masknet/shared'
-import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
+import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
 import { Services } from '../../../API'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
+import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 
 const Label = ({ value }: { value: string }) => (
     <Typography
@@ -29,20 +30,30 @@ export const PersonaCreate = () => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const createPersona = useCreatePersonaV2()
+    const createPersonaByPrivateKey = useCreatePersonaByPrivateKey()
+    const { changeCurrentPersona } = PersonaContext.useContainer()
     const {
-        state: { mnemonic },
-    } = useLocation() as { state: { mnemonic: string[] } }
+        state: { mnemonic, privateKey },
+    } = useLocation() as { state: { mnemonic: string[]; privateKey: string } }
 
     const [personaName, setPersonaName] = useState('')
 
     useEffect(() => {
-        if (!mnemonic || !Services.Identity.validateMnemonic(mnemonic.join(' '))) {
+        if ((!mnemonic || !Services.Identity.validateMnemonic(mnemonic.join(' '))) && !privateKey) {
             navigate(RoutePaths.SignUp, { replace: true })
         }
-    }, [mnemonic])
+    }, [mnemonic, privateKey])
+
+    const create = useCallback(async () => {
+        const identifier = mnemonic
+            ? await createPersona(mnemonic.join(' '), personaName)
+            : await createPersonaByPrivateKey(privateKey, personaName)
+
+        changeCurrentPersona(identifier)
+    }, [mnemonic, privateKey, personaName])
 
     const handleCreatePersona = useSnackbarCallback({
-        executor: () => createPersona(mnemonic.join(' '), personaName),
+        executor: create,
         onSuccess: () => navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`),
         onError: () => navigate(`${RoutePaths.SignUp}`),
         successText: t.create_account_persona_successfully(),
