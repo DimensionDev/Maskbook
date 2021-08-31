@@ -1,6 +1,6 @@
 import * as bip39 from 'bip39'
-import { encode } from '@msgpack/msgpack'
-import { blobToArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
+import { encode, decode } from '@msgpack/msgpack'
+import { blobToArrayBuffer, encodeArrayBuffer, decodeArrayBuffer as decodeArray } from '@dimensiondev/kit'
 import {
     personaRecordToPersona,
     queryAvatarDataURL,
@@ -47,6 +47,7 @@ import { getCurrentPersonaIdentifier } from './SettingsService'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord_V2 } from '../../utils/mnemonic-code'
 import { MaskMessage } from '../../utils'
 import type { PostIVIdentifier } from '@masknet/shared-base'
+import type { EC_JsonWebKey } from '@masknet/shared'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -102,7 +103,6 @@ export {
     createPersonaByMnemonic,
     createPersonaByMnemonicV2,
     renamePersona,
-    queryPersonaByPrivateKey,
     queryPrivateKey,
 } from '../../database'
 
@@ -303,13 +303,20 @@ export const getCurrentPersonaAvatar = async () => {
 }
 //#endregion
 
-//#region Export & Import Private key
+//#region Private / Public key
 export async function exportPersonaPrivateKey(identifier: PersonaIdentifier) {
     const profile = await queryPersonaRecord(identifier)
     if (!profile?.privateKey) return ''
 
     const encodePrivateKey = encode(profile.privateKey)
     return encodeArrayBuffer(encodePrivateKey)
+}
+
+export async function queryPersonaByPrivateKey(privateKeyString: string) {
+    const privateKey = decode(decodeArray(privateKeyString)) as EC_JsonWebKey
+    const identifier = ECKeyIdentifierFromJsonWebKey(privateKey, 'public')
+
+    return queryPersona(identifier)
 }
 //#endregion
 
