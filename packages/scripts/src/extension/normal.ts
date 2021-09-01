@@ -1,4 +1,5 @@
 import yargs, { Argv } from 'yargs'
+const { hideBin } = require('yargs/helpers')
 import { spawn } from 'child_process'
 import { compact } from 'lodash'
 import { resolve } from 'path'
@@ -23,7 +24,7 @@ watchTask(extension, extensionWatch, 'webpack', 'Build Mask Network extension', 
 })
 
 function parseArgs() {
-    const a = yargs(process.argv)
+    const a = yargs(hideBin(process.argv))
     for (const i of presets) a.option(i, { type: 'boolean', description: `Build under preset ${i}` })
     for (const i of otherFlags) a.option(i, { type: 'boolean', description: `Build with flag ${i}` })
     const b = a as Argv<Record<typeof presets[number] | typeof otherFlags[number], boolean>>
