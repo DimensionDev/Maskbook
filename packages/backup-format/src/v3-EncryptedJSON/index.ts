@@ -10,7 +10,7 @@ export async function encryptBackup(password: BufferSource, binaryBackup: Uint8A
     const container = encode([pbkdf2IV, AESParam.iv, encrypted])
     return createContainer(SupportedVersions.Version0, container)
 }
-ex async function decryptBackup(password: BufferSource, data: ArrayBuffer) {
+export async function decryptBackup(password: BufferSource, data: ArrayBuffer) {
     const container = await parseEncryptedJSONContainer(SupportedVersions.Version0, data)
 
     const _ = decode(container)
