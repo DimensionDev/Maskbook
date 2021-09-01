@@ -3,6 +3,7 @@ import { memo, ReactNode, useMemo } from 'react'
 import { FileMessageIcon, ITOIcon, MessageIcon, RedPacketIcon, PollIcon } from '@masknet/icons'
 import { getMaskColor } from '@masknet/theme'
 import { Services } from '../../../../API'
+import type { PostRecord } from '@masknet/shared'
 
 const SUPPORT_PLUGIN: Record<string, ReactNode> = {
     text: <MessageIcon sx={{ width: 48, height: 48 }} />,
@@ -15,16 +16,7 @@ const SUPPORT_PLUGIN: Record<string, ReactNode> = {
 }
 
 interface PostHistoryRowProps {
-    post: {
-        url?: string
-        summary?: string
-        interestedMeta?: ReadonlyMap<string, unknown>
-        recipients:
-            | 'everyone'
-            | {
-                  __raw_map__: ReadonlyMap<string, unknown>
-              }
-    }
+    post: PostRecord
 }
 
 export const PostHistoryRow = memo(({ post }: PostHistoryRowProps) => {
