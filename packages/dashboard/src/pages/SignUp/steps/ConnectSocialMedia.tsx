@@ -11,24 +11,12 @@ import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { useDashboardI18N } from '../../../locales'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 import { upperFirst } from 'lodash-es'
-import { FacebookColoredIcon, MindsIcon, TwitterColoredIcon } from '@masknet/icons'
 import { Button, Stack } from '@material-ui/core'
+import { SOCIAL_MEDIA_ICON_MAPPING } from '../../../constants'
 import { ActionCard } from '../../../components/ActionCard'
 
-const ICON_MAPPING = [
-    {
-        type: 'facebook.com',
-        icon: <FacebookColoredIcon />,
-    },
-    {
-        type: 'twitter.com',
-        icon: <TwitterColoredIcon />,
-    },
-    {
-        type: 'minds.com',
-        icon: <MindsIcon />,
-    },
-]
+const ICON_MAPPING = Object.entries(SOCIAL_MEDIA_ICON_MAPPING).map(([type, icon]) => ({ type, icon }))
+
 export const ConnectSocialMedia = () => {
     const navigate = useNavigate()
     const t = useDashboardI18N()
