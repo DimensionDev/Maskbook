@@ -203,7 +203,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         }
 
         if (createState.type === TransactionStateType.FAILED) {
-            enqueueSnackbar(t('plugin_wallet_transaction_rejected'), { variant: 'error' })
+            enqueueSnackbar(approveState.error.message, { variant: 'error' })
         } else if (createState.type === TransactionStateType.CONFIRMED && createState.no === 0) {
             const { receipt } = createState
 

@@ -78,7 +78,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             resetCallback()
             retry()
         } else if (approveState.type === TransactionStateType.FAILED) {
-            enqueueSnackbar(t('plugin_wallet_approve_all_nft_failed', { symbol: contract?.symbol }), {
+            enqueueSnackbar(approveState.error.message, {
                 variant: 'error',
             })
             resetCallback()

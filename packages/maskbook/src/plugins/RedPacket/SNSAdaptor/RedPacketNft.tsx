@@ -220,7 +220,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         }
 
         if (claimState.type === TransactionStateType.FAILED) {
-            enqueueSnackbar(t('plugin_red_packet_claim_failed'), {
+            enqueueSnackbar(claimState.error.message, {
                 variant: 'error',
                 anchorOrigin: { horizontal: 'right', vertical: 'top' },
             })
