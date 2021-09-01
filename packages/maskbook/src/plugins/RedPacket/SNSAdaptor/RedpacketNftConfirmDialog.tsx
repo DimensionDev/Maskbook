@@ -10,8 +10,8 @@ import {
     ERC721TokenDetailed,
     useWeb3,
     TransactionStateType,
+    resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared'
-import type { TransactionReceipt } from 'web3-core'
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@material-ui/core'
@@ -25,6 +25,8 @@ import { useMemo, useCallback, useEffect } from 'react'
 import { useSnackbar } from '@masknet/theme'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 import { RedPacketNftMetaKey } from '../constants'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+
 const useStyles = makeStyles()((theme) => ({
     root: {
         fontSize: 16,
@@ -126,6 +128,24 @@ const useStyles = makeStyles()((theme) => ({
             backgroundColor: '#1854c4',
         },
     },
+    snackBarText: {
+        fontSize: 14,
+    },
+    snackBarLink: {
+        color: 'white',
+    },
+    openIcon: {
+        display: 'flex',
+        width: 18,
+        height: 18,
+        marginLeft: 2,
+    },
+    snackBar: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        transform: 'translateY(1px)',
+    },
 }))
 export interface RedpacketNftConfirmDialogProps {
     open: boolean
@@ -184,22 +204,34 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
 
         if (createState.type === TransactionStateType.FAILED) {
             enqueueSnackbar(t('plugin_wallet_transaction_rejected'), { variant: 'error' })
-        } else {
-            const { receipt } = createState as {
-                type: TransactionStateType.CONFIRMED
-                receipt: TransactionReceipt
-            }
+        } else if (createState.type === TransactionStateType.CONFIRMED && createState.no === 0) {
+            const { receipt } = createState
 
             const { id } = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
                 id: string
             }
             onSendPost(id)
-            enqueueSnackbar(t('plugin_wallet_transaction_confirmed'), { variant: 'success' })
+            enqueueSnackbar(
+                <div className={classes.snackBar}>
+                    <Typography className={classes.snackBarText}>{t('plugin_wallet_transaction_confirmed')}</Typography>
+                    <Link
+                        href={resolveTransactionLinkOnExplorer(contract!.chainId, createState.receipt.transactionHash)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={classes.snackBarLink}>
+                        <OpenInNewIcon className={classes.openIcon} />
+                    </Link>
+                </div>,
+                {
+                    variant: 'success',
+                    anchorOrigin: { horizontal: 'right', vertical: 'top' },
+                },
+            )
             onClose()
         }
 
         resetCallback()
-    }, [createState, onSendPost])
+    }, [createState, onSendPost, contract])
 
     return (
         <InjectedDialog open={open} onClose={onBack} title={t('confirm')} maxWidth="xs">

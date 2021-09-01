@@ -399,6 +399,8 @@
     "plugin_red_packet_best_wishes": "Best Wishes!",
     "plugin_red_packet_create_new": "New",
     "plugin_red_packet_claim": "Claim",
+    "plugin_red_packet_claim_successfully": "Claim NFT Red Packet successfully",
+    "plugin_red_packet_claim_failed": "Failed to claim NFT Red Packet",
     "plugin_red_packet_claiming": "Claiming...",
     "plugin_red_packet_refund": "Refund",
     "plugin_red_packet_empty": "Empty",

@@ -337,6 +337,8 @@
     "plugin_red_packet_best_wishes": "幸運を祈ります！",
     "plugin_red_packet_create_new": "新しい投げ銭を作成",
     "plugin_red_packet_claim": "受け取る",
+    "plugin_red_packet_claim_successfully": "",
+    "plugin_red_packet_claim_failed": "",
     "plugin_red_packet_refund": "無効",
     "plugin_red_packet_select_existing": "既存の投げ銭を選択",
     "plugin_red_packet_attached_message": "メッセージを追加",

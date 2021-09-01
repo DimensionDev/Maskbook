@@ -10,7 +10,9 @@ import {
     EthereumTokenType,
     ERC721ContractDetailed,
     TransactionStateType,
+    resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import LaunchIcon from '@material-ui/icons/Launch'
 import {
     Grid,
@@ -169,6 +171,24 @@ const useStyles = makeStyles()((theme) => ({
     badgeText: {
         fontSize: 12,
     },
+    snackBarText: {
+        fontSize: 14,
+    },
+    snackBarLink: {
+        color: 'white',
+    },
+    openIcon: {
+        display: 'flex',
+        width: 18,
+        height: 18,
+        marginLeft: 2,
+    },
+    snackBar: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        transform: 'translateY(1px)',
+    },
 }))
 export interface RedPacketNftProps {
     payload: RedPacketNftJSONPayload
@@ -200,15 +220,29 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         }
 
         if (claimState.type === TransactionStateType.FAILED) {
-            enqueueSnackbar(t('plugin_wallet_transaction_rejected'), {
+            enqueueSnackbar(t('plugin_red_packet_claim_failed'), {
                 variant: 'error',
                 anchorOrigin: { horizontal: 'right', vertical: 'top' },
             })
-        } else {
-            enqueueSnackbar(t('plugin_wallet_transaction_confirmed'), {
-                variant: 'success',
-                anchorOrigin: { horizontal: 'right', vertical: 'top' },
-            })
+        } else if (claimState.type === TransactionStateType.CONFIRMED && claimState.no === 0) {
+            enqueueSnackbar(
+                <div className={classes.snackBar}>
+                    <Typography className={classes.snackBarText}>
+                        {t('plugin_red_packet_claim_successfully')}
+                    </Typography>
+                    <Link
+                        href={resolveTransactionLinkOnExplorer(payload.chainId, claimState.receipt.transactionHash)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={classes.snackBarLink}>
+                        <OpenInNewIcon className={classes.openIcon} />
+                    </Link>
+                </div>,
+                {
+                    variant: 'success',
+                    anchorOrigin: { horizontal: 'right', vertical: 'top' },
+                },
+            )
         }
 
         resetCallback()
@@ -368,7 +402,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                         onClick={claimCallback}
                                         className={classes.button}
                                         fullWidth>
-                                        {t('plugin_red_packet_claim')}
+                                        {isClaiming ? t('plugin_red_packet_claiming') : t('plugin_red_packet_claim')}
                                     </ActionButton>
                                 </EthereumWalletConnectedBoundary>
                             </Grid>

@@ -338,6 +338,8 @@
     "plugin_red_packet_best_wishes": "행운을 빌어요!",
     "plugin_red_packet_create_new": "새로운 것 만들기",
     "plugin_red_packet_claim": "수령",
+    "plugin_red_packet_claim_successfully": "",
+    "plugin_red_packet_claim_failed": "",
     "plugin_red_packet_refund": "반환",
     "plugin_red_packet_select_existing": "기존 빨간 백 선택",
     "plugin_red_packet_attached_message": "첨부 메시지",

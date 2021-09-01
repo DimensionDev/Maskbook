@@ -3,15 +3,37 @@ import {
     useERC721ContractSetApproveForAllCallback,
     TransactionStateType,
     ERC721ContractDetailed,
+    resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { useI18N } from '../../utils'
 import { makeStyles, useSnackbar } from '@masknet/theme'
+import { Typography, Link } from '@material-ui/core'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import { useMemo, useEffect } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { useStylesExtends } from '@masknet/shared'
 
-const useStyles = makeStyles()(() => ({}))
+const useStyles = makeStyles()(() => ({
+    snackBarText: {
+        fontSize: 14,
+    },
+    snackBarLink: {
+        color: 'white',
+    },
+    openIcon: {
+        display: 'flex',
+        width: 18,
+        height: 18,
+        marginLeft: 2,
+    },
+    snackBar: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        transform: 'translateY(1px)',
+    },
+}))
 
 export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'approveButton'> {
     children?: React.ReactNode
@@ -34,10 +56,25 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
     const { enqueueSnackbar } = useSnackbar()
 
     useEffect(() => {
-        if ([TransactionStateType.CONFIRMED, TransactionStateType.RECEIPT].includes(approveState.type)) {
-            enqueueSnackbar(t('plugin_wallet_approve_all_nft_successfully', { symbol: contract?.symbol }), {
-                variant: 'success',
-            })
+        if (approveState.type === TransactionStateType.CONFIRMED && approveState.no === 0) {
+            enqueueSnackbar(
+                <div className={classes.snackBar}>
+                    <Typography className={classes.snackBarText}>
+                        {t('plugin_wallet_approve_all_nft_successfully', { symbol: contract?.symbol })}
+                    </Typography>
+                    <Link
+                        href={resolveTransactionLinkOnExplorer(contract!.chainId, approveState.receipt.transactionHash)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={classes.snackBarLink}>
+                        <OpenInNewIcon className={classes.openIcon} />
+                    </Link>
+                </div>,
+                {
+                    variant: 'success',
+                    anchorOrigin: { horizontal: 'right', vertical: 'top' },
+                },
+            )
             resetCallback()
             retry()
         } else if (approveState.type === TransactionStateType.FAILED) {

@@ -343,6 +343,8 @@
     "plugin_red_packet_best_wishes": "祝好運！",
     "plugin_red_packet_create_new": "建立新的",
     "plugin_red_packet_claim": "認領",
+    "plugin_red_packet_claim_successfully": "",
+    "plugin_red_packet_claim_failed": "",
     "plugin_red_packet_refund": "退款",
     "plugin_red_packet_select_existing": "選擇已存在的",
     "plugin_red_packet_attached_message": "附加的訊息",

@@ -397,6 +397,8 @@
     "plugin_red_packet_best_wishes": "crwdns4721:0crwdne4721:0",
     "plugin_red_packet_create_new": "crwdns4723:0crwdne4723:0",
     "plugin_red_packet_claim": "crwdns4725:0crwdne4725:0",
+    "plugin_red_packet_claim_successfully": "",
+    "plugin_red_packet_claim_failed": "",
     "plugin_red_packet_claiming": "crwdns4727:0crwdne4727:0",
     "plugin_red_packet_refund": "crwdns4729:0crwdne4729:0",
     "plugin_red_packet_empty": "crwdns4731:0crwdne4731:0",
