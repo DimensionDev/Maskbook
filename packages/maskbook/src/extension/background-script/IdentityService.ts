@@ -1,8 +1,9 @@
 import * as bip39 from 'bip39'
 import { encode } from '@msgpack/msgpack'
-import { encodeArrayBuffer } from '@dimensiondev/kit'
+import { blobToArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
 import {
     personaRecordToPersona,
+    queryAvatarDataURL,
     queryPersona,
     queryPersonaRecord,
     queryProfile,
@@ -43,7 +44,6 @@ import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared'
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
-import { getStorage, setStorage } from './HelperService'
 import { MaskMessage } from '../../utils'
 
 assertEnvironment(Environment.ManifestBackground)
@@ -259,18 +259,24 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
 //#endregion
 
 //#region avatar
-export const updateCurrentPersonaAvatar = async (avatar: string) => {
+export const updateCurrentPersonaAvatar = async (avatar: Blob) => {
     const identifier = await getCurrentPersonaIdentifier()
 
     if (identifier) {
-        await setStorage(`persona_avatar+${identifier?.toText()}`, avatar)
+        await storeAvatar(identifier, await blobToArrayBuffer(avatar))
         MaskMessage.events.personaAvatarChanged.sendToAll({ reason: 'update', of: identifier?.toText() })
     }
 }
 
 export const getCurrentPersonaAvatar = async () => {
     const identifier = await getCurrentPersonaIdentifier()
-    return getStorage<string>(`persona_avatar+${identifier?.toText()}`)
+    if (!identifier) return null
+
+    try {
+        return queryAvatarDataURL(identifier)
+    } catch {
+        return null
+    }
 }
 //#endregion
 

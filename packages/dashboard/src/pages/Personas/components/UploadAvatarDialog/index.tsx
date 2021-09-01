@@ -23,13 +23,16 @@ export const UploadAvatarDialog = memo<UploadAvatarDialogProps>(({ open, onClose
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
 
     const onSave = useCallback(() => {
-        if (!editor) return
+        if (!editor || !file) return
 
-        const canvas = editor.getImage()
-        updatePersonaAvatar(canvas.toDataURL())
+        editor.getImage().toBlob((blob) => {
+            if (blob) {
+                updatePersonaAvatar(blob)
+            }
+        }, file.type)
 
         onClose()
-    }, [editor])
+    }, [editor, file])
 
     return (
         <MaskDialog open={open} title={t.personas_upload_avatar()} onClose={onClose}>
