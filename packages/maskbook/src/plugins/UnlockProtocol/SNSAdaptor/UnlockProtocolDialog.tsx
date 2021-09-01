@@ -21,15 +21,14 @@ interface UnlockProtocolDialogProps extends withClasses<'wrapper'> {
 export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
     const { t } = useI18N()
     const [open, setOpen] = useState(false)
-    const [address, setAddress] = useState(useAccount())
+    const address = useAccount()
     const [currentUnlockChain, setCurrentUnlockChain] = useState(useChainId())
     const [currentUnlockPost, setCurrentUnlockPost] = useState('')
     const [currentUnlockTarget, setCurrentUnlockTarget] = useState<UnlockLocks[]>(() => [])
     const [availableUnlockTarget, setAvailableUnlockTarget] = useState<UnlockLocks[]>(() => [])
-    const { children } = props
     const { attachMetadata, dropMetadata } = useCompositionContext()
     useEffect(() => {
-        for (const [key, url] of Object.entries(graphEndpointKeyVal)) {
+        for (const key of Object.entries(graphEndpointKeyVal)) {
             PuginUnlockProtocolRPC.getLocks(address, key.toString())
                 .then((value) => {
                     if (value.lockManagers.length) {

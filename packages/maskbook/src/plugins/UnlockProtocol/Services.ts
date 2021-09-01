@@ -50,11 +50,7 @@ export const verifyActiveLock = (data: { lock: string; address: string; chain: n
             if (key.lock.address === data.lock) {
                 const currentTimeInSeconds = Math.floor(Date.now() / 1000)
                 const diff = key.expiration - currentTimeInSeconds
-                if (diff > 0) {
-                    return true
-                } else {
-                    return false
-                }
+                return diff > 0
             } else {
                 return false
             }
@@ -104,8 +100,7 @@ export const getPurchasedLocks = async (_address: string) => {
     }
     const dataRes: Array<{ lock: string; chain: number }> = []
 
-    for (const [key, url] of Object.entries(graphEndpointKeyVal)) {
-        console.log(key)
+    for (const key of Object.keys(graphEndpointKeyVal)) {
         const data = await graphQLClients[key].request(query, variables)
         data.keyPurchases.forEach((element: { lock: string; chain: number }) => {
             element.chain = parseInt(key, 10)
