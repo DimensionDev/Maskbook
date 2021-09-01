@@ -216,7 +216,6 @@ export async function queryPagedPostHistoryByIdentifiers(
     )
     const totalPages = Math.ceil(conditionPosts.length / size)
     const currentPage = page >= totalPages ? totalPages : page
-    console.log(currentPage)
 
     return {
         total: conditionPosts.length,

@@ -31,7 +31,6 @@ export const PostHistoryRow = memo(({ post }: PostHistoryRowProps) => {
     const postIcon = useMemo(() => {
         const { interestedMeta } = post
         const plugin = interestedMeta?.keys().next().value ?? 'text'
-        console.log(plugin)
         return SUPPORT_PLUGIN[plugin] ?? <MessageIcon sx={{ width: 48, height: 48 }} />
     }, [post.interestedMeta])
 
