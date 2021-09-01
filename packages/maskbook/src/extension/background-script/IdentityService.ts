@@ -273,7 +273,7 @@ export const getCurrentPersonaAvatar = async () => {
     if (!identifier) return null
 
     try {
-        return queryAvatarDataURL(identifier)
+        return await queryAvatarDataURL(identifier)
     } catch {
         return null
     }
