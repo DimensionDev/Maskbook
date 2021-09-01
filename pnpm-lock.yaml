@@ -147,6 +147,7 @@ importers:
       react-use: ^17.3.1
       snowpack: ^3.8.8
       unstated-next: ^1.1.0
+      urlcat: ^2.0.4
       use-subscription: ^1.5.1
       uuid: ^8.3.2
       wallet.ts: ^1.0.1
@@ -181,6 +182,7 @@ importers:
       react-router-dom: 6.0.0-beta.2_80412ece85bcda79fd9e9d6e33117ae2
       react-use: 17.3.1_f991c289939c8299bed5e4a6a5a79a62
       unstated-next: 1.1.0
+      urlcat: 2.0.4
       use-subscription: 1.5.1_react@18.0.0-alpha-aecb3b6d1
       uuid: 8.3.2
       wallet.ts: 1.0.1
