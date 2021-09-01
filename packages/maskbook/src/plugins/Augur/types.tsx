@@ -1,3 +1,4 @@
+import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 import type BigNumber from 'bignumber.js'
 
 export interface Team {
@@ -144,6 +145,8 @@ export interface AmmExchange {
     shareFactor: string
     balances: string[]
     weights: string[]
+    lpToken?: ERC20TokenDetailed
+    totalSupply?: string
 }
 
 export interface Liquidity {

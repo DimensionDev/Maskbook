@@ -6,8 +6,10 @@ import {
     pow10,
     TransactionStateType,
     useTokenBalance,
+    useTransactionState,
+    ZERO,
 } from '@masknet/web3-shared'
-import BigNumber from 'bignumber.js'
+import { BigNumber as BN } from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
     DialogContent,
@@ -26,7 +28,7 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { AmmOutcome, LiquidityActionType, Market } from '../types'
 import { MINIMUM_BALANCE, MINIMUM_INITIAL_LP, OUTCOME_PRICE_PRECISION, SHARE_DECIMALS } from '../constants'
 import { useAmmExchange } from '../hooks/useAmmExchange'
-import { useEstimateAddLiquidityPool } from '../hooks/useEstimateAddLiquidity'
+import { useEstimateLiquidityPool } from '../hooks/useEstimateLiquidity'
 import { calcPricesFromOdds, significantOfAmount } from '../utils'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -36,6 +38,7 @@ import { useAddLiquidityCallback } from '../hooks/useAddLiquidity'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { RefreshIcon } from '@masknet/icons'
+import { useRemoveLiquidityCallback } from '../hooks/useRemoveLiquidity'
 
 const useStyles = makeStyles()((theme) => ({
     form: {
@@ -100,35 +103,44 @@ interface LiquidityDialogProps {
     open: boolean
     onClose: () => void
     market: Market
-    token: FungibleTokenDetailed
+    cashToken: FungibleTokenDetailed
     ammOutcomes: AmmOutcome[]
+    type: LiquidityActionType
     onConfirm?: () => void
 }
 
 export function LiquidityDialog(props: LiquidityDialogProps) {
-    const { open, market, token, ammOutcomes, onConfirm, onClose } = props
+    const { open, market, cashToken, ammOutcomes, type, onConfirm, onClose } = props
     const { classes } = useStyles()
     const { t } = useI18N()
     const [inputAmount, setInputAmount] = useState('')
     const [significant, setSignificant] = useState(4)
-    const amount = new BigNumber(formatAmount(inputAmount || '0', token?.decimals ?? 0))
+    const [token, setToken] = useState<FungibleTokenDetailed>(cashToken)
+    const [state, setState] = useTransactionState()
 
+    const outputDecimals = type === LiquidityActionType.Remove ? cashToken.decimals : SHARE_DECIMALS
     const { value: ammExchange, loading: loadingAmm, error: errorAmm, retry: retryAmm } = useAmmExchange(market)
+    useEffect(() => {
+        if (type === LiquidityActionType.Remove && ammExchange?.lpToken) setToken(ammExchange.lpToken)
+        else setToken(cashToken)
+    }, [type, ammExchange])
 
+    const amount = new BN(formatAmount(inputAmount || '0', token?.decimals ?? 0))
     const chainInputAmount = formatAmount(inputAmount || '0', token.decimals)
-
     const {
         value: estimatedResult,
         loading: loadingEstimatedResult,
         error: errorEstimatedResult,
         retry: retryEstimatedResult,
-    } = useEstimateAddLiquidityPool(market, ammExchange, chainInputAmount)
+    } = useEstimateLiquidityPool(market, ammExchange, chainInputAmount, ammOutcomes, type)
 
-    const formattedLpTokens = formatBalance(
+    const displayEstimatedAmount = new BN(formatBalance(estimatedResult?.amount ?? 0, outputDecimals))
+    const formattedReceiveToken = formatBalance(
         estimatedResult?.amount ?? '0',
-        SHARE_DECIMALS,
-        significantOfAmount(new BigNumber(estimatedResult?.amount ?? 0).dividedBy(pow10(SHARE_DECIMALS))),
+        outputDecimals,
+        significantOfAmount(displayEstimatedAmount),
     )
+
     //#region amount
     const {
         value: _tokenBalance = '0',
@@ -136,12 +148,19 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
         error: errorTokenBalance,
         retry: retryTokenBalance,
     } = useTokenBalance(token.type, token.address ?? '')
+
     // Reduce balance accuracy to $BALANCE_DECIMALS
+    const _formattedBalance = new BN(formatBalance(_tokenBalance, token?.decimals ?? 0))
     const tokenBalance = useMemo(() => {
-        const formattedBalance = new BigNumber(formatBalance(_tokenBalance, token?.decimals ?? 0))
-        if (formattedBalance.isLessThan(MINIMUM_BALANCE)) return '0'
-        return _tokenBalance
+        if (_formattedBalance.isLessThan(MINIMUM_BALANCE)) return ZERO
+        return new BN(_tokenBalance)
     }, [_tokenBalance])
+
+    const formattedBalance = formatBalance(tokenBalance, token?.decimals ?? 0)
+    useEffect(() => {
+        if (type === LiquidityActionType.Remove) setInputAmount(formattedBalance)
+    }, [open, formattedBalance])
+
     //#endregion
 
     // region populate outcome prices when this is create action
@@ -156,7 +175,7 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
 
     // calc the significant
     useEffect(() => {
-        const formattedBalance = new BigNumber(formatBalance(tokenBalance, token?.decimals ?? 0))
+        const formattedBalance = new BN(formatBalance(tokenBalance, token?.decimals ?? 0))
         setSignificant(significantOfAmount(formattedBalance))
     }, [tokenBalance])
     //#endregion
@@ -173,6 +192,36 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
         market,
         token,
     )
+    const [removeLiquidityState, removeLiquidityCallback, resetRemoveLiquidityCallback] = useRemoveLiquidityCallback(
+        amount.toFixed(),
+        market,
+        ammExchange,
+        token,
+    )
+
+    useEffect(() => {
+        if (type === LiquidityActionType.Remove) {
+            setState(removeLiquidityState)
+        } else {
+            setState(addLiquidityState)
+        }
+    }, [type, addLiquidityState, removeLiquidityState])
+
+    const callback = useMemo(() => {
+        if (type === LiquidityActionType.Remove) {
+            return removeLiquidityCallback
+        } else {
+            return addLiquidityCallback
+        }
+    }, [type, addLiquidityCallback, removeLiquidityCallback])
+
+    const resetCallback = useMemo(() => {
+        if (type === LiquidityActionType.Remove) {
+            return resetRemoveLiquidityCallback
+        } else {
+            return resetAddLiquidityCallback
+        }
+    }, [type, resetRemoveLiquidityCallback, resetAddLiquidityCallback])
     //#endregion
 
     // on close transaction dialog
@@ -182,45 +231,95 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
             (ev) => {
                 if (!ev.open) {
                     retryTokenBalance()
-                    if (addLiquidityState.type === TransactionStateType.HASH) onDialogClose()
+                    if (state.type === TransactionStateType.HASH) onDialogClose()
                 }
-                if (addLiquidityState.type === TransactionStateType.HASH) setInputAmount('')
-                resetAddLiquidityCallback()
+                if (state.type === TransactionStateType.HASH) setInputAmount('')
+                resetCallback()
             },
-            [addLiquidityState, retryTokenBalance, onDialogClose],
+            [state, retryTokenBalance, onDialogClose],
         ),
+    )
+
+    const DATA = useMemo(
+        () => ({
+            [LiquidityActionType.Add]: {
+                summary: t('plugin_augur_add_liquidity_summary', {
+                    amount: inputAmount,
+                    symbol: token.symbol,
+                    title: market.description,
+                }),
+                setInputAmount: setInputAmount,
+                disableBalance: false,
+                title: t('plugin_augur_add_liquidity'),
+                receiveTokenTitle: t('plugin_augur_lp_tokens'),
+                receiveToken: formattedReceiveToken,
+                poolPct: estimatedResult?.poolPct,
+                button: t('plugin_augur_add_liquidity'),
+                footer: <Trans i18nKey="plugin_augur_add_liquidity_footer" />,
+            },
+            [LiquidityActionType.Create]: {
+                summary: t('plugin_augur_add_liquidity_summary', {
+                    amount: inputAmount,
+                    symbol: token.symbol,
+                    title: market.description,
+                }),
+                setInputAmount: setInputAmount,
+                disableBalance: false,
+                title: t('plugin_augur_add_liquidity'),
+                receiveTokenTitle: t('plugin_augur_lp_tokens'),
+                receiveToken: formattedReceiveToken,
+                poolPct: estimatedResult?.poolPct,
+                button: t('plugin_augur_add_liquidity'),
+                footer: <Trans i18nKey="plugin_augur_add_liquidity_footer" />,
+            },
+            [LiquidityActionType.Remove]: {
+                summary: t('plugin_augur_remove_liquidity_summary', {
+                    amount: inputAmount,
+                    title: market.description,
+                }),
+                setInputAmount: () => {},
+                disableBalance: true,
+                title: t('plugin_augur_all_remove_liquidity'),
+                receiveTokenTitle: cashToken.symbol,
+                receiveToken: formattedReceiveToken,
+                poolPct: estimatedResult?.poolPct,
+                button: t('plugin_augur_all_remove_liquidity'),
+                footer: <Trans i18nKey="plugin_augur_remove_liquidity_footer" />,
+            },
+        }),
+        [inputAmount, token, market, displayEstimatedAmount, estimatedResult],
     )
 
     // open the transaction dialog
     useEffect(() => {
         if (!token || !market) return
-        if (addLiquidityState.type === TransactionStateType.UNKNOWN) return
-        if (addLiquidityState.type === TransactionStateType.CONFIRMED) {
+        if (state.type === TransactionStateType.UNKNOWN) return
+        if (state.type === TransactionStateType.CONFIRMED) {
             onConfirm ? onConfirm() : null
             return
         }
         setTransactionDialogOpen({
             open: true,
-            state: addLiquidityState,
-            summary: `Adding ${inputAmount} ${token.symbol} liquidity to ${market.description} pool.`,
+            state: state,
+            summary: DATA[type].summary,
         })
-    }, [addLiquidityState /* update tx dialog only if state changed */])
+    }, [state /* update tx dialog only if state changed */])
     //#endregion
 
     //#region submit button
     const validationMessage = useMemo(() => {
-        if (!amount || amount.isZero()) return t('plugin_dhedge_enter_an_amount')
-        if (amount.isGreaterThan(tokenBalance))
+        if (amount.isGreaterThan(tokenBalance) || tokenBalance.isZero())
             return t('plugin_dhedge_insufficient_balance', {
                 symbol: token?.symbol,
             })
+        if (!amount || amount.isZero()) return t('plugin_dhedge_enter_an_amount')
         if (
             estimatedResult?.type === LiquidityActionType.Create &&
             amount.isLessThan(formatAmount(MINIMUM_INITIAL_LP, token.decimals))
         )
             return t('plugin_dhedge_low_initial_lp', { amount: MINIMUM_INITIAL_LP, symbol: token.symbol })
         return ''
-    }, [amount.toFixed(), token, tokenBalance, ammExchange, estimatedResult])
+    }, [amount, token, tokenBalance, ammExchange, estimatedResult])
     //#endregion
 
     return (
@@ -228,10 +327,10 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
             className={classes.root}
             open={open}
             onClose={onDialogClose}
-            title={t('plugin_augur_add_liquidity')}
+            title={DATA[type].title}
             maxWidth="xs">
             <DialogContent>
-                {loadingAmm ? (
+                {loadingAmm || loadingTokenBalance ? (
                     <Typography textAlign="center">
                         <CircularProgress className={classes.progress} color="primary" size={15} />
                     </Typography>
@@ -250,48 +349,56 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
                             <TokenAmountPanel
                                 label={t('wallet_transfer_amount')}
                                 amount={inputAmount}
-                                balance={tokenBalance ?? '0'}
+                                balance={tokenBalance.toString() ?? '0'}
                                 token={token}
-                                onAmountChange={setInputAmount}
+                                onAmountChange={DATA[type].setInputAmount}
                                 significant={significant}
+                                disableBalance={DATA[type].disableBalance}
                             />
                         </form>
                         <div className={classes.section}>
-                            <Typography variant="body1" color="textPrimary">
-                                {t('plugin_augur_current_prices')}
-                            </Typography>
-                            <Grid container direction="column" className={`${classes.spacing} ${classes.predictions}`}>
-                                <Grid item container justifyContent="space-between">
-                                    {populatedOutcomes
-                                        .sort((a, b) => b.id - a.id)
-                                        .map((v, i) => (
-                                            <Grid item container key={v.id}>
-                                                <Grid item flex={7}>
-                                                    <Typography variant="body2">
-                                                        {market.outcomes[v.id].name}
-                                                    </Typography>
-                                                </Grid>
-                                                <Divider
-                                                    orientation="vertical"
-                                                    flexItem
-                                                    classes={{ root: classes.divider }}
-                                                />
-                                                <Grid item flex={1}>
-                                                    <Typography variant="body2" className={classes.lable}>
-                                                        {'$' + v.rate.toFixed(OUTCOME_PRICE_PRECISION)}
-                                                    </Typography>
-                                                </Grid>
-                                            </Grid>
-                                        ))}
-                                </Grid>
-                            </Grid>
+                            {type === LiquidityActionType.Add || type === LiquidityActionType.Create ? (
+                                <>
+                                    <Typography variant="body1" color="textPrimary">
+                                        {t('plugin_augur_current_prices')}
+                                    </Typography>
+                                    <Grid
+                                        container
+                                        direction="column"
+                                        className={`${classes.spacing} ${classes.predictions}`}>
+                                        <Grid item container justifyContent="space-between">
+                                            {populatedOutcomes
+                                                .sort((a, b) => b.id - a.id)
+                                                .map((v, i) => (
+                                                    <Grid item container key={v.id}>
+                                                        <Grid item flex={7}>
+                                                            <Typography variant="body2">
+                                                                {market.outcomes[v.id].name}
+                                                            </Typography>
+                                                        </Grid>
+                                                        <Divider
+                                                            orientation="vertical"
+                                                            flexItem
+                                                            classes={{ root: classes.divider }}
+                                                        />
+                                                        <Grid item flex={1}>
+                                                            <Typography variant="body2" className={classes.lable}>
+                                                                {'$' + v.rate.toFixed(OUTCOME_PRICE_PRECISION)}
+                                                            </Typography>
+                                                        </Grid>
+                                                    </Grid>
+                                                ))}
+                                        </Grid>
+                                    </Grid>
+                                </>
+                            ) : null}
                             <Typography variant="h6" color="textPrimary">
                                 {t('plugin_augur_you_receive')}
                             </Typography>
                             <div className={classes.estimate}>
-                                {loadingEstimatedResult ? (
+                                {loadingEstimatedResult && !validationMessage ? (
                                     <CircularProgress className={classes.progress} color="primary" size={15} />
-                                ) : errorEstimatedResult ? (
+                                ) : errorEstimatedResult && !validationMessage ? (
                                     <RefreshIcon
                                         className={classes.refresh}
                                         color="primary"
@@ -320,7 +427,7 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
                                                                     v.amount,
                                                                     SHARE_DECIMALS,
                                                                     significantOfAmount(
-                                                                        new BigNumber(v.amount).dividedBy(
+                                                                        new BN(v.amount).dividedBy(
                                                                             pow10(SHARE_DECIMALS),
                                                                         ),
                                                                     ),
@@ -332,25 +439,25 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
                                         </Grid>
                                         <Grid container justifyContent="space-between">
                                             <Grid item>
-                                                <Typography variant="body1" color="textSecondary">
-                                                    {t('plugin_augur_lp_tokens')}
+                                                <Typography variant="body2" color="textSecondary">
+                                                    {DATA[type].receiveTokenTitle}
                                                 </Typography>
                                             </Grid>
                                             <Grid item>
-                                                <Typography variant="body1" color="textPrimary  ">
-                                                    {estimatedResult?.amount ? formattedLpTokens : '-'}
+                                                <Typography variant="body2" color="textPrimary  ">
+                                                    {estimatedResult?.amount ? DATA[type].receiveToken : '-'}
                                                 </Typography>
                                             </Grid>
                                         </Grid>
                                         <Grid container justifyContent="space-between">
                                             <Grid item>
-                                                <Typography variant="body1" color="textSecondary">
+                                                <Typography variant="body2" color="textSecondary">
                                                     {t('plugin_augur_pool_share_pct')}
                                                 </Typography>
                                             </Grid>
                                             <Grid item>
-                                                <Typography variant="body1" color="textPrimary  ">
-                                                    {estimatedResult?.poolPct ?? '-'}
+                                                <Typography variant="body2" color="textPrimary  ">
+                                                    {DATA[type].poolPct ?? '-'}
                                                 </Typography>
                                             </Grid>
                                         </Grid>
@@ -367,19 +474,19 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
                                             className={classes.button}
                                             fullWidth
                                             disabled={!!validationMessage}
-                                            onClick={errorTokenBalance ? retryTokenBalance : addLiquidityCallback}
+                                            onClick={errorTokenBalance ? retryTokenBalance : callback}
                                             variant="contained"
                                             loading={loadingTokenBalance || loadingAmm}>
                                             {errorTokenBalance
                                                 ? t('plugin_augur_balance_wrong')
-                                                : validationMessage || t('plugin_augur_add_liquidity')}
+                                                : validationMessage || DATA[type].button}
                                         </ActionButton>
                                     </EthereumERC20TokenApprovedBoundary>
                                 </EthereumWalletConnectedBoundary>
                             </DialogActions>
                             <Divider />
                             <DialogContentText classes={{ root: classes.footer }}>
-                                <Trans i18nKey="plugin_augur_add_liquidity_footer" />
+                                {DATA[type].footer}
                             </DialogContentText>
                         </div>
                     </>

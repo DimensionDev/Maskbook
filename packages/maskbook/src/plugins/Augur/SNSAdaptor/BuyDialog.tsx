@@ -127,6 +127,10 @@ export function BuyDialog(props: BuyDialogProps) {
         retry: retryTokenBalance,
     } = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
 
+    useEffect(() => {
+        retryTokenBalance()
+    }, [open])
+
     // set balance to 0 if less than minimum amount
     const tokenBalance = useMemo(() => {
         const formattedBalance = new BigNumber(formatBalance(_tokenBalance, token?.decimals ?? 0))

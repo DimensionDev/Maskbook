@@ -1,18 +1,14 @@
 import { useMemo, useState } from 'react'
-import { Typography, Grid, SwitchClassKey, Button, Switch } from '@material-ui/core'
+import { Typography, Grid, Button, Switch } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import type { AmmOutcome, Market } from '../types'
+import { AmmOutcome, LiquidityActionType, Market } from '../types'
 import { useI18N } from '../../../utils'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { BuyDialog } from '../SNSAdaptor/BuyDialog'
 import { SellDialog } from '../SNSAdaptor/SellDialog'
 import { LiquidityDialog } from '../SNSAdaptor/LiquidityDialog'
 import { OUTCOME_PRICE_PRECISION } from '../constants'
-
-interface Styles extends Partial<Record<SwitchClassKey, string>> {
-    focusVisible?: string
-}
 
 const useSwitchStyle = makeStyles()((theme) => {
     return {
@@ -153,7 +149,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { classes: switchClasses } = useSwitchStyle()
-    const [isBuy, setIsBuy] = useState(true)
+    const [isBuy, setIsBuy] = useState(!market.hasWinner)
     const [selectedOutcome, setSelectedOutcome] = useState<AmmOutcome>()
     const [buyDialogOpen, setBuyDialogOpen] = useState(false)
     const [sellDialogOpen, setSellDialogOpen] = useState(false)
@@ -195,7 +191,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                                     track: switchClasses.track,
                                 }}
                                 checked={!isBuy}
-                                onChange={() => setIsBuy((x) => !x)}
+                                onChange={() => setIsBuy((x) => (!market.hasWinner ? !x : false))}
                                 name="buySell"
                             />
                         </Typography>
@@ -239,36 +235,34 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                             )
                         })}
                 </Grid>
-                {!market.hasWinner ? (
-                    <Grid container className={classes.buttons}>
-                        <Grid item className={classes.actions} xs={6}>
-                            <Button
-                                variant="contained"
-                                fullWidth
-                                color="primary"
-                                disabled={!!validationMessage}
-                                onClick={isBuy ? () => setBuyDialogOpen(true) : () => setSellDialogOpen(true)}>
-                                {validationMessage ? validationMessage : isBuy ? t('buy') : t('sell')}
-                            </Button>
-                        </Grid>
-                        <Grid item className={classes.actions} xs={6}>
-                            <Button
-                                variant="outlined"
-                                fullWidth
-                                className={classes.label}
-                                onClick={() => setLiquidityDialogOpen(true)}>
-                                <Typography color="primary">
-                                    {!market.hasWinner
-                                        ? t('plugin_augur_add_liquidity')
-                                        : t('plugin_augur_remove_liquidity')}
-                                </Typography>
-                                <Typography color="textSecondary" variant="caption">
-                                    {t('plugin_augur_liquidity_button_caption')}
-                                </Typography>
-                            </Button>
-                        </Grid>
+                <Grid container className={classes.buttons}>
+                    <Grid item className={classes.actions} xs={6}>
+                        <Button
+                            variant="contained"
+                            fullWidth
+                            color="primary"
+                            disabled={!!validationMessage}
+                            onClick={isBuy ? () => setBuyDialogOpen(true) : () => setSellDialogOpen(true)}>
+                            {validationMessage ? validationMessage : isBuy ? t('buy') : t('sell')}
+                        </Button>
                     </Grid>
-                ) : null}
+                    <Grid item className={classes.actions} xs={6}>
+                        <Button
+                            variant="outlined"
+                            fullWidth
+                            className={classes.label}
+                            onClick={() => setLiquidityDialogOpen(true)}>
+                            <Typography color="primary">
+                                {isBuy ? t('plugin_augur_add_liquidity') : t('plugin_augur_remove_liquidity')}
+                            </Typography>
+                            {isBuy ? (
+                                <Typography color="textSecondary" variant="caption">
+                                    {t('plugin_augur_add_liquidity_button_caption')}
+                                </Typography>
+                            ) : null}
+                        </Button>
+                    </Grid>
+                </Grid>
             </Grid>
             <BuyDialog
                 open={buyDialogOpen}
@@ -287,10 +281,11 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
             <LiquidityDialog
                 open={liquidityDialogOpen}
                 market={market}
-                token={cashToken}
+                cashToken={cashToken}
                 ammOutcomes={ammOutcomes}
                 onClose={() => setLiquidityDialogOpen(false)}
                 onConfirm={onConfirm}
+                type={isBuy ? LiquidityActionType.Add : LiquidityActionType.Remove}
             />
         </div>
     )

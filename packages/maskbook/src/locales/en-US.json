@@ -979,7 +979,8 @@
     "plugin_augur_sell_too_low": "Amount is too low",
     "plugin_augur_add_liquidity": "Add Liquidity",
     "plugin_augur_remove_liquidity": "Remove Liquidity",
-    "plugin_augur_liquidity_button_caption": "Earn Fees As A Liquidity Provider",
+    "plugin_augur_all_remove_liquidity": "Remove All Liquidity",
+    "plugin_augur_add_liquidity_button_caption": "Earn Fees As A Liquidity Provider",
     "plugin_augur_share": "I just bought {{amount}} {{cashTag}}{{symbol}} share of {{outcome}}, can I win?\nFollow @realMaskbook (mask.io) to bet on Augur's markets.\n#mask_io #augur",
     "plugin_augur_insufficient_balance": "Insufficient Balance",
     "plugin_augur_you_receive": "You'll receive",
@@ -988,5 +989,8 @@
     "plugin_augur_current_prices": "Current Prices",
     "plugin_augur_balance_wrong": "Failed to get balance",
     "plugin_dhedge_low_initial_lp": "Minimum is {{amount}} {{symbol}}",
-    "plugin_augur_add_liquidity_footer": "By adding liquidity you'll earn 1.50% of all trades on this market proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.<br/><strong>Remove liquidity before the winning outcome is known to prevent any loss of funds.</strong>"
+    "plugin_augur_add_liquidity_summary": "Adding {{amount}} {{symbol}} liquidity to {{title}} pool.",
+    "plugin_augur_remove_liquidity_summary": "Removing {{amount}} liquidity from {{title}} pool.",
+    "plugin_augur_add_liquidity_footer": "By adding liquidity you'll earn 1.50% of all trades on this market proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.<br/><strong>Remove liquidity before the winning outcome is known to prevent any loss of funds.</strong>",
+    "plugin_augur_remove_liquidity_footer": "Removing liquidity may return shares; these shares may be sold for USDC if there is still liquidity in the pool. Winning shares can be redeemed for USDC after the market has finalized."
 }

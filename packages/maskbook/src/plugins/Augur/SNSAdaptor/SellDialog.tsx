@@ -125,6 +125,10 @@ export function SellDialog(props: SellDialogProps) {
         retry: retryTokenBalance,
     } = useTokenBalance(EthereumTokenType.ERC20, outcome?.shareToken ?? '')
 
+    useEffect(() => {
+        retryTokenBalance()
+    }, [open])
+
     // Reduce balance accuracy to $BALANCE_DECIMALS
     const tokenBalance = useMemo(() => {
         const formattedBalance = new BigNumber(formatBalance(_tokenBalance, token?.decimals ?? 0))

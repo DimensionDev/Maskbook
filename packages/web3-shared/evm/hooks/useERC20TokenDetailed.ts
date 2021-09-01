@@ -58,7 +58,7 @@ export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'addr
 const lazyBlank = Promise.resolve('')
 const lazyZero = Promise.resolve('0')
 
-async function getERC20TokenDetailed(
+export async function getERC20TokenDetailed(
     address: string,
     chainId: ChainId,
     erc20TokenContract: ERC20 | null,
