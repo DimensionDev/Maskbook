@@ -94,7 +94,7 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
             setError,
             watch,
             reset,
-            formState: { errors, isSubmitting },
+            formState: { errors, isSubmitting, isValid },
         } = useForm<FormInputs>({
             resolver: zodResolver(schema),
             defaultValues: { address: '', tokenId: '' },
@@ -164,7 +164,11 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
                         <Button sx={{ minWidth: 100 }} variant="outlined" color="primary" onClick={onClose}>
                             {t.cancel()}
                         </Button>
-                        <Button disabled={isSubmitting} sx={{ minWidth: 100 }} color="primary" type="submit">
+                        <Button
+                            disabled={isSubmitting || !isValid}
+                            sx={{ minWidth: 100 }}
+                            color="primary"
+                            type="submit">
                             {t.wallets_collectible_add()}
                         </Button>
                     </DialogActions>
