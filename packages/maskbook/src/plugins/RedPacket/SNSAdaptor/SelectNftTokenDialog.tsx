@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
     ownerList: {
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 16,
+        gap: '16px 0',
         width: 528,
         height: 188,
         overflowY: 'auto',
@@ -221,7 +221,8 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const { t } = useI18N()
     const account = useAccount()
     const [tokenDetailed, setTokenDetailed] = useState<ERC721TokenDetailed>()
-    const [tokenDetailedSelectedList, setTokenDetailedSelectedList] = useState<ERC721TokenDetailed[]>([])
+    const [tokenDetailedSelectedList, setTokenDetailedSelectedList] =
+        useState<ERC721TokenDetailed[]>(existTokenDetailedList)
     const [loadingToken, setLoadingToken] = useState(false)
     const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contract)
     const containerRef = useRef<HTMLDivElement>(null)
@@ -230,7 +231,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     useEffect(() => {
         setTokenDetailed(undefined)
         setTokenId('')
-        setTokenDetailedSelectedList([])
+        setTokenDetailedSelectedList(existTokenDetailedList)
     }, [contract])
 
     const selectToken = useCallback(
@@ -259,11 +260,9 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     //#endregion
 
     const onSubmit = useCallback(() => {
-        setExistTokenDetailedList(
-            existTokenDetailedList.concat(tokenDetailed ? [tokenDetailed] : tokenDetailedSelectedList),
-        )
+        setExistTokenDetailedList(tokenDetailed ? [tokenDetailed] : tokenDetailedSelectedList)
         onClose()
-    }, [tokenDetailed, existTokenDetailedList, tokenDetailedSelectedList, setExistTokenDetailedList, onClose])
+    }, [tokenDetailed, tokenDetailedSelectedList, setExistTokenDetailedList, onClose])
 
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_token')} maxWidth="xs">
@@ -353,36 +352,32 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             </Box>
                         ) : (
                             <div className={classes.tokenSelector} ref={containerRef}>
-                                {tokenDetailedOwnerList
-                                    .filter((token) => !existTokenDetailedList.find((t) => token.tokenId === t.tokenId))
-                                    .map((token, i) => {
-                                        const findToken = tokenDetailedSelectedList.find(
-                                            (t) => t.tokenId === token.tokenId,
-                                        )
+                                {tokenDetailedOwnerList.map((token, i) => {
+                                    const findToken = tokenDetailedSelectedList.find((t) => t.tokenId === token.tokenId)
 
-                                        return (
-                                            <ListItem className={classes.selectWrapper} key={i.toString()}>
-                                                <div className={classes.imgWrapper}>
-                                                    <img className={classes.selectWrapperImg} src={token?.info.image} />
-                                                </div>
-                                                <div className={classes.selectWrapperNftNameWrapper}>
-                                                    <Typography
-                                                        className={classes.selectWrapperNftName}
-                                                        color="textSecondary">
-                                                        {token?.info.name}
-                                                    </Typography>
-                                                </div>
-                                                <div
-                                                    className={classNames(
-                                                        classes.checkbox,
-                                                        findToken ? classes.checked : '',
-                                                    )}
-                                                    onClick={() => selectToken(token, findToken)}>
-                                                    {findToken ? <CheckIcon className={classes.checkIcon} /> : null}
-                                                </div>
-                                            </ListItem>
-                                        )
-                                    })}
+                                    return (
+                                        <ListItem className={classes.selectWrapper} key={i.toString()}>
+                                            <div className={classes.imgWrapper}>
+                                                <img className={classes.selectWrapperImg} src={token?.info.image} />
+                                            </div>
+                                            <div className={classes.selectWrapperNftNameWrapper}>
+                                                <Typography
+                                                    className={classes.selectWrapperNftName}
+                                                    color="textSecondary">
+                                                    {token?.info.name}
+                                                </Typography>
+                                            </div>
+                                            <div
+                                                className={classNames(
+                                                    classes.checkbox,
+                                                    findToken ? classes.checked : '',
+                                                )}
+                                                onClick={() => selectToken(token, findToken)}>
+                                                {findToken ? <CheckIcon className={classes.checkIcon} /> : null}
+                                            </div>
+                                        </ListItem>
+                                    )
+                                })}
                                 {loadingOwnerList ? (
                                     <ListItem className={classNames(classes.selectWrapper, classes.loadingWrapper)}>
                                         <CircularProgress size={25} />

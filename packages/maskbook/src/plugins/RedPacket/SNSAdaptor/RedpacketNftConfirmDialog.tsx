@@ -178,11 +178,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         [duration, message, senderName, contract, privateKey],
     )
     useEffect(() => {
-        if (
-            ![TransactionStateType.CONFIRMED, TransactionStateType.RECEIPT, TransactionStateType.FAILED].includes(
-                createState.type,
-            )
-        ) {
+        if (![TransactionStateType.CONFIRMED, TransactionStateType.FAILED].includes(createState.type)) {
             return
         }
 

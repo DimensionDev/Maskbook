@@ -1,6 +1,6 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import {
     useAccount,
     useChainIdValid,
@@ -9,6 +9,7 @@ import {
     useERC721TokenDetailed,
     EthereumTokenType,
     ERC721ContractDetailed,
+    TransactionStateType,
 } from '@masknet/web3-shared'
 import LaunchIcon from '@material-ui/icons/Launch'
 import {
@@ -23,7 +24,7 @@ import {
     Skeleton,
     Box,
 } from '@material-ui/core'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -179,6 +180,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const web3 = useWeb3()
     const account = useAccount()
     const chainIdValid = useChainIdValid()
+    const { enqueueSnackbar } = useSnackbar()
     const [disabled, setDisabled] = useState(false)
     //#region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -189,6 +191,28 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         payload.id,
         web3.eth.accounts.sign(account, payload.privateKey).signature,
     )
+
+    const isClaiming = claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING
+
+    useEffect(() => {
+        if (![TransactionStateType.CONFIRMED, TransactionStateType.FAILED].includes(claimState.type)) {
+            return
+        }
+
+        if (claimState.type === TransactionStateType.FAILED) {
+            enqueueSnackbar(t('plugin_wallet_transaction_rejected'), {
+                variant: 'error',
+                anchorOrigin: { horizontal: 'right', vertical: 'top' },
+            })
+        } else {
+            enqueueSnackbar(t('plugin_wallet_transaction_confirmed'), {
+                variant: 'success',
+                anchorOrigin: { horizontal: 'right', vertical: 'top' },
+            })
+        }
+
+        resetCallback()
+    }, [claimState])
 
     const openAddressLinkOnExplorer = useCallback(() => {
         window.open(
@@ -339,8 +363,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                     <ActionButton
                                         variant="contained"
                                         size="large"
-                                        loading={false}
-                                        disabled={false}
+                                        loading={isClaiming}
+                                        disabled={isClaiming}
                                         onClick={claimCallback}
                                         className={classes.button}
                                         fullWidth>

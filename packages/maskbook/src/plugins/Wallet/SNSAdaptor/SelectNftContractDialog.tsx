@@ -105,7 +105,7 @@ const ERC721_CONTRACT_LIST: ERC721ContractDetailed[] = [
         chainId: ChainId.Mainnet,
         name: 'CryptoKitties',
         symbol: 'CKITTY',
-        //iconURL: new URL('../../../web3/assets/cryptokitties.png', import.meta.url).toString(),
+        iconURL: new URL('../../../web3/assets/cryptokitties.png', import.meta.url).toString(),
     },
     {
         type: EthereumTokenType.ERC721,
