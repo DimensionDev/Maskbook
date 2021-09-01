@@ -5,12 +5,23 @@ import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
-import { ERC721TokenRecordIntoDB, ERC721TokenRecordOutDB, getWalletByAddress, WalletRecordIntoDB } from './helpers'
+import {
+    ERC721TokenRecordIntoDB,
+    ERC721TokenRecordOutDB,
+    getERC721TokenRecordIntoDBKey,
+    getWalletByAddress,
+    WalletRecordIntoDB,
+} from './helpers'
 import { queryTransactionPaged } from '../../../database/helpers/pagination'
 
 export async function getERC721Tokens() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC721Token')
     return t.objectStore('ERC721Token').getAll()
+}
+
+export async function getERC721Token(address: string, tokenId: string) {
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC721Token')
+    return t.objectStore('ERC721Token').get(getERC721TokenRecordIntoDBKey(address, tokenId))
 }
 
 const fuse = new Fuse([] as ERC721TokenDetailed[], {
