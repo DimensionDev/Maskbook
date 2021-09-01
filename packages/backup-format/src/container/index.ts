@@ -1,0 +1,38 @@
+import { concatArrayBuffer, unreachable } from '@dimensiondev/kit'
+import { BackupErrors } from '../BackupErrors'
+
+const MAGIC_HEADER_Version0 = new Uint8Array([...'MASK-BACKUP-V000'].map((x) => x.charCodeAt(0)))
+const CHECKSUM_LENGTH = 16
+
+/** @internal */
+export enum SupportedVersions {
+    Version0 = 0,
+}
+function getMagicHeader(version: SupportedVersions) {
+    if (version === 0) return MAGIC_HEADER_Version0
+    unreachable(version)
+}
+
+/** @internal */
+export async function createContainer(version: SupportedVersions, data: ArrayBuffer) {
+    const checksum = await crypto.subtle.digest({ name: 'SHA-256' }, data)
+    return concatArrayBuffer(getMagicHeader(version), data, checksum)
+}
+
+/** @internal */
+export async function parseEncryptedJSONContainer(version: SupportedVersions, _container: ArrayBuffer) {
+    const container = new Uint8Array(_container)
+
+    for (const [index, value] of getMagicHeader(version).entries()) {
+        if (container[index] !== value) throw new TypeError(BackupErrors.UnknownFormat)
+    }
+
+    const data = container.slice(MAGIC_HEADER_Version0.length, -CHECKSUM_LENGTH)
+    const sum = new Uint8Array(await crypto.subtle.digest({ name: 'SHA-256' }, data))
+
+    for (const [index, value] of container.slice(-CHECKSUM_LENGTH).entries()) {
+        if (sum[index] !== value) throw new TypeError(BackupErrors.WrongCheckSum)
+    }
+
+    return data
+}
