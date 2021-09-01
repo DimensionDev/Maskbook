@@ -126,6 +126,9 @@ export namespace SocialNetworkUI {
             /** Inject UI to the Profile page */
             enhancedProfileTab?(signal: AbortSignal): void
             enhancedProfile?(signal: AbortSignal): void
+
+            userAvator?(signal: AbortSignal): void
+            enhancedProfileNFTAvator?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void

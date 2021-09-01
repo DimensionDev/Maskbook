@@ -36,6 +36,14 @@ export interface ProfileNFTsPageEvent {
     show: boolean
 }
 
+export interface NFTAVatorEvent {
+    twitterId: string
+    tokenId: string
+    image?: string
+    amount: string
+    address: string
+}
+
 export interface MaskMessages extends SettingsEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: { text: string; image?: Blob }
@@ -77,6 +85,8 @@ export interface MaskMessages extends SettingsEvents {
         requestID: string
         selectedPersona: PersonaIdentifier
     }
+
+    NFTAvatorUpdated: NFTAVatorEvent
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })

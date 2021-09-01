@@ -161,3 +161,23 @@ export const selfInfoSelectors = () => ({
     bio: p(bio, 1),
     userAvatar: p(avatar, 1),
 })
+
+export const searchAvatorSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
+export const searchAvatorSelectorInput = () =>
+    querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]')
+        .at(1)
+        .closest<HTMLDivElement>(2)
+        .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > :first-child')
+export const searchAvatorSelectorImage = () =>
+    querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]')
+        .at(1)
+        .closest<HTMLDivElement>(2)
+        .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > img')
+
+export const searchAvatorOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
+
+//#region avator selector
+
+export const searchTwitterAvatorSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] > div > :nth-child(2) > div > div > div > :nth-child(2) > div > a')
+//#endregion
