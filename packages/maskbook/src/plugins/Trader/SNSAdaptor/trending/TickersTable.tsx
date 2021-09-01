@@ -61,7 +61,7 @@ export function TickersTable(props: TickersTableProps) {
                         <Link color="primary" target="_blank" rel="noopener noreferrer" href={ticker.trade_url}>
                             <span title={formated !== ticker.base_name ? ticker.base_name : ''}>{formated}</span>
                             <span>/</span>
-                            <span>{ticker.target_name}</span>
+                            <span>{formatEthereumAddress(ticker.target_name, 2)}</span>
                         </Link>
                     )
                 })()}

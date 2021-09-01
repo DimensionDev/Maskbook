@@ -73,6 +73,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getPolygonNetworkTradeProvider()
             case NetworkType.Arbitrum:
                 throw new Error('TODO')
+            case NetworkType.xDai:
+                throw new Error('TODO')
             default:
                 unreachable(network)
         }
@@ -86,6 +88,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             case NetworkType.Polygon:
                 return Services.Settings.setPolygonNetworkTradeProvider(provider)
             case NetworkType.Arbitrum:
+                throw new Error('TODO')
+            case NetworkType.xDai:
                 throw new Error('TODO')
             default:
                 unreachable(network)

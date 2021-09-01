@@ -1,7 +1,7 @@
 import { ChainId } from '@masknet/web3-shared'
 import { Percent } from '@uniswap/sdk-core'
 import JSBI from 'jsbi'
-import { AMPL, DAI, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WETH, WETH_ONLY } from './trader'
+import { AMPL, DAI, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WNATIVE, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
@@ -10,14 +10,14 @@ import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
  */
 export const UNISWAP_CUSTOM_BASES: ERC20TokenCustomizedBase = {
     [ChainId.Mainnet]: {
-        [AMPL[ChainId.Mainnet].address]: [DAI, WETH].map((x) => x[ChainId.Mainnet]),
+        [AMPL[ChainId.Mainnet].address]: [DAI, WNATIVE].map((x) => x[ChainId.Mainnet]),
     },
 }
 
 export const UNISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
-    ...WETH_ONLY,
-    [ChainId.Mainnet]: [WETH, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Mainnet]),
-    [ChainId.Rinkeby]: [WETH, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),
+    ...WNATIVE_ONLY,
+    [ChainId.Mainnet]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Mainnet]),
+    [ChainId.Rinkeby]: [WNATIVE, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),
 }
 
 export const MAX_HOP = 3

@@ -10,7 +10,8 @@
         "Matic": "https://dh-pre-prod.web.app",
         "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     },
     "API_URL": {
         "Mainnet": "https://api-v2.dhedge.org/graphql",
@@ -23,6 +24,7 @@
         "Matic": "https://api-v2.dhedge.org/graphql",
         "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     }
 }

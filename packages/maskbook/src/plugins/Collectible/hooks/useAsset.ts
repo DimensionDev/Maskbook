@@ -20,7 +20,7 @@ import { getOrderUnitPrice } from '../utils'
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
     const account = useAccount()
     const chainId = useChainId()
-    const { WETH_ADDRESS } = useTokenConstants()
+    const { WNATIVE_ADDRESS } = useTokenConstants()
 
     return useAsyncRetry(async () => {
         if (!token) return
@@ -38,8 +38,10 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     is_verified: ['approved', 'verified'].includes(
                         openSeaResponse.collection?.safelist_request_status ?? '',
                     ),
-                    is_order_weth: isSameAddress(desktopOrder?.paymentToken ?? '', WETH_ADDRESS),
-                    is_collection_weth: openSeaResponse.collection.payment_tokens.some(currySameAddress(WETH_ADDRESS)),
+                    is_order_weth: isSameAddress(desktopOrder?.paymentToken ?? '', WNATIVE_ADDRESS),
+                    is_collection_weth: openSeaResponse.collection.payment_tokens.some(
+                        currySameAddress(WNATIVE_ADDRESS),
+                    ),
                     is_owner: openSeaResponse.top_ownerships.some((item) => isSameAddress(item.owner.address, account)),
                     // it's an IOS string as my inspection
                     is_auction: Date.parse(`${openSeaResponse.endTime ?? ''}Z`) > Date.now(),
@@ -126,5 +128,5 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
             default:
                 unreachable(provider)
         }
-    }, [toTokenIdentifier(token), account, chainId, provider, WETH_ADDRESS])
+    }, [toTokenIdentifier(token), account, chainId, provider, WNATIVE_ADDRESS])
 }

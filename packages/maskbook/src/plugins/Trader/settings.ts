@@ -71,6 +71,12 @@ export const arbitrumNetworkTradeProviderSettings = createGlobalSettings<TradePr
     { primary: () => '' },
 )
 
+export const xdaiNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+xdai+tradeProvider`,
+    TradeProvider.SUSHISWAP,
+    { primary: () => '' },
+)
+
 //#region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]

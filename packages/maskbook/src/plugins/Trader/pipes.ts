@@ -88,7 +88,9 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                 case NetworkType.Polygon:
                     return 'https://polygon.api.0x.org/'
                 case NetworkType.Arbitrum:
-                    return ''
+                    return 'https://aribitrum.api.0x.org/'
+                case NetworkType.xDai:
+                    return 'https://xdai.api.0x.org/'
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -139,7 +141,9 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                 case NetworkType.Polygon:
                     return `https://analytics-polygon.sushi.com/pairs/${address}`
                 case NetworkType.Arbitrum:
-                    return ''
+                    return `https://analytics-aribtrum.sushi.com/pairs/${address}`
+                case NetworkType.xDai:
+                    return `https://analytics-xdai.sushi.com/pairs/${address}`
                 default:
                     safeUnreachable(networkType)
                     return ''
