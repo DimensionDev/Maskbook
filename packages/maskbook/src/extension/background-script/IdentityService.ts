@@ -4,9 +4,10 @@ import { blobToArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
 import {
     personaRecordToPersona,
     queryAvatarDataURL,
+    PostRecord,
     queryPersona,
     queryPersonaRecord,
-    queryPostsDB,
+    queryPostPagedDB,
     queryProfile,
     queryProfilesWithQuery,
     storeAvatar,
@@ -46,7 +47,6 @@ import type { EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } fr
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { MaskMessage } from '../../utils'
-import { orderBy } from 'lodash-es'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -204,26 +204,19 @@ export { detachProfileDB as detachProfile } from '../../database/Persona/Persona
 //#region Post
 export { queryPostsDB } from '../../database'
 
-export async function queryPagedPostHistoryByIdentifiers(
-    network: string,
-    useIds: string[],
-    page: number,
-    size: number,
+export async function queryPagedPostHistory(
+    options: {
+        network: string
+        after?: PostRecord
+    },
+    count: number,
 ) {
-    const posts = await queryPostsDB(network)
-    const conditionPosts = orderBy(posts, (x) => x.foundAt, 'desc').filter(
-        (x) => x.summary && x.url && useIds.includes(x.postBy.userId),
-    )
-    const totalPages = Math.ceil(conditionPosts.length / size)
-    const currentPage = page >= totalPages ? totalPages : page
-
-    return {
-        total: conditionPosts.length,
-        pages: totalPages,
-        currentPage: currentPage,
-        haveNext: currentPage !== totalPages,
-        data: conditionPosts.slice((currentPage - 1) * size, currentPage * size),
+    const currentPersona = await getCurrentPersonaIdentifier()
+    if (currentPersona) {
+        return queryPostPagedDB(currentPersona, options, count)
     }
+
+    return []
 }
 //#endregion
 
