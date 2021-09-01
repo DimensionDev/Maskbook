@@ -58,8 +58,8 @@ export async function restoreNewIdentityWithMnemonicWord(
     return ecKeyID
 }
 
-export async function downloadBackup<T>(obj: T) {
-    const { buffer, mimeType, fileName } = await createBackupInfo(obj)
+export async function downloadBackup<T>(obj: T, type?: 'txt' | 'json') {
+    const { buffer, mimeType, fileName } = await createBackupInfo(obj, type)
     saveAsFileFromBuffer(buffer, mimeType, fileName)
     return obj
 }
@@ -84,7 +84,7 @@ export async function createBackupUrl(
     return { url, fileName }
 }
 
-async function createBackupInfo<T>(obj: T) {
+async function createBackupInfo<T>(obj: T, type?: 'txt' | 'json') {
     const string = typeof obj === 'string' ? obj : JSON.stringify(obj)
     const buffer = encodeText(string)
     const date = new Date()
@@ -92,8 +92,8 @@ async function createBackupInfo<T>(obj: T) {
         .getDate()
         .toString()
         .padStart(2, '0')}`
-    const fileName = `maskbook-keystore-backup-${today}.json`
-    const mimeType = 'application/json'
+    const fileName = `maskbook-keystore-backup-${today}.${type ?? 'json'}`
+    const mimeType = type === 'txt' ? 'text/plain' : 'application/json'
     return { buffer, mimeType, fileName }
 }
 
