@@ -4,9 +4,10 @@ import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
-import { sendCode, verifyCode } from '../../api'
+import { sendCode, useLanguage, verifyCode } from '../../api'
 import { emailRegexp } from '../../regexp'
 import { CountdownButton, MaskTextField, useSnackbar } from '@masknet/theme'
+import { Locale, Scenario, AccountType } from '../../type'
 
 const useStyles = makeStyles()({
     container: {
@@ -22,6 +23,7 @@ interface SettingEmailDialogProps {
 }
 
 export default function SettingEmailDialog({ open, onClose }: SettingEmailDialogProps) {
+    const language = useLanguage()
     const snackbar = useSnackbar()
     const t = useDashboardI18N()
     const { classes } = useStyles()
@@ -43,7 +45,7 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
         } else {
             const result = await verifyCode({
                 account: email,
-                type: 'email',
+                type: AccountType.email,
                 code,
             }).catch((err) => {
                 if (err.status === 400) {
@@ -79,7 +81,9 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
     const sendValidationEmail = async () => {
         const res = await sendCode({
             account: email,
-            type: 'email',
+            type: AccountType.email,
+            scenario: user.email ? Scenario.change : Scenario.create,
+            locale: language.includes('zh') ? Locale.zh : Locale.en,
         }).catch((error) => {
             snackbar.enqueueSnackbar(error.message, { variant: 'error' })
         })
