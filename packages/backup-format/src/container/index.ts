@@ -4,6 +4,7 @@ import { BackupErrors } from '../BackupErrors'
 const MAGIC_HEADER_Version0 = new Uint8Array([...'MASK-BACKUP-V000'].map((x) => x.charCodeAt(0)))
 const CHECKSUM_LENGTH = 16
 
+/** @internal */
 export enum SupportedVersions {
     Version0 = 0,
 }
@@ -12,11 +13,13 @@ function getMagicHeader(version: SupportedVersions) {
     unreachable(version)
 }
 
+/** @internal */
 export async function createContainer(version: SupportedVersions, data: ArrayBuffer) {
     const checksum = await crypto.subtle.digest({ name: 'SHA-256' }, data)
     return concatArrayBuffer(getMagicHeader(version), data, checksum)
 }
 
+/** @internal */
 export async function parseEncryptedJSONContainer(version: SupportedVersions, _container: ArrayBuffer) {
     const container = new Uint8Array(_container)
 

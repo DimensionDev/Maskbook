@@ -1,6 +1,6 @@
 import { encodeText, decodeText } from '@dimensiondev/kit'
 import { decode, encode } from '@msgpack/msgpack'
-import { createContainer, parseContainer } from '..'
+import { createContainer, parseEncryptedJSONContainer } from '../container'
 import { BackupErrors } from '../BackupErrors'
 import { SupportedVersions } from '../container'
 export async function encrypt(key: CryptoKey, backup: unknown) {
@@ -14,7 +14,7 @@ export async function encrypt(key: CryptoKey, backup: unknown) {
 }
 
 export async function decrypt(key: CryptoKey, data: ArrayBuffer) {
-    const container = await parseContainer(SupportedVersions.Version0, data)
+    const container = await parseEncryptedJSONContainer(SupportedVersions.Version0, data)
 
     const _ = decode(container)
     if (!Array.isArray(_) || _.length !== 2) throw new TypeError(BackupErrors.UnknownFormat)
