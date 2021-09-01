@@ -14,7 +14,7 @@ export const PostHistory = memo(({ network }: PostHistoryProps) => {
     const [page, setPage] = useState(0)
     const { value, error, loading } = usePostHistory(network, page, DEFAULT_PAGE_SIZE)
 
-    if (!value?.length) return <Placeholder network={network} />
+    if (!value?.length && !loading) return <Placeholder network={network} />
 
     return (
         <Stack justifyContent="space-between" height="100%">
