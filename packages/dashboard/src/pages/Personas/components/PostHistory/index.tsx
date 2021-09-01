@@ -5,13 +5,12 @@ import { memo, useState } from 'react'
 import { Placeholder } from './Placeholder'
 
 interface PostHistoryProps {
-    useIds: string[]
     network: string
 }
 
-const DEFAULT_PAGE_SIZE = 3
+const DEFAULT_PAGE_SIZE = 20
 
-export const PostHistory = memo(({ useIds, network }: PostHistoryProps) => {
+export const PostHistory = memo(({ network }: PostHistoryProps) => {
     const [page, setPage] = useState(0)
     const { value, error, loading } = usePostHistory(network, page, DEFAULT_PAGE_SIZE)
 
