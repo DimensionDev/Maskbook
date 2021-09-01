@@ -153,5 +153,7 @@ export class ExtendedEther extends Ether {
         return this._cachedEther[chainId] ?? (this._cachedEther[chainId] = new ExtendedEther(chainId))
     }
 
-    public static wrapEther = memoize((chainId: ChainId) => toUniswapToken(chainId, WETH[chainId]))
+    public static wrapEther: (chainID: ChainId) => Token = memoize((chainId: ChainId) =>
+        toUniswapToken(chainId, WETH[chainId]),
+    )
 }
