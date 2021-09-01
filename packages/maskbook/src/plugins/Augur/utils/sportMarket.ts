@@ -1,13 +1,6 @@
-import { Team, Sport, SportMarketType, MarketTitle, Outcome } from '../types'
+import { Team, Sport, SportMarketType, MarketTitle, Outcome, SportType, NAMING_TEAM, NAMING_LINE } from '../types'
 import { BigNumber as BN } from 'bignumber.js'
-import {
-    AWAY_TEAM_OUTCOME,
-    NAMING_LINE,
-    NAMING_TEAM,
-    NO_CONTEST,
-    NO_CONTEST_OUTCOME_ID,
-    NO_CONTEST_TIE,
-} from '../constants'
+import { AWAY_TEAM_OUTCOME, NO_CONTEST, NO_CONTEST_OUTCOME_ID, NO_CONTEST_TIE } from '../constants'
 import { getFullTeamName } from '.'
 import { isSameAddress } from '@masknet/web3-shared'
 
@@ -190,7 +183,7 @@ const decodeOutcomes = (
 }
 
 const sportsData = {
-    '2': {
+    [SportType.NFL]: {
         name: 'NFL',
         types: {
             [SportMarketType.HeadToHead]: {
@@ -218,7 +211,7 @@ const sportsData = {
             },
         },
     },
-    '3': {
+    [SportType.MLB]: {
         name: 'MLB',
         types: {
             [SportMarketType.HeadToHead]: {
@@ -246,7 +239,7 @@ const sportsData = {
             },
         },
     },
-    '4': {
+    [SportType.NBA]: {
         name: 'NBA',
         types: {
             [SportMarketType.HeadToHead]: {
@@ -274,7 +267,7 @@ const sportsData = {
             },
         },
     },
-    '6': {
+    [SportType.NHL]: {
         name: 'NHL',
         types: {
             [SportMarketType.HeadToHead]: {
@@ -302,7 +295,7 @@ const sportsData = {
             },
         },
     },
-    '7': {
+    [SportType.MMA]: {
         name: 'MMA',
         types: {
             [SportMarketType.HeadToHead]: {

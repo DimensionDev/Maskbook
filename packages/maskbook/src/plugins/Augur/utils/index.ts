@@ -1,4 +1,13 @@
-import { SportsInterface, Team, Market, AmmExchange, AmmOutcome, EstimateTradeResult, SportMarketType } from '../types'
+import {
+    SportsInterface,
+    Team,
+    Market,
+    AmmExchange,
+    AmmOutcome,
+    EstimateTradeResult,
+    SportMarketType,
+    SportType,
+} from '../types'
 import { BigNumber as BN } from 'bignumber.js'
 import { MINIMUM_BALANCE, SWAP_FEE_DECIMALS } from '../constants'
 import { formatAmount, formatBalance, FungibleTokenDetailed, ZERO } from '@masknet/web3-shared'
@@ -165,7 +174,7 @@ export const calcPricesFromOdds = (initialOdds: string[], outcomes: AmmOutcome[]
 }
 
 const sportsResolutionRules = {
-    '2': {
+    [SportType.NFL]: {
         types: {
             [SportMarketType.HeadToHead]: [
                 `At least 55 minutes of play must have elapsed for the game to be deemed official. If the game is not played or if less than 55 minutes of play have been completed, the game is not considered
@@ -196,7 +205,7 @@ protests, or overturned decisions.`,
             ],
         },
     },
-    '3': {
+    [SportType.MLB]: {
         types: {
             [SportMarketType.HeadToHead]: [
                 `The results of a game are official after (and, unless otherwise stated, bets shall be settled subject to the completion of) 5 innings of play, or 4.5 innings should the home team be leading at the commencement of the bottom of the 5th innings. Should a game be called, if the result is official in accordance with this rule, the winner will be determined by the score/stats after the last completed inning.`,
@@ -221,7 +230,7 @@ protests, or overturned decisions.`,
             ],
         },
     },
-    '4': {
+    [SportType.NBA]: {
         types: {
             [SportMarketType.HeadToHead]: [
                 `At least 43 minutes of play must have elapsed for the game to be deemed official. If the game is not played or if less than 43 minutes of play have been completed, the game is not considered an official game and the market should resolve as 'No Contest'.`,
@@ -243,7 +252,7 @@ protests, or overturned decisions.`,
             ],
         },
     },
-    '6': {
+    [SportType.NHL]: {
         types: {
             [SportMarketType.HeadToHead]: [
                 `At least 55 minutes of play must have elapsed for the game to be deemed official. If the game is not played or if less than 55 minutes of play have been completed, the game is not considered an official game and the market should resolve as 'No Contest'.`,
@@ -266,7 +275,7 @@ protests, or overturned decisions.`,
             ],
         },
     },
-    '7': {
+    [SportType.MMA]: {
         types: {
             [SportMarketType.HeadToHead]: [
                 `A fight is considered official once the first round begins, regardless of the scheduled or actual duration.`,

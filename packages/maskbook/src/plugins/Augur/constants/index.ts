@@ -7,22 +7,6 @@ export const PLUGIN_NAME = 'Augur'
 
 export const BASE_URL = 'https://bafybeieqpwd47pmwcmidysq3demjbzd6kkeg6asxcyudk2tbpwdjxxvqkq.ipfs.dweb.link'
 export const NO_CONTEST_OUTCOME_ID: number = 0
-export const NAMING_TEAM = {
-    HOME_TEAM: 'HOME_TEAM',
-    AWAY_TEAM: 'AWAY_TEAM',
-    FAV_TEAM: 'FAV_TEAM',
-    UNDERDOG_TEAM: 'UNDERDOG_TEAM',
-}
-export const NAMING_LINE = {
-    SPREAD_LINE: 'SPREAD_LINE',
-    OVER_UNDER_LINE: 'OVER_UNDER_LINE',
-}
-
-export const MMA_MARKET_TYPE = {
-    MONEY_LINE: 0,
-    SPREAD: 1, // TODO: no spread markets for MMA when real market factory gets created
-    OVER_UNDER: 1,
-}
 
 export const NO_CONTEST = 'No Contest'
 export const NO_CONTEST_TIE = 'Tie/No Contest'

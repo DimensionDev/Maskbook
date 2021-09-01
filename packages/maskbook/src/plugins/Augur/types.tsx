@@ -13,6 +13,31 @@ export interface TeamsInterface {
     [key: string]: Team
 }
 
+export enum SportType {
+    NFL = '2',
+    MLB = '3',
+    NBA = '4',
+    NHL = '6',
+    MMA = '7',
+}
+
+export const NAMING_TEAM = {
+    HOME_TEAM: 'HOME_TEAM',
+    AWAY_TEAM: 'AWAY_TEAM',
+    FAV_TEAM: 'FAV_TEAM',
+    UNDERDOG_TEAM: 'UNDERDOG_TEAM',
+}
+export const NAMING_LINE = {
+    SPREAD_LINE: 'SPREAD_LINE',
+    OVER_UNDER_LINE: 'OVER_UNDER_LINE',
+}
+
+export const MMA_MARKET_TYPE = {
+    MONEY_LINE: 0,
+    SPREAD: 1, // TODO: no spread markets for MMA when real market factory gets created
+    OVER_UNDER: 1,
+}
+
 export interface Sport {
     sportId: string
     name: string

@@ -1,6 +1,6 @@
 import { isSameAddress } from '@masknet/web3-shared'
-import { MMA_MARKET_TYPE, NO_CONTEST_OUTCOME_ID } from '../constants'
-import type { MarketTitle, Outcome, Sport } from '../types'
+import { NO_CONTEST_OUTCOME_ID } from '../constants'
+import { MarketTitle, MMA_MARKET_TYPE, Outcome, Sport } from '../types'
 
 const NAMING_TEAM = {
     HOME_TEAM: 'HOME_TEAM',
