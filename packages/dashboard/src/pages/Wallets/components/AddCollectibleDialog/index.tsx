@@ -1,4 +1,4 @@
-import { FormEvent, memo, useEffect, useState } from 'react'
+import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { Box, Button, DialogActions, DialogContent } from '@material-ui/core'
 import {
@@ -35,25 +35,25 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     const { value: contractDetailed, loading: contractDetailLoading } = useERC721ContractDetailed(address)
     const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contractDetailed)
 
-    const onSubmit = async () => {
+    const onSubmit = useCallback(async () => {
         if (contractDetailLoading || !wallet) return
 
         const tokenInDB = await PluginServices.Wallet.getERC721Token(address, tokenId)
         if (tokenInDB) throw new Error(FormErrorType.Added)
 
-        const _tokenDetailed = await erc721TokenDetailedCallback()
+        const tokenDetailed = await erc721TokenDetailedCallback()
 
         if (
-            (_tokenDetailed && !isSameAddress(_tokenDetailed.info.owner, wallet.address)) ||
-            !_tokenDetailed ||
-            !_tokenDetailed.info.owner
+            (tokenDetailed && !isSameAddress(tokenDetailed.info.owner, wallet.address)) ||
+            !tokenDetailed ||
+            !tokenDetailed.info.owner
         ) {
             throw new Error(FormErrorType.NotExist)
         } else {
-            await PluginServices.Wallet.addERC721Token(_tokenDetailed)
+            await PluginServices.Wallet.addERC721Token(tokenDetailed)
             onClose()
         }
-    }
+    }, [contractDetailLoading, wallet, address, tokenId, erc721TokenDetailedCallback])
 
     return (
         <AddCollectibleDialogUI
