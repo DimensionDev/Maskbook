@@ -1,9 +1,8 @@
-import { useCallback, useState } from 'react'
-import { useAsync, useToggle } from 'react-use'
+import { memo, useCallback, useState } from 'react'
+import { useAsync } from 'react-use'
 import { Box, Button, Card } from '@material-ui/core'
-import { makeStyles, MaskTextField } from '@masknet/theme'
+import { MaskTextField, useSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
-import { MaskColorVar, useSnackbar } from '@masknet/theme'
 import { Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { MaskAlert } from '../MaskAlert'
@@ -13,49 +12,36 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
 import { blobToText } from '@dimensiondev/kit'
 import { LoadingCard } from './steps/LoadingCard'
-
-const useStyles = makeStyles()((theme) => ({
-    root: {
-        border: `solid 1px ${theme.palette.divider}`,
-        width: '100%',
-        height: 176,
-        borderRadius: 4,
-        background: MaskColorVar.secondaryContrastText.alpha(0.15),
-    },
-    file: {
-        display: 'none',
-    },
-}))
+import { decryptBackup } from '@masknet/backup-format'
+import { decode, encode } from '@msgpack/msgpack'
 
 enum RestoreStatus {
     WaitingInput = 0,
     Verifying = 1,
     Verified = 2,
+    Decrypting = 3,
 }
 
-export interface RestoreFromJsonProps {}
-
-export function RestoreFromLocal(props: RestoreFromJsonProps) {
+export const RestoreFromLocal = memo(() => {
     const t = useDashboardI18N()
-    const { classes } = useStyles()
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar()
 
+    const [file, setFile] = useState<File | null>(null)
     const [json, setJSON] = useState<any | null>(null)
     const [backupValue, setBackupValue] = useState('')
     const [backupId, setBackupId] = useState('')
-    const [needPassword, togglePasswordField] = useToggle(false)
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [restoreStatus, setRestoreStatus] = useState(RestoreStatus.WaitingInput)
 
     const handleSetFile = useCallback(async (file: File) => {
-        if (file.type === 'json') {
+        setFile(file)
+        if (file.type === 'application/json') {
             const content = await blobToText(file)
             setBackupValue(content)
         } else {
-            togglePasswordField(true)
-            setRestoreStatus(RestoreStatus.Verifying)
+            setRestoreStatus(RestoreStatus.Decrypting)
         }
     }, [])
 
@@ -75,17 +61,25 @@ export function RestoreFromLocal(props: RestoreFromJsonProps) {
         }
     }, [backupValue])
 
-    const restoreDB = async () => {
-        if (needPassword) {
-            return
+    const decryptBackupFile = useCallback(async () => {
+        if (!file) return
+
+        try {
+            const decrypted = await decryptBackup(encode(password), await file.arrayBuffer())
+            setBackupValue(JSON.stringify(decode(decrypted)))
+        } catch (error_) {
+            setError(t.sign_in_account_cloud_backup_decrypt_failed())
         }
+    }, [file, password])
+
+    const restoreDB = useCallback(async () => {
         try {
             await Services.Welcome.checkPermissionsAndRestore(backupId)
             navigate(RoutePaths.Personas, { replace: true })
         } catch {
             enqueueSnackbar('Restore backup failed, Please try again', { variant: 'error' })
         }
-    }
+    }, [backupId])
 
     return (
         <>
@@ -98,7 +92,7 @@ export function RestoreFromLocal(props: RestoreFromJsonProps) {
                 )}
                 {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
 
-                {needPassword && (
+                {restoreStatus === RestoreStatus.Decrypting && (
                     <Box sx={{ mt: 4 }}>
                         <MaskTextField
                             placeholder={t.sign_in_account_cloud_backup_password()}
@@ -111,7 +105,11 @@ export function RestoreFromLocal(props: RestoreFromJsonProps) {
                 )}
             </Box>
             <ButtonContainer>
-                <Button variant="rounded" color="primary" onClick={restoreDB}>
+                <Button
+                    variant="rounded"
+                    color="primary"
+                    onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
+                    disabled={!file}>
                     {restoreStatus !== RestoreStatus.Verified ? t.next() : t.restore()}
                 </Button>
             </ButtonContainer>
@@ -120,4 +118,4 @@ export function RestoreFromLocal(props: RestoreFromJsonProps) {
             </Box>
         </>
     )
-}
+})

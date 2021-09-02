@@ -2,7 +2,7 @@ import { concatArrayBuffer, unreachable } from '@dimensiondev/kit'
 import { BackupErrors } from '../BackupErrors'
 
 const MAGIC_HEADER_Version0 = new Uint8Array([...'MASK-BACKUP-V000'].map((x) => x.charCodeAt(0)))
-const CHECKSUM_LENGTH = 16
+const CHECKSUM_LENGTH = 32
 
 /** @internal */
 export enum SupportedVersions {

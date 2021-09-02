@@ -64,6 +64,17 @@ export async function downloadBackup<T>(obj: T, type?: 'txt' | 'json') {
     return obj
 }
 
+export async function downloadBackupV2(buffer: ArrayBuffer) {
+    const date = new Date()
+    const today = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
+        .getDate()
+        .toString()
+        .padStart(2, '0')}`
+    const fileName = `maskbook-keystore-backup-${today}`
+
+    saveAsFileFromBuffer(buffer, '', fileName)
+}
+
 export async function createBackupFile(
     options: { download: boolean; onlyBackupWhoAmI: boolean } & Partial<BackupOptions>,
 ): Promise<BackupJSONFileLatest> {

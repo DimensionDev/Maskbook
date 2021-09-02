@@ -123,11 +123,11 @@ export const fetchBackupValue = (downloadLink: string) => {
     return fetchBase<string>(downloadLink, { method: 'GET' }, (res) => res.text())
 }
 
-export const uploadBackupValue = (uploadLink: string, content: string) => {
+export const uploadBackupValue = (uploadLink: string, content: ArrayBuffer) => {
     return fetch(uploadLink, {
         method: 'PUT',
         // mode: 'no-cors',
-        headers: new Headers({ 'content-type': 'text/plain' }),
+        headers: new Headers({ 'content-type': 'application/octet-stream' }),
         body: content,
     })
 }
