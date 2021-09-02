@@ -59,7 +59,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         fontWeight: 700,
     },
     line: {
-        dispaly: 'inline-flex',
         borderRadius: 9999,
         position: 'absolute',
         bottom: 0,

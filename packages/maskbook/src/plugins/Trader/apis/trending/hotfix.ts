@@ -44,7 +44,7 @@ const KEYWORD_ALIAS_MAP: {
     [DataProvider.UNISWAP_INFO]: {},
 }
 
-const KEYWORK_ID_MAP: {
+const KEYWORD_ID_MAP: {
     [key in DataProvider]: {
         [key in NetworkType]?: Record<string, string>
     }
@@ -111,7 +111,7 @@ export function resolveAlias(keyword: string, dataProvider: DataProvider) {
 }
 
 export function resolveCoinId(keyword: string, dataProvider: DataProvider) {
-    return KEYWORK_ID_MAP[dataProvider][currentNetworkSettings.value]?.[keyword.toUpperCase()]
+    return KEYWORD_ID_MAP[dataProvider][currentNetworkSettings.value]?.[keyword.toUpperCase()]
 }
 
 export function resolveCoinAddress(id: string, dataProvider: DataProvider) {

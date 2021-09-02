@@ -13,13 +13,13 @@ import { getBioDescription, getNickname, getTwitterId } from '../utils/user'
 function injectEnhancedProfilePageForEmptyState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfileaPageAtTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfilePageAtTwitter />)
 }
 
 function injectEnhancedProfilePageState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabPageSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfileaPageAtTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfilePageAtTwitter />)
 }
 export function injectEnhancedProfileAtTwitter(signal: AbortSignal) {
     injectEnhancedProfilePageForEmptyState(signal)
@@ -53,7 +53,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
 }))
 
-export function EnhancedProfileaPageAtTwitter() {
+export function EnhancedProfilePageAtTwitter() {
     const newTweetButton = searchNewTweetButtonSelector().evaluate()
     const style = newTweetButton ? window.getComputedStyle(newTweetButton) : EMPTY_STYLE
     const fontStyle = newTweetButton?.firstChild

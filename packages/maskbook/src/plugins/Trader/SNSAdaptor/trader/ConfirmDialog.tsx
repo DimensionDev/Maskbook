@@ -6,7 +6,7 @@ import type BigNumber from 'bignumber.js'
 import { useStylesExtends } from '@masknet/shared'
 import { TradeSummary, TradeSummaryProps } from './TradeSummary'
 import { TokenPanel } from './TokenPanel'
-import { PriceStaleWarnning } from './PriceStaleWarnning'
+import { PriceStaleWarning } from './PriceStaleWarning'
 import type { TradeComputed, TradeProvider } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
@@ -81,7 +81,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                         </>
                     ) : null}
                     {staled ? (
-                        <PriceStaleWarnning
+                        <PriceStaleWarning
                             onAccept={() => {
                                 setExecutionPrice(trade.executionPrice)
                             }}

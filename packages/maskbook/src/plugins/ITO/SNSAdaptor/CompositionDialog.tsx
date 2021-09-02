@@ -88,7 +88,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             // the settings is not available
             if (!fillSettings?.token) return
 
-            // earily return happended
+            // early return happened
             if (fillState.type !== TransactionStateType.CONFIRMED) return
 
             const { receipt } = fillState

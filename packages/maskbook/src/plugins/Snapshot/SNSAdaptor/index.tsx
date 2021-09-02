@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const isSnaphotURL = (x: string): boolean =>
+const isSnapshotURL = (x: string): boolean =>
     /^https:\/\/(?:www.)?snapshot.(org|page)\/#\/(.*?)\/proposal\/[\dA-Za-z]+$/.test(x)
 
 function Renderer({ url }: { url: string }) {
@@ -51,7 +51,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     DecryptedInspector: function Component(props): JSX.Element | null {
         const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isSnaphotURL)
+        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isSnapshotURL)
         if (!text.ok) return null
         if (!link) return null
         return <Renderer url={link} />
@@ -60,7 +60,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const link = usePostInfoDetails
             .postMetadataMentionedLinks()
             .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isSnaphotURL)
+            .find(isSnapshotURL)
         if (!link) return null
         return <Renderer url={link} />
     },

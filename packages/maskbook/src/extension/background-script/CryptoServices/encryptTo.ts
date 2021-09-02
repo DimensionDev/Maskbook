@@ -44,7 +44,7 @@ export async function encryptTo(
 
     const usingPersona = await queryProfile(whoAmI)
     const minePrivateKey = await queryPrivateKey(whoAmI)
-    if (!minePrivateKey) throw new TypeError('Not inited yet')
+    if (!minePrivateKey) throw new TypeError('Not initialized yet')
     const stringifiedContent = Alpha38.typedMessageStringify(content)
     const localKey = publicShared ? Alpha38.publicSharedAESKey : (await queryLocalKey(whoAmI))!
     const {

@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react'
 
 const Dashboard = lazy(() => import('./initialization/Dashboard'))
-export function IntergratedDashboard() {
+export function IntegratedDashboard() {
     return (
         <Suspense fallback="">
             <Dashboard />

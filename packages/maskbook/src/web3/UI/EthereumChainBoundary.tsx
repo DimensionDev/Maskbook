@@ -63,7 +63,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             return
         }
 
-        // request ethereum-compatiable network
+        // request ethereum-compatible network
         const networkType = getNetworkTypeFromChainId(expectedChainId)
         if (!networkType) return
         try {

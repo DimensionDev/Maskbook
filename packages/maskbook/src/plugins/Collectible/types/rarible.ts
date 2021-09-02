@@ -20,7 +20,7 @@ export interface Salt {
     type: string
 }
 
-export enum RARIBLEFEATURES {
+export enum RARIBLE_FEATURES {
     APPROVE_FOR_ALL = 'APPROVE_FOR_ALL',
     SET_URI_PREFIX = 'SET_URI_PREFIX',
     BURN = 'BURN',
@@ -125,7 +125,7 @@ export interface RaribleCollectibleResponse {
     name: string
     symbol: string
     status: string
-    features: RARIBLEFEATURES[]
+    features: RARIBLE_FEATURES[]
     standard: WyvernSchemaName
     startBlockNumber: number
     pic: string
