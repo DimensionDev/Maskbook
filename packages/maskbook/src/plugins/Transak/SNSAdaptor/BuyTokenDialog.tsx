@@ -11,6 +11,9 @@ const useStyles = makeStyles()((theme) => ({
     dialogPaper: {
         width: '500px !important',
     },
+    dialogContent: {
+        padding: '0 !important',
+    },
     close: {
         color: `${theme.palette.common.white} !important`,
         backgroundColor: `${theme.palette.primary.light} !important`,
@@ -60,6 +63,7 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
                 onClose={closeDialog}
                 classes={{
                     paper: classes.dialogPaper,
+                    dialogContent: classes.dialogContent,
                 }}
                 disableBackdropClick>
                 <DialogContent className={classes.content}>
