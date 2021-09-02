@@ -36,7 +36,6 @@ const useStyles = makeStyles()((theme) => ({
             color: getMaskColor(theme).textPrimary,
         },
     },
-    button: {},
 }))
 
 interface EnhancedProfilePageProps extends withClasses<'text' | 'button'> {
@@ -98,7 +97,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                     <InfoOutlinedIcon color="inherit" fontSize="small" />
                 </Typography>
             </Box>
-            <CollectibleListAddress classes={classes} address={address_} />
+            <CollectibleListAddress address={address_} />
         </div>
     )
 }
