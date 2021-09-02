@@ -1,6 +1,6 @@
 import * as bip39 from 'bip39'
 import { decode, encode } from '@msgpack/msgpack'
-import { decodeArrayBuffer as decodeArray, encodeArrayBuffer } from '@dimensiondev/kit'
+import { blobToArrayBuffer, decodeArrayBuffer as decodeArray, encodeArrayBuffer } from '@dimensiondev/kit'
 import {
     createPersonaByJsonWebKey,
     personaRecordToPersona,
