@@ -57,6 +57,8 @@
     "sign_in_account_cloud_restore_failed": "Restore failed",
     "sign_in_account_cloud_backup_download_failed": "Download backup failed",
     "sign_in_account_cloud_backup_decrypt_failed": "Decrypt failed, please check password",
+    "sign_in_account_cloud_backup_email_format_error": "The email is incorrect.",
+    "sign_in_account_cloud_backup_phone_format_error": "The phone number is incorrect.",
     "cloud_backup": "Cloud Backups",
     "wallets_transfer": "Transfer",
     "wallets_assets": "Assets",
