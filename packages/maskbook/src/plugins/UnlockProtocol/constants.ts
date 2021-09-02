@@ -7,9 +7,9 @@ export const pluginMetaKey = 'com.metamask.unlockprotocol:1'
 
 export const graphEndpointKeyVal = {
     1: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/unlock',
-    4: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/unlock-rinkeby',
     100: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/xdai',
     137: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/polygon',
+    4: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/unlock-rinkeby',
 }
 
 export const keyServerEndpoint = 'https://unlock.iamzub.in'

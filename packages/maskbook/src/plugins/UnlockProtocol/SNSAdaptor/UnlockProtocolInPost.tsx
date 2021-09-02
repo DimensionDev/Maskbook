@@ -26,38 +26,36 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
         if (metadata.ok) {
             if (!!address) {
                 const data: { locks: Record<string, object> } = { locks: {} }
-                PuginUnlockProtocolRPC.getPurchasedLocks(address).then((res) => {
-                    metadata.val.unlockLocks.forEach((locks) => {
-                        res.forEach((e: { lock: string }) => {
-                            if (e.lock === locks.unlocklock) {
-                                const requestdata = {
-                                    lock: e.lock,
-                                    address: address,
-                                    chain: locks.chainid,
-                                    identifier: metadata.val.iv,
-                                }
-                                PuginUnlockProtocolRPC.getKey(requestdata)
-                                    .catch((error) => {
-                                        if (error.code === -1) {
-                                            setContent(t('plugin_unlockprotocol_server_error'))
-                                        }
-                                    })
-                                    .then((response) => {
-                                        setContent(response.message)
-                                        PuginUnlockProtocolRPC.decryptUnlockData(
-                                            metadata.val.iv,
-                                            response.post.unlockKey,
-                                            metadata.val.post,
-                                        ).then((content) => {
-                                            setContent(content.content)
-                                        })
-                                    })
+                metadata.val.unlockLocks.forEach((locks) => {
+                    PuginUnlockProtocolRPC.verifyPurchase(address, locks.unlocklock, locks.chainid).then((res) => {
+                        if (res) {
+                            const requestdata = {
+                                lock: locks.unlocklock,
+                                address: address,
+                                chain: locks.chainid,
+                                identifier: metadata.val.iv,
                             }
-                        })
-                        data.locks[locks.unlocklock] = { network: locks.chainid }
+                            PuginUnlockProtocolRPC.getKey(requestdata)
+                                .catch((error) => {
+                                    if (error.code === -1) {
+                                        setContent(t('plugin_unlockprotocol_server_error'))
+                                    }
+                                })
+                                .then((response) => {
+                                    setContent(response.message)
+                                    PuginUnlockProtocolRPC.decryptUnlockData(
+                                        metadata.val.iv,
+                                        response.post.unlockKey,
+                                        metadata.val.post,
+                                    ).then((content) => {
+                                        setContent(content.content)
+                                    })
+                                })
+                        }
                     })
-                    setRedirurl(paywallUrl + encodeURI(JSON.stringify(data)))
+                    data.locks[locks.unlocklock] = { network: locks.chainid }
                 })
+                setRedirurl(paywallUrl + encodeURI(JSON.stringify(data)))
             }
         }
     }, [chain, address])
@@ -68,9 +66,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                       <>
                           <MaskbookPluginWrapper width={300} pluginName="Unlock Protocol">
                               <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
-                                  <Typography color="textPrimary">
-                                      <pre>{content}</pre>
-                                  </Typography>
+                                  <Typography color="textPrimary">{content}</Typography>
                               </EthereumChainBoundary>
                           </MaskbookPluginWrapper>
                       </>
