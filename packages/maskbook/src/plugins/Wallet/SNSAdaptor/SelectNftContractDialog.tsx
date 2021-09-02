@@ -1,13 +1,7 @@
 import { useCallback, useState, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent, List, ListItem, Typography, Box, Link } from '@material-ui/core'
-import {
-    ERC721ContractDetailed,
-    EthereumTokenType,
-    ChainId,
-    resolveAddressLinkOnExplorer,
-    useChainId,
-} from '@masknet/web3-shared'
+import { ERC721ContractDetailed, resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'
@@ -97,24 +91,24 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-// Todo: replace this temporary List
 const ERC721_CONTRACT_LIST: ERC721ContractDetailed[] = [
-    {
-        type: EthereumTokenType.ERC721,
-        address: '0x06012c8cf97bead5deae237070f9587f8e7a266d',
-        chainId: ChainId.Mainnet,
-        name: 'CryptoKitties',
-        symbol: 'CKITTY',
-        iconURL: new URL('../../../web3/assets/cryptokitties.png', import.meta.url).toString(),
-    },
-    {
-        type: EthereumTokenType.ERC721,
-        address: '0x06012c8cf97bead5deae237070f9587f8e7a266d',
-        chainId: ChainId.Mainnet,
-        name: 'GryptoKitties',
-        symbol: 'GKITTY',
-        iconURL: new URL('../../../web3/assets/cryptokitties.png', import.meta.url).toString(),
-    },
+    // TODO: Replace with real token list
+    // {
+    //     type: EthereumTokenType.ERC721,
+    //     address: '0x06012c8cf97bead5deae237070f9587f8e7a266d',
+    //     chainId: ChainId.Mainnet,
+    //     name: 'CryptoKitties',
+    //     symbol: 'CKITTY',
+    //     iconURL: new URL('../../../web3/assets/cryptokitties.png', import.meta.url).toString(),
+    // },
+    // {
+    //     type: EthereumTokenType.ERC721,
+    //     address: '0x06012c8cf97bead5deae237070f9587f8e7a266d',
+    //     chainId: ChainId.Mainnet,
+    //     name: 'GryptoKitties',
+    //     symbol: 'GKITTY',
+    //     iconURL: new URL('../../../web3/assets/cryptokitties.png', import.meta.url).toString(),
+    // },
 ]
 
 export interface SelectNftContractDialogProps extends withClasses<never> {}
