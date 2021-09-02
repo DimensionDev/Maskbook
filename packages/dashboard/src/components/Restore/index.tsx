@@ -3,7 +3,7 @@ import { Tab } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { ButtonGroupTabList, useTabs } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
-import { RestoreFromJson } from './RestoreFromJson'
+import { RestoreFromLocal } from './RestoreFromLocal'
 import { RestoreFromMnemonic } from './RestoreFromMnemonic'
 import { RestoreFromCloud } from './RestoreFromCloud'
 import { RestoreFromPrivateKey } from './RestoreFromPrivateKey'
@@ -51,7 +51,7 @@ export const Restore = memo(() => {
                     <RestoreFromPrivateKey />
                 </TabPanel>
                 <TabPanel value={tabs.json} classes={tabPanelClasses}>
-                    <RestoreFromJson />
+                    <RestoreFromLocal />
                 </TabPanel>
                 <TabPanel value={tabs.cloud} classes={tabPanelClasses}>
                     <RestoreFromCloud />
