@@ -2,6 +2,7 @@ import { safeUnreachable } from '@dimensiondev/kit'
 import CHAINS from '../assets/chains.json'
 import { getRPCConstants } from '../constants'
 import { ChainId, NetworkType } from '../types'
+import COINGECKO_PLATFORMS from '../assets/coingecko-asset-platforms.json'
 
 export function isChainIdValid(chainId: ChainId, allowTestnet = false) {
     const chainDetailed = getChainDetailed(chainId)
@@ -106,4 +107,8 @@ export function getNetworkTypeFromChainId(chainId: ChainId) {
         return false
     })
     return entry?.[0] as NetworkType | undefined
+}
+
+export function getCoingeckoPlatformId(chain: ChainId) {
+    return COINGECKO_PLATFORMS.find((platform) => platform.chain_identifier === chain)?.id
 }
