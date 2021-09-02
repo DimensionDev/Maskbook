@@ -998,7 +998,12 @@
         ],
         "faucets": [],
         "features": [],
-        "nativeCurrency": { "name": "xDai", "symbol": "xDai", "decimals": 18 },
+        "nativeCurrency": {
+            "name": "xDai",
+            "symbol": "xDai",
+            "decimals": 18,
+            "logoURI": "https://etherscan.io/token/images/stake_32.png?v=2"
+        },
         "infoURL": "https://blockscout.com/xdai/mainnet",
         "shortName": "xDai",
         "chainId": 100,
