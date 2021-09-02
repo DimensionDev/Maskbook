@@ -222,6 +222,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     amount={rawAmount}
                     balance={tokenBalance}
                     token={token}
+                    maxAmountShares={shares === '' ? 1 : shares}
                     onAmountChange={setRawAmount}
                     SelectTokenChip={{
                         loading: loadingTokenBalance,
