@@ -33,7 +33,7 @@ enum RestoreStatus {
 
 export interface RestoreFromJsonProps {}
 
-export function RestoreFromJson(props: RestoreFromJsonProps) {
+export function RestoreFromLocal(props: RestoreFromJsonProps) {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
