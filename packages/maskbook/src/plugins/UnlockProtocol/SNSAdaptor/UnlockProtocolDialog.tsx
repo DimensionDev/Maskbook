@@ -29,7 +29,7 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
     const { attachMetadata, dropMetadata } = useCompositionContext()
     useEffect(() => {
         for (const key of Object.entries(graphEndpointKeyVal)) {
-            PuginUnlockProtocolRPC.getLocks(address, key.toString())
+            PuginUnlockProtocolRPC.getLocks(address, key[0].toString())
                 .then((value) => {
                     if (value.lockManagers.length) {
                         setAvailableUnlockTarget([...availableUnlockTarget, ...value.lockManagers])
