@@ -342,6 +342,7 @@
     "plugin_red_packet_select_existing": "기존 빨간 백 선택",
     "plugin_red_packet_nft_share_claimed_message": "",
     "plugin_red_packet_nft_share_foreshow_message": "",
+    "plugin_red_packet_nft_tip": "",
     "plugin_red_packet_attached_message": "첨부 메시지",
     "plugin_red_packet_from": "보낸사람: {{name}}",
     "plugin_red_packet_description_claimed": "이미 수령하였습니다.",

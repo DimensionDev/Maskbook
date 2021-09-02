@@ -408,7 +408,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
 
                     <CardContent>
                         <Typography variant="body1" className={classes.whiteText}>
-                            This image contains a Red Packet Use Maskbook to open it.
+                            {t('plugin_red_packet_nft_tip')}
                         </Typography>
                     </CardContent>
                     <div className={classes.footer}>

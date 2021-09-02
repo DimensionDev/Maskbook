@@ -341,6 +341,7 @@
     "plugin_red_packet_select_existing": "既存の投げ銭を選択",
     "plugin_red_packet_nft_share_claimed_message": "",
     "plugin_red_packet_nft_share_foreshow_message": "",
+    "plugin_red_packet_nft_tip": "",
     "plugin_red_packet_attached_message": "メッセージを追加",
     "plugin_red_packet_from": "送信者：{{name}}",
     "plugin_red_packet_description_expired": "期限切れです",

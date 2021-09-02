@@ -405,6 +405,7 @@
     "plugin_red_packet_nft_share_claimed_message": "",
     "plugin_red_packet_nft_share_foreshow_message": "",
     "plugin_red_packet_share_message": "crwdns4737:0{{sender}}crwdnd4737:0{{network}}crwdnd4737:0{{payload}}crwdne4737:0",
+    "plugin_red_packet_nft_tip": "",
     "plugin_red_packet_attached_message": "crwdns4739:0crwdne4739:0",
     "plugin_red_packet_from": "crwdns4741:0{{name}}crwdne4741:0",
     "plugin_red_packet_description_claimed": "crwdns4743:0{{amount}}crwdnd4743:0{{symbol}}crwdne4743:0",

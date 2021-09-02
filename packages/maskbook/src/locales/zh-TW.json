@@ -347,6 +347,7 @@
     "plugin_red_packet_select_existing": "選擇已存在的",
     "plugin_red_packet_nft_share_claimed_message": "",
     "plugin_red_packet_nft_share_foreshow_message": "",
+    "plugin_red_packet_nft_tip": "",
     "plugin_red_packet_attached_message": "附加的訊息",
     "plugin_red_packet_from": "寄送人：{{name}}",
     "plugin_red_packet_description_claimed": "你已經認領了 {{amount}} {{symbol}}。",
