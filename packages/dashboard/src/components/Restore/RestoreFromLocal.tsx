@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { useAsync } from 'react-use'
+import { useCallback, useState } from 'react'
+import { useAsync, useToggle } from 'react-use'
 import { Box, Button, Card } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskTextField } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar, useSnackbar } from '@masknet/theme'
 import { Services } from '../../API'
@@ -11,6 +11,8 @@ import FileUpload from '../FileUpload'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
+import { blobToText } from '@dimensiondev/kit'
+import { LoadingCard } from './steps/LoadingCard'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -42,7 +44,20 @@ export function RestoreFromLocal(props: RestoreFromJsonProps) {
     const [json, setJSON] = useState<any | null>(null)
     const [backupValue, setBackupValue] = useState('')
     const [backupId, setBackupId] = useState('')
+    const [needPassword, togglePasswordField] = useToggle(false)
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
     const [restoreStatus, setRestoreStatus] = useState(RestoreStatus.WaitingInput)
+
+    const handleSetFile = useCallback(async (file: File) => {
+        if (file.type === 'json') {
+            const content = await blobToText(file)
+            setBackupValue(content)
+        } else {
+            togglePasswordField(true)
+            setRestoreStatus(RestoreStatus.Verifying)
+        }
+    }, [])
 
     useAsync(async () => {
         if (!backupValue) return
@@ -61,6 +76,9 @@ export function RestoreFromLocal(props: RestoreFromJsonProps) {
     }, [backupValue])
 
     const restoreDB = async () => {
+        if (needPassword) {
+            return
+        }
         try {
             await Services.Welcome.checkPermissionsAndRestore(backupId)
             navigate(RoutePaths.Personas, { replace: true })
@@ -72,21 +90,29 @@ export function RestoreFromLocal(props: RestoreFromJsonProps) {
     return (
         <>
             <Box sx={{ width: '100%' }}>
-                {restoreStatus === RestoreStatus.Verifying && <div className={classes.root}>Verifying</div>}
+                {restoreStatus === RestoreStatus.Verifying && <LoadingCard text="Verifying" />}
                 {restoreStatus === RestoreStatus.WaitingInput && (
                     <Card variant="background" sx={{ height: '144px' }}>
-                        <FileUpload onChange={(_, content) => content && setBackupValue(content)} readAsText />
+                        <FileUpload onChange={handleSetFile} />
                     </Card>
                 )}
                 {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
+
+                {needPassword && (
+                    <Box sx={{ mt: 4 }}>
+                        <MaskTextField
+                            placeholder={t.sign_in_account_cloud_backup_password()}
+                            type="password"
+                            onChange={(e) => setPassword(e.currentTarget.value)}
+                            error={!!error}
+                            helperText={error}
+                        />
+                    </Box>
+                )}
             </Box>
             <ButtonContainer>
-                <Button
-                    variant="rounded"
-                    color="primary"
-                    onClick={restoreDB}
-                    disabled={restoreStatus !== RestoreStatus.Verified}>
-                    {restoreStatus === RestoreStatus.WaitingInput ? t.next() : t.restore()}
+                <Button variant="rounded" color="primary" onClick={restoreDB}>
+                    {restoreStatus !== RestoreStatus.Verified ? t.next() : t.restore()}
                 </Button>
             </ButtonContainer>
             <Box sx={{ marginTop: '35px', width: '100%' }}>
