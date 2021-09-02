@@ -139,6 +139,17 @@ export interface RedPacketNftJSONPayload {
     privateKey: string
     chainId: ChainId
 }
+
+export interface RedPacketNftRecord {
+    id: string
+    password: string
+    contract_version: number
+}
+
+export interface RedPacketNftRecordInDatabase extends RedPacketNftRecord {
+    /** An unique record type in DB */
+    type: 'red-packet-nft'
+}
 //#endregion
 
 export enum DialogTabs {
