@@ -1002,7 +1002,7 @@
             "name": "xDai",
             "symbol": "xDai",
             "decimals": 18,
-            "logoURI": "https://etherscan.io/token/images/stake_32.png?v=2"
+            "logoURI": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/xdai/assets/0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d/logo.png"
         },
         "infoURL": "https://blockscout.com/xdai/mainnet",
         "shortName": "xDai",
