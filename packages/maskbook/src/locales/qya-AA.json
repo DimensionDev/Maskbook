@@ -402,6 +402,8 @@
     "plugin_red_packet_empty": "crwdns4731:0crwdne4731:0",
     "plugin_red_packet_refunding": "crwdns4733:0crwdne4733:0",
     "plugin_red_packet_select_existing": "crwdns4735:0crwdne4735:0",
+    "plugin_red_packet_nft_share_claimed_message": "",
+    "plugin_red_packet_nft_share_foreshow_message": "",
     "plugin_red_packet_share_message": "crwdns4737:0{{sender}}crwdnd4737:0{{network}}crwdnd4737:0{{payload}}crwdne4737:0",
     "plugin_red_packet_attached_message": "crwdns4739:0crwdne4739:0",
     "plugin_red_packet_from": "crwdns4741:0{{name}}crwdne4741:0",

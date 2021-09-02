@@ -8,6 +8,8 @@ import {
     useWeb3,
     useERC721TokenDetailed,
     EthereumTokenType,
+    resolveNetworkName,
+    useNetworkType,
     ERC721ContractDetailed,
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
@@ -23,8 +25,9 @@ import {
     CardMedia,
     CardContent,
     Button,
-    Skeleton,
     Box,
+    Skeleton,
+    CircularProgress,
 } from '@material-ui/core'
 import { useState, useCallback, useEffect } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -35,6 +38,8 @@ import type { RedPacketNftJSONPayload } from '../types'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket'
 import classNames from 'classnames'
+import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -57,6 +62,15 @@ const useStyles = makeStyles()((theme) => ({
         backgroundImage: `url(${new URL('./assets/background.png', import.meta.url)})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
+    },
+    loadingCard: {
+        width: '100%',
+        height: 360,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingCardImg: {
+        width: 200,
     },
     title: {
         textAlign: 'left',
@@ -114,8 +128,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         color: theme.palette.common.white,
         flexDirection: 'column',
-        justifyContent: 'space-between',
-        height: 136,
+        height: 360,
         boxSizing: 'border-box',
     },
     tokenWrapper: {
@@ -124,6 +137,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     tokenImgWrapper: {
+        position: 'relative',
         width: 120,
         height: 180,
         overflow: 'hidden',
@@ -188,6 +202,25 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         transform: 'translateY(1px)',
+    },
+    loadingTokenImg: {
+        opacity: 0.4,
+    },
+    tokenImgSpinner: {
+        position: 'absolute',
+        top: 65,
+        left: 40,
+        width: 30,
+        height: 30,
+    },
+    loadingText: {
+        textAlign: 'center',
+        fontSize: 24,
+    },
+    loadingWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 }))
 export interface RedPacketNftProps {
@@ -272,6 +305,31 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         availability?.claimed_id,
     )
 
+    const previewNftImg = new URL('./assets/nft-preview.png', import.meta.url).toString()
+
+    //#region on share
+    const postLink = usePostLink()
+    const networkType = useNetworkType()
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            availability?.isClaimed
+                ? t('plugin_red_packet_nft_share_claimed_message', {
+                      sender: payload.senderName,
+                      payload: postLink,
+                      network: resolveNetworkName(networkType),
+                  }).trim()
+                : t('plugin_red_packet_nft_share_foreshow_message', {
+                      sender: payload.senderName,
+                      payload: postLink,
+                      network: resolveNetworkName(networkType),
+                  }).trim(),
+        )
+        .toString()
+
+    const onShare = useCallback(() => {
+        if (shareLink) window.open(shareLink, '_blank', 'noopener noreferrer')
+    }, [shareLink])
+    //#endregion
     if (!availability || loading)
         return (
             <EthereumChainBoundary chainId={payload.chainId}>
@@ -280,22 +338,22 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         animation="wave"
                         variant="rectangular"
                         width="30%"
-                        height={12}
+                        height={18}
                         style={{ marginTop: 16 }}
                     />
                     <Skeleton
                         animation="wave"
                         variant="rectangular"
                         width="40%"
-                        height={12}
-                        style={{ marginTop: 16 }}
+                        height={18}
+                        style={{ marginTop: 24 }}
                     />
                     <Skeleton
                         animation="wave"
                         variant="rectangular"
                         width="70%"
-                        height={12}
-                        style={{ marginBottom: 16 }}
+                        height={18}
+                        style={{ marginTop: 24 }}
                     />
                 </Card>
             </EthereumChainBoundary>
@@ -320,8 +378,19 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
 
                     {availability.isClaimed ? (
                         <Box className={classes.tokenWrapper}>
-                            <div className={classes.tokenImgWrapper}>
-                                <img className={classes.tokenImg} src={erc721TokenDetailed?.info.image} />
+                            <div
+                                className={classNames(
+                                    classes.tokenImgWrapper,
+                                    erc721TokenDetailed?.info.image ? '' : classes.loadingTokenImg,
+                                )}>
+                                {erc721TokenDetailed?.info.image ? null : (
+                                    <CircularProgress className={classes.tokenImgSpinner} />
+                                )}
+
+                                <img
+                                    className={classes.tokenImg}
+                                    src={erc721TokenDetailed?.info.image ?? previewNftImg}
+                                />
                             </div>
                             <Typography className={classes.claimedText}>You got 1 {payload.contractName}</Typography>
                         </Box>
@@ -381,7 +450,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                             <Button
                                 className={classes.button}
                                 fullWidth
-                                onClick={() => {}}
+                                onClick={onShare}
                                 size="large"
                                 variant="contained">
                                 {t('share')}
