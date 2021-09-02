@@ -107,3 +107,8 @@ export function getNetworkTypeFromChainId(chainId: ChainId) {
     })
     return entry?.[0] as NetworkType | undefined
 }
+
+export function getChainFromChainId(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    return chainDetailed?.chain
+}

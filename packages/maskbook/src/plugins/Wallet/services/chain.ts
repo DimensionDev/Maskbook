@@ -10,8 +10,13 @@ import {
     currentChainIdSettings,
     currentProviderSettings,
 } from '../settings'
+import { getGasPriceDict } from '../apis/debank'
 
 const beats: true[] = []
+
+export function getGasPriceDictFromDeBank(chain: string) {
+    return getGasPriceDict(chain)
+}
 
 export async function kickToUpdateChainState() {
     beats.push(true)

@@ -1,17 +1,25 @@
 import { memo, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
-import { EthereumRpcType, formatWeiToEther, useNativeTokenDetailed } from '@masknet/web3-shared'
-import { Typography, Link, Button } from '@material-ui/core'
-import { useI18N } from '../../../../../utils'
+import {
+    EthereumRpcType,
+    formatWeiToEther,
+    getChainFromChainId,
+    NetworkType,
+    useChainId,
+    useNativeTokenDetailed,
+} from '@masknet/web3-shared'
+import { Button, Link, Typography } from '@material-ui/core'
+import { useI18N, useValueRef } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { LoadingButton } from '@material-ui/lab'
-import { useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
 import { FormattedCurrency, TokenIcon } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
+import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -95,7 +103,8 @@ const ContractInteraction = memo(() => {
     const { classes } = useStyles()
     const history = useHistory()
     const { value } = useUnconfirmedRequest()
-
+    const networkType = useValueRef(currentNetworkSettings)
+    const chainId = useChainId()
     const { typeName, spender, to, gasPrice, maxFeePerGas, maxPriorityFeePerGas, amount } = useMemo(() => {
         switch (value?.computedPayload?.type) {
             case EthereumRpcType.CONTRACT_INTERACTION:
@@ -177,9 +186,28 @@ const ContractInteraction = memo(() => {
         if (value) {
             await WalletRPC.deleteUnconfirmedRequest(value.payload)
             await Services.Ethereum.request(value.payload, { skipConfirmation: true })
-            window.close()
+            // TODO: control with search
+            // window.close()
         }
     }, [value])
+
+    const { value: defaultPrices } = useAsync(async () => {
+        if (networkType === NetworkType.Ethereum && !maxFeePerGas && !maxPriorityFeePerGas) {
+            const response = await WalletRPC.getEstimateGasFees(chainId)
+            return {
+                maxPriorityFeePerGas: response?.medium.suggestedMaxPriorityFeePerGas ?? 0,
+                maxFeePerGas: response?.medium.suggestedMaxFeePerGas ?? 0,
+            }
+        } else if (!gasPrice) {
+            const response = await WalletRPC.getGasPriceDictFromDeBank(
+                getChainFromChainId(chainId)?.toLowerCase() ?? '',
+            )
+            return {
+                gasPrice: response.data.normal.price,
+            }
+        }
+        return {}
+    }, [gasPrice, maxPriorityFeePerGas, maxFeePerGas, networkType, chainId])
 
     return (
         <main className={classes.container}>
@@ -206,14 +234,17 @@ const ContractInteraction = memo(() => {
                         <FormattedCurrency value={280} sign="$" />
                     </Typography>
                 </div>
-                {gasPrice ? (
+                {networkType !== NetworkType.Ethereum ? (
                     <div className={classes.item}>
                         <Typography className={classes.label}>
                             {t('popups_wallet_contract_interaction_gas_fee')}
                         </Typography>
                         <Typography className={classes.gasPrice}>
                             <span>
-                                {formatWeiToEther(gasPrice as number).toString()} {nativeToken?.symbol}
+                                {formatWeiToEther(
+                                    new BigNumber((gasPrice as string) ?? defaultPrices?.gasPrice ?? 0).toNumber(),
+                                ).toString(10)}
+                                {nativeToken?.symbol}
                             </span>
                             <Link
                                 component="button"
@@ -231,7 +262,11 @@ const ContractInteraction = memo(() => {
                             </Typography>
                             <Typography className={classes.gasPrice}>
                                 <span>
-                                    {formatWeiToEther(new BigNumber(maxPriorityFeePerGas ?? 0).toNumber()).toString()}{' '}
+                                    {formatWeiToEther(
+                                        new BigNumber(
+                                            maxPriorityFeePerGas ?? defaultPrices?.maxPriorityFeePerGas ?? 0,
+                                        ).toNumber(),
+                                    ).toString(10)}
                                     {nativeToken?.symbol}
                                 </span>
                             </Typography>
@@ -242,7 +277,9 @@ const ContractInteraction = memo(() => {
                             </Typography>
                             <Typography className={classes.gasPrice}>
                                 <span>
-                                    {formatWeiToEther(new BigNumber(maxFeePerGas ?? 0).toNumber()).toString()}{' '}
+                                    {formatWeiToEther(
+                                        new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0).toNumber(),
+                                    ).toString(10)}
                                     {nativeToken?.symbol}
                                 </span>
                                 <Link

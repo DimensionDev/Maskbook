@@ -147,9 +147,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
 
-    const { value: estimateGasFees } = useAsync(async () => {
-        return WalletRPC.getEstimateGasFees(chainId)
-    }, [chainId])
+    const { value: estimateGasFees } = useAsync(async () => WalletRPC.getEstimateGasFees(chainId), [chainId])
 
     const schema = useMemo(() => {
         return zod

@@ -8,9 +8,11 @@ import {
     EthereumTokenType,
     formatBalance,
     formatWeiToGwei,
+    getChainFromChainId,
     isGreaterThan,
     isZero,
     pow10,
+    useChainId,
     useGasLimit,
     useTokenTransferCallback,
     useWallet,
@@ -25,11 +27,11 @@ import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet
 import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
-import Services from '../../../../service'
 import { ExpandMore } from '@material-ui/icons'
 import { PopupRoutes } from '../../../index'
 import { useHistory } from 'react-router'
 import { LoadingButton } from '@material-ui/lab'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 
 const useStyles = makeStyles()({
     container: {
@@ -127,12 +129,11 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     const { t } = useI18N()
     const { classes } = useStyles()
     const wallet = useWallet()
+    const chainId = useChainId()
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const history = useHistory()
 
     const schema = useMemo(() => {
-        const gasPriceRule = zod.string().nonempty(t('wallet_transfer_error_gasPrice_absence'))
-
         return zod.object({
             address: zod
                 .string()
@@ -160,7 +161,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                     (gasLimit) => isGreaterThan(gasLimit, minGasLimitContext),
                     ` Gas limit must be at least ${minGasLimitContext}.`,
                 ),
-            gasPrice: gasPriceRule,
+            gasPrice: zod.string().min(1, t('wallet_transfer_error_gasPrice_absence')),
         })
     }, [selectedAsset, minGasLimitContext])
 
@@ -184,14 +185,13 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     //#region Set default gas price
     useAsync(async () => {
-        //TODO: replace to debank api
-        const gasNow = await Services.Settings.getGasNow()
+        const gasNow = await WalletRPC.getGasPriceDictFromDeBank(getChainFromChainId(chainId)?.toLowerCase() ?? '')
         const gasPrice = methods.getValues('gasPrice')
         if (gasNow && !gasPrice) {
-            const gasPrice = new BigNumber(gasNow.fast)
+            const gasPrice = new BigNumber(gasNow.data.fast.price)
             methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toString())
         }
-    }, [methods.setValue, methods.getValues])
+    }, [methods.setValue, methods.getValues, chainId])
     //#endregion
 
     //#region Get min gas limit with amount and recipient address
@@ -260,6 +260,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         <FormProvider {...methods}>
             <Prior1559TransferUI
                 accountName={wallet?.name ?? ''}
+                selectedAsset={selectedAsset}
                 openAccountMenu={openMenu}
                 openAssetMenu={openAssetMenu}
                 handleMaxClick={handleMaxClick}

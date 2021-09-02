@@ -10,7 +10,6 @@ import {
 } from '@masknet/web3-shared'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { isEqual } from 'lodash-es'
-import { connectGasNow } from './apis/gasnow'
 import { trackEtherPrice } from './apis/coingecko'
 import { startEffects } from '../../utils/side-effects'
 
@@ -126,11 +125,4 @@ export const currentEtherPriceSettings = createGlobalSettings<number>(`${PLUGIN_
 
 const effect = startEffects(import.meta.webpackHot)
 
-effect(() => {
-    try {
-        return connectGasNow()
-    } catch {
-        return () => {}
-    }
-})
 effect(() => trackEtherPrice())

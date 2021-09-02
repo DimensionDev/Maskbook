@@ -28,7 +28,6 @@ export default function Wallet() {
 
     const history = useHistory()
     const { value } = useUnconfirmedRequest()
-    console.log(value)
     useEffect(() => {
         if (value?.computedPayload) {
             switch (value.computedPayload.type) {
