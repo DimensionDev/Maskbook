@@ -128,6 +128,8 @@ const ShapeHelper = styled('div')(({ theme }) => ({
 
 const ContentContainer = styled('div')(({ theme }) => ({
     height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
 }))

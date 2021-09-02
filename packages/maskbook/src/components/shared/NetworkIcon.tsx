@@ -20,6 +20,7 @@ const icons: Record<NetworkType, string> = {
     [NetworkType.Binance]: new URL('../../resources/wallet-network-icon/binance.png', import.meta.url).toString(),
     [NetworkType.Polygon]: new URL('../../resources/wallet-network-icon/polygon.png', import.meta.url).toString(),
     [NetworkType.Arbitrum]: new URL('../../resources/wallet-network-icon/arbitrum.png', import.meta.url).toString(),
+    [NetworkType.xDai]: new URL('../../resources/wallet-network-icon/xdai.png', import.meta.url).toString(),
 }
 
 export function NetworkIcon(props: NetworkIconProps) {

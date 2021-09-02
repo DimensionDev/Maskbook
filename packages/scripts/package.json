@@ -12,13 +12,13 @@
     "lodash": "^4.17.21",
     "proper-lockfile": "^4.1.1",
     "rimraf": "^3.0.2",
-    "yargs": "^17.0.1"
+    "yargs": "^17.1.1"
   },
   "devDependencies": {
     "@types/gulp": "^4.0.9",
     "@types/inquirer": "^7.3.3",
-    "@types/lodash": "^4.14.171",
+    "@types/lodash": "^4.14.172",
     "@types/proper-lockfile": "^4.1.2",
-    "ts-node": "^10.2.0"
+    "ts-node": "^10.2.1"
   }
 }

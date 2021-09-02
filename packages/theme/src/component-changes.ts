@@ -180,6 +180,13 @@ export const Paper: Theme = (mode, colors) => ({
                         borderRadius: 12,
                     },
                 },
+                {
+                    props: { variant: 'rounded' },
+                    style: {
+                        borderRadius: 16,
+                        backgroundColor: colors.primaryBackground,
+                    },
+                },
             ],
         },
     },

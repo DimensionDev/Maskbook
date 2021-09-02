@@ -1,4 +1,3 @@
-import './extension/content-script/hmr'
 import Services from './extension/service'
 import './setup.ui'
 

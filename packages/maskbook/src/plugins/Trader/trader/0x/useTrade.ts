@@ -1,14 +1,13 @@
-import { getEnumAsArray } from '@dimensiondev/kit'
 import { NetworkType, FungibleTokenDetailed, isNative, useBlockNumber, useTokenConstants } from '@masknet/web3-shared'
-import { difference } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
+import { safeUnreachable } from '@dimensiondev/kit'
+import { useAccount } from '@masknet/web3-shared'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
-import { TradeStrategy, ZrxTradePool } from '../../types'
+import { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance'
 import { useTradeProviderSettings } from '../useTradeSettings'
 import { currentNetworkSettings } from '../../../Wallet/settings'
-import { safeUnreachable } from '@dimensiondev/kit'
 
 export function setTokenNativeNetwork(networkType: NetworkType) {
     switch (networkType) {
@@ -19,6 +18,8 @@ export function setTokenNativeNetwork(networkType: NetworkType) {
         case NetworkType.Polygon:
             return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Arbitrum:
+            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        case NetworkType.xDai:
             return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         default:
             safeUnreachable(networkType)
@@ -33,6 +34,7 @@ export function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
+    const account = useAccount()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const blockNumber = useBlockNumber()
 
@@ -54,19 +56,18 @@ export function useTrade(
             {
                 sellToken,
                 buyToken,
+                takerAddress: account,
                 sellAmount: isExactIn ? inputAmount : void 0,
                 buyAmount: isExactIn ? void 0 : outputAmount,
+                skipValidation: true,
                 slippagePercentage: slippage,
-                excludedSources: difference(
-                    getEnumAsArray(ZrxTradePool).map((x) => x.value),
-                    pools,
-                ),
                 affiliateAddress: ZRX_AFFILIATE_ADDRESS,
             },
             currentNetworkSettings.value,
         )
     }, [
         NATIVE_TOKEN_ADDRESS,
+        account,
         strategy,
         inputAmount,
         outputAmount,

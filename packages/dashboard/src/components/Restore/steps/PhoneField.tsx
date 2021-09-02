@@ -5,6 +5,7 @@ import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
 import { Button } from '@material-ui/core'
 import { Label, ValidationCodeStep } from './Commont'
 import type { StepCommonProps } from '../../Stepper'
+import { AccountType } from '../../../pages/Settings/type'
 
 export const PhoneField = memo(({ toStep }: StepCommonProps) => {
     const t = useDashboardI18N()
@@ -13,7 +14,7 @@ export const PhoneField = memo(({ toStep }: StepCommonProps) => {
     return (
         <>
             <PhoneNumberField
-                label={<Label onModeChange={() => toStep(ValidationCodeStep.EmailInput)} mode="phone" />}
+                label={<Label onModeChange={() => toStep(ValidationCodeStep.EmailInput)} mode={AccountType.phone} />}
                 onChange={({ country, phone }) => setAccount(country + phone)}
                 value={{
                     country: '+1',
@@ -24,7 +25,9 @@ export const PhoneField = memo(({ toStep }: StepCommonProps) => {
                 <Button
                     variant="rounded"
                     color="primary"
-                    onClick={() => toStep(ValidationCodeStep.AccountValidation, { account: account, type: 'phone' })}
+                    onClick={() =>
+                        toStep(ValidationCodeStep.AccountValidation, { account: account, type: AccountType.phone })
+                    }
                     disabled={!account}>
                     {t.next()}
                 </Button>

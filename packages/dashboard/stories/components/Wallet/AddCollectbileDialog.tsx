@@ -13,6 +13,5 @@ export const AddCollectibleDialog = of({
         address: '',
         onAddressChange: action('onAddressChange'),
         onSubmit: action('onSubmit'),
-        exclude: [],
     },
 })

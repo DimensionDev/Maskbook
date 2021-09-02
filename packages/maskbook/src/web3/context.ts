@@ -4,10 +4,10 @@ import { ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderType } from 
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
-    currentGasPriceSettings,
     currentBalanceSettings,
     currentNonceSettings,
     currentAccountSettings,
+    currentGasPriceSettings,
     currentNetworkSettings,
     currentProviderSettings,
     currentChainIdSettings,
@@ -33,9 +33,9 @@ export const Web3Context: Web3ProviderType = {
     chainId: createSubscriptionFromSettings(currentChainIdSettings),
     account: createSubscriptionFromSettings(currentAccountSettings),
     balance: createSubscriptionFromSettings(currentBalanceSettings),
+    gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
     blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
     nonce: createSubscriptionFromSettings(currentNonceSettings),
-    gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
     etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
     wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
     providerType: createSubscriptionFromSettings(currentProviderSettings),

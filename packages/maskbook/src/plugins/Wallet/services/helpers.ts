@@ -68,11 +68,15 @@ export function ERC20TokenRecordOutDB(x: ERC20TokenRecordInDatabase) {
     return record
 }
 
+export function getERC721TokenRecordIntoDBKey(address: string, tokenId: string) {
+    return `${formatEthereumAddress(address)}_${tokenId}`
+}
+
 export function ERC721TokenRecordIntoDB(x: ERC721TokenDetailed) {
     const record: ERC721TokenRecordInDatabase = {
         ...x,
         // NFT cannot be divided and store each token separately
-        record_id: `${formatEthereumAddress(x.contractDetailed.address)}_${x.tokenId}`,
+        record_id: getERC721TokenRecordIntoDBKey(x.contractDetailed.address, x.tokenId),
     }
     return record
 }

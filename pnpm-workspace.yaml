@@ -20,3 +20,4 @@ packages:
   - 'packages/plugins/example'
   - 'packages/plugins/Wallet'
   - 'packages/external-plugin-previewer'
+  - 'packages/backup-format'

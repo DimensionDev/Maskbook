@@ -2,6 +2,7 @@ import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
 import createEmotionCache, { EmotionCache } from '@emotion/cache'
 import { useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
+import { TssCacheProvider } from 'tss-react'
 
 class Informative {
     private callback = new Set<() => void>()
@@ -34,6 +35,7 @@ class EmotionInformativeSheetsRegistry {
 }
 
 const emotionRegistryMap = new WeakMap<ShadowRoot, EmotionInformativeSheetsRegistry>()
+const emotion2RegistryMap = new WeakMap<ShadowRoot, EmotionInformativeSheetsRegistry>()
 function createSubscription(registry: undefined | EmotionInformativeSheetsRegistry) {
     return {
         getCurrentValue: () => registry?.toString(),
@@ -55,7 +57,12 @@ export function useCurrentShadowRootStyles(ref: Node | null): string {
         const registry = emotionRegistryMap.get(root)
         return createSubscription(registry)
     }, [ref])
-    return [useSubscription(emotionSubscription)].filter(Boolean).join('\n')
+    const emotion2Subscription = useMemo(() => {
+        const root = ref?.getRootNode() as ShadowRoot
+        const registry = emotion2RegistryMap.get(root)
+        return createSubscription(registry)
+    }, [ref])
+    return [useSubscription(emotionSubscription), useSubscription(emotion2Subscription)].filter(Boolean).join('\n')
 }
 
 const initOnceMap = new WeakMap<ShadowRoot, unknown>()
@@ -78,25 +85,36 @@ export interface ShadowRootStyleProviderProps extends React.PropsWithChildren<{}
 /** @internal */
 export function ShadowRootStyleProvider(props: ShadowRootStyleProviderProps) {
     const { shadow, children } = props
-    const { emotionCache } = initOnce(shadow, () => init(props))
-    return <EmotionCacheProvider value={emotionCache}>{children}</EmotionCacheProvider>
+    const { muiEmotionCache, tssEmotionCache } = initOnce(shadow, () => init(props))
+    return (
+        <EmotionCacheProvider value={muiEmotionCache}>
+            <TssCacheProvider value={tssEmotionCache}>{children}</TssCacheProvider>
+        </EmotionCacheProvider>
+    )
 }
 function init({ shadow, onHeadCreate }: ShadowRootStyleProviderProps) {
     const head = shadow.appendChild(createElement('head', 'css-container'))
 
     onHeadCreate?.(head)
     //#region Emotion
-    const EmotionInsertionPoint = head.appendChild(createElement('div', 'emotion-area'))
+    const MuiInsertionPoint = head.appendChild(createElement('div', 'mui-area'))
+    const TSSInsertionPoint = head.appendChild(createElement('div', 'tss-area'))
     // emotion doesn't allow numbers appears in the key
     const instanceID = Math.random().toString(36).slice(2).replace(/\d/g, 'x')
-    const emotionCache = createEmotionCache({
-        container: EmotionInsertionPoint,
-        key: 'emo-' + instanceID,
+    const muiEmotionCache = createEmotionCache({
+        container: MuiInsertionPoint,
+        key: 'mui-' + instanceID,
         speedy: false,
         // TODO: support speedy mode which use insertRule
         // https://github.com/emotion-js/emotion/blob/master/packages/sheet/src/index.js
     })
-    emotionRegistryMap.set(shadow, new EmotionInformativeSheetsRegistry(emotionCache))
+    const tssEmotionCache = createEmotionCache({
+        container: TSSInsertionPoint,
+        key: 'tss-' + instanceID,
+        speedy: false,
+    })
+    emotionRegistryMap.set(shadow, new EmotionInformativeSheetsRegistry(muiEmotionCache))
+    emotion2RegistryMap.set(shadow, new EmotionInformativeSheetsRegistry(tssEmotionCache))
     //#endregion
-    return { emotionCache }
+    return { muiEmotionCache, tssEmotionCache }
 }
