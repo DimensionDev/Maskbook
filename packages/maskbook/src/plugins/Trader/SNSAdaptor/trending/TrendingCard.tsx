@@ -8,7 +8,7 @@ const useStyles = makeStyles()((theme) => {
     const isTwitter = isTwitterF(activatedSocialNetworkUI)
     return {
         root: {
-            width: 450,
+            maxWidth: 450,
             overflow: 'auto',
             '&::-webkit-scrollbar': {
                 display: 'none',
