@@ -22,11 +22,11 @@ export const Flags = {
     /** In E2E, prefer open shadow root so we can test it. */
     using_ShadowDOM_attach_mode: process.env.target === 'E2E' ? 'open' : 'closed',
     /** Don't inject injected script in this mode. Native side will do the job. */
-    support_native_injected_script_declaration: is_iOSApp,
+    support_declarative_user_script: is_iOSApp,
     /** Don't show welcome page in this mode. Native side will do the job. */
     has_native_welcome_ui: appOnly,
     /** Firefox has a special API that can inject to the document with a higher permission. */
-    requires_injected_script_run_directly: process.env.target === 'firefox',
+    has_firefox_xray_vision: process.env.target === 'firefox',
     support_eth_network_switch: betaOrInsiderOnly,
     //#region Experimental features
     image_payload_marked_as_beta: appOnly,

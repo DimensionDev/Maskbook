@@ -3,11 +3,6 @@
  * Mask SDK that provides the ability of interacting with Mask Network.
  */
 /**
- * Current Mask Network installed.
- * @public
- */
-export declare const version: string
-/**
  * Current Mask SDK version.
  * @public
  */

@@ -77,6 +77,7 @@ export interface MaskMessages extends SettingsEvents {
         requestID: string
         selectedPersona: PersonaIdentifier
     }
+    maskSDKHotModuleReload: void
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })
