@@ -21,40 +21,46 @@ import Services from '../extension/service'
 
 const Web3Provider = createExternalProvider()
 
-export const Web3Context: Web3ProviderType = {
-    provider: {
-        getCurrentValue: () => Web3Provider,
-        subscribe: () => noop,
-    },
-    allowTestnet: {
-        getCurrentValue: () => Flags.wallet_allow_testnet,
-        subscribe: () => noop,
-    },
-    chainId: createSubscriptionFromSettings(currentChainIdSettings),
-    account: createSubscriptionFromSettings(currentAccountSettings),
-    balance: createSubscriptionFromSettings(currentBalanceSettings),
-    gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
-    blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
-    nonce: createSubscriptionFromSettings(currentNonceSettings),
-    etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
-    wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
-    providerType: createSubscriptionFromSettings(currentProviderSettings),
-    networkType: createSubscriptionFromSettings(currentNetworkSettings),
-    erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
-    erc20TokensCount: createSubscriptionFromAsync(
-        WalletRPC.getERC20TokensCount,
-        0,
-        WalletMessages.events.erc20TokensUpdated.on,
-    ),
-    getERC20TokensPaged,
-    portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
-    getAssetList: WalletRPC.getAssetsList,
-    getAssetsListNFT: WalletRPC.getAssetsListNFT,
-    getERC721TokensPaged,
-    fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
-    getTransactionList: WalletRPC.getTransactionList,
-    createMnemonicWords: WalletRPC.createMnemonicWords,
+function createWeb3Context(disablePopup = false): Web3ProviderType {
+    const Web3ProviderWithoutConfirm = createExternalProvider(true)
+    return {
+        provider: {
+            getCurrentValue: () => (disablePopup ? Web3ProviderWithoutConfirm : Web3Provider),
+            subscribe: () => noop,
+        },
+        allowTestnet: {
+            getCurrentValue: () => Flags.wallet_allow_testnet,
+            subscribe: () => noop,
+        },
+        chainId: createSubscriptionFromSettings(currentChainIdSettings),
+        account: createSubscriptionFromSettings(currentAccountSettings),
+        balance: createSubscriptionFromSettings(currentBalanceSettings),
+        blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
+        nonce: createSubscriptionFromSettings(currentNonceSettings),
+        gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
+        etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
+        wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
+        providerType: createSubscriptionFromSettings(currentProviderSettings),
+        networkType: createSubscriptionFromSettings(currentNetworkSettings),
+        erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
+        erc20TokensCount: createSubscriptionFromAsync(
+            WalletRPC.getERC20TokensCount,
+            0,
+            WalletMessages.events.erc20TokensUpdated.on,
+        ),
+        getERC20TokensPaged,
+        portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
+        getAssetList: WalletRPC.getAssetsList,
+        getAssetsListNFT: WalletRPC.getAssetsListNFT,
+        getERC721TokensPaged,
+        fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+        getTransactionList: WalletRPC.getTransactionList,
+        createMnemonicWords: WalletRPC.createMnemonicWords,
+    }
 }
+
+export const Web3Context = createWeb3Context()
+export const Web3ContextWithoutConfirm = createWeb3Context(true)
 
 async function getWallets() {
     const raw = await WalletRPC.getWallets()

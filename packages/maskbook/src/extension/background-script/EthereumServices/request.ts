@@ -23,6 +23,31 @@ export async function request<T extends unknown>(requestArguments: RequestArgume
     })
 }
 
+export async function requestWithoutPopup<T extends unknown>(
+    requestArguments: RequestArguments,
+    overrides?: SendOverrides,
+) {
+    return new Promise<T>((resolve, reject) => {
+        id += 1
+        INTERNAL_send(
+            {
+                jsonrpc: '2.0',
+                id,
+                params: [],
+                ...requestArguments,
+            },
+            (error, response) => {
+                if (error || response?.error) reject(error ?? response?.error)
+                else resolve(response?.result)
+            },
+            {
+                ...overrides,
+                disablePopup: true,
+            },
+        )
+    })
+}
+
 export async function requestSend(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
@@ -34,5 +59,22 @@ export async function requestSend(
             id,
         },
         callback,
+    )
+}
+
+export async function requestSendWithoutPopup<T extends unknown>(
+    payload: JsonRpcPayload,
+    callback: (error: Error | null, response?: JsonRpcResponse) => void,
+) {
+    id += 1
+    await INTERNAL_send(
+        {
+            ...payload,
+            id,
+        },
+        callback,
+        {
+            disablePopup: true,
+        },
     )
 }

@@ -28,12 +28,16 @@ export default function Wallet() {
 
     const history = useHistory()
     const { value } = useUnconfirmedRequest()
-
+    console.log(value)
     useEffect(() => {
         if (value?.computedPayload) {
             switch (value.computedPayload.type) {
                 case EthereumRpcType.SIGN:
                     history.push(PopupRoutes.WalletSignRequest)
+                    break
+                case EthereumRpcType.CONTRACT_INTERACTION:
+                case EthereumRpcType.SEND_ETHER:
+                    history.push(PopupRoutes.ContractInteraction)
                     break
                 default:
                     break

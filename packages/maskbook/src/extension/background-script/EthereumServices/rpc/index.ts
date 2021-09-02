@@ -159,12 +159,15 @@ export async function getSendTransactionRpcComputed(
             return {
                 type: EthereumRpcType.SEND_ETHER,
                 _tx: tx,
+                //tx.to === account
             }
         } else {
             return {
                 type: EthereumRpcType.CONTRACT_INTERACTION,
                 name: 'Unknown',
                 _tx: tx,
+
+                //tx.to == token address
             }
         }
     }

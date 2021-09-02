@@ -7,7 +7,7 @@ import { createNormalReactRoot } from '../../utils'
 import '../../social-network-adaptor/browser-action'
 
 import { Web3Provider } from '@masknet/web3-shared'
-import { Web3Context } from '../../web3/context'
+import { Web3ContextWithoutConfirm } from '../../web3/context'
 import { PopupFrame } from './components/PopupFrame'
 
 const Wallet = lazy(() => import('./pages/Wallet'))
@@ -19,7 +19,7 @@ const SignRequest = lazy(() => import('./SignRequest'))
 
 function Dialogs() {
     return MaskUIRoot(
-        <Web3Provider value={Web3Context}>
+        <Web3Provider value={Web3ContextWithoutConfirm}>
             <HashRouter>
                 <Suspense fallback="">
                     <Switch>

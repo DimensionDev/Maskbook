@@ -213,6 +213,19 @@ export enum EthereumTokenType {
     ERC1155 = 3,
 }
 
+export type EIP1559GasConfig = {
+    gas: number
+    maxFeePerGas: number
+    maxPriorityFeePerGas: number
+}
+
+export type PriorEIP1559GasConfig = {
+    gas: number
+    gasPrice: number
+}
+
+export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
+
 // Learn more for a full list of supported JSON RPC methods
 // https://eth.wiki/json-rpc/API#json-rpc-methods
 export enum EthereumMethodType {

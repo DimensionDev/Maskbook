@@ -35,6 +35,7 @@ export interface SendOverrides {
     providerType?: ProviderType
     rpc?: string
     skipConfirmation?: boolean
+    disablePopup?: boolean
 }
 
 function parseGasPrice(price: string | undefined) {
@@ -80,6 +81,7 @@ export async function INTERNAL_send(
         providerType = currentProviderSettings.value,
         rpc,
         skipConfirmation = false,
+        disablePopup = false,
     }: SendOverrides = {},
 ) {
     if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
@@ -119,7 +121,8 @@ export async function INTERNAL_send(
             return
         }
 
-        openPopupsWindow()
+        if (!disablePopup) openPopupsWindow()
+        return
     }
 
     const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null
@@ -195,7 +198,7 @@ export async function INTERNAL_send(
         const isEIP1159Valid =
             parseGasPrice(config.maxFeePerGas as string) > 0 && parseGasPrice(config.maxPriorityFeePerGas as string) > 0
 
-        if (Flags.EIP1159_enabled && isEIP1159Supported(chainId) && !isGasPriceValid && !isEIP1159Valid) {
+        if (Flags.EIP1159_enabled && isEIP1159Supported(chainId) && isGasPriceValid && !isEIP1159Valid) {
             throw new Error('To be implemented.')
         } else {
             config.gasPrice = await getGasPrice()

@@ -67,17 +67,11 @@ export function TransferTab(props: TransferTabProps) {
 
     //#region transfer tokens
     const transferAmount = new BigNumber(amount || '0').multipliedBy(pow10(token.decimals))
-    const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
-        token.type,
-        token.address,
-        transferAmount.toFixed(),
-        address,
-        memo,
-    )
+    const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(token.type, token.address)
 
     const onTransfer = useCallback(async () => {
-        await transferCallback()
-    }, [transferCallback])
+        await transferCallback(transferAmount.toFixed(), address, undefined, memo)
+    }, [transferCallback, transferAmount, address, memo])
     //#endregion
 
     //#region remote controlled transaction dialog
