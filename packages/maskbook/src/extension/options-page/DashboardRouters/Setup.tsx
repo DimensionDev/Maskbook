@@ -81,7 +81,7 @@ const useSetupFormStyles = makeStyles()((theme) => ({
         },
     },
     form: {
-        width: 368,
+        minWidth: 368,
         minHeight: 200,
         [theme.breakpoints.down('sm')]: {
             width: '100%',
