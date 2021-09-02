@@ -13,11 +13,14 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
 import { Step, Stepper } from '../Stepper'
 import { LoadingCard } from './steps/LoadingCard'
+import { decryptBackup } from '@masknet/backup-format'
+import { decode, encode } from '@msgpack/msgpack'
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar()
+
     const [backupId, setBackupId] = useState('')
     const [step, setStep] = useState<{ name: string; params: any }>({ name: 'validate', params: null })
 
@@ -27,8 +30,13 @@ export const RestoreFromCloud = memo(() => {
     )
 
     const [{ loading: decryptingBackup }, decryptBackupFn] = useAsyncFn(
-        async (account: string, password: string, encryptedValue: string) => {
-            return Services.Crypto.decryptBackup('password', 'account', encryptedValue)
+        async (account: string, password: string, encryptedValue: ArrayBuffer) => {
+            try {
+                const decrypted = await decryptBackup(encode(account + password), encryptedValue)
+                return JSON.stringify(decode(decrypted))
+            } catch {
+                return null
+            }
         },
         [],
     )
@@ -39,19 +47,20 @@ export const RestoreFromCloud = memo(() => {
     }, [fetchBackupValueError])
 
     const onValidated = async (downloadLink: string, account: string, password: string) => {
-        try {
-            const backupValue = await fetchBackupValueFn(downloadLink)
-            const backupText = await decryptBackupFn(account, password, backupValue)
-            const backupInfo = await Services.Welcome.parseBackupStr(backupText)
+        const backupValue = await fetchBackupValueFn(downloadLink)
+        const backupText = await decryptBackupFn(account, password, backupValue)
 
-            if (backupInfo) {
-                setBackupId(backupInfo.id)
-                setStep({ name: 'restore', params: { backupJson: backupInfo.info } })
-            }
-            return null
-        } catch {
+        if (!backupText) {
             return t.sign_in_account_cloud_backup_decrypt_failed()
         }
+
+        const backupInfo = await Services.Welcome.parseBackupStr(backupText)
+
+        if (backupInfo) {
+            setBackupId(backupInfo.id)
+            setStep({ name: 'restore', params: { backupJson: backupInfo.info } })
+        }
+        return null
     }
 
     const onRestore = async () => {

@@ -120,7 +120,7 @@ export const verifyCode = ({ account, type, code }: VerifyCodeRequest) => {
 }
 
 export const fetchBackupValue = (downloadLink: string) => {
-    return fetchBase<string>(downloadLink, { method: 'GET' }, (res) => res.text())
+    return fetchBase<ArrayBuffer>(downloadLink, { method: 'GET' }, (res) => res.arrayBuffer())
 }
 
 export const uploadBackupValue = (uploadLink: string, content: ArrayBuffer) => {
