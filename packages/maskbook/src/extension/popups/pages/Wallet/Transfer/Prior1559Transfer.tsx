@@ -5,18 +5,20 @@ import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 import {
     Asset,
+    EthereumTokenType,
     formatBalance,
     formatWeiToGwei,
     isGreaterThan,
     isZero,
     pow10,
     useGasLimit,
+    useTokenTransferCallback,
     useWallet,
 } from '@masknet/web3-shared'
 import { Controller, useForm, useFormContext, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAsync, useUpdateEffect } from 'react-use'
-import { Box, Chip, Collapse, MenuItem, Typography } from '@material-ui/core'
+import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
+import { Box, Button, Chip, Collapse, MenuItem, Typography } from '@material-ui/core'
 import { StyledInput } from '../../../components/StyledInput'
 import { UserIcon } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
@@ -25,10 +27,14 @@ import { noop } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
 import Services from '../../../../service'
 import { ExpandMore } from '@material-ui/icons'
+import { PopupRoutes } from '../../../index'
+import { useHistory } from 'react-router'
+import { LoadingButton } from '@material-ui/lab'
 
 const useStyles = makeStyles()({
     container: {
         padding: 16,
+        flex: 1,
     },
     label: {
         color: '#1C68F3',
@@ -97,6 +103,18 @@ const useStyles = makeStyles()({
             lineHeight: '16px',
         },
     },
+    controller: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: 20,
+        padding: 16,
+    },
+    button: {
+        padding: '9px 0',
+        borderRadius: 20,
+        fontSize: 14,
+        lineHeight: '20px',
+    },
 })
 
 export interface Prior1559TransferProps {
@@ -110,6 +128,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     const { classes } = useStyles()
     const wallet = useWallet()
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
+    const history = useHistory()
 
     const schema = useMemo(() => {
         const gasPriceRule = zod.string().nonempty(t('wallet_transfer_error_gasPrice_absence'))
@@ -117,7 +136,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         return zod.object({
             address: zod
                 .string()
-                .nonempty(t('wallet_transfer_error_address_absence'))
+                .min(1, t('wallet_transfer_error_address_absence'))
                 .refine((address) => EthereumAddress.isValid(address), t('wallet_transfer_error_invalid_address'))
                 .refine((address) => address !== wallet?.address, t('wallet_transfer_error_address_absence')),
             amount: zod
@@ -136,7 +155,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 }, t('wallet_transfer_error_insufficent_balance', { token: selectedAsset?.token.symbol })),
             gasLimit: zod
                 .string()
-                .nonempty(t('wallet_transfer_error_gasLimit_absence'))
+                .min(1, t('wallet_transfer_error_gasLimit_absence'))
                 .refine(
                     (gasLimit) => isGreaterThan(gasLimit, minGasLimitContext),
                     ` Gas limit must be at least ${minGasLimitContext}.`,
@@ -193,9 +212,29 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     }, [minGasLimit, methods.setValue])
     //#endregion
 
+    const [_, transferCallback] = useTokenTransferCallback(
+        selectedAsset?.token.type ?? EthereumTokenType.Native,
+        selectedAsset?.token.address ?? '',
+    )
+
     const handleMaxClick = useCallback(() => {
         methods.setValue('amount', formatBalance(selectedAsset?.balance, selectedAsset?.token.decimals))
     }, [methods.setValue, selectedAsset])
+
+    const [{ loading }, onSubmit] = useAsyncFn(
+        async (data: zod.infer<typeof schema>) => {
+            const transferAmount = new BigNumber(data.amount || '0')
+                .multipliedBy(pow10(selectedAsset?.token.decimals || 0))
+                .toFixed()
+            await transferCallback(transferAmount, data.address, {
+                gasPrice: new BigNumber(data.gasPrice).toNumber(),
+                gas: new BigNumber(data.gasLimit).toNumber(),
+            })
+
+            history.replace(PopupRoutes.ContractInteraction)
+        },
+        [selectedAsset],
+    )
 
     const [menu, openMenu] = useMenu(
         <MenuItem className={classes.expand} key="expand">
@@ -224,6 +263,9 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 openAccountMenu={openMenu}
                 openAssetMenu={openAssetMenu}
                 handleMaxClick={handleMaxClick}
+                handleCancel={() => history.goBack()}
+                handleConfirm={methods.handleSubmit(onSubmit)}
+                confirmLoading={loading}
             />
             {otherWallets ? menu : null}
         </FormProvider>
@@ -236,6 +278,9 @@ export interface Prior1559TransferUIProps {
     openAssetMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
     handleMaxClick: () => void
     selectedAsset?: Asset
+    handleCancel: () => void
+    handleConfirm: () => void
+    confirmLoading: boolean
 }
 
 type TransferFormData = {
@@ -246,7 +291,17 @@ type TransferFormData = {
 }
 
 export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
-    ({ accountName, openAccountMenu, openAssetMenu, handleMaxClick, selectedAsset }) => {
+    ({
+        accountName,
+        openAccountMenu,
+        openAssetMenu,
+        handleMaxClick,
+        selectedAsset,
+        handleConfirm,
+        handleCancel,
+        confirmLoading,
+    }) => {
+        const { t } = useI18N()
         const { classes } = useStyles()
 
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
@@ -262,142 +317,160 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         } = useFormContext<TransferFormData>()
 
         return (
-            <div className={classes.container}>
-                <Typography className={classes.label}>Transfer Account</Typography>
-                <Typography className={classes.accountName}>{accountName}</Typography>
-                <Typography className={classes.label}>Receiving Account</Typography>
-                <Controller
-                    render={({ field }) => (
-                        <StyledInput
-                            {...field}
-                            error={!!errors.address?.message}
-                            helperText={errors.address?.message}
-                            InputProps={{
-                                endAdornment: (
-                                    <div onClick={openAccountMenu} style={{ marginLeft: 12 }}>
-                                        <UserIcon className={classes.user} />
-                                    </div>
-                                ),
-                            }}
-                        />
-                    )}
-                    name="address"
-                />
-                <Typography className={classes.label}>
-                    <span>Choose Token</span>
-                    <Typography className={classes.balance} component="span">
-                        Balance:
-                        <FormattedBalance
-                            value={selectedAsset?.balance}
-                            decimals={selectedAsset?.token?.decimals}
-                            symbol={selectedAsset?.token?.symbol}
-                            significant={6}
-                        />
-                    </Typography>
-                </Typography>
-                <Controller
-                    render={({ field }) => {
-                        return (
+            <>
+                <div className={classes.container}>
+                    <Typography className={classes.label}>Transfer Account</Typography>
+                    <Typography className={classes.accountName}>{accountName}</Typography>
+                    <Typography className={classes.label}>Receiving Account</Typography>
+                    <Controller
+                        render={({ field }) => (
                             <StyledInput
                                 {...field}
-                                type="text"
-                                onChange={(ev) => {
-                                    const amount_ = ev.currentTarget.value.replace(/,/g, '.')
-                                    if (RE_MATCH_FRACTION_AMOUNT.test(amount_)) {
-                                        ev.currentTarget.value = `0${amount_}`
-                                        field.onChange(ev)
-                                    } else if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) {
-                                        ev.currentTarget.value = amount_
-                                        field.onChange(ev)
-                                    }
-                                }}
-                                error={!!errors.amount?.message}
-                                helperText={errors.amount?.message}
+                                error={!!errors.address?.message}
+                                helperText={errors.address?.message}
                                 InputProps={{
-                                    autoComplete: 'off',
-                                    autoCorrect: 'off',
-                                    title: 'Token Amount',
-                                    inputMode: 'decimal',
-                                    spellCheck: false,
                                     endAdornment: (
-                                        <Box display="flex" alignItems="center">
-                                            <Chip
-                                                size="small"
-                                                label="MAX"
-                                                clickable
-                                                color="primary"
-                                                classes={{ root: classes.max, label: classes.maxLabel }}
-                                                onClick={handleMaxClick}
-                                            />
-                                            <Chip
-                                                className={classes.chip}
-                                                onClick={openAssetMenu}
-                                                icon={
-                                                    <TokenIcon
-                                                        classes={{ icon: classes.icon }}
-                                                        address={selectedAsset?.token.address ?? ''}
-                                                        name={selectedAsset?.token.name}
-                                                        logoURI={selectedAsset?.token.logoURI}
-                                                    />
-                                                }
-                                                deleteIcon={<ChevronDown className={classes.icon} />}
-                                                color="default"
-                                                size="small"
-                                                variant="outlined"
-                                                clickable
-                                                label={selectedAsset?.token.symbol}
-                                                onDelete={noop}
-                                            />
-                                        </Box>
+                                        <div onClick={openAccountMenu} style={{ marginLeft: 12 }}>
+                                            <UserIcon className={classes.user} />
+                                        </div>
                                     ),
                                 }}
-                                inputProps={{
-                                    pattern: '^[0-9]*[.,]?[0-9]*$',
-                                    min: 0,
-                                    minLength: 1,
-                                    maxLength: 79,
-                                }}
                             />
-                        )
-                    }}
-                    name="amount"
-                />
+                        )}
+                        name="address"
+                    />
+                    <Typography className={classes.label}>
+                        <span>Choose Token</span>
+                        <Typography className={classes.balance} component="span">
+                            Balance:
+                            <FormattedBalance
+                                value={selectedAsset?.balance}
+                                decimals={selectedAsset?.token?.decimals}
+                                symbol={selectedAsset?.token?.symbol}
+                                significant={6}
+                            />
+                        </Typography>
+                    </Typography>
+                    <Controller
+                        render={({ field }) => {
+                            return (
+                                <StyledInput
+                                    {...field}
+                                    type="text"
+                                    onChange={(ev) => {
+                                        const amount_ = ev.currentTarget.value.replace(/,/g, '.')
+                                        if (RE_MATCH_FRACTION_AMOUNT.test(amount_)) {
+                                            ev.currentTarget.value = `0${amount_}`
+                                            field.onChange(ev)
+                                        } else if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) {
+                                            ev.currentTarget.value = amount_
+                                            field.onChange(ev)
+                                        }
+                                    }}
+                                    error={!!errors.amount?.message}
+                                    helperText={errors.amount?.message}
+                                    InputProps={{
+                                        autoComplete: 'off',
+                                        autoCorrect: 'off',
+                                        title: 'Token Amount',
+                                        inputMode: 'decimal',
+                                        spellCheck: false,
+                                        endAdornment: (
+                                            <Box display="flex" alignItems="center">
+                                                <Chip
+                                                    size="small"
+                                                    label="MAX"
+                                                    clickable
+                                                    color="primary"
+                                                    classes={{ root: classes.max, label: classes.maxLabel }}
+                                                    onClick={handleMaxClick}
+                                                />
+                                                <Chip
+                                                    className={classes.chip}
+                                                    onClick={openAssetMenu}
+                                                    icon={
+                                                        <TokenIcon
+                                                            classes={{ icon: classes.icon }}
+                                                            address={selectedAsset?.token.address ?? ''}
+                                                            name={selectedAsset?.token.name}
+                                                            logoURI={selectedAsset?.token.logoURI}
+                                                        />
+                                                    }
+                                                    deleteIcon={<ChevronDown className={classes.icon} />}
+                                                    color="default"
+                                                    size="small"
+                                                    variant="outlined"
+                                                    clickable
+                                                    label={selectedAsset?.token.symbol}
+                                                    onDelete={noop}
+                                                />
+                                            </Box>
+                                        ),
+                                    }}
+                                    inputProps={{
+                                        pattern: '^[0-9]*[.,]?[0-9]*$',
+                                        min: 0,
+                                        minLength: 1,
+                                        maxLength: 79,
+                                    }}
+                                />
+                            )
+                        }}
+                        name="amount"
+                    />
 
-                <div className={classes.gasInput}>
-                    <div>
-                        <Typography className={classes.label}>Gas Price</Typography>
-                        <Controller
-                            render={({ field }) => (
-                                <StyledInput
-                                    {...field}
-                                    error={!!errors.gasPrice?.message}
-                                    helperText={errors.gasPrice?.message}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
-                                    }}
-                                />
-                            )}
-                            name="gasPrice"
-                        />
-                    </div>
-                    <div>
-                        <Typography className={classes.label}>Gas limit</Typography>
-                        <Controller
-                            render={({ field }) => (
-                                <StyledInput
-                                    {...field}
-                                    error={!!errors.gasLimit?.message}
-                                    helperText={errors.gasLimit?.message}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
-                                    }}
-                                />
-                            )}
-                            name="gasLimit"
-                        />
+                    <div className={classes.gasInput}>
+                        <div>
+                            <Typography className={classes.label}>Gas Price</Typography>
+                            <Controller
+                                render={({ field }) => (
+                                    <StyledInput
+                                        {...field}
+                                        error={!!errors.gasPrice?.message}
+                                        helperText={errors.gasPrice?.message}
+                                        inputProps={{
+                                            pattern: '^[0-9]*[.,]?[0-9]*$',
+                                        }}
+                                    />
+                                )}
+                                name="gasPrice"
+                            />
+                        </div>
+                        <div>
+                            <Typography className={classes.label}>Gas limit</Typography>
+                            <Controller
+                                render={({ field }) => (
+                                    <StyledInput
+                                        {...field}
+                                        error={!!errors.gasLimit?.message}
+                                        helperText={errors.gasLimit?.message}
+                                        inputProps={{
+                                            pattern: '^[0-9]*[.,]?[0-9]*$',
+                                        }}
+                                    />
+                                )}
+                                name="gasLimit"
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div className={classes.controller}>
+                    <Button
+                        variant="contained"
+                        className={classes.button}
+                        style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
+                        onClick={handleCancel}>
+                        {t('cancel')}
+                    </Button>
+                    <LoadingButton
+                        loading={confirmLoading}
+                        variant="contained"
+                        className={classes.button}
+                        onClick={handleConfirm}>
+                        {t('confirm')}
+                    </LoadingButton>
+                </div>
+            </>
         )
     },
 )

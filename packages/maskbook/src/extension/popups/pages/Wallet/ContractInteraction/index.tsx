@@ -184,10 +184,10 @@ const ContractInteraction = memo(() => {
     return (
         <main className={classes.container}>
             <div className={classes.info}>
-                <Typography className={classes.title}>
-                    {spender ? t('popups_wallet_contract_interaction_approve') : t('wallet_transfer_send')}
+                <Typography className={classes.title}>{typeName}</Typography>
+                <Typography className={classes.spender} style={{ wordBreak: 'break-all' }}>
+                    {spender}
                 </Typography>
-                <Typography className={classes.spender}>{spender}</Typography>
                 <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
                     {to}
                 </Typography>

@@ -31,7 +31,6 @@ import { ExpandMore } from '@material-ui/icons'
 import { useHistory } from 'react-router'
 import { LoadingButton } from '@material-ui/lab'
 import { PopupRoutes } from '../../../index'
-import { delay } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     container: {
@@ -292,14 +291,12 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             const transferAmount = new BigNumber(data.amount || '0')
                 .multipliedBy(pow10(selectedAsset?.token.decimals || 0))
                 .toFixed()
-            transferCallback(transferAmount, data.address, {
+            await transferCallback(transferAmount, data.address, {
                 maxFeePerGas: new BigNumber(data.maxFeePerGas).toNumber(),
                 maxPriorityFeePerGas: new BigNumber(data.maxPriorityFeePerGas).toNumber(),
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
 
-            // 我想不出更好的办法了 T T
-            await delay(1000)
             history.replace(PopupRoutes.ContractInteraction)
         },
         [selectedAsset],
