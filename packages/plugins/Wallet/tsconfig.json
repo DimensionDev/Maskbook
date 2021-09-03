@@ -3,19 +3,14 @@
   "compilerOptions": {
     "rootDir": "./src/",
     "outDir": "./dist/",
-    "stripInternal": true,
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "resolveJsonModule": true
   },
-  "include": ["./src/**/*", "./src/**/*.json"],
+  "include": ["./src", "./src/**/*.json"],
   "references": [
     { "path": "../../plugin-infra" },
     { "path": "../../web3-shared" },
     { "path": "../../shared" },
     { "path": "../../theme" }
-  ],
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": { "module": "CommonJS" }
-  }
+  ]
 }

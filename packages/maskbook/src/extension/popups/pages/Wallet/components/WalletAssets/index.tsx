@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { Button, Tab, Tabs, experimentalStyled as styled, tabClasses, tabsClasses } from '@material-ui/core'
+import { Button, Tab, Tabs, styled, tabClasses, tabsClasses } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { WalletHeader } from '../WalletHeader'
 import { WalletInfo } from '../WalletInfo'

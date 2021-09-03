@@ -55,7 +55,6 @@ const useStyles = makeStyles()((theme) => ({
         '& .MuiSlider-thumb': {
             width: 28,
             height: 28,
-            marginTop: -12,
             background: theme.palette.mode === 'dark' ? '#fff' : '2CA4EF, 100%',
         },
         '& .MuiSlider-rail': {

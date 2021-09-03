@@ -8,7 +8,7 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[]) {
     const balance = useBalance()
     const chainDetailed = useChainDetailed()
 
-    const chain = chainDetailed?.chain.toLowerCase() ?? 'unknown'
+    const chain = chainDetailed?.shortName.toLowerCase() ?? 'unknown'
     const nativeToken = first(tokens.filter((x) => x.type === EthereumTokenType.Native))
     const erc20Tokens = tokens.filter((x) => x.type === EthereumTokenType.ERC20)
 

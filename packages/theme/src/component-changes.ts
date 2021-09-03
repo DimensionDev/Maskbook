@@ -180,8 +180,35 @@ export const Paper: Theme = (mode, colors) => ({
                         borderRadius: 12,
                     },
                 },
+                {
+                    props: { variant: 'rounded' },
+                    style: {
+                        borderRadius: 16,
+                        backgroundColor: colors.primaryBackground,
+                    },
+                },
             ],
         },
+    },
+})
+
+export const Tabs: Theme = () => ({
+    components: {
+        MuiTab: {
+            styleOverrides: {
+                root: {
+                    // up-sm
+                    '@media screen and (min-width: 600px)': {
+                        minWidth: 160,
+                    },
+                },
+            },
+        },
+    },
+})
+export const Link: Theme = () => ({
+    components: {
+        MuiLink: { defaultProps: { underline: 'hover' } },
     },
 })
 

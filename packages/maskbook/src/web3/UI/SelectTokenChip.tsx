@@ -22,6 +22,10 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.text.primary,
             pointerEvents: 'none',
         },
+        tokenIcon: {
+            width: 16,
+            height: 16,
+        },
     }
 })
 
@@ -76,7 +80,14 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
     return (
         <Chip
             className={classes.chip}
-            icon={<TokenIcon address={token.address} name={token.name} logoURI={token.logoURI} />}
+            icon={
+                <TokenIcon
+                    classes={{ icon: classes.tokenIcon }}
+                    address={token.address}
+                    name={token.name}
+                    logoURI={token.logoURI}
+                />
+            }
             deleteIcon={readonly ? undefined : <ExpandMoreIcon className={classes.icon} />}
             color="default"
             size="small"

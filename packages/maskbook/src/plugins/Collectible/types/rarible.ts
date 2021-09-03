@@ -1,13 +1,8 @@
 import type { WyvernSchemaName } from 'opensea-js/lib/types'
 
 export interface RaribleTransferItem {
-    date: string
-    owner: string
-    from: string
-    token: string
-    tokenId: string
-    value: number
     type: string
+    from: string
 }
 
 export interface Royalty {
@@ -57,42 +52,62 @@ export interface Ownership {
     likes: number
 }
 
-export interface RaribleNFTItemMapResponse {
-    item: {
-        id: string
-        token: string
-        tokenId: string
-        unlockable: boolean
-        creator: string
-        blacklisted: boolean
-        supply: number
-        royalties: Royalty[]
-        likes: number
-        categories: string[]
-        verified: boolean
-        owners: string[]
-        sellers: number
-        ownership: Ownership
-        totalStock: number
-        offer?: RaribleOfferResponse
-    }
-    properties: {
+export interface Creator {
+    account: string
+    value: number
+}
+
+export interface Meta {
+    name: string
+    description: string
+    attributes: {
+        key: string
+        value: string
+    }[]
+    image: {
+        meta: {
+            PREVIEW: {
+                type: string
+                width: number
+                height: number
+            }
+        }
+        url: {
+            BIG: string
+            ORIGINAL: string
+            PREVIEW: string
+        }
         name: string
-        description: string
-        image: string
-        imagePreview?: string
-        imageBig: string
-        animationUrl?: string
-        attributes: Attribute[]
     }
-    meta: {
-        imageMeta: {
-            type: string
-            width: number
-            height: number
+    animation?: {
+        meta: {
+            PREVIEW: {
+                type: string
+                width: number
+                height: number
+            }
+        }
+        url: {
+            BIG: string
+            ORIGINAL: string
+            PREVIEW: string
         }
     }
+}
+
+export interface RaribleNFTItemMapResponse {
+    contract: string
+    creators: Creator[]
+    date: string
+    deleted: boolean
     id: string
+    lazySupply: string
+    meta: Meta
+    owners: string[]
+    royalties: Royalty[]
+    pending: RaribleTransferItem[]
+    supply: string
+    tokenId: string
 }
 
 export interface RaribleNFTOwnershipResponse extends RaribleNFTItemMapResponse {

@@ -1,6 +1,7 @@
 import yargs, { Argv } from 'yargs'
+const { hideBin } = require('yargs/helpers')
 export function getArgv<T>() {
-    return (yargs(process.argv) as Argv<Partial<T>>).argv
+    return (yargs(hideBin(process.argv)) as Argv<Partial<T>>).argv
 }
 
 export function isWatch() {

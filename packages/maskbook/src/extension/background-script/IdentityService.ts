@@ -1,5 +1,15 @@
 import * as bip39 from 'bip39'
-import { personaRecordToPersona, queryPersona, queryProfile, queryProfilesWithQuery, storeAvatar } from '../../database'
+import { encode } from '@msgpack/msgpack'
+import { blobToArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
+import {
+    personaRecordToPersona,
+    queryAvatarDataURL,
+    queryPersona,
+    queryPersonaRecord,
+    queryProfile,
+    queryProfilesWithQuery,
+    storeAvatar,
+} from '../../database'
 import {
     ECKeyIdentifier,
     ECKeyIdentifierFromJsonWebKey,
@@ -13,12 +23,16 @@ import {
     consistentPersonaDBWriteAccess,
     createOrUpdateProfileDB,
     createProfileDB,
+    createRelationDB,
     deleteProfileDB,
     LinkedProfileDetails,
     ProfileRecord,
     queryPersonaDB,
     queryPersonasDB,
     queryProfilesDB,
+    queryRelationsPagedDB,
+    RelationRecord,
+    updateRelationDB,
 } from '../../database/Persona/Persona.db'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
@@ -27,8 +41,10 @@ import { decodeArrayBuffer, decodeText } from '../../utils/type-transform/String
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import type { PersonaInformation, ProfileInformation } from '@masknet/shared'
+import type { EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared'
+import { getCurrentPersonaIdentifier } from './SettingsService'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import { MaskMessage } from '../../utils'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -40,6 +56,10 @@ export { queryProfile, queryProfilePaged } from '../../database'
 
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)
+}
+
+export function queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]) {
+    return queryProfilesWithQuery((record) => identifiers.some((x) => record.identifier.equals(x)))
 }
 export async function queryMyProfiles(network?: string): Promise<Profile[]> {
     const myPersonas = (await queryMyPersonas(network)).filter((x) => !x.uninitialized)
@@ -108,6 +128,12 @@ export function queryMyPersonas(network?: string): Promise<Persona[]> {
             : x,
     )
 }
+export async function backupPersonaPrivateKey(
+    identifier: PersonaIdentifier,
+): Promise<EC_Private_JsonWebKey | undefined> {
+    const x = await queryPersonaDB(identifier)
+    return x?.privateKey
+}
 
 export async function queryOwnedPersonaInformation(): Promise<PersonaInformation[]> {
     const personas = await queryPersonas(undefined, true)
@@ -173,6 +199,39 @@ export async function attachProfile(
 export { detachProfileDB as detachProfile } from '../../database/Persona/Persona.db'
 //#endregion
 
+//#region Relation
+export async function createNewRelation(profile: ProfileIdentifier, linked: PersonaIdentifier) {
+    await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked, favor: 0 }, t))
+}
+
+export async function queryRelationPaged(
+    options: {
+        network: string
+        after?: RelationRecord
+    },
+    count: number,
+): Promise<RelationRecord[]> {
+    const currentPersona = await getCurrentPersonaIdentifier()
+    if (currentPersona) {
+        return queryRelationsPagedDB(currentPersona, options, count)
+    }
+
+    return []
+}
+
+export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: 0 | 1) {
+    await consistentPersonaDBWriteAccess((t) =>
+        updateRelationDB(
+            {
+                profile,
+                linked,
+                favor,
+            },
+            t,
+        ),
+    )
+}
+//#endregion
 /**
  * In older version of Mask, identity is marked as `ProfileIdentifier(network, '$unknown')` or `ProfileIdentifier(network, '$self')`. After upgrading to the newer version of Mask, Mask will try to find the current user in that network and call this function to replace old identifier into a "resolved" identity.
  * @param identifier The resolved identity
@@ -197,5 +256,38 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
         // the profile already exists
     }
 }
+//#endregion
+
+//#region avatar
+export const updateCurrentPersonaAvatar = async (avatar: Blob) => {
+    const identifier = await getCurrentPersonaIdentifier()
+
+    if (identifier) {
+        await storeAvatar(identifier, await blobToArrayBuffer(avatar))
+        MaskMessage.events.personaAvatarChanged.sendToAll({ reason: 'update', of: identifier?.toText() })
+    }
+}
+
+export const getCurrentPersonaAvatar = async () => {
+    const identifier = await getCurrentPersonaIdentifier()
+    if (!identifier) return null
+
+    try {
+        return await queryAvatarDataURL(identifier)
+    } catch {
+        return null
+    }
+}
+//#endregion
+
+//#region Export & Import Private key
+export async function exportPersonaPrivateKey(identifier: PersonaIdentifier) {
+    const profile = await queryPersonaRecord(identifier)
+    if (!profile?.privateKey) return ''
+
+    const encodePrivateKey = encode(profile.privateKey)
+    return encodeArrayBuffer(encodePrivateKey)
+}
+//#endregion
 
 export * from './IdentityServices/sign'

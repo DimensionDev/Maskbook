@@ -7,4 +7,5 @@ export const networkNames: Record<NetworkType, string> = {
     [NetworkType.Binance]: 'bsc-mainnet',
     [NetworkType.Polygon]: 'matic',
     [NetworkType.Arbitrum]: 'arbitrum',
+    [NetworkType.xDai]: 'xdai',
 }

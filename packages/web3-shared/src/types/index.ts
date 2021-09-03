@@ -32,6 +32,9 @@ export enum ChainId {
     // Arbitrum
     Arbitrum = 42161,
     Arbitrum_Rinkeby = 421611,
+
+    // xDai
+    xDai = 100,
 }
 
 export enum ProviderType {
@@ -47,6 +50,7 @@ export enum NetworkType {
     Binance = 'Binance',
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
+    xDai = 'xDai',
 }
 
 export interface Wallet {
@@ -220,6 +224,7 @@ export enum EthereumMethodType {
     PERSONAL_SIGN = 'personal_sign',
     WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
+    ETH_ACCOUNTS = 'eth_accounts',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_GET_CODE = 'eth_getCode',
@@ -435,6 +440,11 @@ export interface Asset {
         [key in CurrencyType]: string
     }
     logoURI?: string
+}
+
+export enum DomainProvider {
+    ENS = 'ENS',
+    UNS = 'UNS',
 }
 
 export enum PortfolioProvider {

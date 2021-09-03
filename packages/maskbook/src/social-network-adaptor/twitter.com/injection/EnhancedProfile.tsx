@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { useState } from 'react'
-import { EnhancedProfileaPage } from '../../../components/InjectedComponents/EnhancedProfile'
+import { EnhancedProfilePage } from '../../../components/InjectedComponents/EnhancedProfile'
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
     searchNewTweetButtonSelector,
@@ -71,7 +71,7 @@ export function EnhancedProfileaPageAtTwitter() {
         setTwitterId(getTwitterId())
     }
     return (
-        <EnhancedProfileaPage
+        <EnhancedProfilePage
             classes={classes}
             bioDescription={bio}
             nickname={nickname}

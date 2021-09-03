@@ -6,7 +6,6 @@ import { ChainId, getChainName } from '@masknet/web3-shared'
 import { request, requestSend } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaRinkebyBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
-import { Flags } from '../../../utils/flags'
 import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../types'
 import { OpenSeaEventHistoryQuery } from '../queries/OpenSea'
 import { currentChainIdSettings } from '../../Wallet/settings'
@@ -47,7 +46,6 @@ export async function getAsset(tokenAddress: string, tokenId: string) {
     const sdkResponse = await (await createOpenSeaPort()).api.getAsset({ tokenAddress, tokenId })
     const fetchResponse = await (
         await fetch(urlcat(await createOpenSeaAPI(), '/asset/:tokenAddress/:tokenId', { tokenAddress, tokenId }), {
-            cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : undefined,
             mode: 'cors',
             headers: {
                 'x-api-key': OpenSeaAPI_Key,
@@ -90,7 +88,6 @@ export async function getEvents(asset_contract_address: string, token_id: string
         },
     }
     const response = await fetch(OpenSeaGraphQLURL, {
-        cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : undefined,
         method: 'POST',
         body: stringify(query),
     })

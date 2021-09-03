@@ -19,7 +19,9 @@ const querySelectorAll = <T extends E>(selector: string) => {
 export const searchProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]')
 export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[aria-label][role="navigation"]  [role="tablist"][data-testid="ScrollSnap-List"] > :last-child')
+    querySelector<E>(
+        '[data-testid="primaryColumn"] > div > :nth-child(2) > div > div > :nth-child(2) > div > :last-child',
+    )
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [role="region"] [aria-label]')
 export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>

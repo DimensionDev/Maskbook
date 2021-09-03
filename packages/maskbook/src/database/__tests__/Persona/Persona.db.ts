@@ -65,7 +65,7 @@ export async function createProfileRecord(
 }
 
 export async function personaDBWriteAccess(action: (t: FullPersonaDBTransaction<'readwrite'>) => Promise<void>) {
-    await action(createTransaction(await createPersonaDBAccess(), 'readwrite')('profiles', 'personas'))
+    await action(createTransaction(await createPersonaDBAccess(), 'readwrite')('profiles', 'personas', 'relations'))
 }
 
 beforeAll(() => {

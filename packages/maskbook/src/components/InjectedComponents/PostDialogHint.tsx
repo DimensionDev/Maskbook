@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const { classes } = useStyles()
     return (
-        <IconButton className={classes.button} onClick={props.onHintButtonClicked}>
+        <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
             <MaskbookSharpIcon color="primary" />
         </IconButton>
     )

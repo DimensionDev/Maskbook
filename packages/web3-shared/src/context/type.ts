@@ -30,7 +30,7 @@ export interface Web3ProviderType {
     erc20Tokens: Subscription<ERC20TokenDetailed[]>
     getERC20TokensPaged: (index: number, count: number, query?: string) => Promise<ERC20TokenDetailed[]>
     portfolioProvider: Subscription<PortfolioProvider>
-    getAssetList: (address: string, network: NetworkType, provider: PortfolioProvider) => Promise<Asset[]>
+    getAssetsList: (address: string, network: NetworkType, provider: PortfolioProvider) => Promise<Asset[]>
     getAssetsListNFT: (
         address: string,
         chainId: ChainId,

@@ -10,7 +10,8 @@
         "Matic": "",
         "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     },
     "GET_SINGLE_ASSET_URL": {
         "Mainnet": "https://api.opensea.io/api/v1/asset",
@@ -23,7 +24,8 @@
         "Matic": "",
         "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     },
     "GET_ASSETS_URL": {
         "Mainnet": "https://api.opensea.io/api/v1/assets",
@@ -36,6 +38,7 @@
         "Matic": "",
         "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     }
 }

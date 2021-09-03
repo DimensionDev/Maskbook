@@ -125,6 +125,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                 variant="standard"
                 MenuProps={{
                     container,
+                    anchorOrigin: { horizontal: 'left', vertical: 'bottom' },
                     classes: { paper: classes.menuPaper },
                 }}
                 value={defaultIndex}
@@ -162,7 +163,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                             />
                         </FormControl>
                     ))}
-                    <IconButton onClick={addNewOption} classes={{ root: classes.addButton }}>
+                    <IconButton size="large" onClick={addNewOption} classes={{ root: classes.addButton }}>
                         <AddIcon color="primary" />
                     </IconButton>
                 </div>

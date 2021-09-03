@@ -5,6 +5,7 @@ packages:
   - 'packages/scripts'
   - 'packages/dashboard'
   - 'packages/maskbook'
+  - 'packages/injected-script'
   - 'packages/public-api'
   - 'packages/shared-base'
   - 'packages/shared'
@@ -18,3 +19,4 @@ packages:
   - 'packages/plugins/example'
   - 'packages/plugins/Wallet'
   - 'packages/external-plugin-previewer'
+  - 'packages/backup-format'

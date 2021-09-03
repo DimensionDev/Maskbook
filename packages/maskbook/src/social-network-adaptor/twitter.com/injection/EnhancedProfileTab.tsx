@@ -38,22 +38,24 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         height: props.height,
     },
     button: {
+        zIndex: 1,
+        position: 'relative',
         display: 'flex',
         minWidth: 56,
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
         padding: props.padding,
-        fontWeight: 700,
         color: props.color,
         font: props.font,
         fontSize: props.fontSize,
         '&:hover': {
-            color: props.hover,
+            color: props.color,
         },
     },
     selected: {
-        color: props.hover,
+        color: `${props.hover} !important`,
+        fontWeight: 700,
     },
     line: {
         dispaly: 'inline-flex',
@@ -83,8 +85,10 @@ function clear() {
 
     const eleEmpty = searchProfileEmptySelector().evaluate()
     if (eleEmpty) eleEmpty.style.display = 'none'
+
+    // set display: none will change the height of the original element
     const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) elePage.style.display = 'none'
+    if (elePage) elePage.style.visibility = 'hidden'
 }
 
 function reset() {

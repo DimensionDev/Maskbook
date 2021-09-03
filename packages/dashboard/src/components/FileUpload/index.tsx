@@ -37,9 +37,10 @@ export interface FileUploadProps {
     height?: number
     readAsText?: boolean
     onChange: (file: File, content?: string) => void
+    accept?: string
 }
 
-export default function FileUpload({ width, height, readAsText, onChange }: FileUploadProps) {
+export default function FileUpload({ width, height, readAsText, onChange, accept }: FileUploadProps) {
     const { classes } = useStyles()
     const [file, setFile] = useState<File | null>()
 
@@ -64,7 +65,7 @@ export default function FileUpload({ width, height, readAsText, onChange }: File
                 <FileIcon />
                 <Typography className={classes.text}>Please click or drag the file to here</Typography>
             </div>
-            <input type="file" className={classes.file} onChange={handleChange} />
+            <input type="file" className={classes.file} accept={accept} onChange={handleChange} />
         </Card>
     )
 }

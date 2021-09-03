@@ -11,11 +11,18 @@
       "import": "./dist/components.js"
     }
   },
+  "typesVersions": {
+    "*": {
+      "components": [
+        "./dist/components.d.ts"
+      ]
+    }
+  },
   "dependencies": {
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared": "workspace:*",
-    "react-use": "^17.2.4"
+    "react-use": "^17.3.1"
   }
 }

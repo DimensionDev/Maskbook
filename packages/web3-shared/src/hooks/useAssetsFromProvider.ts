@@ -6,7 +6,7 @@ import { useNetworkType } from './useNetworkType'
 import { getNetworkTypeFromChainId } from '../utils'
 
 export function useAssetsFromProvider() {
-    const { getAssetList } = useWeb3Context()
+    const { getAssetsList: getAssetList } = useWeb3Context()
     const { portfolioProvider } = useWeb3State()
     const account = useAccount()
     const network = useNetworkType()

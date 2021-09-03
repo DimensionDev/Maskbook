@@ -11,7 +11,7 @@ import {
     Dialog,
     useMediaQuery,
 } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useDialogStackConsumer } from '@masknet/theme'
 import { Children, cloneElement } from 'react'
 import { useI18N, usePortalShadowRoot } from '../../utils'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
@@ -44,7 +44,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     onClose?(): void
     title?: React.ReactChild
     disableBackdropClick?: boolean
-    disableArrowBack?: boolean
+    titleBarIconStyle?: 'auto' | 'back' | 'close'
 }
 
 export function InjectedDialog(props: InjectedDialogProps) {
@@ -62,17 +62,17 @@ export function InjectedDialog(props: InjectedDialogProps) {
     } = useStylesExtends(useStyles(), props, overwrite.InjectedDialog?.classes)
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
 
-    const { children, open, disableBackdropClick, disableArrowBack, onClose, title, ...rest } = props
+    const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, ...rest } = props
     const { t } = useI18N()
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
+    const { extraProps, shouldReplaceExitWithBack } = useDialogStackConsumer(open)
 
     return usePortalShadowRoot((container) => (
         <Dialog
             container={container}
             fullScreen={fullScreen}
             classes={dialogClasses}
-            open={open}
             scroll="paper"
             fullWidth
             maxWidth="sm"
@@ -88,21 +88,26 @@ export function InjectedDialog(props: InjectedDialogProps) {
                     root: dialogBackdropRoot,
                 },
             }}
-            {...rest}>
+            {...rest}
+            {...extraProps}>
             <ErrorBoundary>
                 {title ? (
                     <DialogTitle classes={{ root: dialogTitle }}>
                         <IconButton
+                            size="large"
                             classes={{ root: dialogCloseButton }}
                             aria-label={t('post_dialog__dismiss_aria')}
                             onClick={onClose}>
-                            <DialogDismissIconUI disableArrowBack={disableArrowBack} />
+                            <DialogDismissIconUI style={shouldReplaceExitWithBack ? 'back' : titleBarIconStyle} />
                         </IconButton>
                         <Typography className={dialogTitleTypography} display="inline" variant="inherit">
                             {title}
                         </Typography>
                     </DialogTitle>
                 ) : null}
+                {/* There is a .MuiDialogTitle+.MuiDialogContent selector that provides paddingTop: 0 */}
+                {/* Add an empty span here to revert this effect. */}
+                <span />
                 {content}
                 {actions}
             </ErrorBoundary>

@@ -1,5 +1,5 @@
 import { MaskBannerIcon } from '@masknet/icons'
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { styled } from '@material-ui/core/styles'
 import { memo } from 'react'
 import { LightColor } from '@masknet/theme/constants'
 import { Container } from '@material-ui/core'

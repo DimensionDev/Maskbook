@@ -3,12 +3,8 @@
   "compilerOptions": {
     "rootDir": "./src/",
     "outDir": "./dist/",
-    "stripInternal": true
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./src/**/*"],
-  "references": [{ "path": "../theme" }],
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": { "module": "CommonJS" }
-  }
+  "include": ["./src"],
+  "references": [{ "path": "../theme" }]
 }

@@ -67,7 +67,7 @@ export default function DashboardPersonasRouter() {
 
     const actions = useMemo(
         () => [
-            <Button variant="outlined" onClick={openImportPersona}>
+            <Button sx={{ marginRight: 1 }} variant="outlined" onClick={openImportPersona}>
                 {t('import')}
             </Button>,
             <Button

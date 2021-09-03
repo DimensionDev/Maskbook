@@ -5,8 +5,5 @@
     "outDir": "./dist/",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.json"],
-  "ts-node": {
-    "compilerOptions": { "module": "CommonJS" }
-  }
+  "include": ["./src", "./src/**/*.json"]
 }

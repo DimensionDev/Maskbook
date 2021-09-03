@@ -38,6 +38,8 @@ export function resolveNetworkAddress(networkType: NetworkType, address: string)
             return `ethereum:${address}`
         case NetworkType.Arbitrum:
             return `arbitrum:${address}`
+        case NetworkType.xDai:
+            return `xdai:${address}`
         default:
             safeUnreachable(networkType)
             return address
@@ -54,6 +56,8 @@ export function resolveNetworkName(networkType: NetworkType) {
             return 'Ethereum'
         case NetworkType.Arbitrum:
             return 'Arbitrum'
+        case NetworkType.xDai:
+            return 'xDai'
         default:
             safeUnreachable(networkType)
             return 'Unknown'
@@ -86,6 +90,8 @@ export function resolveChainColor(chainId: ChainId) {
             return 'rgb(240, 185, 10)'
         case ChainId.Mumbai:
             return 'rgb(130, 71, 229)'
+        case ChainId.xDai:
+            return 'rgb(73, 169, 166)'
         default:
             return 'rgb(214, 217, 220)'
     }
