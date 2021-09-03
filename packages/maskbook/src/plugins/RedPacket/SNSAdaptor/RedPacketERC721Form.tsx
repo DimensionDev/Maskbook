@@ -30,7 +30,6 @@ const useStyles = makeStyles()((theme) => {
         },
         line: {
             display: 'flex',
-            width: '100%',
             margin: theme.spacing(1),
         },
         nftNameWrapper: {
@@ -71,14 +70,15 @@ const useStyles = makeStyles()((theme) => {
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             gap: 16,
-            width: 528,
-            height: 188,
+            width: '100%',
+            height: 200,
             overflowY: 'auto',
             background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
             borderRadius: 12,
             marginTop: theme.spacing(1.5),
             marginBottom: theme.spacing(1.5),
-            padding: theme.spacing(1, 1.5, 1, 1),
+            padding: theme.spacing(1.5, 1.5, 1, 1),
+            boxSizing: 'border-box',
         },
         tokenSelectorWrapper: {
             position: 'relative',
