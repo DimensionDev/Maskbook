@@ -5,7 +5,7 @@ export const AUGUR_PLUGIN_ID = 'com.augur'
 export const AUGUR_CHAIN_ID = ChainId.Matic
 export const PLUGIN_NAME = 'Augur'
 
-export const BASE_URL = 'https://bafybeieqpwd47pmwcmidysq3demjbzd6kkeg6asxcyudk2tbpwdjxxvqkq.ipfs.dweb.link'
+export const BASE_URL = 'https://bafybeigjwp26ubjuwtxxtqaibnvt5rt2hlkmzwz5f7e2kqvqsiapo2v6mi.ipfs.dweb.link'
 export const NO_CONTEST_OUTCOME_ID: number = 0
 
 export const NO_CONTEST = 'No Contest'
