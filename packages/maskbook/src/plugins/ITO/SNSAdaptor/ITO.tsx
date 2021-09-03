@@ -774,7 +774,7 @@ export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }
             elevation={0}
             style={{ backgroundImage: `url(${PoolBackground})` }}>
             <Typography variant="body1" className={classes.loadingITO}>
-                {t('plugin_ito_loading_failed')}
+                {t('loading_failed')}
             </Typography>
             <ActionButton
                 onClick={retryPoolPayload}
@@ -782,7 +782,7 @@ export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }
                 size="large"
                 color="primary"
                 className={classes.loadingITO_Button}>
-                {t('plugin_ito_loading_try_again')}
+                {t('try_again')}
             </ActionButton>
         </Card>
     )

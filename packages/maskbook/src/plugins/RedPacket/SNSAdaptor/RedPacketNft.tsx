@@ -3,7 +3,6 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles, useSnackbar } from '@masknet/theme'
 import {
     useAccount,
-    useChainIdValid,
     resolveAddressLinkOnExplorer,
     useWeb3,
     useERC721TokenDetailed,
@@ -29,10 +28,9 @@ import {
     Skeleton,
     CircularProgress,
 } from '@material-ui/core'
-import { useState, useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { RedPacketNftJSONPayload } from '../types'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback'
@@ -208,6 +206,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     tokenImgSpinner: {
         position: 'absolute',
+        opacity: 0.4,
         top: 65,
         left: 40,
         width: 30,
@@ -222,6 +221,23 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    errorCard: {
+        height: 360,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    errImage: {
+        width: 220,
+    },
+    errorButton: {
+        borderColor: 'white',
+        minHeight: 30,
+        width: 100,
+        marginTop: 16,
+        '&:hover': {
+            borderColor: 'white',
+        },
+    },
 }))
 export interface RedPacketNftProps {
     payload: RedPacketNftJSONPayload
@@ -232,9 +248,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const { classes } = useStyles()
     const web3 = useWeb3()
     const account = useAccount()
-    const chainIdValid = useChainIdValid()
     const { enqueueSnackbar } = useSnackbar()
-    const [disabled, setDisabled] = useState(false)
     //#region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
@@ -246,6 +260,46 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     )
 
     const isClaiming = claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING
+
+    const openAddressLinkOnExplorer = useCallback(() => {
+        window.open(
+            resolveAddressLinkOnExplorer(payload.chainId, payload.contractAddress),
+            '_blank',
+            'noopener noreferrer',
+        )
+    }, [payload])
+
+    const {
+        value: availability,
+        loading,
+        retry: retryAvailability,
+        error: availabilityError,
+    } = useAvailabilityNftRedPacket(payload.id, account)
+
+    const {
+        value: erc721TokenDetailed,
+        retry: retryERC721TokenDetailed,
+        error: ERC721TokenDetailedError,
+    } = useERC721TokenDetailed(
+        availability
+            ? ({
+                  type: EthereumTokenType.ERC721,
+                  address: payload.contractAddress,
+                  chainId: payload.chainId,
+                  name: payload.contractName,
+                  symbol: '',
+                  baseURI: '',
+                  iconURL: payload.contractTokenURI,
+              } as ERC721ContractDetailed)
+            : undefined,
+        availability?.claimed_id,
+    )
+    const isFailedToLoading = Boolean(availabilityError || ERC721TokenDetailedError)
+
+    const onErrorRetry = useCallback(() => {
+        retryAvailability()
+        retryERC721TokenDetailed()
+    }, [retryAvailability, retryERC721TokenDetailed])
 
     useEffect(() => {
         if (![TransactionStateType.CONFIRMED, TransactionStateType.FAILED].includes(claimState.type)) {
@@ -276,37 +330,14 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     anchorOrigin: { horizontal: 'right', vertical: 'top' },
                 },
             )
+            retryAvailability()
         }
 
         resetCallback()
-    }, [claimState])
-
-    const openAddressLinkOnExplorer = useCallback(() => {
-        window.open(
-            resolveAddressLinkOnExplorer(payload.chainId, payload.contractAddress),
-            '_blank',
-            'noopener noreferrer',
-        )
-    }, [payload])
-
-    const { value: availability, loading } = useAvailabilityNftRedPacket(payload.id, account)
-    const { value: erc721TokenDetailed } = useERC721TokenDetailed(
-        availability
-            ? ({
-                  type: EthereumTokenType.ERC721,
-                  address: payload.contractAddress,
-                  chainId: payload.chainId,
-                  name: payload.contractName,
-                  symbol: '',
-                  baseURI: '',
-                  iconURL: payload.contractTokenURI,
-              } as ERC721ContractDetailed)
-            : undefined,
-        availability?.claimed_id,
-    )
+    }, [claimState, retryAvailability])
 
     const previewNftImg = new URL('./assets/nft-preview.png', import.meta.url).toString()
-
+    const rpNftImg = new URL('./assets/redpacket.nft.png', import.meta.url).toString()
     //#region on share
     const postLink = usePostLink()
     const networkType = useNetworkType()
@@ -330,155 +361,139 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         if (shareLink) window.open(shareLink, '_blank', 'noopener noreferrer')
     }, [shareLink])
     //#endregion
+
+    if (isFailedToLoading)
+        return (
+            <div className={classes.root}>
+                <Card className={classNames(classes.card, classes.errorCard)} component="article" elevation={0}>
+                    <img className={classes.errImage} src={rpNftImg} />
+                    <Typography className={classes.whiteText} variant="h5">
+                        {t('loading_failed')}
+                    </Typography>
+                    <Button
+                        onClick={onErrorRetry}
+                        className={classNames(classes.errorButton, classes.whiteText)}
+                        variant="outlined">
+                        {t('try_again')}
+                    </Button>
+                </Card>
+            </div>
+        )
     if (!availability || loading)
         return (
-            <EthereumChainBoundary chainId={payload.chainId}>
-                <Card className={classes.loadingBox} component="article" elevation={0}>
-                    <Skeleton
-                        animation="wave"
-                        variant="rectangular"
-                        width="30%"
-                        height={18}
-                        style={{ marginTop: 16 }}
-                    />
-                    <Skeleton
-                        animation="wave"
-                        variant="rectangular"
-                        width="40%"
-                        height={18}
-                        style={{ marginTop: 24 }}
-                    />
-                    <Skeleton
-                        animation="wave"
-                        variant="rectangular"
-                        width="70%"
-                        height={18}
-                        style={{ marginTop: 24 }}
-                    />
-                </Card>
-            </EthereumChainBoundary>
+            <Card className={classes.loadingBox} component="article" elevation={0}>
+                <Skeleton animation="wave" variant="rectangular" width="30%" height={18} style={{ marginTop: 16 }} />
+                <Skeleton animation="wave" variant="rectangular" width="40%" height={18} style={{ marginTop: 24 }} />
+                <Skeleton animation="wave" variant="rectangular" width="70%" height={18} style={{ marginTop: 24 }} />
+            </Card>
         )
 
     return (
-        <EthereumChainBoundary chainId={payload.chainId}>
-            <div className={classes.root}>
-                <Card className={classes.card} component="article" elevation={0}>
+        <div className={classes.root}>
+            <Card className={classes.card} component="article" elevation={0}>
+                <CardHeader
+                    className={classNames(classes.title, availability.isEnd ? classes.hide : '', classes.whiteText)}
+                    title={payload.message}
+                    subheader={
+                        <span
+                            className={classNames(classes.link, classes.whiteText)}
+                            onClick={openAddressLinkOnExplorer}>
+                            <Typography variant="body2">{payload.contractName}</Typography>
+                            <LaunchIcon fontSize="small" className={classes.dimWhiteText} />
+                        </span>
+                    }
+                />
+
+                {availability.isClaimed ? (
+                    <Box className={classes.tokenWrapper}>
+                        <div className={classes.tokenImgWrapper}>
+                            {erc721TokenDetailed?.info.image ? null : (
+                                <CircularProgress className={classes.tokenImgSpinner} />
+                            )}
+
+                            <img
+                                className={classNames(
+                                    classes.tokenImg,
+                                    erc721TokenDetailed?.info.image ? '' : classes.loadingTokenImg,
+                                )}
+                                src={erc721TokenDetailed?.info.image ?? previewNftImg}
+                            />
+                        </div>
+                        <Typography className={classes.claimedText}>You got 1 {payload.contractName}</Typography>
+                    </Box>
+                ) : (
+                    <CardMedia className={classes.image} component="div" image={rpNftImg} title="nft icon">
+                        <Typography className={classes.remain}>
+                            {availability.claimedAmount}/{availability.totalAmount} Collectibles
+                        </Typography>
+                    </CardMedia>
+                )}
+
+                <CardContent>
+                    <Typography variant="body1" className={classes.whiteText}>
+                        {t('plugin_red_packet_nft_tip')}
+                    </Typography>
+                </CardContent>
+                <div className={classes.footer}>
+                    <Link
+                        href="https://mask.io/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={classes.whiteText}>
+                        Mask.io
+                    </Link>
+                    <Typography variant="body1">From: @{payload.senderName}</Typography>
+                </div>
+            </Card>
+            {availability.isEnd ? (
+                <Card className={classes.coverCard}>
                     <CardHeader
-                        className={classNames(classes.title, availability.isEnd ? classes.hide : '', classes.whiteText)}
+                        className={classNames(classes.title, classes.dim, classes.dimWhiteText)}
                         title={payload.message}
                         subheader={
                             <span
-                                className={classNames(classes.link, classes.whiteText)}
+                                className={classNames(classes.link, classes.dimWhiteText)}
                                 onClick={openAddressLinkOnExplorer}>
                                 <Typography variant="body2">{payload.contractName}</Typography>
                                 <LaunchIcon fontSize="small" className={classes.dimWhiteText} />
                             </span>
                         }
                     />
-
-                    {availability.isClaimed ? (
-                        <Box className={classes.tokenWrapper}>
-                            <div
-                                className={classNames(
-                                    classes.tokenImgWrapper,
-                                    erc721TokenDetailed?.info.image ? '' : classes.loadingTokenImg,
-                                )}>
-                                {erc721TokenDetailed?.info.image ? null : (
-                                    <CircularProgress className={classes.tokenImgSpinner} />
-                                )}
-
-                                <img
-                                    className={classes.tokenImg}
-                                    src={erc721TokenDetailed?.info.image ?? previewNftImg}
-                                />
-                            </div>
-                            <Typography className={classes.claimedText}>You got 1 {payload.contractName}</Typography>
-                        </Box>
-                    ) : (
-                        <CardMedia
-                            className={classes.image}
-                            component="div"
-                            image={new URL('./assets/redpacket.nft.png', import.meta.url).toString()}
-                            title="nft icon">
-                            <Typography className={classes.remain}>
-                                {availability.claimedAmount}/{availability.totalAmount} Collectibles
-                            </Typography>
-                        </CardMedia>
-                    )}
-
-                    <CardContent>
-                        <Typography variant="body1" className={classes.whiteText}>
-                            {t('plugin_red_packet_nft_tip')}
+                    <div className={classNames(classes.badge, classes.whiteText)}>
+                        <Typography variant="body2" className={classes.badgeText}>
+                            {availability.expired ? t('plugin_red_packet_expired') : t('plugin_red_packet_completed')}
                         </Typography>
-                    </CardContent>
-                    <div className={classes.footer}>
-                        <Link
-                            href="https://mask.io/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={classes.whiteText}>
-                            Mask.io
-                        </Link>
-                        <Typography variant="body1">From: @{payload.senderName}</Typography>
                     </div>
                 </Card>
-                {availability.isEnd ? (
-                    <Card className={classes.coverCard}>
-                        <CardHeader
-                            className={classNames(classes.title, classes.dim, classes.dimWhiteText)}
-                            title={payload.message}
-                            subheader={
-                                <span
-                                    className={classNames(classes.link, classes.dimWhiteText)}
-                                    onClick={openAddressLinkOnExplorer}>
-                                    <Typography variant="body2">{payload.contractName}</Typography>
-                                    <LaunchIcon fontSize="small" className={classes.dimWhiteText} />
-                                </span>
-                            }
-                        />
-                        <div className={classNames(classes.badge, classes.whiteText)}>
-                            <Typography variant="body2" className={classes.badgeText}>
-                                {availability.expired
-                                    ? t('plugin_red_packet_expired')
-                                    : t('plugin_red_packet_completed')}
-                            </Typography>
-                        </div>
-                    </Card>
-                ) : (
-                    <Grid container spacing={2} className={classes.buttonWrapper}>
-                        <Grid item xs={availability.isClaimed ? 12 : 6}>
-                            <Button
-                                className={classes.button}
-                                fullWidth
-                                onClick={onShare}
-                                size="large"
-                                variant="contained">
-                                {t('share')}
-                            </Button>
-                        </Grid>
-                        {availability.isClaimed ? null : (
-                            <Grid item xs={6}>
-                                <EthereumWalletConnectedBoundary
-                                    classes={{
-                                        connectWallet: classes.button,
-                                        unlockMetaMask: classes.button,
-                                    }}>
-                                    <ActionButton
-                                        variant="contained"
-                                        size="large"
-                                        loading={isClaiming}
-                                        disabled={isClaiming}
-                                        onClick={claimCallback}
-                                        className={classes.button}
-                                        fullWidth>
-                                        {isClaiming ? t('plugin_red_packet_claiming') : t('plugin_red_packet_claim')}
-                                    </ActionButton>
-                                </EthereumWalletConnectedBoundary>
-                            </Grid>
-                        )}
+            ) : (
+                <Grid container spacing={2} className={classes.buttonWrapper}>
+                    <Grid item xs={availability.isClaimed ? 12 : 6}>
+                        <Button className={classes.button} fullWidth onClick={onShare} size="large" variant="contained">
+                            {t('share')}
+                        </Button>
                     </Grid>
-                )}
-            </div>
-        </EthereumChainBoundary>
+                    {availability.isClaimed ? null : (
+                        <Grid item xs={6}>
+                            <EthereumWalletConnectedBoundary
+                                classes={{
+                                    connectWallet: classes.button,
+                                    unlockMetaMask: classes.button,
+                                }}>
+                                <ActionButton
+                                    variant="contained"
+                                    size="large"
+                                    loading={isClaiming}
+                                    disabled={isClaiming}
+                                    onClick={claimCallback}
+                                    className={classes.button}
+                                    fullWidth>
+                                    {isClaiming ? t('plugin_red_packet_claiming') : t('plugin_red_packet_claim')}
+                                </ActionButton>
+                            </EthereumWalletConnectedBoundary>
+                        </Grid>
+                    )}
+                </Grid>
+            )}
+        </div>
     )
 }
