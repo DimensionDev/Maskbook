@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils'
-import { graphEndpointKeyVal, pluginMetaKey } from '../constants'
+import { pluginMetaKey } from '../constants'
 import type { UnlockLocks } from '../types'
 import { PuginUnlockProtocolRPC } from '../messages'
 import { SelectRecipientsUnlockDialogUI } from './SelectRecipientsUnlockDialog'
@@ -28,29 +28,25 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
     const [availableUnlockTarget, setAvailableUnlockTarget] = useState<UnlockLocks[]>(() => [])
     const { attachMetadata, dropMetadata } = useCompositionContext()
     useEffect(() => {
-        for (const key of Object.entries(graphEndpointKeyVal)) {
-            PuginUnlockProtocolRPC.getLocks(address, key[0].toString())
-                .then((value) => {
-                    if (value.lockManagers.length) {
-                        setAvailableUnlockTarget([...availableUnlockTarget, ...value.lockManagers])
-                    } else {
-                        console.log(availableUnlockTarget)
-                    }
-                })
-                .catch((error) => {
-                    console.error(error)
-                    setAvailableUnlockTarget([
-                        {
-                            lock: {
-                                name: error.message || 'Some error occured',
-                                chain: currentUnlockChain,
-                                address: '0x0',
-                                price: '0',
-                            },
+        PuginUnlockProtocolRPC.getLocks(address)
+            .then((value) => {
+                if (value.length) {
+                    setAvailableUnlockTarget(value)
+                }
+            })
+            .catch((error) => {
+                console.error(error)
+                setAvailableUnlockTarget([
+                    {
+                        lock: {
+                            name: error.message || 'Some error occured',
+                            chain: currentUnlockChain,
+                            address: '0x0',
+                            price: '0',
                         },
-                    ])
-                })
-        }
+                    },
+                ])
+            })
     }, [address])
 
     const onInsert = () => {

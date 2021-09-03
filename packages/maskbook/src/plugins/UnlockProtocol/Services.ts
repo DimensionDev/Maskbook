@@ -87,7 +87,7 @@ export const verifyPurchase = async (_useraddress: String, _lockAddress: String,
     return flag
 }
 
-export const getLocks = async <UnlockLocks>(_address1: String, chain: string) => {
+export const getLocks = async <UnlockLocks>(_address1: String) => {
     const query = gql`
         query lockManager($address: String!) {
             lockManagers(where: { address: $address }) {
@@ -103,14 +103,18 @@ export const getLocks = async <UnlockLocks>(_address1: String, chain: string) =>
         address: _address1,
     }
 
-    const data = await graphQLClients[chain].request(query, variables)
+    const dataRes: Array<{ lock: { chain: number; name: string; price?: string; address: string } }> = []
 
-    data.lockManagers.forEach(
-        (element: { lock: { chain?: number; name?: string; price?: string; address?: string } }) => {
-            element.lock.chain = parseInt(chain, 10)
-        },
-    )
-    return data
+    for (const key of Object.keys(graphEndpointKeyVal)) {
+        const data = await graphQLClients[key].request(query, variables)
+        data.lockManagers.forEach(
+            (element: { lock: { chain: number; name: string; price?: string; address: string } }) => {
+                element.lock.chain = parseInt(key, 10)
+                dataRes.push(element)
+            },
+        )
+    }
+    return dataRes
 }
 
 export const getPurchasedLocks = async (_address: string) => {
