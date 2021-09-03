@@ -1,7 +1,7 @@
 import { useCallback, useState, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent, List, ListItem, Typography, Box, Link } from '@material-ui/core'
-import { ERC721ContractDetailed, resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared'
+import { ChainId, ERC721ContractDetailed, resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'
@@ -12,6 +12,7 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import Fuse from 'fuse.js'
 import { useERC721ContractDetailed } from '@masknet/web3-shared'
 import classNames from 'classnames'
+import { ERC721_CONTRACT_LIST } from './ERC721ContractList'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -91,34 +92,18 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const ERC721_CONTRACT_LIST: ERC721ContractDetailed[] = [
-    // TODO: Replace with real token list
-    // {
-    //     type: EthereumTokenType.ERC721,
-    //     address: '0x06012c8cf97bead5deae237070f9587f8e7a266d',
-    //     chainId: ChainId.Mainnet,
-    //     name: 'CryptoKitties',
-    //     symbol: 'CKITTY',
-    //     iconURL: new URL('../../../web3/assets/cryptokitties.png', import.meta.url).toString(),
-    // },
-    // {
-    //     type: EthereumTokenType.ERC721,
-    //     address: '0x06012c8cf97bead5deae237070f9587f8e7a266d',
-    //     chainId: ChainId.Mainnet,
-    //     name: 'GryptoKitties',
-    //     symbol: 'GKITTY',
-    //     iconURL: new URL('../../../web3/assets/cryptokitties.png', import.meta.url).toString(),
-    // },
-]
-
 export interface SelectNftContractDialogProps extends withClasses<never> {}
 
 export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
+    const chainId = useChainId()
+
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
+
+    const contractList = chainId === ChainId.Mainnet ? ERC721_CONTRACT_LIST : []
 
     //#region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
@@ -130,6 +115,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     )
     const onSubmit = useCallback(
         (contract: ERC721ContractDetailed) => {
+            console.log({ contract })
             setKeyword('')
             setDialog({
                 open: false,
@@ -151,16 +137,17 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     //#region fuse
     const fuse = useMemo(
         () =>
-            new Fuse(ERC721_CONTRACT_LIST, {
+            new Fuse(contractList, {
                 shouldSort: true,
                 threshold: 0.45,
                 minMatchCharLength: 3,
                 keys: [
                     { name: 'name', weight: 0.5 },
-                    { name: 'symbol', weight: 1 },
+                    { name: 'symbol', weight: 0.8 },
+                    { name: 'address', weight: 1 },
                 ],
             }),
-        [ERC721_CONTRACT_LIST],
+        [contractList],
     )
 
     const searchedTokenList = fuse.search(keyword).map((x) => x.item)
@@ -191,6 +178,8 @@ function SearchResultBox(props: SearchResultBoxProps) {
     const { keyword, searchedTokenList, onSubmit } = props
     const { classes } = useStyles()
     const isValid = EthereumAddress.isValid(keyword)
+    const chainId = useChainId()
+    const contractList = chainId === ChainId.Mainnet ? ERC721_CONTRACT_LIST : []
     const { value: contractDetailed, loading } = useERC721ContractDetailed(keyword)
     const { t } = useI18N()
     return (
@@ -214,7 +203,7 @@ function SearchResultBox(props: SearchResultBoxProps) {
                 </div>
             ) : (
                 <List>
-                    {(keyword === '' ? ERC721_CONTRACT_LIST : searchedTokenList).map((contract, i) => (
+                    {(keyword === '' ? contractList : searchedTokenList).map((contract, i) => (
                         <div key={i.toString()}>
                             <ContractListItem key={i.toString()} onSubmit={onSubmit} contract={contract} />
                         </div>

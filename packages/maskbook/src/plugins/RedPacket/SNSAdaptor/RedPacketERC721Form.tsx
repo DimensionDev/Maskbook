@@ -12,6 +12,7 @@ import {
     ERC721TokenDetailed,
     useERC721TokenDetailedOwnerList,
     useAccount,
+    useChainId,
     useRedPacketNftConstants,
 } from '@masknet/web3-shared'
 import CloseIcon from '@material-ui/icons/Close'
@@ -138,6 +139,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const [open, setOpen] = useState(false)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const account = useAccount()
+    const chainId = useChainId()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
     const [existTokenDetailedList, setExistTokenDetailedList] = useState<ERC721TokenDetailed[]>([])
     const [message, setMessage] = useState('Best Wishes!')
@@ -158,11 +160,24 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         [existTokenDetailedList, setExistTokenDetailedList],
     )
 
-    useEffect(() => {
+    const clearToken = useCallback(() => {
+        setOffset(0)
         setExistTokenDetailedList([])
         clearTokenDetailedOwnerList()
         setOpenConfirmDialog(false)
-    }, [contract, account, setOpenConfirmDialog])
+    }, [setExistTokenDetailedList, clearTokenDetailedOwnerList, setOpenConfirmDialog, setOffset])
+
+    const clearContract = useCallback(() => {
+        setContract(undefined)
+    }, [setContract])
+
+    useEffect(() => {
+        clearToken()
+    }, [contract, account])
+
+    useEffect(() => {
+        clearContract()
+    }, [chainId])
 
     const { RED_PACKET_NFT_ADDRESS } = useRedPacketNftConstants()
 

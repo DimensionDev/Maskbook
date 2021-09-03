@@ -32,6 +32,7 @@ const useStyles = makeStyles()((theme) => {
         icon: {
             height: 24,
             width: 24,
+            borderRadius: 500,
         },
         tokenWrapper: {
             display: 'flex',

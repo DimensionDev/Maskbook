@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     ownerTokenBox: {
         background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
-        width: 530,
+        width: '100%',
         height: 450,
         borderRadius: 12,
         margin: '16px auto',
