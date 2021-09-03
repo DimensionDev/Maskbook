@@ -1,16 +1,24 @@
-import { Button, DialogActions, DialogContent, Typography, TextField } from '@material-ui/core'
-import { memo } from 'react'
+import { Button, DialogActions, DialogContent, Typography } from '@material-ui/core'
+import { memo, useCallback } from 'react'
 import { MaskColorVar, MaskDialog } from '@masknet/theme'
-import { useDashboardI18N, DashboardTrans } from '../../../../locales'
+import { DashboardTrans, useDashboardI18N } from '../../../../locales'
+import { Services } from '../../../../API'
+import type { PersonaIdentifier } from '@masknet/shared'
 
 export interface DeletePersonaDialogProps {
     open: boolean
     onClose: () => void
     nickname?: string
+    identifier: PersonaIdentifier
 }
 
-export const DeletePersonaDialog = memo<DeletePersonaDialogProps>(({ open, onClose, nickname }) => {
+export const DeletePersonaDialog = memo<DeletePersonaDialogProps>(({ open, onClose, nickname, identifier }) => {
     const t = useDashboardI18N()
+
+    const handleDelete = useCallback(async () => {
+        await Services.Identity.deletePersona(identifier, 'delete even with private')
+    }, [nickname, identifier])
+
     return (
         <MaskDialog open={open} title={t.personas_delete_dialog_title()} onClose={onClose}>
             <DialogContent>
@@ -20,18 +28,10 @@ export const DeletePersonaDialog = memo<DeletePersonaDialogProps>(({ open, onClo
                         values={{ nickname: nickname ?? '' }}
                     />
                 </Typography>
-                <TextField
-                    variant="filled"
-                    label="Password"
-                    type="password"
-                    InputProps={{ disableUnderline: true }}
-                    fullWidth
-                    sx={{ marginTop: 2.75 }}
-                />
             </DialogContent>
             <DialogActions>
                 <Button color="secondary">{t.personas_cancel()}</Button>
-                <Button>{t.personas_confirm()}</Button>
+                <Button onClick={handleDelete}>{t.personas_confirm()}</Button>
             </DialogActions>
         </MaskDialog>
     )
