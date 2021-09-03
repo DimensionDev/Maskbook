@@ -14,6 +14,7 @@ import { blobToText } from '@dimensiondev/kit'
 import { LoadingCard } from './steps/LoadingCard'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
+import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 
 enum RestoreStatus {
     WaitingInput = 0,
@@ -26,6 +27,7 @@ export const RestoreFromLocal = memo(() => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar()
+    const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
 
     const [file, setFile] = useState<File | null>(null)
     const [json, setJSON] = useState<any | null>(null)
@@ -75,6 +77,10 @@ export const RestoreFromLocal = memo(() => {
     const restoreDB = useCallback(async () => {
         try {
             await Services.Welcome.checkPermissionsAndRestore(backupId)
+            if (!currentPersona) {
+                const lastedPersona = await Services.Identity.queryLastPersonaCreated()
+                await changeCurrentPersona(lastedPersona.identifier)
+            }
             navigate(RoutePaths.Personas, { replace: true })
         } catch {
             enqueueSnackbar('Restore backup failed, Please try again', { variant: 'error' })

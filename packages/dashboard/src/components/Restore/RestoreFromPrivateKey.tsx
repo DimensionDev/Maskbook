@@ -42,7 +42,7 @@ export const RestoreFromPrivateKey = memo(() => {
         try {
             const persona = await Services.Identity.queryPersonaByPrivateKey(data.privateKey)
             if (persona) {
-                changeCurrentPersona(persona.identifier)
+                await changeCurrentPersona(persona.identifier)
                 navigate(RoutePaths.Personas)
             } else {
                 navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.PersonaCreate}`, {

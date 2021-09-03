@@ -15,11 +15,13 @@ import { Step, Stepper } from '../Stepper'
 import { LoadingCard } from './steps/LoadingCard'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
+import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar()
+    const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
 
     const [backupId, setBackupId] = useState('')
     const [step, setStep] = useState<{ name: string; params: any }>({ name: 'validate', params: null })
@@ -66,6 +68,10 @@ export const RestoreFromCloud = memo(() => {
     const onRestore = async () => {
         try {
             await Services.Welcome.checkPermissionsAndRestore(backupId)
+            if (!currentPersona) {
+                const lastedPersona = await Services.Identity.queryLastPersonaCreated()
+                await changeCurrentPersona(lastedPersona.identifier)
+            }
             navigate(RoutePaths.Personas, { replace: true })
         } catch {
             enqueueSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
