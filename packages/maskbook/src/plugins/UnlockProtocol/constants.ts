@@ -12,6 +12,6 @@ export const graphEndpointKeyVal = {
     4: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/unlock-rinkeby',
 }
 
-export const keyServerEndpoint = 'https://unlock.iamzub.in'
+export const keyServerEndpoint = 'https://unlock.r2d2.to/'
 
 export const paywallUrl = 'https://app.unlock-protocol.com/checkout?paywallConfig='

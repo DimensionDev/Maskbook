@@ -80,7 +80,7 @@ export const verifyPurchase = async (_useraddress: String, _lockAddress: String,
     console.log('saddddd', data)
     if (data.locks[0].owner === _useraddress.toLowerCase()) {
         flag = true
-    } else if (!!data.locks[0].keys.length()) {
+    } else if (!!data.locks[0].keys.length) {
         data.locks[0].keys.forEach((key: { owner: { id: string } }) => {
             if (key.owner.id === _useraddress.toLowerCase()) flag = true
         })
