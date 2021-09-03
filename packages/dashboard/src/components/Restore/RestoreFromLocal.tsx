@@ -51,13 +51,19 @@ export const RestoreFromLocal = memo(() => {
         if (!backupValue) return
 
         setRestoreStatus(RestoreStatus.Verifying)
-        const backupInfo = await Services.Welcome.parseBackupStr(backupValue)
+        try {
+            const backupInfo = await Services.Welcome.parseBackupStr(backupValue)
 
-        if (backupInfo) {
-            setJSON(backupInfo.info)
-            setBackupId(backupInfo.id)
-            setRestoreStatus(RestoreStatus.Verified)
-        } else {
+            if (backupInfo) {
+                setJSON(backupInfo.info)
+                setBackupId(backupInfo.id)
+                setRestoreStatus(RestoreStatus.Verified)
+            } else {
+                setRestoreStatus(RestoreStatus.WaitingInput)
+                setBackupValue('')
+            }
+        } catch {
+            enqueueSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
             setRestoreStatus(RestoreStatus.WaitingInput)
             setBackupValue('')
         }
@@ -83,7 +89,7 @@ export const RestoreFromLocal = memo(() => {
             }
             navigate(RoutePaths.Personas, { replace: true })
         } catch {
-            enqueueSnackbar('Restore backup failed, Please try again', { variant: 'error' })
+            enqueueSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
         }
     }, [backupId])
 
