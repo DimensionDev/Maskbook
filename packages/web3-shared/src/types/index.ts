@@ -18,9 +18,6 @@ export enum ChainId {
     Gorli = 5,
     Kovan = 42,
 
-    // xDai
-    xDai = 100,
-
     // BSC
     BSC = 56,
     BSCT = 97,
