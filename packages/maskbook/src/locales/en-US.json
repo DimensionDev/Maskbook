@@ -811,7 +811,6 @@
     "plugin_unlockprotocol_submit_post": "Submit post",
     "plugin_unlockprotocol_title": "Unlock Protocol",
     "plugin_unlockprotocol_server_error": "Some Server error occured, Please try again later.",
-    "plugin_unlockprotocol_connect_wallet": "Please connect Wallet",
     "popups_welcome": "Welcome",
     "popups_wallet_token": "Token",
     "popups_wallet_go_back": "Go back",
