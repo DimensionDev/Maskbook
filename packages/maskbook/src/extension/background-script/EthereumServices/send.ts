@@ -250,5 +250,6 @@ export async function INTERNAL_nativeSend(
             callback(error, undefined)
             handleNonce(account, error, undefined)
         }
+        console.error('internal native send error', error)
     }
 }
