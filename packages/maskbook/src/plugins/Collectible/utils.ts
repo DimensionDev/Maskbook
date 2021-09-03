@@ -68,8 +68,8 @@ export function getOrderUnitPrice(order: Order) {
 
 export function getOrderUSDPrice(order: Order) {
     if (!order.currentPrice || !order.paymentTokenContract?.decimals) return
-    const price = formatBalance(order.currentPrice, order.paymentTokenContract.decimals)
-    const quantity = formatBalance(order.paymentTokenContract.usdPrice, 0)
+    const price = formatBalance(order.paymentTokenContract.usdPrice, 0)
+    const quantity = formatBalance(order.currentPrice, order.paymentTokenContract.decimals)
 
     return new BigNumber(price).multipliedBy(quantity).toFixed(2, 1).toString()
 }
