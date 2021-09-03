@@ -48,7 +48,7 @@ export const Web3Context: Web3ProviderType = {
     ),
     getERC20TokensPaged,
     portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
-    getAssetList: WalletRPC.getAssetsList,
+    getAssetsList: WalletRPC.getAssetsList,
     getAssetsListNFT: WalletRPC.getAssetsListNFT,
     getERC721TokensPaged,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
