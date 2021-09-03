@@ -28,9 +28,9 @@ export const ConnectSocialMedia = () => {
         }
     }, [currentPersona])
 
-    const handleConnect = (networkIdentifier: string) => {
+    const handleConnect = async (networkIdentifier: string) => {
         if (currentPersona) {
-            connectPersona(currentPersona.identifier, networkIdentifier)
+            await connectPersona(currentPersona.identifier, networkIdentifier)
         }
     }
 

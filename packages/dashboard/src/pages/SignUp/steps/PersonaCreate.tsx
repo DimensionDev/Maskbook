@@ -49,7 +49,7 @@ export const PersonaCreate = () => {
             ? await createPersona(mnemonic.join(' '), personaName)
             : await createPersonaByPrivateKey(privateKey, personaName)
 
-        changeCurrentPersona(identifier)
+        await changeCurrentPersona(identifier)
     }, [mnemonic, privateKey, personaName])
 
     const handleCreatePersona = useSnackbarCallback({
