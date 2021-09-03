@@ -77,7 +77,6 @@ export const verifyPurchase = async (_useraddress: String, _lockAddress: String,
     }
     let flag = false
     const data = await graphQLClients[_lockChain].request(query, variables)
-    console.log('saddddd', data)
     if (data.locks[0].owner === _useraddress.toLowerCase()) {
         flag = true
     } else if (!!data.locks[0].keys.length) {
