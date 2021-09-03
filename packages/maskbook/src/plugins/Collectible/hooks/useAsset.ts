@@ -18,6 +18,7 @@ import { CollectibleProvider, CollectibleToken } from '../types'
 import { getOrderUnitPrice } from '../utils'
 
 export function useAsset(provider: CollectibleProvider, token?: CollectibleToken) {
+    console.log(provider, token)
     const account = useAccount()
     const chainId = useChainId()
     const { WNATIVE_ADDRESS } = useTokenConstants()

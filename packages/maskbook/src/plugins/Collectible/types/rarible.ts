@@ -161,7 +161,7 @@ export interface RaribleOfferResponse {
     token: string
     tokenId: string
     assetType: string
-    owner: string
+    maker: string
     salt: Salt
     buyValue: number
     buyToken: string
@@ -192,9 +192,9 @@ export interface RaribleOrder extends RaribleOfferResponse {
 
 export enum RaribleEventType {
     ORDER = 'order',
-    BUY = 'BUY',
+    BUY = 'buy',
     TRANSFER = 'transfer',
-    OFFER = 'OFFER',
+    OFFER = 'offer',
 }
 
 export interface RaribleHistory {
@@ -208,5 +208,4 @@ export interface RaribleHistory {
     from?: string
     date: Date
     transactionHash: string
-    salt: string
 }
