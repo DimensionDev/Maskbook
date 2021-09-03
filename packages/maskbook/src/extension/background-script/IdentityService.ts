@@ -1,5 +1,15 @@
 import * as bip39 from 'bip39'
-import { personaRecordToPersona, queryPersona, queryProfile, queryProfilesWithQuery, storeAvatar } from '../../database'
+import { encode } from '@msgpack/msgpack'
+import { blobToArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
+import {
+    personaRecordToPersona,
+    queryAvatarDataURL,
+    queryPersona,
+    queryPersonaRecord,
+    queryProfile,
+    queryProfilesWithQuery,
+    storeAvatar,
+} from '../../database'
 import {
     ECKeyIdentifier,
     ECKeyIdentifierFromJsonWebKey,
@@ -13,16 +23,16 @@ import {
     consistentPersonaDBWriteAccess,
     createOrUpdateProfileDB,
     createProfileDB,
+    createRelationDB,
     deleteProfileDB,
     LinkedProfileDetails,
     ProfileRecord,
-    createRelationDB,
-    updateRelationDB,
-    queryRelationsPagedDB,
-    RelationRecord,
     queryPersonaDB,
     queryPersonasDB,
     queryProfilesDB,
+    queryRelationsPagedDB,
+    RelationRecord,
+    updateRelationDB,
 } from '../../database/Persona/Persona.db'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
@@ -34,6 +44,7 @@ import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared'
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import { MaskMessage } from '../../utils'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -245,5 +256,38 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
         // the profile already exists
     }
 }
+//#endregion
+
+//#region avatar
+export const updateCurrentPersonaAvatar = async (avatar: Blob) => {
+    const identifier = await getCurrentPersonaIdentifier()
+
+    if (identifier) {
+        await storeAvatar(identifier, await blobToArrayBuffer(avatar))
+        MaskMessage.events.personaAvatarChanged.sendToAll({ reason: 'update', of: identifier?.toText() })
+    }
+}
+
+export const getCurrentPersonaAvatar = async () => {
+    const identifier = await getCurrentPersonaIdentifier()
+    if (!identifier) return null
+
+    try {
+        return await queryAvatarDataURL(identifier)
+    } catch {
+        return null
+    }
+}
+//#endregion
+
+//#region Export & Import Private key
+export async function exportPersonaPrivateKey(identifier: PersonaIdentifier) {
+    const profile = await queryPersonaRecord(identifier)
+    if (!profile?.privateKey) return ''
+
+    const encodePrivateKey = encode(profile.privateKey)
+    return encodeArrayBuffer(encodePrivateKey)
+}
+//#endregion
 
 export * from './IdentityServices/sign'

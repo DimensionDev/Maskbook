@@ -17,9 +17,8 @@ import RepeatIcon from '@material-ui/icons/Repeat'
 import formatDateTime from 'date-fns/format'
 import { Fragment, useCallback, useState, useEffect } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { Flags, useI18N } from '../../../utils'
-import { TxFeeEstimation } from '../../../web3/UI/TxFeeEstimation'
-import { PoolSettings, useFillParams } from './hooks/useFill'
+import { useI18N } from '../../../utils'
+import type { PoolSettings } from './hooks/useFill'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion'
 
 const useSwapItemStyles = makeStyles()({
@@ -121,7 +120,6 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
         poolSettings?.advanceSettingData.contract &&
         poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION2_ADDRESS
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
-    const fillParamsResult = useFillParams(poolSettings)
 
     useEffect(() => {
         if (poolSettings?.token?.chainId !== chainId) onClose()
@@ -289,9 +287,6 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                             </Paper>
                         </Grid>
                     </>
-                ) : null}
-                {Flags.wallet_gas_price_dialog_enable && fillParamsResult?.gas ? (
-                    <TxFeeEstimation classes={classes} gas={fillParamsResult?.gas} />
                 ) : null}
                 <Grid item xs={12}>
                     <Typography variant="h5" className={classes.title} component="p">

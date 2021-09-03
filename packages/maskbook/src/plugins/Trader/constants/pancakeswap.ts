@@ -1,5 +1,5 @@
 import { ChainId } from '@masknet/web3-shared'
-import { BTCB, BUSD, DAI, ETHER, UST, WETH, WETH_ONLY } from './trader'
+import { BTCB, BUSD, DAI, ETHER, UST, WNATIVE, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
@@ -9,6 +9,6 @@ import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 export const PANCAKESWAP_CUSTOM_BASES: ERC20TokenCustomizedBase = {}
 
 export const PANCAKESWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
-    ...WETH_ONLY,
-    [ChainId.BSC]: [WETH, DAI, BUSD, BTCB, UST, ETHER].map((x) => x[ChainId.BSC]),
+    ...WNATIVE_ONLY,
+    [ChainId.BSC]: [WNATIVE, DAI, BUSD, BTCB, UST, ETHER].map((x) => x[ChainId.BSC]),
 }

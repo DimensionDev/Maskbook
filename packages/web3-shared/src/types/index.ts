@@ -29,6 +29,9 @@ export enum ChainId {
     // Arbitrum
     Arbitrum = 42161,
     Arbitrum_Rinkeby = 421611,
+
+    // xDai
+    xDai = 100,
 }
 
 export enum ProviderType {
@@ -44,6 +47,7 @@ export enum NetworkType {
     Binance = 'Binance',
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
+    xDai = 'xDai',
 }
 
 export interface Wallet {

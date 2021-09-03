@@ -9,7 +9,9 @@
   },
   "typesVersions": {
     "*": {
-      "constants": ["./dist/src/constants.d.ts"]
+      "constants": [
+        "./dist/src/constants.d.ts"
+      ]
     }
   },
   "main": "./dist/src/index.js",
@@ -26,18 +28,18 @@
     "notistack": "1.0.6-next.2",
     "react-window": "^1.8.6",
     "tinycolor2": "^1.4.2",
-    "tss-react": "^0.6.0",
+    "tss-react": "^0.8.1",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
-    "@storybook/addon-actions": "^6.3.5",
-    "@storybook/addon-essentials": "^6.3.5",
-    "@storybook/addon-links": "^6.3.5",
-    "@storybook/addons": "^6.3.5",
-    "@storybook/react": "^6.3.5",
-    "@storybook/theming": "^6.3.5",
+    "@storybook/addon-actions": "^6.3.7",
+    "@storybook/addon-essentials": "^6.3.7",
+    "@storybook/addon-links": "^6.3.7",
+    "@storybook/addons": "^6.3.7",
+    "@storybook/react": "^6.3.7",
+    "@storybook/theming": "^6.3.7",
     "@types/qrcode": "^1.4.1",
     "@types/tinycolor2": "^1.4.3",
     "babel-loader": "^8.2.2",

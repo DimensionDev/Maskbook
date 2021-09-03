@@ -42,7 +42,7 @@ export function getChainDetailedCAIP(chainId = ChainId.Mainnet) {
 
 export function getChainRPC(chainId: ChainId, seed: number) {
     const { RPC, RPC_WEIGHTS } = getRPCConstants(chainId)
-    if (!RPC || !RPC_WEIGHTS) throw new Error('Unknown chain id.')
+    if (!RPC || !RPC_WEIGHTS) throw new Error(`Unknown chain id: ${chainId}.`)
     return RPC[RPC_WEIGHTS[seed]]
 }
 
@@ -84,6 +84,8 @@ export function getChainIdFromNetworkType(networkType: NetworkType) {
             return ChainId.Matic
         case NetworkType.Arbitrum:
             return ChainId.Arbitrum
+        case NetworkType.xDai:
+            return ChainId.xDai
         default:
             safeUnreachable(networkType)
             return ChainId.Mainnet
@@ -91,17 +93,17 @@ export function getChainIdFromNetworkType(networkType: NetworkType) {
 }
 
 export function getNetworkTypeFromChainId(chainId: ChainId) {
-    const chainDetailed = getChainDetailed(chainId)
-    switch (chainDetailed?.chain) {
-        case 'ETH':
-            return NetworkType.Ethereum
-        case 'BSC':
-            return NetworkType.Binance
-        case 'Matic':
-            return NetworkType.Polygon
-        case 'Arbitrum':
-            return NetworkType.Arbitrum
-        default:
-            return
+    const map: Record<NetworkType, string> = {
+        [NetworkType.Ethereum]: 'ETH',
+        [NetworkType.Binance]: 'BSC',
+        [NetworkType.Polygon]: 'Matic',
+        [NetworkType.Arbitrum]: 'Arbitrum',
+        [NetworkType.xDai]: 'xDai',
     }
+    const chainDetailed = getChainDetailed(chainId)
+    const entry = Object.entries(map).find(([key, value]) => {
+        if (value === chainDetailed?.chain) return true
+        return false
+    })
+    return entry?.[0] as NetworkType | undefined
 }

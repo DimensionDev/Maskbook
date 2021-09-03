@@ -18,7 +18,7 @@ export function useRecentTransactions(status?: TransactionStatusType) {
     const [flag, setFlag] = useState(false)
 
     // update transactions status intervally
-    const [delay, setDelay] = useState(0)
+    const [delay, setDelay] = useState<number | null>(null)
     useInterval(() => setFlag((x) => !x), delay)
 
     // update transactions by message center
@@ -26,7 +26,7 @@ export function useRecentTransactions(status?: TransactionStatusType) {
 
     return useAsyncRetry(async () => {
         try {
-            setDelay(0)
+            setDelay(null)
             return getTransactions(account, status)
         } catch (error) {
             throw error

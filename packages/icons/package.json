@@ -10,7 +10,7 @@
     "build": "node --es-module-specifier-resolution=node ./dist/utils/ssr.js"
   },
   "devDependencies": {
-    "snowpack": "^3.8.3"
+    "snowpack": "^3.8.8"
   },
   "dependencies": {
     "@emotion/server": "^11.4.0"

@@ -5,6 +5,7 @@ import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
 import { Button } from '@material-ui/core'
 import { Label, ValidationCodeStep } from './Commont'
 import type { StepCommonProps } from '../../Stepper'
+import { AccountType } from '../../../pages/Settings/type'
 
 export const EmailField = memo(({ toStep }: StepCommonProps) => {
     const t = useDashboardI18N()
@@ -12,7 +13,7 @@ export const EmailField = memo(({ toStep }: StepCommonProps) => {
     return (
         <>
             <MaskTextField
-                label={<Label onModeChange={() => toStep(ValidationCodeStep.PhoneInput)} mode="email" />}
+                label={<Label onModeChange={() => toStep(ValidationCodeStep.PhoneInput)} mode={AccountType.email} />}
                 fullWidth
                 value={account}
                 onChange={(event) => setAccount(event.target.value)}
@@ -22,7 +23,9 @@ export const EmailField = memo(({ toStep }: StepCommonProps) => {
                 <Button
                     variant="rounded"
                     color="primary"
-                    onClick={() => toStep(ValidationCodeStep.AccountValidation, { account: account, type: 'email' })}
+                    onClick={() =>
+                        toStep(ValidationCodeStep.AccountValidation, { account: account, type: AccountType.email })
+                    }
                     disabled={!account}>
                     {t.next()}
                 </Button>

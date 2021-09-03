@@ -2,6 +2,7 @@ import { ChangeEvent, useCallback, useMemo } from 'react'
 import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
+import BigNumber from 'bignumber.js'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { FormattedBalance, useStylesExtends } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
@@ -59,6 +60,8 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     MaxChipStyle?: ChipProps['classes']
     SelectTokenChip?: Partial<SelectTokenChipProps>
     TextFieldProps?: Partial<TextFieldProps>
+    // E.g. red packet shares
+    maxAmountShares?: number
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
@@ -68,6 +71,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         balance,
         token,
         onAmountChange,
+        maxAmountShares = 1,
         label,
         disableToken = false,
         disableBalance = false,
@@ -155,7 +159,14 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     color="primary"
                                     variant="outlined"
                                     onClick={() => {
-                                        onAmountChange(formatBalance(maxAmount ?? balance, token.decimals))
+                                        onAmountChange(
+                                            formatBalance(
+                                                new BigNumber(maxAmount ?? balance)
+                                                    .dividedBy(maxAmountShares)
+                                                    .decimalPlaces(0, 1),
+                                                token.decimals,
+                                            ),
+                                        )
                                     }}
                                     {...MaxChipProps}
                                 />

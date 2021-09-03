@@ -4,9 +4,10 @@ import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
-import { sendCode, verifyCode } from '../../api'
+import { sendCode, useLanguage, verifyCode } from '../../api'
 import { phoneRegexp } from '../../regexp'
 import { CountdownButton, MaskTextField, useSnackbar } from '@masknet/theme'
+import { Scenario, Locale, AccountType } from '../../type'
 
 const useStyles = makeStyles()({
     container: {
@@ -22,6 +23,7 @@ interface SettingPhoneNumberDialogProps {
 }
 
 export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhoneNumberDialogProps) {
+    const language = useLanguage()
     const snackbar = useSnackbar()
     const t = useDashboardI18N()
     const { classes } = useStyles()
@@ -50,7 +52,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
         } else {
             const result = await verifyCode({
                 account: countryCode + phone,
-                type: 'phone',
+                type: AccountType.phone,
                 code,
             }).catch((err) => {
                 if (err.status === 400) {
@@ -89,7 +91,9 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
     const sendValidationCode = () => {
         sendCode({
             account: countryCode + phone,
-            type: 'phone',
+            type: AccountType.phone,
+            scenario: user.email ? Scenario.change : Scenario.create,
+            locale: language.includes('zh') ? Locale.zh : Locale.en,
         })
             .then(() => {
                 snackbar.enqueueSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })

@@ -56,11 +56,15 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
                 noPersonas: !showPassword.base,
                 noProfiles: !showPassword.base,
                 noWallets: !showPassword.wallet,
-                download: local,
+                download: false,
                 onlyBackupWhoAmI: false,
             })
 
-            if (!local && params) {
+            if (local) {
+                // local backup, no account
+                const encrypted = await Services.Crypto.encryptBackup(backupPassword, '', JSON.stringify(file))
+                await Services.Welcome.downloadBackup(encrypted, 'txt')
+            } else if (params) {
                 const abstract = file.personas
                     .filter((x) => x.nickname)
                     .map((x) => x.nickname)

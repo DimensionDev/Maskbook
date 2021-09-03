@@ -40,25 +40,26 @@ export const maUSDC = createERC20Tokens('maUSDC_ADDRESS', 'Matic Aave interest b
 export const NFTX = createERC20Tokens('NFTX_ADDRESS', 'NFTX', 'NFTX', 18)
 export const STETH = createERC20Tokens('stETH_ADDRESS', 'stakedETH', 'stETH', 18)
 
-export const WETH = createERC20Tokens(
-    'WETH_ADDRESS',
+export const WNATIVE = createERC20Tokens(
+    'WNATIVE_ADDRESS',
     (chainId) => `Wrapped ${getChainDetailed(chainId)?.nativeCurrency.name ?? 'Ether'}`,
     (chainId) => `W${getChainDetailed(chainId)?.nativeCurrency.symbol ?? 'ETH'}`,
     18,
 )
 
-export const WETH_ONLY: ERC20AgainstToken = {
-    [ChainId.Mainnet]: [WETH[ChainId.Mainnet]],
-    [ChainId.Ropsten]: [WETH[ChainId.Ropsten]],
-    [ChainId.Rinkeby]: [WETH[ChainId.Rinkeby]],
-    [ChainId.Kovan]: [WETH[ChainId.Kovan]],
-    [ChainId.Gorli]: [WETH[ChainId.Gorli]],
-    [ChainId.BSC]: [WETH[ChainId.BSC]],
-    [ChainId.BSCT]: [WETH[ChainId.BSCT]],
-    [ChainId.Matic]: [WETH[ChainId.Matic]],
-    [ChainId.Mumbai]: [WETH[ChainId.Mumbai]],
-    [ChainId.Arbitrum]: [],
-    [ChainId.Arbitrum_Rinkeby]: [],
+export const WNATIVE_ONLY: ERC20AgainstToken = {
+    [ChainId.Mainnet]: [WNATIVE[ChainId.Mainnet]],
+    [ChainId.Ropsten]: [WNATIVE[ChainId.Ropsten]],
+    [ChainId.Rinkeby]: [WNATIVE[ChainId.Rinkeby]],
+    [ChainId.Kovan]: [WNATIVE[ChainId.Kovan]],
+    [ChainId.Gorli]: [WNATIVE[ChainId.Gorli]],
+    [ChainId.BSC]: [WNATIVE[ChainId.BSC]],
+    [ChainId.BSCT]: [WNATIVE[ChainId.BSCT]],
+    [ChainId.Matic]: [WNATIVE[ChainId.Matic]],
+    [ChainId.Mumbai]: [WNATIVE[ChainId.Mumbai]],
+    [ChainId.Arbitrum]: [WNATIVE[ChainId.Arbitrum]],
+    [ChainId.Arbitrum_Rinkeby]: [WNATIVE[ChainId.Arbitrum_Rinkeby]],
+    [ChainId.xDai]: [WNATIVE[ChainId.xDai]],
 }
 
 export const BIPS_BASE = new BigNumber(10000)

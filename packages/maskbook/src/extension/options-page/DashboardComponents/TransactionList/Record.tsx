@@ -8,6 +8,7 @@ import { DebankTransactionDirection, ZerionTransactionDirection } from '../../..
 
 const useStyles = makeStyles()((theme) => ({
     root: { display: 'flex', alignItems: 'center' },
+    icon: { width: 16, height: 16 },
     direction: { marginLeft: theme.spacing(0.5), marginRight: theme.spacing(0.5) },
     amount: { marginRight: theme.spacing(0.5) },
     symbol: { marginRight: theme.spacing(0.5) },
@@ -22,7 +23,7 @@ export const Record: FC<{ pair: Transaction['pairs'][number] }> = ({ pair }) => 
             variant="body2"
             className={classNames(styles.root, { [styles.receive]: pair.direction === 'receive' })}
             title={pair.name}>
-            <TokenIcon address={pair.address} logoURI={pair.logoURI} />
+            <TokenIcon classes={{ icon: styles.icon }} address={pair.address} logoURI={pair.logoURI} />
             <span className={styles.direction}>
                 {pair.direction === DebankTransactionDirection.SEND || pair.direction === ZerionTransactionDirection.OUT
                     ? '-'

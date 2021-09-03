@@ -34,6 +34,8 @@ export function resolveDebankChainName(network: NetworkType) {
             return 'matic'
         case NetworkType.Arbitrum:
             return 'arbitrum'
+        case NetworkType.xDai:
+            return 'xdai'
         default:
             safeUnreachable(network)
             return ''
@@ -49,7 +51,9 @@ export function resolveZerionAssetsScopeName(network: NetworkType) {
         case NetworkType.Polygon:
             return 'polygon-assets'
         case NetworkType.Arbitrum:
-            return ''
+            return 'arbitrum-assets'
+        case NetworkType.xDai:
+            return 'xdai-assets'
         default:
             safeUnreachable(network)
             return ''
@@ -65,6 +69,8 @@ export function resolveZerionTransactionsScopeName(network: NetworkType) {
         case NetworkType.Polygon:
             return ''
         case NetworkType.Arbitrum:
+            return ''
+        case NetworkType.xDai:
             return ''
         default:
             safeUnreachable(network)

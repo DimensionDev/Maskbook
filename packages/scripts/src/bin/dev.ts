@@ -14,7 +14,7 @@ async function main() {
             shell: true,
         })
     }
-    return extensionWatch(extensionArgsParser())
+    await extensionWatch(extensionArgsParser())
 }
 
 main().then(async (child) => {

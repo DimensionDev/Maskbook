@@ -1,5 +1,5 @@
 import { ChainId } from '@masknet/web3-shared'
-import { COMP, DAI, MKR, USDC, USDT, WETH, WETH_ONLY } from './trader'
+import { COMP, DAI, MKR, USDC, USDT, WNATIVE, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
@@ -9,6 +9,6 @@ import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 export const SASHIMISWAP_CUSTOM_BASES: ERC20TokenCustomizedBase = {}
 
 export const SASHIMISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
-    ...WETH_ONLY,
-    [ChainId.Mainnet]: [WETH, DAI, USDC, USDT, COMP, MKR].map((x) => x[ChainId.Mainnet]),
+    ...WNATIVE_ONLY,
+    [ChainId.Mainnet]: [WNATIVE, DAI, USDC, USDT, COMP, MKR].map((x) => x[ChainId.Mainnet]),
 }

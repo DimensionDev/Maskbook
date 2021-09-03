@@ -35,6 +35,7 @@ async function fetchProposalFromGraphql(id: string) {
                     strategies {
                       name
                       params
+                      __typename
                     }
                 }
                 votes(first: 10000, where: { proposal: $id }) {
@@ -87,7 +88,7 @@ export async function getScores(
     space: string,
     _strategies: Strategy[],
 ) {
-    const strategies = message.payload.metadata.strategies ?? _strategies
+    const strategies = _strategies ?? message.payload.metadata.strategies
     // Sometimes `message.payload.metadata.network` is absent, this is maybe a snapshot api issue.
     const network = message.payload.metadata.network ?? _network
     const provider = ss.utils.getProvider(network)

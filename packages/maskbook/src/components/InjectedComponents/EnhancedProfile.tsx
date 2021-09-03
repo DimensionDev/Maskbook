@@ -6,7 +6,7 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { useState, useEffect } from 'react'
 import { CollectibleListAddress } from '../../extension/options-page/DashboardComponents/CollectibleList'
 import { useEthereumAddress } from '../../social-network-adaptor/twitter.com/injection/useEthereumName'
-import { MaskMessage } from '../../utils'
+import { MaskMessage, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 
 const RULE_TIP = [
@@ -36,7 +36,6 @@ const useStyles = makeStyles()((theme) => ({
             color: getMaskColor(theme).textPrimary,
         },
     },
-    button: {},
 }))
 
 interface EnhancedProfilePageProps extends withClasses<'text' | 'button'> {
@@ -51,6 +50,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
     const { bioDescription, nickname, twitterId, onUpdated } = props
+    const { t } = useI18N()
 
     useLocationChange(() => {
         MaskMessage.events.profileNFTsTabUpdated.sendToLocal('reset')
@@ -70,7 +70,13 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
 
     const { name, addressENS, addressUNS, address } = useEthereumAddress(nickname, twitterId, bioDescription)
     const address_ = addressENS ?? addressUNS ?? address ?? ''
-    if (!show || !address_) return null
+    if (!show) return null
+    if (!address_)
+        return (
+            <Box className={classes.text} display="flex" alignItems="center" justifyContent="center">
+                <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
+            </Box>
+        )
     return (
         <div className={classes.root}>
             <Box className={classes.note} display="flex" alignItems="center" justifyContent="flex-end">
@@ -91,12 +97,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                     <InfoOutlinedIcon color="inherit" fontSize="small" />
                 </Typography>
             </Box>
-            <CollectibleListAddress
-                classes={{
-                    button: classes.button,
-                }}
-                address={address_}
-            />
+            <CollectibleListAddress address={address_} />
         </div>
     )
 }

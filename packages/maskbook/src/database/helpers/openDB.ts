@@ -10,12 +10,24 @@ import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined
+    function clean() {
+        db = undefined
+    }
     return async () => {
+        if (process.env.target === 'safari') await import('safari-14-idb-fix').then(({ default: ready }) => ready())
         assertEnvironment(Environment.ManifestBackground)
-        if (db) return db
+        if (db) {
+            try {
+                // try if the db still open
+                db.transaction([], 'readonly', {})
+                return db
+            } catch {
+                clean()
+            }
+        }
         db = await opener()
-        db.addEventListener('close', () => (db = undefined))
-        db.addEventListener('error', () => (db = undefined))
+        db.addEventListener('close', clean)
+        db.addEventListener('error', clean)
         return db
     }
 }
