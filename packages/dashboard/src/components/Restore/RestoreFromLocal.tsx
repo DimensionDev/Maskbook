@@ -87,7 +87,7 @@ export const RestoreFromLocal = memo(() => {
                 {restoreStatus === RestoreStatus.Verifying && <LoadingCard text="Verifying" />}
                 {restoreStatus === RestoreStatus.WaitingInput && (
                     <Card variant="background" sx={{ height: '144px' }}>
-                        <FileUpload onChange={handleSetFile} />
+                        <FileUpload onChange={handleSetFile} accept="application/octet-stream, application/json" />
                     </Card>
                 )}
                 {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
