@@ -161,7 +161,9 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     onClick={() => {
                                         onAmountChange(
                                             formatBalance(
-                                                new BigNumber(maxAmount ?? balance).dividedBy(maxAmountShares),
+                                                new BigNumber(maxAmount ?? balance)
+                                                    .dividedBy(maxAmountShares)
+                                                    .decimalPlaces(0, 1),
                                                 token.decimals,
                                             ),
                                         )
