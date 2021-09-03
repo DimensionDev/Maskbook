@@ -222,6 +222,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const { t } = useI18N()
     const account = useAccount()
     const [tokenDetailed, setTokenDetailed] = useState<ERC721TokenDetailed>()
+    const [searched, setSearched] = useState(false)
     const [tokenDetailedSelectedList, setTokenDetailedSelectedList] =
         useState<ERC721TokenDetailed[]>(existTokenDetailedList)
     const [loadingToken, setLoadingToken] = useState(false)
@@ -233,6 +234,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         setTokenDetailed(undefined)
         setTokenId('')
         setTokenDetailedSelectedList(existTokenDetailedList)
+        setSearched(false)
     }, [contract])
 
     const selectToken = useCallback(
@@ -248,12 +250,15 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     //#region fetch token detail
     const onSearch = useCallback(async () => {
         setLoadingToken(true)
-        setTokenDetailed(await erc721TokenDetailedCallback())
+        const _tokenDetailed = await erc721TokenDetailedCallback()
+        setTokenDetailed(_tokenDetailed?.info.owner ? _tokenDetailed : undefined)
+        setSearched(true)
         setLoadingToken(false)
     }, [erc721TokenDetailedCallback])
 
     useEffect(() => {
         setTokenDetailed(undefined)
+        setSearched(false)
     }, [tokenId])
 
     const isOwner = isSameAddress(account, tokenDetailed?.info.owner) || tokenDetailedSelectedList.length > 0
@@ -338,9 +343,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 {t('search')}
                             </Button>
                         </div>
-                        {loadingToken ? (
+                        {(loadingToken || !tokenDetailed) && searched ? (
                             <Box className={classes.noResultBox}>
-                                <Typography>{t('wallet_loading_token')}</Typography>
+                                <Typography>
+                                    {loadingToken ? t('wallet_loading_token') : t('wallet_search_no_result')}
+                                </Typography>
                             </Box>
                         ) : tokenDetailed?.info.name ? (
                             <Box className={classNames(classes.wrapper, classes.nftWrapper)}>

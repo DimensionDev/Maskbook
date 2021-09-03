@@ -64,11 +64,15 @@ export async function getERC721TokenDetailedFromChain(
     tokenId: string,
 ) {
     if (!contractDetailed) return
-    const tokenURI = await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenURI(tokenId))
-    const owner = await safeNonPayableTransactionCall(erc721TokenContract.methods.ownerOf(tokenId))
-    const asset = await getERC721TokenAssetFromChain(tokenURI)
-    const tokenInfo = { owner, ...asset }
-    return createERC721Token(contractDetailed, tokenInfo, tokenId)
+    try {
+        const tokenURI = await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenURI(tokenId))
+        const owner = await safeNonPayableTransactionCall(erc721TokenContract.methods.ownerOf(tokenId))
+        const asset = await getERC721TokenAssetFromChain(tokenURI)
+        const tokenInfo = { owner, ...asset }
+        return createERC721Token(contractDetailed, tokenInfo, tokenId)
+    } catch (err) {
+        return
+    }
 }
 
 const BASE64_PREFIX = 'data:application/json;base64,'

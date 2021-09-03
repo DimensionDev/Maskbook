@@ -18,6 +18,9 @@ export function useScrollBottomEvent(ref: RefObject<HTMLDivElement>, cb: () => v
         if (!ref.current) return
         ref.current.addEventListener('scroll', onScroll)
         // useLayoutEffect() to remove the listener before changes painted on screen.
-        return () => ref.current!.removeEventListener('scroll', onScroll)
+        return () => {
+            if (!ref.current) return
+            ref.current.removeEventListener('scroll', onScroll)
+        }
     }, [onScroll, ref.current])
 }
