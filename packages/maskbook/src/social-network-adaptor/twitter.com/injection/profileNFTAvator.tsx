@@ -2,7 +2,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import type { ProfileIdentifier } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
 import { NFTAvator } from '../../../components/InjectedComponents/NFTAvator'
@@ -10,7 +10,12 @@ import Services from '../../../extension/service'
 import { gun2 } from '../../../network/gun/version.2'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { createReactRootShadowed, MaskMessage, startWatch } from '../../../utils'
-import { searchAvatorSelector, searchAvatorSelectorImage, searchAvatorSelectorInput } from '../utils/selector'
+import {
+    searchAvatorSelector,
+    searchAvatorSelectorImage,
+    searchAvatorSelectorInput,
+    searchProfileSaveSelector,
+} from '../utils/selector'
 import { getTwitterId } from '../utils/user'
 
 export function injectProfileNFTAvatorInTwitter(signal: AbortSignal) {
@@ -55,6 +60,8 @@ function NFTAvatorInTwitter() {
     const twitterId = getTwitterId()
     const useInfo = useGetCurrentUserInfo()
     const avator = useNFTAvator(twitterId)
+    const profileSave = searchProfileSaveSelector().evaluate()
+    const [avatorMeta, setAvatorMeta] = useState<AvatorMetaData>({} as AvatorMetaData)
     const onChange = useCallback(async (token: ERC721TokenDetailed, amount: string) => {
         UpdateAvator(token.info.image ?? '')
         const metaData = {
@@ -64,15 +71,19 @@ function NFTAvatorInTwitter() {
             address: token.contractDetailed.address,
             image: token.info.image ?? '',
         }
-        gun2
-            //@ts-ignore
-            .get(twitterId)
-            //@ts-ignore
-            .put(metaData).then!()
-        MaskMessage.events.NFTAvatorUpdated.sendToLocal(metaData)
+        setAvatorMeta(metaData)
     }, [])
 
-    if (avator) UpdateAvator(avator.image ?? '')
+    useEffect(() => {
+        profileSave?.addEventListener('click', () => MaskMessage.events.NFTAvatorUpdated.sendToLocal(avatorMeta))
+        return () =>
+            profileSave?.removeEventListener('click', () => MaskMessage.events.NFTAvatorUpdated.sendToLocal(avatorMeta))
+    }, [profileSave, avatorMeta])
+
+    useEffect(() => {
+        UpdateAvator(avator?.image ?? '')
+    }, [avator])
+
     if (twitterId !== useInfo?.userId) return null
     return <NFTAvator onChange={onChange} classes={classes} />
 }
@@ -94,4 +105,12 @@ export function useNFTAvator(twitterId: string) {
         const avator = (await gun2.get(twitterId).then!()) as AvatorMetaData
         return avator
     }, [twitterId]).value
+}
+
+export function saveNFTAvator(avatorMeta: AvatorMetaData) {
+    gun2
+        //@ts-ignore
+        .get(avatorMeta.twitterId)
+        //@ts-ignore
+        .put(avatorMeta).then!()
 }

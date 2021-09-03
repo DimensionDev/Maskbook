@@ -162,6 +162,7 @@ export const selfInfoSelectors = () => ({
     userAvatar: p(avatar, 1),
 })
 
+//#region nft avator
 export const searchAvatorSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
 export const searchAvatorSelectorInput = () =>
     querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]')
@@ -175,6 +176,8 @@ export const searchAvatorSelectorImage = () =>
         .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > img')
 
 export const searchAvatorOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
+export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
+//#endregion
 
 //#region avator selector
 

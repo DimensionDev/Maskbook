@@ -1,4 +1,5 @@
-import { useStylesExtends, useValueRef } from '@masknet/shared'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { useRemoteControlledDialog, useStylesExtends, useValueRef } from '@masknet/shared'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import {
     ERC721TokenDetailed,
@@ -7,15 +8,16 @@ import {
     useChainId,
     useCollectibles,
 } from '@masknet/web3-shared'
-import { Box, Button, Link, Skeleton, TablePagination, Typography } from '@material-ui/core'
+import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import classnames from 'classnames'
-import { head } from 'lodash-es'
-import { useCallback, useState } from 'react'
+import { head, uniqBy } from 'lodash-es'
+import { useCallback, useEffect, useState } from 'react'
 import { PluginCollectibleRPC } from '../../plugins/Collectible/messages'
 import { getOrderUnitPrice } from '../../plugins/Collectible/utils'
 import { currentCollectibleDataProviderSettings } from '../../plugins/Wallet/settings'
 import { EthereumChainBoundary } from '../../web3/UI/EthereumChainBoundary'
+import { AddNFT } from './AddNFT'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -91,6 +93,8 @@ export function NFTAvator(props: NFTAvatorProps) {
     const provider = useValueRef(currentCollectibleDataProviderSettings)
     const [page, setPage] = useState(0)
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>()
+    const [open_, setOpen_] = useState(false)
+    const [collectibles_, setCollectibles_] = useState<ERC721TokenDetailed[]>([])
     const {
         value = {
             collectibles: [],
@@ -101,7 +105,11 @@ export function NFTAvator(props: NFTAvatorProps) {
         error,
     } = useCollectibles(account, chainId, provider, page, 50)
     //0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
-    const { collectibles = [], hasNextPage } = value
+
+    const { collectibles, hasNextPage } = value
+    useEffect(() => {
+        setCollectibles_(collectibles)
+    }, [collectibles, collectibles.length])
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
@@ -109,81 +117,96 @@ export function NFTAvator(props: NFTAvatorProps) {
         onChange(selectedToken, amount?.toFixed() ?? '0')
     }, [onChange, selectedToken])
 
-    return (
-        <Box className={classes.root}>
-            <Box className={classes.title}>
-                <Typography variant="body1">NFT Avator Setting</Typography>
-                {account ? (
-                    <Typography variant="body1">
-                        Wallet: {formatEthereumAddress(account, 4)} <Link>Change</Link>
-                    </Typography>
-                ) : null}
-            </Box>
-            <EthereumChainBoundary chainId={chainId}>
-                <Box className={classes.NFTBox}>
-                    <Box className={classes.AddCollectible}>
-                        <Button variant="outlined" size="small">
-                            Add Collectibles
-                        </Button>
-                    </Box>
-                    <Box className={classes.NFTImage}>
-                        {loading
-                            ? Array.from({ length: 24 })
-                                  .fill(0)
-                                  .map((_, i) => (
-                                      <Skeleton
-                                          animation="wave"
-                                          variant="rectangular"
-                                          className={classes.image}
-                                          key={i}
-                                      />
-                                  ))
-                            : collectibles.map((token: ERC721TokenDetailed, i) => (
-                                  <img
-                                      key={i}
-                                      onClick={() => setSelectedToken(token)}
-                                      src={token.info.image}
-                                      className={classnames(
-                                          classes.image,
-                                          selectedToken === token ? classes.selected : '',
-                                      )}
-                                  />
-                              ))}
-                    </Box>
+    const onAddClick = useCallback((token) => {
+        setSelectedToken(token)
+        setCollectibles_((tokens) => uniqBy([token, ...tokens], (x) => x.contractDetailed.address && x.tokenId))
+    }, [])
 
-                    {!(page === 0 && collectibles.length === 0) ? (
-                        <TablePagination
-                            count={-1}
-                            component="div"
-                            onPageChange={() => {}}
-                            page={page}
-                            rowsPerPage={30}
-                            rowsPerPageOptions={[30]}
-                            labelDisplayedRows={() => null}
-                            backIconButtonProps={{
-                                onClick: () => setPage(page - 1),
-                                size: 'small',
-                                disabled: page === 0,
-                            }}
-                            nextIconButtonProps={{
-                                onClick: () => setPage(page + 1),
-                                disabled: !hasNextPage,
-                                size: 'small',
-                            }}
-                        />
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
+
+    return (
+        <>
+            <Box className={classes.root}>
+                <Box className={classes.title}>
+                    <Typography variant="body1">NFT Avator Setting</Typography>
+                    {account ? (
+                        <Typography variant="body1">
+                            Wallet: {formatEthereumAddress(account, 4)}
+                            <Button onClick={openSelectProviderDialog} size="small">
+                                Change
+                            </Button>
+                        </Typography>
                     ) : null}
-                    <Box className={classes.button}>
-                        <Button
-                            variant="contained"
-                            size="medium"
-                            className={classes.setNFTAvator}
-                            onClick={() => onClick()}
-                            disabled={!selectedToken}>
-                            Set NFT Avator
-                        </Button>
-                    </Box>
                 </Box>
-            </EthereumChainBoundary>
-        </Box>
+                <EthereumChainBoundary chainId={chainId}>
+                    <Box className={classes.NFTBox}>
+                        <Box className={classes.AddCollectible}>
+                            <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
+                                Add Collectibles
+                            </Button>
+                        </Box>
+                        <Box className={classes.NFTImage}>
+                            {loading
+                                ? Array.from({ length: 24 })
+                                      .fill(0)
+                                      .map((_, i) => (
+                                          <Skeleton
+                                              animation="wave"
+                                              variant="rectangular"
+                                              className={classes.image}
+                                              key={i}
+                                          />
+                                      ))
+                                : collectibles_.map((token: ERC721TokenDetailed, i) => (
+                                      <img
+                                          key={i}
+                                          onClick={() => setSelectedToken(token)}
+                                          src={token.info.image}
+                                          className={classnames(
+                                              classes.image,
+                                              selectedToken === token ? classes.selected : '',
+                                          )}
+                                      />
+                                  ))}
+                        </Box>
+
+                        {!(page === 0 && collectibles_.length === 0) ? (
+                            <TablePagination
+                                count={-1}
+                                component="div"
+                                onPageChange={() => {}}
+                                page={page}
+                                rowsPerPage={30}
+                                rowsPerPageOptions={[30]}
+                                labelDisplayedRows={() => null}
+                                backIconButtonProps={{
+                                    onClick: () => setPage(page - 1),
+                                    size: 'small',
+                                    disabled: page === 0,
+                                }}
+                                nextIconButtonProps={{
+                                    onClick: () => setPage(page + 1),
+                                    disabled: !hasNextPage,
+                                    size: 'small',
+                                }}
+                            />
+                        ) : null}
+                        <Box className={classes.button}>
+                            <Button
+                                variant="contained"
+                                size="medium"
+                                className={classes.setNFTAvator}
+                                onClick={() => onClick()}
+                                disabled={!selectedToken}>
+                                Set NFT Avator
+                            </Button>
+                        </Box>
+                    </Box>
+                </EthereumChainBoundary>
+            </Box>
+            <AddNFT open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
+        </>
     )
 }

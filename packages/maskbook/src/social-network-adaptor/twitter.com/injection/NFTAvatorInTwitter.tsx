@@ -3,10 +3,12 @@ import { searchTwitterAvatorSelector } from '../utils/selector'
 import { getTwitterId } from '../utils/user'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { AvatorMetaData, useNFTAvator } from './profileNFTAvator'
+import { AvatorMetaData, saveNFTAvator, useNFTAvator } from './profileNFTAvator'
 import { useState, useEffect, useCallback } from 'react'
 import Services from '../../../extension/service'
 import { toNumber } from 'lodash-es'
+import { Typography } from '@material-ui/core'
+import { NFTAvatorAmountIcon } from '@masknet/icons'
 
 export function injectNFTAvatorInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatorSelector())
@@ -17,12 +19,27 @@ export function injectNFTAvatorInTwitter(signal: AbortSignal) {
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'absolute',
-        top: 28,
+        top: 16,
         left: 36,
         width: 60,
         textAlign: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
         color: 'white',
+    },
+
+    nftImage: {
+        width: '100%',
+        height: 'auto',
+    },
+    wrapper: {
+        position: 'absolute',
+        width: '100%',
+        left: 0,
+        top: 12,
+    },
+    amount: {
+        color: 'white',
+        fontSize: 12,
+        fontWeight: 700,
     },
 }))
 
@@ -33,26 +50,36 @@ function NFTAvatorInTwitter(props: NFTAvatorInTwitterProps) {
     const [amount, setAmount] = useState('')
     const avatorMeta = useNFTAvator(twitterId)
 
-    useEffect(() => {
-        if (!avatorMeta) return
-        setAmount(avatorMeta.amount)
-    }, [avatorMeta])
-
     const onUpdate = useCallback((data: AvatorMetaData) => {
         if (!data.image) return
-        UpdateAvator(data.image!)
+        updateAvator(data.image!)
         setAmount(data.amount)
+        saveNFTAvator(data)
     }, [])
 
     useEffect(() => {
         return MaskMessage.events.NFTAvatorUpdated.on((data) => onUpdate(data))
     }, [])
 
+    useEffect(() => {
+        setAmount(avatorMeta?.amount ?? '0')
+        updateAvator(avatorMeta?.image ?? '')
+    }, [avatorMeta])
+
     if (toNumber(amount) === 0) return null
-    return <div className={classes.root}>{amount}</div>
+    return (
+        <div className={classes.root}>
+            <NFTAvatorAmountIcon className={classes.nftImage} />
+            <div className={classes.wrapper}>
+                <Typography align="center" className={classes.amount}>
+                    {amount} ETH
+                </Typography>
+            </div>
+        </div>
+    )
 }
 
-async function UpdateAvator(image: string) {
+async function updateAvator(image: string) {
     const blob = await Services.Helper.fetch(image)
     if (!blob) return
     const blobURL = URL.createObjectURL(blob)
