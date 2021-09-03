@@ -67,6 +67,7 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
         const navigate = useNavigate()
         const { classes } = useStyles()
         const t = useDashboardI18N()
+        const navigate = useNavigate()
 
         const [showAddPersonaCard, setShowAddPersonaCard] = useState(false)
 
