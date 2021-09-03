@@ -1,4 +1,4 @@
-import { safeUnreachable } from '@dimensiondev/kit'
+import { createLookupTableResolver } from '.'
 import CHAINS from '../assets/chains.json'
 import { getRPCConstants } from '../constants'
 import { ChainId, NetworkType } from '../types'
@@ -76,23 +76,16 @@ export function getChainIdFromName(name: string) {
         : undefined
 }
 
-export function getChainIdFromNetworkType(networkType: NetworkType) {
-    switch (networkType) {
-        case NetworkType.Ethereum:
-            return ChainId.Mainnet
-        case NetworkType.Binance:
-            return ChainId.BSC
-        case NetworkType.Polygon:
-            return ChainId.Matic
-        case NetworkType.Arbitrum:
-            return ChainId.Arbitrum
-        case NetworkType.xDai:
-            return ChainId.xDai
-        default:
-            safeUnreachable(networkType)
-            return ChainId.Mainnet
-    }
-}
+export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, ChainId>(
+    {
+        [NetworkType.Ethereum]: ChainId.Mainnet,
+        [NetworkType.Binance]: ChainId.BSC,
+        [NetworkType.Polygon]: ChainId.Matic,
+        [NetworkType.Arbitrum]: ChainId.Arbitrum,
+        [NetworkType.xDai]: ChainId.xDai,
+    },
+    ChainId.Mainnet,
+)
 
 export function getNetworkTypeFromChainId(chainId: ChainId) {
     const map: Record<NetworkType, string> = {
