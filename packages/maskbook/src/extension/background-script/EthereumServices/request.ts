@@ -21,6 +21,10 @@ const RISK_METHOD_LIST = [
     EthereumMethodType.ETH_SEND_TRANSACTION,
 ]
 
+interface RequestOptions {
+    popupsWindow?: boolean
+}
+
 function getSendMethod() {
     if (hasNativeAPI && nativeAPI) return INTERNAL_nativeSend
     return INTERNAL_send
@@ -34,7 +38,11 @@ function isRiskMethod(method: EthereumMethodType) {
     return RISK_METHOD_LIST.includes(method)
 }
 
-export async function request<T extends unknown>(requestArguments: RequestArguments, overrides?: SendOverrides) {
+export async function request<T extends unknown>(
+    requestArguments: RequestArguments,
+    overrides?: SendOverrides,
+    options?: RequestOptions,
+) {
     return new Promise<T>(async (resolve, reject) => {
         requestSend(
             {
@@ -48,6 +56,7 @@ export async function request<T extends unknown>(requestArguments: RequestArgume
                 else resolve(response?.result)
             },
             overrides,
+            options,
         )
     })
 }
@@ -56,9 +65,11 @@ export async function requestSend(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
     overrides?: SendOverrides,
+    options?: RequestOptions,
 ) {
     id += 1
     const { providerType = currentProviderSettings.value } = overrides ?? {}
+    const { popupsWindow = true } = options ?? {}
     const payload_ = {
         ...payload,
         id,
@@ -75,18 +86,10 @@ export async function requestSend(
             return
         }
         UNCONFIRMED_CALLBACK_MAP.set(payload_.id, callback)
+        if (popupsWindow) openPopupsWindow()
         return
     }
     getSendMethod()(payload_, callback, overrides)
-}
-
-export async function requestSendWithConfirmation(
-    payload: JsonRpcPayload,
-    callback: (error: Error | null, response?: JsonRpcResponse) => void,
-    overrides?: SendOverrides,
-) {
-    requestSend(payload, callback, overrides)
-    openPopupsWindow()
 }
 
 export async function confirmRequest(payload: JsonRpcPayload) {
