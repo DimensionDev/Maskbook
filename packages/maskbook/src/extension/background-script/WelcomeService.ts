@@ -70,9 +70,9 @@ export async function downloadBackupV2(buffer: ArrayBuffer) {
         .getDate()
         .toString()
         .padStart(2, '0')}`
-    const fileName = `maskbook-keystore-backup-${today}`
+    const fileName = `maskbook-keystore-backup-${today}.bin`
 
-    saveAsFileFromBuffer(buffer, '', fileName)
+    saveAsFileFromBuffer(buffer, 'application/octet-stream', fileName)
 }
 
 export async function createBackupFile(
