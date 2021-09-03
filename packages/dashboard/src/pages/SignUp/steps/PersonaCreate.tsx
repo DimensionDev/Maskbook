@@ -12,7 +12,7 @@ import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { Box, Button, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
-import { useSnackbarCallback } from '@masknet/shared'
+import { delay, useSnackbarCallback } from '@masknet/shared'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
 import { Services } from '../../../API'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
@@ -50,6 +50,7 @@ export const PersonaCreate = () => {
             : await createPersonaByPrivateKey(privateKey, personaName)
 
         await changeCurrentPersona(identifier)
+        await delay(300)
     }, [mnemonic, privateKey, personaName])
 
     const handleCreatePersona = useSnackbarCallback({
