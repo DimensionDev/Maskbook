@@ -191,10 +191,7 @@ const GasSetting = memo(() => {
                           gasPrice: currentGasPrice ? options[currentGasPrice].gasPrice : initConfig.gasPrice,
                       }
                 await WalletRPC.deleteUnconfirmedRequest(value.payload)
-                await Services.Ethereum.request(
-                    { ...value.payload, params: [config, ...value.payload.params] },
-                    { skipConfirmation: true },
-                )
+                await Services.Ethereum.request({ ...value.payload, params: [config, ...value.payload.params] })
             }
         },
         [value, currentGasPrice, options],
