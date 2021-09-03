@@ -27,7 +27,7 @@ async function main() {
         target: 'web3-v1',
     })
 
-    // rename Qualifiction to QualificationEvent
+    // rename Qualification to QualificationEvent
     const qualificationDefinition = path.join(GENERATED_PATH, 'Qualification.d.ts')
     replaceFileAll(qualificationDefinition, [
         ['type Qualification', 'type QualificationEvent'],

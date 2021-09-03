@@ -5,7 +5,7 @@ import {
     MaskLightTheme,
     applyMaskColorVars,
     MaskDarkTheme,
-    useSystemPreferencePalatte,
+    useSystemPreferencePalette,
     NoEffectUsePortalShadowRootContext,
 } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared'
@@ -25,7 +25,7 @@ const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x)
 
 export default function DashboardRoot() {
     const settings = useAppearance()
-    const mode = useSystemPreferencePalatte()
+    const mode = useSystemPreferencePalette()
     const themes: Record<typeof settings, Theme> = {
         dark: MaskDarkTheme,
         light: MaskLightTheme,

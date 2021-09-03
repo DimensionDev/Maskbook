@@ -17,7 +17,7 @@ export function useRecentTransactions(status?: TransactionStatusType) {
     const chainId = useChainId()
     const [flag, setFlag] = useState(false)
 
-    // update transactions status intervally
+    // update transactions status periodically
     const [delay, setDelay] = useState(0)
     useInterval(() => setFlag((x) => !x), delay)
 

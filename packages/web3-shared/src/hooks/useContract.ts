@@ -15,7 +15,7 @@ export function createContract<T extends BaseContract>(web3: Web3, address: stri
 
 /**
  * Create a contract which will forward its all transactions to the
- * EthereumService in the background page and decode the result of calls automaticallly
+ * EthereumService in the background page and decode the result of calls automatically
  * @param address
  * @param ABI
  */
