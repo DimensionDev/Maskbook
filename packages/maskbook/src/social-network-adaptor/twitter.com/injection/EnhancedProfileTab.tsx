@@ -38,6 +38,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         height: props.height,
     },
     button: {
+        zIndex: 1,
+        position: 'relative',
         display: 'flex',
         minWidth: 56,
         justifyContent: 'center',
@@ -48,7 +50,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         font: props.font,
         fontSize: props.fontSize,
         '&:hover': {
-            color: props.hover,
+            color: props.color,
         },
     },
     selected: {

@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { DialogContent } from '@material-ui/core'
-import { usePortalShadowRoot } from '@masknet/theme'
+import { usePortalShadowRoot, makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
@@ -28,6 +28,19 @@ import { omit } from 'lodash-es'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 
+const useStyles = makeStyles()((theme) => ({
+    content: {
+        position: 'relative',
+        paddingTop: 50,
+    },
+    tabs: {
+        top: 0,
+        left: 0,
+        right: 0,
+        position: 'absolute',
+    },
+}))
+
 enum CreateRedPacketPageStep {
     NewRedPacketPage = 'new',
     ConfirmPage = 'confirm',
@@ -42,6 +55,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
     const chainId = useChainId()
     const account = useAccount()
+    const { classes } = useStyles()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
     const { attachMetadata, dropMetadata } = useCompositionContext()
 
@@ -227,8 +241,14 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     return (
         <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={onClose}>
-            <DialogContent>
-                {step === CreateRedPacketPageStep.NewRedPacketPage ? <AbstractTab height={320} {...tabProps} /> : null}
+            <DialogContent className={classes.content}>
+                {step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                    <AbstractTab
+                        classes={{ tabs: classes.tabs }}
+                        height={state[0] === DialogTabs.create ? 280 : 320}
+                        {...tabProps}
+                    />
+                ) : null}
                 {step === CreateRedPacketPageStep.ConfirmPage ? (
                     <RedPacketConfirmDialog
                         onClose={onClose}

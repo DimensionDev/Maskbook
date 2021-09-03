@@ -81,7 +81,7 @@ const SignRequest = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (value) {
             await WalletRPC.deleteUnconfirmedRequest(value.payload)
-            await Services.Ethereum.request(value.payload, { skipConfirmation: true })
+            await Services.Ethereum.request(value.payload)
         }
     }, [value])
 

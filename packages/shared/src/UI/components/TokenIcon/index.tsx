@@ -31,8 +31,6 @@ function getFallbackIcons(address: string, baseURIs: string[]) {
 }
 const useStyles = makeStyles()((theme) => ({
     icon: {
-        width: 16,
-        height: 16,
         backgroundColor: theme.palette.common.white,
         margin: 0,
     },
