@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => {
             borderBottom: `1px solid ${theme.palette.divider}`,
         },
         anchorTopRight: {
-            transform: 'translateX(36px) translateY(4.5px)',
+            transform: 'translateX(40px) translateY(2.5px)',
         },
         avatarWrapper: {
             marginRight: 8,
