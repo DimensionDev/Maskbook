@@ -5,7 +5,7 @@ import { mindsBase } from '../base'
 import { handleSelector, selfInfoSelectors } from '../utils/selector'
 
 async function resolveLastRecognizedIdentityInner(
-    ref: Next.CollectingCapabilities.IdentityResolveProvider['lastRecognized'],
+    ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     await untilDocumentReady()
@@ -36,8 +36,8 @@ async function resolveLastRecognizedIdentityInner(
 
 export const IdentityProviderMinds: Next.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
-    lastRecognized: creator.IdentityResolveProviderLastRecognized(),
+    recognized: creator.IdentityResolveProviderLastRecognized(),
     start(cancel) {
-        resolveLastRecognizedIdentityInner(this.lastRecognized, cancel)
+        resolveLastRecognizedIdentityInner(this.recognized, cancel)
     },
 }

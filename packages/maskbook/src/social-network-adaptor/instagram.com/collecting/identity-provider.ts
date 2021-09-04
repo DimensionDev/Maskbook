@@ -4,7 +4,7 @@ import { instagramBase } from '../base'
 import { openDB } from 'idb'
 export const IdentityProviderInstagram: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     async start(signal) {
-        const ref = this.lastRecognized
+        const ref = this.recognized
         update()
 
         async function update() {
@@ -14,7 +14,7 @@ export const IdentityProviderInstagram: SocialNetworkUI.CollectingCapabilities.I
             setTimeout(update, 10 * 1000)
         }
     },
-    lastRecognized: creator.IdentityResolveProviderLastRecognized(),
+    recognized: creator.IdentityResolveProviderLastRecognized(),
 }
 
 async function query(): Promise<null | SocialNetworkUI.CollectingCapabilities.IdentityResolved> {

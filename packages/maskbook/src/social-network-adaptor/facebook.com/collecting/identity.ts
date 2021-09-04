@@ -7,9 +7,9 @@ import { ProfileIdentifier } from '../../../database/type'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,
-    lastRecognized: creator.IdentityResolveProviderLastRecognized(),
+    recognized: creator.IdentityResolveProviderLastRecognized(),
     start(signal) {
-        resolveLastRecognizedIdentityFacebookInner(this.lastRecognized, signal)
+        resolveLastRecognizedIdentityFacebookInner(this.recognized, signal)
     },
 }
 

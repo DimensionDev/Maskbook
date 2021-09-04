@@ -68,6 +68,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.customization.paletteMode?.start(signal)
     startIntermediateSetupGuide()
     $unknownIdentityResolution()
+    surfaceIdentityResolution()
 
     ui.collecting.postsProvider?.start(signal)
     startPostListener()
@@ -104,12 +105,17 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         const provider = ui.collecting.identityProvider
         provider?.start(signal)
         if (provider?.hasDeprecatedPlaceholderName) {
-            provider.lastRecognized.addListener((id) => {
+            provider.recognized.addListener((id) => {
                 if (signal.aborted) return
                 if (id.identifier.isUnknown) return
                 Services.Identity.resolveIdentity(id.identifier)
             })
         }
+    }
+
+    function surfaceIdentityResolution() {
+        const provider = ui.collecting.surfaceIdentityProvider
+        provider?.start(signal)
     }
 
     function startPostListener() {

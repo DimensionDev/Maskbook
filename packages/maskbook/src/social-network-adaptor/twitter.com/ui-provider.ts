@@ -8,7 +8,7 @@ import { openComposeBoxTwitter } from './automation/openComposeBox'
 import { pasteTextToCompositionTwitter } from './automation/pasteTextToComposition'
 import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage'
 import { gotoProfilePageTwitter } from './automation/gotoProfilePage'
-import { IdentityProviderTwitter } from './collecting/identity'
+import { IdentityProviderTwitter, SurfaceIdentityProviderTwitter } from './collecting/identity'
 import { PostProviderTwitter } from './collecting/post'
 import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
@@ -118,6 +118,7 @@ const twitterUI: SocialNetworkUI.Definition = {
     },
     collecting: {
         identityProvider: IdentityProviderTwitter,
+        surfaceIdentityProvider: SurfaceIdentityProviderTwitter,
         postsProvider: PostProviderTwitter,
         getSearchedKeyword: getSearchedKeywordAtTwitter,
     },
@@ -168,7 +169,7 @@ const twitterUI: SocialNetworkUI.Definition = {
                 // ! Change this might be a breaking change !
                 return new ProfileIdentifier(
                     'twitter.com',
-                    ProfileIdentifier.getUserName(IdentityProviderTwitter.lastRecognized.value.identifier) ||
+                    ProfileIdentifier.getUserName(IdentityProviderTwitter.recognized.value.identifier) ||
                         ProfileIdentifier.getUserName(currentSelectedIdentity[twitterBase.networkIdentifier].value) ||
                         ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
                         unreachable('Cannot figure out password' as never),

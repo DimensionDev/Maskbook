@@ -183,13 +183,15 @@ export namespace SocialNetworkUI {
         export interface Define {
             /** Resolve the information of who am I on the current network. */
             identityProvider?: IdentityResolveProvider
+            /** Resolve the information of identity on the current page which has been browsing. */
+            surfaceIdentityProvider?: IdentityResolveProvider
             /** Maintain all the posts up-to-date. */
             postsProvider?: PostsProvider
             /** Get searched keyword */
             getSearchedKeyword?(): string
         }
         export type ProfileUI = { bioContent: string }
-        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar'>
+        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar' | 'bio'>
 
         /** Resolve the information of who am I on the current network. */
         export interface IdentityResolveProvider {
@@ -200,7 +202,7 @@ export namespace SocialNetworkUI {
             /**
              * The account that user is using (may not in the database)
              */
-            readonly lastRecognized: ValueRef<IdentityResolved>
+            readonly recognized: ValueRef<IdentityResolved>
             /**
              * Start to maintain the posts.
              * It should add new seen posts and remove gone posts.

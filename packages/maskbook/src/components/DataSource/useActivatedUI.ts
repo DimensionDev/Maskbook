@@ -1,6 +1,6 @@
+import { useMemo } from 'react'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier, useValueRef } from '@masknet/shared'
-import { useMemo } from 'react'
 import type { Profile } from '../../database'
 import { currentSelectedIdentity } from '../../settings/settings'
 import type { SocialNetworkUI } from '../../social-network'
@@ -14,7 +14,12 @@ export function useFriendsList() {
 const default_ = new ValueRef({ identifier: ProfileIdentifier.unknown })
 export function useLastRecognizedIdentity() {
     return useValueRef<SocialNetworkUI.CollectingCapabilities.IdentityResolved>(
-        activatedSocialNetworkUI.collecting.identityProvider?.lastRecognized || default_,
+        activatedSocialNetworkUI.collecting.identityProvider?.recognized || default_,
+    )
+}
+export function useSurfaceRecognizedIdentity() {
+    return useValueRef<SocialNetworkUI.CollectingCapabilities.IdentityResolved>(
+        activatedSocialNetworkUI.collecting.surfaceIdentityProvider?.recognized || default_,
     )
 }
 export function useMyIdentities() {

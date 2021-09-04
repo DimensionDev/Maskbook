@@ -11,6 +11,8 @@ import type {
     Asset,
     CollectibleProvider,
     Transaction,
+    Domain,
+    DomainType,
 } from '../types'
 
 export interface Web3ProviderType {
@@ -38,6 +40,7 @@ export interface Web3ProviderType {
         page?: number,
         size?: number,
     ) => Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }>
+    getDomainsList: (twitterId: string, domainType: DomainType) => Promise<Domain[]>
     getERC721TokensPaged: (index: number, count: number, query?: string) => Promise<ERC721TokenDetailed[]>
     getTransactionList: (
         address: string,

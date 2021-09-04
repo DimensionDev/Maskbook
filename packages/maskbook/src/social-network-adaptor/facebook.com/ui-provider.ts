@@ -100,7 +100,7 @@ const facebookUI: SocialNetworkUI.Definition = {
                 // ! Change this might be a breaking change !
                 return new ProfileIdentifier(
                     'facebook.com',
-                    ProfileIdentifier.getUserName(IdentityProviderFacebook.lastRecognized.value.identifier) ||
+                    ProfileIdentifier.getUserName(IdentityProviderFacebook.recognized.value.identifier) ||
                         ProfileIdentifier.getUserName(currentSelectedIdentity[facebookBase.networkIdentifier].value) ||
                         ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
                         unreachable('Cannot figure out password' as never),

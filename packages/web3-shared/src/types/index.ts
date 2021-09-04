@@ -501,3 +501,17 @@ export interface Transaction {
     gasFee: TransactionGasFee | undefined
     transactionType: string
 }
+
+//#region domain
+export enum DomainType {
+    ENS = 'ENS',
+    UNS = 'UNS',
+    DNS = 'DNS',
+}
+
+export interface Domain {
+    label: string
+    ownerAddress: string
+    resolvedAddress?: string
+}
+//#endregion
