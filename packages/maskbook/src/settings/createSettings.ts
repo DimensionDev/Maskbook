@@ -62,6 +62,12 @@ export function createInternalSettings<T extends browser.storage.StorageValue>(
         reject,
     })
 
+    readyPromise.then(() => {
+        Object.assign(settings, {
+            ready: true,
+        })
+    })
+
     const id = Date.now()
     cached.set(key, settings)
     lastEventId.set(key, id)
