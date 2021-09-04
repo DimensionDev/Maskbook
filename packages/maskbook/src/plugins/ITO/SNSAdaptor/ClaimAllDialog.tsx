@@ -302,33 +302,19 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         })
     }, [claimState, swappedTokens /* update tx dialog only if state changed */])
 
+    const createTabItem = (name: string, chainId: ChainId) => ({
+        label: <span>{name}</span>,
+        sx: { p: 0 },
+        cb: () => setChainId(chainId),
+    })
+
     const tabProps: AbstractTabProps = {
         tabs: [
-            {
-                label: <span>ETH</span>,
-                sx: { p: 0 },
-                cb: () => setChainId(ChainId.Mainnet),
-            },
-            {
-                label: <span>BSC</span>,
-                sx: { p: 0 },
-                cb: () => setChainId(ChainId.BSC),
-            },
-            {
-                label: <span>Polygon/Matic</span>,
-                sx: { p: 0 },
-                cb: () => setChainId(ChainId.Matic),
-            },
-            {
-                label: <span>Arbitrum</span>,
-                sx: { p: 0 },
-                cb: () => setChainId(ChainId.Arbitrum),
-            },
-            {
-                label: <span>xDai</span>,
-                sx: { p: 0 },
-                cb: () => setChainId(ChainId.xDai),
-            },
+            createTabItem('ETH', ChainId.Mainnet),
+            createTabItem('BSC', ChainId.BSC),
+            createTabItem('Polygon/Matic', ChainId.Matic),
+            createTabItem('Arbitrum', ChainId.Arbitrum),
+            createTabItem('xDai', ChainId.xDai),
         ],
         index: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].indexOf(chainId),
         classes,
