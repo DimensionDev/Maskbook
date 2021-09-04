@@ -44,7 +44,11 @@ export async function getAssetsListNFT(
         const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size })
         return {
             assets: assets
-                .filter((x) => ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name))
+                .filter(
+                    (x) =>
+                        x.asset_contract.asset_contract_type === 'non-fungible' ||
+                        ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
+                )
                 .map((x) => {
                     switch (x.asset_contract.schema_name) {
                         case 'ERC721':
