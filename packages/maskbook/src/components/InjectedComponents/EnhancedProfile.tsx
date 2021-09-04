@@ -85,7 +85,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                         href={resolveAddressLinkOnExplorer(chainId, address)}
                         target="_blank"
                         rel="noopener noreferrer">
-                        {formatEthereumAddress(name ?? address ?? '', 4)}
+                        {type === 'address' ? formatEthereumAddress(address, 4) : name}
                     </Link>
                 </Typography>
                 <Typography

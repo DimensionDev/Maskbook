@@ -3,7 +3,6 @@ import {
     Asset,
     ChainId,
     CollectibleProvider,
-    createERC1155Token,
     createERC20Token,
     createERC721Token,
     createNativeToken,
