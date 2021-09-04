@@ -36,7 +36,7 @@ export interface ProfileNFTsPageEvent {
     show: boolean
 }
 
-export interface NFTAVatorEvent {
+export interface NFTAVatarEvent {
     twitterId: string
     tokenId: string
     image?: string
@@ -86,7 +86,7 @@ export interface MaskMessages extends SettingsEvents {
         selectedPersona: PersonaIdentifier
     }
 
-    NFTAvatorUpdated: NFTAVatorEvent
+    NFTAvatarUpdated: NFTAVatarEvent
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })

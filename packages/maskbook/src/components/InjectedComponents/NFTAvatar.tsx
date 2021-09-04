@@ -33,8 +33,8 @@ const useStyles = makeStyles()((theme) => ({
         paddingBottom: theme.spacing(1),
     },
     NFTBox: {
-        border: `1px solid ${getMaskColor(theme).border}`,
-        broderRadius: 4,
+        border: `1px solid ${theme.palette.mode === 'dark' ? 'rgb(61, 84, 102)' : 'rgb(207, 217, 222)'}`,
+        borderRadius: 4,
         padding: theme.spacing(1),
     },
     NFTImage: {
@@ -59,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'center',
         paddingTop: theme.spacing(1),
     },
-    setNFTAvator: {
+    setNFTAvatar: {
         paddingLeft: 64,
         paddingRight: 64,
     },
@@ -83,11 +83,11 @@ async function getNFTAmount(token: ERC721TokenDetailed) {
     return order ? new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber() : null
 }
 
-export interface NFTAvatorProps extends withClasses<'root'> {
+export interface NFTAvatarProps extends withClasses<'root'> {
     onChange: (token: ERC721TokenDetailed, amount: string) => void
 }
 
-export function NFTAvator(props: NFTAvatorProps) {
+export function NFTAvatar(props: NFTAvatarProps) {
     const { onChange } = props
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
@@ -145,9 +145,11 @@ export function NFTAvator(props: NFTAvatorProps) {
         <>
             <Box className={classes.root}>
                 <Box className={classes.title}>
-                    <Typography variant="body1">NFT Avator Setting</Typography>
+                    <Typography variant="body1" color="textPrimary">
+                        NFT Avatar Setting
+                    </Typography>
                     {account ? (
-                        <Typography variant="body1">
+                        <Typography variant="body1" color="textPrimary">
                             Wallet: {formatEthereumAddress(account, 4)}
                             <Button onClick={openSelectProviderDialog} size="small">
                                 Change
@@ -205,10 +207,10 @@ export function NFTAvator(props: NFTAvatorProps) {
                             <Button
                                 variant="contained"
                                 size="medium"
-                                className={classes.setNFTAvator}
+                                className={classes.setNFTAvatar}
                                 onClick={() => onClick()}
                                 disabled={!selectedToken}>
-                                Set NFT Avator
+                                Set NFT Avatar
                             </Button>
                         </Box>
                     </Box>

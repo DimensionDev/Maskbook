@@ -127,8 +127,8 @@ export namespace SocialNetworkUI {
             enhancedProfileTab?(signal: AbortSignal): void
             enhancedProfile?(signal: AbortSignal): void
 
-            userAvator?(signal: AbortSignal): void
-            enhancedProfileNFTAvator?(signal: AbortSignal): void
+            userAvatar?(signal: AbortSignal): void
+            enhancedProfileNFTAvatar?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void

@@ -28,8 +28,8 @@ import { unreachable } from '@dimensiondev/kit'
 import { injectEnhancedProfileTabAtTwitter } from './injection/EnhancedProfileTab'
 import { injectEnhancedProfileAtTwitter } from './injection/EnhancedProfile'
 import { makeStyles } from '@masknet/theme'
-import { injectNFTAvatorInTwitter } from './injection/NFTAvatorInTwitter'
-import { injectProfileNFTAvatorInTwitter } from './injection/profileNFTAvator'
+import { injectNFTAvatarInTwitter } from './injection/NFTAvatarInTwitter'
+import { injectProfileNFTAvatarInTwitter } from './injection/profileNFTAvatar'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => ({
     root: {
@@ -162,8 +162,8 @@ const twitterUI: SocialNetworkUI.Definition = {
         setupWizard: createTaskStartSetupGuideDefault('twitter.com'),
         userBadge: injectMaskUserBadgeAtTwitter,
         commentComposition: undefined,
-        userAvator: injectNFTAvatorInTwitter,
-        enhancedProfileNFTAvator: injectProfileNFTAvatorInTwitter,
+        userAvatar: injectNFTAvatarInTwitter,
+        enhancedProfileNFTAvatar: injectProfileNFTAvatarInTwitter,
     },
     configuration: {
         steganography: {

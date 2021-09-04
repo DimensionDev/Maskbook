@@ -5,26 +5,26 @@ import type { ERC721TokenDetailed } from '@masknet/web3-shared'
 import { useCallback, useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
-import { NFTAvator } from '../../../components/InjectedComponents/NFTAvator'
+import { NFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
 import Services from '../../../extension/service'
 import { gun2 } from '../../../network/gun/version.2'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { createReactRootShadowed, MaskMessage, startWatch } from '../../../utils'
 import {
-    searchAvatorSelector,
-    searchAvatorSelectorImage,
-    searchAvatorSelectorInput,
+    searchAvatarSelector,
+    searchAvatarSelectorImage,
+    searchAvatarSelectorInput,
     searchProfileSaveSelector,
 } from '../utils/selector'
 import { getTwitterId } from '../utils/user'
 
-export function injectProfileNFTAvatorInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchAvatorSelector())
+export function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
+    const watcher = new MutationObserverWatcher(searchAvatarSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatorInTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInTwitter />)
 }
 
-export interface AvatorMetaData {
+export interface AvatarMetaData {
     twitterId: string
     tokenId: string
     amount: string
@@ -55,15 +55,15 @@ function useGetCurrentUserInfo(): { userId?: string; identifier?: ProfileIdentif
     return userInfo?.[0]
 }
 
-function NFTAvatorInTwitter() {
+function NFTAvatarInTwitter() {
     const { classes } = useStyles()
     const twitterId = getTwitterId()
     const useInfo = useGetCurrentUserInfo()
-    const avator = useNFTAvator(twitterId)
+    const avatar = useNFTAvatar(twitterId)
     const profileSave = searchProfileSaveSelector().evaluate()
-    const [avatorMeta, setAvatorMeta] = useState<AvatorMetaData>({} as AvatorMetaData)
+    const [avatarMeta, setAvatarMeta] = useState<AvatarMetaData>({} as AvatarMetaData)
     const onChange = useCallback(async (token: ERC721TokenDetailed, amount: string) => {
-        UpdateAvator(token.info.image ?? '')
+        UpdateAvatar(token.info.image ?? '')
         const metaData = {
             twitterId,
             amount,
@@ -71,46 +71,46 @@ function NFTAvatorInTwitter() {
             address: token.contractDetailed.address,
             image: token.info.image ?? '',
         }
-        setAvatorMeta(metaData)
+        setAvatarMeta(metaData)
     }, [])
 
     useEffect(() => {
-        profileSave?.addEventListener('click', () => MaskMessage.events.NFTAvatorUpdated.sendToLocal(avatorMeta))
+        profileSave?.addEventListener('click', () => MaskMessage.events.NFTAvatarUpdated.sendToLocal(avatarMeta))
         return () =>
-            profileSave?.removeEventListener('click', () => MaskMessage.events.NFTAvatorUpdated.sendToLocal(avatorMeta))
-    }, [profileSave, avatorMeta])
+            profileSave?.removeEventListener('click', () => MaskMessage.events.NFTAvatarUpdated.sendToLocal(avatarMeta))
+    }, [profileSave, avatarMeta])
 
     useEffect(() => {
-        UpdateAvator(avator?.image ?? '')
-    }, [avator])
+        UpdateAvatar(avatar?.image ?? '')
+    }, [avatar])
 
     if (twitterId !== useInfo?.userId) return null
-    return <NFTAvator onChange={onChange} classes={classes} />
+    return <NFTAvatar onChange={onChange} classes={classes} />
 }
 
-async function UpdateAvator(image: string) {
+async function UpdateAvatar(image: string) {
     const blob = await Services.Helper.fetch(image)
     if (!blob) return
     const blobURL = URL.createObjectURL(blob)
-    const avatorInput = searchAvatorSelectorInput().evaluate()[0]
-    if (!avatorInput) return
-    avatorInput.style.backgroundImage = `url("${blobURL.toString()}")`
-    const avatorImage = searchAvatorSelectorImage().evaluate()[0]
-    if (!avatorImage) return
-    avatorImage.setAttribute('src', blobURL.toString())
+    const avatarInput = searchAvatarSelectorInput().evaluate()[0]
+    if (!avatarInput) return
+    avatarInput.style.backgroundImage = `url("${blobURL.toString()}")`
+    const avatarImage = searchAvatarSelectorImage().evaluate()[0]
+    if (!avatarImage) return
+    avatarImage.setAttribute('src', blobURL.toString())
 }
 
-export function useNFTAvator(twitterId: string) {
+export function useNFTAvatar(twitterId: string) {
     return useAsync(async () => {
-        const avator = (await gun2.get(twitterId).then!()) as AvatorMetaData
-        return avator
+        const avatar = (await gun2.get(twitterId).then!()) as AvatarMetaData
+        return avatar
     }, [twitterId]).value
 }
 
-export function saveNFTAvator(avatorMeta: AvatorMetaData) {
+export function saveNFTAvatar(avatarMeta: AvatarMetaData) {
     gun2
         //@ts-ignore
-        .get(avatorMeta.twitterId)
+        .get(avatarMeta.twitterId)
         //@ts-ignore
-        .put(avatorMeta).then!()
+        .put(avatarMeta).then!()
 }

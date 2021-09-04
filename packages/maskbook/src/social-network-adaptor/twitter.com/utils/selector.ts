@@ -162,25 +162,25 @@ export const selfInfoSelectors = () => ({
     userAvatar: p(avatar, 1),
 })
 
-//#region nft avator
-export const searchAvatorSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
-export const searchAvatorSelectorInput = () =>
+//#region nft avatar
+export const searchAvatarSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
+export const searchAvatarSelectorInput = () =>
     querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]')
         .at(1)
         .closest<HTMLDivElement>(2)
         .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > :first-child')
-export const searchAvatorSelectorImage = () =>
+export const searchAvatarSelectorImage = () =>
     querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]')
         .at(1)
         .closest<HTMLDivElement>(2)
         .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > img')
 
-export const searchAvatorOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
+export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
 export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
 //#endregion
 
-//#region avator selector
+//#region avatar selector
 
-export const searchTwitterAvatorSelector: () => LiveSelector<E, true> = () =>
+export const searchTwitterAvatarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] > div > :nth-child(2) > div > div > div > :nth-child(2) > div > a')
 //#endregion

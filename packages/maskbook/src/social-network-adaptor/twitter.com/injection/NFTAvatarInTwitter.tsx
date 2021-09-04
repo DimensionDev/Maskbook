@@ -1,19 +1,19 @@
 import { createReactRootShadowed, MaskMessage, startWatch } from '../../../utils'
-import { searchTwitterAvatorSelector } from '../utils/selector'
+import { searchTwitterAvatarSelector } from '../utils/selector'
 import { getTwitterId } from '../utils/user'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { AvatorMetaData, saveNFTAvator, useNFTAvator } from './profileNFTAvator'
+import { AvatarMetaData, saveNFTAvatar, useNFTAvatar } from './profileNFTAvatar'
 import { useState, useEffect, useCallback } from 'react'
 import Services from '../../../extension/service'
 import { toNumber } from 'lodash-es'
 import { Typography } from '@material-ui/core'
-import { NFTAvatorAmountIcon } from '@masknet/icons'
+import { NFTAvatarAmountIcon } from '@masknet/icons'
 
-export function injectNFTAvatorInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchTwitterAvatorSelector())
+export function injectNFTAvatarInTwitter(signal: AbortSignal) {
+    const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatorInTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInTwitter />)
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -43,33 +43,33 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NFTAvatorInTwitterProps {}
-function NFTAvatorInTwitter(props: NFTAvatorInTwitterProps) {
+interface NFTAvatarInTwitterProps {}
+function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const { classes } = useStyles()
     const twitterId = getTwitterId()
     const [amount, setAmount] = useState('')
-    const avatorMeta = useNFTAvator(twitterId)
+    const avatarMeta = useNFTAvatar(twitterId)
 
-    const onUpdate = useCallback((data: AvatorMetaData) => {
+    const onUpdate = useCallback((data: AvatarMetaData) => {
         if (!data.image) return
-        updateAvator(data.image!)
+        updateAvatar(data.image!)
         setAmount(data.amount)
-        saveNFTAvator(data)
+        saveNFTAvatar(data)
     }, [])
 
     useEffect(() => {
-        return MaskMessage.events.NFTAvatorUpdated.on((data) => onUpdate(data))
+        return MaskMessage.events.NFTAvatarUpdated.on((data) => onUpdate(data))
     }, [])
 
     useEffect(() => {
-        setAmount(avatorMeta?.amount ?? '0')
-        updateAvator(avatorMeta?.image ?? '')
-    }, [avatorMeta])
+        setAmount(avatarMeta?.amount ?? '0')
+        updateAvatar(avatarMeta?.image ?? '')
+    }, [avatarMeta])
 
     if (toNumber(amount) === 0) return null
     return (
         <div className={classes.root}>
-            <NFTAvatorAmountIcon className={classes.nftImage} />
+            <NFTAvatarAmountIcon className={classes.nftImage} />
             <div className={classes.wrapper}>
                 <Typography align="center" className={classes.amount}>
                     {amount} ETH
@@ -79,18 +79,18 @@ function NFTAvatorInTwitter(props: NFTAvatorInTwitterProps) {
     )
 }
 
-async function updateAvator(image: string) {
+async function updateAvatar(image: string) {
     const blob = await Services.Helper.fetch(image)
     if (!blob) return
     const blobURL = URL.createObjectURL(blob)
-    const avatorElement = searchTwitterAvatorSelector()
+    const avatarElement = searchTwitterAvatarSelector()
         .querySelector('div > :nth-child(2) > div > :first-child')
         .evaluate() as HTMLElement
 
-    avatorElement.style.backgroundImage = `url("${blobURL.toString()}")`
-    const avatorImage = searchTwitterAvatorSelector()
+    avatarElement.style.backgroundImage = `url("${blobURL.toString()}")`
+    const avatarImage = searchTwitterAvatarSelector()
         .querySelector('div > :nth-child(2) > div > img')
         .evaluate() as HTMLElement
-    if (!avatorImage) return
-    avatorImage.setAttribute('src', blobURL.toString())
+    if (!avatarImage) return
+    avatarImage.setAttribute('src', blobURL.toString())
 }
