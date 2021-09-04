@@ -10,11 +10,9 @@ import { MaskMessage, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 
 const RULE_TIP = [
-    'Binding Rule',
-    '1. Their Twitter nickname is their ENS',
-    '2. Their Twitter bio contains ENS',
-    '3. Their Twitter bio contains a validated address',
-    '4. Their Twitter id + “.eth” form their ENS',
+    '1. Twitter name or bio contains ENS (e.g. vitalik.eth);',
+    '2. Twitter bio contains valid Ethereum address;',
+    '3. The ENS or Ethereum address has NFTs in it.',
 ].join('\n')
 
 const useStyles = makeStyles()((theme) => ({
