@@ -186,7 +186,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { open, onClose } = props
     const currentChainId = useChainId()
     const [chainId, setChainId] = useState(
-        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].includes(currentChainId) ? currentChainId : ChainId.Mainnet,
+        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].includes(currentChainId)
+            ? currentChainId
+            : ChainId.Mainnet,
     )
     const { value: swappedTokens, loading, retry } = useClaimablePools(chainId)
     const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
@@ -317,8 +319,18 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                 sx: { p: 0 },
                 cb: () => setChainId(ChainId.Matic),
             },
+            {
+                label: <span>Arbitrum</span>,
+                sx: { p: 0 },
+                cb: () => setChainId(ChainId.Arbitrum),
+            },
+            {
+                label: <span>xDai</span>,
+                sx: { p: 0 },
+                cb: () => setChainId(ChainId.xDai),
+            },
         ],
-        index: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].indexOf(chainId),
+        index: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].indexOf(chainId),
         classes,
         hasOnlyOneChild: true,
     }
