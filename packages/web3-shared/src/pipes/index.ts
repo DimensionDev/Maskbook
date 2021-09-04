@@ -148,3 +148,10 @@ export function resolveCollectibleLink(
             unreachable(provider)
     }
 }
+
+export function resolveOpenSeaLink(address: string, tokenId: string) {
+    return urlcat('https://opensea.io/assets/:address/:tokenId', {
+        address,
+        tokenId,
+    })
+}

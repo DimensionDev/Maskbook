@@ -21,6 +21,7 @@ import { twitterBase } from '../base'
 import { twitterShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
 import { currentSelectedIdentity } from '../../../settings/settings'
+import { injectAvatorInTwitter } from '../injection/Avatar'
 
 function registerPostCollectorInner(
     postStore: Next.CollectingCapabilities.PostsProvider['posts'],
@@ -96,6 +97,7 @@ function registerPostCollectorInner(
                 }),
             )
             injectMaskIconToPostTwitter(info, cancel)
+            injectAvatorInTwitter(info, cancel)
             postStore.set(proxy, info)
             return {
                 onTargetChanged: run,
