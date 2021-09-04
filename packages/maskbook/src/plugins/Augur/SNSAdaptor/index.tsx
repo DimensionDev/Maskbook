@@ -4,13 +4,12 @@ import { SnackbarContent } from '@material-ui/core'
 import { base } from '../base'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { MarketView } from '../UI/MarketView'
-import { AUGUR_CHAIN_ID, BASE_URL, PLUGIN_NAME } from '../constants'
-import { escapeRegExp } from 'lodash-es'
+import { AUGUR_CHAIN_ID, URL_REGEX, PLUGIN_NAME } from '../constants'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 
 function createMatchLink() {
-    return new RegExp(`${escapeRegExp(BASE_URL.concat('/#!/market?id='))}([x0-9A-Fa-f]+)-([0-9]+)$`)
+    return URL_REGEX
 }
 
 function getMarketFromLink(link: string) {

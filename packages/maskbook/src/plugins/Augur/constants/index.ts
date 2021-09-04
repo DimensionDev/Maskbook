@@ -1,11 +1,15 @@
 import { ChainId } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
+import { escapeRegExp } from 'lodash-es'
 
 export const AUGUR_PLUGIN_ID = 'com.augur'
 export const AUGUR_CHAIN_ID = ChainId.Matic
 export const PLUGIN_NAME = 'Augur'
 
-export const BASE_URL = 'https://bafybeigjwp26ubjuwtxxtqaibnvt5rt2hlkmzwz5f7e2kqvqsiapo2v6mi.ipfs.dweb.link'
+export const URL_REGEX = new RegExp(
+    `^${escapeRegExp('https://')}[a-zA-Z0-9]+${escapeRegExp('.ipfs.dweb.link/#!/market?id=')}([x0-9A-Fa-f]+)-([0-9]+)$`,
+)
+
 export const NO_CONTEST_OUTCOME_ID: number = 0
 
 export const NO_CONTEST = 'No Contest'
