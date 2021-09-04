@@ -1,9 +1,15 @@
 import { makeStyles } from '@masknet/theme'
-import { ChainId, createERC721Token, ERC721TokenDetailed, EthereumTokenType } from '@masknet/web3-shared'
+import {
+    ChainId,
+    createERC721Token,
+    ERC721TokenDetailed,
+    EthereumTokenType,
+    isSameAddress,
+    useAccount,
+} from '@masknet/web3-shared'
 import { Button, DialogContent, Typography } from '@material-ui/core'
 import { useCallback, useState } from 'react'
 import { InputBox } from '../../extension/options-page/DashboardComponents/InputBox'
-import { SearchInput } from '../../extension/options-page/DashboardComponents/SearchInput'
 import { PluginCollectibleRPC } from '../../plugins/Collectible/messages'
 import { InjectedDialog } from '../shared/InjectedDialog'
 
@@ -20,8 +26,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     message: {
         '&:before': {
-            content: '"|"',
+            content: '""',
             marginRight: theme.spacing(0.5),
+            borderLeft: '2px solid',
         },
     },
 }))
@@ -36,6 +43,7 @@ export function AddNFT(props: AddNFTProps) {
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
     const { onClose, open, onAddClick } = props
+    const account = useAccount()
 
     const onClick = useCallback(async () => {
         if (!address) {
@@ -47,31 +55,36 @@ export function AddNFT(props: AddNFTProps) {
             return
         }
 
-        getNFT(address, tokenId)
+        getNFT(account, address, tokenId)
             .then((token) => {
                 onAddClick(token)
-                onClose()
+                _onClose()
             })
             .catch((error) => setMessage(error.message))
     }, [tokenId, address, onAddClick, onClose])
 
     const onAddressChange = useCallback((address: string) => {
-        setAddress(address)
         setMessage('')
+        setAddress(address)
     }, [])
     const onTokenIdChange = useCallback((tokenId: string) => {
-        setTokenId(tokenId)
         setMessage('')
+        setTokenId(tokenId)
     }, [])
 
+    const _onClose = () => {
+        setMessage('')
+        onClose()
+    }
+
     return (
-        <InjectedDialog title="Add collectibles" open={open} onClose={onClose}>
+        <InjectedDialog title="Add collectibles" open={open} onClose={_onClose}>
             <DialogContent>
                 <Button className={classes.addNFT} variant="outlined" size="small" onClick={() => onClick()}>
                     Add
                 </Button>
                 <div className={classes.input}>
-                    <SearchInput label="Input Contract Address" onChange={(address) => onAddressChange(address)} />
+                    <InputBox label="Input Contract Address" onChange={(address) => onAddressChange(address)} />
                 </div>
                 <div className={classes.input}>
                     <InputBox label="Token ID" onChange={(tokenId) => onTokenIdChange(tokenId)} />
@@ -86,8 +99,9 @@ export function AddNFT(props: AddNFTProps) {
     )
 }
 
-async function getNFT(contract: string, tokenId: string) {
+async function getNFT(account: string, contract: string, tokenId: string) {
     const asset = await PluginCollectibleRPC.getAsset(contract, tokenId)
+    if (!isSameAddress(asset.owner.address, account)) throw new Error('TokenId does not belong to account')
     return createERC721Token(
         {
             chainId: ChainId.Mainnet,

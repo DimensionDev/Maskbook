@@ -16,6 +16,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { PluginCollectibleRPC } from '../../plugins/Collectible/messages'
 import { getOrderUnitPrice } from '../../plugins/Collectible/utils'
 import { currentCollectibleDataProviderSettings } from '../../plugins/Wallet/settings'
+import { useI18N } from '../../utils'
 import { EthereumChainBoundary } from '../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 
@@ -65,6 +66,7 @@ const useStyles = makeStyles()((theme) => ({
     selected: {
         border: `1px solid ${getMaskColor(theme).blue}`,
     },
+    error: {},
 }))
 
 async function getNFTAmount(token: ERC721TokenDetailed) {
@@ -95,6 +97,7 @@ export function NFTAvator(props: NFTAvatorProps) {
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>()
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<ERC721TokenDetailed[]>([])
+    const { t } = useI18N()
     const {
         value = {
             collectibles: [],
@@ -126,6 +129,18 @@ export function NFTAvator(props: NFTAvatorProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
+    const LoadStatus = Array.from({ length: 24 })
+        .fill(0)
+        .map((_, i) => <Skeleton animation="wave" variant="rectangular" className={classes.image} key={i} />)
+    const Retry = (
+        <Box className={classes.error}>
+            <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
+
+            <Button className={classes.button} variant="text" onClick={() => retry()}>
+                {t('plugin_collectible_retry')}
+            </Button>
+        </Box>
+    )
     return (
         <>
             <Box className={classes.root}>
@@ -149,16 +164,9 @@ export function NFTAvator(props: NFTAvatorProps) {
                         </Box>
                         <Box className={classes.NFTImage}>
                             {loading
-                                ? Array.from({ length: 24 })
-                                      .fill(0)
-                                      .map((_, i) => (
-                                          <Skeleton
-                                              animation="wave"
-                                              variant="rectangular"
-                                              className={classes.image}
-                                              key={i}
-                                          />
-                                      ))
+                                ? LoadStatus
+                                : error || collectibles_.length === 0
+                                ? Retry
                                 : collectibles_.map((token: ERC721TokenDetailed, i) => (
                                       <img
                                           key={i}
