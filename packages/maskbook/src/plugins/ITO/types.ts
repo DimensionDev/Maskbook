@@ -26,10 +26,7 @@ export interface JSON_PayloadInMask {
     exchange_amounts: string[]
     exchange_tokens: FungibleTokenDetailed[]
     regions: string
-    // @deprecated
-    is_mask?: boolean
-    // @deprecated
-    test_nums?: number[]
+    block_number?: number
 }
 
 export interface PoolSubgraph {

@@ -126,12 +126,16 @@ export function PoolInList(props: PoolInListProps) {
     //#endregion
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const account = useAccount()
-    const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)
+    const {
+        computed: availabilityComputed,
+        loading: loadingAvailability,
+        value: availability,
+    } = useAvailabilityComputed(pool)
     const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)
     const title = pool.message.split(MSG_DELIMITER)[1] ?? pool.message
     const noRemain = isZero(pool.total_remaining)
     const { listOfStatus } = availabilityComputed
-
+    console.log({ availability })
     const isWithdrawn = tradeInfo?.destructInfo
 
     const canWithdraw = !isWithdrawn && (listOfStatus.includes(ITO_Status.expired) || noRemain)

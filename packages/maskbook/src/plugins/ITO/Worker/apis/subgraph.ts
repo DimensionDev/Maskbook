@@ -23,6 +23,7 @@ const POOL_FIELDS = `
     contract_address
     qualification_address
     pid
+    block_number
     password
     message
     limit
@@ -163,6 +164,7 @@ export async function getAllPoolsAsSeller(address: string, page: number) {
     }
     `)
     if (!data?.sellInfos) return []
+
     return data.sellInfos.map((x) => {
         const pool = payloadIntoMask(omit(x.pool, ['exchange_in_volumes', 'exchange_out_volumes']))
         return {
