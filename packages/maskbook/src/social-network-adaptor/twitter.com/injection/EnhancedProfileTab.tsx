@@ -97,7 +97,7 @@ function reset() {
     const eleEmpty = searchProfileEmptySelector().evaluate()
     if (eleEmpty) eleEmpty.style.display = ''
     const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) elePage.style.display = ''
+    if (elePage) elePage.style.visibility = 'visible'
 
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {

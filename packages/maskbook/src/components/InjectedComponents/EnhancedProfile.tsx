@@ -67,10 +67,10 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         })
     }, [])
 
-    const { name, addressENS, addressUNS, address } = useEthereumAddress(nickname, twitterId, bioDescription)
-    const address_ = addressENS ?? addressUNS ?? address ?? ''
-    if (!show) return null
-    if (!address_)
+    const { value } = useEthereumAddress(nickname, twitterId, bioDescription)
+    if (!show || !value) return null
+    const { type, name, address } = value
+    if (!address)
         return (
             <Box className={classes.text} display="flex" alignItems="center" justifyContent="center">
                 <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
@@ -80,12 +80,12 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         <div className={classes.root}>
             <Box className={classes.note} display="flex" alignItems="center" justifyContent="flex-end">
                 <Typography color="textPrimary" component="span">
-                    Current display of {addressENS ? 'ENS' : addressUNS ? 'UNS' : 'address'}:{' '}
+                    Current display of {type}:{' '}
                     <Link
-                        href={resolveAddressLinkOnExplorer(chainId, address_)}
+                        href={resolveAddressLinkOnExplorer(chainId, address)}
                         target="_blank"
                         rel="noopener noreferrer">
-                        {addressENS || addressUNS ? name : formatEthereumAddress(address ?? '', 4)}
+                        {formatEthereumAddress(name ?? address ?? '', 4)}
                     </Link>
                 </Typography>
                 <Typography
@@ -96,7 +96,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                     <InfoOutlinedIcon color="inherit" fontSize="small" />
                 </Typography>
             </Box>
-            <CollectibleListAddress classes={classes} address={address_} />
+            <CollectibleListAddress address={address} />
         </div>
     )
 }
