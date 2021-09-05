@@ -6,7 +6,6 @@ import { makeStyles } from '@masknet/theme'
 import { AvatarMetaData, saveNFTAvatar, useNFTAvatar } from './profileNFTAvatar'
 import { useState, useEffect, useCallback } from 'react'
 import Services from '../../../extension/service'
-import { toNumber } from 'lodash-es'
 import { Typography } from '@material-ui/core'
 import { NFTAvatarAmountIcon } from '@masknet/icons'
 
@@ -45,8 +44,8 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 700,
         textShadow: '2px 1px black',
-
         whiteSpace: 'nowrap',
+        lineHeight: 1.1,
     },
     amountWrapper: {
         background:
@@ -79,7 +78,6 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         updateAvatar(avatarMeta?.image ?? '')
     }, [avatarMeta])
 
-    if (toNumber(amount) === 0) return null
     return (
         <div className={classes.root}>
             <div className={classes.nftLogo}>
@@ -88,7 +86,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             <div className={classes.wrapper}>
                 <div className={classes.amountWrapper}>
                     <Typography align="center" className={classes.amount}>
-                        {amount} ETH
+                        {`${amount} ETH`}
                     </Typography>
                 </div>
             </div>

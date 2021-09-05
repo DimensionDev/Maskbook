@@ -74,6 +74,7 @@ export function injectAvatorInTwitter(post: PostInfo, signal: AbortSignal) {
                             color: 'white',
                             whiteSpace: 'nowrap',
                             textShadow: '2px 1px black',
+                            lineHeight: 1,
                         }}>{`${avatarMeta.amount} ETH`}</Typography>
                 </div>
             </div>,
