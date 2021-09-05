@@ -52,40 +52,6 @@ export async function getCurrenies(dataProvider: DataProvider): Promise<Currency
     }
 }
 
-export async function getLimitedCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
-    switch (dataProvider) {
-        case DataProvider.COIN_GECKO:
-            return [
-                {
-                    id: 'usd',
-                    name: 'USD',
-                    symbol: '$',
-                    description: 'Unite State Dollar',
-                },
-            ]
-        case DataProvider.COIN_MARKET_CAP:
-            return [
-                {
-                    id: '2781',
-                    name: 'USD',
-                    symbol: '$',
-                    description: 'Unite State Dollar',
-                },
-            ]
-        case DataProvider.UNISWAP_INFO:
-            return [
-                {
-                    id: 'usd',
-                    name: 'USD',
-                    symbol: '$',
-                    description: 'Unite State Dollar',
-                },
-            ]
-        default:
-            unreachable(dataProvider)
-    }
-}
-
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:

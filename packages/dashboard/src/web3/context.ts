@@ -68,7 +68,7 @@ export const Web3Context: Web3ProviderType = {
         PortfolioProvider.DEBANK,
         Messages.events.currentPortfolioDataProviderSettings.on,
     ),
-    getAssetList: PluginServices.Wallet.getAssetsList,
+    getAssetsList: PluginServices.Wallet.getAssetsList,
     getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,
     getERC721TokensPaged,
     getTransactionList: PluginServices.Wallet.getTransactionList,

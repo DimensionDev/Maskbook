@@ -2,13 +2,13 @@ import { Resolution } from '@unstoppabledomains/resolution'
 import { useAsyncRetry } from 'react-use'
 import { useChainId } from '.'
 
-export function useResolveUNS(uns: string) {
+export function useResolveUNS(name: string) {
     const chainId = useChainId()
 
     return useAsyncRetry(async () => {
-        if (!uns) return ''
-        return resolve(uns)
-    }, [uns, chainId])
+        if (!name) return ''
+        return resolve(name)
+    }, [name, chainId])
 }
 
 async function resolve(uns: string) {

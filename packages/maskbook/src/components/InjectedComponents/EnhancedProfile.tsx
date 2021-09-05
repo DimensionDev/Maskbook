@@ -6,15 +6,13 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { useState, useEffect } from 'react'
 import { CollectibleListAddress } from '../../extension/options-page/DashboardComponents/CollectibleList'
 import { useEthereumAddress } from '../../social-network-adaptor/twitter.com/injection/useEthereumName'
-import { MaskMessage } from '../../utils'
+import { MaskMessage, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 
 const RULE_TIP = [
-    'Binding Rule',
-    '1. Their Twitter nickname is their ENS',
-    '2. Their Twitter bio contains ENS',
-    '3. Their Twitter bio contains a validated address',
-    '4. Their Twitter id + “.eth” form their ENS',
+    '1. Twitter name or bio contains ENS (e.g. vitalik.eth);',
+    '2. Twitter bio contains valid Ethereum address;',
+    '3. The ENS or Ethereum address has NFTs in it.',
 ].join('\n')
 
 const useStyles = makeStyles()((theme) => ({
@@ -36,7 +34,6 @@ const useStyles = makeStyles()((theme) => ({
             color: getMaskColor(theme).textPrimary,
         },
     },
-    button: {},
 }))
 
 interface EnhancedProfilePageProps extends withClasses<'text' | 'button'> {
@@ -51,6 +48,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
     const { bioDescription, nickname, twitterId, onUpdated } = props
+    const { t } = useI18N()
 
     useLocationChange(() => {
         MaskMessage.events.profileNFTsTabUpdated.sendToLocal('reset')
@@ -68,19 +66,25 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         })
     }, [])
 
-    const { name, addressENS, addressUNS, address } = useEthereumAddress(nickname, twitterId, bioDescription)
-    const address_ = addressENS ?? addressUNS ?? address ?? ''
-    if (!show || !address_) return null
+    const { value } = useEthereumAddress(nickname, twitterId, bioDescription)
+    if (!show || !value) return null
+    const { type, name, address } = value
+    if (!address)
+        return (
+            <Box className={classes.text} display="flex" alignItems="center" justifyContent="center">
+                <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
+            </Box>
+        )
     return (
         <div className={classes.root}>
             <Box className={classes.note} display="flex" alignItems="center" justifyContent="flex-end">
                 <Typography color="textPrimary" component="span">
-                    Current display of {addressENS ? 'ENS' : addressUNS ? 'UNS' : 'address'}:{' '}
+                    Current display of {type}:{' '}
                     <Link
-                        href={resolveAddressLinkOnExplorer(chainId, address_)}
+                        href={resolveAddressLinkOnExplorer(chainId, address)}
                         target="_blank"
                         rel="noopener noreferrer">
-                        {addressENS || addressUNS ? name : formatEthereumAddress(address ?? '', 4)}
+                        {formatEthereumAddress(name ?? address ?? '', 4)}
                     </Link>
                 </Typography>
                 <Typography
@@ -91,12 +95,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                     <InfoOutlinedIcon color="inherit" fontSize="small" />
                 </Typography>
             </Box>
-            <CollectibleListAddress
-                classes={{
-                    button: classes.button,
-                }}
-                address={address_}
-            />
+            <CollectibleListAddress address={address} />
         </div>
     )
 }

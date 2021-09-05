@@ -7,7 +7,6 @@ import {
     pow10,
     useAccount,
     useNativeTokenDetailed,
-    useNetworkType,
     useRedPacketConstants,
     useTokenBalance,
     useWeb3,
@@ -74,7 +73,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
     // context
     const web3 = useWeb3()
     const account = useAccount()
-    const networkType = useNetworkType()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
     //#region select token
@@ -222,6 +220,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     amount={rawAmount}
                     balance={tokenBalance}
                     token={token}
+                    maxAmountShares={isRandom || shares === '' ? 1 : shares}
                     onAmountChange={setRawAmount}
                     SelectTokenChip={{
                         loading: loadingTokenBalance,

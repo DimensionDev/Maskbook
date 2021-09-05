@@ -59,7 +59,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => ({
     dialogTitle: {
         display: 'flex',
         alignItems: 'center',
-        padding: '10px 15px',
+        padding: '3px 15px',
         borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#ccd6dd'}`,
         '& > h2': {
             display: 'inline-block',
@@ -76,6 +76,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => ({
         },
     },
     dialogContent: {
+        padding: 16,
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             display: 'flex',
             flexDirection: 'column',
@@ -85,7 +86,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => ({
         },
     },
     dialogActions: {
-        padding: '10px 15px',
+        padding: '3px 15px',
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             display: 'flex',
             flexDirection: 'column',

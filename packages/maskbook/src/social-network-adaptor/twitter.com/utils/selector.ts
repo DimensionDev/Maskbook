@@ -82,7 +82,7 @@ export const postEditorDraftContentSelector = () => {
 }
 
 export const searchResultHeadingSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] [role="region"] [role="heading"]')
+    querySelector<E>('[role="main"] [data-testid="primaryColumn"] [role="region"] > [role="heading"]')
 
 export const postEditorToolbarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="toolBar"] > div > *:last-child')
