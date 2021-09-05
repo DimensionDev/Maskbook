@@ -2,6 +2,7 @@ import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/h
 import { NFTAvatarAmountIcon } from '@masknet/icons'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
+import { Typography } from '@material-ui/core'
 import Services from '../../../extension/service'
 import { gun2 } from '../../../network/gun/version.2'
 import type { PostInfo } from '../../../social-network/PostInfo'
@@ -51,7 +52,7 @@ export function injectAvatorInTwitter(post: PostInfo, signal: AbortSignal) {
                 style={{ display: 'flex', justifyContent: 'center', position: 'absolute', left: 0, top: 48 }}
                 onClick={(e) => {
                     e.preventDefault()
-                    location.href = resolveOpenSeaLink(avatarMeta.address, avatarMeta.tokenId)
+                    window.open(resolveOpenSeaLink(avatarMeta.address, avatarMeta.tokenId), '_blank')
                 }}>
                 <NFTAvatarAmountIcon style={{ width: '100%', paddingLeft: 10 }} />
                 <div
@@ -59,19 +60,21 @@ export function injectAvatorInTwitter(post: PostInfo, signal: AbortSignal) {
                         position: 'absolute',
                         left: 0,
                         top: 10,
-                        backgroundImage: `url(${new URL('./nftamount.png', import.meta.url)})`,
-                        backgroundRepeat: 'no-repeat',
+                        background:
+                            'linear-gradient(106.15deg, #FF0000 5.97%, #FF8A00 21.54%, #FFC700 42.35%, #52FF00 56.58%, #00FFFF 73.01%, #0038FF 87.8%, #AD00FF 101.49%, #FF0000 110.25%)',
+                        borderRadius: 3,
                         minWidth: 43,
                         width: 'auto',
                     }}>
-                    <p
+                    <Typography
                         style={{
                             fontSize: 10,
                             transform: 'scale(0.8)',
                             margin: 0,
                             color: 'white',
                             whiteSpace: 'nowrap',
-                        }}>{`${avatarMeta.amount} ETH`}</p>
+                            textShadow: '2px 1px black',
+                        }}>{`${avatarMeta.amount} ETH`}</Typography>
                 </div>
             </div>,
         )

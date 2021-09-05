@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         width: '100%',
         left: 0,
-        top: 15,
+        top: 16,
         display: 'flex',
         justifyContent: 'center',
     },
@@ -44,14 +44,14 @@ const useStyles = makeStyles()((theme) => ({
         color: 'white',
         fontSize: 14,
         fontWeight: 700,
-        WebkitTextStrokeColor: 'black',
-        WebkitTextStrokeWidth: 1,
+        textShadow: '2px 1px black',
 
         whiteSpace: 'nowrap',
     },
     amountWrapper: {
-        backgroundImage: `url(${new URL('./nftamount.png', import.meta.url)})`,
-        backgroundRepeat: 'no-repeat',
+        background:
+            'linear-gradient(106.15deg, #FF0000 5.97%, #FF8A00 21.54%, #FFC700 42.35%, #52FF00 56.58%, #00FFFF 73.01%, #0038FF 87.8%, #AD00FF 101.49%, #FF0000 110.25%)',
+        borderRadius: 3,
         minWidth: 72,
     },
 }))
