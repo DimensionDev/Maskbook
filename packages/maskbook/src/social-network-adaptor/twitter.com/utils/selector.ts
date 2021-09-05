@@ -184,3 +184,10 @@ export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="P
 export const searchTwitterAvatarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] > div > :nth-child(2) > div > div > div > :nth-child(2) > div > a')
 //#endregion
+
+//#region twitter avator
+export const searchAccountSwitherButtonSelector = () =>
+    querySelector<E>('[data-testid="SideNav_AccountSwitcher_Button"]')
+
+export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserCell"]')
+//#endregion

@@ -30,6 +30,7 @@ import { injectEnhancedProfileAtTwitter } from './injection/EnhancedProfile'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFTAvatarInTwitter'
 import { injectProfileNFTAvatarInTwitter } from './injection/profileNFTAvatar'
+import { injectUserNFTAvatarAtTwitter } from './injection/Avatar'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => ({
     root: {
@@ -162,8 +163,9 @@ const twitterUI: SocialNetworkUI.Definition = {
         setupWizard: createTaskStartSetupGuideDefault('twitter.com'),
         userBadge: injectMaskUserBadgeAtTwitter,
         commentComposition: undefined,
-        userAvatar: injectNFTAvatarInTwitter,
+        userAvatar: injectUserNFTAvatarAtTwitter,
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInTwitter,
+        profileAvator: injectNFTAvatarInTwitter,
     },
     configuration: {
         steganography: {

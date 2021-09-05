@@ -19,27 +19,40 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'absolute',
-        top: 16,
-        left: 36,
-        width: 60,
+        top: 12,
+        left: 0,
+        width: 134,
         textAlign: 'center',
         color: 'white',
     },
 
     nftImage: {
         width: '100%',
-        height: 'auto',
+        height: 33,
+        paddingLeft: 16,
     },
     wrapper: {
         position: 'absolute',
         width: '100%',
         left: 0,
-        top: 12,
+        top: 15,
+        display: 'flex',
+        justifyContent: 'center',
     },
+    nftLogo: {},
     amount: {
         color: 'white',
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: 700,
+        WebkitTextStrokeColor: 'black',
+        WebkitTextStrokeWidth: 1,
+
+        whiteSpace: 'nowrap',
+    },
+    amountWrapper: {
+        backgroundImage: `url(${new URL('./nftamount.png', import.meta.url)})`,
+        backgroundRepeat: 'no-repeat',
+        minWidth: 72,
     },
 }))
 
@@ -69,11 +82,15 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     if (toNumber(amount) === 0) return null
     return (
         <div className={classes.root}>
-            <NFTAvatarAmountIcon className={classes.nftImage} />
+            <div className={classes.nftLogo}>
+                <NFTAvatarAmountIcon className={classes.nftImage} />
+            </div>
             <div className={classes.wrapper}>
-                <Typography align="center" className={classes.amount}>
-                    {amount} ETH
-                </Typography>
+                <div className={classes.amountWrapper}>
+                    <Typography align="center" className={classes.amount}>
+                        {amount} ETH
+                    </Typography>
+                </div>
             </div>
         </div>
     )
