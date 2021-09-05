@@ -6,6 +6,7 @@ import { SushiSwapIcon } from '../../../../resources/SushiSwapIcon'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { ZRXIcon } from '../../../../resources/ZRXIcon'
 import { DODOIcon } from '../../../../resources/DODOIcon'
+import { OneInchIcon } from '../../../../resources/OneInchIcon'
 import { resolveTradeProviderName } from '../../pipes'
 import { TradeProvider } from '../../types'
 
@@ -56,6 +57,8 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
             )
         case TradeProvider.DODO:
             return <DODOIcon classes={{ root: classes.icon }} />
+        case TradeProvider.ONE_INCH:
+            return <OneInchIcon classes={{ root: classes.icon }} />
         default:
             unreachable(props.provider)
     }

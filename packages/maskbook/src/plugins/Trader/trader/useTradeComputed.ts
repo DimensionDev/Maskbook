@@ -100,6 +100,16 @@ export function useTradeComputed(
     )
     const dodo = useDODOTradeComputed(dodo_.value ?? null, strategy, inputToken, outputToken)
 
+    // 1inch
+    const one_ = useZrxTrade(
+        strategy,
+        provider === TradeProvider.ONE_INCH ? inputAmount_ : '0',
+        provider === TradeProvider.ONE_INCH ? outputAmount_ : '0',
+        inputToken,
+        outputToken,
+    )
+    const one = useZrxTradeComputed(one_.value ?? null, strategy, inputToken, outputToken)
+
     if (nativeToken_.value)
         return {
             ...nativeToken_,
@@ -135,6 +145,11 @@ export function useTradeComputed(
             return {
                 ...dodo_,
                 value: dodo,
+            }
+        case TradeProvider.ONE_INCH:
+            return {
+                ...one_,
+                value: one,
             }
         default:
             unreachable(provider)

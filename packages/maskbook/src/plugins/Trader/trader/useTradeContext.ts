@@ -107,6 +107,10 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     TYPE: tradeProvider,
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).DODO_EXCHANGE_PROXY_ADDRESS,
                 }
+            case TradeProvider.ONE_INCH:
+                return {
+                    TYPE: tradeProvider,
+                }
             default:
                 unreachable(tradeProvider)
         }

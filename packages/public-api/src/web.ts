@@ -145,6 +145,7 @@ export enum TradeProvider {
     PANCAKESWAP = 6,
     DODO = 7,
     UNISWAP_V3 = 8,
+    ONE_INCH = 9,
 }
 /** Supported language settings */
 export enum LanguageOptions {

@@ -16,11 +16,24 @@ export async function getAvailableTraderProviders(type?: TagType, keyword?: stri
                 TradeProvider.ZRX,
                 TradeProvider.BALANCER,
                 TradeProvider.DODO,
+                TradeProvider.ONE_INCH,
             ]
         case NetworkType.Polygon:
-            return [TradeProvider.QUICKSWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO, TradeProvider.ZRX]
+            return [
+                TradeProvider.QUICKSWAP,
+                TradeProvider.SUSHISWAP,
+                TradeProvider.DODO,
+                TradeProvider.ZRX,
+                TradeProvider.ONE_INCH,
+            ]
         case NetworkType.Binance:
-            return [TradeProvider.PANCAKESWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO, TradeProvider.ZRX]
+            return [
+                TradeProvider.PANCAKESWAP,
+                TradeProvider.SUSHISWAP,
+                TradeProvider.DODO,
+                TradeProvider.ZRX,
+                TradeProvider.ONE_INCH,
+            ]
         case NetworkType.Arbitrum:
             return [TradeProvider.UNISWAP_V3]
         case NetworkType.xDai:

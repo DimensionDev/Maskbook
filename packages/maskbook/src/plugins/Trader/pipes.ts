@@ -68,6 +68,8 @@ export function resolveTradeProviderName(tradeProvider: TradeProvider) {
             return 'PancakeSwap'
         case TradeProvider.DODO:
             return 'DODO'
+        case TradeProvider.ONE_INCH:
+            return '1inch'
         default:
             unreachable(tradeProvider)
     }
@@ -108,6 +110,22 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://exchange.pancakeswap.finance/#/swap'
         case TradeProvider.DODO:
             return 'https://app.dodoex.io'
+        case TradeProvider.ONE_INCH:
+            switch (networkType) {
+                case NetworkType.Ethereum:
+                    return 'https://api.1inch.exchange/v3.0/1/'
+                case NetworkType.Binance:
+                    return 'https://api.1inch.exchange/v3.0/56/'
+                case NetworkType.Polygon:
+                    return 'https://api.1inch.exchange/v3.0/137/'
+                case NetworkType.Arbitrum:
+                    return ''
+                case NetworkType.xDai:
+                    return ''
+                default:
+                    safeUnreachable(networkType)
+                    return ''
+            }
         default:
             unreachable(tradeProvider)
     }
@@ -120,6 +138,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
         case TradeProvider.UNISWAP_V3:
             return `https://info.uniswap.org/pair/${address}`
         case TradeProvider.ZRX:
+            return ''
+        case TradeProvider.ONE_INCH:
             return ''
         case TradeProvider.DODO: {
             if (!networkNames[networkType]) {
@@ -245,6 +265,7 @@ export function resolveZrxTradePoolName(swapSource: ZrxTradePool) {
         [ZrxTradePool.UniswapV3]: 'Uniswap V3',
         [ZrxTradePool.WaultSwap]: 'WaultSwap',
         [ZrxTradePool.xSigma]: 'xSigma',
+        [ZrxTradePool.OneInch]: '1inch',
     }
     return SWAP_SOURCE_NAME_MAP[swapSource] ?? 'Unknown'
 }
