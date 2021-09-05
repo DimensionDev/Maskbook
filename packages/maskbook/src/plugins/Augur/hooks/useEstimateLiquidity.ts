@@ -110,7 +110,6 @@ export async function estimateRemoveLiquidityPool(
 ): Promise<LiquidityBreakdown | undefined> {
     let minAmounts
     let collateralOut = '0'
-    let poolPct
 
     if (!market.hasWinner) {
         const results = await ammFactoryContract.methods
@@ -142,7 +141,7 @@ export async function estimateRemoveLiquidityPool(
     }
 
     const totalSupply = new BigNumber(amm.totalSupply ?? '0')
-    poolPct = formatPercentage(totalSupply.isZero() ? '0' : new BigNumber(lpTokenBalance).dividedBy(totalSupply))
+    const poolPct = formatPercentage(totalSupply.isZero() ? '0' : new BigNumber(lpTokenBalance).dividedBy(totalSupply))
 
     return {
         minAmounts,
