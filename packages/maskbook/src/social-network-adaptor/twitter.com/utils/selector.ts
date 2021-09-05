@@ -87,6 +87,11 @@ export const searchResultHeadingSelector: () => LiveSelector<E, true> = () =>
 export const postEditorToolbarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="toolBar"] > div > *:last-child')
 
+export const twitterMainAvatarSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="toolBar"]')
+        .closest<HTMLElement>(4)
+        .querySelector<HTMLElement>('div > a > div > :nth-child(2) > div')
+
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
 export const bioDescriptionSelector = () => querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
@@ -143,6 +148,7 @@ export const postsContentSelector = () =>
         }), // timeline page for new twitter
     )
 
+export const postAvatarsContentSelector = () => querySelectorAll('[data-testid="tweet"]')
 const base = querySelector<HTMLScriptElement>('#react-root + script')
 const handle = /"screen_name":"(.*?)"/
 const name = /"name":"(.*?)"/

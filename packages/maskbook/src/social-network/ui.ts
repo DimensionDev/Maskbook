@@ -71,6 +71,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     ui.collecting.postsProvider?.start(signal)
     startPostListener()
+    ui.collecting.avatarProvider?.start(signal)
+    startAvatarListener()
 
     ui.injection.pageInspector?.(signal)
     if (Flags.toolbox_enabled) ui.injection.toolBoxInNavBar?.(signal)
@@ -132,6 +134,30 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             ui.injection.commentComposition?.commentInspector(postSignal, value)
         })
         posts.event.on('delete', unmount)
+        function unmount(key: object) {
+            if (!abortSignals.has(key)) return
+            abortSignals.get(key)!.abort()
+            // AbortSignal need an event loop
+            // unmount a React root need another one.
+            // let's guess a number that the React root will unmount.
+            return delay(16 * 3)
+        }
+    }
+
+    function startAvatarListener() {
+        const avatars = ui.collecting.avatarProvider?.avatarPosts
+        if (!avatars) return
+        const abortSignals = new WeakMap<object, AbortController>()
+        avatars.event.on('set', async (key, value) => {
+            await unmount(key)
+            const abort = new AbortController()
+            signal.addEventListener('abort', () => abort.abort())
+            abortSignals.set(key, abort)
+            const { signal: postSignal } = abort
+            ui.injection.postAvatar?.(postSignal, value)
+        })
+
+        avatars.event.on('delete', unmount)
         function unmount(key: object) {
             if (!abortSignals.has(key)) return
             abortSignals.get(key)!.abort()

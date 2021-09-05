@@ -1,7 +1,7 @@
 import { createReactRootShadowed, MaskMessage, startWatch } from '../../../utils'
 import { searchTwitterAvatarSelector } from '../utils/selector'
 import { getTwitterId } from '../utils/user'
-import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { AvatarMetaData, saveNFTAvatar, useNFTAvatar } from './profileNFTAvatar'
 import { useState, useEffect, useCallback } from 'react'
@@ -108,4 +108,11 @@ async function updateAvatar(image: string) {
         .evaluate() as HTMLElement
     if (!avatarImage) return
     avatarImage.setAttribute('src', blobURL.toString())
+}
+
+function updateTwitterAvatar(parent: () => LiveSelector<HTMLElement, true>, image: string) {
+    let ele = parent().querySelector('div').evaluate()
+    if (ele) ele.style.backgroundImage = `url(${new URL(image, import.meta.url)})`
+    ele = parent().querySelector('img').evaluate()
+    if (ele) ele.setAttribute('src', `url(${new URL(image, import.meta.url)})`)
 }

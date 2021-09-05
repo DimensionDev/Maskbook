@@ -1,12 +1,15 @@
-import { postsContentSelector } from '../utils/selector'
 import { IntervalWatcher } from '@dimensiondev/holoflows-kit'
-import { activatedSocialNetworkUI, creator, globalUIState, SocialNetworkUI as Next } from '../../../social-network'
+import {
+    activatedSocialNetworkUI,
+    createorAvatar,
+    globalUIState,
+    SocialNetworkUI as Next,
+} from '../../../social-network'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { postIdParser } from '../utils/fetch'
 import { memoize } from 'lodash-es'
 import Services from '../../../extension/service'
-import { injectMaskIconToPostTwitter } from '../injection/MaskbookIcon'
-import { postsImageSelector } from '../utils/selector'
+import { postAvatarsContentSelector, postsImageSelector } from '../utils/selector'
 import { ProfileIdentifier } from '../../../database/type'
 import { postParser, postImagesParser } from '../utils/fetch'
 import { untilElementAvailable } from '../../../utils/dom'
@@ -22,29 +25,18 @@ import { twitterShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
 import { currentSelectedIdentity } from '../../../settings/settings'
 
-function registerPostCollectorInner(
-    postStore: Next.CollectingCapabilities.PostsProvider['posts'],
+function registerAvatarCollectorInner(
+    postStore: Next.CollectingCapabilities.AvatarProvider['avatarPosts'],
     cancel: AbortSignal,
 ) {
     const getTweetNode = (node: HTMLElement) => {
         const root = node.closest<HTMLDivElement>(
             [
                 'article > div',
-                'div[role="link"]', // retweet in new twitter
+                'div[data-testid="tweet"]', // retweet in new twitter
             ].join(),
         )
         if (!root) return null
-
-        const isCardNode = node.matches('[data-testid="card.wrapper"]')
-        const hasTextNode = !!root.querySelector(
-            [
-                '[data-testid="tweet"] div[lang]', // timeline
-                '[data-testid="tweet"] + div div[lang]', // detailed
-            ].join(),
-        )
-
-        // if a text node already exists, it's not going to decrypt the card node
-        if (isCardNode && hasTextNode) return null
 
         return root
     }
@@ -70,7 +62,7 @@ function registerPostCollectorInner(
         },
         (info: PostInfo) => info.postBy.getCurrentValue()?.toText(),
     )
-    const watcher = new IntervalWatcher(postsContentSelector())
+    const watcher = new IntervalWatcher(postAvatarsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
@@ -95,7 +87,6 @@ function registerPostCollectorInner(
                     updateProfileInfo(info)
                 }),
             )
-            injectMaskIconToPostTwitter(info, cancel)
             postStore.set(proxy, info)
             return {
                 onTargetChanged: run,
@@ -114,10 +105,10 @@ function registerPostCollectorInner(
     cancel.addEventListener('abort', () => watcher.stopWatch())
 }
 
-export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
-    posts: creator.PostProviderStore(),
+export const AvatarProviderTwitter: Next.CollectingCapabilities.AvatarProvider = {
+    avatarPosts: createorAvatar.AvatarProviderStore(),
     start(cancel) {
-        registerPostCollectorInner(this.posts, cancel)
+        registerAvatarCollectorInner(this.avatarPosts, cancel)
     },
 }
 

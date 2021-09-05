@@ -130,6 +130,7 @@ export namespace SocialNetworkUI {
             userAvatar?(signal: AbortSignal): void
             enhancedProfileNFTAvatar?(signal: AbortSignal): void
             profileAvator?(signal: AbortSignal): void
+            postAvatar?(signal: AbortSignal, current: PostInfo): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void
@@ -191,6 +192,8 @@ export namespace SocialNetworkUI {
             postsProvider?: PostsProvider
             /** Get searched keyword */
             getSearchedKeyword?(): string
+
+            avatarProvider?: AvatarProvider
         }
         export type ProfileUI = { bioContent: string }
         export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar'>
@@ -221,6 +224,11 @@ export namespace SocialNetworkUI {
              * Start to maintain the posts.
              * It should add new seen posts and remove gone posts.
              */
+            start(signal: AbortSignal): void
+        }
+
+        export interface AvatarProvider {
+            readonly avatarPosts: ObservableWeakMap<object, PostInfo>
             start(signal: AbortSignal): void
         }
     }

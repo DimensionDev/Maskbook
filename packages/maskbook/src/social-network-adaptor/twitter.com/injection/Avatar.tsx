@@ -7,7 +7,12 @@ import Services from '../../../extension/service'
 import { gun2 } from '../../../network/gun/version.2'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { createReactRootShadowed, Flags, memoizePromise, startWatch } from '../../../utils'
-import { searchAccountSwitherButtonSelector, searchUseCellSelector, selfInfoSelectors } from '../utils/selector'
+import {
+    searchAccountSwitherButtonSelector,
+    searchUseCellSelector,
+    selfInfoSelectors,
+    twitterMainAvatarSelector,
+} from '../utils/selector'
 import type { AvatarMetaData } from './profileNFTAvatar'
 
 async function getNFTAvatorMeta(twitterId: string) {
@@ -24,28 +29,26 @@ function updateNFTAvatar(avatarMeta: AvatarMetaData, parent: HTMLDivElement | nu
     eleAvatorImage.setAttribute('src', `url(${new URL(avatarMeta.image ?? '', import.meta.url)})`)
 }
 
-export function injectAvatorInTwitter(post: PostInfo, signal: AbortSignal) {
+export async function injectAvatorInTwitter(signal: AbortSignal, post: PostInfo) {
+    const avatarMeta = await getNFTAvatorMeta(post.postBy.getCurrentValue().userId)
+    if (!avatarMeta || !avatarMeta.image) return
+
+    updateTwitterAvatar(twitterMainAvatarSelector, avatarMeta.image)
+
     const ls = new LiveSelector([post.rootNodeProxy])
-        .map((x) =>
-            x.current.parentElement?.parentElement?.previousElementSibling?.parentElement?.parentElement?.querySelector<HTMLDivElement>(
-                'div',
-            ),
-        )
+        .map((x) => x.current.firstChild?.firstChild?.firstChild as HTMLDivElement)
         .enableSingleMode()
 
     ifUsingMaskbook(post.postBy.getCurrentValue()).then(add, remove)
     post.postBy.subscribe(() => ifUsingMaskbook(post.postBy.getCurrentValue()).then(add, remove))
     let remover = () => {}
-    async function add() {
+    function add() {
         if (signal?.aborted) return
         const node = ls.evaluate()
         if (!node) return
-        const avatarMeta = await getNFTAvatorMeta(post.postBy.getCurrentValue().userId)
-        if (!avatarMeta || !avatarMeta.image) return
-
         const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         proxy.realCurrent = node
-        updateNFTAvatar(avatarMeta, node.querySelector<HTMLDivElement>('a'))
+        updateNFTAvatar(avatarMeta, node.firstChild?.firstChild?.lastChild?.firstChild as HTMLDivElement)
         const root = createReactRootShadowed(proxy.afterShadow, { signal })
         root.render(
             <div
@@ -65,6 +68,8 @@ export function injectAvatorInTwitter(post: PostInfo, signal: AbortSignal) {
                         borderRadius: 3,
                         minWidth: 43,
                         width: 'auto',
+                        display: 'flex',
+                        justifyContent: 'center',
                     }}>
                     <Typography
                         style={{
@@ -143,3 +148,10 @@ const ifUsingMaskbook = memoizePromise(
         Services.Identity.queryProfile(pid).then((x) => (!!x.linkedPersona ? Promise.resolve() : Promise.reject())),
     (pid: ProfileIdentifier) => pid.toText(),
 )
+
+function updateTwitterAvatar(parent: () => LiveSelector<HTMLElement, true>, image: string) {
+    let ele = parent().querySelector('div').evaluate()
+    if (ele) ele.style.backgroundImage = `url(${new URL(image, import.meta.url)})`
+    ele = parent().querySelector('img').evaluate()
+    if (ele) ele.setAttribute('src', `url(${new URL(image, import.meta.url)})`)
+}

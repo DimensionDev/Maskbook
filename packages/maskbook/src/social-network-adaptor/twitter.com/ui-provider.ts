@@ -30,7 +30,8 @@ import { injectEnhancedProfileAtTwitter } from './injection/EnhancedProfile'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFTAvatarInTwitter'
 import { injectProfileNFTAvatarInTwitter } from './injection/profileNFTAvatar'
-import { injectUserNFTAvatarAtTwitter } from './injection/Avatar'
+import { injectAvatorInTwitter, injectUserNFTAvatarAtTwitter } from './injection/Avatar'
+import { AvatarProviderTwitter } from './collecting/avatar'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => ({
     root: {
@@ -123,6 +124,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderTwitter,
         postsProvider: PostProviderTwitter,
         getSearchedKeyword: getSearchedKeywordAtTwitter,
+        avatarProvider: AvatarProviderTwitter,
     },
     customization: {
         paletteMode: PaletteModeProviderTwitter,
@@ -167,6 +169,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         userAvatar: injectUserNFTAvatarAtTwitter,
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInTwitter,
         profileAvator: injectNFTAvatarInTwitter,
+        postAvatar: injectAvatorInTwitter,
     },
     configuration: {
         steganography: {
