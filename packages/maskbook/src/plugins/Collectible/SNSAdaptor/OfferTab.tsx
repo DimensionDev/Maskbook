@@ -114,7 +114,9 @@ export function OfferTab() {
                         ) : (
                             <>
                                 <TableCell>{t('plugin_collectible_price')}</TableCell>
-                                <TableCell>{t('plugin_collectible_expiration')}</TableCell>
+                                {provider === CollectibleProvider.OPENSEA ? (
+                                    <TableCell>{t('plugin_collectible_expiration')}</TableCell>
+                                ) : null}
                             </>
                         )}
                     </TableRow>

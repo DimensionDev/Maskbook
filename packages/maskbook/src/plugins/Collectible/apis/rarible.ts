@@ -85,27 +85,26 @@ export async function getOffersFromRarible(tokenAddress: string, tokenId: string
     })
 }
 
-export async function getListingsFromRarible(tokenAddress: string, tokenId: string, owners: string[]) {
+export async function getListingsFromRarible(tokenAddress: string, tokenId: string) {
     const assets = await fetchFromRarible<Ownership[]>(RaribleMainnetURL, `items/${tokenAddress}:${tokenId}/ownerships`)
-    const profiles = await getProfilesFromRarible(owners)
+    const sellings = assets.filter((x) => x.selling)
+    const profiles = await getProfilesFromRarible(sellings.map((x) => x.owner))
     const chainId = currentChainIdSettings.value
-    return assets
-        .filter((x) => x.selling)
-        .map((asset) => {
-            const ownerInfo = profiles.find((owner) => owner.id === asset.owner)
-            return {
-                unitPrice: asset.priceEth,
-                hash: asset.signature,
-                makerAccount: {
-                    user: {
-                        username: ownerInfo?.name,
-                    },
-                    address: ownerInfo?.id,
-                    profile_img_url: toRaribleImage(ownerInfo?.image),
-                    link: `${resolveRaribleUserNetwork(chainId)}${ownerInfo?.id ?? ''}`,
+    return sellings.map((asset) => {
+        const ownerInfo = profiles.find((owner) => owner.id === asset.owner)
+        return {
+            unitPrice: asset.priceEth,
+            hash: asset.signature,
+            makerAccount: {
+                user: {
+                    username: ownerInfo?.name,
                 },
-            }
-        })
+                address: ownerInfo?.id,
+                profile_img_url: toRaribleImage(ownerInfo?.image),
+                link: `${resolveRaribleUserNetwork(chainId)}${ownerInfo?.id ?? ''}`,
+            },
+        }
+    })
 }
 
 export async function getOrderFromRarbile(tokenAddress: string, tokenId: string, side: OrderSide) {
@@ -113,8 +112,7 @@ export async function getOrderFromRarbile(tokenAddress: string, tokenId: string,
         case OrderSide.Buy:
             return getOffersFromRarible(tokenAddress, tokenId)
         case OrderSide.Sell:
-            // TODO: listing tab
-            return getListingsFromRarible(tokenAddress, tokenId, [])
+            return getListingsFromRarible(tokenAddress, tokenId)
         default:
             return []
     }
@@ -125,13 +123,12 @@ export async function getHistoryFromRarible(tokenAddress: string, tokenId: strin
         method: 'POST',
         body: stringify({
             // types: ['BID', 'BURN', 'BUY', 'CANCEL', 'CANCEL_BID', 'ORDER', 'MINT', 'TRANSFER', 'SALE'],
-            types: ['BID', 'BUY', 'ORDER', 'MINT', 'TRANSFER', 'SALE'],
             filter: {
                 '@type': 'by_item',
                 address: tokenAddress,
                 tokenId,
             },
-            size: 20,
+            size: 100,
         }),
         headers: {
             'content-type': 'application/json',
