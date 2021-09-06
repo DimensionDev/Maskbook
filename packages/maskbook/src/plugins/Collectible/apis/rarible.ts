@@ -1,11 +1,12 @@
-import { RaribleChainURL } from '../constants'
-import { compact, head } from 'lodash-es'
+import { RaribleChainURL, RaribleMainnetURL } from '../constants'
+import { compact } from 'lodash-es'
 import { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
-import type {
+import {
+    Ownership,
+    RaribleEventType,
     RaribleHistory,
     RaribleNFTItemMapResponse,
-    RaribleNFTOwnershipResponse,
     RaribleOfferResponse,
     RaribleProfileResponse,
 } from '../types'
@@ -26,7 +27,7 @@ async function fetchFromRarible<T>(root: string, subPath: string, config = {} as
 }
 
 export async function getProfilesFromRarible(addresses: (string | undefined)[]) {
-    return fetchFromRarible<RaribleProfileResponse[]>(RaribleChainURL, 'profiles/list', {
+    return fetchFromRarible<RaribleProfileResponse[]>(RaribleMainnetURL, 'profiles/list', {
         method: 'POST',
         body: stringify(addresses),
         headers: {
@@ -55,13 +56,20 @@ export async function getNFTItem(tokenAddress: string, tokenId: string) {
 
 export async function getOffersFromRarible(tokenAddress: string, tokenId: string) {
     const orders = await fetchFromRarible<RaribleOfferResponse[]>(
-        RaribleChainURL,
+        RaribleMainnetURL,
         `items/${tokenAddress}:${tokenId}/offers`,
+        {
+            method: 'POST',
+            body: stringify({ size: 20 }),
+            headers: {
+                'content-type': 'application/json',
+            },
+        },
     )
-    const profiles = await getProfilesFromRarible(orders.map((item) => item.owner))
+    const profiles = await getProfilesFromRarible(orders.map((item) => item.maker))
     const chainId = currentChainIdSettings.value
     return orders.map((order) => {
-        const ownerInfo = profiles.find((owner) => owner.id === order.owner)
+        const ownerInfo = profiles.find((owner) => owner.id === order.maker)
         return {
             unitPrice: order.buyPriceEth,
             hash: order.signature,
@@ -77,33 +85,26 @@ export async function getOffersFromRarible(tokenAddress: string, tokenId: string
     })
 }
 
-export async function getListingsFromRarible(tokenAddress: string, tokenId: string, owners: string[]) {
-    const assets = await fetchFromRarible<RaribleNFTOwnershipResponse[]>(RaribleChainURL, 'ownerships/list', {
-        method: 'POST',
-        body: stringify(owners.map((owner) => `${tokenAddress}:${tokenId}:${owner}`)),
-        headers: {
-            'content-type': 'application/json',
-        },
-    })
-    const profiles = await getProfilesFromRarible(owners)
+export async function getListingsFromRarible(tokenAddress: string, tokenId: string) {
+    const assets = await fetchFromRarible<Ownership[]>(RaribleMainnetURL, `items/${tokenAddress}:${tokenId}/ownerships`)
+    const listings = assets.filter((x) => x.selling)
+    const profiles = await getProfilesFromRarible(listings.map((x) => x.owner))
     const chainId = currentChainIdSettings.value
-    return assets
-        .map((asset) => {
-            const ownerInfo = profiles.find((owner) => owner.id === asset.ownership.owner)
-            return {
-                unitPrice: asset.ownership.priceEth,
-                hash: asset.ownership.signature,
-                makerAccount: {
-                    user: {
-                        username: ownerInfo?.name,
-                    },
-                    address: ownerInfo?.id,
-                    profile_img_url: toRaribleImage(ownerInfo?.image),
-                    link: `${resolveRaribleUserNetwork(chainId)}${ownerInfo?.id ?? ''}`,
+    return listings.map((asset) => {
+        const ownerInfo = profiles.find((owner) => owner.id === asset.owner)
+        return {
+            unitPrice: asset.priceEth,
+            hash: asset.signature,
+            makerAccount: {
+                user: {
+                    username: ownerInfo?.name,
                 },
-            }
-        })
-        .filter((item) => item.unitPrice)
+                address: ownerInfo?.id,
+                profile_img_url: toRaribleImage(ownerInfo?.image),
+                link: `${resolveRaribleUserNetwork(chainId)}${ownerInfo?.id ?? ''}`,
+            },
+        }
+    })
 }
 
 export async function getOrderFromRarible(tokenAddress: string, tokenId: string, side: OrderSide) {
@@ -111,26 +112,33 @@ export async function getOrderFromRarible(tokenAddress: string, tokenId: string,
         case OrderSide.Buy:
             return getOffersFromRarible(tokenAddress, tokenId)
         case OrderSide.Sell:
-            const asset = head(
-                await fetchFromRarible<RaribleNFTItemMapResponse[]>(RaribleChainURL, 'items/map', {
-                    method: 'POST',
-                    body: stringify([`${tokenAddress}:${tokenId}`]),
-                    headers: {
-                        'content-type': 'application/json',
-                    },
-                }),
-            )
-            return getListingsFromRarible(tokenAddress, tokenId, [])
+            return getListingsFromRarible(tokenAddress, tokenId)
         default:
             return []
     }
 }
 
 export async function getHistoryFromRarible(tokenAddress: string, tokenId: string) {
-    const histories = await fetchFromRarible<RaribleHistory[]>(
-        RaribleChainURL,
-        `items/${tokenAddress}:${tokenId}/history`,
-    )
+    let histories = await fetchFromRarible<RaribleHistory[]>(RaribleMainnetURL, `activity`, {
+        method: 'POST',
+        body: stringify({
+            // types: ['BID', 'BURN', 'BUY', 'CANCEL', 'CANCEL_BID', 'ORDER', 'MINT', 'TRANSFER', 'SALE'],
+            filter: {
+                '@type': 'by_item',
+                address: tokenAddress,
+                tokenId,
+            },
+            size: 100,
+        }),
+        headers: {
+            'content-type': 'application/json',
+        },
+    })
+
+    if (histories.length) {
+        histories = histories.filter((x) => Object.values(RaribleEventType).includes(x['@type']))
+    }
+
     const profiles = await getProfilesFromRarible(
         compact([
             ...histories.map((history) => history.owner),
