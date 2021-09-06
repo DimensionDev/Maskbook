@@ -152,7 +152,7 @@ export function InvestDialog() {
                 ? [
                       `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${
                           pool?.name
-                      }. Follow @realMaskbook (mask.io) to invest dHEDGE pools.`,
+                      }. Follow @realMaskNetwork (mask.io) to invest dHEDGE pools.`,
                       '#mask_io',
                   ].join('\n')
                 : '',

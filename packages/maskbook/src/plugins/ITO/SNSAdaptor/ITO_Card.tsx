@@ -76,7 +76,7 @@ export function ITO_Card(props: ITO_CardProps) {
                     packet?.claimable,
                     18,
                     6,
-                )}. Follow @realMaskbook (mask.io) to claim airdrop.`,
+                )}. Follow @realMaskNetwork (mask.io) to claim airdrop.`,
                 '#mask_io',
                 postLink,
             ].join('\n'),

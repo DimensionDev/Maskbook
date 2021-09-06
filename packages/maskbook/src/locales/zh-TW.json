@@ -10,7 +10,7 @@
     "add_token_search_hint": "搜尋 ERC20 代幣",
     "add_asset": "新增資產",
     "additional_post_box__encrypted_post_pre": "使用 #mask_io 解密這篇貼文！ {{encrypted}}",
-    "additional_post_box__encrypted_post_pre_red_packet_twitter": "用 #mask_io @realMaskbook 開啟紅包 {{encrypted}}",
+    "additional_post_box__encrypted_post_pre_red_packet_twitter": "用 #mask_io @realMaskNetwork 開啟紅包 {{encrypted}}",
     "additional_post_box__encrypted_post_pre_red_packet": "用 #mask_io 開啟紅包 {{encrypted}}",
     "additional_post_box__steganography_post_pre": "這張圖片是使用 #mask_io 加密。 📪🔑 安裝 mask.io 解密。 {{random}}",
     "auto_paste_failed_dialog_title": "手動貼上",

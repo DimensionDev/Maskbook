@@ -120,7 +120,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                         .multipliedBy(checkState.type === CheckStateType.YEP ? checkState.ratio : 1)
                         .dp(0)
                         .toFixed() + '.00'
-                }. Follow @realMaskbook (mask.io) to claim airdrop.`,
+                }. Follow @realMaskNetwork (mask.io) to claim airdrop.`,
                 postLink,
             ].join('\n'),
         )
