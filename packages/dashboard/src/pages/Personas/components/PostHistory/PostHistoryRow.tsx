@@ -30,10 +30,8 @@ export const PostHistoryRow = memo(({ post }: PostHistoryRowProps) => {
         const { recipients } = post
         if (recipients === 'everyone') return ['Everyone']
 
-        const { __raw_map__: raws } = recipients
-        const keys = [...raws.keys()]
-
-        return keys.length ? keys.map((x) => x.replace(/^.*\//, '@')) : ['Myself']
+        const userIds = Array.from(recipients.keys()).map((x) => `@${x.userId}`)
+        return userIds.length ? userIds : ['Myself']
     }, [post.recipients])
 
     return <PostHistoryRowUI icon={postIcon} recipients={allRecipients} post={post} />
