@@ -154,7 +154,7 @@ export class PostIdentifier<T extends Identifier = Identifier> extends Identifie
         return this.equals(PostIdentifier.unknown)
     }
     /**
-     * If identifier is a PostIdentifier, that means this post is binded with other post in some kind
+     * If identifier is a PostIdentifier, that means this post is bound with other post in some kind
      * e.g. a comment.
      */
     constructor(public readonly identifier: T, public readonly postId: string) {

@@ -29,7 +29,7 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
         onConfirm,
         children,
         maxWidth = 'sm',
-        cancelText = t.settigns_button_cancel(),
+        cancelText = t.settings_button_cancel(),
         confirmText = t.settings_button_confirm(),
         confirmDisabled = false,
     } = props

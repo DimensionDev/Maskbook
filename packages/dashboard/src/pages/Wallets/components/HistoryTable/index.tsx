@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
-import { LoadingPlaceholder } from '../../../../components/LoadingPlacholder'
+import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { HistoryTableRow } from '../HistoryTableRow'
 import { noop } from 'lodash-es'

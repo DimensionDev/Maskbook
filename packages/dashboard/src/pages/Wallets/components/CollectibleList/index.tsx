@@ -13,7 +13,7 @@ import {
     useWallet,
 } from '@masknet/web3-shared'
 import { useCurrentCollectibleDataProvider } from '../../api'
-import { LoadingPlaceholder } from '../../../../components/LoadingPlacholder'
+import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'

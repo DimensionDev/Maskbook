@@ -60,7 +60,7 @@ export interface PluginItemProps {
     onSetting?: (id: string) => void
 }
 
-export function PluginItemPlaceHodler() {
+export function PluginItemPlaceholder() {
     const { classes } = useStyles()
     return <Box className={classes.empty} />
 }

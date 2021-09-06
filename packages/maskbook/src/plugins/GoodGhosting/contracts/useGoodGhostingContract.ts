@@ -4,5 +4,5 @@ import GoodGhostingPolygonABI from '@masknet/web3-contracts/abis/GoodGhostingPol
 import { useContract } from '@masknet/web3-shared'
 
 export function useGoodGhostingContract(address: string) {
-    return useContract<GoodGhostingPolygon>(address, GoodGhostingPolygonABI.abi as AbiItem[])
+    return useContract<GoodGhostingPolygon>(address, GoodGhostingPolygonABI as AbiItem[])
 }

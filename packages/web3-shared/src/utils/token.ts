@@ -109,16 +109,16 @@ export function createERC20Tokens(
     type Table = { [chainId in ChainId]: ERC20TokenDetailed }
     const base = {} as Table
     return getEnumAsArray(ChainId).reduce<Table>((accumulator, { value: chainId }) => {
-        const evaludator: <T>(f: T | ((chainId: ChainId) => T)) => T = (f) =>
+        const evaluator: <T>(f: T | ((chainId: ChainId) => T)) => T = (f) =>
             typeof f === 'function' ? (f as any)(chainId) : f
 
         accumulator[chainId] = {
             type: EthereumTokenType.ERC20,
             chainId,
             address: getTokenConstants(chainId)[key] ?? '',
-            name: evaludator(name),
-            symbol: evaludator(symbol),
-            decimals: evaludator(decimals),
+            name: evaluator(name),
+            symbol: evaluator(symbol),
+            decimals: evaluator(decimals),
         }
         return accumulator
     }, base)
