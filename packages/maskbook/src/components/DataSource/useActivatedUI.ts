@@ -17,9 +17,9 @@ export function useLastRecognizedIdentity() {
         activatedSocialNetworkUI.collecting.identityProvider?.recognized || default_,
     )
 }
-export function useSurfaceRecognizedIdentity() {
+export function useCurrentVisitingIdentity() {
     return useValueRef<SocialNetworkUI.CollectingCapabilities.IdentityResolved>(
-        activatedSocialNetworkUI.collecting.surfaceIdentityProvider?.recognized || default_,
+        activatedSocialNetworkUI.collecting.currentVisitingIdentityProvider?.recognized || default_,
     )
 }
 export function useMyIdentities() {

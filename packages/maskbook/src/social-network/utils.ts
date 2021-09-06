@@ -22,11 +22,9 @@ export function managedStateCreator(): SocialNetworkUI.ManagedState {
     return {}
 }
 export const creator = {
-    IdentityResolveProviderLastRecognized:
+    EmptyIdentityResolveProviderState:
         (): SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'] =>
             new ValueRef({ identifier: ProfileIdentifier.unknown }),
-    IdentityResolveProviderSurfaceRecognized:
-        (): SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'] =>
-            new ValueRef({ identifier: ProfileIdentifier.unknown }),
-    PostProviderStore: (): SocialNetworkUI.CollectingCapabilities.PostsProvider['posts'] => new ObservableWeakMap(),
+    EmptyPostProviderState: (): SocialNetworkUI.CollectingCapabilities.PostsProvider['posts'] =>
+        new ObservableWeakMap(),
 }

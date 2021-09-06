@@ -184,7 +184,7 @@ export namespace SocialNetworkUI {
             /** Resolve the information of who am I on the current network. */
             identityProvider?: IdentityResolveProvider
             /** Resolve the information of identity on the current page which has been browsing. */
-            surfaceIdentityProvider?: IdentityResolveProvider
+            currentVisitingIdentityProvider?: IdentityResolveProvider
             /** Maintain all the posts up-to-date. */
             postsProvider?: PostsProvider
             /** Get searched keyword */

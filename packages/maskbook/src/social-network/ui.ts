@@ -68,11 +68,11 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.customization.paletteMode?.start(signal)
     startIntermediateSetupGuide()
     $unknownIdentityResolution()
-    surfaceIdentityResolution()
 
     ui.collecting.postsProvider?.start(signal)
     startPostListener()
 
+    ui.collecting.currentVisitingIdentityProvider?.start(signal)
     ui.injection.pageInspector?.(signal)
     if (Flags.toolbox_enabled) ui.injection.toolBoxInNavBar?.(signal)
     ui.injection.setupPrompt?.(signal)
@@ -111,11 +111,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 Services.Identity.resolveIdentity(id.identifier)
             })
         }
-    }
-
-    function surfaceIdentityResolution() {
-        const provider = ui.collecting.surfaceIdentityProvider
-        provider?.start(signal)
     }
 
     function startPostListener() {

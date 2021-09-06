@@ -22,7 +22,7 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
 )
 
 export const PostProviderFacebook: Next.CollectingCapabilities.PostsProvider = {
-    posts: creator.PostProviderStore(),
+    posts: creator.EmptyPostProviderState(),
     start(signal) {
         collectPostsFacebookInner(this.posts, signal)
     },

@@ -34,7 +34,7 @@ function resolveLastRecognizedIdentityInner(
     cancel.addEventListener('abort', () => watcher.stopWatch())
 }
 
-function resolveSurfaceRecognizedIdentityInner(
+function resolveCurrentVisitingIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
@@ -70,16 +70,16 @@ function resolveSurfaceRecognizedIdentityInner(
 
 export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
-    recognized: creator.IdentityResolveProviderLastRecognized(),
+    recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveLastRecognizedIdentityInner(this.recognized, cancel)
     },
 }
 
-export const SurfaceIdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolveProvider = {
+export const CurrentVisitingIdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
-    recognized: creator.IdentityResolveProviderSurfaceRecognized(),
+    recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveSurfaceRecognizedIdentityInner(this.recognized, cancel)
+        resolveCurrentVisitingIdentityInner(this.recognized, cancel)
     },
 }

@@ -8,7 +8,7 @@ import { openComposeBoxTwitter } from './automation/openComposeBox'
 import { pasteTextToCompositionTwitter } from './automation/pasteTextToComposition'
 import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage'
 import { gotoProfilePageTwitter } from './automation/gotoProfilePage'
-import { IdentityProviderTwitter, SurfaceIdentityProviderTwitter } from './collecting/identity'
+import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity'
 import { PostProviderTwitter } from './collecting/post'
 import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
@@ -118,7 +118,7 @@ const twitterUI: SocialNetworkUI.Definition = {
     },
     collecting: {
         identityProvider: IdentityProviderTwitter,
-        surfaceIdentityProvider: SurfaceIdentityProviderTwitter,
+        currentVisitingIdentityProvider: CurrentVisitingIdentityProviderTwitter,
         postsProvider: PostProviderTwitter,
         getSearchedKeyword: getSearchedKeywordAtTwitter,
     },

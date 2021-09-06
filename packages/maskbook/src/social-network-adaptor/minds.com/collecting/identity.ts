@@ -36,7 +36,7 @@ async function resolveLastRecognizedIdentityInner(
 
 export const IdentityProviderMinds: Next.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
-    recognized: creator.IdentityResolveProviderLastRecognized(),
+    recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveLastRecognizedIdentityInner(this.recognized, cancel)
     },

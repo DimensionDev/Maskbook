@@ -14,7 +14,7 @@ export const IdentityProviderInstagram: SocialNetworkUI.CollectingCapabilities.I
             setTimeout(update, 10 * 1000)
         }
     },
-    recognized: creator.IdentityResolveProviderLastRecognized(),
+    recognized: creator.EmptyIdentityResolveProviderState(),
 }
 
 async function query(): Promise<null | SocialNetworkUI.CollectingCapabilities.IdentityResolved> {
