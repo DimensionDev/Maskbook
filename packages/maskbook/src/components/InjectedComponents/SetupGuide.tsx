@@ -551,7 +551,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const [username, setUsername] = useState(getUsername)
     useEffect(
         () =>
-            activatedSocialNetworkUI.collecting.identityProvider?.lastRecognized.addListener((val) => {
+            activatedSocialNetworkUI.collecting.identityProvider?.recognized.addListener((val) => {
                 if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
             }),
         [username],
