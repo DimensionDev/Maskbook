@@ -9,17 +9,16 @@ import type { BackupFileInfo } from '../../../pages/Settings/type'
 
 interface ConfirmBackupInfoProps extends StepCommonProps {
     backupInfo: BackupFileInfo
-    account: string
-    onNext(downloadLink: string, account: string, password: string): Promise<string | null>
+    onNext(password: string): Promise<string | null>
 }
 
-export const ConfirmBackupInfo = memo(({ backupInfo, onNext, account }: ConfirmBackupInfoProps) => {
+export const ConfirmBackupInfo = memo(({ backupInfo, onNext }: ConfirmBackupInfoProps) => {
     const t = useDashboardI18N()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
 
     const handleNext = async () => {
-        const result = await onNext(backupInfo.downloadURL, account, password)
+        const result = await onNext(password)
         if (result) {
             setErrorMessage(result)
         }

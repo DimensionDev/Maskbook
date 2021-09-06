@@ -5,23 +5,29 @@ import { Body, ColumnContentLayout, Footer } from '../../components/RegisterFram
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
 import { Restore } from '../../components/Restore'
+import { UserProvider } from '../Settings/hooks/UserContext'
 
 export default function SignIn() {
     const t = useDashboardI18N()
     const navigate = useNavigate()
 
     return (
-        <RowLayout>
-            <ColumnContentLayout>
-                <Header
-                    title={t.sign_in_account_identity_title()}
-                    action={{ name: t.sign_in_account_sign_up_button(), callback: () => navigate(RoutePaths.SignUp) }}
-                />
-                <Body>
-                    <Restore />
-                </Body>
-                <Footer />
-            </ColumnContentLayout>
-        </RowLayout>
+        <UserProvider>
+            <RowLayout>
+                <ColumnContentLayout>
+                    <Header
+                        title={t.sign_in_account_identity_title()}
+                        action={{
+                            name: t.sign_in_account_sign_up_button(),
+                            callback: () => navigate(RoutePaths.SignUp),
+                        }}
+                    />
+                    <Body>
+                        <Restore />
+                    </Body>
+                    <Footer />
+                </ColumnContentLayout>
+            </RowLayout>
+        </UserProvider>
     )
 }

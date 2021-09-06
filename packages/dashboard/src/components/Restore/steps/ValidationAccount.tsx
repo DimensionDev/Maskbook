@@ -38,7 +38,7 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
 
         if ((backupInfo as BackupFileInfo).downloadURL) {
             setError('')
-            toStep(ValidationCodeStep.ConfirmBackupInfo, { backupInfo: backupInfo, account: account })
+            toStep(ValidationCodeStep.ConfirmBackupInfo, { backupInfo: backupInfo, account: account, type: type })
         } else {
             setError((backupInfo as { message: string }).message)
         }
