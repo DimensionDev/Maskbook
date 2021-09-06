@@ -140,6 +140,7 @@
     "personas_setup_connect_tips": "Please connect to your {{type}} account.",
     "personas_setup_connect": "Connect",
     "personas_name_maximum_tips": "Maximum length is {{length}} characters long.",
+    "personas_name_existed": "The persona name already exists",
     "personas_rename_placeholder": "Persona Name",
     "personas_confirm": "Confirm",
     "personas_cancel": "Cancel",
