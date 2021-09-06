@@ -2,7 +2,7 @@ import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/h
 import { NFTAvatarAmountIcon } from '@masknet/icons'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
-import { Typography } from '@material-ui/core'
+import { Link, Typography } from '@material-ui/core'
 import Services from '../../../extension/service'
 import { gun2 } from '../../../network/gun/version.2'
 import type { PostInfo } from '../../../social-network/PostInfo'
@@ -29,12 +29,7 @@ function updateNFTAvatar(avatarMeta: AvatarMetaData, parent: HTMLDivElement | nu
     eleAvatorImage.setAttribute('src', `url(${new URL(avatarMeta.image ?? '', import.meta.url)})`)
 }
 
-export async function injectAvatorInTwitter(signal: AbortSignal, post: PostInfo) {
-    const avatarMeta = await getNFTAvatorMeta(post.postBy.getCurrentValue().userId)
-    if (!avatarMeta || !avatarMeta.image) return
-
-    updateTwitterAvatar(twitterMainAvatarSelector, avatarMeta.image)
-
+export function injectAvatorInTwitter(signal: AbortSignal, post: PostInfo) {
     const ls = new LiveSelector([post.rootNodeProxy])
         .map((x) => x.current.firstChild?.firstChild?.firstChild as HTMLDivElement)
         .enableSingleMode()
@@ -42,46 +37,54 @@ export async function injectAvatorInTwitter(signal: AbortSignal, post: PostInfo)
     ifUsingMaskbook(post.postBy.getCurrentValue()).then(add, remove)
     post.postBy.subscribe(() => ifUsingMaskbook(post.postBy.getCurrentValue()).then(add, remove))
     let remover = () => {}
-    function add() {
+    async function add() {
         if (signal?.aborted) return
         const node = ls.evaluate()
         if (!node) return
         const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         proxy.realCurrent = node
+        const avatarMeta = await getNFTAvatorMeta(post.postBy.getCurrentValue().userId)
+        if (!avatarMeta || !avatarMeta.image) return
         updateNFTAvatar(avatarMeta, node.firstChild?.firstChild?.lastChild?.firstChild as HTMLDivElement)
         const root = createReactRootShadowed(proxy.afterShadow, { signal })
         root.render(
             <div
-                style={{ display: 'flex', justifyContent: 'center', position: 'absolute', left: 0, top: 48 }}
+                style={{ display: 'flex', justifyContent: 'center', position: 'absolute', left: 0, top: 44 }}
                 onClick={(e) => {
                     e.preventDefault()
                     window.open(resolveOpenSeaLink(avatarMeta.address, avatarMeta.tokenId), '_blank')
                 }}>
-                <NFTAvatarAmountIcon style={{ width: '100%', paddingLeft: 10 }} />
-                <div
-                    style={{
-                        position: 'absolute',
-                        left: 0,
-                        top: 10,
-                        background:
-                            'linear-gradient(106.15deg, #FF0000 5.97%, #FF8A00 21.54%, #FFC700 42.35%, #52FF00 56.58%, #00FFFF 73.01%, #0038FF 87.8%, #AD00FF 101.49%, #FF0000 110.25%)',
-                        borderRadius: 3,
-                        minWidth: 43,
-                        width: 'auto',
-                        display: 'flex',
-                        justifyContent: 'center',
-                    }}>
-                    <Typography
+                <Link
+                    title={resolveOpenSeaLink(avatarMeta.address, avatarMeta.tokenId)}
+                    href={resolveOpenSeaLink(avatarMeta.address, avatarMeta.tokenId)}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <NFTAvatarAmountIcon style={{ width: '100%', paddingLeft: 10 }} />
+                    <div
                         style={{
-                            fontSize: 10,
-                            transform: 'scale(0.8)',
-                            margin: 0,
-                            color: 'white',
-                            whiteSpace: 'nowrap',
-                            textShadow: '2px 1px black',
-                            lineHeight: 1,
-                        }}>{`${avatarMeta.amount} ETH`}</Typography>
-                </div>
+                            position: 'absolute',
+                            left: 0,
+                            top: 10,
+                            background:
+                                'linear-gradient(106.15deg, #FF0000 5.97%, #FF8A00 21.54%, #FFC700 42.35%, #52FF00 56.58%, #00FFFF 73.01%, #0038FF 87.8%, #AD00FF 101.49%, #FF0000 110.25%)',
+                            borderRadius: 3,
+                            minWidth: 43,
+                            width: 'auto',
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}>
+                        <Typography
+                            style={{
+                                fontSize: 10,
+                                transform: 'scale(0.8)',
+                                margin: 0,
+                                color: 'white',
+                                whiteSpace: 'nowrap',
+                                textShadow: '2px 1px black',
+                                lineHeight: 1,
+                            }}>{`${avatarMeta.amount} ETH`}</Typography>
+                    </div>
+                </Link>
             </div>,
         )
         remover = root.destory
@@ -141,6 +144,8 @@ export async function injectUserNFTAvatarAtTwitter(signal: AbortSignal) {
             ?.innerText.replace('@', '') ?? twitterId,
         searchUseCellSelector().querySelector<HTMLElement>('div > div > div > div > :last-child > div').evaluate(),
     )
+
+    _(twitterMainAvatarSelector, signal, twitterId, twitterMainAvatarSelector().evaluate())
 }
 
 const ifUsingMaskbook = memoizePromise(
