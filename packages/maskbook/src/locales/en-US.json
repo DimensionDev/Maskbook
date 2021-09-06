@@ -243,6 +243,8 @@
     "settings_post_replacement_desc": "All posts on the web-pages will be rendered by Mask, including those not created by Mask.",
     "settings_title_general": "General",
     "settings_title_advanced_options": "Advanced",
+    "settings_title_bind_nft_avatar": "Bind NFT Avatar",
+    "bind_nft_avator": "Bind NFT Avatar",
     "settings_title_database_management": "Database Management",
     "settings_launch_page": "Launch Page",
     "settings_launch_page_secondary": "Select the default page to open when launch the app",

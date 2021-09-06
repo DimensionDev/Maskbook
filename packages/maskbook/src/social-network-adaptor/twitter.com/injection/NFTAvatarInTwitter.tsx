@@ -1,13 +1,13 @@
-import { createReactRootShadowed, MaskMessage, startWatch } from '../../../utils'
+import { createReactRootShadowed, MaskMessage, NFTAVatarEvent, startWatch } from '../../../utils'
 import { searchTwitterAvatarSelector } from '../utils/selector'
 import { getTwitterId } from '../utils/user'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { AvatarMetaData, saveNFTAvatar, useNFTAvatar } from './profileNFTAvatar'
 import { useState, useEffect, useCallback } from 'react'
 import Services from '../../../extension/service'
 import { Typography } from '@material-ui/core'
 import { NFTAvatarAmountIcon } from '@masknet/icons'
+import { saveNFTAvatar, useNFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -62,11 +62,11 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const [amount, setAmount] = useState('')
     const avatarMeta = useNFTAvatar(twitterId)
 
-    const onUpdate = useCallback((data: AvatarMetaData) => {
-        if (!data.image) return
-        updateAvatar(data.image!)
-        setAmount(data.amount)
-        saveNFTAvatar(data)
+    const onUpdate = useCallback(async (data: NFTAVatarEvent) => {
+        const avatar = await saveNFTAvatar(data.userId, data.avatarId ?? '', data.address, data.tokenId)
+        if (!avatar) return
+        await updateAvatar(avatar.image!)
+        setAmount(avatar.amount)
     }, [])
 
     useEffect(() => {

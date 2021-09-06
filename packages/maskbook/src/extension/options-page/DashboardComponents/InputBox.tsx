@@ -1,9 +1,10 @@
+import { useStylesExtends } from '@masknet/shared'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { IconButton, InputBase, Paper, Typography } from '@material-ui/core'
-import { useState } from 'react'
+import { IconButton, InputBase, InputBaseProps, Paper, Typography } from '@material-ui/core'
+import { useState, useEffect } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
-    searchbox: {
+    root: {
         display: 'block',
         width: '100%',
         border: `1px solid ${getMaskColor(theme).border}`,
@@ -26,18 +27,23 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface InputBoxProps {
+export interface InputBoxProps extends withClasses<'root'> {
     label: string
     onChange?: (keyword: string) => void
     children?: React.ReactElement
+    value?: string
+    inputBaseProps?: Partial<InputBaseProps>
 }
-export function InputBox({ label, children, onChange }: InputBoxProps) {
-    const { classes } = useStyles()
+export function InputBox(props: InputBoxProps) {
+    const { label, children, onChange, value } = props
+    const classes = useStylesExtends(useStyles(), props)
     const [visible, setVisible] = useState(false)
-    const [keyword, setKeyword] = useState('')
 
+    useEffect(() => {
+        setVisible((v) => !(!value || value.length === 0))
+    }, [value])
     return (
-        <Paper className={classes.searchbox} elevation={0}>
+        <Paper className={classes.root} elevation={0}>
             {visible ? (
                 <Typography variant="body2" className={classes.label}>
                     {label}
@@ -50,14 +56,13 @@ export function InputBox({ label, children, onChange }: InputBoxProps) {
 
                 <InputBase
                     className={classes.input}
-                    inputProps={{ 'aria-label': 'select a token' }}
                     placeholder={label}
-                    value={keyword}
+                    value={value}
                     onChange={(e) => {
-                        setKeyword(e.target.value)
                         setVisible(e.target.value.length !== 0)
                         onChange?.(e.target.value)
                     }}
+                    {...props.inputBaseProps}
                 />
             </Paper>
         </Paper>

@@ -13,6 +13,8 @@ import BigNumber from 'bignumber.js'
 import classnames from 'classnames'
 import { head, uniqBy } from 'lodash-es'
 import { useCallback, useEffect, useState } from 'react'
+import { useAsync } from 'react-use'
+import { gun2 } from '../../network/gun/version.2'
 import { PluginCollectibleRPC } from '../../plugins/Collectible/messages'
 import { getOrderUnitPrice } from '../../plugins/Collectible/utils'
 import { currentCollectibleDataProviderSettings } from '../../plugins/Wallet/settings'
@@ -69,22 +71,8 @@ const useStyles = makeStyles()((theme) => ({
     error: {},
 }))
 
-async function getNFTAmount(token: ERC721TokenDetailed) {
-    if (!(token.contractDetailed.address && token.tokenId)) return null
-
-    const asset = await PluginCollectibleRPC.getAsset(token.contractDetailed.address, token.tokenId)
-    const order = head(
-        (asset.sellOrders ?? []).sort(
-            (a, b) =>
-                new BigNumber(getOrderUnitPrice(a) ?? 0).toNumber() -
-                new BigNumber(getOrderUnitPrice(b) ?? 0).toNumber(),
-        ),
-    )
-    return order ? new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber() : null
-}
-
 export interface NFTAvatarProps extends withClasses<'root'> {
-    onChange: (token: ERC721TokenDetailed, amount: string) => void
+    onChange: (token: ERC721TokenDetailed) => void
 }
 
 export function NFTAvatar(props: NFTAvatarProps) {
@@ -110,14 +98,15 @@ export function NFTAvatar(props: NFTAvatarProps) {
     //0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
 
     const { collectibles, hasNextPage } = value
+
+    console.log(collectibles)
     useEffect(() => {
         setCollectibles_(collectibles)
     }, [collectibles, collectibles.length])
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
-        const amount = await getNFTAmount(selectedToken)
-        onChange(selectedToken, amount?.toFixed() ?? '0')
+        onChange(selectedToken)
     }, [onChange, selectedToken])
 
     const onAddClick = useCallback((token) => {
@@ -219,4 +208,64 @@ export function NFTAvatar(props: NFTAvatarProps) {
             <AddNFT open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
         </>
     )
+}
+
+export interface AvatarMetaData {
+    userId: string
+    tokenId: string
+    amount: string
+    image?: string
+    name?: string
+    address: string
+    avatarId?: string
+    symbol: string
+}
+
+export async function saveNFTAvatar(userId: string, avatarId: string, contract: string, tokenId: string) {
+    const asset = await PluginCollectibleRPC.getAsset(contract, tokenId)
+    const orders =
+        !asset.sellOrders || asset.sellOrders?.length === 0
+            ? !asset.orders || asset.orders?.length === 0
+                ? !asset.buyOrders || asset.buyOrders?.length === 0
+                    ? []
+                    : asset.buyOrders
+                : asset.orders
+            : asset.sellOrders
+
+    const order = head(
+        orders.sort(
+            (a, b) =>
+                new BigNumber(getOrderUnitPrice(a) ?? 0).toNumber() -
+                new BigNumber(getOrderUnitPrice(b) ?? 0).toNumber(),
+        ),
+    )
+
+    const avatarMeta: AvatarMetaData = {
+        amount: order ? new BigNumber(getOrderUnitPrice(order) ?? 0).toFixed() : '0',
+        address: contract,
+        tokenId,
+        avatarId,
+        userId,
+        name: asset.assetContract.name,
+        symbol: asset.assetContract.tokenSymbol,
+        image: asset.imageUrl ?? asset.imagePreviewUrl ?? '',
+    }
+
+    await gun2
+        .get(userId)
+        //@ts-ignore
+        .put(avatarMeta).then!()
+
+    return avatarMeta
+}
+
+export function useNFTAvatar(userId: string) {
+    return useAsync(async () => {
+        const avatar = (await gun2.get(userId).then!()) as AvatarMetaData
+        return avatar
+    }, [userId]).value
+}
+
+export async function getNFTAvator(userId: string) {
+    return (await gun2.get(userId).then!()) as AvatarMetaData
 }

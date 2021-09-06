@@ -37,11 +37,12 @@ export interface ProfileNFTsPageEvent {
 }
 
 export interface NFTAVatarEvent {
-    twitterId: string
+    userId: string
     tokenId: string
     image?: string
     amount: string
     address: string
+    avatarId?: string
 }
 
 export interface MaskMessages extends SettingsEvents {

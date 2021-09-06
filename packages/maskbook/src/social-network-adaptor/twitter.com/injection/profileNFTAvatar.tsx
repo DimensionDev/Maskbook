@@ -3,11 +3,9 @@ import type { ProfileIdentifier } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared'
 import { useCallback, useEffect, useState } from 'react'
-import { useAsync } from 'react-use'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
-import { NFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
+import { AvatarMetaData, NFTAvatar, useNFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
 import Services from '../../../extension/service'
-import { gun2 } from '../../../network/gun/version.2'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { createReactRootShadowed, MaskMessage, startWatch } from '../../../utils'
 import {
@@ -22,14 +20,6 @@ export function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchAvatarSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInTwitter />)
-}
-
-export interface AvatarMetaData {
-    twitterId: string
-    tokenId: string
-    amount: string
-    image?: string
-    address: string
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -62,14 +52,17 @@ function NFTAvatarInTwitter() {
     const avatar = useNFTAvatar(twitterId)
     const profileSave = searchProfileSaveSelector().evaluate()
     const [avatarMeta, setAvatarMeta] = useState<AvatarMetaData>({} as AvatarMetaData)
-    const onChange = useCallback(async (token: ERC721TokenDetailed, amount: string) => {
+    const onChange = useCallback(async (token: ERC721TokenDetailed) => {
         UpdateAvatar(token.info.image ?? '')
         const metaData = {
-            twitterId,
-            amount,
+            userId: twitterId,
+            amount: '0',
             tokenId: token.tokenId,
             address: token.contractDetailed.address,
             image: token.info.image ?? '',
+            symbol: token.contractDetailed.symbol,
+            name: token.contractDetailed.name,
+            avatarId: '',
         }
         setAvatarMeta(metaData)
     }, [])
@@ -98,19 +91,4 @@ async function UpdateAvatar(image: string) {
     const avatarImage = searchAvatarSelectorImage().evaluate()[0]
     if (!avatarImage) return
     avatarImage.setAttribute('src', blobURL.toString())
-}
-
-export function useNFTAvatar(twitterId: string) {
-    return useAsync(async () => {
-        const avatar = (await gun2.get(twitterId).then!()) as AvatarMetaData
-        return avatar
-    }, [twitterId]).value
-}
-
-export function saveNFTAvatar(avatarMeta: AvatarMetaData) {
-    gun2
-        //@ts-ignore
-        .get(avatarMeta.twitterId)
-        //@ts-ignore
-        .put(avatarMeta).then!()
 }

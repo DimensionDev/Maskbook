@@ -3,8 +3,8 @@ import { NFTAvatarAmountIcon } from '@masknet/icons'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import { Link, Typography } from '@material-ui/core'
+import { AvatarMetaData, getNFTAvator } from '../../../components/InjectedComponents/NFTAvatar'
 import Services from '../../../extension/service'
-import { gun2 } from '../../../network/gun/version.2'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { createReactRootShadowed, Flags, memoizePromise, startWatch } from '../../../utils'
 import {
@@ -13,11 +13,6 @@ import {
     selfInfoSelectors,
     twitterMainAvatarSelector,
 } from '../utils/selector'
-import type { AvatarMetaData } from './profileNFTAvatar'
-
-async function getNFTAvatorMeta(twitterId: string) {
-    return (await gun2.get(twitterId).then!()) as AvatarMetaData
-}
 
 function updateNFTAvatar(avatarMeta: AvatarMetaData, parent: HTMLDivElement | null) {
     if (!parent) return
@@ -43,7 +38,7 @@ export function injectAvatorInTwitter(signal: AbortSignal, post: PostInfo) {
         if (!node) return
         const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         proxy.realCurrent = node
-        const avatarMeta = await getNFTAvatorMeta(post.postBy.getCurrentValue().userId)
+        const avatarMeta = await getNFTAvator(post.postBy.getCurrentValue().userId)
         if (!avatarMeta || !avatarMeta.image) return
         updateNFTAvatar(avatarMeta, node.firstChild?.firstChild?.lastChild?.firstChild as HTMLDivElement)
         const root = createReactRootShadowed(proxy.afterShadow, { signal })
@@ -113,7 +108,7 @@ function _(main: () => LiveSelector<HTMLElement, true>, signal: AbortSignal, twi
 
 function updateAvatar(parent?: HTMLElement, twitterId?: string) {
     if (!parent || !twitterId) return
-    getNFTAvatorMeta(twitterId).then((avatarMeta: AvatarMetaData) => {
+    getNFTAvator(twitterId).then((avatarMeta: AvatarMetaData) => {
         const ele = parent.firstChild as HTMLElement
         if (ele) ele.style.backgroundImage = `url(${new URL(avatarMeta.image ?? '', import.meta.url)})`
         const image = parent.lastChild as HTMLElement
