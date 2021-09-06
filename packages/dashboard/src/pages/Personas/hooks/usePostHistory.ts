@@ -16,7 +16,7 @@ export const usePostHistory = (network: string, page: number, size = 20) => {
         const values = await Services.Identity.queryPagedPostHistory(
             {
                 network,
-                after: lastValue,
+                after: lastValue?.identifier,
             },
             size,
         )

@@ -4,7 +4,6 @@ import { blobToArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
 import {
     personaRecordToPersona,
     queryAvatarDataURL,
-    PostRecord,
     queryPersona,
     queryPersonaRecord,
     queryPostPagedDB,
@@ -47,6 +46,7 @@ import type { EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } fr
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { MaskMessage } from '../../utils'
+import type { PostIVIdentifier } from '@masknet/shared-base'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -207,7 +207,7 @@ export { queryPostsDB } from '../../database'
 export async function queryPagedPostHistory(
     options: {
         network: string
-        after?: PostRecord
+        after?: PostIVIdentifier
     },
     count: number,
 ) {

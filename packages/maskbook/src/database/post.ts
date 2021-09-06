@@ -252,7 +252,7 @@ export async function queryPostPagedDB(
     linked: PersonaIdentifier,
     options: {
         network: string
-        after?: PostRecord
+        after?: PostIVIdentifier
     },
     count: number,
 ) {
@@ -267,13 +267,12 @@ export async function queryPostPagedDB(
         if (encryptBy !== linked.toText()) continue
 
         if (firstRecord && options.after) {
-            cursor.continue(options.after?.identifier.toText())
+            cursor.continue(options.after.toText())
             firstRecord = false
             continue
         }
 
-        if (Identifier.fromString(cursor.value.identifier, PostIVIdentifier).unwrap() === options.after?.identifier)
-            continue
+        if (Identifier.fromString(cursor.value.identifier, PostIVIdentifier).unwrap() === options.after) continue
 
         if (count <= 0) break
         const outData = postOutDB(cursor.value)
