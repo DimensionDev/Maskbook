@@ -46,7 +46,7 @@
     "sign_in_account_sign_up_button": "Sign Up",
     "sign_in_account_identity_warning": "The digital identity code can only recover your digital identity. It can encrypt and decrypt the social information signed and sent by this digital identity.",
     "sign_in_account_private_key_placeholder": "Input your Private Key",
-    "sign_in_account_private_key_error": "Incorrect identity code",
+    "sign_in_account_private_key_error": "Incorrect Private Key",
     "sign_in_account_private_key_persona_not_found": "Can't find persona",
     "sign_in_account_private_key_warning": "The digital identity code can only recover your digital identity. It can encrypt and decrypt the social information signed and sent by this digital identity.",
     "sign_in_account_cloud_backup_send_email_success": "Verification code was sent to your {{type}}. Please check your {{type}}.",
