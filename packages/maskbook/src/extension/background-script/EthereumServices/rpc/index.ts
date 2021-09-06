@@ -18,7 +18,7 @@ type AbiItem = {
     }[]
 }
 
-// fix the type eror
+// fix the type error
 const coder = ABICoder as unknown as ABICoder.AbiCoder
 
 const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
@@ -107,7 +107,7 @@ export async function getJsonRpcComputed(payload: JsonRpcPayload): Promise<Ether
                 chain: payload.params[0],
             }
 
-        // contract interation
+        // contract interaction
         case EthereumMethodType.ETH_SEND_TRANSACTION:
             return getSendTransactionRpcComputed(payload.params[0])
 

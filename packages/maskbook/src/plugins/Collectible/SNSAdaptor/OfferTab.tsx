@@ -58,16 +58,7 @@ export function OfferTab() {
 
     const dataSource = useMemo(() => {
         if (!offers.value || !offers.value?.length) return []
-        return offers.value.sort((a, b) => {
-            const current = new BigNumber(a.unitPrice)
-            const next = new BigNumber(b.unitPrice)
-            if (current.isLessThan(next)) {
-                return 1
-            } else if (current.isGreaterThan(next)) {
-                return -1
-            }
-            return 0
-        })
+        return offers.value
     }, [offers.value])
 
     if (offers.loading) return <LoadingTable />

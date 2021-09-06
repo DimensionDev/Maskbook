@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core'
 import classnames from 'classnames'
 import { ReactElement, useCallback, useEffect, useState } from 'react'
 
@@ -36,10 +37,13 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
 
     return (
         <div key="nfts" className={classes.tab}>
-            <div className={classnames(classes.button, active ? classes.selected : '')} onClick={onClick}>
+            <Typography
+                className={classnames(classes.button, active ? classes.selected : '')}
+                onClick={onClick}
+                component="div">
                 NFTs
                 {active && children ? children : null}
-            </div>
+            </Typography>
         </div>
     )
 }

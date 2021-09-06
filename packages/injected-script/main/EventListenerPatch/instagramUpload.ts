@@ -1,5 +1,9 @@
 import type { InternalEvents } from '../../shared'
-import { constructXrayUnwrappedFilesFromUintLike, overwriteFunctionOnXRayObject, unwrapXRay_DOMObject } from '../utils'
+import {
+    constructXrayUnwrappedFilesFromUintLike,
+    overwriteFunctionOnXRayObject,
+    unwrapXRay_CPPBindingObject,
+} from '../utils'
 // TODO: This file is not audited
 export async function instagramUpload(url: InternalEvents['instagramUpload'][0]) {
     const result = await window.fetch(url).then((x) => x.arrayBuffer())
@@ -14,7 +18,7 @@ export async function instagramUpload(url: InternalEvents['instagramUpload'][0])
             if (done) {
                 _target.apply(thisArg, args)
             }
-            const raw = unwrapXRay_DOMObject(input)
+            const raw = unwrapXRay_CPPBindingObject(input)
             for (const x of Object.keys(raw)) {
                 // Old react for __reactEventHandlers, new for __reactProps
                 if (x.startsWith('__reactEventHandlers') || x.startsWith('__reactProps')) {

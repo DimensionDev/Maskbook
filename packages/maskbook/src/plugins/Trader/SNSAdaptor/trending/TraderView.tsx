@@ -124,7 +124,7 @@ export function TraderView(props: TraderViewProps) {
 
     //#region merge trending
     const coinId = usePreferredCoinId(name, dataProvider)
-    const trendingById = useTrendingById(coinId, dataProvider)
+    const trendingById = useTrendingById(name ? '' : coinId, dataProvider)
     const trendingByKeyword = useTrendingByKeyword(tagType, coinId ? '' : name, dataProvider)
     const {
         value: { currency, trending },
@@ -206,7 +206,7 @@ export function TraderView(props: TraderViewProps) {
 
     //#region if the coin is a native token or contract address exists
 
-    const isSwapable =
+    const isSwappable =
         (!!trending?.coin.contract_address ||
             ['eth', 'matic', 'bnb'].includes(trending?.coin.symbol.toLowerCase() ?? '')) &&
         chainIdValid &&
@@ -229,7 +229,7 @@ export function TraderView(props: TraderViewProps) {
         <Tab className={classes.tab} key="market" label={t('plugin_trader_tab_market')} />,
         <Tab className={classes.tab} key="price" label={t('plugin_trader_tab_price')} />,
         <Tab className={classes.tab} key="exchange" label={t('plugin_trader_tab_exchange')} />,
-        isSwapable ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
+        isSwappable ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
     ].filter(Boolean)
     //#endregion
 
@@ -282,7 +282,7 @@ export function TraderView(props: TraderViewProps) {
                     </>
                 ) : null}
                 {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
-                {tabIndex === 3 && isSwapable ? (
+                {tabIndex === 3 && isSwappable ? (
                     <TradeView
                         classes={{ root: classes.tradeViewRoot }}
                         TraderProps={{

@@ -9,7 +9,7 @@ export interface DictItem {
     en: string
 }
 
-export interface PorjectItem {
+export interface ProjectItem {
     id: string
     log_url: string
     name: Omit<DictItem, 'id'>
@@ -89,7 +89,7 @@ export interface HistoryRecord {
     }
     history_list: HistoryItem[]
     project_dict: {
-        [key in string]: PorjectItem
+        [key in string]: ProjectItem
     }
     token_dict: {
         [key in string | 'eth']: TokenItem

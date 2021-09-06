@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react'
-import { DataProvider } from '@masknet/public-api'
+import type { DataProvider } from '@masknet/public-api'
 import { useValueRef } from '@masknet/shared'
 import { currentDataProviderSettings } from '../settings'
 
 export function useCurrentDataProvider(availableDataProviders: DataProvider[]) {
-    const [dataProvider, setDataProvider] = useState(
-        availableDataProviders.length ? availableDataProviders[0] : DataProvider.COIN_GECKO,
-    )
     const currentDataProvider = useValueRef<DataProvider>(currentDataProviderSettings)
+    const [dataProvider, setDataProvider] = useState(currentDataProvider)
 
     // sync data provider
     useEffect(() => {

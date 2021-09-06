@@ -25,6 +25,7 @@ export async function queryPostKeysOnGun2(
             .get(postHash)
             // @ts-ignore
             .get(keyHash).then!()) || {}
+    /* cspell:disable-next-line */
     // ? In this step we get something like ["jzarhbyjtexiE7aB1DvQ", "jzarhuse6xlTAtblKRx9"]
     const internalKeys = Object.keys(internalNodes).filter((x) => x !== '_')
     // ? In this step we get all keys in this category (gun2[postHash][keyHash])

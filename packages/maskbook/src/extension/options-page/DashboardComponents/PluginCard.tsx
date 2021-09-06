@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         marginTop: theme.spacing(2),
     },
-    logoWraper: {
+    logoWrapper: {
         alignSelf: 'flex-start',
         flexShrink: 0,
     },
@@ -92,7 +92,7 @@ export default function PluginCard({ id, name, icon, description, enabled, onSwi
     return (
         <Card className={classes.card} elevation={2}>
             <div className={classes.info}>
-                <div className={classes.logoWraper}>
+                <div className={classes.logoWrapper}>
                     <span className={classes.logo}>{icon}</span>
                 </div>
                 <dl className={classes.metas}>

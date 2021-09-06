@@ -41,11 +41,15 @@ export async function getAssetsListNFT(
     page?: number,
     size?: number,
 ): Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }> {
-    if (provider === CollectibleProvider.OPENSEAN) {
+    if (provider === CollectibleProvider.OPENSEA) {
         const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size })
         return {
             assets: assets
-                .filter((x) => ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name))
+                .filter(
+                    (x) =>
+                        x.asset_contract.asset_contract_type === 'non-fungible' ||
+                        ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
+                )
                 .map((x) =>
                     createERC721Token(
                         {

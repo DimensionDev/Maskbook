@@ -71,7 +71,7 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
                             dense
                             records={records}
                         />
-                        {/* Hack: this is an un-dry and costly temperary solution, will be replaced later */}
+                        {/* Hack: this is an un-dry and costly temporary solution, will be replaced later */}
                         {process.env.architecture === 'app' && process.env.target === 'firefox' ? (
                             backupInfo.loading || loading ? null : (
                                 <Button

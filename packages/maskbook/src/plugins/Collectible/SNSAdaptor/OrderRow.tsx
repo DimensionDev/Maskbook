@@ -76,9 +76,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                 <>
                     <TableCell>
                         <Typography className={classes.content}>
-                            {order.paymentTokenContract?.symbol !== 'ETH' &&
-                            order.paymentTokenContract?.symbol !== 'WETH' &&
-                            provider === CollectibleProvider.OPENSEA ? (
+                            {provider === CollectibleProvider.OPENSEA ? (
                                 <Link
                                     href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.paymentToken!)}
                                     target="_blank"
@@ -109,9 +107,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                 <>
                     <TableCell>
                         <Typography style={{ display: 'flex' }} className={classes.content}>
-                            {order.paymentTokenContract?.symbol !== 'ETH' &&
-                            order.paymentTokenContract?.symbol !== 'WETH' &&
-                            provider === CollectibleProvider.OPENSEA ? (
+                            {provider === CollectibleProvider.OPENSEA ? (
                                 <Link
                                     href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.paymentToken!)}
                                     target="_blank"

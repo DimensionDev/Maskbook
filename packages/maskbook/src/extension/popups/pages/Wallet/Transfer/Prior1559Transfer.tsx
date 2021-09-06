@@ -153,7 +153,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                         pow10(selectedAsset?.token.decimals ?? 0),
                     )
                     return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
-                }, t('wallet_transfer_error_insufficent_balance', { token: selectedAsset?.token.symbol })),
+                }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
             gasLimit: zod
                 .string()
                 .min(1, t('wallet_transfer_error_gasLimit_absence'))

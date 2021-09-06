@@ -59,7 +59,7 @@ export function useTradeCallback(
                         y.tokenOut, // address tokenOut
                         y.swapAmount, // uint swapAmount
                         y.limitReturnAmount, // uint limitReturnAmount
-                        y.maxPrice, // uinnt maxPrice
+                        y.maxPrice, // uint maxPrice
                     ] as [string, string, string, string, string, string],
             ),
         )

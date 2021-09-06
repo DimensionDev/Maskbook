@@ -106,7 +106,7 @@ export function TransferTab(props: TransferTabProps) {
     const validationMessage = useMemo(() => {
         if (!transferAmount || isZero(transferAmount)) return t('wallet_transfer_error_amount_absence')
         if (isGreaterThan(transferAmount, tokenBalance))
-            return t('wallet_transfer_error_insufficent_balance', {
+            return t('wallet_transfer_error_insufficient_balance', {
                 token: token.symbol,
             })
         if (!address) return t('wallet_transfer_error_address_absence')

@@ -87,7 +87,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
         paddingBottom: theme.spacing(1),
     },
-    deteils: {
+    details: {
         '& > *': {
             paddingBottom: theme.spacing(1),
         },
@@ -221,7 +221,7 @@ export function PoolInList(props: PoolInListProps) {
                         </Typography>
                     </Box>
 
-                    <Box className={classes.deteils}>
+                    <Box className={classes.details}>
                         <TableContainer component={Paper} className={classes.table}>
                             <Table size="small">
                                 <TableHead>
