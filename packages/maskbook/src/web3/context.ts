@@ -19,13 +19,11 @@ import type { InternalSettings } from '../settings/createSettings'
 import { createExternalProvider } from './helpers'
 import Services from '../extension/service'
 
-const Web3Provider = createExternalProvider()
-
 function createWeb3Context(disablePopup = false): Web3ProviderType {
-    const Web3ProviderWithoutConfirm = createExternalProvider(true)
+    const Web3Provider = createExternalProvider(disablePopup)
     return {
         provider: {
-            getCurrentValue: () => (disablePopup ? Web3ProviderWithoutConfirm : Web3Provider),
+            getCurrentValue: () => Web3Provider,
             subscribe: () => noop,
         },
         allowTestnet: {
@@ -50,7 +48,7 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
         ),
         getERC20TokensPaged,
         portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
-        getAssetList: WalletRPC.getAssetsList,
+        getAssetsList: WalletRPC.getAssetsList,
         getAssetsListNFT: WalletRPC.getAssetsListNFT,
         getERC721TokensPaged,
         fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
@@ -104,7 +102,10 @@ function createSubscriptionFromSettings<T>(settings: InternalSettings<T>): Subsc
     const { trigger, subscribe } = getEventTarget()
     settings.readyPromise.finally(trigger)
     return {
-        getCurrentValue: () => settings.value,
+        getCurrentValue: () => {
+            if (!settings.ready) throw settings.readyPromise
+            return settings.value
+        },
         subscribe: (f) => {
             const a = subscribe(f)
             const b = settings.addListener(() => trigger())
@@ -119,11 +120,18 @@ function createSubscriptionFromAsync<T>(
 ): Subscription<T> {
     let state = defaultValue
     const { subscribe, trigger } = getEventTarget()
-    f()
-        .then((v) => (state = v))
+    let isLoading = true
+    const init = f()
+        .then((v) => {
+            state = v
+        })
         .finally(trigger)
+        .finally(() => (isLoading = false))
     return {
-        getCurrentValue: () => state,
+        getCurrentValue: () => {
+            if (isLoading) throw init
+            return state
+        },
         subscribe: (sub) => {
             const a = subscribe(sub)
             const b = onChange(async () => {

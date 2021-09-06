@@ -65,25 +65,7 @@ export async function requestWithoutPopup<T extends unknown>(
     requestArguments: RequestArguments,
     overrides?: SendOverrides,
 ) {
-    return new Promise<T>((resolve, reject) => {
-        id += 1
-        INTERNAL_send(
-            {
-                jsonrpc: '2.0',
-                id,
-                params: [],
-                ...requestArguments,
-            },
-            (error, response) => {
-                if (error || response?.error) reject(error ?? response?.error)
-                else resolve(response?.result)
-            },
-            {
-                ...overrides,
-                disablePopup: true,
-            },
-        )
-    })
+    return request(requestArguments, overrides, { popupsWindow: false })
 }
 
 export async function requestSend(
@@ -117,6 +99,14 @@ export async function requestSend(
     getSendMethod()(payload_, callback, overrides)
 }
 
+export async function requestSendWithoutPopup(
+    payload: JsonRpcPayload,
+    callback: (error: Error | null, response?: JsonRpcResponse) => void,
+    overrides?: SendOverrides,
+) {
+    return requestSend(payload, callback, overrides)
+}
+
 export async function confirmRequest(payload: JsonRpcPayload) {
     const pid = getPayloadId(payload)
     if (!pid) return
@@ -130,21 +120,4 @@ export async function rejectRequest(payload: JsonRpcPayload) {
     if (!pid) return
     await WalletRPC.deleteUnconfirmedRequest(payload)
     UNCONFIRMED_CALLBACK_MAP.delete(pid)
-}
-
-export async function requestSendWithoutPopup<T extends unknown>(
-    payload: JsonRpcPayload,
-    callback: (error: Error | null, response?: JsonRpcResponse) => void,
-) {
-    id += 1
-    await INTERNAL_send(
-        {
-            ...payload,
-            id,
-        },
-        callback,
-        {
-            disablePopup: true,
-        },
-    )
 }

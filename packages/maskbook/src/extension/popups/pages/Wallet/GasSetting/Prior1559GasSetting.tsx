@@ -14,6 +14,8 @@ import { Typography } from '@material-ui/core'
 import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@material-ui/lab'
 import { isEmpty } from 'lodash-es'
+import { useHistory, useLocation } from 'react-router'
+import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -74,7 +76,8 @@ export const Prior1559GasSetting = memo(() => {
     const { t } = useI18N()
     const chainId = useChainId()
     const { value } = useUnconfirmedRequest()
-
+    const location = useLocation()
+    const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
 
     //#region Get gas now from debank
@@ -168,6 +171,8 @@ export const Prior1559GasSetting = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (value) {
+                const toBeClose = new URLSearchParams(location.search).get('toBeClose')
+
                 const config = {
                     ...value.payload.params[0],
                     gas: data.gasLimit,
@@ -175,15 +180,17 @@ export const Prior1559GasSetting = memo(() => {
                 }
 
                 await WalletRPC.deleteUnconfirmedRequest(value.payload)
-                await Services.Ethereum.request(
-                    {
-                        ...value.payload,
-                        params: [config, ...value.payload.params],
-                    },
-                    { skipConfirmation: true },
-                )
+                await Services.Ethereum.confirmRequest({
+                    ...value.payload,
+                    params: [config, ...value.payload.params],
+                })
+
+                if (toBeClose) {
+                    window.close()
+                } else {
+                    history.replace(PopupRoutes.TokenDetail)
+                }
             }
-            //    TODO: url search params to control close or history
         },
         [value],
     )

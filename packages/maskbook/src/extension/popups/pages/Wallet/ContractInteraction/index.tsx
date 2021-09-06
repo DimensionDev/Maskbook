@@ -9,7 +9,7 @@ import {
     useChainId,
     useNativeTokenDetailed,
 } from '@masknet/web3-shared'
-import { Button, Link, Typography } from '@material-ui/core'
+import { Link, Typography } from '@material-ui/core'
 import { useI18N, useValueRef } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
@@ -20,6 +20,7 @@ import Services from '../../../../service'
 import { FormattedCurrency, TokenIcon } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
 import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
+import { useLocation } from 'react-router'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -101,6 +102,7 @@ const useStyles = makeStyles()(() => ({
 const ContractInteraction = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const location = useLocation()
     const history = useHistory()
     const { value } = useUnconfirmedRequest()
     const networkType = useValueRef(currentNetworkSettings)
@@ -184,12 +186,30 @@ const ContractInteraction = memo(() => {
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (value) {
+            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
             await WalletRPC.deleteUnconfirmedRequest(value.payload)
-            await Services.Ethereum.request(value.payload, { skipConfirmation: true })
-            // TODO: control with search
-            // window.close()
+            await Services.Ethereum.confirmRequest(value.payload)
+
+            if (toBeClose) {
+                window.close()
+            } else {
+                history.replace(PopupRoutes.TokenDetail)
+            }
         }
-    }, [value])
+    }, [value, location.search, history])
+
+    const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
+        if (value) {
+            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
+            await Services.Ethereum.rejectRequest(value.payload)
+
+            if (toBeClose) {
+                window.close()
+            } else {
+                history.goBack()
+            }
+        }
+    }, [value, location.search, history])
 
     const { value: defaultPrices } = useAsync(async () => {
         if (networkType === NetworkType.Ethereum && !maxFeePerGas && !maxPriorityFeePerGas) {
@@ -300,13 +320,14 @@ const ContractInteraction = memo(() => {
                 </div>
             </div>
             <div className={classes.controller}>
-                <Button
+                <LoadingButton
+                    loading={rejectLoading}
                     variant="contained"
                     className={classes.button}
                     style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
-                    onClick={() => window.close()}>
+                    onClick={handleReject}>
                     {t('cancel')}
-                </Button>
+                </LoadingButton>
                 <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
                     {t('confirm')}
                 </LoadingButton>

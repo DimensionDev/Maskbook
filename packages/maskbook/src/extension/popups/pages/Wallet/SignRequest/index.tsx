@@ -1,13 +1,15 @@
 import { memo, useMemo } from 'react'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
-import { Button, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { useI18N } from '../../../../../utils'
 import { EthereumRpcType, useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../service'
 import { LoadingButton } from '@material-ui/lab'
+import { useHistory, useLocation } from 'react-router'
+import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -61,6 +63,8 @@ const useStyles = makeStyles()(() => ({
 
 const SignRequest = memo(() => {
     const { t } = useI18N()
+    const history = useHistory()
+    const location = useLocation()
     const { classes } = useStyles()
     const { value } = useUnconfirmedRequest()
     const wallet = useWallet()
@@ -80,10 +84,32 @@ const SignRequest = memo(() => {
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (value) {
+            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
+
             await WalletRPC.deleteUnconfirmedRequest(value.payload)
-            await Services.Ethereum.request(value.payload)
+            await Services.Ethereum.confirmRequest(value.payload)
+
+            if (toBeClose) {
+                window.close()
+            } else {
+                history.replace(PopupRoutes.Wallet)
+            }
         }
-    }, [value])
+    }, [value, location.search, history])
+
+    const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
+        if (value) {
+            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
+
+            await Services.Ethereum.rejectRequest(value.payload)
+
+            if (toBeClose) {
+                window.close()
+            } else {
+                history.replace(PopupRoutes.Wallet)
+            }
+        }
+    }, [location, history, value])
 
     return (
         <main className={classes.container}>
@@ -99,13 +125,14 @@ const SignRequest = memo(() => {
             </Typography>
             <Typography className={classes.message}>{data}</Typography>
             <div className={classes.controller}>
-                <Button
+                <LoadingButton
+                    loading={rejectLoading}
                     variant="contained"
                     className={classes.button}
                     style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
-                    onClick={() => window.close()}>
+                    onClick={handleReject}>
                     {t('cancel')}
-                </Button>
+                </LoadingButton>
                 <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
                     {t('confirm')}
                 </LoadingButton>

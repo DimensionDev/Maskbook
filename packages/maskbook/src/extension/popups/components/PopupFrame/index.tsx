@@ -83,6 +83,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
             PopupRoutes.GasSetting,
             PopupRoutes.WalletSignRequest,
             PopupRoutes.ContractInteraction,
+            PopupRoutes.Unlock,
         ],
         exact: true,
     })
@@ -106,9 +107,6 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                             className={classes.nav}
                             activeClassName={classes.active}>
                             {t('wallets')}
-                        </NavLink>
-                        <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
-                            {t('personas')}
                         </NavLink>
                     </Box>
                 </Box>

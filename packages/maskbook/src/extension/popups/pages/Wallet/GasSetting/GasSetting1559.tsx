@@ -14,6 +14,8 @@ import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@material-ui/lab'
 import { isEmpty } from 'lodash-es'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
+import { useHistory, useLocation } from 'react-router'
+import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -75,6 +77,8 @@ export const GasSetting1559 = memo(() => {
     const { classes } = useStyles()
     const { t } = useI18N()
     const chainId = useChainId()
+    const location = useLocation()
+    const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
 
     const { value: gasNow } = useAsync(async () => {
@@ -218,6 +222,7 @@ export const GasSetting1559 = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (value) {
+                const toBeClose = new URLSearchParams(location.search).get('toBeClose')
                 const config = {
                     ...value.payload.params[0],
                     gas: data.gasLimit,
@@ -226,17 +231,19 @@ export const GasSetting1559 = memo(() => {
                 }
 
                 await WalletRPC.deleteUnconfirmedRequest(value.payload)
-                await Services.Ethereum.request(
-                    {
-                        ...value.payload,
-                        params: [config, ...value.payload.params],
-                    },
-                    { skipConfirmation: true },
-                )
+
+                await Services.Ethereum.confirmRequest({
+                    ...value.payload,
+                    params: [config, ...value.payload.params],
+                })
+                if (toBeClose) {
+                    window.close()
+                } else {
+                    history.replace(PopupRoutes.TokenDetail)
+                }
             }
-            //    TODO: url search params to control close or history
         },
-        [value],
+        [value, location.search, history],
     )
 
     const onSubmit = handleSubmit((data) => handleConfirm(data))

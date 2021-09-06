@@ -14,6 +14,7 @@ import {
     currentProviderSettings,
 } from '../settings'
 import { updateExoticWalletFromSource } from './wallet'
+import { Flags } from '../../../utils'
 
 export async function updateAccount(
     options: {
@@ -56,4 +57,14 @@ export async function resetAccount(
     if (chainId) currentChainIdSettings.value = chainId
     if (networkType) currentNetworkSettings.value = networkType
     if (providerType) currentProviderSettings.value = providerType
+}
+
+export async function getSupportedNetwork() {
+    return [
+        NetworkType.Ethereum,
+        Flags.bsc_enabled ? NetworkType.Binance : undefined,
+        Flags.polygon_enabled ? NetworkType.Polygon : undefined,
+        Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
+        Flags.xdai_enabled ? NetworkType.xDai : undefined,
+    ].filter(Boolean) as NetworkType[]
 }

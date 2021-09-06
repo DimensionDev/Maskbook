@@ -14,6 +14,7 @@ export function PersonaComparer(a: Persona, b: Persona): boolean {
 
 export function PersonaArrayComparer(a: Persona[], b: Persona[]) {
     if (a.length !== b.length) return false
+    if (Object.getOwnPropertySymbols(a) || Object.getOwnPropertySymbols(b)) return false
     return a.every((persona, index) => PersonaComparer(persona, b[index]))
 }
 
