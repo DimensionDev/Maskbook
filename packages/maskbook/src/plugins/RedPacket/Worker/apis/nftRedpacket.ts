@@ -86,7 +86,7 @@ export async function getNftRedPacketTxid(rpid: string) {
     return first(data?.redPackets)?.txid
 }
 
-export async function getNftRedPacketHistory(address: string, chainId: ChainId) {
+export async function getNftRedPacketHistory(address: string) {
     const data = await fetchFromNFTRedPacketSubgraph<{ nftredPackets: NftRedPacketSubgraphOutMask[] }>(`
     {
         nftredPackets (where: { creator: "${address.toLowerCase()}" }, orderBy: creation_time, orderDirection: desc) {
@@ -95,35 +95,31 @@ export async function getNftRedPacketHistory(address: string, chainId: ChainId) 
     }
     `)
     if (!data?.nftredPackets) return []
-    return data.nftredPackets
-        .map((x) => {
-            // @ts-ignore
-            const nftRedPacketSubgraphInMask = {
-                ...x,
-                token: tokenIntoMask(x.token),
-                duration: x.duration * 1000,
-                creation_time: x.creation_time * 1000,
-                last_updated_time: x.last_updated_time * 1000,
-            } as NftRedPacketSubgraphInMask
-            const redPacketBasic = pick(nftRedPacketSubgraphInMask, redPacketBasicKeys)
-            const network = getChainName(nftRedPacketSubgraphInMask.chain_id)
-            const sender = {
-                address: nftRedPacketSubgraphInMask.creator.address,
-                name: nftRedPacketSubgraphInMask.creator.name,
-                message: nftRedPacketSubgraphInMask.message,
-            }
-            const payload = {
-                sender,
-                network,
-                token_type: EthereumTokenType.ERC721,
-                token: pick(nftRedPacketSubgraphInMask.token, ['symbol', 'address', 'name', 'decimals']),
-                ...redPacketBasic,
-            } as NftRedPacketJSONPayload
-            // @ts-ignore
-            return {
-                payload,
-                ...nftRedPacketSubgraphInMask,
-            } as NftRedPacketHistory
-        })
-        .sort((r1, r2) => r1.creation_time - r2.creation_time)
+    return data.nftredPackets.map((x) => {
+        const nftRedPacketSubgraphInMask = {
+            ...x,
+            token: tokenIntoMask(x.token),
+            duration: x.duration * 1000,
+            creation_time: x.creation_time * 1000,
+            last_updated_time: x.last_updated_time * 1000,
+        } as NftRedPacketSubgraphInMask
+        const redPacketBasic = pick(nftRedPacketSubgraphInMask, redPacketBasicKeys)
+        const network = getChainName(nftRedPacketSubgraphInMask.chain_id)
+        const sender = {
+            address: nftRedPacketSubgraphInMask.creator.address,
+            name: nftRedPacketSubgraphInMask.creator.name,
+            message: nftRedPacketSubgraphInMask.message,
+        }
+        const payload = {
+            sender,
+            network,
+            token_type: EthereumTokenType.ERC721,
+            token: pick(nftRedPacketSubgraphInMask.token, ['symbol', 'address', 'name', 'decimals']),
+            ...redPacketBasic,
+        } as NftRedPacketJSONPayload
+        return {
+            payload,
+            ...nftRedPacketSubgraphInMask,
+        } as NftRedPacketHistory
+    })
 }

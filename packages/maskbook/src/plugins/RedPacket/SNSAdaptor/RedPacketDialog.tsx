@@ -4,7 +4,7 @@ import { usePortalShadowRoot, makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { RedPacketJSONPayload, DialogTabs, RedPacketRecord, NftRedPacketJSONPayload } from '../types'
+import { RedPacketJSONPayload, DialogTabs, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
 import { RedPacketMetaKey } from '../constants'
 import { RedPacketCreateNew } from './RedPacketCreateNew'
@@ -74,15 +74,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }, [props, state])
 
     const onCreateOrSelect = useCallback(
-        async (payload: RedPacketJSONPayload | NftRedPacketJSONPayload) => {
+        async (payload: RedPacketJSONPayload) => {
             if (payload.password === '') {
                 if (payload.contract_version === 1) {
                     alert('Unable to share a red packet without a password. But you can still withdraw the red packet.')
                     payload.password = prompt('Please enter the password of the red packet:', '') ?? ''
-                } else if (
-                    (payload.contract_version > 1 && payload.contract_version < 4) ||
-                    payload.token_type === EthereumTokenType.ERC721
-                ) {
+                } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
                     payload.password = await Services.Ethereum.personalSign(
                         Web3Utils.sha3(payload.sender.message) ?? '',

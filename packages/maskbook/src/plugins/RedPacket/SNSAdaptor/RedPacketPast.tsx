@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props {
-    onSelect: (payload: RedPacketJSONPayload | NftRedPacketJSONPayload) => void
+    onSelect: (payload: RedPacketJSONPayload) => void
     onClose?: () => void
 }
 

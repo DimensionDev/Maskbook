@@ -1,5 +1,5 @@
 import { TokenIcon } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ERC721ContractDetailed, useAccount } from '@masknet/web3-shared'
 import { Box, ListItem, Typography } from '@material-ui/core'
 import { fill } from 'lodash-es'
@@ -15,6 +15,15 @@ import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket
 import { NftList } from './NftList'
 
 const useStyles = makeStyles()((theme) => ({
+    root: {
+        borderRadius: 10,
+        border: `solid 1px ${theme.palette.divider}`,
+        marginBottom: theme.spacing(1.5),
+        position: 'static !important' as any,
+        height: 'auto !important',
+        padding: theme.spacing(2),
+        backgroundColor: MaskColorVar.lightBackground,
+    },
     primary: {
         display: 'flex',
         alignItems: 'center',
@@ -40,14 +49,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         color: theme.palette.text.secondary,
     },
-    root: {
-        borderRadius: 10,
-        border: `solid 1px ${theme.palette.divider}`,
-        marginBottom: theme.spacing(1.5),
-        position: 'static !important' as any,
-        height: 'auto !important',
-        padding: theme.spacing(2),
-    },
     box: {
         display: 'flex',
         width: '100%',
@@ -64,7 +65,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         marginBottom: theme.spacing(2),
     },
-    div: {},
     icon: {
         width: 27,
         height: 27,
@@ -140,7 +140,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo((p
                 />
                 <Box className={classes.content}>
                     <section className={classes.section}>
-                        <div className={classes.div}>
+                        <div>
                             <Typography variant="body1" className={classNames(classes.title, classes.message)}>
                                 {history.message === '' ? t('plugin_red_packet_best_wishes') : history.message}
                             </Typography>
