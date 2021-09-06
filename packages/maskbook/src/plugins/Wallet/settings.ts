@@ -65,6 +65,17 @@ export const currentCollectibleDataProviderSettings = createGlobalSettings<Colle
 )
 
 /**
+ * Is the current selected wallet has been locked?
+ */
+export const currentIsMaskWalletLockedSettings = createGlobalSettings<boolean>(
+    `${PLUGIN_IDENTIFIER}+isMaskWalletLocked`,
+    false,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
+/**
  * Chain Id
  */
 export const currentChainIdSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+chainId`, ChainId.Mainnet, {
