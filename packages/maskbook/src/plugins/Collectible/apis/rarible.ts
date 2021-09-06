@@ -87,10 +87,10 @@ export async function getOffersFromRarible(tokenAddress: string, tokenId: string
 
 export async function getListingsFromRarible(tokenAddress: string, tokenId: string) {
     const assets = await fetchFromRarible<Ownership[]>(RaribleMainnetURL, `items/${tokenAddress}:${tokenId}/ownerships`)
-    const sellings = assets.filter((x) => x.selling)
-    const profiles = await getProfilesFromRarible(sellings.map((x) => x.owner))
+    const listings = assets.filter((x) => x.selling)
+    const profiles = await getProfilesFromRarible(listings.map((x) => x.owner))
     const chainId = currentChainIdSettings.value
-    return sellings.map((asset) => {
+    return listings.map((asset) => {
         const ownerInfo = profiles.find((owner) => owner.id === asset.owner)
         return {
             unitPrice: asset.priceEth,
