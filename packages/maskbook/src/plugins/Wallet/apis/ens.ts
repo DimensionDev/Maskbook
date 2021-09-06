@@ -2,7 +2,6 @@ import stringify from 'json-stable-stringify'
 
 async function fetchFromENSTextResolverSubgraph<T>(query: string) {
     const subgraphURL = 'https://api.thegraph.com/subgraphs/name/dimensiondev/ens-text-resolver-subgraph'
-    if (!subgraphURL) return null
     const response = await fetch(subgraphURL, {
         method: 'POST',
         mode: 'cors',

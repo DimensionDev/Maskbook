@@ -13,9 +13,9 @@ export async function getDomainsByTwitterId(twitterId: string, domainType: Domai
                 resolvedAddress: x.owner,
             }))
         case DomainType.UNS:
-            throw new Error('To be implemennted.')
+            throw new Error('To be implemented.')
         case DomainType.DNS:
-            throw new Error('To be implemennted.')
+            throw new Error('To be implemented.')
         default:
             unreachable(domainType)
     }
