@@ -199,6 +199,7 @@ export enum RaribleEventType {
 
 export interface RaribleHistory {
     '@type': RaribleEventType
+    id: string
     owner: string
     value: number
     price: number
