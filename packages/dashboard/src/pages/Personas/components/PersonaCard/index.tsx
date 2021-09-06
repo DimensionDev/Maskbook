@@ -1,17 +1,13 @@
-import { memo, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
-import { SettingsIcon } from '@masknet/icons'
-import { IconButton, MenuItem, Typography } from '@material-ui/core'
+import { memo } from 'react'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { Typography } from '@material-ui/core'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
-import { PersonaIdentifier, ProfileIdentifier, ProfileInformation, useMenu } from '@masknet/shared'
-import { DeletePersonaDialog } from '../DeletePersonaDialog'
+import type { PersonaIdentifier, ProfileIdentifier, ProfileInformation } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
-import { RenameDialog } from '../RenameDialog'
 import type { SocialNetwork } from '../../api'
 import classNames from 'classnames'
-import { ExportPrivateKeyDialog } from '../ExportPrivateKeyDialog'
+import { formatFingerprint } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -89,17 +85,6 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
     const { onConnect, onDisconnect, onClick, onRename } = props
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const [renameDialogOpen, setRenameDialogOpen] = useState(false)
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-    const [exportPrivateKeyDialogOpen, setExportPrivateKeyDialogOpen] = useState(false)
-
-    const [menu, openMenu] = useMenu(
-        <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_rename()}</MenuItem>,
-        <MenuItem onClick={() => setExportPrivateKeyDialogOpen(true)}>{t.personas_export_private()}</MenuItem>,
-        <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
-            {t.personas_delete()}
-        </MenuItem>,
-    )
 
     return (
         <div className={classes.card}>
@@ -109,15 +94,9 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                     <Typography variant="subtitle2" sx={{ cursor: 'pointer' }} onClick={onClick}>
                         {nickname}
                     </Typography>
-                    <IconButton
-                        size="large"
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            openMenu(e)
-                        }}
-                        className={classes.setting}>
-                        <SettingsIcon fontSize="inherit" style={{ fill: MaskColorVar.textPrimary }} />
-                    </IconButton>
+                    <Typography variant="subtitle2" sx={{ cursor: 'pointer' }} onClick={onClick}>
+                        {formatFingerprint(identifier.compressedPoint, 4)}
+                    </Typography>
                 </div>
                 <div className={classes.content}>
                     {definedSocialNetworks.map(({ networkIdentifier }) => {
@@ -144,28 +123,6 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                     })}
                 </div>
             </div>
-            {menu}
-            {renameDialogOpen && (
-                <RenameDialog
-                    open={renameDialogOpen}
-                    nickname={nickname}
-                    onClose={() => setRenameDialogOpen(false)}
-                    onConfirm={async (name) => {
-                        await onRename(identifier, name)
-                        setRenameDialogOpen(false)
-                    }}
-                />
-            )}
-            <DeletePersonaDialog
-                open={deleteDialogOpen}
-                onClose={() => setDeleteDialogOpen(false)}
-                nickname={nickname}
-            />
-            <ExportPrivateKeyDialog
-                open={exportPrivateKeyDialogOpen}
-                identifier={identifier}
-                onClose={() => setExportPrivateKeyDialogOpen(false)}
-            />
         </div>
     )
 })
