@@ -159,9 +159,9 @@ export async function INTERNAL_send(
         const isEIP1159Valid =
             parseGasPrice(config.maxFeePerGas as string) > 0 && parseGasPrice(config.maxPriorityFeePerGas as string) > 0
 
-        if (Flags.EIP1159_enabled && isEIP1159Supported(chainId) && isGasPriceValid && !isEIP1159Valid) {
+        if (Flags.EIP1159_enabled && isEIP1159Supported(chainId) && !isEIP1159Valid) {
             throw new Error('To be implemented.')
-        } else {
+        } else if (!isGasPriceValid) {
             config.gasPrice = await getGasPrice()
         }
 

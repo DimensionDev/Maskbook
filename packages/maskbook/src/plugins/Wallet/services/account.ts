@@ -59,7 +59,7 @@ export async function resetAccount(
     if (providerType) currentProviderSettings.value = providerType
 }
 
-export async function getSupportedNetwork() {
+export async function getSupportedNetworks() {
     return [
         NetworkType.Ethereum,
         Flags.bsc_enabled ? NetworkType.Binance : undefined,

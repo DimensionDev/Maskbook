@@ -48,7 +48,7 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
 
     const onTransfer = useCallback(async () => {
         await transferCallback(token.tokenId, address)
-    }, [transferCallback, token, address])
+    }, [transferCallback, token.tokenId, address])
     //#endregion
 
     //#region remote controlled transaction dialog

@@ -14,7 +14,7 @@ function GlobalCss() {
             styles={{
                 body: {
                     overflowX: 'hidden',
-                    margin: '0 auto!important',
+                    margin: '0 auto !important',
                     width: 310,
                     maxWidth: '100%',
                     backgroundColor: 'transparent',

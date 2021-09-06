@@ -10,6 +10,9 @@ import { InteractionCircleIcon } from '@masknet/icons'
 import { useI18N } from '../../../../../utils'
 import { useHistory } from 'react-router'
 import { PopupRoutes } from '../../../index'
+import { PluginTraderMessages } from '../../../../../plugins/Trader/messages'
+import { PluginTransakMessages } from '../../../../../plugins/Transak/messages'
+import { useChainDetailed, useWallet } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()({
     content: {
@@ -53,13 +56,23 @@ const useStyles = makeStyles()({
 
 const TokenDetail = memo(() => {
     const { t } = useI18N()
+    const wallet = useWallet()
+    const chainDetailed = useChainDetailed()
     const { classes } = useStyles()
     const history = useHistory()
     const { currentToken } = useContainer(WalletContext)
 
-    const openLabPage = useCallback(() => {
-        browser.windows.create({
-            url: browser.runtime.getURL('/next.html#/labs'),
+    const openBuyDialog = useCallback(() => {
+        PluginTransakMessages.buyTokenDialogUpdated.sendToVisiblePages({
+            open: true,
+            address: wallet?.address ?? '',
+            code: chainDetailed?.nativeCurrency.symbol,
+        })
+    }, [wallet?.address, chainDetailed])
+
+    const openSwapDialog = useCallback(() => {
+        PluginTraderMessages.swapDialogUpdated.sendToVisiblePages({
+            open: true,
         })
     }, [])
 
@@ -87,7 +100,7 @@ const TokenDetail = memo(() => {
                     <FormattedCurrency value={getTokenUSDValue(currentToken).toFixed(2)} sign="$" />
                 </Typography>
                 <div className={classes.controller}>
-                    <div onClick={openLabPage}>
+                    <div onClick={openBuyDialog}>
                         <ArrowDownCircle className={classes.icon} />
                         <Typography className={classes.text}>{t('popups_wallet_token_buy')}</Typography>
                     </div>
@@ -95,7 +108,7 @@ const TokenDetail = memo(() => {
                         <ArrowUpCircle className={classes.icon} />
                         <Typography className={classes.text}>{t('popups_wallet_token_send')}</Typography>
                     </div>
-                    <div onClick={openLabPage}>
+                    <div onClick={openSwapDialog}>
                         <InteractionCircleIcon className={classes.icon} />
                         <Typography className={classes.text}>{t('popups_wallet_token_swap')}</Typography>
                     </div>

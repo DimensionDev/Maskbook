@@ -52,7 +52,7 @@ const Welcome = memo(() => {
             iframeRef={iframeRef}
             privacyPolicyURL={privacyPolicyURL}
             iframeLoadHandler={handleIFrameLoad}
-            agreeHandler={() => navigate(RoutePaths.Setup)}
+            agreeHandler={() => navigate(RoutePaths.CreateMaskWalletForm)}
             cancelHandler={() => window.close()}
         />
     )

@@ -149,7 +149,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     }, [open])
     //#endregion
 
-    const { value: networks } = useAsync(async () => WalletRPC.getSupportedNetwork(), [])
+    const { value: networks } = useAsync(async () => WalletRPC.getSupportedNetworks(), [])
 
     const onConnectProvider = useCallback(
         async (providerType: ProviderType) => {

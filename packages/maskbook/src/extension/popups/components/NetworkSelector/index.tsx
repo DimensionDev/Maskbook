@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const NetworkSelector = memo(() => {
     const currentChainId = useValueRef(currentChainIdSettings)
-    const { value: networks } = useAsync(async () => WalletRPC.getSupportedNetwork(), [])
+    const { value: networks } = useAsync(async () => WalletRPC.getSupportedNetworks(), [])
     const onChainChange = useCallback((chainId: ChainId) => {
         WalletRPC.updateAccount({
             chainId,
