@@ -18,7 +18,7 @@ export function useChainIdValid(): boolean {
 }
 
 /**
- * Returns true if the currenct chain id is matched with the given one
+ * Returns true if the current chain id is matched with the given one
  * @param chainId
  * @returns
  */

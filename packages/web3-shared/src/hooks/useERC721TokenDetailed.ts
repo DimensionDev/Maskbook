@@ -77,7 +77,7 @@ const CORS_PROXY = 'https://whispering-harbor-49523.herokuapp.com'
 async function getERC721TokenAssetFromChain(tokenURI?: string) {
     if (!tokenURI) return
 
-    // for some NFT tokens retrun JSON in base64 encoded
+    // for some NFT tokens return JSON in base64 encoded
     if (tokenURI.startsWith(BASE64_PREFIX))
         try {
             return JSON.parse(atob(tokenURI.replace(BASE64_PREFIX, ''))) as ERC721TokenInfo

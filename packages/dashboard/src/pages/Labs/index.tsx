@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Box } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
-import PluginItem, { PluginItemPlaceHodler } from './components/PluginItem'
+import PluginItem, { PluginItemPlaceholder } from './components/PluginItem'
 import {
     FileServiceIcon,
     MarketsIcon,
@@ -158,7 +158,7 @@ export default function Plugins() {
                         onExplore={onExplore}
                         onSwitch={onSwitch}
                     />
-                    <PluginItemPlaceHodler />
+                    <PluginItemPlaceholder />
                 </Box>
                 <Box className={classes.list}>
                     <PluginItem

@@ -7,7 +7,7 @@ import { EmailField } from './steps/EmailField'
 import { PhoneField } from './steps/PhoneField'
 import { LoadingCard } from './steps/LoadingCard'
 import { ValidationAccount } from './steps/ValidationAccount'
-import { ValidationCodeStep } from './steps/Commont'
+import { ValidationCodeStep } from './steps/common'
 import type { AccountType } from '../../pages/Settings/type'
 
 interface CodeValidationProps {
