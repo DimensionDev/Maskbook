@@ -27,6 +27,7 @@ import {
     currentPortfolioDataProviderSettings,
     currentGasNowSettings,
     currentEtherPriceSettings,
+    currentIsMaskWalletLockedSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
 
@@ -75,6 +76,10 @@ export const [getCurrentPortfolioDataProvider, setCurrentPortfolioDataProvider] 
 
 export const [getCurrentCollectibleDataProvider, setCurrentCollectibleDataProvider] = create(
     currentCollectibleDataProviderSettings,
+)
+
+export const [getCurrentIsMaskWalletLockedSettings, setCurrentIsMaskWalletLockedSettings] = create(
+    currentIsMaskWalletLockedSettings,
 )
 
 export async function getWalletAllowTestChain() {

@@ -6,9 +6,9 @@ import { lazy, useEffect } from 'react'
 import { PopupRoutes } from '../../index'
 import { WalletContext } from './hooks/useWalletContext'
 import { useUnconfirmedRequest } from './hooks/useUnConfirmedRequest'
-import { useWalletLockStatus } from './hooks/useWalletLockStatus'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
+import { useValueRef } from '@masknet/shared'
+import { currentIsMaskWalletLockedSettings } from '../../../../plugins/Wallet/settings'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -33,9 +33,7 @@ export default function Wallet() {
     const history = useHistory()
 
     const { value, loading: getRequestLoading } = useUnconfirmedRequest()
-    const { value: lockStatus, retry, loading } = useWalletLockStatus()
-
-    WalletMessages.events.walletLockStatusUpdated.on(retry)
+    const lockStatus = useValueRef(currentIsMaskWalletLockedSettings)
 
     useEffect(() => {
         if (value?.computedPayload) {
@@ -61,7 +59,7 @@ export default function Wallet() {
 
     return (
         <WalletContext.Provider>
-            {getRequestLoading || loading ? (
+            {getRequestLoading ? (
                 <LoadingPlaceholder />
             ) : (
                 <Switch>
