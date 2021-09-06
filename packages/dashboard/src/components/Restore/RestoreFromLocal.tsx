@@ -103,7 +103,6 @@ export const RestoreFromLocal = memo(() => {
                     </Card>
                 )}
                 {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
-
                 {restoreStatus === RestoreStatus.Decrypting && (
                     <Box sx={{ mt: 4 }}>
                         <MaskTextField
