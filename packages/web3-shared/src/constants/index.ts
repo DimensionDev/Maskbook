@@ -14,6 +14,7 @@ import TokenAssetBaseURL from '@masknet/web3-constants/data/token-asset-base-url
 import GoodGhosting from '@masknet/web3-constants/data/good-ghosting.json'
 import SpaceStationGalaxy from '@masknet/web3-constants/data/space-station-galaxy.json'
 import OpenseaAPI from '@masknet/web3-constants/data/opensea-api.json'
+
 import { hookTransform, transform, transformFromJSON } from './utils'
 
 export const getAirdropConstants = transform(Airdrop)
