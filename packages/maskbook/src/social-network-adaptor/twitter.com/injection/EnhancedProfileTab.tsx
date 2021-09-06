@@ -49,7 +49,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         color: props.color,
         font: props.font,
         fontSize: props.fontSize,
-        fontWeight: 700,
+        fontWeight: 500,
         '&:hover': {
             color: props.color,
         },
