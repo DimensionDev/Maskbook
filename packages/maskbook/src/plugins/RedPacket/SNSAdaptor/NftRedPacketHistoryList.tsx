@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { useAccount, useChainId } from '@masknet/web3-shared'
+import { ERC721ContractDetailed, useAccount, useChainId } from '@masknet/web3-shared'
 import { List, Typography } from '@material-ui/core'
 import { useEffect } from 'react'
 import type { NftRedPacketHistory } from '../types'
@@ -20,7 +20,7 @@ const useStyles = makeStyles()({
 })
 
 interface Props {
-    onSend: (history: NftRedPacketHistory) => void
+    onSend: (history: NftRedPacketHistory, contract: ERC721ContractDetailed) => void
 }
 
 export function NftRedPacketHistoryList({ onSend }: Props) {
@@ -31,7 +31,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
 
     useEffect(() => {
         retry()
-    }, [chainId])
+    }, [chainId, account])
 
     if (loading) {
         return (

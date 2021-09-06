@@ -1,9 +1,8 @@
-import { List, ListProps, ListItem, Skeleton } from '@material-ui/core'
-import type { FC, HTMLProps } from 'react'
-import classnames from 'classnames'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ERC721ContractDetailed, useERC721TokenDetailed } from '@masknet/web3-shared'
-import { MaskColorVar } from '@masknet/theme'
-import { makeStyles } from '@masknet/theme'
+import { List, ListItem, ListProps, Skeleton } from '@material-ui/core'
+import classnames from 'classnames'
+import type { FC, HTMLProps } from 'react'
 
 const useStyles = makeStyles()({
     list: {
@@ -54,7 +53,7 @@ const useStyles = makeStyles()({
 })
 
 interface NftItemProps extends HTMLProps<HTMLDivElement> {
-    contract: ERC721ContractDetailed
+    contract: ERC721ContractDetailed | undefined
     tokenId: string
     claimed?: boolean
 }
@@ -62,7 +61,7 @@ interface NftItemProps extends HTMLProps<HTMLDivElement> {
 export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, ...rest }) => {
     const result = useERC721TokenDetailed(contract, tokenId)
     const { classes } = useStyles()
-    if (!result.value) {
+    if (!result.value || !contract) {
         return (
             <div className={classnames(className, classes.nft, classes.loading)} {...rest}>
                 <Skeleton height={185} width={120} />
@@ -80,7 +79,7 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
 }
 
 interface NftListProps extends ListProps {
-    contract: ERC721ContractDetailed
+    contract: ERC721ContractDetailed | undefined
     statusList: boolean[]
     tokenIds: string[]
 }

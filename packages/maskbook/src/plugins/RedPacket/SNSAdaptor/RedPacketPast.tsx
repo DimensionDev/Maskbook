@@ -5,10 +5,11 @@ import { useI18N } from '../../../utils'
 import { IconURLs } from './IconURL'
 import { RedPacketHistoryList } from './RedPacketHistoryList'
 import { NftRedPacketHistoryList } from './NftRedPacketHistoryList'
-import type { NftRedPacketHistory, NftRedPacketJSONPayload, RedPacketJSONPayload } from '../types'
+import type { NftRedPacketHistory, RedPacketJSONPayload } from '../types'
 import { RedPacketNftMetaKey } from '../constants'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import type { ERC721ContractDetailed } from '@masknet/web3-shared'
 
 enum RpTypeTabs {
     ERC20 = 0,
@@ -63,16 +64,16 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
     const { attachMetadata } = useCompositionContext()
     const handleSendNftRedpacket = useCallback(
-        (history: NftRedPacketHistory) => {
-            const { rpid, duration, message, payload, token } = history
+        (history: NftRedPacketHistory, contractDetailed: ERC721ContractDetailed) => {
+            const { rpid, duration, message, payload } = history
             attachMetadata(RedPacketNftMetaKey, {
                 id: rpid,
                 duration: duration,
                 message: message,
                 senderName,
-                contractName: token.name,
-                contractAddress: payload.contract_address,
-                contractTokenURI: token.logoURI ?? '',
+                contractName: contractDetailed.name,
+                contractAddress: contractDetailed.address,
+                contractTokenURI: contractDetailed.iconURL ?? '',
                 privateKey: payload.password,
                 chainId: history.chain_id,
             })

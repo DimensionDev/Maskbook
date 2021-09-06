@@ -124,9 +124,6 @@ export interface ERC721TokenInfo {
 export interface ERC721TokenDetailed {
     tokenId: string
     info: ERC721TokenInfo
-    address?: string
-    name?: string
-    logoURI?: string
     contractDetailed: ERC721ContractDetailed
 }
 

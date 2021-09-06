@@ -1,10 +1,10 @@
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ERC721ContractDetailed, useAccount } from '@masknet/web3-shared'
+import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared'
 import { Box, ListItem, Typography } from '@material-ui/core'
 import { fill } from 'lodash-es'
 import classNames from 'classnames'
-import { FC, memo, useCallback, useMemo } from 'react'
+import { FC, memo, useCallback } from 'react'
 import { Trans } from 'react-i18next'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -103,7 +103,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface NftRedPacketHistoryItemProps {
     history: NftRedPacketHistory
-    onSend: (history: NftRedPacketHistory) => void
+    onSend: (history: NftRedPacketHistory, contract: ERC721ContractDetailed) => void
 }
 export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo((props) => {
     const account = useAccount()
@@ -113,13 +113,12 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo((p
     const {
         computed: { canSend, listOfStatus },
     } = useNftAvailabilityComputed(account, history.payload)
-    const contractDetailed = useMemo(() => {
-        return { ...history.token.contractDetailed, address: history.token.address } as ERC721ContractDetailed
-    }, [history.token.contractDetailed, history.token.address])
+    const { value: contractDetailed } = useERC721ContractDetailed(history.contract?.address)
+    const contractAddress = history.token.contractDetailed.address
 
     const handleSend = useCallback(() => {
-        if (canSend) onSend(history)
-    }, [onSend, canSend, history])
+        if (canSend && contractDetailed) onSend(history, contractDetailed)
+    }, [onSend, canSend, history, contractDetailed])
 
     const { value: redpacketStatus } = useAvailabilityNftRedPacket(history.rpid, account)
     const bitStatusList = redpacketStatus
@@ -134,9 +133,9 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo((p
             <Box className={classes.box}>
                 <TokenIcon
                     classes={{ icon: classes.icon }}
-                    address={history.token.address!}
-                    name={history.token.name}
-                    logoURI={history.token.logoURI}
+                    address={contractAddress}
+                    name={contractDetailed?.name ?? '-'}
+                    logoURI={contractDetailed?.iconURL ?? ''}
                 />
                 <Box className={classes.content}>
                     <section className={classes.section}>

@@ -127,7 +127,7 @@ interface RedPacketCreator {
     address: string
 }
 
-interface NFTRedPacketCreator extends Omit<RedPacketCreator, 'token' | 'is_random' | 'total_remaining'> {
+interface NFTRedPacketCreator extends Omit<RedPacketCreator, 'token' | 'is_random'> {
     token: ERC721TokenDetailed
 }
 
@@ -146,8 +146,16 @@ export interface RedPacketSubgraphInMask extends RedPacketBasic {
     }[]
 }
 
+interface ERC721TokenContract {
+    address: string
+    name: string
+    symbol: string
+    chain_id: number
+}
+
 export interface NftRedPacketSubgraphInMask extends Omit<RedPacketSubgraphInMask, 'is_random' | 'token' | 'creator'> {
     token: ERC721TokenDetailed
+    contract: ERC721TokenContract
     creator: NFTRedPacketCreator
     address: string
     token_ids: string[]

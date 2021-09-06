@@ -14,7 +14,7 @@
     },
     "SUBGRAPH_URL": {
         "Mainnet": "",
-        "Ropsten": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-ropsten",
+        "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
