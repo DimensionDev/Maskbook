@@ -42,8 +42,10 @@ export const RestoreFromLocal = memo(() => {
         if (file.type === 'application/json') {
             const content = await blobToText(file)
             setBackupValue(content)
-        } else {
+        } else if (file.type === 'application/octet-stream') {
             setRestoreStatus(RestoreStatus.Decrypting)
+        } else {
+            enqueueSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
         }
     }, [])
 
