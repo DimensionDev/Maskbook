@@ -155,7 +155,7 @@ export function RedPacket(props: RedPacketProps) {
     } = useAvailabilityComputed(account, payload)
     const { value: tokenDetailed } = useFungibleTokenDetailed(payload.token_type, payload.token?.address ?? '')
     const token = payload.token ?? tokenDetailed
-    //#ednregion
+    //#endregion
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
 
@@ -197,7 +197,7 @@ export function RedPacket(props: RedPacketProps) {
         (ev) => undefined,
     )
 
-    // open the transation dialog
+    // open the transaction dialog
     useEffect(() => {
         const state = canClaim ? claimState : refundState
         if (state.type === TransactionStateType.UNKNOWN) return

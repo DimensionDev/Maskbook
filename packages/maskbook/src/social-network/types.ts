@@ -52,7 +52,7 @@ export namespace SocialNetwork {
          */
         networkIdentifier: string
         /**
-         * This field _will_ be overwritten by SocialNetworkUI.permessions
+         * This field _will_ be overwritten by SocialNetworkUI.permissions
          */
         declarativePermissions: SocialNetworkUI.DeclarativePermission
         /** Should this UI content script activate? */
@@ -146,7 +146,7 @@ export namespace SocialNetworkUI {
     }
     export namespace AutomationCapabilities {
         export interface Define {
-            /** Automation on the composition dialog that the social network provies */
+            /** Automation on the composition dialog that the social network provides */
             nativeCompositionDialog?: NativeCompositionDialog
             maskCompositionDialog?: MaskCompositionDialog
             nativeCommentBox?: NativeCommentBox

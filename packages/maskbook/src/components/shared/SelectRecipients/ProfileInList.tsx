@@ -21,7 +21,7 @@ const useStyle = makeStyles()({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
-    hightlighted: {
+    highlighted: {
         backgroundColor: 'inherit',
         color: 'inherit',
         fontWeight: 'bold',
@@ -60,7 +60,7 @@ export function ProfileInList(props: ProfileInListProps) {
                 }}
                 primary={
                     <Highlighter
-                        highlightClassName={classes.hightlighted}
+                        highlightClassName={classes.highlighted}
                         searchWords={[props.search ?? '']}
                         autoEscape={true}
                         textToHighlight={name}
@@ -68,7 +68,7 @@ export function ProfileInList(props: ProfileInListProps) {
                 }
                 secondary={
                     <Highlighter
-                        highlightClassName={classes.hightlighted}
+                        highlightClassName={classes.highlighted}
                         searchWords={[props.search ?? '']}
                         autoEscape={true}
                         textToHighlight={secondary}

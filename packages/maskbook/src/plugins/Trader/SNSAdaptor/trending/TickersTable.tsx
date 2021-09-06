@@ -56,10 +56,10 @@ export function TickersTable(props: TickersTableProps) {
             </TableCell>
             <TableCell className={classes.cell}>
                 {(() => {
-                    const formated = formatEthereumAddress(ticker.base_name, 2)
+                    const formatted = formatEthereumAddress(ticker.base_name, 2)
                     return (
                         <Link color="primary" target="_blank" rel="noopener noreferrer" href={ticker.trade_url}>
-                            <span title={formated !== ticker.base_name ? ticker.base_name : ''}>{formated}</span>
+                            <span title={formatted !== ticker.base_name ? ticker.base_name : ''}>{formatted}</span>
                             <span>/</span>
                             <span>{formatEthereumAddress(ticker.target_name, 2)}</span>
                         </Link>

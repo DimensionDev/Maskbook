@@ -30,7 +30,7 @@ function useCollectibleState(token?: CollectibleToken) {
     )
     //#endregion
 
-    //#reguin events
+    //#region events
     const [eventPage, setEventPage] = useState(0)
     const cursors = useRef<string[]>([])
     const events = useEvents(

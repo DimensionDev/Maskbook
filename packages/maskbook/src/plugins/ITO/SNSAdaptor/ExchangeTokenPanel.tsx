@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ExchangetokenPanelProps {
+export interface ExchangeTokenPanelProps {
     onAmountChange: (amount: string, key: string) => void
     inputAmount: string
 
@@ -55,7 +55,7 @@ export interface ExchangetokenPanelProps {
     TokenAmountPanelProps: Partial<TokenAmountPanelProps>
 }
 
-export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
+export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     const {
         onAmountChange,
         dataIndex,

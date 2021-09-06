@@ -27,9 +27,9 @@ export function useEthereumName(nickname: string, twitterId: string, bio: string
     return name
 }
 
-export function useEthereumAddress(nickanme: string, twitterId: string, bio: string) {
+export function useEthereumAddress(nickname: string, twitterId: string, bio: string) {
     const [address, setAddress] = useState<string | undefined>()
-    const name = useEthereumName(nickanme, twitterId, bio)
+    const name = useEthereumName(nickname, twitterId, bio)
     const { value: addressENS, loading: loadingAddressENS } = useResolveENS(name)
     const { value: addressUNS, loading: loadingAddressUNS } = useResolveUNS(name)
 

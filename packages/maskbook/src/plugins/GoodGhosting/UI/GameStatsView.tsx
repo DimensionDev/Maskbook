@@ -38,7 +38,7 @@ export function GameStatsView(props: GameStatsViewProps) {
     const { value: financialData, loading, error, retry } = props.finDataResult
     const {
         value: otherPlayerData,
-        loading: otherPlayerloading,
+        loading: otherPlayerLoading,
         error: otherPlayerError,
         retry: otherPlayerRetry,
     } = props.otherPlayerResult
@@ -52,7 +52,7 @@ export function GameStatsView(props: GameStatsViewProps) {
     } = props.poolAssetsResult
     const { t } = useI18N()
 
-    if ((loading && !financialData) || otherPlayerloading || poolAssetsLoading) {
+    if ((loading && !financialData) || otherPlayerLoading || poolAssetsLoading) {
         return (
             <Typography variant="h6" color="textSecondary">
                 Loading game stats

@@ -278,7 +278,7 @@ export type EthereumRpcComputed =
           type: EthereumRpcType.CANCEL | EthereumRpcType.RETRY
 
           /**
-           * The replacemnet transaction
+           * The replacement transaction
            */
           tx: EthereumTransactionConfig
 
@@ -450,7 +450,7 @@ export enum PortfolioProvider {
 }
 
 export enum CollectibleProvider {
-    OPENSEAN = 0,
+    OPENSEA = 0,
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>

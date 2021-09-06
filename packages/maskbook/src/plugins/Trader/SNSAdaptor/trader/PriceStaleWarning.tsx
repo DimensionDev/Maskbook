@@ -18,11 +18,11 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface PriceStaleWarnningProps extends withClasses<never> {
+export interface PriceStaleWarningProps extends withClasses<never> {
     onAccept(): void
 }
 
-export function PriceStaleWarnning(props: PriceStaleWarnningProps) {
+export function PriceStaleWarning(props: PriceStaleWarningProps) {
     const { onAccept } = props
     const classes = useStylesExtends(useStyles(), props)
 

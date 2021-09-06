@@ -106,7 +106,7 @@ export async function getListingsFromRarible(tokenAddress: string, tokenId: stri
         .filter((item) => item.unitPrice)
 }
 
-export async function getOrderFromRarbile(tokenAddress: string, tokenId: string, side: OrderSide) {
+export async function getOrderFromRarible(tokenAddress: string, tokenId: string, side: OrderSide) {
     switch (side) {
         case OrderSide.Buy:
             return getOffersFromRarible(tokenAddress, tokenId)
