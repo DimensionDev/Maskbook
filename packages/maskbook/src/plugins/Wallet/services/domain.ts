@@ -1,22 +1,22 @@
 import { memoizePromise, unreachable } from '@dimensiondev/kit'
-import { DomainType, Domain } from '@masknet/web3-shared'
+import { AddressNameType, AddressName } from '@masknet/web3-shared'
 import * as ENS from '../apis/ens'
 
-const fetchDomainsByTwitterIdCached = memoizePromise(ENS.fetchDomainsByTwitterId, (twitterId) => twitterId)
+const fetchAddressNamesByTwitterIdCached = memoizePromise(ENS.fetchAddressNamesByTwitterId, (twitterId) => twitterId)
 
-export async function getDomainsByTwitterId(twitterId: string, domainType: DomainType): Promise<Domain[]> {
-    switch (domainType) {
-        case DomainType.ENS:
-            return (await fetchDomainsByTwitterIdCached(twitterId)).map((x) => ({
+export async function getAddressNames(twitterId: string, addressNameType: AddressNameType): Promise<AddressName[]> {
+    switch (addressNameType) {
+        case AddressNameType.ENS:
+            return (await fetchAddressNamesByTwitterIdCached(twitterId)).map((x) => ({
                 label: '',
                 ownerAddress: x.owner,
                 resolvedAddress: x.owner,
             }))
-        case DomainType.UNS:
+        case AddressNameType.UNS:
             throw new Error('To be implemented.')
-        case DomainType.DNS:
+        case AddressNameType.DNS:
             throw new Error('To be implemented.')
         default:
-            unreachable(domainType)
+            unreachable(addressNameType)
     }
 }

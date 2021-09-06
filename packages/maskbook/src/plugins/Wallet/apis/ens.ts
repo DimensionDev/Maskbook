@@ -13,7 +13,7 @@ async function fetchFromENSTextResolverSubgraph<T>(query: string) {
     return data
 }
 
-export async function fetchDomainsByTwitterId(twitterId: string) {
+export async function fetchAddressNamesByTwitterId(twitterId: string) {
     const data = await fetchFromENSTextResolverSubgraph<{
         twitterHandle?: {
             domains: {

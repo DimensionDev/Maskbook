@@ -50,7 +50,7 @@ export const Web3Context: Web3ProviderType = {
     portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
     getAssetsList: WalletRPC.getAssetsList,
     getAssetsListNFT: WalletRPC.getAssetsListNFT,
-    getDomainsList: WalletRPC.getDomainsByTwitterId,
+    getAddressNamesList: WalletRPC.getAddressNames,
     getERC721TokensPaged,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
     getTransactionList: WalletRPC.getTransactionList,

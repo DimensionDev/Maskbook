@@ -502,14 +502,14 @@ export interface Transaction {
     transactionType: string
 }
 
-//#region domain
-export enum DomainType {
+//#region address name
+export enum AddressNameType {
     ENS = 'ENS',
     UNS = 'UNS',
     DNS = 'DNS',
 }
 
-export interface Domain {
+export interface AddressName {
     label: string
     ownerAddress: string
     resolvedAddress?: string

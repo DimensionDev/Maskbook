@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
-import { DomainType, useWeb3Context } from '..'
+import { AddressNameType, useWeb3Context } from '..'
 
-export function useENSDomains(twitterId: string) {
-    const { getDomainsList } = useWeb3Context()
+export function useAddressNames(twitterId: string) {
+    const { getAddressNamesList } = useWeb3Context()
 
     return useAsyncRetry(async () => {
-        return getDomainsList(twitterId, DomainType.ENS)
+        return getAddressNamesList(twitterId, AddressNameType.ENS)
     }, [twitterId])
 }
