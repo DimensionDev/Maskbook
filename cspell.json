@@ -241,7 +241,9 @@
         "NYFI",
         "Csvg",
         "Horiz",
-        "hookform"
+        "hookform",
+        "METASWAP",
+        "metaswap"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": ["**/__tests__/**", "*generated*", "**/dist/**", "**/*.json", "**/node_modules/**", "pnpm-lock.yaml"]
