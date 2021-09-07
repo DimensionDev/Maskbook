@@ -211,7 +211,9 @@
         "xdai",
         "xlarge",
         "xlink",
-        "zerion"
+        "zerion",
+        "Zubin",
+        "Choudhary"
     ],
     "ignoreWords": [
         "BSCT",
@@ -266,7 +268,10 @@
         "swaptoken",
         "tinycolor",
         "unstoppabledomains",
-        "vitalik"
+        "vitalik",
+        "unlockprotocol",
+        "unlocklock",
+        "chainid"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

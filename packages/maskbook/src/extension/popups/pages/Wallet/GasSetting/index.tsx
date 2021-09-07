@@ -153,7 +153,7 @@ const GasSetting = memo(() => {
                     return new BigNumber(data.maxFeePerGas).isGreaterThan(data.maxPriorityFeePerGas)
                 },
                 {
-                    message: t('popups_wallet_gas_fee_settings_maxFee_lower_than_priorityFee'),
+                    message: t('popups_wallet_gas_fee_settings_max_fee_lower_than_priority_fee'),
                     path: ['maxFeePerGas'],
                 },
             )
