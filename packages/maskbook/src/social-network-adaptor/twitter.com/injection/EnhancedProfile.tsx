@@ -1,6 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { useState } from 'react'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { EnhancedProfilePage } from '../../../components/InjectedComponents/EnhancedProfile'
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
@@ -59,24 +60,16 @@ export function EnhancedProfilePageAtTwitter() {
     const fontStyle = newTweetButton?.firstChild
         ? window.getComputedStyle(newTweetButton.firstChild as HTMLElement)
         : EMPTY_STYLE
+
     const { classes } = useStyles({ backgroundColor: style.backgroundColor, fontFamily: fontStyle.fontFamily })
+    const identity = useCurrentVisitingIdentity()
 
-    const [bio, setBio] = useState(getBioDescription())
-    const [nickname, setNickname] = useState(getNickname())
-    const [twitterId, setTwitterId] = useState(getTwitterId())
-
-    const onUpdated = () => {
-        setBio(getBioDescription())
-        setNickname(getNickname())
-        setTwitterId(getTwitterId())
-    }
     return (
         <EnhancedProfilePage
             classes={classes}
-            bioDescription={bio}
-            nickname={nickname}
-            twitterId={twitterId}
-            onUpdated={onUpdated}
+            bioDescription={identity.bio ?? ''}
+            nickname={identity.nickname ?? ''}
+            twitterId={identity.identifier.userId}
         />
     )
 }

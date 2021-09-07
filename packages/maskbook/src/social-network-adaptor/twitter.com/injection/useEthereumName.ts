@@ -48,7 +48,7 @@ export function useEthereumAddress(nickname: string, twitterId: string, bio: str
             : {
                   type: addressENS ? 'ENS' : addressUNS ? 'UNS' : 'address',
                   name,
-                  address: isLoading ? '' : addressENS ?? addressUNS ?? address,
+                  address: isLoading ? '' : addressENS ?? addressUNS ?? address ?? '',
               },
         error: undefined,
     } as AsyncState<{
