@@ -11,7 +11,10 @@ let web3: Web3 | null = null
 
 async function onAccountsChanged(accounts: string[]) {
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
-    if (!accounts.length) return
+    if (!accounts.length) {
+        provider = null
+        return
+    }
     await updateAccount({
         account: first(accounts),
         providerType: ProviderType.MetaMask,
@@ -35,6 +38,7 @@ async function onChainIdChanged(id: string) {
 async function onError(error: string) {
     if (typeof error !== 'string' || !error.toLowerCase().includes('Lost Connection to MetaMask'.toLowerCase())) return
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
+    provider = null
     await resetAccount({
         providerType: ProviderType.MetaMask,
     })
