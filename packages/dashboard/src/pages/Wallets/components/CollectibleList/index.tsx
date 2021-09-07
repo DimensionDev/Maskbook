@@ -1,5 +1,5 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react'
-import { Box, TablePagination } from '@material-ui/core'
+import { Box, ImageList, TablePagination } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
@@ -9,7 +9,7 @@ import {
     formatEthereumAddress,
     useAccount,
     useChainId,
-    useCollectibles,
+    useCollectiblesPaged,
     useWallet,
 } from '@masknet/web3-shared'
 import { useCurrentCollectibleDataProvider } from '../../api'
@@ -25,10 +25,7 @@ const useStyles = makeStyles()({
         maxHeight: 'calc(100% - 58px)',
         overflow: 'auto',
     },
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
+    root: { display: 'flex', flexWrap: 'wrap' },
     card: {
         padding: '10px 14px',
     },
@@ -51,7 +48,7 @@ export const CollectibleList = memo(() => {
         value = { collectibles: [], hasNextPage: false },
         loading: collectiblesLoading,
         error: collectiblesError,
-    } = useCollectibles(account, chainId, provider, page, 20)
+    } = useCollectiblesPaged(page, 11)
 
     const { collectibles = [], hasNextPage } = value
 
@@ -104,13 +101,21 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                     ) : isEmpty ? (
                         <EmptyPlaceholder children={t.wallets_empty_collectible_tip()} />
                     ) : (
-                        <div className={classes.root}>
-                            {dataSource.map((x) => (
-                                <div className={classes.card} key={x.tokenId}>
-                                    <CollectibleCard chainId={chainId} provider={provider} token={x} />
-                                </div>
+                        <ImageList
+                            variant="quilted"
+                            cols={6}
+                            gap={24}
+                            rowHeight={200}
+                            sx={{ width: '100%', height: 'auto' }}>
+                            {dataSource.map((token) => (
+                                <CollectibleCard
+                                    key={token.tokenId + token.contractDetailed.address}
+                                    chainId={chainId}
+                                    provider={provider}
+                                    token={token}
+                                />
                             ))}
-                        </div>
+                        </ImageList>
                     )}
                 </Box>
                 {showPagination ? (
