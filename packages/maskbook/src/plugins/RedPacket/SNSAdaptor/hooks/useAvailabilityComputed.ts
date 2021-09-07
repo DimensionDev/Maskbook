@@ -30,26 +30,14 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     const isRefunded = isEmpty && Number.parseInt(availability.claimed, 10) < Number.parseInt(availability.total, 10)
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
     const parsedChainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
+    const isPasswordValid = Boolean(payload.password && payload.password !== 'PASSWORD INVALID')
     return {
         ...asyncResult,
         computed: {
             canFetch: parsedChainId === chainId,
-            canClaim:
-                !isExpired &&
-                !isEmpty &&
-                !isClaimed &&
-                parsedChainId === chainId &&
-                payload.password &&
-                payload.password !== 'PASSWORD INVALID',
+            canClaim: !isExpired && !isEmpty && !isClaimed && parsedChainId === chainId && isPasswordValid,
             canRefund: isExpired && !isEmpty && isCreator && parsedChainId === chainId,
-            canSend:
-                !isEmpty &&
-                !isExpired &&
-                !isRefunded &&
-                isCreator &&
-                parsedChainId === chainId &&
-                payload.password &&
-                payload.password !== 'PASSWORD INVALID',
+            canSend: !isEmpty && !isExpired && !isRefunded && isCreator && parsedChainId === chainId && isPasswordValid,
             listOfStatus: compact([
                 isClaimed ? RedPacketStatus.claimed : undefined,
                 isEmpty ? RedPacketStatus.empty : undefined,
