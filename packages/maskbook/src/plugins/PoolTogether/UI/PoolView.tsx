@@ -224,7 +224,8 @@ export function PoolView(props: PoolProps) {
     }
     const tokenFaucet = first(pool.tokenFaucets)
     const tokenFaucetDripToken = first(pool.tokens.tokenFaucetDripTokens)
-
+    console.log('token.address:', token.address)
+    console.log('token.symbol:', token.symbol)
     return (
         <Grid container direction="row" className={classes.root}>
             <Grid item container direction="column" className={classes.metaPrize}>

@@ -1,4 +1,7 @@
 import { makeStyles } from '@masknet/theme'
+import { poolAddressMap } from '../constants'
+import { getSlicePoolId } from '../utils'
+import { PoolView } from './PoolView'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -12,9 +15,33 @@ const useStyles = makeStyles()((theme) => ({
 
 export function PoolsView() {
     const { classes } = useStyles()
+    const [PoolIDs, SelectorList] = GETDATA()
     return (
         <div className={classes.root}>
-            <span> Pool view </span>
+            {PoolIDs.map((item: any, index: number) => {
+                return <PoolView key={index} poolId={item.PoolId} />
+            })}
         </div>
     )
+}
+
+//=> Functions
+const GETDATA = (): Array<any> => {
+    const chainId = '42'
+    console.log('CHAIND ID', chainId)
+    const PoolIDs = []
+    const SelectorList = [{ name: 'ALL' }]
+    for (const poolId of Object.keys(poolAddressMap[chainId])) {
+        const [COIN] = getSlicePoolId(poolId)
+
+        if (poolId === 'BTC-USDT' || poolId === 'BTC-USDC' || poolId === 'BTC-DAI') {
+            PoolIDs.push({ PoolId: poolId, coin: COIN }) //, address: poolAddressMap[chainId][poolId]
+
+            // const selsectFilter = SelectorConstants.filter((item: any) => item.name === COIN)
+            // if (selsectFilter.length > 0 && !SelectorList.includes(selsectFilter[0]))
+            //     SelectorList.push(selsectFilter[0])
+        }
+    }
+
+    return [PoolIDs, SelectorList]
 }

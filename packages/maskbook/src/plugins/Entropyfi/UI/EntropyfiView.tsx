@@ -4,7 +4,7 @@ import { Card, CardActions, CardContent, Link, Paper, Tab, Tabs, Typography } fr
 import { makeStyles } from '@masknet/theme'
 import React, { useState } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
-import { PoolTogetherIcon } from '../../../resources/PoolTogetherIcon'
+import { EntropyfiIcon } from '../../../resources/EntropyfiIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
 // import { usePool, usePools } from '../hooks/usePools'
 // import type { Pool } from '../types'
@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: 'none',
         border: `solid 1px ${theme.palette.divider}`,
         padding: 0,
-        backgroundColor: '#290b5a',
+        backgroundColor: 'rgba(33, 39, 41, 0.65)',
         textAlign: 'center',
     },
     message: {
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-        backgroundColor: '#290b5a',
+        backgroundColor: 'rgba(33, 39, 41, 0.65)',
     },
     tabs: {
         borderTop: `solid 1px ${theme.palette.divider}`,
@@ -90,10 +90,14 @@ const useStyles = makeStyles()((theme) => ({
         width: 40,
         height: 10,
     },
-    pooltogether: {
-        height: 10,
-        width: 10,
+    entropyfiIcon: {
+        height: 15,
+        width: 15,
         marginLeft: theme.spacing(0.5),
+        marginBottom: theme.spacing(-0.5),
+    },
+    entropyfiText: {
+        fontSize: 10,
     },
     progress: {
         bottom: theme.spacing(1),
@@ -157,10 +161,10 @@ export function EntropyfiView() {
                         className={classes.footLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        title="PoolTogether"
-                        href="https://pooltogether.com/">
-                        <PoolTogetherIcon classes={{ root: classes.pooltogether }} />
-                        oolTogether
+                        title="Entropyfi"
+                        href="https://www.entropyfi.com/">
+                        <EntropyfiIcon classes={{ root: classes.entropyfiIcon }} />
+                        <span className={classes.entropyfiText}>Entropyfi</span>
                     </Link>
                 </Typography>
             </CardActions>

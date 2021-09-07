@@ -6,6 +6,11 @@ import { useAsyncRetry } from 'react-use'
 import { poolAddressMap, tokenMap } from '../constants'
 import { usePoolContract } from '../contracts'
 
+// export function usePoolState(): PoolState {
+//     const state = useAppSelector((state: AppState) => state.pools)
+//     return state
+// }
+
 export function useUserShortPrincipalBalance(
     userAddress: string,
     poolId: string,

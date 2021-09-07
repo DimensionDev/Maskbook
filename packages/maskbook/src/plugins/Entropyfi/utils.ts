@@ -2,6 +2,7 @@ import { Token } from '@uniswap/sdk-core'
 import type { I18NFunction } from '../../utils'
 import { ONE_DAY_SECONDS, ONE_WEEK_SECONDS } from './constants'
 import type { rawTokenMap, TokenMap } from './types'
+import { ChainId } from '@masknet/web3-shared'
 
 export function getPrizePeriod(t: I18NFunction, preiod: number) {
     if (preiod === ONE_DAY_SECONDS) {
@@ -35,4 +36,22 @@ export function formTokenMap(rawTokenMap: rawTokenMap): TokenMap {
         }
     }
     return tokenMap
+}
+
+export const getSlicePoolId = (poolId: string): Array<string> => {
+    const slicePoolId = poolId.split('-')
+    const COIN = slicePoolId[slicePoolId.length - 1]
+    return [poolId.replace(`-${COIN}`, ''), COIN]
+}
+
+export const getNetworkColor = (chainId: ChainId) => {
+    switch (chainId) {
+        case ChainId.Mainnet:
+            return '#617fea'
+        case ChainId.Matic:
+            return '#7b41da'
+        // add more if needed
+        default:
+            return '#f1f1f1'
+    }
 }
