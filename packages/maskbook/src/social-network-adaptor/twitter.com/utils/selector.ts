@@ -42,6 +42,10 @@ export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="UserProfileHeader_Items"]')
+export const searchAvatarSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] a[role="link"][href$="/photo"] img')
+export const searchHeaderPhotoSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] a[role="link"][href$=/header_photo] img')
 export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
     querySelector<HTMLDivElement, SingleMode>(
         [

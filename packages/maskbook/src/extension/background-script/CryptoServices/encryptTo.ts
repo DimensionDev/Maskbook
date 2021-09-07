@@ -121,11 +121,11 @@ function getSummary(content: TypedMessageText) {
         // it seems like using "en" can also split the word correctly.
         const seg = new Intl.Segmenter('en')
         for (const word of seg.segment(content.content)) {
-            if (result.length >= 20) break
+            if (result.length >= 30) break
             result += word.segment
         }
     } else {
-        result = result.slice(0, 20)
+        result = result.slice(0, 30)
     }
     return result
 }

@@ -72,6 +72,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.collecting.postsProvider?.start(signal)
     startPostListener()
 
+    ui.collecting.currentVisitingIdentityProvider?.start(signal)
     ui.injection.pageInspector?.(signal)
     if (Flags.toolbox_enabled) ui.injection.toolBoxInNavBar?.(signal)
     ui.injection.setupPrompt?.(signal)
@@ -104,7 +105,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         const provider = ui.collecting.identityProvider
         provider?.start(signal)
         if (provider?.hasDeprecatedPlaceholderName) {
-            provider.lastRecognized.addListener((id) => {
+            provider.recognized.addListener((id) => {
                 if (signal.aborted) return
                 if (id.identifier.isUnknown) return
                 Services.Identity.resolveIdentity(id.identifier)
@@ -157,11 +158,12 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     async function activateSNSAdaptorPluginOnStart() {
         const plugin = await Services.Settings.shouldActivatePluginOnSNSStart()
         if (!plugin) return
+
         await delay(500)
         MaskMessage.events.requestComposition.sendToLocal({
             open: true,
             reason: 'timeline',
-            options: { startupPlugin: plugin },
+            options: plugin === 'none' ? {} : { startupPlugin: plugin },
         })
     }
 }

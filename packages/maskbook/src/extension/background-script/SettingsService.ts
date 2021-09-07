@@ -124,3 +124,7 @@ export async function shouldActivatePluginOnSNSStart() {
     sessionStorage.removeItem(key)
     return val
 }
+
+export async function openTab(url: string) {
+    await browser.tabs.create({ active: true, url })
+}

@@ -514,3 +514,17 @@ export interface Transaction {
     gasFee: TransactionGasFee | undefined
     transactionType: string
 }
+
+//#region address name
+export enum AddressNameType {
+    ENS = 'ENS',
+    UNS = 'UNS',
+    DNS = 'DNS',
+}
+
+export interface AddressName {
+    label: string
+    ownerAddress: string
+    resolvedAddress?: string
+}
+//#endregion

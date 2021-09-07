@@ -11,6 +11,7 @@ export * from './recentTransactions'
 export * from './rpc'
 export * from './keystore'
 export * from './chain'
+export * from './domain'
 export * from './cloud'
 export * from './estimateGasFee'
 export {
