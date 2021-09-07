@@ -62,7 +62,7 @@ export async function getAssetsListNFT(
                         {
                             name: x.name,
                             description: x.description,
-                            image: x.image_url ?? x.image_preview_url ?? x.asset_contract.image_url ?? '',
+                            image: x.image_url || x.image_preview_url || x.asset_contract.image_url || '',
                         },
                         x.token_id,
                     ),
