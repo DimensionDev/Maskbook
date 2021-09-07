@@ -1,7 +1,6 @@
 import { memo, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
-import { SettingsIcon } from '@masknet/icons'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { PublicKeyIcon, SettingsIcon } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@material-ui/core'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
 import { PersonaIdentifier, ProfileIdentifier, ProfileInformation, useMenu } from '@masknet/shared'
@@ -10,11 +9,12 @@ import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { RenameDialog } from '../RenameDialog'
 import type { SocialNetwork } from '../../api'
-import { PublicKeyIcon } from '@masknet/icons'
 import { useToggle } from 'react-use'
 import { UploadAvatarDialog } from '../UploadAvatarDialog'
 import { MaskAvatar } from '../../../../components/MaskAvatar'
 import { ExportPrivateKeyDialog } from '../ExportPrivateKeyDialog'
+import { RoutePaths } from '../../../../type'
+import { useNavigate } from 'react-router'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -67,6 +67,7 @@ export interface PersonaRowCardUIProps {
 }
 
 export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
+    const navigate = useNavigate()
     const { nickname, definedSocialNetworks, identifier, profiles } = props
     const { onConnect, onDisconnect, onRename } = props
     const [avatarOn, toggleAvatar] = useToggle(false)
@@ -80,6 +81,9 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const [menu, openMenu] = useMenu(
         <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_rename()}</MenuItem>,
         <MenuItem onClick={() => setExportPrivateKeyDialogOpen(true)}>{t.personas_export_private()}</MenuItem>,
+        <MenuItem onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}>
+            {t.settings_global_backup_title()}
+        </MenuItem>,
         <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
             {t.personas_delete()}
         </MenuItem>,

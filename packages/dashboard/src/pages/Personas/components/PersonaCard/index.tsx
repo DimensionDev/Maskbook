@@ -94,7 +94,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                     <Typography variant="subtitle2" sx={{ cursor: 'pointer' }} onClick={onClick}>
                         {nickname}
                     </Typography>
-                    <Typography variant="subtitle2" sx={{ cursor: 'pointer' }} onClick={onClick}>
+                    <Typography variant="caption" sx={{ cursor: 'pointer' }} onClick={onClick}>
                         {formatFingerprint(identifier.compressedPoint, 4)}
                     </Typography>
                 </div>

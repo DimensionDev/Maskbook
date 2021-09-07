@@ -1,12 +1,13 @@
 import { memo, useState } from 'react'
 import { Box, Button, Drawer } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PersonaCard } from '../PersonaCard'
-import { MaskColorVar } from '@masknet/theme'
 import { AddPersonaCard } from '../AddPersonaCard'
 import { useDashboardI18N } from '../../../../locales'
 import type { PersonaIdentifier, PersonaInformation } from '@masknet/shared'
+import { RoutePaths } from '../../../../type'
+import { useNavigate } from 'react-router'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -70,6 +71,7 @@ export interface PersonaDrawerUIProps extends PersonaDrawer {
 
 export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
     ({ open, currentPersonaIdentifier, toggleDrawer, personas, onChangeCurrentPersona, onCreatePersona }) => {
+        const navigate = useNavigate()
         const { classes } = useStyles()
         const t = useDashboardI18N()
 
@@ -112,7 +114,11 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                 )}
                 <Box className={classes.buttons}>
                     <Button onClick={() => setShowAddPersonaCard(true)}>{t.personas_add_persona()}</Button>
-                    <Button color="warning">{t.personas_back_up()}</Button>
+                    <Button
+                        color="warning"
+                        onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}>
+                        {t.personas_back_up()}
+                    </Button>
                 </Box>
             </Drawer>
         )
