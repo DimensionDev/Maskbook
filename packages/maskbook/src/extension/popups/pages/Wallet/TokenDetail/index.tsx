@@ -13,6 +13,10 @@ import { PopupRoutes } from '../../../index'
 import { PluginTraderMessages } from '../../../../../plugins/Trader/messages'
 import { PluginTransakMessages } from '../../../../../plugins/Transak/messages'
 import { useChainDetailed, useWallet } from '@masknet/web3-shared'
+import { useAsync } from 'react-use'
+import Services from '../../../../service'
+import { compact, intersectionWith } from 'lodash-es'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()({
     content: {
@@ -62,19 +66,44 @@ const TokenDetail = memo(() => {
     const history = useHistory()
     const { currentToken } = useContainer(WalletContext)
 
-    const openBuyDialog = useCallback(() => {
-        PluginTransakMessages.buyTokenDialogUpdated.sendToVisiblePages({
-            open: true,
-            address: wallet?.address ?? '',
-            code: chainDetailed?.nativeCurrency.symbol,
-        })
-    }, [wallet?.address, chainDetailed])
+    const { value: isActiveSocialNetwork } = useAsync(async () => {
+        const urls = compact((await browser.tabs.query({ active: true })).map((tab) => tab.url))
+        const definedSocialNetworkUrls = (await Services.SocialNetwork.getDefinedSocialNetworkUIs()).map(
+            ({ networkIdentifier }) => networkIdentifier,
+        )
 
-    const openSwapDialog = useCallback(() => {
-        PluginTraderMessages.swapDialogUpdated.sendToVisiblePages({
-            open: true,
-        })
+        return !!intersectionWith(urls, definedSocialNetworkUrls, (a, b) => a.includes(b)).length
     }, [])
+
+    const openBuyDialog = useCallback(async () => {
+        if (isActiveSocialNetwork) {
+            PluginTransakMessages.buyTokenDialogUpdated.sendToVisiblePages({
+                open: true,
+                address: wallet?.address ?? '',
+                code: chainDetailed?.nativeCurrency.symbol,
+            })
+        } else {
+            const url = urlcat('next.html#', 'labs', { open: 'Transak' })
+            await browser.tabs.create({
+                active: true,
+                url: browser.runtime.getURL(url),
+            })
+        }
+    }, [wallet?.address, chainDetailed, isActiveSocialNetwork])
+
+    const openSwapDialog = useCallback(async () => {
+        if (isActiveSocialNetwork) {
+            PluginTraderMessages.swapDialogUpdated.sendToVisiblePages({
+                open: true,
+            })
+        } else {
+            const url = urlcat('next.html#', 'labs', { open: 'Swap' })
+            await browser.tabs.create({
+                active: true,
+                url: browser.runtime.getURL(url),
+            })
+        }
+    }, [isActiveSocialNetwork])
 
     if (!currentToken) return null
 
