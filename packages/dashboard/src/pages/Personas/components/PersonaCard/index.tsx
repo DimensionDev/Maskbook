@@ -3,11 +3,10 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@material-ui/core'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
 import type { PersonaIdentifier, ProfileIdentifier, ProfileInformation } from '@masknet/shared'
-import { useDashboardI18N } from '../../../../locales'
+import { formatFingerprint } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import type { SocialNetwork } from '../../api'
 import classNames from 'classnames'
-import { formatFingerprint } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -60,14 +59,13 @@ export interface PersonaCardProps {
 }
 
 export const PersonaCard = memo<PersonaCardProps>((props) => {
-    const { connectPersona, disconnectPersona, renamePersona, definedSocialNetworks } = PersonaContext.useContainer()
+    const { connectPersona, disconnectPersona, definedSocialNetworks } = PersonaContext.useContainer()
 
     return (
         <PersonaCardUI
             {...props}
             onConnect={connectPersona}
             onDisconnect={disconnectPersona}
-            onRename={renamePersona}
             definedSocialNetworks={definedSocialNetworks}
         />
     )
@@ -77,13 +75,11 @@ export interface PersonaCardUIProps extends PersonaCardProps {
     definedSocialNetworks: SocialNetwork[]
     onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
-    onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
 }
 
 export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
     const { nickname, active = false, definedSocialNetworks, identifier, profiles } = props
-    const { onConnect, onDisconnect, onClick, onRename } = props
-    const t = useDashboardI18N()
+    const { onConnect, onDisconnect, onClick } = props
     const { classes } = useStyles()
 
     return (
@@ -100,22 +96,27 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                 </div>
                 <div className={classes.content}>
                     {definedSocialNetworks.map(({ networkIdentifier }) => {
-                        const profile = profiles.find((x) => x.identifier.network === networkIdentifier)
-                        if (profile) {
+                        const currentNetworkProfiles = profiles.filter(
+                            (x) => x.identifier.network === networkIdentifier,
+                        )
+
+                        currentNetworkProfiles.map(() => {})
+                        if (!currentNetworkProfiles.length) {
                             return (
-                                <ConnectedPersonaLine
+                                <UnconnectedPersonaLine
                                     key={networkIdentifier}
                                     onConnect={() => onConnect(identifier, networkIdentifier)}
-                                    onDisconnect={() => onDisconnect(profile.identifier)}
-                                    userId={profile.identifier.userId}
                                     networkIdentifier={networkIdentifier}
                                 />
                             )
                         } else {
                             return (
-                                <UnconnectedPersonaLine
+                                <ConnectedPersonaLine
+                                    isHideOperations
                                     key={networkIdentifier}
                                     onConnect={() => onConnect(identifier, networkIdentifier)}
+                                    onDisconnect={onDisconnect}
+                                    profileIdentifiers={currentNetworkProfiles.map((x) => x.identifier)}
                                     networkIdentifier={networkIdentifier}
                                 />
                             )

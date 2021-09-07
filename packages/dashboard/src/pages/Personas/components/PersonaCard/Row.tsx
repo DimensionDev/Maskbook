@@ -123,27 +123,29 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                 </Box>
                 <Box>
                     {definedSocialNetworks.map(({ networkIdentifier }) => {
-                        const profile = profiles?.find((x) => x.identifier.network === networkIdentifier)
-                        if (profile) {
+                        const currentNetworkProfiles = profiles.filter(
+                            (x) => x.identifier.network === networkIdentifier,
+                        )
+
+                        currentNetworkProfiles.map(() => {})
+                        if (!currentNetworkProfiles.length) {
                             return (
-                                <Box key={networkIdentifier} sx={{ mt: 1 }}>
-                                    <ConnectedPersonaLine
-                                        onConnect={() => onConnect(identifier, networkIdentifier)}
-                                        onDisconnect={() => onDisconnect(profile.identifier)}
-                                        userId={profile.identifier.userId}
-                                        networkIdentifier={networkIdentifier}
-                                    />
-                                </Box>
+                                <UnconnectedPersonaLine
+                                    key={networkIdentifier}
+                                    onConnect={() => onConnect(identifier, networkIdentifier)}
+                                    networkIdentifier={networkIdentifier}
+                                />
                             )
                         } else {
                             return (
-                                <Box key={networkIdentifier} sx={{ mt: 1 }}>
-                                    <UnconnectedPersonaLine
-                                        key={networkIdentifier}
-                                        onConnect={() => onConnect(identifier, networkIdentifier)}
-                                        networkIdentifier={networkIdentifier}
-                                    />
-                                </Box>
+                                <ConnectedPersonaLine
+                                    isHideOperations={false}
+                                    key={networkIdentifier}
+                                    onConnect={() => onConnect(identifier, networkIdentifier)}
+                                    onDisconnect={onDisconnect}
+                                    profileIdentifiers={currentNetworkProfiles.map((x) => x.identifier)}
+                                    networkIdentifier={networkIdentifier}
+                                />
                             )
                         }
                     })}
