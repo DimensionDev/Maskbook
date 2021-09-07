@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared'
 import { useCallback, useEffect, useState } from 'react'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
-import { AvatarMetaData, NFTAvatar, useNFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
+import { AvatarMetaDB, NFTAvatar, useNFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
 import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { createReactRootShadowed, MaskMessage, startWatch } from '../../../utils'
@@ -24,7 +24,7 @@ export function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        padding: theme.spacing(2, 2, 0, 2),
+        padding: '11px 14px 11px 14px',
     },
 }))
 
@@ -51,7 +51,7 @@ function NFTAvatarInTwitter() {
     const useInfo = useGetCurrentUserInfo()
     const avatar = useNFTAvatar(twitterId)
     const profileSave = searchProfileSaveSelector().evaluate()
-    const [avatarMeta, setAvatarMeta] = useState<AvatarMetaData>({} as AvatarMetaData)
+    const [avatarMeta, setAvatarMeta] = useState<AvatarMetaDB>({} as AvatarMetaDB)
     const onChange = useCallback(async (token: ERC721TokenDetailed) => {
         UpdateAvatar(token.info.image ?? '')
         const metaData = {

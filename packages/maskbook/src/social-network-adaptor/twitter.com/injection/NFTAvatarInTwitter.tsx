@@ -1,13 +1,18 @@
-import { createReactRootShadowed, MaskMessage, NFTAVatarEvent, startWatch } from '../../../utils'
+import { createReactRootShadowed, Flags, MaskMessage, NFTAVatarEvent, startWatch } from '../../../utils'
 import { searchTwitterAvatarSelector } from '../utils/selector'
-import { getTwitterId } from '../utils/user'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
-import Services from '../../../extension/service'
-import { Typography } from '@material-ui/core'
+import { Typography, Button } from '@material-ui/core'
 import { NFTAvatarAmountIcon } from '@masknet/icons'
-import { saveNFTAvatar, useNFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
+import {
+    AvatarMetaDB,
+    clearAvatar,
+    getNFTAvator,
+    saveNFTAvatar,
+    useNFTAvatar,
+} from '../../../components/InjectedComponents/NFTAvatar'
+import { getTwitterId } from '../utils/user'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -53,6 +58,11 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 3,
         minWidth: 72,
     },
+    recover: {
+        position: 'absolute',
+        right: 115,
+        top: 0,
+    },
 }))
 
 interface NFTAvatarInTwitterProps {}
@@ -61,43 +71,104 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const twitterId = getTwitterId()
     const [amount, setAmount] = useState('')
     const avatarMeta = useNFTAvatar(twitterId)
+    const parent = searchTwitterAvatarSelector().querySelector<HTMLElement>('div > :nth-child(2) > div').evaluate()
+    const onUpdate = useCallback(
+        (data: NFTAVatarEvent) => {
+            console.log('aaaaabbbbbbbbb')
+            saveNFTAvatar(data.userId, data.avatarId ?? data.userId, data.address, data.tokenId).then(
+                (avatar: AvatarMetaDB) => {
+                    console.log('----------------------------------------')
+                    console.log(avatar)
 
-    const onUpdate = useCallback(async (data: NFTAVatarEvent) => {
-        const avatar = await saveNFTAvatar(data.userId, data.avatarId ?? '', data.address, data.tokenId)
-        if (!avatar) return
-        await updateAvatar(avatar.image!)
-        setAmount(avatar.amount)
+                    if (!parent) return
+                    updateAvatarImage(parent, avatar.image ?? '')
+                    setAmount(avatar.amount)
+                },
+            )
+        },
+        [parent],
+    )
+    useEffect(() => {
+        return MaskMessage.events.NFTAvatarUpdated.on((data) => {
+            console.log('aaaaaaaaaaaaaaaaaaaaaaaaaa')
+            console.log(data)
+            onUpdate(data)
+        })
     }, [])
 
     useEffect(() => {
-        return MaskMessage.events.NFTAvatarUpdated.on((data) => onUpdate(data))
-    }, [])
-
-    useEffect(() => {
+        if (!parent) return
         setAmount(avatarMeta?.amount ?? '0')
-        updateAvatar(avatarMeta?.image ?? '')
-    }, [avatarMeta])
+        updateAvatarImage(parent, avatarMeta?.image ?? '')
+    }, [avatarMeta, parent, twitterId])
 
+    const onClick = async () => {
+        await clearAvatar(twitterId)
+    }
+
+    if (!avatarMeta) return null
+    if (!Flags.nft_avatar_enabled) return null
     return (
-        <div className={classes.root}>
-            <div className={classes.nftLogo}>
-                <NFTAvatarAmountIcon className={classes.nftImage} />
-            </div>
-            <div className={classes.wrapper}>
-                <div className={classes.amountWrapper}>
-                    <Typography align="center" className={classes.amount}>
-                        {`${amount} ETH`}
-                    </Typography>
+        <>
+            <div className={classes.root}>
+                <div className={classes.nftLogo}>
+                    <NFTAvatarAmountIcon className={classes.nftImage} />
+                </div>
+                <div className={classes.wrapper}>
+                    <div className={classes.amountWrapper}>
+                        <Typography align="center" className={classes.amount}>
+                            {`${amount} ETH`}
+                        </Typography>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <Button variant="outlined" size="small" className={classes.recover} onClick={() => onClick()}>
+                Cancel NFT Avatar
+            </Button>
+        </>
     )
 }
 
-async function updateAvatar(image: string) {
+export function updateAvatarFromDB(parent?: HTMLElement, twitterId?: string) {
+    if (!parent || !twitterId) return
+    getNFTAvator(twitterId).then((avatarMeta: AvatarMetaDB) => {
+        updateAvatarImage(parent, avatarMeta.image ?? '')
+    })
+}
+
+function recovAvatar(parent: HTMLElement) {
+    const avatar = parent.firstChild as HTMLDivElement
+    if (avatar) {
+        if (avatar.hasAttribute('avatar')) {
+            avatar.style.backgroundImage = avatar.getAttribute('avatar') ?? ''
+            avatar.removeAttribute('avatar')
+        }
+    }
+
+    const image = parent.lastChild as HTMLDivElement
+    if (image) {
+        if (image.hasAttribute('avatar')) {
+            image.setAttribute('src', image.getAttribute('avatar') ?? '')
+            image.removeAttribute('avatar')
+        }
+    }
+}
+
+export function updateAvatarImage(parent: HTMLElement, image?: string) {
+    if (!Flags.nft_avatar_enabled) {
+        return
+    }
+
+    if (!image) {
+        recovAvatar(parent)
+        return
+    }
+    /*
     const blob = await Services.Helper.fetch(image)
     if (!blob) return
     const blobURL = URL.createObjectURL(blob)
+
     const avatarElement = searchTwitterAvatarSelector()
         .querySelector('div > :nth-child(2) > div > :first-child')
         .evaluate() as HTMLElement
@@ -108,4 +179,20 @@ async function updateAvatar(image: string) {
         .evaluate() as HTMLElement
     if (!avatarImage) return
     avatarImage.setAttribute('src', blobURL.toString())
+    */
+    const avatar = parent.firstChild as HTMLDivElement
+    if (avatar) {
+        if (!avatar.hasAttribute('avatar')) {
+            avatar.setAttribute('avatar', avatar.style.backgroundImage)
+        }
+        avatar.style.backgroundImage = `url(${new URL(image, import.meta.url)})`
+    }
+    const ele = parent.lastChild as HTMLDivElement
+    console.log(ele)
+    if (ele) {
+        if (!ele.hasAttribute('avatar')) {
+            ele.setAttribute('avatar', ele.getAttribute('src') ?? '')
+        }
+        ele.setAttribute('src', `url(${new URL(image, import.meta.url)})`)
+    }
 }

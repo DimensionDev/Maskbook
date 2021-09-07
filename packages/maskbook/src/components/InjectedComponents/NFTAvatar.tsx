@@ -22,13 +22,13 @@ import { useI18N } from '../../utils'
 import { EthereumChainBoundary } from '../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 
+export const AvatarGUN = gun2.get('com.maskbook.nft.avatar')
 const useStyles = makeStyles()((theme) => ({
     root: {},
     title: {
         padding: 0,
         display: 'flex',
         justifyContent: 'space-between',
-        paddingBottom: theme.spacing(1),
     },
     AddCollectible: {
         textAlign: 'right',
@@ -94,7 +94,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         loading,
         retry,
         error,
-    } = useCollectibles(account, chainId, provider, page, 50)
+    } = useCollectibles('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', chainId, provider, page, 50)
     //0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
 
     const { collectibles, hasNextPage } = value
@@ -210,7 +210,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     )
 }
 
-export interface AvatarMetaData {
+export interface AvatarMetaDB {
     userId: string
     tokenId: string
     amount: string
@@ -240,18 +240,19 @@ export async function saveNFTAvatar(userId: string, avatarId: string, contract: 
         ),
     )
 
-    const avatarMeta: AvatarMetaData = {
+    const avatarMeta: AvatarMetaDB = {
         amount: order ? new BigNumber(getOrderUnitPrice(order) ?? 0).toFixed() : '0',
+        userId,
         address: contract,
         tokenId,
         avatarId,
-        userId,
         name: asset.assetContract.name,
         symbol: asset.assetContract.tokenSymbol,
         image: asset.imageUrl ?? asset.imagePreviewUrl ?? '',
     }
 
-    await gun2
+    await AvatarGUN
+        //@ts-ignore
         .get(userId)
         //@ts-ignore
         .put(avatarMeta).then!()
@@ -259,13 +260,32 @@ export async function saveNFTAvatar(userId: string, avatarId: string, contract: 
     return avatarMeta
 }
 
-export function useNFTAvatar(userId: string) {
+export function useNFTAvatar(userId?: string) {
     return useAsync(async () => {
-        const avatar = (await gun2.get(userId).then!()) as AvatarMetaData
+        if (!userId) return undefined
+        const b = await AvatarGUN.then!()
+        console.log('id:', userId)
+        console.log(b)
+        const avatar = (await AvatarGUN
+            //@ts-ignore
+            .get(userId).then!()) as AvatarMetaData
+        console.log(avatar)
         return avatar
     }, [userId]).value
 }
 
 export async function getNFTAvator(userId: string) {
-    return (await gun2.get(userId).then!()) as AvatarMetaData
+    return (
+        (await AvatarGUN
+            //@ts-ignore
+            .get(userId).then!()) as AvatarMetaData
+    )
+}
+
+export async function clearAvatar(userId: string) {
+    await AvatarGUN
+        //@ts-ignore
+        .get(userId)
+        //@ts-ignore
+        .put(null).then!()
 }

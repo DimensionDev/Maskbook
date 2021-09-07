@@ -3,7 +3,7 @@ import { NFTAvatarAmountIcon } from '@masknet/icons'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import { Link, Typography } from '@material-ui/core'
-import { AvatarMetaData, getNFTAvator } from '../../../components/InjectedComponents/NFTAvatar'
+import { AvatarMetaDB, getNFTAvator } from '../../../components/InjectedComponents/NFTAvatar'
 import Services from '../../../extension/service'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { createReactRootShadowed, Flags, memoizePromise, startWatch } from '../../../utils'
@@ -13,8 +13,9 @@ import {
     selfInfoSelectors,
     twitterMainAvatarSelector,
 } from '../utils/selector'
+import { updateAvatarFromDB, updateAvatarImage } from './NFTAvatarInTwitter'
 
-function updateNFTAvatar(avatarMeta: AvatarMetaData, parent: HTMLDivElement | null) {
+function updateNFTAvatar(avatarMeta: AvatarMetaDB, parent: HTMLDivElement | null) {
     if (!parent) return
     const eleAvator = parent.querySelector<HTMLDivElement>('div > :nth-child(2) > div > div')
     if (!eleAvator) return
@@ -40,7 +41,11 @@ export function injectAvatorInTwitter(signal: AbortSignal, post: PostInfo) {
         proxy.realCurrent = node
         const avatarMeta = await getNFTAvator(post.postBy.getCurrentValue().userId)
         if (!avatarMeta || !avatarMeta.image) return
-        updateNFTAvatar(avatarMeta, node.firstChild?.firstChild?.lastChild?.firstChild as HTMLDivElement)
+        //updateNFTAvatar(avatarMeta, node.firstChild?.firstChild?.lastChild?.firstChild as HTMLDivElement)
+        const avatarParentNode = (
+            node.firstChild?.firstChild?.lastChild?.firstChild as HTMLDivElement
+        ).querySelector<HTMLDivElement>('div > :nth-child(2) > div > div')
+        if (avatarParentNode) updateAvatarImage(avatarParentNode, avatarMeta.image)
         const root = createReactRootShadowed(proxy.afterShadow, { signal })
         root.render(
             <div
@@ -94,7 +99,7 @@ function _(main: () => LiveSelector<HTMLElement, true>, signal: AbortSignal, twi
     // To reproduce, open a profile and switch to another profile.
     startWatch(
         new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
-            const check = () => updateAvatar(parent, twitterId)
+            const check = () => updateAvatarFromDB(parent, twitterId)
             check()
             return {
                 onNodeMutation: check,
@@ -104,16 +109,6 @@ function _(main: () => LiveSelector<HTMLElement, true>, signal: AbortSignal, twi
         }),
         signal,
     )
-}
-
-function updateAvatar(parent?: HTMLElement, twitterId?: string) {
-    if (!parent || !twitterId) return
-    getNFTAvator(twitterId).then((avatarMeta: AvatarMetaData) => {
-        const ele = parent.firstChild as HTMLElement
-        if (ele) ele.style.backgroundImage = `url(${new URL(avatarMeta.image ?? '', import.meta.url)})`
-        const image = parent.lastChild as HTMLElement
-        if (image) image.setAttribute('src', `url(${new URL(avatarMeta.image ?? '', import.meta.url)})`)
-    })
 }
 
 export async function injectUserNFTAvatarAtTwitter(signal: AbortSignal) {
@@ -148,10 +143,3 @@ const ifUsingMaskbook = memoizePromise(
         Services.Identity.queryProfile(pid).then((x) => (!!x.linkedPersona ? Promise.resolve() : Promise.reject())),
     (pid: ProfileIdentifier) => pid.toText(),
 )
-
-function updateTwitterAvatar(parent: () => LiveSelector<HTMLElement, true>, image: string) {
-    let ele = parent().querySelector('div').evaluate()
-    if (ele) ele.style.backgroundImage = `url(${new URL(image, import.meta.url)})`
-    ele = parent().querySelector('img').evaluate()
-    if (ele) ele.setAttribute('src', `url(${new URL(image, import.meta.url)})`)
-}
