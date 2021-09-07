@@ -21,6 +21,7 @@ import { FormattedCurrency, TokenIcon } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
 import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 import { useLocation } from 'react-router'
+import { useRejectHandler } from '../hooks/useRejectHandler'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -143,7 +144,7 @@ const ContractInteraction = memo(() => {
                     amount: value.computedPayload._tx.value,
                 }
             default:
-                return {}
+                throw new Error('To be implemented')
         }
     }, [value, t])
 
@@ -198,18 +199,7 @@ const ContractInteraction = memo(() => {
         }
     }, [value, location.search, history])
 
-    const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-        if (value) {
-            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
-            await Services.Ethereum.rejectRequest(value.payload)
-
-            if (toBeClose) {
-                window.close()
-            } else {
-                history.goBack()
-            }
-        }
-    }, [value, location.search, history])
+    const [{ loading: rejectLoading }, handleReject] = useRejectHandler(history.goBack, value)
 
     const { value: defaultPrices } = useAsync(async () => {
         if (networkType === NetworkType.Ethereum && !maxFeePerGas && !maxPriorityFeePerGas) {

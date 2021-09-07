@@ -1,6 +1,6 @@
 import { memo, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { NetworkType, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
+import { isSameAddress, NetworkType, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
 import { MenuItem, Typography } from '@material-ui/core'
 import { FormattedBalance, TokenIcon, useMenu, useValueRef } from '@masknet/shared'
 import { useContainer } from 'unstated-next'
@@ -35,7 +35,7 @@ const Transfer = memo(() => {
     const otherWallets = useMemo(
         () =>
             wallets
-                .filter((item) => item.address !== wallet?.address)
+                .filter((item) => isSameAddress(item.address, wallet?.address))
                 .map((wallet) => ({ name: wallet.name ?? '', address: wallet.address })),
         [wallet, wallets],
     )

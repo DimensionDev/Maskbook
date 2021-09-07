@@ -24,7 +24,7 @@ export function useGasLimit(type?: EthereumTokenType, address?: string, amount?:
                 })
             case EthereumTokenType.ERC721:
             case EthereumTokenType.ERC1155:
-                throw new Error('To be implement')
+                throw new Error('To be implemented')
             default:
                 unreachable(type)
         }

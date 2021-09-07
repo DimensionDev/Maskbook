@@ -13,9 +13,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@material-ui/core'
 import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@material-ui/lab'
-import { isEmpty } from 'lodash-es'
+import { isEmpty, noop } from 'lodash-es'
 import { useHistory, useLocation } from 'react-router'
 import { PopupRoutes } from '../../../index'
+import { useRejectHandler } from '../hooks/useRejectHandler'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -196,6 +197,8 @@ export const Prior1559GasSetting = memo(() => {
     )
 
     const onSubmit = handleSubmit((data) => handleConfirm(data))
+
+    useRejectHandler(noop, value)
 
     return (
         <>

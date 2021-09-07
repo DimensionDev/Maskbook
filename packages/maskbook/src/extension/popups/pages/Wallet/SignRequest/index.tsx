@@ -10,6 +10,7 @@ import Services from '../../../../service'
 import { LoadingButton } from '@material-ui/lab'
 import { useHistory, useLocation } from 'react-router'
 import { PopupRoutes } from '../../../index'
+import { useRejectHandler } from '../hooks/useRejectHandler'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -97,19 +98,10 @@ const SignRequest = memo(() => {
         }
     }, [value, location.search, history])
 
-    const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-        if (value) {
-            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
-
-            await Services.Ethereum.rejectRequest(value.payload)
-
-            if (toBeClose) {
-                window.close()
-            } else {
-                history.replace(PopupRoutes.Wallet)
-            }
-        }
-    }, [location, history, value])
+    const [{ loading: rejectLoading }, handleReject] = useRejectHandler(
+        () => history.replace(PopupRoutes.Wallet),
+        value,
+    )
 
     return (
         <main className={classes.container}>
