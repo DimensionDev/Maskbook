@@ -12,9 +12,9 @@ export async function encryptUnlockData(content: string): Promise<{
         key,
         typeof content === 'string' ? encodeText(content) : content,
     )
-    const exportkey = await crypto.subtle.exportKey('raw', key)
+    const exportKey = await crypto.subtle.exportKey('raw', key)
 
-    return { iv: encodeArrayBuffer(iv), key: encodeArrayBuffer(exportkey), encrypted: encodeArrayBuffer(encrypted) }
+    return { iv: encodeArrayBuffer(iv), key: encodeArrayBuffer(exportKey), encrypted: encodeArrayBuffer(encrypted) }
 }
 
 export async function decryptUnlockData(
@@ -24,13 +24,13 @@ export async function decryptUnlockData(
 ): Promise<{
     content: string
 }> {
-    const importkey = await crypto.subtle.importKey('raw', decodeArrayBuffer(key), 'AES-GCM', true, ['decrypt'])
+    const importKey = await crypto.subtle.importKey('raw', decodeArrayBuffer(key), 'AES-GCM', true, ['decrypt'])
     const decrypted = await crypto.subtle.decrypt(
         {
             name: 'AES-GCM',
             iv: decodeArrayBuffer(iv),
         },
-        importkey,
+        importKey,
         decodeArrayBuffer(encrypted),
     )
     return { content: decodeText(decrypted) }

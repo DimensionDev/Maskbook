@@ -6,7 +6,7 @@ import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { paywallUrl } from '../constants'
 import { renderWithUnlockProtocolMetadata, UnlockProtocolMetadataReader } from '../helpers'
 import { useAccount, useChainId } from '@masknet/web3-shared'
-import { PuginUnlockProtocolRPC } from '../messages'
+import { PluginUnlockProtocolRPC } from '../messages'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 interface UnlockProtocolInPostProps {
@@ -19,7 +19,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
     const [content, setContent] = useState('')
     const address = useAccount()
     const chain = useChainId()
-    const [redirurl, setRedirurl] = useState('')
+    const [redirectUrl, setRedirectUrl] = useState('')
 
     useEffect(() => {
         const metadata = UnlockProtocolMetadataReader(props.message.meta)
@@ -27,15 +27,15 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
             if (!!address) {
                 const data: { locks: Record<string, object> } = { locks: {} }
                 metadata.val.unlockLocks.forEach((locks) => {
-                    PuginUnlockProtocolRPC.verifyPurchase(address, locks.unlocklock, locks.chainid).then((res) => {
+                    PluginUnlockProtocolRPC.verifyPurchase(address, locks.unlocklock, locks.chainid).then((res) => {
                         if (res) {
-                            const requestdata = {
+                            const requestData = {
                                 lock: locks.unlocklock,
                                 address: address,
                                 chain: locks.chainid,
                                 identifier: metadata.val.iv,
                             }
-                            PuginUnlockProtocolRPC.getKey(requestdata)
+                            PluginUnlockProtocolRPC.getKey(requestData)
                                 .catch((error) => {
                                     if (error.code === -1) {
                                         setContent(t('plugin_unlockprotocol_server_error'))
@@ -43,7 +43,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                                 })
                                 .then((response) => {
                                     setContent(response.message)
-                                    PuginUnlockProtocolRPC.decryptUnlockData(
+                                    PluginUnlockProtocolRPC.decryptUnlockData(
                                         metadata.val.iv,
                                         response.post.unlockKey,
                                         metadata.val.post,
@@ -55,7 +55,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                     })
                     data.locks[locks.unlocklock] = { network: locks.chainid }
                 })
-                setRedirurl(paywallUrl + encodeURI(JSON.stringify(data)))
+                setRedirectUrl(paywallUrl + encodeURI(JSON.stringify(data)))
             }
         }
     }, [chain, address])
@@ -75,7 +75,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
             : null
 
         return <>{jsx}</>
-    } else if (!!redirurl) {
+    } else if (!!redirectUrl) {
         const jsx = message
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
@@ -85,7 +85,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                               <br />
                               <Typography color="textPrimary">"Please look for and buy an active lock"</Typography>
                               <br />
-                              <Button target="_blank" href={redirurl}>
+                              <Button target="_blank" href={redirectUrl}>
                                   Buy Lock
                               </Button>
                           </>

@@ -59,7 +59,7 @@ export const verifyActiveLock = (data: { lock: string; address: string; chain: n
     })
 }
 
-export const verifyPurchase = async (_useraddress: String, _lockAddress: String, _lockChain: number) => {
+export const verifyPurchase = async (_userAddress: String, _lockAddress: String, _lockChain: number) => {
     const query = gql`
         query locks($address: String!) {
             locks(where: { address: $address }) {
@@ -77,11 +77,11 @@ export const verifyPurchase = async (_useraddress: String, _lockAddress: String,
     }
     let flag = false
     const data = await graphQLClients[_lockChain].request(query, variables)
-    if (data.locks[0].owner === _useraddress.toLowerCase()) {
+    if (data.locks[0].owner === _userAddress.toLowerCase()) {
         flag = true
     } else if (!!data.locks[0].keys.length) {
         data.locks[0].keys.forEach((key: { owner: { id: string } }) => {
-            if (key.owner.id === _useraddress.toLowerCase()) flag = true
+            if (key.owner.id === _userAddress.toLowerCase()) flag = true
         })
     }
     return flag

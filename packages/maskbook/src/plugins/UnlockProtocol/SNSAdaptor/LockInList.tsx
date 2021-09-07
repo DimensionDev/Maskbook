@@ -17,7 +17,7 @@ const useStyle = makeStyles()({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
-    hightlighted: {
+    highlighted: {
         backgroundColor: 'inherit',
         color: 'inherit',
         fontWeight: 'bold',

@@ -7,7 +7,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils'
 import { pluginMetaKey } from '../constants'
 import type { UnlockLocks } from '../types'
-import { PuginUnlockProtocolRPC } from '../messages'
+import { PluginUnlockProtocolRPC } from '../messages'
 import { SelectRecipientsUnlockDialogUI } from './SelectRecipientsUnlockDialog'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 
@@ -28,7 +28,7 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
     const [availableUnlockTarget, setAvailableUnlockTarget] = useState<UnlockLocks[]>(() => [])
     const { attachMetadata, dropMetadata } = useCompositionContext()
     useEffect(() => {
-        PuginUnlockProtocolRPC.getLocks(address)
+        PluginUnlockProtocolRPC.getLocks(address)
             .then((value) => {
                 if (value.length) {
                     setAvailableUnlockTarget(value)
@@ -39,7 +39,7 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                 setAvailableUnlockTarget([
                     {
                         lock: {
-                            name: error.message || 'Some error occured',
+                            name: error.message || 'Some error occurred.',
                             chain: currentUnlockChain,
                             address: '0x0',
                             price: '0',
@@ -51,20 +51,20 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
 
     const onInsert = () => {
         if (!!currentUnlockTarget.length && !!currentUnlockPost) {
-            PuginUnlockProtocolRPC.encryptUnlockData(currentUnlockPost).then((encres) => {
+            PluginUnlockProtocolRPC.encryptUnlockData(currentUnlockPost).then((encryption) => {
                 const uploadData = {
-                    identifier: encres.iv,
+                    identifier: encryption.iv,
                     unlockLocks: currentUnlockTarget.map((x) => {
                         return { unlocklock: x.lock.address, chainid: x.lock.chain }
                     }),
-                    unlockKey: encres.key,
+                    unlockKey: encryption.key,
                 }
-                PuginUnlockProtocolRPC.postUnlockData(uploadData).then((res) => {
+                PluginUnlockProtocolRPC.postUnlockData(uploadData).then((res) => {
                     if (res === 200) {
                         const data = {
                             iv: uploadData.identifier,
                             unlockLocks: uploadData.unlockLocks,
-                            post: encres.encrypted,
+                            post: encryption.encrypted,
                         }
                         if (data) {
                             attachMetadata(pluginMetaKey, JSON.parse(JSON.stringify(data)))
