@@ -144,14 +144,14 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo((p
                                 })}
                             </Typography>
                         </div>
-                        {canSend || listOfStatus.includes(RedPacketStatus.empty) ? (
+                        {canSend ? (
                             <ActionButton
                                 onClick={handleSend}
                                 disabled={listOfStatus.includes(RedPacketStatus.empty)}
                                 className={classes.actionButton}
                                 variant="contained"
                                 size="large">
-                                {canSend ? t('plugin_red_packet_history_send') : ''}
+                                {t('plugin_red_packet_history_send')}
                             </ActionButton>
                         ) : null}
                     </section>

@@ -32,24 +32,17 @@ export function useNftAvailabilityComputed(account: string, payload: NftRedPacke
         const isClaimed = availability.isClaimed
         const isCreator = isSameAddress(payload?.sender.address ?? '', account)
         const parsedChainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
+
+        const isSameChain = parsedChainId === chainId
+        const isValidPassword = payload.password && payload.password !== 'PASSWORD INVALID'
+        const isClaimable = !isExpired && !isEmpty && !isClaimed && isSameChain
+        const isSendable = !isEmpty && !isExpired && isCreator && isSameChain
         return {
             ...asyncResult,
             computed: {
-                canFetch: parsedChainId === chainId,
-                canClaim:
-                    !isExpired &&
-                    !isEmpty &&
-                    !isClaimed &&
-                    parsedChainId === chainId &&
-                    payload.password &&
-                    payload.password !== 'PASSWORD INVALID',
-                canSend:
-                    !isEmpty &&
-                    !isExpired &&
-                    isCreator &&
-                    parsedChainId === chainId &&
-                    payload.password &&
-                    payload.password !== 'PASSWORD INVALID',
+                canFetch: isSameChain,
+                canClaim: isClaimable && isValidPassword,
+                canSend: isSendable && isValidPassword,
                 listOfStatus: compact([
                     isClaimed ? RedPacketStatus.claimed : undefined,
                     isEmpty ? RedPacketStatus.empty : undefined,
