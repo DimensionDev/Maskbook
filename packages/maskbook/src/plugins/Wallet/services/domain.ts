@@ -7,7 +7,7 @@ const fetchAddressNamesByTwitterIdCached = memoizePromise(ENS.fetchAddressNamesB
 export async function getAddressNames(twitterId: string, addressNameType: AddressNameType): Promise<AddressName[]> {
     switch (addressNameType) {
         case AddressNameType.ENS:
-            return (await fetchAddressNamesByTwitterIdCached(twitterId)).map((x) => ({
+            return (await fetchAddressNamesByTwitterIdCached(twitterId.toLowerCase())).map((x) => ({
                 label: '',
                 ownerAddress: x.owner,
                 resolvedAddress: x.owner,
