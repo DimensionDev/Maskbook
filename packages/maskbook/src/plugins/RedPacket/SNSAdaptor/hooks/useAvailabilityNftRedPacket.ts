@@ -28,6 +28,18 @@ export function useAvailabilityNftRedPacket(id: string, from: string) {
         const isCompleted = isClaimedAll && !isClaimed
         const isEnd = isCompleted || availability.expired
 
-        return { isClaimed, totalAmount, claimedAmount, isClaimedAll, isCompleted, isEnd, ...availability }
+        const bits = result.bit_status.split('')
+        const bitStatusList = bits.reverse().map((bit) => bit === '1')
+
+        return {
+            isClaimed,
+            totalAmount,
+            claimedAmount,
+            isClaimedAll,
+            isCompleted,
+            isEnd,
+            bitStatusList,
+            ...availability,
+        }
     }, [id, from, nftRedPacketContract])
 }

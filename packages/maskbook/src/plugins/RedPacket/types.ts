@@ -155,7 +155,7 @@ interface ERC721TokenContract {
 
 export interface NftRedPacketSubgraphInMask extends Omit<RedPacketSubgraphInMask, 'is_random' | 'token' | 'creator'> {
     token: ERC721TokenDetailed
-    contract: ERC721TokenContract
+    token_contract: ERC721TokenContract
     creator: NFTRedPacketCreator
     address: string
     token_ids: string[]

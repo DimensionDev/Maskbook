@@ -23,7 +23,6 @@ const redPacketBasicKeys = [
 ]
 
 const TOKEN_FIELDS = `
-    type
     address
     name
     symbol
@@ -49,7 +48,10 @@ const RED_PACKET_FIELDS = `
     last_updated_time
     duration
     chain_id
-    token {
+    token: token_contract  {
+        ${TOKEN_FIELDS}
+    }
+    token_contract {
         ${TOKEN_FIELDS}
     }
     token_ids
@@ -86,10 +88,17 @@ export async function getNftRedPacketTxid(rpid: string) {
     return first(data?.redPackets)?.txid
 }
 
-export async function getNftRedPacketHistory(address: string) {
+const PAGE_SIZE = 20
+export async function getNftRedPacketHistory(address: string, page: number) {
     const data = await fetchFromNFTRedPacketSubgraph<{ nftredPackets: NftRedPacketSubgraphOutMask[] }>(`
     {
-        nftredPackets (where: { creator: "${address.toLowerCase()}" }, orderBy: creation_time, orderDirection: desc) {
+        nftredPackets (
+          where: { creator: "${address.toLowerCase()}" },
+          orderBy: creation_time,
+          orderDirection: desc,
+          first: ${page * PAGE_SIZE},
+          skip: ${(page - 1) * PAGE_SIZE}
+        ) {
             ${RED_PACKET_FIELDS}
         }
     }

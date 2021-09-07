@@ -29,8 +29,8 @@ export async function getRedPacketHistoryWithPassword(address: string, chainId: 
     return historiesWithPassword
 }
 
-export async function getNftRedPacketHistory(address: string, chainId: ChainId) {
-    const histories = await subgraph.getNftRedPacketHistory(address)
+export async function getNftRedPacketHistory(address: string, chainId: ChainId, page: number) {
+    const histories = await subgraph.getNftRedPacketHistory(address, page)
     const historiesWithPassword = []
     for (const history of histories) {
         const record = await nftDb.getRedPacketNft(history.txid)

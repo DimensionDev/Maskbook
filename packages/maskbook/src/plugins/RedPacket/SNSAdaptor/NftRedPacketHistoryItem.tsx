@@ -113,27 +113,21 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo((p
     const {
         computed: { canSend, listOfStatus },
     } = useNftAvailabilityComputed(account, history.payload)
-    const { value: contractDetailed } = useERC721ContractDetailed(history.contract?.address)
-    const contractAddress = history.token.contractDetailed.address
+    const { value: contractDetailed } = useERC721ContractDetailed(history.token_contract.address)
 
     const handleSend = useCallback(() => {
         if (canSend && contractDetailed) onSend(history, contractDetailed)
     }, [onSend, canSend, history, contractDetailed])
 
     const { value: redpacketStatus } = useAvailabilityNftRedPacket(history.rpid, account)
-    const bitStatusList = redpacketStatus
-        ? redpacketStatus.bit_status
-              .split('')
-              .reverse()
-              .map((bit) => bit === '1')
-        : fill(Array(history.token_ids.length), false)
+    const bitStatusList = redpacketStatus ? redpacketStatus.bitStatusList : fill(Array(history.token_ids.length), false)
 
     return (
         <ListItem className={classes.root}>
             <Box className={classes.box}>
                 <TokenIcon
                     classes={{ icon: classes.icon }}
-                    address={contractAddress}
+                    address={contractDetailed?.address ?? ''}
                     name={contractDetailed?.name ?? '-'}
                     logoURI={contractDetailed?.iconURL ?? ''}
                 />

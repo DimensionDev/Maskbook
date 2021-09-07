@@ -1,7 +1,8 @@
+import { useScrollBottomEvent } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { ERC721ContractDetailed, useAccount, useChainId } from '@masknet/web3-shared'
 import { List, Typography } from '@material-ui/core'
-import { useEffect } from 'react'
+import { useRef } from 'react'
 import type { NftRedPacketHistory } from '../types'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
@@ -13,6 +14,7 @@ const useStyles = makeStyles()({
         height: '100%',
         flexDirection: 'column',
         margin: '0 auto',
+        overflow: 'auto',
     },
     placeholder: {
         textAlign: 'center',
@@ -27,11 +29,10 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     const { classes } = useStyles()
     const account = useAccount()
     const chainId = useChainId()
-    const { value: histories, loading, retry } = useNftRedPacketHistory(account, chainId)
+    const { histories, fetchMore, loading } = useNftRedPacketHistory(account, chainId)
+    const containerRef = useRef(null)
 
-    useEffect(() => {
-        retry()
-    }, [chainId, account])
+    useScrollBottomEvent(containerRef, fetchMore)
 
     if (loading) {
         return (
@@ -45,10 +46,12 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     }
 
     return (
-        <List className={classes.root}>
-            {histories.map((history) => (
-                <NftRedPacketHistoryItem key={history.rpid} history={history} onSend={onSend} />
-            ))}
-        </List>
+        <div ref={containerRef} className={classes.root}>
+            <List>
+                {histories.map((history) => (
+                    <NftRedPacketHistoryItem key={history.rpid} history={history} onSend={onSend} />
+                ))}
+            </List>
+        </div>
     )
 }
