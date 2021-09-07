@@ -32,7 +32,7 @@ export function useEthereumAddress(nickname: string, twitterId: string, bio: str
     const { value: addressUNS, loading: loadingAddressUNS } = useResolveUNS(name)
     const { value: names = [], loading: loadingAddressNames } = useAddressNames(twitterId)
 
-    const ownerAddress = first(names)?.ownerAddress ?? ''
+    const ownerAddress = first(names)?.ownerAddress
 
     useEffect(() => {
         setAddress('')
