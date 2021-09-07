@@ -2,661 +2,195 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import BN from 'bn.js'
+import { ContractOptions } from 'web3-eth-contract'
+import { EventLog } from 'web3-core'
+import { EventEmitter } from 'events'
 import {
-    ethers,
-    EventFilter,
-    Signer,
-    BigNumber,
-    BigNumberish,
-    PopulatedTransaction,
+    Callback,
+    PayableTransactionObject,
+    NonPayableTransactionObject,
+    BlockType,
+    ContractEventLog,
     BaseContract,
-    ContractTransaction,
-    Overrides,
-    CallOverrides,
-} from 'ethers'
-import { BytesLike } from '@ethersproject/bytes'
-import { Listener, Provider } from '@ethersproject/providers'
-import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi'
-import { TypedEventFilter, TypedEvent, TypedListener } from './commons'
+} from './types'
 
-interface LosslessV2PoolInterface extends ethers.utils.Interface {
-    functions: {
-        'PRECISION()': FunctionFragment
-        'aToken()': FunctionFragment
-        'addressProvider()': FunctionFragment
-        'bidToken()': FunctionFragment
-        'checkUpkeep(bytes)': FunctionFragment
-        'deposit(uint256,uint256)': FunctionFragment
-        'endGame()': FunctionFragment
-        'factory()': FunctionFragment
-        'initialize(address,address,address)': FunctionFragment
-        'performUpkeep(bytes)': FunctionFragment
-        'poolTermination()': FunctionFragment
-        'poolTokensInfo()': FunctionFragment
-        'principalToken()': FunctionFragment
-        'sponsorDeposit(uint256)': FunctionFragment
-        'sponsorWithdraw(uint256)': FunctionFragment
-        'startFirstRound()': FunctionFragment
-        'startGame()': FunctionFragment
-        'status()': FunctionFragment
-        'swap(bool,uint256)': FunctionFragment
-        'userLongPrincipalBalance(address)': FunctionFragment
-        'userShortPrincipalBalance(address)': FunctionFragment
-        'valuePerLongToken()': FunctionFragment
-        'valuePerShortToken()': FunctionFragment
-        'valuePerSponsorToken()': FunctionFragment
-        'withdraw(bool,uint256,uint256)': FunctionFragment
-    }
-
-    encodeFunctionData(functionFragment: 'PRECISION', values?: undefined): string
-    encodeFunctionData(functionFragment: 'aToken', values?: undefined): string
-    encodeFunctionData(functionFragment: 'addressProvider', values?: undefined): string
-    encodeFunctionData(functionFragment: 'bidToken', values?: undefined): string
-    encodeFunctionData(functionFragment: 'checkUpkeep', values: [BytesLike]): string
-    encodeFunctionData(functionFragment: 'deposit', values: [BigNumberish, BigNumberish]): string
-    encodeFunctionData(functionFragment: 'endGame', values?: undefined): string
-    encodeFunctionData(functionFragment: 'factory', values?: undefined): string
-    encodeFunctionData(functionFragment: 'initialize', values: [string, string, string]): string
-    encodeFunctionData(functionFragment: 'performUpkeep', values: [BytesLike]): string
-    encodeFunctionData(functionFragment: 'poolTermination', values?: undefined): string
-    encodeFunctionData(functionFragment: 'poolTokensInfo', values?: undefined): string
-    encodeFunctionData(functionFragment: 'principalToken', values?: undefined): string
-    encodeFunctionData(functionFragment: 'sponsorDeposit', values: [BigNumberish]): string
-    encodeFunctionData(functionFragment: 'sponsorWithdraw', values: [BigNumberish]): string
-    encodeFunctionData(functionFragment: 'startFirstRound', values?: undefined): string
-    encodeFunctionData(functionFragment: 'startGame', values?: undefined): string
-    encodeFunctionData(functionFragment: 'status', values?: undefined): string
-    encodeFunctionData(functionFragment: 'swap', values: [boolean, BigNumberish]): string
-    encodeFunctionData(functionFragment: 'userLongPrincipalBalance', values: [string]): string
-    encodeFunctionData(functionFragment: 'userShortPrincipalBalance', values: [string]): string
-    encodeFunctionData(functionFragment: 'valuePerLongToken', values?: undefined): string
-    encodeFunctionData(functionFragment: 'valuePerShortToken', values?: undefined): string
-    encodeFunctionData(functionFragment: 'valuePerSponsorToken', values?: undefined): string
-    encodeFunctionData(functionFragment: 'withdraw', values: [boolean, BigNumberish, BigNumberish]): string
-
-    decodeFunctionResult(functionFragment: 'PRECISION', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'aToken', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'addressProvider', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'bidToken', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'checkUpkeep', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'deposit', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'endGame', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'factory', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'initialize', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'performUpkeep', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'poolTermination', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'poolTokensInfo', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'principalToken', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'sponsorDeposit', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'sponsorWithdraw', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'startFirstRound', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'startGame', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'status', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'swap', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'userLongPrincipalBalance', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'userShortPrincipalBalance', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'valuePerLongToken', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'valuePerShortToken', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'valuePerSponsorToken', data: BytesLike): Result
-    decodeFunctionResult(functionFragment: 'withdraw', data: BytesLike): Result
-
-    events: {
-        'AnnounceWinner(bool,int256,int256)': EventFragment
-        'Deposit(uint256,uint256)': EventFragment
-        'SponsorDeposit(uint256)': EventFragment
-        'SponsorWithdraw(uint256)': EventFragment
-        'UpdateTokenValue(uint256,uint256)': EventFragment
-        'Withdraw(bool,uint256,uint256)': EventFragment
-    }
-
-    getEvent(nameOrSignatureOrTopic: 'AnnounceWinner'): EventFragment
-    getEvent(nameOrSignatureOrTopic: 'Deposit'): EventFragment
-    getEvent(nameOrSignatureOrTopic: 'SponsorDeposit'): EventFragment
-    getEvent(nameOrSignatureOrTopic: 'SponsorWithdraw'): EventFragment
-    getEvent(nameOrSignatureOrTopic: 'UpdateTokenValue'): EventFragment
-    getEvent(nameOrSignatureOrTopic: 'Withdraw'): EventFragment
+interface EventOptions {
+    filter?: object
+    fromBlock?: BlockType
+    topics?: string[]
 }
 
-export class LosslessV2Pool extends BaseContract {
-    connect(signerOrProvider: Signer | Provider | string): this
-    attach(addressOrName: string): this
-    deployed(): Promise<this>
+export type AnnounceWinner = ContractEventLog<{
+    isShortLastRoundWinner: boolean
+    initialPrice: string
+    endPrice: string
+    0: boolean
+    1: string
+    2: string
+}>
+export type Deposit = ContractEventLog<{
+    shortPrincipalAmount: string
+    longPrincipalAmount: string
+    0: string
+    1: string
+}>
+export type SponsorDeposit = ContractEventLog<{
+    principalAmount: string
+    0: string
+}>
+export type SponsorWithdraw = ContractEventLog<{
+    sponsorTokenAmount: string
+    0: string
+}>
+export type UpdateTokenValue = ContractEventLog<{
+    valuePerShortToken: string
+    valuePerLongToken: string
+    0: string
+    1: string
+}>
+export type Withdraw = ContractEventLog<{
+    isAToken: boolean
+    shortTokenAmount: string
+    longTokenAmount: string
+    0: boolean
+    1: string
+    2: string
+}>
 
-    listeners<EventArgsArray extends Array<any>, EventArgsObject>(
-        eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    ): Array<TypedListener<EventArgsArray, EventArgsObject>>
-    off<EventArgsArray extends Array<any>, EventArgsObject>(
-        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-        listener: TypedListener<EventArgsArray, EventArgsObject>,
-    ): this
-    on<EventArgsArray extends Array<any>, EventArgsObject>(
-        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-        listener: TypedListener<EventArgsArray, EventArgsObject>,
-    ): this
-    once<EventArgsArray extends Array<any>, EventArgsObject>(
-        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-        listener: TypedListener<EventArgsArray, EventArgsObject>,
-    ): this
-    removeListener<EventArgsArray extends Array<any>, EventArgsObject>(
-        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-        listener: TypedListener<EventArgsArray, EventArgsObject>,
-    ): this
-    removeAllListeners<EventArgsArray extends Array<any>, EventArgsObject>(
-        eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    ): this
+export interface LosslessV2Pool extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): LosslessV2Pool
+    clone(): LosslessV2Pool
+    methods: {
+        PRECISION(): NonPayableTransactionObject<string>
 
-    listeners(eventName?: string): Array<Listener>
-    off(eventName: string, listener: Listener): this
-    on(eventName: string, listener: Listener): this
-    once(eventName: string, listener: Listener): this
-    removeListener(eventName: string, listener: Listener): this
-    removeAllListeners(eventName?: string): this
+        aToken(): NonPayableTransactionObject<string>
 
-    queryFilter<EventArgsArray extends Array<any>, EventArgsObject>(
-        event: TypedEventFilter<EventArgsArray, EventArgsObject>,
-        fromBlockOrBlockhash?: string | number | undefined,
-        toBlock?: string | number | undefined,
-    ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>
+        addressProvider(): NonPayableTransactionObject<string>
 
-    interface: LosslessV2PoolInterface
+        bidToken(): NonPayableTransactionObject<string>
 
-    functions: {
-        PRECISION(overrides?: CallOverrides): Promise<[BigNumber]>
-
-        aToken(overrides?: CallOverrides): Promise<[string]>
-
-        addressProvider(overrides?: CallOverrides): Promise<[string]>
-
-        bidToken(overrides?: CallOverrides): Promise<[string]>
-
-        checkUpkeep(
-            checkData: BytesLike,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<ContractTransaction>
+        checkUpkeep(checkData: string | number[]): NonPayableTransactionObject<{
+            upkeepNeeded: boolean
+            performData: string
+            0: boolean
+            1: string
+        }>
 
         deposit(
-            shortPrincipalAmount: BigNumberish,
-            longPrincipalAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<ContractTransaction>
+            shortPrincipalAmount: number | string | BN,
+            longPrincipalAmount: number | string | BN,
+        ): NonPayableTransactionObject<void>
 
-        endGame(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
+        endGame(): NonPayableTransactionObject<void>
 
-        factory(overrides?: CallOverrides): Promise<[string]>
+        factory(): NonPayableTransactionObject<string>
 
-        initialize(
-            shortToken_: string,
-            longToken_: string,
-            sponsorToken_: string,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<ContractTransaction>
+        inPoolTimestamp(arg0: string): NonPayableTransactionObject<string>
 
-        performUpkeep(
-            performData: BytesLike,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<ContractTransaction>
+        initialize(shortToken_: string, longToken_: string, sponsorToken_: string): NonPayableTransactionObject<void>
 
-        poolTermination(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
+        performUpkeep(performData: string | number[]): NonPayableTransactionObject<void>
 
-        poolTokensInfo(overrides?: CallOverrides): Promise<
-            [string, string, string] & {
-                longToken: string
-                shortToken: string
-                sponsorToken: string
-            }
-        >
+        poolTermination(): NonPayableTransactionObject<void>
 
-        principalToken(overrides?: CallOverrides): Promise<[string]>
-
-        sponsorDeposit(
-            principalAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<ContractTransaction>
-
-        sponsorWithdraw(
-            sponsorTokenAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<ContractTransaction>
-
-        startFirstRound(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
-
-        startGame(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
-
-        status(overrides?: CallOverrides): Promise<
-            [boolean, boolean, boolean, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, number] & {
-                isShortLastRoundWinner: boolean
-                isFirstUser: boolean
-                isFirstRound: boolean
-                gameRound: BigNumber
-                durationOfGame: BigNumber
-                durationOfBidding: BigNumber
-                lastUpdateTimestamp: BigNumber
-                initialPrice: BigNumber
-                endPrice: BigNumber
-                currState: number
-            }
-        >
-
-        swap(
-            fromLongToShort: boolean,
-            swapTokenAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<ContractTransaction>
-
-        userLongPrincipalBalance(
-            userAddress: string,
-            overrides?: CallOverrides,
-        ): Promise<[BigNumber] & { userLongAmount: BigNumber }>
-
-        userShortPrincipalBalance(
-            userAddress: string,
-            overrides?: CallOverrides,
-        ): Promise<[BigNumber] & { userShortAmount: BigNumber }>
-
-        valuePerLongToken(overrides?: CallOverrides): Promise<[BigNumber]>
-
-        valuePerShortToken(overrides?: CallOverrides): Promise<[BigNumber]>
-
-        valuePerSponsorToken(overrides?: CallOverrides): Promise<[BigNumber]>
-
-        withdraw(
-            isAToken: boolean,
-            shortTokenAmount: BigNumberish,
-            longTokenAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<ContractTransaction>
-    }
-
-    PRECISION(overrides?: CallOverrides): Promise<BigNumber>
-
-    aToken(overrides?: CallOverrides): Promise<string>
-
-    addressProvider(overrides?: CallOverrides): Promise<string>
-
-    bidToken(overrides?: CallOverrides): Promise<string>
-
-    checkUpkeep(
-        checkData: BytesLike,
-        overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<ContractTransaction>
-
-    deposit(
-        shortPrincipalAmount: BigNumberish,
-        longPrincipalAmount: BigNumberish,
-        overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<ContractTransaction>
-
-    endGame(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
-
-    factory(overrides?: CallOverrides): Promise<string>
-
-    initialize(
-        shortToken_: string,
-        longToken_: string,
-        sponsorToken_: string,
-        overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<ContractTransaction>
-
-    performUpkeep(
-        performData: BytesLike,
-        overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<ContractTransaction>
-
-    poolTermination(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
-
-    poolTokensInfo(overrides?: CallOverrides): Promise<
-        [string, string, string] & {
+        poolTokensInfo(): NonPayableTransactionObject<{
             longToken: string
             shortToken: string
             sponsorToken: string
-        }
-    >
+            0: string
+            1: string
+            2: string
+        }>
 
-    principalToken(overrides?: CallOverrides): Promise<string>
+        principalToken(): NonPayableTransactionObject<string>
 
-    sponsorDeposit(
-        principalAmount: BigNumberish,
-        overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<ContractTransaction>
+        sponsorDeposit(principalAmount: number | string | BN): NonPayableTransactionObject<void>
 
-    sponsorWithdraw(
-        sponsorTokenAmount: BigNumberish,
-        overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<ContractTransaction>
+        sponsorWithdraw(sponsorTokenAmount: number | string | BN): NonPayableTransactionObject<void>
 
-    startFirstRound(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
+        startFirstRound(): NonPayableTransactionObject<void>
 
-    startGame(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
+        startGame(): NonPayableTransactionObject<void>
 
-    status(overrides?: CallOverrides): Promise<
-        [boolean, boolean, boolean, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, number] & {
+        status(): NonPayableTransactionObject<{
             isShortLastRoundWinner: boolean
             isFirstUser: boolean
             isFirstRound: boolean
-            gameRound: BigNumber
-            durationOfGame: BigNumber
-            durationOfBidding: BigNumber
-            lastUpdateTimestamp: BigNumber
-            initialPrice: BigNumber
-            endPrice: BigNumber
-            currState: number
-        }
-    >
+            gameRound: string
+            durationOfGame: string
+            durationOfBidding: string
+            lastUpdateTimestamp: string
+            initialPrice: string
+            endPrice: string
+            currState: string
+            0: boolean
+            1: boolean
+            2: boolean
+            3: string
+            4: string
+            5: string
+            6: string
+            7: string
+            8: string
+            9: string
+        }>
 
-    swap(
-        fromLongToShort: boolean,
-        swapTokenAmount: BigNumberish,
-        overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<ContractTransaction>
+        swap(fromLongToShort: boolean, swapTokenAmount: number | string | BN): NonPayableTransactionObject<void>
 
-    userLongPrincipalBalance(userAddress: string, overrides?: CallOverrides): Promise<BigNumber>
+        userLongPrincipalBalance(userAddress: string): NonPayableTransactionObject<string>
 
-    userShortPrincipalBalance(userAddress: string, overrides?: CallOverrides): Promise<BigNumber>
+        userShortPrincipalBalance(userAddress: string): NonPayableTransactionObject<string>
 
-    valuePerLongToken(overrides?: CallOverrides): Promise<BigNumber>
+        valuePerLongToken(): NonPayableTransactionObject<string>
 
-    valuePerShortToken(overrides?: CallOverrides): Promise<BigNumber>
+        valuePerShortToken(): NonPayableTransactionObject<string>
 
-    valuePerSponsorToken(overrides?: CallOverrides): Promise<BigNumber>
-
-    withdraw(
-        isAToken: boolean,
-        shortTokenAmount: BigNumberish,
-        longTokenAmount: BigNumberish,
-        overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<ContractTransaction>
-
-    callStatic: {
-        PRECISION(overrides?: CallOverrides): Promise<BigNumber>
-
-        aToken(overrides?: CallOverrides): Promise<string>
-
-        addressProvider(overrides?: CallOverrides): Promise<string>
-
-        bidToken(overrides?: CallOverrides): Promise<string>
-
-        checkUpkeep(
-            checkData: BytesLike,
-            overrides?: CallOverrides,
-        ): Promise<[boolean, string] & { upkeepNeeded: boolean; performData: string }>
-
-        deposit(
-            shortPrincipalAmount: BigNumberish,
-            longPrincipalAmount: BigNumberish,
-            overrides?: CallOverrides,
-        ): Promise<void>
-
-        endGame(overrides?: CallOverrides): Promise<void>
-
-        factory(overrides?: CallOverrides): Promise<string>
-
-        initialize(
-            shortToken_: string,
-            longToken_: string,
-            sponsorToken_: string,
-            overrides?: CallOverrides,
-        ): Promise<void>
-
-        performUpkeep(performData: BytesLike, overrides?: CallOverrides): Promise<void>
-
-        poolTermination(overrides?: CallOverrides): Promise<void>
-
-        poolTokensInfo(overrides?: CallOverrides): Promise<
-            [string, string, string] & {
-                longToken: string
-                shortToken: string
-                sponsorToken: string
-            }
-        >
-
-        principalToken(overrides?: CallOverrides): Promise<string>
-
-        sponsorDeposit(principalAmount: BigNumberish, overrides?: CallOverrides): Promise<void>
-
-        sponsorWithdraw(sponsorTokenAmount: BigNumberish, overrides?: CallOverrides): Promise<void>
-
-        startFirstRound(overrides?: CallOverrides): Promise<void>
-
-        startGame(overrides?: CallOverrides): Promise<void>
-
-        status(overrides?: CallOverrides): Promise<
-            [boolean, boolean, boolean, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, number] & {
-                isShortLastRoundWinner: boolean
-                isFirstUser: boolean
-                isFirstRound: boolean
-                gameRound: BigNumber
-                durationOfGame: BigNumber
-                durationOfBidding: BigNumber
-                lastUpdateTimestamp: BigNumber
-                initialPrice: BigNumber
-                endPrice: BigNumber
-                currState: number
-            }
-        >
-
-        swap(fromLongToShort: boolean, swapTokenAmount: BigNumberish, overrides?: CallOverrides): Promise<void>
-
-        userLongPrincipalBalance(userAddress: string, overrides?: CallOverrides): Promise<BigNumber>
-
-        userShortPrincipalBalance(userAddress: string, overrides?: CallOverrides): Promise<BigNumber>
-
-        valuePerLongToken(overrides?: CallOverrides): Promise<BigNumber>
-
-        valuePerShortToken(overrides?: CallOverrides): Promise<BigNumber>
-
-        valuePerSponsorToken(overrides?: CallOverrides): Promise<BigNumber>
+        valuePerSponsorToken(): NonPayableTransactionObject<string>
 
         withdraw(
             isAToken: boolean,
-            shortTokenAmount: BigNumberish,
-            longTokenAmount: BigNumberish,
-            overrides?: CallOverrides,
-        ): Promise<void>
+            shortTokenAmount: number | string | BN,
+            longTokenAmount: number | string | BN,
+        ): NonPayableTransactionObject<void>
+    }
+    events: {
+        AnnounceWinner(cb?: Callback<AnnounceWinner>): EventEmitter
+        AnnounceWinner(options?: EventOptions, cb?: Callback<AnnounceWinner>): EventEmitter
+
+        Deposit(cb?: Callback<Deposit>): EventEmitter
+        Deposit(options?: EventOptions, cb?: Callback<Deposit>): EventEmitter
+
+        SponsorDeposit(cb?: Callback<SponsorDeposit>): EventEmitter
+        SponsorDeposit(options?: EventOptions, cb?: Callback<SponsorDeposit>): EventEmitter
+
+        SponsorWithdraw(cb?: Callback<SponsorWithdraw>): EventEmitter
+        SponsorWithdraw(options?: EventOptions, cb?: Callback<SponsorWithdraw>): EventEmitter
+
+        UpdateTokenValue(cb?: Callback<UpdateTokenValue>): EventEmitter
+        UpdateTokenValue(options?: EventOptions, cb?: Callback<UpdateTokenValue>): EventEmitter
+
+        Withdraw(cb?: Callback<Withdraw>): EventEmitter
+        Withdraw(options?: EventOptions, cb?: Callback<Withdraw>): EventEmitter
+
+        allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
 
-    filters: {
-        AnnounceWinner(
-            isShortLastRoundWinner?: null,
-            initialPrice?: null,
-            endPrice?: null,
-        ): TypedEventFilter<
-            [boolean, BigNumber, BigNumber],
-            {
-                isShortLastRoundWinner: boolean
-                initialPrice: BigNumber
-                endPrice: BigNumber
-            }
-        >
+    once(event: 'AnnounceWinner', cb: Callback<AnnounceWinner>): void
+    once(event: 'AnnounceWinner', options: EventOptions, cb: Callback<AnnounceWinner>): void
 
-        Deposit(
-            shortPrincipalAmount?: null,
-            longPrincipalAmount?: null,
-        ): TypedEventFilter<[BigNumber, BigNumber], { shortPrincipalAmount: BigNumber; longPrincipalAmount: BigNumber }>
+    once(event: 'Deposit', cb: Callback<Deposit>): void
+    once(event: 'Deposit', options: EventOptions, cb: Callback<Deposit>): void
 
-        SponsorDeposit(principalAmount?: null): TypedEventFilter<[BigNumber], { principalAmount: BigNumber }>
+    once(event: 'SponsorDeposit', cb: Callback<SponsorDeposit>): void
+    once(event: 'SponsorDeposit', options: EventOptions, cb: Callback<SponsorDeposit>): void
 
-        SponsorWithdraw(sponsorTokenAmount?: null): TypedEventFilter<[BigNumber], { sponsorTokenAmount: BigNumber }>
+    once(event: 'SponsorWithdraw', cb: Callback<SponsorWithdraw>): void
+    once(event: 'SponsorWithdraw', options: EventOptions, cb: Callback<SponsorWithdraw>): void
 
-        UpdateTokenValue(
-            valuePerShortToken?: null,
-            valuePerLongToken?: null,
-        ): TypedEventFilter<[BigNumber, BigNumber], { valuePerShortToken: BigNumber; valuePerLongToken: BigNumber }>
+    once(event: 'UpdateTokenValue', cb: Callback<UpdateTokenValue>): void
+    once(event: 'UpdateTokenValue', options: EventOptions, cb: Callback<UpdateTokenValue>): void
 
-        Withdraw(
-            isAToken?: null,
-            shortTokenAmount?: null,
-            longTokenAmount?: null,
-        ): TypedEventFilter<
-            [boolean, BigNumber, BigNumber],
-            {
-                isAToken: boolean
-                shortTokenAmount: BigNumber
-                longTokenAmount: BigNumber
-            }
-        >
-    }
-
-    estimateGas: {
-        PRECISION(overrides?: CallOverrides): Promise<BigNumber>
-
-        aToken(overrides?: CallOverrides): Promise<BigNumber>
-
-        addressProvider(overrides?: CallOverrides): Promise<BigNumber>
-
-        bidToken(overrides?: CallOverrides): Promise<BigNumber>
-
-        checkUpkeep(
-            checkData: BytesLike,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<BigNumber>
-
-        deposit(
-            shortPrincipalAmount: BigNumberish,
-            longPrincipalAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<BigNumber>
-
-        endGame(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
-
-        factory(overrides?: CallOverrides): Promise<BigNumber>
-
-        initialize(
-            shortToken_: string,
-            longToken_: string,
-            sponsorToken_: string,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<BigNumber>
-
-        performUpkeep(
-            performData: BytesLike,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<BigNumber>
-
-        poolTermination(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
-
-        poolTokensInfo(overrides?: CallOverrides): Promise<BigNumber>
-
-        principalToken(overrides?: CallOverrides): Promise<BigNumber>
-
-        sponsorDeposit(
-            principalAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<BigNumber>
-
-        sponsorWithdraw(
-            sponsorTokenAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<BigNumber>
-
-        startFirstRound(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
-
-        startGame(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
-
-        status(overrides?: CallOverrides): Promise<BigNumber>
-
-        swap(
-            fromLongToShort: boolean,
-            swapTokenAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<BigNumber>
-
-        userLongPrincipalBalance(userAddress: string, overrides?: CallOverrides): Promise<BigNumber>
-
-        userShortPrincipalBalance(userAddress: string, overrides?: CallOverrides): Promise<BigNumber>
-
-        valuePerLongToken(overrides?: CallOverrides): Promise<BigNumber>
-
-        valuePerShortToken(overrides?: CallOverrides): Promise<BigNumber>
-
-        valuePerSponsorToken(overrides?: CallOverrides): Promise<BigNumber>
-
-        withdraw(
-            isAToken: boolean,
-            shortTokenAmount: BigNumberish,
-            longTokenAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<BigNumber>
-    }
-
-    populateTransaction: {
-        PRECISION(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-        aToken(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-        addressProvider(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-        bidToken(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-        checkUpkeep(
-            checkData: BytesLike,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<PopulatedTransaction>
-
-        deposit(
-            shortPrincipalAmount: BigNumberish,
-            longPrincipalAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<PopulatedTransaction>
-
-        endGame(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>
-
-        factory(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-        initialize(
-            shortToken_: string,
-            longToken_: string,
-            sponsorToken_: string,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<PopulatedTransaction>
-
-        performUpkeep(
-            performData: BytesLike,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<PopulatedTransaction>
-
-        poolTermination(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>
-
-        poolTokensInfo(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-        principalToken(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-        sponsorDeposit(
-            principalAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<PopulatedTransaction>
-
-        sponsorWithdraw(
-            sponsorTokenAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<PopulatedTransaction>
-
-        startFirstRound(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>
-
-        startGame(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>
-
-        status(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-        swap(
-            fromLongToShort: boolean,
-            swapTokenAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<PopulatedTransaction>
-
-        userLongPrincipalBalance(userAddress: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-        userShortPrincipalBalance(userAddress: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-        valuePerLongToken(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-        valuePerShortToken(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-        valuePerSponsorToken(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-        withdraw(
-            isAToken: boolean,
-            shortTokenAmount: BigNumberish,
-            longTokenAmount: BigNumberish,
-            overrides?: Overrides & { from?: string | Promise<string> },
-        ): Promise<PopulatedTransaction>
-    }
+    once(event: 'Withdraw', cb: Callback<Withdraw>): void
+    once(event: 'Withdraw', options: EventOptions, cb: Callback<Withdraw>): void
 }

@@ -18,7 +18,6 @@
     "@ethersproject/providers": "^5.0.9",
     "@ethersproject/solidity": "^5.0.4",
     "@ethersproject/strings": "^5.1.0",
-    "@ethersproject/bignumber": "^5.0.4",
     "@hookform/resolvers": "2.8.0",
     "@masknet/dashboard": "workspace:*",
     "@masknet/external-plugin-previewer": "workspace:*",
