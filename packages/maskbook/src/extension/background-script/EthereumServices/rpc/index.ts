@@ -25,7 +25,7 @@ const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 
 const ABI_LIST_WITH_SIGNATURE = (ABI_LIST as AbiItem[]).map((x) => ({
     ...x,
-    signature: coder.encodeFunctionSignature(`${x.name}(${x.parameters.join(',')})`),
+    signature: coder.encodeFunctionSignature(`${x.name}(${x.parameters.map((y) => y.type).join(',')})`),
 }))
 
 function isEmptyHex(hex: string) {
