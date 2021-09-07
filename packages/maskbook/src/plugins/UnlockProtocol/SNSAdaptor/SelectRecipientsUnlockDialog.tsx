@@ -1,10 +1,21 @@
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import Fuse from 'fuse.js'
-import { InputBase, DialogContent, List, ListItem, ListItemText, DialogActions, Button } from '@material-ui/core'
+import {
+    InputBase,
+    DialogContent,
+    List,
+    ListItem,
+    ListItemText,
+    DialogActions,
+    Button,
+    Typography,
+    Link,
+} from '@material-ui/core'
 import { useState, useMemo } from 'react'
 import type { UnlockLocks } from '../types'
 import { LockInList } from './LockInList'
 import { useI18N } from '../../../utils'
+import { Trans } from 'react-i18next'
 
 export interface SelectRecipientsUnlockDialogUIProps extends withClasses<never> {
     open: boolean
@@ -43,7 +54,23 @@ export function SelectRecipientsUnlockDialogUI(props: SelectRecipientsUnlockDial
                 <List style={{ height: items.length * LIST_ITEM_HEIGHT || 40 }} dense>
                     {itemsAfterSearch.length === 0 ? (
                         <ListItem>
-                            <ListItemText primary={t('plugin_unlockprotocol_no_lock_found')} />
+                            <ListItemText>
+                                <Typography variant="body2">
+                                    <Trans
+                                        i18nKey="plugin_unlockprotocol_no_lock_found"
+                                        components={{
+                                            dashboard: (
+                                                <Link
+                                                    color="primary"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    href="https://app.unlock-protocol.com/dashboard"
+                                                />
+                                            ),
+                                        }}
+                                    />
+                                </Typography>
+                            </ListItemText>
                         </ListItem>
                     ) : (
                         itemsAfterSearch.map((item) => (
