@@ -245,6 +245,43 @@ export async function deletePostCryptoKeyDB(record: PostIVIdentifier, t?: PostTr
     await t.objectStore('post').delete(record.toText())
 }
 
+/**
+ * Query posts by paged
+ */
+export async function queryPostPagedDB(
+    linked: PersonaIdentifier,
+    options: {
+        network: string
+        after?: PostIVIdentifier
+    },
+    count: number,
+) {
+    const t = createTransaction(await db(), 'readonly')('post')
+
+    const data: PostRecord[] = []
+    let firstRecord = true
+
+    for await (const cursor of t.objectStore('post').iterate()) {
+        const encryptBy = restorePrototype(cursor.value.encryptBy, ECKeyIdentifier.prototype)?.toText()
+
+        if (encryptBy !== linked.toText()) continue
+
+        if (firstRecord && options.after) {
+            cursor.continue(options.after.toText())
+            firstRecord = false
+            continue
+        }
+
+        if (Identifier.fromString(cursor.value.identifier, PostIVIdentifier).unwrap() === options.after) continue
+
+        if (count <= 0) break
+        const outData = postOutDB(cursor.value)
+        count -= 1
+        data.push(outData)
+    }
+    return data
+}
+
 //#region db in and out
 function postOutDB(db: PostDBRecord): PostRecord {
     const { identifier, foundAt, postBy, recipients, postCryptoKey, encryptBy, interestedMeta, summary, url } = db

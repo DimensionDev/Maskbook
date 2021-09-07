@@ -1,0 +1,16 @@
+name: Check Spell
+
+on:
+  pull_request:
+    branches: [develop]
+
+jobs:
+  check-spell:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - name: Check Spell
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+          git diff --name-only origin/${{ github.event.pull_request.base.ref }} | xargs npx cspell lint

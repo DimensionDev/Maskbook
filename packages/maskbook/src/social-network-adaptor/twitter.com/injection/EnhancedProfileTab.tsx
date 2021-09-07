@@ -49,7 +49,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         color: props.color,
         font: props.font,
         fontSize: props.fontSize,
-        fontWeight: 700,
+        fontWeight: 500,
         '&:hover': {
             color: props.color,
         },
@@ -59,7 +59,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         fontWeight: 700,
     },
     line: {
-        dispaly: 'inline-flex',
         borderRadius: 9999,
         position: 'absolute',
         bottom: 0,

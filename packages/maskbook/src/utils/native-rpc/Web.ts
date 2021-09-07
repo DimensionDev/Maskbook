@@ -214,7 +214,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
     async SNSAdaptor_getCurrentDetectedProfile() {
         const { activatedSocialNetworkUI } = await import('../../social-network')
-        return activatedSocialNetworkUI.collecting.identityProvider?.lastRecognized.value.identifier.toText()
+        return activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier.toText()
     },
 }
 

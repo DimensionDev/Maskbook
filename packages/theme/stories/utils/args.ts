@@ -16,7 +16,7 @@ export function matrix<T>(
     return {
         matrix: {
             pattern: args,
-            // backgroundColor: 'rgba(0,0,0,0.7)', // Optional: If you want to change backgournd color
+            // backgroundColor: 'rgba(0,0,0,0.7)', // Optional: If you want to change background color
             // showOriginal: true // Optional: If you want to show original component set to true
         },
     }

@@ -14,11 +14,11 @@ import { fetchLBP_PoolsByTokenAddress, fetchLBP_PoolTokenPrices, fetchLBP_PoolTo
 const createSOR_ = memoize(
     (chainId: ChainId) => {
         const { RPC } = getRPCConstants(chainId)
-        const provderURL = first(RPC)
-        if (!provderURL) throw new Error('Unknown chain id.')
+        const providerURL = first(RPC)
+        if (!providerURL) throw new Error('Unknown chain id.')
         return new SOR(
             // we choose a fixed provider cause it's only used here.
-            new JsonRpcProvider(provderURL),
+            new JsonRpcProvider(providerURL),
             BALANCER_SOR_GAS_PRICE,
             BALANCER_MAX_NO_POOLS,
             chainId,

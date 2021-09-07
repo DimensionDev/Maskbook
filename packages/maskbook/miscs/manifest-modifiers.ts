@@ -1,3 +1,4 @@
+/* spell-checker: disable */
 import base from '../src/manifest.json'
 type Manifest = typeof base & Record<string, any>
 export function manifestV3(manifest: Manifest) {

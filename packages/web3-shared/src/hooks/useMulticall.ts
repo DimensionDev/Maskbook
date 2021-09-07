@@ -82,7 +82,7 @@ function chunkArray(items: Call[], gasLimit = CONSERVATIVE_BLOCK_GAS_LIMIT * 10)
 //#endregion
 
 //#region useMulticallCallback
-export enum MulticalStateType {
+export enum MulticallStateType {
     UNKNOWN = 0,
     /** Wait for tx call */
     PENDING = 1,
@@ -92,11 +92,11 @@ export enum MulticalStateType {
     FAILED = 3,
 }
 
-export type MulticalState =
-    | { type: MulticalStateType.UNKNOWN }
-    | { type: MulticalStateType.PENDING }
-    | { type: MulticalStateType.SUCCEED; results: Result[] }
-    | { type: MulticalStateType.FAILED; error: Error }
+export type MulticallState =
+    | { type: MulticallStateType.UNKNOWN }
+    | { type: MulticallStateType.PENDING }
+    | { type: MulticallStateType.SUCCEED; results: Result[] }
+    | { type: MulticallStateType.FAILED; error: Error }
 
 /**
  * The basic hook for fetching data from the Multicall contract
@@ -106,20 +106,20 @@ export function useMulticallCallback() {
     const chainId = useChainId()
     const blockNumber = useBlockNumber()
     const multicallContract = useMulticallContract()
-    const [multicallState, setMulticallState] = useState<MulticalState>({
-        type: MulticalStateType.UNKNOWN,
+    const [multicallState, setMulticallState] = useState<MulticallState>({
+        type: MulticallStateType.UNKNOWN,
     })
     const multicallCallback = useCallback(
         async (calls: Call[], overrides?: NonPayableTx) => {
             if (calls.length === 0 || !multicallContract) {
                 setMulticallState({
-                    type: MulticalStateType.UNKNOWN,
+                    type: MulticallStateType.UNKNOWN,
                 })
                 return
             }
             try {
                 setMulticallState({
-                    type: MulticalStateType.PENDING,
+                    type: MulticallStateType.PENDING,
                 })
 
                 // filter out cached calls
@@ -138,13 +138,13 @@ export function useMulticallCallback() {
                     )
                 }
                 setMulticallState({
-                    type: MulticalStateType.SUCCEED,
+                    type: MulticallStateType.SUCCEED,
                     results: calls.map((call) => getCallResult(call, chainId, blockNumber) ?? [false, '0x0', '0x0']),
                 })
             } catch (error) {
                 if (error instanceof Error) {
                     setMulticallState({
-                        type: MulticalStateType.FAILED,
+                        type: MulticallStateType.FAILED,
                         error,
                     })
                 }
@@ -157,16 +157,16 @@ export function useMulticallCallback() {
 }
 //#endregion
 
-//#region useMutlicallStateDecoded
-export function useMutlicallStateDecoded<
+//#region useMulticallStateDecoded
+export function useMulticallStateDecoded<
     T extends BaseContract,
     K extends keyof T['methods'],
     R extends UnboxTransactionObject<ReturnType<T['methods'][K]>>,
->(contracts: T[], names: K[], state: MulticalState) {
+>(contracts: T[], names: K[], state: MulticallState) {
     const web3 = useWeb3()
     type Result = { succeed: boolean; gasUsed: string } & ({ error: any; value: null } | { error: null; value: R })
     return useMemo(() => {
-        if (state.type !== MulticalStateType.SUCCEED) return []
+        if (state.type !== MulticallStateType.SUCCEED) return []
         if (contracts.length !== state.results.length) return []
         return state.results.map(([succeed, gasUsed, result], index): Result => {
             // the ignore formatter for better reading
@@ -202,11 +202,11 @@ export function useSingleContractMultipleData<T extends BaseContract, K extends 
         ])
     }, [contract?.options.address, names.join(), callDatas.flatMap((x) => x).join()])
     const [state, callback] = useMulticallCallback()
-    const results = useMutlicallStateDecoded(Array.from({ length: calls.length }).fill(contract) as T[], names, state)
+    const results = useMulticallStateDecoded(Array.from({ length: calls.length }).fill(contract) as T[], names, state)
     return [results, calls, state, callback] as const
 }
 
-export function useMutlipleContractSingleData<T extends BaseContract, K extends keyof T['methods']>(
+export function useMultipleContractSingleData<T extends BaseContract, K extends keyof T['methods']>(
     contracts: T[],
     names: K[],
     callData: Parameters<T['methods'][K]>,
@@ -222,7 +222,7 @@ export function useMutlipleContractSingleData<T extends BaseContract, K extends 
         [contracts.map((x) => x.options.address).join(), names.join(), callData.join()],
     )
     const [state, callback] = useMulticallCallback()
-    const results = useMutlicallStateDecoded(contracts, names, state)
+    const results = useMulticallStateDecoded(contracts, names, state)
     return [results, calls, state, callback] as const
 }
 
@@ -242,6 +242,6 @@ export function useMultipleContractMultipleData<T extends BaseContract, K extend
         [contracts.map((x) => x.options.address).join(), names.join(), callDatas.flatMap((x) => x).join(), gasLimit],
     )
     const [state, callback] = useMulticallCallback()
-    const results = useMutlicallStateDecoded(contracts, names, state)
+    const results = useMulticallStateDecoded(contracts, names, state)
     return [results, calls, state, callback] as const
 }

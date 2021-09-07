@@ -35,7 +35,7 @@ For general introductions, see [Mask.io](https://mask.io).
 
 - [User Forum](https://github.com/DimensionDev/Maskbook/discussions)
 - [Report Bug][report-bug]
-- [Twitter](https://twitter.com/realMaskbook)
+- [Twitter](https://twitter.com/realMaskNetwork)
 - [Facebook](https://www.facebook.com/masknetwork)
 - [Telegram](https://t.me/maskbook_group)
 - [Discord](https://discord.gg/4SVXvj7)
