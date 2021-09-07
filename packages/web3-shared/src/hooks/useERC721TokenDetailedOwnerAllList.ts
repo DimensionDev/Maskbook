@@ -5,6 +5,9 @@ import type { ERC721TokenDetailed } from '../types'
 import { useRef } from 'react'
 import { useChainId } from '../index'
 
+/**
+ * Fetch all assets by opensea api not only restrict to one contract.
+ */
 export function useERC721TokenDetailedOwnerAllList(owner: string, offset: number) {
     const { GET_ASSETS_URL } = useOpenseaAPIConstants()
     const allListRef = useRef<ERC721TokenDetailed[]>([])
