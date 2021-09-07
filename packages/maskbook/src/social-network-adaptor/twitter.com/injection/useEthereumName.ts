@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import { useResolveENS, useResolveUNS, useAddressNames, useENSLabel } from '@masknet/web3-shared'
+import { useResolveENS, useResolveUNS, useAddressNames } from '@masknet/web3-shared'
 import { useEffect, useMemo, useState } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 

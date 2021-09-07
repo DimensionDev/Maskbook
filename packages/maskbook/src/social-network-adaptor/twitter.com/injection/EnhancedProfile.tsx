@@ -1,6 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { EnhancedProfilePage } from '../../../components/InjectedComponents/EnhancedProfile'
 import { createReactRootShadowed, startWatch } from '../../../utils'
@@ -9,7 +8,6 @@ import {
     searchProfileEmptySelector,
     searchProfileTabPageSelector,
 } from '../utils/selector'
-import { getBioDescription, getNickname, getTwitterId } from '../utils/user'
 
 function injectEnhancedProfilePageForEmptyState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
