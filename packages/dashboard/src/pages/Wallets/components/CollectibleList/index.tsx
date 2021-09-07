@@ -48,8 +48,7 @@ export const CollectibleList = memo(() => {
         value = { collectibles: [], hasNextPage: false },
         loading: collectiblesLoading,
         error: collectiblesError,
-    } = useCollectiblesPaged(page, 11)
-
+    } = useCollectiblesPaged(page, 20)
     const { collectibles = [], hasNextPage } = value
 
     const dataSource = collectibles.filter((x) => {
@@ -103,7 +102,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                     ) : (
                         <ImageList
                             variant="quilted"
-                            cols={6}
+                            cols={5}
                             gap={24}
                             rowHeight={200}
                             sx={{ width: '100%', height: 'auto' }}>

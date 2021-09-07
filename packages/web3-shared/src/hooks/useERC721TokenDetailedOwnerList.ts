@@ -99,13 +99,14 @@ export async function getERC721TokenDetailedOwnerListFromOpensea(
     apiURL: string,
     offset: number,
     chainId: ChainId,
+    pageLimit?: number,
 ) {
-    const limit = 50
+    const limit = pageLimit ?? 50
     const detailedURL = urlcat(apiURL, {
         owner,
         asset_contract_address: contractDetailed?.address,
         limit,
-        offset: offset * limit,
+        offset: pageLimit ? offset : offset * limit,
     })
     const response = await fetch(detailedURL)
 

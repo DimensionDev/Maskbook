@@ -12,8 +12,12 @@ export interface CollectibleCardProps {
 export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, token }) => {
     const [loadFailed, setLoadFailed] = useState(false)
 
-    return token.info.image || loadFailed ? (
-        <ImageListItem sx={{ height: 186, mb: 4 }}>
+    if (loadFailed) {
+        return <CollectiblePlaceholder />
+    }
+
+    return token.info.image ? (
+        <ImageListItem sx={{ height: 186, width: 144, mb: 4 }}>
             <Link
                 target="_blank"
                 rel="noopener noreferrer"
@@ -22,7 +26,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
                 <img
                     onError={() => setLoadFailed(true)}
                     src={token.info.image}
-                    style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '8px 8px 0px 0px', objectFit: 'cover' }}
+                    style={{ width: '100%', height: '100%', borderRadius: '8px 8px 0px 0px', objectFit: 'cover' }}
                 />
             </Link>
             <ImageListItemBar sx={{ py: 1 }} subtitle={<span>{token.info.name}</span>} position="below" />
