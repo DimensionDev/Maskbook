@@ -92,6 +92,12 @@ const useStyles = makeStyles()((theme) => {
             height: 180,
             overflow: 'hidden',
         },
+        tokenSelectorParent: {
+            width: '100%',
+            background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+            borderRadius: 12,
+            paddingBottom: 5,
+        },
         addWrapper: {
             cursor: 'pointer',
             alignItems: 'center',
@@ -188,30 +194,32 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
             <Box className={classes.root}>
                 <ERC721ContractSelectPanel contract={contract} onContractChange={setContract} />
                 {contract ? (
-                    <List className={classes.tokenSelector}>
-                        <ListItem
-                            onClick={() => setOpen(true)}
-                            className={classNames(classes.tokenSelectorWrapper, classes.addWrapper)}>
-                            <AddCircleOutlineIcon className={classes.addIcon} onClick={() => void 0} />
-                        </ListItem>
-                        {existTokenDetailedList.map((value, i) => (
-                            <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
-                                <div className={classes.imgWrapper}>
-                                    <img className={classes.nftImg} src={value.info.image} />
-                                </div>
-                                <div className={classes.nftNameWrapper}>
-                                    <Typography className={classes.nftName} color="textSecondary">
-                                        {value.info.name}
-                                    </Typography>
-                                </div>
-                                <div className={classes.closeIconWrapperBack} onClick={() => removeToken(value)}>
-                                    <div className={classes.closeIconWrapper}>
-                                        <CloseIcon className={classes.closeIcon} />
+                    <div className={classes.tokenSelectorParent}>
+                        <List className={classes.tokenSelector}>
+                            {existTokenDetailedList.map((value, i) => (
+                                <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
+                                    <div className={classes.imgWrapper}>
+                                        <img className={classes.nftImg} src={value.info.image} />
                                     </div>
-                                </div>
+                                    <div className={classes.nftNameWrapper}>
+                                        <Typography className={classes.nftName} color="textSecondary">
+                                            {value.info.name}
+                                        </Typography>
+                                    </div>
+                                    <div className={classes.closeIconWrapperBack} onClick={() => removeToken(value)}>
+                                        <div className={classes.closeIconWrapper}>
+                                            <CloseIcon className={classes.closeIcon} />
+                                        </div>
+                                    </div>
+                                </ListItem>
+                            ))}
+                            <ListItem
+                                onClick={() => setOpen(true)}
+                                className={classNames(classes.tokenSelectorWrapper, classes.addWrapper)}>
+                                <AddCircleOutlineIcon className={classes.addIcon} onClick={() => void 0} />
                             </ListItem>
-                        ))}
-                    </List>
+                        </List>
+                    </div>
                 ) : null}
                 <div className={classes.line}>
                     <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />

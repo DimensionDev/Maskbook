@@ -54,6 +54,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     openIcon: {
         display: 'flex',
+        color: theme.palette.mode === 'light' ? 'rgba(123, 129, 146, 1)' : 'rgba(111, 118, 124, 1)',
         width: 16,
         height: 16,
         marginLeft: 2,
@@ -233,15 +234,15 @@ function ContractListItem(props: ContractListItemProps) {
                 </Typography>
             </ListItem>
             <Typography>
-                <Link
-                    className={classNames(classes.address, contract.iconURL ? '' : classes.addressNoImage)}
-                    href={resolveAddressLinkOnExplorer(chainId, contract.address)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={stop}>
-                    <span>{contract.address}</span>
-                    <OpenInNewIcon className={classes.openIcon} fontSize="small" />
-                </Link>
+                <div className={classNames(classes.address, contract.iconURL ? '' : classes.addressNoImage)}>
+                    <span onClick={() => onSubmit(contract)}>{contract.address}</span>
+                    <Link
+                        href={resolveAddressLinkOnExplorer(chainId, contract.address)}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <OpenInNewIcon className={classes.openIcon} fontSize="small" />
+                    </Link>
+                </div>
             </Typography>
         </div>
     )

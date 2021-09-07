@@ -81,6 +81,7 @@ const useStyles = makeStyles()((theme) => ({
     searchWrapper: {
         display: 'flex',
         justifyContent: 'space-between',
+        padding: '0px 18px 0px 10px',
     },
     textField: {
         width: 394,
@@ -266,7 +267,9 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     //#endregion
 
     const onSubmit = useCallback(() => {
-        setExistTokenDetailedList(tokenDetailed ? [tokenDetailed] : tokenDetailedSelectedList)
+        setExistTokenDetailedList(
+            tokenDetailed ? [tokenDetailed, ...existTokenDetailedList] : tokenDetailedSelectedList,
+        )
         onClose()
     }, [tokenDetailed, tokenDetailedSelectedList, setExistTokenDetailedList, onClose])
 
