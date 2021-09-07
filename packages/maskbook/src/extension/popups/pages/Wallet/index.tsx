@@ -9,6 +9,8 @@ import { useUnconfirmedRequest } from './hooks/useUnConfirmedRequest'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 import { useValueRef } from '@masknet/shared'
 import { currentIsMaskWalletLockedSettings } from '../../../../plugins/Wallet/settings'
+import { useLocation } from 'react-router'
+import urlcat from 'urlcat'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -29,27 +31,28 @@ const Unlock = lazy(() => import('./Unlock'))
 export default function Wallet() {
     const wallet = useWallet()
     const wallets = useWallets(ProviderType.Maskbook)
-
+    const location = useLocation()
     const history = useHistory()
 
     const { value, loading: getRequestLoading } = useUnconfirmedRequest()
     const lockStatus = useValueRef(currentIsMaskWalletLockedSettings)
 
     useEffect(() => {
+        const toBeClose = new URLSearchParams(location.search).get('toBeClose')
         if (value?.computedPayload) {
             switch (value.computedPayload.type) {
                 case EthereumRpcType.SIGN:
-                    history.push(PopupRoutes.WalletSignRequest)
+                    history.push(urlcat(PopupRoutes.WalletSignRequest, { toBeClose }))
                     break
                 case EthereumRpcType.CONTRACT_INTERACTION:
                 case EthereumRpcType.SEND_ETHER:
-                    history.push(PopupRoutes.ContractInteraction)
+                    history.push(urlcat(PopupRoutes.ContractInteraction, { toBeClose }))
                     break
                 default:
                     break
             }
         }
-    }, [value])
+    }, [value, location])
 
     useEffect(() => {
         if (lockStatus) {

@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
 import { useI18N } from '../../../../../utils'
 import { EthereumRpcType, useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
@@ -98,10 +98,7 @@ const SignRequest = memo(() => {
         }
     }, [value, location.search, history])
 
-    const [{ loading: rejectLoading }, handleReject] = useRejectHandler(
-        () => history.replace(PopupRoutes.Wallet),
-        value,
-    )
+    const handleReject = useRejectHandler(() => history.replace(PopupRoutes.Wallet), value)
 
     return (
         <main className={classes.container}>
@@ -117,14 +114,13 @@ const SignRequest = memo(() => {
             </Typography>
             <Typography className={classes.message}>{data}</Typography>
             <div className={classes.controller}>
-                <LoadingButton
-                    loading={rejectLoading}
+                <Button
                     variant="contained"
                     className={classes.button}
                     style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
                     onClick={handleReject}>
                     {t('cancel')}
-                </LoadingButton>
+                </Button>
                 <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
                     {t('confirm')}
                 </LoadingButton>

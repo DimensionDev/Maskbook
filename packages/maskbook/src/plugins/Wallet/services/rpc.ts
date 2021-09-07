@@ -76,7 +76,6 @@ export async function deleteUnconfirmedRequest(payload: JsonRpcPayload) {
     const chunk_ = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
     const requests = (chunk_?.requests ?? []).filter((x) => x.id !== payload.id)
     if (!chunk_) return
-    if (!requests.length) return
 
     const chunk = {
         ...chunk_,

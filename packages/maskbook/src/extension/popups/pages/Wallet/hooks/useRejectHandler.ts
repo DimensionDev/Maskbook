@@ -1,10 +1,8 @@
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { EthereumRpcComputed } from '@masknet/web3-shared'
 import { useLocation } from 'react-router'
-import { useAsyncFn } from 'react-use'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
 export function useRejectHandler(
     callback: () => void,
@@ -12,26 +10,27 @@ export function useRejectHandler(
 ) {
     const location = useLocation()
 
-    const result = useAsyncFn(async () => {
+    const cleanConfirmRequest = useCallback(() => {
         if (value) {
-            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
-            await WalletRPC.deleteUnconfirmedRequest(value.payload)
-            await Services.Ethereum.rejectRequest(value.payload)
-
-            if (toBeClose) {
-                window.close()
-            } else {
-                callback()
-            }
+            Services.Ethereum.rejectRequest(value.payload)
         }
-    }, [value, location.search, callback])
+    }, [value])
 
-    const [_, handleReject] = result
+    const handleReject = useCallback(async () => {
+        const toBeClose = new URLSearchParams(location.search).get('toBeClose')
+        cleanConfirmRequest()
+
+        if (toBeClose) {
+            window.close()
+        } else {
+            callback()
+        }
+    }, [location.search, cleanConfirmRequest])
 
     useEffect(() => {
         window.addEventListener('beforeunload', handleReject)
-        return window.removeEventListener('beforeunload', handleReject)
+        return () => window.removeEventListener('beforeunload', handleReject)
     }, [handleReject])
 
-    return result
+    return handleReject
 }

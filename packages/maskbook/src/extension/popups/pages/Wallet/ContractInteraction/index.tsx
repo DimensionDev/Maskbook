@@ -9,7 +9,7 @@ import {
     useChainId,
     useNativeTokenDetailed,
 } from '@masknet/web3-shared'
-import { Link, Typography } from '@material-ui/core'
+import { Button, Link, Typography } from '@material-ui/core'
 import { useI18N, useValueRef } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
@@ -109,20 +109,32 @@ const ContractInteraction = memo(() => {
     const networkType = useValueRef(currentNetworkSettings)
     const chainId = useChainId()
     const { typeName, spender, to, gasPrice, maxFeePerGas, maxPriorityFeePerGas, amount } = useMemo(() => {
-        switch (value?.computedPayload?.type) {
-            case EthereumRpcType.CONTRACT_INTERACTION:
-                if (value.computedPayload.name === 'approve') {
-                    return {
-                        typeName: t('popups_wallet_contract_interaction_approve'),
-                        spender: value.computedPayload.parameters?.spender,
-                        to: value.computedPayload._tx.to,
-                        gasPrice: value.computedPayload._tx.gasPrice,
-                        maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
-                        maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
-                        amount: value.computedPayload.parameters?.value,
+        if (value?.computedPayload?.type) {
+            switch (value.computedPayload.type) {
+                case EthereumRpcType.CONTRACT_INTERACTION:
+                    if (value.computedPayload.name === 'approve') {
+                        return {
+                            typeName: t('popups_wallet_contract_interaction_approve'),
+                            spender: value.computedPayload.parameters?.spender,
+                            to: value.computedPayload._tx.to,
+                            gasPrice: value.computedPayload._tx.gasPrice,
+                            maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
+                            maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
+                            amount: value.computedPayload.parameters?.value,
+                        }
+                    } else {
+                        // ERC20 Transfer and other contract interaction
+                        return {
+                            typeName: t('wallet_transfer_send'),
+                            spender: value.computedPayload._tx.from,
+                            to: value.computedPayload._tx.to,
+                            gasPrice: value.computedPayload._tx.gasPrice,
+                            maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
+                            maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
+                            amount: value.computedPayload.parameters?.value,
+                        }
                     }
-                } else {
-                    // ERC20 Transfer and other contract interaction
+                case EthereumRpcType.SEND_ETHER:
                     return {
                         typeName: t('wallet_transfer_send'),
                         spender: value.computedPayload._tx.from,
@@ -130,22 +142,13 @@ const ContractInteraction = memo(() => {
                         gasPrice: value.computedPayload._tx.gasPrice,
                         maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
                         maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
-                        amount: value.computedPayload.parameters?.value,
+                        amount: value.computedPayload._tx.value,
                     }
-                }
-            case EthereumRpcType.SEND_ETHER:
-                return {
-                    typeName: t('wallet_transfer_send'),
-                    spender: value.computedPayload._tx.from,
-                    to: value.computedPayload._tx.to,
-                    gasPrice: value.computedPayload._tx.gasPrice,
-                    maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
-                    maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
-                    amount: value.computedPayload._tx.value,
-                }
-            default:
-                throw new Error('To be implemented')
+                default:
+                    throw new Error('To be implemented')
+            }
         }
+        return {}
     }, [value, t])
 
     // const { value: token } = useERC20TokenDetailed(to)
@@ -199,7 +202,7 @@ const ContractInteraction = memo(() => {
         }
     }, [value, location.search, history])
 
-    const [{ loading: rejectLoading }, handleReject] = useRejectHandler(history.goBack, value)
+    const handleReject = useRejectHandler(history.goBack, value)
 
     const { value: defaultPrices } = useAsync(async () => {
         if (networkType === NetworkType.Ethereum && !maxFeePerGas && !maxPriorityFeePerGas) {
@@ -310,14 +313,13 @@ const ContractInteraction = memo(() => {
                 </div>
             </div>
             <div className={classes.controller}>
-                <LoadingButton
-                    loading={rejectLoading}
+                <Button
                     variant="contained"
                     className={classes.button}
                     style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
                     onClick={handleReject}>
                     {t('cancel')}
-                </LoadingButton>
+                </Button>
                 <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
                     {t('confirm')}
                 </LoadingButton>

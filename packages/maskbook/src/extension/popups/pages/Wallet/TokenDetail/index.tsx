@@ -84,10 +84,7 @@ const TokenDetail = memo(() => {
             })
         } else {
             const url = urlcat('next.html#', 'labs', { open: 'Transak' })
-            await browser.tabs.create({
-                active: true,
-                url: browser.runtime.getURL(url),
-            })
+            window.open(browser.runtime.getURL(url), 'BUY_DIALOG')
         }
     }, [wallet?.address, chainDetailed, isActiveSocialNetwork])
 
@@ -98,10 +95,7 @@ const TokenDetail = memo(() => {
             })
         } else {
             const url = urlcat('next.html#', 'labs', { open: 'Swap' })
-            await browser.tabs.create({
-                active: true,
-                url: browser.runtime.getURL(url),
-            })
+            window.open(browser.runtime.getURL(url), 'SWAP_DIALOG')
         }
     }, [isActiveSocialNetwork])
 

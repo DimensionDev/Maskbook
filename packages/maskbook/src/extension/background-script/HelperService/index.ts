@@ -86,7 +86,6 @@ export async function createNewWindowAndPasteShareContent(SNSIdentifier: string,
 
 export function openPopupsWindow(route?: string) {
     const url = urlcat('popups.html#', route ?? PopupRoutes.Wallet, { toBeClose: 1 })
-
     if (!!navigator.userAgent.match(/Chrome/)) {
         window.open(browser.runtime.getURL(url), '', 'resizable,scrollbars,status,width=310,height=540')
     } else {

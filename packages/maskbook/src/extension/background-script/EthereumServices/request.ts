@@ -118,6 +118,8 @@ export async function confirmRequest(payload: JsonRpcPayload) {
 export async function rejectRequest(payload: JsonRpcPayload) {
     const pid = getPayloadId(payload)
     if (!pid) return
+    // getSendMethod()(payload, UNCONFIRMED_CALLBACK_MAP.get(pid) ?? noop)
+    UNCONFIRMED_CALLBACK_MAP.get(pid)?.(new Error('User rejected!'))
     await WalletRPC.deleteUnconfirmedRequest(payload)
     UNCONFIRMED_CALLBACK_MAP.delete(pid)
 }
