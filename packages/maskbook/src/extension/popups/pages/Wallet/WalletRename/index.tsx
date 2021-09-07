@@ -6,6 +6,7 @@ import { useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useHistory } from 'react-router'
 import { useI18N } from '../../../../../utils'
+import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles()({
     header: {
@@ -41,6 +42,11 @@ const WalletRename = memo(() => {
         await WalletRPC.renameWallet(wallet.address, name)
         return history.goBack()
     }, [wallet?.address])
+
+    useUpdateEffect(() => {
+        if (wallet?.name) setName(wallet.name)
+    }, [wallet?.name])
+
     return (
         <>
             <div className={classes.header}>

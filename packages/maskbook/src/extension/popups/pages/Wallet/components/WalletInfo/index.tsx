@@ -5,7 +5,7 @@ import { MoreHoriz } from '@material-ui/icons'
 import { MaskWalletIcon, EditIcon } from '@masknet/icons'
 import { CopyIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useRouteMatch } from 'react-router-dom'
 import { PopupRoutes } from '../../../../index'
 import { useWallet } from '@masknet/web3-shared'
 
@@ -59,13 +59,21 @@ const useStyles = makeStyles()({
 export const WalletInfo = memo(() => {
     const wallet = useWallet()
     const history = useHistory()
+
+    const excludePath = useRouteMatch({
+        path: PopupRoutes.WalletSettings,
+        exact: true,
+    })
+
     if (!wallet) return null
+
     return (
         <WalletInfoUI
             name={wallet.name ?? ''}
             address={wallet.address}
             onEditClick={() => history.push(PopupRoutes.WalletRename)}
             onSettingClick={() => history.push(PopupRoutes.WalletSettings)}
+            hideSettings={!!excludePath}
         />
     )
 })
@@ -75,9 +83,10 @@ export interface WalletInfoUIProps {
     address: string
     onSettingClick: () => void
     onEditClick: () => void
+    hideSettings: boolean
 }
 
-export const WalletInfoUI = memo<WalletInfoUIProps>(({ name, address, onSettingClick, onEditClick }) => {
+export const WalletInfoUI = memo<WalletInfoUIProps>(({ name, address, onSettingClick, onEditClick, hideSettings }) => {
     const { classes } = useStyles()
     return (
         <div className={classes.container}>
@@ -97,7 +106,9 @@ export const WalletInfoUI = memo<WalletInfoUIProps>(({ name, address, onSettingC
                     </Typography>
                 </div>
             </div>
-            <MoreHoriz color="primary" style={{ cursor: 'pointer' }} onClick={onSettingClick} />
+            {!hideSettings ? (
+                <MoreHoriz color="primary" style={{ cursor: 'pointer' }} onClick={onSettingClick} />
+            ) : null}
         </div>
     )
 })

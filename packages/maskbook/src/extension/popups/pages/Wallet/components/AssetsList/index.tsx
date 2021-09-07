@@ -72,6 +72,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(({ dataSource, onItemClick }
                                 decimals={asset.token.decimals}
                                 symbol={asset.token.symbol}
                                 classes={{ symbol: classes.symbol }}
+                                significant={6}
                             />
                         </ListItemText>
                         <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />
