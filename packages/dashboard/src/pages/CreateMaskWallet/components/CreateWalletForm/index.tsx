@@ -105,7 +105,7 @@ const CreateWalletForm = memo(() => {
     const {
         control,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isValid },
     } = useForm<zod.infer<typeof schema>>({
         mode: 'onChange',
         resolver: zodResolver(schema),
@@ -160,8 +160,8 @@ const CreateWalletForm = memo(() => {
                                         type="password"
                                         variant="filled"
                                         placeholder={t.create_wallet_payment_password()}
-                                        error={!!errors.password?.message}
-                                        helperText={errors.password?.message}
+                                        error={!isValid && !!errors.password?.message}
+                                        helperText={!isValid ? errors.password?.message : ''}
                                         className={classes.input}
                                         InputProps={{ disableUnderline: true }}
                                     />
@@ -172,8 +172,8 @@ const CreateWalletForm = memo(() => {
                                 render={({ field }) => (
                                     <TextField
                                         {...field}
-                                        error={!!errors.confirm?.message}
-                                        helperText={errors.confirm?.message}
+                                        error={!isValid && !!errors.confirm?.message}
+                                        helperText={!isValid ? errors.confirm?.message : ''}
                                         type="password"
                                         variant="filled"
                                         placeholder={t.create_wallet_re_enter_payment_password()}
@@ -192,7 +192,7 @@ const CreateWalletForm = memo(() => {
                     <Button color="secondary" className={classes.button} onClick={() => navigate(-1)}>
                         {t.cancel()}
                     </Button>
-                    <Button className={classes.button} onClick={onSubmit}>
+                    <Button className={classes.button} onClick={onSubmit} disabled={!isValid}>
                         {t.next()}
                     </Button>
                 </Box>

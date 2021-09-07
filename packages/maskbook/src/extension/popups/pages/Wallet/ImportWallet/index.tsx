@@ -246,8 +246,8 @@ const ImportWallet = memo(() => {
                                         type="password"
                                         variant="filled"
                                         placeholder={t('popups_wallet_payment_password')}
-                                        error={!!errors.password?.message}
-                                        helperText={errors.password?.message}
+                                        error={!isValid && !!errors.password?.message}
+                                        helperText={!isValid ? errors.password?.message : ''}
                                     />
                                 )}
                                 name="password"
@@ -257,8 +257,8 @@ const ImportWallet = memo(() => {
                                     <StyledInput
                                         classes={{ root: classes.textField }}
                                         {...field}
-                                        error={!!errors.confirm?.message}
-                                        helperText={errors.confirm?.message}
+                                        error={!isValid && !!errors.confirm?.message}
+                                        helperText={!isValid ? errors.confirm?.message : ''}
                                         type="password"
                                         variant="filled"
                                         placeholder="Re-enter the payment password"
@@ -280,7 +280,12 @@ const ImportWallet = memo(() => {
                     classes={{ indicator: classes.indicator }}
                     onChange={(event, tab) => setCurrentTab(tab)}>
                     {getEnumAsArray(ImportWalletTab).map(({ key, value }) => (
-                        <Tab label={key} value={value} classes={{ root: classes.tab, selected: classes.selected }} />
+                        <Tab
+                            key={key}
+                            label={key}
+                            value={value}
+                            classes={{ root: classes.tab, selected: classes.selected }}
+                        />
                     ))}
                 </Tabs>
                 <TabPanel value={ImportWalletTab.Mnemonic} className={classes.tabPanel}>

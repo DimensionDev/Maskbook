@@ -301,5 +301,6 @@
     "create_wallet_payment_password_tip": "The password must be between 8 and 20 characters and contains at least a number, an uppercase letter,\n a lowercase letter and a special character.",
     "create_wallet_your_wallet_address": "Your wallet address",
     "create_wallet_done": "Done",
-    "create_wallet_verify_words": "Verify mnemonic words"
+    "create_wallet_verify_words": "Verify mnemonic words",
+    "create_wallet_mnemonic_word_not_match": "Mismatch of mnemonic words"
 }

@@ -202,7 +202,7 @@ const ContractInteraction = memo(() => {
         }
     }, [value, location.search, history])
 
-    const handleReject = useRejectHandler(history.goBack, value)
+    const handleReject = useRejectHandler(() => history.replace(PopupRoutes.Wallet), value)
 
     const { value: defaultPrices } = useAsync(async () => {
         if (networkType === NetworkType.Ethereum && !maxFeePerGas && !maxPriorityFeePerGas) {

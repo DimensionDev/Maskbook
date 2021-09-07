@@ -17,7 +17,7 @@ function GlobalCss() {
                     margin: '0 auto !important',
                     width: 310,
                     maxWidth: '100%',
-                    backgroundColor: 'transparent',
+                    // backgroundColor: 'transparent',
                     '&::-webkit-scrollbar': {
                         display: 'none',
                     },
