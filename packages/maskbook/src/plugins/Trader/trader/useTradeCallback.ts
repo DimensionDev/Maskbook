@@ -16,7 +16,7 @@ import { isNativeTokenWrapper } from '../helpers'
 import { TradeContext } from './useTradeContext'
 
 export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeComputed<unknown> | null) {
-    // trade conetxt
+    // trade context
     const context = useContext(TradeContext)
 
     // create trade computed

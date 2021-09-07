@@ -6,6 +6,7 @@ import {
     queryAvatarDataURL,
     queryPersona,
     queryPersonaRecord,
+    queryPostPagedDB,
     queryProfile,
     queryProfilesWithQuery,
     storeAvatar,
@@ -45,6 +46,7 @@ import type { EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } fr
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { MaskMessage } from '../../utils'
+import type { PostIVIdentifier } from '@masknet/shared-base'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -197,6 +199,25 @@ export async function attachProfile(
     return attachProfileDB(source, target, data)
 }
 export { detachProfileDB as detachProfile } from '../../database/Persona/Persona.db'
+//#endregion
+
+//#region Post
+export { queryPostsDB } from '../../database'
+
+export async function queryPagedPostHistory(
+    options: {
+        network: string
+        after?: PostIVIdentifier
+    },
+    count: number,
+) {
+    const currentPersona = await getCurrentPersonaIdentifier()
+    if (currentPersona) {
+        return queryPostPagedDB(currentPersona, options, count)
+    }
+
+    return []
+}
 //#endregion
 
 //#region Relation

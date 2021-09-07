@@ -7,36 +7,36 @@ import { useCurrentCurrency } from './useCurrentCurrency'
 
 export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProvider: DataProvider) {
     const chainId = useChainId()
-    const currencyAsyncResult = useCurrentCurrency(dataProvider)
+    const currency = useCurrentCurrency(dataProvider)
     const trendingAsyncResult = useAsync(async () => {
         if (!keyword) return null
-        if (!currencyAsyncResult.value) return null
-        return PluginTraderRPC.getCoinTrendingByKeyword(keyword, tagType, currencyAsyncResult.value, dataProvider)
-    }, [chainId, dataProvider, currencyAsyncResult.value, keyword])
+        if (!currency) return null
+        return PluginTraderRPC.getCoinTrendingByKeyword(keyword, tagType, currency, dataProvider)
+    }, [chainId, dataProvider, currency?.id, keyword])
     return {
         value: {
-            currency: currencyAsyncResult.value,
+            currency: currency,
             trending: trendingAsyncResult.value,
         },
-        loading: currencyAsyncResult.loading || trendingAsyncResult.loading,
-        error: currencyAsyncResult.error || trendingAsyncResult.error,
+        loading: trendingAsyncResult.loading,
+        error: trendingAsyncResult.error,
     }
 }
 
 export function useTrendingById(id: string, dataProvider: DataProvider) {
     const chainId = useChainId()
-    const currencyAsyncResult = useCurrentCurrency(dataProvider)
+    const currency = useCurrentCurrency(dataProvider)
     const trendingAsyncResult = useAsync(async () => {
         if (!id) return null
-        if (!currencyAsyncResult.value) return null
-        return PluginTraderRPC.getCoinTrendingById(id, currencyAsyncResult.value, dataProvider)
-    }, [chainId, dataProvider, currencyAsyncResult.value, id])
+        if (!currency) return null
+        return PluginTraderRPC.getCoinTrendingById(id, currency, dataProvider)
+    }, [chainId, dataProvider, currency?.id, id])
     return {
         value: {
-            currency: currencyAsyncResult.value,
+            currency: currency,
             trending: trendingAsyncResult.value,
         },
-        loading: currencyAsyncResult.loading || trendingAsyncResult.loading,
-        error: currencyAsyncResult.error || trendingAsyncResult.error,
+        loading: trendingAsyncResult.loading,
+        error: trendingAsyncResult.error,
     }
 }

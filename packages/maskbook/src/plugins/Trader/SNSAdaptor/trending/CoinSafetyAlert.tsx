@@ -22,11 +22,11 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface CoinSaftyAlertProps {
+export interface CoinSafetyAlertProps {
     coin: Coin
 }
 
-export function CoinSaftyAlert(props: CoinSaftyAlertProps) {
+export function CoinSafetyAlert(props: CoinSafetyAlertProps) {
     const { coin } = props
 
     const { t } = useI18N()

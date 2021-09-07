@@ -26,11 +26,11 @@ export const calculateNextPrize = (pool: Pool) => {
     if (!Number.isNaN(rawPrize)) {
         return '$' + rawPrize.toLocaleString(undefined, { maximumFractionDigits: 0 })
     } else {
-        const pirzeAmount = Number.parseFloat(pool.prize.amount)
-        const formattedPirzeAmount = pirzeAmount.toLocaleString(undefined, {
-            maximumFractionDigits: pirzeAmount >= 10 ? 0 : 2,
+        const prizeAmount = Number.parseFloat(pool.prize.amount)
+        const formattedPrizeAmount = prizeAmount.toLocaleString(undefined, {
+            maximumFractionDigits: prizeAmount >= 10 ? 0 : 2,
         })
-        return `${formattedPirzeAmount} ${pool.tokens.underlyingToken.symbol}`
+        return `${formattedPrizeAmount} ${pool.tokens.underlyingToken.symbol}`
     }
 }
 
@@ -57,11 +57,11 @@ export const getNetworkColor = (chainId: ChainId) => {
     }
 }
 
-export function getPrizePeriod(t: I18NFunction, preiod: number) {
-    if (preiod === ONE_DAY_SECONDS) {
+export function getPrizePeriod(t: I18NFunction, period: number) {
+    if (period === ONE_DAY_SECONDS) {
         return t('daily')
-    } else if (preiod === ONE_WEEK_SECONDS) {
+    } else if (period === ONE_WEEK_SECONDS) {
         return t('weekly')
     }
-    return t('days', { preiod: (preiod / ONE_WEEK_SECONDS).toFixed() })
+    return t('days', { period: (period / ONE_WEEK_SECONDS).toFixed() })
 }

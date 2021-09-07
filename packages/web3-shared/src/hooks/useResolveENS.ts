@@ -7,6 +7,7 @@ export function useResolveENS(name: string) {
     const chainId = useChainId()
 
     return useAsyncRetry(async () => {
+        if (!name) return
         const result = await web3.eth.ens.getAddress(name)
         return result
     }, [web3, name, chainId])

@@ -40,6 +40,7 @@
     "react-router-dom": "^6.0.0-beta.0",
     "react-use": "^17.3.1",
     "unstated-next": "^1.1.0",
+    "urlcat": "^2.0.4",
     "use-subscription": "^1.5.1",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",

@@ -14,6 +14,7 @@ export default function (signal: AbortSignal) {
             console.log('New connection from', conn)
             if (!newDashboardConnection.value) return false
             if (!conn.url) return false
+            /* cspell:disable-next-line */
             if (!new URL(conn.url).host.endsWith('compassionate-northcutt-326a3a.netlify.app')) return false
             return { acceptAs: Environment.HasBrowserAPI }
         })

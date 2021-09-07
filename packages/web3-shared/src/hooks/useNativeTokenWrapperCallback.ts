@@ -104,11 +104,11 @@ export function useNativeTokenWrapperCallback() {
                 return
             }
 
-            // error: insufficent weth balance
+            // error: insufficient weth balance
             if (all === false && isLessThan(wethBalance, amount)) {
                 setTransactionState({
                     type: TransactionStateType.FAILED,
-                    error: new Error('Insufficent WETH balance'),
+                    error: new Error('Insufficient WETH balance'),
                 })
                 return
             }

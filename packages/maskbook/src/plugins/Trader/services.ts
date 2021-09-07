@@ -46,24 +46,24 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
     }
 })
 
-currentTradeProviderSettings.addListener((tradeProvier: TradeProvider) => {
+currentTradeProviderSettings.addListener((tradeProvider: TradeProvider) => {
     const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
     if (!networkType) return
     switch (networkType) {
         case NetworkType.Ethereum:
-            ethereumNetworkTradeProviderSettings.value = tradeProvier
+            ethereumNetworkTradeProviderSettings.value = tradeProvider
             break
         case NetworkType.Binance:
-            binanceNetworkTradeProviderSettings.value = tradeProvier
+            binanceNetworkTradeProviderSettings.value = tradeProvider
             break
         case NetworkType.Polygon:
-            polygonNetworkTradeProviderSettings.value = tradeProvier
+            polygonNetworkTradeProviderSettings.value = tradeProvider
             break
         case NetworkType.Arbitrum:
-            arbitrumNetworkTradeProviderSettings.value = tradeProvier
+            arbitrumNetworkTradeProviderSettings.value = tradeProvider
             break
         case NetworkType.xDai:
-            xdaiNetworkTradeProviderSettings.value = tradeProvier
+            xdaiNetworkTradeProviderSettings.value = tradeProvider
             break
         default:
             unreachable(networkType)
