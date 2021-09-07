@@ -99,7 +99,7 @@ const TextIconContainer = styled('div')(
 
 const brands: Record<string, React.ReactNode> = {
     'https://www.facebook.com/masknetwork': <FacebookIcon />,
-    'https://twitter.com/realmaskbook': <TwitterIcon />,
+    'https://twitter.com/realMaskNetwork': <TwitterIcon />,
     'https://github.com/DimensionDev/Maskbook': <GitHubIcon />,
     'https://t.me/maskbook_group': <TelegramIcon />,
     'https://discord.gg/4SVXvj7': <DiscordIcon />,
