@@ -26,7 +26,7 @@ export interface InternalEvents {
     //#endregion
     /** A simple RPC. */
     // Not using async-call-rpc because we need to make sure every intrinsics
-    // we're using is caputred.
+    // we're using is captured.
     resolvePromise: [req_id: number, data: unknown]
     rejectPromise: [req_id: number, error: unknown]
 }
