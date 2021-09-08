@@ -31,6 +31,7 @@ export const {
     dispatchEvent,
     DataTransfer: no_xray_DataTransfer,
     ClipboardEvent: no_xray_ClipboardEvent,
+    CustomEvent: no_xray_CustomEvent,
     // The "window."" here is used to create a no-xray version on Firefox
 } = globalThis.window
 export const _XPCNativeWrapper = typeof XPCNativeWrapper === 'undefined' ? undefined : XPCNativeWrapper

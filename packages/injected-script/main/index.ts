@@ -1,4 +1,4 @@
-import './EventListenerPatch/index'
+import './communicate'
 import './locationChange'
 import './user-agent'
 
