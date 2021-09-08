@@ -366,7 +366,6 @@
     "plugin_red_packet_expired": "",
     "plugin_red_packet_history_split_mode": "",
     "plugin_red_packet_history_send": "",
-    "plugin_red_packet_nft_send_tip": "",
     "plugin_gitcoin_readme": "このサービスを利用するにあたり、寄付金額の 5% が <fund>Gitcoin grants development fund</fund> に寄付されます",
     "plugin_gitcoin_select_a_token": "トークンを選択する",
     "plugin_gitcoin_enter_an_amount": "量を決める",

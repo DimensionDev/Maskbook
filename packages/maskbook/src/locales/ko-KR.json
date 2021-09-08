@@ -368,7 +368,6 @@
     "plugin_red_packet_expired": "",
     "plugin_red_packet_history_split_mode": "",
     "plugin_red_packet_history_send": "",
-    "plugin_red_packet_nft_send_tip": "",
     "plugin_gitcoin_readme": "이 서비스를 이용하면 <fund>Gitcoin 개발 기금에 당신의 기여금</fund>의 5%를 기부할 것이다.",
     "plugin_gitcoin_select_a_token": "토큰 선택",
     "plugin_gitcoin_enter_an_amount": "수액 입력",

@@ -436,7 +436,6 @@
     "plugin_red_packet_history_claimed": "Claimed: <strong>{{claimedShares}}/{{shares}}</strong> Share",
     "plugin_red_packet_history_split_mode": "Split Mode: {{mode}}",
     "plugin_red_packet_history_send": "Send",
-    "plugin_red_packet_nft_send_tip": "You can get the rest of your collection back after 24 hours of sending.",
     "plugin_red_packet_nft_account_name": "Wallet account",
     "plugin_red_packet_nft_attached_message": "Attached Message",
     "plugin_red_packet_nft_total_amount": "Total Amount",

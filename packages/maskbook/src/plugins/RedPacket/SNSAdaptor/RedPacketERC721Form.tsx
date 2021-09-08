@@ -224,9 +224,6 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 <div className={classes.line}>
                     <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
                 </div>
-                <Typography className={classes.tip} color="textSecondary">
-                    {t('plugin_red_packet_nft_send_tip')}
-                </Typography>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC721TokenApprovedBoundary
                         validationMessage={validationMessage}
