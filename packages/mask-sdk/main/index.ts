@@ -1,15 +1,12 @@
-import type * as Mask from '../public-api'
-// import { AsyncCall } from 'async-call-rpc/base.min'
-
+import { persona } from './persona'
 document.currentScript?.remove()
 
-// AsyncCall({}, { channel: {} as any })
 const MaskSDK: typeof Mask = {
     sdkVersion: 0,
     socialNetwork: {} as any,
     credentials: {} as any,
     ethereum: {} as any,
-    persona: {} as any,
+    persona,
 }
 
 try {

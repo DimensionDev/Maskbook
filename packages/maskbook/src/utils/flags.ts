@@ -15,6 +15,7 @@ export const Flags = {
     },
     /** The Mask Network v2 main switch. */
     v2_enabled: betaOrInsiderOnly,
+    mask_SDK_ready: betaOrInsiderOnly,
     /** There is no "tabs" to navigate to. We must be careful with this. */
     has_no_browser_tab_ui: appOnly,
     has_no_connected_user_link: appOnly,

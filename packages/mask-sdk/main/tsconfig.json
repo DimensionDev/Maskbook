@@ -8,5 +8,5 @@
     "types": ["@types/web"]
   },
   "include": ["./"],
-  "references": [{ "path": "../public-api" }, { "path": "../server" }]
+  "references": [{ "path": "../public-api" }, { "path": "../shared" }]
 }

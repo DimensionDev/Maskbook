@@ -1,14 +1,16 @@
-/**
- * @see https://eips.ethereum.org/EIPS/eip-1193
- * A EIP-1193 compatible Ethereum provider.
- * @public
- * @remarks Since API=0
- */
-export declare const ethereum: Ethereum.Provider & Ethereum.ExperimentalMaskProvider
+declare namespace Mask {
+    /**
+     * @see https://eips.ethereum.org/EIPS/eip-1193
+     * A EIP-1193 compatible Ethereum provider.
+     * @public
+     * @remarks Since API=0
+     */
+    export const ethereum: Ethereum.Provider & Ethereum.ExperimentalProvider
+}
 /** @public Types defined in EIP-1193 */
-export declare namespace Ethereum {
+declare namespace Mask.Ethereum {
     /** Extra APIs that only can be used with Mask Network is defined here. */
-    export interface ExperimentalMaskProvider {}
+    export interface ExperimentalProvider {}
     export interface Provider {
         /**
          * The `request` method is intended as a transport- and protocol-agnostic wrapper function for Remote Procedure Calls (RPCs).

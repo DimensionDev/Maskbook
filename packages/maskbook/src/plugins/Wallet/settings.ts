@@ -137,11 +137,5 @@ export const currentEtherPriceSettings = createGlobalSettings<number>(`${PLUGIN_
 
 const effect = startEffects(import.meta.webpackHot)
 
-effect(() => {
-    try {
-        return connectGasNow()
-    } catch {
-        return () => {}
-    }
-})
+effect(() => connectGasNow())
 effect(() => trackEtherPrice())

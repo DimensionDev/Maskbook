@@ -1,3 +1,4 @@
+import { noop } from 'lodash-es'
 import { MaskMessage } from '../../../utils'
 import { Flags } from '../../../utils/flags'
 
@@ -37,24 +38,28 @@ export default function (signal: AbortSignal) {
             //#endregion
 
             //#region Mask SDK
-            const code = process.env.NODE_ENV === 'development' ? await fetchUserScript(maskSDK_URL) : await maskSDK
-            browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
+            if (Flags.mask_SDK_ready) {
+                const code = process.env.NODE_ENV === 'development' ? await fetchUserScript(maskSDK_URL) : await maskSDK
+                browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
+            }
             //#endregion
         }
         injectContentScript(arg.tabId, arg.frameId).catch(HandleError(arg))
     }
     browser.webNavigation.onCommitted.addListener(onCommittedListener)
     signal.addEventListener('abort', () => browser.webNavigation.onCommitted.removeListener(onCommittedListener))
-    MaskMessage.events.maskSDKHotModuleReload.on
-    window.addEventListener(
-        'mask-sdk-reload',
-        async () => {
-            browser.tabs.executeScript((await browser.tabs.query({ active: true })).at(0)?.id!, {
-                code: (await fetchUserScript(maskSDK_URL)) + `\n;console.log("[@masknet/sdk] SDK reloaded.")`,
-            })
-        },
-        { signal },
-    )
+
+    if (process.env.NODE_ENV === 'development' && Flags.mask_SDK_ready) {
+        signal.addEventListener(
+            'abort',
+            MaskMessage.events.maskSDKHotModuleReload.on(async () => {
+                const code = (await fetchUserScript(maskSDK_URL)) + `\n;console.log("[@masknet/sdk] SDK reloaded.")`
+                for (const tab of await browser.tabs.query({})) {
+                    browser.tabs.executeScript(tab.id!, { code }).then(noop)
+                }
+            }),
+        )
+    }
 }
 
 function fetchInjectContentScript(entryHTML: string) {
