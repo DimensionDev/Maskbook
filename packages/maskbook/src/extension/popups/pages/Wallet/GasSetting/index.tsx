@@ -153,7 +153,7 @@ const GasSetting = memo(() => {
                     return new BigNumber(data.maxFeePerGas).isGreaterThan(data.maxPriorityFeePerGas)
                 },
                 {
-                    message: t('popups_wallet_gas_fee_settings_maxFee_lower_than_priorityFee'),
+                    message: t('popups_wallet_gas_fee_settings_max_fee_lower_than_priority_fee'),
                     path: ['maxFeePerGas'],
                 },
             )
@@ -191,10 +191,7 @@ const GasSetting = memo(() => {
                           gasPrice: currentGasPrice ? options[currentGasPrice].gasPrice : initConfig.gasPrice,
                       }
                 await WalletRPC.deleteUnconfirmedRequest(value.payload)
-                await Services.Ethereum.request(
-                    { ...value.payload, params: [config, ...value.payload.params] },
-                    { skipConfirmation: true },
-                )
+                await Services.Ethereum.request({ ...value.payload, params: [config, ...value.payload.params] })
             }
         },
         [value, currentGasPrice, options],

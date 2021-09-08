@@ -1,3 +1,4 @@
+/* spell-checker: disable */
 import path from 'path'
 import fs, { promises } from 'fs'
 
@@ -51,13 +52,16 @@ function config(opts: {
     noEval?: boolean
     readonlyCache?: boolean
 }) {
-    // https://github.com/facebook/react/issues/20377 React-devtools conflicts with react-refresh
-    const disableReactHMR = opts.isProfile || opts.disableReactHMR
     const { mode, target, name, noEval, dist, hmrPort, isProfile } = opts
     let { disableHMR } = opts
     const isManifestV3 = target.runtimeEnv.manifest === 3
     if (mode === 'production') disableHMR = true
+    if (target.Firefox) disableHMR = true
     if (mode === 'none') throw new TypeError('env cannot be none in this config')
+
+    // https://github.com/facebook/react/issues/20377 React-devtools conflicts with react-refresh
+    let disableReactHMR = opts.isProfile || opts.disableReactHMR
+    if (disableHMR) disableReactHMR = true
 
     /** On iOS, eval is async (it is hooked by webextension-shim). */
     const sourceMapKind: Configuration['devtool'] = target.iOS || isManifestV3 || noEval ? false : 'eval-source-map'
@@ -140,11 +144,13 @@ function config(opts: {
                                     runtime: 'automatic',
                                     useBuiltins: true,
                                     development: disableReactHMR ? false : mode === 'development',
-                                    refresh: {
-                                        refreshReg: '$RefreshReg$',
-                                        refreshSig: '$RefreshSig$',
-                                        emitFullSignatures: true,
-                                    },
+                                    refresh: disableReactHMR
+                                        ? false
+                                        : {
+                                              refreshReg: '$RefreshReg$',
+                                              refreshSig: '$RefreshSig$',
+                                              emitFullSignatures: true,
+                                          },
                                 },
                             },
                         },

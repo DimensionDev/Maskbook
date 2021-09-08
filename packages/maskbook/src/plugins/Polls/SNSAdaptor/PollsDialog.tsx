@@ -116,7 +116,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
         })
     }
 
-    // react hooks are not binded with the function identity but hooks order
+    // react hooks are not bound with the function identity but hooks order
     const useSelect = (count: number, fn: (newVal: number) => void, defaultIndex = 0) => {
         const options = Array.from<string>({ length: count }).fill('')
 

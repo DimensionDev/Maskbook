@@ -12,6 +12,7 @@ export default function LanguageSetting() {
     }
     const t = useDashboardI18N()
 
+    // cspell:ignore lengua, española, française, русский язык, زبان فارسی
     // Some languages are not ready to ship to the users. Only display them in beta/insider version.
     return (
         <SettingSelect value={lang} onChange={handleChange}>

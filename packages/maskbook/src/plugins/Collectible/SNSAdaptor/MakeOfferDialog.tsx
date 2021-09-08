@@ -125,7 +125,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         const amount_ = new BigNumber(amount || '0')
         const balance_ = new BigNumber(balance.value ?? '0')
         if (amount_.isZero()) return t('plugin_collectible_enter_a_price')
-        if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficent_balance')
+        if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
         if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0)
             return t('plugin_collectible_invalid_expiration_date')
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')

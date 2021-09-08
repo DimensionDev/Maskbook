@@ -80,6 +80,8 @@
     "event-iterator": "^2.0.0",
     "fuse.js": "^6.4.3",
     "gun": "0.2020.520",
+    "graphql": "^15.5.1",
+    "graphql-request": "^3.4.0",
     "https-browserify": "^1.0.0",
     "i18next-browser-languagedetector": "^6.1.2",
     "immer": "^9.0.6",

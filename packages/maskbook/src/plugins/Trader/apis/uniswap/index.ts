@@ -220,7 +220,7 @@ export async function getCoinInfo(id: string) {
         fetchTokenData(id, oneMonthBlock),
         fetchTokenData(id, oneYearBlock),
     ])
-    //#engregion
+    //#endregion
 
     //#region calculate the trade volume and the untracked volume before day ago
     const oneDayVolumeUSD = new BigNumber(token?.tradeVolumeUSD ?? 0).minus(oneDayToken?.tradeVolumeUSD ?? 0).toNumber()

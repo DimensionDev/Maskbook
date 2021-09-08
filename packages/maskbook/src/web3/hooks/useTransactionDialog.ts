@@ -19,7 +19,7 @@ export function useTransactionDialog(
         resetTransactionState()
     })
 
-    // open the transation dialog
+    // open the transaction dialog
     useEffect(() => {
         if (transactionState.type === TransactionStateType.UNKNOWN) return
         setDialog({

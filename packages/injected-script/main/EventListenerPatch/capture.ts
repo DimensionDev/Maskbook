@@ -1,4 +1,4 @@
-import { clone_into, redefineEventTargetPrototype, unwrapXRay_DOMObject } from '../utils'
+import { clone_into, redefineEventTargetPrototype, unwrapXRay_CPPBindingObject } from '../utils'
 import { apply, error, no_xray_Proxy, warn, xray_Map } from '../intrinsic'
 
 const CapturingEvents: Set<string> = new Set(['keyup', 'input', 'paste'] as (keyof DocumentEventMap)[])
@@ -121,7 +121,7 @@ export function dispatchEventRaw<T extends Event>(
         yield window as unknown as Node
     }
     function getMockedEvent<T extends Event>(event: T, currentTarget: () => EventTarget, overwrites: Partial<T> = {}) {
-        const target = unwrapXRay_DOMObject(currentTarget())
+        const target = unwrapXRay_CPPBindingObject(currentTarget())
         const source = {
             target,
             srcElement: target,
@@ -135,8 +135,8 @@ export function dispatchEventRaw<T extends Event>(
             event,
             clone_into({
                 get(target, key) {
-                    if (key === 'currentTarget') return unwrapXRay_DOMObject(currentTarget())
-                    return (source as any)[key] ?? (unwrapXRay_DOMObject(target) as any)[key]
+                    if (key === 'currentTarget') return unwrapXRay_CPPBindingObject(currentTarget())
+                    return (source as any)[key] ?? (unwrapXRay_CPPBindingObject(target) as any)[key]
                 },
             }),
         )

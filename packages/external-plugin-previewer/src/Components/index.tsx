@@ -13,11 +13,11 @@ export const div = createNativeTagDelegate('div')
 export const br = createNativeTagDelegate('br', { children: false })
 function createNativeTagDelegate<T extends keyof HTMLElementTagNameMap>(
     tag: T,
-    accpetProps?: { [key in keyof HTMLElementTagNameMap[T]]?: boolean },
+    acceptProps?: { [key in keyof HTMLElementTagNameMap[T]]?: boolean },
 ) {
     const C: Component<{}> = () => {
         // TODO: implement acceptProps
-        if (accpetProps?.children === false) return createElement(tag)
+        if (acceptProps?.children === false) return createElement(tag)
         return createElement(tag, {}, <slot />)
     }
     C.displayName = tag

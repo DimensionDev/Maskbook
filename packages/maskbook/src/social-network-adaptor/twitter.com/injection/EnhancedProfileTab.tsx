@@ -38,6 +38,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         height: props.height,
     },
     button: {
+        zIndex: 1,
+        position: 'relative',
         display: 'flex',
         minWidth: 56,
         justifyContent: 'center',
@@ -47,8 +49,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         color: props.color,
         font: props.font,
         fontSize: props.fontSize,
+        fontWeight: 500,
         '&:hover': {
-            color: props.hover,
+            color: props.color,
         },
     },
     selected: {
@@ -56,7 +59,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         fontWeight: 700,
     },
     line: {
-        dispaly: 'inline-flex',
         borderRadius: 9999,
         position: 'absolute',
         bottom: 0,
@@ -96,7 +98,7 @@ function reset() {
     const eleEmpty = searchProfileEmptySelector().evaluate()
     if (eleEmpty) eleEmpty.style.display = ''
     const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) elePage.style.display = ''
+    if (elePage) elePage.style.visibility = 'visible'
 
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {

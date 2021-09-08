@@ -19,7 +19,7 @@ export interface Currency {
 }
 
 //#region get all currency
-export function getAllCurrenies(): Currency[] {
+export function getAllCurrencies(): Currency[] {
     return []
 }
 //#endregion

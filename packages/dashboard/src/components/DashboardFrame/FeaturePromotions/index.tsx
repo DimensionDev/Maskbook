@@ -55,7 +55,7 @@ export const FeaturePromotions = memo(() => {
         connectPersona(currentPersona.identifier, TWITTER_NETWORK)
     }
 
-    const openMaskNetwork = () => Services.Settings.openSNSAndActivatePlugin(`${TWITTER_ADDRESS}/realmaskbook`, '')
+    const openMaskNetwork = () => Services.Settings.openSNSAndActivatePlugin(`${TWITTER_ADDRESS}/realMaskNetwork`, '')
 
     return (
         <div className={classes.container}>

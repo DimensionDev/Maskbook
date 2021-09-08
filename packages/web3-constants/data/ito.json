@@ -93,8 +93,8 @@
         "BSCT": "",
         "Matic": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-polygon",
         "Mumbai": "",
-        "Arbitrum": "https://api.thegraph.com/legacy-explorer/subgraph/dimensiondev/mask-ito-arbitrum-one",
+        "Arbitrum": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-arbitrum-one",
         "Arbitrum_Rinkeby": "",
-        "xDai": "https://api.thegraph.com/legacy-explorer/subgraph/dimensiondev/mask-ito-xdai"
+        "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-xdai"
     }
 }

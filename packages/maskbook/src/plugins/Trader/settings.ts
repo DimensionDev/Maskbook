@@ -87,7 +87,7 @@ const uniswapV3Settings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+t
 const zrxSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+zrx`, '')
 const sushiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sushiswap`, '')
 const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sashimiswap`, '')
-const qucikswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
+const quickswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
 const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+pancakeswap`, '')
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+balancer`, '')
 const dodoSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+dodo`, '')
@@ -108,7 +108,7 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
         case TradeProvider.SASHIMISWAP:
             return sashimiswapSettings
         case TradeProvider.QUICKSWAP:
-            return qucikswapSettings
+            return quickswapSettings
         case TradeProvider.PANCAKESWAP:
             return pancakeswapSettings
         case TradeProvider.BALANCER:

@@ -1,6 +1,6 @@
 import { error, _XPCNativeWrapper, no_xray_Proxy, no_xray_DataTransfer } from './intrinsic'
 
-const { Uint8Array: no_xray_Uint8Array, Blob: no_xray_Blob, File: no_xray_File } = globalThis.window
+const { Blob: no_xray_Blob, File: no_xray_File } = globalThis.window
 const EventTargetPrototype = globalThis.window.EventTarget.prototype
 const { now } = Date
 // Firefox magics!
@@ -35,8 +35,8 @@ export function redefineEventTargetPrototype<K extends keyof EventTarget>(
     overwriteFunctionOnXRayObject(EventTargetPrototype, defineAs, apply)
 }
 
-/** get the xray-unwrapped version of a _DOM_ object */
-export function unwrapXRay_DOMObject<T>(x: T) {
+/** get the xray-unwrapped version of a C++ binding object */
+export function unwrapXRay_CPPBindingObject<T>(x: T) {
     if (_XPCNativeWrapper) return _XPCNativeWrapper.unwrap(x)
     return x
 }
@@ -76,7 +76,7 @@ export function constructXrayUnwrappedFilesFromUintLike(
     fileName: string,
     xray_fileContent: number[] | Uint8Array,
 ) {
-    const binary = no_xray_Uint8Array.from(xray_fileContent)
+    const binary = unwrapXRay_CPPBindingObject(Uint8Array.from(xray_fileContent))
     const blob = new no_xray_Blob([binary], { type: format })
     const file = new no_xray_File([blob], fileName, {
         lastModified: now(),

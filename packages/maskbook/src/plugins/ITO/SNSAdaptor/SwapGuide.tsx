@@ -27,7 +27,9 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
         flexDirection: 'column',
-        padding: theme.spacing(2, 3),
+    },
+    paper: {
+        maxWidth: 544,
     },
 }))
 
@@ -91,11 +93,12 @@ export function SwapGuide(props: SwapGuideProps) {
 
     return (
         <InjectedDialog
+            classes={{ paper: classes.paper, dialogContent: classes.paper }}
             open={open}
             title={SwapTitle[status]}
             onClose={closeDialog}
             maxWidth={SwapStatus.Swap || status === SwapStatus.Unlock ? 'xs' : 'sm'}>
-            <DialogContent className={classes.content}>
+            <DialogContent className={classes.content} classes={{ root: classes.content }}>
                 {(() => {
                     switch (status) {
                         case SwapStatus.Remind:

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { DialogContent } from '@material-ui/core'
-import { usePortalShadowRoot } from '@masknet/theme'
+import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
@@ -20,6 +20,19 @@ import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-es'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 
+const useStyles = makeStyles()((theme) => ({
+    content: {
+        position: 'relative',
+        paddingTop: 50,
+    },
+    tabs: {
+        top: 0,
+        left: 0,
+        right: 0,
+        position: 'absolute',
+    },
+}))
+
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',
     ConfirmItoPage = 'confirm-item',
@@ -35,6 +48,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const account = useAccount()
     const chainId = useChainId()
+    const { classes } = useStyles()
     const { attachMetadata, dropMetadata } = useCompositionContext()
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
@@ -74,7 +88,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             // the settings is not available
             if (!fillSettings?.token) return
 
-            // earily return happended
+            // early return happened
             if (fillState.type !== TransactionStateType.CONFIRMED) return
 
             const { receipt } = fillState
@@ -216,8 +230,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     return (
         <InjectedDialog disableBackdropClick open={props.open} title={t('plugin_ito_display_name')} onClose={onClose}>
-            <DialogContent>
-                {step === ITOCreateFormPageStep.NewItoPage ? <AbstractTab height={540} {...tabProps} /> : null}
+            <DialogContent className={classes.content}>
+                {step === ITOCreateFormPageStep.NewItoPage ? (
+                    <AbstractTab classes={{ tabs: classes.tabs }} height={540} {...tabProps} />
+                ) : null}
                 {step === ITOCreateFormPageStep.ConfirmItoPage ? (
                     <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={onDone} onClose={onClose} />
                 ) : null}

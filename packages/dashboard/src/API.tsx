@@ -1,6 +1,6 @@
 // This file includes the API bridge to the Mask Network extension
 // In isolated mode, set up at ./initialization/isolated_bridge
-// In intergrated mode, set up at /packages/maskbook/src/extension/dashboard/index
+// In integrated mode, set up at /packages/maskbook/src/extension/dashboard/index
 
 import type { DashboardPluginMessages, DashboardPluginServices } from '@masknet/shared'
 import type { Services as ServiceType } from '../../maskbook/dist/extension/service'
