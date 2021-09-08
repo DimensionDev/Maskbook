@@ -59,23 +59,22 @@ export function useNativeTransferCallback() {
                 value: amount,
                 data: memo ? toHex(memo) : undefined,
                 nonce,
-                ...(gasConfig ?? {
-                    gas: await web3.eth
-                        .estimateGas({
-                            from: account,
-                            to: recipient,
-                            value: amount,
-                            data: memo ? toHex(memo) : undefined,
+                gas: await web3.eth
+                    .estimateGas({
+                        from: account,
+                        to: recipient,
+                        value: amount,
+                        data: memo ? toHex(memo) : undefined,
+                    })
+                    .catch((error) => {
+                        setTransferState({
+                            type: TransactionStateType.FAILED,
+                            error,
                         })
-                        .catch((error) => {
-                            setTransferState({
-                                type: TransactionStateType.FAILED,
-                                error,
-                            })
-                            throw error
-                        }),
-                    gasPrice,
-                }),
+                        throw error
+                    }),
+                gasPrice,
+                ...gasConfig,
             }
 
             // send transaction and wait for hash

@@ -54,21 +54,20 @@ export function useERC20TokenTransferCallback(address?: string) {
             const config = {
                 from: account,
                 nonce,
-                ...(gasConfig ?? {
-                    gas: await erc20Contract.methods
-                        .transfer(recipient, amount)
-                        .estimateGas({
-                            from: account,
+                gas: await erc20Contract.methods
+                    .transfer(recipient, amount)
+                    .estimateGas({
+                        from: account,
+                    })
+                    .catch((error) => {
+                        setTransferState({
+                            type: TransactionStateType.FAILED,
+                            error,
                         })
-                        .catch((error) => {
-                            setTransferState({
-                                type: TransactionStateType.FAILED,
-                                error,
-                            })
-                            throw error
-                        }),
-                    gasPrice,
-                }),
+                        throw error
+                    }),
+                gasPrice,
+                ...gasConfig,
             }
             const tx = erc20Contract.methods.transfer(recipient, amount)
             // send transaction and wait for hash

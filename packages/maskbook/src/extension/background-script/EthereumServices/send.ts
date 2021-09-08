@@ -3,7 +3,6 @@ import { first } from 'lodash-es'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
-    addGasMargin,
     ChainId,
     EthereumMethodType,
     EthereumTransactionConfig,
@@ -151,8 +150,8 @@ export async function INTERNAL_send(
         // add nonce
         if (providerType === ProviderType.Maskbook && config.from) config.nonce = await getNonce(config.from as string)
 
-        // add gas margin
-        if (config.gas) config.gas = `0x${addGasMargin(config.gas).toString(16)}`
+        // // add gas margin
+        // if (config.gas) config.gas = `0x${addGasMargin(config.gas).toString(16)}`
 
         // pricing transaction
         const isGasPriceValid = parseGasPrice(config.gasPrice as string) > 0
