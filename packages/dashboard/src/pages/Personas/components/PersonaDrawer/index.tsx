@@ -122,7 +122,7 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                             sx={{ mb: 2 }}
                             color="warning"
                             onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}>
-                            {t.personas_back_up()}
+                            {t.settings_global_backup_title()}
                         </Button>
                     </Box>
                 </Stack>

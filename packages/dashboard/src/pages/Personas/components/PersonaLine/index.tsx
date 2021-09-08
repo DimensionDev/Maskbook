@@ -6,6 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '../../../../constants'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
 import type { ProfileIdentifier } from '@masknet/shared'
+import { PersonaContext } from '../../hooks/usePersonaContext'
 
 const useStyles = makeStyles()((theme) => ({
     connect: {
@@ -58,9 +59,14 @@ export interface ConnectedPersonaLineProps {
 export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
     ({ profileIdentifiers, onConnect, onDisconnect, networkIdentifier, isHideOperations }) => {
         const t = useDashboardI18N()
+        const { openProfilePage } = PersonaContext.useContainer()
         const { classes } = useStyles()
 
         const [openDisconnectDialog, setOpenDisconnectDialog] = useState(false)
+
+        const handleUserIdClick = async (network: string, userId: string) => {
+            await openProfilePage(network, userId)
+        }
 
         return (
             <Box className={classes.connect} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -78,7 +84,8 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                             <Typography
                                 variant="caption"
                                 key={x.userId}
-                                sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1 }}>
+                                onClick={() => handleUserIdClick(networkIdentifier, x.userId)}
+                                sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1, cursor: 'pointer' }}>
                                 {`@${x.userId}`}
                             </Typography>
                         ))}
