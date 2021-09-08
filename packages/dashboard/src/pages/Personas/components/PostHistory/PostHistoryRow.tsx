@@ -1,11 +1,12 @@
 import { Box, Button, Link, Stack, Typography } from '@material-ui/core'
 import { memo, ReactNode, useMemo } from 'react'
-import { FileMessageIcon, ITOIcon, MessageIcon, RedPacketIcon, PollIcon } from '@masknet/icons'
+import { FileMessageIcon, ITOIcon, MessageIcon, PollIcon, RedPacketIcon } from '@masknet/icons'
 import { getMaskColor, MaskColorVar } from '@masknet/theme'
 import { Services } from '../../../../API'
 import type { PostRecord } from '@masknet/shared'
 import { PLUGIN_IDS } from '../../../Labs/constants'
 import { useDashboardI18N } from '../../../../locales'
+import { PersonaContext } from '../../hooks/usePersonaContext'
 
 const MSG_DELIMITER = '2c1aca02'
 
@@ -61,10 +62,17 @@ const SUPPORT_PLUGIN: Record<
 
 interface PostHistoryRowProps {
     post: PostRecord
+    network: string
 }
 
-export const PostHistoryRow = memo(({ post }: PostHistoryRowProps) => {
+export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
     const t = useDashboardI18N()
+    const { openProfilePage } = PersonaContext.useContainer()
+
+    const recipientClickHandler = async (event: React.MouseEvent<HTMLSpanElement>, userId: string) => {
+        event.stopPropagation()
+        await openProfilePage(network, userId)
+    }
 
     const postIcon = useMemo(() => {
         const { interestedMeta } = post
@@ -100,12 +108,14 @@ export const PostHistoryRow = memo(({ post }: PostHistoryRowProps) => {
     }, [post.identifier])
 
     const allRecipients = useMemo(() => {
-        const { recipients } = post
+        const { recipients, postBy } = post
         if (recipients === 'everyone') return ['Everyone']
 
-        const userIds = Array.from(recipients.keys()).map((x) => `@${x.userId}`)
-        return userIds.length ? userIds : ['Myself']
-    }, [post.recipients])
+        const userIds = Array.from(recipients.keys()).map((x) => (
+            <span onClick={(e) => recipientClickHandler(e, x.userId)}>{`@${x.userId}`}</span>
+        ))
+        return userIds.length ? userIds : [<span onClick={(e) => recipientClickHandler(e, postBy.userId)}>Myself</span>]
+    }, [post.recipients, post.postBy])
 
     return (
         <PostHistoryRowUI
@@ -118,11 +128,12 @@ export const PostHistoryRow = memo(({ post }: PostHistoryRowProps) => {
     )
 })
 
-interface PostHistoryRowUIProps extends PostHistoryRowProps {
+interface PostHistoryRowUIProps {
     icon: ReactNode
     message?: ReactNode
     operation: ReactNode
-    recipients: string[]
+    recipients: ReactNode[]
+    post: PostRecord
 }
 
 const PostHistoryRowUI = memo<PostHistoryRowUIProps>(({ post, message, icon, operation, recipients }) => {
@@ -150,8 +161,8 @@ const PostHistoryRowUI = memo<PostHistoryRowUIProps>(({ post, message, icon, ope
                     {message}
                 </Typography>
                 <Typography component="p" variant="body2" sx={{ color: (theme) => getMaskColor(theme).textSecondary }}>
-                    {recipients.map((recipient) => (
-                        <Typography key={recipient} component="span" variant="body2" sx={{ mr: 1 }}>
+                    {recipients.map((recipient, index) => (
+                        <Typography key={index} component="span" variant="body2" sx={{ mr: 1 }}>
                             {recipient}
                         </Typography>
                     ))}
