@@ -12,11 +12,12 @@ import { useHistory } from 'react-router'
 import { PopupRoutes } from '../../../index'
 import { PluginTraderMessages } from '../../../../../plugins/Trader/messages'
 import { PluginTransakMessages } from '../../../../../plugins/Transak/messages'
-import { useChainDetailed, useWallet } from '@masknet/web3-shared'
+import { useWallet } from '@masknet/web3-shared'
 import { useAsync } from 'react-use'
 import Services from '../../../../service'
 import { compact, intersectionWith } from 'lodash-es'
 import urlcat from 'urlcat'
+import type { Coin } from '../../../../../plugins/Trader/types'
 
 const useStyles = makeStyles()({
     content: {
@@ -61,7 +62,6 @@ const useStyles = makeStyles()({
 const TokenDetail = memo(() => {
     const { t } = useI18N()
     const wallet = useWallet()
-    const chainDetailed = useChainDetailed()
     const { classes } = useStyles()
     const history = useHistory()
     const { currentToken } = useContainer(WalletContext)
@@ -77,27 +77,37 @@ const TokenDetail = memo(() => {
 
     const openBuyDialog = useCallback(async () => {
         if (isActiveSocialNetwork) {
+            console.log(currentToken?.token.symbol ?? currentToken?.token.name)
             PluginTransakMessages.buyTokenDialogUpdated.sendToVisiblePages({
                 open: true,
                 address: wallet?.address ?? '',
-                code: chainDetailed?.nativeCurrency.symbol,
+                code: currentToken?.token.symbol ?? currentToken?.token.name,
             })
         } else {
             const url = urlcat('next.html#', 'labs', { open: 'Transak' })
             window.open(browser.runtime.getURL(url), 'BUY_DIALOG')
         }
-    }, [wallet?.address, chainDetailed, isActiveSocialNetwork])
+    }, [wallet?.address, isActiveSocialNetwork, currentToken])
 
     const openSwapDialog = useCallback(async () => {
-        if (isActiveSocialNetwork) {
+        if (isActiveSocialNetwork && currentToken) {
             PluginTraderMessages.swapDialogUpdated.sendToVisiblePages({
                 open: true,
+                traderProps: {
+                    coin: {
+                        id: currentToken.token.address,
+                        name: currentToken.token.name,
+                        symbol: currentToken.token.symbol,
+                        contract_address: currentToken.token.address,
+                        decimals: currentToken.token.decimals,
+                    } as Coin,
+                },
             })
         } else {
             const url = urlcat('next.html#', 'labs', { open: 'Swap' })
             window.open(browser.runtime.getURL(url), 'SWAP_DIALOG')
         }
-    }, [isActiveSocialNetwork])
+    }, [isActiveSocialNetwork, currentToken])
 
     if (!currentToken) return null
 

@@ -25,8 +25,8 @@ function Dialogs() {
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
                 <Web3Provider value={Web3ContextWithoutConfirm}>
-                    <Suspense fallback="">
-                        <HashRouter>
+                    <HashRouter>
+                        <Suspense fallback="">
                             <Switch>
                                 <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
                                 <Route path={PopupRoutes.Personas} children={frame(<Personas />)} exact />
@@ -44,8 +44,8 @@ function Dialogs() {
                                 </Route>
                                 <Route children={<Redirect to={PopupRoutes.Wallet} />} />
                             </Switch>
-                        </HashRouter>
-                    </Suspense>
+                        </Suspense>
+                    </HashRouter>
                 </Web3Provider>
             </ThemeProvider>
         </StyledEngineProvider>,
