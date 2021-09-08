@@ -239,10 +239,13 @@
         "bpowi",
         "cneg",
         "xneg",
+        "wpow",
+        "bmath",
         "exitswap",
         "Denormalized",
         "joinswap",
         "moneylines",
+        "buysell",
         "Staker"
     ],
     "ignoreWords": [
