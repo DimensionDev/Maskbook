@@ -15,7 +15,7 @@ function GlobalCss() {
                 body: {
                     overflowX: 'hidden',
                     margin: '0 auto !important',
-                    width: 310,
+                    width: 350,
                     maxWidth: '100%',
                     // backgroundColor: 'transparent',
                     '&::-webkit-scrollbar': {
@@ -35,9 +35,9 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     header: {
-        padding: '0px 10px',
+        padding: '0 10px',
         backgroundColor: theme.palette.primary.main,
-        height: 40,
+        height: 50,
         display: 'flex',
         justifyContent: 'space-between',
     },
@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         backgroundColor: 'transparent',
         borderRadius: '4px 4px 0px 0px',
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: 500,
         color: theme.palette.primary.contrastText,
         textDecoration: 'none',
@@ -95,9 +95,12 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                 <Box className={classes.header}>
                     <Box className={classes.left}>
                         {excludePath || history.length === 1 ? (
-                            <MiniMaskIcon />
+                            <MiniMaskIcon style={{ fontSize: 30 }} />
                         ) : (
-                            <ArrowBackIcon onClick={history.goBack} style={{ fill: '#ffffff', cursor: 'pointer' }} />
+                            <ArrowBackIcon
+                                onClick={history.goBack}
+                                style={{ fill: '#ffffff', cursor: 'pointer', fontSize: 30 }}
+                            />
                         )}
                     </Box>
                     <Box className={classes.right}>
@@ -107,6 +110,9 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                             className={classes.nav}
                             activeClassName={classes.active}>
                             {t('wallets')}
+                        </NavLink>
+                        <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
+                            {t('personas')}
                         </NavLink>
                     </Box>
                 </Box>

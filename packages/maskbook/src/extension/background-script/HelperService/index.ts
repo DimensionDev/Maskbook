@@ -91,7 +91,7 @@ export function openPopupsWindow(route?: string) {
     } else {
         browser.windows.create({
             url: browser.runtime.getURL(url),
-            width: 310,
+            width: 350,
             height: 540,
             type: 'popup',
         })
