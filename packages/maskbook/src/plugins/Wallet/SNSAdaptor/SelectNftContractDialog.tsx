@@ -81,7 +81,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     noResultBox: {
         background: theme.palette.mode === 'light' ? 'rgba(247, 249, 250, 1)' : 'rgba(23, 25, 29, 1)',
-        width: 540,
         height: 431,
         display: 'flex',
         justifyContent: 'center',
