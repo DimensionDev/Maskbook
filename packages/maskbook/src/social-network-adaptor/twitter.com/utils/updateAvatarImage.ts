@@ -52,3 +52,23 @@ export function updateAvatarFromDB(parent?: HTMLElement, twitterId?: string) {
         updateAvatarImage(parent, avatarMeta.image ?? '')
     })
 }
+
+const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d{19})/
+function getURL(node: HTMLElement) {
+    if (node.hasAttribute('avatar')) return node.getAttribute('avatar')
+    return node.getAttribute('src')
+}
+export function getTwitterAvatarId(parent?: HTMLElement) {
+    if (!parent) return ''
+    const ele = parent.lastChild as HTMLDivElement
+    if (!ele) return ''
+
+    const url = getURL(ele)
+    if (!url) return ''
+
+    const _url = new URL(url)
+    const avatarId = _url.pathname.match(TWITTER_AVATAR_ID_MATCH)
+    if (!avatarId) return ''
+
+    return avatarId[1]
+}

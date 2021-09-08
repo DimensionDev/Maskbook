@@ -12,7 +12,7 @@ import {
     useNFTAvatar,
 } from '../../../components/InjectedComponents/NFTAvatar'
 import { getTwitterId } from '../utils/user'
-import { updateAvatarImage } from '../utils/updateAvatarImage'
+import { getTwitterAvatarId, updateAvatarImage } from '../utils/updateAvatarImage'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -75,6 +75,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>(undefined)
     const getParentDom = () =>
         searchTwitterAvatarSelector().querySelector<HTMLElement>('div > :nth-child(2) > div').evaluate()
+    const avatarId = getTwitterAvatarId(getParentDom())
     const onUpdate = useCallback(
         (data: NFTAVatarEvent) => {
             saveNFTAvatar(data.userId, data.avatarId ?? data.userId, data.address, data.tokenId)
@@ -117,18 +118,20 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     if (!Flags.nft_avatar_enabled) return null
     return (
         <>
-            <div className={classes.root}>
-                <div className={classes.nftLogo}>
-                    <NFTAvatarAmountIcon className={classes.nftImage} />
-                </div>
-                <div className={classes.wrapper}>
-                    <div className={classes.amountWrapper}>
-                        <Typography align="center" className={classes.amount}>
-                            {`${amount} ETH`}
-                        </Typography>
+            {avatarId === avatar.avatarId ? (
+                <div className={classes.root}>
+                    <div className={classes.nftLogo}>
+                        <NFTAvatarAmountIcon className={classes.nftImage} />
+                    </div>
+                    <div className={classes.wrapper}>
+                        <div className={classes.amountWrapper}>
+                            <Typography align="center" className={classes.amount}>
+                                {`${amount} ETH`}
+                            </Typography>
+                        </div>
                     </div>
                 </div>
-            </div>
+            ) : null}
 
             <Button variant="outlined" size="small" className={classes.recover} onClick={() => onClick()}>
                 Cancel NFT Avatar

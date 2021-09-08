@@ -6,7 +6,7 @@ import { getNFTAvatar, setOrClearAvatar } from '../../../components/InjectedComp
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { createReactRootShadowed, Flags, startWatch } from '../../../utils'
 import { selfInfoSelectors } from '../utils/selector'
-import { updateAvatarFromDB, updateAvatarImage } from '../utils/updateAvatarImage'
+import { getTwitterAvatarId, updateAvatarFromDB, updateAvatarImage } from '../utils/updateAvatarImage'
 
 export function injectAvatarInTwitter(signal: AbortSignal, post: PostInfo) {
     const ls = new LiveSelector([post.rootNodeProxy])
@@ -33,6 +33,8 @@ export function injectAvatarInTwitter(signal: AbortSignal, post: PostInfo) {
             updateAvatarImage(avatarParentNode)
             return
         }
+        const avatarId = getTwitterAvatarId(avatarParentNode)
+        if (avatarId !== avatarMeta.avatarId) return
         updateAvatarImage(avatarParentNode, avatarMeta.image)
         const root = createReactRootShadowed(proxy.afterShadow, { signal })
         root.render(
