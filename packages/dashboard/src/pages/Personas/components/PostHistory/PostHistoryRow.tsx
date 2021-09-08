@@ -65,7 +65,7 @@ interface PostHistoryRowProps {
 
 export const PostHistoryRow = memo(({ post }: PostHistoryRowProps) => {
     const t = useDashboardI18N()
-    console.log(post)
+
     const postIcon = useMemo(() => {
         const { interestedMeta } = post
         const plugin = interestedMeta?.keys().next().value ?? 'text'
