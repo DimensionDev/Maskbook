@@ -10,7 +10,7 @@ import { createReactRootShadowed, Flags, memoizePromise, startWatch } from '../.
 import { selfInfoSelectors } from '../utils/selector'
 import { updateAvatarFromDB, updateAvatarImage } from '../utils/updateAvatarImage'
 
-export function injectAvatorInTwitter(signal: AbortSignal, post: PostInfo) {
+export function injectAvatarInTwitter(signal: AbortSignal, post: PostInfo) {
     const ls = new LiveSelector([post.rootNodeProxy])
         .map((x) => x.current.firstChild?.firstChild?.firstChild as HTMLDivElement)
         .enableSingleMode()

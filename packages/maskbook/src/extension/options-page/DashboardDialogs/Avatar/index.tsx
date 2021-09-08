@@ -82,7 +82,7 @@ export function DashboardBindNFTAvatarDialog(props: WrappedDialogProps) {
                 size="medium"
                 icon={<StorageIcon fontSize="large" className={classes.icon} />}
                 iconColor="#699CF7"
-                primary={t('bind_nft_avator')}
+                primary={t('bind_nft_avatar')}
                 footer={
                     <Box
                         sx={{

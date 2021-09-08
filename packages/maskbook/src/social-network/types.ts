@@ -129,7 +129,7 @@ export namespace SocialNetworkUI {
 
             userAvatar?(signal: AbortSignal): void
             enhancedProfileNFTAvatar?(signal: AbortSignal): void
-            profileAvator?(signal: AbortSignal): void
+            profileAvatar?(signal: AbortSignal): void
             postAvatar?(signal: AbortSignal, current: PostInfo): void
         }
         export interface NewPostComposition {

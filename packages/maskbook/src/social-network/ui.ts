@@ -89,7 +89,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     ui.injection.userAvatar?.(signal)
     ui.injection.enhancedProfileNFTAvatar?.(signal)
-    ui.injection.profileAvator?.(signal)
+    ui.injection.profileAvatar?.(signal)
 
     startPluginSNSAdaptor(getCurrentSNSNetwork(ui.networkIdentifier), createPluginHost(signal))
 
