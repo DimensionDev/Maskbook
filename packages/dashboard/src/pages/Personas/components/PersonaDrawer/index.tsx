@@ -88,7 +88,7 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                         {personas.map((item) => {
                             const { identifier, nickname, linkedProfiles } = item
                             return (
-                                <Box mb={2.5}>
+                                <Box mb={2.5} key={identifier.toText()}>
                                     <PersonaCard
                                         identifier={identifier}
                                         active={identifier.equals(currentPersonaIdentifier)}
