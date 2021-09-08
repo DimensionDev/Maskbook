@@ -199,7 +199,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         canSend && !isPasswordValid
             ? intervalToDuration({ start: Date.now(), end: history.payload.creation_time + 3600 * 24 * 1000 })
             : null
-    const formatedRefundDuration = `${refundDuration?.hours}h ${refundDuration?.minutes}m`
+    const formatRefundDuration = `${refundDuration?.hours}h ${refundDuration?.minutes}m`
     //#endregion
 
     return (
@@ -279,7 +279,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     transition
                                     disablePortal>
                                     <Typography className={classes.popperText}>
-                                        {t('plugin_red_packet_data_broken', { duration: formatedRefundDuration })}
+                                        {t('plugin_red_packet_data_broken', { duration: formatRefundDuration })}
                                     </Typography>
                                     <div className={classes.arrow} />
                                 </Popper>
