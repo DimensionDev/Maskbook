@@ -42,7 +42,7 @@ export const RestoreFromLocal = memo(() => {
         if (file.type === 'application/json') {
             const content = await blobToText(file)
             setBackupValue(content)
-        } else if (file.type === 'application/octet-stream') {
+        } else if (['application/octet-stream', 'application/macbinary'].includes(file.type)) {
             setRestoreStatus(RestoreStatus.Decrypting)
         } else {
             enqueueSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
