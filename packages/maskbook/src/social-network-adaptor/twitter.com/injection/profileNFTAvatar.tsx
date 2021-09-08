@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
 import { NFTAvatar, useNFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { createReactRootShadowed, MaskMessage, NFTAVatarEvent, startWatch } from '../../../utils'
+import { createReactRootShadowed, Flags, MaskMessage, NFTAVatarEvent, startWatch } from '../../../utils'
 import {
     searchProfileAvatarSelector,
     searchProfileSaveSelector,
@@ -74,12 +74,14 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     }
 
     useEffect(() => {
+        if (!Flags.nft_avatar_enabled) return
         setTwitterId(getTwitterId())
         const parent = searchProfileAvatarParentSelector()
         if (parent && avatar) updateAvatarImage(parent, avatar.image)
     }, [avatar])
 
     useEffect(() => {
+        if (!Flags.nft_avatar_enabled) return
         const profileSave = searchProfileSaveSelector().evaluate()
         if (!profileSave) return
         profileSave.addEventListener('click', handler)
@@ -87,5 +89,6 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     }, [handler])
 
     if (twitterId !== useInfo?.userId) return null
+    if (!Flags.nft_avatar_enabled) return null
     return <NFTAvatar onChange={onChange} classes={classes} />
 }

@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     recover: {
         position: 'absolute',
-        right: 115,
+        right: 160,
         top: 0,
     },
 }))
@@ -115,7 +115,6 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     }
 
     if (!avatar) return null
-    if (!Flags.nft_avatar_enabled) return null
     return (
         <>
             {avatarId === avatar.avatarId ? (
@@ -132,10 +131,11 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                     </div>
                 </div>
             ) : null}
-
-            <Button variant="outlined" size="small" className={classes.recover} onClick={() => onClick()}>
-                Cancel NFT Avatar
-            </Button>
+            {Flags.nft_avatar_enabled ? (
+                <Button variant="outlined" size="small" className={classes.recover} onClick={() => onClick()}>
+                    Cancel NFT Avatar
+                </Button>
+            ) : null}
         </>
     )
 }
