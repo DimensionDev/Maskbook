@@ -131,7 +131,8 @@ export function SmartYieldPoolsView() {
                 orientation="horizontal"
                 onChange={(ev: React.ChangeEvent<{}>, newValue: number) => {
                     setTabIndex(newValue)
-                }}>
+                }}
+            >
                 {tabs}
             </Tabs>
             <Paper className={classes.paper}>
