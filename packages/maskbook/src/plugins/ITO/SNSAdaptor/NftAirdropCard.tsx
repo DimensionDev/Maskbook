@@ -7,19 +7,19 @@ import {
     useChainId,
 } from '@masknet/web3-shared'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { Box, makeStyles, Typography, Button, TextField, CircularProgress, Link } from '@material-ui/core'
+import { Box, Typography, Button, TextField, CircularProgress, Link } from '@material-ui/core'
 import { useSpaceStationClaimableTokenCountCallback } from './hooks/useSpaceStationClaimableTokenCountCallback'
 import { useSpaceStationContractClaimCallback } from './hooks/useSpaceStationContractClaimCallback'
 import { useSpaceStationClaimable } from './hooks/useSpaceStationClaimable'
 import { useI18N } from '../../../utils'
 import { useState, useEffect } from 'react'
-import { useSnackbar, OptionsObject } from '@masknet/theme'
+import { makeStyles, useSnackbar, OptionsObject } from '@masknet/theme'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import CloseIcon from '@material-ui/icons/Close'
 import classNames from 'classnames'
 import type { CampaignInfo } from '../types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         color: '#fff',
         width: 496,
@@ -163,7 +163,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
     const currentChainId = useChainId()
     const { value: claimInfo, loading } = useSpaceStationClaimable(account)
     const claimable = Boolean(claimInfo?.claimable) && currentChainId === ChainId.Mumbai
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [claimState, claimCallback] = useSpaceStationContractClaimCallback(campaignInfo!)
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const snackbarOptions = {
