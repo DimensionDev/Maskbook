@@ -43,8 +43,9 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
         <MaskbookPluginWrapper pluginName="Entropyfi">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary
-                    chainId={ChainId.Mainnet}
-                    isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}>
+                    chainId={ChainId.Kovan}
+                    // isValidChainId={(chainId) => [ChainId.Kovan].includes(chainId)}
+                >
                     <EntropyfiView />
                 </EthereumChainBoundary>
             </Suspense>

@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { useSingleContractMultipleData } from '@masknet/web3-shared'
 import { CurrencyAmount, Token } from '@uniswap/sdk-core'
+import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { poolAddressMap, tokenMap } from '../constants'
@@ -11,11 +12,7 @@ import { usePoolContract } from '../contracts'
 //     return state
 // }
 
-export function useUserShortPrincipalBalance(
-    userAddress: string,
-    poolId: string,
-    chainId: number,
-): CurrencyAmount<Token> | undefined {
+export function useUserShortPrincipalBalance(userAddress: string, poolId: string, chainId: number) {
     const poolAddress = poolAddressMap[chainId][poolId]
     const contract = usePoolContract(poolAddress)
 
@@ -26,15 +23,13 @@ export function useUserShortPrincipalBalance(
         [[userAddress]],
     )
 
-    const asyncResult = useAsyncRetry(() => callback(calls), [calls])
-    const [amount] = results
-
+    useAsyncRetry(() => callback(calls), [calls, callback])
     return useMemo(
         () =>
-            userAddress && poolAddress && amount
-                ? CurrencyAmount.fromRawAmount(tokenMap[chainId][poolId].principalToken, amount.toString())
+            userAddress && poolAddress && results && results.length > 0 && results[0].value
+                ? CurrencyAmount.fromRawAmount(tokenMap[chainId][poolId].principalToken, results[0].value.toString())
                 : undefined,
-        [poolId, amount, chainId, userAddress],
+        [poolId, results, chainId, userAddress],
     )
 }
 
@@ -45,66 +40,93 @@ export function useUserLongPrincipalBalance(
 ): CurrencyAmount<Token> | undefined {
     const poolAddress = poolAddressMap[chainId][poolId]
     const contract = usePoolContract(poolAddress)
+    const [results, calls, _, callback] = useSingleContractMultipleData(
+        contract,
+        ['userLongPrincipalBalance'],
+        [[userAddress]],
+    )
 
-    const inputs = useMemo(() => [userAddress], [userAddress])
-    const [amount] = useSingleContractMultipleData(contract, ['userLongPrincipalBalance'], [[userAddress]])
-
+    useAsyncRetry(() => callback(calls), [calls, callback])
     return useMemo(
         () =>
-            userAddress && poolAddress && amount
-                ? CurrencyAmount.fromRawAmount(tokenMap[chainId][poolId].principalToken, amount.toString())
+            userAddress && poolAddress && results && results.length > 0 && results[0].value
+                ? CurrencyAmount.fromRawAmount(tokenMap[chainId][poolId].principalToken, results[0].value.toString())
                 : undefined,
-        [poolId, amount, chainId, userAddress],
+        [poolId, results, chainId, userAddress],
     )
 }
 
 export function useLastUpdateTimestamp(chainId: number, poolId: string): number | undefined {
     const poolAddress = poolAddressMap[chainId][poolId]
     const contract = usePoolContract(poolAddress)
-    const [status] = useSingleContractMultipleData(contract, ['status'], [])
+    const [results, calls, _, callback] = useSingleContractMultipleData(contract, ['status'], [[]])
+
+    useAsyncRetry(() => callback(calls), [calls, callback])
+
     // return status
     // @ts-ignore
-    return useMemo(() => (poolAddress && status ? status?.lastUpdateTimestamp.toNumber() : undefined), [poolId, status])
+    console.log('result', results)
+    return useMemo(
+        () =>
+            poolAddress && results && results.length > 0 && results[0].value
+                ? results[0].value?.lastUpdateTimestamp
+                : undefined,
+        [poolId, results, chainId],
+    )
 }
 
 export function useInitialPrice(chainId: number, poolId: string): string | undefined {
     const poolAddress = poolAddressMap[chainId][poolId]
     const contract = usePoolContract(poolAddress)
-    const [status] = useSingleContractMultipleData(contract, ['status'], [])
+    const [results, calls, _, callback] = useSingleContractMultipleData(contract, ['status'], [[]])
+    useAsyncRetry(() => callback(calls), [calls, callback])
     // return status
     return useMemo(
         () =>
-            poolAddress && status
+            poolAddress && results && results.length > 0 && results[0].value
                 ? poolId === 'ETH-GAS-USDT'
-                    ? status.initialPrice.div(10 ** 9).toString()
-                    : status.initialPrice.div(10 ** 8).toString()
+                    ? new BigNumber(results[0].value.initialPrice).div(10 ** 9).toString()
+                    : new BigNumber(results[0].value.initialPrice).div(10 ** 8).toString()
                 : undefined,
-        [poolId, status],
+        [poolId, results, chainId],
     )
 }
 
 export function usePoolStatus(chainId: number, poolId: string): number | undefined {
     const poolAddress = poolAddressMap[chainId][poolId]
     const contract = usePoolContract(poolAddress)
-    const [status] = useSingleContractMultipleData(contract, ['status'], [])
+    const [results, calls, _, callback] = useSingleContractMultipleData(contract, ['status'], [[]])
+    useAsyncRetry(() => callback(calls), [calls, callback])
     // return status
     // @ts-ignore
-    return useMemo(() => (poolAddress && status ? status.currState : []), [poolId, status])
+    return useMemo(
+        () => (poolAddress && results && results.length > 0 && results[0].value ? results[0].value?.currState : ''),
+        [poolId, results, chainId],
+    )
 }
 
 export function useValuePerShortToken(chainId: number, poolId: string): string | undefined {
     const poolAddress = poolAddressMap[chainId][poolId]
     const contract = usePoolContract(poolAddress)
-    const [value] = useSingleContractMultipleData(contract, ['valuePerShortToken'], [])
+    const [results, calls, _, callback] = useSingleContractMultipleData(contract, ['valuePerShortToken'], [[]])
+    useAsyncRetry(() => callback(calls), [calls, callback])
     // return status
-    // @ts-ignore
-    return useMemo(() => (poolAddress && value ? value.toString() : []), [poolId, value])
+    return useMemo(
+        () =>
+            poolAddress && results && results.length > 0 && results[0].value ? results[0].value.toString() : undefined,
+        [poolId, results, chainId],
+    )
 }
 
 export function useValuePerLongToken(chainId: number, poolId: string): string | undefined {
     const poolAddress = poolAddressMap[chainId][poolId]
     const contract = usePoolContract(poolAddress)
-    const [value] = useSingleContractMultipleData(contract, ['valuePerLongToken'], [])
+    const [results, calls, _, callback] = useSingleContractMultipleData(contract, ['valuePerLongToken'], [[]])
+    useAsyncRetry(() => callback(calls), [calls, callback])
     // return status
-    return useMemo(() => (poolAddress && value ? value.toString() : undefined), [poolId, value])
+    return useMemo(
+        () =>
+            poolAddress && results && results.length > 0 && results[0].value ? results[0].value.toString() : undefined,
+        [poolId, results, chainId],
+    )
 }

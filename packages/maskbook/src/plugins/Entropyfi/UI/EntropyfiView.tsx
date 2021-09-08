@@ -1,5 +1,4 @@
 import { DarkColor } from '@masknet/theme/constants'
-import { usePoolTogetherConstants } from '@masknet/web3-shared'
 import { Card, CardActions, CardContent, Link, Paper, Tab, Tabs, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import React, { useState } from 'react'
@@ -111,7 +110,7 @@ export function EntropyfiView() {
     const { classes } = useStyles()
 
     //#region mask pool
-    const { MASK_POOL_ADDRESS, MASK_POOL_SUBGRAPH } = usePoolTogetherConstants()
+    // const { MASK_POOL_ADDRESS, MASK_POOL_SUBGRAPH } = usePoolTogetherConstants()
 
     //#region tabs
     const [tabIndex, setTabIndex] = useState(0)
@@ -119,6 +118,7 @@ export function EntropyfiView() {
         <Tab className={classes.tab} key="pools" label={t('plugin_pooltogether_tab_pools')} />,
         <Tab className={classes.tab} key="account" label={t('plugin_pooltogether_tab_account')} />,
     ].filter(Boolean)
+    console.log('tabs', tabs)
     //#endregion
 
     return (

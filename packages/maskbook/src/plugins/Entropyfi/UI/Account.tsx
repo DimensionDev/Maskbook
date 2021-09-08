@@ -2,6 +2,9 @@ import { DarkColor } from '@masknet/theme/constants'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
+import { useValuePerShortToken } from '../hooks/usePoolData'
+import { useAccount, useChainId } from '@masknet/web3-shared'
+import { useEffect } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -53,10 +56,17 @@ const useStyles = makeStyles()((theme) => ({
 export function Account() {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const account = useAccount()
+    const chainId = useChainId()
+    const rest = useValuePerShortToken(chainId, 'BTC-USDT')
+    useEffect(() => {
+        console.log('res', rest)
+    })
 
     return (
         <Grid container direction="column" className={classes.root}>
             <span> Account </span>
+            <span>{}</span>
         </Grid>
     )
 }

@@ -18,7 +18,7 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'insider',
         web3: {
-            operatingSupportedChains: [ChainId.Kovan, ChainId.Mainnet, ChainId.Mumbai, ChainId.Matic], // todo load from api?
+            operatingSupportedChains: [ChainId.Kovan], // todo load from api?
         },
     },
 
