@@ -41,16 +41,6 @@ export function useEthereumAddress(nickname: string, twitterId: string, bio: str
 
     const isLoading = loadingAddressENS || loadingAddressUNS || loadingAddressNames
 
-    console.log({
-        addressENS,
-        addressUNS,
-        loadingAddressENS,
-        loadingAddressUNS,
-        loadingAddressNames,
-        names,
-        ownerAddress,
-    })
-
     return {
         loading: isLoading,
         value: isLoading
