@@ -11,11 +11,11 @@ import {
 } from '@masknet/web3-shared'
 import { TokenIcon } from '../TokenIcon'
 import type { MaskSearchableListItemProps } from '@masknet/theme'
+import { makeStyles, MaskLoadingButton } from '@masknet/theme'
 import { some } from 'lodash-es'
 import { useCallback } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { MaskLoadingButton } from '@masknet/theme'
 import { LoadingIcon } from '@masknet/icons'
+import { useSharedI18N } from '../../../locales'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -68,6 +68,7 @@ const useStyles = makeStyles()((theme) => ({
 export const getERC20TokenListItem =
     (addedTokens: FungibleTokenDetailed[], externalTokens: FungibleTokenDetailed[], account?: string) =>
     ({ data, onSelect }: MaskSearchableListItemProps<Asset>) => {
+        const t = useSharedI18N()
         const { classes } = useStyles()
         const [, addERC20Token] = useAddERC20TokenCallback()
         const [, trustERC20Token] = useTrustERC20TokenCallback()
@@ -122,7 +123,7 @@ export const getERC20TokenListItem =
                                 size="small"
                                 clearStyle
                                 loadingIndicator={<LoadingIcon sx={{ fontSize: 16 }} />}>
-                                Import
+                                {t.import()}
                             </MaskLoadingButton>
                         )}
                     </Typography>
