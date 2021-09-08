@@ -12,7 +12,7 @@ import {
     isZero,
     TransactionStateType,
     useGasPrice,
-    useTokenBalance,
+    useFungibleTokenBalance,
     useTokenTransferCallback,
     Wallet,
 } from '@masknet/web3-shared'
@@ -57,7 +57,7 @@ export function TransferTab(props: TransferTabProps) {
     const { value: gasPrice = '0' } = useGasPrice()
 
     // balance
-    const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useTokenBalance(
+    const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useFungibleTokenBalance(
         token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',
     )
