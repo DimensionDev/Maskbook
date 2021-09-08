@@ -3,7 +3,7 @@ import { useResolveENS, useResolveUNS, useAddressNames } from '@masknet/web3-sha
 import { useEffect, useMemo, useState } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
-const ENS_RE = /[\w#%+.:=@~-]{1,256}\.(eth|kred|xyz|luxe)\b/
+const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ENS_RE_FULL = new RegExp(`^${ENS_RE.source}$`)
 const ADDRESS = /0x[\dA-Fa-f]{40}/
 
