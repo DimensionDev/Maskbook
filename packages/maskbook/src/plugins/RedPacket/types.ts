@@ -185,6 +185,7 @@ export interface NftRedPacketHistory extends NftRedPacketSubgraphInMask {
 //#region nft red packet
 export interface RedPacketNftJSONPayload {
     id: string
+    txid: string
     duration: number
     message: string
     senderName: string

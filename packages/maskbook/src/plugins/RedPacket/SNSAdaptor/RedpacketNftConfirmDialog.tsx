@@ -21,7 +21,7 @@ import LaunchIcon from '@material-ui/icons/Launch'
 import { useI18N } from '../../../utils'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useMemo, useCallback, useEffect } from 'react'
+import { useMemo, useCallback, useEffect, useState } from 'react'
 import { useSnackbar } from '@masknet/theme'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 import { RedPacketNftMetaKey } from '../constants'
@@ -183,10 +183,12 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     const isSending = createState.type === TransactionStateType.WAIT_FOR_CONFIRMING
     const { enqueueSnackbar } = useSnackbar()
     const onSendTx = useCallback(() => createCallback(publicKey), [publicKey])
+    const [txid, setTxid] = useState('')
     const onSendPost = useCallback(
         (id: string) => {
             attachMetadata(RedPacketNftMetaKey, {
                 id,
+                txid,
                 duration,
                 message,
                 senderName,
@@ -197,10 +199,11 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 chainId: contract.chainId,
             })
         },
-        [duration, message, senderName, contract, privateKey],
+        [duration, message, senderName, contract, privateKey, txid],
     )
     useEffect(() => {
         if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING && createState.hash) {
+            setTxid(createState.hash)
             RedPacketNftRPC.addRedPacketNft({ id: createState.hash, password: privateKey, contract_version: 1 })
         }
 

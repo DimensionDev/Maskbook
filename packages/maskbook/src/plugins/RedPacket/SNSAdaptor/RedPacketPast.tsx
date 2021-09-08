@@ -65,9 +65,10 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
     const { attachMetadata } = useCompositionContext()
     const handleSendNftRedpacket = useCallback(
         (history: NftRedPacketHistory, contractDetailed: ERC721ContractDetailed) => {
-            const { rpid, duration, message, payload } = history
+            const { rpid, txid, duration, message, payload } = history
             attachMetadata(RedPacketNftMetaKey, {
                 id: rpid,
+                txid,
                 duration: duration,
                 message: message,
                 senderName,
