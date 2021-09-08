@@ -124,13 +124,13 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
     },
     disabledButton: {
-        color: 'rgba(255, 255, 255, 0.3)',
+        color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
         boxShadow: 'none',
-        backgroundColor: 'rgba(255, 255, 255, 0.12)',
+        backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
         cursor: 'default',
         '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.12)',
-            color: 'rgba(255, 255, 255, 0.3)',
+            backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
+            color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
         },
     },
 }))
