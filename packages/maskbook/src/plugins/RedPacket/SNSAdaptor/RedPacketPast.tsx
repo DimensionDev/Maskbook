@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     tabs: {
         backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
-        width: 520,
+        width: 544,
         height: 36,
         minHeight: 36,
         margin: '0 auto',
