@@ -6,8 +6,8 @@ export default function (signal: AbortSignal) {
     const injectedScriptURL = '/injected-script.js'
     const injectedScript = fetchUserScript(injectedScriptURL)
 
-    const maskSDKURL = '/mask-sdk.js'
-    const maskSDK = fetchUserScript(maskSDKURL)
+    const maskSDK_URL = '/mask-sdk.js'
+    const maskSDK = fetchUserScript(maskSDK_URL)
 
     const injectContentScript = fetchInjectContentScript('/generated__content__script.html')
 
@@ -37,7 +37,7 @@ export default function (signal: AbortSignal) {
             //#endregion
 
             //#region Mask SDK
-            const code = process.env.NODE_ENV === 'development' ? await fetchUserScript(maskSDKURL) : await maskSDK
+            const code = process.env.NODE_ENV === 'development' ? await fetchUserScript(maskSDK_URL) : await maskSDK
             browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
             //#endregion
         }
@@ -50,7 +50,7 @@ export default function (signal: AbortSignal) {
         'mask-sdk-reload',
         async () => {
             browser.tabs.executeScript((await browser.tabs.query({ active: true })).at(0)?.id!, {
-                code: (await fetchUserScript(maskSDKURL)) + `\n;console.log("[@masknet/sdk] SDK reloaded.")`,
+                code: (await fetchUserScript(maskSDK_URL)) + `\n;console.log("[@masknet/sdk] SDK reloaded.")`,
             })
         },
         { signal },
