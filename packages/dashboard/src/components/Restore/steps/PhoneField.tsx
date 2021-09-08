@@ -31,7 +31,7 @@ export const PhoneField = memo(({ toStep }: StepCommonProps) => {
             <PhoneNumberField
                 onBlur={validCheck}
                 label={<Label onModeChange={() => toStep(ValidationCodeStep.EmailInput)} mode={AccountType.phone} />}
-                onChange={({ country, phone }) => setAccount(country + phone)}
+                onChange={({ country, phone }) => setAccount(country + ' ' + phone)}
                 error={invalidPhone ? t.sign_in_account_cloud_backup_phone_format_error() : ''}
                 value={{
                     country: '+1',
