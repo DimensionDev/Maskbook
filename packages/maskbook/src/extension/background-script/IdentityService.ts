@@ -181,7 +181,6 @@ export async function restoreFromMnemonicWords(
         nickname,
     })
 
-    console.log(identifier)
     return queryPersona(identifier)
 }
 export async function restoreFromBase64(base64: string): Promise<Persona | null> {
