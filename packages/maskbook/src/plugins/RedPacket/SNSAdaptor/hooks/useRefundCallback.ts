@@ -11,8 +11,6 @@ import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import type { TransactionReceipt } from 'web3-core'
 
 export function useRefundCallback(version: number, from: string, id?: string) {
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const [refundState, setRefundState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
 
@@ -44,8 +42,6 @@ export function useRefundCallback(version: number, from: string, id?: string) {
                     })
                     throw error
                 }),
-            gasPrice,
-            nonce,
         }
 
         // step 2: blocking
@@ -76,7 +72,7 @@ export function useRefundCallback(version: number, from: string, id?: string) {
                 reject(error)
             })
         })
-    }, [nonce, gasPrice, id, redPacketContract, from])
+    }, [id, redPacketContract, from])
 
     const resetCallback = useCallback(() => {
         setRefundState({

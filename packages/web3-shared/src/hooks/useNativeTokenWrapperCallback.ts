@@ -10,7 +10,7 @@ import { isLessThan, isZero } from '../utils'
 
 export function useNativeTokenWrapperCallback() {
     const nonce = useNonce()
-    const gasPrice = useGasPrice()
+    const { value: gasPrice = '0' } = useGasPrice()
     const account = useAccount()
     const wrapperContract = useNativeTokenWrapperContract()
     const [transactionState, setTransactionState] = useTransactionState()

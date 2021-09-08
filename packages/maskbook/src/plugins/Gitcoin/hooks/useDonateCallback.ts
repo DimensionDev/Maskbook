@@ -27,8 +27,6 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
 
     const web3 = useWeb3()
     const account = useAccount()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const [donateState, setDonateState] = useTransactionState()
 
     const donations = useMemo((): [string, string, string][] => {
@@ -67,7 +65,6 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         const value = new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed()
         const config = {
             from: account,
-            nonce,
             gas: await bulkCheckoutContract.methods
                 .donate(donations)
                 .estimateGas({
@@ -81,7 +78,6 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
                     })
                     throw error
                 }),
-            gasPrice,
             value,
         }
 
@@ -105,7 +101,7 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
                     reject(error)
                 })
         })
-    }, [web3, nonce, gasPrice, account, amount, token, donations])
+    }, [web3, account, amount, token, donations])
 
     const resetCallback = useCallback(() => {
         setDonateState({
