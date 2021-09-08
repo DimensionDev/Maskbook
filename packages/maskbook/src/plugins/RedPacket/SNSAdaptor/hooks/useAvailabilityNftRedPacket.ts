@@ -35,6 +35,7 @@ export function useAvailabilityNftRedPacket(id: string, from: string) {
             isClaimed,
             totalAmount,
             claimedAmount,
+            remaining: totalAmount - claimedAmount,
             isClaimedAll,
             isCompleted,
             isEnd,

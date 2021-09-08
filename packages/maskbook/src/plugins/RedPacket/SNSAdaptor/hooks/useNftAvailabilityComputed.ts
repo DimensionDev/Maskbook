@@ -27,7 +27,7 @@ export function useNftAvailabilityComputed(account: string, payload: NftRedPacke
             }
         }
 
-        const isEmpty = availability.balance === '0'
+        const isEmpty = availability.remaining === 0
         const isExpired = availability.expired
         const isClaimed = availability.isClaimed
         const isCreator = isSameAddress(payload?.sender.address ?? '', account)
