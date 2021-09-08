@@ -13,6 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
+
 interface DisconnectProfileDialogProps {
     open: boolean
     networkIdentifier: string
@@ -35,6 +36,7 @@ export const DisconnectProfileDialog = ({
 }: DisconnectProfileDialogProps) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
+
     const [currentStep, setCurrentStep] = useState<steps>(steps.selection)
     const [profileIdentifier, setProfileIdentifier] = useState<ProfileIdentifier | null>()
 
@@ -76,7 +78,10 @@ export const DisconnectProfileDialog = ({
                             <WarningIcon className={classes.svg} sx={{ fontSize: 64 }} color="warning" />
                         </Box>
                         <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1 }}>
-                            {t.personas_disconnect_warning({ userId: profileIdentifier?.userId ?? '' })}
+                            {t.personas_disconnect_warning({
+                                userId: profileIdentifier?.userId ?? '',
+                                network: networkIdentifier,
+                            })}
                         </Typography>
                         <Stack mt={3} mb={1} direction="row" justifyContent="space-around" gap={4}>
                             <Button sx={{ flex: 1 }} onClick={onClose} color="secondary">
