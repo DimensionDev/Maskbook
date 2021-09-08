@@ -43,15 +43,15 @@ export function useTokenPrice(
             WalletRPC.trackNativeToken(platform)
         }
         return currentTokenPricesSettings.addListener((newVal) => {
-            const value = newVal[category][currencyType]
+            const value = newVal[category]?.[currencyType] ?? 0
             setPrice(value)
         })
     }, [platform, contractAddress])
 
     useEffect(() => {
         const currentTokenPrices = currentTokenPricesSettings.value
-        setPrice(currentTokenPrices[category][currencyType] ?? 0)
-    }, [category, contractAddress])
+        setPrice(currentTokenPrices[category]?.[currencyType] ?? 0)
+    }, [category])
 
     return price
 }
