@@ -3,8 +3,6 @@ import {
     useAccount,
     useTransactionState,
     TransactionStateType,
-    useNonce,
-    useGasPrice,
     addGasMargin,
     TransactionEventType,
 } from '@masknet/web3-shared'
@@ -14,8 +12,6 @@ import type { AmmOutcome, Market } from '../types'
 export function useSellCallback(market?: Market, outcome?: AmmOutcome, shareTokensIn?: string[]) {
     const ammContract = useAmmFactory(market?.ammExchange?.address ?? '')
     const account = useAccount()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const [sellState, setSellState] = useTransactionState()
 
     const sellCallback = useCallback(async () => {
@@ -35,8 +31,6 @@ export function useSellCallback(market?: Market, outcome?: AmmOutcome, shareToke
         const config = {
             from: account,
             value: '0',
-            gasPrice,
-            nonce,
         }
         const estimatedGas = await ammContract.methods
             .sellForCollateral(market.address, market.id, outcome.id, shareTokensIn, '0')
@@ -80,7 +74,7 @@ export function useSellCallback(market?: Market, outcome?: AmmOutcome, shareToke
                     reject(error)
                 })
         })
-    }, [gasPrice, nonce, account, shareTokensIn, market, outcome])
+    }, [account, shareTokensIn, market, outcome])
 
     const resetCallback = useCallback(() => {
         setSellState({

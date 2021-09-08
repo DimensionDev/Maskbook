@@ -6,8 +6,6 @@ import {
     useAccount,
     useTransactionState,
     TransactionStateType,
-    useNonce,
-    useGasPrice,
     addGasMargin,
     TransactionEventType,
 } from '@masknet/web3-shared'
@@ -24,8 +22,6 @@ export function useBuyCallback(
     const ammContract = useAmmFactory(market?.ammExchange?.address ?? '')
 
     const account = useAccount()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const [buyState, setBuyState] = useTransactionState()
 
     const buyCallback = useCallback(async () => {
@@ -45,8 +41,6 @@ export function useBuyCallback(
         const config = {
             from: account,
             value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
-            gasPrice,
-            nonce,
         }
 
         const estimatedGas = await ammContract.methods
@@ -91,7 +85,7 @@ export function useBuyCallback(
                     reject(error)
                 })
         })
-    }, [gasPrice, nonce, account, amount, token, minTokenOut, market, outcome])
+    }, [account, amount, token, minTokenOut, market, outcome])
 
     const resetCallback = useCallback(() => {
         setBuyState({

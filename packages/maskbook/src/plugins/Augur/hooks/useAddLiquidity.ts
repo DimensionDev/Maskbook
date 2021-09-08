@@ -6,8 +6,6 @@ import {
     useAccount,
     useTransactionState,
     TransactionStateType,
-    useNonce,
-    useGasPrice,
     addGasMargin,
     TransactionEventType,
 } from '@masknet/web3-shared'
@@ -24,8 +22,6 @@ export function useAddLiquidityCallback(
     const ammContract = useAmmFactory(market?.ammExchange?.address ?? '')
 
     const account = useAccount()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const [state, setState] = useTransactionState()
     const minTokenOut = new BigNumber(breakdown?.lpTokens ?? 0)
         .multipliedBy(1 - currentSlippageSettings.value / 10000)
@@ -48,8 +44,6 @@ export function useAddLiquidityCallback(
         const config = {
             from: account,
             value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
-            gasPrice,
-            nonce,
         }
 
         const action =
@@ -94,7 +88,7 @@ export function useAddLiquidityCallback(
                     reject(error)
                 })
         })
-    }, [gasPrice, nonce, account, amount, token, minTokenOut, market, breakdown])
+    }, [account, amount, token, minTokenOut, market, breakdown])
 
     const resetCallback = useCallback(() => {
         setState({

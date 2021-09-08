@@ -6,8 +6,6 @@ import {
     useAccount,
     useTransactionState,
     TransactionStateType,
-    useNonce,
-    useGasPrice,
     addGasMargin,
     TransactionEventType,
 } from '@masknet/web3-shared'
@@ -25,8 +23,6 @@ export function useRemoveLiquidityCallback(
     const balancerPoolContract = useBalancerPool(amm?.lpToken?.address ?? '')
 
     const account = useAccount()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const [state, setState] = useTransactionState()
     const minTokensOut = market?.outcomes.map((o) => '0') ?? []
 
@@ -47,8 +43,6 @@ export function useRemoveLiquidityCallback(
         const config = {
             from: account,
             value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
-            gasPrice,
-            nonce,
         }
 
         const action = market.hasWinner
@@ -92,7 +86,7 @@ export function useRemoveLiquidityCallback(
                     reject(error)
                 })
         })
-    }, [gasPrice, nonce, account, amount, token, minTokensOut, market, amm, balancerPoolContract, ammContract])
+    }, [account, amount, token, minTokensOut, market, amm, balancerPoolContract, ammContract])
 
     const resetCallback = useCallback(() => {
         setState({
