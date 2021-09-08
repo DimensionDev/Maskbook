@@ -1,0 +1,34 @@
+[
+    { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "owner", "type": "address" },
+            { "indexed": false, "internalType": "string", "name": "title", "type": "string" },
+            { "indexed": false, "internalType": "address[]", "name": "payees", "type": "address[]" },
+            { "indexed": false, "internalType": "uint256[]", "name": "shares", "type": "uint256[]" },
+            { "indexed": false, "internalType": "address", "name": "splitter", "type": "address" }
+        ],
+        "name": "DeployPaymentSplitter",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "owner", "type": "address" },
+            { "internalType": "string", "name": "title", "type": "string" },
+            { "internalType": "address[]", "name": "payees", "type": "address[]" },
+            { "internalType": "uint256[]", "name": "shares", "type": "uint256[]" }
+        ],
+        "name": "deployPaymentSplitter",
+        "outputs": [{ "internalType": "address", "name": "splitter", "type": "address" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "query", "type": "address" }],
+        "name": "isPaymentSplitter",
+        "outputs": [{ "internalType": "bool", "name": "result", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]

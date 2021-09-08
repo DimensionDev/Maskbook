@@ -1,0 +1,34 @@
+[
+    {
+        "inputs": [
+            { "internalType": "address", "name": "proxy", "type": "address" },
+            { "internalType": "uint256", "name": "deadline", "type": "uint256" },
+            { "internalType": "bytes", "name": "params", "type": "bytes" },
+            { "internalType": "address", "name": "", "type": "address" },
+            { "internalType": "uint256", "name": "bidPrice", "type": "uint256" },
+            { "internalType": "address", "name": "", "type": "address" },
+            { "internalType": "uint256", "name": "bestBidPrice", "type": "uint256" },
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+        ],
+        "name": "canBid",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "proxy", "type": "address" },
+            { "internalType": "uint256", "name": "deadline", "type": "uint256" },
+            { "internalType": "bytes", "name": "params", "type": "bytes" },
+            { "internalType": "address", "name": "bidder", "type": "address" },
+            { "internalType": "uint256", "name": "bidPrice", "type": "uint256" },
+            { "internalType": "address", "name": "bestBidder", "type": "address" },
+            { "internalType": "uint256", "name": "bestBidPrice", "type": "uint256" },
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+        ],
+        "name": "canClaim",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]

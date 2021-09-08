@@ -5,6 +5,7 @@ export const PLUGIN_IDS = {
     RED_PACKET: 'com.maskbook.red_packet',
     TRANSAK: 'com.maskbook.transak',
     COLLECTIBLES: 'com.maskbook.collectibles',
+    SHOYU: 'com.shoyunft',
     SWAP: '',
     SNAPSHOT: 'org.snapshot',
     MARKETS: 'com.maskbook.ito',

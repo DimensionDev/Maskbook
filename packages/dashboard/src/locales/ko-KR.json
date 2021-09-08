@@ -262,6 +262,8 @@
     "labs_collectibles_desc": "Opensea and Rarible의 지정 정보를 포시하고 소셜미디어에서 경매하기",
     "labs_gitcoin": "Gitcoin",
     "labs_gitcoin_desc": "Gitcoin의 지정 정보를 표시하고 소셜미디어에서 프로젝트에게 적접 기부하기",
+    "labs_shoyu": "Shoyu",
+    "labs_shoyu_desc": "NFT Exchange and Launchpad",
     "labs_valuables": "가치",
     "labs_valuables_desc": "크리에이터가 서명한 트윗을 구입 및 판매하기",
     "labs_dhedge": "DHEDGE",

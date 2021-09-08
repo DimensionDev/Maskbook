@@ -2,9 +2,11 @@ import type { OpenSeaFungibleToken, WyvernSchemaName } from 'opensea-js/lib/type
 import type { ChainId } from '@masknet/web3-shared'
 import type { OpenSeaAssetEventType } from './opensea'
 import type { RaribleEventType } from './rarible'
+import type { shoyuEventType } from './shoyu'
 
 export * from './opensea'
 export * from './rarible'
+export * from './shoyu'
 
 export interface CollectibleJSON_Payload {
     chain_id: ChainId
@@ -30,6 +32,7 @@ export interface CollectibleToken {
 export enum CollectibleProvider {
     OPENSEA = 0,
     RARIBLE = 1,
+    SHOYU = 2,
 }
 
 export interface NFTAsset {
@@ -116,7 +119,7 @@ export interface NFTHistory {
         quantity: string
         id: string
     }
-    eventType: OpenSeaAssetEventType | RaribleEventType
+    eventType: OpenSeaAssetEventType | RaribleEventType | shoyuEventType
     transactionBlockExplorerLink?: string
     timestamp: number
 }

@@ -1,0 +1,511 @@
+[
+    {
+        "inputs": [
+            { "internalType": "address", "name": "protocolFeeRecipient", "type": "address" },
+            { "internalType": "uint8", "name": "protocolFee", "type": "uint8" },
+            { "internalType": "address", "name": "operationalFeeRecipient", "type": "address" },
+            { "internalType": "uint8", "name": "operationalFee", "type": "uint8" },
+            { "internalType": "string", "name": "_baseURI721", "type": "string" },
+            { "internalType": "string", "name": "_baseURI1155", "type": "string" }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "proxy", "type": "address" },
+            { "indexed": true, "internalType": "address", "name": "owner", "type": "address" },
+            { "indexed": false, "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" },
+            { "indexed": false, "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" },
+            { "indexed": false, "internalType": "address", "name": "royaltyFeeRecipient", "type": "address" },
+            { "indexed": false, "internalType": "uint8", "name": "royaltyFee", "type": "uint8" }
+        ],
+        "name": "DeployNFT1155AndMintBatch",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "proxy", "type": "address" },
+            { "indexed": true, "internalType": "address", "name": "owner", "type": "address" },
+            { "indexed": false, "internalType": "string", "name": "name", "type": "string" },
+            { "indexed": false, "internalType": "string", "name": "symbol", "type": "string" },
+            { "indexed": false, "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" },
+            { "indexed": false, "internalType": "address", "name": "royaltyFeeRecipient", "type": "address" },
+            { "indexed": false, "internalType": "uint8", "name": "royaltyFee", "type": "uint8" }
+        ],
+        "name": "DeployNFT721AndMintBatch",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "proxy", "type": "address" },
+            { "indexed": true, "internalType": "address", "name": "owner", "type": "address" },
+            { "indexed": false, "internalType": "string", "name": "name", "type": "string" },
+            { "indexed": false, "internalType": "string", "name": "symbol", "type": "string" },
+            { "indexed": false, "internalType": "uint256", "name": "toTokenId", "type": "uint256" },
+            { "indexed": false, "internalType": "address", "name": "royaltyFeeRecipient", "type": "address" },
+            { "indexed": false, "internalType": "uint8", "name": "royaltyFee", "type": "uint8" }
+        ],
+        "name": "DeployNFT721AndPark",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "proxy", "type": "address" },
+            { "indexed": true, "internalType": "address", "name": "owner", "type": "address" },
+            { "indexed": false, "internalType": "string", "name": "name", "type": "string" },
+            { "indexed": false, "internalType": "string", "name": "symbol", "type": "string" },
+            { "indexed": true, "internalType": "address", "name": "dividendToken", "type": "address" },
+            { "indexed": false, "internalType": "uint256", "name": "initialSupply", "type": "uint256" }
+        ],
+        "name": "DeploySocialToken",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
+            { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": false, "internalType": "string", "name": "uri", "type": "string" }],
+        "name": "SetBaseURI1155",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": false, "internalType": "string", "name": "uri", "type": "string" }],
+        "name": "SetBaseURI721",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": false, "internalType": "address", "name": "deployer", "type": "address" },
+            { "indexed": false, "internalType": "bool", "name": "whitelisted", "type": "bool" }
+        ],
+        "name": "SetDeployerWhitelisted",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": false, "internalType": "uint8", "name": "fee", "type": "uint8" }],
+        "name": "SetOperationalFee",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": false, "internalType": "address", "name": "recipient", "type": "address" }],
+        "name": "SetOperationalFeeRecipient",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": false, "internalType": "address", "name": "recipient", "type": "address" }],
+        "name": "SetProtocolFeeRecipient",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": false, "internalType": "address", "name": "strategy", "type": "address" },
+            { "indexed": false, "internalType": "bool", "name": "whitelisted", "type": "bool" }
+        ],
+        "name": "SetStrategyWhitelisted",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": false, "internalType": "address", "name": "exchange", "type": "address" }],
+        "name": "UpgradeERC1155Exchange",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": false, "internalType": "address", "name": "exchange", "type": "address" }],
+        "name": "UpgradeERC721Exchange",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": false, "internalType": "address", "name": "newTarget", "type": "address" }],
+        "name": "UpgradeNFT1155",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": false, "internalType": "address", "name": "newTarget", "type": "address" }],
+        "name": "UpgradeNFT721",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": false, "internalType": "address", "name": "newTarget", "type": "address" }],
+        "name": "UpgradeSocialToken",
+        "type": "event"
+    },
+    {
+        "inputs": [],
+        "name": "DOMAIN_SEPARATOR",
+        "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MAX_OPERATIONAL_FEE",
+        "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MAX_ROYALTY_FEE",
+        "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MINT_BATCH_1155_TYPEHASH",
+        "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MINT_BATCH_721_TYPEHASH",
+        "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MINT_SOCIAL_TOKEN_TYPEHASH",
+        "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "PARK_TOKEN_IDS_721_TYPEHASH",
+        "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "baseURI1155",
+        "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "baseURI721",
+        "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "owner", "type": "address" },
+            { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" },
+            { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" },
+            { "internalType": "address", "name": "royaltyFeeRecipient", "type": "address" },
+            { "internalType": "uint8", "name": "royaltyFee", "type": "uint8" }
+        ],
+        "name": "deployNFT1155AndMintBatch",
+        "outputs": [{ "internalType": "address", "name": "nft", "type": "address" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "owner", "type": "address" },
+            { "internalType": "string", "name": "name", "type": "string" },
+            { "internalType": "string", "name": "symbol", "type": "string" },
+            { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" },
+            { "internalType": "address", "name": "royaltyFeeRecipient", "type": "address" },
+            { "internalType": "uint8", "name": "royaltyFee", "type": "uint8" }
+        ],
+        "name": "deployNFT721AndMintBatch",
+        "outputs": [{ "internalType": "address", "name": "nft", "type": "address" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "owner", "type": "address" },
+            { "internalType": "string", "name": "name", "type": "string" },
+            { "internalType": "string", "name": "symbol", "type": "string" },
+            { "internalType": "uint256", "name": "toTokenId", "type": "uint256" },
+            { "internalType": "address", "name": "royaltyFeeRecipient", "type": "address" },
+            { "internalType": "uint8", "name": "royaltyFee", "type": "uint8" }
+        ],
+        "name": "deployNFT721AndPark",
+        "outputs": [{ "internalType": "address", "name": "nft", "type": "address" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "owner", "type": "address" },
+            { "internalType": "string", "name": "name", "type": "string" },
+            { "internalType": "string", "name": "symbol", "type": "string" },
+            { "internalType": "address", "name": "dividendToken", "type": "address" },
+            { "internalType": "uint256", "name": "initialSupply", "type": "uint256" }
+        ],
+        "name": "deploySocialToken",
+        "outputs": [{ "internalType": "address", "name": "proxy", "type": "address" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "erc1155Exchange",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "erc721Exchange",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "name": "isDeployerWhitelisted",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "query", "type": "address" }],
+        "name": "isNFT1155",
+        "outputs": [{ "internalType": "bool", "name": "result", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "query", "type": "address" }],
+        "name": "isNFT721",
+        "outputs": [{ "internalType": "bool", "name": "result", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "query", "type": "address" }],
+        "name": "isSocialToken",
+        "outputs": [{ "internalType": "bool", "name": "result", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "name": "isStrategyWhitelisted",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "nft", "type": "address" },
+            { "internalType": "address", "name": "to", "type": "address" },
+            { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" },
+            { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" },
+            { "internalType": "bytes", "name": "data", "type": "bytes" },
+            { "internalType": "uint8", "name": "v", "type": "uint8" },
+            { "internalType": "bytes32", "name": "r", "type": "bytes32" },
+            { "internalType": "bytes32", "name": "s", "type": "bytes32" }
+        ],
+        "name": "mintBatch1155",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "nft", "type": "address" },
+            { "internalType": "address", "name": "to", "type": "address" },
+            { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" },
+            { "internalType": "bytes", "name": "data", "type": "bytes" },
+            { "internalType": "uint8", "name": "v", "type": "uint8" },
+            { "internalType": "bytes32", "name": "r", "type": "bytes32" },
+            { "internalType": "bytes32", "name": "s", "type": "bytes32" }
+        ],
+        "name": "mintBatch721",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "token", "type": "address" },
+            { "internalType": "address", "name": "to", "type": "address" },
+            { "internalType": "uint256", "name": "amount", "type": "uint256" },
+            { "internalType": "uint8", "name": "v", "type": "uint8" },
+            { "internalType": "bytes32", "name": "r", "type": "bytes32" },
+            { "internalType": "bytes32", "name": "s", "type": "bytes32" }
+        ],
+        "name": "mintSocialToken",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "name": "nonces",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "operationalFeeInfo",
+        "outputs": [
+            { "internalType": "address", "name": "recipient", "type": "address" },
+            { "internalType": "uint8", "name": "permil", "type": "uint8" }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "nft", "type": "address" },
+            { "internalType": "uint256", "name": "toTokenId", "type": "uint256" },
+            { "internalType": "uint8", "name": "v", "type": "uint8" },
+            { "internalType": "bytes32", "name": "r", "type": "bytes32" },
+            { "internalType": "bytes32", "name": "s", "type": "bytes32" }
+        ],
+        "name": "parkTokenIds721",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "protocolFeeInfo",
+        "outputs": [
+            { "internalType": "address", "name": "recipient", "type": "address" },
+            { "internalType": "uint8", "name": "permil", "type": "uint8" }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    {
+        "inputs": [{ "internalType": "string", "name": "uri", "type": "string" }],
+        "name": "setBaseURI1155",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "string", "name": "uri", "type": "string" }],
+        "name": "setBaseURI721",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "deployer", "type": "address" },
+            { "internalType": "bool", "name": "whitelisted", "type": "bool" }
+        ],
+        "name": "setDeployerWhitelisted",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint8", "name": "operationalFee", "type": "uint8" }],
+        "name": "setOperationalFee",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "operationalFeeRecipient", "type": "address" }],
+        "name": "setOperationalFeeRecipient",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "protocolFeeRecipient", "type": "address" }],
+        "name": "setProtocolFeeRecipient",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "strategy", "type": "address" },
+            { "internalType": "bool", "name": "whitelisted", "type": "bool" }
+        ],
+        "name": "setStrategyWhitelisted",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "exchange", "type": "address" }],
+        "name": "upgradeERC1155Exchange",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "exchange", "type": "address" }],
+        "name": "upgradeERC721Exchange",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "newTarget", "type": "address" }],
+        "name": "upgradeNFT1155",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "newTarget", "type": "address" }],
+        "name": "upgradeNFT721",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "newTarget", "type": "address" }],
+        "name": "upgradeSocialToken",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]

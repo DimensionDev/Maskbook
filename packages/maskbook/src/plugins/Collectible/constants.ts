@@ -10,6 +10,9 @@ export const openseaPathnameRegexMatcher = /^\/assets\/(0x[\dA-Fa-f]{40})\/(\d+)
 export const raribleHostnames = ['rarible.com', 'app.rarible.com', 'ropsten.rarible.com']
 export const rariblePathnameRegexMatcher = /^\/token\/(0x[\dA-Fa-f]{40}):(\d+)/
 
+export const shoyuHostnames = ['shoyunft.com']
+export const shoyuPathnameRegexMatcher = /^\/token\/(0x[\dA-Fa-f]{40}):(\d+)/
+
 export const OpenSeaAPI_Key = 'c38fe2446ee34f919436c32db480a2e3'
 export const OpenSeaBaseURL = 'https://api.opensea.io/api/v1/'
 export const OpenSeaRinkebyBaseURL = 'https://rinkeby-api.opensea.io/api/v1/'
@@ -27,3 +30,9 @@ export const RaribleIPFSURL = 'https://ipfs.rarible.com/ipfs/'
 export const RaribleUserURL = 'https://rarible.com/user/'
 export const RaribleRopstenUserURL = 'https://ropsten.rarible.com/user/'
 export const RaribleMainnetURL = 'https://api-mainnet.rarible.com/marketplace/api/v4/'
+
+export const ShoyuURL = ' https://shoyunft.com'
+export const ShoyuGraphRopsten = 'https://api.thegraph.com/subgraphs/name/shoyunft/shoyu-ropsten'
+export const ShoyuGraphKovan = 'https://api.thegraph.com/subgraphs/name/shoyunft/shoyu-kovan'
+export const ShoyuGraphMainnet = 'https://api.thegraph.com/subgraphs/name/shoyunft/shoyu-mainnet'
+export const ShoyuGRAPHQL = 'https://shoyunft-graphql-server.herokuapp.com/'

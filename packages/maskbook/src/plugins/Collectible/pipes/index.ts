@@ -1,44 +1,38 @@
 import { Network } from 'opensea-js'
 import { unreachable } from '@dimensiondev/kit'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId, createLookupTableResolver} from '@masknet/web3-shared'
 import { NullAddress, RaribleRopstenUserURL, RaribleUserURL } from '../constants'
 import { CollectibleProvider, OpenSeaAssetEventType, RaribleEventType } from '../types'
 
-export function resolveOpenSeaAssetEventType(eventType: OpenSeaAssetEventType, fromUserName?: string) {
-    switch (eventType) {
-        case OpenSeaAssetEventType.CREATED:
-            return fromUserName === NullAddress ? 'Created' : 'List'
-        case OpenSeaAssetEventType.SUCCESSFUL:
-            return 'Sale'
-        case OpenSeaAssetEventType.CANCELLED:
-            return 'Cancel'
-        case OpenSeaAssetEventType.BID_WITHDRAWN:
-            return 'Bid Cancel'
-        case OpenSeaAssetEventType.BID_ENTERED:
-            return 'Bid'
-        case OpenSeaAssetEventType.TRANSFER:
-            return fromUserName === NullAddress ? 'Created' : 'Transfer'
-        case OpenSeaAssetEventType.OFFER_ENTERED:
-            return 'Offer'
-        default:
-            return eventType
-    }
-}
 
-export function resolveRaribleAssetEventType(eventType: RaribleEventType) {
-    switch (eventType) {
-        case RaribleEventType.BUY:
-            return 'Buy'
-        case RaribleEventType.OFFER:
-            return 'Offer'
-        case RaribleEventType.ORDER:
-            return 'Order'
-        case RaribleEventType.TRANSFER:
-            return 'Transfer'
-        default:
-            return eventType
+export const resolveOpenSeaAssetEventType = createLookupTableResolver<OpenSeaAssetEventType, string>
+(
+    {
+        [OpenSeaAssetEventType.CREATED]: fromUserName === NullAddress ? 'Created' : 'List',
+        [OpenSeaAssetEventType.SUCCESSFUL]: 'Sale',
+        [OpenSeaAssetEventType.CANCELLED]: 'Cancel',
+        [OpenSeaAssetEventType.BID_WITHDRAWN]: 'Bid Cancel',
+        [OpenSeaAssetEventType.BID_ENTERED]: 'Bid',
+        [OpenSeaAssetEventType.TRANSFER]: fromUserName === NullAddress ? 'Created' : 'Transfer',
+        [OpenSeaAssetEventType.OFFER_ENTERED]: 'Offer'  
+    },
+    (eventType) => {
+        throw new Error(`Unknown event type: ${eventType}`)
+    },
+) 
+
+export const resolveRaribleAssetEventType = createLookupTableResolver<RaribleEventType, string> (
+    {
+        [RaribleEventType.BUY]: 'Buy',
+        [RaribleEventType.OFFER]: 'Offer',
+        [RaribleEventType.ORDER]: 'Order',
+        [RaribleEventType.TRANSFER]: 'Transfer'
+    },  
+    (eventType) => {
+        throw new Error(`Unknown event type: ${eventType}`) 
     }
-}
+)
+
 
 export function resolveOpenSeaNetwork(chainId: ChainId) {
     switch (chainId) {
