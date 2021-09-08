@@ -7,7 +7,10 @@ declare namespace Mask {
      */
     export const persona: Persona
     export interface Persona {
-        sign(message: string, style: 'web3'): Promise<unknown>
-        // sign(message: string, style: 'mask'): Promise<unknown>
+        /**
+         * API might change any time.
+         * @remarks Since API=0
+         */
+        __experimental__sign__(message: string, style: 'web3'): Promise<string>
     }
 }
