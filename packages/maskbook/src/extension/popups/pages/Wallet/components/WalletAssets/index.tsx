@@ -40,10 +40,10 @@ const StyledTabs = styled(Tabs)`
         background-color: #f7f9fa;
         padding-top: 6px;
     }
-    &.${tabsClasses.indicator} {
+    & .${tabsClasses.indicator} {
         display: none;
     }
-    &.${tabsClasses.flexContainer} {
+    & .${tabsClasses.flexContainer} {
         justify-content: center;
     }
 `
@@ -53,7 +53,7 @@ const StyledTab = styled(Tab)`
         font-size: 12px;
         line-height: 16px;
         min-height: unset;
-        min-width: 145px;
+        min-width: 165px;
         padding: 7px 0;
         background-color: #f7f9fa;
         border-radius: 4px 4px 0px 0px;

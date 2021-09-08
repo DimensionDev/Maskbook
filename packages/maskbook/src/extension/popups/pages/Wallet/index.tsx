@@ -5,7 +5,6 @@ import { Route, Switch, useHistory } from 'react-router-dom'
 import { lazy, useEffect, Suspense } from 'react'
 import { PopupRoutes } from '../../index'
 import { WalletContext } from './hooks/useWalletContext'
-import { useUnconfirmedRequest } from './hooks/useUnConfirmedRequest'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 import { useValueRef } from '@masknet/shared'
 import { currentIsMaskWalletLockedSettings } from '../../../../plugins/Wallet/settings'
@@ -13,6 +12,9 @@ import { useLocation } from 'react-router'
 import urlcat from 'urlcat'
 import { ThemeProvider } from '@emotion/react'
 import { MaskLightTheme } from '@masknet/theme'
+import { useAsyncRetry } from 'react-use'
+import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
+import Services from '../../../service'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -36,10 +38,17 @@ export default function Wallet() {
     const location = useLocation()
     const history = useHistory()
 
-    const { value, loading: getRequestLoading } = useUnconfirmedRequest()
     const lockStatus = useValueRef(currentIsMaskWalletLockedSettings)
 
-    useEffect(() => {
+    const { loading: getRequestLoading, retry } = useAsyncRetry(async () => {
+        const payload = await WalletRPC.topUnconfirmedRequest()
+        if (!payload) return
+        const computedPayload = await Services.Ethereum.getJsonRpcComputed(payload)
+        const value = {
+            payload,
+            computedPayload,
+        }
+
         const toBeClose = new URLSearchParams(location.search).get('toBeClose')
         if (value?.computedPayload) {
             switch (value.computedPayload.type) {
@@ -54,7 +63,11 @@ export default function Wallet() {
                     break
             }
         }
-    }, [value, location])
+    }, [location])
+
+    useEffect(() => {
+        return WalletMessages.events.requestsUpdated.on(retry)
+    }, [retry])
 
     useEffect(() => {
         if (lockStatus) {

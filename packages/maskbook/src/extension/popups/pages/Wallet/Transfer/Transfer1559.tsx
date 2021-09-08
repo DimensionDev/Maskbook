@@ -30,7 +30,6 @@ import { noop } from 'lodash-es'
 import { ExpandMore } from '@material-ui/icons'
 import { useHistory } from 'react-router'
 import { LoadingButton } from '@material-ui/lab'
-import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()({
     container: {
@@ -294,10 +293,8 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 maxPriorityFeePerGas: new BigNumber(data.maxPriorityFeePerGas).toNumber(),
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
-
-            history.replace(PopupRoutes.ContractInteraction)
         },
-        [selectedAsset],
+        [selectedAsset, transferCallback],
     )
 
     const [menu, openMenu] = useMenu(

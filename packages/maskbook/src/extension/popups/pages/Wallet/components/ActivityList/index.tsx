@@ -20,7 +20,7 @@ const useStyles = makeStyles()({
         padding: 0,
     },
     item: {
-        padding: 12,
+        padding: 14,
         borderBottom: '1px solid #F7F9FA',
         cursor: 'pointer',
     },

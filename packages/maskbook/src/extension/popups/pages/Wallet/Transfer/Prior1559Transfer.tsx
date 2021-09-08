@@ -28,7 +28,6 @@ import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
 import { ExpandMore } from '@material-ui/icons'
-import { PopupRoutes } from '../../../index'
 import { useHistory } from 'react-router'
 import { LoadingButton } from '@material-ui/lab'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
@@ -230,8 +229,6 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 gasPrice: new BigNumber(data.gasPrice).toNumber(),
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
-
-            history.replace(PopupRoutes.ContractInteraction)
         },
         [selectedAsset],
     )

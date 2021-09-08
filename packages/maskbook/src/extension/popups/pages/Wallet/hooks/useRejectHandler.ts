@@ -9,28 +9,30 @@ export function useRejectHandler(
     value?: { payload: JsonRpcPayload; computedPayload?: EthereumRpcComputed },
 ) {
     const location = useLocation()
-
-    const cleanConfirmRequest = useCallback(() => {
+    const toBeClose = new URLSearchParams(location.search).get('toBeClose')
+    const cleanConfirmRequest = useCallback(async () => {
         if (value) {
-            Services.Ethereum.rejectRequest(value.payload)
+            await Services.Ethereum.rejectRequest(value.payload)
         }
     }, [value])
 
     const handleReject = useCallback(async () => {
-        const toBeClose = new URLSearchParams(location.search).get('toBeClose')
-        cleanConfirmRequest()
+        await cleanConfirmRequest()
 
         if (toBeClose) {
             window.close()
         } else {
             callback()
         }
-    }, [location.search, cleanConfirmRequest])
+    }, [location.search, cleanConfirmRequest, toBeClose])
 
     useEffect(() => {
-        window.addEventListener('beforeunload', handleReject)
-        return () => window.removeEventListener('beforeunload', handleReject)
-    }, [handleReject])
+        if (toBeClose) {
+            window.addEventListener('beforeunload', handleReject)
+            return () => window.removeEventListener('beforeunload', handleReject)
+        }
+        return
+    }, [handleReject, toBeClose])
 
     return handleReject
 }
