@@ -11,7 +11,7 @@ import {
     PRICE_IMPACT_NON_EXPERT_BLOCKED,
     PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN,
 } from './constants'
-import { NetworkType } from '@masknet/web3-shared'
+import { NetworkType, createLookupTableResolver } from '@masknet/web3-shared'
 import urlcat from 'urlcat'
 
 export function resolveCurrencyName(currency: Currency) {
@@ -22,58 +22,44 @@ export function resolveCurrencyName(currency: Currency) {
     ].join(' ')
 }
 
-export function resolveDataProviderName(dataProvider: DataProvider) {
-    switch (dataProvider) {
-        case DataProvider.COIN_GECKO:
-            return 'CoinGecko'
-        case DataProvider.COIN_MARKET_CAP:
-            return 'CoinMarketCap'
-        case DataProvider.UNISWAP_INFO:
-            return 'Uniswap Info'
-        default:
-            unreachable(dataProvider)
-    }
-}
+export const resolveDataProviderName = createLookupTableResolver<DataProvider, string>(
+    {
+        [DataProvider.COIN_GECKO]: 'CoinGecko',
+        [DataProvider.COIN_MARKET_CAP]: 'CoinMarketCap',
+        [DataProvider.UNISWAP_INFO]: 'Uniswap Info',
+    },
+    (dataProvider) => {
+        throw new Error(`Unknown data provider: ${dataProvider}`)
+    },
+)
 
-export function resolveDataProviderLink(dataProvider: DataProvider) {
-    switch (dataProvider) {
-        case DataProvider.COIN_GECKO:
-            return 'https://www.coingecko.com/'
-        case DataProvider.COIN_MARKET_CAP:
-            return 'https://coinmarketcap.com/'
-        case DataProvider.UNISWAP_INFO:
-            return 'https://info.uniswap.org/'
-        default:
-            unreachable(dataProvider)
-    }
-}
+export const resolveDataProviderLink = createLookupTableResolver<DataProvider, string>(
+    {
+        [DataProvider.COIN_GECKO]: 'https://www.coingecko.com/',
+        [DataProvider.COIN_MARKET_CAP]: 'https://coinmarketcap.com/',
+        [DataProvider.UNISWAP_INFO]: 'https://info.uniswap.org/',
+    },
+    (dataProvider) => {
+        throw new Error(`Unknown data provider: ${dataProvider}`)
+    },
+)
 
-export function resolveTradeProviderName(tradeProvider: TradeProvider) {
-    switch (tradeProvider) {
-        case TradeProvider.UNISWAP_V2:
-            return 'Uniswap V2'
-        case TradeProvider.UNISWAP_V3:
-            return 'Uniswap V3'
-        case TradeProvider.ZRX:
-            return '0x'
-        case TradeProvider.SUSHISWAP:
-            return 'SushiSwap'
-        case TradeProvider.SASHIMISWAP:
-            return 'SashimiSwap'
-        case TradeProvider.BALANCER:
-            return 'Balancer'
-        case TradeProvider.QUICKSWAP:
-            return 'QuickSwap'
-        case TradeProvider.PANCAKESWAP:
-            return 'PancakeSwap'
-        case TradeProvider.DODO:
-            return 'DODO'
-        case TradeProvider.ONE_INCH:
-            return '1inch'
-        default:
-            unreachable(tradeProvider)
-    }
-}
+export const resolveTradeProviderName = createLookupTableResolver<TradeProvider, string>(
+    {
+        [TradeProvider.UNISWAP_V2]: 'Uniswap V2',
+        [TradeProvider.UNISWAP_V3]: 'Uniswap V3',
+        [TradeProvider.ZRX]: '0x',
+        [TradeProvider.SUSHISWAP]: 'SushiSwap',
+        [TradeProvider.SASHIMISWAP]: 'SashimiSwap',
+        [TradeProvider.BALANCER]: 'Balancer',
+        [TradeProvider.QUICKSWAP]: 'QuickSwap',
+        [TradeProvider.PANCAKESWAP]: 'PancakeSwap',
+        [TradeProvider.DODO]: 'DODO',
+    },
+    (tradeProvider) => {
+        throw new Error(`Unknown provider type: ${tradeProvider}`)
+    },
+)
 
 export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkType: NetworkType) {
     switch (tradeProvider) {

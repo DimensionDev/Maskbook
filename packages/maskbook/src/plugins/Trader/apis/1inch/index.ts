@@ -17,10 +17,6 @@ export async function swapOneQuote(request: SwapQuoteOneRequest, networkType: Ne
         if (typeof value === 'string') params[key] = value
     })
     if (request.slippage) params.slippage = new BigNumber(request.slippage).dividedBy(BIPS_BASE).toFixed()
-    // if (request.buyTokenPercentageFee)
-    //     params.buyTokenPercentageFee = new BigNumber(request.buyTokenPercentageFee).dividedBy(100).toFixed()
-    // if (request.includedSources) params.includedSources = request.includedSources.join()
-    // if (request.excludedSources) params.excludedSources = request.excludedSources.join()
 
     const response =
         (await fetch(urlcat(ONE_INCH_BASE_URL[networkType], 'swap', params))) ||
