@@ -132,7 +132,7 @@ export function TransferTab(props: TransferTabProps) {
         <div className={classes.root}>
             <TokenAmountPanel
                 amount={amount}
-                maxAmount={maxAmount}
+                maxAmount={maxAmout}
                 balance={tokenBalance}
                 label={t('wallet_transfer_amount')}
                 token={token}
