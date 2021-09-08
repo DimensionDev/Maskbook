@@ -1,7 +1,7 @@
 import { Box, Button, Link, Stack, Typography } from '@material-ui/core'
 import { memo, ReactNode, useMemo } from 'react'
 import { FileMessageIcon, ITOIcon, MessageIcon, RedPacketIcon, PollIcon } from '@masknet/icons'
-import { getMaskColor } from '@masknet/theme'
+import { getMaskColor, MaskColorVar } from '@masknet/theme'
 import { Services } from '../../../../API'
 import type { PostRecord } from '@masknet/shared'
 import { PLUGIN_IDS } from '../../../Labs/constants'
@@ -24,37 +24,37 @@ const SUPPORT_PLUGIN: Record<
 > = {
     text: {
         pluginId: null,
-        icon: <MessageIcon sx={{ width: 48, height: 48 }} />,
+        icon: <MessageIcon />,
         messageParse: () => null,
     },
     'com.maskbook.fileservice:1': {
         pluginId: null,
-        icon: <FileMessageIcon sx={{ width: 48, height: 48 }} />,
+        icon: <FileMessageIcon />,
         messageParse: parseFileServiceMessage,
     },
     'com.maskbook.fileservice:2': {
         pluginId: null,
-        icon: <FileMessageIcon sx={{ width: 48, height: 48 }} />,
+        icon: <FileMessageIcon />,
         messageParse: parseFileServiceMessage,
     },
     'com.maskbook.red_packet:1': {
         pluginId: PLUGIN_IDS.RED_PACKET,
-        icon: <RedPacketIcon sx={{ width: 48, height: 48 }} />,
+        icon: <RedPacketIcon />,
         messageParse: (body: any) => body.sender.message,
     },
     'com.maskbook.ito:1': {
         pluginId: PLUGIN_IDS.MARKETS,
-        icon: <ITOIcon sx={{ width: 48, height: 48 }} />,
+        icon: <ITOIcon />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.ito:2': {
         pluginId: PLUGIN_IDS.MARKETS,
-        icon: <ITOIcon sx={{ width: 48, height: 48 }} />,
+        icon: <ITOIcon />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.poll:1': {
         pluginId: PLUGIN_IDS.POLL,
-        icon: <PollIcon sx={{ width: 48, height: 48 }} />,
+        icon: <PollIcon />,
         messageParse: (body: any) => body.question,
     },
 }
@@ -69,7 +69,7 @@ export const PostHistoryRow = memo(({ post }: PostHistoryRowProps) => {
     const postIcon = useMemo(() => {
         const { interestedMeta } = post
         const plugin = interestedMeta?.keys().next().value ?? 'text'
-        return SUPPORT_PLUGIN[plugin]?.icon ?? <MessageIcon sx={{ width: 48, height: 48 }} />
+        return SUPPORT_PLUGIN[plugin]?.icon ?? <MessageIcon />
     }, [post.interestedMeta])
 
     const postMessage = useMemo(() => {
@@ -128,7 +128,15 @@ interface PostHistoryRowUIProps extends PostHistoryRowProps {
 const PostHistoryRowUI = memo<PostHistoryRowUIProps>(({ post, message, icon, operation, recipients }) => {
     return (
         <Stack direction="row" gap={1.5} sx={{ mb: 3 }} alignItems="center">
-            {icon}
+            <Stack
+                justifyContent="center"
+                alignItems="center"
+                borderRadius="50%"
+                width={48}
+                height={48}
+                sx={{ background: () => MaskColorVar.primary.alpha(0.1) }}>
+                {icon}
+            </Stack>
             <Stack
                 flex={1}
                 justifyContent="space-around"

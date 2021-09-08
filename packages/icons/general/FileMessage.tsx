@@ -4,14 +4,13 @@ import type { SvgIcon } from '@material-ui/core'
 export const FileMessageIcon: typeof SvgIcon = createIcon(
     'FileMessageIcon',
     <g>
-        <rect opacity="0.1" width="48" height="48" rx="24" fill="#1C68F3" />
         <path
-            d="M15 19C15 18.4477 15.4477 18 16 18H22C22.3148 18 22.6111 18.1482 22.8 18.4L25.8 22.4C26.2944 23.0592 25.824 24 25 24H16C15.4477 24 15 23.5523 15 23V19Z"
+            d="M3 7C3 6.44772 3.44772 6 4 6H10C10.3148 6 10.6111 6.14819 10.8 6.4L13.8 10.4C14.2944 11.0592 13.824 12 13 12H4C3.44772 12 3 11.5523 3 11V7Z"
             fill="#F7931E"
         />
-        <rect opacity="0.8" x="16.5" y="19.3359" width="15" height="10.5" rx="1" fill="#AFC3E1" />
-        <rect opacity="0.8" x="16.5" y="20.0859" width="15" height="10.5" rx="1" fill="#AFC3E1" />
-        <rect x="15" y="21" width="18" height="10.5" rx="1" fill="#FFB915" />
+        <rect opacity="0.8" x="4.5" y="7.33594" width="15" height="10.5" rx="1" fill="#AFC3E1" />
+        <rect opacity="0.8" x="4.5" y="8.08594" width="15" height="10.5" rx="1" fill="#AFC3E1" />
+        <rect x="3" y="9" width="18" height="10.5" rx="1" fill="#FFB915" />
     </g>,
-    '0 0 48 48',
+    '0 0 24 24',
 )
