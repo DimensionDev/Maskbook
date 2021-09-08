@@ -115,7 +115,7 @@ function registerPostCollectorInner(
 }
 
 export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
-    posts: creator.PostProviderStore(),
+    posts: creator.EmptyPostProviderState(),
     start(cancel) {
         registerPostCollectorInner(this.posts, cancel)
     },

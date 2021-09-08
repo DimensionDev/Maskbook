@@ -23,7 +23,7 @@ import {
 } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
-import { CoinSaftyAlert } from './CoinSaftyAlert'
+import { CoinSafetyAlert } from './CoinSafetyAlert'
 import { PLUGIN_IDENTIFIER as TRANSAK_PLUGIN_ID } from '../../../Transak/constants'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
@@ -252,7 +252,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 disableTypography
             />
             <CardContent className={classes.content}>
-                {dataProvider === DataProvider.UNISWAP_INFO && <CoinSaftyAlert coin={trending.coin} />}
+                {dataProvider === DataProvider.UNISWAP_INFO && <CoinSafetyAlert coin={trending.coin} />}
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>

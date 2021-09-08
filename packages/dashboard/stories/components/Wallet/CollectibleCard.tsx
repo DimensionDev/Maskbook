@@ -8,7 +8,7 @@ export default meta({ title: 'Components/Wallet/Collectible Card' })
 export const CollectibleCard = of({
     args: {
         chainId: ChainId.Mainnet,
-        provider: CollectibleProvider.OPENSEAN,
+        provider: CollectibleProvider.OPENSEA,
         token: createERC721Token(
             {
                 type: EthereumTokenType.ERC721,

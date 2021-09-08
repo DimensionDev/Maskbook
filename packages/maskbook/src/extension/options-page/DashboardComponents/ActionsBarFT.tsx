@@ -67,7 +67,7 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
     ].filter(Boolean)
     //#endregion
 
-    const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogFT)
+    const [transferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogFT)
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu(items)
 
@@ -78,7 +78,7 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
             </IconButton>
             {menu}
             {hideTokenConfirmDialog}
-            {transeferDialog}
+            {transferDialog}
         </>
     )
 }

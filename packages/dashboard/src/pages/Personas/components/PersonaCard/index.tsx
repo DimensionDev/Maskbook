@@ -81,7 +81,7 @@ export interface PersonaCardUIProps extends PersonaCardProps {
     definedSocialNetworks: SocialNetwork[]
     onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
-    onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => void
+    onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
 }
 
 export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
@@ -94,7 +94,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
     const [exportPrivateKeyDialogOpen, setExportPrivateKeyDialogOpen] = useState(false)
 
     const [menu, openMenu] = useMenu(
-        <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
+        <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_rename()}</MenuItem>,
         <MenuItem onClick={() => setExportPrivateKeyDialogOpen(true)}>{t.personas_export_private()}</MenuItem>,
         <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
             {t.personas_delete()}
@@ -145,15 +145,17 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                 </div>
             </div>
             {menu}
-            <RenameDialog
-                open={renameDialogOpen}
-                nickname={nickname}
-                onClose={() => setRenameDialogOpen(false)}
-                onConfirm={(name) => {
-                    onRename(identifier, name)
-                    setRenameDialogOpen(false)
-                }}
-            />
+            {renameDialogOpen && (
+                <RenameDialog
+                    open={renameDialogOpen}
+                    nickname={nickname}
+                    onClose={() => setRenameDialogOpen(false)}
+                    onConfirm={async (name) => {
+                        await onRename(identifier, name)
+                        setRenameDialogOpen(false)
+                    }}
+                />
+            )}
             <DeletePersonaDialog
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}

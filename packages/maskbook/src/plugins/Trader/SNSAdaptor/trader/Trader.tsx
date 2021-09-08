@@ -229,7 +229,7 @@ export function Trader(props: TraderProps) {
                           inputToken.symbol
                       } for ${formatBalance(tradeComputed.outputAmount, outputToken.decimals, 6)} ${cashTag}${
                           outputToken.symbol
-                      }. Follow @realMaskbook (mask.io) to swap cryptocurrencies on Twitter.`,
+                      }. Follow @realMaskNetwork (mask.io) to swap cryptocurrencies on Twitter.`,
                       '#mask_io',
                   ].join('\n')
                 : '',

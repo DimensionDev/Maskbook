@@ -125,7 +125,7 @@ export function resolveIPFSLink(ipfs: string): string {
 
 export function resolveCollectibleProviderLink(chainId: ChainId, provider: CollectibleProvider) {
     switch (provider) {
-        case CollectibleProvider.OPENSEAN:
+        case CollectibleProvider.OPENSEA:
             if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io`
             return `https://opensea.io`
         default:
@@ -139,7 +139,7 @@ export function resolveCollectibleLink(
     { contractDetailed: { address }, tokenId }: ERC721TokenDetailed,
 ) {
     switch (provider) {
-        case CollectibleProvider.OPENSEAN:
+        case CollectibleProvider.OPENSEA:
             return urlcat(resolveCollectibleProviderLink(chainId, provider), '/assets/:address/:tokenId', {
                 address,
                 tokenId,

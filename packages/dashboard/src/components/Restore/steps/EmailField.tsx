@@ -3,7 +3,7 @@ import { memo, useState } from 'react'
 import { MaskTextField } from '@masknet/theme'
 import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
 import { Button } from '@material-ui/core'
-import { Label, ValidationCodeStep } from './Commont'
+import { Label, ValidationCodeStep } from './common'
 import type { StepCommonProps } from '../../Stepper'
 import { AccountType } from '../../../pages/Settings/type'
 

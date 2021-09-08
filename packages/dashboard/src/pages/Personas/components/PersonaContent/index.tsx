@@ -4,6 +4,7 @@ import { Box, Tab } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { ContactsTable } from '../ContactsTable'
+import { PostHistory } from '../PostHistory'
 const useStyles = makeStyles()({
     container: {
         flex: 1,
@@ -36,7 +37,7 @@ export const PersonaContent = memo<PersonaContentProps>(({ network }) => {
                     <Tab value={PersonaContentTab.Contacts} label="Contacts" />
                 </ButtonGroupTabList>
                 <TabPanel value={PersonaContentTab.Posts} className={classes.tab}>
-                    Post
+                    <PostHistory network={network} />
                 </TabPanel>
                 <TabPanel value={PersonaContentTab.Contacts} className={classes.tab}>
                     <ContactsTable network={network} />

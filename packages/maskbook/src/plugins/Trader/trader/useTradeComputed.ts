@@ -5,7 +5,7 @@ import { pow10 } from '@masknet/web3-shared'
 import { TradeProvider, TradeStrategy } from '../types'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
-import { useV2Trade as useUnswapV2Trade, useV3Trade as useUnswapV3Trade } from './uniswap/useTrade'
+import { useV2Trade as useUniswapV2Trade, useV3Trade as useUniswapV3Trade } from './uniswap/useTrade'
 import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeComputed'
 import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
 import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
@@ -29,7 +29,7 @@ export function useTradeComputed(
     const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
 
-    // trade conetxt
+    // trade context
     const context = useContext(TradeContext)
 
     // NATIVE-WNATIVE pair
@@ -44,7 +44,7 @@ export function useTradeComputed(
     )
 
     // uniswap-v2 like providers
-    const uniswapV2_ = useUnswapV2Trade(
+    const uniswapV2_ = useUniswapV2Trade(
         strategy,
         context?.IS_UNISWAP_V2_LIKE ? inputAmount_ : '0',
         context?.IS_UNISWAP_V2_LIKE ? outputAmount_ : '0',
@@ -54,7 +54,7 @@ export function useTradeComputed(
     const uniswapV2 = useUniswapTradeComputed(uniswapV2_.value, inputToken, outputToken)
 
     // uniswap-v3 like providers
-    const uniswapV3_ = useUnswapV3Trade(
+    const uniswapV3_ = useUniswapV3Trade(
         strategy,
         context?.IS_UNISWAP_V3_LIKE ? inputAmount_ : '0',
         context?.IS_UNISWAP_V3_LIKE ? outputAmount_ : '0',

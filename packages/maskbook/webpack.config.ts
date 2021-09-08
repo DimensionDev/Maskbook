@@ -1,3 +1,4 @@
+/* spell-checker: disable */
 import path from 'path'
 import fs, { promises } from 'fs'
 

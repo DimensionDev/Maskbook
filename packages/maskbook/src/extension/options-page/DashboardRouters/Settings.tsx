@@ -145,6 +145,7 @@ export default function DashboardSettingsRouter() {
         LanguageOptions.frFR,
     ]
     const langMapper = useRef((x: LanguageOptions) => {
+        /* spell-checker: disable */
         if (x === LanguageOptions.enUS) return 'English'
         if (x === LanguageOptions.zhTW) return '正體中文'
         if (x === LanguageOptions.zhCN) return '简体中文'
@@ -156,6 +157,7 @@ export default function DashboardSettingsRouter() {
         if (x === LanguageOptions.frFR) return 'langue française'
         if (x === LanguageOptions.faIR) return 'زبان فارسی'
         if (x === LanguageOptions.__auto__) return t('language_auto')
+        /* spell-checker: enable */
         safeUnreachable(x)
         return x
     }).current

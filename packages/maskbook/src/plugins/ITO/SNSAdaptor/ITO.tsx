@@ -247,7 +247,7 @@ export function ITO(props: ITO_Props) {
 
     const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime, endTime, qualificationAddress } =
         availabilityComputed
-    //#ednregion
+    //#endregion
 
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(availability?.remaining ?? '0')

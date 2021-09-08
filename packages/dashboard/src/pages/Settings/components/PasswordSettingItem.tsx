@@ -11,8 +11,8 @@ export default function PasswordSettingItem() {
     return (
         <SettingItem
             icon={<SettingsPasswordIcon />}
-            title={t.settings_change_passowrd_title()}
-            desc={user.backupPassword ? t.settings_change_passowrd_desc() : t.settings_change_passowrd_not_set()}
+            title={t.settings_change_password_title()}
+            desc={user.backupPassword ? t.settings_change_password_desc() : t.settings_change_password_not_set()}
             error={!user.backupPassword}>
             <PasswordSetting />
         </SettingItem>

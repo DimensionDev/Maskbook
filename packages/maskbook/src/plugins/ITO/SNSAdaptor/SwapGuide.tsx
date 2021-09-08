@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     paper: {
-        padding: '0 !important',
+        maxWidth: 544,
     },
 }))
 

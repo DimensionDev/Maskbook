@@ -165,7 +165,7 @@ export function createMnemonicWords() {
 
 export async function importNewWallet(
     rec: PartialRequired<Omit<WalletRecord, 'id' | 'eth_balance' | 'createdAt' | 'updatedAt'>, 'name'>,
-    slient = false,
+    silent = false,
 ) {
     const { name, path, mnemonic = [], passphrase = '' } = rec
     const address = await getWalletAddress()
@@ -194,7 +194,7 @@ export async function importNewWallet(
         else if (!record_.mnemonic.length && !record_._private_key_)
             await t.objectStore('Wallet').put(WalletRecordIntoDB(record))
     }
-    if (!slient) {
+    if (!silent) {
         WalletMessages.events.walletsUpdated.sendToAll(undefined)
         await updateAccount({
             account: record.address,
