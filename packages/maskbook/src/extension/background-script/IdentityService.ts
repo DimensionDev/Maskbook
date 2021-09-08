@@ -49,7 +49,7 @@ import { recover_ECDH_256k1_KeyPair_ByMnemonicWord_V2 } from '../../utils/mnemon
 import { MaskMessage } from '../../utils'
 import type { PostIVIdentifier } from '@masknet/shared-base'
 import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
-import { orderBy } from 'lodash-es'
+import { first, orderBy } from 'lodash-es'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -136,7 +136,7 @@ export function queryMyPersonas(network?: string): Promise<Persona[]> {
 
 export async function queryLastPersonaCreated() {
     const all = await queryPersonas(undefined, true)
-    return orderBy(all, (x) => x.createdAt, 'desc')[0]
+    return first(orderBy(all, (x) => x.createdAt, 'desc'))
 }
 
 export async function backupPersonaPrivateKey(
