@@ -22,7 +22,7 @@ function updateCurrentPrices(data: CryptoPrice) {
 let tokenTrackingCount = 0
 let nativeTokenCount = 0
 
-export async function kickToUpdateTokenPrices() {
+export function kickToUpdateTokenPrices() {
     tokenTrackingCount += 1
     nativeTokenCount += 1
 }
@@ -48,8 +48,6 @@ export async function updateTokenPrices() {
                 updateCurrentPrices(prices)
             }),
         )
-    } catch {
-        // do nothing
     } finally {
         // reset the polling if chain state updated successfully
         resetPoolTask()
