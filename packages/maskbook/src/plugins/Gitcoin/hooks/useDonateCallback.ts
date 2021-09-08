@@ -5,9 +5,7 @@ import {
     TransactionEventType,
     TransactionStateType,
     useAccount,
-    useGasPrice,
     useGitcoinConstants,
-    useNonce,
     useTransactionState,
     useWeb3,
 } from '@masknet/web3-shared'

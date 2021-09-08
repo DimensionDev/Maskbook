@@ -1,12 +1,6 @@
 import { useCallback } from 'react'
 import { useRedPacketContract } from './useRedPacketContract'
-import {
-    TransactionEventType,
-    TransactionStateType,
-    useGasPrice,
-    useNonce,
-    useTransactionState,
-} from '@masknet/web3-shared'
+import { TransactionEventType, TransactionStateType, useTransactionState } from '@masknet/web3-shared'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import type { TransactionReceipt } from 'web3-core'
 

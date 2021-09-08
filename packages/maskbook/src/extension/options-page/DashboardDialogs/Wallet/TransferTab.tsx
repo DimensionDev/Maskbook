@@ -10,7 +10,6 @@ import {
     FungibleTokenDetailed,
     isGreaterThan,
     isZero,
-    pow10,
     TransactionStateType,
     useGasPrice,
     useTokenBalance,
