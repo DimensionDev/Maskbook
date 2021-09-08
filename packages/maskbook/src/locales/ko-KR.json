@@ -313,6 +313,7 @@
     "plugin_red_packet_display_name": "플러그인: 빨간 백",
     "plugin_red_packet_split_mode": "분할 모드",
     "plugin_red_packet_average": "평균",
+    "plugin_red_packet_data_broken": "",
     "plugin_red_packet_random": "렌덤",
     "plugin_red_packet_shares": "공유",
     "plugin_red_packet_best_wishes": "행운을 빌어요!",

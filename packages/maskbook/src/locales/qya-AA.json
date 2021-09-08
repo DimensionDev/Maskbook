@@ -392,6 +392,7 @@
     "plugin_red_packet_claiming": "crwdns4727:0crwdne4727:0",
     "plugin_red_packet_refund": "crwdns4729:0crwdne4729:0",
     "plugin_red_packet_empty": "crwdns4731:0crwdne4731:0",
+    "plugin_red_packet_data_broken": "",
     "plugin_red_packet_refunding": "crwdns4733:0crwdne4733:0",
     "plugin_red_packet_select_existing": "crwdns4735:0crwdne4735:0",
     "plugin_red_packet_share_message": "crwdns4737:0{{sender}}crwdnd4737:0{{network}}crwdnd4737:0{{payload}}crwdne4737:0",
