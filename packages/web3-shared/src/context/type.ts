@@ -54,4 +54,5 @@ export interface Web3ProviderType {
     }>
     fetchERC20TokensFromTokenLists: (urls: string[], chainId: ChainId) => Promise<ERC20TokenDetailed[]>
     createMnemonicWords: () => Promise<string[]>
+    getNonce: (address: string) => Promise<number>
 }
