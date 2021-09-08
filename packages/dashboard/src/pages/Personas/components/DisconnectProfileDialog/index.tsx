@@ -23,8 +23,8 @@ interface DisconnectProfileDialogProps {
 }
 
 enum steps {
-    selection = 0,
-    action = 1,
+    selection = 1,
+    action = 2,
 }
 
 export const DisconnectProfileDialog = ({
@@ -46,7 +46,12 @@ export const DisconnectProfileDialog = ({
                 {currentStep === steps.selection && (
                     <Stack minHeight="100px" justifyContent="center">
                         {profileIdentifiers.map((x) => (
-                            <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
+                            <Stack
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="space-between"
+                                mb={1}
+                                key={x.userId}>
                                 <Stack direction="row" alignItems="center" gap={1}>
                                     {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
                                     <Typography
