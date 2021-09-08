@@ -1,24 +1,20 @@
 import { makeStyles } from '@masknet/theme'
 
-// import { withStyles } from "@material-ui/core/styles";
 import { Typography, Divider, LinearProgress } from '@material-ui/core'
 import { formatUSDValue } from './web3/utils'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { COLOR_SY_SENIOR_TEXT, COLOR_SY_JUNIOR_TEXT } from '../../constants'
 
-// const StyledLinearProgress = withStyles({
-//     colorPrimary: {
-//         backgroundColor: COLOR_SY_JUNIOR_TEXT
-//     },
-//     barColorPrimary: {
-//         backgroundColor: COLOR_SY_SENIOR_TEXT
-//     }
-// })(LinearProgress);
-
 const s = makeStyles()((theme) => ({
     progress: {
         display: 'flex',
         marginTop: 24,
+        '& .MuiLinearProgress-colorPrimary': {
+            backgroundColor: COLOR_SY_JUNIOR_TEXT,
+        },
+        '& .MuiLinearProgress-barColorPrimary': {
+            backgroundColor: COLOR_SY_SENIOR_TEXT,
+        },
     },
     dataColumn: {
         paddingLeft: 16,

@@ -2,7 +2,6 @@ import { makeStyles } from '@masknet/theme'
 import { SmartYieldPoolView } from './SmartYieldPoolView'
 import { SmartYieldPoolModelGetData } from './../Model/SYPoolModel'
 import { SmartYieldPortfolioModelGetData } from './../Model/SYPortfolioModel'
-// import { withStyles } from "@material-ui/core/styles";
 
 import { useEffect } from 'react'
 import { useI18N, I18NFunction } from '../../../utils/i18n-next-ui'
@@ -54,16 +53,10 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_DARK,
         paddingTop: 10,
     },
+    progress: {
+        color: COLOR_BARNBRIDGE_ORANGE,
+    },
 }))
-
-// const StyledCircularProgress = withStyles({
-//     colorPrimary: {
-//         color: COLOR_BARNBRIDGE_ORANGE,
-//     },
-//     barColorPrimary: {
-//         backgroundColor: COLOR_BARNBRIDGE_ORANGE
-//     }
-// })(CircularProgress);
 
 export function SmartYieldPoolsView() {
     const [tabIndex, setTabIndex] = useState(0)
@@ -85,7 +78,7 @@ export function SmartYieldPoolsView() {
     }, [syData, syPortfolioData])
 
     if (_syDataState.length <= 1 || loadingPools || loadingPortfolio) {
-        return <CircularProgress size={50} />
+        return <CircularProgress className={classes.progress} size={50} />
     }
 
     const protocols = Object.keys(_syDataState[0])
