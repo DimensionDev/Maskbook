@@ -6,13 +6,9 @@ import { isSameAddress } from '../utils'
 import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
-import { useNonce } from './useNonce'
-import { useGasPrice } from './useGasPrice'
 
 export function useERC721TokenTransferCallback(address?: string, tokenId?: string, recipient?: string) {
     const account = useAccount()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const erc721Contract = useERC721TokenContract(address)
     const [transferState, setTransferState] = useTransactionState()
 
@@ -64,8 +60,6 @@ export function useERC721TokenTransferCallback(address?: string, tokenId?: strin
                     })
                     throw error
                 }),
-            gasPrice,
-            nonce,
         }
 
         // send transaction and wait for hash
@@ -88,7 +82,7 @@ export function useERC721TokenTransferCallback(address?: string, tokenId?: strin
                     reject(error)
                 })
         })
-    }, [gasPrice, nonce, account, tokenId, recipient, erc721Contract])
+    }, [account, tokenId, recipient, erc721Contract])
 
     const resetCallback = useCallback(() => {
         setTransferState({

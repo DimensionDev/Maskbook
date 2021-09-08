@@ -455,8 +455,6 @@
     "plugin_file_service_error_101": "crwdns4851:0crwdne4851:0",
     "plugin_file_service_error_102": "crwdns4853:0{{limit}}crwdne4853:0",
     "plugin_file_service_on_change_file": "crwdns4855:0crwdne4855:0",
-    "plugin_gas_now_dialog_gas_fee": "crwdns4877:0{{fee}}crwdnd4877:0{{symbol}}crwdne4877:0",
-    "plugin_gas_fee_as_usd": "crwdns4879:0{{usd}}crwdne4879:0",
     "plugin_trader_swap": "crwdns4881:0crwdne4881:0",
     "plugin_trader_wrap": "crwdns4883:0crwdne4883:0",
     "plugin_trader_unwrap": "crwdns4885:0crwdne4885:0",
