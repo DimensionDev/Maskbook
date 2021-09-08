@@ -87,7 +87,9 @@ export const RestoreFromLocal = memo(() => {
             await Services.Welcome.checkPermissionsAndRestore(backupId)
             if (!currentPersona) {
                 const lastedPersona = await Services.Identity.queryLastPersonaCreated()
-                await changeCurrentPersona(lastedPersona.identifier)
+                if (lastedPersona) {
+                    await changeCurrentPersona(lastedPersona.identifier)
+                }
             }
             navigate(RoutePaths.Personas, { replace: true })
         } catch {
