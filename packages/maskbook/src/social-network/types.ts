@@ -29,6 +29,8 @@ export namespace SocialNetwork {
     export interface Utils {
         /** @returns the homepage url. e.g.: https://twitter.com/ */
         getHomePage?(): string
+        /** @returns the profile url. e.g.: https://twitter.com/realMaskNetwork */
+        getProfilePage?(userId?: string): string
         /** @returns post URL from PostIdentifier */
         getPostURL?(post: PostIdentifier<Identifier>): URL | null
         /** Is this username valid in this network */
