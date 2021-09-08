@@ -7,11 +7,11 @@ import {
     Grid,
     IconButton,
     Drawer,
-    experimentalStyled as styled,
+    styled,
     Box,
     paperClasses,
-    makeStyles,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
 import Color from 'color'
 import { ErrorBoundary } from '@masknet/shared'
@@ -63,7 +63,7 @@ export const DashboardFrame = memo((props: DashboardFrameProps) => {
                     </LeftContainer>
                 )}
                 <Grid container direction="column" item xs={isLargeScreen ? 10 : 12}>
-                    <Suspense fallback="Loading...">
+                    <Suspense fallback={null}>
                         <ErrorBoundary>{props.children}</ErrorBoundary>
                     </Suspense>
                 </Grid>
@@ -128,11 +128,13 @@ const ShapeHelper = styled('div')(({ theme }) => ({
 
 const ContentContainer = styled('div')(({ theme }) => ({
     height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
 }))
 
-const useStyle = makeStyles((theme) => ({
+const useStyle = makeStyles()((theme) => ({
     toolbarGutters: {
         [theme.breakpoints.up('lg')]: {
             paddingLeft: theme.spacing(0),
@@ -159,15 +161,16 @@ export const PageFrame = memo((props: PageFrameProps) => {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
     const showFeaturePromotions = featurePromotionsEnabled.some((path: string) => path === location.pathname)
-    const classes = useStyle()
-
+    const { classes } = useStyle()
     return (
         <>
             <AppBar position="relative" color="inherit" elevation={0}>
                 <Toolbar classes={{ gutters: classes.toolbarGutters }}>
                     {!isLargeScreen && (
                         <MaskLogo item container alignItems="center">
-                            <MenuButton onClick={toggleDrawer}>{drawerOpen ? <CloseIcon /> : <MenuIcon />}</MenuButton>
+                            <MenuButton size="large" onClick={toggleDrawer}>
+                                {drawerOpen ? <CloseIcon /> : <MenuIcon />}
+                            </MenuButton>
                             <MaskNotSquareIcon />
                         </MaskLogo>
                     )}

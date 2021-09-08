@@ -1,47 +1,59 @@
-import { memo, useMemo, useState } from 'react'
-import { MaskColorVar, MaskDialog } from '@masknet/theme'
-import { useSnackbarCallback } from '@masknet/shared'
-import { Box, Button, DialogActions, DialogContent, makeStyles, TextField } from '@material-ui/core'
-import { useERC721TokenAssetDetailed, useERC721TokenDetailed, useWallet } from '@masknet/web3-shared'
-import { PluginServices } from '../../../../API'
+import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
+import { MaskDialog, MaskTextField } from '@masknet/theme'
+import { Box, Button, DialogActions, DialogContent } from '@material-ui/core'
+import {
+    isSameAddress,
+    useERC721ContractDetailed,
+    useERC721TokenDetailedCallback,
+    useWallet,
+} from '@masknet/web3-shared'
 import { EthereumAddress } from 'wallet.ts'
 import { useDashboardI18N } from '../../../../locales'
+import { z } from 'zod'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { PluginServices } from '../../../../API'
 
 export interface AddCollectibleDialogProps {
     open: boolean
     onClose: () => void
 }
 
-const useStyles = makeStyles((theme) => ({
-    title: {
-        fontSize: theme.typography.pxToRem(12),
-        color: MaskColorVar.textPrimary,
-        fontWeight: 500,
-        marginBottom: 10,
-    },
-}))
+type FormInputs = {
+    address: string
+    tokenId: string
+}
+
+enum FormErrorType {
+    Added = 'ADDED',
+    NotExist = 'NOT_EXIST',
+}
 
 export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose }) => {
-    const [address, setAddress] = useState('')
-
     const wallet = useWallet()
-    const tokenDetailed = useERC721TokenDetailed(address)
-    const assetDetailed = useERC721TokenAssetDetailed(tokenDetailed.value)
+    const [address, setAddress] = useState('')
+    const { value: contractDetailed, loading: contractDetailLoading } = useERC721ContractDetailed(address)
+    const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contractDetailed)
 
-    const onSubmit = useSnackbarCallback({
-        executor: async () => {
-            if (!tokenDetailed.value || !assetDetailed.value || !wallet) return
-            await Promise.all([
-                PluginServices.Wallet.addERC721Token({
-                    ...tokenDetailed.value,
-                    asset: assetDetailed.value,
-                }),
-                PluginServices.Wallet.trustERC721Token(wallet.address, tokenDetailed.value),
-            ])
-        },
-        deps: [wallet, tokenDetailed, assetDetailed],
-        onSuccess: onClose,
-    })
+    const onSubmit = useCallback(async () => {
+        if (contractDetailLoading || !wallet) return
+
+        const tokenInDB = await PluginServices.Wallet.getERC721Token(address, tokenId)
+        if (tokenInDB) throw new Error(FormErrorType.Added)
+
+        const tokenDetailed = await erc721TokenDetailedCallback()
+
+        if (
+            (tokenDetailed && !isSameAddress(tokenDetailed.info.owner, wallet.address)) ||
+            !tokenDetailed ||
+            !tokenDetailed.info.owner
+        ) {
+            throw new Error(FormErrorType.NotExist)
+        } else {
+            await PluginServices.Wallet.addERC721Token(tokenDetailed)
+            onClose()
+        }
+    }, [contractDetailLoading, wallet, address, tokenId, erc721TokenDetailedCallback])
 
     return (
         <AddCollectibleDialogUI
@@ -49,8 +61,8 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
             onClose={onClose}
             address={address}
             onAddressChange={setAddress}
+            onTokenIdChange={setTokenId}
             onSubmit={onSubmit}
-            exclude={Array.from(wallet?.erc721_token_whitelist ?? [])}
         />
     )
 })
@@ -59,42 +71,108 @@ export interface AddCollectibleDialogUIProps {
     open: boolean
     onClose: () => void
     address: string
-    exclude: string[]
     onAddressChange: (address: string) => void
+    onTokenIdChange: (tokenId: string) => void
     onSubmit: () => void
 }
 
 export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
-    ({ open, onClose, address, exclude, onAddressChange, onSubmit }) => {
+    ({ open, onClose, onAddressChange, onTokenIdChange, onSubmit }) => {
         const t = useDashboardI18N()
-        const validateAddressMessage = useMemo(() => {
-            if (address.length && !EthereumAddress.isValid(address)) return t.wallets_incorrect_address()
-            if (exclude.find((item) => item === address)) return t.wallets_collectible_been_added()
-            return ''
-        }, [address])
+
+        const schema = z.object({
+            address: z
+                .string()
+                .min(1)
+                .refine((address) => EthereumAddress.isValid(address), t.wallets_incorrect_address()),
+            tokenId: z.string().min(1),
+        })
+
+        const {
+            control,
+            handleSubmit,
+            setError,
+            watch,
+            reset,
+            formState: { errors, isSubmitting, isValid },
+        } = useForm<FormInputs>({
+            resolver: zodResolver(schema),
+            defaultValues: { address: '', tokenId: '' },
+        })
+
+        useEffect(() => {
+            const subscription = watch((value) => {
+                onAddressChange(value.address)
+                onTokenIdChange(value.tokenId)
+            })
+            return () => subscription.unsubscribe()
+        }, [watch])
+
+        const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+            handleSubmit(onSubmit)(event).catch((error) => {
+                setError('tokenId', {
+                    type: 'value',
+                    message:
+                        error.message === FormErrorType.Added
+                            ? t.wallets_collectible_been_added()
+                            : t.wallets_collectible_error_not_exist(),
+                })
+            })
+        }
+
+        const handleClose = () => {
+            reset()
+            onClose()
+        }
 
         return (
-            <MaskDialog open={open} title={t.wallets_add_collectible()} onClose={onClose}>
-                <DialogContent>
-                    <form>
-                        <Box style={{ display: 'flex', flexDirection: 'column' }}>
-                            <TextField
-                                variant="filled"
-                                label={t.wallets_collectible_address()}
-                                InputProps={{ disableUnderline: true }}
-                                value={address}
-                                error={!!validateAddressMessage}
-                                helperText={validateAddressMessage}
-                                onChange={(e) => onAddressChange(e.target.value)}
+            <MaskDialog open={open} title={t.wallets_add_collectible()} onClose={handleClose}>
+                <form onSubmit={handleFormSubmit}>
+                    <DialogContent>
+                        <Box>
+                            <Controller
+                                control={control}
+                                render={({ field }) => (
+                                    <MaskTextField
+                                        {...field}
+                                        label={t.wallets_collectible_address()}
+                                        required
+                                        helperText={errors.address?.message}
+                                        error={!!errors.address}
+                                    />
+                                )}
+                                name="address"
                             />
                         </Box>
-                    </form>
-                </DialogContent>
-                <DialogActions>
-                    <Button color="primary" onClick={onSubmit}>
-                        {t.wallets_collectible_add()}
-                    </Button>
-                </DialogActions>
+                        <Box sx={{ mt: 3 }}>
+                            <Controller
+                                control={control}
+                                render={({ field }) => (
+                                    <MaskTextField
+                                        {...field}
+                                        label={t.wallets_collectible_token_id()}
+                                        required
+                                        helperText={errors.tokenId?.message}
+                                        error={!!errors.tokenId}
+                                    />
+                                )}
+                                name="tokenId"
+                            />
+                        </Box>
+                    </DialogContent>
+                    <DialogActions sx={{ mt: 3 }}>
+                        <Button sx={{ minWidth: 100 }} variant="outlined" color="primary" onClick={onClose}>
+                            {t.cancel()}
+                        </Button>
+                        <Button
+                            disabled={isSubmitting || !isValid}
+                            sx={{ minWidth: 100 }}
+                            color="primary"
+                            type="submit">
+                            {t.wallets_collectible_add()}
+                        </Button>
+                    </DialogActions>
+                </form>
             </MaskDialog>
         )
     },

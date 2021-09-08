@@ -7,6 +7,7 @@ import type { GameMetaData, GoodGhostingInfo, Player, TimelineEvent } from '../t
 import { ZERO_ADDRESS } from '../constants'
 import { useI18N } from '../../../utils'
 import addSeconds from 'date-fns/addSeconds'
+import Services from '../../../extension/service'
 
 export function useGameContractAddress(id: string) {
     const { GOOD_GHOSTING_CONTRACT_ADDRESS_FILE } = useGoodGhostingConstants()
@@ -17,10 +18,8 @@ export function useGameContractAddress(id: string) {
                 contractAddress: '',
             }
 
-        const response = await fetch(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
-        const data = await response.text()
-        const gameData = data ? JSON.parse(data) : {}
-        return gameData[id] || gameData.default || {}
+        const gameData = await Services.Helper.fetchJson(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
+        return gameData?.[id] || gameData?.default || {}
     }, [id, GOOD_GHOSTING_CONTRACT_ADDRESS_FILE])
 
     return asyncResult
@@ -43,6 +42,7 @@ export function useGameInfo(gameData: GameMetaData) {
             'adaiToken',
             'lendingPool',
             'earlyWithdrawalFee',
+            'rewardsPerPlayer',
         ] as any
         return {
             names: [...names, 'players'],
@@ -51,7 +51,7 @@ export function useGameInfo(gameData: GameMetaData) {
     }, [account])
 
     const [results, calls, _, callback] = useSingleContractMultipleData(contract, names, callDatas)
-    const asyncResult = useAsyncRetry(() => callback(calls), [calls, callback])
+    const asyncResult = useAsyncRetry(() => callback(calls), [calls])
 
     const gameInfo = useMemo(() => {
         if (!contract || !results.length) return
@@ -70,6 +70,7 @@ export function useGameInfo(gameData: GameMetaData) {
             adaiToken,
             lendingPool,
             earlyWithdrawalFee,
+            rewardsPerPlayer,
             currentPlayer,
         ] = results.map((x) => {
             if (x.error) failedToGetInfo = true
@@ -83,6 +84,7 @@ export function useGameInfo(gameData: GameMetaData) {
         return {
             ...gameData,
             segmentPayment,
+            rewardsPerPlayer,
             firstSegmentStart: Number.parseInt(firstSegmentStart, 10),
             currentSegment: Number.parseInt(currentSegment, 10),
             lastSegment: Number.parseInt(lastSegment, 10),

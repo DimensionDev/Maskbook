@@ -7,13 +7,14 @@ import {
     resolveTokenLinkOnExplorer,
     useTokenConstants,
 } from '@masknet/web3-shared'
-import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
-import { makeStyles, Theme } from '@material-ui/core/styles'
+import { Link, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
+import ListItemButton from '@material-ui/core/ListItemButton'
+import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { useCallback } from 'react'
 import { TokenIcon } from '@masknet/shared'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 36,
         height: 36,
@@ -68,7 +69,7 @@ export interface TokenInListProps {
 }
 
 export function TokenInList({ data, index, style }: TokenInListProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     const stop = useCallback((ev: React.MouseEvent<HTMLAnchorElement>) => ev.stopPropagation(), [])
@@ -80,10 +81,9 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
     const { address, name, symbol, logoURI } = token
 
     return (
-        <ListItem
+        <ListItemButton
             // force react not to reuse dom node
             key={token.address}
-            button
             style={style}
             disabled={data.selected.some(currySameAddress(address))}
             onClick={() => data.onSelect(token)}>
@@ -111,6 +111,6 @@ export function TokenInList({ data, index, style }: TokenInListProps) {
                     {balance !== null && formatBalance(balance, token.decimals, 4)}
                 </Typography>
             </ListItemText>
-        </ListItem>
+        </ListItemButton>
     )
 }

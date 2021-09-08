@@ -1,6 +1,5 @@
 import { ChangeEvent, useState, useCallback, useMemo, useEffect } from 'react'
 import {
-    makeStyles,
     DialogContent,
     Box,
     Checkbox,
@@ -11,10 +10,17 @@ import {
     Typography,
     Link,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-es'
 import { useSnackbar } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
-import { FungibleTokenDetailed, EthereumTokenType, useAccount, isNative, useTokenWatched } from '@masknet/web3-shared'
+import {
+    FungibleTokenDetailed,
+    EthereumTokenType,
+    useAccount,
+    isNative,
+    useFungibleTokenWatched,
+} from '@masknet/web3-shared'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -30,7 +36,7 @@ import { toAsset, toUnixTimestamp } from '../helpers'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { Trans } from 'react-i18next'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         content: {
             padding: 0,
@@ -72,7 +78,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const selectedPaymentToken = first(paymentTokens)
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
     const account = useAccount()
@@ -81,7 +87,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
 
-    const { amount, token, balance, setAmount, setToken } = useTokenWatched(selectedPaymentToken)
+    const { amount, token, balance, setAmount, setToken } = useFungibleTokenWatched(selectedPaymentToken)
 
     const onMakeOffer = useCallback(async () => {
         if (!asset?.value) return
@@ -119,7 +125,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         const amount_ = new BigNumber(amount || '0')
         const balance_ = new BigNumber(balance.value ?? '0')
         if (amount_.isZero()) return t('plugin_collectible_enter_a_price')
-        if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficent_balance')
+        if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
         if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0)
             return t('plugin_collectible_invalid_expiration_date')
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')

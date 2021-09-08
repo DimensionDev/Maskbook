@@ -59,10 +59,14 @@ export interface BackupJSONFileVersion2 {
         postBy: string // ProfileIdentifier.toText()
         identifier: string // PostIVIdentifier.toText()
         postCryptoKey?: AESJsonWebKey
-        recipients: [/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }][]
+        recipients: 'everyone' | [/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }][]
         /** @deprecated */
         recipientGroups: never[] // Array<GroupIdentifier.toText()>
         foundAt: number // Unix timestamp
+        encryptBy?: string // PersonaIdentifier.toText()
+        url?: string
+        summary?: string
+        interestedMeta?: string // encoded by MessagePack
     }>
     wallets: Array<{
         address: string
@@ -78,6 +82,7 @@ export interface BackupJSONFileVersion2 {
         updatedAt: number // Unix timestamp
     }>
     grantedHostPermissions: string[]
+    plugin?: Record<string, any>
 }
 
 export function isBackupJSONFileVersion2(obj: object): obj is BackupJSONFileVersion2 {

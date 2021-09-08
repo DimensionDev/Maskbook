@@ -1,35 +1,30 @@
-import { TextField, experimentalStyled as styled } from '@material-ui/core'
-import { useRef, memo } from 'react'
+import { TextField, Grid } from '@material-ui/core'
+import { memo } from 'react'
 
-const Container = styled('div')({
-    display: 'inline-grid',
-    gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: 24,
-    '& > *': {
-        width: 124,
-        height: 48,
-    },
-})
-const a12 = [...Array(12).keys()]
 export interface DesktopMnemonicConfirmProps {
-    onChange(mnemonics: (string | undefined)[]): void
+    puzzleWords: string[]
+    indexes?: number[]
+    onChange(word: string, index: number): void
 }
 export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) => {
-    const value = useRef<Readonly<Record<string, string>>>({ length: 12 as any })
+    const { puzzleWords, indexes, onChange } = props
+
     return (
-        <Container>
-            {a12.map((i) => (
-                <TextField
-                    key={i}
-                    label={i + 1 + '.'}
-                    variant="filled"
-                    size="small"
-                    onChange={(e) => {
-                        value.current = { ...value.current, [i]: e.currentTarget.value }
-                        props.onChange(Array.from(value.current as any))
-                    }}
-                />
+        <Grid container spacing={2}>
+            {puzzleWords.map((word, i) => (
+                <Grid item xs={3} key={i}>
+                    <TextField
+                        sx={{ width: '100%', userSelect: 'none' }}
+                        label={i + 1 + '.'}
+                        variant="filled"
+                        size="small"
+                        value={word}
+                        InputProps={{ disableUnderline: true }}
+                        disabled={indexes && !indexes.includes(i)}
+                        onChange={(e) => onChange(e.target.value, indexes ? indexes.indexOf(i) : i)}
+                    />
+                </Grid>
             ))}
-        </Container>
+        </Grid>
     )
 })

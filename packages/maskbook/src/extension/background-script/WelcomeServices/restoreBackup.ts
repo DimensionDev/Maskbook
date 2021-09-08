@@ -14,6 +14,8 @@ import { i18n } from '../../../utils/i18n-next'
 import { currentImportingBackup } from '../../../settings/settings'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { importNewWallet } from '../../../plugins/Wallet/services'
+import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra'
+import { Result } from 'ts-results'
 
 /**
  * Restore the backup
@@ -57,12 +59,41 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
         for (const x of data.posts) {
             await createOrUpdatePostDB(PostRecordFromJSONFormat(x), 'append')
         }
+
+        const plugins = [...activatedPluginsWorker]
+        const works = new Set<Promise<Result<void, unknown>>>()
+        for (const [pluginID, item] of Object.entries(data.plugin || {})) {
+            const plugin = plugins.find((x) => x.ID === pluginID)
+            // should we warn user here?
+            if (!plugin) {
+                if ([...registeredPluginIDs].includes(pluginID))
+                    console.warn(`[@masknet/plugin-infra] Found a backup of a not enabled plugin ${plugin}`, item)
+                else console.warn(`[@masknet/plugin-infra] Found an unknown plugin backup of ${plugin}`, item)
+                continue
+            }
+
+            const f = plugin.backup?.onRestore
+            if (!f) {
+                console.warn(
+                    `[@masknet/plugin-infra] Found a backup of plugin ${plugin} but it did not register a onRestore callback.`,
+                    item,
+                )
+                continue
+            }
+            const x = Result.wrapAsync(async () => {
+                const x = await f(item)
+                if (x.err) console.error(`[@masknet/plugin-infra] Plugin ${plugin} failed to restore its backup.`, item)
+                return x.unwrap()
+            })
+            works.add(x)
+        }
+        await Promise.all(works)
     } finally {
         currentImportingBackup.value = false
     }
 }
 
-const uncomfirmedBackup = new Map<string, BackupJSONFileLatest>()
+const unconfirmedBackup = new Map<string, BackupJSONFileLatest>()
 
 /**
  * Restore backup step 1: store the unconfirmed backup in cached
@@ -70,7 +101,7 @@ const uncomfirmedBackup = new Map<string, BackupJSONFileLatest>()
  * @param json the backup to be cached
  */
 export async function setUnconfirmedBackup(id: string, json: BackupJSONFileLatest) {
-    uncomfirmedBackup.set(id, json)
+    unconfirmedBackup.set(id, json)
 }
 
 /**
@@ -78,7 +109,7 @@ export async function setUnconfirmedBackup(id: string, json: BackupJSONFileLates
  * @param id the uuid for each restoration
  */
 export async function getUnconfirmedBackup(id: string) {
-    return uncomfirmedBackup.get(id)
+    return unconfirmedBackup.get(id)
 }
 
 /**
@@ -86,9 +117,9 @@ export async function getUnconfirmedBackup(id: string) {
  * @param id the uuid for each restoration
  */
 export async function confirmBackup(id: string, whoAmI?: ProfileIdentifier) {
-    if (uncomfirmedBackup.has(id)) {
-        await restoreBackup(uncomfirmedBackup.get(id)!, whoAmI)
-        uncomfirmedBackup.delete(id)
+    if (unconfirmedBackup.has(id)) {
+        await restoreBackup(unconfirmedBackup.get(id)!, whoAmI)
+        unconfirmedBackup.delete(id)
     } else {
         throw new Error('cannot find backup')
     }

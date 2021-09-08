@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { makeStyles, Typography, MenuItem, Link } from '@material-ui/core'
+import { Typography, MenuItem, Link } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ShadowRootMenu } from '../../../../utils/shadow-root/ShadowRootComponents'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     link: {
         display: 'flex',
         alignItems: 'center',
@@ -29,7 +30,7 @@ export interface FootnoteMenuProps {
 export function FootnoteMenu(props: FootnoteMenuProps) {
     const { children, options, selectedIndex = -1, onChange } = props
 
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const onOpen = (event: React.MouseEvent<HTMLAnchorElement>) => setAnchorEl(event.currentTarget)
     const onSelect = (option: FootnoteMenuOption) => {

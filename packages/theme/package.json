@@ -4,11 +4,18 @@
   "description": "@material-ui/core theme of design system of Mask Network",
   "type": "module",
   "exports": {
-    ".": "./dist/src/theme.js",
+    ".": "./dist/src/index.js",
     "./constants": "./dist/src/constants.js"
   },
-  "main": "./dist/src/theme.js",
-  "types": "./dist/src/theme.d.ts",
+  "typesVersions": {
+    "*": {
+      "constants": [
+        "./dist/src/constants.d.ts"
+      ]
+    }
+  },
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "scripts": {
     "build-storybook": "build -- build-storybook",
     "start": "dev -- start-storybook -p 6006"
@@ -18,20 +25,21 @@
     "classnames": "^2.3.1",
     "fuse.js": "^6.4.6",
     "lodash-es": "^4.17.20",
-    "notistack": "1.0.6-next.1",
+    "notistack": "1.0.6-next.2",
     "react-window": "^1.8.6",
     "tinycolor2": "^1.4.2",
-    "tss-react": "^0.6.0-beta.1",
+    "tss-react": "^0.8.1",
+    "unstated-next": "^1.1.0",
     "use-subscription": "^1.5.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.6",
-    "@storybook/addon-actions": "^6.3.5",
-    "@storybook/addon-essentials": "^6.3.5",
-    "@storybook/addon-links": "^6.3.5",
-    "@storybook/addons": "^6.3.5",
-    "@storybook/react": "^6.3.5",
-    "@storybook/theming": "^6.3.5",
+    "@babel/core": "^7.15.0",
+    "@storybook/addon-actions": "^6.3.7",
+    "@storybook/addon-essentials": "^6.3.7",
+    "@storybook/addon-links": "^6.3.7",
+    "@storybook/addons": "^6.3.7",
+    "@storybook/react": "^6.3.7",
+    "@storybook/theming": "^6.3.7",
     "@types/qrcode": "^1.4.1",
     "@types/tinycolor2": "^1.4.3",
     "babel-loader": "^8.2.2",

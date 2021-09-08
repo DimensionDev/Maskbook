@@ -3,20 +3,23 @@ import {
     ethereumNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
     binanceNetworkTradeProviderSettings,
+    arbitrumNetworkTradeProviderSettings,
+    xdaiNetworkTradeProviderSettings,
 } from '../settings'
 import { TradeProvider } from '../types'
-import { getNetworkTypeFromChainId } from '@masknet/web3-shared'
+import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../Wallet/settings'
 import { unreachable } from '@dimensiondev/kit'
-import { NetworkType } from '@masknet/public-api'
 
 export function useCurrentTradeProvider() {
-    const networkType: NetworkType | undefined = getNetworkTypeFromChainId(currentChainIdSettings.value)
+    const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
     const ethNetworkTradeProvider = useValueRef(ethereumNetworkTradeProviderSettings)
     const polygonNetworkTradeProvider = useValueRef(polygonNetworkTradeProviderSettings)
     const binanceNetworkTradeProvider = useValueRef(binanceNetworkTradeProviderSettings)
+    const arbitrumNetworkTradeProvider = useValueRef(arbitrumNetworkTradeProviderSettings)
+    const xdaiNetworkTradeProvider = useValueRef(xdaiNetworkTradeProviderSettings)
 
-    if (!networkType) return TradeProvider.UNISWAP
+    if (!networkType) return TradeProvider.UNISWAP_V2
     switch (networkType) {
         case NetworkType.Ethereum:
             return ethNetworkTradeProvider
@@ -25,7 +28,9 @@ export function useCurrentTradeProvider() {
         case NetworkType.Binance:
             return binanceNetworkTradeProvider
         case NetworkType.Arbitrum:
-            throw new Error('TODO')
+            return arbitrumNetworkTradeProvider
+        case NetworkType.xDai:
+            return xdaiNetworkTradeProvider
         default:
             unreachable(networkType)
     }

@@ -5,7 +5,7 @@ import {
     ERC721Token,
     NativeToken,
     NetworkType,
-    NonFungibleTokenDetailed,
+    ERC721TokenDetailed,
     ProviderType,
     CollectibleProvider,
 } from '../types'
@@ -38,6 +38,8 @@ export function resolveNetworkAddress(networkType: NetworkType, address: string)
             return `ethereum:${address}`
         case NetworkType.Arbitrum:
             return `arbitrum:${address}`
+        case NetworkType.xDai:
+            return `xdai:${address}`
         default:
             safeUnreachable(networkType)
             return address
@@ -54,6 +56,8 @@ export function resolveNetworkName(networkType: NetworkType) {
             return 'Ethereum'
         case NetworkType.Arbitrum:
             return 'Arbitrum'
+        case NetworkType.xDai:
+            return 'xDai'
         default:
             safeUnreachable(networkType)
             return 'Unknown'
@@ -82,6 +86,12 @@ export function resolveChainColor(chainId: ChainId) {
             return 'rgb(246, 195, 67)'
         case ChainId.Gorli:
             return 'rgb(48, 153, 242)'
+        case ChainId.BSCT:
+            return 'rgb(240, 185, 10)'
+        case ChainId.Mumbai:
+            return 'rgb(130, 71, 229)'
+        case ChainId.xDai:
+            return 'rgb(73, 169, 166)'
         default:
             return 'rgb(214, 217, 220)'
     }
@@ -115,7 +125,7 @@ export function resolveIPFSLink(ipfs: string): string {
 
 export function resolveCollectibleProviderLink(chainId: ChainId, provider: CollectibleProvider) {
     switch (provider) {
-        case CollectibleProvider.OPENSEAN:
+        case CollectibleProvider.OPENSEA:
             if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io`
             return `https://opensea.io`
         default:
@@ -126,10 +136,10 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: Colle
 export function resolveCollectibleLink(
     chainId: ChainId,
     provider: CollectibleProvider,
-    { address, tokenId }: NonFungibleTokenDetailed,
+    { contractDetailed: { address }, tokenId }: ERC721TokenDetailed,
 ) {
     switch (provider) {
-        case CollectibleProvider.OPENSEAN:
+        case CollectibleProvider.OPENSEA:
             return urlcat(resolveCollectibleProviderLink(chainId, provider), '/assets/:address/:tokenId', {
                 address,
                 tokenId,

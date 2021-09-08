@@ -63,6 +63,7 @@ export interface NFTAsset {
 
 export interface NFTOrder {
     unitPrice: number
+    usdPrice?: number
     makerAccount: {
         user?: {
             username?: string

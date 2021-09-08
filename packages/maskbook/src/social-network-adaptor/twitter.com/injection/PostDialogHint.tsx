@@ -28,7 +28,7 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
 
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const onHintButtonClicked = useCallback(
-        () => MaskMessage.events.compositionUpdated.sendToLocal({ reason, open: true }),
+        () => MaskMessage.events.requestComposition.sendToLocal({ reason, open: true }),
         [reason],
     )
     return <PostDialogHint onHintButtonClicked={onHintButtonClicked} />

@@ -16,7 +16,7 @@
             "url": "http://json-schema.org/draft-07/schema"
         },
         {
-            "fileMatch": ["/packages/maskbook/src/_locales/*/messages.json"],
+            "fileMatch": ["/packages/maskbook/src/locales/*.json"],
             "url": "/.vscode/schema/locale.json"
         },
         {

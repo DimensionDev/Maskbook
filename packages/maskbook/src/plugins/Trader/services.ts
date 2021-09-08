@@ -9,6 +9,8 @@ import {
     ethereumNetworkTradeProviderSettings,
     binanceNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
+    arbitrumNetworkTradeProviderSettings,
+    xdaiNetworkTradeProviderSettings,
 } from './settings'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 
@@ -30,7 +32,12 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
                 currentDataProviderSettings.value = DataProvider.COIN_GECKO
             break
         case NetworkType.Arbitrum:
-            currentTradeProviderSettings.value = TradeProvider.UNISWAP
+            currentTradeProviderSettings.value = TradeProvider.UNISWAP_V3
+            if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
+                currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
+            break
+        case NetworkType.xDai:
+            currentTradeProviderSettings.value = TradeProvider.SUSHISWAP
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
             break
@@ -39,21 +46,25 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
     }
 })
 
-currentTradeProviderSettings.addListener((tradeProvier: TradeProvider) => {
+currentTradeProviderSettings.addListener((tradeProvider: TradeProvider) => {
     const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
     if (!networkType) return
     switch (networkType) {
         case NetworkType.Ethereum:
-            ethereumNetworkTradeProviderSettings.value = tradeProvier
+            ethereumNetworkTradeProviderSettings.value = tradeProvider
             break
         case NetworkType.Binance:
-            binanceNetworkTradeProviderSettings.value = tradeProvier
+            binanceNetworkTradeProviderSettings.value = tradeProvider
             break
         case NetworkType.Polygon:
-            polygonNetworkTradeProviderSettings.value = tradeProvier
+            polygonNetworkTradeProviderSettings.value = tradeProvider
             break
         case NetworkType.Arbitrum:
-            throw new Error('TODO')
+            arbitrumNetworkTradeProviderSettings.value = tradeProvider
+            break
+        case NetworkType.xDai:
+            xdaiNetworkTradeProviderSettings.value = tradeProvider
+            break
         default:
             unreachable(networkType)
     }

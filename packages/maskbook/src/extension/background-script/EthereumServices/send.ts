@@ -1,12 +1,21 @@
 import { EthereumAddress } from 'wallet.ts'
-import type { HttpProvider, TransactionConfig } from 'web3-core'
+import { first } from 'lodash-es'
+import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { addGasMargin, ChainId, EthereumMethodType, ProviderType } from '@masknet/web3-shared'
+import {
+    addGasMargin,
+    ChainId,
+    EthereumMethodType,
+    EthereumTransactionConfig,
+    isEIP1159Supported,
+    ProviderType,
+} from '@masknet/web3-shared'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/kit'
+import * as MetaMask from './providers/MetaMask'
 import { createWeb3 } from './web3'
 import * as WalletConnect from './providers/WalletConnect'
-import { addRecentTransaction, getWallet } from '../../../plugins/Wallet/services'
+import { getWallet } from '../../../plugins/Wallet/services'
 import { commitNonce, getNonce, resetNonce } from './nonce'
 import { getGasPrice } from './network'
 import {
@@ -15,19 +24,53 @@ import {
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
 import { debugModeSetting } from '../../../settings/settings'
+import { Flags } from '../../../utils'
+import { nativeAPI } from '../../../utils/native-rpc'
+import { WalletRPC } from '../../../plugins/Wallet/messages'
 
 export interface SendOverrides {
     chainId?: ChainId
     account?: string
     providerType?: ProviderType
-    rpc?: string
+}
+
+function parseGasPrice(price: string | undefined) {
+    return Number.parseInt(price ?? '0x0', 16)
+}
+
+function getChainIdFromPayload(payload: JsonRpcPayload) {
+    switch (payload.method) {
+        // here are methods that contracts may emit
+        case EthereumMethodType.ETH_CALL:
+        case EthereumMethodType.ETH_ESTIMATE_GAS:
+        case EthereumMethodType.ETH_SEND_TRANSACTION:
+            const config = first(payload.params) as { chainId?: string } | undefined
+            return typeof config?.chainId === 'string' ? Number.parseInt(config.chainId, 16) || undefined : undefined
+        default:
+            return undefined
+    }
+}
+
+function handleRecentTransaction(account: string, response: JsonRpcResponse | undefined) {
+    const hash = response?.result as string | undefined
+    if (typeof hash !== 'string') return
+    if (!/^0x([\dA-Fa-f]{64})$/.test(hash)) return
+    WalletRPC.addRecentTransaction(account, hash)
+}
+
+async function handleNonce(account: string, error: Error | null, response: JsonRpcResponse | undefined) {
+    const error_ = (error ?? response?.error) as { message: string } | undefined
+    const message = error_?.message ?? ''
+    if (!EthereumAddress.isValid(account)) return
+    if (/\bnonce\b/im.test(message) && /\b(low|high)\b/im.test(message)) resetNonce(account)
+    else commitNonce(account)
 }
 
 /**
  * This API is only used internally. Please use requestSend instead in order to share the same payload id globally.
  * @param payload
  * @param callback
- * @param rpc
+ * @param sendOverrides
  */
 export async function INTERNAL_send(
     payload: JsonRpcPayload,
@@ -36,7 +79,6 @@ export async function INTERNAL_send(
         chainId = currentChainIdSettings.value,
         account = currentAccountSettings.value,
         providerType = currentProviderSettings.value,
-        rpc,
     }: SendOverrides = {},
 ) {
     if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
@@ -46,7 +88,7 @@ export async function INTERNAL_send(
 
     const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null
     const web3 = createWeb3({
-        chainId,
+        chainId: getChainIdFromPayload(payload) ?? chainId,
         privKeys: wallet?._private_key_ ? [wallet._private_key_] : [],
         providerType,
     })
@@ -75,6 +117,12 @@ export async function INTERNAL_send(
                 })
                 break
             case ProviderType.MetaMask:
+                try {
+                    await MetaMask.ensureConnectedAndUnlocked()
+                } catch (error: any) {
+                    callback(error)
+                    break
+                }
                 provider?.send(
                     {
                         ...payload,
@@ -98,17 +146,24 @@ export async function INTERNAL_send(
     }
 
     async function sendTransaction() {
-        const [config] = payload.params as [TransactionConfig]
+        const [config] = payload.params as [EthereumTransactionConfig]
 
         // add nonce
         if (providerType === ProviderType.Maskbook && config.from) config.nonce = await getNonce(config.from as string)
 
-        // add gas price
-        if (!config.gasPrice || !Number.parseInt((config.gasPrice as string) ?? '0x0', 16))
-            config.gasPrice = await getGasPrice()
-
         // add gas margin
         if (config.gas) config.gas = `0x${addGasMargin(config.gas).toString(16)}`
+
+        // pricing transaction
+        const isGasPriceValid = parseGasPrice(config.gasPrice as string) > 0
+        const isEIP1159Valid =
+            parseGasPrice(config.maxFeePerGas as string) > 0 && parseGasPrice(config.maxPriorityFeePerGas as string) > 0
+
+        if (Flags.EIP1159_enabled && isEIP1159Supported(chainId) && !isGasPriceValid && !isEIP1159Valid) {
+            throw new Error('To be implemented.')
+        } else {
+            config.gasPrice = await getGasPrice()
+        }
 
         // send the transaction
         switch (providerType) {
@@ -132,6 +187,12 @@ export async function INTERNAL_send(
                 )
                 break
             case ProviderType.MetaMask:
+                try {
+                    await MetaMask.ensureConnectedAndUnlocked()
+                } catch (error: any) {
+                    callback(error)
+                    break
+                }
                 provider?.send(payload, (error, response) => {
                     callback(error, response)
                     handleRecentTransaction(account, response)
@@ -158,18 +219,7 @@ export async function INTERNAL_send(
                 await sendTransaction()
                 break
             default:
-                if (rpc) {
-                    fetch(rpc, {
-                        method: 'POST',
-                        body: JSON.stringify(payload),
-                    })
-                        .catch((error: Error) => callback(error))
-                        .then(async (res) => {
-                            if (res) callback(null, (await res.json()) as JsonRpcResponse)
-                        })
-                } else {
-                    provider.send(payload, callback)
-                }
+                provider.send(payload, callback)
                 break
         }
     } catch (error: any) {
@@ -177,17 +227,29 @@ export async function INTERNAL_send(
     }
 }
 
-function handleRecentTransaction(account: string, response: JsonRpcResponse | undefined) {
-    const hash = response?.result as string | undefined
-    if (typeof hash !== 'string') return
-    if (!/^0x([\dA-Fa-f]{64})$/.test(hash)) return
-    addRecentTransaction(account, hash)
-}
-
-async function handleNonce(account: string, error: Error | null, response: JsonRpcResponse | undefined) {
-    const error_ = (error ?? response?.error) as { message: string } | undefined
-    const message = error_?.message ?? ''
-    if (!EthereumAddress.isValid(account)) return
-    if (/\bnonce\b/im.test(message) && /\b(low|high)\b/im.test(message)) resetNonce(account)
-    else commitNonce(account)
+/**
+ * This API redirects requests to the native app.
+ * @param payload
+ * @param callback
+ * @param sendOverrides
+ */
+export async function INTERNAL_nativeSend(
+    payload: JsonRpcPayload,
+    callback: (error: Error | null, response?: JsonRpcResponse) => void,
+    { account = currentAccountSettings.value }: SendOverrides = {},
+) {
+    try {
+        const response = await nativeAPI?.api.send(payload)
+        callback(null, response)
+        if (payload.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
+            handleNonce(account, null, response)
+            handleRecentTransaction(account, response)
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            callback(error, undefined)
+            handleNonce(account, error, undefined)
+        }
+        console.error('internal native send error', error)
+    }
 }

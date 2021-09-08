@@ -2,13 +2,7 @@ import stableStringify from 'json-stable-stringify'
 const CryptoKeyCache = new Map<string, CryptoKey>()
 const JsonWebKeyCache = new WeakMap<CryptoKey, JsonWebKey>()
 
-type Algorithms =
-    | string
-    | RsaHashedImportParams
-    | EcKeyImportParams
-    | HmacImportParams
-    | DhImportKeyParams
-    | AesKeyAlgorithm
+type Algorithms = string | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm
 
 export function getKeyParameter(
     type: 'ecdh' | 'ecdsa' | 'aes' | 'pbkdf2',

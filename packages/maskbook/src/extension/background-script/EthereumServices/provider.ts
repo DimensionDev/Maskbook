@@ -30,7 +30,6 @@ export async function connectWalletConnect() {
 
 export async function connectMetaMask() {
     const { accounts, chainId } = await MetaMask.requestAccounts()
-    await MetaMask.updateIsMetaMaskLockedSettings()
     return {
         account: first(accounts),
         chainId,

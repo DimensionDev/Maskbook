@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { DialogContent, Typography } from '@material-ui/core'
 import { InjectedDialog, InjectedDialogProps } from '../shared/InjectedDialog'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { MaskbookIcon } from '../../resources/MaskbookIcon'
 import { FormattedBalance, useStylesExtends } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
 import { ITO_Card } from '../../plugins/ITO/SNSAdaptor/ITO_Card'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     dialogPaper: {
         background: 'linear-gradient(180.43deg, #04277B 26.69%, #6B94F2 99.57%)',
     },
@@ -68,7 +68,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
             onClose={props.onClose}
             title="Your Mask Breakdown"
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogPaper }}
-            disableArrowBack>
+            titleBarIconStyle="close">
             <DialogContent className={classes.content}>
                 <MaskbookIcon classes={{ root: classes.logo }} />
                 <Typography className={classes.amount}>

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import {
-    makeStyles,
     DialogContent,
     Typography,
     IconButton,
@@ -13,13 +12,13 @@ import {
     Divider,
     CircularProgress,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import AddIcon from '@material-ui/icons/Add'
 import addDate from 'date-fns/add'
 import { usePortalShadowRoot } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '@masknet/shared'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
@@ -27,8 +26,9 @@ import type { PollMetaData } from '../types'
 import { POLL_META_KEY_1 } from '../constants'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { PluginPollRPC } from '../messages'
+import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 
-const useNewPollStyles = makeStyles((theme) => ({
+const useNewPollStyles = makeStyles()((theme) => ({
     menuPaper: {
         height: 200,
     },
@@ -116,7 +116,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
         })
     }
 
-    // react hooks are not binded with the function identity but hooks order
+    // react hooks are not bound with the function identity but hooks order
     const useSelect = (count: number, fn: (newVal: number) => void, defaultIndex = 0) => {
         const options = Array.from<string>({ length: count }).fill('')
 
@@ -125,6 +125,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                 variant="standard"
                 MenuProps={{
                     container,
+                    anchorOrigin: { horizontal: 'left', vertical: 'bottom' },
                     classes: { paper: classes.menuPaper },
                 }}
                 value={defaultIndex}
@@ -162,7 +163,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                             />
                         </FormControl>
                     ))}
-                    <IconButton onClick={addNewOption} classes={{ root: classes.addButton }}>
+                    <IconButton size="large" onClick={addNewOption} classes={{ root: classes.addButton }}>
                         <AddIcon color="primary" />
                     </IconButton>
                 </div>
@@ -237,18 +238,6 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
         </div>
     )
 }
-
-const useStyles = makeStyles((theme) => {
-    ;({
-        title: {
-            marginLeft: 6,
-        },
-        container: {
-            width: '100%',
-        },
-    })
-})
-
 interface PollsDialogProps extends withClasses<'wrapper'> {
     open: boolean
     onClose: () => void
@@ -260,13 +249,15 @@ export default function PollsDialog(props: PollsDialogProps) {
     const loading = useState(false)
 
     const { t } = useI18N()
+    const { attachMetadata, dropMetadata } = useCompositionContext()
 
     const createNewPoll = () => {
         setTabState(1)
     }
 
     const insertPoll = (data?: PollMetaData | null) => {
-        editActivatedPostMetadata((next) => (data ? next.set(POLL_META_KEY_1, data) : next.delete(POLL_META_KEY_1)))
+        if (data) attachMetadata(POLL_META_KEY_1, data)
+        else dropMetadata(POLL_META_KEY_1)
         props.onClose()
     }
 

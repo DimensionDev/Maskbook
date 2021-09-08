@@ -4,8 +4,8 @@ import type { SvgIcon } from '@material-ui/core'
 export const MenuLabsIcon: typeof SvgIcon = createIcon(
     'MenuLabsIcon',
     <g>
-        <circle cx="11" cy="12" r="6" fill="url(#paint0_linear)" />
-        <g filter="url(#filter0_b)">
+        <circle cx="11" cy="12" r="6" fill="url(#labs_linear)" />
+        <g filter="url(#labs)">
             <path
                 fillRule="evenodd"
                 clipRule="evenodd"
@@ -16,7 +16,7 @@ export const MenuLabsIcon: typeof SvgIcon = createIcon(
         </g>
         <circle cx="17.309" cy="6.656" fill="#B0CFEB" fillOpacity=".8" r="1.156" />
         <defs>
-            <linearGradient id="paint0_linear" x1="5" y1="18" x2="17" y2="18" gradientUnits="userSpaceOnUse">
+            <linearGradient id="labs_linear" x1="5" y1="18" x2="17" y2="18" gradientUnits="userSpaceOnUse">
                 <stop stopColor="#AFC3E1" />
                 <stop offset="1" stopColor="#C3D7F5" />
             </linearGradient>
@@ -25,7 +25,7 @@ export const MenuLabsIcon: typeof SvgIcon = createIcon(
                 <stop offset="1" stopColor="#C4E1FB" />
             </linearGradient>
             <filter
-                id="filter0_b"
+                id="labs"
                 x="-1"
                 y="6.131"
                 width="25"

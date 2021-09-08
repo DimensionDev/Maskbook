@@ -1,4 +1,5 @@
-import { Avatar, Link, makeStyles, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Avatar, Link, TableCell, TableRow, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import LinkIcon from '@material-ui/icons/Link'
 import { FormattedBalance } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared'
@@ -10,7 +11,7 @@ import { CollectibleState } from '../../hooks/useCollectibleState'
 import { resolveOpenSeaAssetEventType, resolveRaribleAssetEventType } from '../../pipes'
 import { Account } from '../Account'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         account: {
             display: 'flex',
@@ -45,8 +46,7 @@ interface Props {
 }
 
 export function Row({ event, isDifferenceToken }: Props) {
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const { provider } = CollectibleState.useContainer()
 
     const unitPrice = useMemo(() => {

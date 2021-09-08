@@ -1,5 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { ToolboxHint } from '../../../components/InjectedComponents/ToolboxHint'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { startWatch } from '../../../utils/watcher'
@@ -11,7 +11,7 @@ export function injectToolboxHintAtMinds(signal: AbortSignal) {
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ToolboxHintAtMinds />)
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     wrapper: {
         paddingTop: 4,
         paddingBottom: 4,
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function ToolboxHintAtMinds() {
-    const classes = useStyles()
+    const { classes } = useStyles()
     // Todo: add click handler
     return (
         <ToolboxHint

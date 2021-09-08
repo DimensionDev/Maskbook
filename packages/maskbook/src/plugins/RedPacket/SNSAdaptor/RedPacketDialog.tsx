@@ -1,12 +1,11 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { DialogContent } from '@material-ui/core'
-import { usePortalShadowRoot } from '@masknet/theme'
+import { usePortalShadowRoot, makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { RedPacketJSONPayload, DialogTabs, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
-import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { RedPacketMetaKey } from '../constants'
 import { RedPacketForm } from './RedPacketForm'
 import { RedPacketHistoryList } from './RedPacketHistoryList'
@@ -24,10 +23,23 @@ import {
     useRedPacketConstants,
 } from '@masknet/web3-shared'
 import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
-import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit } from 'lodash-es'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
+import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+
+const useStyles = makeStyles()((theme) => ({
+    content: {
+        position: 'relative',
+        paddingTop: 50,
+    },
+    tabs: {
+        top: 0,
+        left: 0,
+        right: 0,
+        position: 'absolute',
+    },
+}))
 
 enum CreateRedPacketPageStep {
     NewRedPacketPage = 'new',
@@ -43,7 +55,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
     const chainId = useChainId()
     const account = useAccount()
+    const { classes } = useStyles()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
+    const { attachMetadata, dropMetadata } = useCompositionContext()
 
     const state = useState(DialogTabs.create)
 
@@ -56,7 +70,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         setSettings(undefined)
         const [, setValue] = state
         setValue(DialogTabs.create)
-        currentGasPriceSettings.value = 0
         props.onClose()
     }, [props, state])
 
@@ -76,9 +89,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 }
             }
 
-            editActivatedPostMetadata((next) =>
-                payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey),
-            )
+            if (payload) attachMetadata(RedPacketMetaKey, payload)
+            else dropMetadata(RedPacketMetaKey)
             onClose()
         },
         [onClose, chainId],
@@ -123,7 +135,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             if (!createSettings?.token) return
 
             // TODO:
-            // earily return happended
+            // early return happened
             // we should guide user to select the red packet in the existing list
             if (createState.type !== TransactionStateType.CONFIRMED) return
 
@@ -195,11 +207,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
     const onBack = useCallback(() => {
         if (step === CreateRedPacketPageStep.ConfirmPage) setStep(CreateRedPacketPageStep.NewRedPacketPage)
-        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
     }, [step])
     const onNext = useCallback(() => {
         if (step === CreateRedPacketPageStep.NewRedPacketPage) setStep(CreateRedPacketPageStep.ConfirmPage)
-        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
     }, [step])
 
     const onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
@@ -231,8 +241,14 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     return (
         <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={onClose}>
-            <DialogContent>
-                {step === CreateRedPacketPageStep.NewRedPacketPage ? <AbstractTab height={320} {...tabProps} /> : null}
+            <DialogContent className={classes.content}>
+                {step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                    <AbstractTab
+                        classes={{ tabs: classes.tabs }}
+                        height={state[0] === DialogTabs.create ? 280 : 320}
+                        {...tabProps}
+                    />
+                ) : null}
                 {step === CreateRedPacketPageStep.ConfirmPage ? (
                     <RedPacketConfirmDialog
                         onClose={onClose}

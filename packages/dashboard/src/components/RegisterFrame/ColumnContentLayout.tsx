@@ -1,11 +1,8 @@
-import { memo } from 'react'
-import { experimentalStyled as styled } from '@material-ui/core/styles'
-import { getMaskColor } from '@masknet/theme'
-import { InfoOutlined } from '@material-ui/icons'
-import { Button, Typography } from '@material-ui/core'
-import { useNavigate } from 'react-router'
+import { RestoreIcon, RestoreBlueIcon, SignUpAccountIcon } from '@masknet/icons'
+import { styled } from '@material-ui/core/styles'
 
-const Container = styled('div')`
+export const ColumnContentLayout = styled('div')(
+    ({ theme }) => `
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -13,73 +10,43 @@ const Container = styled('div')`
     height: 100%;
     align-items: center;
     justify-content: center;
-`
-
-const Header = styled('div')(
-    ({ theme }) => `
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    width: 78%;
 `,
 )
 
-const Body = styled('div')(
+export const Body = styled('main')(
     ({ theme }) => `
     flex: 2;
-    width: 60%;
+    width: 78%;
 `,
 )
 
-const Footer = styled('div')(
+export const Footer = styled('footer')(
     ({ theme }) => `
     flex: 1;
     width: 78%;
 `,
 )
 
-const TipContainer = styled('div')(
+export const SignUpAccountLogo = styled(SignUpAccountIcon)(
     ({ theme }) => `
-    display: flex;
-    align-items: center;
-    padding: ${theme.spacing(2.5)};
-    background: ${getMaskColor(theme).infoBackground};
-    border-radius: ${theme.spacing(1)};
-
-    & > p {
-        margin-left: ${theme.spacing(1)};
-        margin-bottom: 0;
-    }
-
-    & > svg {
-        color: ${getMaskColor(theme).secondaryInfoText}};
-    }
+    width: 100%;
+    height: 96px;
+    margin-bottom: ${theme.spacing(10)};
 `,
 )
 
-interface ColumnContentLayoutProps extends React.PropsWithChildren<{}> {}
+export const RestoreBlueLogo = styled(RestoreBlueIcon)(
+    ({ theme }) => `
+    width: 100%;
+    height: 96px;
+    margin-bottom: ${theme.spacing(10)};
+`,
+)
 
-export const ColumnContentLayout = memo(({ children }: ColumnContentLayoutProps) => {
-    const navigate = useNavigate()
-    const handleGoBack = () => navigate(-1)
-
-    return (
-        <Container>
-            <Header>
-                <Button variant="text" onClick={handleGoBack}>
-                    Go Back
-                </Button>
-            </Header>
-            <Body>{children}</Body>
-            <Footer>
-                <TipContainer>
-                    <InfoOutlined />
-                    <Typography variant="body2" paragraph>
-                        footer
-                    </Typography>
-                </TipContainer>
-            </Footer>
-        </Container>
-    )
-})
+export const RestoreLogo = styled(RestoreIcon)(
+    ({ theme }) => `
+    width: 100%;
+    height: 96px;
+    margin-bottom: ${theme.spacing(10)};
+`,
+)

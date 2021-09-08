@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { Button, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
@@ -10,7 +11,7 @@ import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
 import { isZero, useAccount } from '@masknet/web3-shared'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             overflow: 'auto',
@@ -37,8 +38,7 @@ const useStyles = makeStyles((theme) => {
 
 export function OfferTab() {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const account = useAccount()
     const { asset, token, provider, offers, offerPage, setOfferPage } = CollectibleState.useContainer()
 
@@ -58,16 +58,7 @@ export function OfferTab() {
 
     const dataSource = useMemo(() => {
         if (!offers.value || !offers.value?.length) return []
-        return offers.value.sort((a, b) => {
-            const current = new BigNumber(a.unitPrice)
-            const next = new BigNumber(b.unitPrice)
-            if (current.isLessThan(next)) {
-                return 1
-            } else if (current.isGreaterThan(next)) {
-                return -1
-            }
-            return 0
-        })
+        return offers.value
     }, [offers.value])
 
     if (offers.loading) return <LoadingTable />
@@ -114,7 +105,9 @@ export function OfferTab() {
                         ) : (
                             <>
                                 <TableCell>{t('plugin_collectible_price')}</TableCell>
-                                <TableCell>{t('plugin_collectible_expiration')}</TableCell>
+                                {provider === CollectibleProvider.OPENSEA ? (
+                                    <TableCell>{t('plugin_collectible_expiration')}</TableCell>
+                                ) : null}
                             </>
                         )}
                     </TableRow>

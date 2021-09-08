@@ -1,15 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import {
-    Box,
-    DialogContent,
-    ImageList,
-    ImageListItem,
-    List,
-    ListItem,
-    makeStyles,
-    Theme,
-    Typography,
-} from '@material-ui/core'
+import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
@@ -37,7 +28,7 @@ import { currentNetworkSettings, currentProviderSettings } from '../../settings'
 import { Flags } from '../../../../utils'
 import { getMaskColor } from '@masknet/theme'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     paper: {
         width: '750px !important',
         maxWidth: 'unset',
@@ -113,6 +104,7 @@ const networks = [
     Flags.bsc_enabled ? NetworkType.Binance : undefined,
     Flags.polygon_enabled ? NetworkType.Polygon : undefined,
     Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
+    Flags.xdai_enabled ? NetworkType.xDai : undefined,
 ].filter(Boolean) as NetworkType[]
 
 interface SelectProviderDialogUIProps extends withClasses<never> {}

@@ -1,10 +1,11 @@
-import { AvatarGroup, Box, Breadcrumbs, makeStyles, Paper, Typography } from '@material-ui/core'
+import { AvatarGroup, Box, Breadcrumbs, Paper, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import type { TradeComputed } from '../../types'
 import { formatEthereumAddress } from '@masknet/web3-shared'
 import { TokenIcon, useStylesExtends } from '@masknet/shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         boxSizing: 'border-box',

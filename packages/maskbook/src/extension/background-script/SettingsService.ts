@@ -12,6 +12,8 @@ import {
     ethereumNetworkTradeProviderSettings,
     binanceNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
+    arbitrumNetworkTradeProviderSettings,
+    xdaiNetworkTradeProviderSettings,
 } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
@@ -56,6 +58,10 @@ export const [getPolygonNetworkTradeProvider, setPolygonNetworkTradeProvider] = 
 export const [getBinanceNetworkTradeProvider, setBinanceNetworkTradeProvider] = create(
     binanceNetworkTradeProviderSettings,
 )
+export const [getArbitrumNetworkTradeProvider, setArbitrumNetworkTradeProvider] = create(
+    arbitrumNetworkTradeProviderSettings,
+)
+export const [getxDaiNetworkTradeProvider, setxDaiNetworkTradeProvider] = create(xdaiNetworkTradeProviderSettings)
 
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 
@@ -112,4 +118,8 @@ export async function shouldActivatePluginOnSNSStart() {
     const val = sessionStorage.getItem(key)
     sessionStorage.removeItem(key)
     return val
+}
+
+export async function openTab(url: string) {
+    await browser.tabs.create({ active: true, url })
 }

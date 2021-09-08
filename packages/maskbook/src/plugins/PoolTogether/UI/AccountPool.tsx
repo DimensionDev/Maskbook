@@ -1,7 +1,8 @@
 import { TokenIcon } from '@masknet/shared'
 import { DarkColor } from '@masknet/theme/constants'
 import { formatBalance, useChainId } from '@masknet/web3-shared'
-import { Grid, Link, makeStyles, Typography } from '@material-ui/core'
+import { Grid, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { PoolTogetherTrophy } from '../../../resources/PoolTogetherIcon'
 import { useI18N } from '../../../utils'
 import { useManagePoolURL } from '../hooks/usePoolURL'
@@ -10,7 +11,7 @@ import { calculateNextPrize, calculateOdds, calculateSecondsRemaining } from '..
 import { CountdownView } from './CountdownView'
 import { NetworkView } from './NetworkView'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         justifyContent: 'center',
@@ -87,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: 'transparent',
         color: DarkColor.textSecondary,
     },
-    countdownSeperator: {
+    countdownSeparator: {
         color: DarkColor.textSecondary,
     },
     odds: {
@@ -112,8 +113,7 @@ export function AccountPool(props: AccountPoolProps) {
     const token = accountPool.pool.tokens.underlyingToken
 
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const poolURL = useManagePoolURL(accountPool.pool)
     const chainId = useChainId()
 
@@ -179,7 +179,7 @@ export function AccountPool(props: AccountPoolProps) {
                         <CountdownView
                             secondsRemaining={calculateSecondsRemaining(accountPool.pool)}
                             msgOnEnd={t('plugin_pooltogether_pool_ended')}
-                            classes={{ digit: classes.countdownDigit, seperator: classes.countdownSeperator }}
+                            classes={{ digit: classes.countdownDigit, separator: classes.countdownSeparator }}
                         />
                     </Grid>
                     <Grid item className={classes.footer}>

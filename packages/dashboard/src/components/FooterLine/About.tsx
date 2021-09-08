@@ -1,17 +1,18 @@
 import { DiscordIcon, MaskBlueIcon, MaskGreyIcon, MaskTextIcon, MaskTextNightlyIcon } from '@masknet/icons'
-import { Avatar, IconButton, Link, makeStyles, Typography } from '@material-ui/core'
+import { Avatar, IconButton, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import FacebookIcon from '@material-ui/icons/Facebook'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import TelegramIcon from '@material-ui/icons/Telegram'
 import TwitterIcon from '@material-ui/icons/Twitter'
 import { useDashboardI18N } from '../../locales'
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { styled } from '@material-ui/core/styles'
 import { Version } from './Version'
 import { getMaskColor } from '@masknet/theme'
 import links from './links.json'
 import { ABOUT_DIALOG_BACKGROUND } from '../../assets'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     wrapper: {
         width: 580,
         minHeight: 660,
@@ -74,8 +75,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const IconContainer = styled('div')(
-    ({ theme }) => `
+const IconContainer = styled('div')(`
     width: 100%;
     height: 100%;
 
@@ -83,8 +83,8 @@ const IconContainer = styled('div')(
         width: 100%;
         height: 100%;
     }
-`,
-)
+`)
+
 const TextIconContainer = styled('div')(
     ({ theme }) => `
     padding: ${theme.spacing(1)} 0;
@@ -99,7 +99,7 @@ const TextIconContainer = styled('div')(
 
 const brands: Record<string, React.ReactNode> = {
     'https://www.facebook.com/masknetwork': <FacebookIcon />,
-    'https://twitter.com/realmaskbook': <TwitterIcon />,
+    'https://twitter.com/realMaskNetwork': <TwitterIcon />,
     'https://github.com/DimensionDev/Maskbook': <GitHubIcon />,
     'https://t.me/maskbook_group': <TelegramIcon />,
     'https://discord.gg/4SVXvj7': <DiscordIcon />,
@@ -109,7 +109,7 @@ const MaskIcon = () => (process.env.NODE_ENV === 'production' ? <MaskBlueIcon />
 const MaskTitleIcon = () => (process.env.NODE_ENV === 'production' ? <MaskTextIcon /> : <MaskTextNightlyIcon />)
 
 export function About() {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const t = useDashboardI18N()
     return (
         <>

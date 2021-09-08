@@ -17,8 +17,8 @@ export class ErrorBoundary extends Component<Partial<CrashUIProps>> {
     static getDerivedStateFromError(error: unknown) {
         return { error }
     }
-    state: { error: Error | null } = { error: null }
-    render() {
+    override state: { error: Error | null } = { error: null }
+    override render() {
         if (!this.state.error) return <>{this.props.children}</>
         return (
             <CrashUI

@@ -18,8 +18,13 @@
             "https://api.1inch.exchange/v3.0/137/tokens"
         ],
         "Mumbai": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/80001/tokens.json"],
-        "Arbitrum": [],
-        "Arbitrum_Rinkeby": []
+        "Arbitrum": [
+            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/42161/tokens.json"
+        ],
+        "Arbitrum_Rinkeby": [
+            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/421611/tokens.json"
+        ],
+        "xDai": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/100/tokens.json"]
     },
     "BALANCE_CHECKER_ADDRESS": {
         "Mainnet": "0xb1F8e55c7f64D203C1400B9D8555d050F94aDF39",
@@ -31,20 +36,50 @@
         "BSCT": "0x7f004a42D760Eb68eB95Fa50f739917675181fCA",
         "Matic": "0x6cc1b1058F9153358278C35E0b2D382f1585854B",
         "Mumbai": "0xFEd05EE9b7DdbAb97Abc55e27EF95C7c14688Aad",
-        "Arbitrum": "",
-        "Arbitrum_Rinkeby": "0xF98dC9391273c5ab9fa2c980A8d4F875ece802db"
+        "Arbitrum": "0xAb7B1bE4233A04e5C43a810E75657ECED8E5463B",
+        "Arbitrum_Rinkeby": "0xF98dC9391273c5ab9fa2c980A8d4F875ece802db",
+        "xDai": "0x96c7D011cdFD467f551605f0f5Fce279F86F4186"
     },
     "MULTICALL_ADDRESS": {
-        "Mainnet": "0xeefba1e63905ef1d7acba5a8513c70307c1ce441",
-        "Ropsten": "0x69F47251bAa9Ee4568Aba01Bc7B61720ba6caCef",
-        "Rinkeby": "0xC65e66535170fEA12088b373c0bEB0647Fa636B8",
-        "Kovan": "0x2cc8688c5f75e365aaeeb4ea8d6a480405a48d2a",
-        "Gorli": "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e",
-        "BSC": "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c",
-        "BSCT": "0x6cc1b1058F9153358278C35E0b2D382f1585854B",
-        "Matic": "0xC119574D5Fb333F5AC018658D4d8b5035E16bf39",
-        "Mumbai": "0x6B70EC653c4331bdD0D0DCC7C941eb594e69a91d",
+        "Mainnet": "0x1F98415757620B543A52E61c46B32eB19261F984",
+        "Ropsten": "0x1F98415757620B543A52E61c46B32eB19261F984",
+        "Rinkeby": "0x1F98415757620B543A52E61c46B32eB19261F984",
+        "Kovan": "0x1F98415757620B543A52E61c46B32eB19261F984",
+        "Gorli": "0x1F98415757620B543A52E61c46B32eB19261F984",
+        "BSC": "0x5211fe40fE49a13CC86E3bC77855152457eDE585",
+        "BSCT": "",
+        "Matic": "0x54c06a5D7C6447BE47E07390eD7da7e6994585f4",
+        "Mumbai": "",
+        "Arbitrum": "0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB",
+        "Arbitrum_Rinkeby": "0xa501c031958F579dB7676fF1CE78AD305794d579",
+        "xDai": "0xAb7B1bE4233A04e5C43a810E75657ECED8E5463B"
+    },
+    "ENS_REGISTRAR_ADDRESS": {
+        "Mainnet": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+        "Ropsten": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+        "Rinkeby": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+        "Kovan": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+        "Gorli": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": "0xED3567405159F99d1ebAebcff5D44494BCE5cD0A"
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    },
+    "ENS_REVERSE_RECORDS_ADDRESS": {
+        "Mainnet": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
+        "Ropsten": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
+        "Rinkeby": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
+        "Kovan": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
+        "Gorli": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     }
 }

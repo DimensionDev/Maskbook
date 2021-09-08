@@ -14,8 +14,8 @@ import type { PostInfo } from './PostInfo'
 import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
 import type { TypedMessage } from '../protocols/typed-message'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
-import type { ClassNameMap } from '@material-ui/styles'
 
+type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Don't define values in namespaces
 export namespace SocialNetwork {
     export interface PayloadEncoding {
@@ -52,7 +52,7 @@ export namespace SocialNetwork {
          */
         networkIdentifier: string
         /**
-         * This field _will_ be overwritten by SocialNetworkUI.permessions
+         * This field _will_ be overwritten by SocialNetworkUI.permissions
          */
         declarativePermissions: SocialNetworkUI.DeclarativePermission
         /** Should this UI content script activate? */
@@ -123,6 +123,9 @@ export namespace SocialNetworkUI {
             /** Inject UI to the search result */
             searchResult?(signal: AbortSignal): void
             setupWizard?(signal: AbortSignal, for_: PersonaIdentifier): void
+            /** Inject UI to the Profile page */
+            enhancedProfileTab?(signal: AbortSignal): void
+            enhancedProfile?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void
@@ -143,7 +146,7 @@ export namespace SocialNetworkUI {
     }
     export namespace AutomationCapabilities {
         export interface Define {
-            /** Automation on the composition dialog that the social network provies */
+            /** Automation on the composition dialog that the social network provides */
             nativeCompositionDialog?: NativeCompositionDialog
             maskCompositionDialog?: MaskCompositionDialog
             nativeCommentBox?: NativeCommentBox
@@ -166,8 +169,7 @@ export namespace SocialNetworkUI {
             open?(content: TypedMessage, options?: MaskCompositionDialogOpenOptions): void
         }
         export interface MaskCompositionDialogOpenOptions {
-            onlyMySelf?: boolean
-            shareToEveryOne?: boolean
+            target?: 'E2E' | 'Everyone'
         }
         export interface NativeCommentBox {
             appendText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void
@@ -181,13 +183,15 @@ export namespace SocialNetworkUI {
         export interface Define {
             /** Resolve the information of who am I on the current network. */
             identityProvider?: IdentityResolveProvider
+            /** Resolve the information of identity on the current page which has been browsing. */
+            currentVisitingIdentityProvider?: IdentityResolveProvider
             /** Maintain all the posts up-to-date. */
             postsProvider?: PostsProvider
             /** Get searched keyword */
             getSearchedKeyword?(): string
         }
         export type ProfileUI = { bioContent: string }
-        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar'>
+        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar' | 'bio'>
 
         /** Resolve the information of who am I on the current network. */
         export interface IdentityResolveProvider {
@@ -198,7 +202,7 @@ export namespace SocialNetworkUI {
             /**
              * The account that user is using (may not in the database)
              */
-            readonly lastRecognized: ValueRef<IdentityResolved>
+            readonly recognized: ValueRef<IdentityResolved>
             /**
              * Start to maintain the posts.
              * It should add new seen posts and remove gone posts.
@@ -239,7 +243,7 @@ export namespace SocialNetworkUI {
             InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps, InjectedDialogClassKey>
         }
         export interface ComponentOverwriteConfig<Props extends { classes?: any }, Classes extends string> {
-            classes?: () => Partial<ClassNameMap<Classes>>
+            classes?: () => { classes: Partial<ClassNameMap<Classes>> }
             props?: (props: Props) => Props
         }
         export interface I18NOverwrite {

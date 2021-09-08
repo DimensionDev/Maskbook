@@ -3,7 +3,8 @@ import { flatten, uniq } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
 import { getMaskColor, useSnackbar, VariantType, SnackbarProvider } from '@masknet/theme'
 import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
-import { makeStyles, DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@material-ui/core'
+import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     formatBalance,
     TransactionStateType,
@@ -26,7 +27,11 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { useLayoutEffect, useRef } from 'react'
 
-const useStyles = makeStyles((theme) => ({
+interface StyleProps {
+    shortITOwrapper: boolean
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     wrapper: {
         padding: theme.spacing(0, 4),
     },
@@ -147,7 +152,7 @@ const useStyles = makeStyles((theme) => ({
     contentWrapper: {
         display: 'flex',
         flexDirection: 'column',
-        height: ({ shortITOwrapper }: { shortITOwrapper: boolean }) => (shortITOwrapper ? 450 : 650),
+        height: props.shortITOwrapper ? 450 : 650,
     },
     actionButtonWrapper: {
         position: 'sticky',
@@ -222,14 +227,15 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     )
     dateToHideSpaceStationCampaign.setHours(0, 0, 0, 0)
     const [chainId, setChainId] = useState(
-        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].includes(currentChainId) ? currentChainId : ChainId.Mainnet,
+        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].includes(currentChainId)
+            ? currentChainId
+            : ChainId.Mainnet,
     )
     const { value: swappedTokens, loading, retry } = useClaimablePools(chainId)
     const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     // Todo: Remove the code after the period that old ITO is being used and continues to be used for a while
     const { value: swappedTokensOld, loading: loadingOld, retry: retryOld } = useClaimablePools(chainId, true)
-
     const { enqueueSnackbar } = useSnackbar()
     const popEnqueueSnackbar = useCallback(
         (variant: VariantType) =>
@@ -252,7 +258,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     )
 
     const showNftAirdrop = chainId === ChainId.Matic && campaignInfo && now < dateToHideSpaceStationCampaign.getTime()
-    const classes = useStyles({
+    const { classes } = useStyles({
         shortITOwrapper:
             (showNftAirdrop &&
                 (!swappedTokens || swappedTokens.length === 0) &&
@@ -344,25 +350,21 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         })
     }, [claimState, swappedTokens /* update tx dialog only if state changed */])
 
+    const createTabItem = (name: string, chainId: ChainId) => ({
+        label: <span>{name}</span>,
+        sx: { p: 0 },
+        cb: () => setChainId(chainId),
+    })
+
     const tabProps: AbstractTabProps = {
         tabs: [
-            {
-                label: <span>ETH</span>,
-                sx: { p: 0 },
-                cb: () => setChainId(ChainId.Mainnet),
-            },
-            {
-                label: <span>BSC</span>,
-                sx: { p: 0 },
-                cb: () => setChainId(ChainId.BSC),
-            },
-            {
-                label: <span>Polygon/Matic</span>,
-                sx: { p: 0 },
-                cb: () => setChainId(ChainId.Matic),
-            },
+            createTabItem('ETH', ChainId.Mainnet),
+            createTabItem('BSC', ChainId.BSC),
+            createTabItem('Polygon/Matic', ChainId.Matic),
+            createTabItem('Arbitrum', ChainId.Arbitrum),
+            createTabItem('xDai', ChainId.xDai),
         ],
-        index: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].indexOf(chainId),
+        index: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].indexOf(chainId),
         classes,
         hasOnlyOneChild: true,
     }
@@ -460,7 +462,7 @@ interface ContentProps {
 }
 
 function Content(props: ContentProps) {
-    const classes = useStyles({ shortITOwrapper: false })
+    const { classes } = useStyles({ shortITOwrapper: false })
     const { swappedTokens } = props
     return (
         <List className={classes.tokenCardWrapper}>
@@ -480,7 +482,7 @@ interface SwappedTokensProps {
 
 function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
     const { t } = useI18N()
-    const classes = useStyles({ shortITOwrapper: false })
+    const { classes } = useStyles({ shortITOwrapper: false })
     const theme = useTheme()
 
     return swappedToken.token ? (

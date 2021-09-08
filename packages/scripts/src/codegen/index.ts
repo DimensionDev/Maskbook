@@ -12,6 +12,5 @@ export function codegen(cb: TaskFunctionCallback) {
 export const codegenWatch = series(getProcessLock.bind(null, 'codegen'), parallel(i18nCodegenWatch, typescriptWatch))
 watchTask(codegen, codegenWatch, 'codegen', 'All codegen tasks combined into one')
 
-export * from './guard'
 export * from './i18n-codegen'
 export * from './typescript'

@@ -37,6 +37,17 @@ export const Button: Theme = (mode, colors): ThemeOptions => ({
                 },
             },
             variants: [
+                // new variant for rounded button
+                {
+                    props: { variant: 'rounded' },
+                    style: {
+                        borderRadius: '24px',
+                        backgroundColor: button.main(),
+                        color: button.contrast(),
+                        '&:hover': { backgroundColor: button.main() },
+                        '&[disabled]': { backgroundColor: button.main(), color: button.contrast() },
+                    },
+                },
                 {
                     props: { variant: 'contained' },
                     style: {
@@ -145,6 +156,14 @@ export const Card: Theme = (mode, colors) => ({
                         border: `1px solid ${colors.lineLight}`,
                     },
                 },
+                {
+                    props: { variant: 'background' },
+                    style: {
+                        padding: 8,
+                        border: 'none',
+                        background: mode === 'dark' ? colors.lightBackground : colors.normalBackground,
+                    },
+                },
             ],
         },
     },
@@ -161,8 +180,35 @@ export const Paper: Theme = (mode, colors) => ({
                         borderRadius: 12,
                     },
                 },
+                {
+                    props: { variant: 'rounded' },
+                    style: {
+                        borderRadius: 16,
+                        backgroundColor: colors.primaryBackground,
+                    },
+                },
             ],
         },
+    },
+})
+
+export const Tabs: Theme = () => ({
+    components: {
+        MuiTab: {
+            styleOverrides: {
+                root: {
+                    // up-sm
+                    '@media screen and (min-width: 600px)': {
+                        minWidth: 160,
+                    },
+                },
+            },
+        },
+    },
+})
+export const Link: Theme = () => ({
+    components: {
+        MuiLink: { defaultProps: { underline: 'hover' } },
     },
 })
 

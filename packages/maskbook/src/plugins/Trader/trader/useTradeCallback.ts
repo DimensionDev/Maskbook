@@ -1,39 +1,33 @@
 import { useContext } from 'react'
-import type { Trade } from '@uniswap/v2-sdk'
+import type { Trade as V2Trade } from '@uniswap/v2-sdk'
+import type { Trade as V3Trade } from '@uniswap/v3-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
 import { unreachable } from '@dimensiondev/kit'
-import { SwapQuoteResponse, SwapResponse, SwapRouteSuccessResponse, TradeComputed, TradeProvider } from '../types'
+import { TradeProvider } from '@masknet/public-api'
+import type { SwapQuoteResponse, SwapResponse, SwapRouteSuccessResponse, TradeComputed } from '../types'
 import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback'
 import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback'
 import { useTradeCallback as useUniswapCallback } from './uniswap/useTradeCallback'
 import { useTradeCallback as useBalancerCallback } from './balancer/useTradeCallback'
 import { useTradeCallback as useDODOCallback } from './dodo/useTradeCallback'
-import { useRouterV2Contract as useUniswapRouterV2Contract } from '../contracts/uniswap/useRouterV2Contract'
-import { useRouterV2Contract as useSushiSwapRouterV2Contract } from '../contracts/sushiswap/useRouterV2Contract'
-import { useRouterV2Contract as useSashimiSwapRouterV2Contract } from '../contracts/sashimiswap/useRouterV2Contract'
-import { useRouterV2Contract as useQuickSwapRouterV2Contract } from '../contracts/quickswap/useRouterV2Contract'
-import { useRouterV2Contract as usePancakeSwapRouterV2Contract } from '../contracts/pancakeswap/useRouterV2Contract'
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract'
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { isNativeTokenWrapper } from '../helpers'
 import { TradeContext } from './useTradeContext'
 
 export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeComputed<unknown> | null) {
-    const uniswapRouterV2Contract = useUniswapRouterV2Contract()
-    const sushiswapRouterV2Contract = useSushiSwapRouterV2Contract()
-    const sashimiswapRouterV2Contract = useSashimiSwapRouterV2Contract()
-    const quickswapRouterV2Contract = useQuickSwapRouterV2Contract()
-    const pancakeswapRouterV2Contract = usePancakeSwapRouterV2Contract()
-    const exchangeProxyContract = useExchangeProxyContract()
-
-    // trade conetxt
+    // trade context
     const context = useContext(TradeContext)
 
     // create trade computed
     const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed)
-    const tradeComputedForUniswapLike =
-        context?.IS_UNISWAP_LIKE && !isNativeTokenWrapper_
-            ? (tradeComputed as TradeComputed<Trade<Currency, Currency, TradeType>>)
+    const tradeComputedForUniswapV2Like =
+        context?.IS_UNISWAP_V2_LIKE && !isNativeTokenWrapper_
+            ? (tradeComputed as TradeComputed<V2Trade<Currency, Currency, TradeType>>)
+            : null
+    const tradeComputedForUniswapV3Like =
+        context?.IS_UNISWAP_V3_LIKE && !isNativeTokenWrapper_
+            ? (tradeComputed as TradeComputed<V3Trade<Currency, Currency, TradeType>>)
             : null
     const tradeComputedForZRX = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapQuoteResponse>) : null
     const tradeComputedForBalancer = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapResponse>) : null
@@ -41,34 +35,39 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         ? (tradeComputed as TradeComputed<SwapRouteSuccessResponse>)
         : null
 
-    const uniswap = useUniswapCallback(tradeComputedForUniswapLike, uniswapRouterV2Contract)
-    const sushiswap = useUniswapCallback(tradeComputedForUniswapLike, sushiswapRouterV2Contract)
-    const sashimiswap = useUniswapCallback(tradeComputedForUniswapLike, sashimiswapRouterV2Contract)
-    const quickswap = useUniswapCallback(tradeComputedForUniswapLike, quickswapRouterV2Contract)
-    const pancakeswap = useUniswapCallback(tradeComputedForUniswapLike, pancakeswapRouterV2Contract)
+    // uniswap like providers
+    const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like)
+    const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like)
+
+    // balancer
+    const exchangeProxyContract = useExchangeProxyContract()
     const balancer = useBalancerCallback(
         provider === TradeProvider.BALANCER ? tradeComputedForBalancer : null,
         exchangeProxyContract,
     )
+
+    // other providers
     const zrx = useZrxCallback(provider === TradeProvider.ZRX ? tradeComputedForZRX : null)
     const dodo = useDODOCallback(provider === TradeProvider.DODO ? tradeComputedForDODO : null)
-    const nativeTokenWrapper = useNativeTokenWrapperCallback(tradeComputed as TradeComputed<NativeTokenWrapper>)
 
     // the trade is an ETH-WETH pair
+    const nativeTokenWrapper = useNativeTokenWrapperCallback(tradeComputed as TradeComputed<NativeTokenWrapper>)
     if (isNativeTokenWrapper_) return nativeTokenWrapper
 
     // handle trades by various provider
     switch (provider) {
-        case TradeProvider.UNISWAP:
-            return uniswap
+        case TradeProvider.UNISWAP_V2:
+            return uniswapV2Like
+        case TradeProvider.UNISWAP_V3:
+            return uniswapV3Like
         case TradeProvider.SUSHISWAP:
-            return sushiswap
+            return uniswapV2Like
         case TradeProvider.SASHIMISWAP:
-            return sashimiswap
+            return uniswapV2Like
         case TradeProvider.QUICKSWAP:
-            return quickswap
+            return uniswapV2Like
         case TradeProvider.PANCAKESWAP:
-            return pancakeswap
+            return uniswapV2Like
         case TradeProvider.ZRX:
             return zrx
         case TradeProvider.BALANCER:

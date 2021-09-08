@@ -1,19 +1,12 @@
-import { makeStyles } from '@material-ui/core'
-import { useStylesExtends } from '@masknet/shared'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'
 import { useAvailableTraderProviders } from '../../trending/useAvailableTraderProviders'
 import { useSearchedKeyword } from '../../trending/useSearchedKeyword'
 import { TagType } from '../../types'
 import { TraderView } from './TraderView'
 
-const useStyles = makeStyles({
-    root: {},
-})
-
 export interface SearchResultInspectorProps {}
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
-    const classes = useStylesExtends(useStyles(), props)
     const keyword = useSearchedKeyword()
     const [_, type, name = ''] = keyword.match(/([#$])(\w+)/) ?? []
     const type_ = type === '$' ? TagType.CASH : TagType.HASH
@@ -22,14 +15,12 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     if (!name || !dataProviders?.length) return null
     return (
-        <div className={classes.root}>
-            <TraderView
-                isPopper={false}
-                name={name}
-                tagType={type_}
-                dataProviders={dataProviders}
-                tradeProviders={traderProviders}
-            />
-        </div>
+        <TraderView
+            isPopper={false}
+            name={name}
+            tagType={type_}
+            dataProviders={dataProviders}
+            tradeProviders={traderProviders}
+        />
     )
 }

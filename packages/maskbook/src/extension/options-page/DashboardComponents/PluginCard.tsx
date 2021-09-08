@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import Button from '@material-ui/core/Button'
 import Switch from '@material-ui/core/Switch'
 import Typography from '@material-ui/core/Typography'
@@ -17,7 +17,7 @@ export interface PluginCardProps {
     canDisable: boolean
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     card: {
         display: 'flex',
         flexDirection: 'column',
@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
             theme.palette.mode === 'dark'
                 ? 'none'
                 : '0px 2px 4px rgba(96, 97, 112, 0.16), 0px 0px 1px rgba(40, 41, 61, 0.04)',
-
         [theme.breakpoints.down('sm')]: {
             width: '100%',
             marginRight: 0,
@@ -42,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         marginTop: theme.spacing(2),
     },
-    logoWraper: {
+    logoWrapper: {
         alignSelf: 'flex-start',
         flexShrink: 0,
     },
@@ -82,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PluginCard({ id, name, icon, description, enabled, onSwitch, canDisable }: PluginCardProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [pluginDetail, openPluginDetail] = useModal(DashboardPluginDetailDialog, {
         id,
         name,
@@ -93,7 +92,7 @@ export default function PluginCard({ id, name, icon, description, enabled, onSwi
     return (
         <Card className={classes.card} elevation={2}>
             <div className={classes.info}>
-                <div className={classes.logoWraper}>
+                <div className={classes.logoWrapper}>
                     <span className={classes.logo}>{icon}</span>
                 </div>
                 <dl className={classes.metas}>

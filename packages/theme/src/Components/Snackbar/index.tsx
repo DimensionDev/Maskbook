@@ -1,13 +1,14 @@
 import { useRef, memo } from 'react'
 import { SnackbarProvider } from 'notistack'
-import { makeStyles, IconButton } from '@material-ui/core'
+import { IconButton } from '@material-ui/core'
+import { makeStyles } from '../../makeStyles'
 import { Close as CloseIcon } from '@material-ui/icons'
 import { MaskColorVar } from '../../constants'
 
 export { SnackbarProvider, useSnackbar } from 'notistack'
 export type { VariantType, OptionsObject } from 'notistack'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     root: {
         color: MaskColorVar.textLight,
         pointerEvents: 'inherit',
@@ -28,12 +29,11 @@ const useStyles = makeStyles(() => ({
         background: MaskColorVar.warning,
         color: MaskColorVar.lightestBackground,
     },
-}))
+})
 
 export const CustomSnackbarProvider = memo(({ children }) => {
     const ref = useRef<SnackbarProvider>(null)
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const onDismiss = (key: string | number) => () => {
         ref.current?.closeSnackbar(key)
     }
@@ -46,7 +46,7 @@ export const CustomSnackbarProvider = memo(({ children }) => {
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             hideIconVariant={true}
             action={(key) => (
-                <IconButton onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
+                <IconButton size="large" onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
                     <CloseIcon color="inherit" />
                 </IconButton>
             )}

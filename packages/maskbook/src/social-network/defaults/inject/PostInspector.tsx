@@ -3,21 +3,21 @@ import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '../../PostInfo'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostInspector, PostInspectorProps } from '../../../components/InjectedComponents/PostInspector'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-es'
 
 export function injectPostInspectorDefault<T extends string>(
     config: InjectPostInspectorDefaultConfig = {},
     additionalPropsToPostInspector: (classes: Record<T, string>) => Partial<PostInspectorProps> = () => ({}),
-    useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
+    useCustomStyles: (props?: any) => { classes: Record<T, string> } = makeStyles()({}) as any,
 ) {
     const PostInspectorDefault = memo(function PostInspectorDefault(props: {
         onDecrypted: PostInspectorProps['onDecrypted']
         zipPost: PostInspectorProps['needZip']
     }) {
         const { onDecrypted, zipPost } = props
-        const classes = useCustomStyles()
+        const { classes } = useCustomStyles()
         const additionalProps = additionalPropsToPostInspector(classes)
         return <PostInspector onDecrypted={onDecrypted} needZip={zipPost} {...additionalProps} />
     })

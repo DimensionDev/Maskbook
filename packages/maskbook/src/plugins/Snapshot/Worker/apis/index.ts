@@ -1,19 +1,27 @@
-import ss from '@snapshot-labs/snapshot.js'
-import type { VoteItemList, Proposal, Profile3Box, ProposalMessage, ProposalIdentifier, VoteSuccess } from '../../types'
+import ss from '@dimensiondev/snapshot.js'
+import type {
+    Proposal,
+    Profile3Box,
+    ProposalMessage,
+    ProposalIdentifier,
+    VoteSuccess,
+    RawVote,
+    Strategy,
+} from '../../types'
 import Services from '../../../../extension/service'
 import { resolveIPFSLink } from '@masknet/web3-shared'
+import { transform } from 'lodash-es'
 
 export async function fetchProposal(id: string) {
     const response = await fetch(resolveIPFSLink(id), {
         method: 'GET',
     })
-    const network = await fetchProposalNetwork(id)
+    const { network, votes, strategies } = await fetchProposalFromGraphql(id)
     const result = await response.json()
-
-    return { ...result, network } as Proposal
+    return { ...result, network, strategies, votes } as Proposal
 }
 
-async function fetchProposalNetwork(id: string) {
+async function fetchProposalFromGraphql(id: string) {
     const response = await fetch(`https://hub.snapshot.org/graphql`, {
         method: 'POST',
         headers: {
@@ -21,35 +29,40 @@ async function fetchProposalNetwork(id: string) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            operationName: 'Proposal',
             query: `query Proposal($id: String!) {
                 proposal(id: $id) {
                     network
+                    strategies {
+                      name
+                      params
+                      __typename
+                    }
                 }
+                votes(first: 10000, where: { proposal: $id }) {
+                    id
+                    voter
+                    created
+                    choice
+                  }
             }`,
             variables: {
                 id,
             },
         }),
     })
-
-    const {
+    interface Res {
         data: {
-            proposal: { network },
-        },
-    } = await response.json()
+            proposal: {
+                network: string
+                strategies: Strategy[]
+            }
+            votes: RawVote[]
+        }
+    }
 
-    return network as string
-}
+    const { data }: Res = await response.json()
 
-export function fetchAllProposalsOfSpace() {}
-
-export async function fetchAllVotesOfProposal(id: string, space: string) {
-    const response = await fetch(`https://hub.snapshot.page/api/${space}/proposal/${id}`, {
-        method: 'GET',
-    })
-    const result: VoteItemList = await response.json()
-    return result
+    return { votes: data.votes, network: data.proposal.network, strategies: data.proposal.strategies }
 }
 
 export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Box[]> {
@@ -67,23 +80,33 @@ export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Bo
     return profiles ?? []
 }
 
-export async function getScores(message: ProposalMessage, voters: string[], blockNumber: number, _network: string) {
-    const spaceKey = message.space
-    const strategies = message.payload.metadata.strategies
+export async function getScores(
+    message: ProposalMessage,
+    voters: string[],
+    blockNumber: number,
+    _network: string,
+    space: string,
+    _strategies: Strategy[],
+) {
+    const strategies = _strategies ?? message.payload.metadata.strategies
     // Sometimes `message.payload.metadata.network` is absent, this is maybe a snapshot api issue.
     const network = message.payload.metadata.network ?? _network
     const provider = ss.utils.getProvider(network)
     const snapshot = Number(message.payload.snapshot)
     const blockTag = snapshot > blockNumber ? 'latest' : snapshot
     const scores: { [key in string]: number }[] = await ss.utils.getScores(
-        spaceKey,
+        space,
         strategies,
         network,
         provider,
         voters,
         blockTag,
     )
-    return scores
+    return scores.map((score) =>
+        transform(score, function (result: { [key in string]: number }, val, key: string) {
+            result[key.toString().toLowerCase()] = val
+        }),
+    )
 }
 
 export async function vote(identifier: ProposalIdentifier, choice: number, address: string) {

@@ -27,7 +27,7 @@ async function main() {
         target: 'web3-v1',
     })
 
-    // rename Qualifiction to QualificationEvent
+    // rename Qualification to QualificationEvent
     const qualificationDefinition = path.join(GENERATED_PATH, 'Qualification.d.ts')
     replaceFileAll(qualificationDefinition, [
         ['type Qualification', 'type QualificationEvent'],
@@ -35,7 +35,7 @@ async function main() {
     ])
 
     // format code
-    run(GENERATED_PATH, 'npx', 'prettier', '--write', '*')
+    run(GENERATED_PATH, 'npx', 'prettier', '.', '--write')
 
     // add to git stage
     run(ABIS_PATH, 'git', 'add', '.')

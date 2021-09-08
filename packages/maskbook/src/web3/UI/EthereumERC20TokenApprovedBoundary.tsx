@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 import { useSnackbar } from '@masknet/theme'
-import { Grid, makeStyles } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     ApproveStateType,
     ERC20TokenDetailed,
@@ -12,7 +13,7 @@ import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     button: {
         flexDirection: 'column',
         position: 'relative',
@@ -36,14 +37,15 @@ export interface EthereumERC20TokenApprovedBoundaryProps {
     amount: string
     spender?: string
     token?: ERC20TokenDetailed
+    fallback?: React.ReactNode
     children?: React.ReactNode | ((allowance: string) => React.ReactNode)
 }
 
 export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenApprovedBoundaryProps) {
-    const { amount, spender, token, children = null } = props
+    const { amount, spender, token, children = null, fallback } = props
 
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { enqueueSnackbar } = useSnackbar()
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
@@ -68,7 +70,9 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     if (approveStateType === ApproveStateType.UNKNOWN)
         return (
             <Grid container>
-                <ActionButton className={classes.button} fullWidth variant="contained" size="large" loading disabled />
+                <ActionButton className={classes.button} fullWidth variant="contained" size="large" disabled>
+                    {fallback ?? 'Enter an amount'}
+                </ActionButton>
             </Grid>
         )
     if (approveStateType === ApproveStateType.FAILED)

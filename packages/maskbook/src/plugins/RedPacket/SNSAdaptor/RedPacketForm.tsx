@@ -7,13 +7,13 @@ import {
     pow10,
     useAccount,
     useNativeTokenDetailed,
-    useNetworkType,
     useRedPacketConstants,
     useTokenBalance,
     useWeb3,
 } from '@masknet/web3-shared'
 import { omit } from 'lodash-es'
-import { FormControl, InputLabel, makeStyles, MenuItem, MenuProps, Select, TextField } from '@material-ui/core'
+import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -29,7 +29,7 @@ import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES
 import type { RedPacketJSONPayload } from '../types'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     line: {
         display: 'flex',
         margin: theme.spacing(1),
@@ -73,7 +73,6 @@ export function RedPacketForm(props: RedPacketFormProps) {
     // context
     const web3 = useWeb3()
     const account = useAccount()
-    const networkType = useNetworkType()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
     //#region select token
@@ -180,7 +179,13 @@ export function RedPacketForm(props: RedPacketFormProps) {
                             setRawAmount('0')
                             setIsRandom(e.target.value as number)
                         }}
-                        MenuProps={props.SelectMenuProps}>
+                        MenuProps={{
+                            anchorOrigin: {
+                                vertical: 'top',
+                                horizontal: 'left',
+                            },
+                            ...props.SelectMenuProps,
+                        }}>
                         <MenuItem value={0}>{t('plugin_red_packet_average')}</MenuItem>
                         <MenuItem value={1}>{t('plugin_red_packet_random')}</MenuItem>
                     </Select>
@@ -215,6 +220,7 @@ export function RedPacketForm(props: RedPacketFormProps) {
                     amount={rawAmount}
                     balance={tokenBalance}
                     token={token}
+                    maxAmountShares={isRandom || shares === '' ? 1 : shares}
                     onAmountChange={setRawAmount}
                     SelectTokenChip={{
                         loading: loadingTokenBalance,

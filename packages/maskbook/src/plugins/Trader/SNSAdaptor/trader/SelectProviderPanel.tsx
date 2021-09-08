@@ -1,11 +1,12 @@
-import { Chip, makeStyles } from '@material-ui/core'
+import { Chip } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { TradeProvider } from '../../types'
 import { resolveTradeProviderName } from '../../pipes'
 import { TradeProviderIcon } from './TradeProviderIcon'
 import { Flags } from '../../../../utils/flags'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {},
         chip: {
@@ -27,8 +28,8 @@ export interface SelectProviderPanelProps {
 
 export function SelectProviderPanel(props: SelectProviderPanelProps) {
     const { value, onChange } = props
-    const classes = useStyles()
 
+    const { classes } = useStyles()
     return (
         <div className={classes.root}>
             {getEnumAsArray(TradeProvider).map((x) => {

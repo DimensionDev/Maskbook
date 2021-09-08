@@ -1,4 +1,5 @@
-import { Box, ClickAwayListener, makeStyles, Skeleton, Tooltip, Typography } from '@material-ui/core'
+import { Box, ClickAwayListener, Skeleton, Tooltip, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Info as InfoIcon } from '@material-ui/icons'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useState } from 'react'
@@ -23,7 +24,7 @@ import { ClaimDialog } from './ClaimDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2.5),
         color: '#fff',
@@ -119,7 +120,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                         .multipliedBy(checkState.type === CheckStateType.YEP ? checkState.ratio : 1)
                         .dp(0)
                         .toFixed() + '.00'
-                }. Follow @realMaskbook (mask.io) to claim airdrop.`,
+                }. Follow @realMaskNetwork (mask.io) to claim airdrop.`,
                 postLink,
             ].join('\n'),
         )

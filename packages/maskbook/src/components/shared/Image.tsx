@@ -156,7 +156,7 @@ function isSameOrigin(x: unknown) {
     } catch {}
     return false
 }
-async function toImage(arr: ImageBitmapSource): Promise<CanvasImageSource> {
+async function toImage(arr: Blob): Promise<CanvasImageSource> {
     try {
         return await createImageBitmap(arr)
     } catch {

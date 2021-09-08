@@ -1,19 +1,26 @@
 import type { FungibleTokenDetailed } from '../types'
 import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsFromProvider } from './useAssetsFromProvider'
-import { useCallback } from 'react'
-import { isSameAddress, makeSortAssertFn } from '../utils'
-import { useChainId } from './useChainId'
+import { useCallback, useEffect, useState } from 'react'
+import { isSameAddress } from '../utils'
+import { sortBy, uniqBy } from 'lodash-es'
 
 export function useAssetsByTokenList(tokens: FungibleTokenDetailed[]) {
-    const chainId = useChainId()
+    const [tokensForAsset, setTokensForAsset] = useState<FungibleTokenDetailed[]>([])
+
+    // merge tokens to avoid fetch asset from chain all the time
+    useEffect(() => {
+        const uniqTokens = uniqBy([...tokensForAsset, ...tokens], (x) => x.address)
+        const sortedTokens = sortBy(uniqTokens, (x) => x.address)
+        setTokensForAsset(sortedTokens)
+    }, [tokens.length])
 
     const {
         value: assetsDetailedChain = [],
         loading: assetsDetailedChainLoading,
         error: assetsDetailedChainError,
         retry: retryAssetsDetailedChain,
-    } = useAssetsFromChain(tokens)
+    } = useAssetsFromChain(tokensForAsset)
 
     const {
         value: assetsDetailedProvider = [],
@@ -39,7 +46,7 @@ export function useAssetsByTokenList(tokens: FungibleTokenDetailed[]) {
             }
             return asset
         })
-        .sort(makeSortAssertFn(chainId, { isMaskBoost: true }))
+        .filter((m) => tokens.find((x) => isSameAddress(x.address, m.token.address)))
 
     return {
         value: assetsDetailed,

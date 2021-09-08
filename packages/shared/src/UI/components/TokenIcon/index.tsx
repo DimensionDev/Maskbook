@@ -10,7 +10,8 @@ import {
     useChainId,
     useTokenAssetBaseURLConstants,
 } from '@masknet/web3-shared'
-import { Avatar, AvatarProps, makeStyles, Theme } from '@material-ui/core'
+import { Avatar, AvatarProps } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useImageFailOver } from '../../index'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
@@ -28,11 +29,8 @@ function getFallbackIcons(address: string, baseURIs: string[]) {
     // load from remote
     return baseURIs.map((x) => `${x}/assets/${checkSummedAddress}/logo.png`)
 }
-
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     icon: {
-        width: 16,
-        height: 16,
         backgroundColor: theme.palette.common.white,
         margin: 0,
     },
@@ -56,7 +54,7 @@ export function TokenIcon(props: TokenIconProps) {
         _logoURI = nativeToken?.nativeCurrency.logoURI
     }
 
-    const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId)
+    const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId ?? _chainId)
     const fallbackLogos = getFallbackIcons(address, TOKEN_ASSET_BASE_URI ?? [])
 
     const tokenBlockie = useBlockie(address)

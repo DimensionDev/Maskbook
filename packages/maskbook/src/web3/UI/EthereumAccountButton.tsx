@@ -10,7 +10,8 @@ import {
     useWallet,
     useNativeTokenBalance,
 } from '@masknet/web3-shared'
-import { Button, ButtonProps, makeStyles, Typography } from '@material-ui/core'
+import { Button, ButtonProps, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
@@ -18,7 +19,7 @@ import { WalletIcon } from '../../components/shared/WalletIcon'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags, useI18N } from '../../utils'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             display: 'inline-flex',

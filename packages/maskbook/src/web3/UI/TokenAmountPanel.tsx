@@ -1,6 +1,8 @@
 import { ChangeEvent, useCallback, useMemo } from 'react'
-import { Box, Chip, ChipProps, InputProps, makeStyles, TextField, TextFieldProps, Typography } from '@material-ui/core'
+import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
+import BigNumber from 'bignumber.js'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { FormattedBalance, useStylesExtends } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
@@ -10,7 +12,7 @@ import { useI18N } from '../../utils'
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {},
         input: {
@@ -58,6 +60,8 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     MaxChipStyle?: ChipProps['classes']
     SelectTokenChip?: Partial<SelectTokenChipProps>
     TextFieldProps?: Partial<TextFieldProps>
+    // E.g. red packet shares
+    maxAmountShares?: number
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
@@ -67,6 +71,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         balance,
         token,
         onAmountChange,
+        maxAmountShares = 1,
         label,
         disableToken = false,
         disableBalance = false,
@@ -76,8 +81,9 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     //#region update amount by self
-    const { RE_MATCH_WHOLE_AMOUNT } = useMemo(
+    const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
         () => ({
+            RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`), // .ddd...d
             RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals}}$`), // d.ddd...d
         }),
         [token?.decimals],
@@ -85,9 +91,10 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const onChange = useCallback(
         (ev: ChangeEvent<HTMLInputElement>) => {
             const amount_ = ev.currentTarget.value.replace(/,/g, '.')
-            if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) onAmountChange(amount_)
+            if (RE_MATCH_FRACTION_AMOUNT.test(amount_)) onAmountChange(`0${amount_}`)
+            else if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) onAmountChange(amount_)
         },
-        [onAmountChange, RE_MATCH_WHOLE_AMOUNT],
+        [onAmountChange, RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT],
     )
     //#endregion
 
@@ -152,7 +159,14 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     color="primary"
                                     variant="outlined"
                                     onClick={() => {
-                                        onAmountChange(formatBalance(maxAmount ?? balance, token.decimals))
+                                        onAmountChange(
+                                            formatBalance(
+                                                new BigNumber(maxAmount ?? balance)
+                                                    .dividedBy(maxAmountShares)
+                                                    .decimalPlaces(0, 1),
+                                                token.decimals,
+                                            ),
+                                        )
                                     }}
                                     {...MaxChipProps}
                                 />

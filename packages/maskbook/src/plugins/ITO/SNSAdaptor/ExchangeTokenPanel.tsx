@@ -1,5 +1,6 @@
 import { EthereumTokenType, FungibleTokenDetailed, useTokenBalance } from '@masknet/web3-shared'
-import { IconButton, makeStyles, Paper } from '@material-ui/core'
+import { IconButton, Paper } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import AddIcon from '@material-ui/icons/AddOutlined'
 import RemoveIcon from '@material-ui/icons/RemoveOutlined'
 import { useCallback, useEffect, useState } from 'react'
@@ -9,8 +10,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
     },
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface ExchangetokenPanelProps {
+export interface ExchangeTokenPanelProps {
     onAmountChange: (amount: string, key: string) => void
     inputAmount: string
 
@@ -55,7 +55,7 @@ export interface ExchangetokenPanelProps {
     TokenAmountPanelProps: Partial<TokenAmountPanelProps>
 }
 
-export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
+export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     const {
         onAmountChange,
         dataIndex,
@@ -73,9 +73,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
         onAdd,
     } = props
     const { t } = useI18N()
-
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     //#region select token dialog
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
@@ -144,12 +142,12 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
                 {...props.TokenAmountPanelProps}
             />
             {showAdd ? (
-                <IconButton onClick={onAdd} className={classes.button}>
+                <IconButton size="large" onClick={onAdd} className={classes.button}>
                     <AddIcon color="primary" />
                 </IconButton>
             ) : null}
             {showRemove ? (
-                <IconButton onClick={onRemove} className={classes.button}>
+                <IconButton size="large" onClick={onRemove} className={classes.button}>
                     <RemoveIcon color="secondary" />
                 </IconButton>
             ) : null}

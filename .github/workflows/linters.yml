@@ -26,7 +26,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm install
       - run: npx gulp locale-kit
@@ -45,20 +45,20 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
-      - name: compiled dist cache
+      - name: Restore TypeScript incremental build cache
         uses: actions/cache@v2
         with:
           path: packages/**/dist
           # actions/cache will not upload changes in cache if primary key hits
           # by adding date to the primary key, we can ensure the cache updates on the first build of the day
-          key: ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
           # Allow fallback to cache of different dependencies but not allowing fallback to different tsconfig
           # because that might indicates a structural/flags changes in tsc emit.
           restore-keys: |
-            ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
-            ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}
+            ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}
       - run: npx pnpm install
       - run: npx gulp codegen
   eslint:
@@ -72,7 +72,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm install
       - run: npm run lint:ci -- --max-warnings=0

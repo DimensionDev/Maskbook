@@ -1,4 +1,5 @@
 import type { ChainId, TransactionStatusType } from '@masknet/web3-shared'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 
 export interface ERC20TokenRecord {
     /** contract address */
@@ -11,29 +12,6 @@ export interface ERC20TokenRecord {
     decimals: number
     /** token symbol */
     symbol: string
-}
-
-export interface ERC721TokenRecord {
-    /** contract address */
-    address: string
-    /** eth chain id */
-    chainId: ChainId
-    /** token name */
-    name: string
-    /** token symbol */
-    symbol: string
-    /** token id */
-    tokenId: string
-    /** base uri */
-    baseURI?: string
-    /** asset uri */
-    tokenURI?: string
-    /** asset name */
-    assetName?: string
-    /** asset description */
-    assetDescription?: string
-    /** asset img uri */
-    assetImage?: string
 }
 
 export interface ERC1155TokenRecord {
@@ -113,11 +91,14 @@ export interface TransactionChunkRecord {
     updatedAt: Date
 }
 
-export interface ERC20TokenRecordInDatabase extends ERC20TokenRecord {}
-
-export interface ERC721TokenRecordInDatabase extends ERC721TokenRecord {
-    record_id: string
+export interface UnconfirmedRequestChunkRecord {
+    /** A chunk of unconfirmed rpc requests */
+    requests: JsonRpcPayload[]
+    createdAt: Date
+    updatedAt: Date
 }
+
+export interface ERC20TokenRecordInDatabase extends ERC20TokenRecord {}
 
 export interface ERC1155TokenRecordInDatabase extends ERC1155TokenRecord {
     record_id: string
@@ -128,6 +109,10 @@ export interface WalletRecordInDatabase extends WalletRecord {}
 export interface PhraseRecordInDatabase extends PhraseRecord {}
 
 export interface TransactionChunkRecordInDatabase extends TransactionChunkRecord {
+    record_id: string
+}
+
+export interface UnconfirmedRequestChunkRecordInDatabase extends UnconfirmedRequestChunkRecord {
     record_id: string
 }
 

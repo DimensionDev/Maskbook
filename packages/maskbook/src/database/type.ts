@@ -12,8 +12,8 @@ export {
     PostIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared'
-export function ECKeyIdentifierFromJsonWebKey(key: EC_JsonWebKey) {
-    const x = compressSecp256k1Key(key, 'public')
+export function ECKeyIdentifierFromJsonWebKey(key: EC_JsonWebKey, type: 'public' | 'private' = 'public') {
+    const x = compressSecp256k1Key(key, type)
     return new ECKeyIdentifier('secp256k1', x)
 }
 /**

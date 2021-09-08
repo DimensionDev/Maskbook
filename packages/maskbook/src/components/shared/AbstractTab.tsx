@@ -1,8 +1,8 @@
-import { makeStyles } from '@material-ui/core/styles'
-import { Theme, Tabs, Tab, Box, BoxProps, Paper } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
+import { Tabs, Tab, Box, BoxProps, Paper } from '@material-ui/core'
 import { useStylesExtends } from '@masknet/shared'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     tab: {
         minWidth: 'unset',
     },

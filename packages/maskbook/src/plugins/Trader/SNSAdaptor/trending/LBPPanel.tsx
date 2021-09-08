@@ -1,6 +1,7 @@
 import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 import { formatEthereumAddress, useTokenConstants } from '@masknet/web3-shared'
-import { Button, CircularProgress, IconButton, Link, makeStyles, Theme, Typography } from '@material-ui/core'
+import { Button, CircularProgress, IconButton, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { useStylesExtends } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
@@ -9,7 +10,7 @@ import { usePoolTokenPrices } from '../../LBP/usePoolTokenPrices'
 import type { Currency } from '../../types'
 import { LBPPriceChart } from './LBPPriceChart'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         paddingBottom: theme.spacing(2),
     },
@@ -57,7 +58,7 @@ export interface LBPPanelProps extends withClasses<never> {
 export function LBPPanel(props: LBPPanelProps) {
     const { token, duration } = props
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(props), props)
+    const classes = useStylesExtends(useStyles(), props)
 
     const { USDC_ADDRESS } = useTokenConstants()
     const { value: pools = [], loading: poolsLoading, error: poolsError } = usePools(token.address)

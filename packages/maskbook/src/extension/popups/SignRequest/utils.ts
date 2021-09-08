@@ -1,4 +1,5 @@
-import { DialogRoutes, getRouteURLWithNoParam } from '..'
+import { PopupRoutes, getRouteURLWithNoParam } from '..'
+import urlcat from 'urlcat'
 
 export interface SignRequest {
     // TODO: support sign binary (u8[])
@@ -9,8 +10,5 @@ export interface SignRequest {
     // TODO: support sign with given candidate (not displaying persona selector)
 }
 export function constructSignRequestURL(request: SignRequest) {
-    const params = new URLSearchParams()
-    params.set('message', request.message)
-    params.set('id', request.requestID)
-    return `${getRouteURLWithNoParam(DialogRoutes.SignRequest)}?${params.toString()}`
+    return urlcat(getRouteURLWithNoParam(PopupRoutes.SignRequest), { message: request.message, id: request.requestID })
 }

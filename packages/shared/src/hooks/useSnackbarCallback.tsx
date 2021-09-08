@@ -1,6 +1,6 @@
 import { useSnackbar } from '@masknet/theme'
 import { useCallback } from 'react'
-import { useMaskThemeI18N } from '../locales'
+import { useSharedI18N } from '../locales'
 
 export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>(options: SnackbarCallback<P, T>): P
 /** Prefer the first overload. */
@@ -20,7 +20,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
     key?: string,
     successText?: string,
 ) {
-    const t = useMaskThemeI18N()
+    const t = useSharedI18N()
     const { enqueueSnackbar } = useSnackbar()
     const executor = typeof opts === 'function' ? opts : opts.executor
     if (typeof opts === 'object') {
@@ -45,7 +45,11 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                     return res
                 },
                 (error) => {
-                    enqueueSnackbar(`Error: ${error.message || error}`, { key, preventDuplicate: true })
+                    enqueueSnackbar(`Error: ${error.message || error}`, {
+                        key,
+                        preventDuplicate: true,
+                        variant: 'error',
+                    })
                     onError?.(error)
                     throw error
                 },

@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { IconButton } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
 import { useMyIdentities } from '../DataSource/useActivatedUI'
 import type { BannerProps } from '../Welcomes/Banner'
@@ -14,7 +14,7 @@ export interface PostDialogHintUIProps {
     onHintButtonClicked: () => void
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     button: {
         // TODO: is it correct? (what about twitter?)
         padding: isMobileFacebook ? 0 : '8px',
@@ -34,16 +34,16 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
-        <IconButton className={classes.button} onClick={props.onHintButtonClicked}>
+        <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
             <MaskbookSharpIcon color="primary" />
         </IconButton>
     )
 })
 
 export const PostDialogHintUI = memo(function PostDialogHintUI({ onHintButtonClicked }: PostDialogHintUIProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
 
     return isMobileFacebook ? (

@@ -1,4 +1,5 @@
-import { IconButton, makeStyles, MenuItem } from '@material-ui/core'
+import { IconButton, MenuItem } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import {
     Wallet,
@@ -15,7 +16,7 @@ import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogFT } from '../DashboardDialogs/Wallet'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     more: {
         color: theme.palette.text.primary,
     },
@@ -66,7 +67,7 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
     ].filter(Boolean)
     //#endregion
 
-    const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogFT)
+    const [transferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogFT)
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu(items)
 
@@ -77,7 +78,7 @@ export function ActionsBarFT(props: ActionsBarFT_Props) {
             </IconButton>
             {menu}
             {hideTokenConfirmDialog}
-            {transeferDialog}
+            {transferDialog}
         </>
     )
 }

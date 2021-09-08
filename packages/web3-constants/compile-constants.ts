@@ -16,6 +16,7 @@ const chainNames = [
     'Mumbai',
     'Arbitrum',
     'Arbitrum_Rinkeby',
+    'xDai',
 ]
 
 async function main() {

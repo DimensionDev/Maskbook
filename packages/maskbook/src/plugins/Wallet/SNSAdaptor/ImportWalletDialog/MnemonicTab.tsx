@@ -1,8 +1,9 @@
 import type { FC } from 'react'
-import { Card, makeStyles, TextField } from '@material-ui/core'
+import { Card, TextField } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     card: {
         position: 'relative',
         minHeight: 140,
@@ -38,8 +39,7 @@ interface MnemonicTabProps {
 }
 
 export const MnemonicTab: FC<MnemonicTabProps> = ({ words, onChange }) => {
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const handleChange = (newWord: string, index: number) => {
         const newWords = words.map((word, i) => {
             return i === index ? newWord : word

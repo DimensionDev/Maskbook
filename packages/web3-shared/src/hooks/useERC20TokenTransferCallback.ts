@@ -33,13 +33,13 @@ export function useERC20TokenTransferCallback(address?: string, amount?: string,
             return
         }
 
-        // error: insufficent balance
+        // error: insufficient balance
         const balance = await erc20Contract.methods.balanceOf(account).call()
 
         if (isGreaterThan(amount, balance)) {
             setTransferState({
                 type: TransactionStateType.FAILED,
-                error: new Error('Insufficent balance'),
+                error: new Error('Insufficient balance'),
             })
             return
         }

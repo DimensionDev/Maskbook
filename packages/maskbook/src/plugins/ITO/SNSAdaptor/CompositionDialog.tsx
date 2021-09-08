@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { DialogContent } from '@material-ui/core'
-import { usePortalShadowRoot } from '@masknet/theme'
+import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
@@ -9,7 +9,6 @@ import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
 import { DialogTabs, JSON_PayloadInMask } from '../types'
 import { CreateForm } from './CreateForm'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { editActivatedPostMetadata } from '../../../protocols/typed-message/global-state'
 import { payloadOutMask } from './helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
@@ -17,9 +16,22 @@ import Services from '../../../extension/service'
 import { formatBalance, useChainId, useAccount, TransactionStateType, useITOConstants } from '@masknet/web3-shared'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
-import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-es'
+import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+
+const useStyles = makeStyles()((theme) => ({
+    content: {
+        position: 'relative',
+        paddingTop: 50,
+    },
+    tabs: {
+        top: 0,
+        left: 0,
+        right: 0,
+        position: 'absolute',
+    },
+}))
 
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',
@@ -36,6 +48,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const account = useAccount()
     const chainId = useChainId()
+    const { classes } = useStyles()
+    const { attachMetadata, dropMetadata } = useCompositionContext()
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
 
@@ -48,8 +62,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const onBack = useCallback(() => {
         if (step === ITOCreateFormPageStep.ConfirmItoPage) setStep(ITOCreateFormPageStep.NewItoPage)
-        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
-    }, [step, currentGasPriceSettings])
+    }, [step])
     //#endregion
 
     const [poolSettings, setPoolSettings] = useState<PoolSettings>()
@@ -58,8 +71,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings)
     const onDone = useCallback(() => {
         fillCallback()
-        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
-    }, [fillCallback, currentGasPriceSettings])
+    }, [fillCallback])
     //#endregion
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -76,7 +88,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             // the settings is not available
             if (!fillSettings?.token) return
 
-            // earily return happended
+            // early return happened
             if (fillState.type !== TransactionStateType.CONFIRMED) return
 
             const { receipt } = fillState
@@ -134,28 +146,28 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 alert('Failed to sign the password.')
                 return
             }
-            editActivatedPostMetadata((next) => {
-                // To meet the max allowance of the data size of image steganography, we need to
-                //  cut off and simplify some properties, such as save the token address string only.
-                const r = omit(
-                    set(
-                        set(payloadOutMask(payload), 'token', payload.token.address),
-                        'exchange_tokens',
-                        payload.exchange_tokens.map(({ address }) => ({ address })),
-                    ),
-                    [
-                        'creation_time',
-                        'unlock_time',
-                        'total_remaining',
-                        'buyers',
-                        'regions',
-                        'start_time',
-                        'end_time',
-                        'qualification_address',
-                    ],
-                )
-                return payload ? next.set(ITO_MetaKey_2, r) : next.delete(ITO_MetaKey_2)
-            })
+
+            // To meet the max allowance of the data size of image steganography, we need to
+            //  cut off and simplify some properties, such as save the token address string only.
+            const payloadDetail = omit(
+                set(
+                    set(payloadOutMask(payload), 'token', payload.token.address),
+                    'exchange_tokens',
+                    payload.exchange_tokens.map(({ address }) => ({ address })),
+                ),
+                [
+                    'creation_time',
+                    'unlock_time',
+                    'total_remaining',
+                    'buyers',
+                    'regions',
+                    'start_time',
+                    'end_time',
+                    'qualification_address',
+                ],
+            )
+            if (payload) attachMetadata(ITO_MetaKey_2, payloadDetail)
+            else dropMetadata(ITO_MetaKey_2)
 
             props.onConfirm(payload)
             // storing the created pool in DB, it helps retrieve the pool password later
@@ -172,11 +184,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
         setStep(ITOCreateFormPageStep.NewItoPage)
         setPoolSettings(undefined)
         setValue(DialogTabs.create)
-        // After close this tx dialog, it should set the gas price to zero
-        //  to let Metamask to determine the gas price for the further tx.
-        currentGasPriceSettings.value = 0
         props.onClose()
-    }, [props, state, currentGasPriceSettings])
+    }, [props, state])
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -221,8 +230,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     return (
         <InjectedDialog disableBackdropClick open={props.open} title={t('plugin_ito_display_name')} onClose={onClose}>
-            <DialogContent>
-                {step === ITOCreateFormPageStep.NewItoPage ? <AbstractTab height={540} {...tabProps} /> : null}
+            <DialogContent className={classes.content}>
+                {step === ITOCreateFormPageStep.NewItoPage ? (
+                    <AbstractTab classes={{ tabs: classes.tabs }} height={540} {...tabProps} />
+                ) : null}
                 {step === ITOCreateFormPageStep.ConfirmItoPage ? (
                     <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={onDone} onClose={onClose} />
                 ) : null}

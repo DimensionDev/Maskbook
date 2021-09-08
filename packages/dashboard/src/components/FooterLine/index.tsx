@@ -1,6 +1,7 @@
-import { experimentalStyled as styled, makeStyles } from '@material-ui/core/styles'
-import { Link } from 'react-router-dom'
-import { Breadcrumbs, Dialog, IconButton, Link as MuiLink, Theme, Typography } from '@material-ui/core'
+import { styled } from '@material-ui/core'
+import { useHref, useNavigate } from 'react-router'
+import { Breadcrumbs, Dialog, IconButton, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { memo, useState } from 'react'
 import { About } from './About'
@@ -10,85 +11,97 @@ import { getMaskColor } from '@masknet/theme'
 import links from './links.json'
 import { RoutePaths } from '../../type'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     navRoot: {
         padding: '40px 0',
     },
     ol: {
-        justifyContent: 'center',
+        justifyContent: 'space-around',
     },
     footerLink: {
         display: 'inline-flex',
-        borderRadius: '0',
+        padding: theme.spacing(0.5),
+        borderRadius: 0,
         whiteSpace: 'nowrap',
-        padding: '4px 20px',
+        verticalAlign: 'middle',
     },
     separator: {
         color: getMaskColor(theme).lineLight,
     },
     closeButton: {
-        color: theme.palette.text.secondary,
         position: 'absolute',
-        right: 12,
-        top: 0,
+        right: theme.spacing(2.5),
+        top: theme.spacing(1),
+        color: theme.palette.text.secondary,
     },
 }))
 
-const AboutDialog = styled(Dialog)(
-    ({ theme }) => `
+const AboutDialog = styled(Dialog)`
     padding: 0;
     overflow: hidden;
-`,
-)
+`
 
-type FooterLinkBaseProps = { title?: string }
-type FooterLinkLinkProps = FooterLinkBaseProps & { to: string }
+type FooterLinkBaseProps = React.PropsWithChildren<{ title?: string }>
 type FooterLinkAnchorProps = FooterLinkBaseProps & { href: string }
-type FooterLinkAnchorButtonProps = FooterLinkBaseProps & { onClick(e: React.MouseEvent<HTMLAnchorElement>): void }
 
-type FooterLinkProps = FooterLinkLinkProps | FooterLinkAnchorProps | FooterLinkAnchorButtonProps
-
-const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
-    const classes = useStyles()
-    const children = (
-        <Typography variant="body2" component="span">
-            {props.children}
-        </Typography>
-    )
-    if ('href' in props)
-        return (
-            <MuiLink
-                underline="none"
-                {...props}
-                target="_blank"
-                rel="noopener noreferrer"
-                color="textPrimary"
-                className={classes.footerLink}>
-                {children}
-            </MuiLink>
-        )
-    if ('to' in props)
-        return (
-            <MuiLink underline="none" {...props} component={Link} color="textPrimary" className={classes.footerLink}>
-                {children}
-            </MuiLink>
-        )
+function FooterLinkExternal(props: FooterLinkAnchorProps) {
+    const { classes } = useStyles()
     return (
-        <MuiLink
+        <Link
             underline="none"
-            {...props}
+            target="_blank"
+            rel="noopener noreferrer"
+            color="textPrimary"
+            href={props.href}
+            className={classes.footerLink}>
+            <Typography variant="body2" component="span">
+                {props.children}
+            </Typography>
+        </Link>
+    )
+}
+
+type FooterLinkLinkProps = FooterLinkBaseProps & { to: string }
+function FooterLinkTo(props: FooterLinkLinkProps) {
+    const { classes } = useStyles()
+    const href = useHref(props.to)
+    const navigate = useNavigate()
+
+    return (
+        <Link
+            underline="none"
+            onClick={() => navigate(href)}
+            href={href}
+            color="textPrimary"
+            className={classes.footerLink}>
+            <Typography variant="body2" component="span">
+                {props.children}
+            </Typography>
+        </Link>
+    )
+}
+
+type FooterLinkAnchorButtonProps = FooterLinkBaseProps & { onClick(e: React.MouseEvent<HTMLAnchorElement>): void }
+function FooterLinkButton(props: FooterLinkAnchorButtonProps) {
+    const { classes } = useStyles()
+    return (
+        <Link
+            underline="none"
             component="a"
             style={{ cursor: 'pointer' }}
             color="textPrimary"
+            onClick={props.onClick}
             className={classes.footerLink}>
-            {children}
-        </MuiLink>
+            <Typography variant="body2" component="span">
+                {props.children}
+            </Typography>
+        </Link>
     )
 }
 
 export const FooterLine = memo(() => {
     const t = useDashboardI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [isOpen, setOpen] = useState(false)
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
 
@@ -106,19 +119,24 @@ export const FooterLine = memo(() => {
                 classes={{ separator: classes.separator, ol: classes.ol, root: classes.navRoot }}
                 separator="|"
                 aria-label="breadcrumb">
-                <FooterLink href={links.MASK_OFFICIAL_WEBSITE}>Mask.io</FooterLink>
-                <FooterLink onClick={() => setOpen(true)}>{t.about()}</FooterLink>
-                <FooterLink onClick={openVersionLink} title={process.env.VERSION}>
+                <FooterLinkExternal href={links.MASK_OFFICIAL_WEBSITE}>Mask.io</FooterLinkExternal>
+                <FooterLinkButton onClick={() => setOpen(true)}>{t.about()}</FooterLinkButton>
+                <FooterLinkButton onClick={openVersionLink} title={process.env.VERSION}>
                     <Version />
-                </FooterLink>
-                <FooterLink href={links.MOBILE_DOWNLOAD_LINK}>{t.dashboard_mobile_test()}</FooterLink>
-                <FooterLink href={links.MASKBOOK_GITHUB}>{t.dashboard_source_code()}</FooterLink>
-                <FooterLink href={links.BOUNTY_LIST}>{t.footer_bounty_list()}</FooterLink>
-                <FooterLink to={RoutePaths.PrivacyPolicy}>{t.privacy_policy()}</FooterLink>
+                </FooterLinkButton>
+                <FooterLinkExternal href={links.MOBILE_DOWNLOAD_LINK}>{t.dashboard_mobile_test()}</FooterLinkExternal>
+                <FooterLinkExternal href={links.MASKBOOK_GITHUB}>{t.dashboard_source_code()}</FooterLinkExternal>
+                <FooterLinkExternal href={links.BOUNTY_LIST}>{t.footer_bounty_list()}</FooterLinkExternal>
+                <FooterLinkTo to={RoutePaths.PrivacyPolicy}>{t.privacy_policy()}</FooterLinkTo>
             </Breadcrumbs>
             <AboutDialog open={isOpen} title="" onClose={() => setOpen(false)}>
                 <About />
-                <IconButton className={classes.closeButton} onClick={() => setOpen(false)} edge="end" color="inherit">
+                <IconButton
+                    size="large"
+                    className={classes.closeButton}
+                    onClick={() => setOpen(false)}
+                    edge="end"
+                    color="inherit">
                     <Close />
                 </IconButton>
             </AboutDialog>

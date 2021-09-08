@@ -1,0 +1,44 @@
+{
+    "GET_CONTRACT_URL": {
+        "Mainnet": "https://api.opensea.io/api/v1/asset_contract",
+        "Ropsten": "",
+        "Rinkeby": "https://rinkeby-api.opensea.io/api/v1/asset_contract",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    },
+    "GET_SINGLE_ASSET_URL": {
+        "Mainnet": "https://api.opensea.io/api/v1/asset",
+        "Ropsten": "",
+        "Rinkeby": "https://rinkeby-api.opensea.io/api/v1/asset",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    },
+    "GET_ASSETS_URL": {
+        "Mainnet": "https://api.opensea.io/api/v1/assets",
+        "Ropsten": "",
+        "Rinkeby": "https://rinkeby-api.opensea.io/api/v1/assets",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    }
+}

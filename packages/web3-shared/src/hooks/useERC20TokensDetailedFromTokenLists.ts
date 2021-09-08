@@ -11,40 +11,42 @@ import type { ERC20TokenDetailed } from '../types'
 export function useERC20TokensDetailedFromTokenLists(
     lists?: string[],
     keyword: string = '',
+    additionalTokens: ERC20TokenDetailed[] = [],
 ): AsyncStateRetry<ERC20TokenDetailed[]> {
     //#region fetch token lists
     const chainId = useChainId()
     const { fetchERC20TokensFromTokenLists } = useWeb3Context()
-    const { value: allTokens = [], ...asyncResult } = useAsyncRetry(
+    const { value: tokensFromList = [], ...asyncResult } = useAsyncRetry(
         async () => (!lists || lists.length === 0 ? [] : fetchERC20TokensFromTokenLists(lists, chainId)),
         [chainId, lists?.sort().join()],
     )
     //#endregion
-
     //#region fuse
     const fuse = useMemo(
         () =>
-            new Fuse(allTokens, {
+            new Fuse([...additionalTokens, ...tokensFromList], {
                 shouldSort: true,
                 threshold: 0.45,
-                minMatchCharLength: 1,
+                minMatchCharLength: 3,
                 keys: [
                     { name: 'name', weight: 0.5 },
-                    { name: 'symbol', weight: 0.5 },
+                    { name: 'symbol', weight: 1 },
                 ],
             }),
-        [allTokens],
+        [tokensFromList, additionalTokens],
     )
     //#endregion
 
     //#region create searched tokens
     const searchedTokens = useMemo(() => {
-        if (!keyword) return allTokens
+        const allToken = [...additionalTokens, ...tokensFromList]
+        if (!keyword) return allToken
+
         return [
-            ...(EthereumAddress.isValid(keyword) ? allTokens.filter(currySameAddress(keyword)) : []),
+            ...(EthereumAddress.isValid(keyword) ? allToken.filter(currySameAddress(keyword)) : []),
             ...fuse.search(keyword).map((x) => x.item),
         ]
-    }, [keyword, fuse, allTokens])
+    }, [keyword, fuse, tokensFromList, additionalTokens])
     //#endregion
 
     if (!asyncResult.error)

@@ -1,10 +1,10 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react'
-import { Box, makeStyles, TablePagination } from '@material-ui/core'
+import { Box, TablePagination } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
     CollectibleProvider,
-    ERC1155TokenAssetDetailed,
-    ERC721TokenAssetDetailed,
+    ERC721TokenDetailed,
     EthereumTokenType,
     formatEthereumAddress,
     useAccount,
@@ -13,12 +13,12 @@ import {
     useWallet,
 } from '@masknet/web3-shared'
 import { useCurrentCollectibleDataProvider } from '../../api'
-import { LoadingPlaceholder } from '../LoadingPlacholder'
+import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     container: {
         padding: '24px 26px 0px',
         height: 'calc(100% - 58px)',
@@ -38,7 +38,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
-}))
+})
 
 export const CollectibleList = memo(() => {
     const [page, setPage] = useState(0)
@@ -51,17 +51,15 @@ export const CollectibleList = memo(() => {
         value = { collectibles: [], hasNextPage: false },
         loading: collectiblesLoading,
         error: collectiblesError,
-    } = useCollectibles(account, provider, page, 20)
+    } = useCollectibles(account, chainId, provider, page, 20)
 
     const { collectibles = [], hasNextPage } = value
 
     const dataSource = collectibles.filter((x) => {
-        const key = `${formatEthereumAddress(x.address)}_${x.tokenId}`
-        switch (x.type) {
+        const key = `${formatEthereumAddress(x.contractDetailed.address)}_${x.tokenId}`
+        switch (x.contractDetailed.type) {
             case EthereumTokenType.ERC721:
                 return wallet?.erc721_token_blacklist ? !wallet?.erc721_token_blacklist.has(key) : true
-            case EthereumTokenType.ERC1155:
-                return wallet?.erc1155_token_blacklist ? !wallet?.erc1155_token_blacklist.has(key) : true
             default:
                 return false
         }
@@ -91,14 +89,13 @@ export interface CollectibleListUIProps {
     showPagination: boolean
     chainId: ChainId
     provider: CollectibleProvider
-    dataSource: (ERC721TokenAssetDetailed | ERC1155TokenAssetDetailed)[]
+    dataSource: ERC721TokenDetailed[]
 }
 
 export const CollectibleListUI = memo<CollectibleListUIProps>(
     ({ page, onPageChange, isLoading, isEmpty, hasNextPage, showPagination, chainId, provider, dataSource }) => {
         const t = useDashboardI18N()
-        const classes = useStyles()
-
+        const { classes } = useStyles()
         return (
             <>
                 <Box className={classes.container}>

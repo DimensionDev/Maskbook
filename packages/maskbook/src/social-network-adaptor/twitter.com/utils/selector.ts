@@ -15,6 +15,48 @@ const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
+//#region "Enhanced Profile"
+export const searchProfileSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[aria-label][role="navigation"]')
+export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>(
+        '[data-testid="primaryColumn"] > div > :nth-child(2) > div > div > :nth-child(2) > div > :last-child',
+    )
+export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] [role="region"] [aria-label]')
+export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
+export const searchProfileActiveTabSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="true"]')
+export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="false"]')
+export const searchProfileActiveTabStatusLineSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="true"] > div > div')
+export const searchProfileActiveTabLabelSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[aria-label][role="navigation"] [role="tablist"] [role="tab"][aria-selected="true"] > div')
+export const searchProfileTabListSelector = () =>
+    querySelectorAll('[aria-label][role="navigation"]  [role="tablist"][data-testid="ScrollSnap-List"] a')
+export const searchForegroundColorSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] > div > div > div > div > div > div > div > div > div > div')
+export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
+export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="UserProfileHeader_Items"]')
+export const searchAvatarSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] a[role="link"][href$="/photo"] img')
+export const searchHeaderPhotoSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] a[role="link"][href$=/header_photo] img')
+export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
+    querySelector<HTMLDivElement, SingleMode>(
+        [
+            '.profile', // legacy twitter
+            'a[href*="header_photo"] ~ div', // new twitter
+            'div[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div ~ div', // new twitter without header photo
+        ].join(),
+        singleMode,
+    )
+//#endregion
+
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
 
 export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
@@ -44,12 +86,14 @@ export const postEditorDraftContentSelector = () => {
 }
 
 export const searchResultHeadingSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] [role="region"] [role="heading"]')
+    querySelector<E>('[role="main"] [data-testid="primaryColumn"] [role="region"] > [role="heading"]')
 
 export const postEditorToolbarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="toolBar"] > div > *:last-child')
 
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
+
+export const bioDescriptionSelector = () => querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
 
 export const bioPageUserNickNameSelector = () =>
     querySelector<HTMLDivElement>('[data-testid="UserDescription"]')

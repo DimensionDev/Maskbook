@@ -1,15 +1,6 @@
 import { ECKeyIdentifier, Identifier } from '@masknet/shared-base'
-import {
-    Box,
-    Button,
-    DialogActions,
-    DialogContent,
-    makeStyles,
-    MenuItem,
-    Select,
-    TextField,
-    Typography,
-} from '@material-ui/core'
+import { Box, Button, DialogActions, DialogContent, MenuItem, Select, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { delay } from 'opensea-js/lib/utils/utils'
 import { useEffect } from 'react'
 import { useState } from 'react'
@@ -34,12 +25,12 @@ export default function SignRequest() {
     return <SignRequestHandler requestID={id} message={message} />
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     root: { maxWidth: 500, padding: 32, '&>*': { marginBottom: 12 } },
 })
 
 function SignRequestHandler(props: SignRequest) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const personas = useMyPersonas()
     const [selected, setSelected] = useState(personas[0].identifier.toText())
     useEffect(() => {

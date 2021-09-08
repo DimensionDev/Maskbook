@@ -1,8 +1,10 @@
 import { Fragment } from 'react'
 import { Linkedin as LinkedinIcon, Smile as SmileIcon } from 'react-feather'
 import classNames from 'classnames'
-import { List, ListItem, ListItemIcon, ListItemText, Typography, Box, Divider } from '@material-ui/core'
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
+import { List, ListItemIcon, ListItemText, Typography, Box, Divider } from '@material-ui/core'
+import ListItemButton from '@material-ui/core/ListItemButton'
+import { ThemeProvider } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { Link, useRouteMatch } from 'react-router-dom'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import { useI18N, useMatchXS, extendsTheme } from '../../../utils'
@@ -10,7 +12,7 @@ import Logo from './MaskbookLogo'
 import { Carousel } from './Carousel'
 import { makeNewBugIssueURL } from '../../debug-page/issue'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     drawer: {
         height: '100%',
         display: 'grid',
@@ -118,7 +120,7 @@ interface DrawerProps {
 
 export default function Drawer(props: DrawerProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const match = useRouteMatch('/:param/')
     const forSetupPurpose = match?.url.includes('/setup')
     const xsMatched = useMatchXS()
@@ -168,12 +170,11 @@ export default function Drawer(props: DrawerProps) {
                             <List className={classes.drawerList}>
                                 {routers.map((item, index) => (
                                     <Fragment key={index}>
-                                        <ListItem
+                                        <ListItemButton
                                             className={classes.drawerItem}
                                             selected={match ? item[1].startsWith(match.url) : false}
                                             component={Link}
-                                            to={item[1]}
-                                            button>
+                                            to={item[1]}>
                                             <ListItemIcon className={classes.drawerItemIcon} children={item[2]} />
                                             <ListItemText
                                                 className={classes.drawerItemText}
@@ -185,15 +186,14 @@ export default function Drawer(props: DrawerProps) {
                                                     <ChevronRightIcon color="action" />
                                                 </ListItemIcon>
                                             ) : null}
-                                        </ListItem>
+                                        </ListItemButton>
                                         {xsMatched ? <Divider /> : null}
                                     </Fragment>
                                 ))}
                             </List>
                             <List className={classes.drawerList}>
-                                <ListItem
+                                <ListItemButton
                                     className={classNames(classes.drawerItem, classes.drawerFeedback)}
-                                    button
                                     onClick={onJoin}>
                                     <ListItemIcon
                                         className={classes.drawerItemIcon}
@@ -209,10 +209,9 @@ export default function Drawer(props: DrawerProps) {
                                             <ChevronRightIcon color="action" />
                                         </ListItemIcon>
                                     ) : null}
-                                </ListItem>
-                                <ListItem
+                                </ListItemButton>
+                                <ListItemButton
                                     className={classNames(classes.drawerItem, classes.drawerFeedback)}
-                                    button
                                     onClick={onFeedback}>
                                     <ListItemIcon
                                         className={classes.drawerItemIcon}
@@ -228,7 +227,7 @@ export default function Drawer(props: DrawerProps) {
                                             <ChevronRightIcon color="action" />
                                         </ListItemIcon>
                                     ) : null}
-                                </ListItem>
+                                </ListItemButton>
                                 {xsMatched ? <Divider /> : null}
                             </List>
                         </>

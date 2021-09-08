@@ -1,8 +1,8 @@
 import { useCallback, memo } from 'react'
 import { noop } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
-import { makeStyles, Theme, withStyles } from '@material-ui/core/styles'
-import { Button, Paper, Typography, Box } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
+import { Button, Paper, Typography, Box, GlobalStyles } from '@material-ui/core'
 import { useI18N, delay, Flags } from '../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -12,22 +12,26 @@ import { MaskUIRoot } from '../../UIRoot'
 import { useMyIdentities } from '../../components/DataSource/useActivatedUI'
 import { hasSNSAdaptorPermission, requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
 
-const GlobalCss = withStyles({
-    '@global': {
-        body: {
-            overflowX: 'hidden',
-            margin: '0 auto',
-            width: 340,
-            maxWidth: '100%',
-            backgroundColor: 'transparent',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-    },
-})(() => null)
+function GlobalCss() {
+    return (
+        <GlobalStyles
+            styles={{
+                body: {
+                    overflowX: 'hidden',
+                    margin: '0 auto',
+                    width: 340,
+                    maxWidth: '100%',
+                    backgroundColor: 'transparent',
+                    '&::-webkit-scrollbar': {
+                        display: 'none',
+                    },
+                },
+            }}
+        />
+    )
+}
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         lineHeight: 1.75,
         padding: 20,
@@ -54,7 +58,6 @@ const useStyles = makeStyles((theme: Theme) => ({
         fontSize: 16,
         fontWeight: 500,
     },
-    description: {},
     divider: {
         marginBottom: theme.spacing(2),
     },
@@ -67,8 +70,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function BrowserActionUI() {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const ui = activatedSocialNetworkUI
     const identities = useMyIdentities()
 
@@ -77,31 +79,37 @@ function BrowserActionUI() {
     )
 
     const onEnter = useCallback((event: React.MouseEvent) => {
+        const openLegacyDashboard = () => browser.runtime.openOptionsPage()
+        const openNextDashboard = () =>
+            browser.tabs.create({
+                active: true,
+                url: browser.runtime.getURL('/next.html'),
+            })
+        const shouldOpenNextDashboard =
+            (process.env.NODE_ENV === 'development' && event.ctrlKey && !Flags.v2_enabled) ||
+            (Flags.v2_enabled && !event.ctrlKey)
         if (event.shiftKey) {
             browser.tabs.create({
                 active: true,
                 url: browser.runtime.getURL('/debug.html'),
             })
-        } else if (process.env.NODE_ENV === 'development' && event.ctrlKey) {
-            browser.tabs.create({
-                active: true,
-                url: browser.runtime.getURL('/next.html'),
-            })
+        } else if (shouldOpenNextDashboard) {
+            openNextDashboard()
         } else {
-            browser.runtime.openOptionsPage()
+            openLegacyDashboard()
         }
     }, [])
 
-    const { openDialog: openSelectProviderDailog } = useRemoteControlledDialog(
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
         noop,
         'activated',
     )
     const onConnect = useCallback(async () => {
-        openSelectProviderDailog()
+        openSelectProviderDialog()
         await delay(200)
         window.close()
-    }, [openSelectProviderDailog])
+    }, [openSelectProviderDialog])
 
     const Trademark = memo(() => {
         const src =
@@ -125,16 +133,13 @@ function BrowserActionUI() {
                         }}>
                         <Typography className={classes.title}>{t('browser_action_notifications')}</Typography>
                     </Box>
-                    <Typography className={classes.description} color="textSecondary" variant="body2">
+                    <Typography color="textSecondary" variant="body2">
                         {t('browser_action_notifications_description', {
                             sns: ui.networkIdentifier,
                         })}
                     </Typography>
 
-                    <Box
-                        sx={{
-                            display: 'flex',
-                        }}>
+                    <Box sx={{ display: 'flex' }}>
                         <Button
                             className={classes.button}
                             variant="text"

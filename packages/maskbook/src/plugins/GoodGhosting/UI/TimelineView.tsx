@@ -1,11 +1,12 @@
-import { makeStyles, Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { GoodGhostingInfo } from '../types'
 import formatDateTime from 'date-fns/format'
 import isBefore from 'date-fns/isBefore'
 import classNames from 'classnames'
 import { useTimeline } from '../hooks/useGameInfo'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     text: {
         whiteSpace: 'nowrap',
     },
@@ -67,10 +68,10 @@ const useStyles = makeStyles((theme) => ({
         background: '#D9E0F0',
         marginBottom: theme.spacing(1),
     },
-    tallVeritcalLine: {
+    tallVerticalLine: {
         height: '120px',
     },
-    shortVeritcalLine: {
+    shortVerticalLine: {
         height: '50px',
     },
 }))
@@ -80,8 +81,7 @@ interface TimelineViewProps {
 }
 
 export function TimelineView(props: TimelineViewProps) {
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const timeline = useTimeline(props.info)
 
     return (
@@ -100,7 +100,7 @@ export function TimelineView(props: TimelineViewProps) {
                             <div
                                 className={classNames(
                                     classes.verticalLine,
-                                    index % 2 === 0 ? classes.tallVeritcalLine : classes.shortVeritcalLine,
+                                    index % 2 === 0 ? classes.tallVerticalLine : classes.shortVerticalLine,
                                 )}
                             />
                             <div

@@ -5,12 +5,12 @@ export class ObservableWeakMap<K extends object, V> extends WeakMap<K, V> {
     declare __brand: 'Map'
 
     event = new Emitter<{ delete: [K]; set: [K, V] }>()
-    delete(key: K) {
+    override delete(key: K) {
         const _ = super.delete(key)
         this.event.emit('delete', key)
         return _
     }
-    set(key: K, value: V) {
+    override set(key: K, value: V) {
         const _ = super.set(key, value)
         this.event.emit('set', key, value)
         return _
@@ -20,16 +20,16 @@ export class ObservableMap<K, V> extends Map<K, V> {
     declare __brand: 'Map'
 
     event = new Emitter<{ delete: [K]; set: [K, V]; clear: [] }>()
-    clear() {
+    override clear() {
         super.clear()
         this.event.emit('clear')
     }
-    delete(key: K) {
+    override delete(key: K) {
         const _ = super.delete(key)
         this.event.emit('delete', key)
         return _
     }
-    set(key: K, value: V) {
+    override set(key: K, value: V) {
         const _ = super.set(key, value)
         this.event.emit('set', key, value)
         return _
@@ -39,16 +39,16 @@ export class ObservableSet<T> extends Set<T> {
     declare __brand: 'ObservableSet'
 
     event = new Emitter<{ delete: [T]; add: [T[]]; clear: [] }>()
-    clear() {
+    override clear() {
         super.clear()
         this.event.emit('clear')
     }
-    delete(key: T) {
+    override delete(key: T) {
         const _ = super.delete(key)
         this.event.emit('delete', key)
         return _
     }
-    add(...value: T[]) {
+    override add(...value: T[]) {
         value.forEach((x) => super.add(x))
         this.event.emit('add', value)
         return this

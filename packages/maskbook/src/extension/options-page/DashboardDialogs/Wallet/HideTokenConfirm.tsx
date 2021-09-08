@@ -2,13 +2,11 @@ import { Trash2 as TrashIcon } from 'react-feather'
 import { Button } from '@material-ui/core'
 import { unreachable } from '@dimensiondev/kit'
 import {
-    ERC1155TokenDetailed,
     ERC20TokenDetailed,
     ERC721TokenDetailed,
     EthereumTokenType,
     FungibleTokenDetailed,
     isNative,
-    NonFungibleTokenDetailed,
 } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils'
@@ -18,32 +16,36 @@ import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, Wrapp
 import type { WalletProps } from './types'
 
 export function DashboardWalletHideTokenConfirmDialog(
-    props: WrappedDialogProps<WalletProps & { token: FungibleTokenDetailed | NonFungibleTokenDetailed }>,
+    props: WrappedDialogProps<WalletProps & { token: FungibleTokenDetailed | ERC721TokenDetailed }>,
 ) {
     const { wallet, token } = props.ComponentProps!
     const { t } = useI18N()
-
+    const tokenAddress =
+        (token as FungibleTokenDetailed).address ?? (token as ERC721TokenDetailed).contractDetailed.address
+    const tokenName = (token as FungibleTokenDetailed).name ?? (token as ERC721TokenDetailed).info.name
     const onConfirm = useSnackbarCallback(
         () => {
-            const type = token.type
+            const type = ((token as FungibleTokenDetailed).type ??
+                (token as ERC721TokenDetailed).contractDetailed.type) as
+                | EthereumTokenType.Native
+                | EthereumTokenType.ERC20
+                | EthereumTokenType.ERC721
             switch (type) {
                 case EthereumTokenType.Native:
                     throw new Error('Unable to hide the native token.')
                 case EthereumTokenType.ERC20:
                     return WalletRPC.blockERC20Token(wallet.address, token as ERC20TokenDetailed)
                 case EthereumTokenType.ERC721:
-                    return WalletRPC.blockERC721Token(wallet.address, token as ERC721TokenDetailed)
-                case EthereumTokenType.ERC1155:
-                    return WalletRPC.blockERC1155Token(wallet.address, token as ERC1155TokenDetailed)
+                    return WalletRPC.removeERC721Token(token as ERC721TokenDetailed)
                 default:
                     unreachable(type)
             }
         },
-        [wallet.address],
+        [wallet.address, token],
         props.onClose,
     )
 
-    if (isNative(token.address)) return null
+    if (isNative(tokenAddress)) return null
     return (
         <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper
@@ -51,7 +53,7 @@ export function DashboardWalletHideTokenConfirmDialog(
                 icon={<TrashIcon />}
                 iconColor="#F4637D"
                 primary={t('hide_token')}
-                secondary={t('hide_token_hint', { token: token.name })}
+                secondary={t('hide_token_hint', { token: tokenName })}
                 footer={
                     <SpacedButtonGroup>
                         <DebounceButton variant="contained" color="danger" onClick={onConfirm}>

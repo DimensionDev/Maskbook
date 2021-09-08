@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { MaskColorVar } from '@masknet/theme'
 import DashboardRouterContainer from './Container'
 import { TextField, IconButton, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import ClearIcon from '@material-ui/icons/Clear'
 import SearchIcon from '@material-ui/icons/Search'
 import AutoResize from 'react-virtualized-auto-sizer'
@@ -16,7 +16,7 @@ import { last } from 'lodash-es'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardContactSearchDialog } from '../DashboardDialogs/Contact'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     title: {
         margin: theme.spacing(3, 0),
         color: theme.palette.text.secondary,
@@ -110,8 +110,7 @@ export default function DashboardContactsRouter() {
     } = usePagedProfile('')
 
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const isEmpty = !isPagePending && items.length === 0
     const [searchUI, setSearchUI] = useState('')
     const [searchContactDialog, , openSearchContactDialog] = useModal(DashboardContactSearchDialog)

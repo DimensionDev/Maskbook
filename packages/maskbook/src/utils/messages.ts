@@ -15,13 +15,13 @@ export interface UpdateEvent<Data> {
     readonly of: Data
 }
 
-export interface CompositionEvent {
+export interface CompositionRequest {
     readonly reason: 'timeline' | 'popup'
     readonly open: boolean
     readonly content?: TypedMessage
     readonly options?: {
-        onlyMySelf?: boolean
-        shareToEveryOne?: boolean
+        target?: 'E2E' | 'Everyone'
+        startupPlugin?: string
     }
 }
 
@@ -30,6 +30,10 @@ export interface SettingsUpdateEvent {
     key: string
     value: browser.storage.StorageValue
     initial: boolean
+}
+
+export interface ProfileNFTsPageEvent {
+    show: boolean
 }
 
 export interface MaskMessages extends SettingsEvents {
@@ -45,10 +49,11 @@ export interface MaskMessages extends SettingsEvents {
     createInternalSettingsChanged: SettingsUpdateEvent
     /** emit when the settings finished syncing with storage. */
     createInternalSettingsUpdated: SettingsUpdateEvent
-    /** emit when compose status updated. */
-    compositionUpdated: CompositionEvent
+    requestComposition: CompositionRequest
     personaChanged: (UpdateEvent<PersonaIdentifier> & { owned: boolean })[]
+    personaAvatarChanged: UpdateEvent<string>
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
+    relationsChanged: (UpdateEvent<ProfileIdentifier> & { favor: 0 | 1 })[]
     /** Public Key found / Changed */
     linkedProfilesChanged: {
         of: ProfileIdentifier
@@ -63,10 +68,11 @@ export interface MaskMessages extends SettingsEvents {
         appendText: string
         context: ThirdPartyPopupContextIdentifier
     }
-    /** Plugin ID */
-    activatePluginCompositionEntry: string
     pluginEnabled: string
     pluginDisabled: string
+
+    profileNFTsPageUpdated: ProfileNFTsPageEvent
+    profileNFTsTabUpdated: 'reset'
     signRequestApproved: {
         requestID: string
         selectedPersona: PersonaIdentifier

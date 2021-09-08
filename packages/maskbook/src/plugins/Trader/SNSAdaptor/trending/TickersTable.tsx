@@ -1,15 +1,5 @@
-import {
-    Link,
-    makeStyles,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Theme,
-    Typography,
-} from '@material-ui/core'
+import { Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
@@ -17,7 +7,7 @@ import type { Ticker } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import { formatElapsed } from '../../../Wallet/formatter'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         maxHeight: 266,
         scrollbarWidth: 'none',
@@ -25,7 +15,6 @@ const useStyles = makeStyles((theme: Theme) => ({
             display: 'none',
         },
     },
-    table: {},
     cell: {
         paddingLeft: theme.spacing(1.5),
         paddingRight: theme.spacing(1),
@@ -51,7 +40,7 @@ export interface TickersTableProps {
 
 export function TickersTable(props: TickersTableProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const rows = [
         t('plugin_trader_table_exchange'),
         t('plugin_trader_table_pair'),
@@ -67,12 +56,12 @@ export function TickersTable(props: TickersTableProps) {
             </TableCell>
             <TableCell className={classes.cell}>
                 {(() => {
-                    const formated = formatEthereumAddress(ticker.base_name, 2)
+                    const formatted = formatEthereumAddress(ticker.base_name, 2)
                     return (
                         <Link color="primary" target="_blank" rel="noopener noreferrer" href={ticker.trade_url}>
-                            <span title={formated !== ticker.base_name ? ticker.base_name : ''}>{formated}</span>
+                            <span title={formatted !== ticker.base_name ? ticker.base_name : ''}>{formatted}</span>
                             <span>/</span>
-                            <span>{ticker.target_name}</span>
+                            <span>{formatEthereumAddress(ticker.target_name, 2)}</span>
                         </Link>
                     )
                 })()}
@@ -91,7 +80,7 @@ export function TickersTable(props: TickersTableProps) {
 
     return (
         <TableContainer className={classes.container}>
-            <Table className={classes.table} size="small" stickyHeader>
+            <Table size="small" stickyHeader>
                 <TableHead>
                     <TableRow>
                         {rows.map((x) =>

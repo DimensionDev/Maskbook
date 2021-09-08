@@ -96,7 +96,7 @@ export function DecryptPost(props: DecryptPostProps) {
     // pass 1:
     // decrypt post content and image attachments
     const decryptedPayloadForImageAlpha38 = decryptedPayloadForImage?.version === -38 ? decryptedPayloadForImage : null
-    const sharedPublic = usePostInfoSharedPublic() || decryptedPayloadForImageAlpha38?.sharedPublic
+    const sharedPublic = usePostInfoSharedPublic() || decryptedPayloadForImageAlpha38?.sharedPublic || false
 
     useEffect(() => {
         const signal = new AbortController()
@@ -139,20 +139,15 @@ export function DecryptPost(props: DecryptPostProps) {
             }
         }
 
+        const postURL = current.url.getCurrentValue()?.toString()
         if (deconstructedPayload.ok)
             makeProgress(
                 'post text',
-                ServicesWithProgress.decryptFromText(
-                    deconstructedPayload.val,
-                    postBy,
-                    whoAmI.network,
-                    whoAmI,
-                    sharedPublic,
-                ),
+                ServicesWithProgress.decryptFromText(deconstructedPayload.val, postBy, whoAmI.network, whoAmI, postURL),
             )
         postMetadataImages.forEach((url) => {
             if (signal.signal.aborted) return
-            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI.network, whoAmI, undefined))
+            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI.network, whoAmI, postURL))
         })
         return () => signal.abort()
     }, [
@@ -161,7 +156,6 @@ export function DecryptPost(props: DecryptPostProps) {
         (deconstructedPayload.val as Payload)?.encryptedText,
         postBy.toText(),
         postMetadataImages.join(),
-        sharedPublic,
         whoAmI.toText(),
     ])
 
@@ -175,7 +169,7 @@ export function DecryptPost(props: DecryptPostProps) {
     // }, [decryptedPostContent])
 
     // pass 3:
-    // inovke callback
+    // invoke callback
     const firstSucceedDecrypted = progress.find((p) => p.progress.type === 'success')
     useEffect(() => {
         if (firstSucceedDecrypted?.progress.type !== 'success') return

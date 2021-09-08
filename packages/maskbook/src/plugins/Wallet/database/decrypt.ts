@@ -4,10 +4,12 @@ import { Err, None, Ok, Option, Result, Some } from 'ts-results'
 import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
 import { startEffect } from '../../../utils'
 import type { EncryptedWallet, EncryptedWalletPrimaryKey } from './types'
+
 type WalletRecordEncrypted = unknown
 
 let primaryKey: null | CryptoKey = null
 let decrypted: WalletRecordEncrypted = null
+
 const EncryptedDB = createPluginDatabase<EncryptedWallet | EncryptedWalletPrimaryKey>(PLUGIN_IDENTIFIER)
 
 export enum DecryptWalletError {
@@ -54,6 +56,8 @@ export async function lockWallet() {
     decrypted = null
     WalletMessages.events.walletLockStatusUpdated.sendToAll(true)
 }
+
+export async function unlockWallet(password: string) {}
 
 export async function updateWalletStore(newStore: WalletRecordEncrypted): Promise<Result<void, UpdateWalletError>> {
     if (!(await hasEncryptedWalletStore())) return Err(UpdateWalletError.EncryptedStoreNotExist)

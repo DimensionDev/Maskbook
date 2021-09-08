@@ -1,7 +1,7 @@
 import fs from 'fs/promises'
 import { resolve } from 'path'
 import { PKG_PATH } from '.'
-import { format } from 'prettier'
+import { prettier } from './prettier'
 
 export async function* walk(
     dir: string,
@@ -33,19 +33,7 @@ class File {
     get content() {
         return fs.readFile(this.path, 'utf-8')
     }
-    setContent(f: string) {
-        return fs.writeFile(
-            this.path,
-            format(f, {
-                parser: 'typescript',
-                trailingComma: 'all',
-                printWidth: 120,
-                semi: false,
-                singleQuote: true,
-                jsxBracketSameLine: true,
-                tabWidth: 4,
-            }),
-            'utf-8',
-        )
+    async setContent(f: string) {
+        return fs.writeFile(this.path, await prettier(f), 'utf-8')
     }
 }

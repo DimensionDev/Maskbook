@@ -12,7 +12,6 @@ export function useProposal(id: string) {
     return useSuspense<{ proposal: Proposal; message: ProposalMessage }, [string]>(id, [id], cache, Suspender)
 }
 async function Suspender(id: string) {
-    // await testDelay(1000)
     const proposal = await PluginSnapshotRPC.fetchProposal(id)
     const message: ProposalMessage = JSON.parse(proposal.msg)
     const now = Date.now()

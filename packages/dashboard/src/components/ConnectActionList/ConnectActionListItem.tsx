@@ -1,4 +1,5 @@
-import { ListItem, ListItemIcon, ListItemText, experimentalStyled as styled } from '@material-ui/core'
+import { ListItemIcon, ListItemText, styled } from '@material-ui/core'
+import ListItemButton from '@material-ui/core/ListItemButton'
 import { MaskColorVar } from '@masknet/theme'
 
 export interface ConnectActionListItemProps {
@@ -10,7 +11,7 @@ export interface ConnectActionListItemProps {
 export function ConnectActionListItem(props: ConnectActionListItemProps) {
     const { title, icon, onClick } = props
     return (
-        <Container button onClick={onClick}>
+        <Container onClick={onClick}>
             <Dot />
             <ListItemText primary={title} />
             <Icon>{icon}</Icon>
@@ -22,7 +23,7 @@ const Icon = styled(ListItemIcon)`
     font-size: 48px;
 `
 
-const Container = styled(ListItem)`
+const Container = styled(ListItemButton)`
     border: 1px solid ${MaskColorVar.border};
     border-radius: 8px;
 `

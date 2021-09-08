@@ -5,7 +5,7 @@
     "outDir": "./dist/",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./src/**/*.tsx", "./src/**/*.ts", "./src/**/*.json"],
+  "include": ["./src", "./src/**/*.json"],
   // ! Note: maskbook/ depends dashboard/ on source-code level
   // !       but dashboard/ depends maskbook/ on type level
   // !       do not add dashboard/ as a reference otherwise there is a circular dependency on the type level.
@@ -18,7 +18,13 @@
     { "path": "../icons" },
     { "path": "../plugin-infra" },
     { "path": "../plugins/Wallet" },
-    { "path": "../external-plugin-previewer" }
+    { "path": "../external-plugin-previewer" },
+    { "path": "../injected-script/sdk" }
   ],
-  "ts-node": { "transpileOnly": true, "compilerOptions": { "module": "CommonJS" } }
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
 }

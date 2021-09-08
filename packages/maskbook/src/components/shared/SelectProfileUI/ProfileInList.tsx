@@ -1,8 +1,9 @@
 import { memo } from 'react'
-import { ListItem, Theme, ListItemAvatar, ListItemText } from '@material-ui/core'
+import { ListItemAvatar, ListItemText } from '@material-ui/core'
+import ListItemButton from '@material-ui/core/ListItemButton'
+import { makeStyles } from '@masknet/theme'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import type { ListItemTypeMap } from '@material-ui/core/ListItem'
-import { makeStyles } from '@material-ui/core/styles'
 import { Avatar } from '../../../utils'
 import type { Profile } from '../../../database'
 
@@ -12,7 +13,7 @@ export interface ProfileInListProps {
     onClick?: () => void
     ListItemProps?: Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>>
 }
-const useStyle = makeStyles((theme: Theme) => ({
+const useStyle = makeStyles()((theme) => ({
     // ? I want to let the children of this element have no change to
     // ? extends the width of the parent element.
     // ? Only `grid` or `inline-grid` works. but why??
@@ -30,13 +31,12 @@ const useStyle = makeStyles((theme: Theme) => ({
  * Item in the list
  */
 export const ProfileInList = memo<ProfileInListProps>((props) => {
-    const classes = useStyle()
-
+    const { classes } = useStyle()
     const { disabled, ListItemProps: listItemProps, onClick } = props
     const name = props.item.nickname || props.item.identifier.userId
 
     return (
-        <ListItem button disabled={disabled} onClick={onClick} {...listItemProps}>
+        <ListItemButton disabled={disabled} onClick={onClick} {...listItemProps}>
             <ListItemAvatar>
                 <Avatar person={props.item} />
             </ListItemAvatar>
@@ -49,6 +49,6 @@ export const ProfileInList = memo<ProfileInListProps>((props) => {
                 primary={name}
                 secondary={props.item.linkedPersona?.fingerprint.toLowerCase()}
             />
-        </ListItem>
+        </ListItemButton>
     )
 })

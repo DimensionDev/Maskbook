@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import classNames from 'classnames'
-import { Checkbox, FormControlLabel, Link, makeStyles, Typography } from '@material-ui/core'
+import { Checkbox, FormControlLabel, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, TokenIcon, useStylesExtends } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -16,7 +17,7 @@ import { SwapStatus } from './SwapGuide'
 import { getMaskColor } from '@masknet/theme'
 import urlcat from 'urlcat'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     reminderText: {
         color: '#FF5555',
         marginTop: theme.spacing(1),
@@ -80,12 +81,12 @@ const useStyles = makeStyles((theme) => ({
             textDecoration: 'none',
         },
     },
-    comfirmWrapper: {
+    confirmWrapper: {
         marginTop: theme.spacing(1),
         display: 'flex',
         alignItems: 'center',
     },
-    comfirmText: {
+    confirmText: {
         color: '#6F767C',
     },
     button: {
@@ -173,7 +174,7 @@ export function RemindDialog(props: RemindDialogProps) {
                     </Link>
                 </div>
             </section>
-            <section className={classes.comfirmWrapper}>
+            <section className={classes.confirmWrapper}>
                 <FormControlLabel
                     control={
                         <Checkbox

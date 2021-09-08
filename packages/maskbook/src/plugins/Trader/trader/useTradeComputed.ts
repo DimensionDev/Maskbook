@@ -5,8 +5,8 @@ import { pow10 } from '@masknet/web3-shared'
 import { TradeProvider, TradeStrategy } from '../types'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
-import { useTrade as useUniswapTrade } from './uniswap/useTrade'
-import { useV2TradeComputed as useUniswapTradeComputed } from './uniswap/useV2TradeComputed'
+import { useV2Trade as useUniswapV2Trade, useV3Trade as useUniswapV3Trade } from './uniswap/useTrade'
+import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeComputed'
 import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
 import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
 import { useTradeComputed as useDODOTradeComputed } from './dodo/useTradeComputed'
@@ -29,7 +29,7 @@ export function useTradeComputed(
     const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
 
-    // trade conetxt
+    // trade context
     const context = useContext(TradeContext)
 
     // NATIVE-WNATIVE pair
@@ -43,15 +43,25 @@ export function useTradeComputed(
         outputToken,
     )
 
-    // uniswap like providers
-    const uniswap_ = useUniswapTrade(
+    // uniswap-v2 like providers
+    const uniswapV2_ = useUniswapV2Trade(
         strategy,
-        context?.IS_UNISWAP_LIKE ? inputAmount_ : '0',
-        context?.IS_UNISWAP_LIKE ? outputAmount_ : '0',
+        context?.IS_UNISWAP_V2_LIKE ? inputAmount_ : '0',
+        context?.IS_UNISWAP_V2_LIKE ? outputAmount_ : '0',
         inputToken,
         outputToken,
     )
-    const uniswap = useUniswapTradeComputed(uniswap_.value, inputToken, outputToken)
+    const uniswapV2 = useUniswapTradeComputed(uniswapV2_.value, inputToken, outputToken)
+
+    // uniswap-v3 like providers
+    const uniswapV3_ = useUniswapV3Trade(
+        strategy,
+        context?.IS_UNISWAP_V3_LIKE ? inputAmount_ : '0',
+        context?.IS_UNISWAP_V3_LIKE ? outputAmount_ : '0',
+        inputToken,
+        outputToken,
+    )
+    const uniswapV3 = useUniswapTradeComputed(uniswapV3_.value, inputToken, outputToken)
 
     // zrx
     const zrx_ = useZrxTrade(
@@ -97,14 +107,19 @@ export function useTradeComputed(
         }
 
     switch (provider) {
-        case TradeProvider.UNISWAP:
+        case TradeProvider.UNISWAP_V2:
         case TradeProvider.SUSHISWAP:
         case TradeProvider.SASHIMISWAP:
         case TradeProvider.QUICKSWAP:
         case TradeProvider.PANCAKESWAP:
             return {
-                ...uniswap_,
-                value: uniswap,
+                ...uniswapV2_,
+                value: uniswapV2,
+            }
+        case TradeProvider.UNISWAP_V3:
+            return {
+                ...uniswapV3_,
+                value: uniswapV3,
             }
         case TradeProvider.ZRX:
             return {

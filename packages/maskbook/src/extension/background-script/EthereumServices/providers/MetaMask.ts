@@ -4,19 +4,14 @@ import { first } from 'lodash-es'
 import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
 import { ChainId, ProviderType } from '@masknet/web3-shared'
 import { resetAccount, updateAccount } from '../../../../plugins/Wallet/services'
-import {
-    currentChainIdSettings,
-    currentIsMetaMaskLockedSettings,
-    currentProviderSettings,
-} from '../../../../plugins/Wallet/settings'
+import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 
 let provider: MetaMaskInpageProvider | null = null
 let web3: Web3 | null = null
 
 async function onAccountsChanged(accounts: string[]) {
-    await updateIsMetaMaskLockedSettings()
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
-
+    if (!accounts.length) return
     await updateAccount({
         account: first(accounts),
         providerType: ProviderType.MetaMask,
@@ -26,7 +21,6 @@ async function onAccountsChanged(accounts: string[]) {
 }
 
 async function onChainIdChanged(id: string) {
-    await updateIsMetaMaskLockedSettings()
     if (currentProviderSettings.value !== ProviderType.MetaMask) return
 
     // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
@@ -44,14 +38,6 @@ async function onError(error: string) {
     await resetAccount({
         providerType: ProviderType.MetaMask,
     })
-}
-
-export async function updateIsMetaMaskLockedSettings() {
-    try {
-        currentIsMetaMaskLockedSettings.value = !(await provider?._metamask?.isUnlocked())
-    } catch {
-        currentIsMetaMaskLockedSettings.value = false
-    }
 }
 
 export function createProvider() {
@@ -80,5 +66,30 @@ export async function requestAccounts() {
     return {
         chainId,
         accounts,
+    }
+}
+
+export async function ensureConnectedAndUnlocked() {
+    const web3 = createWeb3()
+    try {
+        const accounts = await web3.eth.requestAccounts()
+        throw accounts
+    } catch (error: string[] | any) {
+        const accounts = error
+        if (Array.isArray(accounts)) {
+            if (accounts.length === 0) throw new Error('MetaMask is locked or it has not connected any accounts.')
+            else if (accounts.length > 0) return // valid
+        }
+        // Any other error means failed to connect MetaMask
+        throw new Error('Failed to connect MetaMask.')
+    }
+}
+
+export async function isUnlocked() {
+    try {
+        // it's an experimental API. we should not depend on.
+        return provider?._metamask?.isUnlocked() ?? false
+    } catch {
+        return false
     }
 }

@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { Button, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
@@ -10,7 +11,7 @@ import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
 import { isZero, useAccount } from '@masknet/web3-shared'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             overflow: 'auto',
@@ -37,8 +38,7 @@ const useStyles = makeStyles((theme) => {
 
 export function ListingTab() {
     const { t } = useI18N()
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     const account = useAccount()
     const { token, asset, provider, orders, orderPage, setOrderPage } = CollectibleState.useContainer()
 
@@ -113,7 +113,9 @@ export function ListingTab() {
                         ) : (
                             <>
                                 <TableCell>{t('plugin_collectible_price')}</TableCell>
-                                <TableCell>{t('plugin_collectible_expiration')}</TableCell>
+                                {provider === CollectibleProvider.OPENSEA ? (
+                                    <TableCell>{t('plugin_collectible_expiration')}</TableCell>
+                                ) : null}
                             </>
                         )}
                     </TableRow>

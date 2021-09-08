@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { SettingsIcon } from '@masknet/icons'
 import { IconButton, MenuItem, Typography } from '@material-ui/core'
@@ -11,8 +11,9 @@ import { PersonaContext } from '../../hooks/usePersonaContext'
 import { RenameDialog } from '../RenameDialog'
 import type { SocialNetwork } from '../../api'
 import classNames from 'classnames'
+import { ExportPrivateKeyDialog } from '../ExportPrivateKeyDialog'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     card: {
         borderRadius: Number(theme.shape.borderRadius) * 3,
         backgroundColor: MaskColorVar.primaryBackground,
@@ -80,18 +81,21 @@ export interface PersonaCardUIProps extends PersonaCardProps {
     definedSocialNetworks: SocialNetwork[]
     onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
-    onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => void
+    onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
 }
 
 export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
     const { nickname, active = false, definedSocialNetworks, identifier, profiles } = props
     const { onConnect, onDisconnect, onClick, onRename } = props
     const t = useDashboardI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+    const [exportPrivateKeyDialogOpen, setExportPrivateKeyDialogOpen] = useState(false)
+
     const [menu, openMenu] = useMenu(
-        <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
+        <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_rename()}</MenuItem>,
+        <MenuItem onClick={() => setExportPrivateKeyDialogOpen(true)}>{t.personas_export_private()}</MenuItem>,
         <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
             {t.personas_delete()}
         </MenuItem>,
@@ -106,6 +110,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                         {nickname}
                     </Typography>
                     <IconButton
+                        size="large"
                         onClick={(e) => {
                             e.stopPropagation()
                             openMenu(e)
@@ -121,8 +126,10 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                             return (
                                 <ConnectedPersonaLine
                                     key={networkIdentifier}
+                                    onConnect={() => onConnect(identifier, networkIdentifier)}
                                     onDisconnect={() => onDisconnect(profile.identifier)}
                                     userId={profile.identifier.userId}
+                                    networkIdentifier={networkIdentifier}
                                 />
                             )
                         } else {
@@ -138,20 +145,29 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                 </div>
             </div>
             {menu}
-            <RenameDialog
-                open={renameDialogOpen}
-                nickname={nickname}
-                onClose={() => setRenameDialogOpen(false)}
-                onConfirm={(name) => {
-                    onRename(identifier, name)
-                    setRenameDialogOpen(false)
-                }}
-            />
+            {renameDialogOpen && (
+                <RenameDialog
+                    open={renameDialogOpen}
+                    nickname={nickname}
+                    onClose={() => setRenameDialogOpen(false)}
+                    onConfirm={async (name) => {
+                        await onRename(identifier, name)
+                        setRenameDialogOpen(false)
+                    }}
+                />
+            )}
             <DeletePersonaDialog
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
                 nickname={nickname}
             />
+            <ExportPrivateKeyDialog
+                open={exportPrivateKeyDialogOpen}
+                identifier={identifier}
+                onClose={() => setExportPrivateKeyDialogOpen(false)}
+            />
         </div>
     )
 })
+
+export * as PersonaRowCard from './Row'

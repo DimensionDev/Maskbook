@@ -1,9 +1,10 @@
-import { Button, ButtonProps, experimentalStyled as styled } from '@material-ui/core'
+import { Button, ButtonProps, styled } from '@material-ui/core'
 import { forwardRef } from 'react'
 
 const TabButtonWrap = styled(Button)(({ theme }) => ({
-    paddingLeft: theme.spacing(4),
-    paddingRight: theme.spacing(4),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    flex: 1,
 }))
 export interface ButtonTabProps extends React.PropsWithChildren<Omit<ButtonProps, 'onChange' | 'value' | 'selected'>> {
     value: string
@@ -21,6 +22,7 @@ export const ButtonTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, r
         if (!activated && onChange) onChange(event, String(value))
         if (onClick) onClick(event)
     }
+    //TODO: replace secondary to correct theme color
     return (
         <TabButtonWrap
             ref={ref}

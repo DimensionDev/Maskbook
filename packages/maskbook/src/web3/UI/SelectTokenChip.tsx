@@ -1,5 +1,6 @@
 import classNames from 'classnames'
-import { makeStyles, Theme, Chip, ChipProps, CircularProgress } from '@material-ui/core'
+import { Chip, ChipProps, CircularProgress } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ErrorIcon from '@material-ui/icons/Error'
 import { noop } from 'lodash-es'
@@ -7,7 +8,7 @@ import { TokenIcon } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { useI18N } from '../../utils'
 
-const useStyles = makeStyles((theme: Theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         chip: {
             border: 'none',
@@ -20,6 +21,10 @@ const useStyles = makeStyles((theme: Theme) => {
         icon: {
             color: theme.palette.text.primary,
             pointerEvents: 'none',
+        },
+        tokenIcon: {
+            width: 16,
+            height: 16,
         },
     }
 })
@@ -35,8 +40,7 @@ export interface SelectTokenChipProps {
 export function SelectTokenChip(props: SelectTokenChipProps) {
     const { t } = useI18N()
     const { token, error, loading = false, readonly = false, ChipProps } = props
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     if (loading)
         return (
             <Chip
@@ -76,7 +80,14 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
     return (
         <Chip
             className={classes.chip}
-            icon={<TokenIcon address={token.address} name={token.name} logoURI={token.logoURI} />}
+            icon={
+                <TokenIcon
+                    classes={{ icon: classes.tokenIcon }}
+                    address={token.address}
+                    name={token.name}
+                    logoURI={token.logoURI}
+                />
+            }
             deleteIcon={readonly ? undefined : <ExpandMoreIcon className={classes.icon} />}
             color="default"
             size="small"

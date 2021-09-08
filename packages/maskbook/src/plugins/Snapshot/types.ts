@@ -1,5 +1,3 @@
-import type snapshot from '@snapshot-labs/snapshot.js'
-
 export interface ProposalIdentifier {
     /**
      * ENS domain name of space.
@@ -8,6 +6,16 @@ export interface ProposalIdentifier {
      */
     space: string
     /** the identifier of proposal */
+    id: string
+}
+export interface RawVote {
+    /**
+     * There're two sorts of vote,
+     * for multiple choice vote, each choice can be assigned to a different weight.
+     */
+    choice: number | { [choiceIndex: number]: number }
+    created: number
+    voter: string
     id: string
 }
 
@@ -19,9 +27,11 @@ export interface Proposal {
     isStart: boolean
     isEnd: boolean
     status: string
+    strategies: Strategy[]
     authorName: string | null
     authorAvatar: string | null
     network: string
+    votes: RawVote[]
 }
 
 /**
@@ -29,12 +39,13 @@ export interface Proposal {
  * https://docs.snapshot.org/strategies
  */
 export interface Strategy {
-    name: keyof typeof snapshot.strategies
+    name: string
     params: {
         address: string
         decimals?: number
         symbol: string
     }
+    __typename: string
 }
 
 export interface ProposalPayload {
@@ -63,29 +74,27 @@ export interface ProposalMessage {
  * Payload of a vote
  */
 export interface VoteItem {
-    choice: string
+    choice: string | undefined
+    totalWeight: number | undefined
+    choices:
+        | {
+              index: number
+              weight: number
+              name: string
+          }[]
+        | undefined
     address: string
     authorIpfsHash: string
-    relayerIpfsHash: string
     /** the voting power of one voter */
     balance: number
     /** the consist detail of voting power */
     scores: number[]
     strategySymbol: string
-    sig: string
     authorName: string | null
     authorAvatar: string | null
-    msg: {
-        payload: {
-            choice: number
-            metadata: {}
-            proposal: string
-        }
-        space: string
-        timestamp: string
-        type: 'vote'
-        version: string
-    }
+    choiceIndex: number | undefined
+    choiceIndexes: number[] | undefined
+    timestamp: number
 }
 
 export type VoteItemList = {
@@ -94,7 +103,6 @@ export type VoteItemList = {
 
 export interface ProposalResult {
     choice: string
-    voteNumber: number
     powerDetail: {
         power: number
         name: string

@@ -1,20 +1,12 @@
 import { SettingsIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
-import {
-    Avatar,
-    Box,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    makeStyles,
-    experimentalStyled as styled,
-    listItemTextClasses,
-} from '@material-ui/core'
+import { Avatar, Box, ListItem, ListItemAvatar, ListItemText, styled, listItemTextClasses } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { ReactNode } from 'react'
 import SettingSwitch from '../../Settings/components/SettingSwitch'
 import { Twitter, Facebook, Explore } from './Actions'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     empty: {
         margin: theme.spacing(1),
     },
@@ -68,15 +60,14 @@ export interface PluginItemProps {
     onSetting?: (id: string) => void
 }
 
-export function PluginItemPlaceHodler() {
-    const classes = useStyles()
+export function PluginItemPlaceholder() {
+    const { classes } = useStyles()
     return <Box className={classes.empty} />
 }
 
 export default function PluginItem(props: PluginItemProps) {
     const { id, title, desc, icon, enabled, onSwitch, onTwitter, onFacebook, onExplore, onSetting } = props
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <Box className={classes.root}>
             <ListItem>

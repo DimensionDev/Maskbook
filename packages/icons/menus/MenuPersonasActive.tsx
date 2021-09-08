@@ -17,9 +17,9 @@ export const MenuPersonasActiveIcon: typeof SvgIcon = createIcon(
             fillRule="evenodd"
             clipRule="evenodd"
             d="M13.635 12.944c-.97.31-2.018.146-2.97-.445a.434.434 0 00-.37-.045.446.446 0 00-.282.263c-.427 1.021-1.196 1.765-2.166 2.075-1.55.495-3.312-.245-4.392-1.843a5.502 5.502 0 01-.684-1.409 6.763 6.763 0 01-.187-.744l-.165-.934.774.546a.574.574 0 00.505.084c.046-.015.09-.04.132-.063l.196-.215.013-.025.025-.048a4.253 4.253 0 012.259-1.718 4.244 4.244 0 012.687.037 4.244 4.244 0 012.168-1.587 4.274 4.274 0 012.837.091l.049.025c.036.02.082.035.128.051l.012.006c.1.03.211.024.322-.011a.56.56 0 00.363-.36l.305-.89.406.856c.117.238.203.475.28.715.161.507.246 1.03.258 1.544.065 1.923-.952 3.55-2.503 4.044zm-5.973-.585c-.129.042-.264.065-.402.078-.758.049-1.462-.47-1.786-.752.233-.258.698-.711 1.28-.897.138-.044.264-.064.402-.078.758-.048 1.462.47 1.786.752-.242.261-.707.715-1.28.897zm3.164-1.498c.34.075.991.172 1.563-.01.139-.045.262-.104.373-.17.637-.397.92-1.23 1.02-1.648-.339-.075-.99-.172-1.563.01a1.802 1.802 0 00-.373.17c-.636.397-.92 1.23-1.02 1.648z"
-            fill="url(#paint0_linear)"
+            fill="url(#personas_active_linear)"
         />
-        <g filter="url(#filter0_b)">
+        <g filter="url(#personas_active_0)">
             <path
                 fillRule="evenodd"
                 clipRule="evenodd"
@@ -30,7 +30,7 @@ export const MenuPersonasActiveIcon: typeof SvgIcon = createIcon(
         </g>
         <defs>
             <linearGradient
-                id="paint0_linear"
+                id="personas_active_linear"
                 x1="2.598"
                 y1="10.871"
                 x2="15.806"
@@ -40,7 +40,7 @@ export const MenuPersonasActiveIcon: typeof SvgIcon = createIcon(
                 <stop offset="1" stopColor="#6CB8FF" />
             </linearGradient>
             <filter
-                id="filter0_b"
+                id="personas_active_0"
                 x="8.688"
                 y="4.35"
                 width="17.163"

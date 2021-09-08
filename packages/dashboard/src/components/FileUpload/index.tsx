@@ -1,17 +1,17 @@
 import { MaskColorVar } from '@masknet/theme'
-import { makeStyles, Typography } from '@material-ui/core'
+import { Card, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useEffect, useState } from 'react'
 import { File as FileIcon } from '@masknet/icons'
 import { blobToText } from '@dimensiondev/kit'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()({
     root: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
         height: '100%',
-        background: MaskColorVar.secondaryBackground,
         borderRadius: 8,
     },
     container: {
@@ -30,17 +30,18 @@ const useStyles = makeStyles(() => ({
         color: MaskColorVar.textSecondary,
         fontSize: 13,
     },
-}))
+})
 
 export interface FileUploadProps {
     width?: number
     height?: number
     readAsText?: boolean
     onChange: (file: File, content?: string) => void
+    accept?: string
 }
 
-export default function FileUpload({ width, height, readAsText, onChange }: FileUploadProps) {
-    const classes = useStyles()
+export default function FileUpload({ width, height, readAsText, onChange, accept }: FileUploadProps) {
+    const { classes } = useStyles()
     const [file, setFile] = useState<File | null>()
 
     const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,12 +60,12 @@ export default function FileUpload({ width, height, readAsText, onChange }: File
         }
     }, [file, readAsText, onChange])
     return (
-        <div className={classes.root} style={{ width, height }}>
+        <Card variant="background" className={classes.root} style={{ width, height }}>
             <div className={classes.container}>
                 <FileIcon />
                 <Typography className={classes.text}>Please click or drag the file to here</Typography>
             </div>
-            <input type="file" className={classes.file} onChange={handleChange} />
-        </div>
+            <input type="file" className={classes.file} accept={accept} onChange={handleChange} />
+        </Card>
     )
 }

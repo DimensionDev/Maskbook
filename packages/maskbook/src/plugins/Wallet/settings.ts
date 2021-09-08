@@ -41,17 +41,6 @@ export const currentProviderSettings = createGlobalSettings<ProviderType>(
 )
 
 /**
- * Is Metamask Locked
- */
-export const currentIsMetaMaskLockedSettings = createGlobalSettings<boolean>(
-    `${PLUGIN_IDENTIFIER}+isMetaMaskLocked`,
-    true,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
-
-/**
  * The default portfolio data provider
  */
 export const currentPortfolioDataProviderSettings = createGlobalSettings<PortfolioProvider>(
@@ -68,10 +57,21 @@ export const currentPortfolioDataProviderSettings = createGlobalSettings<Portfol
  */
 export const currentCollectibleDataProviderSettings = createGlobalSettings<CollectibleProvider>(
     `${PLUGIN_IDENTIFIER}+collectibleProvider`,
-    CollectibleProvider.OPENSEAN,
+    CollectibleProvider.OPENSEA,
     {
         primary: () => i18n.t('plugin_wallet_settings_collectible_data_source_primary'),
         secondary: () => i18n.t('plugin_wallet_settings_collectible_data_source_secondary'),
+    },
+)
+
+/**
+ * Is the current selected wallet has been locked?
+ */
+export const currentIsMaskWalletLockedSettings = createGlobalSettings<boolean>(
+    `${PLUGIN_IDENTIFIER}+isMaskWalletLocked`,
+    false,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
     },
 )
 

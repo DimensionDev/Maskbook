@@ -1,6 +1,6 @@
 import { ERC20TokenDetailed, formatBalance, TransactionStateType } from '@masknet/web3-shared'
 import { Alert, Box, Skeleton, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@masknet/theme'
 import { useCallback, useEffect } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -11,7 +11,7 @@ import { WalletMessages } from '../../Wallet/messages'
 import { useMaskClaimCallback } from './hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         borderRadius: 10,
         width: '100%',
@@ -76,7 +76,7 @@ export function ITO_Card(props: ITO_CardProps) {
                     packet?.claimable,
                     18,
                     6,
-                )}. Follow @realMaskbook (mask.io) to claim airdrop.`,
+                )}. Follow @realMaskNetwork (mask.io) to claim airdrop.`,
                 '#mask_io',
                 postLink,
             ].join('\n'),

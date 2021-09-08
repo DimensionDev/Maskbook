@@ -15,8 +15,10 @@ import {
     useChainIdValid,
     useTokenConstants,
     ZERO,
+    isGreaterThan,
 } from '@masknet/web3-shared'
-import { Box, Card, Grid, Link, makeStyles, Theme, Typography } from '@material-ui/core'
+import { Box, Card, Grid, Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
@@ -41,6 +43,7 @@ import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import urlcat from 'urlcat'
+import { startCase } from 'lodash-es'
 
 export interface IconProps {
     size?: number
@@ -50,13 +53,12 @@ interface StyleProps {
     titleLength?: number
     tokenNumber?: number
 }
-
-const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
         position: 'relative',
         color: theme.palette.common.white,
         flexDirection: 'column',
-        height: (props: StyleProps) => (props.tokenNumber! > 4 ? 425 : 405),
+        height: props.tokenNumber! > 4 ? 425 : 405,
         minHeight: 405,
         boxSizing: 'border-box',
         backgroundAttachment: 'local',
@@ -77,7 +79,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
         maxWidth: 470,
     },
     title: {
-        fontSize: (props: StyleProps) => (props.titleLength! > 31 ? '1.3rem' : '1.6rem'),
+        fontSize: props.titleLength! > 31 ? '1.3rem' : '1.6rem',
         fontWeight: 'bold',
         marginBottom: 4,
         marginRight: 4,
@@ -182,7 +184,7 @@ interface TokenItemProps {
 }
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
-    const classes = useStyles({})
+    const { classes } = useStyles({})
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     return (
@@ -233,8 +235,7 @@ export function ITO(props: ITO_Props) {
             : message.split(MSG_DELIMITER)[0]
     const title = message.split(MSG_DELIMITER)[1] ?? message
     const regions = message.split(MSG_DELIMITER)[2] ?? defaultRegions
-    const classes = useStyles({ titleLength: getTextUILength(title), tokenNumber: exchange_tokens.length })
-
+    const { classes } = useStyles({ titleLength: getTextUILength(title), tokenNumber: exchange_tokens.length })
     //#region token detailed
     const {
         value: availability,
@@ -246,7 +247,7 @@ export function ITO(props: ITO_Props) {
 
     const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime, endTime, qualificationAddress } =
         availabilityComputed
-    //#ednregion
+    //#endregion
 
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(availability?.remaining ?? '0')
@@ -259,6 +260,7 @@ export function ITO(props: ITO_Props) {
         !isRegionRestrict || !currentRegion || (!loadingRegion && allowRegions.includes(currentRegion.code))
 
     //#region if qualified
+    type Qual_V2 = { qualified: boolean; errorMsg: string }
     const {
         value: ifQualified = false,
         loading: loadingIfQualified,
@@ -279,8 +281,7 @@ export function ITO(props: ITO_Props) {
     //#region buy info
     const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
-        chainId === payload.chain_id &&
-        (new BigNumber(availability ? availability.swapped : 0).isGreaterThan(0) || Boolean(availability?.claimed))
+        chainId === payload.chain_id && (isGreaterThan(availability?.swapped ?? 0, 0) || Boolean(availability?.claimed))
 
     const shareSuccessLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
@@ -381,7 +382,12 @@ export function ITO(props: ITO_Props) {
 
     useEffect(() => {
         const timeToExpired = endTime - Date.now()
-        if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired)) return
+
+        // https://stackoverflow.com/q/3468607
+        // SetTimeout using a 32 bit int to store the delay so the max value allowed would be 2147483647.
+        // Meanwhile, no need to refresh ITO card when expired time is a large value (more than one day).
+        if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired) || timeToExpired > 1000 * 60 * 60 * 24)
+            return
 
         const timer = setTimeout(() => {
             setOpenClaimDialog(false)
@@ -671,14 +677,20 @@ export function ITO(props: ITO_Props) {
                             </ActionButton>
                         </Grid>
                     </Grid>
-                ) : !ifQualified ? (
+                ) : !ifQualified || !(ifQualified as Qual_V2).qualified ? (
                     <ActionButton
                         onClick={retryIfQualified}
                         loading={loadingIfQualified}
                         variant="contained"
                         size="large"
                         className={classes.actionButton}>
-                        {t(loadingIfQualified ? 'plugin_ito_qualification_loading' : 'plugin_ito_qualification_failed')}
+                        {loadingIfQualified
+                            ? t('plugin_ito_qualification_loading')
+                            : !ifQualified
+                            ? t('plugin_ito_qualification_failed')
+                            : !(ifQualified as Qual_V2).qualified
+                            ? startCase((ifQualified as Qual_V2).errorMsg)
+                            : null}
                     </ActionButton>
                 ) : listOfStatus.includes(ITO_Status.expired) ? (
                     <ActionButton
@@ -737,8 +749,7 @@ export function ITO(props: ITO_Props) {
 export function ITO_Loading() {
     const { t } = useI18N()
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
-    const classes = useStyles({})
-
+    const { classes } = useStyles({})
     return (
         <div>
             <Card
@@ -755,7 +766,7 @@ export function ITO_Loading() {
 
 export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }) {
     const { t } = useI18N()
-    const classes = useStyles({})
+    const { classes } = useStyles({})
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     return (
         <Card

@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { Box, Grid, makeStyles, Typography } from '@material-ui/core'
+import { Box, Grid, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { useInterval } from 'react-use'
 import { ONE_SECOND } from '../constants'
 import { DarkColor } from '@masknet/theme/constants'
 import intervalToDuration from 'date-fns/intervalToDuration'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignSelf: 'center',
@@ -32,16 +33,16 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         justifyContent: 'center',
     },
-    lable: {
+    label: {
         color: '#a69bbc',
     },
-    seperator: {
+    separator: {
         color: '#6cf5db',
         width: '2%',
     },
 }))
 
-interface CountdownProps extends withClasses<'digit' | 'seperator'> {
+interface CountdownProps extends withClasses<'digit' | 'separator'> {
     secondsRemaining: number
     msgOnEnd: string
 }
@@ -105,11 +106,11 @@ export const CountdownView = (props: CountdownProps) => {
     interface DoubleDigitsProps {
         leftDigit: number | string
         rightDigit: number | string
-        lable: string
+        label: string
     }
 
     const DoubleDigits = (props: DoubleDigitsProps) => {
-        const { leftDigit, rightDigit, lable } = props
+        const { leftDigit, rightDigit, label } = props
 
         return (
             <>
@@ -118,17 +119,17 @@ export const CountdownView = (props: CountdownProps) => {
                     <RightDigit digit={rightDigit} />
                 </Box>
                 <Box>
-                    <Typography variant="subtitle2" fontSize={8} className={classes.lable}>
-                        {lable}
+                    <Typography variant="subtitle2" fontSize={8} className={classes.label}>
+                        {label}
                     </Typography>
                 </Box>
             </>
         )
     }
 
-    const Seperator = () => {
+    const Separator = () => {
         return (
-            <Grid container item direction="column" className={classes.seperator}>
+            <Grid container item direction="column" className={classes.separator}>
                 <Box py={0.2}>
                     <Typography variant="body2" fontWeight="fontWeightBold">
                         :
@@ -144,30 +145,30 @@ export const CountdownView = (props: CountdownProps) => {
                 <DoubleDigits
                     leftDigit={daysArray.length < 2 ? 0 : daysArray[0]}
                     rightDigit={daysArray.length > 1 ? daysArray[1] : daysArray[0]}
-                    lable="DAY"
+                    label="DAY"
                 />
             </Grid>
             <Grid container item direction="column" className={classes.part}>
                 <DoubleDigits
                     leftDigit={hoursArray.length < 2 ? 0 : hoursArray[0]}
                     rightDigit={hoursArray.length > 1 ? hoursArray[1] : hoursArray[0]}
-                    lable="HR"
+                    label="HR"
                 />
             </Grid>
-            <Seperator />
+            <Separator />
             <Grid container item direction="column" className={classes.part}>
                 <DoubleDigits
                     leftDigit={minutesArray.length < 2 ? 0 : minutesArray[0]}
                     rightDigit={minutesArray.length > 1 ? minutesArray[1] : minutesArray[0]}
-                    lable="MIN"
+                    label="MIN"
                 />
             </Grid>
-            <Seperator />
+            <Separator />
             <Grid container item direction="column" className={classes.part}>
                 <DoubleDigits
                     leftDigit={secondsArray.length < 2 ? 0 : secondsArray[0]}
                     rightDigit={secondsArray.length > 1 ? secondsArray[1] : secondsArray[0]}
-                    lable="SEC"
+                    label="SEC"
                 />
             </Grid>
         </Grid>

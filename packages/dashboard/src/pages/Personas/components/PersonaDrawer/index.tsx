@@ -1,5 +1,6 @@
 import { memo, useState } from 'react'
-import { Box, Button, Drawer, makeStyles } from '@material-ui/core'
+import { Box, Button, Drawer } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PersonaCard } from '../PersonaCard'
 import { MaskColorVar } from '@masknet/theme'
@@ -7,7 +8,7 @@ import { AddPersonaCard } from '../AddPersonaCard'
 import { useDashboardI18N } from '../../../../locales'
 import type { PersonaIdentifier, PersonaInformation } from '@masknet/shared'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         // material-ui toolbar height
         top: `64px !important`,
@@ -15,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         // material-ui toolbar height
         top: `64px`,
-        padding: theme.spacing(3.75, 3.75, 0, 3.75),
+        padding: theme.spacing(3.75, 3.75, 11.25, 3.75),
         background: MaskColorVar.suspensionBackground,
         '& > *': {
             marginTop: theme.spacing(1.5),
@@ -69,8 +70,7 @@ export interface PersonaDrawerUIProps extends PersonaDrawer {
 
 export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
     ({ open, currentPersonaIdentifier, toggleDrawer, personas, onChangeCurrentPersona, onCreatePersona }) => {
-        const classes = useStyles()
-
+        const { classes } = useStyles()
         const t = useDashboardI18N()
 
         const [showAddPersonaCard, setShowAddPersonaCard] = useState(false)
@@ -102,7 +102,13 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                     )
                 })}
                 {showAddPersonaCard && (
-                    <AddPersonaCard onConfirm={onCreatePersona} onCancel={() => setShowAddPersonaCard(false)} />
+                    <AddPersonaCard
+                        onConfirm={(nickName) => {
+                            onCreatePersona(nickName)
+                            setShowAddPersonaCard(false)
+                        }}
+                        onCancel={() => setShowAddPersonaCard(false)}
+                    />
                 )}
                 <Box className={classes.buttons}>
                     <Button onClick={() => setShowAddPersonaCard(true)}>{t.personas_add_persona()}</Button>

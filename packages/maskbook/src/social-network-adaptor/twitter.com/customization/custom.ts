@@ -1,7 +1,7 @@
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared'
 import { Appearance } from '@masknet/theme'
-import { makeStyles, PaletteMode, ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core'
+import { PaletteMode, ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core'
 import produce, { setAutoFreeze } from 'immer'
 import { createElement, useMemo } from 'react'
 import type { SocialNetworkUI } from '../../../social-network'
@@ -118,73 +118,3 @@ export function TwitterThemeProvider(props: Required<React.PropsWithChildren<{}>
     if (!process.env.STORYBOOK) throw new Error('This API is only for Storybook!')
     return createElement(ThemeProvider, { theme: useThemeTwitterVariant(), ...props })
 }
-
-export const useInjectedDialogClassesOverwriteTwitter = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            display: 'block !important',
-        },
-    },
-    container: {
-        alignItems: 'center',
-    },
-    paper: {
-        width: '600px !important',
-        maxWidth: 'none',
-        boxShadow: 'none',
-        backgroundImage: 'none',
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            '&': {
-                display: 'block !important',
-                borderRadius: '0 !important',
-            },
-        },
-    },
-    dialogTitle: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: '10px 15px',
-        borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#ccd6dd'}`,
-        '& > h2': {
-            display: 'inline-block',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-        },
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            '&': {
-                display: 'flex',
-                justifyContent: 'space-between',
-                maxWidth: 600,
-                margin: '0 auto',
-                padding: '7px 14px 6px 11px !important',
-            },
-        },
-    },
-    dialogContent: {
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            display: 'flex',
-            flexDirection: 'column',
-            maxWidth: 600,
-            margin: '0 auto',
-            padding: '7px 14px 6px !important',
-        },
-    },
-    dialogActions: {
-        padding: '10px 15px',
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            maxWidth: 600,
-            margin: '0 auto',
-            padding: '7px 14px 6px !important',
-        },
-    },
-    dialogBackdropRoot: {
-        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
-    },
-}))

@@ -1,4 +1,5 @@
-import { Button, makeStyles, TextField } from '@material-ui/core'
+import { Button, TextField } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { Avatar, useI18N } from '../../../../utils'
 import Services from '../../../service'
@@ -7,16 +8,22 @@ import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'
 import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
 import type { ContactProps } from './types'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()({
     avatar: {
         width: '64px',
         height: '64px',
     },
-}))
+})
 
-export function DashboardContactDialog(props: WrappedDialogProps<ContactProps & { onUpdated: () => void }>) {
+export function DashboardContactDialog(
+    props: WrappedDialogProps<
+        ContactProps & {
+            onUpdated: () => void
+        }
+    >,
+) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { contact, onUpdated } = props.ComponentProps!
     const [nickname, setNickname] = useState(contact.nickname)
     const [avatarURL, setAvatarURL] = useState(contact.avatar)

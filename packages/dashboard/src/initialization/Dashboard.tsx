@@ -1,12 +1,11 @@
 import { HashRouter } from 'react-router-dom'
 import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@material-ui/core'
-import { StylesProvider } from '@material-ui/styles'
 import {
     CustomSnackbarProvider,
     MaskLightTheme,
     applyMaskColorVars,
     MaskDarkTheme,
-    useSystemPreferencePalatte,
+    useSystemPreferencePalette,
     NoEffectUsePortalShadowRootContext,
 } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared'
@@ -20,12 +19,13 @@ import { Pages } from '../pages/routes'
 import { useAppearance } from '../pages/Personas/api'
 import { Web3Provider } from '@masknet/web3-shared'
 import { Web3Context } from '../web3/context'
+import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
 export default function DashboardRoot() {
     const settings = useAppearance()
-    const mode = useSystemPreferencePalatte()
+    const mode = useSystemPreferencePalette()
     const themes: Record<typeof settings, Theme> = {
         dark: MaskDarkTheme,
         light: MaskLightTheme,
@@ -40,8 +40,8 @@ export default function DashboardRoot() {
             <Web3Provider value={Web3Context}>
                 <I18nextProvider i18n={i18n}>
                     <StyledEngineProvider injectFirst>
-                        <StylesProvider>
-                            <ThemeProvider theme={theme}>
+                        <ThemeProvider theme={theme}>
+                            <PersonaContext.Provider>
                                 <ErrorBoundary>
                                     <CssBaseline />
                                     <CustomSnackbarProvider>
@@ -51,8 +51,8 @@ export default function DashboardRoot() {
                                         <PluginRender />
                                     </CustomSnackbarProvider>
                                 </ErrorBoundary>
-                            </ThemeProvider>
-                        </StylesProvider>
+                            </PersonaContext.Provider>
+                        </ThemeProvider>
                     </StyledEngineProvider>
                 </I18nextProvider>
             </Web3Provider>

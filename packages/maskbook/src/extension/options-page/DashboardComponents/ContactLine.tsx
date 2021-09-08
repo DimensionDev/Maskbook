@@ -1,5 +1,6 @@
-import { Typography, IconButton, MenuItem, ListItem, ListItemTypeMap } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { Typography, IconButton, MenuItem, ListItemTypeMap } from '@material-ui/core'
+import ListItemButton from '@material-ui/core/ListItemButton'
+import { makeStyles } from '@masknet/theme'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import type { Profile } from '../../../database'
 import { Avatar, useMenu, useI18N, useMatchXS } from '../../../utils'
@@ -7,7 +8,7 @@ import { useModal } from '../DashboardDialogs/Base'
 import { DashboardContactDialog, DashboardContactDeleteConfirmDialog } from '../DashboardDialogs/Contact'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     line: {
         display: 'flex',
         alignItems: 'center',
@@ -55,7 +56,7 @@ interface ContactLineProps extends Partial<DefaultComponentProps<ListItemTypeMap
 
 export function ContactLine(props: ContactLineProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { contact, onUpdated, onDeleted, ...rest } = props
     const [contactDialog, openContactDialog] = useModal(DashboardContactDialog, { contact, onUpdated })
     const xsMatched = useMatchXS()
@@ -70,7 +71,7 @@ export function ContactLine(props: ContactLineProps) {
     return (
         <>
             {/* // TODO: Use standard ListItemAvatar, ListItemText and ListItemSecondaryAction instead of custom one. */}
-            <ListItem button selected={false} onClick={openContactDialog} className={classes.line} {...rest}>
+            <ListItemButton selected={false} onClick={openContactDialog} className={classes.line} {...rest}>
                 <Avatar className={classes.avatar} person={contact} />
                 <Typography className={classes.user}>{contact.nickname || contact.identifier.userId}</Typography>
                 <Typography className={classes.provider}>@{contact.identifier.network}</Typography>
@@ -88,7 +89,7 @@ export function ContactLine(props: ContactLineProps) {
                     }}>
                     <MoreHorizIcon />
                 </IconButton>
-            </ListItem>
+            </ListItemButton>
             {menu}
             {contactDialog}
             {deleteContactConfirmDialog}

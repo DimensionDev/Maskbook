@@ -18,7 +18,7 @@ import { postParser } from '../utils/fetch'
 import { postContentSelector } from '../utils/selector'
 
 export const PostProviderMinds: Next.CollectingCapabilities.PostsProvider = {
-    posts: creator.PostProviderStore(),
+    posts: creator.EmptyPostProviderState(),
     start(signal) {
         collectPostsMindsInner(this.posts, signal)
     },

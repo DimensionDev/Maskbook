@@ -1,7 +1,8 @@
-import { makeStyles, Theme, Link, Typography } from '@material-ui/core'
+import { Link, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { Period } from '../types'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         top: 0,
         right: 0,
@@ -27,7 +28,7 @@ export interface PriceChartPeriodControlProps {
 }
 
 export function PriceChartPeriodControl(props: PriceChartPeriodControlProps) {
-    const classes = useStyles()
+    const { classes } = useStyles()
     return (
         <div className={classes.root}>
             {[Period.D1, Period.W1, Period.M1, Period.M3, Period.M6].map((period) => (

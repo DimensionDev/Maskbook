@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
-import { Button, DialogContent, DialogActions, makeStyles, TextField } from '@material-ui/core'
+import { Button, DialogContent, DialogActions, TextField } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import type { Wallet } from '@masknet/web3-shared'
 import { WalletMessages, WalletRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -7,7 +8,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useSnackbarCallback } from '../../../extension/options-page/DashboardDialogs/Base'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(2, 4, 3),
     },
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function WalletRenameWalletDialog() {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const [name, setName] = useState('')
     const [wallet, setWallet] = useState<Wallet | null>(null)
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.walletRenameDialogUpdated)

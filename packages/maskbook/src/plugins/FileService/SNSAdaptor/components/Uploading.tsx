@@ -1,4 +1,5 @@
-import { Grid, makeStyles, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { useEffect, useState } from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router'
@@ -11,7 +12,7 @@ import { useExchange } from '../hooks/Exchange'
 import { FileName } from './FileName'
 import { ProgressBar } from './ProgressBar'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
     container: {
         height: 250,
         flexDirection: 'column',
@@ -45,7 +46,7 @@ interface RouteState {
 
 export const Uploading: React.FC = () => {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
     const history = useHistory()
     const { onUploading } = useExchange()
     const [startedAt] = useState(Date.now())

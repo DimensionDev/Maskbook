@@ -2,7 +2,8 @@ import { useMemo } from 'react'
 import classNames from 'classnames'
 import { noop } from 'lodash-es'
 import BigNumber from 'bignumber.js'
-import { IconButton, makeStyles, Typography } from '@material-ui/core'
+import { IconButton, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import TuneIcon from '@material-ui/icons/Tune'
 import RefreshOutlined from '@material-ui/icons/RefreshOutlined'
@@ -12,7 +13,7 @@ import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { EthereumTokenType, formatPercentage, FungibleTokenDetailed, isLessThan, pow10 } from '@masknet/web3-shared'
-import { currentSlippageTolerance } from '../../settings'
+import { currentSlippageSettings } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { isNativeTokenWrapper, toBips } from '../../helpers'
 import { resolveUniswapWarningLevel } from '../../pipes'
@@ -21,7 +22,7 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/Ethereum
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { MINIMUM_AMOUNT } from '../../constants'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         form: {
             marginTop: theme.spacing(2),
@@ -219,8 +220,8 @@ export function TradeForm(props: TradeFormProps) {
             <div className={classes.section}>
                 <div className={classes.status}>
                     <Typography className={classes.label} color="textSecondary" variant="body2">
-                        {t('plugin_trader_slipage_tolerance')}{' '}
-                        {formatPercentage(toBips(currentSlippageTolerance.value))}
+                        {t('plugin_trader_slippage_tolerance')}{' '}
+                        {formatPercentage(toBips(currentSlippageSettings.value))}
                     </Typography>
                     <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
                         <RefreshOutlined fontSize="small" />

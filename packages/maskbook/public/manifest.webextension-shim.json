@@ -7,5 +7,5 @@
         "^.{3,18}:\\/\\/wc\\?uri=wc:",
         "^argent:\\/\\/app\\/wc\\?uri=wc:"
     ],
-    "user-scripts": ["js/injected-script.js"]
+    "user-scripts": ["injected-script.js"]
 }

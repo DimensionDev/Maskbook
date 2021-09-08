@@ -1,12 +1,12 @@
 import { memo, useMemo } from 'react'
 import { RedPacketIcon, CloseIcon, UploadIcon, InteractionIcon, DownloadIcon } from '@masknet/icons'
 import { FilterTransactionType, isSameAddress, useRedPacketConstants } from '@masknet/web3-shared'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@masknet/theme'
 import { Box } from '@material-ui/core'
 import classNames from 'classnames'
 import { MaskColorVar } from '@masknet/theme'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()(() => ({
     container: {
         width: 36,
         height: 36,
@@ -53,13 +53,13 @@ export interface TransactionIconUIProps {
 }
 
 export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRedPacket, transactionType }) => {
-    const classes = useStyles()
+    const { classes } = useStyles()
     const icon = useMemo(() => {
         if (isFailed) return <CloseIcon style={{ stroke: MaskColorVar.redMain }} className={classes.icon} />
         if (isRedPacket) return <RedPacketIcon className={classes.icon} />
 
         switch (transactionType) {
-            case FilterTransactionType.SENT:
+            case FilterTransactionType.SEND:
                 return <UploadIcon style={{ stroke: MaskColorVar.warning }} className={classes.icon} />
             case FilterTransactionType.RECEIVE:
                 return <DownloadIcon style={{ stroke: MaskColorVar.greenMain }} className={classes.icon} />

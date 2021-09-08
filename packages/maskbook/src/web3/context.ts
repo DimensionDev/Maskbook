@@ -1,19 +1,13 @@
 import { noop, pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import {
-    createERC721Token,
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    Wallet,
-    Web3ProviderType,
-} from '@masknet/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderType } from '@masknet/web3-shared'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
-    currentGasPriceSettings,
     currentBalanceSettings,
     currentNonceSettings,
     currentAccountSettings,
+    currentGasPriceSettings,
     currentNetworkSettings,
     currentProviderSettings,
     currentChainIdSettings,
@@ -39,9 +33,9 @@ export const Web3Context: Web3ProviderType = {
     chainId: createSubscriptionFromSettings(currentChainIdSettings),
     account: createSubscriptionFromSettings(currentAccountSettings),
     balance: createSubscriptionFromSettings(currentBalanceSettings),
+    gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
     blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
     nonce: createSubscriptionFromSettings(currentNonceSettings),
-    gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
     etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
     wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
     providerType: createSubscriptionFromSettings(currentProviderSettings),
@@ -54,8 +48,9 @@ export const Web3Context: Web3ProviderType = {
     ),
     getERC20TokensPaged,
     portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
-    getAssetList: WalletRPC.getAssetsList,
+    getAssetsList: WalletRPC.getAssetsList,
     getAssetsListNFT: WalletRPC.getAssetsListNFT,
+    getAddressNamesList: WalletRPC.getAddressNames,
     getERC721TokensPaged,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
     getTransactionList: WalletRPC.getTransactionList,
@@ -96,18 +91,7 @@ async function getERC20TokensPaged(index: number, count: number, query?: string)
 }
 
 async function getERC721TokensPaged(index: number, count: number, query?: string) {
-    const raw = await WalletRPC.getERC721TokensPaged(index, count, query)
-    return raw.map((x) =>
-        createERC721Token(x.chainId, x.tokenId, x.address, x.name, x.symbol, x.baseURI, x.tokenURI, {
-            name: x.assetName,
-            description: x.assetDescription,
-            image: x.assetImage,
-        }),
-    )
-}
-
-async function getERC721Tokens() {
-    return []
+    return WalletRPC.getERC721TokensPaged(index, count, query)
 }
 
 // utils

@@ -1,43 +1,29 @@
-import { Tab, Tabs } from '@material-ui/core'
-import { TabContext, TabPanel, TabPanelClasses } from '@material-ui/lab'
-import { useEffect, useState } from 'react'
-import { ButtonGroupTabList, ButtonGroupTabListProps } from '../Components'
+import { useCallback } from 'react'
+import { useState } from 'react'
 
-export interface useTabsOptions {
-    variant?: 'standard' | 'buttonGroup'
-    tabPanelClasses?: TabPanelClasses
-    buttonTabGroupClasses?: ButtonGroupTabListProps['classes']
-}
-export function useTabs<T extends string>(
-    tabGroupName: string,
-    tabLabels: Record<T, string>,
-    children: Record<T, React.ReactChild>,
-    options?: useTabsOptions,
-) {
-    const items = Object.keys(children) as T[]
-    const first = items[0]
-    const [currentTab, setState] = useState(items[0])
-    useEffect(() => {
-        if (!currentTab || (!items.includes(currentTab) && first)) setState(first)
-    }, [currentTab, first, items.join(';')])
+/**
+ * @example
+ *  const [currentTab, onChange, tabs, setTab] = useTab('tab1', 'tab2', 'tab3')
+ *  return (
+ *      <TabContext value={currentTab}>
+ *          <TabList onChange={onChange}>
+ *              <Tab label="Item One" value={tabs.tab1} />
+ *              <Tab label="Item Two" value={tabs.tab2} />
+ *              <Tab label="Item Three" value={tabs.tab3} />
+ *          </TabList>
+ *          <TabPanel value={tabs.tab1}>Item One</TabPanel>
+ *          <TabPanel value={tabs.tab2}>Item Two</TabPanel>
+ *          <TabPanel value={tabs.tab3}>Item Three</TabPanel>
+ *      </TabContext>
+ *  )
+ */
+export function useTabs<T extends string>(defaultTab: T, ...possibleTabs: T[]) {
+    const [currentTab, setTab] = useState(defaultTab)
+    const enum_: Record<T, T> = { [defaultTab]: defaultTab } as any
+    possibleTabs.forEach((t) => (enum_[t] = t))
 
-    const tabs = items.map((item) => <Tab value={item} key={item} label={tabLabels[item]} />)
-
-    return (
-        <TabContext value={currentTab}>
-            {options?.variant === 'buttonGroup' ? (
-                <ButtonGroupTabList
-                    aria-label={tabGroupName}
-                    onChange={(e, v) => setState(v as T)}
-                    children={tabs}
-                    classes={options?.buttonTabGroupClasses}
-                />
-            ) : (
-                <Tabs value={currentTab} aria-label={tabGroupName} children={tabs} />
-            )}
-            {items.map((item) => (
-                <TabPanel key={item} value={item} children={children[item]} classes={options?.tabPanelClasses} />
-            ))}
-        </TabContext>
-    )
+    const onChange = useCallback((event: unknown, value: any) => {
+        setTab(value)
+    }, [])
+    return [currentTab, onChange, enum_, setTab] as const
 }

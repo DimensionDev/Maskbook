@@ -1,7 +1,6 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react'
 import {
     Box,
-    makeStyles,
     Pagination,
     PaginationItem,
     Table,
@@ -11,16 +10,16 @@ import {
     TableHead,
     TableRow,
 } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
-import { LoadingPlaceholder } from '../LoadingPlacholder'
+import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { TokenTableRow } from '../TokenTableRow'
 import { Asset, formatBalance, useAssets, useERC20TokensPaged } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { ceil } from 'lodash-es'
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         height: 'calc(100% - 58px)',
         display: 'flex',
@@ -92,8 +91,7 @@ export interface TokenTableUIProps {
 export const TokenTableUI = memo<TokenTableUIProps>(
     ({ page, onPageChange, isLoading, isEmpty, showPagination, dataSource, count }) => {
         const t = useDashboardI18N()
-        const classes = useStyles()
-
+        const { classes } = useStyles()
         return (
             <>
                 <TableContainer className={classes.container}>

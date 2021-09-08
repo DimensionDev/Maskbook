@@ -1,22 +1,7 @@
 import { MaskDialog } from '@masknet/theme'
-import {
-    DialogContent,
-    DialogActions,
-    Button,
-    dialogContentClasses,
-    experimentalStyled as styled,
-    buttonClasses,
-} from '@material-ui/core'
-
-const StyledDialogContent = styled(DialogContent)(() => ({
-    [`&.${dialogContentClasses.root}`]: {
-        paddingLeft: 90,
-        paddingRight: 90,
-        minHeight: 168,
-        display: 'flex',
-        alignItems: 'center',
-    },
-}))
+import type { PropsWithChildren, ReactNode } from 'react'
+import { DialogContent, DialogActions, Button, styled, buttonClasses } from '@material-ui/core'
+import { useDashboardI18N } from '../../locales'
 
 const StyledButton: typeof Button = styled(Button)(() => ({
     [`&.${buttonClasses.root}`]: {
@@ -24,30 +9,33 @@ const StyledButton: typeof Button = styled(Button)(() => ({
     },
 })) as any
 
-export interface ConfirmDialogProps extends React.PropsWithChildren<{}> {
+export interface ConfirmDialogProps extends PropsWithChildren<{}> {
     title: string
     open: boolean
-    cancelText?: React.ReactNode | string
-    confirmText?: React.ReactNode | string
+    cancelText?: ReactNode | string
+    confirmText?: ReactNode | string
     confirmDisabled?: boolean
+    maxWidth?: false | 'sm' | 'xs' | 'md' | 'lg' | 'xl'
     onClose(): void
-    onConfirm(): void
+    onConfirm?(): void
 }
 
 export default function ConfirmDialog(props: ConfirmDialogProps) {
+    const t = useDashboardI18N()
     const {
         title,
         open,
         onClose,
         onConfirm,
         children,
-        cancelText = 'Cancel',
-        confirmText = 'Confirm',
+        maxWidth = 'sm',
+        cancelText = t.settings_button_cancel(),
+        confirmText = t.settings_button_confirm(),
         confirmDisabled = false,
     } = props
     return (
-        <MaskDialog title={title} fullWidth maxWidth="sm" open={open} onClose={onClose}>
-            <StyledDialogContent>{children}</StyledDialogContent>
+        <MaskDialog title={title} fullWidth maxWidth={maxWidth} open={open} onClose={onClose}>
+            <DialogContent>{children}</DialogContent>
             <DialogActions>
                 <StyledButton onClick={onClose} color="secondary">
                     {cancelText}

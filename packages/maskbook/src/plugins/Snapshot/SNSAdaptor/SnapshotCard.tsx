@@ -1,6 +1,6 @@
-import { Card, makeStyles, CardContent, CardHeader, Typography } from '@material-ui/core'
-
-const useStyles = makeStyles((theme) => {
+import { Card, CardContent, CardHeader, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             minHeight: 120,
@@ -39,8 +39,7 @@ export interface SnapshotCardProps {
 export function SnapshotCard(props: SnapshotCardProps) {
     const { title, children } = props
 
-    const classes = useStyles()
-
+    const { classes } = useStyles()
     return (
         <Card className={classes.root} variant="outlined">
             <CardHeader className={classes.header} title={<Typography className={classes.title}>{title}</Typography>} />

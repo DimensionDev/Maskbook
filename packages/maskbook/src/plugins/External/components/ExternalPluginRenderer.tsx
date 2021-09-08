@@ -7,7 +7,7 @@ import { createThirdPartyPopupContext } from '../popup-context'
 import { useExternalPluginManifest, useExternalPluginTemplate } from '../loader'
 
 setHostConfig({
-    permissionAwareOpen(url) {
+    permissionAwareOpen(url: string) {
         Services.ThirdPartyPlugin.openPluginPopup(PermissionAwareRedirectOf(url, createThirdPartyPopupContext()))
     },
 })

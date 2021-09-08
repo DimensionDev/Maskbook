@@ -1,19 +1,25 @@
-import { formatEthereumAddress, resolveAddressLinkOnExplorer, resolveIPFSLink, useChainId } from '@masknet/web3-shared'
-import { Avatar, Badge, Box, Link, List, ListItem, makeStyles, Typography } from '@material-ui/core'
+import {
+    formatEthereumAddress,
+    resolveAddressLinkOnExplorer,
+    resolveIPFSLink,
+    useChainId,
+    formatPercentage,
+} from '@masknet/web3-shared'
+import { Avatar, Badge, Box, Link, List, ListItem, Typography } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import millify from 'millify'
 import { useContext } from 'react'
-import { useI18N } from '../../../utils'
+import { useI18N, ShadowRootTooltip } from '../../../utils'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
 import { SnapshotContext } from '../context'
 import { useRetry } from './hooks/useRetry'
 import { useVotes } from './hooks/useVotes'
-import type { VoteItem } from '../types'
 import { LoadingCard } from './LoadingCard'
 import { LoadingFailCard } from './LoadingFailCard'
 import { SnapshotCard } from './SnapshotCard'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         list: {
             display: 'flex',
@@ -32,13 +38,17 @@ const useStyles = makeStyles((theme) => {
             borderBottom: `1px solid ${theme.palette.divider}`,
         },
         anchorTopRight: {
-            transform: 'translateX(36px) translateY(4.5px)',
+            transform: 'translateX(40px) translateY(2.5px)',
         },
         avatarWrapper: {
             marginRight: 8,
         },
         choice: {
             flexGrow: 1,
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            maxWidth: 180,
         },
         ellipsisText: {
             textOverflow: 'ellipsis',
@@ -57,6 +67,9 @@ const useStyles = makeStyles((theme) => {
             textDecoration: 'none !important',
             marginRight: 16,
         },
+        shadowRootTooltip: {
+            color: 'white',
+        },
     }
 })
 
@@ -64,9 +77,8 @@ function Content() {
     const chainId = useChainId()
     const identifier = useContext(SnapshotContext)
     const { payload: votes } = useVotes(identifier)
-    const classes = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
-    const voteEntries = Object.entries(votes)
 
     return (
         <SnapshotCard
@@ -74,39 +86,60 @@ function Content() {
                 <Badge
                     max={9999999}
                     classes={{ anchorOriginTopRightRectangular: classes.anchorTopRight }}
-                    badgeContent={voteEntries.length}
+                    badgeContent={votes.length}
                     color="primary">
                     {t('plugin_snapshot_votes_title')}
                 </Badge>
             }>
             <List className={classes.list}>
-                {voteEntries.map((voteEntry: [string, VoteItem]) => {
+                {votes.map((v) => {
+                    const fullChoiceText =
+                        v.totalWeight && v.choices
+                            ? v.choices.reduce((acc, choice, i) => {
+                                  return (
+                                      acc +
+                                      (i === 0 ? '' : ', ') +
+                                      formatPercentage(choice.weight / v.totalWeight!) +
+                                      ' ' +
+                                      choice.name
+                                  )
+                              }, '')
+                            : null
                     return (
-                        <ListItem className={classes.listItem} key={voteEntry[0]}>
+                        <ListItem className={classes.listItem} key={v.address}>
                             <Link
                                 className={classNames(classes.link, classes.ellipsisText)}
                                 target="_blank"
                                 rel="noopener"
-                                href={resolveAddressLinkOnExplorer(chainId, voteEntry[0])}>
+                                href={resolveAddressLinkOnExplorer(chainId, v.address)}>
                                 <Box className={classes.avatarWrapper}>
-                                    {voteEntry[1].authorAvatar ? (
-                                        <Avatar
-                                            src={resolveIPFSLink(voteEntry[1].authorAvatar)}
-                                            className={classes.avatar}
-                                        />
+                                    {v.authorAvatar ? (
+                                        <Avatar src={resolveIPFSLink(v.authorAvatar)} className={classes.avatar} />
                                     ) : (
-                                        <EthereumBlockie address={voteEntry[0]} />
+                                        <EthereumBlockie address={v.address} />
                                     )}
                                 </Box>
-                                <Typography>
-                                    {voteEntry[1].authorName ?? formatEthereumAddress(voteEntry[0], 4)}
-                                </Typography>
+                                <Typography>{v.authorName ?? formatEthereumAddress(v.address, 4)}</Typography>
                             </Link>
-                            <Typography className={classes.choice}>{voteEntry[1].choice}</Typography>
+                            {v.choice ? (
+                                <Typography className={classes.choice}>{v.choice}</Typography>
+                            ) : v.choices ? (
+                                <ShadowRootTooltip
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    title={
+                                        <Typography className={classes.shadowRootTooltip}>{fullChoiceText}</Typography>
+                                    }
+                                    placement="top"
+                                    arrow>
+                                    <Typography className={classes.choice}>{fullChoiceText}</Typography>
+                                </ShadowRootTooltip>
+                            ) : null}
                             <Typography>
-                                {millify(voteEntry[1].balance, { precision: 2, lowercase: true }) +
+                                {millify(v.balance, { precision: 2, lowercase: true }) +
                                     ' ' +
-                                    (voteEntry[1].strategySymbol ? voteEntry[1].strategySymbol.toUpperCase() : '')}
+                                    (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
                             </Typography>
                         </ListItem>
                     )
