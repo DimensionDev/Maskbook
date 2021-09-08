@@ -1,22 +1,23 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTAvatarAmountIcon } from '@masknet/icons'
-import type { ProfileIdentifier } from '@masknet/shared-base'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import { Link, Typography } from '@material-ui/core'
 import { getNFTAvatar, setOrClearAvatar } from '../../../components/InjectedComponents/NFTAvatar'
-import Services from '../../../extension/service'
 import type { PostInfo } from '../../../social-network/PostInfo'
-import { createReactRootShadowed, Flags, memoizePromise, startWatch } from '../../../utils'
+import { createReactRootShadowed, Flags, startWatch } from '../../../utils'
 import { selfInfoSelectors } from '../utils/selector'
 import { updateAvatarFromDB, updateAvatarImage } from '../utils/updateAvatarImage'
 
-export function injectAvatorInTwitter(signal: AbortSignal, post: PostInfo) {
+export function injectAvatarInTwitter(signal: AbortSignal, post: PostInfo) {
     const ls = new LiveSelector([post.rootNodeProxy])
         .map((x) => x.current.firstChild?.firstChild?.firstChild as HTMLDivElement)
         .enableSingleMode()
 
-    ifUsingMaskbook(post.postBy.getCurrentValue()).then(add, remove)
-    post.postBy.subscribe(() => ifUsingMaskbook(post.postBy.getCurrentValue()).then(add, remove))
+    post.postBy.subscribe(() => {
+        add()
+        return () => remove()
+    })
+    add()
     let remover = () => {}
     async function add() {
         if (signal?.aborted) return
@@ -125,9 +126,3 @@ export async function injectUserNFTAvatarAtTwitter(signal: AbortSignal) {
       _(twitterMainAvatarSelector, signal, twitterId, twitterMainAvatarSelector().evaluate())
       */
 }
-
-const ifUsingMaskbook = memoizePromise(
-    (pid: ProfileIdentifier) =>
-        Services.Identity.queryProfile(pid).then((x) => (!!x.linkedPersona ? Promise.resolve() : Promise.reject())),
-    (pid: ProfileIdentifier) => pid.toText(),
-)
