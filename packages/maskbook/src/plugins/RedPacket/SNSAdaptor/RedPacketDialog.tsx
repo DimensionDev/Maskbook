@@ -243,7 +243,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     return (
         <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={onClose}>
             <DialogContent>
-                {step === CreateRedPacketPageStep.NewRedPacketPage ? <AbstractTab height={570} {...tabProps} /> : null}
+                {step === CreateRedPacketPageStep.NewRedPacketPage ? <AbstractTab height={520} {...tabProps} /> : null}
                 {step === CreateRedPacketPageStep.ConfirmPage ? (
                     <RedPacketConfirmDialog
                         onClose={onClose}
