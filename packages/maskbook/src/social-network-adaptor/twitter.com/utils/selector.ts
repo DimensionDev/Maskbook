@@ -173,9 +173,14 @@ export const selfInfoSelectors = () => ({
 })
 
 //#region nft avatar
-export const searchAvatarSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
+export const searchProfileAvatarSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
+
+export const searchProfileAvatarParentSelector = () =>
+    querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]').at(1).closest<HTMLDivElement>(2).evaluate()[0]
+        .firstChild?.firstChild?.lastChild?.firstChild as HTMLDivElement
+
 export const searchAvatarSelectorInput = () =>
-    querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]')
+    querySelectorAll<E>('[data-testid="fileInput"]')
         .at(1)
         .closest<HTMLDivElement>(2)
         .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > :first-child')
@@ -185,7 +190,7 @@ export const searchAvatarSelectorImage = () =>
         .closest<HTMLDivElement>(2)
         .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > img')
 
-export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
+export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(0)
 export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
 //#endregion
 

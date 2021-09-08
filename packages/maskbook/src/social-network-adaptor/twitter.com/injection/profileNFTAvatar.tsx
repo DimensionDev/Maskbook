@@ -4,20 +4,19 @@ import { makeStyles } from '@masknet/theme'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared'
 import { useCallback, useEffect, useState } from 'react'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
-import { AvatarMetaDB, NFTAvatar, useNFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
-import Services from '../../../extension/service'
+import { NFTAvatar, useNFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { createReactRootShadowed, MaskMessage, startWatch } from '../../../utils'
+import { createReactRootShadowed, MaskMessage, NFTAVatarEvent, startWatch } from '../../../utils'
 import {
-    searchAvatarSelector,
-    searchAvatarSelectorImage,
-    searchAvatarSelectorInput,
+    searchProfileAvatarSelector,
     searchProfileSaveSelector,
+    searchProfileAvatarParentSelector,
 } from '../utils/selector'
+import { updateAvatarImage } from '../utils/updateAvatarImage'
 import { getTwitterId } from '../utils/user'
 
-export function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchAvatarSelector())
+export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
+    const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInTwitter />)
 }
@@ -45,50 +44,48 @@ function useGetCurrentUserInfo(): { userId?: string; identifier?: ProfileIdentif
     return userInfo?.[0]
 }
 
-function NFTAvatarInTwitter() {
+interface NFTAvatarInTwitterProps {}
+
+function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const { classes } = useStyles()
-    const twitterId = getTwitterId()
     const useInfo = useGetCurrentUserInfo()
+
+    const [twitterId, setTwitterId] = useState(getTwitterId())
     const avatar = useNFTAvatar(twitterId)
-    const profileSave = searchProfileSaveSelector().evaluate()
-    const [avatarMeta, setAvatarMeta] = useState<AvatarMetaDB>({} as AvatarMetaDB)
+    const [avatarEvent, setAvatarEvent] = useState<NFTAVatarEvent>({} as NFTAVatarEvent)
+
     const onChange = useCallback(async (token: ERC721TokenDetailed) => {
-        UpdateAvatar(token.info.image ?? '')
-        const metaData = {
+        setAvatarEvent({
             userId: twitterId,
-            amount: '0',
             tokenId: token.tokenId,
             address: token.contractDetailed.address,
             image: token.info.image ?? '',
-            symbol: token.contractDetailed.symbol,
-            name: token.contractDetailed.name,
             avatarId: '',
-        }
-        setAvatarMeta(metaData)
+            amount: '0',
+        })
+        const parent = searchProfileAvatarParentSelector()
+        if (!parent) return
+        updateAvatarImage(parent, token.info.image)
     }, [])
 
-    useEffect(() => {
-        profileSave?.addEventListener('click', () => MaskMessage.events.NFTAvatarUpdated.sendToLocal(avatarMeta))
-        return () =>
-            profileSave?.removeEventListener('click', () => MaskMessage.events.NFTAvatarUpdated.sendToLocal(avatarMeta))
-    }, [profileSave, avatarMeta])
+    const handler = () => {
+        if (!avatar) return
+        MaskMessage.events.NFTAvatarUpdated.sendToLocal(avatarEvent)
+    }
 
     useEffect(() => {
-        UpdateAvatar(avatar?.image ?? '')
+        setTwitterId(getTwitterId())
+        const parent = searchProfileAvatarParentSelector()
+        if (parent && avatar) updateAvatarImage(parent, avatar.image)
     }, [avatar])
+
+    useEffect(() => {
+        const profileSave = searchProfileSaveSelector().evaluate()
+        if (!profileSave) return
+        profileSave.addEventListener('click', handler)
+        return () => profileSave.removeEventListener('click', handler)
+    }, [handler])
 
     if (twitterId !== useInfo?.userId) return null
     return <NFTAvatar onChange={onChange} classes={classes} />
-}
-
-async function UpdateAvatar(image: string) {
-    const blob = await Services.Helper.fetch(image)
-    if (!blob) return
-    const blobURL = URL.createObjectURL(blob)
-    const avatarInput = searchAvatarSelectorInput().evaluate()[0]
-    if (!avatarInput) return
-    avatarInput.style.backgroundImage = `url("${blobURL.toString()}")`
-    const avatarImage = searchAvatarSelectorImage().evaluate()[0]
-    if (!avatarImage) return
-    avatarImage.setAttribute('src', blobURL.toString())
 }

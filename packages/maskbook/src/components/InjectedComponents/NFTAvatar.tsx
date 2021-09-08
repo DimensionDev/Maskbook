@@ -244,48 +244,44 @@ export async function saveNFTAvatar(userId: string, avatarId: string, contract: 
         amount: order ? new BigNumber(getOrderUnitPrice(order) ?? 0).toFixed() : '0',
         userId,
         address: contract,
-        tokenId,
-        avatarId,
+        tokenId: tokenId,
+        avatarId: avatarId ?? userId,
         name: asset.assetContract.name,
         symbol: asset.assetContract.tokenSymbol,
         image: asset.imageUrl ?? asset.imagePreviewUrl ?? '',
     }
 
-    await AvatarGUN
-        //@ts-ignore
-        .get(userId)
-        //@ts-ignore
-        .put(avatarMeta).then!()
-
+    await setOrClearAvatar(userId, avatarMeta)
     return avatarMeta
 }
 
 export function useNFTAvatar(userId?: string) {
     return useAsync(async () => {
         if (!userId) return undefined
-        const b = await AvatarGUN.then!()
-        console.log('id:', userId)
-        console.log(b)
-        const avatar = (await AvatarGUN
+
+        const avatar = await AvatarGUN
             //@ts-ignore
-            .get(userId).then!()) as AvatarMetaData
-        console.log(avatar)
-        return avatar
+            .get(userId).then!()
+
+        delete avatar._
+        return avatar as AvatarMetaDB
     }, [userId]).value
 }
 
-export async function getNFTAvator(userId: string) {
-    return (
-        (await AvatarGUN
-            //@ts-ignore
-            .get(userId).then!()) as AvatarMetaData
-    )
+export async function getNFTAvatar(userId: string) {
+    const avatarDB = await AvatarGUN
+        //@ts-ignore
+        .get(userId).then!()
+
+    delete avatarDB._
+
+    return avatarDB as AvatarMetaDB
 }
 
-export async function clearAvatar(userId: string) {
+export async function setOrClearAvatar(userId: string, avatar?: AvatarMetaDB) {
     await AvatarGUN
         //@ts-ignore
         .get(userId)
         //@ts-ignore
-        .put(null).then!()
+        .put(avatar ? avatar : null).then!()
 }

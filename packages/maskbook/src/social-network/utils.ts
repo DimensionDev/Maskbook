@@ -31,7 +31,7 @@ export const creator = {
 
 export const createorAvatar = {
     IdentityResolveProviderLastRecognized:
-        (): SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['lastRecognized'] =>
+        (): SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'] =>
             new ValueRef({ identifier: ProfileIdentifier.unknown }),
     AvatarProviderStore: (): SocialNetworkUI.CollectingCapabilities.AvatarProvider['avatarPosts'] =>
         new ObservableWeakMap(),

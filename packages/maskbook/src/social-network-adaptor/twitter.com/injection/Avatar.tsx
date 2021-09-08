@@ -3,27 +3,12 @@ import { NFTAvatarAmountIcon } from '@masknet/icons'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import { Link, Typography } from '@material-ui/core'
-import { AvatarMetaDB, getNFTAvator } from '../../../components/InjectedComponents/NFTAvatar'
+import { getNFTAvatar, setOrClearAvatar } from '../../../components/InjectedComponents/NFTAvatar'
 import Services from '../../../extension/service'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { createReactRootShadowed, Flags, memoizePromise, startWatch } from '../../../utils'
-import {
-    searchAccountSwitherButtonSelector,
-    searchUseCellSelector,
-    selfInfoSelectors,
-    twitterMainAvatarSelector,
-} from '../utils/selector'
-import { updateAvatarFromDB, updateAvatarImage } from './NFTAvatarInTwitter'
-
-function updateNFTAvatar(avatarMeta: AvatarMetaDB, parent: HTMLDivElement | null) {
-    if (!parent) return
-    const eleAvator = parent.querySelector<HTMLDivElement>('div > :nth-child(2) > div > div')
-    if (!eleAvator) return
-    eleAvator.style.backgroundImage = `url(${new URL(avatarMeta.image ?? '', import.meta.url)})`
-    const eleAvatorImage = eleAvator?.querySelector('img')
-    if (!eleAvatorImage) return
-    eleAvatorImage.setAttribute('src', `url(${new URL(avatarMeta.image ?? '', import.meta.url)})`)
-}
+import { selfInfoSelectors } from '../utils/selector'
+import { updateAvatarFromDB, updateAvatarImage } from '../utils/updateAvatarImage'
 
 export function injectAvatorInTwitter(signal: AbortSignal, post: PostInfo) {
     const ls = new LiveSelector([post.rootNodeProxy])
@@ -39,13 +24,15 @@ export function injectAvatorInTwitter(signal: AbortSignal, post: PostInfo) {
         if (!node) return
         const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
         proxy.realCurrent = node
-        const avatarMeta = await getNFTAvator(post.postBy.getCurrentValue().userId)
-        if (!avatarMeta || !avatarMeta.image) return
-        //updateNFTAvatar(avatarMeta, node.firstChild?.firstChild?.lastChild?.firstChild as HTMLDivElement)
-        const avatarParentNode = (
-            node.firstChild?.firstChild?.lastChild?.firstChild as HTMLDivElement
-        ).querySelector<HTMLDivElement>('div > :nth-child(2) > div > div')
-        if (avatarParentNode) updateAvatarImage(avatarParentNode, avatarMeta.image)
+        const avatarParentNode = node.firstChild?.firstChild?.lastChild?.firstChild as HTMLDivElement
+        if (!avatarParentNode) return
+        const avatarMeta = await getNFTAvatar(post.postBy.getCurrentValue().userId)
+        if (!avatarMeta || !avatarMeta.image) {
+            setOrClearAvatar(post.postBy.getCurrentValue().userId)
+            updateAvatarImage(avatarParentNode)
+            return
+        }
+        updateAvatarImage(avatarParentNode, avatarMeta.image)
         const root = createReactRootShadowed(proxy.afterShadow, { signal })
         root.render(
             <div
@@ -113,7 +100,7 @@ function _(main: () => LiveSelector<HTMLElement, true>, signal: AbortSignal, twi
 
 export async function injectUserNFTAvatarAtTwitter(signal: AbortSignal) {
     const twitterId = selfInfoSelectors().handle.evaluate()
-
+    /*
     _(
         searchAccountSwitherButtonSelector,
         signal,
@@ -135,7 +122,8 @@ export async function injectUserNFTAvatarAtTwitter(signal: AbortSignal) {
         searchUseCellSelector().querySelector<HTMLElement>('div > div > div > div > :last-child > div').evaluate(),
     )
 
-    _(twitterMainAvatarSelector, signal, twitterId, twitterMainAvatarSelector().evaluate())
+      _(twitterMainAvatarSelector, signal, twitterId, twitterMainAvatarSelector().evaluate())
+      */
 }
 
 const ifUsingMaskbook = memoizePromise(
