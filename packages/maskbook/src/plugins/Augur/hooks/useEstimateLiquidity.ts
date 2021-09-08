@@ -6,7 +6,7 @@ import { useAsyncRetry } from 'react-use'
 import { DUST_POSITION_AMOUNT_ON_CHAIN } from '../constants'
 import { useAmmFactory } from '../contracts/useAmmFactory'
 import { useBalancerPool } from '../contracts/useBalancerPool'
-import { AmmExchange, LiquidityBreakdown, Market, LpAoumnt, LiquidityActionType, AmmOutcome } from '../types'
+import { AmmExchange, LiquidityBreakdown, Market, LpAmount, LiquidityActionType, AmmOutcome } from '../types'
 
 export function useEstimateLiquidityPool(
     market: Market,
@@ -50,7 +50,7 @@ export async function estimateAddLiquidityPool(
     const marketFactoryAddress = market.address
     let results = null
     let tokenAmount = '0'
-    let minAmounts: LpAoumnt[] = []
+    let minAmounts: LpAmount[] = []
     let poolPct = '0'
     let type: LiquidityActionType
 
@@ -81,7 +81,7 @@ export async function estimateAddLiquidityPool(
                               amount: v,
                               outcomeId: i,
                               hide: DUST_POSITION_AMOUNT_ON_CHAIN.isGreaterThan(v),
-                          } as LpAoumnt),
+                          } as LpAmount),
                   )
                 : []
 

@@ -185,7 +185,7 @@ export function SellDialog(props: SellDialogProps) {
     useEffect(() => {
         if (sellState.type === TransactionStateType.UNKNOWN) return
         if (sellState.type === TransactionStateType.CONFIRMED) {
-            market.dirtyAmmExchnage = true
+            market.dirtyAmmExchange = true
             retryTokenBalance()
             return
         }

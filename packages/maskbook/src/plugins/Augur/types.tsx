@@ -114,7 +114,7 @@ export interface Market {
     swapFee: string
     ammExchange?: AmmExchange
     marketType: MarketType
-    dirtyAmmExchnage?: boolean
+    dirtyAmmExchange?: boolean
     initialOdds: string[]
 }
 
@@ -172,7 +172,7 @@ export interface EstimateTradeResult {
     maxSellAmount?: string
 }
 
-export interface LpAoumnt {
+export interface LpAmount {
     amount: string
     outcomeId: number
     hide: boolean
@@ -186,7 +186,7 @@ export enum LiquidityActionType {
 
 export interface LiquidityBreakdown {
     amount?: string
-    minAmounts?: LpAoumnt[]
+    minAmounts?: LpAmount[]
     poolPct?: string
     lpTokens?: string
     cashAmount?: string

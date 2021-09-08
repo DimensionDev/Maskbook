@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
     inputBase: {
         height: 16,
     },
-    lable: {
+    label: {
         textAlign: 'right',
     },
     divider: {
@@ -382,7 +382,7 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
                                                             classes={{ root: classes.divider }}
                                                         />
                                                         <Grid item flex={1}>
-                                                            <Typography variant="body2" className={classes.lable}>
+                                                            <Typography variant="body2" className={classes.label}>
                                                                 {'$' + v.rate.toFixed(OUTCOME_PRICE_PRECISION)}
                                                             </Typography>
                                                         </Grid>
@@ -422,7 +422,7 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
                                                             classes={{ root: classes.divider }}
                                                         />
                                                         <Grid item flex={1}>
-                                                            <Typography variant="body2" className={classes.lable}>
+                                                            <Typography variant="body2" className={classes.label}>
                                                                 {formatBalance(
                                                                     v.amount,
                                                                     SHARE_DECIMALS,

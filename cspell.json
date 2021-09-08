@@ -228,7 +228,22 @@
         "apikey",
         "tokenid",
         "NFTRSS",
-        "solana"
+        "solana",
+        "bpow",
+        "btoi",
+        "bfloor",
+        "badd",
+        "bsub",
+        "bmul",
+        "bdiv",
+        "bpowi",
+        "cneg",
+        "xneg",
+        "exitswap",
+        "Denormalized",
+        "joinswap",
+        "moneylines",
+        "Staker"
     ],
     "ignoreWords": [
         "cryptopunks",

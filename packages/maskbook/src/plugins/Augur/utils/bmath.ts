@@ -105,7 +105,7 @@ function bpowApprox(base: BigNumber, exp: BigNumber, precision: BigNumber): BigN
     let sum = term
     let negative = false
 
-    // term(k) = numer / denom
+    // term(k) = number / denom
     //         = (product(a - i - 1, i=1-->k) * x^k) / (k!)
     // each iteration, multiply previous term by (a-(k-1)) * x / k
     // continue until term is less than precision
@@ -169,9 +169,9 @@ function calcSpotPrice(
     tokenWeightOut: BigNumber,
     swapFee: BigNumber,
 ): BigNumber {
-    const numer = bdiv(tokenBalanceIn, tokenWeightIn)
+    const number = bdiv(tokenBalanceIn, tokenWeightIn)
     const denom = bdiv(tokenBalanceOut, tokenWeightOut)
-    const ratio = bdiv(numer, denom)
+    const ratio = bdiv(number, denom)
     const scale = bdiv(BONE, bsub(BONE, swapFee))
     return bmul(ratio, scale)
 }

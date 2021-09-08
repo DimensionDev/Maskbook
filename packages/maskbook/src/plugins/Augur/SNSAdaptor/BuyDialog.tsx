@@ -246,7 +246,7 @@ export function BuyDialog(props: BuyDialogProps) {
         if (!token || !market) return
         if (buyState.type === TransactionStateType.UNKNOWN) return
         if (buyState.type === TransactionStateType.CONFIRMED) {
-            market.dirtyAmmExchnage = true
+            market.dirtyAmmExchange = true
             return
         }
         setTransactionDialogOpen({

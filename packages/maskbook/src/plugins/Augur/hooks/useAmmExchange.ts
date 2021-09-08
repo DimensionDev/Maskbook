@@ -18,9 +18,9 @@ export function useAmmExchange(market: Market | undefined) {
     const web3 = useWeb3()
     const chainId = useChainId()
 
-    const ammMarekFactoryContract = useAmmFactory(market?.ammExchange?.address ?? '')
-    const sportLinkMarekFactoryContract = useSportsLinkMarketFactory(market?.address ?? '')
-    const mmaMarekFactoryContract = useMmaLinkMarketFactory(market?.address ?? '')
+    const ammMarketFactoryContract = useAmmFactory(market?.ammExchange?.address ?? '')
+    const sportLinkMarketFactoryContract = useSportsLinkMarketFactory(market?.address ?? '')
+    const mmaMarketFactoryContract = useMmaLinkMarketFactory(market?.address ?? '')
     const { GRAPH_URL } = useAugurConstants()
 
     return useAsyncRetry(async () => {
@@ -30,17 +30,17 @@ export function useAmmExchange(market: Market | undefined) {
         if (
             !market ||
             !market.ammExchange ||
-            !ammMarekFactoryContract ||
-            !sportLinkMarekFactoryContract ||
-            !mmaMarekFactoryContract ||
+            !ammMarketFactoryContract ||
+            !sportLinkMarketFactoryContract ||
+            !mmaMarketFactoryContract ||
             !GRAPH_URL
         )
             return
 
         const ammExchange = await PluginAugurRPC.fetchAmmExchange(market.address, market.id, GRAPH_URL)
-        const balances = await ammMarekFactoryContract.methods.getPoolBalances(market.address, market.id).call()
-        const weights = await ammMarekFactoryContract.methods.getPoolWeights(market.address, market.id).call()
-        const pool = await ammMarekFactoryContract.methods.getPool(market.address, market.id).call()
+        const balances = await ammMarketFactoryContract.methods.getPoolBalances(market.address, market.id).call()
+        const weights = await ammMarketFactoryContract.methods.getPoolWeights(market.address, market.id).call()
+        const pool = await ammMarketFactoryContract.methods.getPool(market.address, market.id).call()
 
         const balancerPoolContract = createContract(web3, pool, AugurBalancerPoolABI as AbiItem[]) as AugurBalancerPool
         const totalSupply = (await balancerPoolContract.methods.totalSupply().call()) ?? '0'
@@ -52,13 +52,13 @@ export function useAmmExchange(market: Market | undefined) {
         }
 
         if (market.marketType === MarketType.Sport) {
-            shareFactor = await sportLinkMarekFactoryContract.methods.shareFactor().call()
+            shareFactor = await sportLinkMarketFactoryContract.methods.shareFactor().call()
         } else if (market.marketType === MarketType.Mma) {
-            shareFactor = await mmaMarekFactoryContract.methods.shareFactor().call()
+            shareFactor = await mmaMarketFactoryContract.methods.shareFactor().call()
         } else if (market.marketType === MarketType.Crypto) {
             // TODO: when augur deployed any crypto market
         }
-        market.dirtyAmmExchnage = false
+        market.dirtyAmmExchange = false
         return {
             ...ammExchange,
             address: market.ammExchange.address,
@@ -68,5 +68,5 @@ export function useAmmExchange(market: Market | undefined) {
             lpToken,
             totalSupply,
         } as AmmExchange
-    }, [market, market?.dirtyAmmExchnage])
+    }, [market, market?.dirtyAmmExchange])
 }

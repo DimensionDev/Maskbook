@@ -13,16 +13,17 @@ import { deriveSportMarketInfo } from '../utils/sportMarket'
 
 export function useFetchMarket(address: string, id: string, link: string, cache: RequestCache = 'default') {
     const { AMM_FACTORY_ADDRESS, GRAPH_URL } = useAugurConstants()
-    const ammMarekFactoryContract = useAmmFactory(AMM_FACTORY_ADDRESS ?? '')
-    const sportLinkMarekFactoryContract = useSportsLinkMarketFactory(address)
-    const mmaMarekFactoryContract = useMmaLinkMarketFactory(address)
+    const ammMarketFactoryContract = useAmmFactory(AMM_FACTORY_ADDRESS ?? '')
+    const sportLinkMarketFactoryContract = useSportsLinkMarketFactory(address)
+    const mmaMarketFactoryContract = useMmaLinkMarketFactory(address)
 
     return useAsyncRetry(async () => {
-        if (!sportLinkMarekFactoryContract || !ammMarekFactoryContract || !mmaMarekFactoryContract || !GRAPH_URL) return
+        if (!sportLinkMarketFactoryContract || !ammMarketFactoryContract || !mmaMarketFactoryContract || !GRAPH_URL)
+            return
 
         let rawSwapFee
         try {
-            rawSwapFee = await ammMarekFactoryContract.methods.getSwapFee(address, id).call()
+            rawSwapFee = await ammMarketFactoryContract.methods.getSwapFee(address, id).call()
         } catch {
             rawSwapFee = formatAmount(FALLBACK_SWAP_FEE / 100, SWAP_FEE_DECIMALS)
         }
@@ -35,8 +36,8 @@ export function useFetchMarket(address: string, id: string, link: string, cache:
 
         if (marketInfo.teamSportsMarket && marketInfo.teamSportsMarket.length !== 0) {
             const teamSportsMarket = marketInfo.teamSportsMarket[0]
-            const collateral = await sportLinkMarekFactoryContract.methods.collateral().call()
-            const sportId = await sportLinkMarekFactoryContract.methods.sportId().call()
+            const collateral = await sportLinkMarketFactoryContract.methods.collateral().call()
+            const sportId = await sportLinkMarketFactoryContract.methods.sportId().call()
             const sport = getSport(sportId)
             const homeTeam = getTeam(teamSportsMarket.homeTeamId, sportId)
             const awayTeam = getTeam(teamSportsMarket.awayTeamId, sportId)
@@ -45,7 +46,7 @@ export function useFetchMarket(address: string, id: string, link: string, cache:
             const winner = teamSportsMarket.winner ?? ''
             const hasWinner = !!winner && !new BigNumber(winner).isZero()
             const endDate = new Date(Number.parseInt(teamSportsMarket.endTime, 10) * 1000)
-            const [, shareTokens, , , , , , , initialOdds] = await sportLinkMarekFactoryContract.methods
+            const [, shareTokens, , , , , , , initialOdds] = await sportLinkMarketFactoryContract.methods
                 .getMarket(id)
                 .call()
 
@@ -73,14 +74,14 @@ export function useFetchMarket(address: string, id: string, link: string, cache:
             } as Market
         } else if (marketInfo.mmaMarket && marketInfo.mmaMarket.length !== 0) {
             const mmaMarket = marketInfo.mmaMarket[0]
-            const collateral = await mmaMarekFactoryContract.methods.collateral().call()
-            const sportId = await mmaMarekFactoryContract.methods.sportId().call()
+            const collateral = await mmaMarketFactoryContract.methods.collateral().call()
+            const sportId = await mmaMarketFactoryContract.methods.sportId().call()
             const sport = getSport(sportId)
             const marketType = mmaMarket.marketType
             const winner = mmaMarket.winner ?? ''
             const hasWinner = !!winner && !new BigNumber(winner).isZero()
             const endDate = new Date(Number.parseInt(mmaMarket.endTime, 10) * 1000)
-            const [, shareTokens, , , , , , , initialOdds] = await mmaMarekFactoryContract.methods.getMarket(id).call()
+            const [, shareTokens, , , , , , , initialOdds] = await mmaMarketFactoryContract.methods.getMarket(id).call()
 
             const market = deriveMmaMarketInfo(
                 address,

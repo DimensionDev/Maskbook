@@ -192,7 +192,7 @@ export const MarketBuySell = (props: MarketBuySellProps) => {
                                 }}
                                 checked={!isBuy}
                                 onChange={() => setIsBuy((x) => (!market.hasWinner ? !x : false))}
-                                name="buySell"
+                                name="trade"
                             />
                         </Typography>
                     </Grid>

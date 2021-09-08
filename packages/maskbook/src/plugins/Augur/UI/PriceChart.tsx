@@ -55,7 +55,7 @@ export function PriceChart(props: PriceChartProps) {
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
 
-    //#region make chart responisve
+    //#region make chart responsive
     const { width } = useWindowSize()
     const [responsiveWidth, setResponsiveWidth] = useState(DEFAULT_DIMENSION.width)
     const [responsiveHeight, setResponsiveHeight] = useState(DEFAULT_DIMENSION.height)

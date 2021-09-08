@@ -7,8 +7,11 @@ This plugin fetch and show [Augur](https://www.augur.net/) prediction markets al
 - [x] Detect Augur URL
 - [x] Show market info
 - [x] Buy/Sell
-- [ ] Draw market chart
-- [ ] Add/Remove Liquidty
+- [x] Draw market chart
+- [x] Add/Remove Liquidity
+- [ ] NFL Market
+- [ ] Crypto Market
+- [ ] Portfolio
 
 ## Related projects
 
