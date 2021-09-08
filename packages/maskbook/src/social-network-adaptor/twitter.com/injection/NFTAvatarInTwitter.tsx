@@ -78,7 +78,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const avatarId = getTwitterAvatarId(getParentDom())
     const onUpdate = useCallback(
         (data: NFTAVatarEvent) => {
-            saveNFTAvatar(data.userId, data.avatarId ?? data.userId, data.address, data.tokenId)
+            saveNFTAvatar(data.userId, data.avatarId, data.address, data.tokenId)
                 .then((avatar: AvatarMetaDB) => {
                     const parent = getParentDom()
                     if (!parent) return

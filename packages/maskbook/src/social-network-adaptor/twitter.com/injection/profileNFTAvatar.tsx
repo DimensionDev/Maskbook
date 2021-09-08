@@ -12,7 +12,7 @@ import {
     searchProfileSaveSelector,
     searchProfileAvatarParentSelector,
 } from '../utils/selector'
-import { updateAvatarImage } from '../utils/updateAvatarImage'
+import { getTwitterAvatarId, updateAvatarImage } from '../utils/updateAvatarImage'
 import { getTwitterId } from '../utils/user'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
@@ -55,21 +55,24 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const [avatarEvent, setAvatarEvent] = useState<NFTAVatarEvent>({} as NFTAVatarEvent)
 
     const onChange = useCallback(async (token: ERC721TokenDetailed) => {
+        const parent = searchProfileAvatarParentSelector()
+        if (!parent) return
+
+        const avatarId = getTwitterAvatarId(parent)
         setAvatarEvent({
             userId: twitterId,
             tokenId: token.tokenId,
             address: token.contractDetailed.address,
             image: token.info.image ?? '',
-            avatarId: '',
+            avatarId,
             amount: '0',
         })
-        const parent = searchProfileAvatarParentSelector()
-        if (!parent) return
+
         updateAvatarImage(parent, token.info.image)
     }, [])
 
     const handler = () => {
-        if (!avatar) return
+        if (!avatarEvent) return
         MaskMessage.events.NFTAvatarUpdated.sendToLocal(avatarEvent)
     }
 

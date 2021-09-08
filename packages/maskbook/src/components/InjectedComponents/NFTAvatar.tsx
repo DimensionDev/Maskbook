@@ -94,7 +94,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         loading,
         retry,
         error,
-    } = useCollectibles(account, chainId, provider, page, 50)
+    } = useCollectibles('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', chainId, provider, page, 50)
     //0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
 
     const { collectibles, hasNextPage } = value
@@ -259,12 +259,8 @@ export function useNFTAvatar(userId?: string) {
     return useAsync(async () => {
         if (!userId) return undefined
 
-        const avatar = await AvatarGUN
-            //@ts-ignore
-            .get(userId).then!()
-
-        delete avatar._
-        return avatar as AvatarMetaDB
+        const avatar = await getNFTAvatar(userId)
+        return avatar
     }, [userId]).value
 }
 
@@ -272,9 +268,6 @@ export async function getNFTAvatar(userId: string) {
     const avatarDB = await AvatarGUN
         //@ts-ignore
         .get(userId).then!()
-
-    delete avatarDB._
-
     return avatarDB as AvatarMetaDB
 }
 

@@ -42,7 +42,7 @@ export interface NFTAVatarEvent {
     image?: string
     amount: string
     address: string
-    avatarId?: string
+    avatarId: string
 }
 
 export interface MaskMessages extends SettingsEvents {
