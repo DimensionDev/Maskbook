@@ -73,14 +73,6 @@ export function TransferTab(props: TransferTabProps) {
         return amount_.toFixed()
     }, [tokenBalance, gasPrice, token.type])
 
-    console.log({
-        amount,
-        gasPrice,
-        tokenBalance,
-        transferAmount,
-        type: token.type,
-    })
-
     //#region transfer tokens
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         token.type,
