@@ -32,7 +32,7 @@ export function useEthereumAddress(nickname: string, twitterId: string, bio: str
     const { value: addressUNS, loading: loadingAddressUNS } = useResolveUNS(name)
     const { value: names = [], loading: loadingAddressNames } = useAddressNames(twitterId)
 
-    const ownerAddress = first(names)?.ownerAddress
+    const ownerAddress = first(names)?.ownerAddress || address
 
     useEffect(() => {
         setAddress('')
@@ -42,6 +42,16 @@ export function useEthereumAddress(nickname: string, twitterId: string, bio: str
 
     const isLoading = loadingAddressENS || loadingAddressUNS || loadingAddressNames
 
+    console.log({
+        addressENS,
+        addressUNS,
+        loadingAddressENS,
+        loadingAddressUNS,
+        loadingAddressNames,
+        names,
+        ownerAddress,
+    })
+
     return {
         loading: isLoading,
         value: isLoading
@@ -49,7 +59,7 @@ export function useEthereumAddress(nickname: string, twitterId: string, bio: str
             : {
                   type: addressENS ? 'ENS' : addressUNS ? 'UNS' : 'address',
                   name: addressENS || addressUNS ? name : '',
-                  address: isLoading ? '' : addressENS ?? addressUNS ?? ownerAddress ?? address ?? '',
+                  address: isLoading ? '' : addressENS ?? addressUNS ?? ownerAddress ?? '',
               },
         error: undefined,
     } as AsyncState<{
