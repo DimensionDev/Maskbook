@@ -3,7 +3,7 @@ import { pollingTask } from '@masknet/shared'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 import { WalletRPC } from '../messages'
 import { currentTokenPricesSettings } from '../settings'
-import { CurrencyType } from '@masknet/web3-shared'
+import { ChainId, CurrencyType, getCoingeckoCoinId, getCoingeckoPlatformId } from '@masknet/web3-shared'
 
 const task = pollingTask(
     async () => {
@@ -15,46 +15,49 @@ const task = pollingTask(
         delay: UPDATE_CHAIN_STATE_DELAY,
     },
 )
-
 export function useTokenPrice(
-    platformOrCoinId: string,
+    chainId: ChainId,
     contractAddress: string | undefined,
     currencyType: CurrencyType = CurrencyType.USD,
 ) {
-    const category = contractAddress ?? platformOrCoinId
+    const platformId = getCoingeckoPlatformId(chainId)
+    const coinId = getCoingeckoCoinId(chainId)
+
+    const category = contractAddress ? platformId : coinId
+
     const [price, setPrice] = useState(0)
-    useEffect(() => {
-        // emit an updating request immediately
-        if (contractAddress) {
-            WalletRPC.updateTokenPrices()
-        } else {
-            WalletRPC.updateNativeTokenPrices()
-        }
-    }, [contractAddress])
     useEffect(() => {
         // start the polling task
         task.reset()
         return () => task.cancel()
     }, [])
+
     useEffect(() => {
-        if (contractAddress) {
-            WalletRPC.trackContract(platformOrCoinId, contractAddress)
-        } else {
-            WalletRPC.trackNativeToken(platformOrCoinId)
+        if (!category) return
+
+        if (contractAddress && platformId) {
+            WalletRPC.trackContract(platformId, contractAddress)
+            WalletRPC.updateTokenPrices()
+        }
+        if (!contractAddress) {
+            WalletRPC.trackNativeToken(category)
+            WalletRPC.updateNativeTokenPrices()
         }
         return currentTokenPricesSettings.addListener((newVal) => {
-            const value = newVal[category]?.[currencyType] ?? 0
+            const value = newVal[category!]?.[currencyType] ?? 0
             setPrice(value)
         })
-    }, [platformOrCoinId, contractAddress])
+    }, [platformId, category, contractAddress])
     useEffect(() => {
+        if (!category) return
         const currentTokenPrices = currentTokenPricesSettings.value
         setPrice(currentTokenPrices[category]?.[currencyType] ?? 0)
     }, [category])
 
+    if (!category) return 0
     return price
 }
 
-export function useNativeTokenPrice(platformOrCoinId: string, currencyType: CurrencyType = CurrencyType.USD) {
-    return useTokenPrice(platformOrCoinId, undefined, currencyType)
+export function useNativeTokenPrice(chainId: ChainId, currencyType: CurrencyType = CurrencyType.USD) {
+    return useTokenPrice(chainId, undefined, currencyType)
 }

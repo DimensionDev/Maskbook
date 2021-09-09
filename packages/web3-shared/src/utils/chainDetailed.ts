@@ -103,15 +103,10 @@ export function getNetworkTypeFromChainId(chainId: ChainId) {
     return entry?.[0] as NetworkType | undefined
 }
 
-export function getChainFromChainId(chainId: ChainId) {
-    const chainDetailed = getChainDetailed(chainId)
-    return chainDetailed?.chain
+export function getCoingeckoPlatformId(chainId: ChainId) {
+    return COINGECKO_PLATFORMS.find((platform) => platform.chainId === chainId)?.id
 }
 
-export function getCoingeckoPlatformId(chain: ChainId) {
-    return COINGECKO_PLATFORMS.find((platform) => platform.chain_identifier === chain)?.id
-}
-
-export function getCoingeckoCoinId(coinSymbol: string) {
-    return COINGECKO_COIN_LIST.find((coin) => coin.symbol === coinSymbol)?.id
+export function getCoingeckoCoinId(chainId: ChainId) {
+    return COINGECKO_COIN_LIST.find((coin) => coin.chainId === chainId)?.id
 }
