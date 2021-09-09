@@ -15,6 +15,7 @@ import {
     useFungibleTokenBalance,
     useTokenTransferCallback,
     Wallet,
+    pow10,
 } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -62,8 +63,8 @@ export function TransferTab(props: TransferTabProps) {
         token?.address ?? '',
     )
 
-    // transfer amount
-    const transferAmount = useMemo(() => {
+    const transferAmount = new BigNumber(amount || '0').multipliedBy(pow10(token.decimals)).toFixed()
+    const maxAmount = useMemo(() => {
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ =
             token.type === EthereumTokenType.Native
@@ -125,7 +126,7 @@ export function TransferTab(props: TransferTabProps) {
         <div className={classes.root}>
             <TokenAmountPanel
                 amount={amount}
-                maxAmount={transferAmount}
+                maxAmount={maxAmount}
                 balance={tokenBalance}
                 label={t('wallet_transfer_amount')}
                 token={token}
