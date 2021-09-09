@@ -1,4 +1,3 @@
-import { first } from 'lodash-es'
 import { useResolveENS, useResolveUNS, useAddressNames } from '@masknet/web3-shared'
 import { useEffect, useMemo, useState } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
@@ -32,7 +31,7 @@ export function useEthereumAddress(nickname: string, twitterId: string, bio: str
     const { value: addressUNS, loading: loadingAddressUNS } = useResolveUNS(name)
     const { value: names = [], loading: loadingAddressNames } = useAddressNames(twitterId)
 
-    const ownerAddress = first(names)?.ownerAddress ?? ''
+    const ownerAddress = names.find((x) => x.ownerAddress)?.ownerAddress || address
 
     useEffect(() => {
         setAddress('')
@@ -49,7 +48,7 @@ export function useEthereumAddress(nickname: string, twitterId: string, bio: str
             : {
                   type: addressENS ? 'ENS' : addressUNS ? 'UNS' : 'address',
                   name: addressENS || addressUNS ? name : '',
-                  address: isLoading ? '' : addressENS ?? addressUNS ?? ownerAddress ?? address ?? '',
+                  address: isLoading ? '' : addressENS ?? addressUNS ?? ownerAddress ?? '',
               },
         error: undefined,
     } as AsyncState<{
