@@ -294,21 +294,12 @@ const ContractInteraction = memo(() => {
                 <div className={classes.item}>
                     <Typography className={classes.label}>{t('popups_wallet_contract_interaction_gas_fee')}</Typography>
                     <Typography className={classes.gasPrice}>
-                        <span>
-                            <FormattedBalance
-                                value={new BigNumber(
-                                    networkType !== NetworkType.Ethereum
-                                        ? (gasPrice as string) ?? defaultPrices?.gasPrice ?? 0
-                                        : maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0,
-                                )
-                                    .multipliedBy(gas ?? 0)
-                                    .multipliedBy(10 ** 9)
-                                    .toFixed()}
-                                decimals={nativeToken?.decimals}
-                                significant={4}
-                                symbol={nativeToken?.symbol}
-                            />
-                        </span>
+                        <FormattedBalance
+                            value={gasFee}
+                            decimals={nativeToken?.decimals}
+                            significant={4}
+                            symbol={nativeToken?.symbol}
+                        />
                         <Link
                             component="button"
                             onClick={() => history.push(PopupRoutes.GasSetting)}
