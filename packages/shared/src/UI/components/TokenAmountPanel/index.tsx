@@ -67,6 +67,7 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     TextFieldProps?: Exclude<StandardTextFieldProps, 'variant'>
 }
 
+// todo: merge into one with maskbook TokenAmountPanel
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const {
         amount,

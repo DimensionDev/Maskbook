@@ -28,7 +28,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
     const [selectedToken, setToken] = useState<FungibleTokenDetailed>(token)
-    const [isSelectToken, setSelectToken] = useState(false)
+    const [isOpenSelectTokenDialog, openSelectTokenDialog] = useState(false)
 
     // gas price
     const { value: gasPrice = '0' } = useGasPrice()
@@ -57,16 +57,6 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         memo,
     )
 
-    useEffect(() => {
-        console.log(transferState)
-        if (transferState.type === TransactionStateType.FAILED || transferState.type === TransactionStateType.HASH) {
-            setMemo('')
-            setAddress('')
-            setAmount('')
-            resetTransferCallback()
-        }
-    }, [transferState])
-
     const onTransfer = useCallback(async () => {
         await transferCallback()
     }, [transferCallback])
@@ -81,6 +71,15 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         return ''
     }, [transferAmount, address, tokenBalance, selectedToken, amount])
     //#endregion
+
+    useEffect(() => {
+        if (transferState.type === TransactionStateType.FAILED || transferState.type === TransactionStateType.HASH) {
+            setMemo('')
+            setAddress('')
+            setAmount('')
+            resetTransferCallback()
+        }
+    }, [transferState])
 
     return (
         <Stack direction="row" justifyContent="center" mt={4}>
@@ -103,7 +102,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         SelectTokenChip={{
                             loading: false,
                             ChipProps: {
-                                onClick: () => setSelectToken(true),
+                                onClick: () => openSelectTokenDialog(true),
                             },
                         }}
                     />
@@ -128,14 +127,14 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     </Button>
                 </Box>
             </Stack>
-            {isSelectToken && (
+            {isOpenSelectTokenDialog && (
                 <SelectTokenDialog
                     onSelect={(token) => {
                         setToken(token!)
-                        setSelectToken(false)
+                        openSelectTokenDialog(false)
                     }}
-                    open={isSelectToken}
-                    onClose={() => setSelectToken(false)}
+                    open={isOpenSelectTokenDialog}
+                    onClose={() => openSelectTokenDialog(false)}
                 />
             )}
         </Stack>

@@ -39,6 +39,7 @@ export interface SelectTokenChipProps {
     ChipProps?: Partial<ChipProps>
 }
 
+// todo: merge into one with maskbook SelectTokenChip
 export function SelectTokenChip(props: SelectTokenChipProps) {
     const t = useSharedI18N()
     const { token, error, loading = false, readonly = false, ChipProps } = props

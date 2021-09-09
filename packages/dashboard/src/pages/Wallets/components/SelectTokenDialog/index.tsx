@@ -11,6 +11,7 @@ export interface SelectTokenDialogProps {
     onSelect?(token: FungibleTokenDetailed | null): void
 }
 
+// todo use remote dialog for add token list dialog
 export const SelectTokenDialog = memo<SelectTokenDialogProps>(({ open, onClose, onSelect }) => {
     const t = useDashboardI18N()
 
