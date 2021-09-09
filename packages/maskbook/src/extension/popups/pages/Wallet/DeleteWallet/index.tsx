@@ -90,7 +90,7 @@ const DeleteWallet = memo(() => {
                     <Typography className={classes.title}>Delete Wallet</Typography>
                 </div>
                 <Typography className={classes.tip}>{t('popups_wallet_delete_tip')}</Typography>
-                <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
+                {/*<Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>*/}
                 {/*<StyledInput*/}
                 {/*    placeholder="Input your password"*/}
                 {/*    value={password}*/}
