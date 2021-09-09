@@ -40,15 +40,19 @@ const parseId = (t: string) => {
     return regexMatch(t, /status\/(\d+)/, 1)!
 }
 
-const serializeToText = (node: ChildNode): string => {
+const parseEmojiFragment = (fragment: string) => {
+    return String.fromCodePoint(...fragment.split('-').map((code) => Number.parseInt(code, 16)))
+}
+
+export const serializeToText = (node: ChildNode): string => {
     const snippets: string[] = []
     for (const childNode of Array.from(node.childNodes)) {
         if (childNode.nodeType === Node.TEXT_NODE) {
             if (childNode.nodeValue) snippets.push(childNode.nodeValue)
         } else if (childNode.nodeName === 'IMG') {
             const img = childNode as HTMLImageElement
-            const matched = (img.getAttribute('src') ?? '').match(/emoji\/v2\/svg\/(\w+)\.svg/) ?? []
-            if (matched[1]) snippets.push(String.fromCodePoint(Number.parseInt(`0x${matched[1]}`, 16)))
+            const matched = (img.getAttribute('src') ?? '').match(/emoji\/v2\/svg\/([\w-]+)\.svg/) ?? []
+            if (matched[1]) snippets.push(parseEmojiFragment(matched[1]))
         } else if (childNode.childNodes.length) snippets.push(serializeToText(childNode))
     }
     return snippets.join('')

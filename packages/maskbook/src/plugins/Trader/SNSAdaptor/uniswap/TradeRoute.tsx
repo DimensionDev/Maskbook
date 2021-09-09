@@ -24,6 +24,10 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         marginLeft: theme.spacing(1),
     },
+    icon: {
+        width: 16,
+        height: 16,
+    },
 }))
 
 export interface TradeRouteProps extends withClasses<'root'> {
@@ -52,7 +56,12 @@ export function TradeRoute(props: TradeRouteProps) {
                         {tokens.map((token) => {
                             return (
                                 <Box display="flex" alignItems="center" key={token.address}>
-                                    <TokenIcon address={token.address} name={token.name} logoURI={token.logoURI} />
+                                    <TokenIcon
+                                        classes={{ icon: classes.icon }}
+                                        address={token.address}
+                                        name={token.name}
+                                        logoURI={token.logoURI}
+                                    />
                                     {tokens.length === 1 ? (
                                         <Typography className={classes.name}>
                                             {token.symbol ?? token.name ?? formatEthereumAddress(token.address, 2)}

@@ -37,6 +37,16 @@ function parseGasPrice(price: string | undefined) {
     return Number.parseInt(price ?? '0x0', 16)
 }
 
+function isWriteablePayload(payload: JsonRpcPayload) {
+    return [
+        EthereumMethodType.ETH_SEND_TRANSACTION,
+        EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
+        EthereumMethodType.ETH_SIGN,
+        EthereumMethodType.ETH_SIGN_TRANSACTION,
+        EthereumMethodType.ETH_SIGN_TYPED_DATA,
+    ].includes(payload.method as EthereumMethodType)
+}
+
 function getChainIdFromPayload(payload: JsonRpcPayload) {
     switch (payload.method) {
         // here are methods that contracts may emit
@@ -86,10 +96,10 @@ export async function INTERNAL_send(
     }
 
     const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null
-    const web3 = createWeb3({
+    const web3 = await createWeb3({
         chainId: getChainIdFromPayload(payload) ?? chainId,
         privKeys: wallet?._private_key_ ? [wallet._private_key_] : [],
-        providerType,
+        providerType: isWriteablePayload(payload) ? providerType : ProviderType.Maskbook,
     })
     const provider = web3.currentProvider as HttpProvider | undefined
 
