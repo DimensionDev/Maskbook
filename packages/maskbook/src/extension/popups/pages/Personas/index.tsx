@@ -1,11 +1,13 @@
 import { memo } from 'react'
-import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { makeStyles } from '@masknet/theme'
-import { MasksIcon } from '../../../../../../icons/general'
+import { MasksIcon } from '@masknet/icons'
 import { Typography } from '@material-ui/core'
-import { ECKeyIdentifier, Identifier, useValueRef } from '@masknet/shared'
+import { ECKeyIdentifier, formatFingerprint, Identifier, useValueRef } from '@masknet/shared'
 import { currentPersonaIdentifier } from '../../../../settings/settings'
 import { head } from 'lodash-es'
+import { useAsync } from 'react-use'
+import Services from '../../../service'
+import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 
 const useStyles = makeStyles()({
     container: {
@@ -38,27 +40,31 @@ const useStyles = makeStyles()({
 const Persona = memo(() => {
     const { classes } = useStyles()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
-    const personas = useMyPersonas()
+    const { loading, value: personas } = useAsync(async () => Services.Identity.queryOwnedPersonaInformation())
 
-    const currentPersona = personas.find((x) =>
+    const currentPersona = personas?.find((x) =>
         x.identifier.equals(
             Identifier.fromString(currentIdentifier, ECKeyIdentifier).unwrapOr(head(personas)?.identifier),
         ),
     )
-    if (!personas.length || !currentPersona) return null
+    if (!personas?.length || !currentPersona) return null
     return (
         <>
-            <div className={classes.container}>
-                <div className={classes.left}>
-                    <MasksIcon />
+            {loading ? (
+                <LoadingPlaceholder />
+            ) : (
+                <div className={classes.container}>
+                    <div className={classes.left}>
+                        <MasksIcon />
+                    </div>
+                    <div>
+                        <Typography className={classes.name}>{currentPersona.nickname}</Typography>
+                        <Typography className={classes.identifier}>
+                            {formatFingerprint(currentPersona.identifier.compressedPoint, 4)}
+                        </Typography>
+                    </div>
                 </div>
-                <div>
-                    <Typography className={classes.name}>{currentPersona.nickname}</Typography>
-                    <Typography className={classes.identifier}>
-                        {`${currentPersona.fingerprint.substr(0, 12)}...${currentPersona.fingerprint.substr(-12)}`}
-                    </Typography>
-                </div>
-            </div>
+            )}
         </>
     )
 })
