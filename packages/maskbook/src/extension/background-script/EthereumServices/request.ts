@@ -110,8 +110,8 @@ export async function requestSendWithoutPopup(
 export async function confirmRequest(payload: JsonRpcPayload) {
     const pid = getPayloadId(payload)
     if (!pid) return
-    await WalletRPC.deleteUnconfirmedRequest(payload)
     getSendMethod()(payload, UNCONFIRMED_CALLBACK_MAP.get(pid) ?? noop)
+    await WalletRPC.deleteUnconfirmedRequest(payload)
     UNCONFIRMED_CALLBACK_MAP.delete(pid)
 }
 
