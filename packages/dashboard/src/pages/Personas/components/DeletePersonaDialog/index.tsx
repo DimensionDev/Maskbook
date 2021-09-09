@@ -1,9 +1,12 @@
 import { Button, DialogActions, DialogContent, Typography } from '@material-ui/core'
 import { memo, useCallback } from 'react'
-import { MaskColorVar, MaskDialog } from '@masknet/theme'
+import { MaskColorVar, MaskDialog, useSnackbar } from '@masknet/theme'
 import { DashboardTrans, useDashboardI18N } from '../../../../locales'
 import { Services } from '../../../../API'
 import type { PersonaIdentifier } from '@masknet/shared'
+import { PersonaContext } from '../../hooks/usePersonaContext'
+import { useNavigate } from 'react-router'
+import { RoutePaths } from '../../../../type'
 
 export interface DeletePersonaDialogProps {
     open: boolean
@@ -14,9 +17,20 @@ export interface DeletePersonaDialogProps {
 
 export const DeletePersonaDialog = memo<DeletePersonaDialogProps>(({ open, onClose, nickname, identifier }) => {
     const t = useDashboardI18N()
+    const { changeCurrentPersona } = PersonaContext.useContainer()
+    const navigate = useNavigate()
+    const { enqueueSnackbar } = useSnackbar()
 
     const handleDelete = useCallback(async () => {
         await Services.Identity.deletePersona(identifier, 'delete even with private')
+        const lastedPersona = await Services.Identity.queryLastPersonaCreated()
+
+        if (lastedPersona) {
+            await changeCurrentPersona(lastedPersona.identifier)
+        } else {
+            enqueueSnackbar(t.personas_setup_tip(), { variant: 'warning' })
+            navigate(RoutePaths.Setup)
+        }
     }, [nickname, identifier])
 
     return (
@@ -30,7 +44,9 @@ export const DeletePersonaDialog = memo<DeletePersonaDialogProps>(({ open, onClo
                 </Typography>
             </DialogContent>
             <DialogActions>
-                <Button color="secondary">{t.personas_cancel()}</Button>
+                <Button color="secondary" onClick={onClose}>
+                    {t.personas_cancel()}
+                </Button>
                 <Button onClick={handleDelete}>{t.personas_confirm()}</Button>
             </DialogActions>
         </MaskDialog>

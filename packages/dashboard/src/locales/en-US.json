@@ -146,6 +146,7 @@
     "wallets_empty_history_tips": "No transaction history",
     "wallets_loading_token": "Loading Token",
     "personas_setup_connect_tips": "Please connect to your {{type}} account.",
+    "personas_setup_tip": "Please to create/restore persona.",
     "personas_setup_connect": "Connect",
     "personas_name_maximum_tips": "Maximum length is {{length}} characters long.",
     "personas_name_existed": "The persona name already exists",
