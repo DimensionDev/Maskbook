@@ -17,7 +17,7 @@ import {
 } from '@masknet/web3-shared'
 import CloseIcon from '@material-ui/icons/Close'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
-import { RedpacketMessagePanel } from './RedpackMessagePanel'
+import { RedpacketMessagePanel } from './RedpacketMessagePanel'
 import { SelectNftTokenDialog } from './SelectNftTokenDialog'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'
 

@@ -1,5 +1,6 @@
 import { ERC721ContractDetailed, EthereumTokenType, ChainId } from '@masknet/web3-shared'
 
+// cspell:ignore mayc, axie, coolcats, OPENSTORE
 // Todo: move to https://github.com/DimensionDev/Mask-Token-List
 export const ERC721_CONTRACT_LIST: ERC721ContractDetailed[] = [
     {

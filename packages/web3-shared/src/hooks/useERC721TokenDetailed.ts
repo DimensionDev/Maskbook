@@ -91,7 +91,7 @@ async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<ERC721To
     let promise: Promise<ERC721TokenInfo | void> = lazyVoid
 
     try {
-        // for some NFT tokens retrun JSON in base64 encoded
+        // for some NFT tokens return JSON in base64 encoded
         if (tokenURI.startsWith(BASE64_PREFIX)) {
             promise = Promise.resolve(JSON.parse(atob(tokenURI.replace(BASE64_PREFIX, ''))) as ERC721TokenInfo)
         } else {

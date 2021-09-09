@@ -220,6 +220,8 @@
         "majeure"
     ],
     "ignoreWords": [
+        "cryptopunks",
+        "nftred",
         "BSCT",
         "BTCB",
         "COTM",
@@ -269,6 +271,7 @@
         "nrge",
         "pnpm",
         "setx",
+        "pkts",
         "swaptoken",
         "tinycolor",
         "unstoppabledomains",
