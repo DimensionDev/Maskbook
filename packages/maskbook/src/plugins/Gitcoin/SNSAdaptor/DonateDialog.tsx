@@ -8,7 +8,7 @@ import {
     useChainId,
     useGitcoinConstants,
     useNativeTokenDetailed,
-    useTokenBalance,
+    useFungibleTokenBalance,
 } from '@masknet/web3-shared'
 import { DialogContent, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
@@ -82,7 +82,7 @@ export function DonateDialog(props: DonateDialogProps) {
     const [token = nativeTokenDetailed.value, setToken] = useState<FungibleTokenDetailed | undefined>(
         nativeTokenDetailed.value,
     )
-    const tokenBalance = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    const tokenBalance = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     //#endregion
 
     //#region select token dialog
