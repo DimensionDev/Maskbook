@@ -164,7 +164,7 @@ const PostHistoryRowUI = memo<PostHistoryRowUIProps>(({ post, message, icon, ope
             </Stack>
             <Stack flex={1} justifyContent="space-around" sx={{ cursor: 'pointer' }} gap={0.3} onClick={onClick}>
                 <Typography component="p" variant="body2">
-                    {post.summary}
+                    {post.summary!.length > 40 ? post.summary!.slice(0, 40) + '...' : post.summary}
                 </Typography>
                 <Typography component="p" variant="body2">
                     {message}
