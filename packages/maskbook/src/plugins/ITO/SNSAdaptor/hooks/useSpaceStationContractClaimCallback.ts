@@ -1,7 +1,7 @@
 import { useSpaceStationContract } from './useSpaceStationContract'
 import {
     useAccount,
-    useSpaceStationUUPSConstants,
+    useSpaceStationGalaxyConstants,
     useTransactionState,
     useNonce,
     useGasPrice,
@@ -10,9 +10,9 @@ import {
 } from '@masknet/web3-shared'
 import { useCallback } from 'react'
 import type { CampaignInfo } from '../../types'
-import type { SpaceStationUUPS } from '@masknet/web3-contracts/types/SpaceStationUUPS'
+import type { spaceStationGalaxy } from '@masknet/web3-contracts/types/spaceStationGalaxy'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { getAccountClaimSignature, mutationParticipate, CAMPAIGN_ID } from '../../Worker/apis/spaceStationUUPS'
+import { getAccountClaimSignature, mutationParticipate, CAMPAIGN_ID } from '../../Worker/apis/spaceStationGalaxy'
 import Services from '../../../../extension/service'
 
 export function useSpaceStationContractClaimCallback(campaignInfo: CampaignInfo) {
@@ -20,7 +20,7 @@ export function useSpaceStationContractClaimCallback(campaignInfo: CampaignInfo)
     const gasPrice = useGasPrice()
     const account = useAccount()
     const contract = useSpaceStationContract()
-    const { CONTRACT_ADDRESS } = useSpaceStationUUPSConstants()
+    const { CONTRACT_ADDRESS } = useSpaceStationGalaxyConstants()
     const [claimState, setClaimState] = useTransactionState()
 
     const claimCallback = useCallback(async () => {
@@ -54,7 +54,7 @@ ${campaignInfo.description}`,
             })
         }
         const params = [CAMPAIGN_ID, nftCoreAddress, verifyIDs[0], powahs[0], signature] as Parameters<
-            SpaceStationUUPS['methods']['claim']
+            spaceStationGalaxy['methods']['claim']
         >
         // estimate gas and compose transaction
         const config = {

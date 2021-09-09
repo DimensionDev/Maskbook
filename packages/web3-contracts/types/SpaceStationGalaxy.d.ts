@@ -78,9 +78,9 @@ export type Upgraded = ContractEventLog<{
     0: string
 }>
 
-export interface SpaceStationUUPS extends BaseContract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): SpaceStationUUPS
-    clone(): SpaceStationUUPS
+export interface SpaceStationGalaxy extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): SpaceStationGalaxy
+    clone(): SpaceStationGalaxy
     methods: {
         _hash(
             _cid: number | string | BN,

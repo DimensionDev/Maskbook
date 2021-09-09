@@ -1,4 +1,4 @@
-import { ChainId, getSpaceStationUUPSConstants } from '@masknet/web3-shared'
+import { ChainId, getSpaceStationGalaxyConstants } from '@masknet/web3-shared'
 import stringify from 'json-stable-stringify'
 import { EthereumAddress } from 'wallet.ts'
 import type { ClaimableCount, CampaignInfo, ClaimParams } from '../../types'
@@ -10,7 +10,7 @@ const WHITE_LIST_INFO_FIELD = `
 `
 
 async function fetchFromSubgraph<T>(query: string) {
-    const subgraphURL = getSpaceStationUUPSConstants(ChainId.Mumbai)?.SUBGRAPH_URL
+    const subgraphURL = getSpaceStationGalaxyConstants(ChainId.Mumbai)?.SUBGRAPH_URL
     if (!subgraphURL) return null
     const response = await fetch(subgraphURL, {
         method: 'POST',

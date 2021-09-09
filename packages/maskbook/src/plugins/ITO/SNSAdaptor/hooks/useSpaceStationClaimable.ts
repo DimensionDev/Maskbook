@@ -1,4 +1,4 @@
-import { getClaimableTokenCount } from '../../Worker/apis/spaceStationUUPS'
+import { getClaimableTokenCount } from '../../Worker/apis/spaceStationGalaxy'
 import { useAsyncRetry } from 'react-use'
 
 export function useSpaceStationClaimable(address: string) {

@@ -1,4 +1,4 @@
-import { getClaimableTokenCount } from '../../Worker/apis/spaceStationUUPS'
+import { getClaimableTokenCount } from '../../Worker/apis/spaceStationGalaxy'
 import { useCallback, useState } from 'react'
 import type { ClaimableCount } from '../../types'
 
