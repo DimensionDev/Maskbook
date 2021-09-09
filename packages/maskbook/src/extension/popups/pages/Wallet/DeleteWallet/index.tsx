@@ -8,6 +8,7 @@ import { useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PopupRoutes } from '../../../index'
+import { first } from 'lodash-es'
 
 const useStyles = makeStyles()({
     content: {
@@ -76,8 +77,13 @@ const DeleteWallet = memo(() => {
     const onConfirm = useCallback(async () => {
         if (wallet?.address) {
             await WalletRPC.removeWallet(wallet.address)
-            await WalletRPC.resetAccount()
-            history.replace(PopupRoutes.SelectWallet)
+            const wallets = await WalletRPC.getWallets()
+            if (wallets.length) {
+                await WalletRPC.resetAccount({
+                    account: first(wallets)?.address,
+                })
+            }
+            history.replace(PopupRoutes.Wallet)
         }
     }, [wallet])
 
