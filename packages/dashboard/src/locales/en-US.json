@@ -67,6 +67,7 @@
     "wallets_transfer_error_invalid_address": "Invalid recipient address",
     "wallets_transfer_error_insufficient_balance": "Insufficient {{symbol}} balance",
     "wallets_transfer_send": "Send",
+    "wallets_transfer_memo_placeholder": "Optional message",
     "wallets_swap": "Swap",
     "wallets_red_packet": "Red packet",
     "wallets_sell": "Sell",

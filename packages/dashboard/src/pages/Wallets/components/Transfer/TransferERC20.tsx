@@ -1,11 +1,12 @@
 import { MaskTextField } from '@masknet/theme'
 import { Box, Button, Stack } from '@material-ui/core'
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
     isGreaterThan,
     isZero,
+    pow10,
     TransactionStateType,
     useFungibleTokenBalance,
     useGasPrice,
@@ -40,7 +41,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     // transfer amount
     const transferAmount = useMemo(() => {
-        let amount_ = new BigNumber(amount || '0')
+        let amount_ = new BigNumber(tokenBalance || '0')
         amount_ =
             selectedToken.type === EthereumTokenType.Native
                 ? amount_.minus(new BigNumber(30000).multipliedBy(gasPrice))
@@ -51,12 +52,20 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         selectedToken.type,
         selectedToken.address,
-        transferAmount,
+        new BigNumber(amount).multipliedBy(pow10(selectedToken.decimals)).toFixed(),
         address,
         memo,
     )
 
-    console.log(transferState)
+    useEffect(() => {
+        console.log(transferState)
+        if (transferState.type === TransactionStateType.FAILED || transferState.type === TransactionStateType.HASH) {
+            setMemo('')
+            setAddress('')
+            setAmount('')
+            resetTransferCallback()
+        }
+    }, [transferState])
 
     const onTransfer = useCallback(async () => {
         await transferCallback()
@@ -65,12 +74,12 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     //#region validation
     const validationMessage = useMemo(() => {
         if (!transferAmount || isZero(transferAmount)) return t.wallets_transfer_error_amount_absence()
-        if (isGreaterThan(transferAmount, tokenBalance))
+        if (isGreaterThan(new BigNumber(amount).multipliedBy(pow10(selectedToken.decimals)).toFixed(), transferAmount))
             return t.wallets_transfer_error_insufficient_balance({ symbol: selectedToken.symbol ?? '' })
         if (!address) return t.wallets_transfer_error_address_absence()
         if (!EthereumAddress.isValid(address)) return t.wallets_transfer_error_invalid_address()
         return ''
-    }, [transferAmount, address, tokenBalance, selectedToken])
+    }, [transferAmount, address, tokenBalance, selectedToken, amount])
     //#endregion
 
     return (
@@ -78,6 +87,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
             <Stack maxWidth={640} minWidth={500} alignItems="center">
                 <Box width="100%">
                     <MaskTextField
+                        value={address}
                         onChange={(e) => setAddress(e.currentTarget.value)}
                         label={t.wallets_transfer_to_address()}
                     />
@@ -99,7 +109,13 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     />
                 </Box>
                 <Box mt={2} width="100%">
-                    <MaskTextField onChange={(e) => setMemo(e.currentTarget.value)} label={t.wallets_transfer_memo()} />
+                    <MaskTextField
+                        value={memo}
+                        placeholder={t.wallets_transfer_memo_placeholder()}
+                        disabled={selectedToken.type === EthereumTokenType.ERC20}
+                        onChange={(e) => setMemo(e.currentTarget.value)}
+                        label={t.wallets_transfer_memo()}
+                    />
                 </Box>
                 <Box mt={4}>
                     <Button
