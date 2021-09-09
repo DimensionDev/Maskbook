@@ -3,7 +3,6 @@ import {
     useAccount,
     useSpaceStationGalaxyConstants,
     useTransactionState,
-    useNonce,
     useGasPrice,
     TransactionStateType,
     TransactionEventType,
@@ -16,9 +15,8 @@ import { getAccountClaimSignature, mutationParticipate, CAMPAIGN_ID } from '../.
 import Services from '../../../../extension/service'
 
 export function useSpaceStationContractClaimCallback(campaignInfo: CampaignInfo) {
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
+    const gasPrice = useGasPrice()
     const contract = useSpaceStationContract()
     const { CONTRACT_ADDRESS } = useSpaceStationGalaxyConstants()
     const [claimState, setClaimState] = useTransactionState()
@@ -66,8 +64,6 @@ ${campaignInfo.description}`,
                     setClaimState({ type: TransactionStateType.FAILED, error })
                     throw error
                 }),
-            gasPrice,
-            nonce,
         }
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = contract.methods.claim(...params).send(config as NonPayableTx)
