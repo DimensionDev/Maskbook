@@ -2,8 +2,6 @@ import {
     useTransactionState,
     useAccount,
     useChainId,
-    useGasPrice,
-    useNonce,
     TransactionStateType,
     TransactionEventType,
 } from '@masknet/web3-shared'
@@ -22,8 +20,6 @@ export function useCreateNftRedpacketCallback(
     contractAddress: string,
     tokenIdList: string[],
 ) {
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const [createState, setCreateState] = useTransactionState()
@@ -95,8 +91,6 @@ export function useCreateNftRedpacketCallback(
                         setCreateState({ type: TransactionStateType.FAILED, error })
                         throw error
                     }),
-                gasPrice,
-                nonce,
                 chainId,
             }
 

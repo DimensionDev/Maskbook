@@ -200,19 +200,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const formatRefundDuration = `${refundDuration?.hours}h ${refundDuration?.minutes}m`
     //#endregion
 
-    //#region password lost tips
-    const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
-    const openPopper = Boolean(anchorEl)
-    //#endregion
-
-    //#region refund time
-    const refundDuration =
-        canSend && !isPasswordValid
-            ? intervalToDuration({ start: Date.now(), end: history.payload.creation_time + 3600 * 24 * 1000 })
-            : null
-    const formatRefundDuration = `${refundDuration?.hours}h ${refundDuration?.minutes}m`
-    //#endregion
-
     return (
         <ListItem className={classes.root}>
             <Box className={classes.box}>
