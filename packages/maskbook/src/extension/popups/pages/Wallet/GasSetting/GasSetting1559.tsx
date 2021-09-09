@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useEffect, useMemo, useState } from 'react'
-import { EthereumRpcType, getCoingeckoPlatformId, useChainId } from '@masknet/web3-shared'
+import { EthereumRpcType, getCoingeckoCoinId, useChainId, useNativeTokenDetailed } from '@masknet/web3-shared'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
@@ -83,7 +83,8 @@ export const GasSetting1559 = memo(() => {
     const location = useLocation()
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
-    const nativeTokenPrice = useNativeTokenPrice(getCoingeckoPlatformId(chainId) ?? '')
+    const { value: nativeToken } = useNativeTokenDetailed()
+    const nativeTokenPrice = useNativeTokenPrice(getCoingeckoCoinId(nativeToken?.symbol.toLowerCase() ?? '') ?? '')
 
     const { value: gasNow } = useAsync(async () => {
         const response = await WalletRPC.getEstimateGasFees(chainId)

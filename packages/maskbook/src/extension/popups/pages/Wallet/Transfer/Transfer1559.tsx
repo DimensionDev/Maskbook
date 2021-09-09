@@ -4,12 +4,13 @@ import {
     Asset,
     EthereumTokenType,
     formatBalance,
+    getCoingeckoCoinId,
     isGreaterThan,
     isZero,
     pow10,
     useChainId,
-    useEtherPrice,
     useGasLimit,
+    useNativeTokenDetailed,
     useTokenTransferCallback,
     useWallet,
 } from '@masknet/web3-shared'
@@ -30,6 +31,7 @@ import { noop } from 'lodash-es'
 import { ExpandMore } from '@material-ui/icons'
 import { useHistory } from 'react-router'
 import { LoadingButton } from '@material-ui/lab'
+import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 
 const useStyles = makeStyles()({
     container: {
@@ -140,11 +142,15 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const { t } = useI18N()
     const { classes } = useStyles()
     const wallet = useWallet()
-    const etherPrice = useEtherPrice()
+
     const chainId = useChainId()
     const history = useHistory()
 
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
+
+    const { value: nativeToken } = useNativeTokenDetailed()
+
+    const etherPrice = useNativeTokenPrice(getCoingeckoCoinId(nativeToken?.symbol.toLowerCase() ?? '') ?? '')
 
     const { value: estimateGasFees } = useAsync(async () => WalletRPC.getEstimateGasFees(chainId), [chainId])
 

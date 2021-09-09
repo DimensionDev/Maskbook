@@ -6,6 +6,7 @@ import {
     formatWeiToEther,
     getChainFromChainId,
     getChainIdFromNetworkType,
+    getCoingeckoCoinId,
     getCoingeckoPlatformId,
     isEIP1159Supported,
     NetworkType,
@@ -245,7 +246,7 @@ const ContractInteraction = memo(() => {
         getCoingeckoPlatformId(chainId) ?? '',
         token?.address !== ZERO_ADDRESS ? token?.address : undefined,
     )
-    const nativeTokenPrice = useNativeTokenPrice(getCoingeckoPlatformId(chainId) ?? '')
+    const nativeTokenPrice = useNativeTokenPrice(getCoingeckoCoinId(nativeToken?.symbol.toLowerCase() ?? '') ?? '')
     const tokenValueUSD = new BigNumber(tokenAmount)
         .dividedBy(pow10(tokenDecimals))
         .times(tokenPrice ?? 0)
