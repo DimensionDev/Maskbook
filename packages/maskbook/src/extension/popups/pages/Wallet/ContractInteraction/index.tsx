@@ -28,6 +28,7 @@ import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { ZERO_ADDRESS } from '../../../../../plugins/GoodGhosting/constants'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
+import { unreachable } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -115,12 +116,17 @@ const ContractInteraction = memo(() => {
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const networkType = useValueRef(currentNetworkSettings)
     const chainId = useChainId()
-    const { typeName, to, gas, gasPrice, maxFeePerGas, maxPriorityFeePerGas, amount } = useMemo(() => {
-        if (value?.computedPayload?.type) {
-            switch (value.computedPayload.type) {
+
+    const { typeName, to, gas, gasPrice, maxFeePerGas, maxPriorityFeePerGas, amount, isNativeTokenInteraction } =
+        useMemo(() => {
+            const type = value?.computedPayload?.type
+            if (!type) return {}
+
+            switch (type) {
                 case EthereumRpcType.CONTRACT_INTERACTION:
                     if (value.computedPayload.name === 'approve') {
                         return {
+                            isNativeTokenInteraction: false,
                             typeName: t('popups_wallet_contract_interaction_approve'),
                             spender: value.computedPayload.parameters?.spender,
                             to: value.computedPayload._tx.to,
@@ -130,23 +136,33 @@ const ContractInteraction = memo(() => {
                             maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
                             amount: value.computedPayload.parameters?.value,
                         }
-                    } else {
-                        // ERC20 Transfer and other contract interaction
+                    } else if (['transfer', 'transferFrom'].includes(value.computedPayload.name)) {
                         return {
-                            typeName: t('wallet_transfer_send'),
-                            spender: value.computedPayload._tx.from,
-                            to: value.computedPayload._tx.to,
+                            isNativeTokenInteraction: false,
+                            typeName: t('popups_wallet_contract_interaction_transfer'),
+                            to: value.computedPayload.parameters?.to,
                             gas: value.computedPayload._tx.gas,
                             gasPrice: value.computedPayload._tx.gasPrice,
                             maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
                             maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
                             amount: value.computedPayload.parameters?.value,
                         }
+                    } else {
+                        return {
+                            isNativeTokenInteraction: true,
+                            typeName: t('popups_wallet_contract_interaction'),
+                            to: value.computedPayload._tx.to,
+                            gas: value.computedPayload._tx.gas,
+                            gasPrice: value.computedPayload._tx.gasPrice,
+                            maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
+                            maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
+                            amount: value.computedPayload._tx.value,
+                        }
                     }
                 case EthereumRpcType.SEND_ETHER:
                     return {
+                        isNativeTokenInteraction: true,
                         typeName: t('wallet_transfer_send'),
-                        spender: value.computedPayload._tx.from,
                         to: value.computedPayload._tx.to,
                         gas: value.computedPayload._tx.gas,
                         gasPrice: value.computedPayload._tx.gasPrice,
@@ -154,17 +170,35 @@ const ContractInteraction = memo(() => {
                         maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
                         amount: value.computedPayload._tx.value,
                     }
+                case EthereumRpcType.CONTRACT_DEPLOYMENT:
+                case EthereumRpcType.ETH_DECRYPT:
+                case EthereumRpcType.ETH_GET_ENCRYPTION_PUBLIC_KEY:
+                case EthereumRpcType.WATCH_ASSET:
+                case EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN:
+                case EthereumRpcType.CANCEL:
+                case EthereumRpcType.RETRY:
+                case EthereumRpcType.SIGN:
+                case EthereumRpcType.SIGN_TYPED_DATA:
+                    throw new Error('To be implemented.')
                 default:
-                    throw new Error('To be implemented')
+                    unreachable(type)
             }
-        }
-        return {}
-    }, [value, t])
+        }, [value, t])
+
+    console.log('DEBUG: ContractInteraction')
+    console.log({
+        value,
+        typeName,
+        to,
+        gas,
+        gasPrice,
+        maxFeePerGas,
+        maxPriorityFeePerGas,
+        amount,
+    })
 
     const { value: nativeToken } = useNativeTokenDetailed()
-    const { value: token } = useERC20TokenDetailed(
-        (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ? nativeToken?.address : to) ?? '',
-    )
+    const { value: token } = useERC20TokenDetailed(isNativeTokenInteraction ? '' : to)
 
     const tokenPrice = useTokenPrice(
         getCoingeckoPlatformId(chainId) ?? '',
@@ -242,10 +276,7 @@ const ContractInteraction = memo(() => {
             <div className={classes.content}>
                 <div className={classes.item} style={{ marginTop: 20, marginBottom: 30 }}>
                     <TokenIcon
-                        address={
-                            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ? nativeToken?.address : to) ??
-                            ''
-                        }
+                        address={(isNativeTokenInteraction ? nativeToken?.address : token?.address) ?? ''}
                         classes={{ icon: classes.tokenIcon }}
                     />
                     <Typography className={classes.amount}>
