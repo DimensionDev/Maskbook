@@ -40,7 +40,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     )
 
     // transfer amount
-    const transferAmount = useMemo(() => {
+    const transferAmount = new BigNumber(amount || '0').multipliedBy(pow10(token.decimals)).toFixed()
+    const maxAmount = useMemo(() => {
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ =
             selectedToken.type === EthereumTokenType.Native
@@ -94,7 +95,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                 <Box mt={2} width="100%">
                     <TokenAmountPanel
                         amount={amount}
-                        maxAmount={transferAmount}
+                        maxAmount={maxAmount}
                         balance={tokenBalance}
                         label={t.wallets_transfer_amount()}
                         token={selectedToken}
