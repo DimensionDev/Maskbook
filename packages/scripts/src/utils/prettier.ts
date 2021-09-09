@@ -6,6 +6,7 @@ export async function prettier(f: string) {
         printWidth: 120,
         semi: false,
         singleQuote: true,
+        jsxBracketSameLine: true,
         tabWidth: 4,
     })
 }
