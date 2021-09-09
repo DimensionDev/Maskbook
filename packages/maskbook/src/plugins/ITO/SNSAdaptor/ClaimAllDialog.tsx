@@ -221,10 +221,10 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { value: campaignInfo } = useSpaceStationCampaignInfo()
     const now = Date.now()
     // tomorrow at 00:00:00 of campaign endTime.
-    const dateToHideSpaceStationCampaign = new Date()
-    dateToHideSpaceStationCampaign.setDate(
-        new Date(campaignInfo ? campaignInfo.endTime * 1000 : now + 1000 * 1000).getDate() + 1,
+    const dateToHideSpaceStationCampaign = new Date(
+        (campaignInfo ? campaignInfo.endTime * 1000 : now) + 3600 * 24 * 1000,
     )
+
     dateToHideSpaceStationCampaign.setHours(0, 0, 0, 0)
     const [chainId, setChainId] = useState(
         [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].includes(currentChainId)

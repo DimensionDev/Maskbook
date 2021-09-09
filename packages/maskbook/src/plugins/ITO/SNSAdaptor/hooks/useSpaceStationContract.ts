@@ -1,9 +1,9 @@
 import type { AbiItem } from 'web3-utils'
-import spaceStationGalaxy_ABI from '@masknet/web3-contracts/abis/spaceStationGalaxy.json'
-import type { spaceStationGalaxy } from '@masknet/web3-contracts/types/spaceStationGalaxy'
+import spaceStationGalaxy_ABI from '@masknet/web3-contracts/abis/SpaceStationGalaxy.json'
+import type { SpaceStationGalaxy } from '@masknet/web3-contracts/types/SpaceStationGalaxy'
 import { useSpaceStationGalaxyConstants, useContract } from '@masknet/web3-shared'
 
 export function useSpaceStationContract() {
     const { CONTRACT_ADDRESS } = useSpaceStationGalaxyConstants()
-    return useContract<spaceStationGalaxy>(CONTRACT_ADDRESS, spaceStationGalaxy_ABI as AbiItem[])
+    return useContract<SpaceStationGalaxy>(CONTRACT_ADDRESS, spaceStationGalaxy_ABI as AbiItem[])
 }

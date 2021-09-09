@@ -3,14 +3,14 @@ import stringify from 'json-stable-stringify'
 import { EthereumAddress } from 'wallet.ts'
 import type { ClaimableCount, CampaignInfo, ClaimParams } from '../../types'
 
-export const CAMPAIGN_ID = 92
+export const CAMPAIGN_ID = 160
 const WHITE_LIST_INFO_FIELD = `
     maxCount
     usedCount
 `
 
 async function fetchFromSubgraph<T>(query: string) {
-    const subgraphURL = getSpaceStationGalaxyConstants(ChainId.Mumbai)?.SUBGRAPH_URL
+    const subgraphURL = getSpaceStationGalaxyConstants(ChainId.Matic)?.SUBGRAPH_URL
     if (!subgraphURL) return null
     const response = await fetch(subgraphURL, {
         method: 'POST',
@@ -124,7 +124,7 @@ export async function getAccountClaimSignature(
       mutation {
         prepareParticipate(input: {
             signature:"${userSignature}",
-            campaignID: 92,
+            campaignID: ${CAMPAIGN_ID},
             address: "${account}",
             mintCount: 1,
             chain: ${chain}
@@ -164,7 +164,7 @@ export async function mutationParticipate(
     mutation {
         participate(input: {
             signature:"${userSignature}",
-            campaignID: 92,
+            campaignID: ${CAMPAIGN_ID},
             address: "${account}",
             tx: "${txHash}",
             verifyIDs: ${verifyIDs},

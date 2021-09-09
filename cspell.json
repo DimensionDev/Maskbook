@@ -271,7 +271,11 @@
         "vitalik",
         "unlockprotocol",
         "unlocklock",
-        "chainid"
+        "chainid",
+        "powahs",
+        "gamification",
+        "Defi",
+        "powah"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

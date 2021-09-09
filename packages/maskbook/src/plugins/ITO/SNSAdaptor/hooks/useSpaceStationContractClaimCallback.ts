@@ -10,7 +10,7 @@ import {
 } from '@masknet/web3-shared'
 import { useCallback } from 'react'
 import type { CampaignInfo } from '../../types'
-import type { spaceStationGalaxy } from '@masknet/web3-contracts/types/spaceStationGalaxy'
+import type { SpaceStationGalaxy } from '@masknet/web3-contracts/types/SpaceStationGalaxy'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { getAccountClaimSignature, mutationParticipate, CAMPAIGN_ID } from '../../Worker/apis/spaceStationGalaxy'
 import Services from '../../../../extension/service'
@@ -54,7 +54,7 @@ ${campaignInfo.description}`,
             })
         }
         const params = [CAMPAIGN_ID, nftCoreAddress, verifyIDs[0], powahs[0], signature] as Parameters<
-            spaceStationGalaxy['methods']['claim']
+            SpaceStationGalaxy['methods']['claim']
         >
         // estimate gas and compose transaction
         const config = {

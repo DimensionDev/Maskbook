@@ -26,6 +26,8 @@ const useStyles = makeStyles()((theme) => ({
         height: 340,
         padding: 20,
         borderRadius: 12,
+        marginLeft: 'auto',
+        marginRight: 'auto',
         marginBottom: theme.spacing(1.5),
         background: 'linear-gradient(rgba(234, 69, 96, 1), rgba(255, 126, 172, 1))',
     },
@@ -162,7 +164,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
     const account = useAccount()
     const currentChainId = useChainId()
     const { value: claimInfo, loading } = useSpaceStationClaimable(account)
-    const claimable = Boolean(claimInfo?.claimable) && currentChainId === ChainId.Mumbai
+    const claimable = Boolean(claimInfo?.claimable) && currentChainId === ChainId.Matic
     const { classes } = useStyles()
     const [claimState, claimCallback] = useSpaceStationContractClaimCallback(campaignInfo!)
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
