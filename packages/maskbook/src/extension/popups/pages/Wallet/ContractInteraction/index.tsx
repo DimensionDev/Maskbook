@@ -6,7 +6,9 @@ import {
     formatBalance,
     formatWeiToEther,
     getChainFromChainId,
+    getChainIdFromNetworkType,
     getCoingeckoPlatformId,
+    isEIP1159Supported,
     NetworkType,
     useChainId,
     useERC20TokenDetailed,
@@ -17,6 +19,7 @@ import { useI18N, useValueRef } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { LoadingButton } from '@material-ui/lab'
+import { unreachable } from '@dimensiondev/kit'
 import { useAsync, useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
@@ -28,7 +31,6 @@ import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { ZERO_ADDRESS } from '../../../../../plugins/GoodGhosting/constants'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
-import { unreachable } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -113,62 +115,61 @@ const ContractInteraction = memo(() => {
     const { classes } = useStyles()
     const location = useLocation()
     const history = useHistory()
-    const { value, loading: getValueLoading } = useUnconfirmedRequest()
-    const networkType = useValueRef(currentNetworkSettings)
     const chainId = useChainId()
+    const networkType = useValueRef(currentNetworkSettings)
+    const { value: request, loading: requestLoading } = useUnconfirmedRequest()
 
     const { typeName, to, gas, gasPrice, maxFeePerGas, maxPriorityFeePerGas, amount, isNativeTokenInteraction } =
         useMemo(() => {
-            const type = value?.computedPayload?.type
+            const type = request?.computedPayload?.type
             if (!type) return {}
 
             switch (type) {
                 case EthereumRpcType.CONTRACT_INTERACTION:
-                    if (value.computedPayload.name === 'approve') {
+                    if (request.computedPayload.name === 'approve') {
                         return {
                             isNativeTokenInteraction: false,
                             typeName: t('popups_wallet_contract_interaction_approve'),
-                            spender: value.computedPayload.parameters?.spender,
-                            to: value.computedPayload._tx.to,
-                            gas: value.computedPayload._tx.gas,
-                            gasPrice: value.computedPayload._tx.gasPrice,
-                            maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
-                            maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
-                            amount: value.computedPayload.parameters?.value,
+                            to: request.computedPayload._tx.to,
+                            gas: request.computedPayload._tx.gas,
+                            gasPrice: request.computedPayload._tx.gasPrice,
+                            maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
+                            maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
+                            amount: request.computedPayload.parameters?.value,
                         }
-                    } else if (['transfer', 'transferFrom'].includes(value.computedPayload.name)) {
+                    } else if (['transfer', 'transferFrom'].includes(request.computedPayload.name)) {
                         return {
                             isNativeTokenInteraction: false,
                             typeName: t('popups_wallet_contract_interaction_transfer'),
-                            to: value.computedPayload.parameters?.to,
-                            gas: value.computedPayload._tx.gas,
-                            gasPrice: value.computedPayload._tx.gasPrice,
-                            maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
-                            maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
-                            amount: value.computedPayload.parameters?.value,
+                            to: request.computedPayload.parameters?.to,
+                            gas: request.computedPayload._tx.gas,
+                            gasPrice: request.computedPayload._tx.gasPrice,
+                            maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
+                            maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
+                            amount: request.computedPayload.parameters?.value,
                         }
                     } else {
                         return {
                             isNativeTokenInteraction: true,
                             typeName: t('popups_wallet_contract_interaction'),
-                            to: value.computedPayload._tx.to,
-                            gas: value.computedPayload._tx.gas,
-                            gasPrice: value.computedPayload._tx.gasPrice,
-                            maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
-                            maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
-                            amount: value.computedPayload._tx.value,
+                            to: request.computedPayload._tx.to,
+                            gas: request.computedPayload._tx.gas,
+                            gasPrice: request.computedPayload._tx.gasPrice,
+                            maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
+                            maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
+                            amount: request.computedPayload._tx.value,
                         }
                     }
                 case EthereumRpcType.SEND_ETHER:
                     return {
                         isNativeTokenInteraction: true,
                         typeName: t('wallet_transfer_send'),
-                        to: value.computedPayload._tx.to,
-                        gas: value.computedPayload._tx.gas,
-                        gasPrice: value.computedPayload._tx.gasPrice,
-                        maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
-                        maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
-                        amount: value.computedPayload._tx.value,
+                        to: request.computedPayload._tx.to,
+                        gas: request.computedPayload._tx.gas,
+                        gasPrice: request.computedPayload._tx.gasPrice,
+                        maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
+                        maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
+                        amount: request.computedPayload._tx.value,
                     }
                 case EthereumRpcType.CONTRACT_DEPLOYMENT:
                 case EthereumRpcType.ETH_DECRYPT:
@@ -183,29 +184,20 @@ const ContractInteraction = memo(() => {
                 default:
                     unreachable(type)
             }
-        }, [value, t])
+        }, [request, t])
 
-    console.log('DEBUG: ContractInteraction')
-    console.log({
-        value,
-        typeName,
-        to,
-        gas,
-        gasPrice,
-        maxFeePerGas,
-        maxPriorityFeePerGas,
-        amount,
-    })
-
+    // token detailed
     const { value: nativeToken } = useNativeTokenDetailed()
     const { value: token } = useERC20TokenDetailed(isNativeTokenInteraction ? '' : to)
 
+    // token estimated value
     const tokenPrice = useTokenPrice(
         getCoingeckoPlatformId(chainId) ?? '',
         token?.address !== ZERO_ADDRESS ? token?.address : undefined,
     )
     const nativeTokenPrice = useNativeTokenPrice(getCoingeckoPlatformId(chainId) ?? '')
 
+    // gas price
     const { value: defaultPrices } = useAsync(async () => {
         if (networkType === NetworkType.Ethereum && !maxFeePerGas && !maxPriorityFeePerGas) {
             const response = await WalletRPC.getEstimateGasFees(chainId)
@@ -224,34 +216,12 @@ const ContractInteraction = memo(() => {
         return {}
     }, [gasPrice, maxPriorityFeePerGas, maxFeePerGas, networkType, chainId])
 
-    const gasFee = useMemo(() => {
-        return new BigNumber(
-            networkType !== NetworkType.Ethereum
-                ? (gasPrice as string) ?? defaultPrices?.gasPrice ?? 0
-                : maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0,
-        )
-            .multipliedBy(gas ?? 0)
-            .multipliedBy(10 ** 9)
-            .toFixed()
-    }, [networkType, gasPrice, maxFeePerGas, gas, defaultPrices])
-
-    const { tokenValueUSD, totalUSD } = useMemo(() => {
-        // const tokenValueUSD = new BigNumber(formatBalance((amount ?? 0) as number))).times(tokenPrice ?? 0).toString()
-        const tokenValueUSD = new BigNumber(formatBalance((amount ?? 0) as number, token?.decimals ?? 0))
-            .times(tokenPrice ?? 0)
-            .toString()
-        const totalUSD = new BigNumber(formatWeiToEther(gasFee)).times(nativeTokenPrice).plus(tokenValueUSD).toString()
-        return {
-            tokenValueUSD,
-            totalUSD,
-        }
-    }, [amount, tokenPrice, gasFee, nativeToken, token?.decimals])
-
+    // handlers
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-        if (value) {
+        if (request) {
             const toBeClose = new URLSearchParams(location.search).get('toBeClose')
-            await WalletRPC.deleteUnconfirmedRequest(value.payload)
-            await Services.Ethereum.confirmRequest(value.payload)
+            await WalletRPC.deleteUnconfirmedRequest(request.payload)
+            await Services.Ethereum.confirmRequest(request.payload)
 
             if (toBeClose) {
                 window.close()
@@ -259,11 +229,41 @@ const ContractInteraction = memo(() => {
                 history.replace(PopupRoutes.TokenDetail)
             }
         }
-    }, [value, location.search, history])
+    }, [request, location.search, history])
 
-    const handleReject = useRejectHandler(() => history.replace(PopupRoutes.Wallet), value)
+    const handleReject = useRejectHandler(() => history.replace(PopupRoutes.Wallet), request)
 
-    return getValueLoading ? (
+    // gas fee
+    const gasFee = new BigNumber(
+        isEIP1159Supported(getChainIdFromNetworkType(networkType))
+            ? maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0
+            : (gasPrice as string) ?? defaultPrices?.gasPrice ?? 0,
+    )
+        .multipliedBy(gas ?? 0)
+        .multipliedBy(10 ** 9)
+        .toFixed()
+
+    // estimated value
+    const tokenValueUSD = new BigNumber(
+        formatBalance(
+            (amount ?? 0) as number,
+            (isNativeTokenInteraction ? nativeToken?.decimals : token?.decimals) ?? 0,
+        ),
+    )
+        .times(tokenPrice ?? 0)
+        .toString()
+    const totalUSD = new BigNumber(formatWeiToEther(gasFee)).times(nativeTokenPrice).plus(tokenValueUSD).toString()
+
+    console.log('DEBUG: ContractInteraction')
+    console.log({
+        amount,
+        gasFee,
+        request,
+        tokenPrice,
+        nativeTokenPrice,
+    })
+
+    return requestLoading ? (
         <LoadingPlaceholder />
     ) : (
         <main className={classes.container}>
@@ -280,17 +280,11 @@ const ContractInteraction = memo(() => {
                         classes={{ icon: classes.tokenIcon }}
                     />
                     <Typography className={classes.amount}>
-                        {value?.computedPayload?.type && nativeToken && token ? (
-                            <FormattedBalance
-                                value={amount as string}
-                                decimals={
-                                    value?.computedPayload?.type === EthereumRpcType.SEND_ETHER
-                                        ? nativeToken.decimals
-                                        : token.decimals
-                                }
-                                significant={4}
-                            />
-                        ) : null}
+                        <FormattedBalance
+                            value={amount as string}
+                            decimals={(isNativeTokenInteraction ? nativeToken?.decimals : token?.decimals) ?? 0}
+                            significant={4}
+                        />
                     </Typography>
                     <Typography>
                         <FormattedCurrency value={tokenValueUSD} sign="$" />
