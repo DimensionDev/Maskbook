@@ -4,7 +4,7 @@ import { first } from 'lodash-es'
 import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
 import { ChainId, ProviderType } from '@masknet/web3-shared'
 import { delay } from '@masknet/shared-base'
-import { resetAccount, updateAccount } from '../../../../plugins/Wallet/services'
+import { updateAccount } from '../../../../plugins/Wallet/services'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 
 let provider: MetaMaskInpageProvider | null = null
@@ -33,6 +33,7 @@ async function onChainIdChanged(id: string) {
 }
 
 export async function createProvider() {
+    // @ts-ignore
     if (provider && provider.chainId !== null) return provider
     provider = createMetaMaskProvider()
 
