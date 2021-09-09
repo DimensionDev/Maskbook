@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     tabs: {
         backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
-        width: 520,
+        width: 544,
         height: 36,
         minHeight: 36,
         margin: '0 auto',
@@ -43,6 +43,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     labelWrapper: {
         display: 'flex',
+    },
+    wrapper: {
+        padding: theme.spacing(0, 2, 2, 2),
     },
 }))
 
@@ -85,5 +88,9 @@ export function RedPacketCreateNew(props: RedPacketFormProps) {
         state,
         classes,
     }
-    return <AbstractTab height={500} {...tabProps} />
+    return (
+        <div className={classes.wrapper}>
+            <AbstractTab height={500} {...tabProps} />
+        </div>
+    )
 }

@@ -1,15 +1,20 @@
 import { useState, useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared'
+import { ERC721ContractDetailed, useERC721ContractBalance, useAccount } from '@masknet/web3-shared'
 import classNames from 'classnames'
-import { Box, Typography } from '@material-ui/core'
+import { EthereumAddress } from 'wallet.ts'
+import { Box, Typography, CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { SelectNftContractDialogEvent, WalletMessages } from '../../plugins/Wallet/messages'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useI18N } from '../../utils'
 
-const useStyles = makeStyles()((theme) => {
+interface StyleProps {
+    hasIcon: boolean
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, props) => {
     return {
         root: {
             height: 52,
@@ -37,9 +42,10 @@ const useStyles = makeStyles()((theme) => {
         tokenWrapper: {
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'space-between',
         },
         nftName: {
-            marginLeft: theme.spacing(1),
+            marginLeft: theme.spacing(props.hasIcon ? 1 : 0),
             fontWeight: 300,
             pointerEvents: 'none',
             fontSize: 16,
@@ -62,7 +68,9 @@ export interface ERC721TokenSelectPanelProps {
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, contract } = props
-    const { classes } = useStyles()
+    const account = useAccount()
+    const { classes } = useStyles({ hasIcon: Boolean(contract?.iconURL) })
+    const { value: balance, loading } = useERC721ContractBalance(contract?.address, account)
     const { t } = useI18N()
 
     //#region select contract
@@ -93,6 +101,13 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                 <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
                     {t('dashboard_tab_collectibles')}
                 </Typography>
+                {!contract?.address || !EthereumAddress.isValid(contract.address) ? null : loading ? (
+                    <CircularProgress size={16} />
+                ) : (
+                    <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
+                        Balance: {balance ? balance : '0'}
+                    </Typography>
+                )}
             </div>
             <div className={classNames(classes.wrapper, classes.pointer)} onClick={openDialog}>
                 <div className={classes.tokenWrapper}>

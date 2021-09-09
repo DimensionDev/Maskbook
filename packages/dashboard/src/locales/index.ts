@@ -1,6 +1,6 @@
 // This file is auto generated. DO NOT EDIT
 // Run `npx gulp sync-languages` to regenerate.
-// Default fallback langauge in a family of langauges are chosen by the alphabet order
+// Default fallback language in a family of languages are chosen by the alphabet order
 // To overwrite this, please overwrite packages/scripts/src/locale-kit-next/index.ts
 import en_US from './en-US.json'
 import es_ES from './es-ES.json'

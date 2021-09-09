@@ -118,10 +118,9 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
             }
             const network = getChainName(redPacketSubgraphInMask.chain_id)
 
-            let token
             if (redPacketSubgraphInMask.token.type === EthereumTokenType.Native) {
                 const detailed = getChainDetailed(redPacketSubgraphInMask.token.chainId)
-                token = {
+                const token = {
                     ...redPacketSubgraphInMask.token,
                     name: detailed?.nativeCurrency.name ?? 'Ether',
                     symbol: detailed?.nativeCurrency.symbol ?? 'ETH',
@@ -143,3 +142,5 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
         })
         .sort((a, b) => b.creation_time - a.creation_time)
 }
+
+export * from './nftRedpacket'

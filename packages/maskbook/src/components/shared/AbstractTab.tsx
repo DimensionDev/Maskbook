@@ -1,4 +1,5 @@
 import { makeStyles } from '@masknet/theme'
+import classNames from 'classnames'
 import { Tabs, Tab, Box, BoxProps, Paper } from '@material-ui/core'
 import { useStylesExtends } from '@masknet/shared'
 
@@ -16,7 +17,7 @@ interface TabPanelProps extends BoxProps {
     label: string | React.ReactNode
 }
 
-export interface AbstractTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator'> {
+export interface AbstractTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab'> {
     tabs: (Omit<TabPanelProps, 'height' | 'minHeight'> & {
         cb?: () => void
         disableFocusRipple?: boolean
@@ -53,7 +54,7 @@ export default function AbstractTab(props: AbstractTabProps) {
                     onChange={(_: React.SyntheticEvent, newValue: number) => setValue?.(newValue)}>
                     {tabs.map((tab, i) => (
                         <Tab
-                            className={classes.tab}
+                            className={classNames(classes.tab, [index, value].includes(i) ? classes.focusTab : '')}
                             disableFocusRipple={tab.disableFocusRipple}
                             disableRipple={tab.disableRipple}
                             onClick={tab.cb}

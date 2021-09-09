@@ -1,4 +1,5 @@
 import { useAsyncRetry } from 'react-use'
+import { noop } from 'lodash-es'
 import type { ERC721ContractDetailed, ERC721TokenInfo } from '../types'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { safeNonPayableTransactionCall, createERC721Token } from '../utils'
@@ -75,34 +76,39 @@ export async function getERC721TokenDetailedFromChain(
     }
 }
 
+const assetCache: Record<string, Promise<ERC721TokenInfo> | ERC721TokenInfo> = Object.create(null)
+const lazyVoid = Promise.resolve()
+
 const BASE64_PREFIX = 'data:application/json;base64,'
 // Todo: replace this temporary proxy.
 const CORS_PROXY = 'https://whispering-harbor-49523.herokuapp.com'
-async function getERC721TokenAssetFromChain(tokenURI?: string) {
+async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<ERC721TokenInfo | void> {
     if (!tokenURI) return
 
-    // for some NFT tokens retrun JSON in base64 encoded
-    if (tokenURI.startsWith(BASE64_PREFIX))
-        try {
-            return JSON.parse(atob(tokenURI.replace(BASE64_PREFIX, ''))) as ERC721TokenInfo
-        } catch (error) {
-            void 0
-        }
+    if (assetCache[tokenURI]) {
+        return assetCache[tokenURI]
+    }
+    let promise: Promise<ERC721TokenInfo | void> = lazyVoid
 
-    // for some NFT tokens return JSON
     try {
-        return JSON.parse(tokenURI) as ERC721TokenInfo
+        // for some NFT tokens retrun JSON in base64 encoded
+        if (tokenURI.startsWith(BASE64_PREFIX)) {
+            promise = Promise.resolve(JSON.parse(atob(tokenURI.replace(BASE64_PREFIX, ''))) as ERC721TokenInfo)
+        } else {
+            // for some NFT tokens return JSON
+            promise = Promise.resolve(JSON.parse(tokenURI) as ERC721TokenInfo)
+        }
     } catch (error) {
         void 0
     }
 
-    // for some NFT tokens return an URL refers to a JSON file
-    try {
-        const response = await fetch(`${CORS_PROXY}/${tokenURI}`)
-        const r = await response.json()
-        return r as ERC721TokenInfo
-    } catch (error) {
-        void 0
+    if (promise === lazyVoid) {
+        // for some NFT tokens return an URL refers to a JSON file
+        promise = fetch(`${CORS_PROXY}/${tokenURI}`).then((r) => r.json() as ERC721TokenInfo, noop)
+        assetCache[tokenURI] = promise as Promise<ERC721TokenInfo>
+        const result = await promise
+        assetCache[tokenURI] = result as ERC721TokenInfo
+        return result
     }
 
     return

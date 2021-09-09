@@ -44,7 +44,7 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                           Web3Utils.sha3(from)!,
                       )
 
-        // esitimate gas and compose transaction
+        // estimate gas and compose transaction
         const config = {
             from,
             gas: await claim()

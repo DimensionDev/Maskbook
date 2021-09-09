@@ -113,7 +113,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                         : null,
                     traits: raribleResponse?.meta.attributes.map(({ key, value }) => ({ trait_type: key, value })),
                     description: raribleResponse?.meta.description ?? '',
-                    name: raribleResponse?.meta.name ?? 'Unkown',
+                    name: raribleResponse?.meta.name ?? 'Unknown',
                     collection_name: '',
                     animation_url: raribleResponse.meta.animation?.url.PREVIEW,
                     current_price: 0,

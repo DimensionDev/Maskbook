@@ -6,6 +6,10 @@
             "type": "string",
             "title": "id"
         },
+        "txid": {
+            "type": "string",
+            "title": "txid"
+        },
         "duration": {
             "type": "number",
             "title": "duration"

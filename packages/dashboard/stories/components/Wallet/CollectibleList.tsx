@@ -16,7 +16,7 @@ export const CollectibleList = of({
         isEmpty: false,
         showPagination: true,
         chainId: ChainId.Mainnet,
-        provider: CollectibleProvider.OPENSEAN,
+        provider: CollectibleProvider.OPENSEA,
         dataSource: [],
     },
 })

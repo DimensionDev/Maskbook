@@ -103,11 +103,10 @@ const useStyles = makeStyles()((theme) => ({
 export interface RedPacketInHistoryListProps {
     history: RedPacketHistory
     onSelect: (payload: RedPacketJSONPayload) => void
-    onClose: () => void
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const account = useAccount()
-    const { history, onSelect, onClose } = props
+    const { history, onSelect } = props
     const { t } = useI18N()
     const { classes } = useStyles()
     const {
@@ -123,15 +122,14 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     )
 
     //#region remote controlled transaction dialog
-    const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
-        (ev) => undefined,
     )
 
     useEffect(() => {
         if (refundState.type === TransactionStateType.UNKNOWN || !availability) return
         if (refundState.type === TransactionStateType.HASH) {
-            setTransactionDialogOpen({
+            setTransactionDialog({
                 open: true,
                 state: refundState,
                 summary: availability
@@ -152,7 +150,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) await refundCallback()
         if (canSend) onSelect(history.payload)
-    }, [onSelect, onClose, refundCallback, canRefund, canSend, history])
+    }, [onSelect, refundCallback, canRefund, canSend, history])
 
     return (
         <ListItem className={classes.root}>

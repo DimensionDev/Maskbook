@@ -54,6 +54,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     openIcon: {
         display: 'flex',
+        color: theme.palette.mode === 'light' ? 'rgba(123, 129, 146, 1)' : 'rgba(111, 118, 124, 1)',
         width: 16,
         height: 16,
         marginLeft: 2,
@@ -73,14 +74,13 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     addressNoImage: {
-        left: theme.spacing(2),
+        left: '16px !important',
     },
     dialogContent: {
         height: 560,
     },
     noResultBox: {
         background: theme.palette.mode === 'light' ? 'rgba(247, 249, 250, 1)' : 'rgba(23, 25, 29, 1)',
-        width: 540,
         height: 431,
         display: 'flex',
         justifyContent: 'center',
@@ -233,15 +233,15 @@ function ContractListItem(props: ContractListItemProps) {
                 </Typography>
             </ListItem>
             <Typography>
-                <Link
-                    className={classNames(classes.address, contract.iconURL ? '' : classes.addressNoImage)}
-                    href={resolveAddressLinkOnExplorer(chainId, contract.address)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={stop}>
-                    <span>{contract.address}</span>
-                    <OpenInNewIcon className={classes.openIcon} fontSize="small" />
-                </Link>
+                <div className={classNames(classes.address, contract.iconURL ? '' : classes.addressNoImage)}>
+                    <span onClick={() => onSubmit(contract)}>{contract.address}</span>
+                    <Link
+                        href={resolveAddressLinkOnExplorer(chainId, contract.address)}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <OpenInNewIcon className={classes.openIcon} fontSize="small" />
+                    </Link>
+                </div>
             </Typography>
         </div>
     )

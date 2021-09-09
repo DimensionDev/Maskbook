@@ -1,6 +1,6 @@
 import { isNull } from 'lodash-es'
 import type { SocialNetwork } from '../../../social-network'
-import { bioDescriptionSelector, searchNickNameSelector } from './selector'
+import { bioDescriptionSelector, searchAvatarSelector, searchNickNameSelector } from './selector'
 
 /**
  * @link https://help.twitter.com/en/managing-your-account/twitter-username-rules
@@ -39,4 +39,12 @@ export const getTwitterId = () => {
 export const getBioDescription = () => {
     const node = bioDescriptionSelector().evaluate()
     return node?.innerText ?? ''
+}
+
+export const getAvatar = () => {
+    const node = searchAvatarSelector().evaluate() as HTMLImageElement
+    if (!node) return ''
+
+    const imageURL = node.getAttribute('src') ?? ''
+    return imageURL.trim()
 }

@@ -65,7 +65,7 @@ export function PerformanceChart(props: PerformanceChartProps) {
     const stats: Stat[] = perfHistory?.map((row) => [Number(row.timestamp), Number(row.performance)]) ?? []
     //#endregion
 
-    //#region make chart responisve
+    //#region make chart responsive
     const { width } = useWindowSize()
     const [responsiveWidth, setResponsiveWidth] = useState(DEFAULT_DIMENSION.width)
     const [responsiveHeight, setResponsiveHeight] = useState(DEFAULT_DIMENSION.height)

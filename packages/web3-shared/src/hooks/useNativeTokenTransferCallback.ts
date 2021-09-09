@@ -34,13 +34,13 @@ export function useNativeTransferCallback(amount?: string, recipient?: string, m
             return
         }
 
-        // error: insufficent balance
+        // error: insufficient balance
         const balance = await web3.eth.getBalance(account)
 
         if (isGreaterThan(amount, balance)) {
             setTransferState({
                 type: TransactionStateType.FAILED,
-                error: new Error('Insufficent balance'),
+                error: new Error('Insufficient balance'),
             })
             return
         }

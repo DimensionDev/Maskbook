@@ -13,7 +13,7 @@ import {
     useERC721TokenDetailedOwnerList,
     useAccount,
     useChainId,
-    useRedPacketNftConstants,
+    useNftRedPacketConstants,
 } from '@masknet/web3-shared'
 import CloseIcon from '@material-ui/icons/Close'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => {
         },
         line: {
             display: 'flex',
-            margin: theme.spacing(1),
+            margin: theme.spacing(1, 1, 2, 1),
         },
         nftNameWrapper: {
             width: '100%',
@@ -75,8 +75,6 @@ const useStyles = makeStyles()((theme) => {
             overflowY: 'auto',
             background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
             borderRadius: 12,
-            marginTop: theme.spacing(1.5),
-            marginBottom: theme.spacing(1.5),
             padding: theme.spacing(1.5, 1.5, 1, 1),
             boxSizing: 'border-box',
         },
@@ -91,6 +89,14 @@ const useStyles = makeStyles()((theme) => {
             width: 120,
             height: 180,
             overflow: 'hidden',
+        },
+        tokenSelectorParent: {
+            width: 544,
+            background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+            borderRadius: 12,
+            paddingBottom: 5,
+            marginTop: theme.spacing(1.5),
+            marginBottom: theme.spacing(1.5),
         },
         addWrapper: {
             cursor: 'pointer',
@@ -153,12 +159,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     const addOffset = useCallback(() => (loadMore ? setOffset(offset + 1) : void 0), [offset, loadMore])
 
-    const removeToken = useCallback(
-        (token: ERC721TokenDetailed) => {
-            setExistTokenDetailedList(existTokenDetailedList.filter((t) => t.tokenId !== token.tokenId))
-        },
-        [existTokenDetailedList, setExistTokenDetailedList],
-    )
+    const removeToken = useCallback((token: ERC721TokenDetailed) => {
+        setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))
+    }, [])
 
     const clearToken = useCallback(() => {
         setOffset(0)
@@ -179,49 +182,48 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         clearContract()
     }, [chainId])
 
-    const { RED_PACKET_NFT_ADDRESS } = useRedPacketNftConstants()
+    const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants()
 
     const validationMessage = useMemo(() => {
         if (existTokenDetailedList.length === 0) return t('plugin_wallet_select_a_token')
         return ''
-    }, [existTokenDetailedList])
+    }, [existTokenDetailedList.length])
 
     return (
         <>
             <Box className={classes.root}>
                 <ERC721ContractSelectPanel contract={contract} onContractChange={setContract} />
                 {contract ? (
-                    <List className={classes.tokenSelector}>
-                        <ListItem
-                            onClick={() => setOpen(true)}
-                            className={classNames(classes.tokenSelectorWrapper, classes.addWrapper)}>
-                            <AddCircleOutlineIcon className={classes.addIcon} onClick={() => void 0} />
-                        </ListItem>
-                        {existTokenDetailedList.map((value, i) => (
-                            <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
-                                <div className={classes.imgWrapper}>
-                                    <img className={classes.nftImg} src={value.info.image} />
-                                </div>
-                                <div className={classes.nftNameWrapper}>
-                                    <Typography className={classes.nftName} color="textSecondary">
-                                        {value.info.name}
-                                    </Typography>
-                                </div>
-                                <div className={classes.closeIconWrapperBack} onClick={() => removeToken(value)}>
-                                    <div className={classes.closeIconWrapper}>
-                                        <CloseIcon className={classes.closeIcon} />
+                    <div className={classes.tokenSelectorParent}>
+                        <List className={classes.tokenSelector}>
+                            {existTokenDetailedList.map((value, i) => (
+                                <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
+                                    <div className={classes.imgWrapper}>
+                                        <img className={classes.nftImg} src={value.info.image} />
                                     </div>
-                                </div>
+                                    <div className={classes.nftNameWrapper}>
+                                        <Typography className={classes.nftName} color="textSecondary">
+                                            {value.info.name}
+                                        </Typography>
+                                    </div>
+                                    <div className={classes.closeIconWrapperBack} onClick={() => removeToken(value)}>
+                                        <div className={classes.closeIconWrapper}>
+                                            <CloseIcon className={classes.closeIcon} />
+                                        </div>
+                                    </div>
+                                </ListItem>
+                            ))}
+                            <ListItem
+                                onClick={() => setOpen(true)}
+                                className={classNames(classes.tokenSelectorWrapper, classes.addWrapper)}>
+                                <AddCircleOutlineIcon className={classes.addIcon} onClick={() => void 0} />
                             </ListItem>
-                        ))}
-                    </List>
+                        </List>
+                    </div>
                 ) : null}
                 <div className={classes.line}>
                     <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
                 </div>
-                <Typography className={classes.tip} color="textSecondary">
-                    {t('plugin_red_packet_nft_send_tip')}
-                </Typography>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC721TokenApprovedBoundary
                         validationMessage={validationMessage}

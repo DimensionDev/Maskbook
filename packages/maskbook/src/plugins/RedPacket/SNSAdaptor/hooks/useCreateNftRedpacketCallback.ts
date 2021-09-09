@@ -57,9 +57,26 @@ export function useCreateNftRedpacketCallback(
                 type: TransactionStateType.WAIT_FOR_CONFIRMING,
             })
 
-            type MethodParameters = Parameters<NftRedPacket['methods']['create_red_packet']>
+            //#region check ownership
+            type CheckMethodParameters = Parameters<NftRedPacket['methods']['check_ownership']>
 
-            const params: MethodParameters = [
+            const checkParams: CheckMethodParameters = [tokenIdList, contractAddress]
+
+            const isOwner = await nftRedPacketContract.methods.check_ownership(...checkParams).call({ from: account })
+
+            if (!isOwner) {
+                setCreateState?.({
+                    type: TransactionStateType.FAILED,
+                    error: new Error('Invalid ownership'),
+                })
+                return
+            }
+
+            //#endregion
+
+            type FillMethodParameters = Parameters<NftRedPacket['methods']['create_red_packet']>
+
+            const params: FillMethodParameters = [
                 publicKey,
                 duration,
                 Web3Utils.sha3(Math.random().toString())!,

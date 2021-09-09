@@ -84,7 +84,7 @@ export function useEvents(provider: CollectibleProvider, token?: CollectibleToke
                 return {
                     data: raribleEvents.map((event) => {
                         return {
-                            id: event.salt,
+                            id: event.id,
                             accountPair: {
                                 from: event.fromInfo
                                     ? {

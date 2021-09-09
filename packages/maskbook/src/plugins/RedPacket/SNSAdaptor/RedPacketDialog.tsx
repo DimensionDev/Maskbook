@@ -8,7 +8,7 @@ import { RedPacketJSONPayload, DialogTabs, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
 import { RedPacketMetaKey } from '../constants'
 import { RedPacketCreateNew } from './RedPacketCreateNew'
-import { RedPacketHistoryList } from './RedPacketHistoryList'
+import { RedPacketPast } from './RedPacketPast'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import Services from '../../../extension/service'
 import Web3Utils from 'web3-utils'
@@ -38,6 +38,12 @@ const useStyles = makeStyles()((theme) => ({
         left: 0,
         right: 0,
         position: 'absolute',
+    },
+    focusTab: {
+        backgroundColor: theme.palette.mode === 'light' ? 'rgba(247, 249, 250, 1)' : 'rgba(255, 255, 255, 0.08)',
+    },
+    dialogContent: {
+        padding: 0,
     },
 }))
 
@@ -135,7 +141,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             if (!createSettings?.token) return
 
             // TODO:
-            // earily return happended
+            // early return happened
             // we should guide user to select the red packet in the existing list
             if (createState.type !== TransactionStateType.CONFIRMED) return
 
@@ -233,17 +239,20 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             },
             {
                 label: t('plugin_red_packet_select_existing'),
-                children: <RedPacketHistoryList onSelect={onCreateOrSelect} onClose={onClose} />,
+                children: <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />,
                 sx: { p: 0 },
             },
         ],
         state,
+        classes: {
+            focusTab: classes.focusTab,
+        },
     }
 
     return (
         <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={onClose}>
-            <DialogContent>
-                {step === CreateRedPacketPageStep.NewRedPacketPage ? <AbstractTab height={570} {...tabProps} /> : null}
+            <DialogContent className={classes.dialogContent}>
+                {step === CreateRedPacketPageStep.NewRedPacketPage ? <AbstractTab height={520} {...tabProps} /> : null}
                 {step === CreateRedPacketPageStep.ConfirmPage ? (
                     <RedPacketConfirmDialog
                         onClose={onClose}

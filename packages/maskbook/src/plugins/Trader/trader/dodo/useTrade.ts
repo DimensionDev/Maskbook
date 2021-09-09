@@ -26,7 +26,7 @@ export function useTrade(
     const slippage = useSlippageTolerance()
     const chainId = useChainId()
     const { RPC } = useRPCConstants(chainId)
-    const provderURL = first(RPC)
+    const providerURL = first(RPC)
     const { DODO_ETH_ADDRESS } = useTraderConstants(chainId)
     const account = useAccount()
 
@@ -44,7 +44,7 @@ export function useTrade(
             fromAmount: inputAmount,
             slippage: slippage / 100,
             userAddr: account,
-            rpc: provderURL,
+            rpc: providerURL,
             chainId,
         })
     }, [
@@ -57,7 +57,7 @@ export function useTrade(
         slippage,
         blockNumber, // refresh api each block
         account,
-        provderURL,
+        providerURL,
         chainId,
     ])
 }

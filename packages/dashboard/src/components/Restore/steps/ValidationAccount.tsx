@@ -6,7 +6,7 @@ import { SendingCodeField } from '@masknet/theme'
 import { Button, Typography } from '@material-ui/core'
 import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
 import type { StepCommonProps } from '../../Stepper'
-import { ValidationCodeStep } from './Commont'
+import { ValidationCodeStep } from './common'
 import { AccountType, BackupFileInfo, Scenario, Locale } from '../../../pages/Settings/type'
 
 interface ValidationAccountProps extends StepCommonProps {

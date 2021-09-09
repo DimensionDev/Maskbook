@@ -7,7 +7,7 @@ import { ChainId, isZero, resolveAddressLinkOnExplorer } from '@masknet/web3-sha
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
-import urlcat from 'urlcat'
+import { useMemo } from 'react'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -56,16 +56,18 @@ interface IRowProps {
 export function OrderRow({ order, isDifferenceToken }: IRowProps) {
     const { classes } = useStyles()
     const { provider } = CollectibleState.useContainer()
-    const address = order.makerAccount?.user?.username ?? order.makerAccount?.address ?? ''
+    const address = order.makerAccount?.user?.username || order.makerAccount?.address || ''
+
+    const link = useMemo(() => {
+        return provider === CollectibleProvider.OPENSEA
+            ? `https://opensea.io/accounts/${address}`
+            : order.makerAccount?.link
+    }, [order, provider])
+
     return (
         <TableRow>
             <TableCell>
-                <Link
-                    href={urlcat('https://opensea.io/accounts/:address', { address })}
-                    title={address}
-                    target="_blank"
-                    className={classes.account}
-                    rel="noopener noreferrer">
+                <Link href={link} title={address} target="_blank" className={classes.account} rel="noopener noreferrer">
                     <Avatar src={order.makerAccount?.profile_img_url} className={classes.avatar} />
                     <Typography className={classes.accountName}>
                         <Account address={order.makerAccount?.address} username={order.makerAccount?.user?.username} />
@@ -76,9 +78,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                 <>
                     <TableCell>
                         <Typography className={classes.content}>
-                            {order.paymentTokenContract?.symbol !== 'ETH' &&
-                            order.paymentTokenContract?.symbol !== 'WETH' &&
-                            provider === CollectibleProvider.OPENSEA ? (
+                            {provider === CollectibleProvider.OPENSEA ? (
                                 <Link
                                     href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.paymentToken!)}
                                     target="_blank"
@@ -109,9 +109,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                 <>
                     <TableCell>
                         <Typography style={{ display: 'flex' }} className={classes.content}>
-                            {order.paymentTokenContract?.symbol !== 'ETH' &&
-                            order.paymentTokenContract?.symbol !== 'WETH' &&
-                            provider === CollectibleProvider.OPENSEA ? (
+                            {provider === CollectibleProvider.OPENSEA ? (
                                 <Link
                                     href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.paymentToken!)}
                                     target="_blank"
@@ -133,18 +131,22 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                             }`}
                         </Typography>
                     </TableCell>
-                    <TableCell>
-                        <Typography className={classes.content}>
-                            {order.expirationTime &&
-                                !isZero(order.expirationTime) &&
-                                formatDistanceToNow(
-                                    new Date(new BigNumber(order.expirationTime ?? 0).multipliedBy(1000).toNumber()),
-                                    {
-                                        addSuffix: true,
-                                    },
-                                )}
-                        </Typography>
-                    </TableCell>
+                    {provider === CollectibleProvider.OPENSEA ? (
+                        <TableCell>
+                            <Typography className={classes.content}>
+                                {order.expirationTime &&
+                                    !isZero(order.expirationTime) &&
+                                    formatDistanceToNow(
+                                        new Date(
+                                            new BigNumber(order.expirationTime ?? 0).multipliedBy(1000).toNumber(),
+                                        ),
+                                        {
+                                            addSuffix: true,
+                                        },
+                                    )}
+                            </Typography>
+                        </TableCell>
+                    ) : null}
                 </>
             )}
         </TableRow>

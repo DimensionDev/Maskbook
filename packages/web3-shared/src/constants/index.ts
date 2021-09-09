@@ -4,7 +4,7 @@ import Gitcoin from '@masknet/web3-constants/data/gitcoin.json'
 import ITO from '@masknet/web3-constants/data/ito.json'
 import LBP from '@masknet/web3-constants/data/lbp.json'
 import RedPacket from '@masknet/web3-constants/data/red-packet.json'
-import RedPacketNft from '@masknet/web3-constants/data/red-packet-nft.json'
+import NftRedPacket from '@masknet/web3-constants/data/nft-red-packet.json'
 import Token from '@masknet/web3-constants/data/token.json'
 import Trader from '@masknet/web3-constants/data/trader.json'
 import Trending from '@masknet/web3-constants/data/trending.json'
@@ -57,8 +57,8 @@ export const useGoodGhostingConstants = hookTransform(getGoodGhostingConstants)
 export const getOpenseaAPIConstants = transform(OpenseaAPI)
 export const useOpenseaAPIConstants = hookTransform(getOpenseaAPIConstants)
 
-export const getRedPacketNftConstants = transform(RedPacketNft)
-export const useRedPacketNftConstants = hookTransform(getRedPacketNftConstants)
+export const getNftRedPacketConstants = transform(NftRedPacket)
+export const useNftRedPacketConstants = hookTransform(getNftRedPacketConstants)
 
 // for estimate gas
 export const FAKE_SIGN_PASSWORD = '0x75466cc969717b172b14253aaeebdc958f2b5037a852c1337650ed4978242dd9'

@@ -186,7 +186,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { open, onClose } = props
     const currentChainId = useChainId()
     const [chainId, setChainId] = useState(
-        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].includes(currentChainId) ? currentChainId : ChainId.Mainnet,
+        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].includes(currentChainId)
+            ? currentChainId
+            : ChainId.Mainnet,
     )
     const { value: swappedTokens, loading, retry } = useClaimablePools(chainId)
     const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
@@ -300,25 +302,21 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         })
     }, [claimState, swappedTokens /* update tx dialog only if state changed */])
 
+    const createTabItem = (name: string, chainId: ChainId) => ({
+        label: <span>{name}</span>,
+        sx: { p: 0 },
+        cb: () => setChainId(chainId),
+    })
+
     const tabProps: AbstractTabProps = {
         tabs: [
-            {
-                label: <span>ETH</span>,
-                sx: { p: 0 },
-                cb: () => setChainId(ChainId.Mainnet),
-            },
-            {
-                label: <span>BSC</span>,
-                sx: { p: 0 },
-                cb: () => setChainId(ChainId.BSC),
-            },
-            {
-                label: <span>Polygon/Matic</span>,
-                sx: { p: 0 },
-                cb: () => setChainId(ChainId.Matic),
-            },
+            createTabItem('ETH', ChainId.Mainnet),
+            createTabItem('BSC', ChainId.BSC),
+            createTabItem('Polygon/Matic', ChainId.Matic),
+            createTabItem('Arbitrum', ChainId.Arbitrum),
+            createTabItem('xDai', ChainId.xDai),
         ],
-        index: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].indexOf(chainId),
+        index: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].indexOf(chainId),
         classes,
         hasOnlyOneChild: true,
     }
