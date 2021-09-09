@@ -47,7 +47,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 const chainDetailed = getChainDetailed(chainId)
                 const tokenDetailed =
                     payload.token_type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token
-                return `A Red Packet with ${formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $${
+                return `🧧 A Red Packet with ${formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $${
                     tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
                 } from ${payload.sender.name}`
             },
@@ -56,7 +56,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RedPacketNftMetaKey,
             (_payload) => {
                 const payload = _payload as RedPacketNftJSONPayload
-                return 'A Red Packet with NFT'
+                return payload.message ? `🧧 ${payload.message}` : '🧧 An NFT Red Packet'
             },
         ],
     ]),

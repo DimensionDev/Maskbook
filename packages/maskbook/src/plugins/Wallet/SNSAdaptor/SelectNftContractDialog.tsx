@@ -74,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     addressNoImage: {
-        left: theme.spacing(2),
+        left: '16px !important',
     },
     dialogContent: {
         height: 560,
