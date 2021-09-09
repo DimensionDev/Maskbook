@@ -176,7 +176,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
         },
     }
 
-    useEffect(() => setCheckAddress(''), [account])
+    useEffect(() => setCheckAddress(''), [account, currentChainId])
 
     useEffect(() => {
         if (claimState.type === TransactionStateType.CONFIRMED && claimState.no === 0) {
@@ -247,7 +247,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
                             <div className={classes.gallery}>
                                 {campaignInfo.nfts.map((nft, i) => (
                                     <div className={classes.imgWrapper} key={i}>
-                                        <img src={nft.image} className={classes.nftImage} />{' '}
+                                        <img src={nft.image} className={classes.nftImage} />
                                     </div>
                                 ))}
                             </div>

@@ -432,8 +432,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                         fontSize: 18,
                                         fontWeight: 400,
                                     }}>
-                                    {(swappedTokens && swappedTokens.length > 0) ||
-                                    (swappedTokensOld && swappedTokensOld.length > 0) ? (
+                                    {swappedTokens?.length || swappedTokensOld?.length ? (
                                         <EthereumWalletConnectedBoundary>
                                             <ActionButton
                                                 className={classes.actionButton}
