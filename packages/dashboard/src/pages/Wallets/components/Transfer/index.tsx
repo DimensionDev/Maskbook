@@ -1,23 +1,21 @@
 import { memo } from 'react'
 import { ContentContainer } from '../../../../components/ContentContainer'
 import { Box, Tab } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar, useTabs } from '@masknet/theme'
+import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@material-ui/lab'
+import { TransferERC20 } from './TransferERC20'
+import { useNativeTokenDetailed } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()((theme) => ({
-    caption: {
-        paddingRight: theme.spacing(2.5),
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderBottom: `1px solid ${MaskColorVar.lineLighter}`,
-    },
+    caption: {},
 }))
 
 export const Transfer = memo(() => {
     const { classes } = useStyles()
-    const [currentTab, onChange, tabs] = useTabs('tokens')
+    const { value: nativeToken } = useNativeTokenDetailed()
+    const [currentTab, onChange, tabs] = useTabs('tokens', 'collections')
+
+    if (!nativeToken) return null
 
     return (
         <ContentContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>
@@ -25,8 +23,12 @@ export const Transfer = memo(() => {
                 <TabContext value={currentTab}>
                     <TabList onChange={onChange}>
                         <Tab label="Token" value={tabs.tokens} />
+                        <Tab label="Collections" value={tabs.collections} />
                     </TabList>
-                    <TabPanel value={tabs.tokens}>TBD</TabPanel>
+                    <TabPanel value={tabs.tokens}>
+                        <TransferERC20 token={nativeToken} />
+                    </TabPanel>
+                    <TabPanel value={tabs.collections}>todo</TabPanel>
                 </TabContext>
             </Box>
         </ContentContainer>
