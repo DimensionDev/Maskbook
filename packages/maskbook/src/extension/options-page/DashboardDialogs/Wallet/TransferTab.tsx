@@ -73,16 +73,10 @@ export function TransferTab(props: TransferTabProps) {
     }, [tokenBalance, gasPrice, token.type])
 
     //#region transfer tokens
-    const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
-        token.type,
-        token.address,
-        transferAmount,
-        address,
-        memo,
-    )
+    const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(token.type, token.address)
 
     const onTransfer = useCallback(async () => {
-        await transferCallback(transferAmount.toFixed(), address, undefined, memo)
+        await transferCallback(transferAmount, address, undefined, memo)
     }, [transferCallback, transferAmount, address, memo])
     //#endregion
 
