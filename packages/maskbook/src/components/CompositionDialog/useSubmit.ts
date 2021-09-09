@@ -4,25 +4,31 @@ import { useCallback } from 'react'
 import Services from '../../extension/service'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
 import type { ImageTemplateTypes } from '../../resources/image-payload'
+import { getCurrentSelectedIdentity } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { i18n, useI18N } from '../../utils'
-import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { SteganographyTextPayload } from '../InjectedComponents/SteganographyTextPayload'
 import type { SubmitComposition } from './CompositionUI'
 
 export function useSubmit(onClose: () => void) {
     const { t } = useI18N()
-    const whoAmI = useCurrentIdentity()
 
     const onRequestPost = useCallback(
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
 
+            const network = activatedSocialNetworkUI.networkIdentifier
+            const currentOwnedProfiles = await Services.Identity.queryMyProfiles(network)
+            let currentProfile = getCurrentSelectedIdentity(network)
+            if (!currentOwnedProfiles.some((e) => e.identifier.equals(currentProfile))) {
+                currentProfile = ProfileIdentifier.unknown
+            }
+
             const [encrypted, token] = await Services.Crypto.encryptTo(
                 content,
                 target === 'Everyone' ? [] : target.map((x) => x.identifier),
-                whoAmI?.identifier ?? ProfileIdentifier.unknown,
+                currentProfile,
                 target === 'Everyone',
             )
             const redPacketPreText = isTwitter(activatedSocialNetworkUI)
@@ -50,7 +56,7 @@ export function useSubmit(onClose: () => void) {
             if (target !== 'Everyone') Services.Crypto.publishPostAESKey(token)
             onClose()
         },
-        [t, whoAmI?.identifier.toText(), onClose],
+        [t, onClose],
     )
     return onRequestPost
 }
