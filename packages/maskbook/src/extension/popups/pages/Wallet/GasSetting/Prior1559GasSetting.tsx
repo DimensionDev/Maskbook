@@ -125,7 +125,7 @@ export const Prior1559GasSetting = memo(() => {
             (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
                 value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
         ) {
-            return new BigNumber(value?.computedPayload?._tx.gas ?? 0, 16).toNumber()
+            return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
         }
         return '0'
     }, [value])
@@ -179,7 +179,7 @@ export const Prior1559GasSetting = memo(() => {
     }, [gas, setValue])
 
     useEffect(() => {
-        if (selected) setValue('gasPrice', new BigNumber(options[selected].gasPrice).toString())
+        if (selected) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
     }, [selected, setValue, options])
 
     const [{ loading }, handleConfirm] = useAsyncFn(

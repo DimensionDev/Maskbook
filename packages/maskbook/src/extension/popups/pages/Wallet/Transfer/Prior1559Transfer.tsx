@@ -17,7 +17,7 @@ import {
     useTokenTransferCallback,
     useWallet,
 } from '@masknet/web3-shared'
-import { Controller, useForm, useFormContext, FormProvider } from 'react-hook-form'
+import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Box, Button, Chip, Collapse, MenuItem, Typography } from '@material-ui/core'
@@ -180,7 +180,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         },
     })
 
-    const [address, amount] = methods.watch(['address', 'amount'])
+    const [address, amount, gasPrice] = methods.watch(['address', 'amount', 'gasPrice'])
 
     //#region Set default gas price
     useAsync(async () => {
@@ -194,13 +194,23 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     //#endregion
 
     //#region Get min gas limit with amount and recipient address
-    const { value: minGasLimit } = useGasLimit(
+    const { value: minGasLimit, error } = useGasLimit(
         selectedAsset?.token.type,
         selectedAsset?.token.address,
-        new BigNumber(amount ?? 0).multipliedBy(pow10(selectedAsset?.token.decimals ?? 0)).toFixed(),
+        new BigNumber(!!amount ? amount : 0).multipliedBy(pow10(selectedAsset?.token.decimals ?? 0)).toFixed(),
         address,
     )
     //#endregion
+
+    const maxAmount = useMemo(() => {
+        let amount_ = new BigNumber(selectedAsset?.balance || '0')
+        amount_ =
+            selectedAsset?.token.type === EthereumTokenType.Native
+                ? amount_.minus(new BigNumber(30000).multipliedBy(gasPrice))
+                : amount_
+
+        return amount_.toFixed()
+    }, [selectedAsset?.balance, gasPrice, selectedAsset?.token.type])
 
     //#region set default gasLimit
     useUpdateEffect(() => {
@@ -217,8 +227,8 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     )
 
     const handleMaxClick = useCallback(() => {
-        methods.setValue('amount', formatBalance(selectedAsset?.balance, selectedAsset?.token.decimals))
-    }, [methods.setValue, selectedAsset])
+        methods.setValue('amount', formatBalance(maxAmount, selectedAsset?.token.decimals))
+    }, [methods.setValue, selectedAsset, maxAmount])
 
     const [{ loading }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
@@ -264,6 +274,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 handleCancel={() => history.goBack()}
                 handleConfirm={methods.handleSubmit(onSubmit)}
                 confirmLoading={loading}
+                maxAmount={maxAmount}
             />
             {otherWallets ? menu : null}
         </FormProvider>
@@ -279,6 +290,7 @@ export interface Prior1559TransferUIProps {
     handleCancel: () => void
     handleConfirm: () => void
     confirmLoading: boolean
+    maxAmount: string
 }
 
 type TransferFormData = {
@@ -298,6 +310,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         handleConfirm,
         handleCancel,
         confirmLoading,
+        maxAmount,
     }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
@@ -342,7 +355,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                         <Typography className={classes.balance} component="span">
                             Balance:
                             <FormattedBalance
-                                value={selectedAsset?.balance}
+                                value={maxAmount}
                                 decimals={selectedAsset?.token?.decimals}
                                 symbol={selectedAsset?.token?.symbol}
                                 significant={6}

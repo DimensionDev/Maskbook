@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom'
 import { useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
+import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()({
     content: {
@@ -77,7 +78,7 @@ const DeleteWallet = memo(() => {
         if (wallet?.address) {
             await WalletRPC.removeWallet(wallet.address)
             await WalletRPC.resetAccount()
-            history.goBack()
+            history.replace(PopupRoutes.SelectWallet)
         }
     }, [wallet])
 
