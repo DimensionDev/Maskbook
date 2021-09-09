@@ -13,8 +13,6 @@ import {
     TransactionStateType,
     useAccount,
     useChainId,
-    useGasPrice,
-    useNonce,
     useTransactionState,
     useWeb3,
     FungibleTokenDetailed,
@@ -67,8 +65,6 @@ type paramsObjType = {
 
 export function useFillCallback(poolSettings?: PoolSettings) {
     const web3 = useWeb3()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const { contract: ITO_Contract } = useITO_Contract()
@@ -139,8 +135,6 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         const config = {
             from: account,
             gas,
-            gasPrice,
-            nonce,
         }
 
         // send transaction and wait for hash
@@ -177,7 +171,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                     reject(error)
                 })
         })
-    }, [web3, gasPrice, nonce, account, chainId, ITO_Contract, poolSettings, paramResult, setFillState])
+    }, [web3, account, chainId, ITO_Contract, poolSettings, paramResult, setFillState])
 
     const resetCallback = useCallback(() => {
         setFillState({

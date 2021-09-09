@@ -25,9 +25,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface ColumnLayoutProps extends React.PropsWithChildren<{}> {}
+interface ColumnLayoutProps extends React.PropsWithChildren<{}> {
+    haveFooter?: boolean
+}
 
-export const ColumnLayout = ({ children }: ColumnLayoutProps) => {
+export const ColumnLayout = ({ haveFooter = true, children }: ColumnLayoutProps) => {
     const { classes } = useStyles()
     const mode = useAppearance()
 
@@ -38,7 +40,7 @@ export const ColumnLayout = ({ children }: ColumnLayoutProps) => {
                     <Typography>{mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}</Typography>
                     {children}
                 </Paper>
-                <FooterLine />
+                {haveFooter && <FooterLine />}
             </Content>
         </Container>
     )

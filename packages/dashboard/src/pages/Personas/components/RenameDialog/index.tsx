@@ -40,7 +40,7 @@ export const RenameDialog = memo<RenameDialogProps>(({ open, nickname, onClose, 
     })
 
     const handleFormSubmit = useCallback((event: FormEvent<HTMLFormElement>) => {
-        handleSubmit((data) => onConfirm(data.nickname))(event).catch(() => {
+        handleSubmit((data) => onConfirm(data.nickname.trim()))(event).catch(() => {
             setError('nickname', {
                 type: 'value',
                 message: t.personas_name_existed(),
