@@ -53,14 +53,16 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         selectedToken.type,
         selectedToken.address,
-        new BigNumber(amount).multipliedBy(pow10(selectedToken.decimals)).toFixed(),
-        address,
-        memo,
     )
 
     const onTransfer = useCallback(async () => {
-        await transferCallback()
-    }, [transferCallback])
+        await transferCallback(
+            new BigNumber(amount).multipliedBy(pow10(selectedToken.decimals)).toFixed(),
+            address,
+            undefined,
+            memo,
+        )
+    }, [amount, address, memo, selectedToken.decimals, transferCallback])
 
     //#region validation
     const validationMessage = useMemo(() => {

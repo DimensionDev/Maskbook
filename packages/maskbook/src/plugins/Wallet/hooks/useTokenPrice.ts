@@ -47,7 +47,6 @@ export function useTokenPrice(
             setPrice(value)
         })
     }, [platformOrCoinId, contractAddress])
-
     useEffect(() => {
         const currentTokenPrices = currentTokenPricesSettings.value
         setPrice(currentTokenPrices[category]?.[currencyType] ?? 0)

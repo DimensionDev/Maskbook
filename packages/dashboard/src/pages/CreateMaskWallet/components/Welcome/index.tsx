@@ -9,19 +9,19 @@ const Welcome = memo(() => {
     const mode = useAppearance()
     const navigate = useNavigate()
 
-    const privacyPolicyURL = new URL('../../../Welcome/en.html', import.meta.url).toString()
+    const privacyPolicyURL = new URL('../../en.html', import.meta.url).toString()
     const privacyPolicyDocument = useMemo(() => () => iframeRef?.current?.contentWindow?.document, [iframeRef])
 
     const updateIFrameStyle = () => {
-        const document = privacyPolicyDocument()
-        if (!document) return
+        const iframeDocument = privacyPolicyDocument()
+        if (!iframeDocument) return
 
-        const style = document.createElement('style')
+        const style = iframeDocument.createElement('style')
         style.innerHTML = `
               h3, h6 { color: ${mode === 'dark' ? '#FFFFFF' : '#111432'}; }
               p { color: ${mode === 'dark' ? 'rgba(255, 255, 255, 0.8);' : '#7b8192'}; }
             `
-        document.head?.appendChild(style)
+        iframeDocument.head?.appendChild(style)
     }
 
     const handleIFrameLoad = () => {
@@ -52,7 +52,7 @@ const Welcome = memo(() => {
             iframeRef={iframeRef}
             privacyPolicyURL={privacyPolicyURL}
             iframeLoadHandler={handleIFrameLoad}
-            agreeHandler={() => navigate(RoutePaths.Setup)}
+            agreeHandler={() => navigate(RoutePaths.CreateMaskWalletForm)}
             cancelHandler={() => window.close()}
         />
     )

@@ -10,7 +10,7 @@ export async function getTokenPrices(platform: string, contractAddresses: string
 }
 
 export async function getNativeTokenPrice(tokenIds: string[], currency: CurrencyType) {
-    const requestPath = `${URL_BASE}/simple/price?id=${tokenIds.join(',')}&vs_currencies=${currency}`
+    const requestPath = `${URL_BASE}/simple/price?ids=${tokenIds.join(',')}&vs_currencies=${currency}`
     const prices = await fetch(requestPath).then((r) => r.json() as Promise<CryptoPrice>)
     return prices
 }

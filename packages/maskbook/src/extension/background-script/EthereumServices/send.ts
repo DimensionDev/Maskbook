@@ -167,16 +167,16 @@ export async function INTERNAL_send(
         if (providerType === ProviderType.Maskbook && config.from) config.nonce = await getNonce(config.from as string)
 
         // add gas margin
-        if (config.gas) config.gas = `0x${addGasMargin(config.gas).toString(16)}`
+        if (config.gas && !Flags.v2_enabled) config.gas = `0x${addGasMargin(config.gas).toString(16)}`
 
         // pricing transaction
         const isGasPriceValid = parseGasPrice(config.gasPrice as string) > 0
         const isEIP1159Valid =
             parseGasPrice(config.maxFeePerGas as string) > 0 && parseGasPrice(config.maxPriorityFeePerGas as string) > 0
 
-        if (Flags.EIP1159_enabled && isEIP1159Supported(chainId) && !isGasPriceValid && !isEIP1159Valid) {
+        if (Flags.EIP1159_enabled && isEIP1159Supported(chainId) && !isEIP1159Valid) {
             throw new Error('To be implemented.')
-        } else {
+        } else if (!isGasPriceValid) {
             config.gasPrice = await getGasPrice()
         }
 
