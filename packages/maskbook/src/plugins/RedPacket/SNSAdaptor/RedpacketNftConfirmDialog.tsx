@@ -183,6 +183,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     const isSending = createState.type === TransactionStateType.WAIT_FOR_CONFIRMING
     const { enqueueSnackbar } = useSnackbar()
     const onSendTx = useCallback(() => createCallback(publicKey), [publicKey])
+    const [txid, setTxid] = useState('')
     const onSendPost = useCallback(
         (id: string) => {
             attachMetadata(RedPacketNftMetaKey, {
@@ -201,6 +202,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     )
     useEffect(() => {
         if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING && createState.hash) {
+            setTxid(createState.hash)
             RedPacketRPC.addRedPacketNft({ id: createState.hash, password: privateKey, contract_version: 1 })
         }
 
