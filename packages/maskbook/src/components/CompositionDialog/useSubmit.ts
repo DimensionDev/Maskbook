@@ -50,7 +50,7 @@ export function useSubmit(onClose: () => void) {
             if (target !== 'Everyone') Services.Crypto.publishPostAESKey(token)
             onClose()
         },
-        [t, onClose],
+        [whoAmI?.identifier.toText(), onClose],
     )
     return onRequestPost
 }
