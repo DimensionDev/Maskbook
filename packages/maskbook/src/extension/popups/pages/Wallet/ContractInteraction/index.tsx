@@ -213,7 +213,6 @@ const ContractInteraction = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (request) {
             const toBeClose = new URLSearchParams(location.search).get('toBeClose')
-            await WalletRPC.deleteUnconfirmedRequest(request.payload)
             await Services.Ethereum.confirmRequest(request.payload)
 
             if (toBeClose) {
@@ -227,13 +226,13 @@ const ContractInteraction = memo(() => {
     const handleReject = useRejectHandler(() => history.replace(PopupRoutes.Wallet), request)
 
     // gas fee
+    const gasPriceEIP1159 = new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0).multipliedBy(10 ** 9)
+    const gasPricePriorEIP1159 = (gasPrice as string) ?? defaultPrices?.gasPrice ?? 0
     const gasFee = new BigNumber(
-        isEIP1159Supported(getChainIdFromNetworkType(networkType))
-            ? maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0
-            : (gasPrice as string) ?? defaultPrices?.gasPrice ?? 0,
+        isEIP1159Supported(getChainIdFromNetworkType(networkType)) ? gasPriceEIP1159 : gasPricePriorEIP1159,
     )
         .multipliedBy(gas ?? 0)
-        .multipliedBy(10 ** 9)
+        .integerValue()
         .toFixed()
 
     // token decimals
@@ -257,6 +256,8 @@ const ContractInteraction = memo(() => {
     console.log({
         amount,
         gasFee,
+        maxFeePerGas: maxFeePerGas ?? defaultPrices?.maxFeePerGas,
+        defaultPrice: (gasPrice as string) ?? defaultPrices?.gasPrice,
         request,
         tokenPrice,
         tokenAmount,
