@@ -61,7 +61,6 @@ export function useERC721TokenTransferCallback(address?: string) {
                         })
                         throw error
                     }),
-                gasPrice,
                 ...gasConfig,
             }
 
