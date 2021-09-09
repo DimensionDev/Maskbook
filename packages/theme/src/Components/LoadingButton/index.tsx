@@ -19,7 +19,9 @@ export const MaskLoadingButton = memo<MaskLoadingButtonProps>((props) => {
                 setLoading(false)
             } catch (error) {
                 setLoading(false)
-                throw new Error(error as string)
+                if (typeof error === 'string') {
+                    throw new Error(error)
+                }
             }
         },
         [onClick],
