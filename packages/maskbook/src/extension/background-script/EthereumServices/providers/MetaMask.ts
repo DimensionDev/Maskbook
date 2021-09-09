@@ -33,7 +33,7 @@ async function onChainIdChanged(id: string) {
 }
 
 export async function createProvider() {
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (provider && provider.chainId !== null) return provider
     provider = createMetaMaskProvider()
 
