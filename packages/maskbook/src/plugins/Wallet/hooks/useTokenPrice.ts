@@ -17,11 +17,11 @@ const task = pollingTask(
 )
 
 export function useTokenPrice(
-    platform: string,
+    platformOrCoinId: string,
     contractAddress: string | undefined,
     currencyType: CurrencyType = CurrencyType.USD,
 ) {
-    const category = contractAddress ?? platform
+    const category = contractAddress ?? platformOrCoinId
     const [price, setPrice] = useState(0)
     useEffect(() => {
         // emit an updating request immediately
@@ -38,15 +38,15 @@ export function useTokenPrice(
     }, [])
     useEffect(() => {
         if (contractAddress) {
-            WalletRPC.trackContract(platform, contractAddress)
+            WalletRPC.trackContract(platformOrCoinId, contractAddress)
         } else {
-            WalletRPC.trackNativeToken(platform)
+            WalletRPC.trackNativeToken(platformOrCoinId)
         }
         return currentTokenPricesSettings.addListener((newVal) => {
             const value = newVal[category]?.[currencyType] ?? 0
             setPrice(value)
         })
-    }, [platform, contractAddress])
+    }, [platformOrCoinId, contractAddress])
 
     useEffect(() => {
         const currentTokenPrices = currentTokenPricesSettings.value
@@ -56,6 +56,6 @@ export function useTokenPrice(
     return price
 }
 
-export function useNativeTokenPrice(tokenId: string, currencyType: CurrencyType = CurrencyType.USD) {
-    return useTokenPrice(tokenId, undefined, currencyType)
+export function useNativeTokenPrice(platformOrCoinId: string, currencyType: CurrencyType = CurrencyType.USD) {
+    return useTokenPrice(platformOrCoinId, undefined, currencyType)
 }
