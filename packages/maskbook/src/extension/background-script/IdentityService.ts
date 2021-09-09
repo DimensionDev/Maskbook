@@ -1,6 +1,6 @@
 import * as bip39 from 'bip39'
 import { decode, encode } from '@msgpack/msgpack'
-import { blobToArrayBuffer, decodeArrayBuffer as decodeArray, encodeArrayBuffer } from '@dimensiondev/kit'
+import { blobToArrayBuffer, decodeArrayBuffer, encodeArrayBuffer, decodeText } from '@dimensiondev/kit'
 import {
     createPersonaByJsonWebKey,
     personaRecordToPersona,
@@ -39,7 +39,6 @@ import {
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
-import { decodeArrayBuffer, decodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
@@ -321,7 +320,7 @@ export async function exportPersonaPrivateKey(identifier: PersonaIdentifier) {
 }
 
 export async function queryPersonaByPrivateKey(privateKeyString: string) {
-    const privateKey = decode(decodeArray(privateKeyString)) as EC_JsonWebKey
+    const privateKey = decode(decodeArrayBuffer(privateKeyString)) as EC_JsonWebKey
     const identifier = ECKeyIdentifierFromJsonWebKey(privateKey, 'public')
 
     const persona = await queryPersonaDB(identifier)
@@ -331,7 +330,7 @@ export async function queryPersonaByPrivateKey(privateKeyString: string) {
 }
 
 export async function createPersonaByPrivateKey(privateKeyString: string, nickname: string) {
-    const privateKey = decode(decodeArray(privateKeyString)) as EC_JsonWebKey
+    const privateKey = decode(decodeArrayBuffer(privateKeyString)) as EC_JsonWebKey
     const key = await split_ec_k256_keypair_into_pub_priv(privateKey)
 
     return createPersonaByJsonWebKey({ privateKey: key.privateKey, publicKey: key.publicKey, nickname })

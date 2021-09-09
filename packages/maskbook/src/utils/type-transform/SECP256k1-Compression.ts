@@ -1,6 +1,6 @@
 import secp256k1 from 'tiny-secp256k1'
 import { Convert, combine } from 'pvtsutils'
-import { encodeArrayBuffer, decodeArrayBuffer } from './String-ArrayBuffer'
+import { encodeArrayBuffer, decodeArrayBuffer } from '@dimensiondev/kit'
 import type {
     EC_Public_JsonWebKey,
     EC_Private_JsonWebKey,
