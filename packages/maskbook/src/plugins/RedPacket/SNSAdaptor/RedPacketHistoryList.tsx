@@ -9,7 +9,7 @@ import { useEffect } from 'react'
 const useStyles = makeStyles()({
     root: {
         display: 'flex',
-        width: '100%',
+        width: 544,
         height: '100%',
         flexDirection: 'column',
         margin: '0 auto',

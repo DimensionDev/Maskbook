@@ -1,6 +1,6 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ERC721ContractDetailed, useERC721TokenDetailed } from '@masknet/web3-shared'
-import { List, ListItem, ListProps, Skeleton } from '@material-ui/core'
+import { List, ListItem, ListProps, Skeleton, Typography } from '@material-ui/core'
 import classnames from 'classnames'
 import type { FC, HTMLProps } from 'react'
 
@@ -47,7 +47,10 @@ const useStyles = makeStyles()({
     },
     name: {
         fontSize: 12,
-        padding: '2px 6px 6px',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        padding: '2px 2px 6px',
         color: MaskColorVar.textSecondary,
     },
 })
@@ -72,8 +75,8 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
     return (
         <div className={classnames(className, classes.nft)} {...rest}>
             <img className={classes.media} src={info.image} width="120" height="160" alt={info.name} />
-            <div className={classes.name}>{info.name}</div>
-            {claimed && <div className={classes.claimedBadge}>Claimed</div>}
+            <Typography className={classes.name}>{info.name}</Typography>
+            {claimed && <Typography className={classes.claimedBadge}>Claimed</Typography>}
         </div>
     )
 }
