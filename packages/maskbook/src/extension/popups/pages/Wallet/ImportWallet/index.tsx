@@ -117,25 +117,24 @@ const ImportWallet = memo(() => {
     }, [retry])
 
     const schema = useMemo(() => {
-        const passwordRule = zod
-            .string()
-            .min(8)
-            .max(20)
-            .refine((input) => /[A-Z]/.test(input), t('popups_wallet_password_uppercase_tip'))
-            .refine((input) => /[a-z]/.test(input), t('popups_wallet_password_lowercase_tip'))
-            .refine((input) => /\d/.test(input), t('popups_wallet_password_number_tip'))
-            .refine((input) => /[^\dA-Za-z]/.test(input), t('popups_wallet_password_special_character_tip'))
+        // const passwordRule = zod
+        //     .string()
+        //     .min(8)
+        //     .max(20)
+        //     .refine((input) => /[A-Z]/.test(input), t('popups_wallet_password_uppercase_tip'))
+        //     .refine((input) => /[a-z]/.test(input), t('popups_wallet_password_lowercase_tip'))
+        //     .refine((input) => /\d/.test(input), t('popups_wallet_password_number_tip'))
+        //     .refine((input) => /[^\dA-Za-z]/.test(input), t('popups_wallet_password_special_character_tip'))
         const confirmRule = zod.string().min(8).max(20)
-        return zod
-            .object({
-                name: zod.string().min(1).max(12),
-                password: hasEncryptedWallet ? passwordRule.optional() : passwordRule,
-                confirm: hasEncryptedWallet ? confirmRule.optional() : confirmRule,
-            })
-            .refine((data) => hasEncryptedWallet ?? data.password === data.confirm, {
-                message: t('popups_wallet_password_dont_match'),
-                path: ['confirm'],
-            })
+        return zod.object({
+            name: zod.string().min(1).max(12),
+            // password: hasEncryptedWallet ? passwordRule.optional() : passwordRule,
+            // confirm: hasEncryptedWallet ? confirmRule.optional() : confirmRule,
+        })
+        // .refine((data) => hasEncryptedWallet ?? data.password === data.confirm, {
+        //     message: t('popups_wallet_password_dont_match'),
+        //     path: ['confirm'],
+        // })
     }, [])
 
     const {
@@ -147,8 +146,8 @@ const ImportWallet = memo(() => {
         resolver: zodResolver(schema),
         defaultValues: {
             name: '',
-            password: '',
-            confirm: '',
+            // password: '',
+            // confirm: '',
         },
     })
 
@@ -233,44 +232,44 @@ const ImportWallet = memo(() => {
                         name="name"
                     />
                 </div>
-                {!getHasEncryptedWalletLoading && !hasEncryptedWallet ? (
-                    <>
-                        <div style={{ marginTop: 16 }}>
-                            <Typography className={classes.label}>{t('popups_wallet_payment_password')}</Typography>
-                            <Controller
-                                control={control}
-                                render={({ field }) => (
-                                    <StyledInput
-                                        {...field}
-                                        classes={{ root: classes.textField }}
-                                        type="password"
-                                        variant="filled"
-                                        placeholder={t('popups_wallet_payment_password')}
-                                        error={!isValid && !!errors.password?.message}
-                                        helperText={!isValid ? errors.password?.message : ''}
-                                    />
-                                )}
-                                name="password"
-                            />
-                            <Controller
-                                render={({ field }) => (
-                                    <StyledInput
-                                        classes={{ root: classes.textField }}
-                                        {...field}
-                                        error={!isValid && !!errors.confirm?.message}
-                                        helperText={!isValid ? errors.confirm?.message : ''}
-                                        type="password"
-                                        variant="filled"
-                                        placeholder="Re-enter the payment password"
-                                    />
-                                )}
-                                name="confirm"
-                                control={control}
-                            />
-                        </div>
-                        <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>
-                    </>
-                ) : null}
+                {/*{!getHasEncryptedWalletLoading && !hasEncryptedWallet ? (*/}
+                {/*    <>*/}
+                {/*        <div style={{ marginTop: 16 }}>*/}
+                {/*            <Typography className={classes.label}>{t('popups_wallet_payment_password')}</Typography>*/}
+                {/*            <Controller*/}
+                {/*                control={control}*/}
+                {/*                render={({ field }) => (*/}
+                {/*                    <StyledInput*/}
+                {/*                        {...field}*/}
+                {/*                        classes={{ root: classes.textField }}*/}
+                {/*                        type="password"*/}
+                {/*                        variant="filled"*/}
+                {/*                        placeholder={t('popups_wallet_payment_password')}*/}
+                {/*                        error={!isValid && !!errors.password?.message}*/}
+                {/*                        helperText={!isValid ? errors.password?.message : ''}*/}
+                {/*                    />*/}
+                {/*                )}*/}
+                {/*                name="password"*/}
+                {/*            />*/}
+                {/*            <Controller*/}
+                {/*                render={({ field }) => (*/}
+                {/*                    <StyledInput*/}
+                {/*                        classes={{ root: classes.textField }}*/}
+                {/*                        {...field}*/}
+                {/*                        error={!isValid && !!errors.confirm?.message}*/}
+                {/*                        helperText={!isValid ? errors.confirm?.message : ''}*/}
+                {/*                        type="password"*/}
+                {/*                        variant="filled"*/}
+                {/*                        placeholder="Re-enter the payment password"*/}
+                {/*                    />*/}
+                {/*                )}*/}
+                {/*                name="confirm"*/}
+                {/*                control={control}*/}
+                {/*            />*/}
+                {/*        </div>*/}
+                {/*        <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>*/}
+                {/*    </>*/}
+                {/*) : null}*/}
             </form>
             <TabContext value={currentTab}>
                 <Tabs

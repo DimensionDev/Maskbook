@@ -6,8 +6,6 @@ import { lazy, Suspense, useEffect } from 'react'
 import { PopupRoutes } from '../../index'
 import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
-import { useValueRef } from '@masknet/shared'
-import { currentIsMaskWalletLockedSettings } from '../../../../plugins/Wallet/settings'
 import { useLocation } from 'react-router'
 import urlcat from 'urlcat'
 import { ThemeProvider } from '@emotion/react'
@@ -38,7 +36,7 @@ export default function Wallet() {
     const location = useLocation()
     const history = useHistory()
 
-    const lockStatus = useValueRef(currentIsMaskWalletLockedSettings)
+    // const lockStatus = useValueRef(currentIsMaskWalletLockedSettings)
 
     const { loading: getRequestLoading, retry } = useAsyncRetry(async () => {
         if (
@@ -77,11 +75,11 @@ export default function Wallet() {
         return WalletMessages.events.requestsUpdated.on(retry)
     }, [retry])
 
-    useEffect(() => {
-        if (lockStatus) {
-            history.push(PopupRoutes.Unlock)
-        }
-    }, [lockStatus])
+    // useEffect(() => {
+    //     if (lockStatus) {
+    //         history.push(PopupRoutes.Unlock)
+    //     }
+    // }, [lockStatus])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
@@ -108,7 +106,7 @@ export default function Wallet() {
                             <Route path={PopupRoutes.TokenDetail} children={<TokenDetail />} exact />
                             <Route path={PopupRoutes.Transfer} children={<Transfer />} exact />
                             <Route path={PopupRoutes.ContractInteraction} children={<ContractInteraction />} />
-                            <Route path={PopupRoutes.Unlock} children={<Unlock />} />
+                            {/*<Route path={PopupRoutes.Unlock} children={<Unlock />} />*/}
                         </Switch>
                     )}
                 </WalletContext.Provider>

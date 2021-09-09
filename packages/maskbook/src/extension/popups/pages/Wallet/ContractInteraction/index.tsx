@@ -64,7 +64,7 @@ const useStyles = makeStyles()(() => ({
     },
     content: {
         flex: 1,
-        padding: '0 10px',
+        padding: 10,
     },
     item: {
         display: 'flex',

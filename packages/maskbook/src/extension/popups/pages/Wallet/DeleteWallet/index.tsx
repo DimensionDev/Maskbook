@@ -1,9 +1,8 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback } from 'react'
 import { Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { WalletInfo } from '../components/WalletInfo'
 import { WarningIcon } from '@masknet/icons'
-import { StyledInput } from '../../../components/StyledInput'
 import { useHistory } from 'react-router-dom'
 import { useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
@@ -72,7 +71,7 @@ const DeleteWallet = memo(() => {
     const history = useHistory()
     const wallet = useWallet()
     const { classes } = useStyles()
-    const [password, setPassword] = useState('')
+    // const [password, setPassword] = useState('')
 
     const onConfirm = useCallback(async () => {
         if (wallet?.address) {
@@ -92,11 +91,11 @@ const DeleteWallet = memo(() => {
                 </div>
                 <Typography className={classes.tip}>{t('popups_wallet_delete_tip')}</Typography>
                 <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
-                <StyledInput
-                    placeholder="Input your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                {/*<StyledInput*/}
+                {/*    placeholder="Input your password"*/}
+                {/*    value={password}*/}
+                {/*    onChange={(e) => setPassword(e.target.value)}*/}
+                {/*/>*/}
             </div>
             <div className={classes.controller}>
                 <Button

@@ -111,7 +111,7 @@ const BackupWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const wallet = useWallet()
-    const [confirmed, setConfirmed] = useState(false)
+    const [confirmed, setConfirmed] = useState(true)
     const [currentTab, setCurrentTab] = useState(BackupTabs.JsonFile)
     const [password, setPassword] = useState('')
 
