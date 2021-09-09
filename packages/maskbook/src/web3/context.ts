@@ -46,6 +46,8 @@ export const Web3Context: Web3ProviderType = {
         0,
         WalletMessages.events.erc20TokensUpdated.on,
     ),
+    addERC20Token: WalletRPC.addERC20Token,
+    trustERC20Token: WalletRPC.trustERC20Token,
     getERC20TokensPaged,
     portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
     getAssetsList: WalletRPC.getAssetsList,
