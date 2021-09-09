@@ -1,6 +1,6 @@
 import { createContainer } from 'unstated-next'
 import { useCallback, useState } from 'react'
-import { useConnectSocialNetwork, useDisconnectSocialNetwork } from './useConnectSocialNetwork'
+import { useConnectSocialNetwork, useDisconnectSocialNetwork, useOpenProfilePage } from './useConnectSocialNetwork'
 import { Services } from '../../../API'
 import { useOwnedPersonas, useDefinedSocialNetworkUIs, SocialNetwork, useCurrentPersonaIdentifier } from '../api'
 import { useCreatePersona } from './useCreatePersona'
@@ -15,6 +15,7 @@ function usePersonaContext() {
     const [open, setOpen] = useState(false)
 
     const [, connectPersona] = useConnectSocialNetwork()
+    const [, openProfilePage] = useOpenProfilePage()
     const [, disconnectPersona] = useDisconnectSocialNetwork()
     const [, createPersona] = useCreatePersona()
     const renamePersona = Services.Identity.renamePersona
@@ -29,6 +30,7 @@ function usePersonaContext() {
         currentPersona,
         definedSocialNetworks,
         personas,
+        openProfilePage,
         drawerOpen: open,
         toggleDrawer: () => setOpen((e) => !e),
     }

@@ -5,6 +5,14 @@ export enum CurrencyType {
     USD = 'usd',
 }
 
+export interface PriceRecord {
+    [currency: string]: number
+}
+/** Base on response of coingecko's token price API */
+export interface CryptoPrice {
+    [token: string]: PriceRecord
+}
+
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 

@@ -7,7 +7,7 @@ import {
     isZero,
     useAccount,
     useITOConstants,
-    useTokenBalance,
+    useFungibleTokenBalance,
 } from '@masknet/web3-shared'
 import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
@@ -155,7 +155,7 @@ export function CreateForm(props: CreateFormProps) {
     const inputTokenAmount = formatAmount(tokenAndAmount?.amount || '0', tokenAndAmount?.token?.decimals)
 
     // balance
-    const { value: tokenBalance = '0' } = useTokenBalance(
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(
         tokenAndAmount?.token?.type ?? EthereumTokenType.Native,
         tokenAndAmount?.token?.address ?? '',
     )

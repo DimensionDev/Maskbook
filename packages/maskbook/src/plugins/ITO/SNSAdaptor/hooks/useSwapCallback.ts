@@ -11,8 +11,6 @@ import {
     TransactionEventType,
     TransactionStateType,
     useAccount,
-    useGasPrice,
-    useNonce,
     useChainId,
     useTransactionState,
     isSameAddress,
@@ -36,8 +34,6 @@ export function useSwapCallback(
 ) {
     const { t } = useI18N()
 
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const { ITO_CONTRACT_ADDRESS } = useITOConstants()
@@ -190,8 +186,6 @@ export function useSwapCallback(
                           })
                           throw error
                       }),
-            gasPrice,
-            nonce,
             value,
         }
 
@@ -232,18 +226,7 @@ export function useSwapCallback(
                 .on(TransactionEventType.CONFIRMATION, onSucceed)
                 .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
         })
-    }, [
-        gasPrice,
-        nonce,
-        ITO_Contract,
-        chainId,
-        qualificationContract,
-        account,
-        payload,
-        total,
-        token.address,
-        isQualificationHasLucky,
-    ])
+    }, [ITO_Contract, chainId, qualificationContract, account, payload, total, token.address, isQualificationHasLucky])
 
     const resetCallback = useCallback(() => {
         setSwapState({

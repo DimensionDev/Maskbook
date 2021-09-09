@@ -7,7 +7,7 @@ import {
     pow10,
     TransactionStateType,
     useAccount,
-    useTokenBalance,
+    useFungibleTokenBalance,
 } from '@masknet/web3-shared'
 import { DialogContent, Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
@@ -133,7 +133,7 @@ export function DepositDialog() {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    } = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     //#endregion
 
     useEffect(() => {
