@@ -137,7 +137,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             ? redpacketStatus.bitStatusList
             : fill(Array(history.token_ids.length), false)
         const handleMouseEnter: MouseEventHandler<HTMLButtonElement> = (event) => {
-            if (canSend && isPasswordValid) {
+            if (canSend && !isPasswordValid) {
                 handleShowPopover(event.currentTarget)
             }
         }
