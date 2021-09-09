@@ -38,50 +38,6 @@ export async function generate_ECDH_256k1_KeyPair_ByMnemonicWord(
     }
 }
 
-export async function generate_ECDH_256k1_KeyPair_ByMnemonicWord_V2(
-    mnemonicWord: string,
-    password: string,
-): Promise<MnemonicGenerationInformation> {
-    const verify = bip39.validateMnemonic(mnemonicWord)
-    if (!verify) {
-        throw new Error('Verify error')
-    }
-    const seed = await bip39.mnemonicToSeed(mnemonicWord, password)
-    const masterKey = wallet.HDKey.parseMasterSeed(seed)
-    const derivedKey = masterKey.derive(path)
-    const key = await split_ec_k256_keypair_into_pub_priv(HDKeyToJwk(derivedKey))
-    return {
-        key,
-        password,
-        mnemonicRecord: {
-            parameter: { path: path, withPassword: password.length > 0 },
-            words: mnemonicWord,
-        },
-    }
-}
-
-export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord_V2(
-    mnemonicWord: string,
-    password: string,
-): Promise<MnemonicGenerationInformation> {
-    const verify = bip39.validateMnemonic(mnemonicWord)
-    if (!verify) {
-        throw new Error('Verify error')
-    }
-    const seed = await bip39.mnemonicToSeed(mnemonicWord, password)
-    const masterKey = wallet.HDKey.parseMasterSeed(seed)
-    const derivedKey = masterKey.derive(path)
-    const key = await split_ec_k256_keypair_into_pub_priv(HDKeyToJwk(derivedKey))
-    return {
-        key,
-        password,
-        mnemonicRecord: {
-            parameter: { path: path, withPassword: password.length > 0 },
-            words: mnemonicWord,
-        },
-    }
-}
-
 export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(
     mnemonicWord: string,
     password: string,
