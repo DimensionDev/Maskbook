@@ -1,11 +1,16 @@
-import { createAvatarDBAccess, queryAvatarOutdatedDB, deleteAvatarsDB } from '../../../../database/avatar'
+import {
+    createAvatarDBAccess,
+    queryAvatarOutdatedDB,
+    deleteAvatarsDB,
+    IdentityWithAvatar,
+} from '../../../../database/avatar'
 import { createTransaction } from '../../../../database/helpers/openDB'
 import { consistentPersonaDBWriteAccess } from '../../../../database/Persona/Persona.db'
 import { Identifier, ProfileIdentifier } from '../../../../database/type'
 import { IdentifierMap } from '../../../../database/IdentifierMap'
 import { untilDocumentReady } from '../../../../utils'
 
-async function cleanAvatarDB(anotherList: IdentifierMap<ProfileIdentifier, undefined>) {
+async function cleanAvatarDB(anotherList: IdentifierMap<IdentityWithAvatar, undefined>) {
     const t = createTransaction(await createAvatarDBAccess(), 'readwrite')('avatars', 'metadata')
     const outdated = await queryAvatarOutdatedDB('lastAccessTime', t)
     for (const each of outdated) {

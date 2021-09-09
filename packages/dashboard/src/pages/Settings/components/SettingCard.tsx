@@ -1,4 +1,4 @@
-import { Typography, experimentalStyled as styled } from '@material-ui/core'
+import { Typography, styled } from '@material-ui/core'
 
 const Card = styled('div')(({ theme }) => ({
     borderRadius: Number(theme.shape.borderRadius) * 3,

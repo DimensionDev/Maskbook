@@ -4,7 +4,7 @@ import { formatBalance } from '@masknet/web3-shared'
 import { CircularProgress, Grid, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { COMMINUTY_URL } from '../constants'
+import { COMMUNITY_URL } from '../constants'
 import { useAccountBalance } from '../hooks/useAccountBalances'
 import type { Pool } from '../types'
 import { AccountPool } from './AccountPool'
@@ -121,8 +121,8 @@ export function Account(props: AccountProps) {
                         className={classes.missingPoolLink}
                         rel="noopener noreferrer"
                         title="PoolTogether"
-                        href={COMMINUTY_URL}>
-                        {COMMINUTY_URL}
+                        href={COMMUNITY_URL}>
+                        {COMMUNITY_URL}
                     </Link>
                 </Typography>
             </Grid>

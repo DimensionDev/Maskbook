@@ -4,10 +4,10 @@ import { ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderType } from 
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
-    currentGasPriceSettings,
     currentBalanceSettings,
     currentNonceSettings,
     currentAccountSettings,
+    currentGasPriceSettings,
     currentNetworkSettings,
     currentProviderSettings,
     currentChainIdSettings,
@@ -33,9 +33,9 @@ export const Web3Context: Web3ProviderType = {
     chainId: createSubscriptionFromSettings(currentChainIdSettings),
     account: createSubscriptionFromSettings(currentAccountSettings),
     balance: createSubscriptionFromSettings(currentBalanceSettings),
+    gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
     blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
     nonce: createSubscriptionFromSettings(currentNonceSettings),
-    gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
     etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
     wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
     providerType: createSubscriptionFromSettings(currentProviderSettings),
@@ -46,14 +46,18 @@ export const Web3Context: Web3ProviderType = {
         0,
         WalletMessages.events.erc20TokensUpdated.on,
     ),
+    addERC20Token: WalletRPC.addERC20Token,
+    trustERC20Token: WalletRPC.trustERC20Token,
     getERC20TokensPaged,
     portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
-    getAssetList: WalletRPC.getAssetsList,
+    getAssetsList: WalletRPC.getAssetsList,
     getAssetsListNFT: WalletRPC.getAssetsListNFT,
+    getAddressNamesList: WalletRPC.getAddressNames,
     getERC721TokensPaged,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
     getTransactionList: WalletRPC.getTransactionList,
     createMnemonicWords: WalletRPC.createMnemonicWords,
+    getNonce: Services.Ethereum.getNonce,
 }
 
 async function getWallets() {

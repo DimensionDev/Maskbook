@@ -28,7 +28,7 @@ export interface ReactRootShadowed {
 }
 /**
  * @returns
- * A function that render the JSX in the ShadowRoot with JSS (in material-ui/core) and emotion support.
+ * A function that render the JSX in the ShadowRoot with emotion support.
  *
  * This function should be only call once for each config.key.
  */

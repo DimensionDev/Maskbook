@@ -1,32 +1,25 @@
+/* spell-checker: disable */
 import path from 'path'
 import fs, { promises } from 'fs'
 
-import webpack, {
-    Configuration,
-    HotModuleReplacementPlugin,
-    ProvidePlugin,
-    DefinePlugin,
-    EnvironmentPlugin,
-} from 'webpack'
+import { Configuration, ProvidePlugin, DefinePlugin, EnvironmentPlugin } from 'webpack'
 // Merge declaration of Configuration defined in webpack
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 
 //#region Development plugins
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
-import NotifierPlugin from 'webpack-notifier'
 //#endregion
 //#region Other plugins
 import CopyPlugin from 'copy-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
 import WebExtensionTarget from 'webpack-target-webextension'
 import ManifestPlugin from 'webpack-extension-manifest-plugin'
+import { ReadonlyCachePlugin } from './miscs/ReadonlyCachePlugin'
 //#endregion
 
 import git from '@nice-labs/git-rev'
-import rimraf from 'rimraf'
 
 import * as modifiers from './miscs/manifest-modifiers'
-import { promisify } from 'util'
 
 const src = (file: string) => path.join(__dirname, file)
 const root = (file: string) => path.join(__dirname, '../../', file)
@@ -46,9 +39,6 @@ function EnvironmentPluginNoCache(def: Record<string, any>) {
     }
     return new DefinePlugin(next)
 }
-const watchOptions = {
-    ignored: /\bnode_modules\b/,
-}
 
 function config(opts: {
     name: string
@@ -62,13 +52,16 @@ function config(opts: {
     noEval?: boolean
     readonlyCache?: boolean
 }) {
-    // https://github.com/facebook/react/issues/20377 React-devtools conflicts with react-refresh
-    const disableReactHMR = opts.isProfile || opts.disableReactHMR
     const { mode, target, name, noEval, dist, hmrPort, isProfile } = opts
     let { disableHMR } = opts
     const isManifestV3 = target.runtimeEnv.manifest === 3
     if (mode === 'production') disableHMR = true
+    if (target.Firefox) disableHMR = true
     if (mode === 'none') throw new TypeError('env cannot be none in this config')
+
+    // https://github.com/facebook/react/issues/20377 React-devtools conflicts with react-refresh
+    let disableReactHMR = opts.isProfile || opts.disableReactHMR
+    if (disableHMR) disableReactHMR = true
 
     /** On iOS, eval is async (it is hooked by webextension-shim). */
     const sourceMapKind: Configuration['devtool'] = target.iOS || isManifestV3 || noEval ? false : 'eval-source-map'
@@ -98,6 +91,7 @@ function config(opts: {
                 // Those packages are also installed as dependencies so they appears in node_modules
                 // By aliasing them to the original position, we can speed up the compile because there is no need to wait tsc build them to the dist folder.
                 '@masknet/dashboard$': src('../dashboard/src/entry.tsx'),
+                '@masknet/injected-script': src('../injected-script/sdk'),
                 '@masknet/shared': src('../shared/src/'),
                 '@masknet/shared-base': src('../shared-base/src/'),
                 '@masknet/theme': src('../theme/src/'),
@@ -107,6 +101,7 @@ function config(opts: {
                 '@masknet/plugin-wallet': src('../plugins/Wallet/src/'),
                 '@masknet/external-plugin-previewer': src('../external-plugin-previewer/src/'),
                 '@masknet/web3-shared': src('../web3-shared/src/'),
+                '@masknet/public-api': src('../public-api/src/'),
                 '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
             },
             // Polyfill those Node built-ins
@@ -149,11 +144,13 @@ function config(opts: {
                                     runtime: 'automatic',
                                     useBuiltins: true,
                                     development: disableReactHMR ? false : mode === 'development',
-                                    refresh: {
-                                        refreshReg: '$RefreshReg$',
-                                        refreshSig: '$RefreshSig$',
-                                        emitFullSignatures: true,
-                                    },
+                                    refresh: disableReactHMR
+                                        ? false
+                                        : {
+                                              refreshReg: '$RefreshReg$',
+                                              refreshSig: '$RefreshSig$',
+                                              emitFullSignatures: true,
+                                          },
                                 },
                             },
                         },
@@ -235,29 +232,37 @@ function config(opts: {
             hotUpdateMainFilename: 'hot.[runtime].[fullhash].json',
             globalObject: 'globalThis',
             publicPath: '/',
-            // clean: undefined,
-            // do not use output.clean
-            // we're using multiple configs (main and injected script), that will cause injected script output get removed when the main config starts to build.
+            clean: mode === 'production',
         },
         ignoreWarnings: [/Failed to parse source map/],
         // @ts-ignore
         devServer: {
-            // Have to write disk cause plugin cannot be loaded over network
-            writeToDisk: true,
+            host: '127.0.0.1',
             compress: false,
-            hotOnly: !disableHMR,
-            port: hmrPort,
+            devMiddleware: {
+                // Have to write disk cause plugin cannot be loaded over network
+                writeToDisk: true,
+            },
+            client: disableHMR
+                ? false
+                : {
+                      overlay: false,
+                      progress: false,
+                      webSocketURL: {
+                          protocol: 'ws',
+                          hostname: '127.0.0.1',
+                          port: hmrPort,
+                      },
+                  },
             // WDS does not support chrome-extension:// browser-extension://
-            disableHostCheck: true,
-            // Workaround of https://github.com/webpack/webpack-cli/issues/1955
-            injectClient: (config) => !disableHMR && config.name !== 'injected-script',
-            injectHot: (config) => !disableHMR && config.name !== 'injected-script',
+            allowedHosts: 'all',
+            hot: disableHMR ? false : 'only',
+            port: hmrPort,
             headers: {
                 // We're doing CORS request for HMR
                 'Access-Control-Allow-Origin': '*',
             },
-            transportMode: 'ws',
-            watchOptions,
+            static: { watch: { ignored: /\bnode_modules\b/ } },
         } as DevServerConfiguration,
         stats: mode === 'development' ? undefined : 'errors-only',
     }
@@ -269,10 +274,9 @@ function config(opts: {
     function getHotModuleReloadPlugin() {
         if (disableHMR) return []
         // overlay is not working in our environment
-        return [
-            new HotModuleReplacementPlugin(),
-            !disableReactHMR && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
-        ].filter(nonNullable)
+        return [!disableReactHMR && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true })].filter(
+            nonNullable,
+        )
     }
 }
 function nonNullable<T>(x: T | false | undefined | null): x is T {
@@ -293,27 +297,19 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
             ? argv.outputPath
             : root(argv.outputPath)
         : defaultDist
-    if (mode === 'production') await promisify(rimraf)(dist)
     const disableHMR = Boolean(process.env.NO_HMR)
     const isManifestV3 = target.runtimeEnv.manifest === 3
 
     const shared = { mode, target, dist, isProfile: target.isProfile, readonlyCache: target.readonlyCache }
     const main = config({ ...shared, disableHMR, name: 'main' })
     const manifestV3 = config({ ...shared, disableHMR: true, name: 'background-worker', hmrPort: 35938 })
-    const injectedScript = config({
-        ...shared,
-        disableHMR: true,
-        name: 'injected-script',
-        noEval: true,
-        hmrPort: 35939,
-    })
     // Modify Main
     {
         main.plugins!.push(
             new (WebExtensionTarget as any)(), // See https://github.com/crimx/webpack-target-webextension,
             new CopyPlugin({ patterns: [{ from: publicDir, to: dist }] }),
+            new CopyPlugin({ patterns: [{ from: src('../injected-script/dist/injected-script.js'), to: dist }] }),
             getManifestPlugin(),
-            ...getBuildNotificationPlugins(),
         )
         main.entry = {
             'options-page': withBrowserPolyfill(...withReactDevTools(src('./src/extension/options-page/index.tsx'))),
@@ -349,16 +345,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
         // ? Service workers must registered at the / root
         manifestV3.output!.filename = 'manifest-v3.entry.js'
     }
-    // Modify injectedScript
-    {
-        injectedScript.entry = { 'injected-script': src('./src/extension/injected-script/index.ts') }
-        injectedScript.optimization!.splitChunks = false
-    }
-    if (mode === 'production') return [main, isManifestV3 && manifestV3, injectedScript].filter(nonNullable)
-    // @ts-ignore
-    delete injectedScript.devServer
-    // TODO: multiple config seems doesn't work well therefore we start the watch mode webpack compiler manually, ignore the build message currently
-    webpack(injectedScript).watch(watchOptions, () => {})
+    if (mode === 'production') return [main, isManifestV3 && manifestV3].filter(nonNullable)
     return main
 
     function withReactDevTools(...x: string[]) {
@@ -376,11 +363,6 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
     function withBrowserPolyfill(...path: string[]) {
         if (target.iOS || target.runtimeEnv.target === 'firefox') return path
         return [src('./miscs/browser-loader.js'), ...path]
-    }
-    function getBuildNotificationPlugins() {
-        if (mode === 'production') return []
-        const opt = { title: 'Mask', excludeWarnings: true, skipFirstNotification: true, skipSuccessful: true }
-        return [new NotifierPlugin(opt)]
     }
     function getManifestPlugin() {
         const manifest = require('./src/manifest.json')
@@ -538,17 +520,3 @@ promises.readdir(path.join(__dirname, '../../dist')).then(
     },
     () => {},
 )
-
-class ReadonlyCachePlugin {
-    apply(compiler: webpack.Compiler) {
-        compiler.cache.hooks.store.intercept({
-            register: (tapInfo) => {
-                return {
-                    name: ReadonlyCachePlugin.name,
-                    type: tapInfo.type,
-                    fn: function preventCacheStore() {},
-                }
-            },
-        })
-    }
-}

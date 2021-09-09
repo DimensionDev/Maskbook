@@ -5,14 +5,10 @@ import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { useWeb3 } from './useWeb3'
-import { useNonce } from './useNonce'
-import { useGasPrice } from './useGasPrice'
 import { isGreaterThan, isZero } from '../utils'
 
 export function useNativeTransferCallback(amount?: string, recipient?: string, memo?: string) {
     const web3 = useWeb3()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const [transferState, setTransferState] = useTransactionState()
@@ -34,13 +30,13 @@ export function useNativeTransferCallback(amount?: string, recipient?: string, m
             return
         }
 
-        // error: insufficent balance
+        // error: insufficient balance
         const balance = await web3.eth.getBalance(account)
 
         if (isGreaterThan(amount, balance)) {
             setTransferState({
                 type: TransactionStateType.FAILED,
-                error: new Error('Insufficent balance'),
+                error: new Error('Insufficient balance'),
             })
             return
         }
@@ -68,10 +64,8 @@ export function useNativeTransferCallback(amount?: string, recipient?: string, m
                     })
                     throw error
                 }),
-            gasPrice,
             value: amount,
             data: memo ? toHex(memo) : undefined,
-            nonce,
         }
 
         // send transaction and wait for hash
@@ -92,7 +86,7 @@ export function useNativeTransferCallback(amount?: string, recipient?: string, m
                 }
             })
         })
-    }, [web3, nonce, gasPrice, account, amount, chainId, recipient, memo])
+    }, [web3, account, amount, chainId, recipient, memo])
 
     const resetCallback = useCallback(() => {
         setTransferState({

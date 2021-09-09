@@ -5,13 +5,9 @@ import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { TransactionEventType } from '../types'
-import { useNonce } from './useNonce'
-import { useGasPrice } from './useGasPrice'
 import { isGreaterThan, isZero } from '../utils'
 
 export function useERC20TokenTransferCallback(address?: string, amount?: string, recipient?: string) {
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(address)
     const [transferState, setTransferState] = useTransactionState()
@@ -33,13 +29,13 @@ export function useERC20TokenTransferCallback(address?: string, amount?: string,
             return
         }
 
-        // error: insufficent balance
+        // error: insufficient balance
         const balance = await erc20Contract.methods.balanceOf(account).call()
 
         if (isGreaterThan(amount, balance)) {
             setTransferState({
                 type: TransactionStateType.FAILED,
-                error: new Error('Insufficent balance'),
+                error: new Error('Insufficient balance'),
             })
             return
         }
@@ -64,8 +60,6 @@ export function useERC20TokenTransferCallback(address?: string, amount?: string,
                     })
                     throw error
                 }),
-            gasPrice,
-            nonce,
         }
 
         // send transaction and wait for hash
@@ -88,7 +82,7 @@ export function useERC20TokenTransferCallback(address?: string, amount?: string,
                     reject(error)
                 })
         })
-    }, [nonce, gasPrice, account, address, amount, recipient, erc20Contract])
+    }, [account, address, amount, recipient, erc20Contract])
 
     const resetCallback = useCallback(() => {
         setTransferState({

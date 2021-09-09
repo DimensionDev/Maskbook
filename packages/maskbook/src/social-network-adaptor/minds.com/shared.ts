@@ -12,6 +12,7 @@ export const mindsShared: SocialNetwork.Shared & SocialNetwork.Base = {
     ...mindsBase,
     utils: {
         getHomePage: () => 'https://www.minds.com',
+        getProfilePage: () => 'https://www.minds.com',
         isValidUsername: usernameValidator,
         publicKeyEncoding: undefined,
         textPayloadPostProcessor: undefined,

@@ -7,7 +7,7 @@ import { createThirdPartyPopupContext } from '../popup-context'
 import { useExternalPluginManifest, useExternalPluginTemplate } from '../loader'
 
 setHostConfig({
-    permissionAwareOpen(url) {
+    permissionAwareOpen(url: string) {
         Services.ThirdPartyPlugin.openPluginPopup(PermissionAwareRedirectOf(url, createThirdPartyPopupContext()))
     },
 })
@@ -25,7 +25,6 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
         />
     )
     if (!manifest.value || !template.value) return retry
-    console.log(props.meta, template.value)
     return (
         <Card sx={{ border: '1px solid red' }}>
             <CardHeader

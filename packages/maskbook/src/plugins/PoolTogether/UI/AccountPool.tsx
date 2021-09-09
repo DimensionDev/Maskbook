@@ -88,7 +88,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: 'transparent',
         color: DarkColor.textSecondary,
     },
-    countdownSeperator: {
+    countdownSeparator: {
         color: DarkColor.textSecondary,
     },
     odds: {
@@ -179,7 +179,7 @@ export function AccountPool(props: AccountPoolProps) {
                         <CountdownView
                             secondsRemaining={calculateSecondsRemaining(accountPool.pool)}
                             msgOnEnd={t('plugin_pooltogether_pool_ended')}
-                            classes={{ digit: classes.countdownDigit, seperator: classes.countdownSeperator }}
+                            classes={{ digit: classes.countdownDigit, separator: classes.countdownSeparator }}
                         />
                     </Grid>
                     <Grid item className={classes.footer}>

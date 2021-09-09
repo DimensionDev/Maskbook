@@ -125,6 +125,11 @@ export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even
 }
 
 export async function renamePersona(identifier: PersonaIdentifier, nickname: string) {
+    const personas = await queryPersonasWithQuery(({ nickname: name }) => name === nickname)
+    if (personas.length > 0) {
+        throw new Error('Nickname already exists')
+    }
+
     return consistentPersonaDBWriteAccess((t) =>
         updatePersonaDB({ identifier, nickname }, { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' }, t),
     )

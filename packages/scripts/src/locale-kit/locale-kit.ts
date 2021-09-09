@@ -12,8 +12,8 @@ import { getArgv, task } from '../utils'
 
 async function removeAllUnusedKeys(keys: string[], locales = LOCALE_NAMES) {
     for (const name of locales) {
-        const modifedMessages = omit(await readMessages(name), keys)
-        await writeMessages(name, modifedMessages)
+        const modifiedMessages = omit(await readMessages(name), keys)
+        await writeMessages(name, modifiedMessages)
     }
 }
 

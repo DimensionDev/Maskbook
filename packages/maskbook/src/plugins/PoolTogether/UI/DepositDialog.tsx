@@ -7,7 +7,7 @@ import {
     pow10,
     TransactionStateType,
     useAccount,
-    useTokenBalance,
+    useFungibleTokenBalance,
 } from '@masknet/web3-shared'
 import { DialogContent, Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
@@ -62,7 +62,7 @@ const useStyles = makeStyles()((theme) => ({
     oddsValue: {
         background:
             'linear-gradient(40deg,#ff9304,#ff04ea 10%,#9b4beb 20%,#0e8dd6 30%,#0bc6df 40%,#07d464 50%,#dfd105 60%,#ff04ab 78%,#8933eb 90%,#3b89ff)',
-        '-webkit-background-clip': 'text',
+        webkitBackgroundClip: 'text',
         color: 'transparent',
         animation: '$rainbow_animation 6s linear infinite',
         backgroundSize: '600% 600%',
@@ -133,7 +133,7 @@ export function DepositDialog() {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    } = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     //#endregion
 
     useEffect(() => {
@@ -153,7 +153,7 @@ export function DepositDialog() {
         pool?.prizePool.address ?? '',
         amount.toFixed(),
         pool?.tokens.ticket.address ?? '',
-        ADDRESS_ZERO, // TODO: accoriding to reference at 18 Jul 2021: https://github.com/pooltogether/pooltogether-community-ui/blob/a827bf7932eb6cd7870df99da66d0843abcf727d/lib/components/DepositUI.jsx#L25
+        ADDRESS_ZERO, // TODO: according to reference at 18 Jul 2021: https://github.com/pooltogether/pooltogether-community-ui/blob/a827bf7932eb6cd7870df99da66d0843abcf727d/lib/components/DepositUI.jsx#L25
         token,
     )
     //#endregion

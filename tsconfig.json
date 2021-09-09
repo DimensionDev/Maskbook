@@ -1,18 +1,13 @@
 {
   "references": [
+    // Only list top-level projects here
     { "path": "./e2e/" },
     { "path": "./packages/maskbook/" },
-    { "path": "./packages/public-api/" },
-    { "path": "./packages/theme/" },
-    { "path": "./packages/dashboard/" },
-    { "path": "./packages/shared-base/" },
-    { "path": "./packages/shared/" },
-    { "path": "./packages/web3-shared/" },
-    { "path": "./packages/storybook-shared/" },
-    { "path": "./packages/icons/" },
-    { "path": "./packages/plugin-infra" },
-    { "path": "./packages/plugins/" },
-    { "path": "./packages/external-plugin-previewer" }
+    { "path": "./packages/injected-script/main" },
+    { "path": "./packages/dashboard" },
+    // Storybooks are considered as a "project" not depended by any other project
+    { "path": "./packages/dashboard/stories" },
+    { "path": "./packages/theme/stories" }
   ],
   "compilerOptions": {
     // Classification follows https://www.typescriptlang.org/tsconfig

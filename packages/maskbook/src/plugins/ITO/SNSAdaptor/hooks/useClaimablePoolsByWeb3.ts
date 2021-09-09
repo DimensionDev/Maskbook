@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { flatten, first } from 'lodash-es'
+import { flatten } from 'lodash-es'
 import { sha3 } from 'web3-utils'
 import type { PastLogsOptions, Log } from 'web3-core'
 import {
@@ -10,7 +10,6 @@ import {
     EthereumTokenType,
     useGetPastLogsParams,
     ChainId,
-    getRPCConstants,
 } from '@masknet/web3-shared'
 import type { ClaimablePool } from '../../types'
 import { useBlockNumberOfChain } from './useBlockNumberOfChain'
@@ -40,9 +39,6 @@ export function useClaimablePoolsByWeb3(chainId: ChainId) {
         topics: [SWAP_SUCCESS_TOPIC],
     })
 
-    const { RPC } = getRPCConstants(chainId)
-    const provderURL = first(RPC)
-    if (!provderURL) throw new Error('Unknown chain id.')
     return useAsyncRetry(async () => {
         if (!currentBlock) return []
         const logs = flatten<Log>(
@@ -50,7 +46,6 @@ export function useClaimablePoolsByWeb3(chainId: ChainId) {
                 queryParams.map((queryParam: PastLogsOptions) =>
                     Services.Ethereum.getPastLogs(queryParam, {
                         chainId,
-                        rpc: provderURL,
                     }),
                 ),
             ),
@@ -69,5 +64,5 @@ export function useClaimablePoolsByWeb3(chainId: ChainId) {
             }
             return acc
         }, [])
-    }, [account, address, chainId, JSON.stringify(queryParams), currentBlock, provderURL])
+    }, [account, address, chainId, JSON.stringify(queryParams), currentBlock])
 }

@@ -71,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface CollectibleListUIProps extends withClasses<'empty' | 'button'> {
+interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'> {
     provider: CollectibleProvider
     wallet?: Wallet
     collectibles: ERC721TokenDetailed[]
@@ -107,7 +107,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     if (loading)
         return (
             <Box className={classes.root}>
-                {Array.from({ length: 6 })
+                {Array.from({ length: 8 })
                     .fill(0)
                     .map((_, i) => (
                         <Box className={classes.card} display="flex" flexDirection="column" key={i}>

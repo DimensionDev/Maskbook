@@ -1,5 +1,6 @@
 import { useRef } from 'react'
-import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
+import { Typography, Card, List, Paper, ListItemText, ListItemIcon } from '@material-ui/core'
+import ListItemButton from '@material-ui/core/ListItemButton'
 import { ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { makeStyles } from '@masknet/theme'
 import { Appearance } from '@masknet/theme'
@@ -144,6 +145,7 @@ export default function DashboardSettingsRouter() {
         LanguageOptions.frFR,
     ]
     const langMapper = useRef((x: LanguageOptions) => {
+        /* spell-checker: disable */
         if (x === LanguageOptions.enUS) return 'English'
         if (x === LanguageOptions.zhTW) return '正體中文'
         if (x === LanguageOptions.zhCN) return '简体中文'
@@ -155,6 +157,7 @@ export default function DashboardSettingsRouter() {
         if (x === LanguageOptions.frFR) return 'langue française'
         if (x === LanguageOptions.faIR) return 'زبان فارسی'
         if (x === LanguageOptions.__auto__) return t('language_auto')
+        /* spell-checker: enable */
         safeUnreachable(x)
         return x
     }).current
@@ -203,13 +206,13 @@ export default function DashboardSettingsRouter() {
                         <Card elevation={0}>
                             <List className={classes.list} disablePadding>
                                 {Flags.v2_enabled && (
-                                    <ListItem button onClick={() => (location.href = '/next.html')}>
+                                    <ListItemButton onClick={() => (location.href = '/next.html')}>
                                         <ListItemIcon children={<NewIcon />} />
                                         <ListItemText
                                             primary="Open new dashboard (integrated) (dev-only)"
                                             secondary="/packages/dashboard/"
                                         />
-                                    </ListItem>
+                                    </ListItemButton>
                                 )}
                                 <SettingsUIEnum
                                     classes={listStyle}

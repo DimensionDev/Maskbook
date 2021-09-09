@@ -1,10 +1,10 @@
 /// <reference path="./global.d.ts" />
 import { openDB, DBSchema } from 'idb/with-async-ittr-cjs'
-import { Identifier, ProfileIdentifier } from './type'
+import { Identifier, PersonaIdentifier, ProfileIdentifier } from './type'
 import { createDBAccess, IDBPSafeTransaction, createTransaction } from './helpers/openDB'
 
 //#region Schema
-type IdentityWithAvatar = ProfileIdentifier
+export type IdentityWithAvatar = ProfileIdentifier | PersonaIdentifier
 export type AvatarRecord = ArrayBuffer
 interface AvatarMetadataRecord {
     identifier: string
@@ -102,7 +102,7 @@ export async function queryAvatarOutdatedDB(
  * defaults to 7 days for lastUpdateTime
  */
 export async function isAvatarOutdatedDB(
-    identifier: ProfileIdentifier,
+    identifier: IdentityWithAvatar,
     attribute: 'lastUpdateTime' | 'lastAccessTime',
     deadline: Date = new Date(Date.now() - 1000 * 60 * 60 * 24 * (attribute === 'lastAccessTime' ? 30 : 7)),
 ): Promise<boolean> {

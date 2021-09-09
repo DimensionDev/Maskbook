@@ -7,7 +7,7 @@ import {
     Grid,
     IconButton,
     Drawer,
-    experimentalStyled as styled,
+    styled,
     Box,
     paperClasses,
 } from '@material-ui/core'
@@ -128,6 +128,8 @@ const ShapeHelper = styled('div')(({ theme }) => ({
 
 const ContentContainer = styled('div')(({ theme }) => ({
     height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
 }))
@@ -166,7 +168,9 @@ export const PageFrame = memo((props: PageFrameProps) => {
                 <Toolbar classes={{ gutters: classes.toolbarGutters }}>
                     {!isLargeScreen && (
                         <MaskLogo item container alignItems="center">
-                            <MenuButton onClick={toggleDrawer}>{drawerOpen ? <CloseIcon /> : <MenuIcon />}</MenuButton>
+                            <MenuButton size="large" onClick={toggleDrawer}>
+                                {drawerOpen ? <CloseIcon /> : <MenuIcon />}
+                            </MenuButton>
                             <MaskNotSquareIcon />
                         </MaskLogo>
                     )}

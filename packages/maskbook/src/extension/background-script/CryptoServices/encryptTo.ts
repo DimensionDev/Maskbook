@@ -44,7 +44,7 @@ export async function encryptTo(
 
     const usingPersona = await queryProfile(whoAmI)
     const minePrivateKey = await queryPrivateKey(whoAmI)
-    if (!minePrivateKey) throw new TypeError('Not inited yet')
+    if (!minePrivateKey) throw new TypeError('Not initialized yet')
     const stringifiedContent = Alpha38.typedMessageStringify(content)
     const localKey = publicShared ? Alpha38.publicSharedAESKey : (await queryLocalKey(whoAmI))!
     const {
@@ -84,7 +84,7 @@ export async function encryptTo(
         identifier: new PostIVIdentifier(whoAmI.network, payload.iv),
         postBy: whoAmI,
         postCryptoKey: postAESKey,
-        recipients: recipients,
+        recipients: publicShared ? 'everyone' : recipients,
         foundAt: new Date(),
         encryptBy: usingPersona.linkedPersona?.identifier,
     }
@@ -121,11 +121,11 @@ function getSummary(content: TypedMessageText) {
         // it seems like using "en" can also split the word correctly.
         const seg = new Intl.Segmenter('en')
         for (const word of seg.segment(content.content)) {
-            if (result.length >= 20) break
+            if (result.length >= 30) break
             result += word.segment
         }
     } else {
-        result = result.slice(0, 20)
+        result = result.slice(0, 30)
     }
     return result
 }

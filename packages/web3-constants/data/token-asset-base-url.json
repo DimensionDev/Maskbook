@@ -37,6 +37,7 @@
             "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/polygon"
         ],
         "Arbitrum": [],
-        "Arbitrum_Rinkeby": []
+        "Arbitrum_Rinkeby": [],
+        "xDai": []
     }
 }

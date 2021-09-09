@@ -81,12 +81,12 @@ const useStyles = makeStyles()((theme) => ({
             textDecoration: 'none',
         },
     },
-    comfirmWrapper: {
+    confirmWrapper: {
         marginTop: theme.spacing(1),
         display: 'flex',
         alignItems: 'center',
     },
-    comfirmText: {
+    confirmText: {
         color: '#6F767C',
     },
     button: {
@@ -174,7 +174,7 @@ export function RemindDialog(props: RemindDialogProps) {
                     </Link>
                 </div>
             </section>
-            <section className={classes.comfirmWrapper}>
+            <section className={classes.confirmWrapper}>
                 <FormControlLabel
                     control={
                         <Checkbox

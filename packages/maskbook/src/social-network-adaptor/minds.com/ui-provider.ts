@@ -92,7 +92,7 @@ const mindsUI: SocialNetworkUI.Definition = {
                 // ! Change this might be a breaking change !
                 return new ProfileIdentifier(
                     'minds.com',
-                    ProfileIdentifier.getUserName(IdentityProviderMinds.lastRecognized.value.identifier) ||
+                    ProfileIdentifier.getUserName(IdentityProviderMinds.recognized.value.identifier) ||
                         ProfileIdentifier.getUserName(currentSelectedIdentity[mindsBase.networkIdentifier].value) ||
                         ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
                         unreachable('Cannot figure out password' as never),

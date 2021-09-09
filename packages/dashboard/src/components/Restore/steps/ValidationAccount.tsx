@@ -1,27 +1,33 @@
 import { useDashboardI18N } from '../../../locales'
 import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { sendCode } from '../../../pages/Settings/api'
+import { sendCode, useLanguage } from '../../../pages/Settings/api'
 import { SendingCodeField } from '@masknet/theme'
 import { Button, Typography } from '@material-ui/core'
 import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
 import type { StepCommonProps } from '../../Stepper'
-import { ValidationCodeStep } from './Commont'
-import type { AccountValidationType, BackupFileInfo } from '../../../pages/Settings/type'
+import { ValidationCodeStep } from './common'
+import { AccountType, BackupFileInfo, Scenario, Locale } from '../../../pages/Settings/type'
 
 interface ValidationAccountProps extends StepCommonProps {
     account: string
-    type: AccountValidationType
-    onNext(account: string, type: AccountValidationType, code: string): Promise<BackupFileInfo | { message: string }>
+    type: AccountType
+    onNext(account: string, type: AccountType, code: string): Promise<BackupFileInfo | { message: string }>
 }
 
 export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationAccountProps) => {
+    const language = useLanguage()
     const t = useDashboardI18N()
     const [code, setCode] = useState('')
     const [error, setError] = useState('')
 
     const [{ error: sendCodeError }, handleSendCodeFn] = useAsyncFn(async () => {
-        return sendCode({ account: account, type: type })
+        return sendCode({
+            account,
+            type,
+            scenario: Scenario.backup,
+            locale: language.includes('zh') ? Locale.zh : Locale.en,
+        })
     }, [account, type])
 
     const handleNext = async () => {

@@ -27,7 +27,7 @@ export default function (signal: AbortSignal) {
             browser.tabs.executeScript(arg.tabId, {
                 runAt: 'document_start',
                 frameId: arg.frameId,
-                file: 'js/injected-script.js',
+                file: '/injected-script.js',
             })
         }
         contentScripts(arg.tabId, arg.frameId).catch(HandleError(arg))
@@ -65,7 +65,7 @@ async function fetchInjectedScript() {
     try {
         return `{
     const script = document.createElement('script')
-    script.innerHTML = ${await fetch('js/injected-script.js')
+    script.innerHTML = ${await fetch('/injected-script.js')
         .then((x) => x.text())
         .then(JSON.stringify)}
     document.documentElement.appendChild(script)

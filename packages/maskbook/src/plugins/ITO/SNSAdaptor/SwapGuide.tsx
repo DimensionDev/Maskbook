@@ -27,7 +27,9 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
         flexDirection: 'column',
-        padding: theme.spacing(2, 3),
+    },
+    paper: {
+        maxWidth: 544,
     },
 }))
 
@@ -80,17 +82,23 @@ export function SwapGuide(props: SwapGuideProps) {
         [SwapStatus.Share]: t('plugin_ito_dialog_swap_share_title'),
     }
 
+    const closeDialog = useCallback(() => {
+        setTokenAmount(initAmount)
+        return status === SwapStatus.Share ? onCloseShareDialog() : onClose()
+    }, [status, initAmount, onCloseShareDialog, onClose, setTokenAmount])
+
     useEffect(() => {
         onUpdate(isBuyer ? SwapStatus.Share : SwapStatus.Remind)
     }, [account, isBuyer, chainId, payload.chain_id])
 
     return (
         <InjectedDialog
+            classes={{ paper: classes.paper, dialogContent: classes.paper }}
             open={open}
             title={SwapTitle[status]}
-            onClose={status === SwapStatus.Share ? onCloseShareDialog : onClose}
+            onClose={closeDialog}
             maxWidth={SwapStatus.Swap || status === SwapStatus.Unlock ? 'xs' : 'sm'}>
-            <DialogContent className={classes.content}>
+            <DialogContent className={classes.content} classes={{ root: classes.content }}>
                 {(() => {
                     switch (status) {
                         case SwapStatus.Remind:

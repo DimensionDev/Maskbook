@@ -1,0 +1,10 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/stories/",
+    "tsBuildInfoFile": "../dist/stories.tsbuildinfo"
+  },
+  "include": ["./", "./**/*.json"],
+  "references": [{ "path": "../../storybook-shared" }, { "path": "../" }]
+}

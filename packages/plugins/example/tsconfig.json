@@ -3,14 +3,9 @@
   "compilerOptions": {
     "rootDir": "./src/",
     "outDir": "./dist/",
-    "stripInternal": true,
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "resolveJsonModule": true
   },
-  "include": ["./src/**/*", "./src/**/*.json"],
-  "references": [{ "path": "../../plugin-infra" }],
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": { "module": "CommonJS" }
-  }
+  "include": ["./src", "./src/**/*.json"],
+  "references": [{ "path": "../../plugin-infra" }]
 }

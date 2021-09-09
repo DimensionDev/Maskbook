@@ -18,10 +18,24 @@ export interface SettingDialogProps {
 export default function SwapSettingDialog({ open, onClose }: SettingDialogProps) {
     const ethOptions = [
         { label: 'UniSwap V2', value: TradeProvider.UNISWAP_V2 },
+        { label: 'UniSwap V3', value: TradeProvider.UNISWAP_V3 },
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: 'SashimiSwap', value: TradeProvider.SASHIMISWAP },
         { label: 'Ox', value: TradeProvider.ZRX },
         { label: 'Balancer', value: TradeProvider.BALANCER },
+        { label: 'DODO', value: TradeProvider.DODO },
+    ]
+
+    const polygonOptions = [
+        { label: 'QuickSwap', value: TradeProvider.QUICKSWAP },
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+        { label: 'DODO', value: TradeProvider.DODO },
+    ]
+
+    const bscOptions = [
+        { label: 'PancakeSwap', value: TradeProvider.PANCAKESWAP },
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+        { label: 'DODO', value: TradeProvider.DODO },
     ]
 
     const t = useDashboardI18N()
@@ -29,16 +43,6 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
     const ethNetworkTradeProvider = useEthereumNetworkTradeProvider()
     const polygonNetworkTradeProvider = usePolygonNetworkTradeProvider()
     const bscNetworkTradeProvider = useBinanceNetworkTradeProvider()
-
-    const polygonOptions = [
-        { label: 'QuickSwap', value: TradeProvider.QUICKSWAP },
-        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
-    ]
-
-    const bscOptions = [
-        { label: 'PancakeSwap', value: TradeProvider.PANCAKESWAP },
-        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
-    ]
 
     return (
         <MaskDialog title={t.labs_settings_swap()} open={open} onClose={onClose}>

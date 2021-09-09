@@ -29,3 +29,14 @@ export async function connectSocialNetwork(identifier: PersonaIdentifier, networ
     await delay(100)
     home && browser.tabs.create({ active: true, url: home })
 }
+
+export async function openProfilePage(network: string, userId?: string) {
+    const ui = await loadSocialNetworkUI(network)
+    const profile = ui.utils.getProfilePage?.(userId)
+    if (!Flags.no_web_extension_dynamic_permission_request) {
+        // TODO: requesting permission need a popup in Firefox.
+        if (!(await requestSNSAdaptorPermission(ui))) return
+    }
+    await delay(100)
+    profile && browser.tabs.create({ active: true, url: profile })
+}

@@ -1,26 +1,20 @@
 import { memo, useState } from 'react'
-import { Box, Button, Drawer } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { Box, Button, Drawer, Stack } from '@material-ui/core'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PersonaCard } from '../PersonaCard'
-import { MaskColorVar } from '@masknet/theme'
 import { AddPersonaCard } from '../AddPersonaCard'
 import { useDashboardI18N } from '../../../../locales'
 import type { PersonaIdentifier, PersonaInformation } from '@masknet/shared'
+import { RoutePaths } from '../../../../type'
+import { useNavigate } from 'react-router'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        // material-ui toolbar height
-        top: `64px !important`,
-    },
     paper: {
         // material-ui toolbar height
         top: `64px`,
-        padding: theme.spacing(3.75, 3.75, 0, 3.75),
+        padding: theme.spacing(3, 3.75, 11.25, 3.75),
         background: MaskColorVar.suspensionBackground,
-        '& > *': {
-            marginTop: theme.spacing(1.5),
-        },
     },
     backdrop: {
         background: 'none',
@@ -70,6 +64,7 @@ export interface PersonaDrawerUIProps extends PersonaDrawer {
 
 export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
     ({ open, currentPersonaIdentifier, toggleDrawer, personas, onChangeCurrentPersona, onCreatePersona }) => {
+        const navigate = useNavigate()
         const { classes } = useStyles()
         const t = useDashboardI18N()
 
@@ -87,27 +82,50 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                     },
                 }}
                 elevation={0}
-                classes={{ root: classes.root, paper: classes.paper }}>
-                {personas.map((item) => {
-                    const { identifier, nickname, linkedProfiles } = item
-                    return (
-                        <PersonaCard
-                            identifier={identifier}
-                            active={identifier.equals(currentPersonaIdentifier)}
-                            key={identifier.toText()}
-                            nickname={nickname}
-                            profiles={[...linkedProfiles.values()]}
-                            onClick={() => onChangeCurrentPersona(identifier)}
-                        />
-                    )
-                })}
-                {showAddPersonaCard && (
-                    <AddPersonaCard onConfirm={onCreatePersona} onCancel={() => setShowAddPersonaCard(false)} />
-                )}
-                <Box className={classes.buttons}>
-                    <Button onClick={() => setShowAddPersonaCard(true)}>{t.personas_add_persona()}</Button>
-                    <Button color="warning">{t.personas_back_up()}</Button>
-                </Box>
+                classes={{ paper: classes.paper }}>
+                <Stack justifyContent="space-between" gap={2} height="100%" maxHeight="100%">
+                    <Box overflow="auto">
+                        {personas.map((item) => {
+                            const { identifier, nickname, linkedProfiles } = item
+                            return (
+                                <Box mb={2.5} key={identifier.toText()}>
+                                    <PersonaCard
+                                        identifier={identifier}
+                                        active={identifier.equals(currentPersonaIdentifier)}
+                                        key={identifier.toText()}
+                                        nickname={nickname}
+                                        profiles={[...linkedProfiles.values()]}
+                                        onClick={() => onChangeCurrentPersona(identifier)}
+                                    />
+                                </Box>
+                            )
+                        })}
+                        {showAddPersonaCard && (
+                            <AddPersonaCard
+                                onConfirm={(nickName) => {
+                                    onCreatePersona(nickName)
+                                    setShowAddPersonaCard(false)
+                                }}
+                                onCancel={() => setShowAddPersonaCard(false)}
+                            />
+                        )}
+                        <Box className={classes.buttons}>
+                            <Button onClick={() => setShowAddPersonaCard(true)}>{t.personas_add_persona()}</Button>
+                            <Button color="warning" onClick={() => navigate(RoutePaths.SignIn)}>
+                                {t.recovery()}
+                            </Button>
+                        </Box>
+                    </Box>
+                    <Box>
+                        <Button
+                            fullWidth
+                            sx={{ mb: 2 }}
+                            color="warning"
+                            onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}>
+                            {t.settings_global_backup_title()}
+                        </Button>
+                    </Box>
+                </Stack>
             </Drawer>
         )
     },

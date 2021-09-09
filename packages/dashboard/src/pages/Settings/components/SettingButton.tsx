@@ -1,4 +1,4 @@
-import { Button, experimentalStyled as styled, buttonClasses } from '@material-ui/core'
+import { Button, styled, buttonClasses } from '@material-ui/core'
 
 export default styled<typeof Button>(Button)(({ theme }) => ({
     [`&.${buttonClasses.root}`]: {

@@ -1,4 +1,4 @@
-import { experimentalStyled as styled } from '@material-ui/core'
+import { styled } from '@material-ui/core'
 import type {} from '@material-ui/system'
 /**
  * This component is an abstraction of a list of "start up action suggestions".

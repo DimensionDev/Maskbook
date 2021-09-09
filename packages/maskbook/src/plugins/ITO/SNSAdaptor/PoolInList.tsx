@@ -87,7 +87,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
         paddingBottom: theme.spacing(1),
     },
-    deteils: {
+    details: {
         '& > *': {
             paddingBottom: theme.spacing(1),
         },
@@ -136,8 +136,10 @@ export function PoolInList(props: PoolInListProps) {
 
     const canWithdraw = !isWithdrawn && (listOfStatus.includes(ITO_Status.expired) || noRemain)
 
+    // Note: After upgrade to Asymmetrical secret key in the future, `canSend` requires `password` exists.
     const canSend = !listOfStatus.includes(ITO_Status.expired) && !noRemain
-    const progress = 100 * Number(new BigNumber(pool.total).minus(pool.total_remaining).dividedBy(pool.total))
+    const base = new BigNumber(pool.total).minus(pool.total_remaining).dividedBy(pool.total).toNumber()
+    const progress = 100 * base
 
     const StatusButton = () => {
         return (
@@ -221,7 +223,7 @@ export function PoolInList(props: PoolInListProps) {
                         </Typography>
                     </Box>
 
-                    <Box className={classes.deteils}>
+                    <Box className={classes.details}>
                         <TableContainer component={Paper} className={classes.table}>
                             <Table size="small">
                                 <TableHead>

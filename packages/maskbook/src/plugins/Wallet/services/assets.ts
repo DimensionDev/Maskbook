@@ -16,6 +16,7 @@ import {
     NetworkType,
     PortfolioProvider,
     pow10,
+    getChainShortName,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-es'
@@ -40,11 +41,15 @@ export async function getAssetsListNFT(
     page?: number,
     size?: number,
 ): Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }> {
-    if (provider === CollectibleProvider.OPENSEAN) {
+    if (provider === CollectibleProvider.OPENSEA) {
         const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size })
         return {
             assets: assets
-                .filter((x) => ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name))
+                .filter(
+                    (x) =>
+                        ['non-fungible', 'semi-fungible'].includes(x.asset_contract.asset_contract_type) ||
+                        ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
+                )
                 .map((x) =>
                     createERC721Token(
                         {
@@ -57,7 +62,7 @@ export async function getAssetsListNFT(
                         {
                             name: x.name,
                             description: x.description,
-                            image: x.image_url ?? x.image_preview_url ?? '',
+                            image: x.image_url ?? x.image_preview_url ?? x.asset_contract.image_url ?? '',
                         },
                         x.token_id,
                     ),
@@ -112,18 +117,20 @@ export async function getAssetsList(
 }
 
 function formatAssetsFromDebank(data: BalanceRecord[]) {
+    console.log('DEBUG: formatAssetsFromDebank')
+    console.log(data)
     return data
         .filter((x) => getChainIdFromName(x.chain))
         .map((y): Asset => {
-            const chainId = getChainIdFromName(y.chain) ?? ChainId.Mainnet
+            const chainIdFromChain = getChainIdFromName(y.chain) ?? ChainId.Mainnet
             // the asset id is the token address or the name of the chain
-            const chainIdFormId = getChainIdFromName(y.id)
+            const chainIdFromId = getChainIdFromName(y.id)
             return {
-                chain: y.chain,
+                chain: getChainShortName(chainIdFromChain).toLowerCase(),
                 token:
-                    chainIdFormId && isChainIdMainnet(chainIdFormId)
-                        ? createNativeToken(chainId)
-                        : createERC20Token(chainId, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
+                    chainIdFromId && isChainIdMainnet(chainIdFromId)
+                        ? createNativeToken(chainIdFromChain)
+                        : createERC20Token(chainIdFromChain, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
                 balance: new BigNumber(y.balance).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),

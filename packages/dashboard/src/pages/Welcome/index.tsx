@@ -2,7 +2,7 @@ import { Button } from '@material-ui/core'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { styled } from '@material-ui/core/styles'
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { useAppearance } from '../Personas/api'
 import { useDashboardI18N } from '../../locales'
@@ -35,7 +35,7 @@ export default function Welcome() {
     const mode = useAppearance()
     const navigate = useNavigate()
 
-    const privacyPolicyURL = new URL(`./en.html`, import.meta.url).toString()
+    const agreementContentPageURL = new URL(`./en.html`, import.meta.url).toString()
     const privacyPolicyDocument = useMemo(() => () => iframeRef?.current?.contentWindow?.document, [iframeRef])
 
     useEffect(
@@ -51,21 +51,24 @@ export default function Welcome() {
     }, [mode])
 
     const updateIFrameStyle = () => {
-        const document = privacyPolicyDocument()
-        if (!document) return
+        const iframeDocument = privacyPolicyDocument()
+        if (!iframeDocument) return
 
-        const style = document.createElement('style')
+        const style = iframeDocument.createElement('style')
         style.innerHTML = `
               h3, h6 { color: ${mode === 'dark' ? '#FFFFFF' : '#111432'}; }
               p { color: ${mode === 'dark' ? 'rgba(255, 255, 255, 0.8);' : '#7b8192'}; }
             `
-        document.head?.appendChild(style)
+        iframeDocument.head?.appendChild(style)
     }
 
     const handleIFrameLoad = () => {
         updateIFrameStyle()
 
-        const link = document.getElementById('link')
+        const iframeDocument = privacyPolicyDocument()
+        if (!iframeDocument) return
+
+        const link = iframeDocument.getElementById('link')
         link?.addEventListener('click', handleLinkClick)
     }
 
@@ -76,7 +79,7 @@ export default function Welcome() {
     return (
         <WelcomeUI
             iframeRef={iframeRef}
-            privacyPolicyURL={privacyPolicyURL}
+            privacyPolicyURL={agreementContentPageURL}
             iframeLoadHandler={handleIFrameLoad}
             agreeHandler={() => navigate(RoutePaths.Setup)}
             cancelHandler={() => window.close()}

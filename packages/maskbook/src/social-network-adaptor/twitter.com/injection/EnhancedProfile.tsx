@@ -1,25 +1,24 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { useState } from 'react'
-import { EnhancedProfileaPage } from '../../../components/InjectedComponents/EnhancedProfile'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
+import { EnhancedProfilePage } from '../../../components/InjectedComponents/EnhancedProfile'
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
     searchNewTweetButtonSelector,
     searchProfileEmptySelector,
     searchProfileTabPageSelector,
 } from '../utils/selector'
-import { getBioDescription, getNickname, getTwitterId } from '../utils/user'
 
 function injectEnhancedProfilePageForEmptyState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfileaPageAtTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfilePageAtTwitter />)
 }
 
 function injectEnhancedProfilePageState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabPageSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfileaPageAtTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfilePageAtTwitter />)
 }
 export function injectEnhancedProfileAtTwitter(signal: AbortSignal) {
     injectEnhancedProfilePageForEmptyState(signal)
@@ -53,30 +52,22 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
 }))
 
-export function EnhancedProfileaPageAtTwitter() {
+export function EnhancedProfilePageAtTwitter() {
     const newTweetButton = searchNewTweetButtonSelector().evaluate()
     const style = newTweetButton ? window.getComputedStyle(newTweetButton) : EMPTY_STYLE
     const fontStyle = newTweetButton?.firstChild
         ? window.getComputedStyle(newTweetButton.firstChild as HTMLElement)
         : EMPTY_STYLE
+
     const { classes } = useStyles({ backgroundColor: style.backgroundColor, fontFamily: fontStyle.fontFamily })
+    const identity = useCurrentVisitingIdentity()
 
-    const [bio, setBio] = useState(getBioDescription())
-    const [nickname, setNickname] = useState(getNickname())
-    const [twitterId, setTwitterId] = useState(getTwitterId())
-
-    const onUpdated = () => {
-        setBio(getBioDescription())
-        setNickname(getNickname())
-        setTwitterId(getTwitterId())
-    }
     return (
-        <EnhancedProfileaPage
+        <EnhancedProfilePage
             classes={classes}
-            bioDescription={bio}
-            nickname={nickname}
-            twitterId={twitterId}
-            onUpdated={onUpdated}
+            bioDescription={identity.bio ?? ''}
+            nickname={identity.nickname ?? ''}
+            twitterId={identity.identifier.userId}
         />
     )
 }

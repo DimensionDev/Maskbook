@@ -13,7 +13,7 @@ import {
     TransactionStateType,
     useChainId,
     useChainIdValid,
-    useTokenBalance,
+    useFungibleTokenBalance,
 } from '@masknet/web3-shared'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { TradeForm } from './TradeForm'
@@ -122,12 +122,12 @@ export function Trader(props: TraderProps) {
         value: inputTokenBalance_,
         loading: loadingInputTokenBalance,
         retry: retryInputTokenBalance,
-    } = useTokenBalance(inputToken?.type ?? EthereumTokenType.Native, inputToken?.address ?? '')
+    } = useFungibleTokenBalance(inputToken?.type ?? EthereumTokenType.Native, inputToken?.address ?? '')
     const {
         value: outputTokenBalance_,
         loading: loadingOutputTokenBalance,
         retry: retryOutputTokenBalance,
-    } = useTokenBalance(outputToken?.type ?? EthereumTokenType.Native, outputToken?.address ?? '')
+    } = useFungibleTokenBalance(outputToken?.type ?? EthereumTokenType.Native, outputToken?.address ?? '')
 
     useEffect(() => {
         if (inputTokenBalance_ && !loadingInputTokenBalance)
@@ -229,7 +229,7 @@ export function Trader(props: TraderProps) {
                           inputToken.symbol
                       } for ${formatBalance(tradeComputed.outputAmount, outputToken.decimals, 6)} ${cashTag}${
                           outputToken.symbol
-                      }. Follow @realMaskbook (mask.io) to swap cryptocurrencies on Twitter.`,
+                      }. Follow @realMaskNetwork (mask.io) to swap cryptocurrencies on Twitter.`,
                       '#mask_io',
                   ].join('\n')
                 : '',

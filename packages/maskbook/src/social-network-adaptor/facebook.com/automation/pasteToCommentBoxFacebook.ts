@@ -1,7 +1,8 @@
-import { dispatchCustomEvents, selectElementContents, delay } from '../../../utils/utils'
+import { selectElementContents, delay } from '../../../utils/utils'
 import { isMobileFacebook } from '../utils/isMobile'
 import { MaskMessage } from '../../../utils/messages'
 import type { PostInfo } from '../../../social-network/PostInfo'
+import { inputText, pasteText } from '@masknet/injected-script'
 
 export async function pasteToCommentBoxFacebook(encryptedComment: string, current: PostInfo, dom: HTMLElement | null) {
     const fail = () => {
@@ -13,7 +14,7 @@ export async function pasteToCommentBoxFacebook(encryptedComment: string, curren
         const textarea = root.querySelector('textarea')
         if (!textarea) return fail()
         textarea.focus()
-        dispatchCustomEvents(textarea, 'input', encryptedComment)
+        inputText(encryptedComment)
         textarea.dispatchEvent(new CustomEvent('input', { bubbles: true, cancelable: false, composed: true }))
         await delay(200)
         if (!root.innerText.includes(encryptedComment)) return fail()
@@ -23,7 +24,7 @@ export async function pasteToCommentBoxFacebook(encryptedComment: string, curren
         const input = root.querySelector('[contenteditable]')
         if (!input) return fail()
         selectElementContents(input)
-        dispatchCustomEvents(input, 'paste', encryptedComment)
+        pasteText(encryptedComment)
         await delay(200)
         if (!root.innerText.includes(encryptedComment)) return fail()
     }

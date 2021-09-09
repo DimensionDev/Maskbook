@@ -398,6 +398,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                         />
                         {gotoProfilePageImpl && xsOnly ? (
                             <IconButton
+                                size="large"
                                 className={findUsernameClasses.button}
                                 color={username ? 'primary' : 'default'}
                                 disabled={!username}>
@@ -550,7 +551,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const [username, setUsername] = useState(getUsername)
     useEffect(
         () =>
-            activatedSocialNetworkUI.collecting.identityProvider?.lastRecognized.addListener((val) => {
+            activatedSocialNetworkUI.collecting.identityProvider?.recognized.addListener((val) => {
                 if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
             }),
         [username],

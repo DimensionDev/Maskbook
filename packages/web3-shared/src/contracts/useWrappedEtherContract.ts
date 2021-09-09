@@ -5,6 +5,6 @@ import { useTokenConstants } from '../constants'
 import { useContract } from '../hooks/useContract'
 
 export function useNativeTokenWrapperContract() {
-    const { WETH_ADDRESS } = useTokenConstants()
-    return useContract<WETH>(WETH_ADDRESS, WETH_ABI as AbiItem[])
+    const { WNATIVE_ADDRESS } = useTokenConstants()
+    return useContract<WETH>(WNATIVE_ADDRESS, WETH_ABI as AbiItem[])
 }

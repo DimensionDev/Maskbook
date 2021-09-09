@@ -1,4 +1,5 @@
 import { EthereumAddress } from 'wallet.ts'
+import { first } from 'lodash-es'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
@@ -14,7 +15,7 @@ import { safeUnreachable } from '@dimensiondev/kit'
 import * as MetaMask from './providers/MetaMask'
 import { createWeb3 } from './web3'
 import * as WalletConnect from './providers/WalletConnect'
-import { addRecentTransaction, getWallet } from '../../../plugins/Wallet/services'
+import { getWallet } from '../../../plugins/Wallet/services'
 import { commitNonce, getNonce, resetNonce } from './nonce'
 import { getGasPrice } from './network'
 import {
@@ -24,37 +25,52 @@ import {
 } from '../../../plugins/Wallet/settings'
 import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../utils'
+import { nativeAPI } from '../../../utils/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
-import { PopupRoutes } from '../../popups'
 
 export interface SendOverrides {
     chainId?: ChainId
     account?: string
     providerType?: ProviderType
-    rpc?: string
-    skipConfirmation?: boolean
 }
 
 function parseGasPrice(price: string | undefined) {
     return Number.parseInt(price ?? '0x0', 16)
 }
 
-function isRpcNeedToBeConfirmed(payload: JsonRpcPayload) {
-    return [
-        EthereumMethodType.ETH_SIGN,
-        EthereumMethodType.PERSONAL_SIGN,
-        EthereumMethodType.ETH_SIGN_TYPED_DATA,
-        EthereumMethodType.ETH_DECRYPT,
-        EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
-        EthereumMethodType.ETH_SEND_TRANSACTION,
-    ].includes(payload.method as EthereumMethodType)
+function getChainIdFromPayload(payload: JsonRpcPayload) {
+    switch (payload.method) {
+        // here are methods that contracts may emit
+        case EthereumMethodType.ETH_CALL:
+        case EthereumMethodType.ETH_ESTIMATE_GAS:
+        case EthereumMethodType.ETH_SEND_TRANSACTION:
+            const config = first(payload.params) as { chainId?: string } | undefined
+            return typeof config?.chainId === 'string' ? Number.parseInt(config.chainId, 16) || undefined : undefined
+        default:
+            return undefined
+    }
+}
+
+function handleRecentTransaction(account: string, response: JsonRpcResponse | undefined) {
+    const hash = response?.result as string | undefined
+    if (typeof hash !== 'string') return
+    if (!/^0x([\dA-Fa-f]{64})$/.test(hash)) return
+    WalletRPC.addRecentTransaction(account, hash)
+}
+
+async function handleNonce(account: string, error: Error | null, response: JsonRpcResponse | undefined) {
+    const error_ = (error ?? response?.error) as { message: string } | undefined
+    const message = error_?.message ?? ''
+    if (!EthereumAddress.isValid(account)) return
+    if (/\bnonce\b/im.test(message) && /\b(low|high)\b/im.test(message)) resetNonce(account)
+    else commitNonce(account)
 }
 
 /**
  * This API is only used internally. Please use requestSend instead in order to share the same payload id globally.
  * @param payload
  * @param callback
- * @param rpc
+ * @param sendOverrides
  */
 export async function INTERNAL_send(
     payload: JsonRpcPayload,
@@ -63,8 +79,6 @@ export async function INTERNAL_send(
         chainId = currentChainIdSettings.value,
         account = currentAccountSettings.value,
         providerType = currentProviderSettings.value,
-        rpc,
-        skipConfirmation = false,
     }: SendOverrides = {},
 ) {
     if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
@@ -72,30 +86,9 @@ export async function INTERNAL_send(
         console.debug(new Error().stack)
     }
 
-    // some rpc methods need to be confirmed by the user
-    if (
-        Flags.v2_enabled &&
-        !skipConfirmation &&
-        isRpcNeedToBeConfirmed(payload) &&
-        providerType === ProviderType.Maskbook
-    ) {
-        try {
-            await WalletRPC.pushUnconfirmedRequest(payload)
-        } catch (error: any) {
-            callback(error)
-            return
-        }
-
-        window.open(
-            browser.runtime.getURL(`popups.html${PopupRoutes.Wallet}`),
-            '',
-            'resizable,scrollbars,status,width=310,height=540',
-        )
-    }
-
     const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null
     const web3 = createWeb3({
-        chainId,
+        chainId: getChainIdFromPayload(payload) ?? chainId,
         privKeys: wallet?._private_key_ ? [wallet._private_key_] : [],
         providerType,
     })
@@ -226,18 +219,7 @@ export async function INTERNAL_send(
                 await sendTransaction()
                 break
             default:
-                if (rpc) {
-                    fetch(rpc, {
-                        method: 'POST',
-                        body: JSON.stringify(payload),
-                    })
-                        .catch((error: Error) => callback(error))
-                        .then(async (res) => {
-                            if (res) callback(null, (await res.json()) as JsonRpcResponse)
-                        })
-                } else {
-                    provider.send(payload, callback)
-                }
+                provider.send(payload, callback)
                 break
         }
     } catch (error: any) {
@@ -245,17 +227,29 @@ export async function INTERNAL_send(
     }
 }
 
-function handleRecentTransaction(account: string, response: JsonRpcResponse | undefined) {
-    const hash = response?.result as string | undefined
-    if (typeof hash !== 'string') return
-    if (!/^0x([\dA-Fa-f]{64})$/.test(hash)) return
-    addRecentTransaction(account, hash)
-}
-
-async function handleNonce(account: string, error: Error | null, response: JsonRpcResponse | undefined) {
-    const error_ = (error ?? response?.error) as { message: string } | undefined
-    const message = error_?.message ?? ''
-    if (!EthereumAddress.isValid(account)) return
-    if (/\bnonce\b/im.test(message) && /\b(low|high)\b/im.test(message)) resetNonce(account)
-    else commitNonce(account)
+/**
+ * This API redirects requests to the native app.
+ * @param payload
+ * @param callback
+ * @param sendOverrides
+ */
+export async function INTERNAL_nativeSend(
+    payload: JsonRpcPayload,
+    callback: (error: Error | null, response?: JsonRpcResponse) => void,
+    { account = currentAccountSettings.value }: SendOverrides = {},
+) {
+    try {
+        const response = await nativeAPI?.api.send(payload)
+        callback(null, response)
+        if (payload.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
+            handleNonce(account, null, response)
+            handleRecentTransaction(account, response)
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            callback(error, undefined)
+            handleNonce(account, error, undefined)
+        }
+        console.error('internal native send error', error)
+    }
 }

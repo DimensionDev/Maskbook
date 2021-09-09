@@ -12,11 +12,11 @@ import PhoneNumberSettingItem from './components/PhoneNumberSettingItem'
 import LanguageSetting from './components/LanguageSetting'
 import AppearanceSetting from './components/AppearanceSetting'
 import RestoreSetting from './components/RestoreSetting'
-import MobileSyncSetting from './components/MobileSyncSetting'
+// import MobileSyncSetting from './components/MobileSyncSetting'
 
 import { PasswordVerifiedProvider } from './hooks/VerifyPasswordContext'
 import { UserProvider } from './hooks/UserContext'
-import { SettingsAppearanceIcon, SettingsLanguageIcon, SettingsRestoreIcon, SettingsSyncIcon } from '@masknet/icons'
+import { SettingsAppearanceIcon, SettingsLanguageIcon, SettingsRestoreIcon } from '@masknet/icons'
 
 export default function Settings() {
     const t = useDashboardI18N()
@@ -38,12 +38,12 @@ export default function Settings() {
                             desc={t.settings_appearance_desc()}>
                             <AppearanceSetting />
                         </SettingItem>
-                        <SettingItem
+                        {/* <SettingItem
                             icon={<SettingsSyncIcon />}
                             title={t.settings_sync_with_mobile_title()}
                             desc={t.settings_sync_with_mobile_desc()}>
                             <MobileSyncSetting />
-                        </SettingItem>
+                        </SettingItem> */}
                     </SettingCard>
 
                     <SettingCard title={t.settings_backup_recovery()}>

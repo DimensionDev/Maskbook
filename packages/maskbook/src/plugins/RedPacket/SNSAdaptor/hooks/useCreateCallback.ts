@@ -9,8 +9,6 @@ import {
     TransactionStateType,
     useAccount,
     useChainId,
-    useGasPrice,
-    useNonce,
     useTokenConstants,
     useTransactionState,
 } from '@masknet/web3-shared'
@@ -125,8 +123,6 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
 }
 
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number) {
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const [createState, setCreateState] = useTransactionState()
@@ -168,8 +164,6 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
             from: account,
             value,
             gas,
-            gasPrice,
-            nonce,
         }
 
         // send transaction and wait for hash
@@ -206,7 +200,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                 reject(error)
             })
         })
-    }, [nonce, gasPrice, account, redPacketContract, redPacketSettings, chainId, paramResult])
+    }, [account, redPacketContract, redPacketSettings, chainId, paramResult])
 
     const resetCallback = useCallback(() => {
         setCreateState({
