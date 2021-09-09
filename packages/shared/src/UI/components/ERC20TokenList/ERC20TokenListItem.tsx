@@ -121,7 +121,7 @@ export const getERC20TokenListItem =
                                 color="primary"
                                 onClick={onImport}
                                 size="small"
-                                clearStyle
+                                soloLoading
                                 loadingIndicator={<LoadingIcon sx={{ fontSize: 16 }} />}>
                                 {t.import()}
                             </MaskLoadingButton>
