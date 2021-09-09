@@ -43,7 +43,10 @@ export function useAmmExchange(market: Market | undefined) {
         const pool = await ammMarketFactoryContract.methods.getPool(market.address, market.id).call()
 
         const balancerPoolContract = createContract(web3, pool, AugurBalancerPoolABI as AbiItem[]) as AugurBalancerPool
-        const totalSupply = (await balancerPoolContract.methods.totalSupply().call()) ?? '0'
+        const totalSupply =
+            pool && !isZeroAddress(pool) && balancerPoolContract
+                ? await balancerPoolContract.methods.totalSupply().call()
+                : '0'
 
         if (pool && isAddress(pool) && !isZeroAddress(pool)) {
             const erc20TokenContract = createContract(web3, pool, ERC20ABI as AbiItem[]) as ERC20
