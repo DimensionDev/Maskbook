@@ -468,7 +468,7 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
                                 <EthereumWalletConnectedBoundary>
                                     <EthereumERC20TokenApprovedBoundary
                                         amount={amount.toFixed()}
-                                        spender={market.ammExchange?.address}
+                                        spender={market.ammAddress}
                                         token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
                                         <ActionButton
                                             className={classes.button}

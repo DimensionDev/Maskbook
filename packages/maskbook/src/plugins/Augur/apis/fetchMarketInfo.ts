@@ -1,6 +1,6 @@
 import type { MarketInfo } from '../types'
 
-export async function fetchMarketInfo(address: string, id: string, url: string) {
+export async function fetchMarketInfo(address: string, id: string, url: string): Promise<MarketInfo | undefined> {
     const body = {
         query: `{
             market(id: "${address + '-' + id}") {
@@ -36,5 +36,5 @@ export async function fetchMarketInfo(address: string, id: string, url: string) 
         credentials: 'omit',
     })
     const result = (await response.json())?.data.market
-    return result as MarketInfo
+    return result
 }

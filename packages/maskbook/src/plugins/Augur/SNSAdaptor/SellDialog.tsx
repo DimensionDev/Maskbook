@@ -213,7 +213,7 @@ export function SellDialog(props: SellDialogProps) {
             className={classes.root}
             open={open}
             onClose={onDialogClose}
-            title={market.title + ' ' + outcome?.name}
+            title={market.title + ' ' + outcome?.name ?? ''}
             maxWidth="xs">
             <DialogContent>
                 {loadingAmm ? (

@@ -14,7 +14,7 @@ import { formatAmount, formatBalance, FungibleTokenDetailed, ZERO } from '@maskn
 import { calcSellCompleteSets, estimateBuy } from './bmath'
 import Sports from '../constants/sports'
 
-export const getTeam = (id: string, sportId: string) => {
+export const getTeam = (id: string, sportId: SportType) => {
     return Sports[sportId].teams[id]
 }
 

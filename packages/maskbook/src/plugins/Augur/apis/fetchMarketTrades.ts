@@ -1,6 +1,11 @@
 import type { Trade } from '../types'
 
-export async function fetchMarketTrades(address: string, id: string, url: string, fromTimestamp: Number = 0) {
+export async function fetchMarketTrades(
+    address: string,
+    id: string,
+    url: string,
+    fromTimestamp: number = 0,
+): Promise<Trade[] | undefined> {
     const body = {
         query: `{
             market(id: "${address + '-' + id}") {
@@ -28,7 +33,7 @@ export async function fetchMarketTrades(address: string, id: string, url: string
             price: Number.parseFloat(x.price),
             timestamp: Number.parseInt(x.timestamp, 10),
         }
-    }) as Trade[]
+    })
 
     return trades
 }

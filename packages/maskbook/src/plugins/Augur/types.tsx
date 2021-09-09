@@ -99,6 +99,7 @@ export interface Market {
     address: string
     id: string
     link: string
+    ammAddress: string
     homeTeam?: Team
     awayTeam?: Team
     title: string
@@ -112,7 +113,7 @@ export interface Market {
     winner?: string
     collateral: string
     swapFee: string
-    ammExchange?: AmmExchange
+    ammExchange?: GraphAmmExchange
     marketType: MarketType
     dirtyAmmExchange?: boolean
     initialOdds: string[]
@@ -135,7 +136,17 @@ export interface MarketTitle {
     description: string
 }
 
-export interface AmmExchange {
+export interface GraphAmmExchange {
+    totalVolume: BigNumber
+    volume24hr: BigNumber
+    totalLiquidity: BigNumber
+    liquidity: Liquidity[]
+    trades: Trade[]
+    lpToken?: ERC20TokenDetailed
+    totalSupply?: string
+}
+
+export interface AmmExchange extends GraphAmmExchange {
     address: string
     totalVolume: BigNumber
     volume24hr: BigNumber

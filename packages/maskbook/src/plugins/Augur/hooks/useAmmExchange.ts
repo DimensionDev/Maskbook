@@ -18,7 +18,7 @@ export function useAmmExchange(market: Market | undefined) {
     const web3 = useWeb3()
     const chainId = useChainId()
 
-    const ammMarketFactoryContract = useAmmFactory(market?.ammExchange?.address ?? '')
+    const ammMarketFactoryContract = useAmmFactory(market?.ammAddress ?? '')
     const sportLinkMarketFactoryContract = useSportsLinkMarketFactory(market?.address ?? '')
     const mmaMarketFactoryContract = useMmaLinkMarketFactory(market?.address ?? '')
     const { GRAPH_URL } = useAugurConstants()
@@ -61,7 +61,7 @@ export function useAmmExchange(market: Market | undefined) {
         market.dirtyAmmExchange = false
         return {
             ...ammExchange,
-            address: market.ammExchange.address,
+            address: market.ammAddress,
             balances,
             weights,
             shareFactor,

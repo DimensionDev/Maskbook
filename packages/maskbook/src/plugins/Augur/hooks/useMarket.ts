@@ -6,7 +6,7 @@ import { useAmmFactory } from '../contracts/useAmmFactory'
 import { useMmaLinkMarketFactory } from '../contracts/useMmaLinkMarketFactory'
 import { useSportsLinkMarketFactory } from '../contracts/useSportsLinkMarketFactory'
 import { PluginAugurRPC } from '../messages'
-import { Market, MarketType } from '../types'
+import { Market, MarketType, SportType } from '../types'
 import { getSport, getTeam } from '../utils'
 import { deriveMmaMarketInfo } from '../utils/mmaMarket'
 import { deriveSportMarketInfo } from '../utils/sportMarket'
@@ -37,7 +37,7 @@ export function useFetchMarket(address: string, id: string, link: string, cache:
         if (marketInfo.teamSportsMarket && marketInfo.teamSportsMarket.length !== 0) {
             const teamSportsMarket = marketInfo.teamSportsMarket[0]
             const collateral = await sportLinkMarketFactoryContract.methods.collateral().call()
-            const sportId = await sportLinkMarketFactoryContract.methods.sportId().call()
+            const sportId = (await sportLinkMarketFactoryContract.methods.sportId().call()) as SportType
             const sport = getSport(sportId)
             const homeTeam = getTeam(teamSportsMarket.homeTeamId, sportId)
             const awayTeam = getTeam(teamSportsMarket.awayTeamId, sportId)
@@ -70,7 +70,8 @@ export function useFetchMarket(address: string, id: string, link: string, cache:
                 swapFee,
                 collateral,
                 link,
-                ammExchange: { ...ammExchange, address: AMM_FACTORY_ADDRESS },
+                ammExchange,
+                ammAddress: AMM_FACTORY_ADDRESS,
             } as Market
         } else if (marketInfo.mmaMarket && marketInfo.mmaMarket.length !== 0) {
             const mmaMarket = marketInfo.mmaMarket[0]
@@ -104,9 +105,11 @@ export function useFetchMarket(address: string, id: string, link: string, cache:
                 swapFee,
                 collateral,
                 link,
-                ammExchange: { ...ammExchange, address: AMM_FACTORY_ADDRESS },
+                ammAddress: AMM_FACTORY_ADDRESS,
+                ammExchange,
             } as Market
         } else if (marketInfo.cryptoMarket) {
+            // Pending release from Augur
         }
         return
     }, [address, id])

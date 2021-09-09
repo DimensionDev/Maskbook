@@ -19,7 +19,7 @@ export function useAddLiquidityCallback(
     market?: Market,
     token?: FungibleTokenDetailed,
 ) {
-    const ammContract = useAmmFactory(market?.ammExchange?.address ?? '')
+    const ammContract = useAmmFactory(market?.ammAddress ?? '')
 
     const account = useAccount()
     const [state, setState] = useTransactionState()

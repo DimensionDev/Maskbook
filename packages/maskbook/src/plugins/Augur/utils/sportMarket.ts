@@ -72,12 +72,13 @@ const getOutcomeName = (
     }
 
     if (sportsMarketType === SportMarketType.Spread) {
+        if (!line) return
         // spread
         // line for home team outcome
-        let displayLine = Number(line) > 0 ? `+${line}` : `${line}`
+        let displayLine = line && line > 0 ? `+${line}` : `${line}`
         if (outcomeId === AWAY_TEAM_OUTCOME) {
-            const invertedLine = Number(line) * -1
-            displayLine = Number(line) < 0 ? `+${invertedLine}` : `${invertedLine}`
+            const invertedLine = line * -1
+            displayLine = line < 0 ? `+${invertedLine}` : `${invertedLine}`
         }
 
         const outcome = populateHomeAway(marketOutcome, homeTeam, awayTeam).replace(
@@ -114,9 +115,11 @@ const getMarketTitle = (
     }
 
     if (sportsMarketType === SportMarketType.Spread && !!line) {
+        if (!line) return
+
         let fav = awayTeam
         let underdog = homeTeam
-        if (Number(line) < 0) {
+        if (line < 0) {
             underdog = awayTeam
             fav = homeTeam
         }

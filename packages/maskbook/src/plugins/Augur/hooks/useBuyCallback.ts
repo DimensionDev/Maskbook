@@ -19,7 +19,7 @@ export function useBuyCallback(
     outcome?: AmmOutcome,
     token?: FungibleTokenDetailed,
 ) {
-    const ammContract = useAmmFactory(market?.ammExchange?.address ?? '')
+    const ammContract = useAmmFactory(market?.ammAddress ?? '')
 
     const account = useAccount()
     const [buyState, setBuyState] = useTransactionState()

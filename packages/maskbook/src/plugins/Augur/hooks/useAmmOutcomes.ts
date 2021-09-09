@@ -4,7 +4,7 @@ import { useAmmFactory } from '../contracts/useAmmFactory'
 import type { AmmOutcome, Market } from '../types'
 
 export function useAmmOutcomes(market: Market | undefined) {
-    const ammMarketFactoryContract = useAmmFactory(market?.ammExchange?.address ?? '')
+    const ammMarketFactoryContract = useAmmFactory(market?.ammAddress ?? '')
 
     return useAsyncRetry(async () => {
         if (!ammMarketFactoryContract || !market) return

@@ -19,7 +19,7 @@ export function useRemoveLiquidityCallback(
     amm?: AmmExchange,
     token?: FungibleTokenDetailed,
 ) {
-    const ammContract = useAmmFactory(market?.ammExchange?.address ?? '')
+    const ammContract = useAmmFactory(market?.ammAddress ?? '')
     const balancerPoolContract = useBalancerPool(amm?.lpToken?.address ?? '')
 
     const account = useAccount()

@@ -1,8 +1,13 @@
 import { ZERO } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
-import type { AmmExchange } from '../types'
+import type { GraphAmmExchange, Liquidity, Trade } from '../types'
 
-export async function fetchAmmExchange(address: string, id: string, url: string, cache: RequestCache = 'default') {
+export async function fetchAmmExchange(
+    address: string,
+    id: string,
+    url: string,
+    cache: RequestCache = 'default',
+): Promise<GraphAmmExchange | undefined> {
     const body = {
         query: `{
             market(id: "${address + '-' + id}") {
@@ -41,22 +46,27 @@ export async function fetchAmmExchange(address: string, id: string, url: string,
         totalLiquidity: ZERO,
         totalVolume: ZERO,
         volume24hr: ZERO,
-    } as AmmExchange
+    }
 
     ammExchange.totalLiquidity = ammExchange.liquidity.reduce(
-        (accumulator, currentValue): BigNumber => accumulator.plus(currentValue.collateral),
+        (accumulator: BigNumber, currentValue: Liquidity): BigNumber => accumulator.plus(currentValue.collateral),
         ZERO,
     )
 
     ammExchange.totalVolume = ammExchange.trades.reduce(
-        (accumulator, currentValue): BigNumber => accumulator.plus(currentValue.collateral?.abs() ?? 0),
+        (accumulator: BigNumber, currentValue: Trade): BigNumber =>
+            accumulator.plus(currentValue.collateral?.abs() ?? 0),
         ZERO,
     )
     const now = new Date()
     const timestamps24hrAgo = +now.setDate(now.getDate() - 1) / 1000
     ammExchange.volume24hr = ammExchange.trades
-        .filter((x) => x.timestamp > timestamps24hrAgo)
-        .reduce((accumulator, currentValue): BigNumber => accumulator.plus(currentValue.collateral?.abs() ?? 0), ZERO)
+        .filter((x: Trade) => x.timestamp > timestamps24hrAgo)
+        .reduce(
+            (accumulator: BigNumber, currentValue: Trade): BigNumber =>
+                accumulator.plus(currentValue.collateral?.abs() ?? 0),
+            ZERO,
+        )
 
     return ammExchange
 }

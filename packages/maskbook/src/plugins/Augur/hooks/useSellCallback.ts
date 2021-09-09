@@ -10,7 +10,7 @@ import { useAmmFactory } from '../contracts/useAmmFactory'
 import type { AmmOutcome, Market } from '../types'
 
 export function useSellCallback(market?: Market, outcome?: AmmOutcome, shareTokensIn?: string[]) {
-    const ammContract = useAmmFactory(market?.ammExchange?.address ?? '')
+    const ammContract = useAmmFactory(market?.ammAddress ?? '')
     const account = useAccount()
     const [sellState, setSellState] = useTransactionState()
 
