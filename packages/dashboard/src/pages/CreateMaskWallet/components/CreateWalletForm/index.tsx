@@ -17,6 +17,7 @@ const useStyles = makeStyles()({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
+        height: '100%',
     },
     title: {
         fontSize: 24,

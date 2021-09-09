@@ -211,7 +211,7 @@ const ImportWallet = memo(() => {
     return (
         <div className={classes.container}>
             <div className={classes.header}>
-                <Typography className={classes.title}>{t('import_failed')}</Typography>
+                <Typography className={classes.title}>{t('import_wallet')}</Typography>
                 <NetworkSelector />
             </div>
             <form className={classes.form}>
