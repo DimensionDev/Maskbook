@@ -3,6 +3,8 @@ import * as database from './database'
 import type { ChainId } from '@masknet/web3-shared'
 import * as subgraph from './apis'
 
+export { addRedPacketNft, getRedPacketNft } from './databaseForNft'
+
 export async function discoverRedPacket(record: RedPacketRecord) {
     if (record.contract_version === 1) {
         const txid = await subgraph.getRedPacketTxid(record.id)
