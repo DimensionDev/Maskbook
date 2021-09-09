@@ -3,13 +3,13 @@ import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     EthereumRpcType,
-    formatBalance,
     formatWeiToEther,
     getChainFromChainId,
     getChainIdFromNetworkType,
     getCoingeckoPlatformId,
     isEIP1159Supported,
     NetworkType,
+    pow10,
     useChainId,
     useERC20TokenDetailed,
     useNativeTokenDetailed,
@@ -190,13 +190,6 @@ const ContractInteraction = memo(() => {
     const { value: nativeToken } = useNativeTokenDetailed()
     const { value: token } = useERC20TokenDetailed(isNativeTokenInteraction ? '' : to)
 
-    // token estimated value
-    const tokenPrice = useTokenPrice(
-        getCoingeckoPlatformId(chainId) ?? '',
-        token?.address !== ZERO_ADDRESS ? token?.address : undefined,
-    )
-    const nativeTokenPrice = useNativeTokenPrice(getCoingeckoPlatformId(chainId) ?? '')
-
     // gas price
     const { value: defaultPrices } = useAsync(async () => {
         if (networkType === NetworkType.Ethereum && !maxFeePerGas && !maxPriorityFeePerGas) {
@@ -243,13 +236,18 @@ const ContractInteraction = memo(() => {
         .multipliedBy(10 ** 9)
         .toFixed()
 
-    // estimated value
-    const tokenValueUSD = new BigNumber(
-        formatBalance(
-            (amount ?? 0) as number,
-            (isNativeTokenInteraction ? nativeToken?.decimals : token?.decimals) ?? 0,
-        ),
+    // token decimals
+    const tokenAmount = (amount ?? 0) as number
+    const tokenDecimals = (isNativeTokenInteraction ? nativeToken?.decimals : token?.decimals) ?? 0
+
+    // token estimated value
+    const tokenPrice = useTokenPrice(
+        getCoingeckoPlatformId(chainId) ?? '',
+        token?.address !== ZERO_ADDRESS ? token?.address : undefined,
     )
+    const nativeTokenPrice = useNativeTokenPrice(getCoingeckoPlatformId(chainId) ?? '')
+    const tokenValueUSD = new BigNumber(tokenAmount)
+        .dividedBy(pow10(tokenDecimals))
         .times(tokenPrice ?? 0)
         .toString()
     const totalUSD = new BigNumber(formatWeiToEther(gasFee)).times(nativeTokenPrice).plus(tokenValueUSD).toString()
@@ -280,11 +278,7 @@ const ContractInteraction = memo(() => {
                         classes={{ icon: classes.tokenIcon }}
                     />
                     <Typography className={classes.amount}>
-                        <FormattedBalance
-                            value={amount as string}
-                            decimals={(isNativeTokenInteraction ? nativeToken?.decimals : token?.decimals) ?? 0}
-                            significant={4}
-                        />
+                        <FormattedBalance value={tokenAmount} decimals={tokenDecimals} significant={4} />
                     </Typography>
                     <Typography>
                         <FormattedCurrency value={tokenValueUSD} sign="$" />
