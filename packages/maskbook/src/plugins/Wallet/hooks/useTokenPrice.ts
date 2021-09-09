@@ -56,6 +56,6 @@ export function useTokenPrice(
     return price
 }
 
-export function useNativeTokenPrice(tokenId: string, currencyType: CurrencyType = CurrencyType.USD) {
-    return useTokenPrice(tokenId, undefined, currencyType)
+export function useNativeTokenPrice(platform: string, currencyType: CurrencyType = CurrencyType.USD) {
+    return useTokenPrice(platform, undefined, currencyType)
 }

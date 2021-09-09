@@ -3,7 +3,10 @@ import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     EthereumRpcType,
+    formatBalance,
+    formatWeiToEther,
     getChainFromChainId,
+    getCoingeckoPlatformId,
     NetworkType,
     useChainId,
     useERC20TokenDetailed,
@@ -22,6 +25,9 @@ import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 import { useLocation } from 'react-router'
 import { useRejectHandler } from '../hooks/useRejectHandler'
 import BigNumber from 'bignumber.js'
+import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
+import { ZERO_ADDRESS } from '../../../../../plugins/GoodGhosting/constants'
+import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -106,7 +112,7 @@ const ContractInteraction = memo(() => {
     const { classes } = useStyles()
     const location = useLocation()
     const history = useHistory()
-    const { value } = useUnconfirmedRequest()
+    const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const networkType = useValueRef(currentNetworkSettings)
     const chainId = useChainId()
     const { typeName, to, gas, gasPrice, maxFeePerGas, maxPriorityFeePerGas, amount } = useMemo(() => {
@@ -160,56 +166,11 @@ const ContractInteraction = memo(() => {
         (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ? nativeToken?.address : to) ?? '',
     )
 
-    //
-    // const { value: tokenPrices } = useAsync(async () => {
-    //     const coinList = await getAllCoins()
-    //
-    //     const tokenId = coinList?.find((coin) => coin.symbol === token?.symbol)?.id
-    //     const nativeTokenId = coinList?.find((coin) => coin.symbol === nativeToken?.symbol)?.id
-    //
-    //     if (!tokenId || !nativeTokenId)
-    //         return {
-    //             tokenPRice: 0,
-    //             nativeTokenPrice: 0,
-    //         }
-    //
-    //     const tokenPrice = await fetchTokenPrice(tokenId)
-    //     const nativeTokenPrice = await fetchTokenPrice(nativeTokenId)
-    //
-    //     return {
-    //         tokenPrice,
-    //         nativeTokenPrice,
-    //     }
-    // }, [token, nativeToken, value])
-    //
-    // const { tokenValueUSD, totalUSD } = useMemo(() => {
-    //     const tokenValueUSD = new BigNumber((amount ?? 0) as number).times(tokenPrices?.tokenPrice ?? 0).toString()
-    //
-    //     const totalUSD = formatWeiToEther(gasPrice as number)
-    //         .times(tokenPrices?.nativeTokenPrice ?? 0)
-    //         .plus(tokenValueUSD)
-    //
-    //     return {
-    //         tokenValueUSD,
-    //         totalUSD,
-    //     }
-    // }, [tokenPrices, gasPrice, amount])
-
-    const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-        if (value) {
-            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
-            await WalletRPC.deleteUnconfirmedRequest(value.payload)
-            await Services.Ethereum.confirmRequest(value.payload)
-
-            if (toBeClose) {
-                window.close()
-            } else {
-                history.replace(PopupRoutes.TokenDetail)
-            }
-        }
-    }, [value, location.search, history])
-
-    const handleReject = useRejectHandler(() => history.replace(PopupRoutes.Wallet), value)
+    const tokenPrice = useTokenPrice(
+        getCoingeckoPlatformId(chainId) ?? '',
+        token?.address !== ZERO_ADDRESS ? token?.address : undefined,
+    )
+    const nativeTokenPrice = useNativeTokenPrice(getCoingeckoPlatformId(chainId) ?? '')
 
     const { value: defaultPrices } = useAsync(async () => {
         if (networkType === NetworkType.Ethereum && !maxFeePerGas && !maxPriorityFeePerGas) {
@@ -229,7 +190,48 @@ const ContractInteraction = memo(() => {
         return {}
     }, [gasPrice, maxPriorityFeePerGas, maxFeePerGas, networkType, chainId])
 
-    return (
+    const gasFee = useMemo(() => {
+        return new BigNumber(
+            networkType !== NetworkType.Ethereum
+                ? (gasPrice as string) ?? defaultPrices?.gasPrice ?? 0
+                : maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0,
+        )
+            .multipliedBy(gas ?? 0)
+            .multipliedBy(10 ** 9)
+            .toFixed()
+    }, [networkType, gasPrice, maxFeePerGas, gas, defaultPrices])
+
+    const { tokenValueUSD, totalUSD } = useMemo(() => {
+        // const tokenValueUSD = new BigNumber(formatBalance((amount ?? 0) as number))).times(tokenPrice ?? 0).toString()
+        const tokenValueUSD = new BigNumber(formatBalance((amount ?? 0) as number, token?.decimals ?? 0))
+            .times(tokenPrice ?? 0)
+            .toString()
+        const totalUSD = new BigNumber(formatWeiToEther(gasFee)).times(nativeTokenPrice).plus(tokenValueUSD).toString()
+        return {
+            tokenValueUSD,
+            totalUSD,
+        }
+    }, [amount, tokenPrice, gasFee, nativeToken, token?.decimals])
+
+    const [{ loading }, handleConfirm] = useAsyncFn(async () => {
+        if (value) {
+            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
+            await WalletRPC.deleteUnconfirmedRequest(value.payload)
+            await Services.Ethereum.confirmRequest(value.payload)
+
+            if (toBeClose) {
+                window.close()
+            } else {
+                history.replace(PopupRoutes.TokenDetail)
+            }
+        }
+    }, [value, location.search, history])
+
+    const handleReject = useRejectHandler(() => history.replace(PopupRoutes.Wallet), value)
+
+    return getValueLoading ? (
+        <LoadingPlaceholder />
+    ) : (
         <main className={classes.container}>
             <div className={classes.info}>
                 <Typography className={classes.title}>{typeName}</Typography>
@@ -260,7 +262,7 @@ const ContractInteraction = memo(() => {
                         ) : null}
                     </Typography>
                     <Typography>
-                        <FormattedCurrency value={280} sign="$" />
+                        <FormattedCurrency value={tokenValueUSD} sign="$" />
                     </Typography>
                 </div>
 
@@ -294,7 +296,7 @@ const ContractInteraction = memo(() => {
                 <div className={classes.item} style={{ marginTop: 10 }}>
                     <Typography className={classes.label}>{t('popups_wallet_contract_interaction_total')}</Typography>
                     <Typography className={classes.gasPrice}>
-                        <FormattedCurrency value={280} sign="$" />
+                        <FormattedCurrency value={totalUSD} sign="$" />
                     </Typography>
                 </div>
             </div>

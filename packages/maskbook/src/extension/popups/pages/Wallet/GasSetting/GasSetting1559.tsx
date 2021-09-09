@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useEffect, useMemo, useState } from 'react'
-import { EthereumRpcType, useChainId } from '@masknet/web3-shared'
+import { EthereumRpcType, getCoingeckoPlatformId, useChainId } from '@masknet/web3-shared'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
@@ -17,6 +17,7 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { useHistory, useLocation } from 'react-router'
 import { PopupRoutes } from '../../../index'
 import { useRejectHandler } from '../hooks/useRejectHandler'
+import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -48,6 +49,7 @@ const useStyles = makeStyles()((theme) => ({
         color: '#7B8192',
         fontSize: 12,
         lineHeight: '14px',
+        wordBreak: 'break-all',
     },
     or: {
         display: 'flex',
@@ -81,6 +83,7 @@ export const GasSetting1559 = memo(() => {
     const location = useLocation()
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
+    const nativeTokenPrice = useNativeTokenPrice(getCoingeckoPlatformId(chainId) ?? '')
 
     const { value: gasNow } = useAsync(async () => {
         const response = await WalletRPC.getEstimateGasFees(chainId)
@@ -265,14 +268,14 @@ export const GasSetting1559 = memo(() => {
                         className={selected === index ? classes.selected : undefined}>
                         <Typography className={classes.optionsTitle}>{title}</Typography>
                         <Typography>{new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)} Gwei</Typography>
-                        {/*<Typography className={classes.gasUSD}>*/}
-                        {/*    {t('popups_wallet_gas_fee_settings_usd', {*/}
-                        {/*        usd: new BigNumber(gasPrice)*/}
-                        {/*            .div(10 ** 18)*/}
-                        {/*            .times(etherPrice)*/}
-                        {/*            .toPrecision(3),*/}
-                        {/*    })}*/}
-                        {/*</Typography>*/}
+                        <Typography className={classes.gasUSD}>
+                            {t('popups_wallet_gas_fee_settings_usd', {
+                                usd: new BigNumber(content?.suggestedMaxFeePerGas ?? 0)
+                                    .div(10 ** 9)
+                                    .times(nativeTokenPrice)
+                                    .toPrecision(3),
+                            })}
+                        </Typography>
                     </div>
                 ))}
             </div>

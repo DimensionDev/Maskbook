@@ -1,12 +1,13 @@
-import { memo, useCallback, useState } from 'react'
-import { Button, Typography } from '@material-ui/core'
+import { memo, useState } from 'react'
+import { Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { StyledInput } from '../../../components/StyledInput'
 import { useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useHistory } from 'react-router'
 import { useI18N } from '../../../../../utils'
-import { useUpdateEffect } from 'react-use'
+import { useAsyncFn } from 'react-use'
+import { LoadingButton } from '@material-ui/lab'
 
 const useStyles = makeStyles()({
     header: {
@@ -37,15 +38,11 @@ const WalletRename = memo(() => {
     const { classes } = useStyles()
     const wallet = useWallet()
     const [name, setName] = useState('')
-    const renameWallet = useCallback(async () => {
-        if (!wallet?.address) return
+    const [{ loading }, renameWallet] = useAsyncFn(async () => {
+        if (!wallet?.address || !name) return
         await WalletRPC.renameWallet(wallet.address, name)
         return history.goBack()
-    }, [wallet?.address])
-
-    useUpdateEffect(() => {
-        if (wallet?.name) setName(wallet.name)
-    }, [wallet?.name])
+    }, [wallet?.address, name])
 
     return (
         <>
@@ -53,15 +50,16 @@ const WalletRename = memo(() => {
                 <Typography className={classes.title}>{t('rename')}</Typography>
             </div>
             <div className={classes.content}>
-                <StyledInput value={name} onChange={(e) => setName(e.target.value)} defaultValue={wallet?.name} />
-                <Button
+                <StyledInput onChange={(e) => setName(e.target.value)} defaultValue={wallet?.name} />
+                <LoadingButton
                     fullWidth
+                    loading={loading}
                     variant="contained"
                     disabled={!name}
                     className={classes.button}
                     onClick={renameWallet}>
                     {t('confirm')}
-                </Button>
+                </LoadingButton>
             </div>
         </>
     )
