@@ -13,6 +13,7 @@ import {
     currentChainIdSettings,
     currentPortfolioDataProviderSettings,
     currentEtherPriceSettings,
+    currentTokenPricesSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
@@ -37,6 +38,7 @@ export const Web3Context: Web3ProviderType = {
     blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
     nonce: createSubscriptionFromSettings(currentNonceSettings),
     etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
+    tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
     wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
     providerType: createSubscriptionFromSettings(currentProviderSettings),
     networkType: createSubscriptionFromSettings(currentNetworkSettings),
