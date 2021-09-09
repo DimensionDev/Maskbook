@@ -143,7 +143,7 @@ export const Prior1559GasSetting = memo(() => {
         mode: 'onChange',
         resolver: zodResolver(schema),
         defaultValues: {
-            gasLimit: new BigNumber(gas).toString(),
+            gasLimit: '',
             gasPrice: '',
         },
         context: {
@@ -164,6 +164,10 @@ export const Prior1559GasSetting = memo(() => {
             }
         }
     }, [value, setValue])
+
+    useUpdateEffect(() => {
+        if (gas) setValue('gasLimit', new BigNumber(gas).toString())
+    }, [gas, setValue])
 
     useEffect(() => {
         if (selected) setValue('gasPrice', new BigNumber(options[selected].gasPrice).toString())
@@ -242,6 +246,7 @@ export const Prior1559GasSetting = memo(() => {
                 />
                 <Typography className={classes.label}>Gas Price</Typography>
                 <Controller
+                    control={control}
                     render={({ field }) => (
                         <StyledInput
                             {...field}

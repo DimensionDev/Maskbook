@@ -853,7 +853,7 @@
     "popups_wallet_token_buy": "Buy",
     "popups_wallet_token_send": "Send",
     "popups_wallet_token_swap": "Swap",
-    "popups_wallet_view_on_etherscan": "View on Etherscan",
+    "popups_wallet_view_on_explorer": "View on Explorer",
     "popups_wallet_gas_fee_settings": "Gas fee settings",
     "popups_wallet_gas_fee_settings_description": "Gas fees are the fees for paying ethereum miners. The miners prefer to pack transactions with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won’t be returned.",
     "popups_wallet_gas_fee_settings_low": "Low",

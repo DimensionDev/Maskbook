@@ -11,6 +11,7 @@ import { PopupRoutes } from '../../../index'
 import { useI18N } from '../../../../../utils'
 import { useWalletHD } from '../../../../../plugins/Wallet/hooks/useWalletHD'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { useCopyToClipboard } from 'react-use'
 
 const useStyles = makeStyles()({
     content: {
@@ -70,6 +71,8 @@ const SelectWallet = memo(() => {
     const wallet = useWallet()
     const wallets = useWallets(ProviderType.Maskbook)
 
+    const [, copyToClipboard] = useCopyToClipboard()
+
     const walletList = useMemo(
         () => wallets.filter((item) => !isSameAddress(item.address, wallet?.address)),
         [wallet, wallets],
@@ -98,6 +101,13 @@ const SelectWallet = memo(() => {
         [history],
     )
 
+    const onCopy = useCallback(
+        (address: string) => {
+            copyToClipboard(address)
+        },
+        [copyToClipboard],
+    )
+
     return (
         <>
             <WalletHeader />
@@ -111,7 +121,7 @@ const SelectWallet = memo(() => {
                                 <Typography className={classes.name}>{item.name}</Typography>
                                 <Typography className={classes.address}>
                                     <FormattedAddress address={item.address} size={12} />
-                                    <CopyIcon className={classes.copy} />
+                                    <CopyIcon className={classes.copy} onClick={() => onCopy(item.address)} />
                                 </Typography>
                             </ListItemText>
                         </ListItem>

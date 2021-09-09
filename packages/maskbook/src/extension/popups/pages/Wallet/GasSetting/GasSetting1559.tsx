@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useEffect, useMemo, useState } from 'react'
-import { EthereumRpcType, formatWeiToGwei, useChainId } from '@masknet/web3-shared'
+import { EthereumRpcType, useChainId } from '@masknet/web3-shared'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
@@ -213,6 +213,10 @@ export const GasSetting1559 = memo(() => {
         }
     }, [value, setValue])
 
+    useUpdateEffect(() => {
+        if (gas) setValue('gasLimit', new BigNumber(gas).toString())
+    }, [gas, setValue])
+
     useEffect(() => {
         if (selected) {
             setValue('maxPriorityFeePerGas', options[selected].content?.suggestedMaxPriorityFeePerGas ?? '')
@@ -260,7 +264,7 @@ export const GasSetting1559 = memo(() => {
                         onClick={() => setOption(index)}
                         className={selected === index ? classes.selected : undefined}>
                         <Typography className={classes.optionsTitle}>{title}</Typography>
-                        <Typography>{formatWeiToGwei(content?.suggestedMaxFeePerGas ?? 0).toString()} Gwei</Typography>
+                        <Typography>{new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)} Gwei</Typography>
                         {/*<Typography className={classes.gasUSD}>*/}
                         {/*    {t('popups_wallet_gas_fee_settings_usd', {*/}
                         {/*        usd: new BigNumber(gasPrice)*/}

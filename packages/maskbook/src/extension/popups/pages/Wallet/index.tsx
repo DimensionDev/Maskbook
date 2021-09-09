@@ -2,7 +2,7 @@ import { WalletStartUp } from './components/StartUp'
 import { EthereumRpcType, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
 import { WalletAssets } from './components/WalletAssets'
 import { Route, Switch, useHistory } from 'react-router-dom'
-import { lazy, useEffect, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { PopupRoutes } from '../../index'
 import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
@@ -41,8 +41,16 @@ export default function Wallet() {
     const lockStatus = useValueRef(currentIsMaskWalletLockedSettings)
 
     const { loading: getRequestLoading, retry } = useAsyncRetry(async () => {
+        if (
+            [PopupRoutes.ContractInteraction, PopupRoutes.WalletSignRequest, PopupRoutes.GasSetting].some(
+                (item) => item === location.pathname,
+            )
+        )
+            return
+
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
+
         const computedPayload = await Services.Ethereum.getJsonRpcComputed(payload)
         const value = {
             payload,

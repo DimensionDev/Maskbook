@@ -3,10 +3,10 @@ import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     EthereumRpcType,
-    formatWeiToEther,
     getChainFromChainId,
     NetworkType,
     useChainId,
+    useERC20TokenDetailed,
     useNativeTokenDetailed,
 } from '@masknet/web3-shared'
 import { Button, Link, Typography } from '@material-ui/core'
@@ -17,11 +17,11 @@ import { LoadingButton } from '@material-ui/lab'
 import { useAsync, useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
-import { FormattedCurrency, TokenIcon } from '@masknet/shared'
-import BigNumber from 'bignumber.js'
+import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 import { useLocation } from 'react-router'
 import { useRejectHandler } from '../hooks/useRejectHandler'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -90,6 +90,7 @@ const useStyles = makeStyles()(() => ({
         lineHeight: '24px',
         fontWeight: 500,
         margin: '0 10px',
+        wordBreak: 'break-all',
     },
     gasPrice: {
         fontSize: 12,
@@ -108,7 +109,7 @@ const ContractInteraction = memo(() => {
     const { value } = useUnconfirmedRequest()
     const networkType = useValueRef(currentNetworkSettings)
     const chainId = useChainId()
-    const { typeName, spender, to, gasPrice, maxFeePerGas, maxPriorityFeePerGas, amount } = useMemo(() => {
+    const { typeName, to, gas, gasPrice, maxFeePerGas, maxPriorityFeePerGas, amount } = useMemo(() => {
         if (value?.computedPayload?.type) {
             switch (value.computedPayload.type) {
                 case EthereumRpcType.CONTRACT_INTERACTION:
@@ -117,6 +118,7 @@ const ContractInteraction = memo(() => {
                             typeName: t('popups_wallet_contract_interaction_approve'),
                             spender: value.computedPayload.parameters?.spender,
                             to: value.computedPayload._tx.to,
+                            gas: value.computedPayload._tx.gas,
                             gasPrice: value.computedPayload._tx.gasPrice,
                             maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
                             maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
@@ -128,6 +130,7 @@ const ContractInteraction = memo(() => {
                             typeName: t('wallet_transfer_send'),
                             spender: value.computedPayload._tx.from,
                             to: value.computedPayload._tx.to,
+                            gas: value.computedPayload._tx.gas,
                             gasPrice: value.computedPayload._tx.gasPrice,
                             maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
                             maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
@@ -139,6 +142,7 @@ const ContractInteraction = memo(() => {
                         typeName: t('wallet_transfer_send'),
                         spender: value.computedPayload._tx.from,
                         to: value.computedPayload._tx.to,
+                        gas: value.computedPayload._tx.gas,
                         gasPrice: value.computedPayload._tx.gasPrice,
                         maxFeePerGas: value.computedPayload._tx.maxFeePerGas,
                         maxPriorityFeePerGas: value.computedPayload._tx.maxPriorityFeePerGas,
@@ -151,8 +155,11 @@ const ContractInteraction = memo(() => {
         return {}
     }, [value, t])
 
-    // const { value: token } = useERC20TokenDetailed(to)
     const { value: nativeToken } = useNativeTokenDetailed()
+    const { value: token } = useERC20TokenDetailed(
+        (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ? nativeToken?.address : to) ?? '',
+    )
+
     //
     // const { value: tokenPrices } = useAsync(async () => {
     //     const coinList = await getAllCoins()
@@ -226,9 +233,6 @@ const ContractInteraction = memo(() => {
         <main className={classes.container}>
             <div className={classes.info}>
                 <Typography className={classes.title}>{typeName}</Typography>
-                <Typography className={classes.spender} style={{ wordBreak: 'break-all' }}>
-                    {spender}
-                </Typography>
                 <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
                     {to}
                 </Typography>
@@ -242,69 +246,51 @@ const ContractInteraction = memo(() => {
                         }
                         classes={{ icon: classes.tokenIcon }}
                     />
-                    <Typography className={classes.amount}>{amount}</Typography>
+                    <Typography className={classes.amount}>
+                        {value?.computedPayload?.type && nativeToken && token ? (
+                            <FormattedBalance
+                                value={amount as string}
+                                decimals={
+                                    value?.computedPayload?.type === EthereumRpcType.SEND_ETHER
+                                        ? nativeToken.decimals
+                                        : token.decimals
+                                }
+                                significant={4}
+                            />
+                        ) : null}
+                    </Typography>
                     <Typography>
                         <FormattedCurrency value={280} sign="$" />
                     </Typography>
                 </div>
-                {networkType !== NetworkType.Ethereum ? (
-                    <div className={classes.item}>
-                        <Typography className={classes.label}>
-                            {t('popups_wallet_contract_interaction_gas_fee')}
-                        </Typography>
-                        <Typography className={classes.gasPrice}>
-                            <span>
-                                {formatWeiToEther(
-                                    new BigNumber((gasPrice as string) ?? defaultPrices?.gasPrice ?? 0).toNumber(),
-                                ).toString(10)}
-                                {nativeToken?.symbol}
-                            </span>
-                            <Link
-                                component="button"
-                                onClick={() => history.push(PopupRoutes.GasSetting)}
-                                style={{ marginLeft: 10, fontSize: 'inherit', lineHeight: 'inherit' }}>
-                                {t('popups_wallet_contract_interaction_edit')}
-                            </Link>
-                        </Typography>
-                    </div>
-                ) : (
-                    <>
-                        <div className={classes.item}>
-                            <Typography className={classes.label}>
-                                {t('popups_wallet_gas_fee_settings_max_priority_fee')}
-                            </Typography>
-                            <Typography className={classes.gasPrice}>
-                                <span>
-                                    {formatWeiToEther(
-                                        new BigNumber(
-                                            maxPriorityFeePerGas ?? defaultPrices?.maxPriorityFeePerGas ?? 0,
-                                        ).toNumber(),
-                                    ).toString(10)}
-                                    {nativeToken?.symbol}
-                                </span>
-                            </Typography>
-                        </div>
-                        <div className={classes.item}>
-                            <Typography className={classes.label}>
-                                {t('popups_wallet_gas_fee_settings_max_fee')}
-                            </Typography>
-                            <Typography className={classes.gasPrice}>
-                                <span>
-                                    {formatWeiToEther(
-                                        new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0).toNumber(),
-                                    ).toString(10)}
-                                    {nativeToken?.symbol}
-                                </span>
-                                <Link
-                                    component="button"
-                                    onClick={() => history.push(PopupRoutes.GasSetting)}
-                                    style={{ marginLeft: 10, fontSize: 'inherit', lineHeight: 'inherit' }}>
-                                    {t('popups_wallet_contract_interaction_edit')}
-                                </Link>
-                            </Typography>
-                        </div>
-                    </>
-                )}
+
+                <div className={classes.item}>
+                    <Typography className={classes.label}>{t('popups_wallet_contract_interaction_gas_fee')}</Typography>
+                    <Typography className={classes.gasPrice}>
+                        <span>
+                            <FormattedBalance
+                                value={new BigNumber(
+                                    networkType !== NetworkType.Ethereum
+                                        ? (gasPrice as string) ?? defaultPrices?.gasPrice ?? 0
+                                        : maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0,
+                                )
+                                    .multipliedBy(gas ?? 0)
+                                    .multipliedBy(10 ** 9)
+                                    .toFixed()}
+                                decimals={nativeToken?.decimals}
+                                significant={4}
+                                symbol={nativeToken?.symbol}
+                            />
+                        </span>
+                        <Link
+                            component="button"
+                            onClick={() => history.push(PopupRoutes.GasSetting)}
+                            style={{ marginLeft: 10, fontSize: 'inherit', lineHeight: 'inherit' }}>
+                            {t('popups_wallet_contract_interaction_edit')}
+                        </Link>
+                    </Typography>
+                </div>
+
                 <div className={classes.item} style={{ marginTop: 10 }}>
                     <Typography className={classes.label}>{t('popups_wallet_contract_interaction_total')}</Typography>
                     <Typography className={classes.gasPrice}>

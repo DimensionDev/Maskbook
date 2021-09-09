@@ -156,7 +156,7 @@ const ImportWallet = memo(() => {
         async (data: zod.infer<typeof schema>) => {
             switch (currentTab) {
                 case ImportWalletTab.Mnemonic:
-                    const params = query({ mnemonic })
+                    const params = query({ mnemonic, name: data.name })
                     history.replace({
                         pathname: PopupRoutes.AddDeriveWallet,
                         search: `?${params}`,

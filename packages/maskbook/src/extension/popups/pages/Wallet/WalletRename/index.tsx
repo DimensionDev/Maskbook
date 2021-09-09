@@ -53,7 +53,7 @@ const WalletRename = memo(() => {
                 <Typography className={classes.title}>{t('rename')}</Typography>
             </div>
             <div className={classes.content}>
-                <StyledInput value={name} onChange={(e) => setName(e.target.value)} />
+                <StyledInput value={name} onChange={(e) => setName(e.target.value)} defaultValue={wallet?.name} />
                 <Button
                     fullWidth
                     variant="contained"

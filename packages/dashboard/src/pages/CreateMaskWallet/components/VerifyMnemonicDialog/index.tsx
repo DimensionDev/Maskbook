@@ -39,7 +39,6 @@ const useStyles = makeStyles()({
     address: {
         display: 'flex',
         alignItems: 'center',
-        color: '#111432',
         marginTop: 12,
         fontSize: 14,
         lineHeight: '20px',
@@ -48,7 +47,7 @@ const useStyles = makeStyles()({
         fontSize: 20,
         marginLeft: 12,
         cursor: 'pointer',
-        stroke: '#111432',
+        stroke: MaskColorVar.textPrimary,
     },
 })
 
@@ -134,10 +133,10 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                                     {t.create_wallet_your_wallet_address()}
                                 </Typography>
                             </Box>
-                            <Box className={classes.address}>
+                            <Typography className={classes.address}>
                                 {address}
                                 <CopyIcon className={classes.copy} onClick={() => onCopy(address)} />
-                            </Box>
+                            </Typography>
                             <Button fullWidth className={classes.button} onClick={onDoneClick}>
                                 {t.create_wallet_done()}
                             </Button>

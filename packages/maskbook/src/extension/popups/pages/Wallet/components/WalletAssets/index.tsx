@@ -10,6 +10,9 @@ import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../../index'
 import { ActivityList } from '../ActivityList'
 import { useI18N } from '../../../../../../utils'
+import { useContainer } from 'unstated-next'
+import { WalletContext } from '../../hooks/useWalletContext'
+import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 
 const useStyles = makeStyles()({
     content: {
@@ -82,9 +85,12 @@ export interface WalletAssetsUIProps {
 export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const { assetsLoading } = useContainer(WalletContext)
     const [currentTab, setCurrentTab] = useState(WalletTabs.Assets)
 
-    return (
+    return assetsLoading ? (
+        <LoadingPlaceholder />
+    ) : (
         <>
             <WalletHeader />
             <WalletInfo />

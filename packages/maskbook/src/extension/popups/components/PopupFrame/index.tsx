@@ -80,7 +80,6 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
         path: [
             PopupRoutes.Wallet,
             PopupRoutes.Personas,
-            PopupRoutes.GasSetting,
             PopupRoutes.WalletSignRequest,
             PopupRoutes.ContractInteraction,
             PopupRoutes.Unlock,
