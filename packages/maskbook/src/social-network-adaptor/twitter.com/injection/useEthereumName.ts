@@ -12,9 +12,7 @@ export function useEthereumName(nickname: string, twitterId: string, bio: string
 
     useEffect(() => {
         const matched = bio.match(ENS_RE)
-        if (matched) {
-            setEthereumName(matched[0])
-        }
+        setEthereumName(matched ? matched[0] : '')
     }, [bio])
     const name = useMemo(() => {
         if (ENS_RE_FULL.test(nickname)) {
