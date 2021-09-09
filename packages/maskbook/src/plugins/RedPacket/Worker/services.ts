@@ -4,6 +4,8 @@ import * as subgraph from './apis'
 import * as database from './database'
 import * as nftDb from './databaseForNft'
 
+export { addRedPacketNft, getRedPacketNft } from './databaseForNft'
+
 export async function discoverRedPacket(record: RedPacketRecord) {
     if (record.contract_version === 1) {
         const txid = await subgraph.getRedPacketTxid(record.id)

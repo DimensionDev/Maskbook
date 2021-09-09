@@ -1,17 +1,13 @@
 import { omit } from 'lodash-es'
 import type { RedPacketNftRecordInDatabase, RedPacketNftRecord } from '../types'
-import { RedPacketNftPluginID } from '../constants'
-import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
-
-export const RedPacketNftDatabase = createPluginDatabase<RedPacketNftRecordInDatabase>(RedPacketNftPluginID)
-
+import { RedPacketDatabase } from './database'
 export async function getRedPacketNft(id: string) {
-    const record = await RedPacketNftDatabase.get('red-packet-nft', id)
+    const record = await RedPacketDatabase.get('red-packet-nft', id)
     return record ? RedPacketNftRecordOutDB(record) : undefined
 }
 
 export async function addRedPacketNft(record: RedPacketNftRecord) {
-    return RedPacketNftDatabase.add(RedPacketNftRecordIntoDB(record))
+    return RedPacketDatabase.add(RedPacketNftRecordIntoDB(record))
 }
 
 export async function updateRedPacketNftPassword(id: string, password: string) {

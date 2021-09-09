@@ -26,7 +26,7 @@ import { useSnackbar } from '@masknet/theme'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 import { RedPacketNftMetaKey } from '../constants'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import { RedPacketNftRPC } from '../messages'
+import { RedPacketRPC } from '../messages'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -204,7 +204,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     useEffect(() => {
         if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING && createState.hash) {
             setTxid(createState.hash)
-            RedPacketNftRPC.addRedPacketNft({ id: createState.hash, password: privateKey, contract_version: 1 })
+            RedPacketRPC.addRedPacketNft({ id: createState.hash, password: privateKey, contract_version: 1 })
         }
 
         if (![TransactionStateType.CONFIRMED, TransactionStateType.FAILED].includes(createState.type)) {
