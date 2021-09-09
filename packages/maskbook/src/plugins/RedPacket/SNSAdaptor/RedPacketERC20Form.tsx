@@ -8,7 +8,7 @@ import {
     useAccount,
     useNativeTokenDetailed,
     useRedPacketConstants,
-    useTokenBalance,
+    useFungibleTokenBalance,
     useWeb3,
 } from '@masknet/web3-shared'
 import { omit } from 'lodash-es'
@@ -133,7 +133,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const totalAmount = isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares ?? '0')
 
     // balance
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
+    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',
     )

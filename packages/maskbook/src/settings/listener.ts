@@ -16,6 +16,7 @@ import {
     currentNetworkSettings,
     currentPortfolioDataProviderSettings,
     currentProviderSettings,
+    currentTokenPricesSettings,
 } from '../plugins/Wallet/settings'
 import {
     currentDataProviderSettings,
@@ -34,6 +35,7 @@ export function ToBeListened() {
         currentBalanceSettings,
         currentBlockNumberSettings,
         currentEtherPriceSettings,
+        currentTokenPricesSettings,
         currentTrendingDataProviderSettings: currentDataProviderSettings,
         currentProviderSettings,
         currentNetworkSettings,

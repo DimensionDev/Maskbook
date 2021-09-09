@@ -49,6 +49,7 @@ const useStyles = makeStyles()((theme) => {
 export interface TokenAmountPanelProps extends withClasses<'root'> {
     amount: string
     maxAmount?: string
+    maxAmountShares?: number
     balance: string
     disableToken?: boolean
     disableBalance?: boolean
@@ -60,8 +61,6 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     MaxChipStyle?: ChipProps['classes']
     SelectTokenChip?: Partial<SelectTokenChipProps>
     TextFieldProps?: Partial<TextFieldProps>
-    // E.g. red packet shares
-    maxAmountShares?: number
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {

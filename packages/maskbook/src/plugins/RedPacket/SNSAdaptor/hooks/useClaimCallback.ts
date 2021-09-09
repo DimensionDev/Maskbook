@@ -2,20 +2,12 @@ import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    useTransactionState,
-    TransactionStateType,
-    TransactionEventType,
-    useGasPrice,
-    useNonce,
-} from '@masknet/web3-shared'
+import { useTransactionState, TransactionStateType, TransactionEventType } from '@masknet/web3-shared'
 import type { TransactionReceipt } from 'web3-core'
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 
 export function useClaimCallback(version: number, from: string, id?: string, password?: string) {
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const [claimState, setClaimState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const claimCallback = useCallback(async () => {
@@ -58,8 +50,6 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                     })
                     throw error
                 }),
-            gasPrice,
-            nonce,
         }
 
         // step 2-1: blocking
@@ -90,7 +80,7 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                 reject(error)
             })
         })
-    }, [gasPrice, nonce, id, password, from, redPacketContract])
+    }, [id, password, from, redPacketContract])
 
     const resetCallback = useCallback(() => {
         setClaimState({
