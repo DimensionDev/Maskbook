@@ -1,8 +1,6 @@
 import {
     useAccount,
     useChainId,
-    useGasPrice,
-    useNonce,
     useTransactionState,
     TransactionStateType,
     TransactionEventType,
@@ -14,8 +12,6 @@ import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
 import { useCallback } from 'react'
 
 export function useClaimNftRedpacketCallback(id: string, signedMsg: string) {
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const nftRedPacketContract = useNftRedPacketContract()
@@ -45,8 +41,6 @@ export function useClaimNftRedpacketCallback(id: string, signedMsg: string) {
                     setClaimState({ type: TransactionStateType.FAILED, error })
                     throw error
                 }),
-            gasPrice,
-            nonce,
             chainId,
         }
 
@@ -83,7 +77,7 @@ export function useClaimNftRedpacketCallback(id: string, signedMsg: string) {
                 reject(error)
             })
         })
-    }, [id, signedMsg, account, chainId, nonce, gasPrice])
+    }, [id, signedMsg, account, chainId])
 
     const resetCallback = useCallback(() => {
         setClaimState({
