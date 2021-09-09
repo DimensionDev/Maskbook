@@ -11,9 +11,9 @@ export async function addRedPacketNft(record: RedPacketNftRecord) {
 }
 
 export async function updateRedPacketNftPassword(id: string, password: string) {
-    const record = await RedPacketNftDatabase.get('red-packet-nft', id)
-    await RedPacketNftDatabase.remove('red-packet-nft', id)
-    await RedPacketNftDatabase.add(
+    const record = await RedPacketDatabase.get('red-packet-nft', id)
+    await RedPacketDatabase.remove('red-packet-nft', id)
+    await RedPacketDatabase.add(
         RedPacketNftRecordIntoDB({
             ...record,
             password,
