@@ -4,5 +4,7 @@
     "error_boundary_report_github": "crwdns1973:0crwdne1973:0",
     "error_boundary_report_email": "crwdns1975:0crwdne1975:0",
     "snackbar_done": "crwdns1977:0crwdne1977:0",
-    "import": "crwdns8001:0crwdne8001:0"
+    "import": "crwdns8001:0crwdne8001:0",
+    "balance": "crwdns8023:0crwdne8023:0",
+    "select_token": "crwdns8025:0crwdne8025:0"
 }
