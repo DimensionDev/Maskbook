@@ -80,15 +80,13 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
                       <MaskbookPluginWrapper width={300} pluginName="Unlock Protocol">
-                          <>
-                              <Typography color="textPrimary">"You don't have access to this content"</Typography>
-                              <br />
-                              <Typography color="textPrimary">"Please look for and buy an active lock"</Typography>
-                              <br />
-                              <Button target="_blank" href={redirectUrl}>
-                                  Buy Lock
-                              </Button>
-                          </>
+                          <Typography color="textPrimary">"You don't have access to this content"</Typography>
+                          <br />
+                          <Typography color="textPrimary">"Please look for and buy an active lock"</Typography>
+                          <br />
+                          <Button target="_blank" href={redirectUrl}>
+                              Buy Lock
+                          </Button>
                       </MaskbookPluginWrapper>
                   )
               })

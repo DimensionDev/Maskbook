@@ -10,4 +10,5 @@ export const PLUGIN_IDS = {
     MARKETS: 'com.maskbook.ito',
     VALUABLES: 'com.maskbook.tweet',
     MARKET_TREND: 'com.maskbook.trader',
+    POLL: 'com.maskbook.poll',
 }
