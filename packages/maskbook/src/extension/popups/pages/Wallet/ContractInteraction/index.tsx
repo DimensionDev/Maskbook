@@ -30,7 +30,6 @@ import { useLocation } from 'react-router'
 import { useRejectHandler } from '../hooks/useRejectHandler'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
-import { ZERO_ADDRESS } from '../../../../../plugins/GoodGhosting/constants'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 
 const useStyles = makeStyles()(() => ({
@@ -244,13 +243,14 @@ const ContractInteraction = memo(() => {
     // token estimated value
     const tokenPrice = useTokenPrice(
         getCoingeckoPlatformId(chainId) ?? '',
-        token?.address !== ZERO_ADDRESS ? token?.address : undefined,
+        !isNativeTokenInteraction ? token?.address : undefined,
     )
     const nativeTokenPrice = useNativeTokenPrice(getCoingeckoCoinId(nativeToken?.symbol.toLowerCase() ?? '') ?? '')
     const tokenValueUSD = new BigNumber(tokenAmount)
         .dividedBy(pow10(tokenDecimals))
-        .times(tokenPrice ?? 0)
+        .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
         .toString()
+
     const totalUSD = new BigNumber(formatWeiToEther(gasFee)).times(nativeTokenPrice).plus(tokenValueUSD).toString()
 
     console.log('DEBUG: ContractInteraction')
@@ -259,6 +259,8 @@ const ContractInteraction = memo(() => {
         gasFee,
         request,
         tokenPrice,
+        tokenAmount,
+        tokenDecimals,
         nativeTokenPrice,
     })
 
