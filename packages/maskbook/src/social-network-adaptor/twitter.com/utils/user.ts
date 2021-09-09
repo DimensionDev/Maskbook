@@ -38,6 +38,18 @@ export const getTwitterId = () => {
 
 export const getBioDescription = () => {
     const node = bioDescriptionSelector().evaluate()
+    if (node?.children) {
+        return [...node.children]
+            .map((node) => {
+                // an emoji image
+                if (node.nodeName === 'IMG') {
+                    return node.getAttribute('alt')
+                }
+                // please do not trim the text
+                return node.textContent ?? ''
+            })
+            .join('')
+    }
     return node?.innerText ?? ''
 }
 
