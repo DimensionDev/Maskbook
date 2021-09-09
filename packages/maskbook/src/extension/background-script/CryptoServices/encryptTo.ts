@@ -1,6 +1,6 @@
 import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import { GunAPI as Gun2 } from '../../../network/gun'
-import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
+import { encodeArrayBuffer } from '@dimensiondev/kit'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
 import { queryPrivateKey, queryLocalKey, queryProfile } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'

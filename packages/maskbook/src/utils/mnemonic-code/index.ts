@@ -2,7 +2,7 @@ import * as bip39 from 'bip39'
 import * as wallet from 'wallet.ts'
 import { decompressSecp256k1Key } from '../type-transform/SECP256k1-Compression'
 import { Convert } from 'pvtsutils'
-import { encodeArrayBuffer } from '../type-transform/String-ArrayBuffer'
+import { encodeArrayBuffer } from '@dimensiondev/kit'
 import type { PersonaRecord } from '../../database/Persona/Persona.db'
 import type {
     EC_Private_JsonWebKey,

@@ -1,9 +1,8 @@
 import { TypedMessage, makeTypedMessageText, isTypedMessageText } from '../protocols/typed-message'
 import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
 import { CryptoWorker } from '../modules/workers'
-import { encodeArrayBuffer, encodeText } from '../utils'
+import { encodeArrayBuffer, encodeText, decodeText } from '@dimensiondev/kit'
 import { derive_AES_GCM_256_Key_From_PBKDF2 } from '../modules/CryptoAlgorithm/helper'
-import { decodeText } from '../utils/type-transform/String-ArrayBuffer'
 import { decryptWithAES, encryptWithAES } from './crypto-alpha-40'
 export * from './crypto-alpha-39'
 
