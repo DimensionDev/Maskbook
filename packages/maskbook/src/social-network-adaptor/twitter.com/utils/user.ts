@@ -1,6 +1,7 @@
 import { isNull } from 'lodash-es'
 import type { SocialNetwork } from '../../../social-network'
 import { bioDescriptionSelector, searchAvatarSelector, searchNickNameSelector } from './selector'
+import { serializeToText } from './fetch'
 
 /**
  * @link https://help.twitter.com/en/managing-your-account/twitter-username-rules
@@ -20,10 +21,10 @@ export const getNickname = () => {
         ?.nextSibling as HTMLDivElement
     if (!node) return ''
 
-    const nicknameNode = node.querySelector('div span span')
+    const nicknameNode = node.querySelector('div span')
     if (!nicknameNode) return ''
 
-    return nicknameNode.innerHTML.trim()
+    return serializeToText(nicknameNode)
 }
 
 export const getTwitterId = () => {
@@ -38,19 +39,7 @@ export const getTwitterId = () => {
 
 export const getBioDescription = () => {
     const node = bioDescriptionSelector().evaluate()
-    if (node?.children) {
-        return [...node.children]
-            .map((node) => {
-                // an emoji image
-                if (node.nodeName === 'IMG') {
-                    return node.getAttribute('alt')
-                }
-                // please do not trim the text
-                return node.textContent ?? ''
-            })
-            .join('')
-    }
-    return node?.innerText ?? ''
+    return node ? serializeToText(node) : ''
 }
 
 export const getAvatar = () => {
