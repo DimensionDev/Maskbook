@@ -48,6 +48,9 @@ const useStyles = makeStyles()((theme) => ({
     labelWrapper: {
         display: 'flex',
     },
+    wrapper: {
+        padding: theme.spacing(0, 2, 2, 2),
+    },
 }))
 
 interface Props {
@@ -108,5 +111,9 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
         state,
         classes,
     }
-    return <AbstractTab height={500} {...tabProps} />
+    return (
+        <div className={classes.wrapper}>
+            <AbstractTab height={500} {...tabProps} />
+        </div>
+    )
 }

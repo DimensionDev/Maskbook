@@ -105,7 +105,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                     <CircularProgress size={16} />
                 ) : (
                     <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
-                        balance: {balance ? balance : '0'}
+                        Balance: {balance ? balance : '0'}
                     </Typography>
                 )}
             </div>

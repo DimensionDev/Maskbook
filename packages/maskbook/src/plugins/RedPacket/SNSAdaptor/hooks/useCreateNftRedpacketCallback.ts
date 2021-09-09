@@ -64,7 +64,6 @@ export function useCreateNftRedpacketCallback(
 
             const isOwner = await nftRedPacketContract.methods.check_ownership(...checkParams).call({ from: account })
 
-            console.log({ isOwner })
             if (!isOwner) {
                 setCreateState?.({
                     type: TransactionStateType.FAILED,

@@ -39,6 +39,12 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
         position: 'absolute',
     },
+    focusTab: {
+        backgroundColor: theme.palette.mode === 'light' ? 'rgba(247, 249, 250, 1)' : 'rgba(255, 255, 255, 0.08)',
+    },
+    dialogContent: {
+        padding: 0,
+    },
 }))
 
 enum CreateRedPacketPageStep {
@@ -238,11 +244,14 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             },
         ],
         state,
+        classes: {
+            focusTab: classes.focusTab,
+        },
     }
 
     return (
         <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={onClose}>
-            <DialogContent>
+            <DialogContent className={classes.dialogContent}>
                 {step === CreateRedPacketPageStep.NewRedPacketPage ? <AbstractTab height={520} {...tabProps} /> : null}
                 {step === CreateRedPacketPageStep.ConfirmPage ? (
                     <RedPacketConfirmDialog
