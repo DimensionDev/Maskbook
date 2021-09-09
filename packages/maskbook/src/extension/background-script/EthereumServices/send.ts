@@ -38,7 +38,7 @@ function parseGasPrice(price: string | undefined) {
     return Number.parseInt(price ?? '0x0', 16)
 }
 
-function isReadOnlyMetohd(payload: JsonRpcPayload) {
+function isReadOnlyMethod(payload: JsonRpcPayload) {
     return [
         EthereumMethodType.ETH_GET_CODE,
         EthereumMethodType.ETH_GAS_PRICE,
@@ -105,7 +105,7 @@ export async function INTERNAL_send(
     const web3 = createWeb3({
         chainId: getChainIdFromPayload(payload) ?? chainId,
         privKeys: wallet?._private_key_ ? [wallet._private_key_] : [],
-        providerType: isReadOnlyMetohd(payload) ? ProviderType.Maskbook : providerType,
+        providerType: isReadOnlyMethod(payload) ? ProviderType.Maskbook : providerType,
     })
     const provider = web3.currentProvider as HttpProvider | undefined
 
