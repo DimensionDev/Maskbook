@@ -1,21 +1,12 @@
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    TransactionEventType,
-    TransactionStateType,
-    useAccount,
-    useGasPrice,
-    useNonce,
-    useTransactionState,
-} from '@masknet/web3-shared'
+import { TransactionEventType, TransactionStateType, useAccount, useTransactionState } from '@masknet/web3-shared'
 import type { AirdropPacket } from '../apis'
 import { useAirdropContract } from '../contracts/useAirdropContract'
 
 export function useClaimCallback(packet?: AirdropPacket) {
     const account = useAccount()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const AirdropContract = useAirdropContract()
 
     const [claimState, setClaimState] = useTransactionState()
@@ -73,8 +64,6 @@ export function useClaimCallback(packet?: AirdropPacket) {
                     })
                     throw error
                 }),
-            gasPrice,
-            nonce,
         }
 
         // send transaction
@@ -101,7 +90,7 @@ export function useClaimCallback(packet?: AirdropPacket) {
                 .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
                 .on(TransactionEventType.CONFIRMATION, onSucceed)
         })
-    }, [nonce, gasPrice, AirdropContract, account, packet])
+    }, [AirdropContract, account, packet])
 
     const resetCallback = useCallback(() => {
         setClaimState({

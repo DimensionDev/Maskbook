@@ -6,8 +6,6 @@ import {
     useERC721TokenContract,
     TransactionStateType,
     TransactionEventType,
-    useGasPrice,
-    useNonce,
     useChainId,
 } from '../index'
 
@@ -22,9 +20,7 @@ export function useERC721ContractSetApproveForAllCallback(
     approved: boolean,
 ) {
     const account = useAccount()
-    const gasPrice = useGasPrice()
     const chainId = useChainId()
-    const nonce = useNonce()
     const erc721TokenContract = useERC721TokenContract(contractAddress)
     const [approveState, setApproveState] = useTransactionState()
 
@@ -47,8 +43,6 @@ export function useERC721ContractSetApproveForAllCallback(
                     setApproveState({ type: TransactionStateType.FAILED, error })
                     throw error
                 }),
-            gasPrice,
-            nonce,
         }
 
         return new Promise<void>(async (resolve, reject) => {

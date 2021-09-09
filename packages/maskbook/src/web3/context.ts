@@ -13,6 +13,7 @@ import {
     currentChainIdSettings,
     currentPortfolioDataProviderSettings,
     currentEtherPriceSettings,
+    currentTokenPricesSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
@@ -33,10 +34,11 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
         chainId: createSubscriptionFromSettings(currentChainIdSettings),
         account: createSubscriptionFromSettings(currentAccountSettings),
         balance: createSubscriptionFromSettings(currentBalanceSettings),
+        gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
         blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
         nonce: createSubscriptionFromSettings(currentNonceSettings),
-        gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
         etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
+        tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
         wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
         providerType: createSubscriptionFromSettings(currentProviderSettings),
         networkType: createSubscriptionFromSettings(currentNetworkSettings),
@@ -46,6 +48,8 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
             0,
             WalletMessages.events.erc20TokensUpdated.on,
         ),
+        addERC20Token: WalletRPC.addERC20Token,
+        trustERC20Token: WalletRPC.trustERC20Token,
         getERC20TokensPaged,
         portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
         getAssetsList: WalletRPC.getAssetsList,
@@ -55,6 +59,7 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
         fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
         getTransactionList: WalletRPC.getTransactionList,
         createMnemonicWords: WalletRPC.createMnemonicWords,
+        getNonce: Services.Ethereum.getNonce,
     }
 }
 

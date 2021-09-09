@@ -5,13 +5,9 @@ import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { GasConfig, TransactionEventType } from '../types'
-import { useNonce } from './useNonce'
-import { useGasPrice } from './useGasPrice'
 import { isGreaterThan, isZero } from '../utils'
 
-export function useERC20TokenTransferCallback(address?: string) {
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
+export function useERC20TokenTransferCallback(address?: string, amount?: string, recipient?: string) {
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(address)
     const [transferState, setTransferState] = useTransactionState()
@@ -53,7 +49,6 @@ export function useERC20TokenTransferCallback(address?: string) {
             // estimate gas and compose transaction
             const config = {
                 from: account,
-                nonce,
                 gas: await erc20Contract.methods
                     .transfer(recipient, amount)
                     .estimateGas({
@@ -69,7 +64,7 @@ export function useERC20TokenTransferCallback(address?: string) {
                 gasPrice,
                 ...gasConfig,
             }
-            const tx = erc20Contract.methods.transfer(recipient, amount)
+
             // send transaction and wait for hash
             return new Promise<string>(async (resolve, reject) => {
                 erc20Contract.methods
@@ -91,7 +86,7 @@ export function useERC20TokenTransferCallback(address?: string) {
                     })
             })
         },
-        [nonce, gasPrice, account, address, erc20Contract],
+        [account, address, amount, recipient, erc20Contract],
     )
 
     const resetCallback = useCallback(() => {

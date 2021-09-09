@@ -1,6 +1,5 @@
 import { Box } from '@material-ui/core'
 export function HelloWorld(props: any) {
-    console.log(props)
     return <h1 style={{ background: 'white', color: 'black' }}>Hello, World</h1>
 }
 export function GlobalComponent() {

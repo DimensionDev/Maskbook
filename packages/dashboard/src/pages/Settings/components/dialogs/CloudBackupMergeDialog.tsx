@@ -32,7 +32,6 @@ export function CloudBackupMergeDialog({ account, info, open, onClose }: CloudBa
             }
             onClose()
             snackbar.enqueueSnackbar(t.settings_alert_merge_success(), { variant: 'success' })
-            console.log('merge success')
         } catch (error) {
             setIncorrectBackupPassword(true)
         }

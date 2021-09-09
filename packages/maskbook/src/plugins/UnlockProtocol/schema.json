@@ -1,0 +1,29 @@
+{
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+        "iv": {
+            "type": "string",
+            "title": "iv"
+        },
+        "unlockLocks": {
+            "type": "array",
+            "additionalProperties": true,
+            "title": "unlockLocks",
+            "properties": {
+                "unlocklock": {
+                    "type": "string",
+                    "title": "unlocklock"
+                },
+                "chainid": {
+                    "type": "number",
+                    "title": "chainid"
+                }
+            }
+        },
+        "post": {
+            "type": "string",
+            "title": "post"
+        }
+    }
+}

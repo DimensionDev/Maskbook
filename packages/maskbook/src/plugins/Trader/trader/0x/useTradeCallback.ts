@@ -2,22 +2,11 @@ import { useCallback, useMemo, useState } from 'react'
 import stringify from 'json-stable-stringify'
 import { pick } from 'lodash-es'
 import type { TransactionConfig } from 'web3-core'
-import {
-    ChainId,
-    TransactionState,
-    TransactionStateType,
-    useAccount,
-    useChainId,
-    useGasPrice,
-    useNonce,
-    useWeb3,
-} from '@masknet/web3-shared'
+import { ChainId, TransactionState, TransactionStateType, useAccount, useChainId, useWeb3 } from '@masknet/web3-shared'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {
     const web3 = useWeb3()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const [tradeState, setTradeState] = useState<TransactionState>({
@@ -66,15 +55,9 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             }
         }
 
-        // compose transaction config
-        const config_ = {
-            ...config,
-            nonce,
-        }
-
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
-            web3.eth.sendTransaction(config_, (error, hash) => {
+            web3.eth.sendTransaction(config, (error, hash) => {
                 if (error) {
                     setTradeState({
                         type: TransactionStateType.FAILED,
@@ -90,7 +73,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
                 }
             })
         })
-    }, [web3, nonce, gasPrice, account, chainId, stringify(config)])
+    }, [web3, account, chainId, stringify(config)])
 
     const resetCallback = useCallback(() => {
         setTradeState({

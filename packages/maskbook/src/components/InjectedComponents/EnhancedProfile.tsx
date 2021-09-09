@@ -40,25 +40,18 @@ interface EnhancedProfilePageProps extends withClasses<'text' | 'button'> {
     bioDescription: string
     nickname: string
     twitterId: string
-    onUpdated: () => void
 }
 
 export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const [show, setShow] = useState(false)
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
-    const { bioDescription, nickname, twitterId, onUpdated } = props
+    const { bioDescription, nickname, twitterId } = props
     const { t } = useI18N()
 
     useLocationChange(() => {
         MaskMessage.events.profileNFTsTabUpdated.sendToLocal('reset')
     })
-
-    useEffect(() => {
-        return MaskMessage.events.profileNFTsTabUpdated.on((data) => {
-            onUpdated()
-        })
-    }, [])
 
     useEffect(() => {
         return MaskMessage.events.profileNFTsPageUpdated.on((data) => {
@@ -84,7 +77,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                         href={resolveAddressLinkOnExplorer(chainId, address)}
                         target="_blank"
                         rel="noopener noreferrer">
-                        {formatEthereumAddress(name ?? address ?? '', 4)}
+                        {type === 'address' ? formatEthereumAddress(address, 4) : name}
                     </Link>
                 </Typography>
                 <Typography

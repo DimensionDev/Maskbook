@@ -14,6 +14,7 @@ export * from './chain'
 export * from './domain'
 export * from './cloud'
 export * from './estimateGasFee'
+export * from './tokenPrice'
 export {
     decryptWallet,
     createEncryptedWalletStore,

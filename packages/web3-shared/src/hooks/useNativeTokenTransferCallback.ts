@@ -5,15 +5,11 @@ import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { useWeb3 } from './useWeb3'
-import { useNonce } from './useNonce'
-import { useGasPrice } from './useGasPrice'
 import { isGreaterThan, isZero } from '../utils'
 import type { GasConfig } from '../types'
 
 export function useNativeTransferCallback() {
     const web3 = useWeb3()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const [transferState, setTransferState] = useTransactionState()
@@ -56,9 +52,6 @@ export function useNativeTransferCallback() {
             const config = {
                 from: account,
                 to: recipient,
-                value: amount,
-                data: memo ? toHex(memo) : undefined,
-                nonce,
                 gas: await web3.eth
                     .estimateGas({
                         from: account,
@@ -73,7 +66,8 @@ export function useNativeTransferCallback() {
                         })
                         throw error
                     }),
-                gasPrice,
+                value: amount,
+                data: memo ? toHex(memo) : undefined,
                 ...gasConfig,
             }
 
@@ -96,7 +90,7 @@ export function useNativeTransferCallback() {
                 })
             })
         },
-        [web3, nonce, gasPrice, account, chainId],
+        [web3, account, chainId],
     )
 
     const resetCallback = useCallback(() => {

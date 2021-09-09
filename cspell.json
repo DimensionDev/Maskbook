@@ -162,7 +162,7 @@
         "quickswap",
         "radisk",
         "rarible",
-        "realmaskbook",
+        "realMaskNetwork",
         "redpacket",
         "replacestate",
         "repost",
@@ -211,7 +211,13 @@
         "xdai",
         "xlarge",
         "xlink",
-        "zerion"
+        "zerion",
+        "Zubin",
+        "Choudhary",
+        "counterparty",
+        "jailbroken",
+        "misoperation",
+        "majeure"
     ],
     "ignoreWords": [
         "BSCT",
@@ -272,7 +278,10 @@
         "metaswap",
         "tinycolor",
         "unstoppabledomains",
-        "vitalik"
+        "vitalik",
+        "unlockprotocol",
+        "unlocklock",
+        "chainid"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

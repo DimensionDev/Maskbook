@@ -6,8 +6,6 @@ import {
     useAccount,
     useTransactionState,
     TransactionStateType,
-    useNonce,
-    useGasPrice,
     TransactionEventType,
 } from '@masknet/web3-shared'
 import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
@@ -24,8 +22,6 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
     const poolV2Contract = useDHedgePoolV2Contract(pool?.address ?? '')
 
     const account = useAccount()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const [investState, setInvestState] = useTransactionState()
 
     const investCallback = useCallback(async () => {
@@ -45,8 +41,6 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
         const config = {
             from: account,
             value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
-            gasPrice,
-            nonce,
         }
 
         const deposit = () => {
@@ -87,7 +81,7 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
                     reject(error)
                 })
         })
-    }, [gasPrice, nonce, pool, account, amount, token])
+    }, [pool, account, amount, token])
 
     const resetCallback = useCallback(() => {
         setInvestState({

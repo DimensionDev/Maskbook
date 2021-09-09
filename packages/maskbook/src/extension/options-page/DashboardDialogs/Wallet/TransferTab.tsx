@@ -1,7 +1,7 @@
 import { Button, TextField } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import {
     EthereumTokenType,
@@ -10,9 +10,9 @@ import {
     FungibleTokenDetailed,
     isGreaterThan,
     isZero,
-    pow10,
     TransactionStateType,
-    useTokenBalance,
+    useGasPrice,
+    useFungibleTokenBalance,
     useTokenTransferCallback,
     Wallet,
 } from '@masknet/web3-shared'
@@ -53,21 +53,33 @@ export function TransferTab(props: TransferTabProps) {
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
 
+    // gas price
+    const { value: gasPrice = '0' } = useGasPrice()
+
     // balance
-    const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useTokenBalance(
+    const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useFungibleTokenBalance(
         token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',
     )
 
-    const onChangeAmount = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
-        const _amount = ev.currentTarget.value
-        if (_amount === '') setAmount('')
-        if (/^\d+\.?\d*$/.test(_amount)) setAmount(_amount)
-    }, [])
+    // transfer amount
+    const transferAmount = useMemo(() => {
+        let amount_ = new BigNumber(tokenBalance || '0')
+        amount_ =
+            token.type === EthereumTokenType.Native
+                ? amount_.minus(new BigNumber(30000).multipliedBy(gasPrice))
+                : amount_
+        return amount_.toFixed()
+    }, [tokenBalance, gasPrice, token.type])
 
     //#region transfer tokens
-    const transferAmount = new BigNumber(amount || '0').multipliedBy(pow10(token.decimals))
-    const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(token.type, token.address)
+    const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
+        token.type,
+        token.address,
+        transferAmount,
+        address,
+        memo,
+    )
 
     const onTransfer = useCallback(async () => {
         await transferCallback(transferAmount.toFixed(), address, undefined, memo)
@@ -119,6 +131,7 @@ export function TransferTab(props: TransferTabProps) {
         <div className={classes.root}>
             <TokenAmountPanel
                 amount={amount}
+                maxAmount={transferAmount}
                 balance={tokenBalance}
                 label={t('wallet_transfer_amount')}
                 token={token}
