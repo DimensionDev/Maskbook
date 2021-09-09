@@ -3,6 +3,7 @@ import CHAINS from '../assets/chains.json'
 import { getRPCConstants } from '../constants'
 import { ChainId, NetworkType } from '../types'
 import COINGECKO_PLATFORMS from '../assets/coingecko-asset-platforms.json'
+import COINGECKO_COIN_LIST from '../assets/coingecko-coin-list.json'
 
 export function isChainIdValid(chainId: ChainId, allowTestnet = false) {
     const chainDetailed = getChainDetailed(chainId)
@@ -111,4 +112,8 @@ export function getNetworkTypeFromChainId(chainId: ChainId) {
 
 export function getCoingeckoPlatformId(chain: ChainId) {
     return COINGECKO_PLATFORMS.find((platform) => platform.chain_identifier === chain)?.id
+}
+
+export function getCoingeckoCoinId(coinSymbol: string) {
+    return COINGECKO_COIN_LIST.find((coin) => coin.symbol === coinSymbol)?.id
 }
