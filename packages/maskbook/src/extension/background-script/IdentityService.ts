@@ -44,11 +44,12 @@ import { decompressBackupFile } from '../../utils/type-transform/BackupFileShort
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { EC_JsonWebKey, EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared'
 import { getCurrentPersonaIdentifier } from './SettingsService'
-import { recover_ECDH_256k1_KeyPair_ByMnemonicWord_V2 } from '../../utils/mnemonic-code'
 import { MaskMessage } from '../../utils'
 import type { PostIVIdentifier } from '@masknet/shared-base'
 import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 import { first, orderBy } from 'lodash-es'
+import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import { validateMnemonic } from 'bip39'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -108,7 +109,12 @@ export {
 } from '../../database'
 
 export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
-    const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord_V2(mnemonic, password)
+    const verify = validateMnemonic(mnemonic)
+    if (!verify) {
+        throw new Error('Verify error')
+    }
+
+    const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
     const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey, 'private')
     return queryPersonaDB(identifier)
 }
