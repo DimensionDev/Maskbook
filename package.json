@@ -36,14 +36,14 @@
     "@material-ui/icons": "5.0.0-beta.4",
     "@material-ui/lab": "5.0.0-alpha.43",
     "@material-ui/system": "5.0.0-beta.4",
-    "@types/react": "^17.0.19",
+    "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
-    "@types/web": "^0.0.27",
-    "i18next": "^20.5.0",
+    "@types/web": "^0.0.30",
+    "i18next": "^20.6.1",
     "idb": "5.0.8",
     "react": "=18.0.0-alpha-aecb3b6d1",
     "react-dom": "=18.0.0-alpha-aecb3b6d1",
-    "react-i18next": "^11.11.3"
+    "react-i18next": "^11.12.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
@@ -69,7 +69,7 @@
     "lint-staged": "^11.1.2",
     "npm-run-all": "^4.1.5",
     "only-allow": "^1.0.0",
-    "prettier": "^2.3.2",
+    "prettier": "^2.4.0",
     "ts-node": "^10.2.1",
     "ttypescript": "^1.5.12",
     "typescript": "4.4.2"

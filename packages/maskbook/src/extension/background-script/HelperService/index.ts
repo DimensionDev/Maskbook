@@ -1,6 +1,7 @@
 import { memoizePromise } from '../../../utils'
 import { getNetworkWorker } from '../../../social-network'
 import { constructRequestPermissionURL, PopupRoutes } from '../../popups'
+import urlcat from 'urlcat'
 
 export * from './storage'
 
@@ -84,16 +85,13 @@ export async function createNewWindowAndPasteShareContent(SNSIdentifier: string,
 }
 
 export function openPopupsWindow(route?: string) {
+    const url = urlcat('popups.html#', route ?? PopupRoutes.Wallet, { toBeClose: 1 })
     if (!!navigator.userAgent.match(/Chrome/)) {
-        window.open(
-            browser.runtime.getURL(`popups.html#${route ?? PopupRoutes.Wallet}`),
-            '',
-            'resizable,scrollbars,status,width=310,height=540',
-        )
+        window.open(browser.runtime.getURL(url), '', 'resizable,scrollbars,status,width=310,height=540')
     } else {
         browser.windows.create({
-            url: browser.runtime.getURL(`popups.html#${route ?? PopupRoutes.Wallet}`),
-            width: 310,
+            url: browser.runtime.getURL(url),
+            width: 350,
             height: 540,
             type: 'popup',
         })

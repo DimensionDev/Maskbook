@@ -53,6 +53,8 @@ const AddDeriveWallet = memo(() => {
     const { classes } = useStyles()
     const wallets = useWallets()
     const mnemonic = new URLSearchParams(location.search).get('mnemonic')
+    const walletName = new URLSearchParams(location.search).get('name')
+
     const [page, setPage] = useState(0)
 
     const { loading, value: dataSource } = useAsync(async () => {
@@ -75,7 +77,7 @@ const AddDeriveWallet = memo(() => {
     const onAdd = useCallback(
         async (index) => {
             if (mnemonic) {
-                await WalletRPC.deriveWalletFromIndex(mnemonic.split(' '), '', index)
+                await WalletRPC.deriveWalletFromIndex(mnemonic.split(' '), '', index, walletName ?? 'Account')
             }
         },
         [mnemonic],

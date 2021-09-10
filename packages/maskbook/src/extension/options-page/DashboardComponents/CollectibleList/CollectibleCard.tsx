@@ -8,7 +8,7 @@ import {
     CollectibleProvider,
 } from '@masknet/web3-shared'
 import { Image } from '../../../../components/shared/Image'
-import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
+import { MaskbookSharpIconOfSize } from '../../../../resources/MaskbookIcon'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 import { Video } from '../../../../components/shared/Video'
 
@@ -28,7 +28,8 @@ const useStyles = makeStyles()((theme) => ({
         zIndex: 1,
         backgroundColor: `${theme.palette.background.paper} !important`,
     },
-    placeholder: {
+    placeholderIcon: {
+        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
         width: 64,
         height: 64,
         opacity: 0.1,
@@ -71,7 +72,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                         />
                     )
                 ) : (
-                    <MaskbookIconOutlined className={classes.placeholder} />
+                    <MaskbookSharpIconOfSize classes={{ root: classes.placeholderIcon }} size={22} />
                 )}
             </Card>
         </Link>

@@ -56,7 +56,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         ) : null}
                     </Box>
                     {!connected && error ? (
-                        <ActionButton color="primary" variant="contained" onClick={retry}>
+                        <ActionButton color="primary" variant="contained" onClick={retry} disabled={loading}>
                             {t('retry')}
                         </ActionButton>
                     ) : null}

@@ -109,10 +109,7 @@ export function Navigation({}: NavigationProps) {
                 </ListItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
-            <ListItemLink
-                to={RoutePaths.Wallets}
-                selected={!!useMatch(RoutePaths.Wallets)}
-                onClick={toggleNavigationExpand}>
+            <ListItemLink to="" selected={!!useMatch(RoutePaths.Wallets)} onClick={toggleNavigationExpand}>
                 <ListItemIcon>
                     {useMatch(RoutePaths.Wallets) ? <MenuWalletsActiveIcon /> : <MenuWalletsIcon />}
                 </ListItemIcon>
@@ -121,6 +118,9 @@ export function Navigation({}: NavigationProps) {
             </ListItemLink>
             <Collapse in={expanded}>
                 <List disablePadding>
+                    <ListItemLink to={RoutePaths.Wallets}>
+                        <ListItemText inset primary={t.wallets_assets()} />
+                    </ListItemLink>
                     <ListItemLink to={RoutePaths.WalletsTransfer}>
                         <ListItemText inset primary={t.wallets_transfer()} />
                     </ListItemLink>

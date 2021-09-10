@@ -1,12 +1,10 @@
-import { createContext, useState } from 'react'
+import { createContext, useState, useEffect } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useStylesExtends, useValueRef } from '@masknet/shared'
 import {
     ChainId,
     CollectibleProvider,
     ERC721TokenDetailed,
-    EthereumTokenType,
-    formatEthereumAddress,
     useAccount,
     useChainId,
     useCollectibles,
@@ -18,6 +16,7 @@ import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wall
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
+import { searchProfileTabSelector } from '../../../../social-network-adaptor/twitter.com/utils/selector'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -107,7 +106,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     if (loading)
         return (
             <Box className={classes.root}>
-                {Array.from({ length: 8 })
+                {Array.from({ length: 12 })
                     .fill(0)
                     .map((_, i) => (
                         <Box className={classes.card} display="flex" flexDirection="column" key={i}>
@@ -199,6 +198,12 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
         setPage(0)
     }, [provider, address])
 
+    useEffect(() => {
+        const tab = searchProfileTabSelector().evaluate()
+        if (!tab) return
+        tab.scrollIntoView()
+    }, [page])
+
     return (
         <CollectibleListUI
             classes={classes}
@@ -240,18 +245,11 @@ export function CollectibleList({ wallet, readonly }: CollectibleListProps) {
         setPage(0)
     }, [account, provider])
 
-    const dataSource = collectibles.filter((x) => {
-        const key = `${formatEthereumAddress(x.contractDetailed.address)}_${x.tokenId}`
-        switch (x.contractDetailed.type) {
-            case EthereumTokenType.ERC721:
-                return wallet.erc721_token_blacklist ? !wallet.erc721_token_blacklist.has(key) : true
-            // wallet.erc1155_token_blacklist is still unused, comment it now.
-            // case EthereumTokenType.ERC1155:
-            //     return wallet.erc1155_token_blacklist ? !wallet.erc1155_token_blacklist.has(key) : true
-            default:
-                return false
-        }
-    })
+    useEffect(() => {
+        const tab = searchProfileTabSelector().evaluate()
+        if (!tab) return
+        tab.scrollIntoView()
+    }, [page])
 
     return (
         <CollectibleListUI

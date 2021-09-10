@@ -1,6 +1,6 @@
-import { CreateMaskWalletFrame } from '../../components/CreateWalletFrame'
 import { Routes, Route } from 'react-router-dom'
 import { lazy } from 'react'
+import { CreateMaskWalletFrame } from '../../components/CreateWalletFrame'
 
 const Welcome = lazy(() => import('./components/Welcome'))
 const CreateWalletForm = lazy(() => import('./components/CreateWalletForm'))
