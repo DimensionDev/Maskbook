@@ -1,100 +1,107 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTAvatarAmountIcon } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import { Link, Typography } from '@material-ui/core'
-import { getNFTAvatar, setOrClearAvatar } from '../../../components/InjectedComponents/NFTAvatar'
-import type { PostInfo } from '../../../social-network/PostInfo'
+import { AvatarMetaDB, getNFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
 import { createReactRootShadowed, Flags, startWatch } from '../../../utils'
-import { selfInfoSelectors } from '../utils/selector'
-import { getTwitterAvatarId, updateAvatarFromDB, updateAvatarImage } from '../utils/updateAvatarImage'
+import { postAvatarsContentSelector } from '../utils/selector'
+import { getAvatarId } from '../utils/user'
 
-export function injectAvatarInTwitter(signal: AbortSignal, post: PostInfo) {
-    const ls = new LiveSelector([post.rootNodeProxy])
-        .map((x) => x.current.firstChild?.firstChild?.firstChild as HTMLDivElement)
-        .enableSingleMode()
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        display: 'flex',
+        justifyContent: 'center',
+        position: 'absolute',
+        left: 0,
+        top: 44,
+    },
+    wrapper: {
+        position: 'absolute',
+        left: 0,
+        top: 10,
+        background:
+            'linear-gradient(106.15deg, #FF0000 5.97%, #FF8A00 21.54%, #FFC700 42.35%, #52FF00 56.58%, #00FFFF 73.01%, #0038FF 87.8%, #AD00FF 101.49%, #FF0000 110.25%)',
+        borderRadius: 3,
+        minWidth: 43,
+        width: 'auto',
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    icon: {
+        width: '100%',
+        paddingLeft: 10,
+    },
+    text: {
+        fontSize: 10,
+        transform: 'scale(0.8)',
+        margin: 0,
+        color: 'white',
+        whiteSpace: 'nowrap',
+        textShadow: '2px 1px black',
+        lineHeight: 1,
+    },
+}))
 
-    post.postBy.subscribe(() => {
-        add()
-        return () => remove()
-    })
-    add()
-    let remover = () => {}
-    async function add() {
-        if (signal?.aborted) return
-        const node = ls.evaluate()
-        if (!node) return
-        const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
-        proxy.realCurrent = node
-        const avatarParentNode = node.firstChild?.firstChild?.lastChild?.firstChild as HTMLDivElement
-        if (!avatarParentNode) return
-        const avatarMeta = await getNFTAvatar(post.postBy.getCurrentValue().userId)
-        if (!avatarMeta || !avatarMeta.image) {
-            setOrClearAvatar(post.postBy.getCurrentValue().userId)
-            updateAvatarImage(avatarParentNode)
-            return
-        }
-        const avatarId = getTwitterAvatarId(avatarParentNode)
-        if (avatarId !== avatarMeta.avatarId) return
-        updateAvatarImage(avatarParentNode, avatarMeta.image)
-        const root = createReactRootShadowed(proxy.afterShadow, { signal })
-        root.render(
-            <div
-                style={{ display: 'flex', justifyContent: 'center', position: 'absolute', left: 0, top: 44 }}
-                onClick={(e) => {
-                    e.preventDefault()
-                    window.open(resolveOpenSeaLink(avatarMeta.address, avatarMeta.tokenId), '_blank')
-                }}>
-                <Link
-                    title={resolveOpenSeaLink(avatarMeta.address, avatarMeta.tokenId)}
-                    href={resolveOpenSeaLink(avatarMeta.address, avatarMeta.tokenId)}
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    <NFTAvatarAmountIcon style={{ width: '100%', paddingLeft: 10 }} />
-                    <div
-                        style={{
-                            position: 'absolute',
-                            left: 0,
-                            top: 10,
-                            background:
-                                'linear-gradient(106.15deg, #FF0000 5.97%, #FF8A00 21.54%, #FFC700 42.35%, #52FF00 56.58%, #00FFFF 73.01%, #0038FF 87.8%, #AD00FF 101.49%, #FF0000 110.25%)',
-                            borderRadius: 3,
-                            minWidth: 43,
-                            width: 'auto',
-                            display: 'flex',
-                            justifyContent: 'center',
-                        }}>
-                        <Typography
-                            style={{
-                                fontSize: 10,
-                                transform: 'scale(0.8)',
-                                margin: 0,
-                                color: 'white',
-                                whiteSpace: 'nowrap',
-                                textShadow: '2px 1px black',
-                                lineHeight: 1,
-                            }}>{`${avatarMeta.amount} ETH`}</Typography>
-                    </div>
-                </Link>
-            </div>,
-        )
-        remover = root.destory
-    }
-    function remove() {
-        remover()
-    }
+interface NFTBadgeInTwitterProps {
+    avatar: AvatarMetaDB
+}
+function NFTBadgeInTwitter({ avatar }: NFTBadgeInTwitterProps) {
+    const { classes } = useStyles()
+    return (
+        <div
+            className={classes.root}
+            onClick={(e) => {
+                e.preventDefault()
+                window.open(resolveOpenSeaLink(avatar.address, avatar.tokenId), '_blank')
+            }}>
+            <Link
+                title={resolveOpenSeaLink(avatar.address, avatar.tokenId)}
+                href={resolveOpenSeaLink(avatar.address, avatar.tokenId)}
+                target="_blank"
+                rel="noopener noreferrer">
+                <NFTAvatarAmountIcon className={classes.icon} />
+                <div className={classes.wrapper}>
+                    <Typography className={classes.text}>{`${avatar.amount} ETH`}</Typography>
+                </div>
+            </Link>
+        </div>
+    )
 }
 
-function _(main: () => LiveSelector<HTMLElement, true>, signal: AbortSignal, twitterId?: string, parent?: HTMLElement) {
-    // TODO: for unknown reason the MutationObserverWatcher doesn't work well
-    // To reproduce, open a profile and switch to another profile.
+function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
-            const check = () => updateAvatarFromDB(parent, twitterId)
-            check()
+            let remover = () => {}
+            const remove = () => remover()
+
+            const run = async () => {
+                const twitterIdNode = ele.querySelector(
+                    'div > :nth-child(2) > :nth-child(2) > div > div > div > div > div > a > div > :last-child',
+                ) as HTMLSpanElement
+                if (!twitterIdNode) return
+                const twitterId = twitterIdNode.innerText.trim().replace('@', '')
+                const avatar = await getNFTAvatar(twitterId)
+                if (!avatar) return
+
+                const avatarIdNode = ele.querySelector(
+                    'div > :nth-child(2) > div > div > div > a > div > :last-child > div > img',
+                ) as HTMLImageElement
+                if (!avatarIdNode) return
+                const avatarId = getAvatarId(avatarIdNode.getAttribute('src') ?? '')
+                if (avatarId !== avatar.avatarId) return
+                const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
+                proxy.realCurrent = ele.querySelector('div > :nth-child(2) > div > div > div')
+                const root = createReactRootShadowed(proxy.afterShadow, { signal })
+                root.render(<NFTBadgeInTwitter avatar={avatar} />)
+                remover = root.destory
+            }
+
+            run()
             return {
-                onNodeMutation: check,
-                onTargetChanged: check,
-                onRemove: () => {},
+                onNodeMutation: run,
+                onTargetChanged: run,
+                onRemove: remove,
             }
         }),
         signal,
@@ -102,29 +109,5 @@ function _(main: () => LiveSelector<HTMLElement, true>, signal: AbortSignal, twi
 }
 
 export async function injectUserNFTAvatarAtTwitter(signal: AbortSignal) {
-    const twitterId = selfInfoSelectors().handle.evaluate()
-    /*
-    _(
-        searchAccountSwitherButtonSelector,
-        signal,
-        searchAccountSwitherButtonSelector()
-            .querySelector('div:nth-child(2) > div > :last-child > div > span')
-            .evaluate()
-            ?.innerHTML.replace('@', '') ?? twitterId,
-        searchAccountSwitherButtonSelector().evaluate()?.firstChild?.firstChild?.firstChild?.lastChild
-            ?.firstChild as HTMLElement,
-    )
-
-    _(
-        searchUseCellSelector,
-        signal,
-        searchUseCellSelector()
-            .querySelector<HTMLElement>('div > div:nth-child(2) > div > div > div > :nth-child(2) > div > span')
-            .evaluate()
-            ?.innerText.replace('@', '') ?? twitterId,
-        searchUseCellSelector().querySelector<HTMLElement>('div > div > div > div > :last-child > div').evaluate(),
-    )
-
-      _(twitterMainAvatarSelector, signal, twitterId, twitterMainAvatarSelector().evaluate())
-      */
+    _(postAvatarsContentSelector, signal)
 }

@@ -6,6 +6,8 @@ export function updateAvatarImage(parent: HTMLElement, image?: string) {
         return
     }
 
+    return
+    /*
     if (!image) {
         recovAvatar(parent)
         return
@@ -26,6 +28,7 @@ export function updateAvatarImage(parent: HTMLElement, image?: string) {
         }
         ele.setAttribute('src', `url(${new URL(image, import.meta.url)})`)
     }
+    */
 }
 
 function recovAvatar(parent: HTMLElement) {
@@ -51,24 +54,4 @@ export function updateAvatarFromDB(parent?: HTMLElement, twitterId?: string) {
     getNFTAvatar(twitterId).then((avatarMeta: AvatarMetaDB) => {
         updateAvatarImage(parent, avatarMeta.image ?? '')
     })
-}
-
-const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
-function getURL(node: HTMLElement) {
-    if (node.hasAttribute('avatar')) return node.getAttribute('avatar')
-    return node.getAttribute('src')
-}
-export function getTwitterAvatarId(parent?: HTMLElement) {
-    if (!parent) return ''
-    const ele = parent.lastChild as HTMLDivElement
-    if (!ele) return ''
-
-    const url = getURL(ele)
-    if (!url) return ''
-
-    const _url = new URL(url)
-    const match = _url.pathname.match(TWITTER_AVATAR_ID_MATCH)
-    if (!match) return ''
-
-    return match[1]
 }

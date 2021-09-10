@@ -12,8 +12,8 @@ import {
     searchProfileSaveSelector,
     searchProfileAvatarParentSelector,
 } from '../utils/selector'
-import { getTwitterAvatarId, updateAvatarImage } from '../utils/updateAvatarImage'
-import { getTwitterId } from '../utils/user'
+import { updateAvatarImage } from '../utils/updateAvatarImage'
+import { getAvatar, getAvatarId, getTwitterId } from '../utils/user'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -58,7 +58,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         const parent = searchProfileAvatarParentSelector()
         if (!parent) return
 
-        const avatarId = getTwitterAvatarId(parent)
+        const avatarId = getAvatarId(getAvatar())
         setAvatarEvent({
             userId: twitterId,
             tokenId: token.tokenId,

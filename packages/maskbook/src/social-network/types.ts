@@ -194,8 +194,6 @@ export namespace SocialNetworkUI {
             postsProvider?: PostsProvider
             /** Get searched keyword */
             getSearchedKeyword?(): string
-
-            avatarProvider?: AvatarProvider
         }
         export type ProfileUI = { bioContent: string }
         export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar' | 'bio'>
@@ -226,11 +224,6 @@ export namespace SocialNetworkUI {
              * Start to maintain the posts.
              * It should add new seen posts and remove gone posts.
              */
-            start(signal: AbortSignal): void
-        }
-
-        export interface AvatarProvider {
-            readonly avatarPosts: ObservableWeakMap<object, PostInfo>
             start(signal: AbortSignal): void
         }
     }

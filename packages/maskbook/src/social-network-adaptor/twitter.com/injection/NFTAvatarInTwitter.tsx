@@ -11,8 +11,9 @@ import {
     setOrClearAvatar,
     useNFTAvatar,
 } from '../../../components/InjectedComponents/NFTAvatar'
-import { getTwitterId } from '../utils/user'
-import { getTwitterAvatarId, updateAvatarImage } from '../utils/updateAvatarImage'
+import { updateAvatarImage } from '../utils/updateAvatarImage'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
+import { getAvatarId } from '../utils/user'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -68,14 +69,15 @@ const useStyles = makeStyles()((theme) => ({
 interface NFTAvatarInTwitterProps {}
 function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const { classes } = useStyles()
-    const [twitterId, setTwitterId] = useState(getTwitterId())
+    const identity = useCurrentVisitingIdentity()
     const [amount, setAmount] = useState('')
-    const _avatar = useNFTAvatar(twitterId)
+    const _avatar = useNFTAvatar(identity.identifier.userId)
     const { enqueueSnackbar } = useSnackbar()
-    const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>(undefined)
+    const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>(_avatar)
     const getParentDom = () =>
         searchTwitterAvatarSelector().querySelector<HTMLElement>('div > :nth-child(2) > div').evaluate()
-    const avatarId = getTwitterAvatarId(getParentDom())
+    const [avatarId, setAvatarId] = useState('')
+
     const onUpdate = useCallback(
         (data: NFTAVatarEvent) => {
             saveNFTAvatar(data.userId, data.avatarId, data.address, data.tokenId)
@@ -92,6 +94,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         },
         [enqueueSnackbar],
     )
+
     useEffect(() => {
         return MaskMessage.events.NFTAvatarUpdated.on((data) => {
             onUpdate(data)
@@ -99,17 +102,23 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     }, [])
 
     useEffect(() => {
+        const _avatarId = getAvatarId(identity.avatar ?? '')
+        setAvatarId(_avatarId)
+    }, [identity, identity.avatar])
+
+    useEffect(() => {
+        setAvatar(_avatar)
         const parent = getParentDom()
         if (!parent) return
+        if (!_avatar) return
         setAmount(_avatar?.amount ?? '0')
         updateAvatarImage(parent, _avatar?.image ?? '')
-        setAvatar(_avatar)
     }, [_avatar])
 
     const onClick = async () => {
         const parent = getParentDom()
         if (!parent) return
-        await setOrClearAvatar(twitterId)
+        await setOrClearAvatar(identity.identifier.userId)
         updateAvatarImage(parent)
         setAvatar(undefined)
     }

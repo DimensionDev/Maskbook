@@ -152,7 +152,7 @@ export const postsContentSelector = () =>
         }), // timeline page for new twitter
     )
 
-export const postAvatarsContentSelector = () => querySelectorAll('[data-testid="tweet"]')
+export const postAvatarsContentSelector = () => querySelectorAll('[data-testid="tweet"] > div')
 const base = querySelector<HTMLScriptElement>('#react-root + script')
 const handle = /"screen_name":"(.*?)"/
 const name = /"name":"(.*?)"/
