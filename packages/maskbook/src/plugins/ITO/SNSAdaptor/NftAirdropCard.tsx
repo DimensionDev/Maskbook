@@ -260,7 +260,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
                             <Typography className={classes.text}>
                                 {`${
                                     (now > campaignInfo.startTime * 1000 && now < campaignInfo.endTime * 1000) ||
-                                    !claimable
+                                    claimable
                                         ? campaignInfo.nfts.length
                                         : 0
                                 } ${campaignInfo.nfts.length > 1 ? 'Items' : 'Item'}`}
