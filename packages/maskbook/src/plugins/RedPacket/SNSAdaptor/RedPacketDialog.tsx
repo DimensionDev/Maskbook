@@ -4,7 +4,7 @@ import { usePortalShadowRoot, makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { RedPacketJSONPayload, DialogTabs, RedPacketRecord } from '../types'
+import { RedPacketJSONPayload, DialogTabs, RedPacketRecord, RpTypeTabs } from '../types'
 import { RedPacketRPC } from '../messages'
 import { RedPacketMetaKey } from '../constants'
 import { RedPacketCreateNew } from './RedPacketCreateNew'
@@ -44,6 +44,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     dialogContent: {
         padding: 0,
+    },
+    tabPaper: {
+        position: 'sticky',
+        top: 0,
+        zIndex: 5000,
     },
 }))
 
@@ -222,6 +227,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         setSettings(val)
     }, [])
 
+    const tokenState = useState(RpTypeTabs.ERC20)
+
+    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 540
+
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -230,6 +239,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     <RedPacketCreateNew
                         origin={settings}
                         onNext={onNext}
+                        state={tokenState}
                         onClose={onClose}
                         onChange={onChange}
                         SelectMenuProps={{ container }}
@@ -246,13 +256,16 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         state,
         classes: {
             focusTab: classes.focusTab,
+            tabPaper: classes.tabPaper,
         },
     }
 
     return (
         <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={onClose}>
             <DialogContent className={classes.dialogContent}>
-                {step === CreateRedPacketPageStep.NewRedPacketPage ? <AbstractTab height={520} {...tabProps} /> : null}
+                {step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                    <AbstractTab height={dialogContentHeight} {...tabProps} />
+                ) : null}
                 {step === CreateRedPacketPageStep.ConfirmPage ? (
                     <RedPacketConfirmDialog
                         onClose={onClose}

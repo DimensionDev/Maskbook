@@ -17,7 +17,8 @@ interface TabPanelProps extends BoxProps {
     label: string | React.ReactNode
 }
 
-export interface AbstractTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab'> {
+export interface AbstractTabProps
+    extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
     tabs: (Omit<TabPanelProps, 'height' | 'minHeight'> & {
         cb?: () => void
         disableFocusRipple?: boolean
@@ -40,7 +41,7 @@ export default function AbstractTab(props: AbstractTabProps) {
 
     return (
         <>
-            <Paper square elevation={0}>
+            <Paper square elevation={0} className={classes.tabPaper}>
                 <Tabs
                     className={classes.tabs}
                     classes={{

@@ -1,16 +1,10 @@
 import { makeStyles } from '@masknet/theme'
-import { useState } from 'react'
 import { RedPacketFormProps, RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../../../utils'
 
 import { IconURLs } from './IconURL'
-
-enum RpTypeTabs {
-    ERC20 = 0,
-    ERC721 = 1,
-}
 
 const useStyles = makeStyles()((theme) => ({
     tab: {
@@ -49,11 +43,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function RedPacketCreateNew(props: RedPacketFormProps) {
-    const { origin, onNext, onChange, onClose, SelectMenuProps } = props
+export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly [number, (next: number) => void] }) {
+    const { origin, onNext, onChange, onClose, SelectMenuProps, state } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const state = useState(RpTypeTabs.ERC20)
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -90,7 +83,7 @@ export function RedPacketCreateNew(props: RedPacketFormProps) {
     }
     return (
         <div className={classes.wrapper}>
-            <AbstractTab height={500} {...tabProps} />
+            <AbstractTab {...tabProps} />
         </div>
     )
 }
