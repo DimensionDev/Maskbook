@@ -1,8 +1,8 @@
 import type BigNumber from 'bignumber.js'
 import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@masknet/web3-shared'
-import type { TradeProvider } from '@masknet/public-api'
+import { TradeProvider, NetworkType } from '@masknet/public-api'
 
-export { TradeProvider, NetworkType } from '@masknet/public-api'
+export { TradeProvider, NetworkType }
 
 export enum WarningLevel {
     LOW = 1,

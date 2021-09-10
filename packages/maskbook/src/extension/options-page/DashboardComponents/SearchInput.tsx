@@ -7,7 +7,6 @@ const useStyles = makeStyles()((theme) => ({
     searchbox: {
         display: 'block',
         width: '100%',
-        boxSizing: 'border-box',
         border: `1px solid ${getMaskColor(theme).border}`,
         alignItems: 'center',
         boxSizing: 'border-box',
