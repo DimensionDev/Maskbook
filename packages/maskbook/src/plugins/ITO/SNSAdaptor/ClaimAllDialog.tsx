@@ -73,7 +73,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginBottom: theme.spacing(0.5),
     },
     tokenCard: {
-        width: '100%',
+        width: 535,
+        marginLeft: 'auto',
+        marginRight: 'auto',
         color: 'white',
         flexDirection: 'column',
         padding: 0,

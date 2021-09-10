@@ -19,11 +19,15 @@ import CloseIcon from '@material-ui/icons/Close'
 import classNames from 'classnames'
 import type { CampaignInfo } from '../types'
 
-const useStyles = makeStyles()((theme) => ({
+interface StyleProps {
+    claimable: boolean
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
         color: '#fff',
         width: 496,
-        height: 340,
+        height: props.claimable ? 340 : 250,
         padding: 20,
         borderRadius: 12,
         marginLeft: 'auto',
@@ -167,7 +171,9 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
     const currentChainId = useChainId()
     const { value: claimInfo, loading } = useSpaceStationClaimable(account)
     const claimable = Boolean(claimInfo?.claimable) && currentChainId === ChainId.Matic
-    const { classes } = useStyles()
+    const { classes } = useStyles({
+        claimable: claimable && now > campaignInfo.startTime * 1000 && now < campaignInfo.endTime * 1000,
+    })
     const [claimState, claimCallback] = useSpaceStationContractClaimCallback(campaignInfo!)
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const snackbarOptions = {
@@ -269,6 +275,11 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
                         </div>
                         <div>
                             <EthereumWalletConnectedBoundary
+                                ableToSendTx={
+                                    claimable &&
+                                    now > campaignInfo.startTime * 1000 &&
+                                    now < campaignInfo.endTime * 1000
+                                }
                                 classes={{
                                     connectWallet: classNames(classes.actionButton, classes.connectWallet),
                                     gasFeeButton: classNames(classes.actionButton, classes.connectWallet),
