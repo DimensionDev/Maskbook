@@ -1,4 +1,4 @@
-import { createLookupTableResolver } from '.'
+import { createLookupTableResolver } from './enum'
 import CHAINS from '../assets/chains.json'
 import { getRPCConstants } from '../constants'
 import { ChainId, NetworkType } from '../types'
