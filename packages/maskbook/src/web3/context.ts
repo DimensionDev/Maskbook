@@ -127,6 +127,7 @@ function createSubscriptionFromAsync<T>(
     let state = defaultValue
     const { subscribe, trigger } = getEventTarget()
     let isLoading = true
+    let isSubscribed = false
     const init = f()
         .then((v) => {
             state = v
@@ -139,12 +140,21 @@ function createSubscriptionFromAsync<T>(
             return state
         },
         subscribe: (sub) => {
+            if (isSubscribed) return noop
+            isSubscribed = true
             const a = subscribe(sub)
             const b = onChange(async () => {
                 state = await f()
                 sub()
             })
-            return () => void [a(), b()]
+            return () =>
+                void [
+                    a(),
+                    b(),
+                    () => {
+                        isSubscribed = false
+                    },
+                ]
         },
     }
 }
