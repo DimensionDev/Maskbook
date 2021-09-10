@@ -1,10 +1,5 @@
 import { createMaskSDKServer } from '@masknet/sdk'
-import Services from '../service'
-import './hmr'
+import './hmr-sdk'
+import { hmr_sdkServer } from './hmr-bridge'
 
-const maskSDK = createMaskSDKServer({
-    async persona_sign_web3(message) {
-        const result = await Services.Identity.signWithPersona({ message: String(message), method: 'eth' })
-        return result.signature.signature
-    },
-})
+const maskSDK = createMaskSDKServer(hmr_sdkServer)
