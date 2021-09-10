@@ -131,7 +131,6 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     )
     const onSubmit = useCallback(
         (contract: ERC721ContractDetailed) => {
-            console.log({ contract })
             setKeyword('')
             setDialog({
                 open: false,
