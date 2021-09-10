@@ -32,8 +32,8 @@ export async function updateV1ToV2(history: RedPacketHistory) {
                 contract_version: 1,
                 from: '',
             })
-            // Todo: remove the v1 database record after test pass?
-            // await RedPacketDatabase.remove('red-packet', history.rpid)
+            // TODO: remove the v1 database record after test pass?
+            // await RedPacketDatabase.remove('red-packet', history.txid)
         }
     }
 }

@@ -1,6 +1,7 @@
 import { omit } from 'lodash-es'
 import type { RedPacketNftRecordInDatabase, RedPacketNftRecord } from '../types'
 import { RedPacketDatabase } from './database'
+
 export async function getRedPacketNft(id: string) {
     const record = await RedPacketDatabase.get('red-packet-nft', id)
     return record ? RedPacketNftRecordOutDB(record) : undefined
