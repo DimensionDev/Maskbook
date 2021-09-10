@@ -1,13 +1,10 @@
 import { memo } from 'react'
 import { Box, Button, TableCell, TableRow, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { FormattedCurrency } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Asset, CurrencyType, formatBalance, formatCurrency, getTokenUSDValue, pow10 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
-import { useNavigate } from 'react-router'
-import { RoutePaths } from '../../../../type'
 import { useDashboardI18N } from '../../../../locales'
-import { TokenIcon } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -26,14 +23,13 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TokenTableRowProps {
     asset: Asset
+    onSwap(): void
+    onSend(): void
 }
 
-export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
+export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const navigate = useNavigate()
-
-    const handleSend = () => navigate(RoutePaths.WalletsTransfer, { state: { token: asset.token } })
 
     return (
         <TableRow>
@@ -72,10 +68,10 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
                 </Typography>
             </TableCell>
             <TableCell sx={{ minWidth: '200px' }} className={classes.cell} align="center" variant="body">
-                <Button variant="outlined" color="secondary" sx={{ marginRight: 1 }} onClick={handleSend}>
+                <Button variant="outlined" color="secondary" sx={{ marginRight: 1 }} onClick={onSend}>
                     {t.wallets_balance_Send()}
                 </Button>
-                <Button variant="outlined" color="secondary">
+                <Button variant="outlined" color="secondary" onClick={onSwap}>
                     {t.wallets_balance_Swap()}
                 </Button>
             </TableCell>
