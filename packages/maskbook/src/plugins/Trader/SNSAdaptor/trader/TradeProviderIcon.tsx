@@ -1,4 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
+import { TradeProvider } from '@masknet/public-api'
 import { makeStyles } from '@masknet/theme'
 import { BalancerIcon } from '../../../../resources/BalancerIcon'
 import { SashimiSwapIcon } from '../../../../resources/SashimiSwapIcon'
@@ -7,7 +8,6 @@ import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { ZRXIcon } from '../../../../resources/ZRXIcon'
 import { DODOIcon } from '../../../../resources/DODOIcon'
 import { resolveTradeProviderName } from '../../pipes'
-import { TradeProvider } from '../../types'
 
 const quickswapIcon = new URL('../../../../resources/quickswap.png', import.meta.url).toString()
 const pancakeswapIcon = new URL('../../../../resources/pancakeswap.png', import.meta.url).toString()
