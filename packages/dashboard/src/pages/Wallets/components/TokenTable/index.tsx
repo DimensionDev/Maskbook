@@ -58,6 +58,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+// todo: show asset by chain
 export const TokenTable = memo(() => {
     const navigate = useNavigate()
 
