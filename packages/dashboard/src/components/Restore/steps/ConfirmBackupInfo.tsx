@@ -9,29 +9,30 @@ import type { BackupFileInfo } from '../../../pages/Settings/type'
 
 interface ConfirmBackupInfoProps extends StepCommonProps {
     backupInfo: BackupFileInfo
-    account: string
-    onNext(downloadLink: string, account: string, password: string): Promise<string | null>
+    onNext(password: string): Promise<string | null>
 }
 
-export const ConfirmBackupInfo = memo(({ backupInfo, onNext, account, toStep }: ConfirmBackupInfoProps) => {
+export const ConfirmBackupInfo = memo(({ backupInfo, onNext }: ConfirmBackupInfoProps) => {
     const t = useDashboardI18N()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
 
     const handleNext = async () => {
-        const result = await onNext(backupInfo.downloadURL, account, password)
+        const result = await onNext(password)
         if (result) {
             setErrorMessage(result)
         }
     }
 
-    return backupInfo ? (
+    if (!backupInfo) return null
+
+    return (
         <>
             <Box>
                 <BackupInfoCard info={backupInfo} />
                 <Box sx={{ mt: 4 }}>
                     <MaskTextField
-                        label={t.sign_in_account_cloud_backup_password}
+                        label={t.sign_in_account_cloud_backup_password()}
                         type="password"
                         onChange={(e) => setPassword(e.currentTarget.value)}
                         error={!!errorMessage}
@@ -45,5 +46,5 @@ export const ConfirmBackupInfo = memo(({ backupInfo, onNext, account, toStep }: 
                 </Button>
             </ButtonContainer>
         </>
-    ) : null
+    )
 })

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { User } from 'react-feather'
-import { useI18N, compressBackupFile, encodeArrayBuffer, encodeText } from '../../../../utils'
+import { useI18N, compressBackupFile } from '../../../../utils'
+import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 import { QRCode } from '@masknet/shared'
 import Services from '../../../service'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'

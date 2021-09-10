@@ -1,7 +1,7 @@
 import { Chip } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { TradeProvider } from '../../types'
+import { TradeProvider } from '@masknet/public-api'
 import { resolveTradeProviderName } from '../../pipes'
 import { TradeProviderIcon } from './TradeProviderIcon'
 import { Flags } from '../../../../utils/flags'

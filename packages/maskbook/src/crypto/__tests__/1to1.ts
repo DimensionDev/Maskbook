@@ -1,5 +1,5 @@
 import * as crypto38 from '../crypto-alpha-38'
-import { decodeText } from '../../utils/type-transform/String-ArrayBuffer'
+import { decodeText } from '@dimensiondev/kit'
 import { CryptoWorker } from '../../modules/workers'
 async function test1to1(text: string = Math.random().toString()) {
     const alice = await CryptoWorker.generate_ec_k256_pair()

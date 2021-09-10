@@ -1,4 +1,4 @@
-import { encodeText } from '../type-transform/String-ArrayBuffer'
+import { encodeText } from '@dimensiondev/kit'
 import { CryptoWorker } from '../../modules/workers'
 import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { derive_AES_GCM_256_Key_From_PBKDF2 } from '../../modules/CryptoAlgorithm/helper'

@@ -1,9 +1,10 @@
 import { Box, AvatarGroup, Link } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
-import { Hop, TradeProvider } from '../../types'
-import { resolveTradePairLink } from '../../pipes'
 import { useNetworkType } from '@masknet/web3-shared'
+import { TradeProvider } from '@masknet/public-api'
+import type { Hop } from '../../types'
+import { resolveTradePairLink } from '../../pipes'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

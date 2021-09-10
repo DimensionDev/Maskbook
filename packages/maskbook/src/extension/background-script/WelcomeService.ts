@@ -1,4 +1,4 @@
-import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
+import { encodeText } from '@dimensiondev/kit'
 import { delay } from '../../utils/utils'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey } from '../../database'
@@ -62,6 +62,17 @@ export async function downloadBackup<T>(obj: T, type?: 'txt' | 'json') {
     const { buffer, mimeType, fileName } = await createBackupInfo(obj, type)
     saveAsFileFromBuffer(buffer, mimeType, fileName)
     return obj
+}
+
+export async function downloadBackupV2(buffer: ArrayBuffer) {
+    const date = new Date()
+    const today = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
+        .getDate()
+        .toString()
+        .padStart(2, '0')}`
+    const fileName = `maskbook-keystore-backup-${today}.bin`
+
+    saveAsFileFromBuffer(buffer, 'application/octet-stream', fileName)
 }
 
 export async function createBackupFile(
