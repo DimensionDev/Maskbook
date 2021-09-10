@@ -1,4 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
+import { TradeProvider } from '@masknet/public-api'
 import { getTraderConstants, useChainId } from '@masknet/web3-shared'
 import { createContext, useMemo } from 'react'
 import {
@@ -13,7 +14,7 @@ import {
     UNISWAP_BASE_AGAINST_TOKENS,
     UNISWAP_CUSTOM_BASES,
 } from '../constants'
-import { TradeContext as TradeContext_, TradeProvider } from '../types'
+import type { TradeContext as TradeContext_ } from '../types'
 
 export const TradeContext = createContext<TradeContext_ | null>(null)
 
