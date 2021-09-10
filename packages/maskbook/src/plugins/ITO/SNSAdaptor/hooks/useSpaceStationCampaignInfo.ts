@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import { getCampaignInfo } from '../../Worker/apis/spaceStationGalaxy'
+import { PluginITO_RPC } from '../../messages'
 
 export function useSpaceStationCampaignInfo() {
-    return useAsyncRetry(getCampaignInfo, [])
+    return useAsyncRetry(PluginITO_RPC.getCampaignInfo, [])
 }
