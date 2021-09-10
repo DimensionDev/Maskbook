@@ -9,7 +9,6 @@ import {
     EthereumRpcType,
     formatWeiToGwei,
     getChainFromChainId,
-    getCoingeckoCoinId,
     useChainId,
     useNativeTokenDetailed,
 } from '@masknet/web3-shared'
@@ -90,7 +89,8 @@ export const Prior1559GasSetting = memo(() => {
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeTokenDetailed()
-    const nativeTokenPrice = useNativeTokenPrice(getCoingeckoCoinId(nativeToken?.symbol.toLowerCase() ?? '') ?? '')
+
+    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId ?? 0)
 
     //#region Get gas now from debank
     const { value: gasNow } = useAsync(async () => {
