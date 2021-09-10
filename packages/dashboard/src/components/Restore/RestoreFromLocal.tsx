@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Box, Button, Card } from '@material-ui/core'
-import { MaskTextField, useSnackbar } from '@masknet/theme'
+import { MaskPasswordTextField, useSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
@@ -109,9 +109,8 @@ export const RestoreFromLocal = memo(() => {
                 {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
                 {restoreStatus === RestoreStatus.Decrypting && (
                     <Box sx={{ mt: 4 }}>
-                        <MaskTextField
+                        <MaskPasswordTextField
                             placeholder={t.sign_in_account_cloud_backup_password()}
-                            type="password"
                             onChange={(e) => setPassword(e.currentTarget.value)}
                             error={!!error}
                             helperText={error}

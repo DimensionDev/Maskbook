@@ -3,7 +3,7 @@ import { PluginServices, Services } from '../../../../API'
 import { useAsync, useAsyncFn } from 'react-use'
 import BackupContentSelector, { BackupContentCheckedStatus } from '../BackupContentSelector'
 import { useDashboardI18N } from '../../../../locales'
-import { MaskDialog, MaskTextField, useSnackbar } from '@masknet/theme'
+import { MaskDialog, MaskPasswordTextField, useSnackbar } from '@masknet/theme'
 import { Box } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import LoadingButton from '@material-ui/lab/LoadingButton'
@@ -119,11 +119,10 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
                 <Box sx={{ padding: '0 24px 24px' }}>
                     {previewInfo ? <BackupContentSelector json={previewInfo} onChange={handleContentChange} /> : null}
 
-                    <MaskTextField
+                    <MaskPasswordTextField
                         fullWidth
                         value={backupPassword}
                         onChange={(event) => setBackupPassword(event.target.value)}
-                        type="password"
                         placeholder={t.settings_label_backup_password()}
                         sx={{ marginBottom: '24px' }}
                         error={incorrectBackupPassword}
@@ -131,11 +130,10 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
                     />
 
                     {showPassword.wallet ? (
-                        <MaskTextField
+                        <MaskPasswordTextField
                             fullWidth
                             value={paymentPassword}
                             onChange={(event) => setPaymentPassword(event.target.value)}
-                            type="password"
                             placeholder={t.settings_label_payment_password()}
                             sx={{ marginBottom: '24px' }}
                             error={incorrectPaymentPassword}
