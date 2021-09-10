@@ -11,6 +11,7 @@ const useStyles = makeStyles()({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        backgroundColor: '#ffffff',
     },
     setting: {
         stroke: '#1C68F3',

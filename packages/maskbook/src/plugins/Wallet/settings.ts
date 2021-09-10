@@ -11,8 +11,6 @@ import {
 } from '@masknet/web3-shared'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { isEqual } from 'lodash-es'
-import { connectGasNow } from './apis/gasnow'
-import { startEffects } from '../../utils/side-effects'
 
 export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+selectedWalletAddress`, '', {
     primary: () => 'DO NOT DISPLAY IT IN UI',
@@ -146,6 +144,3 @@ export const currentTokenPricesSettings = createGlobalSettings<CryptoPrice>(
     },
     (a, b) => isEqual(a, b),
 )
-
-const effect = startEffects(import.meta.webpackHot)
-effect(connectGasNow)

@@ -209,13 +209,12 @@ export function DepositDialog() {
             (ev) => {
                 if (!ev.open) {
                     retryLoadTokenBalance()
-                    openSwapDialog({ open: false })
                     if (depositState.type === TransactionStateType.HASH) onClose()
                 }
                 if (depositState.type === TransactionStateType.HASH) setRawAmount('')
                 resetDepositCallback()
             },
-            [id, depositState, openSwapDialog, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
+            [id, depositState, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
         ),
     )
 

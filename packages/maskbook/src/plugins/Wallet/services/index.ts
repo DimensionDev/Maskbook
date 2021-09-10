@@ -13,5 +13,11 @@ export * from './keystore'
 export * from './chain'
 export * from './domain'
 export * from './cloud'
+export * from './estimateGasFee'
 export * from './tokenPrice'
-export { decryptWallet, createEncryptedWalletStore } from '../database/decrypt'
+export {
+    decryptWallet,
+    createEncryptedWalletStore,
+    hasEncryptedWalletStore,
+    getEncryptedWalletStore,
+} from '../database/decrypt'

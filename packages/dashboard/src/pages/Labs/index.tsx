@@ -24,6 +24,7 @@ import { PluginMessages } from '../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { Services } from '../../API'
 import { PLUGIN_IDS } from './constants'
+import { useLocation } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -40,6 +41,7 @@ const useStyles = makeStyles()((theme) => ({
 export default function Plugins() {
     const t = useDashboardI18N()
     const { classes } = useStyles()
+    const location = useLocation()
     const [openTrendSetting, setOpenTrendSetting] = useState(false)
     const [openSwapSetting, setOpenSwapSetting] = useState(false)
     const [pluginStatus, setPluginStatus] = useState({
@@ -102,6 +104,15 @@ export default function Plugins() {
             setPluginStatus((status) => ({ ...status, [id]: enabled }))
         })
     }, [])
+
+    useEffect(() => {
+        const open = new URLSearchParams(location.search).get('open')
+        if (open === 'Transak') {
+            openTransakDialog()
+        } else if (open === 'Swap') {
+            openSwapDialog()
+        }
+    }, [location.search, openTransakDialog, openSwapDialog])
 
     return (
         <PageFrame title={t.labs()}>

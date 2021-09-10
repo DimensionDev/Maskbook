@@ -60,13 +60,18 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     }, [])
 
     const { value } = useEthereumAddress(nickname, twitterId, bioDescription)
-    if (!show || !value) return null
-    const { type, name, address } = value
+
+    if (!show) return null
+
+    const { type, name, address } = value ?? {}
+
     if (!address)
         return (
-            <Box className={classes.text} display="flex" alignItems="center" justifyContent="center">
-                <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
-            </Box>
+            <div className={classes.root}>
+                <Box className={classes.text} display="flex" alignItems="center" justifyContent="center">
+                    <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
+                </Box>
+            </div>
         )
     return (
         <div className={classes.root}>

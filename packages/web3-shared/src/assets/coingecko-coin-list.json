@@ -1,0 +1,32 @@
+[
+    {
+        "id": "ethereum",
+        "symbol": "eth",
+        "name": "Ethereum"
+    },
+    {
+        "id": "binancecoin",
+        "symbol": "bnb",
+        "name": "Binance Coin"
+    },
+    {
+        "id": "xdai",
+        "symbol": "xdai",
+        "name": "xDAI"
+    },
+    {
+        "id": "matic-network",
+        "symbol": "matic",
+        "name": "Polygon"
+    },
+    {
+        "id": "near",
+        "symbol": "near",
+        "name": "Near"
+    },
+    {
+        "id": "flow",
+        "symbol": "flow",
+        "name": "Flow"
+    }
+]

@@ -8,6 +8,9 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../service'
 import { LoadingButton } from '@material-ui/lab'
+import { useHistory, useLocation } from 'react-router'
+import { PopupRoutes } from '../../../index'
+import { useRejectHandler } from '../hooks/useRejectHandler'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -61,6 +64,8 @@ const useStyles = makeStyles()(() => ({
 
 const SignRequest = memo(() => {
     const { t } = useI18N()
+    const history = useHistory()
+    const location = useLocation()
     const { classes } = useStyles()
     const { value } = useUnconfirmedRequest()
     const wallet = useWallet()
@@ -80,10 +85,20 @@ const SignRequest = memo(() => {
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (value) {
+            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
+
             await WalletRPC.deleteUnconfirmedRequest(value.payload)
-            await Services.Ethereum.request(value.payload)
+            await Services.Ethereum.confirmRequest(value.payload)
+
+            if (toBeClose) {
+                window.close()
+            } else {
+                history.replace(PopupRoutes.Wallet)
+            }
         }
-    }, [value])
+    }, [value, location.search, history])
+
+    const handleReject = useRejectHandler(() => history.replace(PopupRoutes.Wallet), value)
 
     return (
         <main className={classes.container}>
@@ -95,7 +110,7 @@ const SignRequest = memo(() => {
                 </Typography>
             </div>
             <Typography className={classes.secondary} style={{ marginTop: 20 }}>
-                Message:
+                {t('popups_wallet_signature_request_message')}:
             </Typography>
             <Typography className={classes.message}>{data}</Typography>
             <div className={classes.controller}>
@@ -103,7 +118,7 @@ const SignRequest = memo(() => {
                     variant="contained"
                     className={classes.button}
                     style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
-                    onClick={() => window.close()}>
+                    onClick={handleReject}>
                     {t('cancel')}
                 </Button>
                 <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>

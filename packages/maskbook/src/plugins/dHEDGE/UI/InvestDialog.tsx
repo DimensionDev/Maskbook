@@ -166,13 +166,12 @@ export function InvestDialog() {
             (ev) => {
                 if (!ev.open) {
                     retryLoadTokenBalance()
-                    openSwapDialog({ open: false })
                     if (investState.type === TransactionStateType.HASH) onClose()
                 }
                 if (investState.type === TransactionStateType.HASH) setRawAmount('')
                 resetInvestCallback()
             },
-            [id, investState, openSwapDialog, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
+            [id, investState, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
         ),
     )
 
