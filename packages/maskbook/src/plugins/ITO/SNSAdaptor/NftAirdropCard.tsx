@@ -74,6 +74,8 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-block',
         width: 65,
         height: 85,
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+        borderRadius: 5,
         marginRight: theme.spacing(1),
     },
     gallery: {
@@ -133,7 +135,7 @@ const useStyles = makeStyles()((theme) => ({
     snackbarTip: {
         fontSize: 13,
         display: 'flex',
-        alignItems: 'end',
+        alignItems: 'self-start',
     },
     snackbarIcon: {
         marginLeft: theme.spacing(0.3),
