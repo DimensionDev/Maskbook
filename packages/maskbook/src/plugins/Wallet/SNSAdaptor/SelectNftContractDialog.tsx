@@ -1,7 +1,13 @@
 import { useCallback, useState, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent, List, ListItem, Typography, Box, Link } from '@material-ui/core'
-import { ChainId, ERC721ContractDetailed, resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared'
+import {
+    ChainId,
+    ERC721ContractDetailed,
+    resolveAddressLinkOnExplorer,
+    useChainId,
+    useAccount,
+} from '@masknet/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'
@@ -12,12 +18,12 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import Fuse from 'fuse.js'
 import { useERC721ContractDetailed } from '@masknet/web3-shared'
 import classNames from 'classnames'
-import { ERC721_CONTRACT_LIST } from './ERC721ContractList'
+import { useNFTscanFindAssets } from '../hooks/useNFTscanFindAssets'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
-        width: '100%',
-        margin: theme.spacing(1, 0, 2),
+        width: '95%',
+        margin: theme.spacing(1, 0, 2, 0.8),
     },
     list: {
         scrollbarWidth: 'none',
@@ -90,7 +96,16 @@ const useStyles = makeStyles()((theme) => ({
     contractName: {
         marginBottom: 20,
     },
+    balance: {
+        position: 'absolute',
+        right: 25,
+    },
 }))
+
+type NFTAsset = {
+    contractDetailed: ERC721ContractDetailed
+    balance?: number
+}
 
 export interface SelectNftContractDialogProps extends withClasses<never> {}
 
@@ -102,8 +117,9 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
-
-    const contractList = chainId === ChainId.Mainnet ? ERC721_CONTRACT_LIST : []
+    const account = useAccount()
+    const { value: assets } = useNFTscanFindAssets(account)
+    const contractList = chainId === ChainId.Mainnet && assets ? assets : []
 
     //#region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
@@ -142,9 +158,9 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                 threshold: 0.45,
                 minMatchCharLength: 3,
                 keys: [
-                    { name: 'name', weight: 0.5 },
-                    { name: 'symbol', weight: 0.8 },
-                    { name: 'address', weight: 1 },
+                    { name: 'contractDetailed.name', weight: 0.5 },
+                    { name: 'contractDetailed.symbol', weight: 0.8 },
+                    { name: 'contractDetailed.address', weight: 1 },
                 ],
             }),
         [contractList],
@@ -156,13 +172,20 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_nft_contract')} maxWidth="xs">
             <DialogContent className={classes.dialogContent}>
-                <SearchInput
-                    label={t('add_nft_contract_search_hint')}
-                    onChange={(keyword) => {
-                        setKeyword(keyword)
-                    }}
+                <div className={classes.search}>
+                    <SearchInput
+                        label={t('add_nft_contract_search_hint')}
+                        onChange={(keyword) => {
+                            setKeyword(keyword)
+                        }}
+                    />
+                </div>
+                <SearchResultBox
+                    keyword={keyword}
+                    contractList={contractList}
+                    searchedTokenList={searchedTokenList}
+                    onSubmit={onSubmit}
                 />
-                <SearchResultBox keyword={keyword} searchedTokenList={searchedTokenList} onSubmit={onSubmit} />
             </DialogContent>
         </InjectedDialog>
     )
@@ -170,16 +193,15 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
 export interface SearchResultBoxProps extends withClasses<never> {
     keyword: string
-    searchedTokenList: ERC721ContractDetailed[]
+    contractList: NFTAsset[]
+    searchedTokenList: NFTAsset[]
     onSubmit: (contract: ERC721ContractDetailed) => void
 }
 
 function SearchResultBox(props: SearchResultBoxProps) {
-    const { keyword, searchedTokenList, onSubmit } = props
+    const { keyword, searchedTokenList, onSubmit, contractList } = props
     const { classes } = useStyles()
     const isValid = EthereumAddress.isValid(keyword)
-    const chainId = useChainId()
-    const contractList = chainId === ChainId.Mainnet ? ERC721_CONTRACT_LIST : []
     const { value: contractDetailed, loading } = useERC721ContractDetailed(keyword)
     const { t } = useI18N()
     return (
@@ -197,7 +219,7 @@ function SearchResultBox(props: SearchResultBoxProps) {
                         </Box>
                     ) : (
                         <List>
-                            <ContractListItem key="0" onSubmit={onSubmit} contract={contractDetailed} />
+                            <ContractListItem key="0" onSubmit={onSubmit} contract={{ contractDetailed }} />
                         </List>
                     )}
                 </div>
@@ -215,7 +237,7 @@ function SearchResultBox(props: SearchResultBoxProps) {
 }
 
 interface ContractListItemProps {
-    contract: ERC721ContractDetailed
+    contract: NFTAsset
     onSubmit: (contract: ERC721ContractDetailed) => void
 }
 
@@ -226,17 +248,25 @@ function ContractListItem(props: ContractListItemProps) {
 
     return (
         <div style={{ position: 'relative' }}>
-            <ListItem className={classes.listItem} onClick={() => onSubmit(contract)}>
-                {contract.iconURL ? <img className={classes.icon} src={contract.iconURL} /> : null}
+            <ListItem className={classes.listItem} onClick={() => onSubmit(contract.contractDetailed)}>
+                {contract.contractDetailed.iconURL ? (
+                    <img className={classes.icon} src={contract.contractDetailed.iconURL} />
+                ) : null}
                 <Typography className={classes.contractName}>
-                    {contract.name} ({contract.symbol})
+                    {contract.contractDetailed.name}{' '}
+                    {contract.contractDetailed.symbol ? '(' + contract.contractDetailed.symbol + ')' : ''}
                 </Typography>
+                {contract.balance ? <Typography className={classes.balance}>{contract.balance}</Typography> : null}
             </ListItem>
             <Typography>
-                <div className={classNames(classes.address, contract.iconURL ? '' : classes.addressNoImage)}>
-                    <span onClick={() => onSubmit(contract)}>{contract.address}</span>
+                <div
+                    className={classNames(
+                        classes.address,
+                        contract.contractDetailed.iconURL ? '' : classes.addressNoImage,
+                    )}>
+                    <span onClick={() => onSubmit(contract.contractDetailed)}>{contract.contractDetailed.address}</span>
                     <Link
-                        href={resolveAddressLinkOnExplorer(chainId, contract.address)}
+                        href={resolveAddressLinkOnExplorer(chainId, contract.contractDetailed.address)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <OpenInNewIcon className={classes.openIcon} fontSize="small" />

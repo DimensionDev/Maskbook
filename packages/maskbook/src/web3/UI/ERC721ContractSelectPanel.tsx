@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
-import { ERC721ContractDetailed, useERC721ContractBalance, useAccount } from '@masknet/web3-shared'
+import { ERC721ContractDetailed, useERC721ContractBalance, useAccount, isSameAddress } from '@masknet/web3-shared'
 import classNames from 'classnames'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, Typography, CircularProgress } from '@material-ui/core'
@@ -9,6 +9,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { SelectNftContractDialogEvent, WalletMessages } from '../../plugins/Wallet/messages'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useI18N } from '../../utils'
+import { useNFTscanFindAssets } from '../../plugins/Wallet/hooks/useNFTscanFindAssets'
 
 interface StyleProps {
     hasIcon: boolean
@@ -70,8 +71,18 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, contract } = props
     const account = useAccount()
     const { classes } = useStyles({ hasIcon: Boolean(contract?.iconURL) })
-    const { value: balance, loading } = useERC721ContractBalance(contract?.address, account)
+    const { value: balanceFromChain, loading: loadingFromChain } = useERC721ContractBalance(contract?.address, account)
+    const { value: assets, loading: loadingFromNFTscan } = useNFTscanFindAssets(account)
+
     const { t } = useI18N()
+
+    const balanceFromNFTscan = assets
+        ? assets.find((asset) => isSameAddress(asset.contractDetailed.address, contract?.address))?.balance
+        : undefined
+
+    const balance = balanceFromChain ?? balanceFromNFTscan
+
+    const loading = (loadingFromChain || loadingFromNFTscan) && !balance && !balanceFromNFTscan
 
     //#region select contract
     const [id] = useState(uuid())

@@ -168,11 +168,11 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         setExistTokenDetailedList([])
         clearTokenDetailedOwnerList()
         setOpenConfirmDialog(false)
-    }, [setExistTokenDetailedList, clearTokenDetailedOwnerList, setOpenConfirmDialog, setOffset])
+    }, [clearTokenDetailedOwnerList, setOffset])
 
     const clearContract = useCallback(() => {
         setContract(undefined)
-    }, [setContract])
+    }, [])
 
     useEffect(() => {
         clearToken()

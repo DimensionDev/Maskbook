@@ -217,7 +217,8 @@
         "counterparty",
         "jailbroken",
         "misoperation",
-        "majeure"
+        "majeure",
+        "nftscan"
     ],
     "ignoreWords": [
         "cryptopunks",

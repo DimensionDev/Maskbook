@@ -163,6 +163,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     selectWrapperImg: {
         maxWidth: '100%',
+        minHeight: 160,
     },
     selectWrapperNftNameWrapper: {
         width: '100%',
