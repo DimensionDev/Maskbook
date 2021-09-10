@@ -11,8 +11,8 @@ export interface RedPacketNftInPostProps {
 export function RedPacketNftInPost({ payload }: RedPacketNftInPostProps) {
     useEffect(() => {
         RedPacketRPC.updateRedPacketNft({
-            type: 'red-packet-nft',
             id: payload.txid,
+            type: 'red-packet-nft',
             password: payload.privateKey,
             contract_version: payload.contractVersion,
         })
