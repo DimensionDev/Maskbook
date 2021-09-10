@@ -4,13 +4,16 @@ import { Box, Tab } from '@material-ui/core'
 import { useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@material-ui/lab'
 import { TransferERC20 } from './TransferERC20'
-import { useNativeTokenDetailed } from '@masknet/web3-shared'
+import { FungibleTokenDetailed, useNativeTokenDetailed } from '@masknet/web3-shared'
+import { useLocation } from 'react-router-dom'
 
 export const Transfer = memo(() => {
+    // todo: token and chain
+    const { state } = useLocation() as { state: { token: FungibleTokenDetailed } }
     const { value: nativeToken } = useNativeTokenDetailed()
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collections')
 
-    if (!nativeToken) return null
+    if (!nativeToken && !state.token) return null
 
     return (
         <ContentContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>
@@ -21,7 +24,7 @@ export const Transfer = memo(() => {
                         <Tab label="Collections" value={tabs.collections} />
                     </TabList>
                     <TabPanel value={tabs.tokens}>
-                        <TransferERC20 token={nativeToken} />
+                        <TransferERC20 token={state.token || nativeToken} />
                     </TabPanel>
                     <TabPanel value={tabs.collections}>todo</TabPanel>
                 </TabContext>

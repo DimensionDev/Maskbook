@@ -32,6 +32,9 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
+
+    const handleSend = () => navigate(RoutePaths.WalletsTransfer, { state: { token: asset.token } })
+
     return (
         <TableRow>
             <TableCell className={classes.cell} align="center" variant="body">
@@ -69,11 +72,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
                 </Typography>
             </TableCell>
             <TableCell sx={{ minWidth: '200px' }} className={classes.cell} align="center" variant="body">
-                <Button
-                    variant="outlined"
-                    color="secondary"
-                    sx={{ marginRight: 1 }}
-                    onClick={() => navigate(RoutePaths.WalletsTransfer)}>
+                <Button variant="outlined" color="secondary" sx={{ marginRight: 1 }} onClick={handleSend}>
                     {t.wallets_balance_Send()}
                 </Button>
                 <Button variant="outlined" color="secondary">
