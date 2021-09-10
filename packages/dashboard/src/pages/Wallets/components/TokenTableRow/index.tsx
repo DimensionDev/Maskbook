@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: theme.typography.pxToRem(14),
     },
     cell: {
-        padding: '16px 28px',
+        padding: theme.spacing(2),
         border: 'none',
     },
 }))
@@ -68,7 +68,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset }) => {
                     )}
                 </Typography>
             </TableCell>
-            <TableCell className={classes.cell} align="center" variant="body">
+            <TableCell sx={{ minWidth: '200px' }} className={classes.cell} align="center" variant="body">
                 <Button
                     variant="outlined"
                     color="secondary"
