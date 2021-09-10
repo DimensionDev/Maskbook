@@ -1,7 +1,8 @@
 import { safeUnreachable } from '@dimensiondev/kit'
+import { TradeProvider } from '@masknet/public-api'
 import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../../Wallet/settings'
-import { TagType, TradeProvider } from '../../types'
+import type { TagType } from '../../types'
 
 export async function getAvailableTraderProviders(type?: TagType, keyword?: string) {
     const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)

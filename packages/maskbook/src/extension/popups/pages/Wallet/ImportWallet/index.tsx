@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import { Tab, Tabs, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useForm, Controller } from 'react-hook-form'
@@ -11,8 +11,8 @@ import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useAsyncFn } from 'react-use'
+import { WalletMessages, WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { useSnackbar } from '@masknet/theme'
 import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
@@ -106,24 +106,35 @@ const ImportWallet = memo(() => {
     const [keyStorePassword, setKeyStorePassword] = useState('')
     const [privateKey, setPrivateKey] = useState('')
 
+    const {
+        value: hasEncryptedWallet,
+        retry,
+        loading: getHasEncryptedWalletLoading,
+    } = useAsyncRetry(async () => WalletRPC.hasEncryptedWalletStore(), [])
+
+    useEffect(() => {
+        return WalletMessages.events.walletLockStatusUpdated.on(retry)
+    }, [retry])
+
     const schema = useMemo(() => {
-        return zod
-            .object({
-                name: zod.string().min(1).max(12),
-                password: zod
-                    .string()
-                    .min(8)
-                    .max(20)
-                    .refine((input) => /[A-Z]/.test(input), t('popups_wallet_password_uppercase_tip'))
-                    .refine((input) => /[a-z]/.test(input), t('popups_wallet_password_lowercase_tip'))
-                    .refine((input) => /\d/.test(input), t('popups_wallet_password_number_tip'))
-                    .refine((input) => /[^\dA-Za-z]/.test(input), t('popups_wallet_password_special_character_tip')),
-                confirm: zod.string().min(8).max(20),
-            })
-            .refine((data) => data.password === data.confirm, {
-                message: t('popups_wallet_password_dont_match'),
-                path: ['confirm'],
-            })
+        // const passwordRule = zod
+        //     .string()
+        //     .min(8)
+        //     .max(20)
+        //     .refine((input) => /[A-Z]/.test(input), t('popups_wallet_password_uppercase_tip'))
+        //     .refine((input) => /[a-z]/.test(input), t('popups_wallet_password_lowercase_tip'))
+        //     .refine((input) => /\d/.test(input), t('popups_wallet_password_number_tip'))
+        //     .refine((input) => /[^\dA-Za-z]/.test(input), t('popups_wallet_password_special_character_tip'))
+        const confirmRule = zod.string().min(8).max(20)
+        return zod.object({
+            name: zod.string().min(1).max(12),
+            // password: hasEncryptedWallet ? passwordRule.optional() : passwordRule,
+            // confirm: hasEncryptedWallet ? confirmRule.optional() : confirmRule,
+        })
+        // .refine((data) => hasEncryptedWallet ?? data.password === data.confirm, {
+        //     message: t('popups_wallet_password_dont_match'),
+        //     path: ['confirm'],
+        // })
     }, [])
 
     const {
@@ -135,8 +146,8 @@ const ImportWallet = memo(() => {
         resolver: zodResolver(schema),
         defaultValues: {
             name: '',
-            password: '',
-            confirm: '',
+            // password: '',
+            // confirm: '',
         },
     })
 
@@ -144,7 +155,7 @@ const ImportWallet = memo(() => {
         async (data: zod.infer<typeof schema>) => {
             switch (currentTab) {
                 case ImportWalletTab.Mnemonic:
-                    const params = query({ mnemonic })
+                    const params = query({ mnemonic, name: data.name })
                     history.replace({
                         pathname: PopupRoutes.AddDeriveWallet,
                         search: `?${params}`,
@@ -200,7 +211,7 @@ const ImportWallet = memo(() => {
     return (
         <div className={classes.container}>
             <div className={classes.header}>
-                <Typography className={classes.title}>{t('import_failed')}</Typography>
+                <Typography className={classes.title}>{t('plugin_wallet_import_wallet')}</Typography>
                 <NetworkSelector />
             </div>
             <form className={classes.form}>
@@ -221,40 +232,44 @@ const ImportWallet = memo(() => {
                         name="name"
                     />
                 </div>
-                <div style={{ marginTop: 16 }}>
-                    <Typography className={classes.label}>{t('popups_wallet_payment_password')}</Typography>
-                    <Controller
-                        control={control}
-                        render={({ field }) => (
-                            <StyledInput
-                                {...field}
-                                classes={{ root: classes.textField }}
-                                type="password"
-                                variant="filled"
-                                placeholder={t('popups_wallet_payment_password')}
-                                error={!!errors.password?.message}
-                                helperText={errors.password?.message}
-                            />
-                        )}
-                        name="password"
-                    />
-                    <Controller
-                        render={({ field }) => (
-                            <StyledInput
-                                classes={{ root: classes.textField }}
-                                {...field}
-                                error={!!errors.confirm?.message}
-                                helperText={errors.confirm?.message}
-                                type="password"
-                                variant="filled"
-                                placeholder="Re-enter the payment password"
-                            />
-                        )}
-                        name="confirm"
-                        control={control}
-                    />
-                </div>
-                <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>
+                {/*{!getHasEncryptedWalletLoading && !hasEncryptedWallet ? (*/}
+                {/*    <>*/}
+                {/*        <div style={{ marginTop: 16 }}>*/}
+                {/*            <Typography className={classes.label}>{t('popups_wallet_payment_password')}</Typography>*/}
+                {/*            <Controller*/}
+                {/*                control={control}*/}
+                {/*                render={({ field }) => (*/}
+                {/*                    <StyledInput*/}
+                {/*                        {...field}*/}
+                {/*                        classes={{ root: classes.textField }}*/}
+                {/*                        type="password"*/}
+                {/*                        variant="filled"*/}
+                {/*                        placeholder={t('popups_wallet_payment_password')}*/}
+                {/*                        error={!isValid && !!errors.password?.message}*/}
+                {/*                        helperText={!isValid ? errors.password?.message : ''}*/}
+                {/*                    />*/}
+                {/*                )}*/}
+                {/*                name="password"*/}
+                {/*            />*/}
+                {/*            <Controller*/}
+                {/*                render={({ field }) => (*/}
+                {/*                    <StyledInput*/}
+                {/*                        classes={{ root: classes.textField }}*/}
+                {/*                        {...field}*/}
+                {/*                        error={!isValid && !!errors.confirm?.message}*/}
+                {/*                        helperText={!isValid ? errors.confirm?.message : ''}*/}
+                {/*                        type="password"*/}
+                {/*                        variant="filled"*/}
+                {/*                        placeholder="Re-enter the payment password"*/}
+                {/*                    />*/}
+                {/*                )}*/}
+                {/*                name="confirm"*/}
+                {/*                control={control}*/}
+                {/*            />*/}
+                {/*        </div>*/}
+                {/*        <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>*/}
+                {/*    </>*/}
+                {/*) : null}*/}
             </form>
             <TabContext value={currentTab}>
                 <Tabs
@@ -262,9 +277,15 @@ const ImportWallet = memo(() => {
                     variant="fullWidth"
                     className={classes.tabs}
                     classes={{ indicator: classes.indicator }}
-                    onChange={(event, tab) => setCurrentTab(tab)}>
+                    onChange={(event, tab) => setCurrentTab(tab)}
+                >
                     {getEnumAsArray(ImportWalletTab).map(({ key, value }) => (
-                        <Tab label={key} value={value} classes={{ root: classes.tab, selected: classes.selected }} />
+                        <Tab
+                            key={key}
+                            label={key}
+                            value={value}
+                            classes={{ root: classes.tab, selected: classes.selected }}
+                        />
                     ))}
                 </Tabs>
                 <TabPanel value={ImportWalletTab.Mnemonic} className={classes.tabPanel}>
@@ -310,7 +331,8 @@ const ImportWallet = memo(() => {
                 fullWidth
                 className={classes.button}
                 disabled={disabled}
-                onClick={onSubmit}>
+                onClick={onSubmit}
+            >
                 Import
             </LoadingButton>
         </div>

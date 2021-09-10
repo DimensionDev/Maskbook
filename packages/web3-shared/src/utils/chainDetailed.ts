@@ -1,7 +1,9 @@
-import { safeUnreachable } from '@dimensiondev/kit'
+import { createLookupTableResolver } from './enum'
 import CHAINS from '../assets/chains.json'
 import { getRPCConstants } from '../constants'
 import { ChainId, NetworkType } from '../types'
+import COINGECKO_PLATFORMS from '../assets/coingecko-asset-platforms.json'
+import COINGECKO_COIN_LIST from '../assets/coingecko-coin-list.json'
 
 export function isChainIdValid(chainId: ChainId, allowTestnet = false) {
     const chainDetailed = getChainDetailed(chainId)
@@ -74,23 +76,16 @@ export function getChainIdFromName(name: string) {
         : undefined
 }
 
-export function getChainIdFromNetworkType(networkType: NetworkType) {
-    switch (networkType) {
-        case NetworkType.Ethereum:
-            return ChainId.Mainnet
-        case NetworkType.Binance:
-            return ChainId.BSC
-        case NetworkType.Polygon:
-            return ChainId.Matic
-        case NetworkType.Arbitrum:
-            return ChainId.Arbitrum
-        case NetworkType.xDai:
-            return ChainId.xDai
-        default:
-            safeUnreachable(networkType)
-            return ChainId.Mainnet
-    }
-}
+export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, ChainId>(
+    {
+        [NetworkType.Ethereum]: ChainId.Mainnet,
+        [NetworkType.Binance]: ChainId.BSC,
+        [NetworkType.Polygon]: ChainId.Matic,
+        [NetworkType.Arbitrum]: ChainId.Arbitrum,
+        [NetworkType.xDai]: ChainId.xDai,
+    },
+    ChainId.Mainnet,
+)
 
 export function getNetworkTypeFromChainId(chainId: ChainId) {
     const map: Record<NetworkType, string> = {
@@ -106,4 +101,17 @@ export function getNetworkTypeFromChainId(chainId: ChainId) {
         return false
     })
     return entry?.[0] as NetworkType | undefined
+}
+
+export function getChainFromChainId(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    return chainDetailed?.chain
+}
+
+export function getCoingeckoPlatformId(chain: ChainId) {
+    return COINGECKO_PLATFORMS.find((platform) => platform.chain_identifier === chain)?.id
+}
+
+export function getCoingeckoCoinId(coinSymbol: string) {
+    return COINGECKO_COIN_LIST.find((coin) => coin.symbol === coinSymbol)?.id
 }

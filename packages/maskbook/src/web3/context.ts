@@ -13,49 +13,58 @@ import {
     currentChainIdSettings,
     currentPortfolioDataProviderSettings,
     currentEtherPriceSettings,
+    currentTokenPricesSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
 import { createExternalProvider } from './helpers'
 import Services from '../extension/service'
 
-const Web3Provider = createExternalProvider()
-
-export const Web3Context: Web3ProviderType = {
-    provider: {
-        getCurrentValue: () => Web3Provider,
-        subscribe: () => noop,
-    },
-    allowTestnet: {
-        getCurrentValue: () => Flags.wallet_allow_testnet,
-        subscribe: () => noop,
-    },
-    chainId: createSubscriptionFromSettings(currentChainIdSettings),
-    account: createSubscriptionFromSettings(currentAccountSettings),
-    balance: createSubscriptionFromSettings(currentBalanceSettings),
-    gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
-    blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
-    nonce: createSubscriptionFromSettings(currentNonceSettings),
-    etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
-    wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
-    providerType: createSubscriptionFromSettings(currentProviderSettings),
-    networkType: createSubscriptionFromSettings(currentNetworkSettings),
-    erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
-    erc20TokensCount: createSubscriptionFromAsync(
-        WalletRPC.getERC20TokensCount,
-        0,
-        WalletMessages.events.erc20TokensUpdated.on,
-    ),
-    getERC20TokensPaged,
-    portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
-    getAssetsList: WalletRPC.getAssetsList,
-    getAssetsListNFT: WalletRPC.getAssetsListNFT,
-    getAddressNamesList: WalletRPC.getAddressNames,
-    getERC721TokensPaged,
-    fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
-    getTransactionList: WalletRPC.getTransactionList,
-    createMnemonicWords: WalletRPC.createMnemonicWords,
+function createWeb3Context(disablePopup = false): Web3ProviderType {
+    const Web3Provider = createExternalProvider(disablePopup)
+    return {
+        provider: {
+            getCurrentValue: () => Web3Provider,
+            subscribe: () => noop,
+        },
+        allowTestnet: {
+            getCurrentValue: () => Flags.wallet_allow_testnet,
+            subscribe: () => noop,
+        },
+        chainId: createSubscriptionFromSettings(currentChainIdSettings),
+        account: createSubscriptionFromSettings(currentAccountSettings),
+        balance: createSubscriptionFromSettings(currentBalanceSettings),
+        gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
+        blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
+        nonce: createSubscriptionFromSettings(currentNonceSettings),
+        etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
+        tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
+        wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
+        providerType: createSubscriptionFromSettings(currentProviderSettings),
+        networkType: createSubscriptionFromSettings(currentNetworkSettings),
+        erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
+        erc20TokensCount: createSubscriptionFromAsync(
+            WalletRPC.getERC20TokensCount,
+            0,
+            WalletMessages.events.erc20TokensUpdated.on,
+        ),
+        addERC20Token: WalletRPC.addERC20Token,
+        trustERC20Token: WalletRPC.trustERC20Token,
+        getERC20TokensPaged,
+        portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
+        getAssetsList: WalletRPC.getAssetsList,
+        getAssetsListNFT: WalletRPC.getAssetsListNFT,
+        getAddressNamesList: WalletRPC.getAddressNames,
+        getERC721TokensPaged,
+        fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+        getTransactionList: WalletRPC.getTransactionList,
+        createMnemonicWords: WalletRPC.createMnemonicWords,
+        getNonce: Services.Ethereum.getNonce,
+    }
 }
+
+export const Web3Context = createWeb3Context()
+export const Web3ContextWithoutConfirm = createWeb3Context(true)
 
 async function getWallets() {
     const raw = await WalletRPC.getWallets()
@@ -99,7 +108,10 @@ function createSubscriptionFromSettings<T>(settings: InternalSettings<T>): Subsc
     const { trigger, subscribe } = getEventTarget()
     settings.readyPromise.finally(trigger)
     return {
-        getCurrentValue: () => settings.value,
+        getCurrentValue: () => {
+            if (!settings.ready) throw settings.readyPromise
+            return settings.value
+        },
         subscribe: (f) => {
             const a = subscribe(f)
             const b = settings.addListener(() => trigger())
@@ -114,18 +126,35 @@ function createSubscriptionFromAsync<T>(
 ): Subscription<T> {
     let state = defaultValue
     const { subscribe, trigger } = getEventTarget()
-    f()
-        .then((v) => (state = v))
+    let isLoading = true
+    let isSubscribed = false
+    const init = f()
+        .then((v) => {
+            state = v
+        })
         .finally(trigger)
+        .finally(() => (isLoading = false))
     return {
-        getCurrentValue: () => state,
+        getCurrentValue: () => {
+            if (isLoading) throw init
+            return state
+        },
         subscribe: (sub) => {
+            if (isSubscribed) return noop
+            isSubscribed = true
             const a = subscribe(sub)
             const b = onChange(async () => {
                 state = await f()
                 sub()
             })
-            return () => void [a(), b()]
+            return () =>
+                void [
+                    a(),
+                    b(),
+                    () => {
+                        isSubscribed = false
+                    },
+                ]
         },
     }
 }

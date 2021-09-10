@@ -1,4 +1,5 @@
 import { getRedPacketConstants, getTokenConstants } from '../constants'
+import { EthereumAddress } from 'wallet.ts'
 
 export function isSameAddress(addrA: string = '', addrB: string = '') {
     if (!addrA || !addrB) return false
@@ -48,4 +49,9 @@ export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
                 isSameAddress(HAPPY_RED_PACKET_ADDRESS_V4, address)
             )
     }
+}
+
+export function isValidAddress(address?: string) {
+    if (!address) return false
+    return EthereumAddress.isValid(address)
 }

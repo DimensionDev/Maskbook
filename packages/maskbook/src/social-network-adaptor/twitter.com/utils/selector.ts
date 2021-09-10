@@ -132,6 +132,9 @@ export const postsContentSelector = () =>
             // quoted tweets
             '[data-testid="tweet"] + div div[role="link"] div[lang]',
             '[data-testid="tweet"] > div:last-child div[role="link"] div[lang]',
+
+            // reply-tweets
+            '[data-testid="tweet"] + div div div[lang][dir]',
         ].join(),
     ).concat(
         querySelectorAll('[data-testid="tweet"] > div:last-child').map((x) => {

@@ -11,7 +11,7 @@ const useStyles = makeStyles()({
     },
     container: {
         contain: 'strict',
-        backgroundColor: MaskColorVar.white,
+        backgroundColor: MaskColorVar.mainBackground,
         borderRadius: 24,
         width: '100%',
         height: '100%',

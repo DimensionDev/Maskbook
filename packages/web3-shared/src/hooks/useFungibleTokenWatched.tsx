@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { EthereumTokenType } from '../types'
-import { useTokenBalance } from './useTokenBalance'
+import { useFungibleTokenBalance } from './useFungibleTokenBalance'
 import { useFungibleTokenDetailed } from './useFungibleTokenDetailed'
 import { useNativeTokenDetailed } from './useNativeTokenDetailed'
 
@@ -12,7 +12,7 @@ export function useFungibleTokenWatched(initialToken?: {
     const [token = nativeToken.value, setToken] = useState(initialToken)
 
     const [amount, setAmount] = useState('')
-    const balance = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    const balance = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     const detailed = useFungibleTokenDetailed(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     return {
         amount,

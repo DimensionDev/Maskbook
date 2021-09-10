@@ -3,14 +3,10 @@ import type { NonPayableTx, PayableTx } from '@masknet/web3-contracts/types/type
 import { useNativeTokenWrapperContract } from '../contracts/useWrappedEtherContract'
 import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
-import { useNonce } from './useNonce'
-import { useGasPrice } from './useGasPrice'
 import { TransactionEventType } from '../types'
 import { isLessThan, isZero } from '../utils'
 
 export function useNativeTokenWrapperCallback() {
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const wrapperContract = useNativeTokenWrapperContract()
     const [transactionState, setTransactionState] = useTransactionState()
@@ -55,8 +51,6 @@ export function useNativeTokenWrapperCallback() {
                         })
                         throw error
                     }),
-                gasPrice,
-                nonce,
             }
 
             // send transaction and wait for hash
@@ -80,7 +74,7 @@ export function useNativeTokenWrapperCallback() {
                     })
             })
         },
-        [nonce, gasPrice, account, wrapperContract],
+        [account, wrapperContract],
     )
 
     const unwrapCallback = useCallback(
@@ -134,8 +128,6 @@ export function useNativeTokenWrapperCallback() {
                         })
                         throw error
                     }),
-                gasPrice,
-                nonce,
             }
             // send transaction and wait for hash
             return new Promise<string>((resolve, reject) => {
@@ -158,7 +150,7 @@ export function useNativeTokenWrapperCallback() {
                     })
             })
         },
-        [nonce, gasPrice, account, wrapperContract],
+        [account, wrapperContract],
     )
 
     const resetCallback = useCallback(() => {

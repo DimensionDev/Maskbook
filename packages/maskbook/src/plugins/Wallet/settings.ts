@@ -7,12 +7,10 @@ import {
     CollectibleProvider,
     NetworkType,
     GasNow,
+    CryptoPrice,
 } from '@masknet/web3-shared'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { isEqual } from 'lodash-es'
-import { connectGasNow } from './apis/gasnow'
-import { trackEtherPrice } from './apis/coingecko'
-import { startEffects } from '../../utils/side-effects'
 
 export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+selectedWalletAddress`, '', {
     primary: () => 'DO NOT DISPLAY IT IN UI',
@@ -135,13 +133,14 @@ export const currentEtherPriceSettings = createGlobalSettings<number>(`${PLUGIN_
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
-const effect = startEffects(import.meta.webpackHot)
-
-effect(() => {
-    try {
-        return connectGasNow()
-    } catch {
-        return () => {}
-    }
-})
-effect(() => trackEtherPrice())
+/**
+ * ERC20 Token prices or native token prices
+ */
+export const currentTokenPricesSettings = createGlobalSettings<CryptoPrice>(
+    `${PLUGIN_IDENTIFIER}+tokenPrices`,
+    {},
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+    (a, b) => isEqual(a, b),
+)

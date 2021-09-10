@@ -25,6 +25,7 @@ const TitleContainer = styled('div')(
 const Subtitle = styled(Typography)(
     ({ theme }) => `
     padding-top: 30px;
+    color: ${theme.palette.mode === 'dark' ? MaskColorVar.textSecondary.alpha(0.8) : MaskColorVar.textPrimary}
 `,
 )
 

@@ -11,7 +11,7 @@ import { ValidationCodeStep } from './steps/common'
 import type { AccountType } from '../../pages/Settings/type'
 
 interface CodeValidationProps {
-    onValidated(downloadLink: string, account: string, password: string): Promise<string | null>
+    onValidated(downloadLink: string, account: string, password: string, type: AccountType): Promise<string | null>
 }
 
 export const CodeValidation = memo(({ onValidated }: CodeValidationProps) => {
@@ -25,7 +25,8 @@ export const CodeValidation = memo(({ onValidated }: CodeValidationProps) => {
     return (
         <Stepper
             defaultStep={ValidationCodeStep.EmailInput}
-            transition={{ render: <LoadingCard />, trigger: fetchingBackupInfo }}>
+            transition={{ render: <LoadingCard />, trigger: fetchingBackupInfo }}
+        >
             <Step name={ValidationCodeStep.EmailInput}>{(toStep) => <EmailField toStep={toStep} />}</Step>
             <Step name={ValidationCodeStep.PhoneInput}>{(toStep) => <PhoneField toStep={toStep} />}</Step>
             <Step name={ValidationCodeStep.AccountValidation}>
@@ -34,8 +35,12 @@ export const CodeValidation = memo(({ onValidated }: CodeValidationProps) => {
                 )}
             </Step>
             <Step name={ValidationCodeStep.ConfirmBackupInfo}>
-                {(toStep, { backupInfo, account }) => (
-                    <ConfirmBackupInfo toStep={toStep} backupInfo={backupInfo} account={account} onNext={onValidated} />
+                {(toStep, { backupInfo, account, type }) => (
+                    <ConfirmBackupInfo
+                        toStep={toStep}
+                        backupInfo={backupInfo}
+                        onNext={(password) => onValidated(backupInfo.downloadURL, account, password, type)}
+                    />
                 )}
             </Step>
         </Stepper>

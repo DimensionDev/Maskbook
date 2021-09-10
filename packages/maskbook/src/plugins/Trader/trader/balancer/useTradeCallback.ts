@@ -7,8 +7,6 @@ import {
     TransactionStateType,
     useAccount,
     useChainId,
-    useGasPrice,
-    useNonce,
     useTraderConstants,
 } from '@masknet/web3-shared'
 import { useCallback, useState } from 'react'
@@ -21,8 +19,6 @@ export function useTradeCallback(
     exchangeProxyContract: ExchangeProxy | null,
     allowedSlippage = SLIPPAGE_DEFAULT,
 ) {
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const { BALANCER_ETH_ADDRESS } = useTraderConstants()
@@ -108,8 +104,6 @@ export function useTradeCallback(
                     })
                     throw error
                 }),
-            gasPrice,
-            nonce,
             value: transactionValue,
         }
 
@@ -140,7 +134,7 @@ export function useTradeCallback(
                     reject(error)
                 })
         })
-    }, [nonce, gasPrice, chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS])
+    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS])
 
     const resetCallback = useCallback(() => {
         setTradeState({

@@ -5,6 +5,14 @@ export enum CurrencyType {
     USD = 'usd',
 }
 
+export interface PriceRecord {
+    [currency: string]: number
+}
+/** Base on response of coingecko's token price API */
+export interface CryptoPrice {
+    [token: string]: PriceRecord
+}
+
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 
@@ -212,6 +220,19 @@ export enum EthereumTokenType {
     ERC721 = 2,
     ERC1155 = 3,
 }
+
+export type EIP1559GasConfig = {
+    gas: number
+    maxFeePerGas: number
+    maxPriorityFeePerGas: number
+}
+
+export type PriorEIP1559GasConfig = {
+    gas: number
+    gasPrice: number
+}
+
+export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
 
 // Learn more for a full list of supported JSON RPC methods
 // https://eth.wiki/json-rpc/API#json-rpc-methods

@@ -1,17 +1,19 @@
 import SettingButton from './SettingButton'
-import { useState, useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import BackupDialog from './dialogs/BackupDialog'
 import BackupModeSelectDialog from './dialogs/BackupModeSelectDialog'
-import { CloudBackupPreviewDialog, Action } from './dialogs/CloudBackupPreviewDialog'
+import { Action, CloudBackupPreviewDialog } from './dialogs/CloudBackupPreviewDialog'
 import { CloudBackupMergeDialog } from './dialogs/CloudBackupMergeDialog'
 import { useDashboardI18N } from '../../../locales'
 import { CloudBackupVerifyDialog, VerifyNextData } from './dialogs/CloudBackupVerifyDialog'
 import { UserContext } from '../hooks/UserContext'
 import type { VerifyCodeRequest } from '../api'
 import type { BackupFileInfo } from '../type'
+import { useLocation } from 'react-router'
 
 export default function BackupSetting() {
     const t = useDashboardI18N()
+    const { state } = useLocation() as { state: { open: 'setting' | null } }
     const { ensurePasswordSet } = useContext(UserContext)
     const [showDialog, setShowDialog] = useState({
         backup: false,
@@ -23,6 +25,11 @@ export default function BackupSetting() {
     const [localMode, setLocalMode] = useState(true)
     const [params, setParams] = useState<VerifyCodeRequest | undefined>(undefined)
     const [cloudFileInfo, setCloudFileInfo] = useState<BackupFileInfo | undefined>(undefined)
+
+    useEffect(() => {
+        if (!state?.open) return
+        ensurePasswordSet(() => setShowDialog({ ...showDialog, mode: state?.open === 'setting' }))
+    }, [state?.open])
 
     const onBackup = () => {
         ensurePasswordSet(() => setShowDialog({ ...showDialog, mode: true }))

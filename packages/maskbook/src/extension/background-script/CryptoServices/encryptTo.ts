@@ -1,6 +1,6 @@
 import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import { GunAPI as Gun2 } from '../../../network/gun'
-import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
+import { encodeArrayBuffer } from '@dimensiondev/kit'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
 import { queryPrivateKey, queryLocalKey, queryProfile } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
@@ -114,18 +114,22 @@ export async function publishPostAESKey(iv: string) {
     // Use the latest payload version here since we do not accept new post for older version.
     return Gun2.publishPostAESKeyOnGun2(-38, iv, ...info)
 }
+
+const SUMMARY_MAX_LENGTH = 40
 function getSummary(content: TypedMessageText) {
     let result = ''
+    const sliceLength = content.content.length > SUMMARY_MAX_LENGTH ? SUMMARY_MAX_LENGTH + 1 : SUMMARY_MAX_LENGTH
+
     // UTF-8 aware summary
     if (Intl.Segmenter) {
         // it seems like using "en" can also split the word correctly.
         const seg = new Intl.Segmenter('en')
         for (const word of seg.segment(content.content)) {
-            if (result.length >= 30) break
+            if (result.length >= sliceLength) break
             result += word.segment
         }
     } else {
-        result = result.slice(0, 30)
+        result = content.content.slice(0, sliceLength)
     }
     return result
 }

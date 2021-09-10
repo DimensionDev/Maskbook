@@ -20,7 +20,7 @@ const useStyles = makeStyles()({
         padding: 0,
     },
     item: {
-        padding: 12,
+        padding: 14,
         borderBottom: '1px solid #F7F9FA',
         cursor: 'pointer',
     },
@@ -55,7 +55,8 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
                 <Link
                     href={resolveTransactionLinkOnExplorer(chainId, transaction.hash)}
                     target="_blank"
-                    rel="noopener noreferrer">
+                    rel="noopener noreferrer"
+                >
                     <ListItem key={index} className={classes.item}>
                         {transaction.status === TransactionStatusType.NOT_DEPEND ? (
                             <CircularProgress size={20} color="primary" />

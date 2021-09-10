@@ -77,10 +77,10 @@ const StyledTabs = styled(Tabs)`
         background-color: #f7f9fa;
         padding-top: 6px;
     }
-    &.${tabsClasses.indicator} {
+    & .${tabsClasses.indicator} {
         display: none;
     }
-    &.${tabsClasses.flexContainer} {
+    & .${tabsClasses.flexContainer} {
         justify-content: center;
     }
 `
@@ -90,7 +90,7 @@ const StyledTab = styled(Tab)`
         font-size: 12px;
         line-height: 16px;
         min-height: unset;
-        min-width: 145px;
+        min-width: 165px;
         padding: 7px 0;
         background-color: #f7f9fa;
         border-radius: 4px 4px 0px 0px;
@@ -111,7 +111,7 @@ const BackupWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const wallet = useWallet()
-    const [confirmed, setConfirmed] = useState(false)
+    const [confirmed, setConfirmed] = useState(true)
     const [currentTab, setCurrentTab] = useState(BackupTabs.JsonFile)
     const [password, setPassword] = useState('')
 
@@ -146,7 +146,8 @@ const BackupWallet = memo(() => {
                             <TabPanel
                                 value={BackupTabs.JsonFile}
                                 className={classes.tabPanel}
-                                style={{ flex: currentTab === BackupTabs.JsonFile ? '1' : '0' }}>
+                                style={{ flex: currentTab === BackupTabs.JsonFile ? '1' : '0' }}
+                            >
                                 <div className={classes.placeholder}>
                                     <FileIcon style={{ fontSize: 32, width: 32, height: 32 }} />
                                 </div>
@@ -157,7 +158,8 @@ const BackupWallet = memo(() => {
                             <TabPanel
                                 value={BackupTabs.PrivateKey}
                                 className={classes.tabPanel}
-                                style={{ flex: currentTab === BackupTabs.PrivateKey ? '1' : '0' }}>
+                                style={{ flex: currentTab === BackupTabs.PrivateKey ? '1' : '0' }}
+                            >
                                 <Typography className={classes.privateKey}>{privateKeyInHex}</Typography>
                                 <Typography className={classes.tip}>
                                     {t('popups_wallet_backup_private_key_tip')}
@@ -184,7 +186,8 @@ const BackupWallet = memo(() => {
                         fullWidth
                         className={classes.button}
                         disabled={!confirmed && !password}
-                        onClick={onConfirm}>
+                        onClick={onConfirm}
+                    >
                         {!confirmed ? t('popups_wallet_next') : t('download')}
                     </Button>
                 </div>

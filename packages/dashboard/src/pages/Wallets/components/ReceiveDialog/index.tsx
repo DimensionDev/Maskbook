@@ -7,7 +7,7 @@ import { makeStyles } from '@masknet/theme'
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
 import { useCopyToClipboard } from 'react-use'
 import { useCurrentSelectedWalletNetwork } from '../../api'
-import { NetworkType, resolveNetworkAddress } from '@masknet/web3-shared'
+import { NetworkType, resolveNetworkAddressPrefix } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -70,12 +70,13 @@ export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
                 onClose={onClose}
                 DialogProps={{
                     classes: { paper: classes.paper },
-                }}>
+                }}
+            >
                 <DialogContent className={classes.container}>
                     <Typography sx={{ marginBottom: 3.5 }}>{t.wallets_receive_tips({ chainName })}</Typography>
                     <WalletQRCodeContainer width={286} height={286} border={{ borderWidth: 15, borderHeight: 2 }}>
                         <QRCode
-                            text={resolveNetworkAddress(currentNetworkType, walletAddress)}
+                            text={`${resolveNetworkAddressPrefix(currentNetworkType)}:${walletAddress}`}
                             options={{ width: 282 }}
                             canvasProps={{
                                 style: { display: 'block', margin: 'auto' },

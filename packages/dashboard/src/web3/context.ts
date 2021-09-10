@@ -34,6 +34,11 @@ export const Web3Context: Web3ProviderType = {
         0,
         Messages.events.currentEtherPriceSettings.on,
     ),
+    tokenPrices: createSubscriptionFromAsync(
+        Services.Settings.getTokenPrices,
+        {},
+        Messages.events.currentTokenPricesSettings.on,
+    ),
     balance: createSubscriptionFromAsync(Services.Settings.getBalance, '0', Messages.events.currentBalanceSettings.on),
     blockNumber: createSubscriptionFromAsync(
         Services.Settings.getBlockNumber,
@@ -57,6 +62,8 @@ export const Web3Context: Web3ProviderType = {
     ),
     wallets: createSubscriptionFromAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
     erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
+    addERC20Token: PluginServices.Wallet.addERC20Token,
+    trustERC20Token: PluginServices.Wallet.trustERC20Token,
     erc20TokensCount: createSubscriptionFromAsync(
         PluginServices.Wallet.getERC20TokensCount,
         0,
@@ -75,6 +82,7 @@ export const Web3Context: Web3ProviderType = {
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
     createMnemonicWords: PluginServices.Wallet.createMnemonicWords,
+    getNonce: Services.Ethereum.getNonce,
 }
 
 export function createExternalProvider() {
@@ -132,6 +140,7 @@ function createSubscriptionFromAsync<T>(
     onChange: (callback: () => void) => () => void,
 ): Subscription<T> {
     let state = defaultValue
+    let isSubscribed = false
     const { subscribe, trigger } = getEventTarget()
     f()
         .then((v) => (state = v))
@@ -139,12 +148,21 @@ function createSubscriptionFromAsync<T>(
     return {
         getCurrentValue: () => state,
         subscribe: (sub) => {
+            if (isSubscribed) return noop
+            isSubscribed = true
             const a = subscribe(sub)
             const b = onChange(async () => {
                 state = await f()
                 sub()
             })
-            return () => void [a(), b()]
+            return () =>
+                void [
+                    a(),
+                    b(),
+                    () => {
+                        isSubscribed = false
+                    },
+                ]
         },
     }
 }

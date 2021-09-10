@@ -16,7 +16,7 @@ export const Placeholder = memo<PlaceholderProps>(({ network }) => {
     const handleClick = () => Services.Settings.openSNSAndActivatePlugin(url, 'none')
 
     return (
-        <Stack height="100%" alignItems="center" justifyContent="center">
+        <Stack height="100%" alignItems="center" justifyContent="center" mt={-3.5}>
             <Box textAlign="center">
                 <EmptyIcon sx={{ fontSize: 100 }} />
                 <Typography variant="body2" mb={3}>

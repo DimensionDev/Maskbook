@@ -126,6 +126,7 @@ export interface CreateMnemonicUIProps {
 export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshWords, onVerifyClick }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
+    const navigate = useNavigate()
     const [open, setOpen] = useState(true)
 
     return (
@@ -141,7 +142,7 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
                 <MnemonicReveal words={words} />
             </div>
             <Box className={classes.controller}>
-                <Button color="secondary" className={classes.button}>
+                <Button color="secondary" className={classes.button} onClick={() => navigate(-1)}>
                     {t.cancel()}
                 </Button>
                 <Button className={classes.button} onClick={onVerifyClick}>

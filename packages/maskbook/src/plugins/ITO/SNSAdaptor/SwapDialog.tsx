@@ -17,7 +17,7 @@ import {
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
-    useTokenBalance,
+    useFungibleTokenBalance,
     ZERO,
     useFungibleTokenDetailed,
     isSameAddress,
@@ -188,7 +188,7 @@ export function SwapDialog(props: SwapDialogProps) {
     //#endregion
 
     //#region balance
-    const { value: tokenBalance = '0' } = useTokenBalance(
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(
         swapToken ? swapToken.type : EthereumTokenType.Native,
         swapToken ? swapToken.address : NATIVE_TOKEN_ADDRESS,
     )

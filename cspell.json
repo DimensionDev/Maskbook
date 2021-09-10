@@ -213,7 +213,13 @@
         "xlink",
         "zerion",
         "Zubin",
-        "Choudhary"
+        "Choudhary",
+        "macbinary",
+        "Choudhary",
+        "counterparty",
+        "jailbroken",
+        "misoperation",
+        "majeure"
     ],
     "ignoreWords": [
         "BSCT",
@@ -266,6 +272,12 @@
         "pnpm",
         "setx",
         "swaptoken",
+        "NYFI",
+        "Csvg",
+        "Horiz",
+        "hookform",
+        "METASWAP",
+        "metaswap",
         "tinycolor",
         "unstoppabledomains",
         "vitalik",

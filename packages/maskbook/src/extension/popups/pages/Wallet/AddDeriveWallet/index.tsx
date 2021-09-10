@@ -53,6 +53,8 @@ const AddDeriveWallet = memo(() => {
     const { classes } = useStyles()
     const wallets = useWallets()
     const mnemonic = new URLSearchParams(location.search).get('mnemonic')
+    const walletName = new URLSearchParams(location.search).get('name')
+
     const [page, setPage] = useState(0)
 
     const { loading, value: dataSource } = useAsync(async () => {
@@ -75,7 +77,7 @@ const AddDeriveWallet = memo(() => {
     const onAdd = useCallback(
         async (index) => {
             if (mnemonic) {
-                await WalletRPC.deriveWalletFromIndex(mnemonic.split(' '), '', index)
+                await WalletRPC.deriveWalletFromIndex(mnemonic.split(' '), '', index, walletName ?? 'Account')
             }
         },
         [mnemonic],
@@ -98,14 +100,16 @@ const AddDeriveWallet = memo(() => {
                     variant="contained"
                     className={classes.button}
                     disabled={page === 0 || loading}
-                    onClick={() => setPage((prev) => prev - 1)}>
+                    onClick={() => setPage((prev) => prev - 1)}
+                >
                     {t('popups_wallet_previous')}
                 </Button>
                 <Button
                     variant="contained"
                     className={classes.button}
                     onClick={() => setPage((prev) => prev + 1)}
-                    disabled={loading}>
+                    disabled={loading}
+                >
                     {t('popups_wallet_next')}
                 </Button>
             </div>

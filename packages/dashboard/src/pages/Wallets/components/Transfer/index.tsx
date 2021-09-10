@@ -1,32 +1,32 @@
 import { memo } from 'react'
 import { ContentContainer } from '../../../../components/ContentContainer'
 import { Box, Tab } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar, useTabs } from '@masknet/theme'
+import { useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@material-ui/lab'
-
-const useStyles = makeStyles()((theme) => ({
-    caption: {
-        paddingRight: theme.spacing(2.5),
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderBottom: `1px solid ${MaskColorVar.lineLighter}`,
-    },
-}))
+import { TransferERC20 } from './TransferERC20'
+import { FungibleTokenDetailed, useNativeTokenDetailed } from '@masknet/web3-shared'
+import { useLocation } from 'react-router-dom'
 
 export const Transfer = memo(() => {
-    const { classes } = useStyles()
-    const [currentTab, onChange, tabs] = useTabs('tokens')
+    // todo: token and chain
+    const { state } = useLocation() as { state: { token: FungibleTokenDetailed } }
+    const { value: nativeToken } = useNativeTokenDetailed()
+    const [currentTab, onChange, tabs] = useTabs('tokens', 'collections')
+
+    if (!nativeToken && !state.token) return null
 
     return (
         <ContentContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>
-            <Box className={classes.caption}>
+            <Box>
                 <TabContext value={currentTab}>
                     <TabList onChange={onChange}>
                         <Tab label="Token" value={tabs.tokens} />
+                        <Tab label="Collections" value={tabs.collections} />
                     </TabList>
-                    <TabPanel value={tabs.tokens}>TBD</TabPanel>
+                    <TabPanel value={tabs.tokens}>
+                        <TransferERC20 token={state.token || nativeToken} />
+                    </TabPanel>
+                    <TabPanel value={tabs.collections}>todo</TabPanel>
                 </TabContext>
             </Box>
         </ContentContainer>

@@ -1,5 +1,9 @@
-import { useWeb3StateContext } from '../context'
+import { useAsyncRetry } from 'react-use'
+import { useWeb3 } from '.'
 
 export function useGasPrice() {
-    return useWeb3StateContext().gasPrice
+    const web3 = useWeb3()
+    return useAsyncRetry(async () => {
+        return web3.eth.getGasPrice()
+    }, [web3])
 }

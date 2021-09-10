@@ -1,13 +1,14 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback } from 'react'
 import { Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { WalletInfo } from '../components/WalletInfo'
 import { WarningIcon } from '@masknet/icons'
-import { StyledInput } from '../../../components/StyledInput'
 import { useHistory } from 'react-router-dom'
 import { useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
+import { PopupRoutes } from '../../../index'
+import { first } from 'lodash-es'
 
 const useStyles = makeStyles()({
     content: {
@@ -71,13 +72,18 @@ const DeleteWallet = memo(() => {
     const history = useHistory()
     const wallet = useWallet()
     const { classes } = useStyles()
-    const [password, setPassword] = useState('')
+    // const [password, setPassword] = useState('')
 
     const onConfirm = useCallback(async () => {
         if (wallet?.address) {
             await WalletRPC.removeWallet(wallet.address)
-            await WalletRPC.resetAccount()
-            history.goBack()
+            const wallets = await WalletRPC.getWallets()
+            if (wallets.length) {
+                await WalletRPC.resetAccount({
+                    account: first(wallets)?.address,
+                })
+            }
+            history.replace(PopupRoutes.Wallet)
         }
     }, [wallet])
 
@@ -90,19 +96,20 @@ const DeleteWallet = memo(() => {
                     <Typography className={classes.title}>Delete Wallet</Typography>
                 </div>
                 <Typography className={classes.tip}>{t('popups_wallet_delete_tip')}</Typography>
-                <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
-                <StyledInput
-                    placeholder="Input your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                {/*<Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>*/}
+                {/*<StyledInput*/}
+                {/*    placeholder="Input your password"*/}
+                {/*    value={password}*/}
+                {/*    onChange={(e) => setPassword(e.target.value)}*/}
+                {/*/>*/}
             </div>
             <div className={classes.controller}>
                 <Button
                     variant="contained"
                     color="inherit"
                     className={classes.cancelButton}
-                    onClick={() => history.goBack()}>
+                    onClick={() => history.goBack()}
+                >
                     {t('cancel')}
                 </Button>
                 <Button variant="contained" color="error" className={classes.deleteButton} onClick={onConfirm}>

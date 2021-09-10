@@ -1,5 +1,6 @@
 import { useWeb3StateContext } from '../context'
 
 export function useEtherPrice() {
-    return useWeb3StateContext().etherPrice
+    const { tokenPrices } = useWeb3StateContext()
+    return tokenPrices.ethereum?.usd ?? 0
 }
