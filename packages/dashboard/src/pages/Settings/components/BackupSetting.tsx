@@ -27,6 +27,7 @@ export default function BackupSetting() {
     const [cloudFileInfo, setCloudFileInfo] = useState<BackupFileInfo | undefined>(undefined)
 
     useEffect(() => {
+        if (!state?.open) return
         ensurePasswordSet(() => setShowDialog({ ...showDialog, mode: state?.open === 'setting' }))
     }, [state?.open])
 
