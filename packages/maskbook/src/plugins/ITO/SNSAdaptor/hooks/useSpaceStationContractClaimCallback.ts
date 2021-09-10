@@ -11,8 +11,7 @@ import { useCallback } from 'react'
 import type { CampaignInfo } from '../../types'
 import type { SpaceStationGalaxy } from '@masknet/web3-contracts/types/SpaceStationGalaxy'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { CAMPAIGN_ID } from '../../Worker/apis/spaceStationGalaxy'
-import { PluginITO_RPC } from '../../messages'
+import { getAccountClaimSignature, mutationParticipate, CAMPAIGN_ID } from '../../Worker/apis/spaceStationGalaxy'
 import Services from '../../../../extension/service'
 
 export function useSpaceStationContractClaimCallback(campaignInfo: CampaignInfo) {
@@ -40,7 +39,7 @@ ${campaignInfo.description}`,
             account,
         )
 
-        const { allow, signature, verifyIDs, nftCoreAddress, powahs } = await PluginITO_RPC.getAccountClaimSignature(
+        const { allow, signature, verifyIDs, nftCoreAddress, powahs } = await getAccountClaimSignature(
             useSignature,
             account,
             campaignInfo.chain,
@@ -76,7 +75,7 @@ ${campaignInfo.description}`,
                         hash,
                     })
 
-                    const participated = await PluginITO_RPC.mutationParticipate(
+                    const participated = await mutationParticipate(
                         useSignature,
                         account,
                         campaignInfo.chain,

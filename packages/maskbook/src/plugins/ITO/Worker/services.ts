@@ -4,7 +4,6 @@ import * as database from './database'
 import { getChainDetailed, ChainId } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../Wallet/settings'
 
-//#region ITO
 export async function getTradeInfo(pid: string, trader: string) {
     const tradeInfo = await subgraph.getTradeInfo(pid, trader)
     return tradeInfo
@@ -59,29 +58,3 @@ export async function discoverPool(from: string, payload: JSON_PayloadInMask) {
     }
     await database.addPoolIntoDB(record)
 }
-
-//#endregion
-
-//#region nft airdrop
-export async function getClaimableTokenCount(address: string) {
-    return subgraph.getClaimableTokenCount(address)
-}
-
-export async function getCampaignInfo() {
-    return subgraph.getCampaignInfo()
-}
-
-export async function getAccountClaimSignature(userSignature: string, account: string, chain: string) {
-    return subgraph.getAccountClaimSignature(userSignature, account, chain)
-}
-
-export async function mutationParticipate(
-    userSignature: string,
-    account: string,
-    chain: string,
-    txHash: string,
-    verifyIDs: number[],
-) {
-    return subgraph.mutationParticipate(userSignature, account, chain, txHash, verifyIDs)
-}
-//#endregion
