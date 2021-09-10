@@ -39,11 +39,11 @@ declare namespace Mask.Ethereum {
         on(eventName: 'disconnect', listener: (error: ProviderRpcError) => void): this
         on(eventName: 'chainChanged', listener: (chainId: string) => void): this
         on(eventName: 'accountsChanged', listener: (accounts: string[]) => void): this
-        /** @deprecated use disconnect event. */
+        /** @deprecated use `disconnect` event. */
         on(eventName: 'close', listener: (...args: any[]) => void): this
-        /** @deprecated Use chainChanged event. */
+        /** @deprecated Use `chainChanged` event. */
         on(eventName: 'networkChanged', listener: (...args: any[]) => void): this
-        /** @deprecated Use message event. */
+        /** @deprecated Use `message` event. */
         on(eventName: 'notification', listener: (...args: any[]) => void): this
         on(eventName: string | symbol, listener: (...args: any[]) => void): this
         removeListener(eventName: string | symbol, listener: (...args: any[]) => void): this
