@@ -246,15 +246,24 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
                     </div>
                     <div className={classes.claimWrapper}>
                         <div className={classes.nftsWrapper}>
-                            <div className={classes.gallery}>
-                                {campaignInfo.nfts.map((nft, i) => (
-                                    <div className={classes.imgWrapper} key={i}>
-                                        <img src={nft.image} className={classes.nftImage} />
-                                    </div>
-                                ))}
-                            </div>
+                            {now < campaignInfo.startTime * 1000 ||
+                            now > campaignInfo.endTime * 1000 ||
+                            !claimable ? null : (
+                                <div className={classes.gallery}>
+                                    {campaignInfo.nfts.map((nft, i) => (
+                                        <div className={classes.imgWrapper} key={i}>
+                                            <img src={nft.image} className={classes.nftImage} />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                             <Typography className={classes.text}>
-                                {`${campaignInfo.nfts.length} ${campaignInfo.nfts.length > 1 ? 'Items' : 'Item'}`}
+                                {`${
+                                    (now > campaignInfo.startTime * 1000 && now < campaignInfo.endTime * 1000) ||
+                                    !claimable
+                                        ? campaignInfo.nfts.length
+                                        : 0
+                                } ${campaignInfo.nfts.length > 1 ? 'Items' : 'Item'}`}
                             </Typography>
                         </div>
                         <div>
