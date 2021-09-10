@@ -1,4 +1,4 @@
-import type { ThirdPartyPopupContextIdentifier } from '../../plugins/External/popup-context'
+import type { MaskSDK_SNS_ContextIdentifier } from '../../plugins/External/sns-context'
 
 export enum PopupRoutes {
     Root = '/',
@@ -28,7 +28,7 @@ export enum PopupRoutes {
 export function getRouteURLWithNoParam(kind: PopupRoutes) {
     return browser.runtime.getURL(`/popups.html#${kind}`)
 }
-export function PermissionAwareRedirectOf(url: string, context: ThirdPartyPopupContextIdentifier) {
+export function PermissionAwareRedirectOf(url: string, context: MaskSDK_SNS_ContextIdentifier) {
     return (
         getRouteURLWithNoParam(PopupRoutes.PermissionAwareRedirect) +
         `?url=${encodeURIComponent(url)}&context=${context}`

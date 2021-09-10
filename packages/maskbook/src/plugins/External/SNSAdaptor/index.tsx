@@ -4,10 +4,27 @@ import { ExternalPluginLoader } from '../components/Container'
 import type { ExternalPluginLoadDetails } from '../types'
 import { base } from '../base'
 import { ThirdPartyPluginCompositionEntry } from '../components/CompositionEntry'
+import { ExternalPluginMessages } from '../messages'
+import { isLocalContext } from '../sns-context'
+import { MaskMessage } from '../../../utils'
+import { makeTypedMessageText } from '@masknet/shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(signal) {
+        const a = ExternalPluginMessages.ping.on((data) => {
+            if (!isLocalContext(data.context)) return
+            ExternalPluginMessages.pong.sendToContentScripts(data.challenge)
+        })
+        const b = ExternalPluginMessages.appendComposition.on((data) => {
+            if (!isLocalContext(data.context)) return
+
+            // TODO: should ask for user.
+            MaskMessage.events.replaceComposition.sendToLocal(makeTypedMessageText(data.appendText, data.payload))
+        })
+        signal.addEventListener('abort', a)
+        signal.addEventListener('abort', b)
+    },
     DecryptedInspector: function Comp(props) {
         const tm = props.message
         if (!tm.meta) return null

@@ -1,5 +1,4 @@
 import { maskSDKServer } from './bridge'
-import type { BridgeAPI } from '@masknet/sdk'
 
 export const hmr_sdkServer = { ...maskSDKServer }
 
@@ -9,7 +8,8 @@ if (import.meta.webpackHot) {
             if (!(key in maskSDKServer)) Reflect.deleteProperty(hmr_sdkServer, key)
         }
         for (const key in maskSDKServer) {
-            hmr_sdkServer[key as keyof BridgeAPI] = maskSDKServer[key as keyof BridgeAPI]
+            // @ts-expect-error
+            hmr_sdkServer[key] = maskSDKServer[key]
         }
     })
 }

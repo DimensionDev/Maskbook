@@ -1,7 +1,6 @@
 import { DialogContent } from '@material-ui/core'
 import { useRef } from 'react'
 import { useCallback, useEffect, useState } from 'react'
-import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { MaskMessage, useI18N } from '../../utils'
 import { useFriendsList as useRecipientsList } from '../DataSource/useActivatedUI'
@@ -40,9 +39,16 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             }
         })
     }, [type])
+    useEffect(() => {
+        if (!open) return
+        return MaskMessage.events.replaceComposition.on((message) => {
+            const ui = UI.current
+            if (!ui) return
+            UI.current.setMessage(message)
+        })
+    }, [open])
     //#endregion
 
-    const [disableE2E, setDisableE2E] = useState(false)
     const UI = useRef<CompositionRef>(null)
 
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
@@ -53,16 +59,9 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                     <CompositionDialogUI
                         ref={UI}
                         {...useCompositionClipboardRequest(requireClipboardPermission || false)}
-                        disabledRecipients={disableE2E ? 'E2E' : undefined}
                         recipients={useRecipientsList()}
                         maxLength={560}
                         onSubmit={useSubmit(onClose)}
-                        onChange={(message) => {
-                            // TODO: move into the plugin system
-                            const hasRedPacket = RedPacketMetadataReader(message.meta).ok
-                            const shouldDisableE2E = hasRedPacket
-                            setDisableE2E(shouldDisableE2E)
-                        }}
                         supportImageEncoding={networkSupport?.text ?? false}
                         supportTextEncoding={networkSupport?.image ?? false}
                     />
