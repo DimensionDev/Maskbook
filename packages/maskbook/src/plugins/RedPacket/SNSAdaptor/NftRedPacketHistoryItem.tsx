@@ -129,8 +129,10 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
         const { value: contractDetailed } = useERC721ContractDetailed(history.token_contract.address)
 
         const handleSend = useCallback(() => {
-            if (canSend && contractDetailed) onSend(history, contractDetailed)
-        }, [onSend, canSend, history, contractDetailed])
+            if (canSend && contractDetailed && isPasswordValid) {
+                onSend(history, contractDetailed)
+            }
+        }, [onSend, canSend, history, contractDetailed, isPasswordValid])
 
         const { value: redpacketStatus } = useAvailabilityNftRedPacket(history.rpid, account)
         const bitStatusList = redpacketStatus
