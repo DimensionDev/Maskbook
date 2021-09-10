@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { WalletHeader } from '../components/WalletHeader'
@@ -9,6 +9,9 @@ import { FormattedAddress } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { useI18N } from '../../../../../utils'
+import { useWalletHD } from '../../../../../plugins/Wallet/hooks/useWalletHD'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { useCopyToClipboard } from 'react-use'
 
 const useStyles = makeStyles()({
     content: {
@@ -62,14 +65,47 @@ const useStyles = makeStyles()({
 
 const SelectWallet = memo(() => {
     const { t } = useI18N()
+    const walletHD = useWalletHD()
     const { classes } = useStyles()
     const history = useHistory()
     const wallet = useWallet()
     const wallets = useWallets(ProviderType.Maskbook)
 
+    const [, copyToClipboard] = useCopyToClipboard()
+
     const walletList = useMemo(
-        () => wallets.filter((item) => isSameAddress(item.address, wallet?.address)),
+        () => wallets.filter((item) => !isSameAddress(item.address, wallet?.address)),
         [wallet, wallets],
+    )
+
+    const handleClickCreate = useCallback(() => {
+        if (!walletHD) {
+            browser.tabs.create({
+                active: true,
+                url: browser.runtime.getURL('/next.html#/create-mask-wallet'),
+            })
+        } else {
+            history.push(PopupRoutes.CreateWallet)
+        }
+    }, [walletHD, history])
+
+    const handleSelect = useCallback(
+        async (address) => {
+            await WalletRPC.updateAccount({
+                account: address,
+                chainId: undefined,
+                providerType: ProviderType.Maskbook,
+            })
+            history.replace(PopupRoutes.Wallet)
+        },
+        [history],
+    )
+
+    const onCopy = useCallback(
+        (address: string) => {
+            copyToClipboard(address)
+        },
+        [copyToClipboard],
     )
 
     return (
@@ -79,13 +115,13 @@ const SelectWallet = memo(() => {
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     {walletList.map((item, index) => (
-                        <ListItem className={classes.item} key={index}>
+                        <ListItem className={classes.item} key={index} onClick={() => handleSelect(item.address)}>
                             <MaskWalletIcon />
                             <ListItemText className={classes.text}>
                                 <Typography className={classes.name}>{item.name}</Typography>
                                 <Typography className={classes.address}>
                                     <FormattedAddress address={item.address} size={12} />
-                                    <CopyIcon className={classes.copy} />
+                                    <CopyIcon className={classes.copy} onClick={() => onCopy(item.address)} />
                                 </Typography>
                             </ListItemText>
                         </ListItem>
@@ -96,14 +132,14 @@ const SelectWallet = memo(() => {
                 <Button
                     variant="contained"
                     className={classes.button}
-                    onClick={() => history.goBack()}
+                    onClick={handleClickCreate}
                     style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}>
-                    {t('cancel')}
+                    {t('create')}
                 </Button>
                 <Button
                     variant="contained"
                     className={classes.button}
-                    onClick={() => history.push(PopupRoutes.CreateWallet)}>
+                    onClick={() => history.push(PopupRoutes.ImportWallet)}>
                     {t('import')}
                 </Button>
             </div>

@@ -8,6 +8,7 @@ import {
     getChainName,
     getChainShortName,
     NetworkType,
+    ProviderType,
     resolveNetworkName,
 } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
@@ -15,12 +16,8 @@ import { useMenu, useValueRef } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { ChainIcon } from '../ChainIcon'
-
-const networks = [
-    NetworkType.Ethereum,
-    Flags.bsc_enabled ? NetworkType.Binance : undefined,
-    Flags.polygon_enabled ? NetworkType.Polygon : undefined,
-].filter(Boolean) as NetworkType[]
+import { useAsync } from 'react-use'
+import { WalletRPC } from '../../../../plugins/Wallet/messages'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -56,23 +53,27 @@ const useStyles = makeStyles()((theme) => ({
 
 export const NetworkSelector = memo(() => {
     const currentChainId = useValueRef(currentChainIdSettings)
-
+    const { value: networks } = useAsync(async () => WalletRPC.getSupportedNetworks(), [])
     const onChainChange = useCallback((chainId: ChainId) => {
-        currentChainIdSettings.value = chainId
+        WalletRPC.updateAccount({
+            chainId,
+            providerType: ProviderType.Maskbook,
+        })
     }, [])
 
-    return <NetworkSelectorUI currentChainId={currentChainId} onChainChange={onChainChange} />
+    return <NetworkSelectorUI currentChainId={currentChainId} onChainChange={onChainChange} networks={networks} />
 })
 
 export interface NetworkSelectorUIProps {
     currentChainId: ChainId
     onChainChange: (chainId: ChainId) => void
+    networks?: NetworkType[]
 }
 
-export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentChainId, onChainChange }) => {
+export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentChainId, onChainChange, networks }) => {
     const { classes } = useStyles()
     const [menu, openMenu] = useMenu(
-        ...(Flags.support_eth_network_switch
+        ...((Flags.support_eth_network_switch
             ? getEnumAsArray(ChainId).map(({ value: chainId }) => {
                   return (
                       <MenuItem key={chainId} onClick={() => onChainChange(chainId)}>
@@ -81,7 +82,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentChainId,
                       </MenuItem>
                   )
               })
-            : networks.map((network) => {
+            : networks?.map((network) => {
                   const chainId = getChainIdFromNetworkType(network)
 
                   return (
@@ -90,7 +91,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentChainId,
                           <Typography>{resolveNetworkName(network)}</Typography>
                       </MenuItem>
                   )
-              })),
+              })) ?? []),
     )
 
     return (
@@ -100,7 +101,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentChainId,
                     <div className={classes.iconWrapper}>
                         <ChainIcon chainId={currentChainId} />
                     </div>
-                    <Typography className={classes.title}>{getChainShortName(currentChainId)}</Typography>
+                    <Typography className={classes.title}>{getChainShortName(currentChainId).toUpperCase()}</Typography>
                 </div>
                 <ArrowDownRound className={classes.arrow} />
             </Box>

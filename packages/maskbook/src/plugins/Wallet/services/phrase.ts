@@ -137,7 +137,7 @@ export async function queryDerivableWalletFromPhrase(
 //#endregion
 
 //#region derive a new wallet from specified index
-export async function deriveWalletFromIndex(mnemonic: string[], passphrase: string, index: number) {
+export async function deriveWalletFromIndex(mnemonic: string[], passphrase: string, index: number, name: string) {
     // find or create phrase
     let phrase = await getPhrase((record) => record.mnemonic.join(' ') === mnemonic.join(' '))
     if (!phrase) {
@@ -150,7 +150,7 @@ export async function deriveWalletFromIndex(mnemonic: string[], passphrase: stri
 
     // create a wallet from mnemonic
     await wallet.importNewWallet({
-        name: `Account${index + 1}`,
+        name: `${name}${index + 1}`,
         path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}`,
         mnemonic: phrase.mnemonic,
         passphrase: phrase.passphrase,

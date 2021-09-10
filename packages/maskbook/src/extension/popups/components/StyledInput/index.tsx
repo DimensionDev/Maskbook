@@ -22,12 +22,12 @@ export const StyledInput = memo(
 
         return (
             <TextField
+                {...props}
                 inputRef={ref}
                 variant="filled"
                 className={classes.textField}
                 inputProps={{ className: classes.input }}
-                InputProps={{ disableUnderline: true, classes: { root: classes.textFieldInput } }}
-                {...props}
+                InputProps={{ ...props.InputProps, disableUnderline: true, classes: { root: classes.textFieldInput } }}
             />
         )
     }),

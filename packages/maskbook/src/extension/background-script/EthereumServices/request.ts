@@ -61,6 +61,13 @@ export async function request<T extends unknown>(
     })
 }
 
+export async function requestWithoutPopup<T extends unknown>(
+    requestArguments: RequestArguments,
+    overrides?: SendOverrides,
+) {
+    return request(requestArguments, overrides, { popupsWindow: false })
+}
+
 export async function requestSend(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
@@ -92,6 +99,14 @@ export async function requestSend(
     getSendMethod()(payload_, callback, overrides)
 }
 
+export async function requestSendWithoutPopup(
+    payload: JsonRpcPayload,
+    callback: (error: Error | null, response?: JsonRpcResponse) => void,
+    overrides?: SendOverrides,
+) {
+    return requestSend(payload, callback, overrides)
+}
+
 export async function confirmRequest(payload: JsonRpcPayload) {
     const pid = getPayloadId(payload)
     if (!pid) return
@@ -103,6 +118,7 @@ export async function confirmRequest(payload: JsonRpcPayload) {
 export async function rejectRequest(payload: JsonRpcPayload) {
     const pid = getPayloadId(payload)
     if (!pid) return
+    UNCONFIRMED_CALLBACK_MAP.get(pid)?.(new Error('User rejected!'))
     await WalletRPC.deleteUnconfirmedRequest(payload)
     UNCONFIRMED_CALLBACK_MAP.delete(pid)
 }

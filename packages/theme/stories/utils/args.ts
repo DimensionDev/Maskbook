@@ -8,11 +8,9 @@ export function argsOfArr<T>(keys: NonNullable<T>[], type?: ControlType) {
     keys.forEach((x) => (options[x] = x))
     return { control: { type, options } }
 }
-export function matrix<T>(
-    args: {
-        [Prop in keyof T]?: Array<NonNullable<T[Prop]> | undefined>
-    },
-) {
+export function matrix<T>(args: {
+    [Prop in keyof T]?: Array<NonNullable<T[Prop]> | undefined>
+}) {
     return {
         matrix: {
             pattern: args,

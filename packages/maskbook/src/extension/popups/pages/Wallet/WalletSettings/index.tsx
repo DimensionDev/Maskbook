@@ -1,6 +1,6 @@
 import { WalletHeader } from '../components/WalletHeader'
 import { WalletInfo } from '../components/WalletInfo'
-import { List, ListItem, ListItemText } from '@material-ui/core'
+import { Link, List, ListItem, ListItemText } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { EnterDashboard } from '../../../components/EnterDashboard'
 import { BackUpIcon, CloudLinkIcon, TrashIcon } from '@masknet/icons'
@@ -8,6 +8,7 @@ import { memo } from 'react'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { useI18N } from '../../../../../utils'
+import { resolveAddressLinkOnExplorer, useChainId, useWallet } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()({
     content: {
@@ -40,6 +41,8 @@ const useStyles = makeStyles()({
 const WalletSettings = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
+    const chainId = useChainId()
+    const wallet = useWallet()
     const { classes } = useStyles()
     return (
         <>
@@ -55,10 +58,15 @@ const WalletSettings = memo(() => {
                         <TrashIcon className={classes.icon} />
                         <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
                     </ListItem>
-                    <ListItem className={classes.item}>
-                        <CloudLinkIcon className={classes.icon} />
-                        <ListItemText className={classes.text}>{t('popups_wallet_view_on_etherscan')}</ListItemText>
-                    </ListItem>
+                    <Link
+                        href={resolveAddressLinkOnExplorer(chainId, wallet?.address ?? '')}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <ListItem className={classes.item}>
+                            <CloudLinkIcon className={classes.icon} />
+                            <ListItemText className={classes.text}>{t('popups_wallet_view_on_explorer')}</ListItemText>
+                        </ListItem>
+                    </Link>
                 </List>
             </div>
             <EnterDashboard />
