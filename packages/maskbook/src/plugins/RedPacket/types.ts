@@ -191,6 +191,7 @@ export interface RedPacketNftJSONPayload {
     senderName: string
     contractName: string
     contractAddress: string
+    contractVersion: number
     contractTokenURI: string
     privateKey: string
     chainId: ChainId

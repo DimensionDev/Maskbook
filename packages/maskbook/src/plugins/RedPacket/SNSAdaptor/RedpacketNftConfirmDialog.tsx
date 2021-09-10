@@ -195,6 +195,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 contractName: contract.name,
                 contractAddress: contract.address,
                 contractTokenURI: contract.iconURL ?? '',
+                contractVersion: 1,
                 privateKey,
                 chainId: contract.chainId,
             })

@@ -4,7 +4,7 @@ import * as subgraph from './apis'
 import * as database from './database'
 import * as nftDb from './databaseForNft'
 
-export { addRedPacketNft, getRedPacketNft, updateRedPacketNftPassword } from './databaseForNft'
+export { addRedPacketNft, getRedPacketNft, updateRedPacketNft } from './databaseForNft'
 
 export async function discoverRedPacket(record: RedPacketRecord) {
     if (record.contract_version === 1) {

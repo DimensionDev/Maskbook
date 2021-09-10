@@ -11,15 +11,12 @@ export async function addRedPacketNft(record: RedPacketNftRecord) {
     return RedPacketDatabase.add(RedPacketNftRecordIntoDB(record))
 }
 
-export async function updateRedPacketNftPassword(id: string, password: string) {
-    const record = await RedPacketDatabase.get('red-packet-nft', id)
-    await RedPacketDatabase.remove('red-packet-nft', id)
-    await RedPacketDatabase.add(
-        RedPacketNftRecordIntoDB({
-            ...record,
-            password,
-        } as RedPacketNftRecord),
-    )
+export async function updateRedPacketNft(newRecord: RedPacketNftRecordInDatabase) {
+    const record = await RedPacketDatabase.get('red-packet-nft', newRecord.id)
+    if (record) {
+        await RedPacketDatabase.remove('red-packet-nft', newRecord.id)
+    }
+    await RedPacketDatabase.add(newRecord)
 }
 
 function RedPacketNftRecordOutDB(x: RedPacketNftRecordInDatabase): RedPacketNftRecord {
