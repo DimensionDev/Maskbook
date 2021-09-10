@@ -14,6 +14,7 @@ import { useCallback, useState, useEffect, useRef } from 'react'
 import { SearchIcon } from '@masknet/icons'
 import CheckIcon from '@material-ui/icons/Check'
 import { useScrollBottomEvent } from '@masknet/shared'
+import { useUpdate } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     ownerTokenBox: {
         background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
-        width: '100%',
+        width: '96%',
         height: 450,
         borderRadius: 12,
         margin: '16px auto',
@@ -81,7 +82,7 @@ const useStyles = makeStyles()((theme) => ({
     searchWrapper: {
         display: 'flex',
         justifyContent: 'space-between',
-        padding: '0px 18px 0px 10px',
+        padding: '0',
     },
     searchWrapperSingle: {
         display: 'flex',
@@ -243,6 +244,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         setTokenDetailedSelectedList(existTokenDetailedList)
         setSearched(false)
     }, [contract])
+
+    const update = useUpdate()
+    useEffect(() => {
+        update()
+    }, [tokenDetailedOwnerList])
 
     const selectToken = useCallback(
         (token: ERC721TokenDetailed, findToken: ERC721TokenDetailed | undefined) => {

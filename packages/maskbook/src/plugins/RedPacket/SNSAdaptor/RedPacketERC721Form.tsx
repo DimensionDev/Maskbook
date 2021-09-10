@@ -176,9 +176,11 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     useEffect(() => {
         clearToken()
+        setOpen(false)
     }, [contract, account])
 
     useEffect(() => {
+        setOpen(false)
         clearContract()
     }, [chainId])
 
