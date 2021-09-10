@@ -2,8 +2,9 @@ import { ExternalLink } from 'react-feather'
 import { Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { resolveTradePairLink } from '../../pipes'
-import type { SwapRouteData, TradeComputed, TradeProvider } from '../../types'
+import type { SwapRouteData, TradeComputed } from '../../types'
 import { useNetworkType } from '@masknet/web3-shared'
+import type { TradeProvider } from '@masknet/public-api'
 
 const useStyles = makeStyles()((theme) => {
     return {

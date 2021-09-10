@@ -14,9 +14,10 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { TradeProvider } from '@masknet/public-api'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { useI18N } from '../../../../utils'
-import { TradeProvider, ZrxTradePool } from '../../types'
+import { ZrxTradePool } from '../../types'
 import { SlippageSlider } from './SlippageSlider'
 import {
     currentSingleHopOnlySettings,

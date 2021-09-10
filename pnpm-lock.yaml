@@ -109,6 +109,7 @@ importers:
       '@dimensiondev/holoflows-kit': '=0.9.0-20210726055325-dfbe7fd'
       '@dimensiondev/kit': ^0.0.0-20210712114527-dc8eac6
       '@hookform/resolvers': ^2.8.0
+      '@masknet/backup-format': workspace:*
       '@masknet/icons': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-infra': workspace:*
@@ -118,6 +119,7 @@ importers:
       '@masknet/storybook-shared': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared': workspace:*
+      '@msgpack/msgpack': ^2.7.1
       '@servie/events': ^3.0.0
       '@snowpack/plugin-dotenv': ^2.2.0
       '@snowpack/plugin-react-refresh': ^2.5.0
@@ -156,6 +158,7 @@ importers:
       '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd
       '@dimensiondev/kit': 0.0.0-20210712114527-dc8eac6
       '@hookform/resolvers': 2.8.0_react-hook-form@7.15.2
+      '@masknet/backup-format': link:../backup-format
       '@masknet/icons': link:../icons
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-infra': link:../plugin-infra
@@ -165,6 +168,7 @@ importers:
       '@masknet/storybook-shared': link:../storybook-shared
       '@masknet/theme': link:../theme
       '@masknet/web3-shared': link:../web3-shared
+      '@msgpack/msgpack': 2.7.1
       '@servie/events': 3.0.0
       '@types/color': 3.0.2
       async-call-rpc: 6.0.0

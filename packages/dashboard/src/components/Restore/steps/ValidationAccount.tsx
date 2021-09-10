@@ -2,7 +2,7 @@ import { useDashboardI18N } from '../../../locales'
 import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { sendCode, useLanguage } from '../../../pages/Settings/api'
-import { SendingCodeField } from '@masknet/theme'
+import { SendingCodeField, useSnackbar } from '@masknet/theme'
 import { Button, Typography } from '@material-ui/core'
 import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
 import type { StepCommonProps } from '../../Stepper'
@@ -18,12 +18,15 @@ interface ValidationAccountProps extends StepCommonProps {
 export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationAccountProps) => {
     const language = useLanguage()
     const t = useDashboardI18N()
+    const { enqueueSnackbar } = useSnackbar()
+
     const [code, setCode] = useState('')
     const [error, setError] = useState('')
 
     const [{ error: sendCodeError }, handleSendCodeFn] = useAsyncFn(async () => {
-        return sendCode({
-            account,
+        enqueueSnackbar(t.sign_in_account_cloud_backup_send_email_success({ type }), { variant: 'success' })
+        await sendCode({
+            account: account.replace(' ', ''),
             type,
             scenario: Scenario.backup,
             locale: language.includes('zh') ? Locale.zh : Locale.en,
@@ -35,7 +38,7 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
 
         if ((backupInfo as BackupFileInfo).downloadURL) {
             setError('')
-            toStep(ValidationCodeStep.ConfirmBackupInfo, { backupInfo: backupInfo, account: account })
+            toStep(ValidationCodeStep.ConfirmBackupInfo, { backupInfo: backupInfo, account: account, type: type })
         } else {
             setError((backupInfo as { message: string }).message)
         }

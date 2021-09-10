@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState, useEffect } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { PluginServices, Services } from '../../../../API'
 import { useAsync, useAsyncFn } from 'react-use'
 import BackupContentSelector, { BackupContentCheckedStatus } from '../BackupContentSelector'
@@ -7,9 +7,11 @@ import { MaskDialog, MaskTextField, useSnackbar } from '@masknet/theme'
 import { Box } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import LoadingButton from '@material-ui/lab/LoadingButton'
-import { VerifyCodeRequest, fetchUploadLink, uploadBackupValue } from '../../api'
+import { fetchUploadLink, uploadBackupValue, VerifyCodeRequest } from '../../api'
 import formatDateTime from 'date-fns/format'
 import { LoadingCard } from '../../../../components/Restore/steps/LoadingCard'
+import { encryptBackup } from '@masknet/backup-format'
+import { encode } from '@msgpack/msgpack'
 
 export interface BackupDialogProps {
     local?: boolean
@@ -51,7 +53,7 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
         }
 
         try {
-            const file = await Services.Welcome.createBackupFile({
+            const fileJson = await Services.Welcome.createBackupFile({
                 noPosts: !showPassword.base,
                 noPersonas: !showPassword.base,
                 noProfiles: !showPassword.base,
@@ -62,19 +64,15 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
 
             if (local) {
                 // local backup, no account
-                const encrypted = await Services.Crypto.encryptBackup(backupPassword, '', JSON.stringify(file))
-                await Services.Welcome.downloadBackup(encrypted, 'txt')
+                const encrypted = await encryptBackup(encode(backupPassword), encode(fileJson))
+                await Services.Welcome.downloadBackupV2(encrypted)
             } else if (params) {
-                const abstract = file.personas
+                const abstract = fileJson.personas
                     .filter((x) => x.nickname)
                     .map((x) => x.nickname)
                     .join(', ')
                 const uploadUrl = await fetchUploadLink({ ...params, abstract })
-                const encrypted = await Services.Crypto.encryptBackup(
-                    backupPassword,
-                    params.account,
-                    JSON.stringify(file),
-                )
+                const encrypted = await encryptBackup(encode(params.account + backupPassword), encode(fileJson))
 
                 uploadBackupValue(uploadUrl, encrypted).then(() => {
                     snackbar.enqueueSnackbar(t.settings_alert_backup_success(), { variant: 'success' })

@@ -8,7 +8,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import TuneIcon from '@material-ui/icons/Tune'
 import RefreshOutlined from '@material-ui/icons/RefreshOutlined'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenPanelType, TradeComputed, TradeProvider, TradeStrategy, WarningLevel } from '../../types'
+import { TokenPanelType, TradeComputed, TradeStrategy, WarningLevel } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
@@ -21,6 +21,7 @@ import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWal
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { MINIMUM_AMOUNT } from '../../constants'
+import type { TradeProvider } from '@masknet/public-api'
 
 const useStyles = makeStyles()((theme) => {
     return {
