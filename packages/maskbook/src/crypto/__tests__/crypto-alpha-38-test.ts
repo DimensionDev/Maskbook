@@ -1,6 +1,6 @@
 import * as c from '../crypto-alpha-38'
 import { makeTypedMessageText, makeTypedMessageTupleSerializable, makeTypedMessageUnknown } from '@masknet/shared'
-import { encodeText, encodeArrayBuffer, decodeText } from '../../utils/type-transform/String-ArrayBuffer'
+import { encodeText, encodeArrayBuffer, decodeText } from '@dimensiondev/kit'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { CryptoWorker } from '../../modules/workers'
 import { derive_AES_GCM_256_Key_From_PBKDF2 } from '../../modules/CryptoAlgorithm/helper'

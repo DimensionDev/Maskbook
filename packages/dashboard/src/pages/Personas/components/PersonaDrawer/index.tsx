@@ -64,9 +64,9 @@ export interface PersonaDrawerUIProps extends PersonaDrawer {
 
 export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
     ({ open, currentPersonaIdentifier, toggleDrawer, personas, onChangeCurrentPersona, onCreatePersona }) => {
-        const navigate = useNavigate()
         const { classes } = useStyles()
         const t = useDashboardI18N()
+        const navigate = useNavigate()
 
         const [showAddPersonaCard, setShowAddPersonaCard] = useState(false)
 

@@ -12,6 +12,7 @@ import { RoutePaths } from '../../type'
 import { useNavigate } from 'react-router'
 import { useState } from 'react'
 import { getMaskColor } from '@masknet/theme'
+import { SignUpRoutePath } from '../../pages/SignUp/routePath'
 
 const useStyles = makeStyles()((theme) => ({
     error: {
@@ -34,10 +35,13 @@ export const RestoreFromMnemonic = () => {
         try {
             const persona = await Services.Identity.queryPersonaByMnemonic(values.join(' '), '')
             if (persona) {
-                changeCurrentPersona(persona.identifier)
+                await changeCurrentPersona(persona.identifier)
                 navigate(RoutePaths.Personas, { replace: true })
             } else {
-                setError(t.sign_in_account_private_key_error())
+                navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
+                    replace: false,
+                    state: { mnemonic: values },
+                })
             }
         } catch {
             setError(t.sign_in_account_private_key_error())

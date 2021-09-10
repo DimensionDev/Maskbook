@@ -10,13 +10,18 @@ import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller } from 'react-hook-form'
 import { z } from 'zod'
+import { useNavigate } from 'react-router'
+import { RoutePaths } from '../../type'
+import { SignUpRoutePath } from '../../pages/SignUp/routePath'
 type FormInputs = {
     privateKey: string
 }
 
 export const RestoreFromPrivateKey = memo(() => {
-    const { changeCurrentPersona } = PersonaContext.useContainer()
+    const navigate = useNavigate()
     const t = useDashboardI18N()
+    const { changeCurrentPersona } = PersonaContext.useContainer()
+
     const schema = z.object({
         privateKey: z.string(),
     })
@@ -37,9 +42,13 @@ export const RestoreFromPrivateKey = memo(() => {
         try {
             const persona = await Services.Identity.queryPersonaByPrivateKey(data.privateKey)
             if (persona) {
-                changeCurrentPersona(persona.identifier)
+                await changeCurrentPersona(persona.identifier)
+                navigate(RoutePaths.Personas)
             } else {
-                setError('privateKey', { type: 'value', message: t.sign_in_account_private_key_persona_not_found() })
+                navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
+                    replace: false,
+                    state: { privateKey: data.privateKey },
+                })
             }
         } catch {
             setError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
