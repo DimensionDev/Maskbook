@@ -10,6 +10,8 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { Account } from './Account'
 import { PoolsView } from './PoolsView'
 
+const backgroundImage_ = new URL('../constants/assets/image_1.PNG', import.meta.url).toString()
+
 const useStyles = makeStyles()((theme) => ({
     root: {
         // width: '100%',
@@ -35,6 +37,8 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         padding: '0 !important',
+        backgroundImage: `url(${backgroundImage_})`,
+        // backgroundImage: `url(require("../constants/assets/image_1.PNG"))`,
     },
     body: {
         flex: 1,
@@ -45,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-        backgroundColor: 'rgba(33, 39, 41, 0.65)',
+        backgroundColor: 'rgba(33, 39, 41, 0.05)',
     },
     tabs: {
         borderTop: `solid 1px ${theme.palette.divider}`,
@@ -122,7 +126,10 @@ export function EntropyfiView() {
     //#endregion
 
     return (
-        <Card className={classes.root} elevation={0}>
+        <Card
+            className={classes.root}
+            elevation={0}
+            style={{ backgroundImage: `url(${'https://i.postimg.cc/pdk4H2bb/image-2.png'})` }}>
             <CardContent className={classes.content}>
                 <Tabs
                     className={classes.tabs}

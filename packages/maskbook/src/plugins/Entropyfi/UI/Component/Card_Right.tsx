@@ -1,0 +1,192 @@
+import { Grid, Button } from '@material-ui/core'
+import { makeStyles } from '@masknet/theme'
+import useToggle from '../../hooks/useToggle'
+import { getSlicePoolId } from '../../utils'
+// import { usePoolState } from '../../hooks/usePoolData'
+
+import { InfoIcon } from '../../constants/assets/global_info'
+// import { DownarrowIcon } from '../../constants/assets/global_downarrow'
+// import { WaitIcon } from '../../constants/assets/card_wait'
+
+const useStyles = makeStyles()((theme) => ({
+    metaDeposit: {
+        marginTop: theme.spacing(1),
+        padding: theme.spacing(0, 1),
+        justifyContent: 'center',
+        // alignItems:'flex-start',
+        maxWidth: '50%',
+        transform: 'translateY(-15px)',
+    },
+    info: {
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        '& nav': {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '30px',
+            backgroundColor: 'rgba(94, 98, 111, 0.19)',
+            backdropFilter: 'blur(50px)',
+            borderRadius: '0px 0px 13px 13px',
+            '& svg': {
+                height: '14px',
+                width: '12px',
+                marginRight: '5px',
+                '&:hover': {
+                    transform: 'scale(0.92)',
+                    '& path': {
+                        fill: '#bdbebe',
+                    },
+                },
+            },
+            '& span': {
+                fontFamily: '-apple-system,system-ui,sans-serif',
+                fontStyle: 'normal',
+                fontWeight: 600,
+                fontSize: '14px',
+                lineHeight: '30px',
+                textAlign: 'center',
+                color: '#fff',
+            },
+        },
+    },
+
+    countDownValue: {
+        justifyContent: 'space-evenly',
+        marginTop: theme.spacing(1),
+        '& div': {
+            backgroundColor: 'hsla(0, 0%, 100%, 0.2)',
+            width: '40px',
+            height: '38px',
+            borderRadius: '10px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            userSelect: 'none',
+            '& span': {
+                fontFamily: '-apple-system,system-ui,sans-serif',
+                fontStyle: 'normal',
+                fontSize: '20px',
+                fontWeight: 600,
+                textAlign: 'center',
+                color: '#fff',
+            },
+        },
+    },
+    countDownTitle: {
+        justifyContent: 'space-evenly',
+        '& p': {
+            width: '40px',
+            fontFamily: '-apple-system,system-ui,sans-serif',
+            textAlign: 'center',
+            color: '#fff',
+            fontWeight: 400,
+            fontSize: '12px',
+            lineHeight: '5px',
+            userSelect: 'none',
+            marginTop: '6px',
+        },
+    },
+    cardTips: {
+        '& div': {
+            marginTop: '-70px',
+            borderRadius: '25px',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: '0',
+            pointerEvents: 'none',
+            '& p': {
+                color: '#fff',
+                fontFamily: '-apple-system,system-ui,sans-serif',
+                fontWeight: 400,
+                lineHeight: '13px',
+                letterSpacing: '1px',
+                fontSize: '10px',
+                textAlign: 'start',
+            },
+        },
+    },
+    countdownNotice: {
+        fontFamily: '-apple-system,system-ui,sans-serif',
+        fontWeight: 400,
+        fontSize: '12px',
+        lineHeight: '16px',
+        textAlign: 'center',
+        color: '#fff',
+        '& span': {
+            margin: '0 5px',
+            fontFamily: '-apple-system,system-ui,sans-serif',
+            color: '#45e7dd',
+        },
+    },
+    deposit: {
+        marginTop: theme.spacing(1),
+        backgroundColor: '#45e7dd',
+        color: '#fff',
+        fontWeight: 400,
+        letterSpacing: '0.5px',
+    },
+}))
+
+export function CardRight(props: any) {
+    const { classes } = useStyles()
+    const [coinId, coinName] = getSlicePoolId(props.poolId)
+    const [show, toggle] = useToggle(false)
+    // const poolState = usePoolState()[42][props.poolId]
+    const poolStateLock = false
+    const initialPrice = '$51,000'
+
+    return (
+        <Grid item container direction="column" className={classes.metaDeposit}>
+            <Grid item className={classes.info}>
+                <nav>
+                    <InfoIcon onMouseEnter={() => toggle()} onMouseLeave={() => toggle()} />
+                    <span>{poolStateLock ? 'Result Countdown' : 'Deposit Countdown'}</span>
+                </nav>
+            </Grid>
+            <Grid item container direction="row" className={classes.countDownValue} style={{ opacity: show ? 0 : 1 }}>
+                <div>
+                    <span>{'01' || '-'}</span>{' '}
+                </div>
+                <div>
+                    <span>{'22' || '-'}</span>{' '}
+                </div>
+                <div>
+                    <span>{'52' || '-'}</span>{' '}
+                </div>
+                <div>
+                    <span>{'53' || '-'}</span>{' '}
+                </div>
+            </Grid>
+            <Grid item container direction="row" className={classes.countDownTitle} style={{ opacity: show ? 0 : 1 }}>
+                <p>Day</p>
+                <p>Hr</p>
+                <p>Min</p>
+                <p>Sec</p>
+            </Grid>
+            <Grid item container className={classes.cardTips}>
+                <TIPS show={show} locked={poolStateLock} />
+            </Grid>
+            <Grid item className={classes.countdownNotice} style={{ opacity: show ? 0 : 1 }}>
+                Will the {coinId} price be higher than <span>{initialPrice}</span> when the game ends ?
+            </Grid>
+            <Grid item>
+                <Button className={classes.deposit} variant="contained" fullWidth size="small">
+                    Deposit
+                </Button>
+            </Grid>
+        </Grid>
+    )
+}
+
+const TIPS = (props: any) => {
+    return (
+        <div style={{ opacity: props.show ? 1 : 0 }}>
+            <p>
+                {props.locked
+                    ? 'Game period = 2 days (deposit) + 5 days (interest generation). First one deposit to the game can query the game price. Protocol will automatically enroll you to the next round, your winning this round will be saved as principal for the next round.'
+                    : 'Protocol will automatically enroll you to the next round, your winning this round will be saved as principal for the next round.'}
+            </p>
+        </div>
+    )
+}
