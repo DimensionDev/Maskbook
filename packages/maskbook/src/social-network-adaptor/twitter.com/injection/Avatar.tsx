@@ -83,15 +83,16 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 const twitterId = twitterIdNode.innerText.trim().replace('@', '')
                 const avatar = await getNFTAvatar(twitterId)
                 if (!avatar) return
-
                 const avatarIdNode = ele.querySelector(
                     'div > :nth-child(2) > div > div > div > a > div > :last-child > div > img',
                 ) as HTMLImageElement
                 if (!avatarIdNode) return
                 const avatarId = getAvatarId(avatarIdNode.getAttribute('src') ?? '')
                 if (avatarId !== avatar.avatarId) return
+                const nftDom = ele.firstChild?.firstChild?.lastChild?.firstChild?.firstChild?.firstChild as HTMLElement
+                if (!nftDom) return
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
-                proxy.realCurrent = ele.querySelector('div > :nth-child(2) > div > div > div')
+                proxy.realCurrent = nftDom
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
                 root.render(<NFTBadgeInTwitter avatar={avatar} />)
                 remover = root.destory
