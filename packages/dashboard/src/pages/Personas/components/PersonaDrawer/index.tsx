@@ -111,7 +111,9 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                         )}
                         <Box className={classes.buttons}>
                             <Button onClick={() => setShowAddPersonaCard(true)}>{t.personas_add_persona()}</Button>
-                            <Button color="warning" onClick={() => navigate(RoutePaths.SignIn)}>
+                            <Button
+                                color="warning"
+                                onClick={() => navigate(RoutePaths.SignIn, { state: { from: 'persona' } })}>
                                 {t.recovery()}
                             </Button>
                         </Box>
