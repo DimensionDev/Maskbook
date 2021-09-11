@@ -41,6 +41,7 @@ export interface BackupJSONFileVersion2 {
         privateKey?: EC_Private_JsonWebKey
         localKey?: AESJsonWebKey
         nickname?: string
+        hasLogout?: boolean
         linkedProfiles: [/** ProfileIdentifier.toText() */ string, LinkedProfileDetails][]
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp

@@ -92,6 +92,7 @@ export async function queryPersona(identifier: PersonaIdentifier): Promise<Perso
         updatedAt: new Date(),
         linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier),
         hasPrivateKey: false,
+        hasLogout: false,
         fingerprint: identifier.compressedPoint,
     }
 }
@@ -122,6 +123,16 @@ export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even
         if (confirm === 'delete even with private') await deletePersonaDB(id, 'delete even with private', t)
         else if (confirm === 'safe delete') await safeDeletePersonaDB(id, t)
     })
+}
+
+export async function logoutPersona(identifier: PersonaIdentifier) {
+    return consistentPersonaDBWriteAccess((t) =>
+        updatePersonaDB(
+            { identifier, hasLogout: true },
+            { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' },
+            t,
+        ),
+    )
 }
 
 export async function renamePersona(identifier: PersonaIdentifier, nickname: string) {
@@ -223,6 +234,7 @@ export async function createPersonaByJsonWebKey(options: {
         nickname: options.nickname,
         mnemonic: options.mnemonic,
         localKey: options.localKey,
+        hasLogout: false,
         uninitialized: options.uninitialized,
     }
     await consistentPersonaDBWriteAccess((t) => createPersonaDB(record, t))
@@ -250,6 +262,7 @@ export async function createProfileWithPersona(
         privateKey: keys.privateKey,
         localKey: keys.localKey,
         mnemonic: keys.mnemonic,
+        hasLogout: false,
     }
     await consistentPersonaDBWriteAccess(async (t) => {
         await createOrUpdatePersonaDB(rec, { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' }, t)

@@ -4,7 +4,6 @@ import { PublicKeyIcon, SettingsIcon } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@material-ui/core'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
 import { PersonaIdentifier, ProfileIdentifier, ProfileInformation, useMenu } from '@masknet/shared'
-import { DeletePersonaDialog } from '../DeletePersonaDialog'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { RenameDialog } from '../RenameDialog'
@@ -15,6 +14,7 @@ import { MaskAvatar } from '../../../../components/MaskAvatar'
 import { ExportPrivateKeyDialog } from '../ExportPrivateKeyDialog'
 import { RoutePaths } from '../../../../type'
 import { useNavigate } from 'react-router'
+import { LogoutPersonaDialog } from '../LogoutPersonaDialog'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -75,7 +75,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+    const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
     const [exportPrivateKeyDialogOpen, setExportPrivateKeyDialogOpen] = useState(false)
 
     const [menu, openMenu] = useMenu(
@@ -84,8 +84,8 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
         <MenuItem onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}>
             {t.settings_global_backup_title()}
         </MenuItem>,
-        <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
-            {t.personas_delete()}
+        <MenuItem onClick={() => setLogoutDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
+            {t.personas_logout()}
         </MenuItem>,
     )
 
@@ -163,11 +163,10 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                     }}
                 />
             )}
-            <DeletePersonaDialog
-                open={deleteDialogOpen}
+            <LogoutPersonaDialog
+                open={logoutDialogOpen}
                 identifier={identifier}
-                onClose={() => setDeleteDialogOpen(false)}
-                nickname={nickname}
+                onClose={() => setLogoutDialogOpen(false)}
             />
             <ExportPrivateKeyDialog
                 open={exportPrivateKeyDialogOpen}

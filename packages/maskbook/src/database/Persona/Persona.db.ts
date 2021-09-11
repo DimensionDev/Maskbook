@@ -189,10 +189,11 @@ export async function queryPersonaByProfileDB(
 export async function queryPersonaDB(
     query: PersonaIdentifier,
     t?: PersonasTransaction<'readonly'>,
+    isIncludeLogout?: boolean,
 ): Promise<PersonaRecord | null> {
     t = t || createTransaction(await db(), 'readonly')('personas')
     const x = await t.objectStore('personas').get(query.toText())
-    if (x) return personaRecordOutDB(x)
+    if (x && (isIncludeLogout || !x.hasLogout)) return personaRecordOutDB(x)
     return null
 }
 
@@ -202,12 +203,13 @@ export async function queryPersonaDB(
 export async function queryPersonasDB(
     query: (record: PersonaRecord) => boolean,
     t?: PersonasTransaction<'readonly'>,
+    isIncludeLogout?: boolean,
 ): Promise<PersonaRecord[]> {
     t = t || createTransaction(await db(), 'readonly')('personas')
     const records: PersonaRecord[] = []
     for await (const each of t.objectStore('personas')) {
         const out = personaRecordOutDB(each.value)
-        if (query(out)) records.push(out)
+        if (query(out) && (isIncludeLogout || !out.hasLogout)) records.push(out)
     }
     return records
 }
@@ -614,6 +616,7 @@ export interface PersonaRecord {
     linkedProfiles: IdentifierMap<ProfileIdentifier, LinkedProfileDetails>
     createdAt: Date
     updatedAt: Date
+    hasLogout?: boolean
     /**
      * create a dummy persona which should hide to the user until
      * connected at least one SNS identity
