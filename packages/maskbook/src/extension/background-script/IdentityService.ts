@@ -3,6 +3,7 @@ import { decode, encode } from '@msgpack/msgpack'
 import { blobToArrayBuffer, decodeArrayBuffer, encodeArrayBuffer, decodeText } from '@dimensiondev/kit'
 import {
     createPersonaByJsonWebKey,
+    loginPersona,
     personaRecordToPersona,
     queryAvatarDataURL,
     queryPersona,
@@ -116,7 +117,13 @@ export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
 
     const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
     const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey, 'private')
-    return queryPersonaDB(identifier)
+    const persona = await queryPersonaDB(identifier, undefined, true)
+    if (persona) {
+        await loginPersona(persona.identifier)
+        return persona
+    }
+
+    return null
 }
 export async function queryPersonas(identifier?: PersonaIdentifier, requirePrivateKey = false): Promise<Persona[]> {
     if (typeof identifier === 'undefined')
@@ -329,8 +336,11 @@ export async function queryPersonaByPrivateKey(privateKeyString: string) {
     const privateKey = decode(decodeArrayBuffer(privateKeyString)) as EC_JsonWebKey
     const identifier = ECKeyIdentifierFromJsonWebKey(privateKey, 'public')
 
-    const persona = await queryPersonaDB(identifier)
-    if (persona) return personaRecordToPersona(persona)
+    const persona = await queryPersonaDB(identifier, undefined, true)
+    if (persona) {
+        await loginPersona(persona.identifier)
+        return personaRecordToPersona(persona)
+    }
 
     return null
 }

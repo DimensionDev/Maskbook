@@ -125,6 +125,16 @@ export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even
     })
 }
 
+export async function loginPersona(identifier: PersonaIdentifier) {
+    return consistentPersonaDBWriteAccess((t) =>
+        updatePersonaDB(
+            { identifier, hasLogout: false },
+            { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' },
+            t,
+        ),
+    )
+}
+
 export async function logoutPersona(identifier: PersonaIdentifier) {
     return consistentPersonaDBWriteAccess((t) =>
         updatePersonaDB(
