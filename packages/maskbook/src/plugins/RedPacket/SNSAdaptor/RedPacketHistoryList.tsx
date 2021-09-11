@@ -9,10 +9,13 @@ import { useEffect } from 'react'
 const useStyles = makeStyles()({
     root: {
         display: 'flex',
-        width: 544,
+        width: 568,
+        padding: '0 12px',
+        boxSizing: 'border-box',
         height: '100%',
         flexDirection: 'column',
         margin: '0 auto',
+        overflow: 'auto',
     },
     placeholder: {
         textAlign: 'center',

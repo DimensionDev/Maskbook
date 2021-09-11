@@ -13,7 +13,9 @@ const useStyles = makeStyles()((theme, _, css) => {
     return {
         root: {
             display: 'flex',
-            width: 544,
+            width: 568,
+            padding: '0 12px',
+            boxSizing: 'border-box',
             height: '100%',
             flexDirection: 'column',
             margin: '0 auto',
@@ -36,7 +38,7 @@ const useStyles = makeStyles()((theme, _, css) => {
         arrow: {
             position: 'absolute',
             bottom: 0,
-            right: 62,
+            right: 74,
             width: 0,
             height: 0,
             borderLeft: '6px solid transparent',
