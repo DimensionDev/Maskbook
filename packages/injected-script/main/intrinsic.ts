@@ -27,7 +27,7 @@ export function xray_Map() {
 //#endregion
 export const {
     Proxy: no_xray_Proxy,
-    Event: no_xray_Event,
+    CustomEvent: no_xray_Event,
     dispatchEvent,
     DataTransfer: no_xray_DataTransfer,
     ClipboardEvent: no_xray_ClipboardEvent,

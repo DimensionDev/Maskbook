@@ -219,7 +219,8 @@
         "counterparty",
         "jailbroken",
         "misoperation",
-        "majeure"
+        "majeure",
+        "localforage"
     ],
     "ignoreWords": [
         "BSCT",
@@ -283,7 +284,11 @@
         "vitalik",
         "unlockprotocol",
         "unlocklock",
-        "chainid"
+        "chainid",
+        "keyvaluepairs",
+        "rweb",
+        "Checkin",
+        "settingschange"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [
