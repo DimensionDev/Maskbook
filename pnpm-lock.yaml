@@ -703,6 +703,11 @@ importers:
       '@material-ui/core': ../empty
       '@material-ui/icons': ../empty
       '@material-ui/lab': ../empty
+      '@material-ui/system': ../empty
+      '@mui/icons-material': ../empty
+      '@mui/lab': ../empty
+      '@mui/material': ../empty
+      '@mui/system': ../empty
       '@servie/events': ^3.0.0
       '@types/react': link:..\empty
       anchorme: ^2.1.2
@@ -718,6 +723,11 @@ importers:
       '@material-ui/core': link:../empty
       '@material-ui/icons': link:../empty
       '@material-ui/lab': link:../empty
+      '@material-ui/system': link:../empty
+      '@mui/icons-material': link:../empty
+      '@mui/lab': link:../empty
+      '@mui/material': link:../empty
+      '@mui/system': link:../empty
       '@servie/events': 3.0.0
       '@types/react': link:../empty
       anchorme: 2.1.2
