@@ -8,6 +8,7 @@ import { currentProviderSettings } from '../../../plugins/Wallet/settings'
 import { Flags } from '../../../utils'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { openPopupsWindow } from '../HelperService'
+import { memoizePromise } from '@dimensiondev/kit'
 
 let id = 0
 
@@ -60,6 +61,8 @@ export async function request<T extends unknown>(
         )
     })
 }
+
+export const requestWithCache = memoizePromise(request, (requestArguments) => JSON.stringify(requestArguments))
 
 export async function requestWithoutPopup<T extends unknown>(
     requestArguments: RequestArguments,

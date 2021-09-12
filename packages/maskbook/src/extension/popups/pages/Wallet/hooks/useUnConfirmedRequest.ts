@@ -8,7 +8,7 @@ export const useUnconfirmedRequest = () => {
     const result = useAsyncRetry(async () => {
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
-        const computedPayload = await Services.Ethereum.getJsonRpcComputed(payload)
+        const computedPayload = await Services.Ethereum.getComputedPayload(payload)
         return {
             payload,
             computedPayload,

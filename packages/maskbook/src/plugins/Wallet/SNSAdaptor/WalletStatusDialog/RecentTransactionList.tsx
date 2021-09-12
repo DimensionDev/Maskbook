@@ -2,17 +2,12 @@ import { Check, XCircle } from 'react-feather'
 import { Box, Button, CircularProgress, Link, List, ListItem, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import {
-    formatKeccakHash,
-    resolveTransactionLinkOnExplorer,
-    TransactionStatusType,
-    useAccount,
-    useChainId,
-} from '@masknet/web3-shared'
+import { resolveTransactionLinkOnExplorer, TransactionStatusType, useAccount, useChainId } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import { WalletRPC } from '../../messages'
+import { RecentTransactionDescription } from './TransactionDescription'
 
 const useStyles = makeStyles()((theme) => ({
     transaction: {
@@ -46,6 +41,11 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
     const account = useAccount()
     const chainId = useChainId()
     const { value: transactions, error, retry } = useRecentTransactions()
+
+    console.log('DEBUG: recent transaction')
+    console.log({
+        transactions,
+    })
 
     //#region clear the most recent transactions
     const onClear = useSnackbarCallback(
@@ -84,7 +84,10 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
                 {transactions.map((transaction) => (
                     <ListItem className={classes.transaction} key={transaction.hash}>
                         <Typography className={classes.title} variant="body2">
-                            {formatKeccakHash(transaction.hash, 6)}
+                            <RecentTransactionDescription
+                                receipt={transaction.receipt}
+                                computedPayload={transaction.computedPayload}
+                            />
                         </Typography>
                         <Link
                             className={classes.link}
