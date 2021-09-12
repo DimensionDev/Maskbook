@@ -13,11 +13,11 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(1, 2),
         alignItems: 'stretch',
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        backgroundColor: 'rgba(255, 255, 255, 0.03)',
         margin: theme.spacing(1, 0),
-        borderRadius: theme.spacing(1),
+        borderRadius: theme.spacing(3),
         '&:hover': {
-            backgroundColor: 'rgba(33, 39, 41, 0.384)',
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
         },
         fontSize: 14,
         display: 'flex',

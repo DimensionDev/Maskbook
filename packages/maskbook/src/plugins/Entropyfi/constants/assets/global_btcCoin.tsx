@@ -4,7 +4,7 @@ import type { FC } from 'react'
 export const BtcIcon: FC<SvgIconProps> = (props) => (
     <SvgIcon {...props}>
         <svg viewBox="0 0 32 32">
-            <g clip-path="url(#clip0)">
+            <g clipPath="url(#clip0)">
                 <path fill="#fff" d="M0 16C0 7.163 7.163 0 16 0s16 7.163 16 16-7.163 16-16 16S0 24.837 0 16z" />
                 <path
                     fill="#F7931A"

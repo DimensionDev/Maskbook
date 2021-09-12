@@ -10,7 +10,12 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { Account } from './Account'
 import { PoolsView } from './PoolsView'
 
-const backgroundImage_ = new URL('../constants/assets/image_1.PNG', import.meta.url).toString()
+// 'D:\Blockchain\Maskbook\packages\maskbook\src\utils\suspends\getAssetAsBlobURL.ts'
+
+const backgroundImage_1 = new URL('../constants/assets/image_2.jpg', import.meta.url).toString()
+
+// import { getAssetAsBlobURL, useI18N } from '../../../../src/utils/'
+// const backgroundImageMain = getAssetAsBlobURL(new URL('../constants/assets/image_2.jpg', import.meta.url))
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -18,8 +23,12 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: 'none',
         border: `solid 1px ${theme.palette.divider}`,
         padding: 0,
-        backgroundColor: 'rgba(33, 39, 41, 0.65)',
+        backgroundColor: 'rgba(31, 55, 54, 1)',
         textAlign: 'center',
+        backgroundAttachment: 'local',
+        backgroundPosition: '0 0',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
     },
     message: {
         color: theme.palette.text.primary,
@@ -37,8 +46,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         padding: '0 !important',
-        backgroundImage: `url(${backgroundImage_})`,
-        // backgroundImage: `url(require("../constants/assets/image_1.PNG"))`,
     },
     body: {
         flex: 1,
@@ -49,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-        backgroundColor: 'rgba(33, 39, 41, 0.05)',
+        backgroundColor: 'rgba(31, 55, 54, 1)',
     },
     tabs: {
         borderTop: `solid 1px ${theme.palette.divider}`,
@@ -126,10 +133,7 @@ export function EntropyfiView() {
     //#endregion
 
     return (
-        <Card
-            className={classes.root}
-            elevation={0}
-            style={{ backgroundImage: `url(${'https://i.postimg.cc/pdk4H2bb/image-2.png'})` }}>
+        <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${backgroundImage_1})` }}>
             <CardContent className={classes.content}>
                 <Tabs
                     className={classes.tabs}

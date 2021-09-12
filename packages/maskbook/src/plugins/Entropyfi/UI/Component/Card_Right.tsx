@@ -1,13 +1,15 @@
 import { Grid, Button } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
+import { BigNumber } from 'bignumber.js'
+
 import useToggle from '../../hooks/useToggle'
 import { getSlicePoolId } from '../../utils'
 // import { usePoolState } from '../../hooks/usePoolData'
 
 import { InfoIcon } from '../../constants/assets/global_info'
-// import { DownarrowIcon } from '../../constants/assets/global_downarrow'
-// import { WaitIcon } from '../../constants/assets/card_wait'
+import { useInitialPrice } from '../../hooks/usePoolData'
 
+import { CountDown } from './Count_Down'
 const useStyles = makeStyles()((theme) => ({
     metaDeposit: {
         marginTop: theme.spacing(1),
@@ -51,42 +53,6 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 
-    countDownValue: {
-        justifyContent: 'space-evenly',
-        marginTop: theme.spacing(1),
-        '& div': {
-            backgroundColor: 'hsla(0, 0%, 100%, 0.2)',
-            width: '40px',
-            height: '38px',
-            borderRadius: '10px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            userSelect: 'none',
-            '& span': {
-                fontFamily: '-apple-system,system-ui,sans-serif',
-                fontStyle: 'normal',
-                fontSize: '20px',
-                fontWeight: 600,
-                textAlign: 'center',
-                color: '#fff',
-            },
-        },
-    },
-    countDownTitle: {
-        justifyContent: 'space-evenly',
-        '& p': {
-            width: '40px',
-            fontFamily: '-apple-system,system-ui,sans-serif',
-            textAlign: 'center',
-            color: '#fff',
-            fontWeight: 400,
-            fontSize: '12px',
-            lineHeight: '5px',
-            userSelect: 'none',
-            marginTop: '6px',
-        },
-    },
     cardTips: {
         '& div': {
             marginTop: '-70px',
@@ -134,8 +100,13 @@ export function CardRight(props: any) {
     const [show, toggle] = useToggle(false)
     // const poolState = usePoolState()[42][props.poolId]
     const poolStateLock = false
-    const initialPrice = '$51,000'
-
+    const InitialPriceNUM = useInitialPrice(42, props.poolId)
+    const initialPriceTEXT = new BigNumber(InitialPriceNUM || 0).toFormat(0)
+    const initialPrice =
+        coinId === 'ETH-GAS'
+            ? `${InitialPriceNUM ? initialPriceTEXT : '-'}Gwei`
+            : `$${InitialPriceNUM ? initialPriceTEXT : '-'}`
+    console.log('initialPrice:', initialPriceTEXT)
     return (
         <Grid item container direction="column" className={classes.metaDeposit}>
             <Grid item className={classes.info}>
@@ -144,26 +115,7 @@ export function CardRight(props: any) {
                     <span>{poolStateLock ? 'Result Countdown' : 'Deposit Countdown'}</span>
                 </nav>
             </Grid>
-            <Grid item container direction="row" className={classes.countDownValue} style={{ opacity: show ? 0 : 1 }}>
-                <div>
-                    <span>{'01' || '-'}</span>{' '}
-                </div>
-                <div>
-                    <span>{'22' || '-'}</span>{' '}
-                </div>
-                <div>
-                    <span>{'52' || '-'}</span>{' '}
-                </div>
-                <div>
-                    <span>{'53' || '-'}</span>{' '}
-                </div>
-            </Grid>
-            <Grid item container direction="row" className={classes.countDownTitle} style={{ opacity: show ? 0 : 1 }}>
-                <p>Day</p>
-                <p>Hr</p>
-                <p>Min</p>
-                <p>Sec</p>
-            </Grid>
+            <CountDown poolId={props.poolId} show={show} />
             <Grid item container className={classes.cardTips}>
                 <TIPS show={show} locked={poolStateLock} />
             </Grid>

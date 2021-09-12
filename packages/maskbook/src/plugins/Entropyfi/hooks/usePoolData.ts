@@ -6,20 +6,18 @@ import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { poolAddressMap, tokenMap } from '../constants'
 import { usePoolContract } from '../contracts'
-// import { PoolState } from './slice'
-// import { useAppSelector } from '../state/hooks'
 
-// export type State = {
-//     shortValue: string | undefined // ethers BigNumber => string
-//     longValue: string | undefined // ethers BigNumber => string
-//     sponsorValue: string | undefined // ethers BigNumber => string
-//     // shortAPY: string // (short+long+ sponsor)/short bigNumberjs bignumber => string
-//     initialPrice: string | undefined // coundDownValue in entropy-app
-//     locked: boolean
-//     gameDuration: number
-//     bidDuration: number
-//     lastUpdateTimestamp: number
-// }
+export type State = {
+    shortValue: string | undefined // ethers BigNumber => string
+    longValue: string | undefined // ethers BigNumber => string
+    sponsorValue: string | undefined // ethers BigNumber => string
+    // shortAPY: string // (short+long+ sponsor)/short bigNumberjs bignumber => string
+    initialPrice: string | undefined // coundDownValue in entropy-app
+    locked: boolean
+    gameDuration: number
+    bidDuration: number
+    lastUpdateTimestamp: number
+}
 // export function usePoolState(): PoolState {
 //     const state = useAppSelector((state: AppState) => state.pools)
 //     return state
