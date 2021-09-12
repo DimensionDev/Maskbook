@@ -4,12 +4,13 @@ import { useCallback } from 'react'
 import Services from '../../extension/service'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
 import type { ImageTemplateTypes } from '../../resources/image-payload'
-import { getCurrentSelectedIdentity } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { i18n, useI18N } from '../../utils'
 import { SteganographyTextPayload } from '../InjectedComponents/SteganographyTextPayload'
 import type { SubmitComposition } from './CompositionUI'
+import { globalUIState } from '../../social-network'
+import { unreachable } from '@dimensiondev/kit'
 
 export function useSubmit(onClose: () => void) {
     const { t } = useI18N()
@@ -19,11 +20,11 @@ export function useSubmit(onClose: () => void) {
             const { content, encode, target } = info
 
             const network = activatedSocialNetworkUI.networkIdentifier
-            const currentOwnedProfiles = await Services.Identity.queryMyProfiles(network)
-            let currentProfile = getCurrentSelectedIdentity(network)
-            if (!currentOwnedProfiles.some((e) => e.identifier.equals(currentProfile))) {
-                currentProfile = ProfileIdentifier.unknown
-            }
+            const currentProfile = new ProfileIdentifier(
+                network,
+                ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
+                    unreachable('Cannot figure out current profile' as never),
+            )
 
             const [encrypted, token] = await Services.Crypto.encryptTo(
                 content,
