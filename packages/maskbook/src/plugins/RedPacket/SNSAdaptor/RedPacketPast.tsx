@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
     },
     wrapper: {
-        padding: theme.spacing(0, 2, 2, 2),
+        padding: theme.spacing(0, 2, 0, 2),
     },
 }))
 
@@ -113,7 +113,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
     }
     return (
         <div className={classes.wrapper}>
-            <AbstractTab height={500} {...tabProps} />
+            <AbstractTab height={512} {...tabProps} />
         </div>
     )
 }
