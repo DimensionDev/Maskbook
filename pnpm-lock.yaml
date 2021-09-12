@@ -47,7 +47,7 @@ importers:
       react-i18next: ^11.12.0
       ts-node: ^10.2.1
       ttypescript: ^1.5.12
-      typescript: 4.4.2
+      typescript: 4.4.3
     dependencies:
       '@emotion/cache': 11.4.0
       '@emotion/react': 11.4.1_6fb7d5da76cf61f01be4ddf675730c6a
@@ -70,8 +70,8 @@ importers:
       '@commitlint/cli': 13.1.0
       '@commitlint/config-conventional': 13.1.0
       '@dimensiondev/patch-package': 6.5.0
-      '@magic-works/commonjs-import.meta': 1.0.1_typescript@4.4.2
-      '@magic-works/i18n-codegen': 0.0.6_typescript@4.4.2
+      '@magic-works/commonjs-import.meta': 1.0.1_typescript@4.4.3
+      '@magic-works/i18n-codegen': 0.0.6_typescript@4.4.3
       '@masknet/cli': link:packages/scripts
       '@nice-labs/git-rev': 3.5.0
       cspell: 5.9.0
@@ -91,9 +91,9 @@ importers:
       npm-run-all: 4.1.5
       only-allow: 1.0.0
       prettier: 2.4.0
-      ts-node: 10.2.1_typescript@4.4.2
-      ttypescript: 1.5.12_ts-node@10.2.1+typescript@4.4.2
-      typescript: 4.4.2
+      ts-node: 10.2.1_typescript@4.4.3
+      ttypescript: 1.5.12_ts-node@10.2.1+typescript@4.4.3
+      typescript: 4.4.3
 
   packages/backup-format:
     specifiers:
@@ -5205,15 +5205,15 @@ packages:
       '@json-rpc-tools/types': 1.7.6
     dev: false
 
-  /@magic-works/commonjs-import.meta/1.0.1_typescript@4.4.2:
+  /@magic-works/commonjs-import.meta/1.0.1_typescript@4.4.3:
     resolution: {integrity: sha512-yNUyMkGXH/c/fh6UB7TfK2+zYbBRzuNi5yucb2M1MCcIAA+gBKoRiY9DFJEJM0XnUOF1bpAlztHoXVkt9x6M7g==}
     peerDependencies:
       typescript: ^3.5||^4
     dependencies:
-      typescript: 4.4.2
+      typescript: 4.4.3
     dev: true
 
-  /@magic-works/i18n-codegen/0.0.6_typescript@4.4.2:
+  /@magic-works/i18n-codegen/0.0.6_typescript@4.4.3:
     resolution: {integrity: sha512-vM8DzT7zcmCDk2KBoeyUgGzkW/4MaKIdDTTh67cJT0/VVXu7fQd2tjRglJwOunowTCwPxwIHWjoCD/DIN4iPXQ==}
     hasBin: true
     peerDependencies:
@@ -5222,7 +5222,7 @@ packages:
       chokidar: 3.5.2
       i18next-translation-parser: 1.0.1
       source-map: 0.7.3
-      typescript: 4.4.2
+      typescript: 4.4.3
       yargs: 16.2.0
     dev: true
 
@@ -24762,6 +24762,36 @@ packages:
       yn: 3.1.1
     dev: true
 
+  /ts-node/10.2.1_typescript@4.4.3:
+    resolution: {integrity: sha512-hCnyOyuGmD5wHleOQX6NIjJtYVIO8bPP8F2acWkB4W06wdlkgyvJtubO/I9NkI88hCFECbsEgoLc0VNkYmcSfw==}
+    engines: {node: '>=12.0.0'}
+    hasBin: true
+    peerDependencies:
+      '@swc/core': '>=1.2.50'
+      '@swc/wasm': '>=1.2.50'
+      '@types/node': '*'
+      typescript: '>=2.7'
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      '@swc/wasm':
+        optional: true
+    dependencies:
+      '@cspotcode/source-map-support': 0.6.1
+      '@tsconfig/node10': 1.0.8
+      '@tsconfig/node12': 1.0.9
+      '@tsconfig/node14': 1.0.1
+      '@tsconfig/node16': 1.0.2
+      acorn: 8.4.1
+      acorn-walk: 8.1.1
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 4.4.3
+      yn: 3.1.1
+    dev: true
+
   /ts-node/6.2.0:
     resolution: {integrity: sha512-ZNT+OEGfUNVMGkpIaDJJ44Zq3Yr0bkU/ugN1PHbU+/01Z7UV1fsELRiTx1KuQNvQ1A3pGh3y25iYF6jXgxV21A==}
     engines: {node: '>=4.2.0'}
@@ -24893,7 +24923,7 @@ packages:
   /tty-browserify/0.0.0:
     resolution: {integrity: sha1-oVe6QC2iTpv5V/mqadUk7tQpAaY=}
 
-  /ttypescript/1.5.12_ts-node@10.2.1+typescript@4.4.2:
+  /ttypescript/1.5.12_ts-node@10.2.1+typescript@4.4.3:
     resolution: {integrity: sha512-1ojRyJvpnmgN9kIHmUnQPlEV1gq+VVsxVYjk/NfvMlHSmYxjK5hEvOOU2MQASrbekTUiUM7pR/nXeCc8bzvMOQ==}
     hasBin: true
     peerDependencies:
@@ -24901,8 +24931,8 @@ packages:
       typescript: '>=3.2.2'
     dependencies:
       resolve: 1.20.0
-      ts-node: 10.2.1_typescript@4.4.2
-      typescript: 4.4.2
+      ts-node: 10.2.1_typescript@4.4.3
+      typescript: 4.4.3
     dev: true
 
   /tunnel-agent/0.6.0:
@@ -25058,8 +25088,8 @@ packages:
     hasBin: true
     dev: false
 
-  /typescript/4.4.2:
-    resolution: {integrity: sha512-gzP+t5W4hdy4c+68bfcv0t400HVJMMd2+H9B7gae1nQlBzCqvrXX+6GL/b3GAgyTH966pzrZ70/fRjwAtZksSQ==}
+  /typescript/4.4.3:
+    resolution: {integrity: sha512-4xfscpisVgqqDfPaJo5vkd+Qd/ItkoagnHpufr+i2QCHBsNYp+G7UAoyFl8aPtx879u38wPV65rZ8qbGZijalA==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
