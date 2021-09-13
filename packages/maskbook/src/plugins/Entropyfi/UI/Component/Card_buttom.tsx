@@ -1,7 +1,9 @@
 import { Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { useValuePerShortToken, useValuePerLongToken } from '../../hooks/usePoolData'
+import { useTokenTotalSupply, useShortTokenValue, useLongTokenValue } from '../../hooks/usePoolData'
 import { BigNumber } from 'bignumber.js'
+import { useChainId } from '@masknet/web3-shared'
+import { tokenMap } from '../../constants'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -38,8 +40,14 @@ const useStyles = makeStyles()((theme) => ({
 export function CardButtom(props: any) {
     const { classes } = useStyles()
 
-    const longValue = new BigNumber(useValuePerShortToken(42, props.poolId) ?? '')
-    const shortValue = new BigNumber(useValuePerLongToken(42, props.poolId) ?? '')
+    const chainId = useChainId()
+    const sponsorValue = useTokenTotalSupply(tokenMap[chainId][props.poolId]?.sponsorToken)
+
+    const shortValue = useShortTokenValue(chainId, props.poolId) || '0'
+    const longValue = useLongTokenValue(chainId, props.poolId) || '0'
+    const poolValue = new BigNumber(shortValue)
+        .plus(new BigNumber(longValue))
+        .plus(new BigNumber(sponsorValue ? sponsorValue.toExact() : '0'))
 
     const _longRatio = new BigNumber(longValue)
         .div(new BigNumber(longValue).plus(new BigNumber(shortValue)))
@@ -49,16 +57,8 @@ export function CardButtom(props: any) {
 
     const longWidth = longRatio * 0.01 * 200
     const shortWidth = (1 - longRatio * 0.01) * 200
-    const _shortAPY = new BigNumber(longValue)
-        .plus(new BigNumber(shortValue))
-        // .plus(new BigNumber(sponsorValue))
-        .div(new BigNumber(shortValue))
-        .toFixed(2)
-    const _longAPY = new BigNumber(longValue)
-        .plus(new BigNumber(shortValue))
-        // .plus(new BigNumber(sponsorValue))
-        .div(new BigNumber(longValue))
-        .toFixed(2)
+    const _shortAPY = poolValue.div(shortValue).toFixed(2)
+    const _longAPY = poolValue.div(longValue).toFixed(2)
 
     return (
         <Grid item container direction="row" className={classes.root}>

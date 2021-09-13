@@ -133,7 +133,7 @@ const changeCountDown = (locked: boolean, gameDuration: number, bidDuration: num
     const nowTimetamp = Math.floor(Date.now() / 1000)
     const left = +startTimestamp + +countdownDuration - nowTimetamp
 
-    console.log('time left', left)
+    // console.log('time left', left)
 
     if (left >= 0 && left <= countdownDuration) {
         const { days, hours, minutes, seconds } = secToDaysHoursMinutes(left)

@@ -52,7 +52,7 @@ export function PoolView(props: any) {
                 <CardLeft poolId={props.poolId} />
                 <CardRight poolId={props.poolId} />
             </Grid>
-            <CardButtom />
+            <CardButtom poolId={props.poolId} />
         </Grid>
     )
 }

@@ -8,9 +8,11 @@ import { GasIcon } from '../../constants/assets/global_gasCoin'
 import { UsdcIcon } from '../../constants/assets/global_usdc'
 import { UsdtIcon } from '../../constants/assets/global_usdt'
 import { DaiIcon } from '../../constants/assets/global_DaiCoin'
+import { tokenMap } from '../../constants'
 import { BigNumber } from 'bignumber.js'
 
-import { useValuePerShortToken, useValuePerLongToken } from '../../hooks/usePoolData'
+import { useTokenTotalSupply, useShortTokenValue, useLongTokenValue } from '../../hooks/usePoolData'
+import { useChainId } from '@masknet/web3-shared'
 const useStyles = makeStyles()((theme) => ({
     metaTitle: {
         marginTop: theme.spacing(2),
@@ -77,15 +79,15 @@ export function CardLeft(props: any) {
     const [coinId, coinName] = getSlicePoolId(props.poolId)
     const [value, setValue] = useState(0)
     const [colorValue, setColorValue] = useState('69,231,221')
+    const chainId = useChainId()
+    const sponsorValue = useTokenTotalSupply(tokenMap[chainId][props.poolId]?.sponsorToken)
 
-    console.log('props.poolId check :', props.poolId)
-
-    // sponsorValue???
-    const poolValue = new BigNumber(useValuePerShortToken(42, props.poolId) ?? '')
-        .plus(new BigNumber(useValuePerLongToken(42, props.poolId) ?? ''))
+    const shortValue = useShortTokenValue(chainId, props.poolId) || '0'
+    const longValue = useLongTokenValue(chainId, props.poolId) || '0'
+    const poolValue = new BigNumber(shortValue)
+        .plus(new BigNumber(longValue))
+        .plus(new BigNumber(sponsorValue ? sponsorValue.toExact() : '0'))
         .toFixed(0)
-
-    console.log('_poolValue :', poolValue)
 
     const iconArr: any = {
         BTC: <BtcIcon />,

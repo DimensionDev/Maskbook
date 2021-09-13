@@ -1,10 +1,4 @@
 import { escapeRegExp } from 'lodash-es'
-export enum PoolStatus {
-    FirstGame = 0,
-    Locked = 1,
-    Accepting = 2,
-    Terminated = 3,
-}
 
 export const POOLTOGETHER_PLUGIN_ID = 'com.pooltogether'
 

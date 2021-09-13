@@ -1,10 +1,10 @@
 // @ts-nocheck
-import { useSingleContractMultipleData } from '@masknet/web3-shared'
+import { useERC20TokenContract, useSingleContractMultipleData } from '@masknet/web3-shared'
 import { CurrencyAmount, Token } from '@uniswap/sdk-core'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { poolAddressMap, tokenMap } from '../constants'
+import { poolAddressMap, tokenMap, PRECISION } from '../constants'
 import { usePoolContract } from '../contracts'
 
 export type State = {
@@ -140,4 +140,39 @@ export function useValuePerLongToken(chainId: number, poolId: string): string | 
             poolAddress && results && results.length > 0 && results[0].value ? results[0].value.toString() : undefined,
         [poolId, results, chainId],
     )
+}
+
+export function useTokenTotalSupply(token: Token): CurrencyAmount<Token> | undefined {
+    const tokenContract = useERC20TokenContract(token?.address)
+    const [results, calls, _, callback] = useSingleContractMultipleData(tokenContract, ['totalSupply'], [[]])
+    useAsyncRetry(() => callback(calls), [calls, callback])
+    return useMemo(
+        () =>
+            tokenContract && results && results.length > 0 && results[0].value
+                ? CurrencyAmount.fromRawAmount(token, results[0].value.toString())
+                : undefined,
+        [results, token],
+    )
+}
+
+export function useShortTokenValue(chainId: number, poolId: string): string | undefined {
+    const token = tokenMap[chainId][poolId].shortToken
+    const shortTokenSupply = useTokenTotalSupply(token)
+    const shortTokenValue = useValuePerShortToken(chainId, poolId)
+    const shortValue =
+        !!shortTokenSupply && !!shortTokenValue
+            ? new BigNumber(shortTokenSupply.toExact()).multipliedBy(shortTokenValue).div(PRECISION).toString()
+            : undefined
+    return shortValue
+}
+
+export function useLongTokenValue(chainId: number, poolId: string): string | undefined {
+    const token = tokenMap[chainId][poolId].longToken
+    const longTokenSupply = useTokenTotalSupply(token)
+    const longTokenValue = useValuePerLongToken(chainId, poolId)
+    const longValue =
+        !!longTokenSupply && !!longTokenValue
+            ? new BigNumber(longTokenSupply.toExact()).multipliedBy(longTokenValue).div(PRECISION).toString()
+            : undefined
+    return longValue
 }
