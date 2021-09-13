@@ -4,6 +4,7 @@ import { sideEffect } from '../utils/side-effects'
 import { LaunchPage } from './types'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
+import { Identifier, ProfileIdentifier } from '@masknet/shared-base'
 
 /**
  * Does the debug mode on
@@ -51,6 +52,11 @@ export const languageSettings = createGlobalSettings<LanguageOptions>('language'
  */
 export const currentImagePayloadStatus: NetworkSettings<string> = createNetworkSettings('currentImagePayloadStatus', '')
 export const currentSelectedIdentity: NetworkSettings<string> = createNetworkSettings('currentSelectedIdentity', '')
+export function getCurrentSelectedIdentity(network: string) {
+    return Identifier.fromString<ProfileIdentifier>(currentSelectedIdentity[network].value, ProfileIdentifier).unwrapOr(
+        ProfileIdentifier.unknown,
+    )
+}
 export const currentSetupGuideStatus: NetworkSettings<string> = createNetworkSettings('currentSetupGuideStatus', '')
 // This is a misuse of concept "NetworkSettings" as "namespaced settings"
 // The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884

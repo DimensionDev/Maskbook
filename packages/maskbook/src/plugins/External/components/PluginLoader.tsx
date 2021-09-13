@@ -4,7 +4,7 @@ import { Result } from 'ts-results'
 import { PermissionAwareRedirectOf } from '../../../extension/popups'
 import Services from '../../../extension/service'
 import { useExternalPluginManifest } from '../loader'
-import { createThirdPartyPopupContext } from '../popup-context'
+import { createThirdPartyPopupContext } from '../sns-context'
 
 export function PluginLoader() {
     const [input, setInput] = useState(
