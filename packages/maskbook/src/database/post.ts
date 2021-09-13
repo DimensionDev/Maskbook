@@ -11,7 +11,7 @@ import { ECKeyIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 type UpgradeKnowledge = { version: 4; data: Map<string, AESJsonWebKey> } | undefined
 const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
     4,
-    5,
+    6,
     (currentTryOpen, knowledge) =>
         openDB<PostDB>('maskbook-post-v2', currentTryOpen, {
             async upgrade(db, oldVersion, _newVersion, transaction): Promise<void> {
@@ -41,11 +41,14 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                     interestedMeta?: ReadonlyMap<string, unknown>
                     recipients: true | Map<string, Version3RecipientDetail>
                 }
+                type Version6PostRecord = Omit<Version5PostRecord, 'encryptBy'> & {
+                    encryptBy?: string
+                }
                 /**
                  * A type assert that make sure a and b are the same type
                  * @param a The latest version PostRecord
                  */
-                function _assert(a: Version5PostRecord, b: PostDBRecord) {
+                function _assert(a: Version6PostRecord, b: PostDBRecord) {
                     a = b
                     b = a
                 }
@@ -138,6 +141,17 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                         if (!v5Record.postCryptoKey) delete v5Record.postCryptoKey
                         await cursor.update(v5Record as any)
                     }
+                }
+
+                if (oldVersion <= 5) {
+                    const store = transaction.objectStore('post')
+                    for await (const cursor of store) {
+                        const v5Record: Version5PostRecord = cursor.value as any
+                        const by = v5Record.encryptBy
+                        if (!by) continue
+                        cursor.value.encryptBy = restorePrototype(by, ECKeyIdentifier.prototype).toText()
+                    }
+                    store.createIndex('persona, date', ['encryptBy', 'foundAt'], { unique: false })
                 }
             },
         }),
@@ -262,9 +276,7 @@ export async function queryPostPagedDB(
     let firstRecord = true
 
     for await (const cursor of t.objectStore('post').iterate()) {
-        const encryptBy = restorePrototype(cursor.value.encryptBy, ECKeyIdentifier.prototype)?.toText()
-
-        if (encryptBy !== linked.toText()) continue
+        if (cursor.value.encryptBy !== linked.toText()) continue
 
         if (firstRecord && options.after) {
             cursor.continue(options.after.toText())
@@ -296,7 +308,7 @@ function postOutDB(db: PostDBRecord): PostRecord {
         recipients: recipients === true ? 'everyone' : new IdentifierMap(recipients, ProfileIdentifier),
         foundAt: foundAt,
         postCryptoKey: postCryptoKey,
-        encryptBy: restorePrototype(encryptBy, ECKeyIdentifier.prototype),
+        encryptBy: encryptBy ? Identifier.fromString(encryptBy, ECKeyIdentifier).unwrapOr(undefined) : undefined,
         interestedMeta,
         summary,
         url,
@@ -307,6 +319,7 @@ function postToDB(out: PostRecord): PostDBRecord {
         ...out,
         identifier: out.identifier.toText(),
         recipients: out.recipients === 'everyone' ? true : out.recipients.__raw_map__,
+        encryptBy: out.encryptBy?.toText(),
     }
 }
 //#endregion
@@ -363,7 +376,7 @@ interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recip
     postBy: PrototypeLess<ProfileIdentifier>
     identifier: string
     recipients: true | Map<string, RecipientDetail>
-    encryptBy?: PrototypeLess<PersonaIdentifier>
+    encryptBy?: string
 }
 
 interface PostDB extends DBSchema {
@@ -371,6 +384,9 @@ interface PostDB extends DBSchema {
     post: {
         value: PostDBRecord
         key: string
+        indexes: {
+            'persona, date': [string, Date]
+        }
     }
 }
 //#endregion
