@@ -14,13 +14,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface EthereumWalletConnectedBoundaryProps extends withClasses<'connectWallet' | 'unlockMetaMask'> {
+export interface EthereumWalletConnectedBoundaryProps
+    extends withClasses<'connectWallet' | 'unlockMetaMask' | 'gasFeeButton' | 'invalidButton'> {
     offChain?: boolean
     children?: React.ReactNode
+    ableToSendTx?: boolean
 }
 
 export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
-    const { children = null, offChain = false } = props
+    const { children = null, offChain = false, ableToSendTx = true } = props
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -53,7 +55,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    if (!isRiskWarningConfirmed)
+    if (!isRiskWarningConfirmed && ableToSendTx)
         return (
             <Grid container>
                 <ActionButton
@@ -71,7 +73,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
         return (
             <Grid container>
                 <ActionButton
-                    className={classes.button}
+                    className={classNames(classes.button, classes.gasFeeButton)}
                     disabled={!nativeTokenBalance.error}
                     fullWidth
                     variant="contained"
@@ -85,7 +87,12 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     if (!chainIdValid && !offChain)
         return (
             <Grid container>
-                <ActionButton className={classes.button} disabled fullWidth variant="contained" size="large">
+                <ActionButton
+                    className={classNames(classes.button, classes.invalidButton)}
+                    disabled
+                    fullWidth
+                    variant="contained"
+                    size="large">
                     {t('plugin_wallet_invalid_network')}
                 </ActionButton>
             </Grid>
