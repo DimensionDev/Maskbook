@@ -58,7 +58,7 @@ export function AddNFT(props: AddNFTProps) {
         getNFT(account, address, tokenId)
             .then((token) => {
                 onAddClick(token)
-                _onClose()
+                handleClose()
             })
             .catch((error) => setMessage(error.message))
     }, [tokenId, address, onAddClick, onClose])
@@ -72,15 +72,15 @@ export function AddNFT(props: AddNFTProps) {
         setTokenId(tokenId)
     }, [])
 
-    const _onClose = () => {
+    const handleClose = () => {
         setMessage('')
         onClose()
     }
 
     return (
-        <InjectedDialog title="Add collectibles" open={open} onClose={_onClose}>
+        <InjectedDialog title="Add collectibles" open={open} onClose={handleClose}>
             <DialogContent>
-                <Button className={classes.addNFT} variant="outlined" size="small" onClick={() => onClick()}>
+                <Button className={classes.addNFT} variant="outlined" size="small" onClick={onClick}>
                     Add
                 </Button>
                 <div className={classes.input}>

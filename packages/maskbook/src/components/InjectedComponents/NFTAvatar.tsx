@@ -99,10 +99,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
 
     const { collectibles, hasNextPage } = value
 
-    console.log(collectibles)
     useEffect(() => {
         setCollectibles_(collectibles)
-    }, [collectibles, collectibles.length])
+    }, [collectibles])
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
@@ -118,7 +117,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    const LoadStatus = Array.from({ length: 24 })
+    const LoadStatus = Array.from({ length: 6 })
         .fill(0)
         .map((_, i) => <Skeleton animation="wave" variant="rectangular" className={classes.image} key={i} />)
     const Retry = (
@@ -199,7 +198,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 className={classes.setNFTAvatar}
                                 onClick={() => onClick()}
                                 disabled={!selectedToken}>
-                                Set NFT Avatar
+                                {t('profile_nft_avatar_set')}
                             </Button>
                         </Box>
                     </Box>
