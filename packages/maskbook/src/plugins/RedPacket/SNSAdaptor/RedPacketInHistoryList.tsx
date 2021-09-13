@@ -16,6 +16,7 @@ import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useRefundCallback } from './hooks/useRefundCallback'
 import { WalletMessages } from '../../Wallet/messages'
 import intervalToDuration from 'date-fns/intervalToDuration'
+import nextDay from 'date-fns/nextDay'
 
 const useStyles = makeStyles()((theme) => ({
     primary: {
@@ -195,7 +196,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     //#region refund time
     const refundDuration =
         canSend && !isPasswordValid
-            ? intervalToDuration({ start: Date.now(), end: history.payload.creation_time + 3600 * 24 * 1000 })
+            ? intervalToDuration({ start: Date.now(), end: nextDay(history.payload.creation_time, 1) })
             : null
     const formatRefundDuration = `${refundDuration?.hours}h ${refundDuration?.minutes}m`
     //#endregion
@@ -217,11 +218,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t('plugin_red_packet_history_duration', {
-                                    startTime: dateTimeFormat(new Date(history.creation_time * 1000)),
-                                    endTime: dateTimeFormat(
-                                        new Date((history.creation_time + history.duration) * 1000),
-                                        false,
-                                    ),
+                                    startTime: dateTimeFormat(new Date(history.creation_time)),
+                                    endTime: dateTimeFormat(new Date(history.creation_time + history.duration), false),
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
