@@ -1,19 +1,19 @@
-import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../utils'
-import { searchTwitterAvatarSelector } from '../utils/selector'
+import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
+import { searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles, useSnackbar } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
-import { Typography, Button } from '@material-ui/core'
-import { NFTAvatarAmountIcon } from '@masknet/icons'
+import { Button } from '@material-ui/core'
+import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import {
     AvatarMetaDB,
     saveNFTAvatar,
     setOrClearAvatar,
     useNFTAvatar,
-} from '../../../components/InjectedComponents/NFT/NFTAvatar'
-import { updateAvatarImage } from '../utils/updateAvatarImage'
-import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-import { getAvatarId } from '../utils/user'
+} from '../../../../components/InjectedComponents/NFT/NFTAvatar'
+import { updateAvatarImage } from '../../utils/updateAvatarImage'
+import { getAvatarId } from '../../utils/user'
+import { NFTBadge } from '../../../../components/InjectedComponents/NFT/NFTBadge'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -24,43 +24,22 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'absolute',
-        top: 18,
+        top: '4px !important',
         left: 0,
         width: 134,
         textAlign: 'center',
         color: 'white',
     },
-
-    nftImage: {
-        width: '100%',
-        height: 33,
-        paddingLeft: 16,
-    },
-    wrapper: {
-        position: 'absolute',
-        width: '100%',
-        left: 0,
-        top: 16,
-        display: 'flex',
-        justifyContent: 'center',
-    },
-    nftLogo: {},
-    amount: {
-        color: 'white',
-        fontSize: 14,
+    text: {
+        fontSize: '20px !important',
         fontWeight: 700,
-        textShadow:
-            '1px 1px black, 1px 0px black, 0px 1px black, -1px 0px black, 0px -1px black, -1px -1px black, 1px -1px black, -1px 1px black',
-
-        whiteSpace: 'nowrap',
-        lineHeight: 1.1,
-    },
-    amountWrapper: {
-        background:
-            'linear-gradient(106.15deg, #FF0000 5.97%, #FF8A00 21.54%, #FFC700 42.35%, #52FF00 56.58%, #00FFFF 73.01%, #0038FF 87.8%, #AD00FF 101.49%, #FF0000 110.25%)',
-        borderRadius: 3,
         minWidth: 72,
     },
+    icon: {
+        width: '43px !important',
+        height: '16px !important',
+    },
+
     recover: {
         position: 'absolute',
         right: 160,
@@ -129,18 +108,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     return (
         <>
             {avatarId === avatar.avatarId ? (
-                <div className={classes.root}>
-                    <div className={classes.nftLogo}>
-                        <NFTAvatarAmountIcon className={classes.nftImage} />
-                    </div>
-                    <div className={classes.wrapper}>
-                        <div className={classes.amountWrapper}>
-                            <Typography align="center" className={classes.amount}>
-                                {`${amount} ETH`}
-                            </Typography>
-                        </div>
-                    </div>
-                </div>
+                <NFTBadge avatar={avatar} classes={{ root: classes.root, text: classes.text, icon: classes.icon }} />
             ) : null}
             {Flags.nft_avatar_enabled ? (
                 <Button variant="outlined" size="small" className={classes.recover} onClick={() => onClick()}>

@@ -3,17 +3,17 @@ import type { ProfileIdentifier } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared'
 import { useCallback, useEffect, useState } from 'react'
-import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
-import { NFTAvatar, useNFTAvatar } from '../../../components/InjectedComponents/NFT/NFTAvatar'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../utils'
+import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
+import { NFTAvatar, useNFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
+import { activatedSocialNetworkUI } from '../../../../social-network'
+import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
 import {
+    searchProfileAvatarParentSelector,
     searchProfileAvatarSelector,
     searchProfileSaveSelector,
-    searchProfileAvatarParentSelector,
-} from '../utils/selector'
-import { updateAvatarImage } from '../utils/updateAvatarImage'
-import { getAvatar, getAvatarId, getTwitterId } from '../utils/user'
+} from '../../utils/selector'
+import { updateAvatarImage } from '../../utils/updateAvatarImage'
+import { getAvatar, getAvatarId, getTwitterId } from '../../utils/user'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -27,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function useGetCurrentUserInfo(): { userId?: string; identifier?: ProfileIdentifier } | undefined {
+function useCurrentUserInfo(): { userId?: string; identifier?: ProfileIdentifier } | undefined {
     const personas = useMyPersonas()
     if (personas.length === 0) return undefined
     const userInfo = personas
@@ -48,7 +48,7 @@ interface NFTAvatarInTwitterProps {}
 
 function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const { classes } = useStyles()
-    const useInfo = useGetCurrentUserInfo()
+    const useInfo = useCurrentUserInfo()
 
     const [twitterId, setTwitterId] = useState(getTwitterId())
     const avatar = useNFTAvatar(twitterId)

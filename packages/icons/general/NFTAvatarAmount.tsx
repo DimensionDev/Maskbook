@@ -61,5 +61,5 @@ export const NFTAvatarAmountIcon = createIcon(
             </linearGradient>
         </defs>
     </g>,
-    '0 0 72 33',
+    '0 0 43 16',
 )
