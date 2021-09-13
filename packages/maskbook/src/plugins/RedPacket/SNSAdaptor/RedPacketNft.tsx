@@ -249,6 +249,14 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const web3 = useWeb3()
     const account = useAccount()
     const { enqueueSnackbar } = useSnackbar()
+
+    const {
+        value: availability,
+        loading,
+        retry: retryAvailability,
+        error: availabilityError,
+    } = useAvailabilityNftRedPacket(payload.id, account)
+
     //#region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
@@ -256,6 +264,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     //#endregion
     const [claimState, claimCallback, resetCallback] = useClaimNftRedpacketCallback(
         payload.id,
+        availability?.totalAmount,
         web3.eth.accounts.sign(account, payload.privateKey).signature,
     )
 
@@ -268,13 +277,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             'noopener noreferrer',
         )
     }, [payload])
-
-    const {
-        value: availability,
-        loading,
-        retry: retryAvailability,
-        error: availabilityError,
-    } = useAvailabilityNftRedPacket(payload.id, account)
 
     const {
         value: erc721TokenDetailed,

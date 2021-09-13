@@ -11,13 +11,15 @@ import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
 import { useCallback } from 'react'
 
-export function useClaimNftRedpacketCallback(id: string, signedMsg: string) {
+const EXTRA_GAS_PER_NFT = 335
+
+export function useClaimNftRedpacketCallback(id: string, totalAmount: number | undefined, signedMsg: string) {
     const account = useAccount()
     const chainId = useChainId()
     const nftRedPacketContract = useNftRedPacketContract()
     const [claimState, setClaimState] = useTransactionState()
     const claimCallback = useCallback(async () => {
-        if (!nftRedPacketContract || !id || !signedMsg || !account) {
+        if (!nftRedPacketContract || !id || !signedMsg || !account || !totalAmount) {
             setClaimState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -34,13 +36,15 @@ export function useClaimNftRedpacketCallback(id: string, signedMsg: string) {
 
         const config = {
             from: account,
-            gas: await nftRedPacketContract.methods
-                .claim(...params)
-                .estimateGas({ from: account })
-                .catch((error) => {
-                    setClaimState({ type: TransactionStateType.FAILED, error })
-                    throw error
-                }),
+            gas:
+                (await nftRedPacketContract.methods
+                    .claim(...params)
+                    .estimateGas({ from: account })
+                    .catch((error) => {
+                        setClaimState({ type: TransactionStateType.FAILED, error })
+                        throw error
+                    })) +
+                EXTRA_GAS_PER_NFT * totalAmount,
             chainId,
         }
 
