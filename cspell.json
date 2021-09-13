@@ -284,7 +284,11 @@
         "unlockprotocol",
         "unlocklock",
         "chainid",
-        "NFT"
+        "NFT",
+        "powahs",
+        "gamification",
+        "Defi",
+        "powah"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

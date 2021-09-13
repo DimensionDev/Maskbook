@@ -98,3 +98,27 @@ export interface Availability {
     end_time?: string
     qualification_addr?: string
 }
+
+//#region SpaceStation
+export interface ClaimableCount {
+    maxCount: number
+    usedCount: number
+}
+
+export interface CampaignInfo {
+    name: string
+    description: string
+    chain: string
+    endTime: number
+    startTime: number
+    nfts: { image: string }[]
+}
+
+export interface ClaimParams {
+    allow: boolean
+    signature: string
+    verifyIDs: number[]
+    powahs: number[]
+    nftCoreAddress: string
+}
+//#endregion
