@@ -24,7 +24,7 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'absolute',
-        top: 12,
+        top: 18,
         left: 0,
         width: 134,
         textAlign: 'center',
