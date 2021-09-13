@@ -7,6 +7,6 @@ package.json
 packages/contracts
 packages/storybook-shared
 packages/netlify/storybook-static
-packages/netlify/snowpack
+packages/netlify/sites
 public/
 scripts/

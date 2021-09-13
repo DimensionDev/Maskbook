@@ -6,7 +6,7 @@ import { Close as CloseIcon } from '@material-ui/icons'
 import { MaskColorVar } from '../../constants'
 
 export { SnackbarProvider, useSnackbar } from 'notistack'
-export type { VariantType } from 'notistack'
+export type { VariantType, OptionsObject } from 'notistack'
 
 const useStyles = makeStyles()({
     root: {

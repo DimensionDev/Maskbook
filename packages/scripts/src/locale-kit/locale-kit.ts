@@ -8,7 +8,7 @@ import {
     readMessages,
     writeMessages,
 } from './utils'
-import { getArgv, task } from '../utils'
+import { parseArgs, task } from '../utils'
 
 async function removeAllUnusedKeys(keys: string[], locales = LOCALE_NAMES) {
     for (const name of locales) {
@@ -36,7 +36,7 @@ async function diagnosis() {
 }
 
 export async function localeKit() {
-    const argv = getArgv<Args>()
+    const argv = parseArgs<Args>()
     if (process.env.CI) return diagnosis()
 
     if (argv.removeUnusedKeys) {
@@ -49,7 +49,7 @@ export async function localeKit() {
 task(localeKit, 'locale-kit', 'Run locale kit.', {
     '--remove-unused-keys': 'to remove unused keys',
 })
-type Args = {
+interface Args {
     removeUnusedKeys: boolean
     setMissingKeys: boolean
     syncKeys: boolean

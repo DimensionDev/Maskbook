@@ -12,6 +12,7 @@ import RPC from '@masknet/web3-constants/data/rpc.json'
 import PoolTogether from '@masknet/web3-constants/data/pooltogether.json'
 import TokenAssetBaseURL from '@masknet/web3-constants/data/token-asset-base-url.json'
 import GoodGhosting from '@masknet/web3-constants/data/good-ghosting.json'
+import SpaceStationGalaxy from '@masknet/web3-constants/data/space-station-galaxy.json'
 import OpenseaAPI from '@masknet/web3-constants/data/opensea-api.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
@@ -54,6 +55,8 @@ export const usePoolTogetherConstants = hookTransform(getPoolTogetherConstants)
 export const getGoodGhostingConstants = transform(GoodGhosting)
 export const useGoodGhostingConstants = hookTransform(getGoodGhostingConstants)
 
+export const getSpaceStationGalaxyConstants = transform(SpaceStationGalaxy)
+export const useSpaceStationGalaxyConstants = hookTransform(getSpaceStationGalaxyConstants)
 export const getOpenseaAPIConstants = transform(OpenseaAPI)
 export const useOpenseaAPIConstants = hookTransform(getOpenseaAPIConstants)
 
