@@ -25,7 +25,6 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
             })
             return
         }
-
         setClaimState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
@@ -81,7 +80,7 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
                 reject(error)
             })
         })
-    }, [id, signedMsg, account, chainId])
+    }, [id, signedMsg, account, chainId, totalAmount])
 
     const resetCallback = useCallback(() => {
         setClaimState({
