@@ -1,9 +1,8 @@
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { Box, Button, Drawer, Stack } from '@material-ui/core'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PersonaCard } from '../PersonaCard'
-import { AddPersonaCard } from '../AddPersonaCard'
 import { useDashboardI18N } from '../../../../locales'
 import type { PersonaIdentifier, PersonaInformation } from '@masknet/shared'
 import { RoutePaths } from '../../../../type'
@@ -68,8 +67,6 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
         const t = useDashboardI18N()
         const navigate = useNavigate()
 
-        const [showAddPersonaCard, setShowAddPersonaCard] = useState(false)
-
         return (
             <Drawer
                 anchor="right"
@@ -100,20 +97,11 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                                 </Box>
                             )
                         })}
-                        {showAddPersonaCard && (
-                            <AddPersonaCard
-                                onConfirm={(nickName) => {
-                                    onCreatePersona(nickName)
-                                    setShowAddPersonaCard(false)
-                                }}
-                                onCancel={() => setShowAddPersonaCard(false)}
-                            />
-                        )}
                         <Box className={classes.buttons}>
-                            <Button onClick={() => setShowAddPersonaCard(true)}>{t.personas_add_persona()}</Button>
+                            <Button onClick={() => navigate(RoutePaths.SignUp)}>{t.personas_add_persona()}</Button>
                             <Button
                                 color="warning"
-                                onClick={() => navigate(RoutePaths.SignIn, { state: { from: 'persona' } })}>
+                                onClick={() => navigate(RoutePaths.SignIn, { state: { from: RoutePaths.Personas } })}>
                                 {t.recovery()}
                             </Button>
                         </Box>

@@ -16,10 +16,10 @@ export default function SignIn() {
 
     const action = useMemo(
         () =>
-            state?.from === 'persona'
+            state?.from
                 ? {
                       name: t.close(),
-                      callback: () => navigate(RoutePaths.Personas),
+                      callback: () => navigate(state.from),
                   }
                 : {
                       name: t.sign_in_account_sign_up_button(),
