@@ -7,7 +7,7 @@ import { getSlicePoolId } from '../../utils'
 // import { usePoolState } from '../../hooks/usePoolData'
 
 import { InfoIcon } from '../../constants/assets/global_info'
-import { useInitialPrice } from '../../hooks/usePoolData'
+import { useInitialPrice, usePoolStatus } from '../../hooks/usePoolData'
 
 import { CountDown } from './Count_Down'
 const useStyles = makeStyles()((theme) => ({
@@ -99,7 +99,6 @@ export function CardRight(props: any) {
     const [coinId, coinName] = getSlicePoolId(props.poolId)
     const [show, toggle] = useToggle(false)
     // const poolState = usePoolState()[42][props.poolId]
-    const poolStateLock = false
     const InitialPriceNUM = useInitialPrice(42, props.poolId)
     const initialPriceTEXT = new BigNumber(InitialPriceNUM || 0).toFormat(0)
     const initialPrice =
@@ -107,22 +106,24 @@ export function CardRight(props: any) {
             ? `${InitialPriceNUM ? initialPriceTEXT : '-'}Gwei`
             : `$${InitialPriceNUM ? initialPriceTEXT : '-'}`
     console.log('initialPrice:', initialPriceTEXT)
+    const locked = usePoolStatus(42, props.poolId) ?? 4
+    console.log(props.poolId, 'card right status:', locked)
     return (
         <Grid item container direction="column" className={classes.metaDeposit}>
             <Grid item className={classes.info}>
                 <nav>
                     <InfoIcon onMouseEnter={() => toggle()} onMouseLeave={() => toggle()} />
-                    <span>{poolStateLock ? 'Result Countdown' : 'Deposit Countdown'}</span>
+                    <span>{(locked === 2 ? false : true) ? 'Result Countdown' : 'Deposit Countdown'}</span>
                 </nav>
             </Grid>
             <CountDown poolId={props.poolId} show={show} />
             <Grid item container className={classes.cardTips}>
-                <TIPS show={show} locked={poolStateLock} />
+                <TIPS show={show} locked={locked === 2 ? false : true} />
             </Grid>
             <Grid item className={classes.countdownNotice} style={{ opacity: show ? 0 : 1 }}>
                 Will the {coinId} price be higher than <span>{initialPrice}</span> when the game ends ?
             </Grid>
-            <Grid item>
+            <Grid item style={{ opacity: show ? 0 : 1 }}>
                 <Button className={classes.deposit} variant="contained" fullWidth size="small">
                     Deposit
                 </Button>
@@ -136,7 +137,7 @@ const TIPS = (props: any) => {
         <div style={{ opacity: props.show ? 1 : 0 }}>
             <p>
                 {props.locked
-                    ? 'Game period = 2 days (deposit) + 5 days (interest generation). First one deposit to the game can query the game price. Protocol will automatically enroll you to the next round, your winning this round will be saved as principal for the next round.'
+                    ? 'Game period = 2 days (deposit) + 5 days (interest generation). First one deposit to the game can query the game price. '
                     : 'Protocol will automatically enroll you to the next round, your winning this round will be saved as principal for the next round.'}
             </p>
         </div>

@@ -10,8 +10,6 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { Account } from './Account'
 import { PoolsView } from './PoolsView'
 
-// 'D:\Blockchain\Maskbook\packages\maskbook\src\utils\suspends\getAssetAsBlobURL.ts'
-
 const backgroundImage_1 = new URL('../constants/assets/image_2.jpg', import.meta.url).toString()
 
 // import { getAssetAsBlobURL, useI18N } from '../../../../src/utils/'
@@ -133,7 +131,8 @@ export function EntropyfiView() {
     //#endregion
 
     return (
-        <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${backgroundImage_1})` }}>
+        <Card className={classes.root} elevation={0}>
+            {/* <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${backgroundImage_1})` }}> */}
             <CardContent className={classes.content}>
                 <Tabs
                     className={classes.tabs}
@@ -173,7 +172,8 @@ export function EntropyfiView() {
                         target="_blank"
                         rel="noopener noreferrer"
                         title="Entropyfi"
-                        href="https://www.entropyfi.com/">
+                        href="https://www.entropyfi.com/"
+                        style={{ textDecoration: 'none', color: '#45e7dd' }}>
                         <EntropyfiIcon classes={{ root: classes.entropyfiIcon }} />
                         <span className={classes.entropyfiText}>Entropyfi</span>
                     </Link>

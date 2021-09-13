@@ -49,11 +49,10 @@ export function CountDown(props: any) {
     const [coinId, coinName] = getSlicePoolId(props.poolId)
     const bidDuration = initialState[42][props.poolId].bidDuration // 2days
     const gameDuration = initialState[42][props.poolId].gameDuration // 5 days
-    const locked = usePoolStatus(42, props.poolId) ?? 1 // locked value is 1 or 2?
+    const locked = usePoolStatus(42, props.poolId) ?? 4
     const lastUpdateTimestamp = useLastUpdateTimestamp(42, props.poolId) ?? 1
 
     console.log(props.poolId, 'status:', locked)
-    console.log(props.poolId, 'lastUpdateTimestamp:', lastUpdateTimestamp)
 
     const [CountDown, setCountDown] = useState<any>({
         day: 0,
@@ -61,10 +60,17 @@ export function CountDown(props: any) {
         min: 0,
         sec: 0,
     })
+
+    // Xilin: I need to change "noImplicitReturns":  in the tsconfig.json to false to make this useEffect to work
+    // but i think this is not the correct way!!!
     useEffect(() => {
         const timer = setInterval(() => {
-            const newCount = changeCountDown(locked > 1 ? false : true, gameDuration, bidDuration, lastUpdateTimestamp)
-            console.log('ifnewCount:', newCount)
+            const newCount = changeCountDown(
+                locked === 2 ? false : true,
+                gameDuration,
+                bidDuration,
+                lastUpdateTimestamp,
+            )
             if (newCount === false) {
                 setCountDown({
                     day: 0,
@@ -79,10 +85,6 @@ export function CountDown(props: any) {
         }, 1000)
         return () => clearInterval(timer)
     }, [CountDown])
-    console.log('CountDown.day:', CountDown.day)
-    console.log('CountDown.hr:', CountDown.hr)
-    console.log('CountDown.sec:', CountDown.sec)
-
     return (
         <Grid item container>
             <Grid
@@ -130,14 +132,10 @@ const changeCountDown = (locked: boolean, gameDuration: number, bidDuration: num
     const countdownDuration: number = locked ? gameDuration : bidDuration
     const nowTimetamp = Math.floor(Date.now() / 1000)
     const left = +startTimestamp + +countdownDuration - nowTimetamp
-    console.log('startTimestamp + countdownDuration', +startTimestamp + +countdownDuration)
-    console.log('countdownDuration', countdownDuration)
-    console.log('nowTimetamp', nowTimetamp)
-    console.log('left', left)
+
+    console.log('time left', left)
 
     if (left >= 0 && left <= countdownDuration) {
-        console.log('reaach here')
-
         const { days, hours, minutes, seconds } = secToDaysHoursMinutes(left)
         day = days
         hr = hours

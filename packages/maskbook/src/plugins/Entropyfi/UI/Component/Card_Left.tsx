@@ -83,7 +83,6 @@ export function CardLeft(props: any) {
     // sponsorValue???
     const poolValue = new BigNumber(useValuePerShortToken(42, props.poolId) ?? '')
         .plus(new BigNumber(useValuePerLongToken(42, props.poolId) ?? ''))
-        .plus(new BigNumber(useValuePerLongToken(42, props.poolId) ?? ''))
         .toFixed(0)
 
     console.log('_poolValue :', poolValue)
@@ -108,7 +107,7 @@ export function CardLeft(props: any) {
                     </Grid>
                 </Grid>
                 <Grid item>
-                    <Typography color="#FFF" marginLeft="10px" align="left" variant="subtitle1">
+                    <Typography color="#FFF" marginLeft="10px" align="left" variant="h6">
                         {coinId} Weekly
                     </Typography>
                 </Grid>
