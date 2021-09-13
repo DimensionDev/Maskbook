@@ -219,7 +219,8 @@
         "counterparty",
         "jailbroken",
         "misoperation",
-        "majeure"
+        "majeure",
+        "Swither"
     ],
     "ignoreWords": [
         "BSCT",
