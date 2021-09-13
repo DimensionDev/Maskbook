@@ -371,7 +371,6 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
         else if (target.Firefox) modifiers.firefox(manifest)
         else if (target.Android) modifiers.geckoview(manifest)
         else if (target.iOS) modifiers.safari(manifest)
-        else if (target.E2E) modifiers.E2E(manifest)
 
         if (mode === 'development') modifiers.development(manifest)
         else modifiers.production(manifest)
@@ -385,7 +384,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
     }
 }
 
-type Presets = 'chromium' | 'e2e' | 'firefox' | 'android' | 'iOS'
+type Presets = 'chromium' | 'firefox' | 'android' | 'iOS'
 function getCompilationInfo(argv: any) {
     let preset = 'chromium' as Presets
 
@@ -404,12 +403,11 @@ function getCompilationInfo(argv: any) {
         preset = 'android'
         webExtensionFirefoxLaunchVariant = 'firefox-android'
     } else if (argv.iOS) preset = 'iOS'
-    else if (argv.E2E) preset = 'e2e'
     else preset = 'chromium'
     //#endregion
 
     // ! this section must match packages/maskbook/src/env.d.ts
-    let target: 'chromium' | 'firefox' | 'safari' | 'E2E' = 'chromium'
+    let target: 'chromium' | 'firefox' | 'safari' = 'chromium'
     let firefoxVariant: 'fennec' | 'geckoview' | false = false
     let architecture: 'web' | 'app' = 'web'
     let resolution: 'desktop' | 'mobile' = 'desktop'
@@ -434,8 +432,6 @@ function getCompilationInfo(argv: any) {
         firefoxVariant = 'geckoview'
         architecture = 'app'
         resolution = 'mobile'
-    } else if (preset === 'e2e') {
-        target = 'E2E'
     } else if (preset === 'iOS') {
         target = 'safari'
         architecture = 'app'
@@ -460,7 +456,6 @@ function getCompilationInfo(argv: any) {
         Chromium: preset === 'chromium',
         iOS: preset === 'iOS',
         Android: preset === 'android',
-        E2E: preset === 'e2e',
         FirefoxEngine: preset === 'firefox' || preset === 'android',
         // ! We cannot upload different version for Firefox desktop and Firefox Android, so they must emit same output.
         Firefox: preset === 'firefox',

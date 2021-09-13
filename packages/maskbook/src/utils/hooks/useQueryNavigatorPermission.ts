@@ -5,7 +5,7 @@ import { Flags } from '../flags'
 
 const q = ['query', 'request', 'revoke'] as const
 
-export function checkPermissionApiUsability(type?: typeof q[number]) {
+function checkPermissionApiUsability(type?: typeof q[number]) {
     const r: Partial<{ [T in typeof q[number]]: boolean }> = {}
     for (const v of q) {
         r[v] = hasIn(navigator, `permissions.${v}`)

@@ -72,14 +72,6 @@ function acceptExternalConnect(manifest: Manifest) {
     }
 }
 export function production(manifest: Manifest) {}
-export function E2E(manifest: Manifest) {
-    development(manifest)
-    // can not capture permission dialog in pptr
-    manifest.permissions = Array.from(
-        new Set([...manifest.permissions, ...manifest.optional_permissions, ...['<all_urls>']]),
-    )
-    manifest.optional_permissions = []
-}
 export function beta(manifest: Manifest) {
     manifest.name += ' (Beta)'
     manifest.browser_action = { default_popup: 'popups.html' }

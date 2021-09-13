@@ -42,7 +42,6 @@
     "@storybook/theming": "^6.3.8",
     "@types/qrcode": "^1.4.1",
     "@types/tinycolor2": "^1.4.3",
-    "babel-loader": "^8.2.2",
     "storybook-addon-matrix": "^1.6.0"
   }
 }
