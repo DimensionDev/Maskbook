@@ -21,13 +21,10 @@ import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 
-// The return type of an async function must either be a valid promise or must not contain a callable 'then' member.ts(1058)
-// Gun is thenable.
-// @ts-expect-error
 async function getAvatarGun() {
     // TODO: do not call gun in SNS adaptor.
     const { gun2 } = await import('../../../network/gun/version.2')
-    return gun2.get('com.maskbook.nft.avatar')
+    return { gun2 }
 }
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -270,10 +267,22 @@ export function useNFTAvatar(userId?: string) {
 }
 
 export async function getNFTAvatar(userId: string) {
-    const avatarDB = await (await getAvatarGun()).get(userId).then!()
+    const avatarDB = await (
+        await getAvatarGun()
+    ).gun2
+        .get('com.maskbook.nft.avatar')
+        // @ts-expect-error
+        .get(userId).then!()
     return avatarDB as AvatarMetaDB
 }
 
 export async function setOrClearAvatar(userId: string, avatar?: AvatarMetaDB) {
-    await (await getAvatarGun()).get(userId).put(avatar ? avatar : null).then!()
+    await (
+        await getAvatarGun()
+    ).gun2
+        .get('com.maskbook.nft.avatar')
+        // @ts-expect-error
+        .get(userId)
+        // @ts-expect-error
+        .put(avatar ? avatar : null).then!()
 }
