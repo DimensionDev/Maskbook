@@ -108,6 +108,10 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                         ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
                         : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
                 ])
+
+                // recheck
+                ;({ chainId } = await Services.Ethereum.connectMetaMask())
+                if (chainId !== expectedChainId) throw new Error('Failed to switch chain.')
             } catch {
                 throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
             }
