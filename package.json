@@ -13,7 +13,7 @@
     "preinstall": "npx only-allow pnpm",
     "postinstall": "patch-package",
     "prepare": "husky install",
-    "test": "jest"
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
