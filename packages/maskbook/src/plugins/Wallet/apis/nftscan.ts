@@ -23,26 +23,26 @@ export async function findAssets(address: string) {
         }[]
     }
 
-    const {
-        data: { nft_platform_list },
-    }: { data: NFT_Assets } = await response.json()
+    const { data }: { data: NFT_Assets | null } = await response.json()
 
-    return nft_platform_list
-        .map((value) => {
-            const contractDetailed: ERC721ContractDetailed = {
-                name: value.nft_platform_name,
-                symbol: '',
-                address: value.nft_platform_contract,
-                type: EthereumTokenType.ERC721,
-                chainId: ChainId.Mainnet,
-            }
+    return data?.nft_platform_list
+        ? data.nft_platform_list
+              .map((value) => {
+                  const contractDetailed: ERC721ContractDetailed = {
+                      name: value.nft_platform_name,
+                      symbol: '',
+                      address: value.nft_platform_contract,
+                      type: EthereumTokenType.ERC721,
+                      chainId: ChainId.Mainnet,
+                  }
 
-            const balance = value.nft_list.length
+                  const balance = value.nft_list.length
 
-            return {
-                contractDetailed,
-                balance,
-            }
-        })
-        .sort((a, b) => b.balance - a.balance)
+                  return {
+                      contractDetailed,
+                      balance,
+                  }
+              })
+              .sort((a, b) => b.balance - a.balance)
+        : null
 }
