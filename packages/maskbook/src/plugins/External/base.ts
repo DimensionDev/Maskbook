@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { Flags } from '../../utils'
+import { Flags } from '../../utils/flags'
 
 export const base: Plugin.Shared.Definition = {
     ID: 'io.maskbook.external',
