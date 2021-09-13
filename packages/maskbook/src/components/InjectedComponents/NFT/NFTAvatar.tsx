@@ -264,7 +264,7 @@ export function useNFTAvatar(userId?: string) {
     return useAsync(async () => {
         if (!userId) return undefined
 
-        const avatar = await (await getAvatarGun())(userId)
+        const avatar = await getNFTAvatar(userId)
         return avatar
     }, [userId]).value
 }
