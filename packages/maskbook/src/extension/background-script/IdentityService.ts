@@ -116,7 +116,7 @@ export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
     }
 
     const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
-    const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey, 'private')
+    const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey, 'public')
     const persona = await queryPersonaDB(identifier, undefined, true)
     if (persona) {
         await loginPersona(persona.identifier)
