@@ -38,10 +38,7 @@ export const WebCryptoMethods: WebCryptoSupportedMethods = {
         return CryptoKeyToJsonWebKey(key)
     },
     async derive_aes_from_pbkdf2(pbkdf, salt, hash, aes_algr, aes_length, iterations) {
-        // In the test environment, there is no CryptoKey object.
-        if (process.env.NODE_ENV !== 'test')
-            if (!(pbkdf instanceof CryptoKey))
-                throw new TypeError('Expect PBKDF2UnknownKey to be a CryptoKey at runtime')
+        if (!(pbkdf instanceof CryptoKey)) throw new TypeError('Expect PBKDF2UnknownKey to be a CryptoKey at runtime')
         const aes = await crypto.subtle.deriveKey(
             { name: 'PBKDF2', salt, iterations, hash },
             pbkdf as unknown as CryptoKey,

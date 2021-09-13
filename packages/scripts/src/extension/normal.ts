@@ -7,7 +7,7 @@ import { awaitChildProcess, PKG_PATH, watchTask } from '../utils'
 import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts'
 import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk'
 
-const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base'] as const
+const presets = ['chromium', 'firefox', 'android', 'iOS', 'base'] as const
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'manifest-v3', 'readonlyCache', 'progress'] as const
 
 export async function extension(f?: Function | ExtensionBuildArgs) {

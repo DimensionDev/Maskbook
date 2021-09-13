@@ -20,8 +20,7 @@ export const Flags = {
     has_no_browser_tab_ui: appOnly,
     has_no_connected_user_link: appOnly,
     has_native_nav_bar: appOnly,
-    /** In E2E, prefer open shadow root so we can test it. */
-    using_ShadowDOM_attach_mode: process.env.target === 'E2E' ? 'open' : 'closed',
+    using_ShadowDOM_attach_mode: 'closed' as ShadowRootMode,
     /** Don't inject injected script in this mode. Native side will do the job. */
     support_declarative_user_script: is_iOSApp,
     /** Don't show welcome page in this mode. Native side will do the job. */
@@ -57,9 +56,8 @@ export const Flags = {
     //#region Functionality missing / broken
     /**
      * - iOS: WebExtension polyfill didn't implemented the dynamic permission API
-     * - E2E: Cannot click the "allow" button (maybe a bug) in the Puppeteer
      */
-    no_web_extension_dynamic_permission_request: is_iOSApp || process.env.target === 'E2E',
+    no_web_extension_dynamic_permission_request: is_iOSApp,
     has_no_WebRTC: process.env.target === 'safari' || !globalThis?.navigator?.permissions?.query,
     //#endregion
     using_emoji_flag: true,

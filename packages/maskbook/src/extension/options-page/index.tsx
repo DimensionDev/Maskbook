@@ -126,7 +126,6 @@ function DashboardUI() {
     // jump to persona if needed
     const [reloadSpy, setReloadSpy] = useState(false)
     const { loading, error } = useAsync(async () => {
-        if (process.env.target === 'E2E' && location.hash.includes('noredirect=true')) return
         if (location.hash.includes(SetupStep.ConsentDataCollection)) return
         const personas = (await Services.Identity.queryMyPersonas()).filter((x) => !x.uninitialized)
         // the user need setup at least one persona

@@ -1,7 +1,6 @@
 {
   "references": [
     // Only list top-level projects here
-    { "path": "./e2e/" },
     { "path": "./packages/maskbook/" },
     { "path": "./packages/injected-script/main" },
     { "path": "./packages/mask-sdk/main" },
@@ -64,15 +63,8 @@
   "files": [],
   "ts-node": {
     "compilerOptions": {
-      "module": "CommonJS",
-      "plugins": [
-        {
-          // Support import.meta syntax in commonjs
-          "transform": "@magic-works/commonjs-import.meta"
-        }
-      ]
+      "module": "CommonJS"
     },
-    "transpileOnly": true,
-    "compiler": "ttypescript"
+    "transpileOnly": true
   }
 }
