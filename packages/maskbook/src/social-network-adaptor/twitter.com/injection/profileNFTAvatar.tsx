@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
 import { NFTAvatar, useNFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { createReactRootShadowed, Flags, MaskMessage, NFTAVatarEvent, startWatch } from '../../../utils'
+import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../utils'
 import {
     searchProfileAvatarSelector,
     searchProfileSaveSelector,
@@ -52,7 +52,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
 
     const [twitterId, setTwitterId] = useState(getTwitterId())
     const avatar = useNFTAvatar(twitterId)
-    const [avatarEvent, setAvatarEvent] = useState<NFTAVatarEvent>({} as NFTAVatarEvent)
+    const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent>({} as NFTAvatarEvent)
 
     const onChange = useCallback(async (token: ERC721TokenDetailed) => {
         const parent = searchProfileAvatarParentSelector()

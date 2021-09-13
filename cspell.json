@@ -283,7 +283,8 @@
         "vitalik",
         "unlockprotocol",
         "unlocklock",
-        "chainid"
+        "chainid",
+        "NFT"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

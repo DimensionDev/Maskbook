@@ -31,7 +31,7 @@ export function updateAvatarImage(parent: HTMLElement, image?: string) {
     */
 }
 
-function recovAvatar(parent: HTMLElement) {
+function recoveAvatar(parent: HTMLElement) {
     const avatar = parent.firstChild as HTMLDivElement
     if (avatar) {
         if (avatar.hasAttribute('avatar')) {

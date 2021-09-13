@@ -1,4 +1,4 @@
-import { createReactRootShadowed, Flags, MaskMessage, NFTAVatarEvent, startWatch } from '../../../utils'
+import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../utils'
 import { searchTwitterAvatarSelector } from '../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles, useSnackbar } from '@masknet/theme'
@@ -81,7 +81,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const [avatarId, setAvatarId] = useState('')
 
     const onUpdate = useCallback(
-        (data: NFTAVatarEvent) => {
+        (data: NFTAvatarEvent) => {
             saveNFTAvatar(data.userId, data.avatarId, data.address, data.tokenId)
                 .then((avatar: AvatarMetaDB) => {
                     const parent = getParentDom()
