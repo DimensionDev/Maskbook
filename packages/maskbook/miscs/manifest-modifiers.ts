@@ -40,7 +40,6 @@ export function geckoview(manifest: Manifest) {
 }
 export function chromium(manifest: Manifest) {}
 export function safari(manifest: Manifest) {
-    manifest['iOS-injected-scripts'] = ['injected-script.js']
     manifest.permissions.push('<all_urls>')
 }
 export function development(manifest: Manifest) {

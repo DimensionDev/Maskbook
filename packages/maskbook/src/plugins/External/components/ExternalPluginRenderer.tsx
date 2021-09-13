@@ -1,16 +1,10 @@
 import type { ExternalPluginLoadDetails } from '../types'
 import { Card, CardHeader, CardContent, Typography, Link, Button } from '@material-ui/core'
 import Services from '../../../extension/service'
-import { MaskExternalPluginPreviewRenderer, setHostConfig } from '@masknet/external-plugin-previewer'
+import { MaskExternalPluginPreviewRenderer, RenderContext } from '@masknet/external-plugin-previewer'
 import { PermissionAwareRedirectOf } from '../../../extension/popups'
-import { createThirdPartyPopupContext } from '../popup-context'
+import { createThirdPartyPopupContext } from '../sns-context'
 import { useExternalPluginManifest, useExternalPluginTemplate } from '../loader'
-
-setHostConfig({
-    permissionAwareOpen(url: string) {
-        Services.ThirdPartyPlugin.openPluginPopup(PermissionAwareRedirectOf(url, createThirdPartyPopupContext()))
-    },
-})
 
 export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
     const manifest = useExternalPluginManifest(props.url)
@@ -41,13 +35,26 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
                 }
             />
             <CardContent style={{ background: 'red', height: 200 }}>
-                <MaskExternalPluginPreviewRenderer
-                    pluginBase={props.url}
-                    onError={console.warn}
-                    script=""
-                    payload={props.meta}
-                    template={template.value}
-                />
+                <RenderContext.Provider
+                    value={{
+                        permissionAwareOpen(url: string) {
+                            const context = createThirdPartyPopupContext()
+                            Services.ThirdPartyPlugin.openPluginPopup(PermissionAwareRedirectOf(url, context), [
+                                context,
+                                props.metaKey,
+                                props.meta,
+                            ])
+                        },
+                        baseURL: props.url,
+                    }}>
+                    <MaskExternalPluginPreviewRenderer
+                        pluginBase={props.url}
+                        onError={console.warn}
+                        script=""
+                        payload={props.meta}
+                        template={template.value}
+                    />
+                </RenderContext.Provider>
             </CardContent>
         </Card>
     )

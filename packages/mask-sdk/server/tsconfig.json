@@ -1,0 +1,11 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/server/",
+    "tsBuildInfoFile": "../dist/server.tsbuildinfo",
+    "types": ["@types/web"]
+  },
+  "include": ["./"],
+  "references": [{ "path": "../public-api" }, { "path": "../shared" }]
+}

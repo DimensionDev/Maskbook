@@ -1,39 +1,65 @@
+import { noop } from 'lodash-es'
+import { MaskMessage } from '../../../utils'
 import { Flags } from '../../../utils/flags'
 
 type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never
 export default function (signal: AbortSignal) {
-    const injectedScript = fetchInjectedScript()
-    const contentScripts = fetchInjectContentScript('/generated__content__script.html')
+    const injectedScriptURL = '/injected-script.js'
+    const injectedScript = fetchUserScript(injectedScriptURL)
+
+    const maskSDK_URL = '/mask-sdk.js'
+    const maskSDK = fetchUserScript(maskSDK_URL)
+
+    const injectContentScript = fetchInjectContentScript('/generated__content__script.html')
+
     async function onCommittedListener(arg: Args): Promise<void> {
         if (arg.url === 'about:blank') return
         if (!arg.url.startsWith('http')) return
         const contains = await browser.permissions.contains({ origins: [arg.url] })
         if (!contains) return
+
         /**
-         * For iOS App, there is a special way to do it in the manifest.json
-         * A `iOS-injected-scripts` field is used to add extra scripts
+         * A `manifest.webextension-shim.json` field is used to declare user scripts.
          */
-        if (!Flags.support_native_injected_script_declaration && !Flags.requires_injected_script_run_directly) {
-            browser.tabs
-                .executeScript(arg.tabId, {
-                    runAt: 'document_start',
-                    frameId: arg.frameId,
-                    // Refresh the injected script every time in the development mode.
-                    code: process.env.NODE_ENV === 'development' ? await fetchInjectedScript() : await injectedScript,
-                })
-                .catch(HandleError(arg))
+        if (!Flags.support_declarative_user_script) {
+            const detail: browser.extensionTypes.InjectDetails = { runAt: 'document_start', frameId: arg.frameId }
+
+            //#region Injected script
+            if (Flags.has_firefox_xray_vision) {
+                browser.tabs.executeScript(arg.tabId, { ...detail, file: injectedScriptURL })
+            } else {
+                // Refresh the injected script every time in the development mode.
+                const code =
+                    process.env.NODE_ENV === 'development'
+                        ? await fetchUserScript(injectedScriptURL)
+                        : await injectedScript
+                browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
+            }
+            //#endregion
+
+            //#region Mask SDK
+            if (Flags.mask_SDK_ready) {
+                const code = process.env.NODE_ENV === 'development' ? await fetchUserScript(maskSDK_URL) : await maskSDK
+                browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
+            }
+            //#endregion
         }
-        if (Flags.requires_injected_script_run_directly) {
-            browser.tabs.executeScript(arg.tabId, {
-                runAt: 'document_start',
-                frameId: arg.frameId,
-                file: '/injected-script.js',
-            })
-        }
-        contentScripts(arg.tabId, arg.frameId).catch(HandleError(arg))
+        injectContentScript(arg.tabId, arg.frameId).catch(HandleError(arg))
     }
     browser.webNavigation.onCommitted.addListener(onCommittedListener)
     signal.addEventListener('abort', () => browser.webNavigation.onCommitted.removeListener(onCommittedListener))
+
+    if (process.env.NODE_ENV === 'development' && Flags.mask_SDK_ready) {
+        signal.addEventListener(
+            'abort',
+            MaskMessage.events.maskSDKHotModuleReload.on(async () => {
+                const code = (await fetchUserScript(maskSDK_URL)) + `\n;console.log("[@masknet/sdk] SDK reloaded.")`
+                for (const tab of await browser.tabs.query({})) {
+                    browser.tabs.executeScript(tab.id!, { code }).then(noop)
+                }
+            }),
+        )
+    }
 }
 
 function fetchInjectContentScript(entryHTML: string) {
@@ -61,20 +87,22 @@ function fetchInjectContentScript(entryHTML: string) {
         }
     }
 }
-async function fetchInjectedScript() {
+async function fetchUserScript(url: string) {
     try {
         return `{
     const script = document.createElement('script')
-    script.innerHTML = ${await fetch('/injected-script.js')
+    script.innerHTML = ${await fetch(url)
         .then((x) => x.text())
+        .then((x) => x.replace('process.env.NODE_ENV', JSON.stringify(process.env.NODE_ENV)))
         .then(JSON.stringify)}
     document.documentElement.appendChild(script)
 }`
     } catch (error) {
         console.error(error)
-        return `console.log('Injected script failed to load.')`
+        return `console.log('User script ${url} failed to load.')`
     }
 }
+
 function HandleError(arg: unknown): (reason: Error) => void {
     return (error) => {
         const ignoredErrorMessages = ['non-structured-clonable data', 'No tab with id']

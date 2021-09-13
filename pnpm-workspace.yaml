@@ -6,6 +6,7 @@ packages:
   - 'packages/dashboard'
   - 'packages/maskbook'
   - 'packages/injected-script'
+  - 'packages/mask-sdk'
   - 'packages/public-api'
   - 'packages/shared-base'
   - 'packages/shared'

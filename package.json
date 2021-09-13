@@ -32,10 +32,14 @@
     "@emotion/serialize": "^1.0.2",
     "@emotion/styled": "^11.3.0",
     "@emotion/utils": "^1.0.0",
-    "@material-ui/core": "5.0.0-beta.4",
-    "@material-ui/icons": "5.0.0-beta.4",
-    "@material-ui/lab": "5.0.0-alpha.43",
-    "@material-ui/system": "5.0.0-beta.4",
+    "@material-ui/core": "npm:@mui/material@5.0.0-rc.1",
+    "@material-ui/icons": "npm:@mui/icons-material@5.0.0-rc.1",
+    "@material-ui/lab": "npm:@mui/lab@5.0.0-alpha.46",
+    "@material-ui/system": "npm:@mui/system@5.0.0-rc.1",
+    "@mui/icons-material": "5.0.0-rc.1",
+    "@mui/lab": "5.0.0-alpha.46",
+    "@mui/material": "5.0.0-rc.1",
+    "@mui/system": "5.0.0-rc.1",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
     "@types/web": "^0.0.30",
@@ -72,7 +76,7 @@
     "prettier": "^2.4.0",
     "ts-node": "^10.2.1",
     "ttypescript": "^1.5.12",
-    "typescript": "4.4.2"
+    "typescript": "4.4.3"
   },
   "engines": {
     "node": ">=14.4.0",
