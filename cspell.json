@@ -288,7 +288,8 @@
         "powahs",
         "gamification",
         "Defi",
-        "powah"
+        "powah",
+        "Switcher"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [
