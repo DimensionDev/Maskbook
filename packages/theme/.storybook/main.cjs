@@ -5,12 +5,13 @@ module.exports = {
         fastRefresh: true,
     },
     webpackFinal: async (config) => {
-        config.module.rules.push({
-            test: /\.m?js/,
-            resolve: {
-                fullySpecified: false,
+        config.module.rules.push(
+            {
+                test: /\.m?js$/,
+                type: 'javascript/auto',
             },
-        })
+            {},
+        )
         return config
     },
 }
