@@ -51,15 +51,13 @@ export const DisconnectProfileDialog = ({
                                 alignItems="center"
                                 justifyContent="space-between"
                                 mb={1}
-                                key={x.userId}
-                            >
+                                key={x.userId}>
                                 <Stack direction="row" alignItems="center" gap={1}>
                                     {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
                                     <Typography
                                         variant="caption"
                                         key={x.userId}
-                                        sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1 }}
-                                    >
+                                        sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1 }}>
                                         {`@${x.userId}`}
                                     </Typography>
                                 </Stack>
@@ -71,8 +69,7 @@ export const DisconnectProfileDialog = ({
                                         onClick={() => {
                                             setProfileIdentifier(x)
                                             setCurrentStep(steps.action)
-                                        }}
-                                    >
+                                        }}>
                                         {t.personas_disconnect()}
                                     </Link>
                                 </Box>
@@ -101,8 +98,7 @@ export const DisconnectProfileDialog = ({
                                 onClick={() => {
                                     onDisconnect(profileIdentifier)
                                     onClose()
-                                }}
-                            >
+                                }}>
                                 {t.confirm()}
                             </Button>
                         </Stack>

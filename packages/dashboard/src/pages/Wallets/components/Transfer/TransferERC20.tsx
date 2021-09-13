@@ -125,8 +125,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         disabled={
                             !!validationMessage || transferState.type === TransactionStateType.WAIT_FOR_CONFIRMING
                         }
-                        onClick={onTransfer}
-                    >
+                        onClick={onTransfer}>
                         {validationMessage || t.wallets_transfer_send()}
                     </Button>
                 </Box>

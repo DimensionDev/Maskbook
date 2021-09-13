@@ -301,8 +301,7 @@ const ContractInteraction = memo(() => {
                         <Link
                             component="button"
                             onClick={() => history.push(PopupRoutes.GasSetting)}
-                            style={{ marginLeft: 10, fontSize: 'inherit', lineHeight: 'inherit' }}
-                        >
+                            style={{ marginLeft: 10, fontSize: 'inherit', lineHeight: 'inherit' }}>
                             {t('popups_wallet_contract_interaction_edit')}
                         </Link>
                     </Typography>
@@ -320,8 +319,7 @@ const ContractInteraction = memo(() => {
                     variant="contained"
                     className={classes.button}
                     style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
-                    onClick={handleReject}
-                >
+                    onClick={handleReject}>
                     {t('cancel')}
                 </Button>
                 <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>

@@ -157,8 +157,7 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                                 fullWidth
                                 className={classes.button}
                                 disabled={!matched}
-                                onClick={onSubmit}
-                            >
+                                onClick={onSubmit}>
                                 {!matched ? t.create_wallet_mnemonic_word_not_match() : t.verify()}
                             </LoadingButton>
                         </>

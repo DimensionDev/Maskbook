@@ -70,8 +70,7 @@ export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
                 onClose={onClose}
                 DialogProps={{
                     classes: { paper: classes.paper },
-                }}
-            >
+                }}>
                 <DialogContent className={classes.container}>
                     <Typography sx={{ marginBottom: 3.5 }}>{t.wallets_receive_tips({ chainName })}</Typography>
                     <WalletQRCodeContainer width={286} height={286} border={{ borderWidth: 15, borderHeight: 2 }}>

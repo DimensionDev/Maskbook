@@ -16,8 +16,7 @@ export const EnterDashboard = memo(() => {
                 position: 'sticky',
                 bottom: 0,
             }}
-            onClick={onEnter}
-        >
+            onClick={onEnter}>
             <Typography style={{ fontSize: 12, lineHeight: '16px' }} color="primary">
                 {t('browser_action_enter_dashboard')}
             </Typography>

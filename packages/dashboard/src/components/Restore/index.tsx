@@ -38,8 +38,7 @@ export const Restore = memo(() => {
                 <ButtonGroupTabList
                     classes={{ root: classes.tabs }}
                     onChange={onChange}
-                    aria-label={t.wallets_import_wallet_tabs()}
-                >
+                    aria-label={t.wallets_import_wallet_tabs()}>
                     <Tab label={t.wallets_wallet_mnemonic()} value={tabs.mnemonic} />
                     <Tab label={t.wallets_wallet_private_key()} value={tabs.privateKey} />
                     <Tab label={t.wallets_wallet_json_file()} value={tabs.local} />

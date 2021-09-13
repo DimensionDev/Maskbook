@@ -119,8 +119,7 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
                             disabled={
                                 !!validationMessage || transferState.type === TransactionStateType.WAIT_FOR_CONFIRMING
                             }
-                            onClick={onTransfer}
-                        >
+                            onClick={onTransfer}>
                             {validationMessage || t('wallet_transfer_send')}
                         </Button>
                     </div>

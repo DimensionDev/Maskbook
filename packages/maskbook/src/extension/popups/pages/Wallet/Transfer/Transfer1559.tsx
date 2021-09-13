@@ -313,8 +313,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 <MenuItem
                     key={index}
                     className={classes.menuItem}
-                    onClick={() => methods.setValue('address', account.address)}
-                >
+                    onClick={() => methods.setValue('address', account.address)}>
                     <Typography>{account.name}</Typography>
                     <Typography>
                         <FormattedAddress address={account.address ?? ''} size={4} />
@@ -568,16 +567,14 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         variant="contained"
                         className={classes.button}
                         style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
-                        onClick={handleCancel}
-                    >
+                        onClick={handleCancel}>
                         {t('cancel')}
                     </Button>
                     <LoadingButton
                         loading={confirmLoading}
                         variant="contained"
                         className={classes.button}
-                        onClick={handleConfirm}
-                    >
+                        onClick={handleConfirm}>
                         {t('confirm')}
                     </LoadingButton>
                 </div>

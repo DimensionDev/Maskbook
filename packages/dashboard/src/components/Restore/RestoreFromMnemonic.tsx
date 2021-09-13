@@ -69,8 +69,7 @@ export const RestoreFromMnemonic = () => {
                     variant="rounded"
                     color="primary"
                     onClick={handleImport}
-                    disabled={some(values, (value) => !value)}
-                >
+                    disabled={some(values, (value) => !value)}>
                     {t.confirm()}
                 </Button>
             </ButtonContainer>

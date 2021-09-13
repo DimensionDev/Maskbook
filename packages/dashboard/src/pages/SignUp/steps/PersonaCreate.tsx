@@ -21,8 +21,7 @@ import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 const Label = ({ value }: { value: string }) => (
     <Typography
         variant="body2"
-        sx={{ marginBottom: '8px', fontWeight: 'bolder', color: (theme) => theme.palette.primary.main }}
-    >
+        sx={{ marginBottom: '8px', fontWeight: 'bolder', color: (theme) => theme.palette.primary.main }}>
         {value}
     </Typography>
 )

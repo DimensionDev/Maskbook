@@ -108,8 +108,7 @@ const DeleteWallet = memo(() => {
                     variant="contained"
                     color="inherit"
                     className={classes.cancelButton}
-                    onClick={() => history.goBack()}
-                >
+                    onClick={() => history.goBack()}>
                     {t('cancel')}
                 </Button>
                 <Button variant="contained" color="error" className={classes.deleteButton} onClick={onConfirm}>

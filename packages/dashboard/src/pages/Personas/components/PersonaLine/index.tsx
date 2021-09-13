@@ -36,8 +36,7 @@ export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onCon
                     display: 'inline-flex',
                     alignItems: 'center',
                     cursor: 'pointer',
-                }}
-            >
+                }}>
                 {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
                 <Typography variant="caption">
                     <Button variant="text" sx={{ fontSize: 13, p: 0 }}>
@@ -78,8 +77,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         width: '100%',
-                    }}
-                >
+                    }}>
                     <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
                         {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
                         {profileIdentifiers.map((x) => (
@@ -87,8 +85,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                                 variant="caption"
                                 key={x.userId}
                                 onClick={() => handleUserIdClick(networkIdentifier, x.userId)}
-                                sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1, cursor: 'pointer' }}
-                            >
+                                sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1, cursor: 'pointer' }}>
                                 {`@${x.userId}`}
                             </Typography>
                         ))}
@@ -102,16 +99,14 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                                 onClick={(e: MouseEvent) => {
                                     e.stopPropagation()
                                     onConnect()
-                                }}
-                            >
+                                }}>
                                 {t.personas_add()}
                             </Link>
                             <Link
                                 sx={{ color: (theme) => getMaskColor(theme).redMain }}
                                 component="button"
                                 variant="caption"
-                                onClick={() => setOpenDisconnectDialog(true)}
-                            >
+                                onClick={() => setOpenDisconnectDialog(true)}>
                                 {t.personas_disconnect()}
                             </Link>
                         </Box>

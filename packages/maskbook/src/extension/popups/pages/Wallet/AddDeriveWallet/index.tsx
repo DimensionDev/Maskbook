@@ -100,16 +100,14 @@ const AddDeriveWallet = memo(() => {
                     variant="contained"
                     className={classes.button}
                     disabled={page === 0 || loading}
-                    onClick={() => setPage((prev) => prev - 1)}
-                >
+                    onClick={() => setPage((prev) => prev - 1)}>
                     {t('popups_wallet_previous')}
                 </Button>
                 <Button
                     variant="contained"
                     className={classes.button}
                     onClick={() => setPage((prev) => prev + 1)}
-                    disabled={loading}
-                >
+                    disabled={loading}>
                     {t('popups_wallet_next')}
                 </Button>
             </div>

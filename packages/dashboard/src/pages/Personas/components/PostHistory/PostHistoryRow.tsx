@@ -159,8 +159,7 @@ const PostHistoryRowUI = memo<PostHistoryRowUIProps>(({ post, message, icon, ope
                 borderRadius="50%"
                 width={48}
                 height={48}
-                sx={{ background: () => MaskColorVar.primary.alpha(0.1) }}
-            >
+                sx={{ background: () => MaskColorVar.primary.alpha(0.1) }}>
                 {icon}
             </Stack>
             <Stack flex={1} justifyContent="space-around" sx={{ cursor: 'pointer' }} gap={0.3} onClick={onClick}>

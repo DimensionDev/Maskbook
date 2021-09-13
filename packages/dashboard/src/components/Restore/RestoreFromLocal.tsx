@@ -124,8 +124,7 @@ export const RestoreFromLocal = memo(() => {
                     variant="rounded"
                     color="primary"
                     onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
-                    disabled={!file}
-                >
+                    disabled={!file}>
                     {restoreStatus !== RestoreStatus.Verified ? t.next() : t.restore()}
                 </Button>
             </ButtonContainer>

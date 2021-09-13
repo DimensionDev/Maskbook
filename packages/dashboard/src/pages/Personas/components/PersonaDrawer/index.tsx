@@ -82,8 +82,7 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                     },
                 }}
                 elevation={0}
-                classes={{ paper: classes.paper }}
-            >
+                classes={{ paper: classes.paper }}>
                 <Stack justifyContent="space-between" gap={2} height="100%" maxHeight="100%">
                     <Box overflow="auto">
                         {personas.map((item) => {
@@ -122,8 +121,7 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                             fullWidth
                             sx={{ mb: 2 }}
                             color="warning"
-                            onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}
-                        >
+                            onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}>
                             {t.settings_global_backup_title()}
                         </Button>
                     </Box>

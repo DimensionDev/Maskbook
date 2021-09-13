@@ -103,8 +103,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
                     <TabPanel
                         value={WalletTabs.Assets}
                         className={classes.tabPanel}
-                        style={{ flex: currentTab === WalletTabs.Assets ? '1' : '0' }}
-                    >
+                        style={{ flex: currentTab === WalletTabs.Assets ? '1' : '0' }}>
                         <AssetsList />
                         <div style={{ padding: 16 }}>
                             <Button className={classes.button} fullWidth onClick={onAddTokenClick}>
@@ -115,8 +114,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
                     <TabPanel
                         value={WalletTabs.Activity}
                         className={classes.tabPanel}
-                        style={{ flex: currentTab === WalletTabs.Activity ? '1' : '0' }}
-                    >
+                        style={{ flex: currentTab === WalletTabs.Activity ? '1' : '0' }}>
                         <ActivityList />
                     </TabPanel>
                 </TabContext>

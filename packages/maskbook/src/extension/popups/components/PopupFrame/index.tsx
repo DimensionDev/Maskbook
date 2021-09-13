@@ -106,8 +106,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                             style={{ marginRight: 5 }}
                             to={PopupRoutes.Wallet}
                             className={classes.nav}
-                            activeClassName={classes.active}
-                        >
+                            activeClassName={classes.active}>
                             {t('wallets')}
                         </NavLink>
                         <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>

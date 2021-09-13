@@ -97,8 +97,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                     e.stopPropagation()
                     openMenu(e)
                 }}
-                className={classes.setting}
-            >
+                className={classes.setting}>
                 <SettingsIcon fontSize="inherit" style={{ fill: MaskColorVar.textPrimary }} />
             </IconButton>
             <Stack direction="row" alignItems="center" justifyContent="center" flex={1}>
@@ -114,8 +113,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                     sx={{
                         display: 'inline-flex',
                         alignItems: 'center',
-                    }}
-                >
+                    }}>
                     <Box sx={{ mr: 1.5 }} className={classes.accountIcon}>
                         <PublicKeyIcon />
                     </Box>

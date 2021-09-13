@@ -253,8 +253,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 <MenuItem
                     key={index}
                     className={classes.menuItem}
-                    onClick={() => methods.setValue('address', account.address)}
-                >
+                    onClick={() => methods.setValue('address', account.address)}>
                     <Typography>{account.name}</Typography>
                     <Typography>
                         <FormattedAddress address={account.address ?? ''} size={4} />
@@ -471,16 +470,14 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                         variant="contained"
                         className={classes.button}
                         style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
-                        onClick={handleCancel}
-                    >
+                        onClick={handleCancel}>
                         {t('cancel')}
                     </Button>
                     <LoadingButton
                         loading={confirmLoading}
                         variant="contained"
                         className={classes.button}
-                        onClick={handleConfirm}
-                    >
+                        onClick={handleConfirm}>
                         {t('confirm')}
                     </LoadingButton>
                 </div>

@@ -25,8 +25,7 @@ export const CodeValidation = memo(({ onValidated }: CodeValidationProps) => {
     return (
         <Stepper
             defaultStep={ValidationCodeStep.EmailInput}
-            transition={{ render: <LoadingCard />, trigger: fetchingBackupInfo }}
-        >
+            transition={{ render: <LoadingCard />, trigger: fetchingBackupInfo }}>
             <Step name={ValidationCodeStep.EmailInput}>{(toStep) => <EmailField toStep={toStep} />}</Step>
             <Step name={ValidationCodeStep.PhoneInput}>{(toStep) => <PhoneField toStep={toStep} />}</Step>
             <Step name={ValidationCodeStep.AccountValidation}>

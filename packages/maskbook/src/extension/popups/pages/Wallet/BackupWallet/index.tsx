@@ -146,8 +146,7 @@ const BackupWallet = memo(() => {
                             <TabPanel
                                 value={BackupTabs.JsonFile}
                                 className={classes.tabPanel}
-                                style={{ flex: currentTab === BackupTabs.JsonFile ? '1' : '0' }}
-                            >
+                                style={{ flex: currentTab === BackupTabs.JsonFile ? '1' : '0' }}>
                                 <div className={classes.placeholder}>
                                     <FileIcon style={{ fontSize: 32, width: 32, height: 32 }} />
                                 </div>
@@ -158,8 +157,7 @@ const BackupWallet = memo(() => {
                             <TabPanel
                                 value={BackupTabs.PrivateKey}
                                 className={classes.tabPanel}
-                                style={{ flex: currentTab === BackupTabs.PrivateKey ? '1' : '0' }}
-                            >
+                                style={{ flex: currentTab === BackupTabs.PrivateKey ? '1' : '0' }}>
                                 <Typography className={classes.privateKey}>{privateKeyInHex}</Typography>
                                 <Typography className={classes.tip}>
                                     {t('popups_wallet_backup_private_key_tip')}
@@ -186,8 +184,7 @@ const BackupWallet = memo(() => {
                         fullWidth
                         className={classes.button}
                         disabled={!confirmed && !password}
-                        onClick={onConfirm}
-                    >
+                        onClick={onConfirm}>
                         {!confirmed ? t('popups_wallet_next') : t('download')}
                     </Button>
                 </div>

@@ -160,8 +160,7 @@ export function TransferTab(props: TransferTabProps) {
                 variant="contained"
                 color="primary"
                 disabled={!!validationMessage || transferState.type === TransactionStateType.WAIT_FOR_CONFIRMING}
-                onClick={onTransfer}
-            >
+                onClick={onTransfer}>
                 {validationMessage || t('wallet_transfer_send')}
             </Button>
         </div>

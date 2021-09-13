@@ -222,8 +222,7 @@ export const Prior1559GasSetting = memo(() => {
                     <div
                         key={index}
                         onClick={() => setOption(index)}
-                        className={selected === index ? classes.selected : undefined}
-                    >
+                        className={selected === index ? classes.selected : undefined}>
                         <Typography className={classes.optionsTitle}>{title}</Typography>
                         <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
                         <Typography className={classes.gasUSD}>
@@ -278,8 +277,7 @@ export const Prior1559GasSetting = memo(() => {
                 fullWidth
                 className={classes.button}
                 disabled={!isEmpty(errors)}
-                onClick={onSubmit}
-            >
+                onClick={onSubmit}>
                 {t('confirm')}
             </LoadingButton>
         </>

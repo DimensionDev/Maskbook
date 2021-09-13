@@ -133,15 +133,13 @@ const SelectWallet = memo(() => {
                     variant="contained"
                     className={classes.button}
                     onClick={handleClickCreate}
-                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
-                >
+                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}>
                     {t('create')}
                 </Button>
                 <Button
                     variant="contained"
                     className={classes.button}
-                    onClick={() => history.push(PopupRoutes.ImportWallet)}
-                >
+                    onClick={() => history.push(PopupRoutes.ImportWallet)}>
                     {t('import')}
                 </Button>
             </div>

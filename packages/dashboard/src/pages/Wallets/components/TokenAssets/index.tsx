@@ -57,8 +57,7 @@ export const TokenAssets = memo(() => {
     return (
         <>
             <ContentContainer
-                sx={{ marginTop: 3, display: 'flex', flexDirection: 'column', maxHeight: 'calc(100% - 114px)' }}
-            >
+                sx={{ marginTop: 3, display: 'flex', flexDirection: 'column', maxHeight: 'calc(100% - 114px)' }}>
                 <TabContext value={activeTab}>
                     <Box className={classes.caption}>
                         <Tabs value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
@@ -71,8 +70,7 @@ export const TokenAssets = memo(() => {
                             className={classes.addCustomTokenButton}
                             onClick={() =>
                                 activeTab === AssetTab.Token ? setAddTokenOpen(true) : setAddCollectibleOpen(true)
-                            }
-                        >
+                            }>
                             +{' '}
                             {activeTab === AssetTab.Token
                                 ? t.wallets_add_token()
@@ -82,15 +80,13 @@ export const TokenAssets = memo(() => {
                     <TabPanel
                         value={AssetTab.Token}
                         key={AssetTab.Token}
-                        className={activeTab === AssetTab.Token ? classes.tab : undefined}
-                    >
+                        className={activeTab === AssetTab.Token ? classes.tab : undefined}>
                         <TokenTable />
                     </TabPanel>
                     <TabPanel
                         value={AssetTab.Collections}
                         key={AssetTab.Collections}
-                        className={activeTab === AssetTab.Collections ? classes.tab : undefined}
-                    >
+                        className={activeTab === AssetTab.Collections ? classes.tab : undefined}>
                         <CollectibleList />
                     </TabPanel>
                 </TabContext>

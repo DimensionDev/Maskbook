@@ -57,8 +57,7 @@ const WalletRename = memo(() => {
                     variant="contained"
                     disabled={!name}
                     className={classes.button}
-                    onClick={renameWallet}
-                >
+                    onClick={renameWallet}>
                     {t('confirm')}
                 </LoadingButton>
             </div>

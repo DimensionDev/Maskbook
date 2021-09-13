@@ -81,8 +81,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                     <Link
                         href={resolveAddressLinkOnExplorer(chainId, address)}
                         target="_blank"
-                        rel="noopener noreferrer"
-                    >
+                        rel="noopener noreferrer">
                         {type === 'address' ? formatEthereumAddress(address, 4) : name}
                     </Link>
                 </Typography>
@@ -90,8 +89,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                     sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
                     color="textPrimary"
                     component="span"
-                    title={RULE_TIP}
-                >
+                    title={RULE_TIP}>
                     <InfoOutlinedIcon color="inherit" fontSize="small" />
                 </Typography>
             </Box>

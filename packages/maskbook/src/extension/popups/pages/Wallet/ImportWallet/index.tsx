@@ -277,8 +277,7 @@ const ImportWallet = memo(() => {
                     variant="fullWidth"
                     className={classes.tabs}
                     classes={{ indicator: classes.indicator }}
-                    onChange={(event, tab) => setCurrentTab(tab)}
-                >
+                    onChange={(event, tab) => setCurrentTab(tab)}>
                     {getEnumAsArray(ImportWalletTab).map(({ key, value }) => (
                         <Tab
                             key={key}
@@ -331,8 +330,7 @@ const ImportWallet = memo(() => {
                 fullWidth
                 className={classes.button}
                 disabled={disabled}
-                onClick={onSubmit}
-            >
+                onClick={onSubmit}>
                 Import
             </LoadingButton>
         </div>

@@ -83,8 +83,7 @@ const Unlock = memo(() => {
                     variant="contained"
                     className={classes.button}
                     disabled={!password}
-                    onClick={handleUnlock}
-                >
+                    onClick={handleUnlock}>
                     {t('unlock')}
                 </LoadingButton>
             </main>

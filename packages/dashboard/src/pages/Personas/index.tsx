@@ -58,8 +58,7 @@ function Personas() {
                     drawerOpen={drawerOpen}
                     toggleDrawer={toggleDrawer}
                 />
-            }
-        >
+            }>
             <Paper variant="rounded" sx={{ mb: 3, p: 4 }}>
                 <PersonaRowCard />
             </Paper>
@@ -85,8 +84,7 @@ function Personas() {
                                 <TabPanel
                                     key={networkIdentifier}
                                     value={networkIdentifier}
-                                    className={activeTab === networkIdentifier ? classes.tab : undefined}
-                                >
+                                    className={activeTab === networkIdentifier ? classes.tab : undefined}>
                                     <PersonaContent network={networkIdentifier} />
                                 </TabPanel>
                             )
@@ -95,8 +93,7 @@ function Personas() {
                                 key={networkIdentifier}
                                 value={networkIdentifier}
                                 className={activeTab === networkIdentifier ? classes.tab : undefined}
-                                sx={{ flex: 1, height: 'calc(100% - 48px)' }}
-                            >
+                                sx={{ flex: 1, height: 'calc(100% - 48px)' }}>
                                 <Stack alignItems="center" height="100%">
                                     <PersonaSetup
                                         networkIdentifier={networkIdentifier}

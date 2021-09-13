@@ -61,8 +61,7 @@ const WalletSettings = memo(() => {
                     <Link
                         href={resolveAddressLinkOnExplorer(chainId, wallet?.address ?? '')}
                         target="_blank"
-                        rel="noopener noreferrer"
-                    >
+                        rel="noopener noreferrer">
                         <ListItem className={classes.item}>
                             <CloudLinkIcon className={classes.icon} />
                             <ListItemText className={classes.text}>{t('popups_wallet_view_on_explorer')}</ListItemText>
