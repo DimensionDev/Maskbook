@@ -22,6 +22,8 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
+          with:
+            node-version: '16'
       - name: pnpm cache
         uses: actions/cache@v2
         with:
