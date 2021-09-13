@@ -309,6 +309,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
             new (WebExtensionTarget as any)(), // See https://github.com/crimx/webpack-target-webextension,
             new CopyPlugin({ patterns: [{ from: publicDir, to: dist }] }),
             new CopyPlugin({ patterns: [{ from: src('../injected-script/dist/injected-script.js'), to: dist }] }),
+            new CopyPlugin({ patterns: [{ from: src('../mask-sdk/dist/mask-sdk.js'), to: dist }] }),
             getManifestPlugin(),
         )
         main.entry = {

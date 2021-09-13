@@ -14,7 +14,7 @@
     "@mui/lab": "../empty",
     "@mui/system": "../empty",
     "@servie/events": "^3.0.0",
-    "@types/react": "link:..\\empty",
+    "@types/react": "../empty",
     "anchorme": "^2.1.2",
     "async-call-rpc": "^6.0.0",
     "bignumber.js": "^9.0.1",

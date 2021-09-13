@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { Flags } from '../../utils'
 
 export const base: Plugin.Shared.Definition = {
     ID: 'io.maskbook.external',
@@ -9,7 +10,7 @@ export const base: Plugin.Shared.Definition = {
     enableRequirement: {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
-        target: 'insider',
+        target: Flags.mask_SDK_ready ? 'stable' : 'insider',
     },
     experimentalMark: true,
 }

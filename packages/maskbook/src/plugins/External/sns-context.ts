@@ -1,6 +1,5 @@
-import './reactions'
 const bindingContext = new Set<string>()
-export type ThirdPartyPopupContextIdentifier = string & { __brand__: 'context' }
+export type MaskSDK_SNS_ContextIdentifier = string & { __brand__: 'context' }
 /**
  * Generate a new random Third Party popup Context identifier.
  *
@@ -9,11 +8,11 @@ export type ThirdPartyPopupContextIdentifier = string & { __brand__: 'context' }
  *
  * The context will be invalidated if this page is lost.
  */
-export function createThirdPartyPopupContext(): ThirdPartyPopupContextIdentifier {
-    const id = Math.random().toString(16).slice(2) as ThirdPartyPopupContextIdentifier
+export function createThirdPartyPopupContext(): MaskSDK_SNS_ContextIdentifier {
+    const id = Math.random().toString(16).slice(2) as MaskSDK_SNS_ContextIdentifier
     bindingContext.add(id)
     return id
 }
-export function isLocalContext(x: string): x is ThirdPartyPopupContextIdentifier {
+export function isLocalContext(x: string): x is MaskSDK_SNS_ContextIdentifier {
     return bindingContext.has(x)
 }
