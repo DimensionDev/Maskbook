@@ -129,9 +129,19 @@ export namespace SocialNetworkUI {
             enhancedProfileTab?(signal: AbortSignal): void
             enhancedProfile?(signal: AbortSignal): void
 
+            /**
+             * @deprecated
+             * TODO: by @Jack-Works This should be in the plugin infra.
+             * SNS Adaptor provides avatar enhancement point,
+             * and plugin infra provides AvatarEnhancementProvider.
+             * Only 1 plugin can provide enhancement to avatar.
+             */
             userAvatar?(signal: AbortSignal): void
+            /** @deprecated same reason as userAvatar */
             enhancedProfileNFTAvatar?(signal: AbortSignal): void
+            /** @deprecated same reason as userAvatar */
             profileAvatar?(signal: AbortSignal): void
+            /** @deprecated same reason as userAvatar */
             postAvatar?(signal: AbortSignal, current: PostInfo): void
         }
         export interface NewPostComposition {

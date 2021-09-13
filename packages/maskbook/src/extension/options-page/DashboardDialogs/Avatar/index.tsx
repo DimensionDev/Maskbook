@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import StorageIcon from '@material-ui/icons/Storage'
 import { InputBox } from '../../DashboardComponents/InputBox'
 import { useCallback, useState } from 'react'
-import { saveNFTAvatar } from '../../../../components/InjectedComponents/NFTAvatar'
+import { saveNFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
 
 const useStyles = makeStyles()({
     root: {

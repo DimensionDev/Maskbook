@@ -14,15 +14,21 @@ import classnames from 'classnames'
 import { head, uniqBy } from 'lodash-es'
 import { useCallback, useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
-import { gun2 } from '../../network/gun/version.2'
-import { PluginCollectibleRPC } from '../../plugins/Collectible/messages'
-import { getOrderUnitPrice } from '../../plugins/Collectible/utils'
-import { currentCollectibleDataProviderSettings } from '../../plugins/Wallet/settings'
-import { useI18N } from '../../utils'
-import { EthereumChainBoundary } from '../../web3/UI/EthereumChainBoundary'
+import { PluginCollectibleRPC } from '../../../plugins/Collectible/messages'
+import { getOrderUnitPrice } from '../../../plugins/Collectible/utils'
+import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
+import { useI18N } from '../../../utils'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 
-export const AvatarGUN = gun2.get('com.maskbook.nft.avatar')
+// The return type of an async function must either be a valid promise or must not contain a callable 'then' member.ts(1058)
+// Gun is thenable.
+// @ts-expect-error
+async function getAvatarGun() {
+    // TODO: do not call gun in SNS adaptor.
+    const { gun2 } = await import('../../../network/gun/version.2')
+    return gun2.get('com.maskbook.nft.avatar')
+}
 const useStyles = makeStyles()((theme) => ({
     root: {},
     title: {
@@ -258,22 +264,16 @@ export function useNFTAvatar(userId?: string) {
     return useAsync(async () => {
         if (!userId) return undefined
 
-        const avatar = await getNFTAvatar(userId)
+        const avatar = await (await getAvatarGun())(userId)
         return avatar
     }, [userId]).value
 }
 
 export async function getNFTAvatar(userId: string) {
-    const avatarDB = await AvatarGUN
-        //@ts-ignore
-        .get(userId).then!()
+    const avatarDB = await (await getAvatarGun()).get(userId).then!()
     return avatarDB as AvatarMetaDB
 }
 
 export async function setOrClearAvatar(userId: string, avatar?: AvatarMetaDB) {
-    await AvatarGUN
-        //@ts-ignore
-        .get(userId)
-        //@ts-ignore
-        .put(avatar ? avatar : null).then!()
+    await (await getAvatarGun()).get(userId).put(avatar ? avatar : null).then!()
 }

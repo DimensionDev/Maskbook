@@ -10,7 +10,7 @@ import {
     saveNFTAvatar,
     setOrClearAvatar,
     useNFTAvatar,
-} from '../../../components/InjectedComponents/NFTAvatar'
+} from '../../../components/InjectedComponents/NFT/NFTAvatar'
 import { updateAvatarImage } from '../utils/updateAvatarImage'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../utils/user'

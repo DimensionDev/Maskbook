@@ -72,7 +72,9 @@ export interface MaskMessages extends SettingsEvents {
     pluginEnabled: string
     pluginDisabled: string
 
+    // TODO: move to plugin message
     profileNFTsPageUpdated: ProfileNFTsPageEvent
+    // TODO: move to plugin message
     profileNFTsTabUpdated: 'reset'
     signRequestApproved: {
         requestID: string

@@ -1,4 +1,4 @@
-import { AvatarMetaDB, getNFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
+import { AvatarMetaDB, getNFTAvatar } from '../../../components/InjectedComponents/NFT/NFTAvatar'
 import { Flags } from '../../../utils'
 
 export function updateAvatarImage(parent: HTMLElement, image?: string) {
