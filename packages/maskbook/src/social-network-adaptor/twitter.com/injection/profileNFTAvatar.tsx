@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared'
 import { useCallback, useEffect, useState } from 'react'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
-import { NFTAvatar, useNFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
+import { NFTAvatar, useNFTAvatar } from '../../../components/InjectedComponents/NFT/NFTAvatar'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { createReactRootShadowed, Flags, MaskMessage, NFTAVatarEvent, startWatch } from '../../../utils'
 import {

@@ -3,12 +3,12 @@ import { NFTAvatarAmountIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import { Link, Typography } from '@material-ui/core'
-import { AvatarMetaDB, getNFTAvatar } from '../../../components/InjectedComponents/NFTAvatar'
+import { AvatarMetaDB, getNFTAvatar } from '../../../components/InjectedComponents/NFT/NFTAvatar'
 import { createReactRootShadowed, Flags, startWatch } from '../../../utils'
 import { postAvatarsContentSelector } from '../utils/selector'
 import { getAvatarId } from '../utils/user'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     root: {
         display: 'flex',
         justifyContent: 'center',
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
             '1px 1px black, 1px 0px black, 0px 1px black, -1px 0px black, 0px -1px black, -1px -1px black, 1px -1px black, -1px 1px black',
         lineHeight: 1,
     },
-}))
+})
 
 interface NFTBadgeInTwitterProps {
     avatar: AvatarMetaDB

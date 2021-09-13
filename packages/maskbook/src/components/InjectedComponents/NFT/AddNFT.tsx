@@ -9,9 +9,9 @@ import {
 } from '@masknet/web3-shared'
 import { Button, DialogContent, Typography } from '@material-ui/core'
 import { useCallback, useState } from 'react'
-import { InputBox } from '../../extension/options-page/DashboardComponents/InputBox'
-import { PluginCollectibleRPC } from '../../plugins/Collectible/messages'
-import { InjectedDialog } from '../shared/InjectedDialog'
+import { InputBox } from '../../../extension/options-page/DashboardComponents/InputBox'
+import { PluginCollectibleRPC } from '../../../plugins/Collectible/messages'
+import { InjectedDialog } from '../../shared/InjectedDialog'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
