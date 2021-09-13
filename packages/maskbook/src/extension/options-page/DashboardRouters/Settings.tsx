@@ -287,22 +287,24 @@ export default function DashboardSettingsRouter() {
                         </Card>
                     </Paper>
 
-                    <Paper component="section" className={classes.section} elevation={elevation}>
-                        <Typography className={classes.title} variant="h6" color="textPrimary">
-                            {t('settings_title_bind_nft_avatar')}
-                        </Typography>
-                        <Card elevation={0}>
-                            <List className={classes.list} disablePadding>
-                                <SettingsUIDummy
-                                    classes={listStyle}
-                                    icon={<StorageIcon />}
-                                    primary="Bind NFT Avatar"
-                                    secondary=""
-                                    onClick={openBindNFTAvatarDialog}
-                                />
-                            </List>
-                        </Card>
-                    </Paper>
+                    {Flags.nft_avatar_enabled ? (
+                        <Paper component="section" className={classes.section} elevation={elevation}>
+                            <Typography className={classes.title} variant="h6" color="textPrimary">
+                                {t('settings_title_bind_nft_avatar')}
+                            </Typography>
+                            <Card elevation={0}>
+                                <List className={classes.list} disablePadding>
+                                    <SettingsUIDummy
+                                        classes={listStyle}
+                                        icon={<StorageIcon />}
+                                        primary="Bind NFT Avatar"
+                                        secondary=""
+                                        onClick={openBindNFTAvatarDialog}
+                                    />
+                                </List>
+                            </Card>
+                        </Paper>
+                    ) : null}
 
                     <Paper component="section" className={classes.section} elevation={elevation}>
                         <Typography className={classes.title} variant="h6" color="textPrimary">
