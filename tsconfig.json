@@ -30,6 +30,8 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    // Exclude everything by default. Include them in each project on-demand
+    "types": ["web", "masknet__global-types"],
 
     // Emit
     "declaration": true,

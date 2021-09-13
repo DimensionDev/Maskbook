@@ -33,6 +33,7 @@
     "@mui/lab": "5.0.0-alpha.46",
     "@mui/material": "5.0.0-rc.1",
     "@mui/system": "5.0.0-rc.1",
+    "@types/masknet__global-types": "workspace:*",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
     "@types/web": "^0.0.30",

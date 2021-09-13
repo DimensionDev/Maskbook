@@ -23,6 +23,7 @@ importers:
       '@mui/material': 5.0.0-rc.1
       '@mui/system': 5.0.0-rc.1
       '@nice-labs/git-rev': ^3.5.0
+      '@types/masknet__global-types': workspace:*
       '@types/react': ^17.0.20
       '@types/react-dom': ^17.0.9
       '@types/web': ^0.0.30
@@ -62,6 +63,7 @@ importers:
       '@mui/lab': 5.0.0-alpha.46_58493e0ec5563a9e4c07a1177b999ba8
       '@mui/material': 5.0.0-rc.1_c93fd34765e43750dee6a2854df1eeb5
       '@mui/system': 5.0.0-rc.1_4b90e6cb5ec0f8c92ac31be335ebdd00
+      '@types/masknet__global-types': link:packages/polyfills/types
       '@types/react': 17.0.20
       '@types/react-dom': 17.0.9
       '@types/web': 0.0.30
@@ -578,6 +580,9 @@ importers:
       '@masknet/plugin-infra': workspace:*
     dependencies:
       '@masknet/plugin-infra': link:../../plugin-infra
+
+  packages/polyfills/types:
+    specifiers: {}
 
   packages/public-api:
     specifiers: {}
