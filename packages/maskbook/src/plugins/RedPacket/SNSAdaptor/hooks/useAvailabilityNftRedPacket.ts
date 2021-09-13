@@ -17,18 +17,15 @@ export function useAvailabilityNftRedPacket(id: string, from: string) {
 
         const isClaimed = availability.claimed_id !== '0'
         const totalAmount = result.erc721_token_ids.length
-        const claimedAmount = Number(result.bit_status)
-            .toString(2)
-            .split('')
-            .reduce((acc, cur) => {
-                if (cur === '1') return acc + 1
-                return acc
-            }, 0)
+        const bits = Number(result.bit_status).toString(2).split('')
+        const claimedAmount = bits.reduce((acc, cur) => {
+            if (cur === '1') return acc + 1
+            return acc
+        }, 0)
         const isClaimedAll = totalAmount === claimedAmount
         const isCompleted = isClaimedAll && !isClaimed
         const isEnd = isCompleted || availability.expired
 
-        const bits = result.bit_status.split('')
         const bitStatusList = bits.reverse().map((bit) => bit === '1')
 
         return {
