@@ -49,7 +49,9 @@ const useStyles = makeStyles()((theme) => ({
         color: 'white',
         fontSize: 14,
         fontWeight: 700,
-        textShadow: '2px 1px black',
+        textShadow:
+            '1px 1px black, 1px 0px black, 0px 1px black, -1px 0px black, 0px -1px black, -1px -1px black, 1px -1px black, -1px 1px black',
+
         whiteSpace: 'nowrap',
         lineHeight: 1.1,
     },

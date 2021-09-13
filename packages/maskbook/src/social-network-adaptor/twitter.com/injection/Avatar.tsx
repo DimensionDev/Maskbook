@@ -38,7 +38,8 @@ const useStyles = makeStyles()((theme) => ({
         margin: 0,
         color: 'white',
         whiteSpace: 'nowrap',
-        textShadow: '2px 1px black',
+        textShadow:
+            '1px 1px black, 1px 0px black, 0px 1px black, -1px 0px black, 0px -1px black, -1px -1px black, 1px -1px black, -1px 1px black',
         lineHeight: 1,
     },
 }))
