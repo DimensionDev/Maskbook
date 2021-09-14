@@ -143,6 +143,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const { onClose } = props
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
+    const [balance, setBalance] = useState(0)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const account = useAccount()
     const chainId = useChainId()
@@ -194,8 +195,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     return (
         <>
             <Box className={classes.root}>
-                <ERC721ContractSelectPanel contract={contract} onContractChange={setContract} />
-                {contract ? (
+                <ERC721ContractSelectPanel
+                    contract={contract}
+                    onContractChange={setContract}
+                    onBalanceChange={setBalance}
+                />
+                {contract && balance ? (
                     <div className={classes.tokenSelectorParent}>
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (

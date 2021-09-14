@@ -65,10 +65,11 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
 
 export interface ERC721TokenSelectPanelProps {
     onContractChange: (contract: ERC721ContractDetailed) => void
+    onBalanceChange: (balance: number) => void
     contract: ERC721ContractDetailed | undefined
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
-    const { onContractChange, contract } = props
+    const { onContractChange, onBalanceChange, contract } = props
     const account = useAccount()
     const { classes } = useStyles({ hasIcon: Boolean(contract?.iconURL) })
     const { value: balanceFromChain, loading: loadingFromChain } = useERC721ContractBalance(contract?.address, account)
@@ -80,9 +81,11 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
         ? assets.find((asset) => isSameAddress(asset.contractDetailed.address, contract?.address))?.balance
         : undefined
 
-    const balance = balanceFromChain ?? balanceFromNFTscan
+    const balance = balanceFromChain ? Number(balanceFromChain) : balanceFromNFTscan ?? 0
 
-    const loading = (loadingFromChain || loadingFromNFTscan) && !balance && !balanceFromNFTscan
+    onBalanceChange(balance)
+
+    const loading = (loadingFromChain || loadingFromNFTscan) && !balance
 
     //#region select contract
     const [id] = useState(uuid())
