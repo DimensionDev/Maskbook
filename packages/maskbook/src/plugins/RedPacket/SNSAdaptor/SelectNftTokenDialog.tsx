@@ -311,7 +311,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         {loadingToken || !tokenDetailed ? (
                             <Box className={classes.noResultBox}>
                                 <Typography>
-                                    {loadingToken ? t('wallet_loading_token') : t('wallet_search_no_result')}
+                                    {loadingToken
+                                        ? t('wallet_loading_token')
+                                        : searched
+                                        ? t('wallet_search_no_result')
+                                        : null}
                                 </Typography>
                             </Box>
                         ) : (
