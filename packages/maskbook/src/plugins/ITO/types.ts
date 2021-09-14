@@ -29,7 +29,12 @@ export interface JSON_PayloadInMask {
     block_number?: number
 }
 
-export interface PoolSubgraph {
+export interface JSON_PayloadFromChain extends Omit<JSON_PayloadInMask, 'exchange_tokens' | 'token'> {
+    exchange_token_addresses: string[]
+    token_address: string
+}
+
+export interface PoolFromSubgraph {
     pool: JSON_PayloadInMask
     exchange_in_volumes: string[]
     exchange_out_volumes: string[]

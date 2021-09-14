@@ -32,7 +32,7 @@ import { useI18N } from '../../../utils'
 import { MSG_DELIMITER } from '../constants'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from './hooks/usePoolTradeInfo'
-import { ITO_Status, JSON_PayloadInMask, PoolSubgraph } from '../types'
+import { ITO_Status, JSON_PayloadInMask, PoolFromSubgraph } from '../types'
 import { useDestructCallback } from './hooks/useDestructCallback'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 
@@ -107,7 +107,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PoolInListProps extends PoolSubgraph {
+export interface PoolInListProps extends PoolFromSubgraph {
     onSend?: (pool: JSON_PayloadInMask) => void
     onRetry: () => void
 }

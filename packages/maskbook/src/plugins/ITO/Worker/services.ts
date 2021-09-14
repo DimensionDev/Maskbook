@@ -1,4 +1,4 @@
-import type { JSON_PayloadInMask, PoolRecord } from '../types'
+import type { JSON_PayloadInMask, PoolRecord, PoolFromSubgraph } from '../types'
 import * as subgraph from './apis/subgraph'
 import * as chain from './apis/chain'
 import * as database from './database'
@@ -21,13 +21,14 @@ export async function getAllPoolsAsSeller(address: string, page: number, endBloc
     const chainId = currentChainIdSettings.value
     const { ITO2_CONTRACT_CREATION_BLOCK_HEIGHT } = getITOConstants(chainId)
     const poolsFromSubgraph = await subgraph.getAllPoolsAsSeller(address, page)
-    const lastestPoolFromSubgraph = poolsFromSubgraph[0]
-    const latestBlockNumberFromSubgraph = lastestPoolFromSubgraph
-        ? getLatestBlockNumberFromSubgraph(lastestPoolFromSubgraph.pool, page)
-        : ITO2_CONTRACT_CREATION_BLOCK_HEIGHT
-    const poolsFromChain = latestBlockNumberFromSubgraph
-        ? await chain.getAllPoolsAsSeller(chainId, latestBlockNumberFromSubgraph, endBlock, address)
-        : []
+    const latestPoolFromSubgraph = poolsFromSubgraph[0]
+    const latestBlockNumberFromSubgraph = getLatestBlockNumberFromSubgraph(
+        latestPoolFromSubgraph,
+        page,
+        ITO2_CONTRACT_CREATION_BLOCK_HEIGHT,
+    )
+
+    const poolsFromChain = await chain.getAllPoolsAsSeller(chainId, latestBlockNumberFromSubgraph, endBlock, address)
     console.log({ poolsFromChain, latestBlockNumberFromSubgraph })
     const poolsFromDB = await database.getAllPoolsAsSeller(poolsFromSubgraph.map((x) => x.pool.pid))
     return poolsFromSubgraph
@@ -45,8 +46,16 @@ export async function getAllPoolsAsSeller(address: string, page: number, endBloc
         .filter((x) => x.pool.chain_id === chainId)
 }
 
-function getLatestBlockNumberFromSubgraph(pool: JSON_PayloadInMask | undefined, page: number) {
-    return page === 0 ? (pool?.block_number ? pool.block_number : undefined) : undefined
+function getLatestBlockNumberFromSubgraph(
+    poolsFromSubgraph: PoolFromSubgraph | undefined,
+    page: number,
+    creationBlockNumber: number | undefined,
+) {
+    return page === 0
+        ? poolsFromSubgraph?.pool
+            ? poolsFromSubgraph?.pool.block_number
+            : creationBlockNumber
+        : undefined
 }
 
 export async function getAllPoolsAsBuyer(address: string, chainId: ChainId) {
