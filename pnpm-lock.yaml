@@ -279,11 +279,6 @@ importers:
       '@types/bn.js': ^4.11.6
       '@types/d3': 5.16.4
       '@types/elliptic': ^6.4.13
-      '@types/enzyme': ^3.10.9
-      '@types/enzyme-adapter-react-16': ^1.0.6
-      '@types/expect-puppeteer': ^4.4.6
-      '@types/jest': ^27.0.1
-      '@types/jest-environment-puppeteer': ^4.4.1
       '@types/json-stable-stringify': ^1.0.33
       '@types/json2csv': ^5.0.3
       '@types/lodash-es': ^4.17.4
