@@ -208,10 +208,12 @@ export async function createPersonaByMnemonic(
 }
 
 export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: string | undefined, password: string) {
+    const personas = await queryPersonasWithQuery(({ nickname: name }) => name === nickname)
+    if (personas.length > 0) throw new Error('Nickname already exists')
+
     const verify = validateMnemonic(mnemonicWord)
-    if (!verify) {
-        throw new Error('Verify error')
-    }
+    if (!verify) throw new Error('Verify error')
+
     const { key, mnemonicRecord: mnemonic } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWord, password)
     const { privateKey, publicKey } = key
     const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
