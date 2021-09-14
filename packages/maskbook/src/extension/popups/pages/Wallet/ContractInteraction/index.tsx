@@ -6,8 +6,6 @@ import {
     formatWeiToEther,
     getChainFromChainId,
     getChainIdFromNetworkType,
-    getCoingeckoCoinId,
-    getCoingeckoPlatformId,
     isEIP1159Supported,
     NetworkType,
     pow10,
@@ -240,11 +238,8 @@ const ContractInteraction = memo(() => {
     const tokenDecimals = (isNativeTokenInteraction ? nativeToken?.decimals : token?.decimals) ?? 0
 
     // token estimated value
-    const tokenPrice = useTokenPrice(
-        getCoingeckoPlatformId(chainId) ?? '',
-        !isNativeTokenInteraction ? token?.address : undefined,
-    )
-    const nativeTokenPrice = useNativeTokenPrice(getCoingeckoCoinId(nativeToken?.symbol.toLowerCase() ?? '') ?? '')
+    const tokenPrice = useTokenPrice(chainId, !isNativeTokenInteraction ? token?.address : undefined)
+    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
     const tokenValueUSD = new BigNumber(tokenAmount)
         .dividedBy(pow10(tokenDecimals))
         .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)

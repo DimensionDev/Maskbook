@@ -1,73 +1,73 @@
 [
     {
         "id": "fantom",
-        "chain_identifier": 250,
+        "chainId": 250,
         "name": "Fantom",
         "shortname": ""
     },
     {
         "id": "binance-smart-chain",
-        "chain_identifier": 56,
+        "chainId": 56,
         "name": "Binance Smart Chain",
         "shortname": "BSC"
     },
     {
         "id": "ethereum",
-        "chain_identifier": 1,
+        "chainId": 1,
         "name": "Ethereum",
         "shortname": ""
     },
     {
         "id": "xdai",
-        "chain_identifier": 100,
+        "chainId": 100,
         "name": "xDAI",
         "shortname": ""
     },
     {
         "id": "okex-chain",
-        "chain_identifier": 66,
+        "chainId": 66,
         "name": "OKExChain",
         "shortname": "OKEx"
     },
     {
         "id": "tomochain",
-        "chain_identifier": 88,
+        "chainId": 88,
         "name": "TomoChain",
         "shortname": ""
     },
     {
         "id": "avalanche",
-        "chain_identifier": 43114,
+        "chainId": 43114,
         "name": "Avalanche",
         "shortname": "AVAX"
     },
     {
         "id": "polygon-pos",
-        "chain_identifier": 137,
+        "chainId": 137,
         "name": "Polygon POS",
         "shortname": "MATIC"
     },
     {
         "id": "huobi-token",
-        "chain_identifier": 128,
+        "chainId": 128,
         "name": "Huobi ECO Chain Mainnet",
         "shortname": "HECO"
     },
     {
         "id": "celo",
-        "chain_identifier": 42220,
+        "chainId": 42220,
         "name": "Celo",
         "shortname": "celo"
     },
     {
         "id": "harmony-shard-0",
-        "chain_identifier": 1666600000,
+        "chainId": 1666600000,
         "name": "Harmony Shard 0",
         "shortname": "Harmony Shard 0"
     },
     {
         "id": "kucoin-community-chain",
-        "chain_identifier": 321,
+        "chainId": 321,
         "name": "Kucoin Community Chain",
         "shortname": "KCC"
     }
