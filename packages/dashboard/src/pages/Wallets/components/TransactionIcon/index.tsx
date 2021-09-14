@@ -59,9 +59,6 @@ export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRed
     const { classes } = useStyles()
     const icon = useMemo(() => {
         if (isFailed) return <CloseIcon style={{ stroke: MaskColorVar.redMain }} className={classes.icon} />
-        // if (isRedPacket) return <RedPacketIcon className={classes.icon} />
-
-        console.log(type)
 
         switch (type) {
             case TransactionType.SEND:
