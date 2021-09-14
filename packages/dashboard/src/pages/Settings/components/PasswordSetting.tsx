@@ -1,13 +1,21 @@
 import SettingButton from './SettingButton'
 import SettingPasswordDialog from './dialogs/SettingPasswordDialog'
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { UserContext } from '../hooks/UserContext'
 import { useDashboardI18N } from '../../../locales'
+import { useLocation } from 'react-router'
 
 export default function PasswordSetting() {
     const t = useDashboardI18N()
     const { user } = useContext(UserContext)
+    const { state } = useLocation() as { state: { open: string | null } }
     const [openSettingDialog, setOpenSettingDialog] = useState(false)
+
+    useEffect(() => {
+        console.log(state)
+        if (!state?.open || state?.open !== 'password') return
+        setOpenSettingDialog(true)
+    }, [state?.open])
 
     return (
         <>

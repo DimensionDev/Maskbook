@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useContext, useState } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PublicKeyIcon, SettingsIcon } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@material-ui/core'
@@ -15,6 +15,7 @@ import { ExportPrivateKeyDialog } from '../ExportPrivateKeyDialog'
 import { RoutePaths } from '../../../../type'
 import { useNavigate } from 'react-router'
 import { LogoutPersonaDialog } from '../LogoutPersonaDialog'
+import { UserContext } from '../../../Settings/hooks/UserContext'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -68,12 +69,14 @@ export interface PersonaRowCardUIProps {
 
 export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const navigate = useNavigate()
-    const { nickname, definedSocialNetworks, identifier, profiles } = props
-    const { onConnect, onDisconnect, onRename } = props
-    const [avatarOn, toggleAvatar] = useToggle(false)
-
     const t = useDashboardI18N()
     const { classes } = useStyles()
+    const { confirmPassword } = useContext(UserContext)
+
+    const { nickname, definedSocialNetworks, identifier, profiles } = props
+    const { onConnect, onDisconnect, onRename } = props
+
+    const [avatarOn, toggleAvatar] = useToggle(false)
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
     const [exportPrivateKeyDialogOpen, setExportPrivateKeyDialogOpen] = useState(false)
@@ -84,7 +87,9 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
         <MenuItem onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}>
             {t.settings_global_backup_title()}
         </MenuItem>,
-        <MenuItem onClick={() => setLogoutDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
+        <MenuItem
+            onClick={() => confirmPassword(() => setLogoutDialogOpen(true))}
+            style={{ color: MaskColorVar.redMain }}>
             {t.personas_logout()}
         </MenuItem>,
     )

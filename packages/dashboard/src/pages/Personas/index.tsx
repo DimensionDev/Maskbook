@@ -13,6 +13,7 @@ import { ContentContainer } from '../../components/ContentContainer'
 import { PersonaContent } from './components/PersonaContent'
 import { PersonaRowCard } from './components/PersonaCard/Row'
 import { PersonaStateBar } from './components/PersonaStateBar'
+import { UserProvider } from '../Settings/hooks/UserContext'
 
 const useStyles = makeStyles()((theme) => ({
     tabPanel: {
@@ -48,65 +49,69 @@ function Personas() {
     }, [currentPersona, definedSocialNetworks])
 
     return (
-        <PageFrame
-            title={t.personas()}
-            noBackgroundFill={true}
-            primaryAction={
-                <PersonaStateBar
-                    nickname={currentPersona?.nickname}
-                    fingerprint={currentPersona?.identifier.compressedPoint}
-                    drawerOpen={drawerOpen}
-                    toggleDrawer={toggleDrawer}
-                />
-            }>
-            <Paper variant="rounded" sx={{ mb: 3, p: 4 }}>
-                <PersonaRowCard />
-            </Paper>
-            <ContentContainer style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <TabContext value={activeTab}>
-                    <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
-                        {definedSocialNetworks.map(({ networkIdentifier }) => (
-                            <Tab
-                                key={networkIdentifier}
-                                value={networkIdentifier}
-                                // They should be localized
-                                label={capitalize(networkIdentifier.replace('.com', ''))}
-                            />
-                        ))}
-                    </Tabs>
-                    {definedSocialNetworks.map(({ networkIdentifier }) => {
-                        if (!currentPersona) return null
-                        const profile = currentPersona.linkedProfiles.find(
-                            (x) => x.identifier.network === networkIdentifier,
-                        )
-                        if (profile)
+        <UserProvider>
+            <PageFrame
+                title={t.personas()}
+                noBackgroundFill={true}
+                primaryAction={
+                    <PersonaStateBar
+                        nickname={currentPersona?.nickname}
+                        fingerprint={currentPersona?.identifier.compressedPoint}
+                        drawerOpen={drawerOpen}
+                        toggleDrawer={toggleDrawer}
+                    />
+                }>
+                <Paper variant="rounded" sx={{ mb: 3, p: 4 }}>
+                    <PersonaRowCard />
+                </Paper>
+                <ContentContainer style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    <TabContext value={activeTab}>
+                        <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
+                            {definedSocialNetworks.map(({ networkIdentifier }) => (
+                                <Tab
+                                    key={networkIdentifier}
+                                    value={networkIdentifier}
+                                    // They should be localized
+                                    label={capitalize(networkIdentifier.replace('.com', ''))}
+                                />
+                            ))}
+                        </Tabs>
+                        {definedSocialNetworks.map(({ networkIdentifier }) => {
+                            if (!currentPersona) return null
+                            const profile = currentPersona.linkedProfiles.find(
+                                (x) => x.identifier.network === networkIdentifier,
+                            )
+                            if (profile)
+                                return (
+                                    <TabPanel
+                                        key={networkIdentifier}
+                                        value={networkIdentifier}
+                                        className={activeTab === networkIdentifier ? classes.tab : undefined}>
+                                        <PersonaContent network={networkIdentifier} />
+                                    </TabPanel>
+                                )
                             return (
                                 <TabPanel
                                     key={networkIdentifier}
                                     value={networkIdentifier}
-                                    className={activeTab === networkIdentifier ? classes.tab : undefined}>
-                                    <PersonaContent network={networkIdentifier} />
+                                    className={activeTab === networkIdentifier ? classes.tab : undefined}
+                                    sx={{ flex: 1, height: 'calc(100% - 48px)' }}>
+                                    <Stack alignItems="center" height="100%">
+                                        <PersonaSetup
+                                            networkIdentifier={networkIdentifier}
+                                            onConnect={() =>
+                                                connectPersona(currentPersona.identifier, networkIdentifier)
+                                            }
+                                        />
+                                    </Stack>
                                 </TabPanel>
                             )
-                        return (
-                            <TabPanel
-                                key={networkIdentifier}
-                                value={networkIdentifier}
-                                className={activeTab === networkIdentifier ? classes.tab : undefined}
-                                sx={{ flex: 1, height: 'calc(100% - 48px)' }}>
-                                <Stack alignItems="center" height="100%">
-                                    <PersonaSetup
-                                        networkIdentifier={networkIdentifier}
-                                        onConnect={() => connectPersona(currentPersona.identifier, networkIdentifier)}
-                                    />
-                                </Stack>
-                            </TabPanel>
-                        )
-                    })}
-                </TabContext>
-            </ContentContainer>
-            <PersonaDrawer personas={personas} />
-        </PageFrame>
+                        })}
+                    </TabContext>
+                </ContentContainer>
+                <PersonaDrawer personas={personas} />
+            </PageFrame>
+        </UserProvider>
     )
 }
 
