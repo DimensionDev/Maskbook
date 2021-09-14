@@ -81,20 +81,27 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
     const [exportPrivateKeyDialogOpen, setExportPrivateKeyDialogOpen] = useState(false)
 
-    const confirmedPasswordCallback = () =>
+    const logoutConfirmedPasswordCallback = () =>
         confirmPassword(() => setLogoutDialogOpen(true), {
             tipTitle: t.personas_logout(),
             tipContent: t.personas_logout_confirm_password_tip(),
             confirmTitle: t.personas_logout(),
         })
 
+    const exportPrivateKeyConfirmedPasswordCallback = () =>
+        confirmPassword(() => setExportPrivateKeyDialogOpen(true), {
+            tipTitle: t.personas_export_persona(),
+            tipContent: t.personas_export_persona_confirm_password_tip(),
+            confirmTitle: t.personas_export_persona(),
+        })
+
     const [menu, openMenu] = useMenu(
         <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_rename()}</MenuItem>,
-        <MenuItem onClick={() => setExportPrivateKeyDialogOpen(true)}>{t.personas_export_private()}</MenuItem>,
+        <MenuItem onClick={exportPrivateKeyConfirmedPasswordCallback}>{t.personas_export_private()}</MenuItem>,
         <MenuItem onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}>
             {t.settings_global_backup_title()}
         </MenuItem>,
-        <MenuItem onClick={confirmedPasswordCallback} style={{ color: MaskColorVar.redMain }}>
+        <MenuItem onClick={logoutConfirmedPasswordCallback} style={{ color: MaskColorVar.redMain }}>
             {t.personas_logout()}
         </MenuItem>,
     )

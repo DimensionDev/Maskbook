@@ -169,6 +169,7 @@
     "personas_export_persona_copy": "Copy",
     "personas_export_persona_copy_success": "Copied",
     "personas_export_persona_copy_failed": "Copy failed",
+    "personas_export_persona_confirm_password_tip": "You haven’t set up your password. To export your private key, you must set up backup password first.",
     "personas_export_private": "Export Private Key",
     "personas_export_private_key_tip": "This export is only for exporting private key. We do not export any other data. If you need more data, please go to Settings:",
     "personas_delete_confirm_tips": "Please confirm that you have deleted persona <i>{{nickname}}</i> and entered your password.",
