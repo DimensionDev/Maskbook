@@ -1,6 +1,10 @@
 import { Grid, Button } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { BigNumber } from 'bignumber.js'
+import { useCallback } from 'react'
+import { useChainId, useERC20TokenDetailed } from '@masknet/web3-shared'
+
+import { poolAddressMap } from '../../constants'
 
 import useToggle from '../../hooks/useToggle'
 import { getSlicePoolId } from '../../utils'
@@ -8,8 +12,11 @@ import { getSlicePoolId } from '../../utils'
 
 import { InfoIcon } from '../../constants/assets/global_info'
 import { useInitialPrice, usePoolStatus } from '../../hooks/usePoolData'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { PluginEntropyfiMessages } from '../../messages'
 
 import { CountDown } from './Count_Down'
+
 const useStyles = makeStyles()((theme) => ({
     metaDeposit: {
         marginTop: theme.spacing(1),
@@ -96,6 +103,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function CardRight(props: any) {
     const { classes } = useStyles()
+    const chainId = useChainId()
     const [coinId, coinName] = getSlicePoolId(props.poolId)
     const [show, toggle] = useToggle(false)
     // const poolState = usePoolState()[42][props.poolId]
@@ -108,6 +116,33 @@ export function CardRight(props: any) {
     console.log('initialPrice:', initialPriceTEXT)
     const locked = usePoolStatus(42, props.poolId) ?? 4
     console.log(props.poolId, 'card right status:', locked)
+
+    console.log(
+        'poolAddressMap[chainId][props.poolId]:',
+        chainId,
+        ' ',
+        props.poolId,
+        ' ',
+        poolAddressMap[chainId][props.poolId],
+    )
+    const {
+        value: token,
+        loading: loadingToken,
+        retry: retryToken,
+        error: errorToken,
+    } = useERC20TokenDetailed(poolAddressMap[chainId][props.poolId])
+
+    //#region the deposit dialog
+    const { setDialog: openDepositDialog } = useRemoteControlledDialog(PluginEntropyfiMessages.DepositDialogUpdated)
+    const onDeposit = useCallback(() => {
+        if (!props.poolId || !token) return
+        openDepositDialog({
+            open: true,
+            pool: props.poolId,
+            token: token,
+        })
+    }, [props.poolId, token, openDepositDialog])
+
     return (
         <Grid item container direction="column" className={classes.metaDeposit}>
             <Grid item className={classes.info}>
@@ -124,7 +159,7 @@ export function CardRight(props: any) {
                 Will the {coinId} price be higher than <span>{initialPrice}</span> when the game ends ?
             </Grid>
             <Grid item style={{ opacity: show ? 0 : 1 }}>
-                <Button className={classes.deposit} variant="contained" fullWidth size="small">
+                <Button className={classes.deposit} variant="contained" fullWidth size="small" onClick={onDeposit}>
                     Deposit
                 </Button>
             </Grid>

@@ -13,6 +13,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     bar: {
         transform: 'translateY(5px)',
+        marginLeft: '15px',
         '& div': {
             height: '8px ',
             borderRadius: '2px',
@@ -55,8 +56,8 @@ export function CardButtom(props: any) {
 
     const longRatio = _longRatio.isNaN() ? 50 : parseInt(_longRatio.toFixed(0), 10)
 
-    const longWidth = longRatio * 0.01 * 200
-    const shortWidth = (1 - longRatio * 0.01) * 200
+    const longWidth = longRatio * 0.01 * 170
+    const shortWidth = (1 - longRatio * 0.01) * 170
     const _shortAPY = poolValue.div(shortValue).toFixed(2)
     const _longAPY = poolValue.div(longValue).toFixed(2)
 
@@ -67,7 +68,7 @@ export function CardButtom(props: any) {
                     <Grid item xs={1} color="#32c682" paddingRight="10px">
                         <span>LONG</span>
                     </Grid>
-                    <Grid item xs={1} color="#32c682" paddingRight="10px">
+                    <Grid item xs={1} color="#32c682" paddingLeft="5px">
                         <span>{longRatio}%</span>
                     </Grid>
                     <Grid item xs={6} container direction="row" className={classes.bar}>
@@ -75,10 +76,10 @@ export function CardButtom(props: any) {
                         <div style={{ width: `${shortWidth}px`, backgroundColor: '#e66362' }} />
                     </Grid>
 
-                    <Grid item xs={1} color="#e66362" paddingLeft="20px">
+                    <Grid item xs={1} color="#e66362" paddingLeft="5px">
                         <span>{100 - longRatio}%</span>
                     </Grid>
-                    <Grid item xs={1} color="#e66362" paddingLeft="20px">
+                    <Grid item xs={1} color="#e66362" paddingLeft="5px">
                         <span>SHORT</span>
                     </Grid>
                 </Grid>
@@ -86,7 +87,7 @@ export function CardButtom(props: any) {
                     <Grid item xs={1}>
                         <span>{_longAPY !== 'NaN' ? _longAPY : ' - '}x</span>
                     </Grid>
-                    <Grid item xs={1} paddingRight="10px">
+                    <Grid item xs={1} paddingLeft="5px">
                         <span>APY</span>
                     </Grid>
                     <Grid item xs={6} marginRight="10px" />
@@ -104,7 +105,7 @@ export function CardButtom(props: any) {
                     target="_blank"
                     rel="noopener noreferrer"
                     href="https://app.entropyfi.com/#/Prediction">
-                    <Typography fontSize="1rem" variant="h6">
+                    <Typography fontSize="0.8rem" variant="body2">
                         View pool
                     </Typography>
                 </a>
