@@ -23,7 +23,6 @@ export const BackupPasswordConfirmDialog = memo<DialogProps>(({ onConfirmed, onC
 
     const onSubmitPassword = () => {
         if (user.backupPassword === password) {
-            console.log(password)
             onConfirmed()
         } else {
             setError(t.settings_dialogs_incorrect_password())
@@ -31,7 +30,7 @@ export const BackupPasswordConfirmDialog = memo<DialogProps>(({ onConfirmed, onC
     }
 
     const title = useMemo(() => {
-        return (user.backupPassword ? option?.confirmTitle : option?.tipTitle) ?? 'Confirm Password'
+        return (user.backupPassword ? option?.confirmTitle : option?.tipTitle) ?? t.confirm_password()
     }, [option?.tipTitle, option?.confirmTitle])
 
     return (
