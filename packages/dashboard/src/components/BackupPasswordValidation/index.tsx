@@ -1,6 +1,6 @@
-import { memo, useContext, useState } from 'react'
+import { memo, useContext, useMemo, useState } from 'react'
 import { Button, DialogActions, DialogContent, Typography } from '@material-ui/core'
-import { UserContext } from '../../pages/Settings/hooks/UserContext'
+import { ConfirmPasswordOption, UserContext } from '../../pages/Settings/hooks/UserContext'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { useNavigate } from 'react-router'
@@ -8,11 +8,12 @@ import { RoutePaths } from '../../type'
 
 interface DialogProps {
     open: boolean
+    option?: ConfirmPasswordOption
     onClose(): void
     onConfirmed(): void
 }
 
-export const BackupPasswordValidation = memo<DialogProps>(({ onConfirmed, onClose, open }) => {
+export const BackupPasswordConfirmDialog = memo<DialogProps>(({ onConfirmed, onClose, open, option }) => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const { user } = useContext(UserContext)
@@ -28,14 +29,17 @@ export const BackupPasswordValidation = memo<DialogProps>(({ onConfirmed, onClos
         }
     }
 
+    const title = useMemo(() => {
+        return (user.backupPassword ? option?.confirmTitle : option?.tipTitle) ?? 'Confirm Password'
+    }, [option?.tipTitle, option?.confirmTitle])
+
     return (
-        <MaskDialog open={open} title={t.personas_logout()} onClose={onClose} maxWidth="xs">
+        <MaskDialog open={open} title={title} onClose={onClose} maxWidth="xs">
             {!user.backupPassword && (
                 <>
-                    <DialogContent>
-                        <Typography color="error" variant="body2" fontSize={13}>
-                            1You haven’t set up your password. To export your private key, you must set up backup
-                            password first.
+                    <DialogContent sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
+                        <Typography variant="body2" fontSize={13}>
+                            {option?.tipContent}
                         </Typography>
                     </DialogContent>
                     <DialogActions>
@@ -50,8 +54,9 @@ export const BackupPasswordValidation = memo<DialogProps>(({ onConfirmed, onClos
             )}
             {user.backupPassword && (
                 <>
-                    <DialogContent>
+                    <DialogContent sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
                         <MaskTextField
+                            sx={{ flex: 1 }}
                             onChange={(e) => {
                                 setPassword(e.currentTarget.value)
                                 setError('')

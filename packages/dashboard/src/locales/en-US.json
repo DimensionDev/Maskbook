@@ -177,6 +177,7 @@
     "personas_edit": "Edit",
     "personas_delete": "Delete",
     "personas_logout": "Log out",
+    "personas_logout_confirm_password_tip": "You haven’t set up your password. To logout persona, you must set up backup password first.",
     "personas_add_persona": "Add Persona",
     "personas_back_up": "Back Up",
     "personas_connect_to": "Connect to {{internalName}}",
