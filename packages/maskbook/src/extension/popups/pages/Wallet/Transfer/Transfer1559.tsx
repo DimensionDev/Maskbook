@@ -149,7 +149,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const { value: nativeToken } = useNativeTokenDetailed()
 
-    const etherPrice = useNativeTokenPrice(nativeToken?.chainId ?? 0)
+    const etherPrice = useNativeTokenPrice(nativeToken?.chainId)
 
     const { value: estimateGasFees } = useAsync(async () => WalletRPC.getEstimateGasFees(chainId), [chainId])
 

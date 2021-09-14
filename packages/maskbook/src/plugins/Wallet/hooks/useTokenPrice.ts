@@ -16,12 +16,16 @@ const task = pollingTask(
     },
 )
 export function useTokenPrice(
-    chainId: ChainId,
+    chainId: ChainId | undefined,
     contractAddress: string | undefined,
     currencyType: CurrencyType = CurrencyType.USD,
 ) {
-    const platformId = getCoingeckoPlatformId(chainId)
-    const coinId = getCoingeckoCoinId(chainId)
+    let platformId: string | undefined = undefined
+    let coinId: string | undefined = undefined
+    if (chainId) {
+        platformId = getCoingeckoPlatformId(chainId)
+        coinId = getCoingeckoCoinId(chainId)
+    }
 
     const category = contractAddress ? platformId : coinId
 
@@ -58,6 +62,6 @@ export function useTokenPrice(
     return price
 }
 
-export function useNativeTokenPrice(chainId: ChainId, currencyType: CurrencyType = CurrencyType.USD) {
+export function useNativeTokenPrice(chainId: ChainId | undefined, currencyType: CurrencyType = CurrencyType.USD) {
     return useTokenPrice(chainId, undefined, currencyType)
 }

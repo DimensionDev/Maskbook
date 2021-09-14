@@ -84,7 +84,7 @@ export const GasSetting1559 = memo(() => {
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeTokenDetailed()
-    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId ?? 0)
+    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
     const { value: gasNow } = useAsync(async () => {
         const response = await WalletRPC.getEstimateGasFees(chainId)

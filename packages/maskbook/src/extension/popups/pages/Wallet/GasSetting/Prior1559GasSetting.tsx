@@ -90,7 +90,7 @@ export const Prior1559GasSetting = memo(() => {
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeTokenDetailed()
 
-    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId ?? 0)
+    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
     //#region Get gas now from debank
     const { value: gasNow } = useAsync(async () => {

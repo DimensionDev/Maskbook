@@ -239,7 +239,7 @@ const ContractInteraction = memo(() => {
 
     // token estimated value
     const tokenPrice = useTokenPrice(chainId, !isNativeTokenInteraction ? token?.address : undefined)
-    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId ?? 0)
+    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
     const tokenValueUSD = new BigNumber(tokenAmount)
         .dividedBy(pow10(tokenDecimals))
         .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
