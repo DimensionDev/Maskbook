@@ -1,11 +1,14 @@
-import { awaitChildProcess, getArgv, printShell, ROOT_PATH, shell, task } from '../utils'
+import { awaitChildProcess, parseArgs, printShell, ROOT_PATH, shell, task } from '../utils'
 import rimraf from 'rimraf'
 import { join } from 'path'
 import { promisify } from 'util'
 const rm = promisify(rimraf)
 
+interface Args {
+    deps: boolean
+}
 export async function clean() {
-    const { deps } = getArgv<{ deps: boolean }>()
+    const { deps } = parseArgs<Args>()
     if (deps) {
         printShell`rm -rf **/node_modules`
         await rm(join(ROOT_PATH, '**/node_modules'))

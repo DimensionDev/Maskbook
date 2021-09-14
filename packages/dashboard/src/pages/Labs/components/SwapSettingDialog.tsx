@@ -21,7 +21,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'UniSwap V3', value: TradeProvider.UNISWAP_V3 },
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: 'SashimiSwap', value: TradeProvider.SASHIMISWAP },
-        { label: 'Ox', value: TradeProvider.ZRX },
+        { label: '0x', value: TradeProvider.ZRX },
         { label: 'Balancer', value: TradeProvider.BALANCER },
         { label: 'DODO', value: TradeProvider.DODO },
     ]

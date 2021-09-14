@@ -2,6 +2,7 @@
 # webpack config.resolve.alias
 packages:
   - 'packages/empty'
+  - 'packages/polyfills/types'
   - 'packages/scripts'
   - 'packages/dashboard'
   - 'packages/maskbook'

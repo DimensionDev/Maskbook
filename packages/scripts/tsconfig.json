@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "lib": ["ESNext"],
-    "noEmit": true
+    "noEmit": true,
+    "types": ["node"]
   },
   "ts-node": {
     "compilerOptions": {

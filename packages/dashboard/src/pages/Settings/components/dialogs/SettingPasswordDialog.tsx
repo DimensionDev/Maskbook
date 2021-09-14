@@ -4,7 +4,8 @@ import { Box, Typography } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
 import { passwordRegexp } from '../../regexp'
-import { MaskTextField, useSnackbar } from '@masknet/theme'
+import { useSnackbar } from '@masknet/theme'
+import PasswordField from '../../../../components/PasswordField'
 
 interface SettingPasswordDialogProps {
     open: boolean
@@ -80,24 +81,21 @@ export default function SettingPasswordDialog({ open, onClose, onSet }: SettingP
             onConfirm={handleConfirm}>
             <Box sx={{ minHeight: '160px' }}>
                 {user.backupPassword ? (
-                    <MaskTextField
+                    <PasswordField
                         fullWidth
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
-                        type="password"
                         placeholder={t.settings_label_backup_password()}
                         sx={{ marginBottom: '10px' }}
                         error={incorrectPassword}
                         helperText={incorrectPassword ? t.settings_dialogs_incorrect_password() : ''}
                     />
                 ) : null}
-
-                <MaskTextField
+                <PasswordField
                     fullWidth
                     value={newPassword}
                     onChange={(event) => setNewPassword(event.target.value)}
                     onBlur={validCheck}
-                    type="password"
                     placeholder={
                         user.backupPassword
                             ? t.settings_label_new_backup_password()
@@ -107,11 +105,11 @@ export default function SettingPasswordDialog({ open, onClose, onSet }: SettingP
                     error={!passwordValid}
                     helperText={passwordValid ? '' : passwordRule}
                 />
-                <MaskTextField
+
+                <PasswordField
                     fullWidth
                     value={repeatPassword}
                     onChange={(event) => setRepeatPassword(event.target.value)}
-                    type="password"
                     placeholder={t.settings_label_re_enter()}
                     error={!passwordMatched}
                     helperText={!passwordMatched ? t.settings_dialogs_inconsistency_password() : ''}

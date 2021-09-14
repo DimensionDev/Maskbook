@@ -10,10 +10,7 @@ import {
     MnemonicGenerationInformation,
 } from '../../../utils/mnemonic-code'
 import type { MnemonicWordDetail } from '../interfaces/interface.blockchain'
-
-if (process.env.NODE_ENV !== 'test' && !process.env.STORYBOOK) {
-    import('webcrypto-liner')
-}
+import 'webcrypto-liner'
 
 const ECDH = getKeyParameter('ecdh')[0]
 const ECDSA = getKeyParameter('ecdsa')[0]

@@ -1,7 +1,6 @@
 {
   "references": [
     // Only list top-level projects here
-    { "path": "./e2e/" },
     { "path": "./packages/maskbook/" },
     { "path": "./packages/injected-script/main" },
     { "path": "./packages/mask-sdk/main" },
@@ -31,6 +30,8 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    // Exclude everything by default. Include them in each project on-demand
+    "types": ["web", "masknet__global-types"],
 
     // Emit
     "declaration": true,
@@ -64,15 +65,8 @@
   "files": [],
   "ts-node": {
     "compilerOptions": {
-      "module": "CommonJS",
-      "plugins": [
-        {
-          // Support import.meta syntax in commonjs
-          "transform": "@magic-works/commonjs-import.meta"
-        }
-      ]
+      "module": "CommonJS"
     },
-    "transpileOnly": true,
-    "compiler": "ttypescript"
+    "transpileOnly": true
   }
 }
