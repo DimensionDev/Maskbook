@@ -421,6 +421,7 @@
     "plugin_red_packet_display_name": "Plugin: Red Packet",
     "plugin_red_packet_erc20_tab_title": "Token",
     "plugin_red_packet_erc721_tab_title": "Collectibles",
+    "plugin_red_packet_erc721_insufficient_balance": "Insufficient Balance",
     "plugin_red_packet_split_mode": "Split Mode",
     "plugin_red_packet_average": "Average",
     "plugin_red_packet_random": "Random",

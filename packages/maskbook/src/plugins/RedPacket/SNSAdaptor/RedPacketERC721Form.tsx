@@ -188,9 +188,10 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants()
 
     const validationMessage = useMemo(() => {
+        if (!balance) return t('plugin_red_packet_erc721_insufficient_balance')
         if (existTokenDetailedList.length === 0) return t('plugin_wallet_select_a_token')
         return ''
-    }, [existTokenDetailedList.length])
+    }, [existTokenDetailedList.length, balance])
 
     return (
         <>
