@@ -217,9 +217,12 @@
         "counterparty",
         "jailbroken",
         "misoperation",
-        "majeure"
+        "majeure",
+        "nftscan"
     ],
     "ignoreWords": [
+        "cryptopunks",
+        "nftred",
         "BSCT",
         "BTCB",
         "COTM",
@@ -269,6 +272,7 @@
         "nrge",
         "pnpm",
         "setx",
+        "pkts",
         "swaptoken",
         "NYFI",
         "Csvg",
