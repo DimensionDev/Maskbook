@@ -7,6 +7,7 @@ import {
     ChainId,
     DebankTransactionDirection,
     resolveLinkOnExplorer,
+    TransactionType,
     useChainId,
     ZerionTransactionDirection,
 } from '@masknet/web3-shared'
@@ -44,6 +45,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const TRANSACTION_TYPE_MAP: { [key in TransactionType]: string } = {
+    [TransactionType.SEND]: 'Send',
+    [TransactionType.RECEIVE]: 'Receive',
+    [TransactionType.TRANSFER]: 'Swap',
+    [TransactionType.CREATE_RED_PACKET]: 'Red Packet',
+    [TransactionType.FILL_POOL]: 'Market',
+}
+
 export interface HistoryTableRowProps {
     transaction: Transaction
 }
@@ -65,10 +74,13 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                 <Box style={{ display: 'flex', alignItems: 'center' }}>
                     <TransactionIcon
                         transactionType={transaction.transactionType}
+                        type={transaction.type}
                         address={transaction.toAddress}
                         failed={transaction.failed}
                     />
-                    <Typography className={classes.type}>{transaction.type}</Typography>
+                    <Typography className={classes.type}>
+                        {[TRANSACTION_TYPE_MAP[(transaction.type as TransactionType) ?? TransactionType.TRANSFER]]}
+                    </Typography>
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center">
