@@ -8,7 +8,9 @@
     { "path": "./packages/dashboard" },
     // Storybooks are considered as a "project" not depended by any other project
     { "path": "./packages/dashboard/stories" },
-    { "path": "./packages/theme/stories" }
+    { "path": "./packages/theme/stories" },
+    // Tests
+    { "path": "./packages/backup-format/tsconfig.tests.json" }
   ],
   "compilerOptions": {
     // Classification follows https://www.typescriptlang.org/tsconfig

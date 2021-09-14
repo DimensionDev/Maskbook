@@ -1,4 +1,5 @@
-import { concatArrayBuffer, unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@dimensiondev/kit/esm/control-flow.mjs'
+import { concatArrayBuffer } from '@dimensiondev/kit/esm/buffer.mjs'
 import { BackupErrors } from '../BackupErrors'
 
 const MAGIC_HEADER_Version0 = new TextEncoder().encode('MASK-BACKUP-V000')
