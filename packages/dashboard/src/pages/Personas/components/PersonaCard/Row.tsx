@@ -127,11 +127,12 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
             </Stack>
             <Box sx={{ flex: 3 }}>
                 <Box
+                    height={22}
                     sx={{
                         display: 'inline-flex',
                         alignItems: 'center',
                     }}>
-                    <Box sx={{ mr: 1.5 }} className={classes.accountIcon}>
+                    <Box sx={{ mr: 1.5, py: '2px', height: '100%' }} className={classes.accountIcon}>
                         <PublicKeyIcon />
                     </Box>
                     <Typography variant="body1" sx={{ fontSize: 13 }} component="span">
