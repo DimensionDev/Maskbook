@@ -90,12 +90,14 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
         <UserContext.Provider value={{ user, updateUser, ensurePasswordSet, confirmPassword }}>
             {children}
             <SettingPasswordDialog open={!!callback} onSet={onSet} onClose={() => setCallback(null)} />
-            <BackupPasswordConfirmDialog
-                option={confirmOption}
-                open={!!confirmCallback}
-                onConfirmed={onConfirmed}
-                onClose={() => setConfirmCallback(null)}
-            />
+            {!!confirmCallback && (
+                <BackupPasswordConfirmDialog
+                    option={confirmOption}
+                    open={!!confirmCallback}
+                    onConfirmed={onConfirmed}
+                    onClose={() => setConfirmCallback(null)}
+                />
+            )}
         </UserContext.Provider>
     )
 }

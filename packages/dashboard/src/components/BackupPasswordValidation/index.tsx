@@ -1,10 +1,11 @@
 import { memo, useContext, useMemo, useState } from 'react'
 import { Button, DialogActions, DialogContent, Typography } from '@material-ui/core'
 import { ConfirmPasswordOption, UserContext } from '../../pages/Settings/hooks/UserContext'
-import { MaskDialog, MaskTextField } from '@masknet/theme'
+import { MaskDialog } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
+import PasswordField from '../PasswordField'
 
 interface DialogProps {
     open: boolean
@@ -55,7 +56,7 @@ export const BackupPasswordConfirmDialog = memo<DialogProps>(({ onConfirmed, onC
             {user.backupPassword && (
                 <>
                     <DialogContent sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-                        <MaskTextField
+                        <PasswordField
                             sx={{ flex: 1 }}
                             onChange={(e) => {
                                 setPassword(e.currentTarget.value)
