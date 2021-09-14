@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-type MaskTextFieldProps = Exclude<StandardTextFieldProps, 'variant'>
+export type MaskTextFieldProps = Exclude<StandardTextFieldProps, 'variant'>
 
 export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: ForwardedRef<any>) => {
     const { label, sx, required = false, ...rest } = props
