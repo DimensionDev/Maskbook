@@ -34,8 +34,7 @@ export const deriveMmaMarketInfo = (
     // will need get get team names
     const sportsMarketType = Number.parseInt(_sportsMarketType, 10)
     const outcomes = decodeOutcomes(shareTokens, homeFighterName, awayFighterName, sportsMarketType, winner, hasWinner)
-    const { title, description } =
-        getMarketTitle(sport.sportId, homeFighterName, awayFighterName, sportsMarketType) || {}
+    const { title = '', description = '' } = getMarketTitle(homeFighterName, awayFighterName, sportsMarketType) || {}
 
     return {
         address,
@@ -69,7 +68,6 @@ const getOutcomeName = (outcomeId: number, homeTeam: string, awayTeam: string, s
 }
 
 export const getMarketTitle = (
-    sportId: string,
     homeTeam: string,
     awayTeam: string,
     sportsMarketType: number,

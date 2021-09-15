@@ -18,7 +18,7 @@ export const deriveSportMarketInfo = (
     hasWinner: boolean,
 ) => {
     let line = new BN(String(value0)).div(10).decimalPlaces(0, 1).toNumber() || undefined
-    const sportsMarketType = new BN(String(_sportsMarketType)).toNumber()
+    const sportsMarketType = new BN(_sportsMarketType).toNumber()
     if (sportsMarketType === SportMarketType.HeadToHead) line = undefined
 
     const homeTeamName = getFullTeamName(homeTeam)
@@ -34,7 +34,7 @@ export const deriveSportMarketInfo = (
         winner,
         hasWinner,
     )
-    const { title, description } =
+    const { title = '', description = '' } =
         getMarketTitle(sport.sportId, homeTeamName, awayTeamName, sportsMarketType, line) || {}
 
     return {

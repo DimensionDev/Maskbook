@@ -21,8 +21,10 @@ import { MarketDescription } from './MarketDescription'
 import { MarketBuySell } from './MarketBuySell'
 import { useFetchMarket } from '../hooks/useMarket'
 import { useAmmOutcomes } from '../hooks/useAmmOutcomes'
-import { useERC20TokenDetailed } from '@masknet/web3-shared'
+import { useAugurConstants, useERC20TokenDetailed } from '@masknet/web3-shared'
 import { ChartView } from './ChartView'
+import { useUserPositions } from '../hooks/useUserPositions'
+import type { BasicMarket } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -116,6 +118,9 @@ export function MarketView(props: MarketViewProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
+    const x = useUserPositions()
+    console.log(x)
+
     //#region tabs
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
@@ -125,7 +130,13 @@ export function MarketView(props: MarketViewProps) {
     ].filter(Boolean)
     //#endregion
 
-    const { value: market, loading, error, retry } = useFetchMarket(address, id, link, 'no-cache')
+    const { AMM_FACTORY_ADDRESS } = useAugurConstants()
+    const {
+        value: market,
+        loading,
+        error,
+        retry,
+    } = useFetchMarket({ address, id, link, ammAddress: AMM_FACTORY_ADDRESS } as BasicMarket, 'no-cache')
     const {
         value: ammOutcomes,
         loading: loadingAmmOutcomes,

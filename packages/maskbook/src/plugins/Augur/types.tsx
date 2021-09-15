@@ -95,11 +95,14 @@ export interface MarketInfo {
     cryptoMarket?: CryptoMarket[]
 }
 
-export interface Market {
+export interface BasicMarket {
     address: string
     id: string
     link: string
     ammAddress: string
+}
+
+export interface Market extends BasicMarket {
     homeTeam?: Team
     awayTeam?: Team
     title: string
@@ -212,3 +215,14 @@ export enum Period {
 }
 
 export type Stat = [number | string, number]
+
+export interface RawUserMarket {
+    id: string
+    liquidity: { collateral: string }[]
+}
+
+export interface UserMarket {
+    address: string
+    id: string
+    liquidity: Liquidity
+}
