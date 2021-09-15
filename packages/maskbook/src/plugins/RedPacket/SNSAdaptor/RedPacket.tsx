@@ -131,6 +131,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'space-around',
     },
+    connectWallet: {
+        marginTop: 16,
+    },
 }))
 
 export interface RedPacketProps {
@@ -327,7 +330,10 @@ export function RedPacket(props: RedPacketProps) {
                 />
             </Card>
             {canClaim || canRefund ? (
-                <EthereumWalletConnectedBoundary>
+                <EthereumWalletConnectedBoundary
+                    classes={{
+                        connectWallet: classes.connectWallet,
+                    }}>
                     <Box className={classes.footer}>
                         {!account ? (
                             <ActionButton variant="contained" size="large" onClick={openSelectProviderDialog}>

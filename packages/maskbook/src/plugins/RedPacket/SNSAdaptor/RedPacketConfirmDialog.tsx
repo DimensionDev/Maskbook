@@ -8,6 +8,7 @@ import type { RedPacketSettings } from './hooks/useCreateCallback'
 import LaunchIcon from '@material-ui/icons/Launch'
 import { FormattedBalance } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
+import classNames from 'classnames'
 import { useEffect } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -18,6 +19,10 @@ const useStyles = makeStyles()((theme) => ({
     grid: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
+    },
+    gridWrapper: {
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
     },
     hit: {
         fontSize: 14,
@@ -73,7 +78,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     }, [chainId, onClose])
 
     return (
-        <Grid container spacing={2} className={classes.grid}>
+        <Grid container spacing={2} className={classNames(classes.grid, classes.gridWrapper)}>
             <Grid item xs={12}>
                 <Typography variant="h4" color="textPrimary" align="center">
                     {settings?.message}
