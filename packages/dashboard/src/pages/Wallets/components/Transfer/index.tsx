@@ -6,12 +6,25 @@ import { TabContext, TabList, TabPanel } from '@material-ui/lab'
 import { TransferERC20 } from './TransferERC20'
 import { FungibleTokenDetailed, useNativeTokenDetailed } from '@masknet/web3-shared'
 import { useLocation } from 'react-router-dom'
+import { useDashboardI18N } from '../../../../locales'
+
+export enum TransferTab {
+    Token = 'Token',
+    Collectibles = 'Collectibles',
+}
+
+const assetTabs = [TransferTab.Token, TransferTab.Collectibles] as const
 
 export const Transfer = memo(() => {
     // todo: token and chain
+    const t = useDashboardI18N()
     const { state } = useLocation() as { state: { token: FungibleTokenDetailed } | null }
     const { value: nativeToken } = useNativeTokenDetailed()
-    const [currentTab, onChange, tabs] = useTabs('tokens', 'collections')
+    const transferTabsLabel: Record<TransferTab, string> = {
+        [TransferTab.Token]: t.wallets_assets_token(),
+        [TransferTab.Collectibles]: t.wallets_assets_collectibles(),
+    }
+    const [currentTab, onChange] = useTabs(TransferTab.Token, TransferTab.Collectibles)
 
     if (!nativeToken && !state?.token) return null
 
@@ -20,13 +33,14 @@ export const Transfer = memo(() => {
             <Box>
                 <TabContext value={currentTab}>
                     <TabList onChange={onChange}>
-                        <Tab label="Token" value={tabs.tokens} />
-                        <Tab label="Collections" value={tabs.collections} />
+                        {assetTabs.map((key) => (
+                            <Tab key={key} value={key} label={transferTabsLabel[key]} />
+                        ))}
                     </TabList>
-                    <TabPanel value={tabs.tokens}>
+                    <TabPanel value={TransferTab.Token}>
                         <TransferERC20 token={state?.token! || nativeToken} />
                     </TabPanel>
-                    <TabPanel value={tabs.collections}>todo</TabPanel>
+                    <TabPanel value={TransferTab.Collectibles}>todo</TabPanel>
                 </TabContext>
             </Box>
         </ContentContainer>
