@@ -49,7 +49,7 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
             <SendingCodeField
                 label={
                     <Typography variant="body2" sx={{ fontWeight: 'bolder' }} lineHeight="30px" color="textPrimary">
-                        Send to {account}
+                        {t.sign_in_account_cloud_send_verification_code_tip()} {account}
                     </Typography>
                 }
                 onChange={(c) => setCode(c)}

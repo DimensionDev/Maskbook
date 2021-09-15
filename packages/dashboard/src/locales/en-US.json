@@ -58,6 +58,7 @@
     "sign_in_account_local_backup_file_drag": "Please click or drag the file here",
     "sign_in_account_cloud_backup_warning": "The cloud backup hosts and encrypts your data.",
     "sign_in_account_cloud_backup_not_support": "Unsupported data backup",
+    "sign_in_account_cloud_send_verification_code_tip": "Send verification code to",
     "sign_in_account_cloud_backup_failed": "Restore backup failed, Please try again.",
     "sign_in_account_cloud_backup_email_or_phone_number": "E-mail or phone number",
     "sign_in_account_cloud_backup_password": "Backup password",
