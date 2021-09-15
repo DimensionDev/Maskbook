@@ -218,6 +218,7 @@
         "jailbroken",
         "misoperation",
         "majeure",
+        "Swither",
         "nftscan"
     ],
     "ignoreWords": [
@@ -286,10 +287,12 @@
         "unlockprotocol",
         "unlocklock",
         "chainid",
+        "NFT",
         "powahs",
         "gamification",
         "Defi",
-        "powah"
+        "powah",
+        "Switcher"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

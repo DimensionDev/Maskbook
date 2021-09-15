@@ -44,6 +44,7 @@ async function createOpenSeaAPI() {
 
 export async function getAsset(tokenAddress: string, tokenId: string) {
     const sdkResponse = await (await createOpenSeaPort()).api.getAsset({ tokenAddress, tokenId })
+
     const fetchResponse = await (
         await fetch(urlcat(await createOpenSeaAPI(), '/asset/:tokenAddress/:tokenId', { tokenAddress, tokenId }), {
             mode: 'cors',
@@ -58,6 +59,7 @@ export async function getAsset(tokenAddress: string, tokenId: string) {
             (item: { side: number; closing_extendable: boolean }) => item.side === 1 && item.closing_extendable,
         ),
     )?.closing_date
+
     return {
         ...sdkResponse,
         ...fetchResponse,

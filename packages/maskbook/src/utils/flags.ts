@@ -61,6 +61,10 @@ export const Flags = {
     has_no_WebRTC: process.env.target === 'safari' || !globalThis?.navigator?.permissions?.query,
     //#endregion
     using_emoji_flag: true,
+
+    //#region add nft avatar
+    nft_avatar_enabled: betaOrInsiderOnly,
+    //#endregion
 } as const
 
 if (process.env.NODE_ENV === 'development') {

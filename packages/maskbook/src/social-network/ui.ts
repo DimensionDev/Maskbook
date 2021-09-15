@@ -71,7 +71,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     ui.collecting.postsProvider?.start(signal)
     startPostListener()
-
     ui.collecting.currentVisitingIdentityProvider?.start(signal)
     ui.injection.pageInspector?.(signal)
     if (Flags.toolbox_enabled) ui.injection.toolBoxInNavBar?.(signal)
@@ -84,6 +83,12 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     ui.injection.enhancedProfile?.(signal)
     ui.injection.enhancedProfileTab?.(signal)
+
+    if (Flags.nft_avatar_enabled) {
+        ui.injection.userAvatar?.(signal)
+        ui.injection.enhancedProfileNFTAvatar?.(signal)
+        ui.injection.profileAvatar?.(signal)
+    }
 
     startPluginSNSAdaptor(getCurrentSNSNetwork(ui.networkIdentifier), createPluginHost(signal))
 

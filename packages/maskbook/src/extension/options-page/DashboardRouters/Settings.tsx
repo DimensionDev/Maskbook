@@ -50,6 +50,8 @@ import { useCurrentTradeProvider } from '../../../plugins/Trader/trending/useCur
 import { useCurrentDataProvider } from '../../../plugins/Trader/trending/useCurrentDataProvider'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { safeUnreachable } from '@dimensiondev/kit'
+import { DashboardBindNFTAvatarDialog } from '../DashboardDialogs/Avatar'
+import StorageIcon from '@material-ui/icons/Storage'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -181,6 +183,7 @@ export default function DashboardSettingsRouter() {
 
     const [backupDialog, openBackupDialog] = useModal(DashboardBackupDialog)
     const [restoreDialog, openRestoreDialog] = useModal(DashboardRestoreDialog)
+    const [bindNFTAvatarDialog, openBindNFTAvatarDialog] = useModal(DashboardBindNFTAvatarDialog)
 
     const listStyle = {
         secondaryAction: classes.secondaryAction,
@@ -284,6 +287,25 @@ export default function DashboardSettingsRouter() {
                         </Card>
                     </Paper>
 
+                    {Flags.nft_avatar_enabled ? (
+                        <Paper component="section" className={classes.section} elevation={elevation}>
+                            <Typography className={classes.title} variant="h6" color="textPrimary">
+                                {t('settings_title_bind_nft_avatar')}
+                            </Typography>
+                            <Card elevation={0}>
+                                <List className={classes.list} disablePadding>
+                                    <SettingsUIDummy
+                                        classes={listStyle}
+                                        icon={<StorageIcon />}
+                                        primary="Bind NFT Avatar"
+                                        secondary=""
+                                        onClick={openBindNFTAvatarDialog}
+                                    />
+                                </List>
+                            </Card>
+                        </Paper>
+                    ) : null}
+
                     <Paper component="section" className={classes.section} elevation={elevation}>
                         <Typography className={classes.title} variant="h6" color="textPrimary">
                             {t('settings_title_advanced_options')}
@@ -335,6 +357,7 @@ export default function DashboardSettingsRouter() {
                         </Card>
                         {backupDialog}
                         {restoreDialog}
+                        {bindNFTAvatarDialog}
                     </Paper>
                 </div>
             </ThemeProvider>

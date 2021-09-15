@@ -285,7 +285,6 @@ importers:
       '@types/bn.js': ^4.11.6
       '@types/d3': 5.16.4
       '@types/elliptic': ^6.4.13
-      '@types/gun': ^0.9.3
       '@types/json-stable-stringify': ^1.0.33
       '@types/json2csv': ^5.0.3
       '@types/lodash-es': ^4.17.4
@@ -329,7 +328,7 @@ importers:
       fuse.js: ^6.4.3
       graphql: ^15.5.1
       graphql-request: ^3.4.0
-      gun: 0.2020.520
+      gun: ^0.2020.1234
       html-webpack-plugin: ^5.3.2
       https-browserify: ^1.0.0
       i18next-browser-languagedetector: ^6.1.2
@@ -430,7 +429,6 @@ importers:
       '@types/bn.js': 4.11.6
       '@types/d3': 5.16.4
       '@types/elliptic': 6.4.13
-      '@types/gun': 0.9.3
       '@types/json-stable-stringify': 1.0.33
       '@types/json2csv': 5.0.3
       '@types/lodash-es': 4.17.4
@@ -468,7 +466,7 @@ importers:
       fuse.js: 6.4.6
       graphql: 15.5.3
       graphql-request: 3.5.0_graphql@15.5.3
-      gun: 0.2020.520
+      gun: 0.2020.1234
       https-browserify: 1.0.0
       i18next-browser-languagedetector: 6.1.2
       immer: 9.0.6
@@ -5474,14 +5472,14 @@ packages:
       '@types/asn1js': 2.0.2
       asn1js: 2.1.1
       pvtsutils: 1.1.7
-      tslib: 2.3.0
+      tslib: 2.3.1
     dev: false
 
   /@peculiar/json-schema/1.1.12:
     resolution: {integrity: sha512-coUfuoMeIB7B8/NMekxaDzLhaYmp0HZNPEjYRm9goRou8UZIC3z21s0sL9AWoCw4EG876QyO3kYrc61WNF9B/w==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      tslib: 2.3.0
+      tslib: 2.3.1
     dev: false
 
   /@peculiar/webcrypto/1.1.7:
@@ -5492,7 +5490,7 @@ packages:
       '@peculiar/asn1-schema': 2.0.37
       '@peculiar/json-schema': 1.1.12
       pvtsutils: 1.1.7
-      tslib: 2.3.0
+      tslib: 2.3.1
       webcrypto-core: 1.2.0
     dev: false
     optional: true
@@ -7779,10 +7777,6 @@ packages:
       '@types/vinyl-fs': 2.4.12
       chokidar: 3.5.2
     dev: true
-
-  /@types/gun/0.9.3:
-    resolution: {integrity: sha512-ydC8P4EHbVUqSK4+BhVQW1b4DCksLVKdnLJENJYuiBQDvk2UfA79vTcKxG7hnpyHPas/7yT6pMviMSDp5m7rmg==}
-    dev: false
 
   /@types/har-format/1.2.7:
     resolution: {integrity: sha512-/TPzUG0tJn5x1TUcVLlDx2LqbE58hyOzDVAc9kf8SpOEmguHjU6bKUyfqb211AdqLOmU/SNyXvLKPNP5qTlfRw==}
@@ -14955,20 +14949,18 @@ packages:
       glogg: 1.0.2
     dev: true
 
-  /gun/0.2020.520:
-    resolution: {integrity: sha512-hMDmj4QQnejweZEy4njbyNlll+GO7H8XIq/SdQ23kFV29B6HqA0+bQmhLCxWKLwQvfRXx9SgSXG/ImGrER/CqQ==}
+  /gun/0.2020.1234:
+    resolution: {integrity: sha512-RqlGDDze1U7gdRZCHx8VMBi0dzyJL4C6jQHwOuFjH9aldGcCQPN0HyVaKVn6jNHgS1AAbTBod4KCfMRXda+eZg==}
     engines: {node: '>=0.8.4'}
-    peerDependencies:
-      '@gooddollar/react-native-webview-crypto': ^0.*
-      bufferutil: ^4.0.1
-      utf-8-validate: ^5.0.2
     dependencies:
-      ws: 7.5.3
+      ws: 7.5.5
     optionalDependencies:
       '@peculiar/webcrypto': 1.1.7
-      buffer: 5.7.1
       emailjs: 2.2.0
       text-encoding: 0.7.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
     dev: false
 
   /gzip-size/5.1.1:
@@ -23959,7 +23951,7 @@ packages:
       '@peculiar/json-schema': 1.1.12
       asn1js: 2.1.1
       pvtsutils: 1.1.7
-      tslib: 2.3.0
+      tslib: 2.3.1
     dev: false
 
   /webcrypto-liner/1.2.4:
@@ -24579,8 +24571,8 @@ packages:
         optional: true
     dev: false
 
-  /ws/7.5.3:
-    resolution: {integrity: sha512-kQ/dHIzuLrS6Je9+uv81ueZomEwH0qVYstcAQ4/Z93K8zeko9gtAbttJWzoC5ukqXY1PpoouV3+VSOqEAFt5wg==}
+  /ws/7.5.4:
+    resolution: {integrity: sha512-zP9z6GXm6zC27YtspwH99T3qTG7bBFv2VIkeHstMLrLlDJuzA7tQ5ls3OJ1hOGGCzTQPniNJoHXIAOS0Jljohg==}
     engines: {node: '>=8.3.0'}
     peerDependencies:
       bufferutil: ^4.0.1
