@@ -13,7 +13,7 @@
         "Arbitrum_Rinkeby": ""
     },
     "SUBGRAPH_URL": {
-        "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-mainnet",
+        "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-mainnet",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
