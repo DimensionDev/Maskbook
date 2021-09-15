@@ -4,4 +4,11 @@ module.exports = {
     reactOptions: {
         fastRefresh: true,
     },
+    webpackFinal: async (config) => {
+        config.module.rules.push({
+            test: /\.m?js$/,
+            type: 'javascript/auto',
+        })
+        return config
+    },
 }

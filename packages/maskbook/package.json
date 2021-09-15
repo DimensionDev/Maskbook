@@ -7,7 +7,7 @@
     "@balancer-labs/sor": "^1.0.0",
     "@dimensiondev/common-protocols": "1.6.0-20201027083702-d0ae6e2",
     "@dimensiondev/holoflows-kit": "=0.9.0-20210726055325-dfbe7fd",
-    "@dimensiondev/kit": "^0.0.0-20210712114527-dc8eac6",
+    "@dimensiondev/kit": "^0.0.0-20210913111737-84c17d7",
     "@dimensiondev/metamask-extension-provider": "3.0.6-20210519045409-1835d4d",
     "@dimensiondev/snapshot.js": "0.2.0",
     "@dimensiondev/stego-js": "=0.11.1-20201027083223-8ab41be",

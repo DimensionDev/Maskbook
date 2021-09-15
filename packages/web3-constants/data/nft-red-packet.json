@@ -1,0 +1,28 @@
+{
+    "RED_PACKET_NFT_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "0x82c1Cc7208F3565e670F2Cd41de3651AeD2A1DF4",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "0xb30e310c2d20e0330e1883c3517064a0be65fb6e",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
+    },
+    "SUBGRAPH_URL": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-polygon",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": ""
+    }
+}

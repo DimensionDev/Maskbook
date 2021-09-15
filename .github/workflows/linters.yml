@@ -30,7 +30,7 @@ jobs:
           restore-keys: ${{ runner.os }}-node-
       - run: npx pnpm install
       - run: npx gulp locale-kit
-  type-check:
+  type-check-and-jest:
     runs-on: ubuntu-20.04
     steps:
       - name: Get cache date
@@ -41,6 +41,8 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
       - name: pnpm cache
         uses: actions/cache@v2
         with:
@@ -61,6 +63,7 @@ jobs:
             ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}
       - run: npx pnpm install
       - run: npx gulp codegen
+      - run: node --experimental-vm-modules ./node_modules/jest/bin/jest.js
   eslint:
     runs-on: ubuntu-20.04
     steps:

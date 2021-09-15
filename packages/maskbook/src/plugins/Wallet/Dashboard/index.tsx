@@ -1,6 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
 import { SelectTokenDialog } from '../SNSAdaptor/SelectTokenDialog'
+import { SelectNftContractDialog } from '../SNSAdaptor/SelectNftContractDialog'
 import { CreateWalletDialog } from '../SNSAdaptor/CreateWalletDialog'
 import { CreateImportChooseDialog } from '../SNSAdaptor/CreateImportChooseDialog'
 import { ImportWalletDialog } from '../SNSAdaptor/ImportWalletDialog'
@@ -25,6 +26,7 @@ const dashboard: Plugin.Dashboard.Definition = {
                 <SelectWalletDialog />
                 <SelectProviderDialog />
                 <SelectTokenDialog />
+                <SelectNftContractDialog />
                 <CreateWalletDialog />
                 <CreateImportChooseDialog />
                 <ImportWalletDialog />

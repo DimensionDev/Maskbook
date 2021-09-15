@@ -3,6 +3,7 @@
  * !! Please make sure it also be able to recognize the old key.
  */
 export const RedPacketMetaKey = 'com.maskbook.red_packet:1'
+export const RedPacketNftMetaKey = 'com.maskbook.red_packet_nft:1'
 /**
  * !! This ID is used to identify the stored plugin data. Change it will cause data lost.
  */
