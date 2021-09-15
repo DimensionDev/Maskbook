@@ -6,57 +6,84 @@ import {
     formatBalance,
     NativeTokenDetailed,
     ERC20TokenDetailed,
+    FungibleTokenDetailed,
 } from '@masknet/web3-shared'
 import type Services from '../../../../extension/service'
 
-function getDescription(
+function getTokenAmountDescription(amount?: string, tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {
+    return `${negative ? '-' : ''}${formatBalance(amount ?? '0', tokenDetailed?.decimals ?? 0, 4)} ${
+        tokenDetailed?.symbol
+    }`.trim()
+}
+
+function getTransactionDescription(
     nativeTokenDetailed?: NativeTokenDetailed,
     tokenDetailed?: ERC20TokenDetailed,
-    receipt?: TransactionReceipt | null,
     computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null,
 ) {
-    if (!computedPayload) return receipt?.transactionHash
+    if (!computedPayload) return
     const type = computedPayload.type
-    const deductedValue = formatBalance(
-        (computedPayload._tx.value as string | undefined) ?? '0',
-        nativeTokenDetailed?.decimals ?? 0,
-    )
     switch (type) {
         case EthereumRpcType.SEND_ETHER:
-            return `Send token -${deductedValue} ${nativeTokenDetailed?.symbol}`
+            return `Send token -${getTokenAmountDescription(
+                computedPayload._tx.value as string | undefined,
+                nativeTokenDetailed,
+            )}`
         case EthereumRpcType.CONTRACT_INTERACTION:
-            const deductedTokenValue = formatBalance(computedPayload.parameters?.value, tokenDetailed?.decimals ?? 0)
             switch (computedPayload.name) {
                 case 'approve':
-                    return `Approve spend limit ${deductedTokenValue} ${tokenDetailed?.symbol}`
+                    return `Approve spend limit ${getTokenAmountDescription(
+                        computedPayload.parameters?.value,
+                        tokenDetailed,
+                    )}`
                 case 'transfer':
                 case 'transferFrom':
-                    return `Transfer token -${deductedTokenValue} ${tokenDetailed?.symbol}`
+                    return `Transfer token ${getTokenAmountDescription(
+                        computedPayload.parameters?.value,
+                        tokenDetailed,
+                        true,
+                    )}`
                 default:
-                    return `Contract Interaction -${deductedValue} ${nativeTokenDetailed?.symbol}`
+                    return `Contract Interaction ${
+                        computedPayload._tx.value
+                            ? getTokenAmountDescription(
+                                  computedPayload._tx.value as string | undefined,
+                                  nativeTokenDetailed,
+                                  true,
+                              )
+                            : ''
+                    }`
             }
         case EthereumRpcType.CONTRACT_DEPLOYMENT:
-            return `Contract Deployment -${deductedValue} ${nativeTokenDetailed?.symbol}`
+            return `Contract Deployment ${getTokenAmountDescription(
+                computedPayload._tx.value as string | undefined,
+                nativeTokenDetailed,
+                true,
+            )}`
         case EthereumRpcType.CANCEL:
             return 'Cancel Transaction'
         case EthereumRpcType.RETRY:
             return 'Retry Transaction'
         default:
-            return receipt?.transactionHash
+            return
     }
 }
 
 export interface RecentTransactionDescriptionProps {
+    hash: string
     receipt?: TransactionReceipt | null
     computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null
 }
 
 export function RecentTransactionDescription(props: RecentTransactionDescriptionProps) {
-    const { receipt, computedPayload } = props
+    const { hash, computedPayload } = props
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     const { value: tokenDetailed } = useERC20TokenDetailed(
-        computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION ? computedPayload._tx.to : '',
+        computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
+            ['approve', 'transfer', 'transferForm'].includes(computedPayload.name ?? '')
+            ? computedPayload._tx.to
+            : '',
     )
 
-    return <span>{getDescription(nativeTokenDetailed, tokenDetailed, receipt, computedPayload)}</span>
+    return <span>{getTransactionDescription(nativeTokenDetailed, tokenDetailed, computedPayload) ?? hash}</span>
 }

@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useChainId } from '@masknet/web3-shared'
 import { useAsyncRetry } from 'react-use'
 import { PluginMessages, PluginServices } from '../../../API'
 
 export function useAddressBook() {
     const chainId = useChainId()
-    const [flag, setFlag] = useState(false)
+    const result = useAsyncRetry(async () => PluginServices.Wallet.getAllAddress(), [chainId])
 
-    useEffect(() => PluginMessages.Wallet.events.addressBookUpdated.on(() => setFlag((x) => !x)), [])
+    useEffect(() => PluginMessages.Wallet.events.addressBookUpdated.on(result.retry), [result.retry])
 
-    return useAsyncRetry(async () => PluginServices.Wallet.getAllAddress(), [flag, chainId])
+    return result
 }

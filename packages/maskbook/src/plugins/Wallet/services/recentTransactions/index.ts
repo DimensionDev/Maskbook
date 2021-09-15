@@ -3,7 +3,7 @@ import type { JsonRpcPayload } from 'web3-core-helpers'
 import { TransactionStatusType } from '@masknet/web3-shared'
 import { getSendTransactionComputedPayload } from '../../../../extension/background-script/EthereumService'
 import * as database from './database'
-import { getReceipt } from './watcher'
+import * as watcher from './watcher'
 
 function getReceiptStatus(receipt: TransactionReceipt | null) {
     if (!receipt) return TransactionStatusType.NOT_DEPEND
@@ -13,9 +13,8 @@ function getReceiptStatus(receipt: TransactionReceipt | null) {
     return TransactionStatusType.NOT_DEPEND
 }
 
-export { addRecentTransaction, clearRecentTransactions } from './database'
-
 export interface RecentTransaction {
+    at: Date
     hash: string
     status: TransactionStatusType
     receipt?: TransactionReceipt | null
@@ -23,19 +22,36 @@ export interface RecentTransaction {
     computedPayload?: UnboxPromise<ReturnType<typeof getSendTransactionComputedPayload>>
 }
 
+export async function addRecentTransaction(address: string, hash: string, payload: JsonRpcPayload) {
+    watcher.watchTransaction(hash)
+    await database.addRecentTransaction(address, hash, payload)
+}
+
+export async function removeRecentTransaction(address: string, hash: string) {
+    watcher.unwatchTransaction(hash)
+    await database.removeRecentTransaction(address, hash)
+}
+
+export async function clearRecentTransactions(address: string) {
+    const transactions = await database.getRecentTransactions(address)
+    transactions.forEach((x) => watcher.unwatchTransaction(x.hash))
+    await database.clearRecentTransactions(address)
+}
+
 export async function getRecentTransactionList(address: string): Promise<RecentTransaction[]> {
     const transactions = await database.getRecentTransactions(address)
     const allSettled = await Promise.allSettled(
-        transactions.map(async ({ hash, payload }) => {
-            const receipt = await getReceipt(hash)
-            const transaction: RecentTransaction = {
+        transactions.map<Promise<RecentTransaction>>(async ({ at, hash, payload }) => {
+            watcher.watchTransaction(hash)
+            const receipt = await watcher.getReceipt(hash)
+            return {
+                at,
                 hash,
                 status: getReceiptStatus(receipt),
+                receipt,
+                payload,
+                computedPayload: await getSendTransactionComputedPayload(payload),
             }
-            transaction.receipt = receipt
-            transaction.payload = payload
-            transaction.computedPayload = await getSendTransactionComputedPayload(payload)
-            return transaction
         }),
     )
 

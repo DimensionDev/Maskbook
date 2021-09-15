@@ -9,6 +9,7 @@ import { currentChainIdSettings } from '../../settings'
 export const MAX_RECENT_TRANSACTIONS_SIZE = 20
 
 export interface RecentTransaction {
+    at: Date
     hash: string
     payload: JsonRpcPayload
 }
@@ -41,6 +42,7 @@ export async function addRecentTransaction(address: string, hash: string, payloa
         transactions: uniqBy(
             [
                 {
+                    at: now,
                     hash,
                     payload,
                 },
@@ -50,6 +52,23 @@ export async function addRecentTransaction(address: string, hash: string, payloa
             (x) => x.hash,
         ).slice(0, MAX_RECENT_TRANSACTIONS_SIZE),
         createdAt: chunk?.createdAt ?? now,
+        updatedAt: now,
+    })
+    WalletMessages.events.recentTransactionsUpdated.sendToAll()
+}
+
+export async function removeRecentTransaction(address: string, hash: string) {
+    const now = new Date()
+    const recordId = getRecordId(address)
+    const chunk = await RecentTransactionChunkDB.get('recent-transactions', recordId)
+    if (!chunk) return
+    await RecentTransactionChunkDB.add({
+        type: 'recent-transactions',
+        id: getRecordId(address),
+        chainId: currentChainIdSettings.value,
+        address: formatEthereumAddress(address),
+        transactions: chunk.transactions.filter((x) => x.hash !== hash),
+        createdAt: chunk.createdAt,
         updatedAt: now,
     })
     WalletMessages.events.recentTransactionsUpdated.sendToAll()

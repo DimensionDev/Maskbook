@@ -42,11 +42,6 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
     const chainId = useChainId()
     const { value: transactions, error, retry } = useRecentTransactions()
 
-    console.log('DEBUG: recent transaction')
-    console.log({
-        transactions,
-    })
-
     //#region clear the most recent transactions
     const onClear = useSnackbarCallback(
         async () => {
@@ -84,10 +79,7 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
                 {transactions.map((transaction) => (
                     <ListItem className={classes.transaction} key={transaction.hash}>
                         <Typography className={classes.title} variant="body2">
-                            <RecentTransactionDescription
-                                receipt={transaction.receipt}
-                                computedPayload={transaction.computedPayload}
-                            />
+                            <RecentTransactionDescription {...transaction} />
                         </Typography>
                         <Link
                             className={classes.link}

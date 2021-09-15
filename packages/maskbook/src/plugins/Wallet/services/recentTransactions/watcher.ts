@@ -1,7 +1,7 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import type { ChainId } from '@masknet/web3-shared'
 import type { TransactionReceipt } from 'web3-core'
-import { getTransactionReceipt } from '../../../../extension/background-script/EthereumService'
+import * as EthereumService from '../../../../extension/background-script/EthereumService'
 import { currentChainIdSettings } from '../../settings'
 import { MAX_RECENT_TRANSACTIONS_SIZE } from './database'
 
@@ -13,7 +13,7 @@ const WATCHED_TRANSACTION_MAP = new Map<
         string,
         {
             at: number
-            receipt: TransactionReceipt | null
+            receipt: Promise<TransactionReceipt | null> | null
         }
     >
 >()
@@ -25,47 +25,58 @@ function getTransactionMap() {
     return WATCHED_TRANSACTION_MAP.get(key)!
 }
 
-async function watchTransaction(hash: string) {
-    const map = getTransactionMap()
-    map.set(hash, {
-        at: Date.now(),
-        receipt: null,
-    })
-    if (timer === null) timer = setTimeout(kickToNextCheckRound, WATCHED_TRANSACTION_CHECK_DELAY)
+function getTransactionReceipt(hash: string) {
+    return EthereumService.getTransactionReceipt(hash)
+        .then((receipt) => {
+            if (receipt) WalletMessages.events.receiptUpdated.sendToAll(receipt)
+            return receipt
+        })
+        .catch(() => null)
 }
 
-function unwatchTransaction(hash: string) {
-    getTransactionMap().delete(hash)
-}
+async function checkReceipt() {
+    if (timer !== null) {
+        clearTimeout(timer)
+        timer = null
+    }
 
-async function kickToNextCheckRound() {
     const map = getTransactionMap()
     const transactions = [...map.entries()].sort(([, a], [, z]) => z.at - a.at)
     const watchedTransactions = transactions.slice(0, MAX_RECENT_TRANSACTIONS_SIZE + WATCHED_TRANSACTION_DELTA)
     const unwatchedTransactions = transactions.slice(MAX_RECENT_TRANSACTIONS_SIZE + WATCHED_TRANSACTION_DELTA)
     unwatchedTransactions.forEach(([hash]) => unwatchTransaction(hash))
-    await Promise.allSettled(
+
+    const checkResult = await Promise.allSettled(
         watchedTransactions.map(async ([hash, transaction]) => {
-            if (transaction.receipt) return
-            const receipt = await getTransactionReceipt(hash)
-            if (receipt) {
-                map.set(hash, {
-                    at: transaction.at,
-                    receipt,
-                })
-                WalletMessages.events.receiptUpdated.sendToAll(receipt)
-            }
+            const receipt = await map.get(hash)?.receipt
+            if (receipt) return true
+            map.set(hash, {
+                at: transaction.at,
+                receipt: getTransactionReceipt(hash),
+            })
+            return false
         }),
     )
-    if ([...map.values()].some((x) => !x.receipt))
-        timer = setTimeout(kickToNextCheckRound, WATCHED_TRANSACTION_CHECK_DELAY)
-    else timer = null
+
+    if (checkResult.every((x) => x.status === 'fulfilled' && x.value)) return
+    if (timer !== null) clearTimeout(timer)
+    timer = setTimeout(checkReceipt, WATCHED_TRANSACTION_CHECK_DELAY)
 }
 
-export async function getReceipt(hash: string): Promise<TransactionReceipt | null> {
+export async function watchTransaction(hash: string) {
     const map = getTransactionMap()
-    const receipt = map.get(hash)?.receipt
-    if (receipt) return receipt
-    watchTransaction(hash)
-    return null
+    if (!map.has(hash))
+        map.set(hash, {
+            at: Date.now(),
+            receipt: getTransactionReceipt(hash),
+        })
+    if (timer === null) timer = setTimeout(checkReceipt, WATCHED_TRANSACTION_CHECK_DELAY)
+}
+
+export function unwatchTransaction(hash: string) {
+    getTransactionMap().delete(hash)
+}
+
+export async function getReceipt(hash: string) {
+    return getTransactionMap().get(hash)?.receipt ?? null
 }
