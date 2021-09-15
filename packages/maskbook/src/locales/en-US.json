@@ -908,5 +908,8 @@
     "popups_persona_start_up_tip": "Connect to your Personas，create a new Personas or restore backups.",
     "popups_persona_new_persona": "New Persona",
     "popups_persona_restore_backups": "Restore Backups",
-    "profile_nft_avatar_set": "Set NFT Avatar"
+    "profile_nft_avatar_set": "Set NFT Avatar",
+    "settings_nft_avatar_whitelist": "NFT Avatar Whitelist",
+    "unbind_nft_avatar": "Delete NFT Avatar",
+    "delete_nft_avatar": "Do you want to delete <strong>{{userId}}</strong>? This operation cannot be reverted."
 }

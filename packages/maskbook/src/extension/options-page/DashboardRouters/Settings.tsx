@@ -50,8 +50,9 @@ import { useCurrentTradeProvider } from '../../../plugins/Trader/trending/useCur
 import { useCurrentDataProvider } from '../../../plugins/Trader/trending/useCurrentDataProvider'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { safeUnreachable } from '@dimensiondev/kit'
-import { DashboardBindNFTAvatarDialog } from '../DashboardDialogs/Avatar'
 import StorageIcon from '@material-ui/icons/Storage'
+import { useHistory } from 'react-router'
+import { DashboardRoute } from '../Route'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -183,13 +184,13 @@ export default function DashboardSettingsRouter() {
 
     const [backupDialog, openBackupDialog] = useModal(DashboardBackupDialog)
     const [restoreDialog, openRestoreDialog] = useModal(DashboardRestoreDialog)
-    const [bindNFTAvatarDialog, openBindNFTAvatarDialog] = useModal(DashboardBindNFTAvatarDialog)
 
     const listStyle = {
         secondaryAction: classes.secondaryAction,
         listItemRoot: classes.listItemRoot,
         listItemIcon: classes.listItemIcon,
     }
+    const history = useHistory()
 
     //#region the trader plugin
     const { value: dataProviders = [] } = useAvailableDataProviders()
@@ -299,7 +300,7 @@ export default function DashboardSettingsRouter() {
                                         icon={<StorageIcon />}
                                         primary="Bind NFT Avatar"
                                         secondary=""
-                                        onClick={openBindNFTAvatarDialog}
+                                        onClick={() => history.push(DashboardRoute.NFTAvatars)}
                                     />
                                 </List>
                             </Card>
@@ -357,7 +358,6 @@ export default function DashboardSettingsRouter() {
                         </Card>
                         {backupDialog}
                         {restoreDialog}
-                        {bindNFTAvatarDialog}
                     </Paper>
                 </div>
             </ThemeProvider>

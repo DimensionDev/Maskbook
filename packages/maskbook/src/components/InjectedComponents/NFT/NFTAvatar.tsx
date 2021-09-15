@@ -14,7 +14,7 @@ import classnames from 'classnames'
 import { head, uniqBy } from 'lodash-es'
 import type { Order } from 'opensea-js/lib/types'
 import { useCallback, useEffect, useState } from 'react'
-import { useAsync } from 'react-use'
+import { useAsync, useAsyncRetry } from 'react-use'
 import { PluginCollectibleRPC } from '../../../plugins/Collectible/messages'
 import { getOrderUnitPrice } from '../../../plugins/Collectible/utils'
 import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
@@ -224,8 +224,8 @@ export interface AvatarMetaDB {
     symbol: string
 }
 
-export async function saveNFTAvatar(userId: string, avatarId: string, contract: string, tokenId: string) {
-    const asset = await PluginCollectibleRPC.getAsset(contract, tokenId)
+export async function getNFT(address: string, tokenId: string) {
+    const asset = await PluginCollectibleRPC.getAsset(address, tokenId)
 
     let orders: Order[] = []
     if (asset.sellOrders?.length) {
@@ -237,23 +237,29 @@ export async function saveNFTAvatar(userId: string, avatarId: string, contract: 
     }
 
     const order = head(
-        orders.sort(
-            (a, b) =>
-                new BigNumber(getOrderUnitPrice(a) ?? 0).toNumber() -
-                new BigNumber(getOrderUnitPrice(b) ?? 0).toNumber(),
-        ),
+        orders.sort((a, b) => new BigNumber(getOrderUnitPrice(b) ?? 0).minus(getOrderUnitPrice(a) ?? 0).toNumber()),
     )
-
-    const avatarMeta: AvatarMetaDB = {
+    return {
         amount: order ? new BigNumber(getOrderUnitPrice(order) ?? 0).toFixed() : '0',
-        userId,
-        address: contract,
-        tokenId: tokenId,
-        avatarId: avatarId ?? userId,
         name: asset.assetContract.name,
-        symbol: asset.assetContract.tokenSymbol,
+        symbol: order?.paymentTokenContract?.symbol ?? '',
         image: asset.imageUrl ?? asset.imagePreviewUrl ?? '',
     }
+}
+export async function saveNFTAvatar(userId: string, avatarId: string, address: string, tokenId: string) {
+    const { name, symbol, amount, image } = await getNFT(address, tokenId)
+    const avatarMeta: AvatarMetaDB = {
+        name,
+        amount,
+        symbol,
+        image,
+        userId,
+        address,
+        tokenId,
+        avatarId,
+    }
+
+    await setOrClearAvatar(userId)
 
     await setOrClearAvatar(userId, avatarMeta)
     return avatarMeta
@@ -275,6 +281,7 @@ export async function getNFTAvatar(userId: string) {
         .get('com.maskbook.nft.avatar')
         // @ts-expect-error
         .get(userId).then!()
+
     return avatarDB as AvatarMetaDB
 }
 
@@ -287,4 +294,24 @@ export async function setOrClearAvatar(userId: string, avatar?: AvatarMetaDB) {
         .get(userId)
         // @ts-expect-error
         .put(avatar ? avatar : null).then!()
+}
+
+export function useNFTAvatars() {
+    return useAsyncRetry(async () => {
+        const result = await getNFTAvatars()
+        return result
+    }, [getNFTAvatars])
+}
+
+export async function getNFTAvatars() {
+    const NFTAvatarNodes =
+        (await (
+            await getAvatarGun()
+        ).gun2 //@ts-expect-error
+            .get('com.maskbook.nft.avatar').then!()) || []
+    const NFTAvatarKeys = Object.keys(NFTAvatarNodes).filter((x) => x !== '_')
+    const resultPromise = NFTAvatarKeys.map((key) => getNFTAvatar(key))
+    const result = (await Promise.all(resultPromise)).filter((x) => x) as AvatarMetaDB[]
+    console.log(result)
+    return result
 }
