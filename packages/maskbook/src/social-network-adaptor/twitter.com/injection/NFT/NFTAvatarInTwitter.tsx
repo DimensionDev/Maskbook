@@ -1,9 +1,8 @@
-import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
+import { createReactRootShadowed, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
 import { searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles, useSnackbar } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
-import { Button } from '@material-ui/core'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import {
     AvatarMetaDB,
@@ -109,11 +108,6 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         <>
             {avatarId === avatar.avatarId ? (
                 <NFTBadge avatar={avatar} classes={{ root: classes.root, text: classes.text, icon: classes.icon }} />
-            ) : null}
-            {Flags.nft_avatar_enabled ? (
-                <Button variant="outlined" size="small" className={classes.recover} onClick={() => onClick()}>
-                    Cancel NFT Avatar
-                </Button>
             ) : null}
         </>
     )

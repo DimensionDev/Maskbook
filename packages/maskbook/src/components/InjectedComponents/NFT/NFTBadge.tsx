@@ -3,7 +3,9 @@ import { useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import { Link, Typography } from '@material-ui/core'
-import type { AvatarMetaDB } from './NFTAvatar'
+import { useState } from 'react'
+import { useAsync } from 'react-use'
+import { AvatarMetaDB, getNFT } from './NFTAvatar'
 
 const useStyles = makeStyles()({
     root: {
@@ -36,6 +38,7 @@ const useStyles = makeStyles()({
         textShadow:
             '1px 1px black, 1px 0px black, 0px 1px black, -1px 0px black, 0px -1px black, -1px -1px black, 1px -1px black, -1px 1px black',
         lineHeight: 1,
+        textDecoration: 'none',
     },
     link: {
         display: 'flex',
@@ -51,6 +54,15 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
 export function NFTBadge(props: NFTBadgeProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { avatar } = props
+
+    const [amount_, setAmount_] = useState('0')
+    const [symbol_, setSymbol_] = useState('')
+    useAsync(async () => {
+        const { amount, symbol } = await getNFT(avatar.address, avatar.tokenId)
+        setAmount_(amount)
+        setSymbol_(symbol)
+    }, [avatar])
+
     return (
         <div
             className={classes.root}
@@ -66,7 +78,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                 rel="noopener noreferrer">
                 <NFTAvatarAmountIcon className={classes.icon} />
                 <div className={classes.wrapper}>
-                    <Typography className={classes.text}>{`${avatar.amount} ETH`}</Typography>
+                    <Typography className={classes.text}>{`${amount_} ${symbol_}`}</Typography>
                 </div>
             </Link>
         </div>

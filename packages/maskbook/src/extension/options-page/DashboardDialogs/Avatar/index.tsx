@@ -1,12 +1,10 @@
 import { Box, Button, Typography } from '@material-ui/core'
-import { useSnackbar } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import { makeStyles } from '@masknet/theme'
 import StorageIcon from '@material-ui/icons/Storage'
 import { InputBox } from '../../DashboardComponents/InputBox'
 import { useCallback, useState } from 'react'
-import { saveNFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
 
 const useStyles = makeStyles()({
     root: {
@@ -35,18 +33,18 @@ const useStyles = makeStyles()({
     },
 })
 
-export function DashboardBindNFTAvatarDialog(props: WrappedDialogProps) {
+export function DashboardBindNFTAvatarDialog(
+    props: WrappedDialogProps<{ onAdd: (userId: string, avatarId: string, address: string, tokenId: string) => void }>,
+) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { enqueueSnackbar } = useSnackbar()
-
     const [message, setMessage] = useState('')
     const [userId, setUserId] = useState('')
     const [avatarId, setAvatarId] = useState('')
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
 
-    const onAdd = useCallback(() => {
+    const _onAdd = useCallback(() => {
         if (!userId) {
             setMessage('Please Input User ID')
             return
@@ -64,16 +62,8 @@ export function DashboardBindNFTAvatarDialog(props: WrappedDialogProps) {
             return
         }
 
-        saveNFTAvatar(userId, avatarId, address, tokenId)
-            .then(() => {
-                enqueueSnackbar('Add Success', { variant: 'success' })
-                setMessage('')
-                setUserId('')
-                setAddress('')
-                setAvatarId('')
-                setTokenId('')
-            })
-            .catch((error) => setMessage(error.message))
+        props.ComponentProps?.onAdd(userId, avatarId, address, tokenId)
+        props.onClose()
     }, [userId, avatarId, address, tokenId])
 
     return (
@@ -134,7 +124,7 @@ export function DashboardBindNFTAvatarDialog(props: WrappedDialogProps) {
                                 {message}
                             </Typography>
                         ) : null}
-                        <Button variant="contained" onClick={() => onAdd()}>
+                        <Button variant="contained" onClick={_onAdd}>
                             Add
                         </Button>
                     </Box>
