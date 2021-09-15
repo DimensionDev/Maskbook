@@ -1,10 +1,9 @@
-import { memo, useState } from 'react'
+import { memo, useContext, useState } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PublicKeyIcon, SettingsIcon } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@material-ui/core'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
 import { PersonaIdentifier, ProfileIdentifier, ProfileInformation, useMenu } from '@masknet/shared'
-import { DeletePersonaDialog } from '../DeletePersonaDialog'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { RenameDialog } from '../RenameDialog'
@@ -15,6 +14,8 @@ import { MaskAvatar } from '../../../../components/MaskAvatar'
 import { ExportPrivateKeyDialog } from '../ExportPrivateKeyDialog'
 import { RoutePaths } from '../../../../type'
 import { useNavigate } from 'react-router'
+import { LogoutPersonaDialog } from '../LogoutPersonaDialog'
+import { UserContext } from '../../../Settings/hooks/UserContext'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -68,24 +69,40 @@ export interface PersonaRowCardUIProps {
 
 export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const navigate = useNavigate()
-    const { nickname, definedSocialNetworks, identifier, profiles } = props
-    const { onConnect, onDisconnect, onRename } = props
-    const [avatarOn, toggleAvatar] = useToggle(false)
-
     const t = useDashboardI18N()
     const { classes } = useStyles()
+    const { confirmPassword } = useContext(UserContext)
+
+    const { nickname, definedSocialNetworks, identifier, profiles } = props
+    const { onConnect, onDisconnect, onRename } = props
+
+    const [avatarOn, toggleAvatar] = useToggle(false)
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+    const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
     const [exportPrivateKeyDialogOpen, setExportPrivateKeyDialogOpen] = useState(false)
+
+    const logoutConfirmedPasswordCallback = () =>
+        confirmPassword(() => setLogoutDialogOpen(true), {
+            tipTitle: t.personas_logout(),
+            tipContent: t.personas_logout_confirm_password_tip(),
+            confirmTitle: t.personas_logout(),
+        })
+
+    const exportPrivateKeyConfirmedPasswordCallback = () =>
+        confirmPassword(() => setExportPrivateKeyDialogOpen(true), {
+            tipTitle: t.personas_export_persona(),
+            tipContent: t.personas_export_persona_confirm_password_tip(),
+            confirmTitle: t.personas_export_persona(),
+        })
 
     const [menu, openMenu] = useMenu(
         <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_rename()}</MenuItem>,
-        <MenuItem onClick={() => setExportPrivateKeyDialogOpen(true)}>{t.personas_export_private()}</MenuItem>,
+        <MenuItem onClick={exportPrivateKeyConfirmedPasswordCallback}>{t.personas_export_private()}</MenuItem>,
         <MenuItem onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}>
             {t.settings_global_backup_title()}
         </MenuItem>,
-        <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
-            {t.personas_delete()}
+        <MenuItem onClick={logoutConfirmedPasswordCallback} style={{ color: MaskColorVar.redMain }}>
+            {t.personas_logout()}
         </MenuItem>,
     )
 
@@ -110,11 +127,12 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
             </Stack>
             <Box sx={{ flex: 3 }}>
                 <Box
+                    height={22}
                     sx={{
                         display: 'inline-flex',
                         alignItems: 'center',
                     }}>
-                    <Box sx={{ mr: 1.5 }} className={classes.accountIcon}>
+                    <Box sx={{ mr: 1.5, py: '2px', height: '100%' }} className={classes.accountIcon}>
                         <PublicKeyIcon />
                     </Box>
                     <Typography variant="body1" sx={{ fontSize: 13 }} component="span">
@@ -163,11 +181,10 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                     }}
                 />
             )}
-            <DeletePersonaDialog
-                open={deleteDialogOpen}
+            <LogoutPersonaDialog
+                open={logoutDialogOpen}
                 identifier={identifier}
-                onClose={() => setDeleteDialogOpen(false)}
-                nickname={nickname}
+                onClose={() => setLogoutDialogOpen(false)}
             />
             <ExportPrivateKeyDialog
                 open={exportPrivateKeyDialogOpen}
