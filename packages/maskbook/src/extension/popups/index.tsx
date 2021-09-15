@@ -19,6 +19,7 @@ export enum PopupRoutes {
     Unlock = '/wallet/unlock',
     Transfer = '/wallet/transfer',
     Personas = '/personas',
+    Logout = '/personas/logout',
     PermissionAwareRedirect = '/redirect',
     RequestPermission = '/request-permission',
     ThirdPartyRequestPermission = '/3rd-request-permission',

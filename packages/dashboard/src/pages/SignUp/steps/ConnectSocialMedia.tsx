@@ -12,7 +12,7 @@ import { useDashboardI18N } from '../../../locales'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 import { upperFirst } from 'lodash-es'
 import { Button, Stack } from '@material-ui/core'
-import { SOCIAL_MEDIA_ICON_MAPPING } from '../../../constants'
+import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { ActionCard } from '../../../components/ActionCard'
 
 const ICON_MAPPING = Object.entries(SOCIAL_MEDIA_ICON_MAPPING).map(([type, icon]) => ({ type, icon }))
