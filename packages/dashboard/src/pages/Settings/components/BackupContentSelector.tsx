@@ -99,22 +99,23 @@ export default function BackupContentSelector({ json, onChange }: BackupContentS
                     ))}
                 </Box>
             </SelectItem>
-            <SelectItem>
-                <CheckboxContainer>
-                    <Checkbox
-                        checked={walletChecked}
-                        onChange={(event) => setWalletChecked(event.target.checked)}
-                        disabled={!json.wallets}
-                        name="wallet"
-                        icon={<RadioButtonUncheckedIcon />}
-                        checkedIcon={<CheckCircleIcon />}
-                    />
-                </CheckboxContainer>
-                <BackupItem sx={{ flex: 1 }}>
-                    <Typography variant="body2">{t.settings_backup_preview_wallets()}</Typography>
-                    <Typography variant="body2">{json.wallets}</Typography>
-                </BackupItem>
-            </SelectItem>
+            {json.wallets ? (
+                <SelectItem>
+                    <CheckboxContainer>
+                        <Checkbox
+                            checked={walletChecked}
+                            onChange={(event) => setWalletChecked(event.target.checked)}
+                            name="wallet"
+                            icon={<RadioButtonUncheckedIcon />}
+                            checkedIcon={<CheckCircleIcon />}
+                        />
+                    </CheckboxContainer>
+                    <BackupItem sx={{ flex: 1 }}>
+                        <Typography variant="body2">{t.settings_backup_preview_wallets()}</Typography>
+                        <Typography variant="body2">{json.wallets}</Typography>
+                    </BackupItem>
+                </SelectItem>
+            ) : null}
         </Box>
     )
 }
