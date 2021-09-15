@@ -12,6 +12,7 @@ import {
     useITOConstants,
     ChainId,
     useChainId,
+    useAccount,
 } from '@masknet/web3-shared'
 import classNames from 'classnames'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
@@ -219,15 +220,10 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
     const DialogRef = useRef<HTMLDivElement>(null)
+    const account = useAccount()
     const currentChainId = useChainId()
-    const { value: campaignInfo } = useSpaceStationCampaignInfo()
-    const now = Date.now()
-    // tomorrow at 00:00:00 of campaign endTime.
-    const dateToHideSpaceStationCampaign = new Date(
-        (campaignInfo ? campaignInfo.endTime * 1000 : now) + 3600 * 24 * 1000,
-    )
+    const { value: campaignInfos, loading: loadingAirdrop, retry: retryAirdrop } = useSpaceStationCampaignInfo(account)
 
-    dateToHideSpaceStationCampaign.setHours(0, 0, 0, 0)
     const [chainId, setChainId] = useState(
         [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].includes(currentChainId)
             ? currentChainId
@@ -254,12 +250,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const claimablePids = uniq(flatten(swappedTokens?.filter((t) => t.isClaimable).map((t) => t.pids)))
     const claimablePidsOld = uniq(flatten(swappedTokensOld?.filter((t) => t.isClaimable).map((t) => t.pids)))
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
-    const [claimStateOld, claimCallbackOld, resetClaimCallbackOld] = useClaimCallback(
-        claimablePidsOld,
-        ITO_CONTRACT_ADDRESS_MAINNET,
-    )
+    const [claimStateOld, resetClaimCallbackOld] = useClaimCallback(claimablePidsOld, ITO_CONTRACT_ADDRESS_MAINNET)
 
-    const showNftAirdrop = chainId === ChainId.Matic && campaignInfo && now < dateToHideSpaceStationCampaign.getTime()
+    const showNftAirdrop = chainId === ChainId.Matic && campaignInfos
     const { classes } = useStyles({
         shortITOwrapper:
             (showNftAirdrop &&
@@ -275,10 +268,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const onClaimButtonClick = useCallback(() => {
         claimCallback()
     }, [claimCallback, chainId])
-
-    const onClaimButtonClickOld = useCallback(() => {
-        claimCallbackOld()
-    }, [claimCallbackOld, chainId])
 
     const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
@@ -383,7 +372,13 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         <AbstractTab {...tabProps} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
-                        {showNftAirdrop ? <NftAirdropCard campaignInfo={campaignInfo!} /> : null}
+                        {showNftAirdrop || loadingAirdrop ? (
+                            <NftAirdropCard
+                                campaignInfos={campaignInfos!}
+                                loading={loadingAirdrop}
+                                retry={retryAirdrop}
+                            />
+                        ) : null}
 
                         {loading || loadingOld || initLoading || !swappedTokens || !swappedTokensOld ? (
                             <div className={classes.emptyContentWrapper}>
@@ -412,7 +407,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     </div>
                                 ) : null}
                             </>
-                        ) : !showNftAirdrop ? (
+                        ) : !showNftAirdrop && !loadingAirdrop ? (
                             <div className={classes.emptyContentWrapper}>
                                 <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
                             </div>
