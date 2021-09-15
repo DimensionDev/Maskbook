@@ -30,6 +30,7 @@ function Inner({ url, context }: { url: string; context: string }) {
         <PermissionAwareRedirectUI
             url={url}
             granted={!!hasPermission}
+            onCancel={() => window.close()}
             onRequest={() => {
                 browser.permissions.request({ origins: [getHostPermissionFieldFromURL(url)] }).finally(retry)
             }}
