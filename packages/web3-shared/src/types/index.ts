@@ -490,6 +490,7 @@ export enum FilterTransactionType {
 
 export enum TransactionType {
     SEND = 'Send',
+    SWAP = 'swap',
     RECEIVE = 'Receive',
     TRANSFER = 'transfer',
     CREATE_RED_PACKET = 'create_red_packet',

@@ -8,7 +8,6 @@ import {
     DebankTransactionDirection,
     formatKeccakHash,
     resolveLinkOnExplorer,
-    TransactionType,
     useChainId,
     ZerionTransactionDirection,
 } from '@masknet/web3-shared'
@@ -16,6 +15,7 @@ import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import classNames from 'classnames'
+import { upperFirst } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
@@ -45,16 +45,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const TRANSACTION_TYPE_MAP: { [key in TransactionType]: string } = {
-    [TransactionType.SEND]: 'Send',
-    [TransactionType.RECEIVE]: 'Receive',
-    [TransactionType.TRANSFER]: 'Swap',
-    [TransactionType.CREATE_RED_PACKET]: 'Red Packet',
-    [TransactionType.FILL_POOL]: 'Market',
-    [TransactionType.CLAIM]: 'Claim',
-    [TransactionType.REFUND]: 'Withdraw',
-}
-
 export interface HistoryTableRowProps {
     transaction: Transaction
 }
@@ -81,7 +71,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                         failed={transaction.failed}
                     />
                     <Typography className={classes.type}>
-                        {TRANSACTION_TYPE_MAP[transaction.type as TransactionType] ?? 'Swap'}
+                        {upperFirst((transaction.type ?? '').replace(/_/g, ' '))}
                     </Typography>
                 </Box>
             </TableCell>
