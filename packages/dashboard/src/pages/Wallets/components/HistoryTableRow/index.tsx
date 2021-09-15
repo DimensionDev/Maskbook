@@ -6,6 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
     DebankTransactionDirection,
+    formatKeccakHash,
     resolveLinkOnExplorer,
     TransactionType,
     useChainId,
@@ -15,7 +16,6 @@ import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import classNames from 'classnames'
-import { formatEthereumAddress } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
@@ -51,6 +51,8 @@ const TRANSACTION_TYPE_MAP: { [key in TransactionType]: string } = {
     [TransactionType.TRANSFER]: 'Swap',
     [TransactionType.CREATE_RED_PACKET]: 'Red Packet',
     [TransactionType.FILL_POOL]: 'Market',
+    [TransactionType.CLAIM]: 'Claim',
+    [TransactionType.REFUND]: 'Withdraw',
 }
 
 export interface HistoryTableRowProps {
@@ -79,7 +81,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                         failed={transaction.failed}
                     />
                     <Typography className={classes.type}>
-                        {[TRANSACTION_TYPE_MAP[(transaction.type as TransactionType) ?? TransactionType.TRANSFER]]}
+                        {TRANSACTION_TYPE_MAP[transaction.type as TransactionType] ?? 'Swap'}
                     </Typography>
                 </Box>
             </TableCell>
@@ -101,10 +103,8 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                 <Typography fontSize="inherit">{formatDateTime(transaction.timeAt, 'yyyy-MM-dd HH:mm')}</Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center">
-                <Link
-                    href={`${resolveLinkOnExplorer(chainId)}/address/${transaction.toAddress}`}
-                    className={classes.link}>
-                    <span>{formatEthereumAddress(transaction.toAddress, 5)}</span>
+                <Link href={`${resolveLinkOnExplorer(chainId)}/tx/${transaction.id}`} className={classes.link}>
+                    <span>{formatKeccakHash(transaction.id, 5)}</span>
                     <LinkOutIcon className={classes.linkIcon} />
                 </Link>
             </TableCell>
