@@ -114,7 +114,7 @@ export function SmartYieldPoolsView() {
         />
     )
 
-    const tabs = [<SYPoolsTab />, <SYWalletTab />].filter(Boolean)
+    const tabs = [<SYPoolsTab />, <SYWalletTab />]
     //#endregion
 
     return (

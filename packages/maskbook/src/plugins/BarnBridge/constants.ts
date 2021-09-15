@@ -7,7 +7,7 @@ export const APP_URL = 'https://app.barnbridge.com/'
 export const API_URL = 'https://api.barnbridge.com/'
 export const SY_URL = 'smart-yield/'
 
-export const URL_PATTERN = new RegExp(`(https)\:\/\/.*\.?${escapeRegExp(BASE_URL)}`)
+export const URL_PATTERN = new RegExp(`https?\:\/\/.*\.?${escapeRegExp(BASE_URL)}`)
 
 export const ONE_SECOND = 1000
 export const ONE_DAY_SECONDS = 86400
@@ -23,6 +23,6 @@ export const COLOR_SY_SENIOR_TEXT = '#00d395'
 export const COLOR_SY_JUNIOR_TEXT = '#a26ee3'
 
 // Strings
-export const BB_SY_CREAM: string = 'C.R.E.A.M FINANCE'
-export const BB_SY_AAVE: string = 'AAVE'
-export const BB_SY_COMPOUND: string = 'Compound'
+export const BB_SY_CREAM = 'C.R.E.A.M FINANCE'
+export const BB_SY_AAVE = 'AAVE'
+export const BB_SY_COMPOUND = 'Compound'

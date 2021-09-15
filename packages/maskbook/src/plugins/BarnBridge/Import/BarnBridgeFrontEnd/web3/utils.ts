@@ -7,27 +7,16 @@ export function formatBigValue(
     minDecimals: number | undefined = undefined,
 ): string {
     value = new BigNumber(value)
-    if (value === undefined) {
+
+    if (value.isNaN()) {
         return defaultValue
     }
-
-    const bnValue = new BigNumber(value)
-
-    if (bnValue.isNaN()) {
-        return defaultValue
-    }
-
-    return new BigNumber(bnValue.toFixed(decimals)).toFormat(minDecimals)
+    return new BigNumber(value.toFixed(decimals)).toFormat(minDecimals)
 }
 
 export function formatUSDValue(value: BigNumber.Value, decimals = 2, minDecimals = decimals): string {
     value = new BigNumber(value)
-    if (value === undefined) {
-        return '-'
-    }
 
-    const val = BigNumber.isBigNumber(value) ? value : new BigNumber(value)
-    const formattedValue = formatBigValue(val.abs(), decimals, '-', minDecimals)
-
-    return val.isPositive() ? `$${formattedValue}` : `-$${formattedValue}`
+    const symbol = value.isPositive() ? '$' : '-$'
+    return symbol + formatBigValue(value.abs(), decimals, '-', minDecimals)
 }

@@ -173,7 +173,7 @@ export function BarnBridgeTabContainerView(props: PoolTogetherViewProps) {
     )
 
     const [tabIndex, setTabIndex] = useState(0)
-    const tabs = [<SmartYieldTab />, <YieldFarmingTab />, <SmartAlphaTab />].filter(Boolean)
+    const tabs = [<SmartYieldTab />, <YieldFarmingTab />, <SmartAlphaTab />]
     //#endregion
 
     return (

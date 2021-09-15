@@ -1,3 +1,4 @@
+import { last } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import { currentAccountSettings } from '../../Wallet/settings'
 
@@ -18,17 +19,6 @@ export function SmartYieldPortfolioModelGetData() {
 
         const realData = await response.json()
 
-        if (realData.data.length > 0) {
-            const data = realData.data[realData.data.length - 1]
-            return {
-                seniorValue: data.seniorValue,
-                juniorValue: data.juniorValue,
-            }
-        } else {
-            return {
-                seniorValue: 0,
-                juniorValue: 0,
-            }
-        }
+        return last(realData.data) ?? { seniorValue: 0, juniorValue: 0 }
     }, [])
 }

@@ -22,8 +22,3 @@ export function isLessThan(a: BigNumber.Value, b: BigNumber.Value) {
 export function pow10(n: BigNumber.Value, m?: BigNumber.Value) {
     return new BigNumber(10).pow(n, m)
 }
-
-/** x ** n */
-export function getExponentValue(decimals = 0): BigNumber {
-    return new BigNumber(10).pow(decimals)
-}

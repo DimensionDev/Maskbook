@@ -12,10 +12,7 @@ const isBarnBridgeUrl = (url: string) => URL_PATTERN.test(url)
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {
-        console.debug('Example plugin has been loaded.')
-        signal.addEventListener('abort', () => console.debug('Example plugin has been terminated'))
-    },
+    init(signal) {},
     PostInspector: function Component() {
         const link = usePostInfoDetails
             .postMetadataMentionedLinks()
