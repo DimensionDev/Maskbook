@@ -29,7 +29,7 @@ export const [useArbitrumNetworkTradeProvider] = createGlobalState(
     Messages.events.arbitrumNetworkTradeProviderSettings.on,
 )
 
-export const [usexDaiNetworkTradeProvider] = createGlobalState(
+export const [useXDaiNetworkTradeProvider] = createGlobalState(
     Services.Settings.getxDaiNetworkTradeProvider,
     Messages.events.xdaiNetworkTradeProviderSettings.on,
 )

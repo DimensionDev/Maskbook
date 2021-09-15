@@ -8,7 +8,7 @@ import {
     useEthereumNetworkTradeProvider,
     usePolygonNetworkTradeProvider,
     useArbitrumNetworkTradeProvider,
-    usexDaiNetworkTradeProvider,
+    useXDaiNetworkTradeProvider,
 } from '../../Settings/api'
 
 import SettingItem from './SettingItem'
@@ -75,7 +75,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         },
         {
             legend: t.labs_settings_swap_network({ network: 'xDai' }),
-            value: usexDaiNetworkTradeProvider(),
+            value: useXDaiNetworkTradeProvider(),
             options: xDaiOptions,
             onChange: (value: any) => Services.Settings.setxDaiNetworkTradeProvider(+value),
         },
