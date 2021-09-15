@@ -33,6 +33,7 @@ export function PluginLoader() {
     )
     const [url, setURL] = useState<null | string>(null)
     const invalidURL = Result.wrap(() => new URL(input)).err
+
     return (
         <Stack sx={{ minHeight: 400 }} spacing={2}>
             <Alert severity="warning">
@@ -50,8 +51,9 @@ export function PluginLoader() {
                 </Typography>
                 <Typography variant="body1">IT WILL CHANGE. DO NOT BUILD OFFICIAL PRODUCT ON IT.</Typography>
             </Alert>
+            {url ? <Loader url={url} /> : null}
             <article>
-                <Typography variant="h6">Load an external plugin</Typography>
+                <Typography variant="h6">Search for an external plugin</Typography>
                 <Typography variant="body1">Every external plugin has to hosted on an URL.</Typography>
             </article>
             <Autocomplete
@@ -77,7 +79,6 @@ export function PluginLoader() {
                     Search for plugin
                 </Button>
             </Box>
-            {url ? <Loader url={url} /> : null}
         </Stack>
     )
 }

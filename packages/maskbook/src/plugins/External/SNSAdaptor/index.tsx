@@ -45,7 +45,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     CompositionDialogMetadataBadgeRender: (key, val) =>
         key.startsWith('plugin:')
             ? {
-                  text: `A 3rd party plugin (${key})`,
+                  text: `External plugin (${key.slice('plugin:'.length)})`,
                   tooltip: `It's inner content: ${JSON.stringify(val)}`,
               }
             : null,
