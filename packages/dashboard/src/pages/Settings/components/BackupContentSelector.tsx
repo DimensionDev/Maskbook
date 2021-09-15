@@ -4,6 +4,8 @@ import type { BackupPreview } from './BackupPreviewCard'
 import { MaskColorVar } from '@masknet/theme'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 
 const SelectItem = styled('div')(({ theme }) => ({
     borderRadius: 8,
@@ -84,6 +86,8 @@ export default function BackupContentSelector({ json, onChange }: BackupContentS
                         checked={baseChecked}
                         onChange={(event) => setBaseChecked(event.target.checked)}
                         name="base"
+                        icon={<RadioButtonUncheckedIcon />}
+                        checkedIcon={<CheckCircleIcon />}
                     />
                 </CheckboxContainer>
                 <Box sx={{ flex: 1 }}>
@@ -102,6 +106,8 @@ export default function BackupContentSelector({ json, onChange }: BackupContentS
                             checked={walletChecked}
                             onChange={(event) => setWalletChecked(event.target.checked)}
                             name="wallet"
+                            icon={<RadioButtonUncheckedIcon />}
+                            checkedIcon={<CheckCircleIcon />}
                         />
                     </CheckboxContainer>
                     <BackupItem sx={{ flex: 1 }}>
