@@ -12,6 +12,7 @@ import { EnterDashboard } from '../../../components/EnterDashboard'
 import { PersonaList } from '../components/PersonaList'
 import { useI18N } from '../../../../../utils'
 import { EditIcon } from '@masknet/icons'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()({
     content: {
@@ -146,7 +147,7 @@ const PersonaHome = memo(() => {
                         onClick={() => {
                             browser.tabs.create({
                                 active: true,
-                                url: browser.runtime.getURL('/next.html#/sign-in'),
+                                url: browser.runtime.getURL(urlcat('/next.html#/sign-in', { from: 'popups' })),
                             })
                         }}>
                         {t('import')}

@@ -8,15 +8,19 @@ import { Restore } from '../../components/Restore'
 import { UserProvider } from '../Settings/hooks/UserContext'
 import { useLocation } from 'react-router-dom'
 import { useMemo } from 'react'
+import type { Search } from 'history'
 
 export default function SignIn() {
     const t = useDashboardI18N()
     const navigate = useNavigate()
-    const { state } = useLocation() as { state: { from: string } }
+
+    const { state, search } = useLocation() as { state: { from: string }; search: Search }
+
+    const from = new URLSearchParams(search).get('from')
 
     const action = useMemo(
         () =>
-            state?.from
+            state?.from || from === 'popups'
                 ? {
                       name: t.close(),
                       callback: () => navigate(state.from),

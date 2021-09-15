@@ -1,7 +1,7 @@
 import { createContainer } from 'unstated-next'
 import { ECKeyIdentifier, Identifier, PersonaInformation, useValueRef } from '@masknet/shared'
 import { currentPersonaIdentifier } from '../../../../../settings/settings'
-import { useAsync, useAsyncRetry } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import Services from '../../../../service'
 import { head } from 'lodash-es'
 import { useEffect, useState } from 'react'
@@ -23,14 +23,6 @@ function usePersonaContext() {
     )
 
     const otherPersonas = personas?.filter((x) => !x.identifier.equals(currentPersona?.identifier))
-
-    //#region If currentPersona does not exist, it will be updated automatically
-    useAsync(async () => {
-        if (!currentPersona) {
-            const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
-            if (lastCreatedPersona) await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona.identifier)
-        }
-    }, [currentPersona])
 
     return {
         deletingPersona,

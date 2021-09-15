@@ -39,18 +39,23 @@ const PersonaRename = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
     const [name, setName] = useState('')
-    const [error, setError] = useState(false)
+    const [error, setError] = useState('')
     const { currentPersona } = PersonaContext.useContainer()
     const { classes } = useStyles()
 
     const [{ loading }, renamePersona] = useAsyncFn(async () => {
         if (!name || !currentPersona) return
         if (name.length >= PERSONA_NAME_MAX_LENGTH) {
-            setError(true)
+            setError(t('popups_rename_error_tip', { length: PERSONA_NAME_MAX_LENGTH }))
             return
         }
 
-        await Services.Identity.renamePersona(currentPersona.identifier, name)
+        try {
+            await Services.Identity.renamePersona(currentPersona.identifier, name)
+        } catch (error) {
+            setError(t('popups_persona_persona_name_exists'))
+            return
+        }
         history.replace(PopupRoutes.Personas)
     }, [currentPersona, name])
 
@@ -63,8 +68,8 @@ const PersonaRename = memo(() => {
                 <StyledInput
                     onChange={(e) => setName(e.target.value)}
                     defaultValue={currentPersona?.nickname}
-                    error={error}
-                    helperText={error ? t('popups_rename_error_tip', { length: PERSONA_NAME_MAX_LENGTH }) : null}
+                    error={!!error}
+                    helperText={error}
                 />
                 <LoadingButton
                     fullWidth

@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Link, List, ListItem, ListItemText } from '@material-ui/core'
+import { Avatar, Link, List, ListItem, ListItemText } from '@material-ui/core'
 import { definedSocialNetworkUIs } from '../../../../../../social-network'
 import { ProfileIdentifier, ProfileInformation, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { compact } from 'lodash-es'
@@ -28,6 +28,31 @@ const useStyles = makeStyles()((theme) => ({
     },
     link: {
         cursor: 'pointer',
+    },
+    avatarContainer: {
+        marginRight: 15,
+        position: 'relative',
+    },
+    avatar: {
+        width: 20,
+        height: 20,
+    },
+    circle: {
+        backgroundColor: '#ffffff',
+        height: 10,
+        width: 10,
+        borderRadius: 5,
+        position: 'absolute',
+        bottom: -3,
+        right: -3,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        '& > svg': {
+            fontSize: 9,
+            width: 9,
+            height: 9,
+        },
     },
 }))
 
@@ -84,9 +109,10 @@ export const ProfileListUI = memo<ProfileListUIProps>(
     ({ networks, profiles, onConnect, onDisconnect, openProfilePage }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
+        console.log(profiles)
         return (
             <List dense className={classes.list}>
-                {profiles.map(({ nickname, identifier }) => {
+                {profiles.map(({ nickname, identifier, avatar }) => {
                     return (
                         <ListItem
                             className={classes.item}
@@ -99,12 +125,21 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                                     {t('popups_persona_disconnect')}
                                 </Link>
                             }>
-                            {SOCIAL_MEDIA_ICON_MAPPING[identifier.network]}
+                            {avatar ? (
+                                <div className={classes.avatarContainer}>
+                                    <Avatar src={avatar} className={classes.avatar} />
+                                    <div className={classes.circle}>
+                                        {SOCIAL_MEDIA_ICON_MAPPING[identifier.network]}
+                                    </div>
+                                </div>
+                            ) : (
+                                SOCIAL_MEDIA_ICON_MAPPING[identifier.network]
+                            )}
                             <ListItemText
                                 className={classes.text}
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => openProfilePage(identifier.network, identifier.userId)}>
-                                @{nickname ?? identifier.userId}
+                                @{identifier.userId}
                             </ListItemText>
                         </ListItem>
                     )

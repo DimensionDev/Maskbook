@@ -3,7 +3,6 @@ import { makeStyles } from '@masknet/theme'
 import { MasksIcon, TipIcon } from '@masknet/icons'
 import { Button, Typography } from '@material-ui/core'
 import { useI18N } from '../../../../../utils'
-import { StyledInput } from '../../../components/StyledInput'
 import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import Services from '../../../../service'
@@ -12,6 +11,7 @@ import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import type { PersonaInformation } from '@masknet/shared-base'
 import { formatFingerprint } from '@masknet/shared'
+import { PasswordField } from '../../../components/PasswordField'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -22,14 +22,14 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     icon: {
-        fill: '#1C68F3',
+        fill: '#FF5F5F',
         fontSize: 36,
     },
     title: {
         fontSize: 18,
         fontWeight: 500,
         lineHeight: '24px',
-        color: '#1C68F3',
+        color: '#FF5F5F',
         marginTop: 12,
     },
     tips: {
@@ -89,6 +89,12 @@ const Logout = memo(() => {
     const [{ loading }, onLogout] = useAsyncFn(async () => {
         if (deletingPersona) {
             await Services.Identity.logoutPersona(deletingPersona.identifier)
+            const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
+            if (!currentPersona) {
+                const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
+                if (lastCreatedPersona)
+                    await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona.identifier)
+            }
 
             history.replace(PopupRoutes.Personas)
         }
@@ -144,7 +150,7 @@ export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout
 
             {backupPassword ? (
                 <div className={classes.password}>
-                    <StyledInput
+                    <PasswordField
                         placeholder={t('popups_backup_password')}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
