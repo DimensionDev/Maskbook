@@ -23,4 +23,4 @@ This plugin fetch and show [Augur](https://www.augur.net/) prediction markets al
 
 ## Pull requests
 
-- TBD
+- <https://github.com/DimensionDev/Maskbook/pull/3894>
