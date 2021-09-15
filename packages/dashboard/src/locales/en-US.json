@@ -52,6 +52,7 @@
     "sign_in_account_private_key_error": "Incorrect Private Key",
     "sign_in_account_private_key_persona_not_found": "Can't find persona",
     "sign_in_account_private_key_warning": "The digital identity code can only recover your digital identity. It can encrypt and decrypt the social information signed and sent by this digital identity.",
+    "sign_in_account_mnemonic_confirm_failed": "Incorrect identity",
     "sign_in_account_cloud_backup_send_email_success": "Verification code was sent to your {{type}}. Please check your {{type}}.",
     "sign_in_account_local_backup_warning": "Local backup can recover all the data that has been stored locally.",
     "sign_in_account_local_backup_file_drag": "Please click or drag the file here",
