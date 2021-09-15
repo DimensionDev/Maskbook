@@ -20,6 +20,10 @@ import { upperFirst } from 'lodash-es'
 const useStyles = makeStyles()((theme) => ({
     type: {
         marginLeft: 14,
+        maxWidth: '240px',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
     },
     cell: {
         padding: '16px 28px',
