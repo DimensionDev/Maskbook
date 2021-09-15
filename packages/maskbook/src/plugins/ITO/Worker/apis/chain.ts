@@ -4,7 +4,7 @@ import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import urlcat from 'urlcat'
 import type BigNumber from 'bignumber.js'
 import type { JSON_PayloadFromChain } from '../../types'
-import { MSG_DELIMITER } from '../../constants'
+import { MSG_DELIMITER, ITO_CONTRACT_BASE_TIMESTAMP } from '../../constants'
 import { getTransactionReceipt } from '../../../../extension/background-script/EthereumService'
 
 const interFace = new Interface(ITO_ABI)
@@ -41,7 +41,7 @@ export async function getAllPoolsAsSeller(
         input: string
         from: string
         to: string
-        block_number: string
+        blockNumber: string
     }
 
     type FillPoolInputParam = {
@@ -61,7 +61,6 @@ export async function getAllPoolsAsSeller(
     const payloadList: { payload: JSON_PayloadFromChain; hash: string }[] = (await response.json()).result.reduce(
         (acc: { payload: JSON_PayloadFromChain; hash: string }[], cur: TxType) => {
             if (!isSameAddress(cur.from, sellerAddress)) return acc
-            console.log({ cur })
             try {
                 const decodedInputParam = interFace.decodeFunctionData(
                     'fill_pool',
@@ -71,16 +70,16 @@ export async function getAllPoolsAsSeller(
                 const [sellerName = '', message = '', regions = '-'] = decodedInputParam._message.split(MSG_DELIMITER)
 
                 const payload: JSON_PayloadFromChain = {
-                    end_time: decodedInputParam._end.toNumber(),
+                    end_time: decodedInputParam._end.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000,
                     exchange_token_addresses: decodedInputParam._exchange_addrs,
                     limit: decodedInputParam._limit.toString(),
                     message,
                     qualification_address: decodedInputParam._qualification,
                     exchange_amounts: decodedInputParam._ratios.map((v) => v.toString()),
-                    start_time: decodedInputParam._start.toNumber(),
+                    start_time: decodedInputParam._start.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000,
                     token_address: decodedInputParam._token_addr,
                     total: decodedInputParam._total_tokens.toString(),
-                    unlock_time: decodedInputParam._unlock_time.toNumber(),
+                    unlock_time: decodedInputParam._unlock_time.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000,
                     seller: {
                         address: cur.from,
                         name: sellerName,
@@ -88,7 +87,7 @@ export async function getAllPoolsAsSeller(
                     contract_address: cur.to,
                     chain_id: ChainId.Mainnet,
                     regions,
-                    block_number: Number(cur.block_number),
+                    block_number: Number(cur.blockNumber),
                     //#region Retrieve at following step
                     pid: '',
                     password: '',
@@ -105,21 +104,37 @@ export async function getAllPoolsAsSeller(
         },
         [],
     )
-
-    console.log({ payloadList })
     //#endregion
 
-    //#region Call web3.eth.getTransactionReceipt()
-    Promise.allSettled(
-        payloadList.map(async (payload) => {
-            const result = await getTransactionReceipt(payload.hash)
+    //#region
+    // 3. Decode event log to retrieve `pid` and `creation_time` for payload.
+    type FillPoolSuccessEventParams = {
+        id: string
+        creation_time: BigNumber
+    }
 
-            console.log({ logs: result?.logs, events: result?.events })
+    const promiseResponse = await Promise.allSettled(
+        payloadList.map(async (entity) => {
+            const result = await getTransactionReceipt(entity.hash)
+            if (!result) return null
 
-            return payload
+            const log = result.logs.find((log) => isSameAddress(log.address, ITO2_CONTRACT_ADDRESS))
+            if (!log) return null
+
+            const eventParams = interFace.decodeEventLog(
+                'FillSuccess',
+                log.data,
+                log.topics,
+            ) as unknown as FillPoolSuccessEventParams
+
+            entity.payload.pid = eventParams.id
+            entity.payload.creation_time = eventParams.creation_time.toNumber()
+
+            return entity
         }),
     )
 
-    //#endregion
-    return []
+    return promiseResponse
+        .map((v) => (v.status === 'fulfilled' && v.value ? v.value.payload : null))
+        .filter((v) => Boolean(v)) as JSON_PayloadFromChain[]
 }
