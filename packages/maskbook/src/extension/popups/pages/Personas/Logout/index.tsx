@@ -1,7 +1,6 @@
 import { memo, useCallback, useState } from 'react'
-import { PersonaHeader } from '../components/PersonaHeader'
 import { makeStyles } from '@masknet/theme'
-import { TipIcon } from '@masknet/icons'
+import { MasksIcon, TipIcon } from '@masknet/icons'
 import { Button, Typography } from '@material-ui/core'
 import { useI18N } from '../../../../../utils'
 import { StyledInput } from '../../../components/StyledInput'
@@ -11,6 +10,8 @@ import Services from '../../../../service'
 import { LoadingButton } from '@material-ui/lab'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
+import type { PersonaInformation } from '@masknet/shared-base'
+import { formatFingerprint } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -32,7 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 12,
     },
     tips: {
-        marginTop: 20,
         color: '#FF5555',
         fontSize: 13,
         linHeight: '18px',
@@ -52,24 +52,50 @@ const useStyles = makeStyles()((theme) => ({
     password: {
         padding: '0 16px 20px 16px',
     },
+    iconContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        marginRight: 20,
+    },
+    name: {
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: 14,
+        color: '#1C68F3',
+        fontWeight: 500,
+    },
+    identifier: {
+        fontSize: 12,
+        color: '#1C68F3',
+        display: 'flex',
+        alignItems: 'center',
+        wordBreak: 'break-all',
+    },
+    personaContainer: {
+        display: 'flex',
+        backgroundColor: '#F7F9FA',
+        borderRadius: 8,
+        padding: '8px 16px',
+        alignSelf: 'normal',
+        margin: '20px 0',
+    },
 }))
 
 const Logout = memo(() => {
-    const { currentPersona } = PersonaContext.useContainer()
+    const { deletingPersona } = PersonaContext.useContainer()
     const history = useHistory()
     const backupPassword = localStorage.getItem('backupPassword')
 
     const [{ loading }, onLogout] = useAsyncFn(async () => {
-        if (currentPersona) {
-            await Services.Identity.logoutPersona(currentPersona.identifier)
-            const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
-            if (lastCreatedPersona) await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona.identifier)
+        if (deletingPersona) {
+            await Services.Identity.logoutPersona(deletingPersona.identifier)
 
             history.replace(PopupRoutes.Personas)
         }
-    }, [currentPersona, history])
+    }, [deletingPersona, history])
     return (
         <LogoutUI
+            deletingPersona={deletingPersona}
             backupPassword={backupPassword ?? ''}
             loading={loading}
             onLogout={onLogout}
@@ -79,38 +105,47 @@ const Logout = memo(() => {
 })
 
 export interface LogoutUIProps {
+    deletingPersona?: PersonaInformation
     backupPassword: string
     loading: boolean
     onCancel: () => void
     onLogout: () => void
 }
 
-export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout, onCancel }) => {
+export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout, onCancel, deletingPersona }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
     const [error, setError] = useState(false)
 
     const onConfirm = useCallback(() => {
-        if (backupPassword && password === backupPassword) {
-            onLogout()
-        } else {
-            setError(true)
-        }
+        if (!backupPassword || backupPassword === password) onLogout()
+        else setError(true)
     }, [onLogout, backupPassword, password])
 
     return (
         <>
-            <PersonaHeader />
             <div className={classes.content}>
                 <TipIcon className={classes.icon} />
                 <Typography className={classes.title}>{t('popups_persona_logout')}</Typography>
+                <div className={classes.personaContainer}>
+                    <div className={classes.iconContainer}>
+                        <MasksIcon />
+                    </div>
+                    <div>
+                        <Typography className={classes.name}>{deletingPersona?.nickname}</Typography>
+                        <Typography className={classes.identifier}>
+                            {formatFingerprint(deletingPersona?.identifier.compressedPoint ?? '', 10)}
+                        </Typography>
+                    </div>
+                </div>
                 <Typography className={classes.tips}>{t('popups_persona_disconnect_tip')}</Typography>
             </div>
+
             {backupPassword ? (
                 <div className={classes.password}>
                     <StyledInput
-                        placeholder="Backup Password"
+                        placeholder={t('popups_backup_password')}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         error={error}

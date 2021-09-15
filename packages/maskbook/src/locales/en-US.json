@@ -910,6 +910,8 @@
     "popups_persona_logout": "Log out",
     "popups_persona_disconnect_tip": "After logging out, your associated social accounts can no longer decrypt past encrypted messages. If you need to reuse your account, you can recover your account with your identity, private key, local or cloud backup.",
     "popups_password_do_not_match": "The code doesn't match",
+    "popups_backup_password": "Backup Password",
+    "popups_rename_error_tip": "Maximum length is {{length}} characters long.",
     "popups_persona_start_up_tip": "Connect to your Personas，create a new Personas or restore backups.",
     "popups_persona_new_persona": "New Persona",
     "popups_persona_restore_backups": "Restore Backups",

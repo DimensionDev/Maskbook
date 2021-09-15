@@ -878,8 +878,5 @@
     "popups_wallet_contract_interaction_total": "총액",
     "popups_wallet_unlock_wallet": "월렛 언락",
     "popups_wallet_unlock_error_password": "잘못된 비밀번호",
-    "popups_missing_parameter_caption": "이 페이지를 닫아세요.",
-    "popups_persona_start_up_tip": "페르스나를 연결하세요. 페르소나를 만들거나 백업을 복구하세요.",
-    "popups_persona_new_persona": "새로운 페로소나",
-    "popups_persona_restore_backups": "백업 복원"
+    "popups_missing_parameter_caption": "이 페이지를 닫아세요."
 }
