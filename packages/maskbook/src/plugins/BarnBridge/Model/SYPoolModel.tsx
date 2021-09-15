@@ -1,5 +1,6 @@
 import { BB_SY_CREAM, BB_SY_AAVE, BB_SY_COMPOUND, APP_URL, SY_URL } from '../constants'
 import { useAsyncRetry } from 'react-use'
+import urlcat from 'urlcat'
 
 export function SmartYieldPoolModelGetData() {
     const protocolsMap: any = {}
@@ -49,11 +50,11 @@ function PrettifyProtocolName(name: string) {
 
 function ConstructRedirectUrl(protocolName: string, coin: string) {
     console.log('generating url')
-    return APP_URL + SY_URL + `stats?m=${protocolName}&t=${coin}`
+    return urlcat(APP_URL + SY_URL, `stats?m=:protocolName&t=:coin`, { protocolName: protocolName, coin: coin })
 }
 
 function PrettifyLiquidity(liqudity: string) {
-    const intLiquidity = parseInt(liqudity, 10)
+    const intLiquidity = Number.parseInt(liqudity, 10)
     if (intLiquidity >= 1000000) {
         return Math.round(intLiquidity / 1000000).toString() + 'M'
     }

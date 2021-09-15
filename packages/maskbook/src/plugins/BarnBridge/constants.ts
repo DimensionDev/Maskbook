@@ -7,7 +7,7 @@ export const APP_URL = 'https://app.barnbridge.com/'
 export const API_URL = 'https://api.barnbridge.com/'
 export const SY_URL = 'smart-yield/'
 
-export const URL_PATTERN = new RegExp(`(http|https)\:\/\/.*\.?${escapeRegExp(BASE_URL)}`)
+export const URL_PATTERN = new RegExp(`(https)\:\/\/.*\.?${escapeRegExp(BASE_URL)}`)
 
 export const ONE_SECOND = 1000
 export const ONE_DAY_SECONDS = 86400

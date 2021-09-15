@@ -1,8 +1,5 @@
 import BigNumber from 'bignumber.js'
-
-export function getExponentValue(decimals = 0): BigNumber {
-    return new BigNumber(10).pow(decimals)
-}
+import { getExponentValue } from '@masknet/web3-shared'
 
 export function getHumanValue(value?: BigNumber, decimals = 0): BigNumber | undefined {
     return value?.div(getExponentValue(decimals))
@@ -96,14 +93,10 @@ export function formatUSD(
         val = Number(val)
     }
 
-    if (BigNumber.isBigNumber(val)) {
-        if (val.isNaN()) {
-            return undefined
-        }
-    } else if (typeof val === 'number') {
-        if (!Number.isFinite(val)) {
-            return undefined
-        }
+    if (BigNumber.isBigNumber(val) && val.isNaN()) {
+        return undefined
+    } else if (typeof val === 'number' && !Number.isFinite(val)) {
+        return undefined
     }
 
     const { decimals = 2, compact = false } = options ?? {}

@@ -40,9 +40,11 @@ const s = makeStyles()((theme) => ({
     },
 }))
 
+type PortfolioPropsLabel = [label: string, value: number | undefined]
+
 type Props = {
     total?: number
-    data: [[string, number | undefined], [string, number | undefined]]
+    data: [PortfolioPropsLabel, PortfolioPropsLabel]
 }
 
 const PortfolioBalance: React.FC<Props> = (props: Props) => {

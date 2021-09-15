@@ -19,9 +19,10 @@ import {
 const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(1, 2),
+        maxWidth: 455,
         alignItems: 'stretch',
         backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
-        margin: theme.spacing(1, 0.5),
+        margin: theme.spacing(1, 1),
         borderRadius: theme.spacing(1),
         fontSize: 14,
         display: 'flex',
