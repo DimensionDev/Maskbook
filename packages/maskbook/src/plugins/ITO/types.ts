@@ -106,6 +106,7 @@ export interface ClaimableCount {
 }
 
 export interface CampaignInfo {
+    id: number
     name: string
     description: string
     chain: string

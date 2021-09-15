@@ -26,14 +26,14 @@ async function fetchFromSubgraph<T>(query: string) {
     return data
 }
 
-export async function getClaimableTokenCount(address: string): Promise<ClaimableCount> {
+export async function getClaimableTokenCount(address: string, id: number): Promise<ClaimableCount> {
     const data = await fetchFromSubgraph<{
         campaign: {
             whitelistInfo: ClaimableCount
         }
     }>(`
     {
-        campaign(id: ${CAMPAIGN_ID}) {
+        campaign(id: ${id}) {
             whitelistInfo(address: "${address.toLowerCase()}") {
                 ${WHITE_LIST_INFO_FIELD}
             }
@@ -49,7 +49,7 @@ export async function getClaimableTokenCount(address: string): Promise<Claimable
     return whitelistInfo
 }
 
-export async function getCampaignInfo(): Promise<CampaignInfo> {
+export async function getCampaignInfo(id: number): Promise<CampaignInfo> {
     const data = await fetchFromSubgraph<{
         campaign: {
             name: string
@@ -63,7 +63,7 @@ export async function getCampaignInfo(): Promise<CampaignInfo> {
         }
     }>(`
     {
-        campaign(id: ${CAMPAIGN_ID}) {
+        campaign(id: ${id}) {
             chain
             name
             endTime
@@ -94,6 +94,7 @@ export async function getCampaignInfo(): Promise<CampaignInfo> {
     } = data
 
     return {
+        id,
         chain,
         name,
         description,
@@ -109,6 +110,7 @@ export async function getAccountClaimSignature(
     userSignature: string,
     account: string,
     chain: string,
+    id: number,
 ): Promise<ClaimParams> {
     const data = await fetchFromSubgraph<{
         prepareParticipate: {
@@ -124,7 +126,7 @@ export async function getAccountClaimSignature(
       mutation {
         prepareParticipate(input: {
             signature:"${userSignature}",
-            campaignID: ${CAMPAIGN_ID},
+            campaignID: ${id},
             address: "${account}",
             mintCount: 1,
             chain: ${chain}
@@ -140,7 +142,8 @@ export async function getAccountClaimSignature(
       }
     `)
 
-    if (!data) throw new Error('Failed to load payload.')
+    if (!data?.prepareParticipate.mintFuncInfo)
+        return { allow: false, signature: '', verifyIDs: [], nftCoreAddress: '', powahs: [] }
 
     const {
         prepareParticipate: {
@@ -157,6 +160,7 @@ export async function mutationParticipate(
     userSignature: string,
     account: string,
     chain: string,
+    id: number,
     txHash: string,
     verifyIDs: number[],
 ) {
@@ -164,7 +168,7 @@ export async function mutationParticipate(
     mutation {
         participate(input: {
             signature:"${userSignature}",
-            campaignID: ${CAMPAIGN_ID},
+            campaignID: ${id},
             address: "${account}",
             tx: "${txHash}",
             verifyIDs: ${verifyIDs},
