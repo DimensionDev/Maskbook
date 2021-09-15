@@ -1,31 +1,15 @@
 import { useRemoteControlledDialog } from '@masknet/shared'
-import {
-    EthereumTokenType,
-    pow10,
-    FungibleTokenDetailed,
-    useTokenBalance,
-    useAccount,
-    isZero,
-} from '@masknet/web3-shared'
-
+import { useAccount, useChainId } from '@masknet/web3-shared'
+import { Button } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { DialogContent } from '@material-ui/core'
-import { useCallback, useState, useMemo } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { PluginTraderMessages } from '../../Trader/messages'
-import type { Coin } from '../../Trader/types'
+import { TokenAmountPanel } from './Component/TokenAmountPanel'
 import { PluginEntropyfiMessages } from '../messages'
-import BigNumber from 'bignumber.js'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { v4 as uuid } from 'uuid'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { useChainId } from '@masknet/web3-shared'
-import { poolAddressMap } from '../constants'
+import { poolAddressMap, tokenMap } from '../constants'
 import { getSlicePoolId } from '../utils'
+// import useDebounce from '../hooks/useDebounce'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -75,103 +59,41 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function DepositDialog() {
-    const { t } = useI18N()
     const { classes } = useStyles()
-    const [id] = useState(uuid())
+
+    const [deposit, setDeposit] = useState('')
+
+    const [poolId, setPoolId] = useState('')
+    const [choose, setChoose] = useState('')
+
     const chainId = useChainId()
-
-    const [pool, setPool] = useState('')
-    const [token, setToken] = useState<FungibleTokenDetailed>()
-
-    const [coinId, coinName] = getSlicePoolId(pool)
+    const [coinId, coinName] = getSlicePoolId(poolId)
     // context
     const account = useAccount()
+
+    const TOKEN_MAP = tokenMap[chainId][poolId]
+    const poolAddress = poolAddressMap[chainId][poolId]
+    const decimals = TOKEN_MAP?.principalToken.decimals
+    // const debouncedDeposit = useDebounce(deposit, 500)
 
     //#region remote controlled dialog
     const { open, closeDialog } = useRemoteControlledDialog(PluginEntropyfiMessages.DepositDialogUpdated, (ev) => {
         if (!ev.open) return
-        setPool(ev.pool)
-        setToken(ev.token)
+        setPoolId(ev.poolId)
+        setChoose(ev.choose)
     })
     const onClose = useCallback(() => {
         closeDialog()
+        setRawAmount('')
     }, [closeDialog])
     //#endregion
 
-    const poolAddress = poolAddressMap[chainId][pool]
+    const tokenBalance = '100'
+    const [depositAmount, setRawAmount] = useState('')
 
-    //#region amount
-    const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
-    const {
-        value: tokenBalance = '0',
-        loading: loadingTokenBalance,
-        retry: retryLoadTokenBalance,
-    } = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
-    //#endregion
-
-    //#region Swap
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(
-        PluginTraderMessages.swapDialogUpdated,
-        useCallback(
-            (ev) => {
-                if (!ev.open) {
-                    retryLoadTokenBalance()
-                }
-            },
-            [retryLoadTokenBalance],
-        ),
-    )
-    const openSwap = useCallback(() => {
-        if (!token) return
-        openSwapDialog({
-            open: true,
-            traderProps: {
-                coin: {
-                    id: token.address,
-                    name: token.name ?? '',
-                    symbol: token.symbol ?? '',
-                    contract_address: token.address,
-                    decimals: token.decimals,
-                } as Coin,
-            },
-        })
-    }, [token, openSwapDialog])
-    //#endregion
-
-    //#region select token
-    const { setDialog: setSelectTokenDialogOpen } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                setToken(ev.token)
-            },
-            [id],
-        ),
-    )
-    const onSelectTokenChipClick = useCallback(() => {
-        if (!token) return
-        setSelectTokenDialogOpen({
-            open: true,
-            uuid: id,
-            disableNativeToken: true,
-            FixedTokenListProps: {
-                selectedTokens: [token.address],
-                whitelist: [token.address],
-            },
-        })
-    }, [id, token?.address])
-    //#endregion
-
-    //#region submit button
-    const validationMessage = useMemo(() => {
-        if (!account) return 'Connect a Wallet'
-        if (!amount || amount.isZero()) return 'enter_an_amount'
-        if (amount.isGreaterThan(tokenBalance)) return 'insufficient_balance'
-        return ''
-    }, [account, amount.toFixed(), token, tokenBalance])
-    //#endregion
+    useEffect(() => {
+        console.log('rawAmount value change', depositAmount)
+    }, [depositAmount])
 
     return (
         <div className={classes.root}>
@@ -179,61 +101,16 @@ export function DepositDialog() {
                 <DialogContent>
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel
-                            label="Long Deposit Amount"
-                            amount={rawAmount}
+                            label={choose + ' Deposit Amount'}
+                            amount={depositAmount}
                             balance={tokenBalance ?? '0'}
-                            token={token}
                             onAmountChange={setRawAmount}
-                            SelectTokenChip={{
-                                loading: loadingTokenBalance,
-                                ChipProps: {
-                                    onClick: onSelectTokenChipClick,
-                                },
-                            }}
+                            disableToken={false}
+                            decimals={decimals}
                         />
                     </form>
-                    <form className={classes.form} noValidate autoComplete="off">
-                        <TokenAmountPanel
-                            label="Short Deposit Amount"
-                            amount={rawAmount}
-                            balance={tokenBalance ?? '0'}
-                            token={token}
-                            onAmountChange={setRawAmount}
-                            SelectTokenChip={{
-                                loading: loadingTokenBalance,
-                                ChipProps: {
-                                    onClick: onSelectTokenChipClick,
-                                },
-                            }}
-                        />
-                    </form>
-                    <EthereumWalletConnectedBoundary>
-                        {isZero(tokenBalance) ? (
-                            <ActionButton
-                                className={classes.button}
-                                fullWidth
-                                onClick={openSwap}
-                                variant="contained"
-                                loading={loadingTokenBalance}>
-                                Buying {coinName}
-                            </ActionButton>
-                        ) : (
-                            <EthereumERC20TokenApprovedBoundary
-                                amount={amount.toFixed()}
-                                spender={poolAddress}
-                                token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
-                                <ActionButton
-                                    className={classes.button}
-                                    fullWidth
-                                    disabled={!!validationMessage}
-                                    // onClick={depositCallback}
-                                    variant="contained"
-                                    loading={loadingTokenBalance}>
-                                    {validationMessage || 'Deposit'}
-                                </ActionButton>
-                            </EthereumERC20TokenApprovedBoundary>
-                        )}
-                    </EthereumWalletConnectedBoundary>
+                    <Button variant="contained"> Approve </Button>
+                    <Button variant="contained"> Deposit </Button>
                 </DialogContent>
             </InjectedDialog>
         </div>

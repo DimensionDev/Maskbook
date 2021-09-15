@@ -76,7 +76,7 @@ export function useLastUpdateTimestamp(chainId: number, poolId: string): number 
 
     // return status
     // @ts-ignore
-    console.log('result', results)
+    // console.log('result', results)
     return useMemo(
         () =>
             poolAddress && results && results.length > 0 && results[0].value

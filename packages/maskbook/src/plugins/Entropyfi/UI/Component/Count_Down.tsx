@@ -52,8 +52,6 @@ export function CountDown(props: any) {
     const locked = usePoolStatus(42, props.poolId) ?? 4
     const lastUpdateTimestamp = useLastUpdateTimestamp(42, props.poolId) ?? 1
 
-    console.log(props.poolId, 'status:', locked)
-
     const [CountDown, setCountDown] = useState<any>({
         day: 0,
         hr: 0,

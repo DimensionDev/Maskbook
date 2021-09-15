@@ -2,15 +2,14 @@ import { Grid, Button } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
-import { useChainId, useERC20TokenDetailed } from '@masknet/web3-shared'
-
-import { poolAddressMap } from '../../constants'
+import { useChainId } from '@masknet/web3-shared'
 
 import useToggle from '../../hooks/useToggle'
 import { getSlicePoolId } from '../../utils'
 // import { usePoolState } from '../../hooks/usePoolData'
 
 import { InfoIcon } from '../../constants/assets/global_info'
+import { DownarrowIcon } from '../../constants/assets/global_downarrow'
 import { useInitialPrice, usePoolStatus } from '../../hooks/usePoolData'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginEntropyfiMessages } from '../../messages'
@@ -22,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1),
         padding: theme.spacing(0, 1),
         justifyContent: 'center',
-        // alignItems:'flex-start',
+        // alignItems: 'flex-start',
         maxWidth: '50%',
         transform: 'translateY(-15px)',
     },
@@ -94,10 +93,37 @@ const useStyles = makeStyles()((theme) => ({
     },
     deposit: {
         marginTop: theme.spacing(1),
-        backgroundColor: '#45e7dd',
         color: '#fff',
         fontWeight: 400,
-        letterSpacing: '0.5px',
+        textTransform: 'uppercase',
+        justifyContent: 'center',
+        '& button': {
+            background: '#32c682',
+            borderRadius: '30px 0 0 30px',
+            width: '80px',
+            marginRight: '3px',
+            maxHeight: '30px',
+            minHeight: '30px',
+            // fontSize: '10px',
+            '&:hover': {
+                background: '#29a16a',
+                transform: 'scale(0.98)',
+            },
+            '& svg': {
+                width: '15px',
+                height: '15px',
+                '&:first-of-type': {
+                    transform: 'rotate(180deg)',
+                },
+            },
+            '&:last-child': {
+                background: '#e66362',
+                borderRadius: '0 30px 30px 0',
+                '&:hover': {
+                    background: '#c15352',
+                },
+            },
+        },
     },
 }))
 
@@ -113,35 +139,38 @@ export function CardRight(props: any) {
         coinId === 'ETH-GAS'
             ? `${InitialPriceNUM ? initialPriceTEXT : '-'}Gwei`
             : `$${InitialPriceNUM ? initialPriceTEXT : '-'}`
-    console.log('initialPrice:', initialPriceTEXT)
+    // console.log('initialPrice:', initialPriceTEXT)
     const locked = usePoolStatus(42, props.poolId) ?? 4
-    console.log(props.poolId, 'card right status:', locked)
+    // console.log(props.poolId, 'card right status:', locked)
 
-    console.log(
-        'poolAddressMap[chainId][props.poolId]:',
-        chainId,
-        ' ',
-        props.poolId,
-        ' ',
-        poolAddressMap[chainId][props.poolId],
-    )
-    const {
-        value: token,
-        loading: loadingToken,
-        retry: retryToken,
-        error: errorToken,
-    } = useERC20TokenDetailed(poolAddressMap[chainId][props.poolId])
+    // console.log(
+    //     'poolAddressMap[chainId][props.poolId]:',
+    //     chainId,
+    //     ' ',
+    //     props.poolId,
+    //     ' ',
+    //     poolAddressMap[chainId][props.poolId],
+    // )
 
     //#region the deposit dialog
     const { setDialog: openDepositDialog } = useRemoteControlledDialog(PluginEntropyfiMessages.DepositDialogUpdated)
-    const onDeposit = useCallback(() => {
-        if (!props.poolId || !token) return
+    const onDepositLong = useCallback(() => {
+        if (!props.poolId) return
         openDepositDialog({
             open: true,
-            pool: props.poolId,
-            token: token,
+            poolId: props.poolId,
+            choose: 'Long',
         })
-    }, [props.poolId, token, openDepositDialog])
+    }, [props.poolId, openDepositDialog])
+
+    const onDepositShort = useCallback(() => {
+        if (!props.poolId) return
+        openDepositDialog({
+            open: true,
+            poolId: props.poolId,
+            choose: 'Short',
+        })
+    }, [props.poolId, openDepositDialog])
 
     return (
         <Grid item container direction="column" className={classes.metaDeposit}>
@@ -158,9 +187,12 @@ export function CardRight(props: any) {
             <Grid item className={classes.countdownNotice} style={{ opacity: show ? 0 : 1 }}>
                 Will the {coinId} price be higher than <span>{initialPrice}</span> when the game ends ?
             </Grid>
-            <Grid item style={{ opacity: show ? 0 : 1 }}>
-                <Button className={classes.deposit} variant="contained" fullWidth size="small" onClick={onDeposit}>
-                    Deposit
+            <Grid item className={classes.deposit} style={{ opacity: show ? 0 : 1 }}>
+                <Button variant="contained" startIcon={<DownarrowIcon />} onClick={onDepositLong}>
+                    Long
+                </Button>
+                <Button variant="contained" endIcon={<DownarrowIcon />} onClick={onDepositShort}>
+                    Short
                 </Button>
             </Grid>
         </Grid>
