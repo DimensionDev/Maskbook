@@ -6,6 +6,7 @@ import {
     addGasMargin,
     ChainId,
     EthereumMethodType,
+    EthereumRpcType,
     EthereumTransactionConfig,
     isEIP1159Supported,
     ProviderType,
@@ -27,6 +28,7 @@ import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../utils'
 import { nativeAPI } from '../../../utils/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
+import { getSendTransactionComputedPayload } from './rpc'
 
 export interface SendOverrides {
     chainId?: ChainId
@@ -66,11 +68,26 @@ function getChainIdFromPayload(payload: JsonRpcPayload) {
     }
 }
 
-function handleRecentTransaction(account: string, response: JsonRpcResponse | undefined) {
+async function handleTransferTransaction(payload: JsonRpcPayload) {
+    if (payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
+    const computedPayload = await getSendTransactionComputedPayload(payload)
+    if (!computedPayload) return
+    switch (computedPayload.type) {
+        case EthereumRpcType.SEND_ETHER:
+            if (computedPayload._tx.to) await WalletRPC.addAddress(computedPayload._tx.to)
+            break
+        case EthereumRpcType.CONTRACT_INTERACTION:
+            if (['transfer', 'transferFrom'].includes(computedPayload.name ?? '') && computedPayload.parameters?.to)
+                await WalletRPC.addAddress(computedPayload.parameters.to)
+            break
+    }
+}
+
+function handleRecentTransaction(account: string, payload: JsonRpcPayload, response: JsonRpcResponse | undefined) {
     const hash = response?.result as string | undefined
     if (typeof hash !== 'string') return
     if (!/^0x([\dA-Fa-f]{64})$/.test(hash)) return
-    WalletRPC.addRecentTransaction(account, hash)
+    WalletRPC.addRecentTransaction(account, hash, payload)
 }
 
 async function handleNonce(account: string, error: Error | null, response: JsonRpcResponse | undefined) {
@@ -197,7 +214,8 @@ export async function INTERNAL_send(
                     (error, response) => {
                         callback(error, response)
                         handleNonce(account, error, response)
-                        handleRecentTransaction(account, response)
+                        handleTransferTransaction(payload)
+                        handleRecentTransaction(account, payload, response)
                     },
                 )
                 break
@@ -210,13 +228,15 @@ export async function INTERNAL_send(
                 }
                 provider?.send(payload, (error, response) => {
                     callback(error, response)
-                    handleRecentTransaction(account, response)
+                    handleTransferTransaction(payload)
+                    handleRecentTransaction(account, payload, response)
                 })
                 break
             case ProviderType.WalletConnect:
                 const response = await WalletConnect.sendCustomRequest(payload as IJsonRpcRequest)
                 callback(null, response)
-                handleRecentTransaction(account, response)
+                handleTransferTransaction(payload)
+                handleRecentTransaction(account, payload, response)
                 break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
@@ -258,7 +278,8 @@ export async function INTERNAL_nativeSend(
         callback(null, response)
         if (payload.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
             handleNonce(account, null, response)
-            handleRecentTransaction(account, response)
+            handleTransferTransaction(payload)
+            handleRecentTransaction(account, payload, response)
         }
     } catch (error) {
         if (error instanceof Error) {

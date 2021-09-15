@@ -49,7 +49,7 @@ export default function Wallet() {
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
 
-        const computedPayload = await Services.Ethereum.getJsonRpcComputed(payload)
+        const computedPayload = await Services.Ethereum.getComputedPayload(payload)
         const value = {
             payload,
             computedPayload,
