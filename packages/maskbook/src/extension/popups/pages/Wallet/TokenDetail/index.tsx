@@ -18,6 +18,7 @@ import Services from '../../../../service'
 import { compact, intersectionWith } from 'lodash-es'
 import urlcat from 'urlcat'
 import type { Coin } from '../../../../../plugins/Trader/types'
+import { ActivityList } from '../components/ActivityList'
 
 const useStyles = makeStyles()({
     content: {
@@ -148,6 +149,7 @@ const TokenDetail = memo(() => {
                     </div>
                 </div>
             </div>
+            <ActivityList tokenAddress={currentToken.token.address} />
         </>
     )
 })

@@ -30,6 +30,9 @@ function getTransactionDescription(
                 nativeTokenDetailed,
             )}`
         case EthereumRpcType.CONTRACT_INTERACTION:
+            if (!tokenDetailed) return ''
+            const deductedTokenValue = formatBalance(computedPayload.parameters?.value, tokenDetailed?.decimals ?? 0)
+
             switch (computedPayload.name) {
                 case 'approve':
                     return `Approve spend limit ${getTokenAmountDescription(
