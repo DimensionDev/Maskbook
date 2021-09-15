@@ -6,8 +6,8 @@ import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
     DebankTransactionDirection,
-    formatKeccakHash,
-    resolveLinkOnExplorer,
+    formatEthereumAddress,
+    resolveTransactionLinkOnExplorer,
     useChainId,
     ZerionTransactionDirection,
 } from '@masknet/web3-shared'
@@ -27,9 +27,10 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: theme.typography.pxToRem(14),
     },
     link: {
-        display: 'flex',
+        display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
+        height: 21,
         color: MaskColorVar.textPrimary,
     },
     linkIcon: {
@@ -93,10 +94,16 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                 <Typography fontSize="inherit">{formatDateTime(transaction.timeAt, 'yyyy-MM-dd HH:mm')}</Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center">
-                <Link href={`${resolveLinkOnExplorer(chainId)}/tx/${transaction.id}`} className={classes.link}>
-                    <span>{formatKeccakHash(transaction.id, 5)}</span>
-                    <LinkOutIcon className={classes.linkIcon} />
-                </Link>
+                <Box className={classes.link}>
+                    <span>{formatEthereumAddress(transaction.toAddress, 5)}</span>
+                    <Link
+                        sx={{ height: 21 }}
+                        href={resolveTransactionLinkOnExplorer(chainId, transaction.id)}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <LinkOutIcon className={classes.linkIcon} />
+                    </Link>
+                </Box>
             </TableCell>
         </TableRow>
     )
