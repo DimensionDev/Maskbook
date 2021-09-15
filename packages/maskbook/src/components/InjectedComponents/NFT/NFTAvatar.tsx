@@ -225,14 +225,14 @@ export interface AvatarMetaDB {
 
 export async function saveNFTAvatar(userId: string, avatarId: string, contract: string, tokenId: string) {
     const asset = await PluginCollectibleRPC.getAsset(contract, tokenId)
-    const orders =
-        !asset.sellOrders || asset.sellOrders?.length === 0
-            ? !asset.orders || asset.orders?.length === 0
-                ? !asset.buyOrders || asset.buyOrders?.length === 0
-                    ? []
-                    : asset.buyOrders
-                : asset.orders
-            : asset.sellOrders
+    let orders = []
+    if (asset.sellOrders?.length) {
+        orders = asset.sellOrders
+    } else if (asset.orders?.length) {
+        orders = assets.orders
+    } else if (asset.buyOrders?.length) {
+        orders = asset.buyOrders
+    }
 
     const order = head(
         orders.sort(

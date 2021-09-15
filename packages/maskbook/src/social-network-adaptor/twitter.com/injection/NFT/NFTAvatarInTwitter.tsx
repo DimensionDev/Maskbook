@@ -80,7 +80,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         return MaskMessage.events.NFTAvatarUpdated.on((data) => {
             onUpdate(data)
         })
-    }, [])
+    }, [onUPdate])
 
     useEffect(() => {
         const _avatarId = getAvatarId(identity.avatar ?? '')
