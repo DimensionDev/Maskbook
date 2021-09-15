@@ -29,7 +29,7 @@ const Setup = () => {
                         {t.setup_page_description()}
                     </Typography>
                 </Box>
-                <Stack justifyContent="space-between" width="545px" margin="0 auto">
+                <Stack justifyContent="space-between" maxWidth="600px" margin="0 auto">
                     <ActionCard
                         title={t.setup_page_create_account_title()}
                         subtitle={t.setup_page_create_account_subtitle()}

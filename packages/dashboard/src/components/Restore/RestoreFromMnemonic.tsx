@@ -44,7 +44,7 @@ export const RestoreFromMnemonic = () => {
                 })
             }
         } catch {
-            setError(t.sign_in_account_private_key_error())
+            setError(t.sign_in_account_mnemonic_confirm_failed())
         }
     }
 
