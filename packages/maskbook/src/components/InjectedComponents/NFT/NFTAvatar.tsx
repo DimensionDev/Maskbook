@@ -12,6 +12,7 @@ import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui
 import BigNumber from 'bignumber.js'
 import classnames from 'classnames'
 import { head, uniqBy } from 'lodash-es'
+import type { Order } from 'opensea-js/lib/types'
 import { useCallback, useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { PluginCollectibleRPC } from '../../../plugins/Collectible/messages'
@@ -225,11 +226,12 @@ export interface AvatarMetaDB {
 
 export async function saveNFTAvatar(userId: string, avatarId: string, contract: string, tokenId: string) {
     const asset = await PluginCollectibleRPC.getAsset(contract, tokenId)
-    let orders = []
+
+    let orders: Order[] = []
     if (asset.sellOrders?.length) {
         orders = asset.sellOrders
     } else if (asset.orders?.length) {
-        orders = assets.orders
+        orders = asset.orders
     } else if (asset.buyOrders?.length) {
         orders = asset.buyOrders
     }
