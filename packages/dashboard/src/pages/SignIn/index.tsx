@@ -23,7 +23,7 @@ export default function SignIn() {
             state?.from || from === 'popups'
                 ? {
                       name: t.close(),
-                      callback: () => navigate(state.from),
+                      callback: () => (state.from ? navigate(state.from) : navigate(RoutePaths.Personas)),
                   }
                 : {
                       name: t.sign_in_account_sign_up_button(),
