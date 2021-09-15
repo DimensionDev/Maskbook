@@ -40,10 +40,10 @@ const s = makeStyles()((theme) => ({
     },
 }))
 
-type PortfolioPropsLabel = [label: string, value: number | undefined]
+type PortfolioPropsLabel = [label: string, value: number]
 
 type Props = {
-    total?: number
+    total: number
     data: [PortfolioPropsLabel, PortfolioPropsLabel]
 }
 
