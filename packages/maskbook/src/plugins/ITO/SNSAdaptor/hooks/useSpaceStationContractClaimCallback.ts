@@ -3,7 +3,6 @@ import {
     useAccount,
     useSpaceStationGalaxyConstants,
     useTransactionState,
-    useGasPrice,
     TransactionStateType,
     TransactionEventType,
 } from '@masknet/web3-shared'
@@ -16,7 +15,6 @@ import Services from '../../../../extension/service'
 
 export function useSpaceStationContractClaimCallback(campaignInfo: CampaignInfo) {
     const account = useAccount()
-    const gasPrice = useGasPrice()
     const contract = useSpaceStationContract()
     const { CONTRACT_ADDRESS } = useSpaceStationGalaxyConstants()
     const [claimState, setClaimState] = useTransactionState()
@@ -32,17 +30,26 @@ export function useSpaceStationContractClaimCallback(campaignInfo: CampaignInfo)
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const useSignature = await Services.Ethereum.personalSign(
-            `${campaignInfo.name}
+        let useSignature = ''
+        try {
+            useSignature = await Services.Ethereum.personalSign(
+                `${campaignInfo.name}
 
 ${campaignInfo.description}`,
-            account,
-        )
+                account,
+            )
+        } catch (error) {
+            setClaimState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Not allowed to claim.'),
+            })
+        }
 
         const { allow, signature, verifyIDs, nftCoreAddress, powahs } = await getAccountClaimSignature(
             useSignature,
             account,
             campaignInfo.chain,
+            campaignInfo.id,
         )
 
         if (!allow) {
@@ -79,6 +86,7 @@ ${campaignInfo.description}`,
                         useSignature,
                         account,
                         campaignInfo.chain,
+                        campaignInfo.id,
                         hash,
                         verifyIDs,
                     )

@@ -10,6 +10,7 @@ import {
     listItemClasses,
     listItemIconClasses,
     ListItemProps,
+    listItemTextClasses,
 } from '@material-ui/core'
 import { ExpandLess, ExpandMore } from '@material-ui/icons'
 import { useContext } from 'react'
@@ -89,6 +90,23 @@ const ListItem = styled(MuiListItem)(({ theme }) => ({
     },
 }))
 
+const ListSubTextItem = styled(ListItemText)(({ theme }) => ({
+    [`&.${listItemTextClasses.inset}`]: {
+        marginLeft: theme.spacing(2),
+        '&:before': {
+            content: '""',
+            display: 'inline-block',
+            width: 4,
+            height: 4,
+            borderRadius: 2,
+            background: 'currentColor',
+            position: 'absolute',
+            left: theme.spacing(9),
+            top: 22,
+        },
+    },
+}))
+
 export interface NavigationProps {}
 export function Navigation({}: NavigationProps) {
     const { expanded, toggleNavigationExpand } = useContext(DashboardContext)
@@ -119,13 +137,13 @@ export function Navigation({}: NavigationProps) {
             <Collapse in={expanded}>
                 <List disablePadding>
                     <ListItemLink to={RoutePaths.Wallets}>
-                        <ListItemText inset primary={t.wallets_assets()} />
+                        <ListSubTextItem inset primary={t.wallets_assets()} />
                     </ListItemLink>
                     <ListItemLink to={RoutePaths.WalletsTransfer}>
-                        <ListItemText inset primary={t.wallets_transfer()} />
+                        <ListSubTextItem inset primary={t.wallets_transfer()} />
                     </ListItemLink>
                     <ListItemLink to={RoutePaths.WalletsHistory}>
-                        <ListItemText inset primary={t.wallets_history()} />
+                        <ListSubTextItem inset primary={t.wallets_history()} />
                     </ListItemLink>
                 </List>
             </Collapse>
