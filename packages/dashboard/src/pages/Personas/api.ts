@@ -10,11 +10,7 @@ export const [useDefinedSocialNetworkUIs, revalidateSocialNetworkUIs, definedSoc
 )
 export const [useOwnedPersonas, , currentPersonas] = createGlobalState(
     Services.Identity.queryOwnedPersonaInformation,
-    (x) => {
-        const a = Messages.events.personaChanged.on(x)
-        const b = Messages.events.profilesChanged.on(x)
-        return () => void [a(), b()]
-    },
+    (x) => Messages.events.ownPersonaChanged.on(x),
 )
 
 export const [useAppearance] = createGlobalState(Services.Settings.getTheme, (x) =>
@@ -27,7 +23,7 @@ export const [useCurrentPersonaIdentifier] = createGlobalState(Services.Settings
 
 export const [usePersonaAvatar] = createGlobalState(Services.Identity.getCurrentPersonaAvatar, (x) => {
     const a = Messages.events.currentPersonaIdentifier.on(x)
-    const b = Messages.events.personaAvatarChanged.on(x)
+    const b = Messages.events.ownPersonaChanged.on(x)
     return () => void [a(), b()]
 })
 
