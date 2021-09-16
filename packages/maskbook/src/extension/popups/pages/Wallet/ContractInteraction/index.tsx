@@ -13,8 +13,9 @@ import {
     useERC20TokenDetailed,
     useNativeTokenDetailed,
 } from '@masknet/web3-shared'
+import { useValueRef, FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@material-ui/core'
-import { useI18N, useValueRef } from '../../../../../utils'
+import { useI18N } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { LoadingButton } from '@material-ui/lab'
@@ -22,7 +23,6 @@ import { unreachable } from '@dimensiondev/kit'
 import { useAsync, useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
-import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 import { useLocation } from 'react-router'
 import { useRejectHandler } from '../hooks/useRejectHandler'

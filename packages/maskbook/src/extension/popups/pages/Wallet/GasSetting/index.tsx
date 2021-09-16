@@ -1,11 +1,12 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@material-ui/core'
-import { useI18N, useValueRef } from '../../../../../utils'
+import { useValueRef } from '@masknet/shared'
+import { NetworkType } from '@masknet/web3-shared'
+import { useI18N } from '../../../../../utils'
 import { GasSetting1559 } from './GasSetting1559'
 import { Prior1559GasSetting } from './Prior1559GasSetting'
 import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
-import { NetworkType } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
