@@ -3,7 +3,7 @@ import { useI18N } from '../../../../utils'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import { makeStyles } from '@masknet/theme'
 import StorageIcon from '@material-ui/icons/Storage'
-import type { AvatarMetaDB } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
+import type { AvatarMetaDB } from '../../../../components/InjectedComponents/NFT/types'
 
 const useStyles = makeStyles()({
     root: {

@@ -1,5 +1,5 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { getNFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
+import { getNFTAvatar } from '../../../../components/InjectedComponents/NFT/gun'
 import { NFTBadge } from '../../../../components/InjectedComponents/NFT/NFTBadge'
 import { createReactRootShadowed, Flags, startWatch } from '../../../../utils'
 import { postAvatarsContentSelector } from '../../utils/selector'

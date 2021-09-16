@@ -4,7 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import { CircularProgress, Link, Typography } from '@material-ui/core'
 import { useEffect, useState } from 'react'
-import { AvatarMetaDB, useNFT } from './NFTAvatar'
+import { useNFT } from './hooks'
+import type { AvatarMetaDB } from './types'
 
 const useStyles = makeStyles()({
     root: {

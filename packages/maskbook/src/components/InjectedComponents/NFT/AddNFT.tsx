@@ -1,17 +1,10 @@
 import { makeStyles } from '@masknet/theme'
-import {
-    ChainId,
-    createERC721Token,
-    ERC721TokenDetailed,
-    EthereumTokenType,
-    isSameAddress,
-    useAccount,
-} from '@masknet/web3-shared'
+import { ERC721TokenDetailed, useAccount } from '@masknet/web3-shared'
 import { Button, DialogContent, Typography } from '@material-ui/core'
 import { useCallback, useState } from 'react'
 import { InputBox } from '../../../extension/options-page/DashboardComponents/InputBox'
-import { PluginCollectibleRPC } from '../../../plugins/Collectible/messages'
 import { InjectedDialog } from '../../shared/InjectedDialog'
+import { createNFT } from './utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -55,7 +48,7 @@ export function AddNFT(props: AddNFTProps) {
             return
         }
 
-        getNFT(account, address, tokenId)
+        createNFT(account, address, tokenId)
             .then((token) => {
                 onAddClick(token)
                 handleClose()
@@ -96,21 +89,5 @@ export function AddNFT(props: AddNFTProps) {
                 ) : null}
             </DialogContent>
         </InjectedDialog>
-    )
-}
-
-async function getNFT(account: string, contract: string, tokenId: string) {
-    const asset = await PluginCollectibleRPC.getAsset(contract, tokenId)
-    if (!isSameAddress(asset.owner.address, account)) throw new Error('TokenId does not belong to account')
-    return createERC721Token(
-        {
-            chainId: ChainId.Mainnet,
-            type: EthereumTokenType.ERC721,
-            name: asset.assetContract.name,
-            symbol: asset.assetContract.tokenSymbol,
-            address: asset.assetContract.address,
-        },
-        { name: asset.name, description: asset.description, image: asset.imageUrl ?? asset.imagePreviewUrl ?? '' },
-        tokenId,
     )
 }
