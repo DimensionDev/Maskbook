@@ -87,8 +87,12 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
                         error={invalidCode}
                         helperText={invalidCode ? t.settings_dialogs_incorrect_code() : ''}
                     />
-                    <CountdownButton size="medium" sx={{ width: '100px', height: '40px' }} onClick={sendVerifyCode}>
-                        {t.settings_button_send()}
+                    <CountdownButton
+                        size="medium"
+                        sx={{ width: '100px', height: '40px' }}
+                        repeatContent={t.resend()}
+                        onClick={sendVerifyCode}>
+                        {t.send()}
                     </CountdownButton>
                 </Box>
 

@@ -1,5 +1,5 @@
 import { Box, Stack } from '@material-ui/core'
-import type { ReactNode } from 'react'
+import { ReactNode, useRef } from 'react'
 import { useEffect, useState } from 'react'
 import { MaskTextField } from '../TextField'
 import { CountdownButton } from '../CountdownButton'
@@ -9,6 +9,7 @@ export interface SendingCodeFieldProps {
     sendButtonText?: string
     errorMessage?: string
     disabled?: boolean
+    autoSend?: boolean
     onBlur?(code: string): void
     onChange?(code: string): void
     onSend?(): void
@@ -20,13 +21,19 @@ export const SendingCodeField = ({
     errorMessage,
     onBlur,
     disabled = false,
+    autoSend = false,
     onChange,
 }: SendingCodeFieldProps) => {
     const [code, setCode] = useState<string>('')
+    const sendButton = useRef<HTMLButtonElement>(null)
 
     useEffect(() => {
         onChange?.(code)
     }, [code])
+
+    useEffect(() => {
+        if (autoSend) sendButton.current?.click()
+    }, [autoSend])
 
     return (
         <Box>
@@ -45,6 +52,7 @@ export const SendingCodeField = ({
                         />
                     </Box>
                     <CountdownButton
+                        ref={sendButton}
                         size="medium"
                         sx={{ height: '40px', width: '100px' }}
                         onClick={onSend}
