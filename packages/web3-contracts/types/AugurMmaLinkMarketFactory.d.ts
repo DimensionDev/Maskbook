@@ -25,59 +25,27 @@ export type LinkNodeChanged = ContractEventLog<{
     newLinkNode: string
     0: string
 }>
+export type MarketActivated = ContractEventLog<{
+    id: string
+    0: string
+}>
 export type MarketCreated = ContractEventLog<{
     id: string
-    creator: string
-    endTime: string
-    marketType: string
-    eventId: string
-    homeFighterName: string
-    homeFighterId: string
-    awayFighterName: string
-    awayFighterId: string
-    estimatedStartTime: string
+    names: string[]
+    initialOdds: string[]
     0: string
-    1: string
-    2: string
-    3: string
-    4: string
-    5: string
-    6: string
-    7: string
-    8: string
-    9: string
+    1: string[]
+    2: string[]
 }>
 export type MarketResolved = ContractEventLog<{
     id: string
     winner: string
-    0: string
-    1: string
-}>
-export type ProtocolChanged = ContractEventLog<{
-    protocol: string
-    0: string
-}>
-export type ProtocolFeeChanged = ContractEventLog<{
-    fee: string
-    0: string
-}>
-export type ProtocolFeeClaimed = ContractEventLog<{
-    protocol: string
-    amount: string
-    0: string
-    1: string
-}>
-export type SettlementFeeChanged = ContractEventLog<{
-    fee: string
-    0: string
-}>
-export type SettlementFeeClaimed = ContractEventLog<{
-    settlementAddress: string
-    amount: string
-    receiver: string
+    winnerIndex: string
+    winnerName: string
     0: string
     1: string
     2: string
+    3: string
 }>
 export type SharesBurned = ContractEventLog<{
     id: string
@@ -95,13 +63,29 @@ export type SharesMinted = ContractEventLog<{
     1: string
     2: string
 }>
-export type StakerFeeChanged = ContractEventLog<{
-    fee: string
+export type SportsEventCreated = ContractEventLog<{
+    id: string
+    markets: string[]
+    lines: string[]
+    homeTeamId: string
+    awayTeamId: string
+    homeTeamName: string
+    awayTeamName: string
+    estimatedStartTime: string
     0: string
+    1: string[]
+    2: string[]
+    3: string
+    4: string
+    5: string
+    6: string
+    7: string
 }>
 export type WinningsClaimed = ContractEventLog<{
     id: string
     winningOutcome: string
+    winningIndex: string
+    winningName: string
     amount: string
     settlementFee: string
     payout: string
@@ -112,6 +96,8 @@ export type WinningsClaimed = ContractEventLog<{
     3: string
     4: string
     5: string
+    6: string
+    7: string
 }>
 
 export interface AugurMmaLinkMarketFactory extends BaseContract {
@@ -142,52 +128,52 @@ export interface AugurMmaLinkMarketFactory extends BaseContract {
 
         collateral(): NonPayableTransactionObject<string>
 
-        createMarket(
+        createEvent(
             _eventId: number | string | BN,
-            _homeFighterName: string,
-            _homeFighterId: number | string | BN,
-            _awayFighterName: string,
-            _awayFighterId: number | string | BN,
+            _homeTeamName: string,
+            _homeTeamId: number | string | BN,
+            _awayTeamName: string,
+            _awayTeamId: number | string | BN,
             _startTimestamp: number | string | BN,
             _moneylines: (number | string | BN)[],
-        ): NonPayableTransactionObject<void>
+        ): NonPayableTransactionObject<string[]>
 
-        events(arg0: number | string | BN): NonPayableTransactionObject<{
-            homeFighterId: string
-            awayFighterId: string
-            startTime: string
-            eventStatus: string
-            0: string
-            1: string
-            2: string
-            3: string
-        }>
+        eventCount(): NonPayableTransactionObject<string>
 
         feePot(): NonPayableTransactionObject<string>
 
-        getEvent(
-            _eventId: number | string | BN,
-        ): NonPayableTransactionObject<[string[], string, string, string, string]>
+        getEventMarkets(_eventId: number | string | BN): NonPayableTransactionObject<string[]>
 
         getMarket(
             _id: number | string | BN,
-        ): NonPayableTransactionObject<[string, string[], string, string, string, string, string, string, string[]]>
-
-        getMarketDetails(
-            _marketId: number | string | BN,
-        ): NonPayableTransactionObject<[string, string, string, string, string, string, string, string]>
+        ): NonPayableTransactionObject<
+            [string, string[], string, string, string, string, string, string, string[], boolean]
+        >
 
         getOwner(): NonPayableTransactionObject<string>
+
+        getSportsEvent(
+            _eventId: number | string | BN,
+        ): NonPayableTransactionObject<
+            [string, string[], string[], string, string, string, string, string, string, string]
+        >
+
+        getSportsEventByIndex(_index: number | string | BN): NonPayableTransactionObject<{
+            _event: [string, string[], string[], string, string, string, string, string, string, string]
+            _eventId: string
+            0: [string, string[], string[], string, string, string, string, string, string, string]
+            1: string
+        }>
+
+        getVersion(): NonPayableTransactionObject<string>
 
         isMarketResolved(_id: number | string | BN): NonPayableTransactionObject<boolean>
 
         linkNode(): NonPayableTransactionObject<string>
 
-        listOfEvents(arg0: number | string | BN): NonPayableTransactionObject<string>
+        listOfSportsEvents(arg0: number | string | BN): NonPayableTransactionObject<string>
 
         listResolvableEvents(): NonPayableTransactionObject<string[]>
-
-        listUnresolvedMarkets(): NonPayableTransactionObject<string[]>
 
         marketCount(): NonPayableTransactionObject<string>
 
@@ -201,7 +187,13 @@ export interface AugurMmaLinkMarketFactory extends BaseContract {
 
         protocolFee(): NonPayableTransactionObject<string>
 
-        resolveMarket(arg0: number | string | BN): NonPayableTransactionObject<void>
+        resolveEvent(
+            _eventId: number | string | BN,
+            _eventStatus: number | string | BN,
+            _homeTeamId: number | string | BN,
+            _awayTeamId: number | string | BN,
+            _whoWon: number | string | BN,
+        ): NonPayableTransactionObject<void>
 
         setLinkNode(_newLinkNode: string): NonPayableTransactionObject<void>
 
@@ -217,23 +209,35 @@ export interface AugurMmaLinkMarketFactory extends BaseContract {
 
         shareFactor(): NonPayableTransactionObject<string>
 
-        sportId(): NonPayableTransactionObject<string>
+        sportsEvents(arg0: number | string | BN): NonPayableTransactionObject<{
+            status: string
+            estimatedStartTime: string
+            homeTeamId: string
+            awayTeamId: string
+            homeTeamName: string
+            awayTeamName: string
+            homeScore: string
+            awayScore: string
+            0: string
+            1: string
+            2: string
+            3: string
+            4: string
+            5: string
+            6: string
+            7: string
+        }>
 
         stakerFee(): NonPayableTransactionObject<string>
 
         transferOwnership(_newOwner: string): NonPayableTransactionObject<boolean>
-
-        trustedResolveMarkets(
-            _eventId: number | string | BN,
-            _eventStatus: number | string | BN,
-            _homeFighterId: number | string | BN,
-            _awayFighterId: number | string | BN,
-            _whoWon: number | string | BN,
-        ): NonPayableTransactionObject<void>
     }
     events: {
         LinkNodeChanged(cb?: Callback<LinkNodeChanged>): EventEmitter
         LinkNodeChanged(options?: EventOptions, cb?: Callback<LinkNodeChanged>): EventEmitter
+
+        MarketActivated(cb?: Callback<MarketActivated>): EventEmitter
+        MarketActivated(options?: EventOptions, cb?: Callback<MarketActivated>): EventEmitter
 
         MarketCreated(cb?: Callback<MarketCreated>): EventEmitter
         MarketCreated(options?: EventOptions, cb?: Callback<MarketCreated>): EventEmitter
@@ -241,29 +245,14 @@ export interface AugurMmaLinkMarketFactory extends BaseContract {
         MarketResolved(cb?: Callback<MarketResolved>): EventEmitter
         MarketResolved(options?: EventOptions, cb?: Callback<MarketResolved>): EventEmitter
 
-        ProtocolChanged(cb?: Callback<ProtocolChanged>): EventEmitter
-        ProtocolChanged(options?: EventOptions, cb?: Callback<ProtocolChanged>): EventEmitter
-
-        ProtocolFeeChanged(cb?: Callback<ProtocolFeeChanged>): EventEmitter
-        ProtocolFeeChanged(options?: EventOptions, cb?: Callback<ProtocolFeeChanged>): EventEmitter
-
-        ProtocolFeeClaimed(cb?: Callback<ProtocolFeeClaimed>): EventEmitter
-        ProtocolFeeClaimed(options?: EventOptions, cb?: Callback<ProtocolFeeClaimed>): EventEmitter
-
-        SettlementFeeChanged(cb?: Callback<SettlementFeeChanged>): EventEmitter
-        SettlementFeeChanged(options?: EventOptions, cb?: Callback<SettlementFeeChanged>): EventEmitter
-
-        SettlementFeeClaimed(cb?: Callback<SettlementFeeClaimed>): EventEmitter
-        SettlementFeeClaimed(options?: EventOptions, cb?: Callback<SettlementFeeClaimed>): EventEmitter
-
         SharesBurned(cb?: Callback<SharesBurned>): EventEmitter
         SharesBurned(options?: EventOptions, cb?: Callback<SharesBurned>): EventEmitter
 
         SharesMinted(cb?: Callback<SharesMinted>): EventEmitter
         SharesMinted(options?: EventOptions, cb?: Callback<SharesMinted>): EventEmitter
 
-        StakerFeeChanged(cb?: Callback<StakerFeeChanged>): EventEmitter
-        StakerFeeChanged(options?: EventOptions, cb?: Callback<StakerFeeChanged>): EventEmitter
+        SportsEventCreated(cb?: Callback<SportsEventCreated>): EventEmitter
+        SportsEventCreated(options?: EventOptions, cb?: Callback<SportsEventCreated>): EventEmitter
 
         WinningsClaimed(cb?: Callback<WinningsClaimed>): EventEmitter
         WinningsClaimed(options?: EventOptions, cb?: Callback<WinningsClaimed>): EventEmitter
@@ -274,26 +263,14 @@ export interface AugurMmaLinkMarketFactory extends BaseContract {
     once(event: 'LinkNodeChanged', cb: Callback<LinkNodeChanged>): void
     once(event: 'LinkNodeChanged', options: EventOptions, cb: Callback<LinkNodeChanged>): void
 
+    once(event: 'MarketActivated', cb: Callback<MarketActivated>): void
+    once(event: 'MarketActivated', options: EventOptions, cb: Callback<MarketActivated>): void
+
     once(event: 'MarketCreated', cb: Callback<MarketCreated>): void
     once(event: 'MarketCreated', options: EventOptions, cb: Callback<MarketCreated>): void
 
     once(event: 'MarketResolved', cb: Callback<MarketResolved>): void
     once(event: 'MarketResolved', options: EventOptions, cb: Callback<MarketResolved>): void
-
-    once(event: 'ProtocolChanged', cb: Callback<ProtocolChanged>): void
-    once(event: 'ProtocolChanged', options: EventOptions, cb: Callback<ProtocolChanged>): void
-
-    once(event: 'ProtocolFeeChanged', cb: Callback<ProtocolFeeChanged>): void
-    once(event: 'ProtocolFeeChanged', options: EventOptions, cb: Callback<ProtocolFeeChanged>): void
-
-    once(event: 'ProtocolFeeClaimed', cb: Callback<ProtocolFeeClaimed>): void
-    once(event: 'ProtocolFeeClaimed', options: EventOptions, cb: Callback<ProtocolFeeClaimed>): void
-
-    once(event: 'SettlementFeeChanged', cb: Callback<SettlementFeeChanged>): void
-    once(event: 'SettlementFeeChanged', options: EventOptions, cb: Callback<SettlementFeeChanged>): void
-
-    once(event: 'SettlementFeeClaimed', cb: Callback<SettlementFeeClaimed>): void
-    once(event: 'SettlementFeeClaimed', options: EventOptions, cb: Callback<SettlementFeeClaimed>): void
 
     once(event: 'SharesBurned', cb: Callback<SharesBurned>): void
     once(event: 'SharesBurned', options: EventOptions, cb: Callback<SharesBurned>): void
@@ -301,8 +278,8 @@ export interface AugurMmaLinkMarketFactory extends BaseContract {
     once(event: 'SharesMinted', cb: Callback<SharesMinted>): void
     once(event: 'SharesMinted', options: EventOptions, cb: Callback<SharesMinted>): void
 
-    once(event: 'StakerFeeChanged', cb: Callback<StakerFeeChanged>): void
-    once(event: 'StakerFeeChanged', options: EventOptions, cb: Callback<StakerFeeChanged>): void
+    once(event: 'SportsEventCreated', cb: Callback<SportsEventCreated>): void
+    once(event: 'SportsEventCreated', options: EventOptions, cb: Callback<SportsEventCreated>): void
 
     once(event: 'WinningsClaimed', cb: Callback<WinningsClaimed>): void
     once(event: 'WinningsClaimed', options: EventOptions, cb: Callback<WinningsClaimed>): void
