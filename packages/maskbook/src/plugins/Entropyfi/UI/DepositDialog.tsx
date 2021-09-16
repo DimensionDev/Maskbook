@@ -1,5 +1,5 @@
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { EthereumTokenType, pow10, useAccount, useChainId, useTokenBalance, isZero } from '@masknet/web3-shared'
+import { pow10, useAccount, useChainId, useERC20TokenBalance, isZero } from '@masknet/web3-shared'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@material-ui/core'
 import { useCallback, useState, useEffect, useMemo } from 'react'
@@ -97,8 +97,9 @@ export function DepositDialog() {
     const {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
+        error: errorTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useTokenBalance(EthereumTokenType.ERC20, principalToken?.address ?? '')
+    } = useERC20TokenBalance(principalToken?.address)
 
     const [depositAmount, setRawAmount] = useState('')
     const formattedAmount = new BigNumber(depositAmount || '0').multipliedBy(pow10(decimals ?? 0)).toString()
