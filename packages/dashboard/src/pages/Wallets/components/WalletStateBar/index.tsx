@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 30,
         lineHeight: '28px',
         height: '28px',
-        cursor: 'pointer',
+        cursor: 'default',
     },
     dot: {
         position: 'relative',
@@ -88,8 +88,7 @@ const WalletStateBarUI = memo<WalletStateBarUIProps>(
                     justifyContent="center"
                     sx={{ background: chainColor.replace(')', ', 0.1)'), px: 2, mr: 1 }}
                     color={chainColor}
-                    className={classes.bar}
-                    onClick={openConnectWalletDialog}>
+                    className={classes.bar}>
                     <Typography component="span" sx={{ background: chainColor }} className={classes.dot} />
                     <Typography component="span" fontSize={12}>
                         {chain}
@@ -108,10 +107,10 @@ const WalletStateBarUI = memo<WalletStateBarUIProps>(
                         </Typography>
                     </Stack>
                 )}
-                <Stack mx={1} justifyContent="center">
+                <Stack mx={1} justifyContent="center" sx={{ cursor: 'pointer' }} onClick={openConnectWalletDialog}>
                     <ProviderIcon providerType={providerType} />
                 </Stack>
-                <Box sx={{ userSelect: 'none' }}>
+                <Box sx={{ userSelect: 'none', cursor: 'pointer' }} onClick={openConnectWalletDialog}>
                     <Box fontSize={16}>{walletName}</Box>
                     <Box fontSize={12}>
                         <FormattedAddress address={walletAddress} size={10} />
