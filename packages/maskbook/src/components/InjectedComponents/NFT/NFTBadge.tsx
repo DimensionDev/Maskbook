@@ -87,7 +87,13 @@ export function NFTBadge(props: NFTBadgeProps) {
                 <NFTAvatarAmountIcon className={classes.icon} />
                 <div className={classes.wrapper}>
                     <Typography className={classes.text}>
-                        {loading ? <CircularProgress size={size} /> : `${amount_} ${symbol_}`}
+                        {loading ? (
+                            <CircularProgress size={size} />
+                        ) : amount_ === '0' ? (
+                            'no offer'
+                        ) : (
+                            `${amount_} ${symbol_}`
+                        )}
                     </Typography>
                 </div>
             </Link>
