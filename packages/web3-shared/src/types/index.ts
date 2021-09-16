@@ -490,10 +490,13 @@ export enum FilterTransactionType {
 
 export enum TransactionType {
     SEND = 'Send',
+    SWAP = 'swap',
     RECEIVE = 'Receive',
     TRANSFER = 'transfer',
     CREATE_RED_PACKET = 'create_red_packet',
     FILL_POOL = 'fill_pool',
+    CLAIM = 'claim',
+    REFUND = 'refund',
 }
 
 export enum DebankTransactionDirection {

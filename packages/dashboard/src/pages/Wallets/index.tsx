@@ -1,6 +1,13 @@
 import { Box } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
-import { getTokenUSDValue, useAssets, useTrustedERC20Tokens, useWallet, useWallets } from '@masknet/web3-shared'
+import {
+    getTokenUSDValue,
+    useAssets,
+    useChainDetailed,
+    useTrustedERC20Tokens,
+    useWallet,
+    useWallets,
+} from '@masknet/web3-shared'
 import { StartUp } from './StartUp'
 import { TokenAssets } from './components/TokenAssets'
 import { Route, Routes, useNavigate } from 'react-router'
@@ -20,6 +27,7 @@ function Wallets() {
     const wallet = useWallet()
     const wallets = useWallets()
     const navigate = useNavigate()
+    const chain = useChainDetailed()
     const t = useDashboardI18N()
 
     const [receiveOpen, setReceiveOpen] = useState(false)
@@ -51,6 +59,7 @@ function Wallets() {
                 <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                     <Balance
                         balance={balance}
+                        chainName={chain?.name ?? ''}
                         onSend={() => navigate(RoutePaths.WalletsTransfer)}
                         onBuy={openBuyDialog}
                         onSwap={openSwapDialog}

@@ -63,6 +63,8 @@ export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRed
         switch (type) {
             case TransactionType.SEND:
                 return <UploadIcon style={{ stroke: MaskColorVar.warning }} className={classes.icon} />
+            case TransactionType.TRANSFER:
+                return <UploadIcon style={{ stroke: MaskColorVar.warning }} className={classes.icon} />
             case TransactionType.RECEIVE:
                 return <DownloadIcon style={{ stroke: MaskColorVar.greenMain }} className={classes.icon} />
             case TransactionType.CREATE_RED_PACKET:
