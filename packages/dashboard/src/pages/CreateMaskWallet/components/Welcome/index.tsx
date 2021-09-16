@@ -27,6 +27,7 @@ const ButtonGroup = styled('div')(
     gap: 10px;
     margin-top: 24px;
     width: 100%;
+    max-width: 864px;
 `,
 )
 
@@ -35,6 +36,7 @@ const IFrame = styled('iframe')(
     border: none;
     width: 100%;
     min-height: 412px;
+    max-width: 864px;
 `,
 )
 
