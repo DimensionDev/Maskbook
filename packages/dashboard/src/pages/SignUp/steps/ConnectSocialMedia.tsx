@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import {
     Body,
     ColumnContentLayout,
@@ -20,7 +20,9 @@ const ICON_MAPPING = Object.entries(SOCIAL_MEDIA_ICON_MAPPING).map(([type, icon]
 export const ConnectSocialMedia = () => {
     const navigate = useNavigate()
     const t = useDashboardI18N()
-    const { currentPersona, connectPersona } = PersonaContext.useContainer()
+    const { currentPersona, connectPersona, definedSocialNetworks } = PersonaContext.useContainer()
+
+    const supportNetworks = useMemo(() => definedSocialNetworks.map((x) => x.networkIdentifier), definedSocialNetworks)
 
     useEffect(() => {
         if (currentPersona && currentPersona?.linkedProfiles.length > 0) {
@@ -49,7 +51,7 @@ export const ConnectSocialMedia = () => {
                             {t.go_back()}
                         </Button>
                     </Stack>
-                    {ICON_MAPPING.map((d) => (
+                    {ICON_MAPPING.filter((x) => supportNetworks.includes(x.type)).map((d) => (
                         <ActionCard
                             key={d.type}
                             title={t.create_account_connect_social_media({ type: upperFirst(d.type) })}
