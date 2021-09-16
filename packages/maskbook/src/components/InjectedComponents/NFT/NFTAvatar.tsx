@@ -242,10 +242,18 @@ export async function getNFT(address: string, tokenId: string) {
     return {
         amount: order ? new BigNumber(getOrderUnitPrice(order) ?? 0).toFixed() : '0',
         name: asset.assetContract.name,
-        symbol: order?.paymentTokenContract?.symbol ?? '',
+        symbol: order?.paymentTokenContract?.symbol ?? 'ETH',
         image: asset.imageUrl ?? asset.imagePreviewUrl ?? '',
     }
 }
+
+export function useNFT(address: string, tokenId: string) {
+    return useAsyncRetry(async () => {
+        const nft = await getNFT(address, tokenId)
+        return nft
+    }, [address, tokenId, getNFT])
+}
+
 export async function saveNFTAvatar(userId: string, avatarId: string, address: string, tokenId: string) {
     const { name, symbol, amount, image } = await getNFT(address, tokenId)
     const avatarMeta: AvatarMetaDB = {

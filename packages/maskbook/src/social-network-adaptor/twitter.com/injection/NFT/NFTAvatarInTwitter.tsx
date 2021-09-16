@@ -107,7 +107,11 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     return (
         <>
             {avatarId === avatar.avatarId ? (
-                <NFTBadge avatar={avatar} classes={{ root: classes.root, text: classes.text, icon: classes.icon }} />
+                <NFTBadge
+                    avatar={avatar}
+                    size={14}
+                    classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
+                />
             ) : null}
         </>
     )
