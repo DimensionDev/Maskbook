@@ -329,7 +329,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
 
         return (
             <>
-                <div className={classes.container}>
+                <form className={classes.container} onSubmit={handleConfirm}>
                     <Typography className={classes.label}>Transfer Account</Typography>
                     <Typography className={classes.accountName}>{accountName}</Typography>
                     <Typography className={classes.label}>Receiving Account</Typography>
@@ -464,7 +464,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                             />
                         </div>
                     </div>
-                </div>
+                </form>
                 <div className={classes.controller}>
                     <Button
                         variant="contained"
