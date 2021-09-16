@@ -2,6 +2,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog, useStylesExtends, useValueRef } from '@masknet/shared'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import {
+    ChainId,
     ERC721TokenDetailed,
     formatEthereumAddress,
     useAccount,
@@ -16,7 +17,7 @@ import type { Order } from 'opensea-js/lib/types'
 import { useCallback, useEffect, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { PluginCollectibleRPC } from '../../../plugins/Collectible/messages'
-import { getOrderUnitPrice } from '../../../plugins/Collectible/utils'
+import { getOrderUnitPrice, getOrderUSDPrice } from '../../../plugins/Collectible/utils'
 import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -234,19 +235,8 @@ interface NFT {
 const NFTAvatarCache = new Map<string, AvatarMetaDB>()
 const NFTCache = new Map<string, NFT>()
 
-function getNFTCache(userId: string) {
-    if (NFTCache.has(userId)) {
-        return NFTCache.get(userId)
-    }
-    return
-}
-
-function setNFTCache(userId: string, nft: NFT) {
-    NFTCache.set(userId, nft)
-}
-
 export async function getNFT(address: string, tokenId: string) {
-    const asset = await PluginCollectibleRPC.getAsset(address, tokenId)
+    const asset = await PluginCollectibleRPC.getAsset(address, tokenId, ChainId.Mainnet)
 
     let orders: Order[] = []
     if (asset.sellOrders?.length) {
@@ -258,8 +248,9 @@ export async function getNFT(address: string, tokenId: string) {
     }
 
     const order = head(
-        orders.sort((a, b) => new BigNumber(getOrderUnitPrice(b) ?? 0).minus(getOrderUnitPrice(a) ?? 0).toNumber()),
+        orders.sort((a, b) => new BigNumber(getOrderUSDPrice(b) ?? 0).minus(getOrderUSDPrice(a) ?? 0).toNumber()),
     )
+
     return {
         amount: order ? new BigNumber(getOrderUnitPrice(order) ?? 0).toFixed() : '0',
         name: asset.assetContract.name,
@@ -270,11 +261,8 @@ export async function getNFT(address: string, tokenId: string) {
 
 export function useNFT(userId: string, address: string, tokenId: string) {
     return useAsyncRetry(async () => {
-        let nft = getNFTCache(userId)
-        if (nft) return nft
-        nft = await getNFT(address, tokenId)
-        setNFTCache(userId, nft)
-        return nft
+        NFTCache.set(userId, NFTCache.get(userId) ?? (await getNFT(address, tokenId)))
+        return NFTCache.get(userId)
     }, [userId, address, tokenId])
 }
 
