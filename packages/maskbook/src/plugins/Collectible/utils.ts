@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import type { Order } from 'opensea-js/lib/types'
+import type { AssetEvent, Order } from 'opensea-js/lib/types'
 import { parseURL } from '../../utils/utils'
 import {
     openseaHostnames,
@@ -72,4 +72,10 @@ export function getOrderUSDPrice(order: Order) {
     const quantity = formatBalance(order.currentPrice, order.paymentTokenContract.decimals)
 
     return new BigNumber(price).multipliedBy(quantity).toFixed(2, 1).toString()
+}
+
+export function getLastSalePrice(lastSale: AssetEvent | null) {
+    if (!lastSale?.totalPrice || !lastSale?.paymentToken?.decimals) return
+    const price = formatBalance(lastSale.totalPrice, lastSale.paymentToken.decimals)
+    return price
 }

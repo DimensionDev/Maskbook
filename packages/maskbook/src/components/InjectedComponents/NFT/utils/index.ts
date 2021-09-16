@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import { head } from 'lodash-es'
 import type { Order } from 'opensea-js/lib/types'
 import { PluginCollectibleRPC } from '../../../../plugins/Collectible/messages'
-import { getOrderUnitPrice, getOrderUSDPrice } from '../../../../plugins/Collectible/utils'
+import { getLastSalePrice, getOrderUnitPrice, getOrderUSDPrice } from '../../../../plugins/Collectible/utils'
 
 export async function getNFT(address: string, tokenId: string) {
     const asset = await PluginCollectibleRPC.getAsset(address, tokenId, ChainId.Mainnet)
@@ -22,9 +22,11 @@ export async function getNFT(address: string, tokenId: string) {
     )
 
     return {
-        amount: order ? new BigNumber(getOrderUnitPrice(order) ?? 0).toFixed() : '0',
+        amount: order
+            ? new BigNumber(getOrderUnitPrice(order) ?? 0).toFixed()
+            : getLastSalePrice(asset.lastSale) ?? '0',
         name: asset.assetContract.name,
-        symbol: order?.paymentTokenContract?.symbol ?? 'ETH',
+        symbol: order?.paymentTokenContract?.symbol ?? asset.lastSale?.paymentToken?.symbol ?? 'ETH',
         image: asset.imageUrl ?? asset.imagePreviewUrl ?? '',
     }
 }
