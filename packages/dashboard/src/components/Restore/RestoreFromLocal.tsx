@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
-import { Box, Button, Card } from '@material-ui/core'
-import { MaskTextField, useSnackbar } from '@masknet/theme'
+import { Box, Card } from '@material-ui/core'
+import { MaskLoadingButton, MaskTextField, useSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
@@ -120,13 +120,13 @@ export const RestoreFromLocal = memo(() => {
                 )}
             </Box>
             <ButtonContainer>
-                <Button
+                <MaskLoadingButton
                     variant="rounded"
                     color="primary"
                     onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
                     disabled={!file}>
                     {restoreStatus !== RestoreStatus.Verified ? t.next() : t.restore()}
-                </Button>
+                </MaskLoadingButton>
             </ButtonContainer>
             <Box sx={{ marginTop: '35px', width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_local_backup_warning()} />

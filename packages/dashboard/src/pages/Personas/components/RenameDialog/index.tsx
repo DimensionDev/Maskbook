@@ -31,7 +31,7 @@ export const RenameDialog = memo<RenameDialogProps>(({ open, nickname, onClose, 
         control,
         handleSubmit,
         setError,
-        formState: { errors, isDirty, isValid },
+        formState: { errors, isDirty, isValid, isSubmitting },
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -71,7 +71,7 @@ export const RenameDialog = memo<RenameDialogProps>(({ open, nickname, onClose, 
                     <Button color="secondary" onClick={onClose}>
                         {t.personas_cancel()}
                     </Button>
-                    <Button disabled={!isDirty || !isValid} type="submit">
+                    <Button disabled={!isDirty || !isValid || isSubmitting} type="submit">
                         {t.personas_confirm()}
                     </Button>
                 </DialogActions>

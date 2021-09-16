@@ -30,7 +30,7 @@ export const RestoreFromPrivateKey = memo(() => {
         control,
         handleSubmit,
         setError,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -77,7 +77,7 @@ export const RestoreFromPrivateKey = memo(() => {
                         />
                     </Box>
                     <ButtonContainer>
-                        <Button variant="rounded" color="primary" type="submit">
+                        <Button variant="rounded" color="primary" type="submit" disabled={isSubmitting}>
                             {t.confirm()}
                         </Button>
                     </ButtonContainer>

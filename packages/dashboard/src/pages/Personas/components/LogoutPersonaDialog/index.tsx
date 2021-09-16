@@ -1,6 +1,6 @@
 import { Box, Button, DialogActions, DialogContent, Typography } from '@material-ui/core'
 import { memo, useCallback } from 'react'
-import { getMaskColor, makeStyles, MaskDialog, useSnackbar } from '@masknet/theme'
+import { getMaskColor, makeStyles, MaskDialog, MaskLoadingButton, useSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { Services } from '../../../../API'
 import type { PersonaIdentifier } from '@masknet/shared'
@@ -30,7 +30,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
     const { enqueueSnackbar } = useSnackbar()
     const { changeCurrentPersona } = PersonaContext.useContainer()
 
-    const handleDelete = useCallback(async () => {
+    const handleLogout = useCallback(async () => {
         await Services.Identity.logoutPersona(identifier)
         const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
 
@@ -58,9 +58,9 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
                 <Button color="secondary" onClick={onClose}>
                     {t.personas_cancel()}
                 </Button>
-                <Button color="error" onClick={handleDelete}>
+                <MaskLoadingButton color="error" onClick={handleLogout}>
                     {t.personas_logout()}
-                </Button>
+                </MaskLoadingButton>
             </DialogActions>
         </MaskDialog>
     )

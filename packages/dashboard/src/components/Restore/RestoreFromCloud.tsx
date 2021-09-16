@@ -1,13 +1,13 @@
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useDashboardI18N } from '../../locales'
-import { Box, Button } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { MaskAlert } from '../MaskAlert'
 import { CodeValidation } from './CodeValidation'
 import { fetchBackupValue } from '../../pages/Settings/api'
 import { Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
-import { useSnackbar } from '@masknet/theme'
+import { MaskLoadingButton, useSnackbar } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
@@ -152,9 +152,9 @@ export const RestoreFromCloud = memo(() => {
                                 <BackupPreviewCard json={backupBasicInfoJson} />
                             </Box>
                             <ButtonContainer>
-                                <Button variant="rounded" color="primary" onClick={handleRestore}>
+                                <MaskLoadingButton variant="rounded" color="primary" onClick={handleRestore}>
                                     {t.restore()}
-                                </Button>
+                                </MaskLoadingButton>
                             </ButtonContainer>
                         </>
                     )}

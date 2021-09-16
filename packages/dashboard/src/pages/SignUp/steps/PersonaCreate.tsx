@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
-import { MaskTextField, useSnackbar } from '@masknet/theme'
+import { MaskLoadingButton, MaskTextField, useSnackbar } from '@masknet/theme'
 import {
     Body,
     ColumnContentLayout,
@@ -9,7 +9,7 @@ import {
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { RoutePaths } from '../../../type'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { Box, Button, Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
 import { delay } from '@masknet/shared'
@@ -83,9 +83,9 @@ export const PersonaCreate = () => {
                         helperText={error}
                     />
                     <ButtonContainer>
-                        <Button variant="rounded" color="primary" onClick={create} disabled={!personaName}>
+                        <MaskLoadingButton variant="rounded" color="primary" onClick={create} disabled={!personaName}>
                             {t.next()}
-                        </Button>
+                        </MaskLoadingButton>
                     </ButtonContainer>
                 </Box>
             </Body>
