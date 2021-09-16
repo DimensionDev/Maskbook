@@ -110,63 +110,59 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
     const t = useDashboardI18N()
     const { classes } = useStyles()
     return (
-        <>
-            <TableContainer className={classes.container}>
-                {isLoading || isEmpty ? (
-                    <Box flex={1}>
-                        {isLoading ? <LoadingPlaceholder /> : null}
-                        {isEmpty ? <EmptyPlaceholder children={t.wallets_empty_tokens_tip()} /> : null}
-                    </Box>
-                ) : (
-                    <Table stickyHeader sx={{ padding: '0 44px' }}>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell key="Asset" align="center" variant="head" className={classes.header}>
-                                    {t.wallets_assets_asset()}
-                                </TableCell>
-                                <TableCell key="Balance" align="center" variant="head" className={classes.header}>
-                                    {t.wallets_assets_balance()}
-                                </TableCell>
-                                <TableCell key="Price" align="center" variant="head" className={classes.header}>
-                                    {t.wallets_assets_price()}
-                                </TableCell>
-                                <TableCell key="Value" align="center" variant="head" className={classes.header}>
-                                    {t.wallets_assets_value()}
-                                </TableCell>
-                                <TableCell key="Operation" align="center" variant="head" className={classes.header}>
-                                    {t.wallets_assets_operation()}
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
+        <TableContainer className={classes.container}>
+            {isLoading || isEmpty ? (
+                <Box flex={1}>
+                    {isLoading ? <LoadingPlaceholder /> : null}
+                    {isEmpty ? <EmptyPlaceholder children={t.wallets_empty_tokens_tip()} /> : null}
+                </Box>
+            ) : (
+                <Table stickyHeader sx={{ padding: '0 44px' }}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell key="Asset" align="center" variant="head" className={classes.header}>
+                                {t.wallets_assets_asset()}
+                            </TableCell>
+                            <TableCell key="Balance" align="center" variant="head" className={classes.header}>
+                                {t.wallets_assets_balance()}
+                            </TableCell>
+                            <TableCell key="Price" align="center" variant="head" className={classes.header}>
+                                {t.wallets_assets_price()}
+                            </TableCell>
+                            <TableCell key="Value" align="center" variant="head" className={classes.header}>
+                                {t.wallets_assets_value()}
+                            </TableCell>
+                            <TableCell key="Operation" align="center" variant="head" className={classes.header}>
+                                {t.wallets_assets_operation()}
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
 
-                        {dataSource.length ? (
-                            <TableBody>
-                                {dataSource
-                                    .sort((first, second) => {
-                                        const firstValue = new BigNumber(
-                                            formatBalance(first.balance, first.token.decimals),
-                                        )
-                                        const secondValue = new BigNumber(
-                                            formatBalance(second.balance, second.token.decimals),
-                                        )
+                    {dataSource.length ? (
+                        <TableBody>
+                            {dataSource
+                                .sort((first, second) => {
+                                    const firstValue = new BigNumber(formatBalance(first.balance, first.token.decimals))
+                                    const secondValue = new BigNumber(
+                                        formatBalance(second.balance, second.token.decimals),
+                                    )
 
-                                        if (firstValue.eq(secondValue)) return 0
+                                    if (firstValue.eq(secondValue)) return 0
 
-                                        return Number(firstValue.lt(secondValue))
-                                    })
-                                    .map((asset, index) => (
-                                        <TokenTableRow
-                                            onSend={() => onSend(asset.token)}
-                                            onSwap={() => onSwap(asset.token)}
-                                            asset={asset}
-                                            key={index}
-                                        />
-                                    ))}
-                            </TableBody>
-                        ) : null}
-                    </Table>
-                )}
-            </TableContainer>
-        </>
+                                    return Number(firstValue.lt(secondValue))
+                                })
+                                .map((asset, index) => (
+                                    <TokenTableRow
+                                        onSend={() => onSend(asset.token)}
+                                        onSwap={() => onSwap(asset.token)}
+                                        asset={asset}
+                                        key={index}
+                                    />
+                                ))}
+                        </TableBody>
+                    ) : null}
+                </Table>
+            )}
+        </TableContainer>
     )
 })
