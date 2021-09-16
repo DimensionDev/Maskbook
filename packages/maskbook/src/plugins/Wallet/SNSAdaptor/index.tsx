@@ -14,6 +14,7 @@ import { TransactionDialog } from './TransactionDialog'
 import { ConnectWalletDialog } from './ConnectWalletDialog'
 import { useStartWatchChainState } from '../hooks/useStartWatchChainState'
 import { WalletRiskWarningDialog } from './RiskWarningDialog'
+import { GasSettingDialog } from './GasSettingDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -35,6 +36,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 <WalletConnectQRCodeDialog />
                 <WalletRenameWalletDialog />
                 <WalletRiskWarningDialog />
+                <GasSettingDialog />
             </>
         )
     },

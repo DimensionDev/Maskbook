@@ -1,3 +1,4 @@
+import type BigNumber from 'bignumber.js'
 import type {
     FungibleTokenDetailed,
     ERC721ContractDetailed,
@@ -6,6 +7,7 @@ import type {
     ProviderType,
     TransactionState,
     Wallet,
+    GasOption,
 } from '@masknet/web3-shared'
 import type { TransactionReceipt } from 'web3-core'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
@@ -72,6 +74,13 @@ export type ImportWalletDialogEvent = {
 
 export type WalletStatusDialogEvent = {
     open: boolean
+}
+
+export type GasSettingDialogEvent = {
+    open: boolean
+    gasOption?: GasOption
+    gasLimit?: number | string
+    gasPrice?: BigNumber.Value
 }
 
 export type WalletRenameDialogEvent = {
@@ -182,6 +191,11 @@ export interface WalletMessage {
      * Wallet status dialog
      */
     walletRenameDialogUpdated: WalletRenameDialogEvent
+
+    /**
+     * Gas setting dialog
+     */
+    gasSettingDialogUpdated: GasSettingDialogEvent
 
     /**
      * Select token dialog
