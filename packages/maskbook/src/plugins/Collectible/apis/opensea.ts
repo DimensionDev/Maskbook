@@ -2,7 +2,7 @@ import { head } from 'lodash-es'
 import { OpenSeaPort } from 'opensea-js'
 import type { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
-import { ChainId, getChainName } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared'
 import { request, requestSend } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaRinkebyBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
@@ -37,9 +37,8 @@ async function createOpenSeaPort() {
 
 async function createOpenSeaAPI() {
     const chainId = currentChainIdSettings.value
-    if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId))
-        throw new Error(`${getChainName(chainId)} is not supported.`)
-    return chainId === ChainId.Mainnet ? OpenSeaBaseURL : OpenSeaRinkebyBaseURL
+    if (chainId === ChainId.Rinkeby) return OpenSeaRinkebyBaseURL
+    return OpenSeaBaseURL
 }
 
 export async function getAsset(tokenAddress: string, tokenId: string) {
