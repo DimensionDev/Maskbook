@@ -4,9 +4,9 @@ import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../utils'
 import {
     ChainId,
+    getChainDetailed,
     getChainIdFromNetworkType,
     getChainName,
-    getChainShortName,
     NetworkType,
     ProviderType,
     resolveNetworkName,
@@ -101,7 +101,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentChainId,
                     <div className={classes.iconWrapper}>
                         <ChainIcon chainId={currentChainId} />
                     </div>
-                    <Typography className={classes.title}>{getChainShortName(currentChainId).toUpperCase()}</Typography>
+                    <Typography className={classes.title}>{getChainDetailed(currentChainId)?.chain}</Typography>
                 </div>
                 <ArrowDownRound className={classes.arrow} />
             </Box>
