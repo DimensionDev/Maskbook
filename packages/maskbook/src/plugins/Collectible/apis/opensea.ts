@@ -23,8 +23,11 @@ function createExternalProvider() {
     }
 }
 
-async function createOpenSeaPort() {
-    const chainId = currentChainIdSettings.value
+async function createOpenSeaPort(chainId?: ChainId) {
+    return createOpenSeaPortChain(chainId ?? currentChainIdSettings.value)
+}
+
+async function createOpenSeaPortChain(chainId: ChainId.Mainnet | ChainId.Rinkeby) {
     return new OpenSeaPort(
         createExternalProvider(),
         {
@@ -35,22 +38,25 @@ async function createOpenSeaPort() {
     )
 }
 
-async function createOpenSeaAPI() {
-    const chainId = currentChainIdSettings.value
+async function createOpenSeaAPI(chainId: ChainId) {
     if (chainId === ChainId.Rinkeby) return OpenSeaRinkebyBaseURL
     return OpenSeaBaseURL
 }
 
-export async function getAsset(tokenAddress: string, tokenId: string) {
-    const sdkResponse = await (await createOpenSeaPort()).api.getAsset({ tokenAddress, tokenId })
+export async function getAsset(tokenAddress: string, tokenId: string, chainId?: ChainId) {
+    const _chainId = chainId ?? currentChainIdSettings.value
+    const sdkResponse = await (await createOpenSeaPort(_chainId)).api.getAsset({ tokenAddress, tokenId })
 
     const fetchResponse = await (
-        await fetch(urlcat(await createOpenSeaAPI(), '/asset/:tokenAddress/:tokenId', { tokenAddress, tokenId }), {
-            mode: 'cors',
-            headers: {
-                'x-api-key': OpenSeaAPI_Key,
+        await fetch(
+            urlcat(await createOpenSeaAPI(_chainId), '/asset/:tokenAddress/:tokenId', { tokenAddress, tokenId }),
+            {
+                mode: 'cors',
+                headers: {
+                    'x-api-key': OpenSeaAPI_Key,
+                },
             },
-        })
+        )
     ).json()
 
     const endTime = head<{ closing_date: Date }>(

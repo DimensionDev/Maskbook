@@ -4,15 +4,13 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles, useSnackbar } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import {
-    AvatarMetaDB,
-    saveNFTAvatar,
-    setOrClearAvatar,
-    useNFTAvatar,
-} from '../../../../components/InjectedComponents/NFT/NFTAvatar'
+
 import { updateAvatarImage } from '../../utils/updateAvatarImage'
 import { getAvatarId } from '../../utils/user'
 import { NFTBadge } from '../../../../components/InjectedComponents/NFT/NFTBadge'
+import { saveNFTAvatar, setOrClearAvatar } from '../../../../components/InjectedComponents/NFT/gun'
+import { useNFTAvatar } from '../../../../components/InjectedComponents/NFT/hooks'
+import type { AvatarMetaDB } from '../../../../components/InjectedComponents/NFT/types'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -23,7 +21,7 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'absolute',
-        top: '4px !important',
+        top: '10px !important',
         left: 0,
         width: 134,
         textAlign: 'center',
@@ -68,7 +66,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                     setAmount(avatar.amount)
                     setAvatar(avatar)
                 })
-                .catch((error) => {
+                .catch((error: Error) => {
                     enqueueSnackbar(error.message, { variant: 'error' })
                 })
         },
@@ -107,7 +105,11 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     return (
         <>
             {avatarId === avatar.avatarId ? (
-                <NFTBadge avatar={avatar} classes={{ root: classes.root, text: classes.text, icon: classes.icon }} />
+                <NFTBadge
+                    avatar={avatar}
+                    size={14}
+                    classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
+                />
             ) : null}
         </>
     )

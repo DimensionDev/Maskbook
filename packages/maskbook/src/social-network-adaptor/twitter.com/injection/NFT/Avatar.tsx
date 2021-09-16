@@ -1,5 +1,5 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { getNFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
+import { getNFTAvatar } from '../../../../components/InjectedComponents/NFT/gun'
 import { NFTBadge } from '../../../../components/InjectedComponents/NFT/NFTBadge'
 import { createReactRootShadowed, Flags, startWatch } from '../../../../utils'
 import { postAvatarsContentSelector } from '../../utils/selector'
@@ -25,7 +25,8 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 if (!avatarIdNode) return
                 const avatarId = getAvatarId(avatarIdNode.getAttribute('src') ?? '')
                 if (avatarId !== avatar.avatarId) return
-                const nftDom = ele.firstChild?.firstChild?.lastChild?.firstChild?.firstChild?.firstChild as HTMLElement
+                const nftDom = ele.firstChild?.firstChild?.firstChild?.nextSibling?.firstChild?.firstChild
+                    ?.firstChild as HTMLElement
                 if (!nftDom) return
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
                 proxy.realCurrent = nftDom

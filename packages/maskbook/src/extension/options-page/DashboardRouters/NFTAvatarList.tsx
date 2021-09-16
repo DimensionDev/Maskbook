@@ -18,12 +18,7 @@ import {
     Typography,
 } from '@material-ui/core'
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined'
-import {
-    AvatarMetaDB,
-    saveNFTAvatar,
-    setOrClearAvatar,
-    useNFTAvatars,
-} from '../../../components/InjectedComponents/NFT/NFTAvatar'
+
 import { extendsTheme, useI18N } from '../../../utils'
 import { DashboardBindNFTAvatarDialog } from '../DashboardDialogs/Avatar'
 import { useModal } from '../DashboardDialogs/Base'
@@ -34,6 +29,9 @@ import { useCurrentIdentity } from '../../../components/DataSource/useActivatedU
 import { DashboardUnbindNFTAvatarDialog } from '../DashboardDialogs/Avatar/confirm'
 import { useCallback, useEffect, useState } from 'react'
 import { remove } from 'lodash-es'
+import { useNFTAvatars } from '../../../components/InjectedComponents/NFT/hooks'
+import type { AvatarMetaDB } from '../../../components/InjectedComponents/NFT/types'
+import { saveNFTAvatar, setOrClearAvatar } from '../../../components/InjectedComponents/NFT/gun'
 
 const settingsTheme = extendsTheme((theme) => ({
     wrapper: {
