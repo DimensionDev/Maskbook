@@ -5,10 +5,10 @@ import { ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { makeStyles } from '@masknet/theme'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
-import { getEnumAsObject } from '@masknet/shared'
+import { getEnumAsObject, useValueRef } from '@masknet/shared'
 import { getChainName, ChainId, ProviderType, useAccount, PortfolioProvider } from '@masknet/web3-shared'
 
-import { useMatchXS, extendsTheme, useI18N, Flags, useValueRef } from '../../../utils'
+import { useMatchXS, extendsTheme, useI18N, Flags } from '../../../utils'
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
 import {
     debugModeSetting,
