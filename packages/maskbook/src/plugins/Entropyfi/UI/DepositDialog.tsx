@@ -1,9 +1,8 @@
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { EthereumTokenType, pow10, useAccount, useChainId, useTokenBalance } from '@masknet/web3-shared'
-import { Button } from '@material-ui/core'
+import { EthereumTokenType, pow10, useAccount, useChainId, useTokenBalance, isZero } from '@masknet/web3-shared'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@material-ui/core'
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState, useEffect, useMemo } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { TokenAmountPanel } from './Component/TokenAmountPanel'
 import { PluginEntropyfiMessages } from '../messages'
@@ -11,6 +10,9 @@ import { poolAddressMap, tokenMap } from '../constants'
 import { getSlicePoolId } from '../utils'
 import BigNumber from 'bignumber.js'
 import usePool from '../hooks/usePool'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 // import useDebounce from '../hooks/useDebounce'
 
 const useStyles = makeStyles()((theme) => ({
@@ -123,6 +125,16 @@ export function DepositDialog() {
             })
     }
 
+    //#region submit button
+    const validationMessage = useMemo(() => {
+        if (!account) return 'connect a wallet'
+        if (!formattedAmount || new BigNumber(formattedAmount).isZero()) return 'Enter an amount'
+        if (new BigNumber(formattedAmount).isGreaterThan(new BigNumber(tokenBalance)))
+            return 'insufficient balance ' + coinName
+        return ''
+    }, [account, formattedAmount, tokenBalance])
+    //#endregion
+
     return (
         <div className={classes.root}>
             <InjectedDialog open={open} onClose={onClose} title={coinName} maxWidth="xs">
@@ -135,13 +147,41 @@ export function DepositDialog() {
                             onAmountChange={setRawAmount}
                             disableToken={false}
                             decimals={decimals}
+                            coinName={coinName}
                         />
                     </form>
-                    <Button variant="contained"> Approve </Button>
+                    <EthereumWalletConnectedBoundary>
+                        {isZero(tokenBalance) ? (
+                            <ActionButton
+                                className={classes.button}
+                                fullWidth
+                                onClick={handleDeposit}
+                                variant="contained"
+                                loading={loadingTokenBalance}>
+                                Deposit
+                            </ActionButton>
+                        ) : (
+                            <EthereumERC20TokenApprovedBoundary
+                                amount={formattedAmount}
+                                spender={poolAddress}
+                                // token={ principalToken }
+                            >
+                                <ActionButton
+                                    className={classes.button}
+                                    fullWidth
+                                    disabled={!!validationMessage}
+                                    onClick={handleDeposit}
+                                    variant="contained"
+                                    loading={loadingTokenBalance}>
+                                    {validationMessage || 'Deposit ' + coinName}
+                                </ActionButton>
+                            </EthereumERC20TokenApprovedBoundary>
+                        )}
+                    </EthereumWalletConnectedBoundary>
+                    {/* <Button variant="contained"> Approve </Button>
                     <Button variant="contained" onClick={handleDeposit}>
-                        {' '}
-                        Deposit{' '}
-                    </Button>
+                        Deposit
+                    </Button> */}
                 </DialogContent>
             </InjectedDialog>
         </div>

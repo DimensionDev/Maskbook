@@ -10,6 +10,7 @@ import { getSlicePoolId } from '../../utils'
 
 import { InfoIcon } from '../../constants/assets/global_info'
 import { DownarrowIcon } from '../../constants/assets/global_downarrow'
+import { WaitIcon } from '../../constants/assets/card_wait'
 import { useInitialPrice, usePoolStatus } from '../../hooks/usePoolData'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginEntropyfiMessages } from '../../messages'
@@ -125,6 +126,44 @@ const useStyles = makeStyles()((theme) => ({
             },
         },
     },
+    wait: {
+        marginTop: theme.spacing(1),
+        color: '#777e91',
+        fontWeight: 400,
+        justifyContent: 'center',
+        '& button': {
+            fontSize: '13px',
+            background: 'rgba(94, 98, 111, 0.19)',
+            borderRadius: '30px',
+            maxHeight: '30px',
+            minHeight: '30px',
+            textTransform: 'uppercase',
+            pointerEvents: 'none',
+            '&:hover': {
+                background: 'rgba(94, 98, 111, 0.19)',
+            },
+            // '& span': {
+            //     animation: '$timerRotate 1s infinite !important',
+            //     // '& svg': {
+            //     //     animation: '$timerRotate 1s infinite important',
+            //     // },
+            // },
+        },
+    },
+    waitIcon: {
+        animation: '$timerRotate 1s infinite!important',
+    },
+    '@keyframes timerRotate': {
+        '0%': {
+            transform: 'rotateZ(0deg)',
+        },
+        '50%': {
+            transform: 'rotateZ(90deg)',
+        },
+        '100%': {
+            transform: 'rotateZ(180deg)',
+        },
+    },
 }))
 
 export function CardRight(props: any) {
@@ -132,26 +171,15 @@ export function CardRight(props: any) {
     const chainId = useChainId()
     const [coinId, coinName] = getSlicePoolId(props.poolId)
     const [show, toggle] = useToggle(false)
-    // const poolState = usePoolState()[42][props.poolId]
-    const InitialPriceNUM = useInitialPrice(42, props.poolId)
+    const InitialPriceNUM = useInitialPrice(chainId, props.poolId)
     const initialPriceTEXT = new BigNumber(InitialPriceNUM || 0).toFormat(0)
     const initialPrice =
         coinId === 'ETH-GAS'
             ? `${InitialPriceNUM ? initialPriceTEXT : '-'}Gwei`
             : `$${InitialPriceNUM ? initialPriceTEXT : '-'}`
-    // console.log('initialPrice:', initialPriceTEXT)
-    const locked = usePoolStatus(42, props.poolId) ?? 4
-    // console.log(props.poolId, 'card right status:', locked)
-
-    // console.log(
-    //     'poolAddressMap[chainId][props.poolId]:',
-    //     chainId,
-    //     ' ',
-    //     props.poolId,
-    //     ' ',
-    //     poolAddressMap[chainId][props.poolId],
-    // )
-
+    const locked = usePoolStatus(chainId, props.poolId) ?? 4
+    const isLocked = locked === 2 ? false : true
+    console.log('isLocked:', isLocked)
     //#region the deposit dialog
     const { setDialog: openDepositDialog } = useRemoteControlledDialog(PluginEntropyfiMessages.DepositDialogUpdated)
     const onDepositLong = useCallback(() => {
@@ -177,24 +205,38 @@ export function CardRight(props: any) {
             <Grid item className={classes.info}>
                 <nav>
                     <InfoIcon onMouseEnter={() => toggle()} onMouseLeave={() => toggle()} />
-                    <span>{(locked === 2 ? false : true) ? 'Result Countdown' : 'Deposit Countdown'}</span>
+                    <span>{isLocked ? 'Result Countdown' : 'Deposit Countdown'}</span>
                 </nav>
             </Grid>
             <CountDown poolId={props.poolId} show={show} />
             <Grid item container className={classes.cardTips}>
-                <TIPS show={show} locked={locked === 2 ? false : true} />
+                <TIPS show={show} locked={isLocked} />
             </Grid>
             <Grid item className={classes.countdownNotice} style={{ opacity: show ? 0 : 1 }}>
                 Will the {coinId} price be higher than <span>{initialPrice}</span> when the game ends ?
             </Grid>
-            <Grid item className={classes.deposit} style={{ opacity: show ? 0 : 1 }}>
-                <Button variant="contained" startIcon={<DownarrowIcon />} onClick={onDepositLong}>
-                    Long
-                </Button>
-                <Button variant="contained" endIcon={<DownarrowIcon />} onClick={onDepositShort}>
-                    Short
-                </Button>
-            </Grid>
+            {!isLocked ? (
+                <Grid item className={classes.deposit} style={{ opacity: show ? 0 : 1 }}>
+                    <Button variant="contained" startIcon={<DownarrowIcon />} onClick={onDepositLong}>
+                        Long
+                    </Button>
+                    <Button variant="contained" endIcon={<DownarrowIcon />} onClick={onDepositShort}>
+                        Short
+                    </Button>
+                </Grid>
+            ) : (
+                <Grid item className={classes.wait} style={{ opacity: show ? 0 : 1 }}>
+                    <Button
+                        variant="contained"
+                        startIcon={<WaitIcon className={classes.waitIcon} />}
+                        fullWidth
+                        // disableElevation
+                        // disableRipple
+                    >
+                        Waiting to settle
+                    </Button>
+                </Grid>
+            )}
         </Grid>
     )
 }

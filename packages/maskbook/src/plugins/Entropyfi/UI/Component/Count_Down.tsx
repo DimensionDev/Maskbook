@@ -3,6 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import React, { useState, useEffect } from 'react'
 import { getSlicePoolId } from '../../utils'
 import { initialState } from '../../hooks/slice'
+import { useChainId } from '@masknet/web3-shared'
 
 import { usePoolStatus, useLastUpdateTimestamp } from '../../hooks/usePoolData'
 const useStyles = makeStyles()((theme) => ({
@@ -47,10 +48,12 @@ const useStyles = makeStyles()((theme) => ({
 export function CountDown(props: any) {
     const { classes } = useStyles()
     const [coinId, coinName] = getSlicePoolId(props.poolId)
-    const bidDuration = initialState[42][props.poolId].bidDuration // 2days
-    const gameDuration = initialState[42][props.poolId].gameDuration // 5 days
-    const locked = usePoolStatus(42, props.poolId) ?? 4
-    const lastUpdateTimestamp = useLastUpdateTimestamp(42, props.poolId) ?? 1
+    const chainId = useChainId()
+    const bidDuration = initialState[chainId][props.poolId].bidDuration // 2days
+    const gameDuration = initialState[chainId][props.poolId].gameDuration // 5 days
+    const locked = usePoolStatus(chainId, props.poolId) ?? 4
+    const isLocked = locked === 2 ? false : true
+    const lastUpdateTimestamp = useLastUpdateTimestamp(chainId, props.poolId) ?? 1
 
     const [CountDown, setCountDown] = useState<any>({
         day: 0,
@@ -63,12 +66,7 @@ export function CountDown(props: any) {
     // but i think this is not the correct way!!!
     useEffect(() => {
         const timer = setInterval(() => {
-            const newCount = changeCountDown(
-                locked === 2 ? false : true,
-                gameDuration,
-                bidDuration,
-                lastUpdateTimestamp,
-            )
+            const newCount = changeCountDown(isLocked, gameDuration, bidDuration, lastUpdateTimestamp)
             if (newCount === false) {
                 setCountDown({
                     day: 0,

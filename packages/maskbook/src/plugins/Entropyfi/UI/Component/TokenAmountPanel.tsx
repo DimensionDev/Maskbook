@@ -1,9 +1,18 @@
 import { ChangeEvent, useCallback, useMemo } from 'react'
-import { ChipProps, InputProps, TextField, TextFieldProps } from '@material-ui/core'
+import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { useI18N } from '../../../../utils'
+import { formatBalance } from '@masknet/web3-shared'
+import { FormattedBalance, useStylesExtends } from '@masknet/shared'
+import BigNumber from 'bignumber.js'
+import classNames from 'classnames'
+
+import { BtcIcon } from '../../constants/assets/global_btcCoin'
+import { GasIcon } from '../../constants/assets/global_gasCoin'
+import { UsdcIcon } from '../../constants/assets/global_usdc'
+import { UsdtIcon } from '../../constants/assets/global_usdt'
+import { DaiIcon } from '../../constants/assets/global_DaiCoin'
 
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79
@@ -39,6 +48,14 @@ const useStyles = makeStyles()((theme) => {
         inputShrinkLabel: {
             transform: 'translate(17px, -3px) scale(0.75) !important',
         },
+        chip: {
+            border: 'none',
+            borderRadius: 8,
+            paddingLeft: theme.spacing(0.5),
+        },
+        loadingChip: {
+            marginRight: theme.spacing(-0.5),
+        },
     }
 })
 
@@ -58,6 +75,7 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     // E.g. red packet shares
     maxAmountShares?: number
     decimals: number
+    coinName: string
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
@@ -73,10 +91,19 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         disableBalance = false,
         MaxChipProps,
         decimals,
+        coinName,
     } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
+    const iconArr: any = {
+        BTC: <BtcIcon />,
+        'ETH-GAS': <GasIcon />,
+
+        USDT: <UsdtIcon />,
+        USDC: <UsdcIcon />,
+        DAI: <DaiIcon />,
+    }
     //#region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
         () => ({
@@ -119,81 +146,87 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                     spellCheck: false,
                     className: classes.input,
                 },
-                // endAdornment: disableToken ? null : token ? (
-                //     <Box
-                //         className={classes.token}
-                //         sx={{
-                //             display: 'flex',
-                //             flexDirection: 'column',
-                //             justifyContent: 'center',
-                //             alignItems: 'flex-end',
-                //         }}>
-                //         {!disableBalance ? (
-                //             <Typography
-                //                 className={classes.balance}
-                //                 color="textSecondary"
-                //                 variant="body2"
-                //                 component="span">
-                //                 {t('plugin_ito_list_table_got')}:
-                //                 <FormattedBalance value={balance} decimals={token.decimals} significant={6} />
-                //             </Typography>
-                //         ) : null}
-                //         <Box
-                //             sx={{
-                //                 display: 'flex',
-                //                 alignItems: 'center',
-                //                 marginTop: 2,
-                //             }}>
-                //             {balance !== '0' && !disableBalance ? (
-                //                 <Chip
-                //                     classes={{
-                //                         root: classNames(classes.max, MaxChipProps?.classes?.root),
-                //                         ...MaxChipProps?.classes,
-                //                     }}
-                //                     size="small"
-                //                     label="MAX"
-                //                     clickable
-                //                     color="primary"
-                //                     variant="outlined"
-                //                     onClick={() => {
-                //                         onAmountChange(
-                //                             formatBalance(
-                //                                 new BigNumber(maxAmount ?? balance)
-                //                                     .dividedBy(maxAmountShares)
-                //                                     .decimalPlaces(0, 1),
-                //                                 token.decimals,
-                //                             ),
-                //                         )
-                //                     }}
-                //                     {...MaxChipProps}
-                //                 />
-                //             ) : null}
-                //             <SelectTokenChip token={token} {...props.SelectTokenChip} />
-                //         </Box>
-                //     </Box>
-                // ) : (
-                //     <Box
-                //         className={classes.token}
-                //         sx={{
-                //             display: 'flex',
-                //             flexDirection: 'column',
-                //             justifyContent: 'center',
-                //             alignItems: 'flex-end',
-                //             marginTop: 2,
-                //         }}>
-                //         {!disableBalance ? (
-                //             <Typography
-                //                 className={classes.balance}
-                //                 color="textSecondary"
-                //                 variant="body2"
-                //                 component="span">
-                //                 -
-                //             </Typography>
-                //         ) : null}
-                //         <SelectTokenChip token={token} {...props.SelectTokenChip} />
-                //     </Box>
-                // ),
-                // ...props.InputProps,
+                endAdornment: disableToken ? null : coinName ? (
+                    <Box
+                        className={classes.token}
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'flex-end',
+                        }}>
+                        {!disableBalance ? (
+                            <Typography
+                                className={classes.balance}
+                                color="textSecondary"
+                                variant="body2"
+                                component="span">
+                                Balance:
+                                <FormattedBalance value={balance} decimals={decimals} significant={6} />
+                            </Typography>
+                        ) : null}
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                marginTop: 2,
+                            }}>
+                            <Chip
+                                className={classNames(classes.chip, classes.loadingChip)}
+                                icon={iconArr[coinName]}
+                                size="small"
+                                clickable={false}
+                                variant="outlined"
+                            />
+                            {balance !== '0' && !disableBalance ? (
+                                <Chip
+                                    classes={{
+                                        root: classNames(classes.max, MaxChipProps?.classes?.root),
+                                        ...MaxChipProps?.classes,
+                                    }}
+                                    size="small"
+                                    label="MAX"
+                                    clickable
+                                    color="primary"
+                                    variant="outlined"
+                                    onClick={() => {
+                                        onAmountChange(
+                                            formatBalance(
+                                                new BigNumber(maxAmount ?? balance)
+                                                    .dividedBy(maxAmountShares)
+                                                    .decimalPlaces(0, 1),
+                                                decimals,
+                                            ),
+                                        )
+                                    }}
+                                    {...MaxChipProps}
+                                />
+                            ) : null}
+                        </Box>
+                    </Box>
+                ) : (
+                    <Box
+                        className={classes.token}
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'flex-end',
+                            marginTop: 2,
+                        }}>
+                        {!disableBalance ? (
+                            <Typography
+                                className={classes.balance}
+                                color="textSecondary"
+                                variant="body2"
+                                component="span">
+                                -
+                            </Typography>
+                        ) : null}
+                        {/* <SelectTokenChip token={token} {...props.SelectTokenChip} /> */}
+                    </Box>
+                ),
+                ...props.InputProps,
             }}
             InputLabelProps={{
                 shrink: true,
