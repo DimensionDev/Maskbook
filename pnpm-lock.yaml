@@ -2786,6 +2786,7 @@ importers:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       web3: 1.5.2
       web3-core: 1.5.2
       web3-utils: 1.5.2
@@ -2794,6 +2795,8 @@ importers:
 >>>>>>> fix: refactor
 =======
 >>>>>>> fix: pnpm-lock
+=======
+>>>>>>> feat: fetch market for positions
 <<<<<<< HEAD
       web3: 1.4.0
       web3-core: 1.5.2
@@ -2819,7 +2822,15 @@ importers:
       web3-core: 1.4.0
       web3-utils: 1.4.0
 >>>>>>> fix: pnpm-lock
+<<<<<<< HEAD
 >>>>>>> fix: pnpm-lock
+=======
+=======
+      web3: 1.5.2
+      web3-core: 1.5.2
+      web3-utils: 1.5.2
+>>>>>>> feat: fetch market for positions
+>>>>>>> feat: fetch market for positions
     devDependencies:
       '@types/use-subscription': 1.0.0
 
@@ -54970,6 +54981,7 @@ packages:
 =======
   /underscore/1.12.1:
     resolution: {integrity: sha512-hEQt0+ZLDVUMhebKxL4x1BTtDY7bavVofhZ9KZ4aI26X9SRaE+Y3m83XUL1UP2jn8ynjndwCCpEHdUG+9pP1Tw==}
+    dev: true
 
 >>>>>>> fix: refactor
   /undertaker-registry/1.0.1:
@@ -55974,17 +55986,6 @@ packages:
     resolution: {integrity: sha512-wYxSGajtmoP4WxfejAPIr4l0fVh+jeMXZb08wNc0tMg6xsfZXj3cECqIK0G7ZAqUq0PP8WlMDtaOGVBTAWztNw==}
     dev: true
 
-  /web3-bzz/1.4.0:
-    resolution: {integrity: sha512-KhXmz8hcfGsqhplB7NrekAeNkG2edHjXV4bL3vnXde8RGMWpabpSNxuwiGv+dv/3nWlrHatH0vGooONYCkP5TA==}
-    engines: {node: '>=8.0.0'}
-    requiresBuild: true
-    dependencies:
-      '@types/node': 12.20.17
-      got: 9.6.0
-      swarm-js: 0.1.40
-      underscore: 1.12.1
-    dev: false
-
   /web3-bzz/1.5.2:
     resolution: {integrity: sha512-W/sPCdA+XQ9duUYKHAwf/g69cbbV8gTCRsa1MpZwU7spXECiyJ2EvD/QzAZ+UpJk3GELXFF/fUByeZ3VRQKF2g==}
     engines: {node: '>=8.0.0'}
@@ -56007,6 +56008,9 @@ packages:
       web3-eth-iban: 1.4.0
       web3-utils: 1.4.0
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> feat: fetch market for positions
     dev: true
 
 =======
@@ -56043,10 +56047,13 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     dev: true
 =======
 >>>>>>> fix: refactor
 =======
+>>>>>>> feat: fetch market for positions
+=======
 =======
 >>>>>>> fix: pnpm-lock
 =======
@@ -56056,6 +56063,9 @@ packages:
 >>>>>>> fix: refactor
 =======
 >>>>>>> fix: pnpm-lock
+=======
+    dev: true
+>>>>>>> feat: fetch market for positions
 
   /web3-core-method/1.5.2:
     resolution: {integrity: sha512-/mC5t9UjjJoQmJJqO5nWK41YHo+tMzFaT7Tp7jDCQsBkinE68KsUJkt0jzygpheW84Zra0DVp6q19gf96+cugg==}
@@ -56085,10 +56095,13 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     dev: true
 =======
 >>>>>>> fix: refactor
 =======
+>>>>>>> feat: fetch market for positions
+=======
 =======
 >>>>>>> fix: pnpm-lock
 =======
@@ -56098,6 +56111,9 @@ packages:
 >>>>>>> fix: refactor
 =======
 >>>>>>> fix: pnpm-lock
+=======
+    dev: true
+>>>>>>> feat: fetch market for positions
 
   /web3-core-promievent/1.5.2:
     resolution: {integrity: sha512-5DacbJXe98ozSor7JlkTNCy6G8945VunRRkPxMk98rUrg60ECVEM/vuefk1atACzjQsKx6tmLZuHxbJQ64TQeQ==}
@@ -56127,10 +56143,13 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     dev: true
 =======
 >>>>>>> fix: refactor
 =======
+>>>>>>> feat: fetch market for positions
+=======
 =======
 >>>>>>> fix: pnpm-lock
 =======
@@ -56140,6 +56159,9 @@ packages:
 >>>>>>> fix: refactor
 =======
 >>>>>>> fix: pnpm-lock
+=======
+    dev: true
+>>>>>>> feat: fetch market for positions
 
   /web3-core-requestmanager/1.5.2:
     resolution: {integrity: sha512-oRVW9OrAsXN2JIZt68OEg1Mb1A9a/L3JAGMv15zLEFEnJEGw0KQsGK1ET2kvZBzvpFd5G0EVkYCnx7WDe4HSNw==}
@@ -56170,10 +56192,13 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     dev: true
 =======
 >>>>>>> fix: refactor
 =======
+>>>>>>> feat: fetch market for positions
+=======
 =======
 >>>>>>> fix: pnpm-lock
 =======
@@ -56183,6 +56208,9 @@ packages:
 >>>>>>> fix: refactor
 =======
 >>>>>>> fix: pnpm-lock
+=======
+    dev: true
+>>>>>>> feat: fetch market for positions
 
   /web3-core-subscriptions/1.5.2:
     resolution: {integrity: sha512-hapI4rKFk22yurtIv0BYvkraHsM7epA4iI8Np+HuH6P9DD0zj/llaps6TXLM9HyacLBRwmOLZmr+pHBsPopUnQ==}
@@ -56214,10 +56242,13 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     dev: true
 =======
 >>>>>>> fix: refactor
 =======
+>>>>>>> feat: fetch market for positions
+=======
 =======
 >>>>>>> fix: pnpm-lock
 =======
@@ -56227,6 +56258,9 @@ packages:
 >>>>>>> fix: refactor
 =======
 >>>>>>> fix: pnpm-lock
+=======
+    dev: true
+>>>>>>> feat: fetch market for positions
 
   /web3-core/1.5.2:
     resolution: {integrity: sha512-sebMpQbg3kbh3vHUbHrlKGKOxDWqjgt8KatmTBsTAWj/HwWYVDzeX+2Q84+swNYsm2DrTBVFlqTErFUwPBvyaA==}
@@ -56259,6 +56293,7 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     dev: true
 =======
 =======
@@ -56268,6 +56303,8 @@ packages:
 =======
 >>>>>>> fix: pnpm-lock
 =======
+>>>>>>> feat: fetch market for positions
+=======
 >>>>>>> fix: rebase
 =======
 >>>>>>> fix: refactor
@@ -56276,7 +56313,13 @@ packages:
 =======
 =======
 >>>>>>> fix: pnpm-lock
+<<<<<<< HEAD
 >>>>>>> fix: pnpm-lock
+=======
+=======
+    dev: true
+>>>>>>> feat: fetch market for positions
+>>>>>>> feat: fetch market for positions
 
   /web3-eth-abi/1.5.2:
     resolution: {integrity: sha512-P3bJbDR5wib4kWGfVeBKBVi27T+AiHy4EJxYM6SMNbpm3DboLDdisu9YBd6INMs8rzxgnprBbGmmyn4jKIDKAA==}
@@ -56292,6 +56335,7 @@ packages:
 =======
     dev: false
 
+<<<<<<< HEAD
   /web3-eth-accounts/1.4.0:
     resolution: {integrity: sha512-tETHBvfO3Z7BXZ7HJIwuX7ol6lPefP55X7b4IiX82C1PujHwsxENY7c/3wyxzqKoDyH6zfyEQo17yhxkhsM1oA==}
     engines: {node: '>=8.0.0'}
@@ -56311,6 +56355,8 @@ packages:
     dev: false
 >>>>>>> fix: refactor
 
+=======
+>>>>>>> feat: fetch market for positions
   /web3-eth-accounts/1.5.2:
     resolution: {integrity: sha512-F8mtzxgEhxfLc66vPi0Gqd6mpscvvk7Ua575bsJ1p9J2X/VtuKgDgpWcU4e4LKeROQ+ouCpAG9//0j9jQuij3A==}
     engines: {node: '>=8.0.0'}
@@ -56346,6 +56392,9 @@ packages:
       web3-eth-abi: 1.4.0
       web3-utils: 1.4.0
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> feat: fetch market for positions
     dev: true
 
 =======
@@ -56373,6 +56422,7 @@ packages:
 =======
     dev: false
 
+<<<<<<< HEAD
   /web3-eth-ens/1.4.0:
     resolution: {integrity: sha512-jR1KorjU1erpYFpFzsMXAWZnHhqUqWPBq/4+BGVj7/pJ43+A3mrE1eB0zl91Dwc1RTNwOhB02iOj1c9OlpGr3g==}
     engines: {node: '>=8.0.0'}
@@ -56389,6 +56439,8 @@ packages:
     dev: false
 >>>>>>> fix: refactor
 
+=======
+>>>>>>> feat: fetch market for positions
   /web3-eth-ens/1.5.2:
     resolution: {integrity: sha512-/UrLL42ZOCYge+BpFBdzG8ICugaRS4f6X7PxJKO+zAt+TwNgBpjuWfW/ZYNcuqJun/ZyfcTuj03TXqA1RlNhZQ==}
     engines: {node: '>=8.0.0'}
@@ -56414,11 +56466,15 @@ packages:
       bn.js: 4.12.0
       web3-utils: 1.4.0
 <<<<<<< HEAD
+<<<<<<< HEAD
     dev: true
 
 =======
 >>>>>>> fix: rebase
 =======
+=======
+    dev: true
+>>>>>>> feat: fetch market for positions
 
 >>>>>>> fix: refactor
   /web3-eth-iban/1.5.2:
@@ -56438,7 +56494,10 @@ packages:
 >>>>>>> fix: pnpm-lock
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> feat: fetch market for positions
   /web3-eth-personal/1.4.0:
     resolution: {integrity: sha512-8Ip6xZ8plmWqAD4ESbKUIPVV9gfTAFFm0ff1FQIw9I9kYvFlBIPzukvm852w2SftGem+/iRH+2+2mK7HvuKXZQ==}
     engines: {node: '>=8.0.0'}
@@ -56459,7 +56518,12 @@ packages:
 =======
 >>>>>>> fix: pnpm-lock
 
+<<<<<<< HEAD
 >>>>>>> fix: rebase
+=======
+=======
+>>>>>>> feat: fetch market for positions
+>>>>>>> feat: fetch market for positions
   /web3-eth-personal/1.5.2:
     resolution: {integrity: sha512-nH5N2GiVC0C5XeMEKU16PeFP3Hb3hkPvlR6Tf9WQ+pE+jw1c8eaXBO1CJQLr15ikhUF3s94ICyHcfjzkDsmRbA==}
     engines: {node: '>=8.0.0'}
@@ -56470,25 +56534,6 @@ packages:
       web3-core-method: 1.5.2
       web3-net: 1.5.2
       web3-utils: 1.5.2
-    dev: false
-
-  /web3-eth/1.4.0:
-    resolution: {integrity: sha512-L990eMJeWh4h/Z3M8MJb9HrKq8tqvzdGZ7igdzd6Ba3B/VKgGFAJ/4XIqtLwAJ1Wg5Cj8my60tYY+34c2cLefw==}
-    engines: {node: '>=8.0.0'}
-    dependencies:
-      underscore: 1.12.1
-      web3-core: 1.4.0
-      web3-core-helpers: 1.4.0
-      web3-core-method: 1.4.0
-      web3-core-subscriptions: 1.4.0
-      web3-eth-abi: 1.4.0
-      web3-eth-accounts: 1.4.0
-      web3-eth-contract: 1.4.0
-      web3-eth-ens: 1.4.0
-      web3-eth-iban: 1.4.0
-      web3-eth-personal: 1.4.0
-      web3-net: 1.4.0
-      web3-utils: 1.4.0
     dev: false
 
   /web3-eth/1.5.2:
@@ -56507,15 +56552,6 @@ packages:
       web3-eth-personal: 1.5.2
       web3-net: 1.5.2
       web3-utils: 1.5.2
-    dev: false
-
-  /web3-net/1.4.0:
-    resolution: {integrity: sha512-41WkKobL+KnKC0CY0RZ1KhMMyR/hMFGlbHZQac4KtB7ro1UdXeK+RiYX+GzSr1h7j9Dj+dQZqyBs70cxmL9cPQ==}
-    engines: {node: '>=8.0.0'}
-    dependencies:
-      web3-core: 1.4.0
-      web3-core-method: 1.4.0
-      web3-utils: 1.4.0
     dev: false
 
   /web3-net/1.5.2:
@@ -56576,6 +56612,7 @@ packages:
 >>>>>>> fix: refactor
 =======
       xhr2-cookies: 1.1.0
+    dev: true
 
 >>>>>>> fix: pnpm-lock
   /web3-providers-http/1.5.2:
@@ -56618,6 +56655,7 @@ packages:
       underscore: 1.12.1
       web3-core-helpers: 1.4.0
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> fix: refactor
 <<<<<<< HEAD
 >>>>>>> fix: refactor
@@ -56625,6 +56663,9 @@ packages:
 =======
 >>>>>>> fix: pnpm-lock
 >>>>>>> fix: pnpm-lock
+=======
+    dev: true
+>>>>>>> feat: fetch market for positions
 
   /web3-providers-ipc/1.5.2:
     resolution: {integrity: sha512-SJC4Sivt4g9LHKlRy7cs1jkJgp7bjrQeUndE6BKs0zNALKguxu6QYnzbmuHCTFW85GfMDjhvi24jyyZHMnBNXQ==}
@@ -56653,12 +56694,15 @@ packages:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     dev: true
 =======
 >>>>>>> fix: refactor
 =======
 >>>>>>> fix: pnpm-lock
 =======
+>>>>>>> feat: fetch market for positions
+=======
 =======
 >>>>>>> fix: rebase
 >>>>>>> fix: rebase
@@ -56666,6 +56710,9 @@ packages:
 >>>>>>> fix: refactor
 =======
 >>>>>>> fix: pnpm-lock
+=======
+    dev: true
+>>>>>>> feat: fetch market for positions
 
   /web3-providers-ws/1.5.2:
     resolution: {integrity: sha512-xy9RGlyO8MbJDuKv2vAMDkg+en+OvXG0CGTCM2BTl6l1vIdHpCa+6A/9KV2rK8aU9OBZ7/Pf+Y19517kHVl9RA==}
@@ -56685,7 +56732,10 @@ packages:
 >>>>>>> fix: pnpm-lock
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> feat: fetch market for positions
   /web3-shh/1.4.0:
     resolution: {integrity: sha512-OZMkMgo+VZnu1ErhIFXW+5ExnPKQg9v8/2DHGVtNEwuC5OHYuAEF5U7MQgbxYJYwbRmxQCt/hA3VwKjnkbmSAA==}
     engines: {node: '>=8.0.0'}
@@ -56705,7 +56755,12 @@ packages:
 =======
 >>>>>>> fix: pnpm-lock
 
+<<<<<<< HEAD
 >>>>>>> fix: rebase
+=======
+=======
+>>>>>>> feat: fetch market for positions
+>>>>>>> feat: fetch market for positions
   /web3-shh/1.5.2:
     resolution: {integrity: sha512-wOxOcYt4Sa0AHAI8gG7RulCwVuVjSRS/M/AbFsea3XfJdN6sU13/syY7OdZNjNYuKjYTzxKYrd3dU/K2iqffVw==}
     engines: {node: '>=8.0.0'}
@@ -56734,11 +56789,15 @@ packages:
       underscore: 1.12.1
       utf8: 3.0.0
 <<<<<<< HEAD
+<<<<<<< HEAD
     dev: true
 
 =======
 >>>>>>> fix: rebase
 =======
+=======
+    dev: true
+>>>>>>> feat: fetch market for positions
 
 >>>>>>> fix: refactor
   /web3-utils/1.5.2:
@@ -56789,20 +56848,6 @@ packages:
       xhr2-cookies: 1.1.0
 >>>>>>> fix: pnpm-lock
       xmlhttprequest: 1.8.0
-    dev: false
-
-  /web3/1.4.0:
-    resolution: {integrity: sha512-faT3pIX+1tuo+wqmUFQPe10MUGaB1UvRYxw9dmVJFLxaRAIfXErSilOf3jFhSwKbbPNkwG0bTiudCLN9JgeS7A==}
-    engines: {node: '>=8.0.0'}
-    requiresBuild: true
-    dependencies:
-      web3-bzz: 1.4.0
-      web3-core: 1.4.0
-      web3-eth: 1.4.0
-      web3-eth-personal: 1.4.0
-      web3-net: 1.4.0
-      web3-shh: 1.4.0
-      web3-utils: 1.4.0
     dev: false
 
   /web3/1.5.2:

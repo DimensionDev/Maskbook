@@ -225,4 +225,5 @@ export interface UserMarket {
     address: string
     id: string
     liquidity: Liquidity
+    market?: Market
 }

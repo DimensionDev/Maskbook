@@ -19,7 +19,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { MarketViewDeck } from './MarketViewDeck'
 import { MarketDescription } from './MarketDescription'
 import { MarketBuySell } from './MarketBuySell'
-import { useFetchMarket } from '../hooks/useMarket'
+import { useMarket } from '../hooks/useMarket'
 import { useAmmOutcomes } from '../hooks/useAmmOutcomes'
 import { useAugurConstants, useERC20TokenDetailed } from '@masknet/web3-shared'
 import { ChartView } from './ChartView'
@@ -136,7 +136,9 @@ export function MarketView(props: MarketViewProps) {
         loading,
         error,
         retry,
-    } = useFetchMarket({ address, id, link, ammAddress: AMM_FACTORY_ADDRESS } as BasicMarket, 'no-cache')
+    } = useMarket({ address, id, link, ammAddress: AMM_FACTORY_ADDRESS } as BasicMarket, 'no-cache')
+    console.log(error)
+
     const {
         value: ammOutcomes,
         loading: loadingAmmOutcomes,
