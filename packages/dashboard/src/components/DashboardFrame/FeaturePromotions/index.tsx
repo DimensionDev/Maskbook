@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { PluginMessages, Services } from '../../../API'
 import { PLUGIN_IDS } from '../../../pages/Labs/constants'
@@ -6,6 +6,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../type'
+import { useAccount } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -30,9 +31,10 @@ const TWITTER_ADDRESS = 'https://www.twitter.com'
 export const FeaturePromotions = memo(() => {
     const { classes } = useStyles()
     const navigate = useNavigate()
+    const account = useAccount()
 
     const { currentPersona, connectPersona } = PersonaContext.useContainer()
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
 
     const isConnectedTwitter = useMemo(() => {
         if (!currentPersona) return false
@@ -42,6 +44,13 @@ export const FeaturePromotions = memo(() => {
 
         return !!linkedProfiles.find((profile) => profile.identifier.network === TWITTER_NETWORK)
     }, [currentPersona])
+
+    const openTransakDialog = useCallback(() => {
+        setBuyDialog({
+            open: true,
+            address: account ?? '',
+        })
+    }, [])
 
     const openTwitter = (pluginId: string) => async () => {
         if (!currentPersona) {
@@ -71,7 +80,7 @@ export const FeaturePromotions = memo(() => {
             />
             <img
                 className={classes.img}
-                onClick={openSwapDialog}
+                onClick={openTransakDialog}
                 src={new URL('./BuyETH.png', import.meta.url).toString()}
             />
             <img
