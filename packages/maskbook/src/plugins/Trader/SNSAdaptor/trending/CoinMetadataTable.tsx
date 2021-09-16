@@ -2,11 +2,10 @@ import { useCopyToClipboard } from 'react-use'
 import { TableContainer, Paper, Table, TableRow, TableCell, TableBody, Typography, IconButton } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
-import type { Trending } from '../../types'
 import type { DataProvider } from '@masknet/public-api'
-import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
+import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
+import type { Trending } from '../../types'
 import { Linking } from './Linking'
-import { FormattedAddress } from '@masknet/shared'
 import { CoinMetadataTags } from './CoinMetadataTags'
 
 const useStyles = makeStyles()((theme) => ({
