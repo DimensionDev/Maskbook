@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import {
     Body,
     ColumnContentLayout,
@@ -15,14 +15,10 @@ import { Button, Stack } from '@material-ui/core'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { ActionCard } from '../../../components/ActionCard'
 
-const ICON_MAPPING = Object.entries(SOCIAL_MEDIA_ICON_MAPPING).map(([type, icon]) => ({ type, icon }))
-
 export const ConnectSocialMedia = () => {
     const navigate = useNavigate()
     const t = useDashboardI18N()
     const { currentPersona, connectPersona, definedSocialNetworks } = PersonaContext.useContainer()
-
-    const supportNetworks = useMemo(() => definedSocialNetworks.map((x) => x.networkIdentifier), definedSocialNetworks)
 
     useEffect(() => {
         if (currentPersona && currentPersona?.linkedProfiles.length > 0) {
@@ -51,15 +47,17 @@ export const ConnectSocialMedia = () => {
                             {t.go_back()}
                         </Button>
                     </Stack>
-                    {ICON_MAPPING.filter((x) => supportNetworks.includes(x.type)).map((d) => (
+                    {definedSocialNetworks.map(({ networkIdentifier }) => (
                         <ActionCard
-                            key={d.type}
-                            title={t.create_account_connect_social_media({ type: upperFirst(d.type) })}
-                            icon={d.icon}
+                            key={networkIdentifier}
+                            title={t.create_account_connect_social_media({
+                                type: upperFirst(networkIdentifier),
+                            })}
+                            icon={SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
                             action={{
                                 type: 'primary',
                                 text: t.connect(),
-                                handler: () => handleConnect(d.type),
+                                handler: () => handleConnect(networkIdentifier),
                             }}
                         />
                     ))}

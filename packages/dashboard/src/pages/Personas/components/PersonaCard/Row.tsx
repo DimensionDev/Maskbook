@@ -52,7 +52,7 @@ export const PersonaRowCard = memo(() => {
             onConnect={connectPersona}
             onDisconnect={disconnectPersona}
             onRename={renamePersona}
-            definedSocialNetworks={definedSocialNetworks.filter((x) => !x.networkIdentifier.includes('instagram'))}
+            definedSocialNetworks={definedSocialNetworks}
         />
     )
 })
