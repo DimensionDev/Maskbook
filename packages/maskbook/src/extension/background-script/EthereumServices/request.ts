@@ -1,11 +1,10 @@
-import { noop } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { INTERNAL_nativeSend, INTERNAL_send, SendOverrides } from './send'
 import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
 import { EthereumMethodType, ProviderType } from '@masknet/web3-shared'
 import { currentProviderSettings } from '../../../plugins/Wallet/settings'
-import { Flags } from '../../../utils'
+import { defer, Flags } from '../../../utils'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { openPopupsWindow } from '../HelperService'
 import { memoizePromise } from '@dimensiondev/kit'
@@ -113,9 +112,15 @@ export async function requestSendWithoutPopup(
 export async function confirmRequest(payload: JsonRpcPayload) {
     const pid = getPayloadId(payload)
     if (!pid) return
-    getSendMethod()(payload, UNCONFIRMED_CALLBACK_MAP.get(pid) ?? noop)
+    const [deferred, resolve, reject] = defer<JsonRpcResponse | undefined, Error>()
+    getSendMethod()(payload, (error, response) => {
+        UNCONFIRMED_CALLBACK_MAP.get(pid)?.(error, response)
+        if (error) reject(error)
+        else resolve(response)
+    })
     await WalletRPC.deleteUnconfirmedRequest(payload)
     UNCONFIRMED_CALLBACK_MAP.delete(pid)
+    return deferred
 }
 
 export async function rejectRequest(payload: JsonRpcPayload) {
