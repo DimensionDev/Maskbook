@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { WalletInfo } from '../components/WalletInfo'
 import { WarningIcon } from '@masknet/icons'
 import { useHistory } from 'react-router-dom'
-import { useWallet } from '@masknet/web3-shared'
+import { ProviderType, useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PopupRoutes } from '../../../index'
@@ -70,7 +70,7 @@ const useStyles = makeStyles()({
 const DeleteWallet = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
-    const wallet = useWallet()
+    const wallet = useWallet(ProviderType.MaskWallet)
     const { classes } = useStyles()
     // const [password, setPassword] = useState('')
 

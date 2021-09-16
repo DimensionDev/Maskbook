@@ -3,7 +3,7 @@ import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/c
 import { makeStyles } from '@masknet/theme'
 import { WalletHeader } from '../components/WalletHeader'
 import { WalletInfo } from '../components/WalletInfo'
-import { isSameAddress, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
+import { isSameAddress, ProviderType, useAccount, useWallet, useWallets } from '@masknet/web3-shared'
 import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
@@ -68,15 +68,17 @@ const SelectWallet = memo(() => {
     const walletHD = useWalletHD()
     const { classes } = useStyles()
     const history = useHistory()
-    const wallet = useWallet()
+    const account = useAccount()
+    const wallet = useWallet(ProviderType.MaskWallet)
     const wallets = useWallets(ProviderType.MaskWallet)
 
     const [, copyToClipboard] = useCopyToClipboard()
 
-    const walletList = useMemo(
-        () => wallets.filter((item) => !isSameAddress(item.address, wallet?.address)),
-        [wallet, wallets],
-    )
+    const currentWalletBeMask = isSameAddress(account, wallet?.address)
+
+    const walletList = useMemo(() => {
+        return !currentWalletBeMask ? wallets : wallets.filter((item) => !isSameAddress(item.address, wallet?.address))
+    }, [wallet, wallets, currentWalletBeMask])
 
     const handleClickCreate = useCallback(() => {
         if (!walletHD) {
@@ -95,9 +97,13 @@ const SelectWallet = memo(() => {
                 account: address,
                 providerType: ProviderType.MaskWallet,
             })
-            history.replace(PopupRoutes.Wallet)
+            if (currentWalletBeMask) {
+                history.replace(PopupRoutes.Wallet)
+            } else {
+                window.close()
+            }
         },
-        [history],
+        [history, currentWalletBeMask],
     )
 
     const onCopy = useCallback(
@@ -110,7 +116,7 @@ const SelectWallet = memo(() => {
     return (
         <>
             <WalletHeader />
-            <WalletInfo />
+            {currentWalletBeMask ? <WalletInfo /> : null}
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     {walletList.map((item, index) => (

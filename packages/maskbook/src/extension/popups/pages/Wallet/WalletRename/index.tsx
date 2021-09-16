@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { StyledInput } from '../../../components/StyledInput'
-import { useWallet } from '@masknet/web3-shared'
+import { ProviderType, useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useHistory } from 'react-router'
 import { useI18N } from '../../../../../utils'
@@ -36,7 +36,7 @@ const WalletRename = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
     const { classes } = useStyles()
-    const wallet = useWallet()
+    const wallet = useWallet(ProviderType.MaskWallet)
     const [name, setName] = useState('')
     const [{ loading }, renameWallet] = useAsyncFn(async () => {
         if (!wallet?.address || !name) return

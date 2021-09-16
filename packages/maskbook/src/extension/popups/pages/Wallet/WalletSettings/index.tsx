@@ -8,7 +8,7 @@ import { memo } from 'react'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { useI18N } from '../../../../../utils'
-import { resolveAddressLinkOnExplorer, useChainId, useWallet } from '@masknet/web3-shared'
+import { ProviderType, resolveAddressLinkOnExplorer, useChainId, useWallet } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()({
     content: {
@@ -42,7 +42,7 @@ const WalletSettings = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
     const chainId = useChainId()
-    const wallet = useWallet()
+    const wallet = useWallet(ProviderType.MaskWallet)
     const { classes } = useStyles()
     return (
         <>

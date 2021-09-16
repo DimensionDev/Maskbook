@@ -31,7 +31,7 @@ const ContractInteraction = lazy(() => import('./ContractInteraction'))
 const Unlock = lazy(() => import('./Unlock'))
 
 export default function Wallet() {
-    const wallet = useWallet()
+    const wallet = useWallet(ProviderType.MaskWallet)
     const wallets = useWallets(ProviderType.MaskWallet)
     const location = useLocation()
     const history = useHistory()
@@ -90,7 +90,7 @@ export default function Wallet() {
                     ) : (
                         <Switch>
                             <Route path={PopupRoutes.Wallet} exact>
-                                {wallets.length === 0 || !wallet ? <WalletStartUp /> : <WalletAssets />}
+                                {!wallet ? <WalletStartUp /> : <WalletAssets />}
                             </Route>
                             <Route path={PopupRoutes.ImportWallet} children={<ImportWallet />} exact />
                             <Route path={PopupRoutes.AddDeriveWallet} children={<AddDeriveWallet />} exact />

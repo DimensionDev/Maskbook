@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Button, Stack, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { useWallet } from '@masknet/web3-shared'
+import { ProviderType, useWallet } from '@masknet/web3-shared'
 import { ERC20TokenList } from '@masknet/shared'
 import { useI18N } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
@@ -38,7 +38,7 @@ const useStyles = makeStyles()({
 
 const AddToken = memo(() => {
     const { t } = useI18N()
-    const wallet = useWallet()
+    const wallet = useWallet(ProviderType.MaskWallet)
     const { classes } = useStyles()
     const history = useHistory()
 

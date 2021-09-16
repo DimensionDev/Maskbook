@@ -7,6 +7,7 @@ import {
     isGreaterThan,
     isZero,
     pow10,
+    ProviderType,
     useChainId,
     useGasLimit,
     useNativeTokenDetailed,
@@ -140,7 +141,7 @@ const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetMenu, otherWallets }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const wallet = useWallet()
+    const wallet = useWallet(ProviderType.MaskWallet)
 
     const chainId = useChainId()
     const history = useHistory()

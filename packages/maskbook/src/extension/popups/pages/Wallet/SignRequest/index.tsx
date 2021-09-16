@@ -3,7 +3,7 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@material-ui/core'
 import { useI18N } from '../../../../../utils'
-import { EthereumRpcType, useWallet } from '@masknet/web3-shared'
+import { EthereumRpcType, ProviderType, useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../service'
@@ -68,7 +68,7 @@ const SignRequest = memo(() => {
     const location = useLocation()
     const { classes } = useStyles()
     const { value } = useUnconfirmedRequest()
-    const wallet = useWallet()
+    const wallet = useWallet(ProviderType.MaskWallet)
 
     const { data, address } = useMemo(() => {
         if (value?.computedPayload?.type === EthereumRpcType.SIGN) {

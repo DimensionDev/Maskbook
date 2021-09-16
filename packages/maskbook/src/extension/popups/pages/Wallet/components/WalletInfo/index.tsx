@@ -2,12 +2,11 @@ import { memo, useCallback } from 'react'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { MoreHoriz } from '@material-ui/icons'
-import { MaskWalletIcon, EditIcon } from '@masknet/icons'
-import { CopyIcon } from '@masknet/icons'
+import { CopyIcon, EditIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { PopupRoutes } from '../../../../index'
-import { useWallet } from '@masknet/web3-shared'
+import { ProviderType, useWallet } from '@masknet/web3-shared'
 import { useCopyToClipboard } from 'react-use'
 
 const useStyles = makeStyles()({
@@ -63,7 +62,7 @@ const useStyles = makeStyles()({
 })
 
 export const WalletInfo = memo(() => {
-    const wallet = useWallet()
+    const wallet = useWallet(ProviderType.MaskWallet)
     const history = useHistory()
 
     const excludePath = useRouteMatch({
