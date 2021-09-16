@@ -372,7 +372,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         <AbstractTab {...tabProps} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
-                        {(showNftAirdrop || loadingAirdrop) && currentChainId === ChainId.Matic ? (
+                        {(showNftAirdrop || loadingAirdrop) &&
+                        currentChainId === ChainId.Matic &&
+                        chainId === ChainId.Matic ? (
                             <NftAirdropCard
                                 campaignInfos={campaignInfos!}
                                 loading={loadingAirdrop}
@@ -407,14 +409,13 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     </div>
                                 ) : null}
                             </>
-                        ) : !showNftAirdrop && !loadingAirdrop ? (
+                        ) : (!showNftAirdrop && !loadingAirdrop) || currentChainId !== ChainId.Matic ? (
                             <div className={classes.emptyContentWrapper}>
                                 <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
                             </div>
                         ) : null}
                         {(swappedTokens && swappedTokens.length > 0) ||
-                        (swappedTokensOld && swappedTokensOld.length > 0) ||
-                        showNftAirdrop ? (
+                        (swappedTokensOld && swappedTokensOld.length > 0) ? (
                             <div className={classes.actionButtonWrapper}>
                                 <EthereumChainBoundary
                                     chainId={chainId}
