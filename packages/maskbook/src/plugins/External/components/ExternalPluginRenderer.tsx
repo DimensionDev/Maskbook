@@ -11,6 +11,9 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
     const template = useExternalPluginTemplate(props.url, manifest.value, props.metaKey)
     const retry = (
         <Button
+            variant="contained"
+            size="small"
+            sx={{ float: 'right' }}
             onClick={() => {
                 manifest.retry()
                 template.retry()
@@ -20,21 +23,29 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
     )
     if (!manifest.value || !template.value) return retry
     return (
-        <Card sx={{ border: '1px solid red' }}>
+        <Card sx={{ border: '1px solid orange', marginTop: 2 }}>
             <CardHeader
-                title={`Mask plugin (3rd party): ${manifest.value.name}`}
+                title={
+                    <>
+                        External plugin: {manifest.value.name}
+                        {retry}
+                    </>
+                }
                 subheader={
                     <>
-                        <Typography variant="caption">
-                            Publisher: {manifest.value.publisher} (⚠ Unverified)
-                            <br />
-                            Plugin URL: <Link href={props.url}>{props.url}</Link>
-                            {retry}
+                        <Typography variant="caption" sx={{ display: 'block' }}>
+                            Publisher: {manifest.value.publisher} (Unverified)
+                        </Typography>
+                        <Typography variant="caption" sx={{ display: 'block' }}>
+                            Plugin URL:{' '}
+                            <Link href={props.url} target="_blank">
+                                {props.url}
+                            </Link>
                         </Typography>
                     </>
                 }
             />
-            <CardContent style={{ background: 'red', height: 200 }}>
+            <CardContent>
                 <RenderContext.Provider
                     value={{
                         permissionAwareOpen(url: string) {

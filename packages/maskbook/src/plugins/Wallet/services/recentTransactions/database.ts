@@ -2,9 +2,8 @@ import { uniqBy } from 'lodash-es'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared'
-import { PLUGIN_IDENTIFIER } from '../../constants'
-import { createPluginDatabase } from '../../../../database/Plugin/wrap-plugin-database'
 import { currentChainIdSettings } from '../../settings'
+import { PluginDB } from '../../database/Plugin.db'
 
 export const MAX_RECENT_TRANSACTIONS_SIZE = 20
 
@@ -28,13 +27,11 @@ function getRecordId(address: string) {
     return `${currentChainIdSettings.value}_${formatEthereumAddress(address)}`
 }
 
-const RecentTransactionChunkDB = createPluginDatabase<RecentTransactionChunk>(PLUGIN_IDENTIFIER)
-
 export async function addRecentTransaction(address: string, hash: string, payload: JsonRpcPayload) {
     const now = new Date()
     const recordId = getRecordId(address)
-    const chunk = await RecentTransactionChunkDB.get('recent-transactions', recordId)
-    await RecentTransactionChunkDB.add({
+    const chunk = await PluginDB.get('recent-transactions', recordId)
+    await PluginDB.add({
         type: 'recent-transactions',
         id: getRecordId(address),
         chainId: currentChainIdSettings.value,
@@ -60,9 +57,9 @@ export async function addRecentTransaction(address: string, hash: string, payloa
 export async function removeRecentTransaction(address: string, hash: string) {
     const now = new Date()
     const recordId = getRecordId(address)
-    const chunk = await RecentTransactionChunkDB.get('recent-transactions', recordId)
+    const chunk = await PluginDB.get('recent-transactions', recordId)
     if (!chunk) return
-    await RecentTransactionChunkDB.add({
+    await PluginDB.add({
         type: 'recent-transactions',
         id: getRecordId(address),
         chainId: currentChainIdSettings.value,
@@ -76,12 +73,12 @@ export async function removeRecentTransaction(address: string, hash: string) {
 
 export async function getRecentTransactions(address: string) {
     const recordId = getRecordId(address)
-    const chunk = await RecentTransactionChunkDB.get('recent-transactions', recordId)
+    const chunk = await PluginDB.get('recent-transactions', recordId)
     return chunk?.transactions ?? []
 }
 
 export async function clearRecentTransactions(address: string) {
     const recordId = getRecordId(address)
-    await RecentTransactionChunkDB.remove('recent-transactions', recordId)
+    await PluginDB.remove('recent-transactions', recordId)
     WalletMessages.events.recentTransactionsUpdated.sendToAll()
 }
