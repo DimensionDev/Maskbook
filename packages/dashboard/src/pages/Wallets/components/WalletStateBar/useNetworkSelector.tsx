@@ -59,6 +59,8 @@ export const useNetworkSelector = () => {
                     break
                 case ProviderType.CustomNetwork:
                     throw new Error('To be implemented.')
+                default:
+                    throw new Error('Unreachable case:' + providerType)
             }
         },
         [providerType],
