@@ -7,7 +7,7 @@ import { fetchBackupValue } from '../../pages/Settings/api'
 import { Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
-import { MaskLoadingButton, useSnackbar } from '@masknet/theme'
+import { useSnackbar } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../type'
@@ -19,6 +19,7 @@ import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { AccountType } from '../../pages/Settings/type'
 import { UserContext } from '../../pages/Settings/hooks/UserContext'
 import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog'
+import { LoadingButton } from '../LoadingButton'
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
@@ -152,9 +153,9 @@ export const RestoreFromCloud = memo(() => {
                                 <BackupPreviewCard json={backupBasicInfoJson} />
                             </Box>
                             <ButtonContainer>
-                                <MaskLoadingButton variant="rounded" color="primary" onClick={handleRestore}>
+                                <LoadingButton variant="rounded" color="primary" onClick={handleRestore}>
                                     {t.restore()}
-                                </MaskLoadingButton>
+                                </LoadingButton>
                             </ButtonContainer>
                         </>
                     )}

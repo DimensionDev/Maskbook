@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
-import { MaskLoadingButton, MaskTextField, useSnackbar } from '@masknet/theme'
+import { MaskTextField, useSnackbar } from '@masknet/theme'
 import {
     Body,
     ColumnContentLayout,
@@ -17,6 +17,7 @@ import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks
 import { Services } from '../../../API'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
+import { LoadingButton } from '../../../components/LoadingButton'
 
 const Label = ({ value }: { value: string }) => (
     <Typography
@@ -83,9 +84,9 @@ export const PersonaCreate = () => {
                         helperText={error}
                     />
                     <ButtonContainer>
-                        <MaskLoadingButton variant="rounded" color="primary" onClick={create} disabled={!personaName}>
+                        <LoadingButton variant="rounded" color="primary" onClick={create} disabled={!personaName}>
                             {t.next()}
-                        </MaskLoadingButton>
+                        </LoadingButton>
                     </ButtonContainer>
                 </Box>
             </Body>

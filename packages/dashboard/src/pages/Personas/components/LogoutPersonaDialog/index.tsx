@@ -1,6 +1,6 @@
 import { Box, Button, DialogActions, DialogContent, Typography } from '@material-ui/core'
 import { memo, useCallback } from 'react'
-import { getMaskColor, makeStyles, MaskDialog, MaskLoadingButton, useSnackbar } from '@masknet/theme'
+import { getMaskColor, makeStyles, MaskDialog, useSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { Services } from '../../../../API'
 import type { PersonaIdentifier } from '@masknet/shared'
@@ -8,6 +8,7 @@ import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 import { WarningIcon } from '@masknet/icons'
+import { LoadingButton } from '../../../../components/LoadingButton'
 
 const useStyles = makeStyles()((theme) => ({
     svg: {
@@ -58,9 +59,9 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
                 <Button color="secondary" onClick={onClose}>
                     {t.personas_cancel()}
                 </Button>
-                <MaskLoadingButton color="error" onClick={handleLogout}>
+                <LoadingButton color="error" onClick={handleLogout}>
                     {t.personas_logout()}
-                </MaskLoadingButton>
+                </LoadingButton>
             </DialogActions>
         </MaskDialog>
     )
