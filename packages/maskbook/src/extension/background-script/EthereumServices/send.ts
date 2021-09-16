@@ -118,7 +118,7 @@ export async function INTERNAL_send(
         console.debug(new Error().stack)
     }
 
-    const wallet = providerType === ProviderType.MaskWallet ? await getWallet() : null
+    const wallet = providerType === ProviderType.MaskWallet ? await getWallet(account) : null
     const web3 = await createWeb3({
         chainId: getChainIdFromPayload(payload) ?? chainId,
         privKeys: wallet?._private_key_ ? [wallet._private_key_] : [],

@@ -3,7 +3,6 @@ import { memo, useEffect, useMemo, useState } from 'react'
 import { EthereumRpcType, useChainId, useNativeTokenDetailed } from '@masknet/web3-shared'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import Services from '../../../../service'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../../../utils'
 import { z as zod } from 'zod'
@@ -15,7 +14,6 @@ import { LoadingButton } from '@material-ui/lab'
 import { isEmpty, noop } from 'lodash-es'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { useHistory, useLocation } from 'react-router'
-import { PopupRoutes } from '../../../index'
 import { useRejectHandler } from '../hooks/useRejectHandler'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 
@@ -60,6 +58,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         lineHeight: '16px',
         margin: '10px 0',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     selected: {
         backgroundColor: '#1C68F3',
@@ -71,6 +72,17 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 10,
         padding: '9px 10px',
         borderRadius: 20,
+    },
+    unit: {
+        color: '#7B8192',
+        fontSize: 12,
+        lineHeight: '16px',
+        flex: 1,
+    },
+    price: {
+        fontSize: 12,
+        lineHeight: '16px',
+        color: '#15181B',
     },
 }))
 
@@ -143,38 +155,8 @@ export const GasSetting1559 = memo(() => {
                     .refine(
                         (value) => new BigNumber(value).isPositive(),
                         t('wallet_transfer_error_max_priority_gas_fee_positive'),
-                    )
-                    .refine((value) => {
-                        return new BigNumber(value).isGreaterThanOrEqualTo(
-                            gasNow?.slow?.suggestedMaxPriorityFeePerGas ?? 0,
-                        )
-                    }, t('wallet_transfer_error_max_priority_gas_fee_too_low'))
-                    .refine(
-                        (value) =>
-                            new BigNumber(value).isLessThan(
-                                new BigNumber(gasNow?.fast?.suggestedMaxPriorityFeePerGas ?? 0).multipliedBy(
-                                    HIGH_FEE_WARNING_MULTIPLIER,
-                                ),
-                            ),
-                        t('wallet_transfer_error_max_priority_gas_fee_too_high'),
                     ),
-                maxFeePerGas: zod
-                    .string()
-                    .min(1, t('wallet_transfer_error_maxFee_absence'))
-                    .refine(
-                        (value) =>
-                            new BigNumber(value).isGreaterThanOrEqualTo(gasNow?.slow?.suggestedMaxFeePerGas ?? 0),
-                        t('wallet_transfer_error_max_fee_too_low'),
-                    )
-                    .refine(
-                        (value) =>
-                            new BigNumber(value).isLessThan(
-                                new BigNumber(gasNow?.fast?.suggestedMaxFeePerGas ?? 0).multipliedBy(
-                                    HIGH_FEE_WARNING_MULTIPLIER,
-                                ),
-                            ),
-                        t('wallet_transfer_error_max_fee_too_high'),
-                    ),
+                maxFeePerGas: zod.string().min(1, t('wallet_transfer_error_maxFee_absence')),
             })
             .refine((data) => new BigNumber(data.maxPriorityFeePerGas).isLessThanOrEqualTo(data.maxFeePerGas), {
                 message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
@@ -187,6 +169,7 @@ export const GasSetting1559 = memo(() => {
         control,
         handleSubmit,
         setValue,
+        watch,
         formState: { errors },
     } = useForm<zod.infer<typeof schema>>({
         mode: 'onChange',
@@ -209,8 +192,11 @@ export const GasSetting1559 = memo(() => {
         ) {
             // if rpc payload contain max fee and max priority fee, set them to default values
             if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
-                setValue('maxPriorityFeePerGas', value.computedPayload._tx.maxPriorityFeePerGas)
-                setValue('maxFeePerGas', value.computedPayload._tx.maxFeePerGas)
+                setValue(
+                    'maxPriorityFeePerGas',
+                    new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas).toString(),
+                )
+                setValue('maxFeePerGas', new BigNumber(value.computedPayload._tx.maxFeePerGas).toString())
             } else {
                 setOption(1)
             }
@@ -223,41 +209,68 @@ export const GasSetting1559 = memo(() => {
 
     useEffect(() => {
         if (selected) {
-            setValue('maxPriorityFeePerGas', options[selected].content?.suggestedMaxPriorityFeePerGas ?? '')
-            setValue('maxFeePerGas', options[selected].content?.suggestedMaxFeePerGas ?? '')
+            setValue(
+                'maxPriorityFeePerGas',
+                new BigNumber(options[selected].content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
+            )
+            setValue(
+                'maxFeePerGas',
+                new BigNumber(options[selected].content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
+            )
         }
     }, [selected, setValue, options])
 
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (value) {
-                const toBeClose = new URLSearchParams(location.search).get('toBeClose')
                 const config = {
                     ...value.payload.params[0],
-                    gas: data.gasLimit,
-                    maxPriorityFeePerGas: new BigNumber(data.maxPriorityFeePerGas).toString(16),
-                    maxFeePerGas: new BigNumber(data.maxFeePerGas).toString(16),
+                    gas: new BigNumber(data.gasLimit).toString(16),
+                    maxPriorityFeePerGas: new BigNumber(data.maxPriorityFeePerGas).toString(),
+                    maxFeePerGas: new BigNumber(data.maxFeePerGas).toString(),
                 }
 
-                await WalletRPC.deleteUnconfirmedRequest(value.payload)
-
-                await Services.Ethereum.confirmRequest({
+                await WalletRPC.updateUnconfirmedRequest({
                     ...value.payload,
                     params: [config, ...value.payload.params],
                 })
-                if (toBeClose) {
-                    window.close()
-                } else {
-                    history.replace(PopupRoutes.TokenDetail)
-                }
+                history.goBack()
             }
         },
-        [value, location.search, history],
+        [value],
     )
 
     const onSubmit = handleSubmit((data) => handleConfirm(data))
 
     useRejectHandler(noop, value)
+
+    const [maxPriorityFeePerGas, maxFeePerGas] = watch(['maxPriorityFeePerGas', 'maxFeePerGas'])
+
+    const maxPriorFeeHelperText = useMemo(() => {
+        if (new BigNumber(maxPriorityFeePerGas).isLessThanOrEqualTo(gasNow?.slow?.suggestedMaxPriorityFeePerGas ?? 0))
+            return t('wallet_transfer_error_max_priority_gas_fee_too_low')
+        if (
+            new BigNumber(maxPriorityFeePerGas).isGreaterThan(
+                new BigNumber(gasNow?.fast?.suggestedMaxPriorityFeePerGas ?? 0).multipliedBy(
+                    HIGH_FEE_WARNING_MULTIPLIER,
+                ),
+            )
+        )
+            return t('wallet_transfer_error_max_priority_gas_fee_too_high')
+        return undefined
+    }, [maxPriorityFeePerGas, gasNow])
+
+    const maxFeeGasHelperText = useMemo(() => {
+        if (new BigNumber(maxFeePerGas).isLessThanOrEqualTo(gasNow?.slow?.suggestedMaxFeePerGas ?? 0))
+            return t('wallet_transfer_error_max_fee_too_low')
+        if (
+            new BigNumber(maxFeePerGas).isGreaterThan(
+                new BigNumber(gasNow?.fast?.suggestedMaxFeePerGas ?? 0).multipliedBy(HIGH_FEE_WARNING_MULTIPLIER),
+            )
+        )
+            return t('wallet_transfer_error_max_fee_too_high')
+        return undefined
+    }, [maxFeePerGas, gasNow])
 
     return (
         <>
@@ -281,7 +294,7 @@ export const GasSetting1559 = memo(() => {
                 ))}
             </div>
             <Typography className={classes.or}>{t('popups_wallet_gas_fee_settings_or')}</Typography>
-            <form>
+            <form onSubmit={onSubmit}>
                 <Typography className={classes.label}>{t('popups_wallet_gas_fee_settings_gas_limit')}</Typography>
                 <Controller
                     control={control}
@@ -301,14 +314,25 @@ export const GasSetting1559 = memo(() => {
                 />
                 <Typography className={classes.label}>
                     {t('popups_wallet_gas_fee_settings_max_priority_fee')}
+                    <Typography component="span" className={classes.unit}>
+                        ({t('wallet_transfer_gwei')})
+                    </Typography>
+                    <Typography component="span" className={classes.price}>
+                        {t('popups_wallet_gas_fee_settings_usd', {
+                            usd: new BigNumber(Number(maxPriorityFeePerGas) ?? 0)
+                                .div(10 ** 9)
+                                .times(nativeTokenPrice)
+                                .toPrecision(3),
+                        })}
+                    </Typography>
                 </Typography>
                 <Controller
                     control={control}
                     render={({ field }) => (
                         <StyledInput
                             {...field}
-                            error={!!errors.maxPriorityFeePerGas?.message}
-                            helperText={errors.maxPriorityFeePerGas?.message}
+                            error={!!errors.maxPriorityFeePerGas?.message || !!maxPriorFeeHelperText}
+                            helperText={errors.maxPriorityFeePerGas?.message || maxPriorFeeHelperText}
                             inputProps={{
                                 pattern: '^[0-9]*[.,]?[0-9]*$',
                             }}
@@ -316,14 +340,27 @@ export const GasSetting1559 = memo(() => {
                     )}
                     name="maxPriorityFeePerGas"
                 />
-                <Typography className={classes.label}>{t('popups_wallet_gas_fee_settings_max_fee')}</Typography>
+                <Typography className={classes.label}>
+                    {t('popups_wallet_gas_fee_settings_max_fee')}
+                    <Typography component="span" className={classes.unit}>
+                        ({t('wallet_transfer_gwei')})
+                    </Typography>
+                    <Typography component="span" className={classes.price}>
+                        {t('popups_wallet_gas_fee_settings_usd', {
+                            usd: new BigNumber(Number(maxFeePerGas) ?? 0)
+                                .div(10 ** 9)
+                                .times(nativeTokenPrice)
+                                .toPrecision(3),
+                        })}
+                    </Typography>
+                </Typography>
                 <Controller
                     control={control}
                     render={({ field }) => (
                         <StyledInput
                             {...field}
-                            error={!!errors.maxFeePerGas?.message}
-                            helperText={errors.maxFeePerGas?.message}
+                            error={!!errors.maxFeePerGas?.message || !!maxFeeGasHelperText}
+                            helperText={errors.maxFeePerGas?.message || maxFeeGasHelperText}
                             inputProps={{
                                 pattern: '^[0-9]*[.,]?[0-9]*$',
                             }}

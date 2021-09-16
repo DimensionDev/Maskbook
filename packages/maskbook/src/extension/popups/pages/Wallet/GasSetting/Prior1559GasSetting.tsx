@@ -3,10 +3,10 @@ import { memo, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import Services from '../../../../service'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     EthereumRpcType,
+    formatWeiToEther,
     formatWeiToGwei,
     getChainFromChainId,
     useChainId,
@@ -21,7 +21,6 @@ import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@material-ui/lab'
 import { isEmpty, noop } from 'lodash-es'
 import { useHistory, useLocation } from 'react-router'
-import { PopupRoutes } from '../../../index'
 import { useRejectHandler } from '../hooks/useRejectHandler'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 
@@ -169,7 +168,7 @@ export const Prior1559GasSetting = memo(() => {
         ) {
             // if rpc payload contain gas price, set it to default values
             if (value?.computedPayload._tx.gasPrice) {
-                setValue('gasPrice', new BigNumber(value.computedPayload._tx.gasPrice as number, 16).toString())
+                setValue('gasPrice', formatWeiToGwei(value.computedPayload._tx.gasPrice as number).toString())
             } else {
                 setOption(1)
             }
@@ -187,25 +186,17 @@ export const Prior1559GasSetting = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (value) {
-                const toBeClose = new URLSearchParams(location.search).get('toBeClose')
-
                 const config = {
                     ...value.payload.params[0],
                     gas: data.gasLimit,
                     gasPrice: new BigNumber(data.gasPrice).toString(16),
                 }
 
-                await WalletRPC.deleteUnconfirmedRequest(value.payload)
-                await Services.Ethereum.confirmRequest({
+                await WalletRPC.updateUnconfirmedRequest({
                     ...value.payload,
                     params: [config, ...value.payload.params],
                 })
-
-                if (toBeClose) {
-                    window.close()
-                } else {
-                    history.replace(PopupRoutes.TokenDetail)
-                }
+                history.goBack()
             }
         },
         [value],
@@ -227,17 +218,14 @@ export const Prior1559GasSetting = memo(() => {
                         <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: new BigNumber(gasPrice)
-                                    .div(10 ** 9)
-                                    .times(nativeTokenPrice)
-                                    .toPrecision(3),
+                                usd: formatWeiToEther(gasPrice).times(nativeTokenPrice).toPrecision(3),
                             })}
                         </Typography>
                     </div>
                 ))}
             </div>
             <Typography className={classes.or}>{t('popups_wallet_gas_fee_settings_or')}</Typography>
-            <form>
+            <form onSubmit={onSubmit}>
                 <Typography className={classes.label}>{t('popups_wallet_gas_fee_settings_gas_limit')}</Typography>
                 <Controller
                     control={control}

@@ -1,11 +1,10 @@
-import { noop } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { INTERNAL_nativeSend, INTERNAL_send, SendOverrides } from './send'
 import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
 import { EthereumMethodType, ProviderType } from '@masknet/web3-shared'
-import { currentProviderSettings } from '../../../plugins/Wallet/settings'
-import { Flags } from '../../../utils'
+import { currentAccountMaskWalletSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
+import { defer, Flags } from '../../../utils'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { openPopupsWindow } from '../HelperService'
 import { memoizePromise } from '@dimensiondev/kit'
@@ -68,7 +67,11 @@ export async function requestWithoutPopup<T extends unknown>(
     requestArguments: RequestArguments,
     overrides?: SendOverrides,
 ) {
-    return request(requestArguments, overrides, { popupsWindow: false })
+    return request(
+        requestArguments,
+        { ...overrides, account: currentAccountMaskWalletSettings.value, providerType: ProviderType.MaskWallet },
+        { popupsWindow: false },
+    )
 }
 
 export async function requestSend(
@@ -107,15 +110,37 @@ export async function requestSendWithoutPopup(
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
     overrides?: SendOverrides,
 ) {
-    return requestSend(payload, callback, overrides)
+    return requestSend(payload, callback, {
+        ...overrides,
+        account: currentAccountMaskWalletSettings.value,
+        providerType: ProviderType.MaskWallet,
+    })
 }
 
 export async function confirmRequest(payload: JsonRpcPayload) {
     const pid = getPayloadId(payload)
     if (!pid) return
-    getSendMethod()(payload, UNCONFIRMED_CALLBACK_MAP.get(pid) ?? noop)
-    await WalletRPC.deleteUnconfirmedRequest(payload)
-    UNCONFIRMED_CALLBACK_MAP.delete(pid)
+    const [deferred, resolve, reject] = defer<JsonRpcResponse | undefined, Error>()
+    getSendMethod()(
+        payload,
+        (error, response) => {
+            UNCONFIRMED_CALLBACK_MAP.get(pid)?.(error, response)
+
+            if (error) reject(error)
+            else if (response?.error) reject(new Error('Transaction error!'))
+            else {
+                WalletRPC.deleteUnconfirmedRequest(payload).then(() => {
+                    UNCONFIRMED_CALLBACK_MAP.delete(pid)
+                })
+                resolve(response)
+            }
+        },
+        {
+            account: currentAccountMaskWalletSettings.value,
+            providerType: ProviderType.MaskWallet,
+        },
+    )
+    return deferred
 }
 
 export async function rejectRequest(payload: JsonRpcPayload) {

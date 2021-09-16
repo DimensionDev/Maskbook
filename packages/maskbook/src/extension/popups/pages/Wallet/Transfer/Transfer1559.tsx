@@ -415,9 +415,9 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         name="address"
                     />
                     <Typography className={classes.label}>
-                        <span>Choose Token</span>
+                        <span>{t('popups_wallet_choose_token')}</span>
                         <Typography className={classes.balance} component="span">
-                            Balance:
+                            {t('wallet_balance')}:
                             <FormattedBalance
                                 value={selectedAsset?.balance}
                                 decimals={selectedAsset?.token?.decimals}
@@ -508,7 +508,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         name="gasLimit"
                     />
                     <Typography className={classes.label}>
-                        Max priority Fee
+                        {t('popups_wallet_gas_fee_settings_max_priority_fee')}
                         <Typography component="span" className={classes.unit}>
                             ({t('wallet_transfer_gwei')})
                         </Typography>
@@ -535,7 +535,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         name="maxPriorityFeePerGas"
                     />
                     <Typography className={classes.label}>
-                        Max Fee
+                        {t('popups_wallet_gas_fee_settings_max_fee')}
                         <Typography component="span" className={classes.unit}>
                             ({t('wallet_transfer_gwei')})
                         </Typography>

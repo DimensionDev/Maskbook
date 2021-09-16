@@ -69,6 +69,31 @@ export async function pushUnconfirmedRequest(payload: JsonRpcPayload) {
     return payload
 }
 
+export async function updateUnconfirmedRequest(payload: JsonRpcPayload) {
+    const now = new Date()
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
+
+    const chunk_ = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
+
+    if (!chunk_?.requests.length) throw new Error('No requests to updated')
+
+    const requests =
+        chunk_?.requests?.map((item) => {
+            if (item.id !== payload.id) return item
+            return payload
+        }) ?? []
+
+    const chunk = {
+        ...chunk_,
+        updateAt: now,
+        requests,
+    }
+
+    await t.objectStore('UnconfirmedRequestChunk').put(chunk)
+    WalletMessages.events.requestsUpdated.sendToAll(undefined)
+    return payload
+}
+
 export async function deleteUnconfirmedRequest(payload: JsonRpcPayload) {
     const now = new Date()
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
