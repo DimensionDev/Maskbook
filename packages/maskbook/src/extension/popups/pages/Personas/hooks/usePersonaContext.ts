@@ -13,7 +13,7 @@ function usePersonaContext() {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { value: personas, retry } = useAsyncRetry(async () => Services.Identity.queryOwnedPersonaInformation())
     useEffect(() => {
-        return MaskMessage.events.personaChanged.on(retry)
+        return MaskMessage.events.ownPersonaChanged.on(retry)
     }, [retry])
 
     const currentPersona = personas?.find((x) =>
