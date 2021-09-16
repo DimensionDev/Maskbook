@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     dialogBackdropRoot: {},
     dialogCloseButton: {
-        color: theme.palette.mode === 'dark' ? theme.palette.grey['50'] : theme.palette.grey['100'],
+        color: theme.palette.text.primary,
     },
 }))
 
