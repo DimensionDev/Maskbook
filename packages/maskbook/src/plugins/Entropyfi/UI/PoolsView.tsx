@@ -2,6 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { poolAddressMap } from '../constants'
 import { getSlicePoolId } from '../utils'
 import { PoolView } from './PoolView'
+import { useChainId } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -27,7 +28,7 @@ export function PoolsView() {
 
 //=> Functions
 const GETDATA = (): Array<any> => {
-    const chainId = '42'
+    const chainId = useChainId()
     console.log('CHAIND ID', chainId)
     const PoolIDs = []
     const SelectorList = [{ name: 'ALL' }]

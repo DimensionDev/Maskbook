@@ -1,5 +1,5 @@
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { useAccount, useChainId } from '@masknet/web3-shared'
+import { EthereumTokenType, pow10, useAccount, useChainId, useTokenBalance } from '@masknet/web3-shared'
 import { Button } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@material-ui/core'
@@ -9,6 +9,8 @@ import { TokenAmountPanel } from './Component/TokenAmountPanel'
 import { PluginEntropyfiMessages } from '../messages'
 import { poolAddressMap, tokenMap } from '../constants'
 import { getSlicePoolId } from '../utils'
+import BigNumber from 'bignumber.js'
+import usePool from '../hooks/usePool'
 // import useDebounce from '../hooks/useDebounce'
 
 const useStyles = makeStyles()((theme) => ({
@@ -73,7 +75,9 @@ export function DepositDialog() {
 
     const TOKEN_MAP = tokenMap[chainId][poolId]
     const poolAddress = poolAddressMap[chainId][poolId]
+    const principalToken = TOKEN_MAP?.principalToken
     const decimals = TOKEN_MAP?.principalToken.decimals
+    const pool = usePool(poolAddress)
     // const debouncedDeposit = useDebounce(deposit, 500)
 
     //#region remote controlled dialog
@@ -88,12 +92,36 @@ export function DepositDialog() {
     }, [closeDialog])
     //#endregion
 
-    const tokenBalance = '100'
+    const {
+        value: tokenBalance = '0',
+        loading: loadingTokenBalance,
+        retry: retryLoadTokenBalance,
+    } = useTokenBalance(EthereumTokenType.ERC20, principalToken?.address ?? '')
+
     const [depositAmount, setRawAmount] = useState('')
+    const formattedAmount = new BigNumber(depositAmount || '0').multipliedBy(pow10(decimals ?? 0)).toString()
 
     useEffect(() => {
         console.log('rawAmount value change', depositAmount)
+        console.log('balance', tokenBalance)
+        console.log('pid', poolId)
     }, [depositAmount])
+
+    const handleDeposit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault()
+        console.log('deposit ', choose)
+
+        const parsedLongAmount = choose === 'Long' ? formattedAmount : '0'
+        const parsedShortAmount = choose === 'Short' ? formattedAmount : '0'
+        await pool
+            .deposit(parsedShortAmount, parsedLongAmount)
+            .then(() => {
+                console.log('set Position:', choose, parsedShortAmount, parsedLongAmount)
+            })
+            .catch((error: any) => {
+                console.error('set position deposit error', error)
+            })
+    }
 
     return (
         <div className={classes.root}>
@@ -110,7 +138,10 @@ export function DepositDialog() {
                         />
                     </form>
                     <Button variant="contained"> Approve </Button>
-                    <Button variant="contained"> Deposit </Button>
+                    <Button variant="contained" onClick={handleDeposit}>
+                        {' '}
+                        Deposit{' '}
+                    </Button>
                 </DialogContent>
             </InjectedDialog>
         </div>

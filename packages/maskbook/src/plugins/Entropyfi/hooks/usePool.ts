@@ -1,15 +1,23 @@
 import { useCallback } from 'react'
 import { usePoolContract } from '../contracts'
 import type BN from 'bn.js'
+import { useAccount } from '@masknet/web3-shared'
 
 const usePool = (address: string) => {
     // // const { account, chainId } = useActiveWeb3React()
     // // const [poolContract, setPoolContract] = use
+    const account = useAccount()
     const poolContract = usePoolContract(address)
+    // const config = {
+    //     from: account,
+    //     value: 0,
+    // }
     const deposit = useCallback(
         async (shortPrincipalAmount: string | number | BN, longPrincipalAmount: string | number | BN) => {
             try {
-                const tx = poolContract?.methods.deposit(shortPrincipalAmount, longPrincipalAmount)
+                const tx = poolContract?.methods
+                    .deposit(shortPrincipalAmount, longPrincipalAmount)
+                    .send({ from: account })
                 return tx
             } catch (error) {
                 console.error('DEPOSIT ERROR', error)
@@ -21,7 +29,9 @@ const usePool = (address: string) => {
     const withdraw = useCallback(
         async (isAtoken: boolean, shortAmount: string | number | BN, longAmount: string | number | BN) => {
             try {
-                const tx = poolContract?.methods.withdraw(isAtoken, shortAmount, longAmount)
+                const tx = poolContract?.methods.withdraw(isAtoken, shortAmount, longAmount).send({
+                    from: account,
+                })
                 return tx
             } catch (error) {
                 console.log(error)
