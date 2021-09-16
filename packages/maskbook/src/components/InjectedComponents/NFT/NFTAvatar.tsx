@@ -224,6 +224,27 @@ export interface AvatarMetaDB {
     symbol: string
 }
 
+interface NFT {
+    amount: string
+    symbol: string
+    name: string
+    image: string
+}
+
+const NFTAvatarCache = new Map<string, AvatarMetaDB>()
+const NFTCache = new Map<string, NFT>()
+
+function getNFTCache(userId: string) {
+    if (NFTCache.has(userId)) {
+        return NFTCache.get(userId)
+    }
+    return
+}
+
+function setNFTCache(userId: string, nft: NFT) {
+    NFTCache.set(userId, nft)
+}
+
 export async function getNFT(address: string, tokenId: string) {
     const asset = await PluginCollectibleRPC.getAsset(address, tokenId)
 
@@ -247,11 +268,14 @@ export async function getNFT(address: string, tokenId: string) {
     }
 }
 
-export function useNFT(address: string, tokenId: string) {
+export function useNFT(userId: string, address: string, tokenId: string) {
     return useAsyncRetry(async () => {
-        const nft = await getNFT(address, tokenId)
+        let nft = getNFTCache(userId)
+        if (nft) return nft
+        nft = await getNFT(address, tokenId)
+        setNFTCache(userId, nft)
         return nft
-    }, [address, tokenId, getNFT])
+    }, [userId, address, tokenId])
 }
 
 export async function saveNFTAvatar(userId: string, avatarId: string, address: string, tokenId: string) {
@@ -283,6 +307,7 @@ export function useNFTAvatar(userId?: string) {
 }
 
 export async function getNFTAvatar(userId: string) {
+    if (NFTAvatarCache.has(userId)) return NFTAvatarCache.get(userId)
     const avatarDB = await (
         await getAvatarGun()
     ).gun2
@@ -290,6 +315,7 @@ export async function getNFTAvatar(userId: string) {
         // @ts-expect-error
         .get(userId).then!()
 
+    NFTAvatarCache.set(userId, avatarDB)
     return avatarDB as AvatarMetaDB
 }
 

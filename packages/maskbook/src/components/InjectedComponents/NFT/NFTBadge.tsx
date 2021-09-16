@@ -58,13 +58,16 @@ export function NFTBadge(props: NFTBadgeProps) {
 
     const [amount_, setAmount_] = useState('0')
     const [symbol_, setSymbol_] = useState('')
-    const { value = { amount: '0', symbol: 'ETH' }, loading } = useNFT(avatar.address, avatar.tokenId)
+    const { value = { amount: '0', symbol: 'ETH' }, loading } = useNFT(avatar.userId, avatar.address, avatar.tokenId)
 
     const { amount, symbol } = value
     useEffect(() => {
         setAmount_(amount)
+    }, [amount])
+
+    useEffect(() => {
         setSymbol_(symbol)
-    }, [amount, symbol])
+    }, [symbol])
 
     return (
         <div
