@@ -15,13 +15,13 @@ import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import classNames from 'classnames'
-import { upperFirst } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
         marginLeft: 14,
         maxWidth: '240px',
         textOverflow: 'ellipsis',
+        textTransform: 'capitalize',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
@@ -75,9 +75,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                         address={transaction.toAddress}
                         failed={transaction.failed}
                     />
-                    <Typography className={classes.type}>
-                        {upperFirst((transaction.type ?? '').replace(/_/g, ' '))}
-                    </Typography>
+                    <Typography className={classes.type}>{(transaction.type ?? '').replace(/_/g, ' ')}</Typography>
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center">
