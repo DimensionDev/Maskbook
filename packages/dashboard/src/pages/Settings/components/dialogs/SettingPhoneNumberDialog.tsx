@@ -140,7 +140,11 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                 </Box>
             ) : (
                 <Box className={classes.container} sx={{ paddingTop: '24px' }}>
-                    <Typography>{t.settings_dialogs_current_phone_validation()}</Typography>
+                    <Typography sx={{ paddingBottom: '8px' }}>
+                        {step === 0
+                            ? t.settings_dialogs_change_phone_validation()
+                            : t.settings_dialogs_current_phone_validation()}
+                    </Typography>
                     <Typography color="primary" fontWeight="bold" variant="h4">
                         {countryCode} {phone}
                     </Typography>
