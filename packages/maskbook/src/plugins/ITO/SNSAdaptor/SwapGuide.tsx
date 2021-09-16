@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     paper: {
         maxWidth: 544,
+        backgroundImage: 'none',
     },
 }))
 

@@ -1,10 +1,11 @@
 import { memo } from 'react'
 import { Box, Button, Stack, Typography } from '@material-ui/core'
 import {
+    getNetworkName,
     ProviderType,
     TransactionStatusType,
     useChainColor,
-    useChainDetailed,
+    useChainId,
     useWallet,
     useWeb3StateContext,
 } from '@masknet/web3-shared'
@@ -21,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 30,
         lineHeight: '28px',
         height: '28px',
-        cursor: 'pointer',
+        cursor: 'default',
     },
     dot: {
         position: 'relative',
@@ -40,7 +41,7 @@ export const WalletStateBar = memo(() => {
 
     const wallet = useWallet()
     const { providerType } = useWeb3StateContext()
-    const chainDetailed = useChainDetailed()
+    const chainId = useChainId()
     const chainColor = useChainColor()
 
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
@@ -55,7 +56,7 @@ export const WalletStateBar = memo(() => {
     return (
         <WalletStateBarUI
             isPending={!!pendingTransactions.length}
-            chain={chainDetailed?.chain}
+            networkName={getNetworkName(chainId)}
             chainColor={chainColor}
             providerType={providerType}
             openConnectWalletDialog={openConnectWalletDialog}
@@ -66,7 +67,7 @@ export const WalletStateBar = memo(() => {
 })
 
 interface WalletStateBarUIProps {
-    chain?: string
+    networkName?: string
     chainColor: string
     isPending: boolean
     providerType: ProviderType
@@ -76,7 +77,7 @@ interface WalletStateBarUIProps {
 }
 
 const WalletStateBarUI = memo<WalletStateBarUIProps>(
-    ({ chain, isPending, providerType, chainColor, walletAddress, walletName, openConnectWalletDialog }) => {
+    ({ networkName, isPending, providerType, chainColor, walletAddress, walletName, openConnectWalletDialog }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
 
@@ -88,11 +89,10 @@ const WalletStateBarUI = memo<WalletStateBarUIProps>(
                     justifyContent="center"
                     sx={{ background: chainColor.replace(')', ', 0.1)'), px: 2, mr: 1 }}
                     color={chainColor}
-                    className={classes.bar}
-                    onClick={openConnectWalletDialog}>
+                    className={classes.bar}>
                     <Typography component="span" sx={{ background: chainColor }} className={classes.dot} />
                     <Typography component="span" fontSize={12}>
-                        {chain}
+                        {networkName}
                     </Typography>
                 </Stack>
                 {isPending && (
@@ -108,10 +108,10 @@ const WalletStateBarUI = memo<WalletStateBarUIProps>(
                         </Typography>
                     </Stack>
                 )}
-                <Stack mx={1} justifyContent="center">
+                <Stack mx={1} justifyContent="center" sx={{ cursor: 'pointer' }} onClick={openConnectWalletDialog}>
                     <ProviderIcon providerType={providerType} />
                 </Stack>
-                <Box sx={{ userSelect: 'none' }}>
+                <Box sx={{ userSelect: 'none', cursor: 'pointer' }} onClick={openConnectWalletDialog}>
                     <Box fontSize={16}>{walletName}</Box>
                     <Box fontSize={12}>
                         <FormattedAddress address={walletAddress} size={10} />

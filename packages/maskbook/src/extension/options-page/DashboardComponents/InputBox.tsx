@@ -10,6 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         border: `1px solid ${getMaskColor(theme).border}`,
         alignItems: 'center',
         padding: theme.spacing(1),
+        boxSizing: 'border-box',
     },
     search: {
         display: 'flex',

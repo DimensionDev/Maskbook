@@ -29,7 +29,7 @@ const independentRef = {
     const debounceQuery = debounce(query, 500, { trailing: true })
 
     isLoading = query()
-    MaskMessage.events.personaChanged.on((x) => x.some((x) => x.owned) && debounceQuery())
+    MaskMessage.events.ownPersonaChanged.on(debounceQuery)
 }
 
 export function useMyPersonas() {

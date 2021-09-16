@@ -17,6 +17,7 @@ import {
     PortfolioProvider,
     pow10,
     getChainShortName,
+    getChainIdFromNetworkType,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-es'
@@ -109,16 +110,16 @@ export async function getAssetsList(
             return assets.flat()
         case PortfolioProvider.DEBANK:
             const { data = [], error_code } = await DebankAPI.getAssetsList(address)
-            if (error_code === 0) return formatAssetsFromDebank(data)
+            if (error_code === 0) return formatAssetsFromDebank(data, network)
             return []
         default:
             unreachable(provider)
     }
 }
 
-function formatAssetsFromDebank(data: BalanceRecord[]) {
+function formatAssetsFromDebank(data: BalanceRecord[], network: NetworkType) {
     return data
-        .filter((x) => getChainIdFromName(x.chain))
+        .filter((x) => getChainIdFromName(x.chain) === getChainIdFromNetworkType(network))
         .map((y): Asset => {
             const chainIdFromChain = getChainIdFromName(y.chain) ?? ChainId.Mainnet
             // the asset id is the token address or the name of the chain

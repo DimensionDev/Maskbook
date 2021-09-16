@@ -6,6 +6,7 @@ import { MaskWalletIcon, SendIcon, CardIcon, SwapIcon, DownloadIcon } from '@mas
 
 export interface BalanceCardProps {
     balance: number
+    chainName: string
     onSend(): void
     onBuy(): void
     onSwap(): void
@@ -70,7 +71,7 @@ const ButtonGroup = styled('div')`
     }
 `
 
-export const Balance = memo<BalanceCardProps>(({ balance, onSend, onBuy, onSwap, onReceive }) => {
+export const Balance = memo<BalanceCardProps>(({ balance, chainName, onSend, onBuy, onSwap, onReceive }) => {
     const t = useDashboardI18N()
 
     return (
@@ -80,7 +81,9 @@ export const Balance = memo<BalanceCardProps>(({ balance, onSend, onBuy, onSwap,
                     <MaskWalletIcon fontSize="inherit" />
                 </IconContainer>
                 <BalanceDisplayContainer>
-                    <BalanceTitle>{t.wallets_balance()}</BalanceTitle>
+                    <BalanceTitle>
+                        {t.wallets_balance()} {chainName}
+                    </BalanceTitle>
                     <BalanceContent>
                         {isNaN(balance)
                             ? '-'

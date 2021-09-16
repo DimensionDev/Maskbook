@@ -41,9 +41,7 @@ export const resolveOpenSeaNetwork = createLookupTableResolver<ChainId.Mainnet |
         [ChainId.Mainnet]: Network.Main,
         [ChainId.Rinkeby]: Network.Rinkeby,
     },
-    (chainId) => {
-        throw new Error(`The chain id ${chainId} is not supported.`)
-    },
+    Network.Main,
 )
 
 export const resolveCollectibleProviderName = createLookupTableResolver<CollectibleProvider, string>(
@@ -61,9 +59,7 @@ export const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainn
         [ChainId.Mainnet]: RaribleUserURL,
         [ChainId.Ropsten]: RaribleRopstenUserURL,
     },
-    (chainId) => {
-        throw new Error(`The chain id ${chainId} is not supported.`)
-    },
+    RaribleUserURL,
 )
 
 export const resolveLinkOnOpenSea = createLookupTableResolver<ChainId.Mainnet | ChainId.Rinkeby, string>(
