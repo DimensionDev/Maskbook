@@ -1,10 +1,11 @@
 import { memo } from 'react'
 import { Box, Button, Stack, Typography } from '@material-ui/core'
 import {
+    getNetworkName,
     ProviderType,
     TransactionStatusType,
     useChainColor,
-    useChainDetailed,
+    useChainId,
     useWallet,
     useWeb3StateContext,
 } from '@masknet/web3-shared'
@@ -40,7 +41,7 @@ export const WalletStateBar = memo(() => {
 
     const wallet = useWallet()
     const { providerType } = useWeb3StateContext()
-    const chainDetailed = useChainDetailed()
+    const chainId = useChainId()
     const chainColor = useChainColor()
 
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
@@ -55,7 +56,7 @@ export const WalletStateBar = memo(() => {
     return (
         <WalletStateBarUI
             isPending={!!pendingTransactions.length}
-            chain={chainDetailed?.chain}
+            networkName={getNetworkName(chainId)}
             chainColor={chainColor}
             providerType={providerType}
             openConnectWalletDialog={openConnectWalletDialog}
@@ -66,7 +67,7 @@ export const WalletStateBar = memo(() => {
 })
 
 interface WalletStateBarUIProps {
-    chain?: string
+    networkName?: string
     chainColor: string
     isPending: boolean
     providerType: ProviderType
@@ -76,7 +77,7 @@ interface WalletStateBarUIProps {
 }
 
 const WalletStateBarUI = memo<WalletStateBarUIProps>(
-    ({ chain, isPending, providerType, chainColor, walletAddress, walletName, openConnectWalletDialog }) => {
+    ({ networkName, isPending, providerType, chainColor, walletAddress, walletName, openConnectWalletDialog }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
 
@@ -91,7 +92,7 @@ const WalletStateBarUI = memo<WalletStateBarUIProps>(
                     className={classes.bar}>
                     <Typography component="span" sx={{ background: chainColor }} className={classes.dot} />
                     <Typography component="span" fontSize={12}>
-                        {chain}
+                        {networkName}
                     </Typography>
                 </Stack>
                 {isPending && (

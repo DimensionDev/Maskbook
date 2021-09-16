@@ -4,6 +4,7 @@ import { getRPCConstants } from '../constants'
 import { ChainId, NetworkType } from '../types'
 import COINGECKO_PLATFORMS from '../assets/coingecko-asset-platforms.json'
 import COINGECKO_COIN_LIST from '../assets/coingecko-coin-list.json'
+import { upperFirst } from 'lodash-es'
 
 export function isChainIdValid(chainId: ChainId, allowTestnet = false) {
     const chainDetailed = getChainDetailed(chainId)
@@ -113,4 +114,12 @@ export function getCoingeckoPlatformId(chainId: ChainId) {
 
 export function getCoingeckoCoinId(chainId: ChainId) {
     return COINGECKO_COIN_LIST.find((coin) => coin.chainId === chainId)?.id
+}
+
+export function getNetworkName(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    if (!chainDetailed) return ''
+    if (chainDetailed.networkId === ChainId.Matic) return chainDetailed.fullName
+    if (chainDetailed.network === 'mainnet') return chainDetailed.chain
+    return upperFirst(chainDetailed.network)
 }
