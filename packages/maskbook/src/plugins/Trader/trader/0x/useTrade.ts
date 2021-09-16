@@ -9,7 +9,7 @@ import { useSlippageTolerance } from '../0x/useSlippageTolerance'
 import { useTradeProviderSettings } from '../useTradeSettings'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 
-export function setTokenNativeNetwork(networkType: NetworkType) {
+export function getNativeTokenLabel(networkType: NetworkType) {
     switch (networkType) {
         case NetworkType.Ethereum:
             return 'ETH'
@@ -47,10 +47,10 @@ export function useTrade(
         if (outputAmount === '0' && !isExactIn) return null
 
         const sellToken = isNative(inputToken.address)
-            ? setTokenNativeNetwork(currentNetworkSettings.value)
+            ? getNativeTokenLabel(currentNetworkSettings.value)
             : inputToken.address
         const buyToken = isNative(outputToken.address)
-            ? setTokenNativeNetwork(currentNetworkSettings.value)
+            ? getNativeTokenLabel(currentNetworkSettings.value)
             : outputToken.address
         return PluginTraderRPC.swapQuote(
             {
