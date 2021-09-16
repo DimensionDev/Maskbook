@@ -229,7 +229,7 @@ const ContractInteraction = memo(() => {
             if (toBeClose) {
                 window.close()
             } else {
-                history.replace(PopupRoutes.TokenDetail)
+                history.goBack()
             }
         }
     }, [request, location.search, history])

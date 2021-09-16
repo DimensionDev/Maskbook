@@ -90,7 +90,7 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
                 (transaction.computedPayload?.name === 'transfer' ||
                     transaction.computedPayload?.name === 'transferFrom')
             ) {
-                return isSameAddress(transaction.receipt?.to, tokenAddress)
+                return isSameAddress(transaction.computedPayload?._tx?.to, tokenAddress)
             }
             return false
         }) ?? []
