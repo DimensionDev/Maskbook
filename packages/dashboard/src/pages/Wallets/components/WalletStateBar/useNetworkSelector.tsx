@@ -4,10 +4,11 @@ import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
     getChainIdFromNetworkType,
+    getNetworkTypeFromChainId,
+    NetworkType,
     ProviderType,
     resolveNetworkName,
     useChainId,
-    useNetworkType,
     useWeb3StateContext,
 } from '@masknet/web3-shared'
 import { ChainIcon, useMenu, useRemoteControlledDialog } from '@masknet/shared'
@@ -31,7 +32,6 @@ const useStyles = makeStyles()((theme) => ({
 export const useNetworkSelector = () => {
     const { classes } = useStyles()
     const currentChainId = useChainId()
-    const networkType = useNetworkType()
     const { providerType } = useWeb3StateContext()
 
     const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
@@ -54,7 +54,7 @@ export const useNetworkSelector = () => {
                     setConnectWalletDialog({
                         open: true,
                         providerType,
-                        networkType: networkType,
+                        networkType: getNetworkTypeFromChainId(chainId) ?? NetworkType.Ethereum,
                     })
                     break
                 case ProviderType.CustomNetwork:
