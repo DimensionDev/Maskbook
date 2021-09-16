@@ -237,7 +237,7 @@
         "explorers": [
             {
                 "name": "arbitrum",
-                "url": "https://explorer.arbitrum.io",
+                "url": "https://arbiscan.io",
                 "standard": "EIP3091"
             }
         ],

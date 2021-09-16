@@ -94,7 +94,10 @@ async function handleNonce(account: string, error: Error | null, response: JsonR
     const error_ = (error ?? response?.error) as { message: string } | undefined
     const message = error_?.message ?? ''
     if (!EthereumAddress.isValid(account)) return
-    if (/\bnonce\b/im.test(message) && /\b(low|high)\b/im.test(message)) resetNonce(account)
+    // nonce too low
+    // nonce too high
+    // transaction too old
+    if (/\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)) resetNonce(account)
     else commitNonce(account)
 }
 
