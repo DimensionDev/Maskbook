@@ -8,6 +8,7 @@ import {
 } from './settings'
 import {
     currentAccountSettings,
+    currentAccountMaskWalletSettings,
     currentBalanceSettings,
     currentEtherPriceSettings,
     currentBlockNumberSettings,
@@ -43,6 +44,7 @@ export function ToBeListened() {
         currentProviderSettings,
         currentNetworkSettings,
         currentAccountSettings,
+        currentAccountMaskWalletSettings,
         currentPortfolioDataProviderSettings,
         currentCollectibleDataProviderSettings,
         currentPersonaIdentifier,

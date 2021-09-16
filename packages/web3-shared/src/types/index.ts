@@ -43,7 +43,7 @@ export enum ChainId {
 }
 
 export enum ProviderType {
-    Maskbook = 'Maskbook',
+    MaskWallet = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
     CustomNetwork = 'CustomNetwork',

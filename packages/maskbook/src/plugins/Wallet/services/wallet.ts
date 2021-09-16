@@ -77,7 +77,7 @@ export async function getWallets(provider?: ProviderType) {
             }),
         )
     ).sort(sortWallet)
-    if (provider === ProviderType.Maskbook) return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
+    if (provider === ProviderType.MaskWallet) return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
     if (provider === currentProviderSettings.value)
         return wallets.filter(currySameAddress(currentAccountSettings.value))
     if (provider) return []
@@ -198,7 +198,7 @@ export async function importNewWallet(
         WalletMessages.events.walletsUpdated.sendToAll(undefined)
         await updateAccount({
             account: record.address,
-            providerType: ProviderType.Maskbook,
+            providerType: ProviderType.MaskWallet,
         })
     }
     return address

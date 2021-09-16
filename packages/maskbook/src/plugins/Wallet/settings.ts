@@ -16,6 +16,14 @@ export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDE
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
+export const currentAccountMaskWalletSettings = createGlobalSettings<string>(
+    `${PLUGIN_IDENTIFIER}+selectedMaskWalletAddress`,
+    '',
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
 /**
  * The network type of the selected wallet
  */
@@ -32,7 +40,7 @@ export const currentNetworkSettings = createGlobalSettings<NetworkType>(
  */
 export const currentProviderSettings = createGlobalSettings<ProviderType>(
     `${PLUGIN_IDENTIFIER}+selectedWalletProvider`,
-    ProviderType.Maskbook,
+    ProviderType.MaskWallet,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },

@@ -11,7 +11,7 @@ export async function createWeb3({
     privKeys = [] as string[],
 } = {}) {
     switch (providerType) {
-        case ProviderType.Maskbook:
+        case ProviderType.MaskWallet:
             return Maskbook.createWeb3({
                 chainId,
                 privKeys,

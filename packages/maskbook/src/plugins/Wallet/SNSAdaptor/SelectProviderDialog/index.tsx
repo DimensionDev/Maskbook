@@ -137,7 +137,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     )
     //#endregion
 
-    const wallets = useWallets(ProviderType.Maskbook)
+    const wallets = useWallets(ProviderType.MaskWallet)
     const selectedNetworkType = useValueRef(currentNetworkSettings)
     const selectedProviderType = useValueRef(currentProviderSettings)
 
@@ -156,7 +156,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
             closeDialog()
 
             switch (providerType) {
-                case ProviderType.Maskbook:
+                case ProviderType.MaskWallet:
                     // choose a wallet
                     if (wallets.length > 0) {
                         setSelectWalletDialog({
@@ -242,7 +242,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             <Provider
                                 logo={<MaskbookIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
                                 name="Mask Network"
-                                onClick={() => onConnectProvider(ProviderType.Maskbook)}
+                                onClick={() => onConnectProvider(ProviderType.MaskWallet)}
                             />
                         </ImageListItem>
                         {Flags.metamask_support_enabled ? (

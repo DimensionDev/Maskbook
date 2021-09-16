@@ -235,7 +235,7 @@ export default function DashboardSettingsRouter() {
                                 />
                                 {Flags.support_eth_network_switch &&
                                 account &&
-                                providerType === ProviderType.Maskbook ? (
+                                providerType === ProviderType.MaskWallet ? (
                                     <SettingsUIEnum
                                         classes={listStyle}
                                         enumObject={ChainId}
