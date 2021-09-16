@@ -94,7 +94,7 @@ const WalletStateBarUI = memo<WalletStateBarUIProps>(
                     className={classes.bar}
                     onClick={openMenu}>
                     <Typography component="span" sx={{ background: chainColor }} className={classes.dot} />
-                    <Typography component="span" fontSize={12}>
+                    <Typography component="span" sx={{ cursor: 'pointer' }} fontSize={12}>
                         {networkName}
                     </Typography>
                 </Stack>

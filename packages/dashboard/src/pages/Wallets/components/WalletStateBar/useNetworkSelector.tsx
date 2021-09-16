@@ -80,7 +80,9 @@ export const useNetworkSelector = () => {
                         <Stack justifyContent="center" width={18}>
                             {chainId === currentChainId && <SuccessIcon sx={{ fontSize: 18 }} />}
                         </Stack>
-                        <ChainIcon chainId={chainId} size={30} />
+                        <Stack justifyContent="center" alignItems="center" width={30}>
+                            <ChainIcon chainId={chainId} size={30} />
+                        </Stack>
                         <Typography flex={1}>{resolveNetworkName(network)}</Typography>
                     </Stack>
                 </MenuItem>
