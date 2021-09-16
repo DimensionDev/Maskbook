@@ -14,6 +14,7 @@ const useStyles = makeStyles()({
         position: 'absolute',
         left: 0,
         top: 46,
+        right: 0,
     },
     wrapper: {
         background:
@@ -73,6 +74,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                 window.open(resolveOpenSeaLink(avatar.address, avatar.tokenId), '_blank')
             }}>
             <Link
+                underline="none"
                 className={classes.link}
                 title={resolveOpenSeaLink(avatar.address, avatar.tokenId)}
                 href={resolveOpenSeaLink(avatar.address, avatar.tokenId)}
