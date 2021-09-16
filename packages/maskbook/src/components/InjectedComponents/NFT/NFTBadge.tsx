@@ -3,7 +3,6 @@ import { useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import { CircularProgress, Link, Typography } from '@material-ui/core'
-import { useEffect, useState } from 'react'
 import { useNFT } from './hooks'
 import type { AvatarMetaDB } from './types'
 
@@ -57,18 +56,9 @@ export function NFTBadge(props: NFTBadgeProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { avatar, size = 10 } = props
 
-    const [amount_, setAmount_] = useState('0')
-    const [symbol_, setSymbol_] = useState('')
     const { value = { amount: '0', symbol: 'ETH' }, loading } = useNFT(avatar.userId, avatar.address, avatar.tokenId)
 
     const { amount, symbol } = value
-    useEffect(() => {
-        setAmount_(amount)
-    }, [amount])
-
-    useEffect(() => {
-        setSymbol_(symbol)
-    }, [symbol])
 
     return (
         <div
@@ -89,10 +79,10 @@ export function NFTBadge(props: NFTBadgeProps) {
                     <Typography className={classes.text}>
                         {loading ? (
                             <CircularProgress size={size} />
-                        ) : amount_ === '0' ? (
+                        ) : amount === '0' ? (
                             'no offer'
                         ) : (
-                            `${amount_} ${symbol_}`
+                            `${amount} ${symbol}`
                         )}
                     </Typography>
                 </div>

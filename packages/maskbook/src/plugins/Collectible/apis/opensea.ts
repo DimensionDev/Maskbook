@@ -38,15 +38,13 @@ async function createOpenSeaPortChain(chainId: ChainId.Mainnet | ChainId.Rinkeby
     )
 }
 
-async function createOpenSeaAPI() {
-    const chainId = currentChainIdSettings.value
+async function createOpenSeaAPI(chainId: ChainId) {
     if (chainId === ChainId.Rinkeby) return OpenSeaRinkebyBaseURL
     return OpenSeaBaseURL
 }
 
 export async function getAsset(tokenAddress: string, tokenId: string, chainId?: ChainId) {
     const _chainId = chainId ?? currentChainIdSettings.value
-    console.log('chain:', _chainId)
     const sdkResponse = await (await createOpenSeaPort(_chainId)).api.getAsset({ tokenAddress, tokenId })
 
     const fetchResponse = await (
