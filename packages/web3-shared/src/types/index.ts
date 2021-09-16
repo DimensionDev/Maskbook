@@ -484,6 +484,16 @@ export enum FilterTransactionType {
     ALL = 'all',
     SEND = 'send',
     RECEIVE = 'receive',
+    CREATE_RED_PACKET = 'create_red_packet',
+    FILL_POOL = 'fill_pool',
+}
+
+export enum TransactionType {
+    SEND = 'Send',
+    RECEIVE = 'Receive',
+    TRANSFER = 'transfer',
+    CREATE_RED_PACKET = 'create_red_packet',
+    FILL_POOL = 'fill_pool',
 }
 
 export enum DebankTransactionDirection {

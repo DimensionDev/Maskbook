@@ -1,11 +1,13 @@
 import type {
     FungibleTokenDetailed,
+    ERC721ContractDetailed,
     GasNow,
     NetworkType,
     ProviderType,
     TransactionState,
     Wallet,
 } from '@masknet/web3-shared'
+import type { TransactionReceipt } from 'web3-core'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_IDENTIFIER } from './constants'
 
@@ -120,6 +122,16 @@ export type SelectTokenDialogEvent =
           token?: FungibleTokenDetailed
       }
 
+export type SelectNftContractDialogEvent = {
+    open: boolean
+    uuid: string
+
+    /**
+     * The selected detailed nft contract.
+     */
+    contract?: ERC721ContractDetailed
+}
+
 export interface WalletMessage {
     /**
      * Transaction dialog
@@ -177,6 +189,11 @@ export interface WalletMessage {
     selectTokenDialogUpdated: SelectTokenDialogEvent
 
     /**
+     * Select nft contract dialog
+     */
+    selectNftContractDialogUpdated: SelectNftContractDialogEvent
+
+    /**
      * WalletConnect QR Code dialog
      */
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
@@ -188,7 +205,9 @@ export interface WalletMessage {
 
     walletsUpdated: void
     phrasesUpdated: void
-    transactionsUpdated: void
+    addressBookUpdated: void
+    recentTransactionsUpdated: void
+    receiptUpdated: TransactionReceipt
     requestsUpdated: void
     erc20TokensUpdated: void
     erc721TokensUpdated: void

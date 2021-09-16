@@ -45,7 +45,7 @@ function SignRequestHandler(props: SignRequest) {
     }
     return (
         <DialogContent className={classes.root}>
-            <Typography variant="h2">Sign request:</Typography>
+            <Typography variant="h3">Sign request:</Typography>
             <Typography variant="body1">
                 <Box sx={{ textDecoration: 'underline', display: 'inline' }} component="span">
                     Unknown source

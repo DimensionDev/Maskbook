@@ -1,37 +1,21 @@
-import { useEffect, useState } from 'react'
-import { useAsyncRetry, useInterval } from 'react-use'
+import { useEffect } from 'react'
+import { useAsyncRetry } from 'react-use'
 import { TransactionStatusType, useAccount, useChainId } from '@masknet/web3-shared'
 import { PluginMessages, PluginServices } from '../../../API'
-
-const UPDATE_TRANSACTION_LATENCY = 30 /* seconds */ * 1000 /* milliseconds  */
-
-async function getTransactions(account: string, status?: TransactionStatusType) {
-    if (!account) return []
-    const transactions = await PluginServices.Wallet.getRecentTransactionsFromChain(account)
-    return transactions.filter((x) => (typeof status !== 'undefined' ? x.status === status : true))
-}
 
 // todo: should merge in plugin infra package when plugin infra ready
 export function useRecentTransactions(status?: TransactionStatusType) {
     const account = useAccount()
     const chainId = useChainId()
-    const [flag, setFlag] = useState(false)
 
-    // update transactions status periodically
-    const [delay, setDelay] = useState(0)
-    useInterval(() => setFlag((x) => !x), delay)
+    const result = useAsyncRetry(async () => {
+        if (!account) return []
+        const transactions = await PluginServices.Wallet.getRecentTransactionList(account)
+        return transactions.filter((x) => (typeof status !== 'undefined' ? x.status === status : true))
+    }, [account, status, chainId])
 
-    // update transactions by message center
-    useEffect(() => PluginMessages.Wallet.events.transactionsUpdated.on(() => setFlag((x) => !x)), [setFlag])
+    useEffect(() => PluginMessages.Wallet.events.receiptUpdated.on(result.retry), [result.retry])
+    useEffect(() => PluginMessages.Wallet.events.recentTransactionsUpdated.on(result.retry), [result.retry])
 
-    return useAsyncRetry(async () => {
-        try {
-            setDelay(0)
-            return getTransactions(account, status)
-        } catch (error) {
-            throw error
-        } finally {
-            setDelay(UPDATE_TRANSACTION_LATENCY)
-        }
-    }, [account, status, flag, chainId])
+    return result
 }

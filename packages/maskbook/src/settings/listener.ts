@@ -24,6 +24,8 @@ import {
     ethereumNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
     binanceNetworkTradeProviderSettings,
+    arbitrumNetworkTradeProviderSettings,
+    xdaiNetworkTradeProviderSettings,
 } from '../plugins/Trader/settings'
 
 export function ToBeListened() {
@@ -47,6 +49,8 @@ export function ToBeListened() {
         ethereumNetworkTradeProviderSettings,
         polygonNetworkTradeProviderSettings,
         binanceNetworkTradeProviderSettings,
+        arbitrumNetworkTradeProviderSettings,
+        xdaiNetworkTradeProviderSettings,
         currentIsMaskWalletLockedSettings,
     }
 }

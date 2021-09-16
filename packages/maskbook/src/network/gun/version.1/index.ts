@@ -41,10 +41,19 @@ export const gun1 = (gun2 as any as ReturnType<typeof typeHelper>).get('maskbook
  * @deprecated Do not use in new code
  */
 export async function queryVersion1PostAESKey(salt: string, myUsername: string) {
-    const result = await gun1.get('posts').get(salt).get(myUsername).then!()
+    const result = await gun1
+        .get('posts')
+        .get(salt)
+        // @ts-expect-error
+        .get(myUsername).then!()
     if (result?.encryptedKey && result.salt) return result
     return undefined
 }
 export async function getVersion1PostByHash(postSalt: string) {
-    return gun1.get('posts').get(postSalt).then!()
+    return (
+        gun1
+            .get('posts')
+            // @ts-expect-error
+            .get(postSalt).then!()
+    )
 }

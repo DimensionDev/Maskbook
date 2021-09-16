@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "=0.9.0-20210726055325-dfbe7fd",
-    "@dimensiondev/kit": "^0.0.0-20210712114527-dc8eac6",
+    "@dimensiondev/kit": "^0.0.0-20210913111737-84c17d7",
     "@hookform/resolvers": "^2.8.0",
     "@masknet/backup-format": "workspace:*",
     "@masknet/icons": "workspace:*",

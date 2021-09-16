@@ -14,11 +14,13 @@ import { RoutePaths } from '../../type'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../API'
 import { WalletStateBar } from './components/WalletStateBar'
+import { useDashboardI18N } from '../../locales'
 
 function Wallets() {
     const wallet = useWallet()
     const wallets = useWallets()
     const navigate = useNavigate()
+    const t = useDashboardI18N()
 
     const [receiveOpen, setReceiveOpen] = useState(false)
 
@@ -40,7 +42,7 @@ function Wallets() {
 
     return (
         <PageFrame
-            title={wallets.length === 0 ? 'Create a Wallet' : 'Market'}
+            title={wallets.length === 0 ? t.create_wallet_form_title() : t.wallets()}
             noBackgroundFill
             primaryAction={<WalletStateBar />}>
             {wallets.length === 0 ? (

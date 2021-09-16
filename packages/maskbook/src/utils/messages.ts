@@ -35,6 +35,15 @@ export interface ProfileNFTsPageEvent {
     show: boolean
 }
 
+export interface NFTAvatarEvent {
+    userId: string
+    tokenId: string
+    image?: string
+    amount: string
+    address: string
+    avatarId: string
+}
+
 export interface MaskMessages extends SettingsEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: { text: string; image?: Blob }
@@ -63,12 +72,16 @@ export interface MaskMessages extends SettingsEvents {
     pluginEnabled: string
     pluginDisabled: string
 
+    // TODO: move to plugin message
     profileNFTsPageUpdated: ProfileNFTsPageEvent
+    // TODO: move to plugin message
     profileNFTsTabUpdated: 'reset'
     signRequestApproved: {
         requestID: string
         selectedPersona: PersonaIdentifier
     }
+
+    NFTAvatarUpdated: NFTAvatarEvent
     maskSDKHotModuleReload: void
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })

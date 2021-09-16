@@ -24,6 +24,16 @@ export const [useBinanceNetworkTradeProvider] = createGlobalState(
     Messages.events.binanceNetworkTradeProviderSettings.on,
 )
 
+export const [useArbitrumNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getArbitrumNetworkTradeProvider,
+    Messages.events.arbitrumNetworkTradeProviderSettings.on,
+)
+
+export const [useXDaiNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getxDaiNetworkTradeProvider,
+    Messages.events.xdaiNetworkTradeProviderSettings.on,
+)
+
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 
 interface BackupBaseRequest {

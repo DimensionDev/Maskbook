@@ -27,6 +27,7 @@ export function PersonaRecordFromJSONFormat(persona: BackupJSONFileLatest['perso
         nickname: persona.nickname,
         mnemonic: persona.mnemonic,
         localKey: persona.localKey,
+        hasLogout: false,
         linkedProfiles: new IdentifierMap(new Map(persona.linkedProfiles), ProfileIdentifier),
     }
 }

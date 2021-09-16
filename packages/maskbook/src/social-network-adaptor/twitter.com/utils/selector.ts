@@ -59,10 +59,13 @@ export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = 
 
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
 
+// `aside *` selectors are for mobile mode
 export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('header[role=banner] a[href="/compose/tweet"]')
+    querySelector<HTMLAnchorElement>('header[role=banner] a[href="/compose/tweet"],aside a[href="/compose/tweet"]')
 export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('header[role=banner] a[href="/compose/tweet"] div[dir]')
+    querySelector<HTMLAnchorElement>(
+        'header[role=banner] a[href="/compose/tweet"] div[dir],aside a[href="/compose/tweet"] div[dir]',
+    )
 
 export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3)')
@@ -90,6 +93,11 @@ export const searchResultHeadingSelector: () => LiveSelector<E, true> = () =>
 
 export const postEditorToolbarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="toolBar"] > div > *:last-child')
+
+export const twitterMainAvatarSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="toolBar"]')
+        .closest<HTMLElement>(4)
+        .querySelector<HTMLElement>('div > a > div > :nth-child(2) > div')
 
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
@@ -150,6 +158,7 @@ export const postsContentSelector = () =>
         }), // timeline page for new twitter
     )
 
+export const postAvatarsContentSelector = () => querySelectorAll('[data-testid="tweet"] > div')
 const base = querySelector<HTMLScriptElement>('#react-root + script')
 const handle = /"screen_name":"(.*?)"/
 const name = /"name":"(.*?)"/
@@ -168,3 +177,38 @@ export const selfInfoSelectors = () => ({
     bio: p(bio, 1),
     userAvatar: p(avatar, 1),
 })
+
+//#region nft avatar
+export const searchProfileAvatarSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
+
+export const searchProfileAvatarParentSelector = () =>
+    querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]').at(1).closest<HTMLDivElement>(2).evaluate()[0]
+        .firstChild?.firstChild?.lastChild?.firstChild as HTMLDivElement
+
+export const searchAvatarSelectorInput = () =>
+    querySelectorAll<E>('[data-testid="fileInput"]')
+        .at(1)
+        .closest<HTMLDivElement>(2)
+        .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > :first-child')
+export const searchAvatarSelectorImage = () =>
+    querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]')
+        .at(1)
+        .closest<HTMLDivElement>(2)
+        .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > img')
+
+export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(0)
+export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
+//#endregion
+
+//#region avatar selector
+
+export const searchTwitterAvatarSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] > div > :nth-child(2) > div > div > div > :nth-child(2) > div > a')
+//#endregion
+
+//#region twitter avatar
+export const searchAccountSwitherButtonSelector = () =>
+    querySelector<E>('[data-testid="SideNav_AccountSwitcher_Button"]')
+
+export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserCell"]')
+//#endregion

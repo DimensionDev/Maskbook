@@ -4,7 +4,6 @@ import {
     Asset,
     EthereumTokenType,
     formatBalance,
-    getCoingeckoCoinId,
     isGreaterThan,
     isZero,
     pow10,
@@ -150,7 +149,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const { value: nativeToken } = useNativeTokenDetailed()
 
-    const etherPrice = useNativeTokenPrice(getCoingeckoCoinId(nativeToken?.symbol.toLowerCase() ?? '') ?? '')
+    const etherPrice = useNativeTokenPrice(nativeToken?.chainId)
 
     const { value: estimateGasFees } = useAsync(async () => WalletRPC.getEstimateGasFees(chainId), [chainId])
 

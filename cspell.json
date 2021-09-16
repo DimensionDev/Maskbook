@@ -217,9 +217,13 @@
         "counterparty",
         "jailbroken",
         "misoperation",
-        "majeure"
+        "majeure",
+        "Swither",
+        "nftscan"
     ],
     "ignoreWords": [
+        "cryptopunks",
+        "nftred",
         "BSCT",
         "BTCB",
         "COTM",
@@ -269,6 +273,7 @@
         "nrge",
         "pnpm",
         "setx",
+        "pkts",
         "swaptoken",
         "NYFI",
         "Csvg",
@@ -282,10 +287,12 @@
         "unlockprotocol",
         "unlocklock",
         "chainid",
+        "NFT",
         "powahs",
         "gamification",
         "Defi",
-        "powah"
+        "powah",
+        "Switcher"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

@@ -28,6 +28,9 @@ const useStyles = makeStyles()((theme) => ({
         verticalAlign: 'middle',
     },
     dialogBackdropRoot: {},
+    dialogCloseButton: {
+        color: theme.palette.text.primary,
+    },
 }))
 
 export type InjectedDialogClassKey =

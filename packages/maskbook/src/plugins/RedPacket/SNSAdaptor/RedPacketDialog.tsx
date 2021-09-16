@@ -4,11 +4,11 @@ import { usePortalShadowRoot, makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { RedPacketJSONPayload, DialogTabs, RedPacketRecord } from '../types'
+import { RedPacketJSONPayload, DialogTabs, RedPacketRecord, RpTypeTabs } from '../types'
 import { RedPacketRPC } from '../messages'
 import { RedPacketMetaKey } from '../constants'
-import { RedPacketForm } from './RedPacketForm'
-import { RedPacketHistoryList } from './RedPacketHistoryList'
+import { RedPacketCreateNew } from './RedPacketCreateNew'
+import { RedPacketPast } from './RedPacketPast'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import Services from '../../../extension/service'
 import Web3Utils from 'web3-utils'
@@ -38,6 +38,17 @@ const useStyles = makeStyles()((theme) => ({
         left: 0,
         right: 0,
         position: 'absolute',
+    },
+    focusTab: {
+        backgroundColor: theme.palette.mode === 'light' ? 'rgba(247, 249, 250, 1)' : 'rgba(255, 255, 255, 0.08)',
+    },
+    dialogContent: {
+        padding: 0,
+    },
+    tabPaper: {
+        position: 'sticky',
+        top: 0,
+        zIndex: 5000,
     },
 }))
 
@@ -216,14 +227,20 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         setSettings(val)
     }, [])
 
+    const tokenState = useState(RpTypeTabs.ERC20)
+
+    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 540
+
     const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: t('plugin_red_packet_create_new'),
                 children: usePortalShadowRoot((container) => (
-                    <RedPacketForm
+                    <RedPacketCreateNew
                         origin={settings}
                         onNext={onNext}
+                        state={tokenState}
+                        onClose={onClose}
                         onChange={onChange}
                         SelectMenuProps={{ container }}
                     />
@@ -232,22 +249,22 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             },
             {
                 label: t('plugin_red_packet_select_existing'),
-                children: <RedPacketHistoryList onSelect={onCreateOrSelect} onClose={onClose} />,
+                children: <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />,
                 sx: { p: 0 },
             },
         ],
         state,
+        classes: {
+            focusTab: classes.focusTab,
+            tabPaper: classes.tabPaper,
+        },
     }
 
     return (
         <InjectedDialog open={props.open} title={t('plugin_red_packet_display_name')} onClose={onClose}>
-            <DialogContent className={classes.content}>
+            <DialogContent className={classes.dialogContent}>
                 {step === CreateRedPacketPageStep.NewRedPacketPage ? (
-                    <AbstractTab
-                        classes={{ tabs: classes.tabs }}
-                        height={state[0] === DialogTabs.create ? 280 : 320}
-                        {...tabProps}
-                    />
+                    <AbstractTab height={dialogContentHeight} {...tabProps} />
                 ) : null}
                 {step === CreateRedPacketPageStep.ConfirmPage ? (
                     <RedPacketConfirmDialog

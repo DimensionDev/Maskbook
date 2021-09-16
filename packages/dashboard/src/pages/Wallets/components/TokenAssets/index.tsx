@@ -35,10 +35,10 @@ const useStyles = makeStyles()((theme) => ({
 export enum AssetTab {
     Token = 'Token',
     Investment = 'Investment',
-    Collections = 'Collections',
+    Collectibles = 'Collectibles',
 }
 
-const assetTabs = [AssetTab.Token, AssetTab.Collections] as const
+const assetTabs = [AssetTab.Token, AssetTab.Collectibles] as const
 
 export const TokenAssets = memo(() => {
     const t = useDashboardI18N()
@@ -46,7 +46,7 @@ export const TokenAssets = memo(() => {
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),
         [AssetTab.Investment]: t.wallets_assets_investment(),
-        [AssetTab.Collections]: t.wallets_assets_collections(),
+        [AssetTab.Collectibles]: t.wallets_assets_collectibles(),
     }
 
     const [activeTab, setActiveTab] = useState<AssetTab>(assetTabs[0])
@@ -84,9 +84,9 @@ export const TokenAssets = memo(() => {
                         <TokenTable />
                     </TabPanel>
                     <TabPanel
-                        value={AssetTab.Collections}
-                        key={AssetTab.Collections}
-                        className={activeTab === AssetTab.Collections ? classes.tab : undefined}>
+                        value={AssetTab.Collectibles}
+                        key={AssetTab.Collectibles}
+                        className={activeTab === AssetTab.Collectibles ? classes.tab : undefined}>
                         <CollectibleList />
                     </TabPanel>
                 </TabContext>

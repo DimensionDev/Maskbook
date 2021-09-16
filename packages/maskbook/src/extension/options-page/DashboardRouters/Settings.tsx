@@ -50,6 +50,9 @@ import { useCurrentTradeProvider } from '../../../plugins/Trader/trending/useCur
 import { useCurrentDataProvider } from '../../../plugins/Trader/trending/useCurrentDataProvider'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { safeUnreachable } from '@dimensiondev/kit'
+import StorageIcon from '@material-ui/icons/Storage'
+import { useHistory } from 'react-router'
+import { DashboardRoute } from '../Route'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -187,6 +190,7 @@ export default function DashboardSettingsRouter() {
         listItemRoot: classes.listItemRoot,
         listItemIcon: classes.listItemIcon,
     }
+    const history = useHistory()
 
     //#region the trader plugin
     const { value: dataProviders = [] } = useAvailableDataProviders()
@@ -283,6 +287,25 @@ export default function DashboardSettingsRouter() {
                             </List>
                         </Card>
                     </Paper>
+
+                    {Flags.nft_avatar_enabled ? (
+                        <Paper component="section" className={classes.section} elevation={elevation}>
+                            <Typography className={classes.title} variant="h6" color="textPrimary">
+                                {t('settings_title_bind_nft_avatar')}
+                            </Typography>
+                            <Card elevation={0}>
+                                <List className={classes.list} disablePadding>
+                                    <SettingsUIDummy
+                                        classes={listStyle}
+                                        icon={<StorageIcon />}
+                                        primary="Bind NFT Avatar"
+                                        secondary=""
+                                        onClick={() => history.push(DashboardRoute.NFTAvatars)}
+                                    />
+                                </List>
+                            </Card>
+                        </Paper>
+                    ) : null}
 
                     <Paper component="section" className={classes.section} elevation={elevation}>
                         <Typography className={classes.title} variant="h6" color="textPrimary">
