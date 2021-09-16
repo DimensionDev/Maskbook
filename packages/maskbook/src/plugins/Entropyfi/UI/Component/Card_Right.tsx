@@ -16,6 +16,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginEntropyfiMessages } from '../../messages'
 
 import { CountDown } from './Count_Down'
+import { PoolStatus } from '../../constants'
 
 const useStyles = makeStyles()((theme) => ({
     metaDeposit: {
@@ -177,9 +178,8 @@ export function CardRight(props: any) {
         coinId === 'ETH-GAS'
             ? `${InitialPriceNUM ? initialPriceTEXT : '-'}Gwei`
             : `$${InitialPriceNUM ? initialPriceTEXT : '-'}`
-    const locked = usePoolStatus(chainId, props.poolId) ?? 4
-    const isLocked = locked === 2 ? false : true
-    console.log('isLocked:', isLocked)
+    const isLocked = usePoolStatus(chainId, props.poolId) === PoolStatus.Accepting
+
     //#region the deposit dialog
     const { setDialog: openDepositDialog } = useRemoteControlledDialog(PluginEntropyfiMessages.DepositDialogUpdated)
     const onDepositLong = useCallback(() => {
