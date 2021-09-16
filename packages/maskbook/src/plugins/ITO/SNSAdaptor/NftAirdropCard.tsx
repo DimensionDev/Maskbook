@@ -210,7 +210,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
         </Box>
     ) : (
         <Box className={classes.root}>
-            <Typography className={classes.title}>{campaignInfos[0].campaignInfo.name}</Typography>
+            <Typography className={classes.title}>SocialFi Launch Campaign</Typography>
             <div className={classes.claimTimeWrapper}>
                 <Typography className={classes.text}>{t('wallet_airdrop_nft_unclaimed_title')}</Typography>
 
