@@ -1,4 +1,4 @@
-import { MemoryRouter, Redirect, Route } from 'react-router'
+import { MemoryRouter, Redirect, Route, Switch } from 'react-router'
 import { FileRouter } from '../../constants'
 import { Upload } from './Upload'
 import { Uploaded } from './Uploaded'
@@ -6,9 +6,11 @@ import { Uploading } from './Uploading'
 
 export const Entry: React.FC = () => (
     <MemoryRouter>
-        <Route path={FileRouter.upload} component={Upload} />
-        <Route path={FileRouter.uploading} component={Uploading} />
-        <Route path={FileRouter.uploaded} component={Uploaded} />
-        <Redirect to={FileRouter.upload} />
+        <Switch>
+            <Route path={FileRouter.upload} children={<Upload />} />
+            <Route path={FileRouter.uploading} children={<Uploading />} />
+            <Route path={FileRouter.uploaded} children={<Uploaded />} />
+            <Redirect to={FileRouter.upload} />
+        </Switch>
     </MemoryRouter>
 )
