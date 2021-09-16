@@ -372,7 +372,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         <AbstractTab {...tabProps} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
-                        {showNftAirdrop || loadingAirdrop ? (
+                        {(showNftAirdrop || loadingAirdrop) && currentChainId === ChainId.Matic ? (
                             <NftAirdropCard
                                 campaignInfos={campaignInfos!}
                                 loading={loadingAirdrop}
