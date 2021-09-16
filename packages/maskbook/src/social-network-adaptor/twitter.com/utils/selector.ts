@@ -59,10 +59,13 @@ export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = 
 
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
 
+// `aside *` selectors are for mobile mode
 export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('header[role=banner] a[href="/compose/tweet"]')
+    querySelector<HTMLAnchorElement>('header[role=banner] a[href="/compose/tweet"],aside a[href="/compose/tweet"]')
 export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('header[role=banner] a[href="/compose/tweet"] div[dir]')
+    querySelector<HTMLAnchorElement>(
+        'header[role=banner] a[href="/compose/tweet"] div[dir],aside a[href="/compose/tweet"] div[dir]',
+    )
 
 export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3)')
