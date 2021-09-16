@@ -32,7 +32,7 @@ const Unlock = lazy(() => import('./Unlock'))
 
 export default function Wallet() {
     const wallet = useWallet()
-    const wallets = useWallets(ProviderType.Maskbook)
+    const wallets = useWallets(ProviderType.MaskWallet)
     const location = useLocation()
     const history = useHistory()
 

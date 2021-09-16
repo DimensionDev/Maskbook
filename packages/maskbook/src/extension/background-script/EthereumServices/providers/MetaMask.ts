@@ -16,7 +16,6 @@ async function onAccountsChanged(accounts: string[]) {
         account: first(accounts),
         providerType: ProviderType.MetaMask,
         chainId: typeof provider?.chainId === 'string' ? Number.parseInt(provider.chainId, 16) : undefined,
-        networkType: undefined,
     })
 }
 
@@ -28,7 +27,6 @@ async function onChainIdChanged(id: string) {
     if (currentChainIdSettings.value === chainId) return
     await updateAccount({
         chainId,
-        networkType: undefined,
     })
 }
 

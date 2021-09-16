@@ -14,6 +14,7 @@ import {
     currentPortfolioDataProviderSettings,
     currentEtherPriceSettings,
     currentTokenPricesSettings,
+    currentAccountMaskWalletSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
@@ -33,6 +34,7 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
         },
         chainId: createSubscriptionFromSettings(currentChainIdSettings),
         account: createSubscriptionFromSettings(currentAccountSettings),
+        accountMaskWallet: createSubscriptionFromSettings(currentAccountMaskWalletSettings),
         balance: createSubscriptionFromSettings(currentBalanceSettings),
         gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
         blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),

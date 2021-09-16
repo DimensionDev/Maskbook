@@ -10,6 +10,7 @@ import {
     NetworkType,
     ProviderType,
     resolveNetworkName,
+    useAccount,
 } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
 import { useMenu, useValueRef } from '@masknet/shared'
@@ -53,13 +54,18 @@ const useStyles = makeStyles()((theme) => ({
 
 export const NetworkSelector = memo(() => {
     const currentChainId = useValueRef(currentChainIdSettings)
+    const account = useAccount(ProviderType.MaskWallet)
     const { value: networks } = useAsync(async () => WalletRPC.getSupportedNetworks(), [])
-    const onChainChange = useCallback((chainId: ChainId) => {
-        WalletRPC.updateAccount({
-            chainId,
-            providerType: ProviderType.Maskbook,
-        })
-    }, [])
+    const onChainChange = useCallback(
+        async (chainId: ChainId) => {
+            await WalletRPC.updateAccount({
+                chainId,
+                account,
+                providerType: ProviderType.MaskWallet,
+            })
+        },
+        [account],
+    )
 
     return <NetworkSelectorUI currentChainId={currentChainId} onChainChange={onChainChange} networks={networks} />
 })

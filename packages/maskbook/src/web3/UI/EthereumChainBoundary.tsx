@@ -56,7 +56,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         if (!chainDetailedCAIP) throw new Error('Unknown network type.')
 
         // if mask wallet was used it can switch network automatically
-        if (providerType === ProviderType.Maskbook) {
+        if (providerType === ProviderType.MaskWallet) {
             await WalletRPC.updateAccount({
                 chainId: expectedChainId,
             })
