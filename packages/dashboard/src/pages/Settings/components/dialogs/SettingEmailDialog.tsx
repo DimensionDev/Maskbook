@@ -123,7 +123,11 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
                 </Box>
             ) : (
                 <Box className={classes.container} sx={{ paddingTop: '24px' }}>
-                    <Typography>{t.settings_dialogs_current_email_validation()}</Typography>
+                    <Typography sx={{ paddingBottom: '8px' }}>
+                        {step === 0
+                            ? t.settings_dialogs_change_email_validation()
+                            : t.settings_dialogs_current_email_validation()}
+                    </Typography>
                     <Typography color="primary" fontWeight="bold" variant="h4">
                         {email}
                     </Typography>
