@@ -186,7 +186,12 @@ export const PageFrame = memo((props: PageFrameProps) => {
                     <NavigationDrawer
                         open={drawerOpen}
                         onClose={toggleDrawer}
-                        hideBackdrop
+                        ModalProps={{
+                            BackdropProps: {
+                                sx: { background: 'transparent' },
+                            },
+                        }}
+                        transitionDuration={300}
                         variant="temporary"
                         elevation={0}>
                         <Navigation />
