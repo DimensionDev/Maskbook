@@ -59,16 +59,9 @@ export interface MaskMessages extends SettingsEvents {
     createInternalSettingsUpdated: SettingsUpdateEvent
     requestComposition: CompositionRequest
     replaceComposition: TypedMessage
-    personaChanged: (UpdateEvent<PersonaIdentifier> & { owned: boolean })[]
-    personaAvatarChanged: UpdateEvent<string>
+    ownPersonaChanged: void
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
     relationsChanged: (UpdateEvent<ProfileIdentifier> & { favor: 0 | 1 })[]
-    /** Public Key found / Changed */
-    linkedProfilesChanged: {
-        of: ProfileIdentifier
-        before: PersonaIdentifier | undefined
-        after: PersonaIdentifier | undefined
-    }[]
     pluginEnabled: string
     pluginDisabled: string
 

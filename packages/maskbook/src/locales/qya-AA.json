@@ -248,6 +248,8 @@
     "settings_post_replacement_desc": "crwdns4449:0crwdne4449:0",
     "settings_title_general": "crwdns4451:0crwdne4451:0",
     "settings_title_advanced_options": "crwdns4453:0crwdne4453:0",
+    "settings_title_bind_nft_avatar": "crwdns8185:0crwdne8185:0",
+    "bind_nft_avatar": "crwdns8187:0crwdne8187:0",
     "settings_title_database_management": "crwdns4455:0crwdne4455:0",
     "settings_launch_page": "crwdns4457:0crwdne4457:0",
     "settings_launch_page_secondary": "crwdns4459:0crwdne4459:0",
@@ -905,5 +907,9 @@
     "popups_missing_parameter_caption": "crwdns7827:0crwdne7827:0",
     "popups_persona_start_up_tip": "crwdns7829:0crwdne7829:0",
     "popups_persona_new_persona": "crwdns7831:0crwdne7831:0",
-    "popups_persona_restore_backups": "crwdns7833:0crwdne7833:0"
+    "popups_persona_restore_backups": "crwdns7833:0crwdne7833:0",
+    "profile_nft_avatar_set": "crwdns8189:0crwdne8189:0",
+    "settings_nft_avatar_whitelist": "crwdns8197:0crwdne8197:0",
+    "unbind_nft_avatar": "crwdns8199:0crwdne8199:0",
+    "delete_nft_avatar": "crwdns8201:0{{userId}}crwdne8201:0"
 }

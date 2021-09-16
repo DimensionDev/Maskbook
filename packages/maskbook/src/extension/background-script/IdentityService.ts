@@ -307,7 +307,7 @@ export const updateCurrentPersonaAvatar = async (avatar: Blob) => {
 
     if (identifier) {
         await storeAvatar(identifier, await blobToArrayBuffer(avatar))
-        MaskMessage.events.personaAvatarChanged.sendToAll({ reason: 'update', of: identifier?.toText() })
+        MaskMessage.events.ownPersonaChanged.sendToAll(undefined)
     }
 }
 

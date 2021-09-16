@@ -611,7 +611,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         )
         if (!persona_.hasPrivateKey) throw new Error('invalid persona')
         await Services.Identity.setupPersona(persona_.identifier)
-        MaskMessage.events.personaChanged.sendToAll([{ of: persona, owned: true, reason: 'new' }])
+        MaskMessage.events.ownPersonaChanged.sendToAll(undefined)
     }
     const onCreate = async () => {
         const content = t('setup_guide_say_hello_content')

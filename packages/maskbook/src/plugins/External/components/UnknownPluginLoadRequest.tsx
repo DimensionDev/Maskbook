@@ -25,7 +25,7 @@ export function UnknownPluginLoadRequestUI({ plugins, onConfirm }: UnknownPlugin
     if (plugins.length === 1)
         return (
             <SnackbarContent
-                message={`Do you want to load a new plugin from ${plugins[0].url}?`}
+                message={`Do you want to load an external plugin from ${plugins[0].url}?`}
                 action={<Button onClick={confirmAll}>Load</Button>}
             />
         )
