@@ -3,6 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     EthereumRpcType,
+    formatGweiToWei,
     formatWeiToEther,
     getChainFromChainId,
     getChainIdFromNetworkType,
@@ -251,7 +252,7 @@ const ContractInteraction = memo(() => {
     // gas fee
     const gasPriceEIP1159 = maxFeePerGas
         ? new BigNumber(maxFeePerGas, 16).idiv(10 ** 9).toString()
-        : new BigNumber(defaultPrices?.maxFeePerGas ?? 0).multipliedBy(10 ** 9)
+        : formatGweiToWei(defaultPrices?.maxFeePerGas ?? 0)
     const gasPricePriorEIP1159 = (gasPrice as string) ?? defaultPrices?.gasPrice ?? 0
     const gasFee = new BigNumber(
         isEIP1159Supported(getChainIdFromNetworkType(networkType)) ? gasPriceEIP1159 : gasPricePriorEIP1159,

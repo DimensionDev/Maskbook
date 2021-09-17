@@ -7,6 +7,7 @@ import {
     Asset,
     EthereumTokenType,
     formatBalance,
+    formatGweiToWei,
     formatWeiToGwei,
     getChainFromChainId,
     isGreaterThan,
@@ -237,7 +238,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 .multipliedBy(pow10(selectedAsset?.token.decimals || 0))
                 .toFixed()
             await transferCallback(transferAmount, data.address, {
-                gasPrice: new BigNumber(data.gasPrice).multipliedBy(10 ** 9).toNumber(),
+                gasPrice: formatGweiToWei(data.gasPrice).toNumber(),
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
         },

@@ -6,6 +6,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     EthereumRpcType,
+    formatGweiToWei,
     formatWeiToEther,
     formatWeiToGwei,
     getChainFromChainId,
@@ -187,8 +188,8 @@ export const Prior1559GasSetting = memo(() => {
             if (value) {
                 const config = {
                     ...value.payload.params[0],
-                    gas: `0x${new BigNumber(data.gasLimit).toString(16)}`,
-                    gasPrice: `0x${new BigNumber(data.gasPrice).multipliedBy(10 ** 9).toString(16)}`,
+                    gas: `0x${formatGweiToWei(data.gasPrice).toString(16)}`,
+                    gasPrice: `0x${formatGweiToWei(data.gasPrice).toString(16)}`,
                 }
 
                 await WalletRPC.updateUnconfirmedRequest({

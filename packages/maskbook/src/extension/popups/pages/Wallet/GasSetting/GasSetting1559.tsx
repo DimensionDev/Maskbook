@@ -1,6 +1,12 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useEffect, useMemo, useState } from 'react'
-import { EthereumRpcType, formatGweiToWei, useChainId, useNativeTokenDetailed } from '@masknet/web3-shared'
+import {
+    EthereumRpcType,
+    formatGweiToWei,
+    formatWeiToGwei,
+    useChainId,
+    useNativeTokenDetailed,
+} from '@masknet/web3-shared'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import BigNumber from 'bignumber.js'
@@ -195,7 +201,10 @@ export const GasSetting1559 = memo(() => {
                     'maxPriorityFeePerGas',
                     new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas, 16).idiv(10 ** 9).toString(),
                 )
-                setValue('maxFeePerGas', new BigNumber(value.computedPayload._tx.maxFeePerGas).idiv(10 ** 9).toString())
+                setValue(
+                    'maxFeePerGas',
+                    new BigNumber(value.computedPayload._tx.maxFeePerGas, 16).idiv(10 ** 9).toString(),
+                )
             } else {
                 setOption(1)
             }
@@ -283,8 +292,7 @@ export const GasSetting1559 = memo(() => {
                         <Typography>{new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)} Gwei</Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: new BigNumber(content?.suggestedMaxFeePerGas ?? 0)
-                                    .div(10 ** 9)
+                                usd: formatWeiToGwei(content?.suggestedMaxFeePerGas ?? 0)
                                     .times(nativeTokenPrice)
                                     .toPrecision(3),
                             })}
@@ -318,8 +326,7 @@ export const GasSetting1559 = memo(() => {
                     </Typography>
                     <Typography component="span" className={classes.price}>
                         {t('popups_wallet_gas_fee_settings_usd', {
-                            usd: new BigNumber(Number(maxPriorityFeePerGas) ?? 0)
-                                .div(10 ** 9)
+                            usd: formatWeiToGwei(Number(maxPriorityFeePerGas) ?? 0)
                                 .times(nativeTokenPrice)
                                 .toPrecision(3),
                         })}
@@ -350,8 +357,7 @@ export const GasSetting1559 = memo(() => {
                     </Typography>
                     <Typography component="span" className={classes.price}>
                         {t('popups_wallet_gas_fee_settings_usd', {
-                            usd: new BigNumber(Number(maxFeePerGas) ?? 0)
-                                .div(10 ** 9)
+                            usd: formatWeiToGwei(Number(maxFeePerGas) ?? 0)
                                 .times(nativeTokenPrice)
                                 .toPrecision(3),
                         })}
