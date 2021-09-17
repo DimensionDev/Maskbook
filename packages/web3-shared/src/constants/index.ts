@@ -44,7 +44,11 @@ export const useTraderConstants = hookTransform(getTraderConstants)
 export const getTrendingConstants = transform(Trending)
 export const useTrendingConstants = hookTransform(getTrendingConstants)
 
-export const getRPCConstants = transformFromJSON(process.env.WEB3_CONSTANTS_RPC ?? '', RPC)
+let WEB3_CONSTANTS_RPC = ''
+try {
+    WEB3_CONSTANTS_RPC = process.env.WEB3_CONSTANTS_RPC ?? ''
+} catch {}
+export const getRPCConstants = transformFromJSON(WEB3_CONSTANTS_RPC, RPC)
 export const useRPCConstants = hookTransform(getRPCConstants)
 
 export const getTokenAssetBaseURLConstants = transform(TokenAssetBaseURL)
