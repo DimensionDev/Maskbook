@@ -263,7 +263,7 @@ export enum EthereumMethodType {
 }
 
 export type EthereumTransactionConfig = TransactionConfig_ & {
-    // EIP1159
+    // EIP1559
     maxFeePerGas?: string
     maxPriorityFeePerGas?: string
 }

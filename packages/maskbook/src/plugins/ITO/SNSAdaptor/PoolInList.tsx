@@ -6,8 +6,12 @@ import {
     getChainDetailed,
     isSameAddress,
     useAccount,
+    FungibleToken,
     useTokenConstants,
     TransactionStateType,
+    useFungibleTokenDetailed,
+    useFungibleTokensDetailed,
+    EthereumTokenType,
 } from '@masknet/web3-shared'
 import {
     Box,
@@ -32,9 +36,10 @@ import { useI18N } from '../../../utils'
 import { MSG_DELIMITER } from '../constants'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from './hooks/usePoolTradeInfo'
-import { ITO_Status, JSON_PayloadInMask, PoolSubgraph } from '../types'
+import { ITO_Status, JSON_PayloadInMask, PoolFromNetwork, JSON_PayloadFromChain } from '../types'
 import { useDestructCallback } from './hooks/useDestructCallback'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
+import { omit } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     top: {
@@ -107,7 +112,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PoolInListProps extends PoolSubgraph {
+export interface PoolInListProps extends PoolFromNetwork {
     onSend?: (pool: JSON_PayloadInMask) => void
     onRetry: () => void
 }
@@ -116,6 +121,39 @@ export function PoolInList(props: PoolInListProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onRetry } = props
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
+
+    //#region Fetch tokens detailed
+    const { value: _tokenDetailed } = useFungibleTokenDetailed(
+        EthereumTokenType.ERC20,
+        (pool as JSON_PayloadFromChain).token_address ?? (pool as JSON_PayloadInMask).token.address,
+    )
+    const poolToken = (pool as JSON_PayloadInMask).token ?? _tokenDetailed
+    const { exchange_token_addresses } = pool as JSON_PayloadFromChain
+    const _poolTokens = exchange_token_addresses
+        ? exchange_token_addresses.map(
+              (v) =>
+                  ({
+                      address: v,
+                      type: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                  } as Pick<FungibleToken, 'address' | 'type'>),
+          )
+        : []
+
+    const { value: _exchangeTokens } = useFungibleTokensDetailed(_poolTokens)
+    const exchangeTokens = (pool as JSON_PayloadInMask).exchange_tokens ?? _exchangeTokens
+    //#endregion
+
+    //#region Calculate out exchange_out_volumes
+    const exchangeOutVolumes =
+        exchange_out_volumes.length === exchange_in_volumes.length
+            ? exchange_out_volumes
+            : poolToken && exchangeTokens
+            ? exchange_in_volumes.map((v, i) =>
+                  new BigNumber(v).div(pool.exchange_amounts[i * 2]).times(pool.exchange_amounts[i * 2 + 1]),
+              )
+            : []
+    //#endregion
 
     //#region withdraw
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(pool.contract_address)
@@ -124,7 +162,7 @@ export function PoolInList(props: PoolInListProps) {
         resetDestructCallback()
     })
     //#endregion
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
+
     const account = useAccount()
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)
     const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)
@@ -149,7 +187,17 @@ export function PoolInList(props: PoolInListProps) {
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : canSend ? (
-                    <ActionButton size="small" variant="contained" onClick={() => onSend?.(pool)}>
+                    <ActionButton
+                        size="small"
+                        variant="contained"
+                        onClick={() =>
+                            onSend?.(
+                                omit({ ...pool, token: poolToken, exchange_tokens: exchangeTokens }, [
+                                    'token_addresses',
+                                    'exchange_token_addresses',
+                                ]) as JSON_PayloadInMask,
+                            )
+                        }>
                         {t('plugin_ito_list_button_send')}
                     </ActionButton>
                 ) : isWithdrawn ? (
@@ -161,14 +209,14 @@ export function PoolInList(props: PoolInListProps) {
         )
     }
 
-    return (
+    return poolToken && exchangeTokens ? (
         <div className={classes.top}>
             <Card className={classes.root} variant="outlined">
                 <Box className={classes.iconbar}>
                     <TokenIcon
                         classes={{ icon: classes.icon }}
-                        address={pool.token.address}
-                        logoURI={pool.token.logoURI}
+                        address={poolToken.address}
+                        logoURI={poolToken.logoURI}
                     />
                 </Box>
                 <Box className={classes.content}>
@@ -208,18 +256,18 @@ export function PoolInList(props: PoolInListProps) {
                             {t('plugin_ito_list_sold_total')}
                             <Typography variant="body2" color="textPrimary" component="span">
                                 <FormattedBalance
-                                    value={BigNumber.sum(...exchange_out_volumes)}
-                                    decimals={pool.token.decimals}
+                                    value={BigNumber.sum(...exchangeOutVolumes)}
+                                    decimals={poolToken.decimals}
                                 />
                             </Typography>{' '}
-                            {pool.token.symbol}
+                            {poolToken.symbol}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="span">
                             {t('plugin_ito_list_total')}
                             <Typography variant="body2" color="textPrimary" component="span">
-                                <FormattedBalance value={pool.total} decimals={pool.token.decimals} />
+                                <FormattedBalance value={pool.total} decimals={poolToken.decimals} />
                             </Typography>{' '}
-                            {pool.token.symbol}
+                            {poolToken.symbol}
                         </Typography>
                     </Box>
 
@@ -243,7 +291,7 @@ export function PoolInList(props: PoolInListProps) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {pool.exchange_tokens.map((token, index) => (
+                                    {exchangeTokens.map((token, index) => (
                                         <TableRow key={index}>
                                             <TableCell
                                                 className={classes.cell}
@@ -259,12 +307,9 @@ export function PoolInList(props: PoolInListProps) {
                                                     new BigNumber(pool.exchange_amounts[index * 2])
                                                         .dividedBy(pool.exchange_amounts[index * 2 + 1])
                                                         .multipliedBy(
-                                                            pow10(
-                                                                pool.token.decimals -
-                                                                    pool.exchange_tokens[index].decimals,
-                                                            ),
+                                                            pow10(poolToken.decimals - exchangeTokens[index].decimals),
                                                         )
-                                                        .multipliedBy(pow10(pool.exchange_tokens[index].decimals))
+                                                        .multipliedBy(pow10(exchangeTokens[index].decimals))
                                                         .integerValue(),
                                                     token.decimals,
                                                     6,
@@ -272,14 +317,14 @@ export function PoolInList(props: PoolInListProps) {
                                                 {isSameAddress(token.address, NATIVE_TOKEN_ADDRESS)
                                                     ? getChainDetailed(token.chainId)?.nativeCurrency.symbol
                                                     : token.symbol}{' '}
-                                                / {pool.token.symbol}
+                                                / {poolToken.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
                                                 <FormattedBalance
-                                                    value={exchange_out_volumes[index]}
-                                                    decimals={pool.token.decimals}
+                                                    value={exchangeOutVolumes[index]}
+                                                    decimals={poolToken.decimals}
                                                     significant={6}
-                                                    symbol={pool.token.symbol}
+                                                    symbol={poolToken.symbol}
                                                 />
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
@@ -299,5 +344,5 @@ export function PoolInList(props: PoolInListProps) {
                 </Box>
             </Card>
         </div>
-    )
+    ) : null
 }

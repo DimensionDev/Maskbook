@@ -1,8 +1,7 @@
 import { getMaskColor, makeStyles, MaskColorVar, MaskDialog } from '@masknet/theme'
 import { Box, Button, DialogContent, Link, Stack, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../../../locales'
-import { SOCIAL_MEDIA_ICON_MAPPING } from '../../../../constants'
-import type { ProfileIdentifier } from '@masknet/shared'
+import { ProfileIdentifier, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { useState } from 'react'
 import { WarningIcon } from '@masknet/icons'
 

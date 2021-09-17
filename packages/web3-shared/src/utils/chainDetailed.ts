@@ -16,9 +16,9 @@ export function isChainIdMainnet(chainId: ChainId) {
     return chainDetailed?.network === 'mainnet'
 }
 
-export function isEIP1159Supported(chainId: ChainId) {
+export function isEIP1559Supported(chainId: ChainId) {
     const features = getChainDetailed(chainId)?.features ?? []
-    return features.includes('EIP1159')
+    return features.includes('EIP1559')
 }
 
 export function getChainDetailed(chainId = ChainId.Mainnet) {

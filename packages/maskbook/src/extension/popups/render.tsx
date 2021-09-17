@@ -11,6 +11,7 @@ import { PopupFrame } from './components/PopupFrame'
 import { StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { Appearance } from '@masknet/theme'
 import { MaskUIRoot } from '../../UIRoot'
+import { status } from '../../setup.ui'
 
 const Wallet = lazy(() => import('./pages/Wallet'))
 const Personas = lazy(() => import('./pages/Personas'))
@@ -29,7 +30,7 @@ function Dialogs() {
                         <Suspense fallback="">
                             <Switch>
                                 <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
-                                <Route path={PopupRoutes.Personas} children={frame(<Personas />)} exact />
+                                <Route path={PopupRoutes.Personas} children={frame(<Personas />)} />
                                 <Route path={PopupRoutes.RequestPermission} exact>
                                     <RequestPermissionPage />
                                 </Route>
@@ -51,7 +52,7 @@ function Dialogs() {
         </StyledEngineProvider>,
     )
 }
-createNormalReactRoot(<Dialogs />)
+status.then(() => createNormalReactRoot(<Dialogs />))
 
 function frame(x: React.ReactNode) {
     return <PopupFrame children={x} />
