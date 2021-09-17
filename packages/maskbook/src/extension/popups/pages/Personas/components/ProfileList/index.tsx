@@ -8,6 +8,7 @@ import { useI18N } from '../../../../../../utils'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../../service'
+import { GrayMasks } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -133,7 +134,7 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                                     </div>
                                 </div>
                             ) : (
-                                SOCIAL_MEDIA_ICON_MAPPING[identifier.network]
+                                <GrayMasks />
                             )}
                             <ListItemText
                                 className={classes.text}
