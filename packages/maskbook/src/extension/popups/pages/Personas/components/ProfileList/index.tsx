@@ -126,16 +126,17 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                                     {t('popups_persona_disconnect')}
                                 </Link>
                             }>
-                            {avatar ? (
-                                <div className={classes.avatarContainer}>
+                            <div className={classes.avatarContainer}>
+                                {avatar ? (
                                     <Avatar src={avatar} className={classes.avatar} />
-                                    <div className={classes.circle}>
-                                        {SOCIAL_MEDIA_ICON_MAPPING[identifier.network]}
+                                ) : (
+                                    <div className={classes.avatar}>
+                                        <GrayMasks className={classes.avatar} />
                                     </div>
-                                </div>
-                            ) : (
-                                <GrayMasks />
-                            )}
+                                )}
+                                <div className={classes.circle}>{SOCIAL_MEDIA_ICON_MAPPING[identifier.network]}</div>
+                            </div>
+
                             <ListItemText
                                 className={classes.text}
                                 style={{ cursor: 'pointer' }}
