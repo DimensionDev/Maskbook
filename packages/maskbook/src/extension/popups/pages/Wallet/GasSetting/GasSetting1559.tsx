@@ -208,7 +208,7 @@ export const GasSetting1559 = memo(() => {
     }, [gas, setValue])
 
     useEffect(() => {
-        if (selected) {
+        if (selected !== null) {
             setValue(
                 'maxPriorityFeePerGas',
                 new BigNumber(options[selected].content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
@@ -247,7 +247,7 @@ export const GasSetting1559 = memo(() => {
     const [maxPriorityFeePerGas, maxFeePerGas] = watch(['maxPriorityFeePerGas', 'maxFeePerGas'])
 
     const maxPriorFeeHelperText = useMemo(() => {
-        if (new BigNumber(maxPriorityFeePerGas).isLessThanOrEqualTo(gasNow?.slow?.suggestedMaxPriorityFeePerGas ?? 0))
+        if (new BigNumber(maxPriorityFeePerGas).isLessThan(gasNow?.slow?.suggestedMaxPriorityFeePerGas ?? 0))
             return t('wallet_transfer_error_max_priority_gas_fee_too_low')
         if (
             new BigNumber(maxPriorityFeePerGas).isGreaterThan(
@@ -261,7 +261,7 @@ export const GasSetting1559 = memo(() => {
     }, [maxPriorityFeePerGas, gasNow])
 
     const maxFeeGasHelperText = useMemo(() => {
-        if (new BigNumber(maxFeePerGas).isLessThanOrEqualTo(gasNow?.slow?.suggestedMaxFeePerGas ?? 0))
+        if (new BigNumber(maxFeePerGas).isLessThan(gasNow?.slow?.suggestedMaxFeePerGas ?? 0))
             return t('wallet_transfer_error_max_fee_too_low')
         if (
             new BigNumber(maxFeePerGas).isGreaterThan(
