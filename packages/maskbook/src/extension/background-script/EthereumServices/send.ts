@@ -8,7 +8,7 @@ import {
     EthereumMethodType,
     EthereumRpcType,
     EthereumTransactionConfig,
-    isEIP1159Supported,
+    isEIP1559Supported,
     ProviderType,
 } from '@masknet/web3-shared'
 import type { IJsonRpcRequest } from '@walletconnect/types'
@@ -192,10 +192,10 @@ export async function INTERNAL_send(
 
         // pricing transaction
         const isGasPriceValid = parseGasPrice(config.gasPrice as string) > 0
-        const isEIP1159Valid =
+        const isEIP1559Valid =
             parseGasPrice(config.maxFeePerGas as string) > 0 && parseGasPrice(config.maxPriorityFeePerGas as string) > 0
 
-        if (Flags.EIP1159_enabled && isEIP1159Supported(chainId) && !isEIP1159Valid) {
+        if (Flags.EIP1559_enabled && isEIP1559Supported(chainId) && !isEIP1559Valid) {
             throw new Error('To be implemented.')
         } else if (!isGasPriceValid) {
             config.gasPrice = await getGasPrice()
