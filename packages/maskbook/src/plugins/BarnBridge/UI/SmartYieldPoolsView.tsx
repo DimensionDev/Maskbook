@@ -160,7 +160,7 @@ function GenerateSmartYieldPositions(t: I18NFunction, syPortfolioData: SYPortofl
     )
 }
 
-function GenerateSmartYieldPoolViews(classes: any, syData: SYPoolModelData, protocols: string[]) {
+function GenerateSmartYieldPoolViews(classes: Record<string, string>, syData: SYPoolModelData, protocols: string[]) {
     return (
         <div className={classes.root}>
             {protocols.map((name: string) => (
