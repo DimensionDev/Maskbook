@@ -309,10 +309,18 @@ const ContractInteraction = memo(() => {
                     {tokenDecimals !== undefined ? (
                         <>
                             <Typography className={classes.amount}>
-                                <FormattedBalance value={tokenAmount} decimals={tokenDecimals} significant={4} />
+                                {new BigNumber(tokenAmount).isGreaterThan(10 ** 9) ? (
+                                    new BigNumber(tokenAmount).toPrecision(3)
+                                ) : (
+                                    <FormattedBalance value={tokenAmount} decimals={tokenDecimals} significant={4} />
+                                )}
                             </Typography>
                             <Typography>
-                                <FormattedCurrency value={tokenValueUSD} sign="$" />
+                                {new BigNumber(tokenValueUSD).isGreaterThan(10 ** 9) ? (
+                                    new BigNumber(tokenValueUSD).toPrecision(3)
+                                ) : (
+                                    <FormattedCurrency value={tokenValueUSD} sign="$" />
+                                )}
                             </Typography>
                         </>
                     ) : null}
@@ -339,7 +347,11 @@ const ContractInteraction = memo(() => {
                 <div className={classes.item} style={{ marginTop: 10 }}>
                     <Typography className={classes.label}>{t('popups_wallet_contract_interaction_total')}</Typography>
                     <Typography className={classes.gasPrice}>
-                        <FormattedCurrency value={totalUSD} sign="$" />
+                        {new BigNumber(totalUSD).isGreaterThan(10 ** 9) ? (
+                            new BigNumber(totalUSD).toPrecision(3)
+                        ) : (
+                            <FormattedCurrency value={totalUSD} sign="$" />
+                        )}
                     </Typography>
                 </div>
             </div>
