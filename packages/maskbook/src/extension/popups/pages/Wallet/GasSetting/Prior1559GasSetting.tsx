@@ -237,7 +237,7 @@ export const Prior1559GasSetting = memo(() => {
                 ))}
             </div>
             <Typography className={classes.or}>{t('popups_wallet_gas_fee_settings_or')}</Typography>
-            <form>
+            <form onSubmit={onSubmit}>
                 <Typography className={classes.label}>{t('popups_wallet_gas_fee_settings_gas_limit')}</Typography>
                 <Controller
                     control={control}
