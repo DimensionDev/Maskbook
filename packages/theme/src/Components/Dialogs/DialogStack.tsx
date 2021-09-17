@@ -3,7 +3,7 @@
 import { createContainer } from 'unstated-next'
 import { useRef, useEffect, useState } from 'react'
 import { first, last } from 'lodash-es'
-import type { DialogProps } from '@material-ui/core'
+import type { DialogProps } from '@mui/material'
 
 /**
  * If you're using <Dialog> solely and you want to support DialogStack, please use this hook.

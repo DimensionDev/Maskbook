@@ -10,7 +10,7 @@ import {
     useChainId,
     useTokenAssetBaseURLConstants,
 } from '@masknet/web3-shared'
-import { Avatar, AvatarProps } from '@material-ui/core'
+import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useImageFailOver } from '../../index'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'

@@ -58,11 +58,11 @@ export default function Wallet() {
         if (value?.computedPayload) {
             switch (value.computedPayload.type) {
                 case EthereumRpcType.SIGN:
-                    history.push(urlcat(PopupRoutes.WalletSignRequest, { toBeClose }))
+                    history.replace(urlcat(PopupRoutes.WalletSignRequest, { toBeClose }))
                     break
                 case EthereumRpcType.CONTRACT_INTERACTION:
                 case EthereumRpcType.SEND_ETHER:
-                    history.push(urlcat(PopupRoutes.ContractInteraction, { toBeClose }))
+                    history.replace(urlcat(PopupRoutes.ContractInteraction, { toBeClose }))
                     break
                 default:
                     break

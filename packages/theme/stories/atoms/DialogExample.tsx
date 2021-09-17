@@ -1,4 +1,4 @@
-import { Button, DialogActions, DialogContent, DialogContentText, Box } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, DialogContentText, Box } from '@mui/material'
 import { MaskDialog } from '../../src/Components/Dialogs'
 export interface DialogExampleProps {
     withExit: boolean

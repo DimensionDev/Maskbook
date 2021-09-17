@@ -1,4 +1,4 @@
-import type { ThemeOptions } from '@material-ui/core'
+import type { ThemeOptions } from '@mui/material'
 
 export const Font: ThemeOptions = {
     // cspell:ignore Jheng

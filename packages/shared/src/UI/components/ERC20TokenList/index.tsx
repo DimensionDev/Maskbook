@@ -18,7 +18,7 @@ import {
     useTrustedERC20Tokens,
 } from '@masknet/web3-shared'
 import { MaskFixedSizeListProps, SearchableList } from '@masknet/theme'
-import { Stack, Typography } from '@material-ui/core'
+import { Stack, Typography } from '@mui/material'
 
 export interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     whitelist?: string[]

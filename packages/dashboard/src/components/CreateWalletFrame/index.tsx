@@ -15,7 +15,10 @@ const useStyles = makeStyles()({
         borderRadius: 24,
         width: '100%',
         height: '100%',
-        minHeight: 832,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 })
 

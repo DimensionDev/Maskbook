@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, CardActions, Button } from '@material-ui/core'
+import { Card, CardContent, Typography, CardActions, Button } from '@mui/material'
 import { RenderContext } from '../index'
 import type { Component } from './index'
 import { useContext } from 'react'

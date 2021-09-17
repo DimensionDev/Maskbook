@@ -18,6 +18,7 @@ import Services from '../../../../service'
 import { compact, intersectionWith } from 'lodash-es'
 import urlcat from 'urlcat'
 import type { Coin } from '../../../../../plugins/Trader/types'
+import { ActivityList } from '../components/ActivityList'
 
 const useStyles = makeStyles()({
     content: {
@@ -77,7 +78,6 @@ const TokenDetail = memo(() => {
 
     const openBuyDialog = useCallback(async () => {
         if (isActiveSocialNetwork) {
-            console.log(currentToken?.token.symbol ?? currentToken?.token.name)
             PluginTransakMessages.buyTokenDialogUpdated.sendToVisiblePages({
                 open: true,
                 address: wallet?.address ?? '',
@@ -127,10 +127,11 @@ const TokenDetail = memo(() => {
                         value={currentToken.balance}
                         decimals={currentToken.token.decimals}
                         symbol={currentToken.token.symbol}
+                        significant={4}
                     />
                 </Typography>
                 <Typography className={classes.text}>
-                    <FormattedCurrency value={getTokenUSDValue(currentToken).toFixed(2)} sign="$" />
+                    <FormattedCurrency value={getTokenUSDValue(currentToken)} sign="$" />
                 </Typography>
                 <div className={classes.controller}>
                     <div onClick={openBuyDialog}>
@@ -147,6 +148,7 @@ const TokenDetail = memo(() => {
                     </div>
                 </div>
             </div>
+            <ActivityList tokenAddress={currentToken.token.address} />
         </>
     )
 })

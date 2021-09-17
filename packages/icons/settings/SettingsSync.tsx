@@ -1,5 +1,5 @@
 import { createPaletteAwareIcon } from '../utils'
-import type { SvgIcon } from '@material-ui/core'
+import type { SvgIcon } from '@mui/material'
 
 export const SettingsSyncIcon: typeof SvgIcon = createPaletteAwareIcon(
     'SettingsSyncIcon',

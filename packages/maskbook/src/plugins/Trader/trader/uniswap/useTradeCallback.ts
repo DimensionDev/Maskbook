@@ -56,7 +56,9 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                     from: account,
                     to: address,
                     data: calldata,
-                    ...(!value || /^0x0*$/.test(value) ? {} : { value }),
+                    ...(!value || /^0x0*$/.test(value)
+                        ? {}
+                        : { value: `0x${Number.parseInt(value, 16).toString(16)}` }),
                 }
 
                 return Services.Ethereum.estimateGas(config)
