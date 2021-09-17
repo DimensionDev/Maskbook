@@ -9,12 +9,6 @@ const s = makeStyles()((theme) => ({
     progress: {
         display: 'flex',
         marginTop: 24,
-        '& .MuiLinearProgress-colorPrimary': {
-            backgroundColor: COLOR_SY_JUNIOR_TEXT,
-        },
-        '& .MuiLinearProgress-barColorPrimary': {
-            backgroundColor: COLOR_SY_SENIOR_TEXT,
-        },
     },
     dataColumn: {
         paddingLeft: 16,
@@ -72,7 +66,12 @@ const PortfolioBalance: React.FC<Props> = (props: Props) => {
                 </div>
             </div>
             <Divider />
-            <LinearProgress className={classes.progress} variant="determinate" value={progress} />
+            <LinearProgress
+                className={classes.progress}
+                classes={{ barColorPrimary: COLOR_SY_SENIOR_TEXT }}
+                variant="determinate"
+                value={progress}
+            />
             <div className={classes.portfolioAmountContainer}>
                 <div style={{ '--color': COLOR_SY_SENIOR_TEXT } as React.CSSProperties}>
                     <Typography variant="subtitle1" color={COLOR_SY_SENIOR_TEXT} className="mb-4">

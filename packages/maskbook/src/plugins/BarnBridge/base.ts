@@ -9,7 +9,7 @@ export const base: Plugin.Shared.Definition = {
         fallback:
             'BarnBridge is a protocol that enables users to hedge against DeFi yield sensitivity and price volatility',
     },
-    publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
+    publisher: { name: { fallback: 'BarnBridge' }, link: 'https://barnbridge.com/' },
     enableRequirement: {
         architecture: { app: false, web: true },
         networks: { type: 'opt-out', networks: {} },
