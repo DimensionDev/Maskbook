@@ -15,7 +15,7 @@ export const AddTokenDialog = memo<AddTokenDialogProps>(({ open, onClose }) => {
     return (
         <MaskDialog maxWidth="md" open={open} title={t.wallets_add_token()} onClose={onClose}>
             <DialogContent>
-                <ERC20TokenList />
+                <ERC20TokenList whitelist={[]} />
             </DialogContent>
         </MaskDialog>
     )

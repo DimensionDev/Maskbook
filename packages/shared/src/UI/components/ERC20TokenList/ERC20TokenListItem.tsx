@@ -114,7 +114,7 @@ export const getERC20TokenListItem =
                     </Typography>
                     <Typography sx={{ fontSize: 14 }} color="textSecondary" component="span">
                         {!isNotAdded ? (
-                            <span>{formatBalance(data.balance, token.decimals)}</span>
+                            <span>{data.balance ? formatBalance(data.balance, token.decimals, 6) : ''}</span>
                         ) : (
                             <MaskLoadingButton
                                 variant="rounded"
