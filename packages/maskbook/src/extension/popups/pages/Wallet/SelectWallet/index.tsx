@@ -5,13 +5,15 @@ import { WalletHeader } from '../components/WalletHeader'
 import { WalletInfo } from '../components/WalletInfo'
 import { isSameAddress, ProviderType, useAccount, useWallet, useWallets } from '@masknet/web3-shared'
 import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
-import { FormattedAddress } from '@masknet/shared'
+import { FormattedAddress, useValueRef } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { useI18N } from '../../../../../utils'
 import { useWalletHD } from '../../../../../plugins/Wallet/hooks/useWalletHD'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useCopyToClipboard } from 'react-use'
+import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
+import { useLocation } from 'react-router'
 
 const useStyles = makeStyles()({
     content: {
@@ -67,6 +69,8 @@ const SelectWallet = memo(() => {
     const { t } = useI18N()
     const walletHD = useWalletHD()
     const { classes } = useStyles()
+    const currentProvider = useValueRef(currentProviderSettings)
+    const location = useLocation()
     const history = useHistory()
     const account = useAccount()
     const wallet = useWallet(ProviderType.MaskWallet)
@@ -74,7 +78,7 @@ const SelectWallet = memo(() => {
 
     const [, copyToClipboard] = useCopyToClipboard()
 
-    const currentWalletBeMask = isSameAddress(account, wallet?.address)
+    const currentWalletBeMask = currentProvider === ProviderType.MaskWallet && isSameAddress(account, wallet?.address)
 
     const walletList = useMemo(() => {
         return !currentWalletBeMask ? wallets : wallets.filter((item) => !isSameAddress(item.address, wallet?.address))
@@ -93,17 +97,15 @@ const SelectWallet = memo(() => {
 
     const handleSelect = useCallback(
         async (address) => {
+            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
             await WalletRPC.updateAccount({
                 account: address,
                 providerType: ProviderType.MaskWallet,
             })
-            if (currentWalletBeMask) {
-                history.replace(PopupRoutes.Wallet)
-            } else {
-                window.close()
-            }
+            if (toBeClose) window.close()
+            else history.replace(PopupRoutes.Wallet)
         },
-        [history, currentWalletBeMask],
+        [history, location],
     )
 
     const onCopy = useCallback(
