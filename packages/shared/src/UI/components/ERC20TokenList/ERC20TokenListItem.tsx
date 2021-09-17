@@ -1,4 +1,4 @@
-import { ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
+import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import classNames from 'classnames'
 import {
     Asset,

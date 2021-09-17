@@ -1,7 +1,7 @@
 {
   "name": "@masknet/theme",
   "private": true,
-  "description": "@material-ui/core theme of design system of Mask Network",
+  "description": "@mui/material theme of design system of Mask Network",
   "type": "module",
   "exports": {
     ".": "./dist/src/index.js",

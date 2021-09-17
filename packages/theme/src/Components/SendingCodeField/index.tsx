@@ -1,4 +1,4 @@
-import { Box, Stack } from '@material-ui/core'
+import { Box, Stack } from '@mui/material'
 import { ReactNode, useRef } from 'react'
 import { useEffect, useState } from 'react'
 import { MaskTextField } from '../TextField'

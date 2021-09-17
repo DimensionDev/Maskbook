@@ -1,7 +1,7 @@
-import type { LoadingButtonProps } from '@material-ui/lab/LoadingButton'
-import LoadingButton from '@material-ui/lab/LoadingButton'
+import type { LoadingButtonProps } from '@mui/lab/LoadingButton'
+import LoadingButton from '@mui/lab/LoadingButton'
 import { memo, useCallback, useState, forwardRef } from 'react'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress } from '@mui/material'
 
 interface MaskLoadingButtonProps extends Exclude<LoadingButtonProps, 'loading' | 'component'> {
     onClick(event: React.MouseEvent<HTMLButtonElement>): Promise<unknown>

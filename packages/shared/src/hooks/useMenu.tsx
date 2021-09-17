@@ -8,7 +8,7 @@ import {
     createContext,
     useContext,
 } from 'react'
-import { Menu, MenuProps } from '@material-ui/core'
+import { Menu, MenuProps } from '@mui/material'
 
 /** Provide ShadowRootMenu for useMenu in content script. */
 export const useMenuContext = createContext<React.ComponentType<MenuProps>>(Menu)

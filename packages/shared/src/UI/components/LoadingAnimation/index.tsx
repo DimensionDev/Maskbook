@@ -1,6 +1,6 @@
 import { LoadingIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import type { SvgIconProps } from '@material-ui/core'
+import type { SvgIconProps } from '@mui/material'
 import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
