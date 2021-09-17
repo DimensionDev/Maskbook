@@ -331,6 +331,10 @@ export const GasSetting1559 = memo(() => {
                     render={({ field }) => (
                         <StyledInput
                             {...field}
+                            onChange={(e) => {
+                                setOption(null)
+                                field.onChange(e)
+                            }}
                             error={!!errors.maxPriorityFeePerGas?.message || !!maxPriorFeeHelperText}
                             helperText={errors.maxPriorityFeePerGas?.message || maxPriorFeeHelperText}
                             inputProps={{
@@ -359,6 +363,10 @@ export const GasSetting1559 = memo(() => {
                     render={({ field }) => (
                         <StyledInput
                             {...field}
+                            onChange={(e) => {
+                                setOption(null)
+                                field.onChange(e)
+                            }}
                             error={!!errors.maxFeePerGas?.message || !!maxFeeGasHelperText}
                             helperText={errors.maxFeePerGas?.message || maxFeeGasHelperText}
                             inputProps={{

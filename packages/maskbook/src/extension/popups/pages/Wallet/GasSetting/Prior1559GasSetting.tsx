@@ -243,12 +243,16 @@ export const Prior1559GasSetting = memo(() => {
                     }}
                     name="gasLimit"
                 />
-                <Typography className={classes.label}>Gas Price</Typography>
+                <Typography className={classes.label}>{t('popups_wallet_gas_price')}</Typography>
                 <Controller
                     control={control}
                     render={({ field }) => (
                         <StyledInput
                             {...field}
+                            onChange={(e) => {
+                                setOption(null)
+                                field.onChange(e)
+                            }}
                             error={!!errors.gasPrice?.message}
                             helperText={errors.gasPrice?.message}
                             inputProps={{
