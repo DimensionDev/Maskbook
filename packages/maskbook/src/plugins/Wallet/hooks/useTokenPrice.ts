@@ -27,7 +27,7 @@ export function useTokenPrice(
         coinId = getCoingeckoCoinId(chainId)
     }
 
-    const category = contractAddress ? contractAddress : coinId
+    const category = contractAddress || coinId
 
     const [price, setPrice] = useState(0)
     useEffect(() => {
