@@ -31,7 +31,7 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags } from '../../utils/flags'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
-import { useI18N } from '../../utils'
+import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
@@ -272,7 +272,15 @@ export function ToolboxHint(props: ToolboxHintProps) {
             </div>
             {menu}
 
-            <div className={classes.wrapper} onClick={isWalletValid ? openWalletStatusDialog : openSelectWalletDialog}>
+            <div
+                className={classes.wrapper}
+                onClick={() => {
+                    isWalletValid
+                        ? openWalletStatusDialog()
+                        : hasNativeAPI
+                        ? nativeAPI?.api.misc_openCreateWalletView()
+                        : openSelectWalletDialog()
+                }}>
                 <div className={classes.button}>
                     {isWalletValid ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} size={24} />}
 

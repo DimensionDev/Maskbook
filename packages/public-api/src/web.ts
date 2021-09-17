@@ -63,7 +63,21 @@ export interface MaskNetworkAPIs {
     profile_removeProfile(params: { identifier: ProfileIdentifier_string }): Promise<void>
     wallet_updateEthereumAccount(params: { account: string }): Promise<void>
     wallet_updateEthereumChainId(params: { chainId: number }): Promise<void>
+    wallet_getLegacyWalletInfo(): Promise<WalletInfo[]>
     SNSAdaptor_getCurrentDetectedProfile(): Promise<ProfileIdentifier_string | undefined>
+}
+
+export interface WalletInfo {
+    address: string
+    name?: string
+    path?: string
+    mnemonic: string[]
+    passphrase: string
+    private_key?: string
+    /** Unix timestamp */
+    createdAt: number
+    /** Unix timestamp */
+    updatedAt: number
 }
 
 export interface Profile {

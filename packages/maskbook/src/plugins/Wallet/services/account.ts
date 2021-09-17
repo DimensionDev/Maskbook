@@ -15,7 +15,7 @@ import {
     currentProviderSettings,
 } from '../settings'
 import { updateExoticWalletFromSource } from './wallet'
-import { Flags } from '../../../utils'
+import { Flags, hasNativeAPI, nativeAPI } from '../../../utils'
 
 export async function updateAccount(
     options: {
@@ -47,7 +47,12 @@ export async function updateAccount(
     }
 
     // update global settings
-    if (chainId) currentChainIdSettings.value = chainId
+    if (chainId) {
+        currentChainIdSettings.value = chainId
+        if (hasNativeAPI) {
+            nativeAPI?.api.wallet_switchBlockChain({ networkId: chainId })
+        }
+    }
     if (networkType) currentNetworkSettings.value = networkType
     if (account) currentAccountSettings.value = account
     if (account && providerType === ProviderType.MaskWallet) currentAccountMaskWalletSettings.value = account
