@@ -1,11 +1,11 @@
 import { useAsyncRetry } from 'react-use'
 import { PluginITO_RPC } from '../../messages'
-import type { PoolFromSubgraph } from '../../types'
+import type { PoolFromNetwork } from '../../types'
 import { useBlockNumber } from '@masknet/web3-shared'
 import { useRef } from 'react'
 
 export function useAllPoolsAsSeller(address: string, page: number) {
-    const allPoolsRef = useRef<PoolFromSubgraph[]>([])
+    const allPoolsRef = useRef<PoolFromNetwork[]>([])
     const blockNumber = useBlockNumber()
 
     return useAsyncRetry(async () => {

@@ -107,7 +107,6 @@ export function payloadOutMaskCompact(payload: JSON_PayloadInMask) {
         creation_time: 0,
         limit: '0',
         total_remaining: '0',
-        buyers: [],
         exchange_amounts: [],
         exchange_tokens: [],
     } as JSON_PayloadOutMask

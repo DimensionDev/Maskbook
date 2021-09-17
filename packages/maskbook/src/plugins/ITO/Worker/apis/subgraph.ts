@@ -3,7 +3,7 @@ import stringify from 'json-stable-stringify'
 import { first, omit } from 'lodash-es'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 import { payloadIntoMask } from '../../SNSAdaptor/helpers'
-import type { JSON_PayloadOutMask } from '../../types'
+import type { JSON_PayloadOutMask, PoolFromNetwork } from '../../types'
 
 const TRADER_FIELDS = `
     address
@@ -38,10 +38,6 @@ const POOL_FIELDS = `
     }
     seller {
         address
-    }
-    buyers (first: 1) {
-        address
-        name
     }
     exchange_amounts
     exchange_tokens {
@@ -171,7 +167,7 @@ export async function getAllPoolsAsSeller(address: string, page: number) {
             pool,
             exchange_in_volumes: x.pool.exchange_in_volumes,
             exchange_out_volumes: x.pool.exchange_out_volumes,
-        }
+        } as PoolFromNetwork
     })
 }
 

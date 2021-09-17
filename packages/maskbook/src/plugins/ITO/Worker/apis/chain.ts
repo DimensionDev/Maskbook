@@ -2,10 +2,11 @@ import { ChainId, getChainConstants, getITOConstants, isSameAddress } from '@mas
 import { Interface } from '@ethersproject/abi'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import urlcat from 'urlcat'
-import type BigNumber from 'bignumber.js'
-import type { JSON_PayloadFromChain } from '../../types'
+import BigNumber from 'bignumber.js'
+import type { PoolFromNetwork, JSON_PayloadFromChain } from '../../types'
 import { MSG_DELIMITER, ITO_CONTRACT_BASE_TIMESTAMP } from '../../constants'
 import { getTransactionReceipt } from '../../../../extension/background-script/EthereumService'
+import { checkAvailability } from './checkAvailability'
 
 const interFace = new Interface(ITO_ABI)
 
@@ -28,7 +29,7 @@ export async function getAllPoolsAsSeller(
             apikey: EXPLORER_API_KEY,
             action: 'txlist',
             module: 'account',
-            sort: 'asc',
+            sort: 'desc',
             startBlock,
             endBlock,
             address: ITO2_CONTRACT_ADDRESS,
@@ -70,30 +71,34 @@ export async function getAllPoolsAsSeller(
                 const [sellerName = '', message = '', regions = '-'] = decodedInputParam._message.split(MSG_DELIMITER)
 
                 const payload: JSON_PayloadFromChain = {
-                    end_time: decodedInputParam._end.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000,
+                    end_time: (decodedInputParam._end.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000) * 1000,
                     exchange_token_addresses: decodedInputParam._exchange_addrs,
                     limit: decodedInputParam._limit.toString(),
                     message,
                     qualification_address: decodedInputParam._qualification,
                     exchange_amounts: decodedInputParam._ratios.map((v) => v.toString()),
-                    start_time: decodedInputParam._start.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000,
+                    start_time: (decodedInputParam._start.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000) * 1000,
                     token_address: decodedInputParam._token_addr,
                     total: decodedInputParam._total_tokens.toString(),
-                    unlock_time: decodedInputParam._unlock_time.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000,
+                    unlock_time:
+                        (decodedInputParam._unlock_time.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000) * 1000,
                     seller: {
                         address: cur.from,
                         name: sellerName,
                     },
                     contract_address: cur.to,
-                    chain_id: ChainId.Mainnet,
+                    chain_id: chainId,
                     regions,
                     block_number: Number(cur.blockNumber),
-                    //#region Retrieve at following step
+                    //#region Retrieve at step 3
                     pid: '',
-                    password: '',
                     creation_time: 0,
+                    //#endregion
+                    //#region Retrieve at step 4
                     total_remaining: '',
-                    buyers: [],
+                    //#endregion
+                    //#region Retrieve from database
+                    password: '',
                     //#endregion
                 }
 
@@ -113,7 +118,7 @@ export async function getAllPoolsAsSeller(
         creation_time: BigNumber
     }
 
-    const promiseResponse = await Promise.allSettled(
+    const eventLogResponse = await Promise.allSettled(
         payloadList.map(async (entity) => {
             const result = await getTransactionReceipt(entity.hash)
             if (!result) return null
@@ -130,11 +135,27 @@ export async function getAllPoolsAsSeller(
             entity.payload.pid = eventParams.id
             entity.payload.creation_time = eventParams.creation_time.toNumber()
 
-            return entity
+            // 4. retrieve `total_remaining`, `exchange_in_volumes` and `exchange_out_volumes`
+            const data = await checkAvailability(
+                entity.payload.pid,
+                entity.payload.seller.address,
+                entity.payload.contract_address,
+                chainId,
+            )
+
+            entity.payload.total_remaining = new BigNumber(data.remaining).toString()
+
+            return {
+                pool: entity.payload,
+                exchange_in_volumes: data.exchanged_tokens,
+                // Calculate out later after fetching token detailed.
+                exchange_out_volumes: [],
+            }
         }),
     )
+    //#endregion
 
-    return promiseResponse
-        .map((v) => (v.status === 'fulfilled' && v.value ? v.value.payload : null))
-        .filter((v) => Boolean(v)) as JSON_PayloadFromChain[]
+    return eventLogResponse
+        .map((v) => (v.status === 'fulfilled' && v.value ? v.value : null))
+        .filter((v) => Boolean(v)) as PoolFromNetwork[]
 }

@@ -12,10 +12,6 @@ export interface JSON_PayloadInMask {
         address: string
         name?: string
     }
-    buyers: {
-        address: string
-        name: string
-    }[]
     chain_id: ChainId
     start_time: number
     end_time: number
@@ -34,8 +30,8 @@ export interface JSON_PayloadFromChain extends Omit<JSON_PayloadInMask, 'exchang
     token_address: string
 }
 
-export interface PoolFromSubgraph {
-    pool: JSON_PayloadInMask
+export interface PoolFromNetwork {
+    pool: JSON_PayloadInMask | JSON_PayloadFromChain
     exchange_in_volumes: string[]
     exchange_out_volumes: string[]
 }
