@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { WalletInfo } from '../components/WalletInfo'
 import { WarningIcon } from '@masknet/icons'
 import { useHistory } from 'react-router-dom'
-import { useWallet } from '@masknet/web3-shared'
+import { ProviderType, useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PopupRoutes } from '../../../index'
@@ -80,7 +80,14 @@ const DeleteWallet = memo(() => {
             const wallets = await WalletRPC.getWallets()
             if (wallets.length) {
                 await WalletRPC.resetAccount({
-                    account: first(wallets)?.address,
+                    account: first(
+                        wallets.filter(
+                            (x) =>
+                                ![ProviderType.MetaMask.toString(), ProviderType.WalletConnect.toString()].includes(
+                                    x.name ?? '',
+                                ),
+                        ),
+                    )?.address,
                 })
             }
             history.replace(PopupRoutes.Wallet)
