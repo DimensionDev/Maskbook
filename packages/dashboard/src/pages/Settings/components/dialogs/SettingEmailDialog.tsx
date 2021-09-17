@@ -41,8 +41,10 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
     }
     const handleConfirm = async () => {
         if (step === 1) {
-            if (!invalidEmail) {
+            if (email && !invalidEmail) {
                 setStep(2)
+            } else {
+                validCheck()
             }
         } else {
             const result = await verifyCode({
@@ -74,7 +76,7 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
     }
 
     const validCheck = () => {
-        if (!email) return
+        if (!email) return setInvalidEmail(true)
 
         const isValid = emailRegexp.test(email)
         setInvalidEmail(!isValid)
