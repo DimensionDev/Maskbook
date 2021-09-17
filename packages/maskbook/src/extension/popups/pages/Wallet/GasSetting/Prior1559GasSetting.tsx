@@ -20,7 +20,7 @@ import { Typography } from '@material-ui/core'
 import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@material-ui/lab'
 import { isEmpty, noop } from 'lodash-es'
-import { useHistory, useLocation } from 'react-router'
+import { useHistory } from 'react-router'
 import { useRejectHandler } from '../hooks/useRejectHandler'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 
@@ -84,7 +84,6 @@ export const Prior1559GasSetting = memo(() => {
     const { t } = useI18N()
     const chainId = useChainId()
     const { value } = useUnconfirmedRequest()
-    const location = useLocation()
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeTokenDetailed()
@@ -180,7 +179,7 @@ export const Prior1559GasSetting = memo(() => {
     }, [gas, setValue])
 
     useEffect(() => {
-        if (selected) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
+        if (selected !== null) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
     }, [selected, setValue, options])
 
     const [{ loading }, handleConfirm] = useAsyncFn(
@@ -188,8 +187,8 @@ export const Prior1559GasSetting = memo(() => {
             if (value) {
                 const config = {
                     ...value.payload.params[0],
-                    gas: data.gasLimit,
-                    gasPrice: new BigNumber(data.gasPrice).toString(16),
+                    gas: `0x${new BigNumber(data.gasLimit).toString(16)}`,
+                    gasPrice: `0x${new BigNumber(data.gasPrice).multipliedBy(10 ** 9).toString(16)}`,
                 }
 
                 await WalletRPC.updateUnconfirmedRequest({
