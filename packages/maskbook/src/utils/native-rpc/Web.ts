@@ -212,6 +212,20 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             chainId,
         })
     },
+    wallet_getLegacyWalletInfo: async () => {
+        const wallets = await WalletRPC.getWallets()
+
+        return wallets.map((x) => ({
+            address: x.address,
+            name: x.name || undefined,
+            path: x.path,
+            mnemonic: x.mnemonic,
+            passphrase: x.passphrase,
+            private_key: x._private_key_,
+            createdAt: x.createdAt.getTime(),
+            updatedAt: x.updatedAt.getTime(),
+        }))
+    },
     async SNSAdaptor_getCurrentDetectedProfile() {
         const { activatedSocialNetworkUI } = await import('../../social-network')
         return activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier.toText()
