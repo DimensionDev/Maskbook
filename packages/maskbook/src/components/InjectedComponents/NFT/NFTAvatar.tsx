@@ -9,24 +9,14 @@ import {
     useCollectibles,
 } from '@masknet/web3-shared'
 import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
-import BigNumber from 'bignumber.js'
 import classnames from 'classnames'
-import { head, uniqBy } from 'lodash-es'
-import type { Order } from 'opensea-js/lib/types'
+import { uniqBy } from 'lodash-es'
 import { useCallback, useEffect, useState } from 'react'
-import { useAsync, useAsyncRetry } from 'react-use'
-import { PluginCollectibleRPC } from '../../../plugins/Collectible/messages'
-import { getOrderUnitPrice } from '../../../plugins/Collectible/utils'
 import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 
-async function getAvatarGun() {
-    // TODO: do not call gun in SNS adaptor.
-    const { gun2 } = await import('../../../network/gun/version.2')
-    return { gun2 }
-}
 const useStyles = makeStyles()((theme) => ({
     root: {},
     title: {
@@ -211,107 +201,4 @@ export function NFTAvatar(props: NFTAvatarProps) {
             <AddNFT open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
         </>
     )
-}
-
-export interface AvatarMetaDB {
-    userId: string
-    tokenId: string
-    amount: string
-    image?: string
-    name?: string
-    address: string
-    avatarId?: string
-    symbol: string
-}
-
-export async function getNFT(address: string, tokenId: string) {
-    const asset = await PluginCollectibleRPC.getAsset(address, tokenId)
-
-    let orders: Order[] = []
-    if (asset.sellOrders?.length) {
-        orders = asset.sellOrders
-    } else if (asset.orders?.length) {
-        orders = asset.orders
-    } else if (asset.buyOrders?.length) {
-        orders = asset.buyOrders
-    }
-
-    const order = head(
-        orders.sort((a, b) => new BigNumber(getOrderUnitPrice(b) ?? 0).minus(getOrderUnitPrice(a) ?? 0).toNumber()),
-    )
-    return {
-        amount: order ? new BigNumber(getOrderUnitPrice(order) ?? 0).toFixed() : '0',
-        name: asset.assetContract.name,
-        symbol: order?.paymentTokenContract?.symbol ?? '',
-        image: asset.imageUrl ?? asset.imagePreviewUrl ?? '',
-    }
-}
-export async function saveNFTAvatar(userId: string, avatarId: string, address: string, tokenId: string) {
-    const { name, symbol, amount, image } = await getNFT(address, tokenId)
-    const avatarMeta: AvatarMetaDB = {
-        name,
-        amount,
-        symbol,
-        image,
-        userId,
-        address,
-        tokenId,
-        avatarId,
-    }
-
-    await setOrClearAvatar(userId)
-
-    await setOrClearAvatar(userId, avatarMeta)
-    return avatarMeta
-}
-
-export function useNFTAvatar(userId?: string) {
-    return useAsync(async () => {
-        if (!userId) return undefined
-
-        const avatar = await getNFTAvatar(userId)
-        return avatar
-    }, [userId]).value
-}
-
-export async function getNFTAvatar(userId: string) {
-    const avatarDB = await (
-        await getAvatarGun()
-    ).gun2
-        .get('com.maskbook.nft.avatar')
-        // @ts-expect-error
-        .get(userId).then!()
-
-    return avatarDB as AvatarMetaDB
-}
-
-export async function setOrClearAvatar(userId: string, avatar?: AvatarMetaDB) {
-    await (
-        await getAvatarGun()
-    ).gun2
-        .get('com.maskbook.nft.avatar')
-        // @ts-expect-error
-        .get(userId)
-        // @ts-expect-error
-        .put(avatar ? avatar : null).then!()
-}
-
-export function useNFTAvatars() {
-    return useAsyncRetry(async () => {
-        const result = await getNFTAvatars()
-        return result
-    }, [getNFTAvatars])
-}
-
-export async function getNFTAvatars() {
-    const NFTAvatarNodes =
-        (await (
-            await getAvatarGun()
-        ).gun2 //@ts-expect-error
-            .get('com.maskbook.nft.avatar').then!()) || []
-    const NFTAvatarKeys = Object.keys(NFTAvatarNodes).filter((x) => x !== '_')
-    const resultPromise = NFTAvatarKeys.map((key) => getNFTAvatar(key))
-    const result = (await Promise.all(resultPromise)).filter((x) => x) as AvatarMetaDB[]
-    console.log(result)
-    return result
 }

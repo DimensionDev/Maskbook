@@ -8,8 +8,10 @@ import type { NftRedPacketHistory } from '../types'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
 
-const useStyles = makeStyles()((theme, _, css) => {
-    const atBottom = {}
+const useStyles = makeStyles()((theme, _, createRef) => {
+    const atBottom = {
+        ref: createRef(),
+    } as const
     return {
         root: {
             display: 'flex',
@@ -45,7 +47,7 @@ const useStyles = makeStyles()((theme, _, css) => {
             borderRight: '6px solid transparent',
             borderTop: `6px solid ${theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff'}`,
             transform: 'translate(-50%, 6px)',
-            [`&.${css(atBottom)}`]: {
+            [`&.${atBottom.ref}`]: {
                 bottom: 'auto',
                 top: 0,
                 transform: 'translate(-50%, -6px) rotate(180deg)',

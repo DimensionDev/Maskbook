@@ -69,7 +69,7 @@ const SelectWallet = memo(() => {
     const { classes } = useStyles()
     const history = useHistory()
     const wallet = useWallet()
-    const wallets = useWallets(ProviderType.Maskbook)
+    const wallets = useWallets(ProviderType.MaskWallet)
 
     const [, copyToClipboard] = useCopyToClipboard()
 
@@ -93,8 +93,7 @@ const SelectWallet = memo(() => {
         async (address) => {
             await WalletRPC.updateAccount({
                 account: address,
-                chainId: undefined,
-                providerType: ProviderType.Maskbook,
+                providerType: ProviderType.MaskWallet,
             })
             history.replace(PopupRoutes.Wallet)
         },

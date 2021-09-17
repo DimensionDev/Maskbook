@@ -9,9 +9,10 @@ import {
     useAccount,
     isSameAddress,
 } from '@masknet/web3-shared'
+import { useSnackbarCallback } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
-import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
+import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import type { WalletProps } from './types'
 
 export function DashboardWalletAddERC721TokenDialog(props: WrappedDialogProps<WalletProps>) {

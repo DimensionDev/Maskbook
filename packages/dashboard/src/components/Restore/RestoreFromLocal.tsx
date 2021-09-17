@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
-import { Box, Button, Card } from '@material-ui/core'
+import { Box, Card } from '@material-ui/core'
 import { MaskTextField, useSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { Services } from '../../API'
@@ -15,6 +15,7 @@ import { LoadingCard } from './steps/LoadingCard'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
+import { LoadingButton } from '../LoadingButton'
 
 enum RestoreStatus {
     WaitingInput = 0,
@@ -120,13 +121,13 @@ export const RestoreFromLocal = memo(() => {
                 )}
             </Box>
             <ButtonContainer>
-                <Button
+                <LoadingButton
                     variant="rounded"
                     color="primary"
                     onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
                     disabled={!file}>
                     {restoreStatus !== RestoreStatus.Verified ? t.next() : t.restore()}
-                </Button>
+                </LoadingButton>
             </ButtonContainer>
             <Box sx={{ marginTop: '35px', width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_local_backup_warning()} />

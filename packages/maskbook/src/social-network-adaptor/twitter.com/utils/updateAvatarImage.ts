@@ -1,4 +1,3 @@
-import { AvatarMetaDB, getNFTAvatar } from '../../../components/InjectedComponents/NFT/NFTAvatar'
 import { Flags } from '../../../utils'
 
 export function updateAvatarImage(parent: HTMLElement, image?: string) {
@@ -51,7 +50,5 @@ function recoverAvatar(parent: HTMLElement) {
 
 export function updateAvatarFromDB(parent?: HTMLElement, twitterId?: string) {
     if (!parent || !twitterId) return
-    getNFTAvatar(twitterId).then((avatarMeta: AvatarMetaDB) => {
-        updateAvatarImage(parent, avatarMeta.image ?? '')
-    })
+    return null
 }

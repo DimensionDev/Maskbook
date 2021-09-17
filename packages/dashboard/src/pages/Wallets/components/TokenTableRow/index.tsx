@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Box, Button, TableCell, TableRow, Typography } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import { FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Asset, CurrencyType, formatBalance, formatCurrency, getTokenUSDValue, pow10 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
@@ -18,6 +18,9 @@ const useStyles = makeStyles()((theme) => ({
     cell: {
         padding: theme.spacing(2),
         border: 'none',
+    },
+    button: {
+        color: theme.palette.mode === 'dark' ? getMaskColor(theme).white : getMaskColor(theme).primary,
     },
 }))
 
@@ -68,10 +71,15 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
                 </Typography>
             </TableCell>
             <TableCell sx={{ minWidth: '200px' }} className={classes.cell} align="center" variant="body">
-                <Button variant="outlined" color="secondary" sx={{ marginRight: 1 }} onClick={onSend}>
+                <Button
+                    variant="outlined"
+                    color="secondary"
+                    sx={{ marginRight: 1 }}
+                    className={classes.button}
+                    onClick={onSend}>
                     {t.wallets_balance_Send()}
                 </Button>
-                <Button variant="outlined" color="secondary" onClick={onSwap}>
+                <Button variant="outlined" color="secondary" onClick={onSwap} className={classes.button}>
                     {t.wallets_balance_Swap()}
                 </Button>
             </TableCell>

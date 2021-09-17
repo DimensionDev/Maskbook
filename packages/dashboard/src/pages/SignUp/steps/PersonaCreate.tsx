@@ -9,7 +9,7 @@ import {
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { RoutePaths } from '../../../type'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { Box, Button, Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
 import { delay } from '@masknet/shared'
@@ -17,6 +17,7 @@ import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks
 import { Services } from '../../../API'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
+import { LoadingButton } from '../../../components/LoadingButton'
 
 const Label = ({ value }: { value: string }) => (
     <Typography
@@ -83,9 +84,9 @@ export const PersonaCreate = () => {
                         helperText={error}
                     />
                     <ButtonContainer>
-                        <Button variant="rounded" color="primary" onClick={create} disabled={!personaName}>
+                        <LoadingButton variant="rounded" color="primary" onClick={create} disabled={!personaName}>
                             {t.next()}
-                        </Button>
+                        </LoadingButton>
                     </ButtonContainer>
                 </Box>
             </Body>

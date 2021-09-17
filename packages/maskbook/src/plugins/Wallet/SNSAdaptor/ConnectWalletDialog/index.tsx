@@ -63,7 +63,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         let chainId: ChainId | undefined
 
         switch (providerType) {
-            case ProviderType.Maskbook:
+            case ProviderType.MaskWallet:
                 throw new Error('Not necessary!')
             case ProviderType.MetaMask:
                 ;({ account, chainId } = await Services.Ethereum.connectMetaMask())

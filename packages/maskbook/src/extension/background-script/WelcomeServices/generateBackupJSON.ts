@@ -101,7 +101,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     }
 
     async function backupAllWallets() {
-        const wallets_ = (await getWallets(ProviderType.Maskbook)).map(WalletRecordToJSONFormat)
+        const wallets_ = (await getWallets(ProviderType.MaskWallet)).map(WalletRecordToJSONFormat)
         wallets.push(...wallets_)
     }
 

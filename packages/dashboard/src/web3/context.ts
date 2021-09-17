@@ -19,6 +19,11 @@ export const Web3Context: Web3ProviderType = {
         '',
         Messages.events.currentAccountSettings.on,
     ),
+    accountMaskWallet: createSubscriptionFromAsync(
+        Services.Settings.getSelectedMaskWalletAddress,
+        '',
+        Messages.events.currentAccountMaskWalletSettings.on,
+    ),
     nonce: createSubscriptionFromAsync(
         Services.Settings.getBlockNumber,
         0,
@@ -52,7 +57,7 @@ export const Web3Context: Web3ProviderType = {
     ),
     providerType: createSubscriptionFromAsync(
         Services.Settings.getCurrentSelectedWalletProvider,
-        ProviderType.Maskbook,
+        ProviderType.MaskWallet,
         Messages.events.currentProviderSettings.on,
     ),
     networkType: createSubscriptionFromAsync(
@@ -139,30 +144,33 @@ function createSubscriptionFromAsync<T>(
     defaultValue: T,
     onChange: (callback: () => void) => () => void,
 ): Subscription<T> {
+    // 0 - idle, 1 - updating state, > 1 - waiting state
+    let beats = 0
     let state = defaultValue
-    let isSubscribed = false
     const { subscribe, trigger } = getEventTarget()
     f()
         .then((v) => (state = v))
         .finally(trigger)
+    const flush = async () => {
+        state = await f()
+        beats -= 1
+        if (beats > 0) {
+            beats = 1
+            setTimeout(flush, 0)
+        } else if (beats < 0) {
+            beats = 0
+        }
+        trigger()
+    }
     return {
         getCurrentValue: () => state,
         subscribe: (sub) => {
-            if (isSubscribed) return noop
-            isSubscribed = true
             const a = subscribe(sub)
             const b = onChange(async () => {
-                state = await f()
-                sub()
+                beats += 1
+                if (beats === 1) flush()
             })
-            return () =>
-                void [
-                    a(),
-                    b(),
-                    () => {
-                        isSubscribed = false
-                    },
-                ]
+            return () => void [a(), b()]
         },
     }
 }

@@ -67,7 +67,7 @@ effect(() => {
 effect(() =>
     currentChainIdSettings.addListener(() => {
         updateChainState()
-        if (currentProviderSettings.value === ProviderType.Maskbook) resetAllNonce()
+        if (currentProviderSettings.value === ProviderType.MaskWallet) resetAllNonce()
     }),
 )
 

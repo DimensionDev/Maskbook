@@ -2,10 +2,9 @@ import { NFTAvatarAmountIcon } from '@masknet/icons'
 import { useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
-import { Link, Typography } from '@material-ui/core'
-import { useState } from 'react'
-import { useAsync } from 'react-use'
-import { AvatarMetaDB, getNFT } from './NFTAvatar'
+import { CircularProgress, Link, Typography } from '@material-ui/core'
+import { useNFT } from './hooks'
+import type { AvatarMetaDB } from './types'
 
 const useStyles = makeStyles()({
     root: {
@@ -15,6 +14,7 @@ const useStyles = makeStyles()({
         position: 'absolute',
         left: 0,
         top: 46,
+        right: 0,
     },
     wrapper: {
         background:
@@ -50,18 +50,15 @@ const useStyles = makeStyles()({
 
 interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
     avatar: AvatarMetaDB
+    size?: number
 }
 export function NFTBadge(props: NFTBadgeProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const { avatar } = props
+    const { avatar, size = 10 } = props
 
-    const [amount_, setAmount_] = useState('0')
-    const [symbol_, setSymbol_] = useState('')
-    useAsync(async () => {
-        const { amount, symbol } = await getNFT(avatar.address, avatar.tokenId)
-        setAmount_(amount)
-        setSymbol_(symbol)
-    }, [avatar])
+    const { value = { amount: '0', symbol: 'ETH' }, loading } = useNFT(avatar.userId, avatar.address, avatar.tokenId)
+
+    const { amount, symbol } = value
 
     return (
         <div
@@ -71,6 +68,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                 window.open(resolveOpenSeaLink(avatar.address, avatar.tokenId), '_blank')
             }}>
             <Link
+                underline="none"
                 className={classes.link}
                 title={resolveOpenSeaLink(avatar.address, avatar.tokenId)}
                 href={resolveOpenSeaLink(avatar.address, avatar.tokenId)}
@@ -78,7 +76,15 @@ export function NFTBadge(props: NFTBadgeProps) {
                 rel="noopener noreferrer">
                 <NFTAvatarAmountIcon className={classes.icon} />
                 <div className={classes.wrapper}>
-                    <Typography className={classes.text}>{`${amount_} ${symbol_}`}</Typography>
+                    <Typography className={classes.text}>
+                        {loading ? (
+                            <CircularProgress size={size} />
+                        ) : amount === '0' ? (
+                            'no offer'
+                        ) : (
+                            `${amount} ${symbol}`
+                        )}
+                    </Typography>
                 </div>
             </Link>
         </div>

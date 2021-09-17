@@ -1,4 +1,4 @@
-import { FormattedAddress, useRemoteControlledDialog, useValueRef } from '@masknet/shared'
+import { FormattedAddress, useRemoteControlledDialog, useValueRef, useSnackbarCallback } from '@masknet/shared'
 import {
     ProviderType,
     resolveAddressLinkOnExplorer,
@@ -15,7 +15,6 @@ import { Copy, Edit3, ExternalLink } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletIcon } from '../../../../components/shared/WalletIcon'
-import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import Services from '../../../../extension/service'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'

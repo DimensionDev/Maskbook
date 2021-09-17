@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useDashboardI18N } from '../../locales'
-import { Box, Button } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { MaskAlert } from '../MaskAlert'
 import { CodeValidation } from './CodeValidation'
 import { fetchBackupValue } from '../../pages/Settings/api'
@@ -19,6 +19,7 @@ import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { AccountType } from '../../pages/Settings/type'
 import { UserContext } from '../../pages/Settings/hooks/UserContext'
 import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog'
+import { LoadingButton } from '../LoadingButton'
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
@@ -152,9 +153,9 @@ export const RestoreFromCloud = memo(() => {
                                 <BackupPreviewCard json={backupBasicInfoJson} />
                             </Box>
                             <ButtonContainer>
-                                <Button variant="rounded" color="primary" onClick={handleRestore}>
+                                <LoadingButton variant="rounded" color="primary" onClick={handleRestore}>
                                     {t.restore()}
-                                </Button>
+                                </LoadingButton>
                             </ButtonContainer>
                         </>
                     )}

@@ -3,9 +3,9 @@ import { Box, Button, CircularProgress, Link, List, ListItem, Typography } from 
 import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { resolveTransactionLinkOnExplorer, TransactionStatusType, useAccount, useChainId } from '@masknet/web3-shared'
+import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
-import { useSnackbarCallback } from '../../../../extension/options-page/DashboardDialogs/Base'
 import { WalletRPC } from '../../messages'
 import { RecentTransactionDescription } from './TransactionDescription'
 

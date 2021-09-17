@@ -1,6 +1,7 @@
 import { createElement } from 'react'
 
 export { MaskCard } from './MaskCard'
+export { MaskBlockQuote as MaskCodeBlock } from './BlockQuote'
 export { Translate } from './Translate'
 
 export interface Component<P> {

@@ -1,5 +1,5 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { UserContext } from '../../hooks/UserContext'
@@ -34,6 +34,8 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
     const [code, setCode] = useState('')
     const [invalidPhone, setInvalidPhone] = useState(false)
     const [invalidCode, setInvalidCode] = useState(false)
+
+    const sendButton = useRef<HTMLButtonElement>(null)
 
     const handleCountryCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value
@@ -103,6 +105,10 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
             })
     }
 
+    useEffect(() => {
+        if (step === 2) sendButton.current?.click()
+    }, [step])
+
     return (
         <ConfirmDialog
             title={user.phone ? t.settings_dialogs_change_phone_number() : t.settings_dialogs_setting_phone_number()}
@@ -134,7 +140,11 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                 </Box>
             ) : (
                 <Box className={classes.container} sx={{ paddingTop: '24px' }}>
-                    <Typography>{t.settings_dialogs_current_phone_validation()}</Typography>
+                    <Typography sx={{ paddingBottom: '8px' }}>
+                        {step === 0
+                            ? t.settings_dialogs_change_phone_validation()
+                            : t.settings_dialogs_current_phone_validation()}
+                    </Typography>
                     <Typography color="primary" fontWeight="bold" variant="h4">
                         {countryCode} {phone}
                     </Typography>
@@ -148,10 +158,12 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                             helperText={invalidCode ? t.settings_dialogs_incorrect_code() : ''}
                         />
                         <CountdownButton
+                            ref={sendButton}
                             size="medium"
                             sx={{ width: '100px', height: '40px' }}
+                            repeatContent={t.resend()}
                             onClick={sendValidationCode}>
-                            {t.settings_button_send()}
+                            {t.send()}
                         </CountdownButton>
                     </Box>
                 </Box>

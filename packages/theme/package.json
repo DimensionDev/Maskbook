@@ -28,7 +28,7 @@
     "notistack": "1.0.6-next.3",
     "react-window": "^1.8.6",
     "tinycolor2": "^1.4.2",
-    "tss-react": "^0.8.1",
+    "tss-react": "^0.9.1",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.5.1"
   },
