@@ -33,13 +33,7 @@ export async function getAllPoolsAsSeller(address: string, page: number, endBloc
         ITO2_CONTRACT_CREATION_BLOCK_HEIGHT,
     )
 
-    const poolsFromChain = await chain.getAllPoolsAsSeller(
-        chainId,
-        // Todo: change it to `startBlockNumberFromChain` after QA test pass.
-        ITO2_CONTRACT_CREATION_BLOCK_HEIGHT,
-        endBlock,
-        address,
-    )
+    const poolsFromChain = await chain.getAllPoolsAsSeller(chainId, startBlockNumberFromChain, endBlock, address)
 
     //#endregion
     const poolsFromNetwork = poolsFromChain.concat(poolsFromSubgraph)
