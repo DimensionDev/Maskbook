@@ -48,8 +48,10 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
     }
     const handleConfirm = async () => {
         if (step === 1) {
-            if (!invalidPhone) {
+            if (phone && !invalidPhone) {
                 setStep(2)
+            } else {
+                validCheck()
             }
         } else {
             const result = await verifyCode({
@@ -84,7 +86,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
     }
 
     const validCheck = () => {
-        if (!phone) return
+        if (!phone) return setInvalidPhone(true)
 
         const isValid = phoneRegexp.test(countryCode + phone)
         setInvalidPhone(!isValid)
