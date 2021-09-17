@@ -25,7 +25,6 @@ const useStyles = makeStyles()({
         padding: 0,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
     },
     addToken: {
         padding: 16,

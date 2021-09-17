@@ -8,7 +8,7 @@ import {
     EthereumMethodType,
     EthereumRpcType,
     EthereumTransactionConfig,
-    isEIP1159Supported,
+    isEIP1559Supported,
     ProviderType,
 } from '@masknet/web3-shared'
 import type { IJsonRpcRequest } from '@walletconnect/types'
@@ -94,7 +94,10 @@ async function handleNonce(account: string, error: Error | null, response: JsonR
     const error_ = (error ?? response?.error) as { message: string } | undefined
     const message = error_?.message ?? ''
     if (!EthereumAddress.isValid(account)) return
-    if (/\bnonce\b/im.test(message) && /\b(low|high)\b/im.test(message)) resetNonce(account)
+    // nonce too low
+    // nonce too high
+    // transaction too old
+    if (/\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)) resetNonce(account)
     else commitNonce(account)
 }
 
@@ -118,11 +121,11 @@ export async function INTERNAL_send(
         console.debug(new Error().stack)
     }
 
-    const wallet = providerType === ProviderType.Maskbook ? await getWallet() : null
+    const wallet = providerType === ProviderType.MaskWallet ? await getWallet() : null
     const web3 = await createWeb3({
         chainId: getChainIdFromPayload(payload) ?? chainId,
         privKeys: wallet?._private_key_ ? [wallet._private_key_] : [],
-        providerType: isReadOnlyMethod(payload) ? ProviderType.Maskbook : providerType,
+        providerType: isReadOnlyMethod(payload) ? ProviderType.MaskWallet : providerType,
     })
     const provider = web3.currentProvider as HttpProvider | undefined
 
@@ -141,7 +144,7 @@ export async function INTERNAL_send(
     async function personalSign() {
         const [data, address] = payload.params as [string, string]
         switch (providerType) {
-            case ProviderType.Maskbook:
+            case ProviderType.MaskWallet:
                 callback(null, {
                     jsonrpc: '2.0',
                     id: payload.id as number,
@@ -181,17 +184,18 @@ export async function INTERNAL_send(
         const [config] = payload.params as [EthereumTransactionConfig]
 
         // add nonce
-        if (providerType === ProviderType.Maskbook && config.from) config.nonce = await getNonce(config.from as string)
+        if (providerType === ProviderType.MaskWallet && config.from)
+            config.nonce = await getNonce(config.from as string)
 
         // add gas margin
         if (config.gas && !Flags.v2_enabled) config.gas = `0x${addGasMargin(config.gas).toString(16)}`
 
         // pricing transaction
         const isGasPriceValid = parseGasPrice(config.gasPrice as string) > 0
-        const isEIP1159Valid =
+        const isEIP1559Valid =
             parseGasPrice(config.maxFeePerGas as string) > 0 && parseGasPrice(config.maxPriorityFeePerGas as string) > 0
 
-        if (Flags.EIP1159_enabled && isEIP1159Supported(chainId) && !isEIP1159Valid) {
+        if (Flags.EIP1559_enabled && isEIP1559Supported(chainId) && !isEIP1559Valid) {
             throw new Error('To be implemented.')
         } else if (!isGasPriceValid) {
             config.gasPrice = await getGasPrice()
@@ -199,7 +203,7 @@ export async function INTERNAL_send(
 
         // send the transaction
         switch (providerType) {
-            case ProviderType.Maskbook:
+            case ProviderType.MaskWallet:
                 const _private_key_ = wallet?._private_key_
                 if (!wallet || !_private_key_) throw new Error('Unable to sign transaction.')
 

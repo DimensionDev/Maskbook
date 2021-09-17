@@ -904,6 +904,7 @@
     "popups_wallet_contract_interaction_total": "Total",
     "popups_wallet_unlock_wallet": "Unlock Wallet",
     "popups_wallet_unlock_error_password": "Password is incorrect",
+    "popups_wallet_activity_to_address": "To: {{address}}",
     "popups_missing_parameter_caption": "Please close this page.",
     "popups_persona_connect_to": "Connect to {{type}}",
     "popups_persona_disconnect": "Disconnect",

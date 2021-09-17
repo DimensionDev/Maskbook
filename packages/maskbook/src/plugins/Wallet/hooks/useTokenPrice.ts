@@ -27,7 +27,7 @@ export function useTokenPrice(
         coinId = getCoingeckoCoinId(chainId)
     }
 
-    const category = contractAddress ? platformId : coinId
+    const category = contractAddress || coinId
 
     const [price, setPrice] = useState(0)
     useEffect(() => {
@@ -56,7 +56,7 @@ export function useTokenPrice(
         if (!category) return
         const currentTokenPrices = currentTokenPricesSettings.value
         setPrice(currentTokenPrices[category]?.[currencyType] ?? 0)
-    }, [category])
+    }, [category, currencyType])
 
     if (!category) return 0
     return price

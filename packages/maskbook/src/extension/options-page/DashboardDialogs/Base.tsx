@@ -266,5 +266,3 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
         </ThemeProvider>
     )
 }
-
-export { useSnackbarCallback } from '@masknet/shared'

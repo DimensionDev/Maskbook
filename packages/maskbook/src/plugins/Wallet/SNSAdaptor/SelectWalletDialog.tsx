@@ -26,7 +26,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const wallets = useWallets(ProviderType.Maskbook)
+    const wallets = useWallets(ProviderType.MaskWallet)
     const selectedWallet = useWallet()
 
     //#region remote controlled dialog logic
@@ -42,8 +42,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
             closeDialog()
             await WalletRPC.updateAccount({
                 account: address,
-                chainId: undefined,
-                providerType: ProviderType.Maskbook,
+                providerType: ProviderType.MaskWallet,
                 networkType,
             })
         },

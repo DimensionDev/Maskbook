@@ -1,7 +1,7 @@
 import { story } from '../utils'
-import TabContext from '@material-ui/lab/TabContext'
-import TabPanel from '@material-ui/lab/TabPanel'
-import { Tab } from '@material-ui/core'
+import TabContext from '@mui/lab/TabContext'
+import TabPanel from '@mui/lab/TabPanel'
+import { Tab } from '@mui/material'
 import { useState } from 'react'
 import { ButtonGroupTabList, ButtonGroupTabListProps } from '../../src/Components/ButtonGroupTab'
 

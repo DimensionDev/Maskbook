@@ -203,13 +203,13 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     wallet_updateEthereumAccount: async ({ account }) => {
         await WalletRPC.updateAccount({
             account,
+            providerType: ProviderType.MaskWallet,
         })
         WalletMessages.events.walletsUpdated.sendToAll()
     },
     wallet_updateEthereumChainId: async ({ chainId }) => {
         await WalletRPC.updateAccount({
             chainId,
-            providerType: ProviderType.Maskbook,
         })
     },
     async SNSAdaptor_getCurrentDetectedProfile() {

@@ -30,7 +30,7 @@ const Unlock = lazy(() => import('./Unlock'))
 
 export default function Wallet() {
     const wallet = useWallet()
-    const wallets = useWallets(ProviderType.Maskbook)
+    const wallets = useWallets(ProviderType.MaskWallet)
     const location = useLocation()
     const history = useHistory()
 
@@ -57,11 +57,11 @@ export default function Wallet() {
         if (value?.computedPayload) {
             switch (value.computedPayload.type) {
                 case EthereumRpcType.SIGN:
-                    history.push(urlcat(PopupRoutes.WalletSignRequest, { toBeClose }))
+                    history.replace(urlcat(PopupRoutes.WalletSignRequest, { toBeClose }))
                     break
                 case EthereumRpcType.CONTRACT_INTERACTION:
                 case EthereumRpcType.SEND_ETHER:
-                    history.push(urlcat(PopupRoutes.ContractInteraction, { toBeClose }))
+                    history.replace(urlcat(PopupRoutes.ContractInteraction, { toBeClose }))
                     break
                 default:
                     break

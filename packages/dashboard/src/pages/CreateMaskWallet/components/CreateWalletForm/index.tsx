@@ -127,7 +127,7 @@ const CreateWalletForm = memo(() => {
     return (
         <div className={classes.container}>
             <Typography className={classes.title}>{t.create_wallet_form_title()}</Typography>
-            <form className={classes.form}>
+            <form className={classes.form} onSubmit={onSubmit}>
                 <Box>
                     <Typography className={classes.label}>{t.create_wallet_wallet_name()}</Typography>
                     <Controller

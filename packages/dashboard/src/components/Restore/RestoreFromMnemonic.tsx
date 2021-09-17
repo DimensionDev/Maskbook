@@ -1,7 +1,7 @@
 import { DesktopMnemonicConfirm } from '../Mnemonic'
 import { useList } from 'react-use'
-import { Box, Button, Typography } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { Box, Typography } from '@material-ui/core'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { some } from 'lodash-es'
 import { MaskAlert } from '../MaskAlert'
@@ -11,8 +11,8 @@ import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { RoutePaths } from '../../type'
 import { useNavigate } from 'react-router'
 import { useState } from 'react'
-import { getMaskColor } from '@masknet/theme'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath'
+import { LoadingButton } from '../LoadingButton'
 
 const useStyles = makeStyles()((theme) => ({
     error: {
@@ -65,13 +65,13 @@ export const RestoreFromMnemonic = () => {
                 )}
             </Box>
             <ButtonContainer>
-                <Button
+                <LoadingButton
                     variant="rounded"
                     color="primary"
                     onClick={handleImport}
                     disabled={some(values, (value) => !value)}>
                     {t.confirm()}
-                </Button>
+                </LoadingButton>
             </ButtonContainer>
             <Box sx={{ marginTop: '35px' }}>
                 <MaskAlert description={t.sign_in_account_identity_warning()} />

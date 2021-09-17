@@ -1,5 +1,5 @@
-import { ButtonGroup, ButtonGroupProps, Tab } from '@material-ui/core'
-import { useTabContext, getPanelId, getTabId } from '@material-ui/lab/TabContext'
+import { ButtonGroup, ButtonGroupProps, Tab } from '@mui/material'
+import { useTabContext, getPanelId, getTabId } from '@mui/lab/TabContext'
 import { forwardRef, cloneElement, Children, isValidElement } from 'react'
 import { ButtonTab } from './ButtonGroupTab'
 export interface ButtonGroupTabListProps

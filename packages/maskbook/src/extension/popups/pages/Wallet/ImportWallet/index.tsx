@@ -214,7 +214,7 @@ const ImportWallet = memo(() => {
                 <Typography className={classes.title}>{t('plugin_wallet_import_wallet')}</Typography>
                 <NetworkSelector />
             </div>
-            <form className={classes.form}>
+            <form className={classes.form} onSubmit={onSubmit}>
                 <div>
                     <Typography className={classes.label}>{t('wallet_name')}</Typography>
                     <Controller

@@ -1,5 +1,5 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { UserContext } from '../../hooks/UserContext'
@@ -33,6 +33,8 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
     const [code, setCode] = useState('')
     const [invalidEmail, setInvalidEmail] = useState(false)
     const [invalidCode, setInvalidCode] = useState(false)
+
+    const sendButton = useRef<HTMLButtonElement>(null)
 
     const handleClose = () => {
         onClose()
@@ -93,6 +95,10 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
         }
     }
 
+    useEffect(() => {
+        if (step === 2) sendButton.current?.click()
+    }, [step])
+
     return (
         <ConfirmDialog
             title={user.email ? t.settings_dialogs_change_email() : t.settings_dialogs_setting_email()}
@@ -117,7 +123,11 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
                 </Box>
             ) : (
                 <Box className={classes.container} sx={{ paddingTop: '24px' }}>
-                    <Typography>{t.settings_dialogs_current_email_validation()}</Typography>
+                    <Typography sx={{ paddingBottom: '8px' }}>
+                        {step === 0
+                            ? t.settings_dialogs_change_email_validation()
+                            : t.settings_dialogs_current_email_validation()}
+                    </Typography>
                     <Typography color="primary" fontWeight="bold" variant="h4">
                         {email}
                     </Typography>
@@ -131,10 +141,12 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
                             helperText={invalidCode ? t.settings_dialogs_incorrect_code() : ''}
                         />
                         <CountdownButton
+                            ref={sendButton}
                             size="medium"
                             sx={{ width: '100px', height: '40px' }}
+                            repeatContent={t.resend()}
                             onClick={sendValidationEmail}>
-                            {t.settings_button_send()}
+                            {t.send()}
                         </CountdownButton>
                     </Box>
                 </Box>

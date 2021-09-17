@@ -17,7 +17,7 @@ export function ProviderIcon(props: ProviderIconProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     switch (providerType) {
-        case ProviderType.Maskbook:
+        case ProviderType.MaskWallet:
             return <MaskBlueIcon classes={{ root: classes.icon }} sx={{ fontSize: size }} />
         case ProviderType.MetaMask:
             return <MetaMaskIcon classes={{ root: classes.icon }} sx={{ fontSize: size }} />

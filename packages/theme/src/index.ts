@@ -1,9 +1,9 @@
 /// <reference path="./extended.d.ts" />
-import { createTheme, PaletteMode, ThemeOptions, useMediaQuery } from '@material-ui/core'
+import { createTheme, PaletteMode, ThemeOptions, useMediaQuery } from '@mui/material'
 import * as Changes from './changes'
 import * as Components from './component-changes'
 import { merge } from 'lodash-es'
-import type { PaletteOptions } from '@material-ui/core/styles/createPalette'
+import type { PaletteOptions } from '@mui/material/styles/createPalette'
 import { DarkColor, LightColor, Color } from './constants'
 
 const color = (mode: PaletteMode, color: Color): PaletteOptions => ({

@@ -52,6 +52,7 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
                         {t.sign_in_account_cloud_send_verification_code_tip()} {account}
                     </Typography>
                 }
+                autoSend
                 onChange={(c) => setCode(c)}
                 errorMessage={sendCodeError?.message || error}
                 onSend={handleSendCodeFn}

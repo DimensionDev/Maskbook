@@ -35,7 +35,7 @@
     "json-stable-stringify": "^1.0.1",
     "lodash-es": "^4.17.21",
     "react-avatar-editor": "^12.0.0",
-    "react-hook-form": "^7.15.2",
+    "react-hook-form": "^7.15.3",
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-use": "^17.3.1",

@@ -1,5 +1,5 @@
-import { DialogTitle, IconButton, Typography, Box, styled } from '@material-ui/core'
-import { Close, ArrowBack } from '@material-ui/icons'
+import { DialogTitle, IconButton, Typography, Box, styled } from '@mui/material'
+import { Close, ArrowBack } from '@mui/icons-material'
 import { memo } from 'react'
 
 const Title = styled(DialogTitle)(({ theme }) => ({

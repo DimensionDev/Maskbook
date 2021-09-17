@@ -8,6 +8,7 @@ import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 import { WarningIcon } from '@masknet/icons'
+import { LoadingButton } from '../../../../components/LoadingButton'
 
 const useStyles = makeStyles()((theme) => ({
     svg: {
@@ -30,7 +31,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
     const { enqueueSnackbar } = useSnackbar()
     const { changeCurrentPersona } = PersonaContext.useContainer()
 
-    const handleDelete = useCallback(async () => {
+    const handleLogout = useCallback(async () => {
         await Services.Identity.logoutPersona(identifier)
         const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
 
@@ -58,9 +59,9 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
                 <Button color="secondary" onClick={onClose}>
                     {t.personas_cancel()}
                 </Button>
-                <Button color="error" onClick={handleDelete}>
+                <LoadingButton color="error" onClick={handleLogout}>
                     {t.personas_logout()}
-                </Button>
+                </LoadingButton>
             </DialogActions>
         </MaskDialog>
     )

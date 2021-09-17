@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { SynchronizeIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
+import { LoadingAnimation } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 60,
         height: 60,
-        fill: 'none',
+        fill: MaskColorVar.primary,
     },
 }))
 
@@ -30,7 +30,7 @@ export const LoadingPlaceholder = memo(() => {
     const { classes } = useStyles()
     return (
         <Box className={classes.container}>
-            <SynchronizeIcon className={classes.icon} />
+            <LoadingAnimation className={classes.icon} />
             <Typography className={classes.prompt}>loading...</Typography>
         </Box>
     )

@@ -1,5 +1,5 @@
 declare global {
-    module '@material-ui/core/Button' {
+    module '@mui/material/Button' {
         interface ButtonPropsVariantOverrides {
             rounded: true
         }
@@ -8,7 +8,7 @@ declare global {
             error: true
         }
     }
-    module '@material-ui/core/Paper' {
+    module '@mui/material/Paper' {
         interface PaperPropsVariantOverrides {
             background: true
             rounded: true

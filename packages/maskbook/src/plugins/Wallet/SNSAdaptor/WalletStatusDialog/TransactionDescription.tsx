@@ -77,13 +77,15 @@ export interface RecentTransactionDescriptionProps {
 
 export function RecentTransactionDescription(props: RecentTransactionDescriptionProps) {
     const { hash, computedPayload } = props
-    const { value: nativeTokenDetailed } = useNativeTokenDetailed()
-    const { value: tokenDetailed } = useERC20TokenDetailed(
+    const { loading: getNativeTokenLoading, value: nativeTokenDetailed } = useNativeTokenDetailed()
+    const { loading: getERC20TokenLoading, value: tokenDetailed } = useERC20TokenDetailed(
         computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
             ['approve', 'transfer', 'transferForm'].includes(computedPayload.name ?? '')
             ? computedPayload._tx.to
             : '',
     )
 
-    return <span>{getTransactionDescription(nativeTokenDetailed, tokenDetailed, computedPayload) ?? hash}</span>
+    return !getNativeTokenLoading && !getERC20TokenLoading ? (
+        <span>{getTransactionDescription(nativeTokenDetailed, tokenDetailed, computedPayload) ?? hash}</span>
+    ) : null
 }

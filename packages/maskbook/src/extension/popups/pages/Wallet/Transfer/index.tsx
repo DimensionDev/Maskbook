@@ -28,7 +28,7 @@ const Transfer = memo(() => {
     const { classes } = useStyles()
     const networkType = useValueRef(currentNetworkSettings)
     const wallet = useWallet()
-    const wallets = useWallets(ProviderType.Maskbook)
+    const wallets = useWallets(ProviderType.MaskWallet)
     const { assets, currentToken } = useContainer(WalletContext)
     const [selectedAsset, setSelectedAsset] = useState(currentToken)
 

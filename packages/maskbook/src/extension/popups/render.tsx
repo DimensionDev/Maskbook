@@ -10,7 +10,7 @@ import { Web3ContextWithoutConfirm } from '../../web3/context'
 import { PopupFrame } from './components/PopupFrame'
 import { StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { Appearance } from '@masknet/theme'
-import { MaskUIRootWithinShadow } from '../../UIRoot'
+import { MaskUIRoot } from '../../UIRoot'
 import { status } from '../../setup.ui'
 
 const Wallet = lazy(() => import('./pages/Wallet'))
@@ -22,7 +22,7 @@ const SignRequest = lazy(() => import('./SignRequest'))
 
 function Dialogs() {
     const theme = useClassicMaskTheme({ appearance: Appearance.light })
-    return MaskUIRootWithinShadow(
+    return MaskUIRoot(
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
                 <Web3Provider value={Web3ContextWithoutConfirm}>
