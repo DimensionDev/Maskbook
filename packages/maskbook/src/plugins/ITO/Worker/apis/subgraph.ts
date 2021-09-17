@@ -48,18 +48,22 @@ const POOL_FIELDS = `
 async function fetchFromMarketSubgraph<T>(query: string, chainId?: ChainId) {
     const subgraphURL = getITOConstants(chainId ? chainId : currentChainIdSettings.value).SUBGRAPH_URL
     if (!subgraphURL) return null
-    const response = await fetch(subgraphURL, {
-        method: 'POST',
-        mode: 'cors',
-        body: stringify({ query }),
-    })
+    try {
+        const response = await fetch(subgraphURL, {
+            method: 'POST',
+            mode: 'cors',
+            body: stringify({ query }),
+        })
 
-    if (!response.ok) return null
+        if (!response.ok) return null
 
-    const { data } = (await response.json()) as {
-        data: T
+        const { data } = (await response.json()) as {
+            data: T
+        }
+        return data
+    } catch (error) {
+        return null
     }
-    return data
 }
 
 export async function getTradeInfo(pid: string, trader: string) {
