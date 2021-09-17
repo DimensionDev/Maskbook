@@ -53,6 +53,9 @@ async function fetchFromMarketSubgraph<T>(query: string, chainId?: ChainId) {
         mode: 'cors',
         body: stringify({ query }),
     })
+
+    if (!response.ok) return null
+
     const { data } = (await response.json()) as {
         data: T
     }
