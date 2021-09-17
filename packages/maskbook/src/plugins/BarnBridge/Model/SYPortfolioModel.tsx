@@ -2,9 +2,12 @@ import { last } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import { currentAccountSettings } from '../../Wallet/settings'
 
-export function SmartYieldPortfolioModelGetData() {
-    const protocolsMap: any = {}
+export interface SYPortoflioModelData {
+    seniorValue: number
+    juniorValue: number
+}
 
+export function SmartYieldPortfolioModelGetData() {
     return useAsyncRetry(async () => {
         const walletAddress = currentAccountSettings.value
         const response = await fetch(
@@ -17,8 +20,12 @@ export function SmartYieldPortfolioModelGetData() {
             },
         )
 
-        const realData = await response.json()
+        interface Payload<T> {
+            data: T
+        }
 
-        return last(realData.data) ?? { seniorValue: 0, juniorValue: 0 }
+        const payload: Payload<SYPortoflioModelData[]> = await response.json()
+
+        return last(payload.data) ?? { seniorValue: 0, juniorValue: 0 }
     }, [])
 }

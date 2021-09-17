@@ -1,10 +1,11 @@
 import { BB_SY_CREAM, BB_SY_AAVE, BB_SY_COMPOUND, APP_URL, SY_URL } from '../constants'
+import type { SYCoinProps } from '../UI/SmartYieldPoolView'
 import { useAsyncRetry } from 'react-use'
 import urlcat from 'urlcat'
 
-export function SmartYieldPoolModelGetData() {
-    const protocolsMap: any = {}
+export type SYPoolModelData = { [id: string]: SYCoinProps[] }
 
+export function SmartYieldPoolModelGetData() {
     return useAsyncRetry(async () => {
         const response = await fetch('https://api.barnbridge.com/api/smartyield/pools?originator=all', {
             body: null,
@@ -12,15 +13,31 @@ export function SmartYieldPoolModelGetData() {
             mode: 'cors',
             credentials: 'omit',
         })
+        const protocolsMap: SYPoolModelData = {}
 
-        const realData = await response.json()
-        realData.data.map(function (entry: any) {
+        interface Payload<T> {
+            data: T
+        }
+        interface Entry {
+            protocolId: string
+            underlyingSymbol: string
+            state: State
+        }
+        interface State {
+            seniorApy: number
+            juniorApy: number
+            seniorLiquidity: string
+            juniorLiquidity: string
+        }
+
+        const payload: Payload<Entry[]> = await response.json()
+        payload.data.map(function (entry: Entry) {
             const protocolId = PrettifyProtocolName(entry.protocolId)
             if (!(protocolId in protocolsMap)) {
                 protocolsMap[protocolId] = []
             }
-            const seniorAPY = (entry.state.seniorApy * 100).toFixed(2)
-            const juniorAPY = (entry.state.juniorApy * 100).toFixed(2)
+            const seniorAPY = Number.parseInt((entry.state.seniorApy * 100).toFixed(2), 10)
+            const juniorAPY = Number.parseInt((entry.state.juniorApy * 100).toFixed(2), 10)
             protocolsMap[protocolId] = protocolsMap[protocolId].concat([
                 {
                     coinName: entry.underlyingSymbol,

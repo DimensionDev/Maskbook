@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { SmartYieldPoolView } from './SmartYieldPoolView'
-import { SmartYieldPoolModelGetData } from './../Model/SYPoolModel'
-import { SmartYieldPortfolioModelGetData } from './../Model/SYPortfolioModel'
+import { SmartYieldPoolModelGetData, SYPoolModelData } from './../Model/SYPoolModel'
+import { SmartYieldPortfolioModelGetData, SYPortoflioModelData } from './../Model/SYPortfolioModel'
 
 import { useEffect } from 'react'
 import { useI18N, I18NFunction } from '../../../utils/i18n-next-ui'
@@ -58,9 +58,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+interface SmartYieldPoolsViewProps {}
+
 export function SmartYieldPoolsView() {
     const [tabIndex, setTabIndex] = useState(0)
-    const [_syDataState, setPools] = useState<any>([])
+    const [_syDataState, setPools] = useState<[SYPoolModelData, SYPortoflioModelData]>([
+        {},
+        { seniorValue: 0, juniorValue: 0 },
+    ])
     const { t } = useI18N()
 
     //#region data
@@ -86,7 +91,7 @@ export function SmartYieldPoolsView() {
 
     //#region tabs
     // Tabs Construction
-    const SYPoolsTab = (props: any) => (
+    const SYPoolsTab = (props: SmartYieldPoolsViewProps) => (
         <Tab
             {...props}
             className={classes.tab}
@@ -100,7 +105,7 @@ export function SmartYieldPoolsView() {
         />
     )
 
-    const SYWalletTab = (props: any) => (
+    const SYWalletTab = (props: SmartYieldPoolsViewProps) => (
         <Tab
             {...props}
             className={classes.tab}
@@ -143,7 +148,7 @@ export function SmartYieldPoolsView() {
     )
 }
 
-function GenerateSmartYieldPositions(t: I18NFunction, syPortfolioData: any) {
+function GenerateSmartYieldPositions(t: I18NFunction, syPortfolioData: SYPortoflioModelData) {
     return (
         <PortfolioBalance
             total={syPortfolioData.seniorValue + syPortfolioData.juniorValue}
@@ -155,10 +160,10 @@ function GenerateSmartYieldPositions(t: I18NFunction, syPortfolioData: any) {
     )
 }
 
-function GenerateSmartYieldPoolViews(classes: any, syData: any, protocols: any) {
+function GenerateSmartYieldPoolViews(classes: any, syData: SYPoolModelData, protocols: string[]) {
     return (
         <div className={classes.root}>
-            {protocols.map((name: any) => (
+            {protocols.map((name: string) => (
                 <SmartYieldPoolView protocolName={name} coins={syData[name]} />
             ))}
         </div>

@@ -80,7 +80,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const protocolNameToIcon: any = {
+const protocolNameToIcon: { [id: string]: JSX.Element } = {
     'C.R.E.A.M FINANCE': <BarnBridgeSmartYieldCREAMToken />,
     Compound: <BarnBridgeSmartYieldCompoundToken />,
     AAVE: <BarnBridgeSmartYieldAAVEToken />,
@@ -221,7 +221,7 @@ export interface SYPoolProps {
     protocolName: string
     coins: SYCoinProps[]
 }
-interface SYCoinProps {
+export interface SYCoinProps {
     coinName: string
     seniorLiquidity: string
     seniorAPY: number

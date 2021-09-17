@@ -1,11 +1,6 @@
 import BigNumber from 'bignumber.js'
 
-export function formatBigValue(
-    value: BigNumber.Value,
-    decimals = 4,
-    defaultValue = '-',
-    minDecimals: number | undefined = undefined,
-): string {
+export function formatBigValue(value: BigNumber.Value, decimals = 4, defaultValue = '-', minDecimals?: number): string {
     value = new BigNumber(value)
 
     if (value.isNaN()) {

@@ -140,14 +140,14 @@ export function BarnBridgeTabContainerView(props: PoolTogetherViewProps) {
     const saTooltipTextbox = <Button variant="contained">{t('plugin_barnbridge_tab_smart_alpha')}</Button>
 
     // Tabs Construction
-    const SmartYieldTab = (props: any) => (
+    const SmartYieldTab = (props: PoolTogetherViewProps) => (
         <Tooltip title={syTooltipTextbox} placement="right" arrow>
             <div>
                 <Tab {...props} key="SY" icon={<BarnBridgeSmartYieldIcon classes={{ root: classes.tabIcons }} />} />
             </div>
         </Tooltip>
     )
-    const YieldFarmingTab = (props: any) => (
+    const YieldFarmingTab = (props: PoolTogetherViewProps) => (
         <Tooltip title={yfTooltipTextbox} placement="right" arrow>
             <div>
                 <Tab
@@ -159,7 +159,7 @@ export function BarnBridgeTabContainerView(props: PoolTogetherViewProps) {
             </div>
         </Tooltip>
     )
-    const SmartAlphaTab = (props: any) => (
+    const SmartAlphaTab = (props: PoolTogetherViewProps) => (
         <Tooltip title={saTooltipTextbox} placement="right" arrow>
             <div>
                 <Tab
