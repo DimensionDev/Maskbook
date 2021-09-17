@@ -49,7 +49,6 @@ function PrettifyProtocolName(name: string) {
 }
 
 function ConstructRedirectUrl(protocolName: string, coin: string) {
-    console.log('generating url')
     return urlcat(APP_URL, `${SY_URL}/stats`, { m: protocolName, t: coin })
 }
 

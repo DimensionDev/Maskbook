@@ -152,7 +152,6 @@ function GenerateHeader() {
 }
 
 function onClickPoolCell(clickUrl: string) {
-    console.log(clickUrl)
     window.open(clickUrl)
 }
 
