@@ -145,7 +145,7 @@ export async function getPool(pid: string) {
     return payloadIntoMask(data.pool)
 }
 
-export async function getAllPoolsAsSeller(address: string, page: number) {
+export async function getAllPoolsAsSeller(address: string, page: number, chainId: ChainId) {
     const data = await fetchFromMarketSubgraph<{
         sellInfos: {
             pool: JSON_PayloadOutMask & {
@@ -153,7 +153,8 @@ export async function getAllPoolsAsSeller(address: string, page: number) {
                 exchange_out_volumes: string[]
             }
         }[]
-    }>(`
+    }>(
+        `
     {
         sellInfos ( orderBy: timestamp, orderDirection: desc, first: 50, skip: ${
             page * 50
@@ -165,7 +166,9 @@ export async function getAllPoolsAsSeller(address: string, page: number) {
             }
         }
     }
-    `)
+    `,
+        chainId,
+    )
     if (!data?.sellInfos) return []
 
     return data.sellInfos.map((x) => {

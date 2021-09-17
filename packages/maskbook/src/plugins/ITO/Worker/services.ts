@@ -3,7 +3,6 @@ import * as subgraph from './apis/subgraph'
 import * as chain from './apis/chain'
 import * as database from './database'
 import { getChainDetailed, ChainId, getITOConstants } from '@masknet/web3-shared'
-import { currentChainIdSettings } from '../../Wallet/settings'
 
 export async function getTradeInfo(pid: string, trader: string) {
     const tradeInfo = await subgraph.getTradeInfo(pid, trader)
@@ -17,8 +16,7 @@ export async function getPool(pid: string) {
     return poolFromChain
 }
 
-export async function getAllPoolsAsSeller(address: string, page: number, endBlock: number) {
-    const chainId = currentChainIdSettings.value
+export async function getAllPoolsAsSeller(address: string, page: number, endBlock: number, chainId: ChainId) {
     const { ITO2_CONTRACT_CREATION_BLOCK_HEIGHT } = getITOConstants(chainId)
 
     //#region Get data from thegraph
