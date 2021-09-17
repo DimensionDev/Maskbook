@@ -3,6 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     EthereumRpcType,
+    formatBalance,
     formatGweiToWei,
     formatWeiToEther,
     getChainFromChainId,
@@ -309,8 +310,8 @@ const ContractInteraction = memo(() => {
                     {tokenDecimals !== undefined ? (
                         <>
                             <Typography className={classes.amount}>
-                                {new BigNumber(tokenAmount).isGreaterThan(10 ** 9) ? (
-                                    new BigNumber(tokenAmount).toPrecision(3)
+                                {new BigNumber(formatBalance(tokenAmount, tokenDecimals)).isGreaterThan(10 ** 9) ? (
+                                    new BigNumber(formatBalance(tokenAmount, tokenDecimals)).toPrecision(3)
                                 ) : (
                                     <FormattedBalance value={tokenAmount} decimals={tokenDecimals} significant={4} />
                                 )}

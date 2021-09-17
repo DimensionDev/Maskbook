@@ -188,7 +188,7 @@ export const Prior1559GasSetting = memo(() => {
             if (value) {
                 const config = {
                     ...value.payload.params[0],
-                    gas: `0x${formatGweiToWei(data.gasPrice).toString(16)}`,
+                    gas: `0x${new BigNumber(data.gasLimit).toString(16)}`,
                     gasPrice: `0x${formatGweiToWei(data.gasPrice).toString(16)}`,
                 }
 
