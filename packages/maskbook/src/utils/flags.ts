@@ -46,7 +46,7 @@ export const Flags = {
     plugin_switch_enabled: betaOrInsiderOnly,
     //#endregion
 
-    EIP1159_enabled: false,
+    EIP1159_enabled: betaOrInsiderOnly,
 
     bsc_enabled: true,
     polygon_enabled: true,

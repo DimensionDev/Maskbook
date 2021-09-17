@@ -201,6 +201,13 @@ export async function INTERNAL_send(
             config.gasPrice = await getGasPrice()
         }
 
+        // if the transaction is eip-1559, need to remove gasPrice from the config
+        if (Flags.EIP1159_enabled && isEIP1159Valid) {
+            config.gasPrice = undefined
+        }
+
+        console.log(config)
+
         // send the transaction
         switch (providerType) {
             case ProviderType.MaskWallet:

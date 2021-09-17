@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useEffect, useMemo, useState } from 'react'
-import { EthereumRpcType, useChainId, useNativeTokenDetailed } from '@masknet/web3-shared'
+import { EthereumRpcType, formatGweiToWei, useChainId, useNativeTokenDetailed } from '@masknet/web3-shared'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import BigNumber from 'bignumber.js'
@@ -13,7 +13,7 @@ import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@material-ui/lab'
 import { isEmpty, noop } from 'lodash-es'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
-import { useHistory, useLocation } from 'react-router'
+import { useHistory } from 'react-router'
 import { useRejectHandler } from '../hooks/useRejectHandler'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 
@@ -92,7 +92,6 @@ export const GasSetting1559 = memo(() => {
     const { classes } = useStyles()
     const { t } = useI18N()
     const chainId = useChainId()
-    const location = useLocation()
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeTokenDetailed()
@@ -194,9 +193,9 @@ export const GasSetting1559 = memo(() => {
             if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
-                    new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas).toString(),
+                    new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas, 16).idiv(10 ** 9).toString(),
                 )
-                setValue('maxFeePerGas', new BigNumber(value.computedPayload._tx.maxFeePerGas).toString())
+                setValue('maxFeePerGas', new BigNumber(value.computedPayload._tx.maxFeePerGas).idiv(10 ** 9).toString())
             } else {
                 setOption(1)
             }
@@ -225,9 +224,9 @@ export const GasSetting1559 = memo(() => {
             if (value) {
                 const config = {
                     ...value.payload.params[0],
-                    gas: new BigNumber(data.gasLimit).toString(16),
-                    maxPriorityFeePerGas: new BigNumber(data.maxPriorityFeePerGas).toString(),
-                    maxFeePerGas: new BigNumber(data.maxFeePerGas).toString(),
+                    gas: `0x${new BigNumber(data.gasLimit).toString(16)}`,
+                    maxPriorityFeePerGas: `0x${formatGweiToWei(data.maxPriorityFeePerGas).toString(16)}`,
+                    maxFeePerGas: `0x${formatGweiToWei(data.maxFeePerGas).toString(16)}`,
                 }
 
                 await WalletRPC.updateUnconfirmedRequest({

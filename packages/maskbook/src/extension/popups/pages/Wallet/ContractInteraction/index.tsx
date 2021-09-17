@@ -249,7 +249,9 @@ const ContractInteraction = memo(() => {
     const handleReject = useRejectHandler(() => history.replace(PopupRoutes.Wallet), request)
 
     // gas fee
-    const gasPriceEIP1159 = new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0).multipliedBy(10 ** 9)
+    const gasPriceEIP1159 = maxFeePerGas
+        ? new BigNumber(maxFeePerGas, 16).idiv(10 ** 9).toString()
+        : new BigNumber(defaultPrices?.maxFeePerGas ?? 0).multipliedBy(10 ** 9)
     const gasPricePriorEIP1159 = (gasPrice as string) ?? defaultPrices?.gasPrice ?? 0
     const gasFee = new BigNumber(
         isEIP1159Supported(getChainIdFromNetworkType(networkType)) ? gasPriceEIP1159 : gasPricePriorEIP1159,

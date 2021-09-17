@@ -4,6 +4,7 @@ import {
     Asset,
     EthereumTokenType,
     formatBalance,
+    formatGweiToWei,
     isGreaterThan,
     isZero,
     pow10,
@@ -294,9 +295,10 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             const transferAmount = new BigNumber(data.amount || '0')
                 .multipliedBy(pow10(selectedAsset?.token.decimals || 0))
                 .toFixed()
+
             await transferCallback(transferAmount, data.address, {
-                maxFeePerGas: new BigNumber(data.maxFeePerGas).toNumber(),
-                maxPriorityFeePerGas: new BigNumber(data.maxPriorityFeePerGas).toNumber(),
+                maxFeePerGas: `0x${formatGweiToWei(data.maxFeePerGas).toString(16)}`,
+                maxPriorityFeePerGas: `0x${formatGweiToWei(data.maxPriorityFeePerGas).toString(16)}`,
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
         },
