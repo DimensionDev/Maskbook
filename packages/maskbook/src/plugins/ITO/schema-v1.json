@@ -119,19 +119,6 @@
         "seller": {
             "$ref": "#/definitions/trader"
         },
-        "buyers": {
-            "type": "array",
-            "title": "buyers",
-            "description": "A list of exchange token buyer",
-            "additionalItems": true,
-            "items": {
-                "anyOf": [
-                    {
-                        "$ref": "#/definitions/trader"
-                    }
-                ]
-            }
-        },
         "exchange_amounts": {
             "type": "array",
             "title": "exchange_amounts",
@@ -174,7 +161,6 @@
         "creation_time",
         "token",
         "seller",
-        "buyers",
         "exchange_amounts",
         "exchange_tokens"
     ]

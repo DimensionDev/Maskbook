@@ -219,7 +219,8 @@
         "misoperation",
         "majeure",
         "Swither",
-        "nftscan"
+        "nftscan",
+        "apikey"
     ],
     "ignoreWords": [
         "cryptopunks",

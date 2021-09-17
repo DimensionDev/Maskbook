@@ -114,7 +114,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 seller: {
                     address: FillSuccess.creator,
                 },
-                buyers: [],
                 chain_id: chainId,
                 start_time: fillSettings.startTime.getTime(),
                 end_time: fillSettings.endTime.getTime(),
@@ -159,7 +158,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
                     'creation_time',
                     'unlock_time',
                     'total_remaining',
-                    'buyers',
                     'regions',
                     'start_time',
                     'end_time',
