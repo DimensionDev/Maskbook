@@ -3,9 +3,8 @@ import { Box, Button, Link, Typography } from '@material-ui/core'
 import { getMaskColor, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { makeStyles } from '@masknet/theme'
-import { SOCIAL_MEDIA_ICON_MAPPING } from '../../../../constants'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
-import type { ProfileIdentifier } from '@masknet/shared'
+import { ProfileIdentifier, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 
 const useStyles = makeStyles()((theme) => ({

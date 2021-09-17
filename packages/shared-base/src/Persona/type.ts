@@ -12,6 +12,7 @@ export interface PersonaInformation {
 export interface ProfileInformation {
     /** The nickname of the profile. Should be used in prior. */
     nickname?: string
+    avatar?: string
     identifier: ProfileIdentifier
 }
 export interface RelationProfile {

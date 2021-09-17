@@ -124,7 +124,7 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
                         <Table stickyHeader>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell variant="head" align="center" className={classes.header}>
+                                    <TableCell variant="head" align="left" className={classes.header}>
                                         {t.personas_contacts_name()}
                                     </TableCell>
                                     <TableCell variant="head" align="center" className={classes.header}>
