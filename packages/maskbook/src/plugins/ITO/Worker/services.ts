@@ -20,7 +20,7 @@ export async function getAllPoolsAsSeller(address: string, page: number, endBloc
     const { ITO2_CONTRACT_CREATION_BLOCK_HEIGHT } = getITOConstants(chainId)
 
     //#region Get data from thegraph
-    const poolsFromSubgraph = await subgraph.getAllPoolsAsSeller(address, page)
+    const poolsFromSubgraph = await subgraph.getAllPoolsAsSeller(address, page, chainId)
     //#endregion
 
     //#region Get data from chain which has not been synced by thegraph.
