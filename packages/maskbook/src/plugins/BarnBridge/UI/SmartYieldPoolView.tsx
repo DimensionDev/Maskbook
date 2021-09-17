@@ -80,7 +80,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const protocolNameToIcon: { [id: string]: JSX.Element } = {
+const protocolNameToIcon: Record<string, JSX.Element> = {
     'C.R.E.A.M FINANCE': <BarnBridgeSmartYieldCREAMToken />,
     Compound: <BarnBridgeSmartYieldCompoundToken />,
     AAVE: <BarnBridgeSmartYieldAAVEToken />,

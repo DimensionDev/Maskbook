@@ -31,7 +31,7 @@ export function SmartYieldPoolModelGetData() {
         }
 
         const payload: Payload<Entry[]> = await response.json()
-        payload.data.map(function (entry: Entry) {
+        payload.data.map((entry) => {
             const protocolId = PrettifyProtocolName(entry.protocolId)
             if (!(protocolId in protocolsMap)) {
                 protocolsMap[protocolId] = []
