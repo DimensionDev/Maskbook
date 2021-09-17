@@ -15,6 +15,7 @@ import { ChainIcon, useMenu, useRemoteControlledDialog } from '@masknet/shared'
 import { useAsync } from 'react-use'
 import { PluginMessages, PluginServices } from '../../../../API'
 import { SuccessIcon } from '@masknet/icons'
+import { noop } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -66,7 +67,7 @@ export const useNetworkSelector = () => {
         [providerType],
     )
 
-    return useMenu(
+    const networkMenu = useMenu(
         ...(networks?.map((network) => {
             const chainId = getChainIdFromNetworkType(network)
 
@@ -89,4 +90,10 @@ export const useNetworkSelector = () => {
             )
         }) ?? []),
     )
+
+    if ([ProviderType.WalletConnect || ProviderType.CustomNetwork].includes(providerType)) {
+        return [null, noop] as const
+    }
+
+    return networkMenu
 }
