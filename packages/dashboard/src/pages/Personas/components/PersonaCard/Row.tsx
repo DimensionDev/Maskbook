@@ -86,6 +86,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
             tipTitle: t.personas_logout(),
             tipContent: t.personas_logout_confirm_password_tip(),
             confirmTitle: t.personas_logout(),
+            force: false,
         })
 
     const exportPrivateKeyConfirmedPasswordCallback = () =>
