@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import { CircularProgress, Link, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
-import classnames from 'classnames'
+import classNames from 'classnames'
 import { useNFT } from './hooks'
 import type { AvatarMetaDB } from './types'
 
@@ -65,9 +65,9 @@ function formatPrice(amount: string) {
     const _amount = new BigNumber(amount ?? '0')
     if (_amount.isZero()) return '0'
     if (_amount.isLessThan(1)) return _amount.toFixed(1, 2)
-    if (_amount.isGreaterThan(1e6)) return `${_amount.div(1e6).toFixed(1)}M`
-    if (_amount.isGreaterThan(1e3)) return `${_amount.div(1e3).toFixed(1)}K`
-    return _amount.toFixed(2)
+    if (_amount.isLessThan(1e3)) return _amount.toFixed(2)
+    if (_amount.isLessThan(1e6)) return `${_amount.div(1e6).toFixed(1)}K`
+    return `${_amount.div(1e6).toFixed(1)}M`
 }
 
 function formatText(symbol: string, length: number) {
@@ -97,7 +97,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                 rel="noopener noreferrer">
                 <div className={classes.wrapper}>
                     {loading ? (
-                        <div className={classnames(classes.loading, classes.box)}>
+                        <div className={classNames(classes.loading, classes.box)}>
                             <CircularProgress size={size} />
                         </div>
                     ) : (
