@@ -31,7 +31,11 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
                 proxy.realCurrent = nftDom
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
-                root.render(<NFTBadge avatar={avatar} />)
+                root.render(
+                    <div style={{ position: 'absolute', left: 0, right: 0, top: 26 }}>
+                        <NFTBadge avatar={avatar} />
+                    </div>,
+                )
                 remover = root.destory
             }
 
