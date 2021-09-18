@@ -86,7 +86,7 @@ export default function SettingPasswordDialog({ open, onClose, onSet }: SettingP
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
                         placeholder={t.settings_label_backup_password()}
-                        sx={{ marginBottom: '10px' }}
+                        sx={{ marginBottom: '16px' }}
                         error={incorrectPassword}
                         helperText={incorrectPassword ? t.settings_dialogs_incorrect_password() : ''}
                     />
@@ -101,7 +101,7 @@ export default function SettingPasswordDialog({ open, onClose, onSet }: SettingP
                             ? t.settings_label_new_backup_password()
                             : t.settings_label_backup_password()
                     }
-                    sx={{ marginBottom: '10px' }}
+                    sx={{ marginBottom: '16px' }}
                     error={!passwordValid}
                     helperText={passwordValid ? '' : passwordRule}
                 />

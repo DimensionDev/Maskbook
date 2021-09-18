@@ -125,7 +125,7 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
                         onChange={(event) => setBackupPassword(event.target.value)}
                         type="password"
                         placeholder={t.settings_label_backup_password()}
-                        sx={{ marginBottom: '24px' }}
+                        sx={{ marginBottom: '16px' }}
                         error={incorrectBackupPassword}
                         helperText={incorrectBackupPassword ? t.settings_dialogs_incorrect_password() : ''}
                     />
@@ -137,7 +137,7 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
                             onChange={(event) => setPaymentPassword(event.target.value)}
                             type="password"
                             placeholder={t.settings_label_payment_password()}
-                            sx={{ marginBottom: '24px' }}
+                            sx={{ marginBottom: '16px' }}
                             error={incorrectPaymentPassword}
                             helperText={incorrectPaymentPassword ? t.settings_dialogs_incorrect_password() : ''}
                         />
