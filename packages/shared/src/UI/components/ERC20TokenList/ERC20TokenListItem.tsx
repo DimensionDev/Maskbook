@@ -13,7 +13,7 @@ import { TokenIcon } from '../TokenIcon'
 import type { MaskSearchableListItemProps } from '@masknet/theme'
 import { makeStyles, MaskLoadingButton } from '@masknet/theme'
 import { some } from 'lodash-es'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { LoadingIcon } from '@masknet/icons'
 import { useSharedI18N } from '../../../locales'
 
@@ -66,7 +66,15 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const getERC20TokenListItem =
-    (addedTokens: FungibleTokenDetailed[], externalTokens: FungibleTokenDetailed[], account?: string) =>
+    (
+        addedTokens: FungibleTokenDetailed[],
+        externalTokens: FungibleTokenDetailed[],
+        info: {
+            from: 'search' | 'defaultList'
+            inList: boolean
+        },
+        account?: string,
+    ) =>
     ({ data, onSelect }: MaskSearchableListItemProps<Asset>) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
@@ -96,6 +104,22 @@ export const getERC20TokenListItem =
             onSelect(data)
         }
 
+        const action = useMemo(() => {
+            return !isNotAdded || isAdded || (info.inList && info.from === 'search') ? (
+                <span>{data.balance ? formatBalance(data.balance, token.decimals, 6) : ''}</span>
+            ) : (
+                <MaskLoadingButton
+                    variant="rounded"
+                    color="primary"
+                    onClick={onImport}
+                    size="small"
+                    soloLoading
+                    loadingIndicator={<LoadingIcon sx={{ fontSize: 16 }} />}>
+                    {t.import()}
+                </MaskLoadingButton>
+            )
+        }, [info, isNotAdded, isAdded])
+
         return (
             <ListItem button className={classes.list} onClick={handleTokenSelect}>
                 <ListItemIcon>
@@ -113,19 +137,7 @@ export const getERC20TokenListItem =
                         </span>
                     </Typography>
                     <Typography sx={{ fontSize: 14 }} color="textSecondary" component="span">
-                        {!isNotAdded || isAdded ? (
-                            <span>{data.balance ? formatBalance(data.balance, token.decimals, 6) : ''}</span>
-                        ) : (
-                            <MaskLoadingButton
-                                variant="rounded"
-                                color="primary"
-                                onClick={onImport}
-                                size="small"
-                                soloLoading
-                                loadingIndicator={<LoadingIcon sx={{ fontSize: 16 }} />}>
-                                {t.import()}
-                            </MaskLoadingButton>
-                        )}
+                        {action}
                     </Typography>
                 </ListItemText>
             </ListItem>

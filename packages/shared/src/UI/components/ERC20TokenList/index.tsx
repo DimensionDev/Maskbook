@@ -5,6 +5,7 @@ import {
     Asset,
     currySameAddress,
     FungibleTokenDetailed,
+    isSameAddress,
     isValidAddress,
     makeSortAssertFn,
     makeSortTokenFn,
@@ -120,7 +121,16 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
             onSearch={setKeyword}
             data={renderAssets as Asset[]}
             searchKey={['token.address', 'token.symbol', 'token.name']}
-            itemRender={getERC20TokenListItem(trustedERC20Tokens, searchedToken ? [searchedToken] : [], account)}
+            itemRender={getERC20TokenListItem(
+                trustedERC20Tokens,
+                searchedToken ? [searchedToken] : [],
+                searchedToken
+                    ? [...tokens, ...erc20TokensDetailed].find((x) => isSameAddress(x.address, searchedToken.address))
+                        ? { from: 'search', inList: true }
+                        : { from: 'search', inList: false }
+                    : { from: 'defaultList', inList: true },
+                account,
+            )}
             placeholder={getPlaceHolder()}
             FixedSizeListProps={FixedSizeListProps}
         />
