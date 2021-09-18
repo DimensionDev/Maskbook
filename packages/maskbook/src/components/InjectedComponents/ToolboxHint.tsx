@@ -280,8 +280,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                         : isWalletValid
                         ? openWalletStatusDialog()
                         : openSelectWalletDialog()
-                }}
-            >
+                }}>
                 <div className={classes.button}>
                     {isWalletValid ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} size={24} />}
 
