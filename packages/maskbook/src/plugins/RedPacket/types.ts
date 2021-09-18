@@ -73,6 +73,23 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }
 
+export interface RedPacketSubgraphInMask extends RedPacketBasic {
+    name: string
+    txid: string
+    total_remaining: string
+    last_updated_time: number
+    chain_id: number
+    token: NativeTokenDetailed | ERC20TokenDetailed
+    creator: {
+        name: string
+        address: string
+    }
+    claimers: {
+        name: string
+        address: string
+    }[]
+}
+
 export interface NftRedPacketJSONPayload extends RedPacketBasic {
     sender: {
         address: string
@@ -106,45 +123,6 @@ export interface RedPacketHistoryInMask {
     password: string
     shares: number
 }
-interface RedPacketCreator {
-    name: string
-    is_random: boolean
-    total: string
-    total_remaining: string
-    creation_time: number
-    last_updated_time: number
-    duration: number
-    chain_id: number
-    token: NativeTokenDetailed | ERC20TokenDetailed
-    creator: {
-        name: string
-        address: string
-    }
-    claimers: {
-        name: string
-        address: string
-    }[]
-    address: string
-}
-
-interface NFTRedPacketCreator extends Omit<RedPacketCreator, 'token' | 'is_random'> {
-    token: ERC721TokenDetailed
-}
-
-export interface RedPacketSubgraphInMask extends RedPacketBasic {
-    message: string
-    name: string
-    txid: string
-    total_remaining: string
-    last_updated_time: number
-    chain_id: number
-    token: NativeTokenDetailed | ERC20TokenDetailed
-    creator: RedPacketCreator
-    claimers: {
-        name: string
-        address: string
-    }[]
-}
 
 interface ERC721TokenContract {
     address: string
@@ -153,10 +131,9 @@ interface ERC721TokenContract {
     chain_id: number
 }
 
-export interface NftRedPacketSubgraphInMask extends Omit<RedPacketSubgraphInMask, 'is_random' | 'token' | 'creator'> {
+export interface NftRedPacketSubgraphInMask extends Omit<RedPacketSubgraphInMask, 'is_random' | 'token'> {
     token: ERC721TokenDetailed
     token_contract: ERC721TokenContract
-    creator: NFTRedPacketCreator
     address: string
     token_ids: string[]
     claimers: {

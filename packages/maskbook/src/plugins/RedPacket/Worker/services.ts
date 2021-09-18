@@ -1,6 +1,6 @@
 import type { ChainId } from '@masknet/web3-shared'
 import type { RedPacketRecord } from '../types'
-import * as subgraph from './apis'
+import * as subgraph from './apis/subgraph'
 import * as database from './database'
 import * as nftDb from './databaseForNft'
 
@@ -15,20 +15,21 @@ export async function discoverRedPacket(record: RedPacketRecord) {
     database.addRedPacket(record)
 }
 
-export async function getRedPacketHistoryWithPassword(address: string, chainId: ChainId) {
-    const histories = await subgraph.getRedPacketHistory(address, chainId)
-    const historiesWithPassword = []
-    for (const history of histories) {
-        await database.updateV1ToV2(history)
-        const record = await database.getRedPacket(history.txid)
-        if (history.chain_id === chainId && record) {
-            history.payload.password = history.password = record.password
-        } else {
-            history.payload.password = history.password = ''
+export async function getRedPacketHistory(address: string, chainId: ChainId) {
+    const redpacketsFromSubgraph = await subgraph.getRedPacketHistory(address, chainId)
+    const redpacketsFromDatabase = await database.getAllRedpackets(redpacketsFromSubgraph.map((x) => x.txid))
+    return redpacketsFromSubgraph.map((x) => {
+        const record = redpacketsFromDatabase.find((y) => y.id === x.txid)
+        if (!record) return x
+        return {
+            ...x,
+            password: record.password,
+            payload: {
+                ...x.payload,
+                password: record.password,
+            },
         }
-        historiesWithPassword.push(history)
-    }
-    return historiesWithPassword
+    })
 }
 
 export async function getNftRedPacketHistory(address: string, chainId: ChainId, page: number) {

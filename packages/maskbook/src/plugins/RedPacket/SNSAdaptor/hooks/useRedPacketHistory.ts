@@ -4,7 +4,7 @@ import type { ChainId } from '@masknet/web3-shared'
 
 export function useRedPacketHistory(address: string, chainId: ChainId) {
     return useAsyncRetry(async () => {
-        const payloads = await RedPacketRPC.getRedPacketHistoryWithPassword(address, chainId)
+        const payloads = await RedPacketRPC.getRedPacketHistory(address, chainId)
         return payloads
     }, [address, chainId])
 }

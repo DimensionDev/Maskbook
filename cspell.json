@@ -220,7 +220,8 @@
         "majeure",
         "Swither",
         "nftscan",
-        "apikey"
+        "apikey",
+        "redpackets"
     ],
     "ignoreWords": [
         "cryptopunks",
