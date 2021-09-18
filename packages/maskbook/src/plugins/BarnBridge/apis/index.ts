@@ -1,4 +1,4 @@
-import { BB_SY_CREAM, BB_SY_AAVE, BB_SY_COMPOUND, APP_URL, SY_URL_FRAGMENT } from '../constants'
+import { BB_SY_CREAM, BB_SY_AAVE, BB_SY_COMPOUND, APP_URL, SY_URL_FRAGMENT, API_URL } from '../constants'
 import type { SYCoinProps } from '../UI/SmartYieldPoolView'
 import urlcat from 'urlcat'
 import { last } from 'lodash-es'
@@ -11,7 +11,7 @@ export interface SYPortfolioModelData {
 export type SYPoolModelData = { [id: string]: SYCoinProps[] }
 
 export async function SYGetPools() {
-    const response = await fetch('https://api-v2.barnbridge.com/api/smartyield/pools?originator=all', {
+    const response = await fetch(urlcat(API_URL, '/api/smartyield/pools', { originator: 'all' }), {
         body: null,
         method: 'GET',
         mode: 'cors',
@@ -84,15 +84,12 @@ function PrettifyLiquidity(liquidity: string) {
 }
 
 export async function SYGetPortfolio(walletAddress: string) {
-    const response = await fetch(
-        `https://api-v2.barnbridge.com/api/smartyield/users/${walletAddress}/portfolio-value`,
-        {
-            body: null,
-            method: 'GET',
-            mode: 'cors',
-            credentials: 'omit',
-        },
-    )
+    const response = await fetch(urlcat(API_URL, '/api/smartyield/pools', { originator: 'all' }), {
+        body: null,
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'omit',
+    })
 
     interface Payload<T> {
         data: T
