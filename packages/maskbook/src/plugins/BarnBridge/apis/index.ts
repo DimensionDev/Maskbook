@@ -11,7 +11,7 @@ export interface SYPortfolioModelData {
 export type SYPoolModelData = { [id: string]: SYCoinProps[] }
 
 export async function SYGetPools() {
-    const response = await fetch(urlcat(API_URL, '/api/smartyield/pools', { originator: 'all' }), {
+    const response = await fetch(urlcat(API_URL, '/smartyield/pools', { originator: 'all' }), {
         body: null,
         method: 'GET',
         mode: 'cors',
@@ -84,7 +84,7 @@ function PrettifyLiquidity(liquidity: string) {
 }
 
 export async function SYGetPortfolio(walletAddress: string) {
-    const response = await fetch(urlcat(API_URL, '/api/smartyield/pools', { originator: 'all' }), {
+    const response = await fetch(urlcat(API_URL, '/smartyield/pools', { originator: 'all' }), {
         body: null,
         method: 'GET',
         mode: 'cors',

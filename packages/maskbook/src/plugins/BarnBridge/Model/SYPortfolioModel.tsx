@@ -1,4 +1,6 @@
 import { last } from 'lodash-es'
+import urlcat from 'urlcat'
+import { API_URL } from '../constants'
 import { useAsyncRetry } from 'react-use'
 
 export interface SYPortfolioModelData {
@@ -9,7 +11,7 @@ export interface SYPortfolioModelData {
 export function SmartYieldPortfolioModelGetData(walletAddress: string) {
     return useAsyncRetry(async () => {
         const response = await fetch(
-            `https://api-v2.barnbridge.com/api/smartyield/users/${walletAddress}/portfolio-value`,
+            urlcat(API_URL, '/smartyield/users/:walletAddress/portfolio-value', { walletAddress }),
             {
                 body: null,
                 method: 'GET',

@@ -1,4 +1,4 @@
-import { BB_SY_CREAM, BB_SY_AAVE, BB_SY_COMPOUND, APP_URL, SY_URL_FRAGMENT } from '../constants'
+import { BB_SY_CREAM, BB_SY_AAVE, BB_SY_COMPOUND, APP_URL, SY_URL_FRAGMENT, API_URL } from '../constants'
 import type { SYCoinProps } from '../UI/SmartYieldPoolView'
 import { useAsyncRetry } from 'react-use'
 import urlcat from 'urlcat'
@@ -7,7 +7,7 @@ export type SYPoolModelData = { [id: string]: SYCoinProps[] }
 
 export function SmartYieldPoolModelGetData() {
     return useAsyncRetry(async () => {
-        const response = await fetch('https://api-v2.barnbridge.com/api/smartyield/pools?originator=all', {
+        const response = await fetch(urlcat(API_URL, '/smartyield/pools', { originator: 'all' }), {
             body: null,
             method: 'GET',
             mode: 'cors',
