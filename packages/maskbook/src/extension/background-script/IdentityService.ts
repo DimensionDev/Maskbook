@@ -169,8 +169,9 @@ export async function queryOwnedPersonaInformation(): Promise<PersonaInformation
             linkedProfiles: map,
         })
         for (const [profile] of persona.linkedProfiles) {
-            const nickname = (await queryProfile(profile)).nickname
-            map.push({ identifier: profile, nickname })
+            const linkedProfile = await queryProfile(profile)
+
+            map.push({ identifier: profile, nickname: linkedProfile.nickname, avatar: linkedProfile.avatar })
         }
     }
     return result

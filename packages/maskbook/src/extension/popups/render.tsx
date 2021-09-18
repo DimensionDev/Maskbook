@@ -10,7 +10,8 @@ import { Web3ContextWithoutConfirm } from '../../web3/context'
 import { PopupFrame } from './components/PopupFrame'
 import { StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { Appearance } from '@masknet/theme'
-import { MaskUIRootWithinShadow } from '../../UIRoot'
+import { MaskUIRoot } from '../../UIRoot'
+import { status } from '../../setup.ui'
 
 const Wallet = lazy(() => import('./pages/Wallet'))
 const Personas = lazy(() => import('./pages/Personas'))
@@ -21,7 +22,7 @@ const SignRequest = lazy(() => import('./SignRequest'))
 
 function Dialogs() {
     const theme = useClassicMaskTheme({ appearance: Appearance.light })
-    return MaskUIRootWithinShadow(
+    return MaskUIRoot(
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
                 <Web3Provider value={Web3ContextWithoutConfirm}>
@@ -29,7 +30,7 @@ function Dialogs() {
                         <Suspense fallback="">
                             <Switch>
                                 <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
-                                <Route path={PopupRoutes.Personas} children={frame(<Personas />)} exact />
+                                <Route path={PopupRoutes.Personas} children={frame(<Personas />)} />
                                 <Route path={PopupRoutes.RequestPermission} exact>
                                     <RequestPermissionPage />
                                 </Route>
@@ -51,7 +52,7 @@ function Dialogs() {
         </StyledEngineProvider>,
     )
 }
-createNormalReactRoot(<Dialogs />)
+status.then(() => createNormalReactRoot(<Dialogs />))
 
 function frame(x: React.ReactNode) {
     return <PopupFrame children={x} />

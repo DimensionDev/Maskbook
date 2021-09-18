@@ -1,6 +1,6 @@
 import { story } from '../utils'
 import { MaskLoadingButton } from '../../src'
-import { Save } from '@material-ui/icons'
+import { Save } from '@mui/icons-material'
 
 const { meta, of } = story(MaskLoadingButton)
 

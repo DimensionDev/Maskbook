@@ -83,10 +83,11 @@ const CreateWalletForm = memo(() => {
         //     .string()
         //     .min(8)
         //     .max(20)
-        //     .refine((input) => /[A-Z]/.test(input), t.create_wallet_password_uppercase_tip())
-        //     .refine((input) => /[a-z]/.test(input), t.create_wallet_password_lowercase_tip())
-        //     .refine((input) => /\d/.test(input), t.create_wallet_password_number_tip())
-        //     .refine((input) => /[^\dA-Za-z]/.test(input), t.create_wallet_password_special_tip())
+        //     .refine((input) => [/[A-Z]/, /[a-z]/, /\d/, /[^\dA-Za-z]/].filter((regex) => regex.test(input)).length >= 2)
+        // .refine((input) => /[A-Z]/.test(input), t.create_wallet_password_uppercase_tip())
+        // .refine((input) => /[a-z]/.test(input), t.create_wallet_password_lowercase_tip())
+        // .refine((input) => /\d/.test(input), t.create_wallet_password_number_tip())
+        // .refine((input) => /[^\dA-Za-z]/.test(input), t.create_wallet_password_special_tip())
         const confirmRule = zod.string().min(8).max(20)
         return zod.object({
             name: zod.string().min(1).max(12),
@@ -126,7 +127,7 @@ const CreateWalletForm = memo(() => {
     return (
         <div className={classes.container}>
             <Typography className={classes.title}>{t.create_wallet_form_title()}</Typography>
-            <form className={classes.form}>
+            <form className={classes.form} onSubmit={onSubmit}>
                 <Box>
                     <Typography className={classes.label}>{t.create_wallet_wallet_name()}</Typography>
                     <Controller

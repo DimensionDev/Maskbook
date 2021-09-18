@@ -1,4 +1,4 @@
-import { Dialog, DialogActions, DialogContent, DialogProps } from '@material-ui/core'
+import { Dialog, DialogActions, DialogContent, DialogProps } from '@mui/material'
 import { memo, ReactNode, useCallback, useState } from 'react'
 import { usePortalShadowRoot } from '../../ShadowRoot'
 import { MaskDialogTitle, MaskDialogTitleProps } from './DialogTitle'

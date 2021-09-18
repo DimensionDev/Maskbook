@@ -1,8 +1,8 @@
 import { useRef, memo } from 'react'
 import { SnackbarProvider } from 'notistack'
-import { IconButton } from '@material-ui/core'
+import { IconButton } from '@mui/material'
 import { makeStyles } from '../../makeStyles'
-import { Close as CloseIcon } from '@material-ui/icons'
+import { Close as CloseIcon } from '@mui/icons-material'
 import { MaskColorVar } from '../../constants'
 
 export { SnackbarProvider, useSnackbar } from 'notistack'

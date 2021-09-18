@@ -1,4 +1,4 @@
-import { PaletteMode, Theme, useTheme } from '@material-ui/core'
+import { PaletteMode, Theme, useTheme } from '@mui/material'
 import { kebabCase } from 'lodash-es'
 import parseColor from 'tinycolor2'
 export const LightColor = {

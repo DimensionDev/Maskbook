@@ -24,7 +24,7 @@ export function useRejectHandler(
         } else {
             callback()
         }
-    }, [location.search, cleanConfirmRequest, toBeClose])
+    }, [cleanConfirmRequest, toBeClose])
 
     useEffect(() => {
         if (toBeClose) {

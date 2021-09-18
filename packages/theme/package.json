@@ -1,7 +1,7 @@
 {
   "name": "@masknet/theme",
   "private": true,
-  "description": "@material-ui/core theme of design system of Mask Network",
+  "description": "@mui/material theme of design system of Mask Network",
   "type": "module",
   "exports": {
     ".": "./dist/src/index.js",
@@ -22,6 +22,8 @@
   },
   "dependencies": {
     "@masknet/storybook-shared": "workspace:*",
+    "@types/qrcode": "^1.4.1",
+    "@types/tinycolor2": "^1.4.3",
     "classnames": "^2.3.1",
     "fuse.js": "^6.4.6",
     "lodash-es": "^4.17.20",
@@ -34,14 +36,13 @@
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
-    "@storybook/addon-actions": "^6.3.8",
-    "@storybook/addon-essentials": "^6.3.8",
-    "@storybook/addon-links": "^6.3.8",
-    "@storybook/addons": "^6.3.8",
-    "@storybook/react": "^6.3.8",
-    "@storybook/theming": "^6.3.8",
-    "@types/qrcode": "^1.4.1",
-    "@types/tinycolor2": "^1.4.3",
-    "storybook-addon-matrix": "^1.6.0"
+    "@storybook/addon-actions": "^6.4.0-alpha.38",
+    "@storybook/addon-essentials": "^6.4.0-alpha.38",
+    "@storybook/addon-links": "^6.4.0-alpha.38",
+    "@storybook/builder-webpack5": "^6.4.0-alpha.38",
+    "@storybook/manager-webpack5": "^6.4.0-alpha.38",
+    "@storybook/react": "^6.4.0-alpha.38",
+    "babel-loader": "^8.2.2",
+    "webpack": "^5.53.0"
   }
 }

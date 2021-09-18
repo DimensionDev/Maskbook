@@ -1,4 +1,4 @@
-import type { ButtonProps, SelectProps, TextFieldProps } from '@material-ui/core'
+import type { ButtonProps, SelectProps, TextFieldProps } from '@mui/material'
 import type { ArgType, ArgTypes } from '@storybook/addons'
 import { argsOfArr, ControlType } from './args'
 function enumIn<T>(enums: {

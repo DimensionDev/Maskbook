@@ -35,7 +35,8 @@ export const PersonaStateBar = memo<PersonaStateBarProps>(({ nickname, toggleDra
     const { classes } = useStyles()
 
     return (
-        <Box display="flex" alignItems="center">
+        // magic number of z-index: https://next.material-ui.com/customization/z-index/#main-content
+        <Box display="flex" alignItems="center" sx={{ zIndex: 1201 }}>
             <MaskAvatar onClick={toggleDrawer} />
             <Stack sx={{ px: 2 }} justifyContent="space-around">
                 <Typography variant="body1" lineHeight={1.2}>

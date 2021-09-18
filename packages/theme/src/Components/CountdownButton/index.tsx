@@ -1,5 +1,5 @@
 import { useEffect, useState, forwardRef, useMemo, ReactNode } from 'react'
-import { Button, ButtonProps } from '@material-ui/core'
+import { Button, ButtonProps } from '@mui/material'
 
 export interface CountdownButtonProps extends ButtonProps {
     duration?: number

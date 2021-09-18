@@ -8,6 +8,7 @@ import { useStylesExtends } from '@masknet/shared'
 import { DashboardRoute } from '../../extension/options-page/Route'
 import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
 import { useMount } from 'react-use'
+import { hasNativeAPI, nativeAPI } from '../../utils'
 
 interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'button'> {
     description?: string
@@ -56,7 +57,8 @@ export function Banner(props: BannerProps) {
             nextStep ?? console.warn('You must provide one of networkIdentifier or nextStep.onClick')
             return
         }
-        Services.Welcome.openOptionsPage(DashboardRoute.Setup)
+
+        hasNativeAPI ? nativeAPI?.api.misc_openDashboardView() : Services.Welcome.openOptionsPage(DashboardRoute.Setup)
     }, [networkIdentifier, nextStep])
     const defaultUserName = networkIdentifier
         ? {

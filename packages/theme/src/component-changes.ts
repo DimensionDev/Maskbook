@@ -1,4 +1,4 @@
-import type { PaletteMode, ThemeOptions } from '@material-ui/core'
+import type { PaletteMode, ThemeOptions } from '@mui/material'
 import type { Color } from './constants'
 
 function css_var<T extends Record<string, unknown>>(

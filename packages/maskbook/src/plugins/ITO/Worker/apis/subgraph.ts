@@ -3,7 +3,7 @@ import stringify from 'json-stable-stringify'
 import { first, omit } from 'lodash-es'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 import { payloadIntoMask } from '../../SNSAdaptor/helpers'
-import type { JSON_PayloadOutMask } from '../../types'
+import type { JSON_PayloadOutMask, PoolFromNetwork } from '../../types'
 
 const TRADER_FIELDS = `
     address
@@ -23,6 +23,7 @@ const POOL_FIELDS = `
     contract_address
     qualification_address
     pid
+    block_number
     password
     message
     limit
@@ -38,10 +39,6 @@ const POOL_FIELDS = `
     seller {
         address
     }
-    buyers (first: 1) {
-        address
-        name
-    }
     exchange_amounts
     exchange_tokens {
         ${TOKEN_FIELDS}
@@ -51,15 +48,22 @@ const POOL_FIELDS = `
 async function fetchFromMarketSubgraph<T>(query: string, chainId?: ChainId) {
     const subgraphURL = getITOConstants(chainId ? chainId : currentChainIdSettings.value).SUBGRAPH_URL
     if (!subgraphURL) return null
-    const response = await fetch(subgraphURL, {
-        method: 'POST',
-        mode: 'cors',
-        body: stringify({ query }),
-    })
-    const { data } = (await response.json()) as {
-        data: T
+    try {
+        const response = await fetch(subgraphURL, {
+            method: 'POST',
+            mode: 'cors',
+            body: stringify({ query }),
+        })
+
+        if (!response.ok) return null
+
+        const { data } = (await response.json()) as {
+            data: T
+        }
+        return data
+    } catch (error) {
+        return null
     }
-    return data
 }
 
 export async function getTradeInfo(pid: string, trader: string) {
@@ -141,7 +145,7 @@ export async function getPool(pid: string) {
     return payloadIntoMask(data.pool)
 }
 
-export async function getAllPoolsAsSeller(address: string, page: number) {
+export async function getAllPoolsAsSeller(address: string, page: number, chainId: ChainId) {
     const data = await fetchFromMarketSubgraph<{
         sellInfos: {
             pool: JSON_PayloadOutMask & {
@@ -149,7 +153,8 @@ export async function getAllPoolsAsSeller(address: string, page: number) {
                 exchange_out_volumes: string[]
             }
         }[]
-    }>(`
+    }>(
+        `
     {
         sellInfos ( orderBy: timestamp, orderDirection: desc, first: 50, skip: ${
             page * 50
@@ -161,15 +166,18 @@ export async function getAllPoolsAsSeller(address: string, page: number) {
             }
         }
     }
-    `)
+    `,
+        chainId,
+    )
     if (!data?.sellInfos) return []
+
     return data.sellInfos.map((x) => {
         const pool = payloadIntoMask(omit(x.pool, ['exchange_in_volumes', 'exchange_out_volumes']))
         return {
             pool,
             exchange_in_volumes: x.pool.exchange_in_volumes,
             exchange_out_volumes: x.pool.exchange_out_volumes,
-        }
+        } as PoolFromNetwork
     })
 }
 

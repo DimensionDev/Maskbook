@@ -1,4 +1,4 @@
-import { Box, InputBaseProps } from '@material-ui/core'
+import { Box, InputBaseProps } from '@mui/material'
 import { makeStyles } from '../../makeStyles'
 import { MaskTextField } from '../TextField'
 import { ChangeEvent, ReactNode, useState } from 'react'
