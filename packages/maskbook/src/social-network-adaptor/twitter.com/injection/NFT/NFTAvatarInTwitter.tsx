@@ -21,26 +21,20 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'absolute',
-        top: '10px !important',
+        bottom: '-10px !important',
         left: 0,
-        width: 134,
         textAlign: 'center',
         color: 'white',
+        transform: 'scale(1) !important',
+        minWidth: 134,
     },
     text: {
         fontSize: '20px !important',
         fontWeight: 700,
-        minWidth: 72,
     },
     icon: {
-        width: '43px !important',
-        height: '16px !important',
-    },
-
-    recover: {
-        position: 'absolute',
-        right: 160,
-        top: 0,
+        width: '19px !important',
+        height: '19px !important',
     },
 }))
 
