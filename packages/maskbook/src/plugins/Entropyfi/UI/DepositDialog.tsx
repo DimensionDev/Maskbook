@@ -1,19 +1,24 @@
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { pow10, useAccount, useChainId, useERC20TokenBalance, isZero } from '@masknet/web3-shared'
+import { pow10, useAccount, useChainId, useERC20TokenBalance, isZero, TransactionStateType } from '@masknet/web3-shared'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@material-ui/core'
 import { useCallback, useState, useEffect, useMemo } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { TokenAmountPanel } from './Component/TokenAmountPanel'
-import { PluginEntropyfiMessages } from '../messages'
-import { poolAddressMap, tokenMap } from '../constants'
-import { getSlicePoolId } from '../utils'
 import BigNumber from 'bignumber.js'
-import usePool from '../hooks/usePool'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { WalletMessages } from '../../Wallet/messages'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-// import useDebounce from '../hooks/useDebounce'
+import { v4 as uuid } from 'uuid'
+
+import { PluginEntropyfiMessages } from '../messages'
+import { poolAddressMap, tokenMap } from '../constants'
+import { TokenAmountPanel } from './Component/TokenAmountPanel'
+import { getSlicePoolId } from '../utils'
+import usePool from '../hooks/usePool'
+import { useDepositCallback } from '../hooks/useDepositCallback'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -65,14 +70,11 @@ const useStyles = makeStyles()((theme) => ({
 export function DepositDialog() {
     const { classes } = useStyles()
 
-    const [deposit, setDeposit] = useState('')
-
     const [poolId, setPoolId] = useState('')
     const [choose, setChoose] = useState('')
 
     const chainId = useChainId()
     const [coinId, coinName] = getSlicePoolId(poolId)
-    // context
     const account = useAccount()
 
     const TOKEN_MAP = tokenMap[chainId][poolId]
@@ -80,9 +82,11 @@ export function DepositDialog() {
     const principalToken = TOKEN_MAP?.principalToken
     const decimals = TOKEN_MAP?.principalToken.decimals
     const pool = usePool(poolAddress)
-    // const debouncedDeposit = useDebounce(deposit, 500)
 
-    //#region remote controlled dialog
+    const [depositAmount, setDepositAmount] = useState('')
+    const formattedAmount = new BigNumber(depositAmount || '0').multipliedBy(pow10(decimals ?? 0)).toString()
+
+    //#region remote controlled dialog from set position
     const { open, closeDialog } = useRemoteControlledDialog(PluginEntropyfiMessages.DepositDialogUpdated, (ev) => {
         if (!ev.open) return
         setPoolId(ev.poolId)
@@ -90,9 +94,14 @@ export function DepositDialog() {
     })
     const onClose = useCallback(() => {
         closeDialog()
-        setRawAmount('')
+        setDepositAmount('')
     }, [closeDialog])
     //#endregion
+
+    const openSwap = () => {
+        //open uniswap to buy coin
+        return ''
+    }
 
     const {
         value: tokenBalance = '0',
@@ -101,21 +110,21 @@ export function DepositDialog() {
         retry: retryLoadTokenBalance,
     } = useERC20TokenBalance(principalToken?.address)
 
-    const [depositAmount, setRawAmount] = useState('')
-    const formattedAmount = new BigNumber(depositAmount || '0').multipliedBy(pow10(decimals ?? 0)).toString()
-
     useEffect(() => {
         console.log('rawAmount value change', depositAmount)
         console.log('balance', tokenBalance)
         console.log('pid', poolId)
+        console.log('poolAddress', poolAddress)
     }, [depositAmount])
 
+    //#region  handleDeposit
     const handleDeposit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         console.log('deposit ', choose)
 
         const parsedLongAmount = choose === 'Long' ? formattedAmount : '0'
         const parsedShortAmount = choose === 'Short' ? formattedAmount : '0'
+
         await pool
             .deposit(parsedShortAmount, parsedLongAmount)
             .then(() => {
@@ -126,7 +135,49 @@ export function DepositDialog() {
             })
     }
 
-    //#region submit button
+    const [depositState, depositCallback, resetDepositCallback] = useDepositCallback(
+        poolAddress ?? '',
+        choose === 'Short' ? formattedAmount : '0',
+        choose === 'Long' ? formattedAmount : '0',
+    )
+    //#endregion
+
+    //#region transaction dialog
+    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(coinName ? `I just deposit ${coinName} into the pool Can I win the prediction?` : '')
+        .toString()
+
+    // on close transaction dialog
+    const [id] = useState(uuid())
+    const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
+        WalletMessages.events.transactionDialogUpdated,
+        useCallback(
+            (ev) => {
+                if (!ev.open) {
+                    retryLoadTokenBalance()
+                    if (depositState.type === TransactionStateType.HASH) onClose()
+                }
+                if (depositState.type === TransactionStateType.HASH) setDepositAmount('')
+                resetDepositCallback()
+            },
+            [id, depositState, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
+        ),
+    )
+    // open the transaction dialog
+    useEffect(() => {
+        if (!coinName || !pool) return
+        if (depositState.type === TransactionStateType.UNKNOWN) return
+        setTransactionDialogOpen({
+            open: true,
+            shareLink,
+            state: depositState,
+            summary: `Depositing ${formattedAmount} ${coinName} on ${poolId} pool.`,
+        })
+    }, [depositState /* update tx dialog only if state changed */])
+    //#endregion
+
+    //#region submit button message
     const validationMessage = useMemo(() => {
         if (!account) return 'connect a wallet'
         if (!formattedAmount || new BigNumber(formattedAmount).isZero()) return 'Enter an amount'
@@ -145,7 +196,7 @@ export function DepositDialog() {
                             label={choose + ' Deposit Amount'}
                             amount={depositAmount}
                             balance={tokenBalance ?? '0'}
-                            onAmountChange={setRawAmount}
+                            onAmountChange={setDepositAmount}
                             disableToken={false}
                             decimals={decimals}
                             coinName={coinName}
@@ -153,13 +204,14 @@ export function DepositDialog() {
                     </form>
                     <EthereumWalletConnectedBoundary>
                         {isZero(tokenBalance) ? (
+                            // TODO if no money in the account, go to uniswap to buy
                             <ActionButton
                                 className={classes.button}
                                 fullWidth
-                                onClick={handleDeposit}
+                                onClick={openSwap}
                                 variant="contained"
                                 loading={loadingTokenBalance}>
-                                Deposit
+                                Buy {coinName} from Uniswap
                             </ActionButton>
                         ) : (
                             <EthereumERC20TokenApprovedBoundary
@@ -171,7 +223,7 @@ export function DepositDialog() {
                                     className={classes.button}
                                     fullWidth
                                     disabled={!!validationMessage}
-                                    onClick={handleDeposit}
+                                    onClick={depositCallback}
                                     variant="contained"
                                     loading={loadingTokenBalance}>
                                     {validationMessage || 'Deposit ' + coinName}
@@ -179,10 +231,6 @@ export function DepositDialog() {
                             </EthereumERC20TokenApprovedBoundary>
                         )}
                     </EthereumWalletConnectedBoundary>
-                    {/* <Button variant="contained"> Approve </Button>
-                    <Button variant="contained" onClick={handleDeposit}>
-                        Deposit
-                    </Button> */}
                 </DialogContent>
             </InjectedDialog>
         </div>
