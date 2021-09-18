@@ -75,5 +75,10 @@
   "engines": {
     "node": ">=14.4.0",
     "pnpm": ">=6"
+  },
+  "pnpm": {
+    "overrides": {
+      "xhr2-cookies": "link:./package-overrides/xhr2-cookies"
+    }
   }
 }

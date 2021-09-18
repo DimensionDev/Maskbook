@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { ThemeProvider, StyledEngineProvider, Box } from '@mui/material'
 import { MaskDarkTheme, MaskLightTheme, applyMaskColorVars } from '../src/index'
-import { withMatrix } from 'storybook-addon-matrix'
+// Not compatible?
+// import { withMatrix } from 'storybook-addon-matrix'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
 import i18n from 'i18next'
 
@@ -17,7 +18,7 @@ export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
 }
 export const decorators = [
-    withMatrix,
+    // withMatrix,
     (Story) => {
         const [isDark, setIsDark] = useState(false)
         useEffect(() => {
