@@ -141,7 +141,11 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                 resolve(hash)
             } catch (error) {
                 if ((error as any)?.code) {
-                    const error_ = new Error('Transaction rejected.')
+                    const error_ = new Error(
+                        (error as any)?.message === 'Unable to add more requests.'
+                            ? 'Unable to add more requests.'
+                            : 'Transaction rejected.',
+                    )
                     setTradeState({
                         type: TransactionStateType.FAILED,
                         error: error_,

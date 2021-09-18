@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
-import { Button, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { useI18N } from '../../../../../utils'
 import { EthereumRpcType, ProviderType, useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
@@ -10,7 +10,6 @@ import Services from '../../../../service'
 import { LoadingButton } from '@material-ui/lab'
 import { useHistory, useLocation } from 'react-router'
 import { PopupRoutes } from '../../../index'
-import { useRejectHandler } from '../hooks/useRejectHandler'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -85,21 +84,18 @@ const SignRequest = memo(() => {
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (value) {
-            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
-
             await WalletRPC.deleteUnconfirmedRequest(value.payload)
             await Services.Ethereum.confirmRequest(value.payload)
-
-            if (toBeClose) {
-                window.close()
-            } else {
-                history.replace(PopupRoutes.Wallet)
-            }
+            history.replace(PopupRoutes.Wallet)
         }
     }, [value, location.search, history])
 
-    const handleReject = useRejectHandler(() => history.replace(PopupRoutes.Wallet), value)
-
+    const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
+        if (value) {
+            await Services.Ethereum.rejectRequest(value.payload)
+            history.replace(PopupRoutes.Wallet)
+        }
+    }, [value])
     return (
         <main className={classes.container}>
             <div className={classes.info}>
@@ -114,13 +110,14 @@ const SignRequest = memo(() => {
             </Typography>
             <Typography className={classes.message}>{data}</Typography>
             <div className={classes.controller}>
-                <Button
+                <LoadingButton
+                    loading={rejectLoading}
                     variant="contained"
                     className={classes.button}
                     style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
                     onClick={handleReject}>
                     {t('cancel')}
-                </Button>
+                </LoadingButton>
                 <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
                     {t('confirm')}
                 </LoadingButton>

@@ -3,6 +3,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
+import { openPopupsWindow } from '../../../extension/background-script/HelperService'
 
 const MAX_UNCONFIRMED_REQUESTS_SIZE = 1
 const MAIN_RECORD_ID = '0'
@@ -50,7 +51,10 @@ export async function pushUnconfirmedRequest(payload: JsonRpcPayload) {
     const requests = chunk_?.requests ?? []
 
     // validate if it's still possible to push a new request
-    if (requests.length >= MAX_UNCONFIRMED_REQUESTS_SIZE) throw new Error('Unable to add more requests.')
+    if (requests.length >= MAX_UNCONFIRMED_REQUESTS_SIZE) {
+        await openPopupsWindow()
+        throw new Error('Unable to add more requests.')
+    }
 
     const chunk = chunk_
         ? {

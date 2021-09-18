@@ -7,7 +7,6 @@ import { PopupRoutes } from '../../index'
 import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 import { useLocation } from 'react-router'
-import urlcat from 'urlcat'
 import { useAsyncRetry } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import Services from '../../../service'
@@ -52,15 +51,14 @@ export default function Wallet() {
             computedPayload,
         }
 
-        const toBeClose = new URLSearchParams(location.search).get('toBeClose')
         if (value?.computedPayload) {
             switch (value.computedPayload.type) {
                 case EthereumRpcType.SIGN:
-                    history.replace(urlcat(PopupRoutes.WalletSignRequest, { toBeClose }))
+                    history.replace(PopupRoutes.WalletSignRequest)
                     break
                 case EthereumRpcType.CONTRACT_INTERACTION:
                 case EthereumRpcType.SEND_ETHER:
-                    history.replace(urlcat(PopupRoutes.ContractInteraction, { toBeClose }))
+                    history.replace(PopupRoutes.ContractInteraction)
                     break
                 default:
                     break

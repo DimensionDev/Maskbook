@@ -2,6 +2,7 @@ import { memoizePromise } from '../../../utils'
 import { getNetworkWorker } from '../../../social-network'
 import { constructRequestPermissionURL, PopupRoutes } from '../../popups'
 import urlcat from 'urlcat'
+import { currentPopupWindowId } from '../../../settings/settings'
 
 export * from './storage'
 
@@ -84,17 +85,59 @@ export async function createNewWindowAndPasteShareContent(SNSIdentifier: string,
     browser.tabs.create({ active: true, url: url.toString() })
 }
 
-export function openPopupsWindow(route?: string) {
-    const url = urlcat('popups.html#', route ?? PopupRoutes.Wallet, { toBeClose: 1 })
-    if (!!navigator.userAgent.match(/Chrome/)) {
-        window.open(browser.runtime.getURL(url), '', 'resizable,scrollbars,status,width=310,height=540')
+export async function openPopupsWindow(route?: string) {
+    const windows = await browser.windows.getAll()
+    const popup = windows.find((win) => win && win.type === 'popup' && win.id === currentPopupWindowId.value)
+
+    // Focus on the pop-up window if it already exists
+    if (popup) {
+        await browser.windows.update(currentPopupWindowId.value, { focused: true })
     } else {
-        browser.windows.create({
+        const url = urlcat('popups.html#', route ?? PopupRoutes.Wallet)
+
+        let left: number
+        let top: number
+
+        try {
+            const lastFocused = await browser.windows.getLastFocused()
+            // Position window in top right corner of lastFocused window.
+            top = lastFocused.top ?? 0
+            left = (lastFocused.left ?? 0) + (lastFocused.width ?? 0) - 350
+        } catch (error_) {
+            // The following properties are more than likely 0, due to being
+            // opened from the background chrome process for the extension that
+            // has no physical dimensions
+
+            const { screenX, screenY, outerWidth } = window
+            top = Math.max(screenY, 0)
+            left = Math.max(screenX + (outerWidth - 350), 0)
+        }
+
+        const { id } = await browser.windows.create({
             url: browser.runtime.getURL(url),
             width: 350,
             height: 540,
             type: 'popup',
+            state: 'normal',
+            left,
+            top,
         })
+
+        // update currentPopupWindowId and clean event
+        if (id) {
+            currentPopupWindowId.value = id
+            browser.windows.onRemoved.addListener(function listener(windowID: number) {
+                if (windowID === id) {
+                    currentPopupWindowId.value = 0
+                }
+            })
+        }
+    }
+}
+
+export async function removePopupWindow() {
+    if (currentPopupWindowId.value) {
+        browser.windows.remove(currentPopupWindowId.value)
     }
 }
 

@@ -16,7 +16,7 @@ import {
     useNativeTokenDetailed,
 } from '@masknet/web3-shared'
 import { useValueRef, FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
-import { Button, Link, Typography } from '@material-ui/core'
+import { Link, Typography } from '@material-ui/core'
 import { useI18N } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
@@ -27,7 +27,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
 import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 import { useLocation } from 'react-router'
-import { useRejectHandler } from '../hooks/useRejectHandler'
+
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
@@ -232,15 +232,9 @@ const ContractInteraction = memo(() => {
     // handlers
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (request) {
-            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
             try {
                 await Services.Ethereum.confirmRequest(request.payload)
-
-                if (toBeClose) {
-                    window.close()
-                } else {
-                    history.goBack()
-                }
+                history.goBack()
             } catch (error_) {
                 setTransferError(true)
             }
@@ -248,7 +242,12 @@ const ContractInteraction = memo(() => {
         return
     }, [request, location.search, history])
 
-    const handleReject = useRejectHandler(() => history.replace(PopupRoutes.Wallet), request)
+    const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
+        if (request) {
+            await Services.Ethereum.rejectRequest(request.payload)
+            history.replace(PopupRoutes.Wallet)
+        }
+    }, [request])
 
     // gas fee
     const gasPriceEIP1559 = maxFeePerGas
@@ -360,13 +359,14 @@ const ContractInteraction = memo(() => {
                 <Typography className={classes.error}>{t('popups_wallet_transfer_error_tip')}</Typography>
             ) : null}
             <div className={classes.controller}>
-                <Button
+                <LoadingButton
+                    loading={rejectLoading}
                     variant="contained"
                     className={classes.button}
                     style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
                     onClick={handleReject}>
                     {t('cancel')}
-                </Button>
+                </LoadingButton>
                 <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
                     {transferError ? t('popups_wallet_re_send') : t('confirm')}
                 </LoadingButton>

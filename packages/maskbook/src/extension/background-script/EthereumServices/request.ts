@@ -8,6 +8,7 @@ import { defer, Flags } from '../../../utils'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { openPopupsWindow } from '../HelperService'
 import { memoizePromise } from '@dimensiondev/kit'
+import Services from '../../service'
 
 let id = 0
 
@@ -148,5 +149,7 @@ export async function rejectRequest(payload: JsonRpcPayload) {
     if (!pid) return
     UNCONFIRMED_CALLBACK_MAP.get(pid)?.(new Error('User rejected!'))
     await WalletRPC.deleteUnconfirmedRequest(payload)
+    // Close pop-up window when request is rejected
+    await Services.Helper.removePopupWindow()
     UNCONFIRMED_CALLBACK_MAP.delete(pid)
 }

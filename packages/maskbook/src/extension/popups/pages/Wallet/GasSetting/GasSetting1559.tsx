@@ -17,10 +17,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@material-ui/core'
 import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@material-ui/lab'
-import { isEmpty, noop } from 'lodash-es'
+import { isEmpty } from 'lodash-es'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { useHistory } from 'react-router'
-import { useRejectHandler } from '../hooks/useRejectHandler'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 
 const useStyles = makeStyles()((theme) => ({
@@ -249,8 +248,6 @@ export const GasSetting1559 = memo(() => {
     )
 
     const onSubmit = handleSubmit((data) => handleConfirm(data))
-
-    useRejectHandler(noop, value)
 
     const [maxPriorityFeePerGas, maxFeePerGas] = watch(['maxPriorityFeePerGas', 'maxFeePerGas'])
 

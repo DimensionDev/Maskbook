@@ -14,6 +14,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useCopyToClipboard } from 'react-use'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { useLocation } from 'react-router'
+import Services from '../../../../service'
 
 const useStyles = makeStyles()({
     content: {
@@ -102,7 +103,7 @@ const SelectWallet = memo(() => {
                 account: address,
                 providerType: ProviderType.MaskWallet,
             })
-            if (toBeClose) window.close()
+            if (toBeClose) await Services.Helper.removePopupWindow()
             else history.replace(PopupRoutes.Wallet)
         },
         [history, location],
