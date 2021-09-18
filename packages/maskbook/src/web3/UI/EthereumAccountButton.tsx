@@ -17,7 +17,7 @@ import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import { WalletIcon } from '../../components/shared/WalletIcon'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { Flags, useI18N } from '../../utils'
+import { hasNativeAPI, nativeAPI, Flags, useI18N } from '../../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -95,8 +95,11 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
                     )
                 }
                 color="primary"
-                onClick={onOpen}
-                {...props.ButtonProps}>
+                onClick={() => {
+                    hasNativeAPI ? nativeAPI?.api.misc_openCreateWalletView() : onOpen()
+                }}
+                {...props.ButtonProps}
+            >
                 {account
                     ? chainIdValid
                         ? `${selectedWallet?.name ?? ''} (${formatEthereumAddress(account, 4)})`

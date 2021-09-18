@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { useI18N } from '../../utils'
+import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import { isZero, useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared'
 import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
 
@@ -49,7 +49,10 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                     fullWidth
                     variant="contained"
                     size="large"
-                    onClick={openSelectProviderDialog}>
+                    onClick={() => {
+                        hasNativeAPI ? nativeAPI?.api.misc_openCreateWalletView() : openSelectProviderDialog()
+                    }}
+                >
                     {t('plugin_wallet_connect_a_wallet')}
                 </ActionButton>
             </Grid>
@@ -63,7 +66,8 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                     fullWidth
                     variant="contained"
                     size="large"
-                    onClick={openRiskWarningDialog}>
+                    onClick={openRiskWarningDialog}
+                >
                     {t('plugin_wallet_confirm_risk_warning')}
                 </ActionButton>
             </Grid>
@@ -78,7 +82,8 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                     fullWidth
                     variant="contained"
                     size="large"
-                    onClick={nativeTokenBalance.retry}>
+                    onClick={nativeTokenBalance.retry}
+                >
                     {t(nativeTokenBalance.loading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee')}
                 </ActionButton>
             </Grid>
@@ -92,7 +97,8 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                     disabled
                     fullWidth
                     variant="contained"
-                    size="large">
+                    size="large"
+                >
                     {t('plugin_wallet_invalid_network')}
                 </ActionButton>
             </Grid>

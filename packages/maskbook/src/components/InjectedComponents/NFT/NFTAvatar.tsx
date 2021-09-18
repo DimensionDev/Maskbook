@@ -13,7 +13,7 @@ import classnames from 'classnames'
 import { uniqBy } from 'lodash-es'
 import { useCallback, useEffect, useState } from 'react'
 import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
-import { useI18N } from '../../../utils'
+import { hasNativeAPI, nativeAPI, useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 
@@ -133,7 +133,14 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     {account ? (
                         <Typography variant="body1" color="textPrimary">
                             Wallet: {formatEthereumAddress(account, 4)}
-                            <Button onClick={openSelectProviderDialog} size="small">
+                            <Button
+                                onClick={() => {
+                                    hasNativeAPI
+                                        ? nativeAPI?.api.misc_openCreateWalletView()
+                                        : openSelectProviderDialog()
+                                }}
+                                size="small"
+                            >
                                 Change
                             </Button>
                         </Typography>
@@ -191,7 +198,8 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 size="medium"
                                 className={classes.setNFTAvatar}
                                 onClick={() => onClick()}
-                                disabled={!selectedToken}>
+                                disabled={!selectedToken}
+                            >
                                 {t('profile_nft_avatar_set')}
                             </Button>
                         </Box>

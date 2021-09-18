@@ -19,7 +19,7 @@ import { useCallback, useEffect } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { useI18N } from '../../../utils'
+import { hasNativeAPI, nativeAPI, useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -333,10 +333,19 @@ export function RedPacket(props: RedPacketProps) {
                 <EthereumWalletConnectedBoundary
                     classes={{
                         connectWallet: classes.connectWallet,
-                    }}>
+                    }}
+                >
                     <Box className={classes.footer}>
                         {!account ? (
-                            <ActionButton variant="contained" size="large" onClick={openSelectProviderDialog}>
+                            <ActionButton
+                                variant="contained"
+                                size="large"
+                                onClick={() => {
+                                    hasNativeAPI
+                                        ? nativeAPI?.api.misc_openCreateWalletView()
+                                        : openSelectProviderDialog()
+                                }}
+                            >
                                 {t('plugin_wallet_connect_a_wallet')}
                             </ActionButton>
                         ) : !chainIdValid ? (
@@ -351,7 +360,8 @@ export function RedPacket(props: RedPacketProps) {
                                 }
                                 variant="contained"
                                 size="large"
-                                onClick={onClaimOrRefund}>
+                                onClick={onClaimOrRefund}
+                            >
                                 {canClaim
                                     ? claimState.type === TransactionStateType.HASH
                                         ? t('plugin_red_packet_claiming')
