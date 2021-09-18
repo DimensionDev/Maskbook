@@ -275,12 +275,13 @@ export function ToolboxHint(props: ToolboxHintProps) {
             <div
                 className={classes.wrapper}
                 onClick={() => {
-                    isWalletValid
-                        ? openWalletStatusDialog()
-                        : hasNativeAPI
+                    hasNativeAPI
                         ? nativeAPI?.api.misc_openCreateWalletView()
+                        : isWalletValid
+                        ? openWalletStatusDialog()
                         : openSelectWalletDialog()
-                }}>
+                }}
+            >
                 <div className={classes.button}>
                     {isWalletValid ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} size={24} />}
 
