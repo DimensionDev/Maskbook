@@ -18,6 +18,9 @@ module.exports = {
         config.module.rules.push({
             test: /\.m?js$/,
             type: 'javascript/auto',
+            resolve: {
+                fullySpecified: false, // disable the behaviour
+            },
         })
         return config
     },
