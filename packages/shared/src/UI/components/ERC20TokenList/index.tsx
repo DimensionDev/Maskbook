@@ -66,9 +66,9 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
 
     //#region add token by address
     const matchedTokenAddress = useMemo(() => {
-        if (!keyword || !isValidAddress(keyword) || erc20TokensDetailed.length) return
+        if (!keyword || !isValidAddress(keyword) || erc20TokensDetailedLoading) return
         return keyword
-    }, [keyword, erc20TokensDetailed.length])
+    }, [keyword, erc20TokensDetailedLoading])
 
     const { value: searchedToken, loading: searchedTokenLoading } = useERC20TokenDetailed(matchedTokenAddress ?? '')
     //#endregion

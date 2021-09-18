@@ -15,6 +15,7 @@ import { ConnectWalletDialog } from '../SNSAdaptor/ConnectWalletDialog'
 import { useStartWatchChainState } from '../hooks/useStartWatchChainState'
 import { WalletRiskWarningDialog } from '../SNSAdaptor/RiskWarningDialog'
 import { GasSettingDialog } from '../SNSAdaptor/GasSettingDialog'
+import { RRC20TokenListDialog } from '../SNSAdaptor/RRC20TokenListDialog'
 
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
@@ -36,6 +37,7 @@ const dashboard: Plugin.Dashboard.Definition = {
                 <WalletConnectQRCodeDialog />
                 <WalletRenameWalletDialog />
                 <WalletRiskWarningDialog />
+                <RRC20TokenListDialog />
                 <GasSettingDialog />
             </>
         )
