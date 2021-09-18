@@ -44,10 +44,10 @@ export const useNetworkSelector = () => {
     const onChainChange = useCallback(
         async (chainId: ChainId) => {
             switch (providerType) {
-                case ProviderType.Maskbook:
+                case ProviderType.MaskWallet:
                     await PluginServices.Wallet.updateAccount({
                         chainId,
-                        providerType: ProviderType.Maskbook,
+                        providerType: ProviderType.MaskWallet,
                     })
                     break
                 case ProviderType.MetaMask:
