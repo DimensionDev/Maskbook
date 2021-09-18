@@ -5,15 +5,20 @@ import { formatUSDValue } from './web3/utils'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { COLOR_SY_SENIOR_TEXT, COLOR_SY_JUNIOR_TEXT } from '../../constants'
 
-const s = makeStyles()((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     progress: {
         display: 'flex',
         marginTop: 24,
+        '& .MuiLinearProgress-colorPrimary': {
+            backgroundColor: COLOR_SY_JUNIOR_TEXT,
+        },
+        '& .MuiLinearProgress-barColorPrimary': {
+            backgroundColor: COLOR_SY_SENIOR_TEXT,
+        },
     },
     dataColumn: {
         paddingLeft: 16,
         position: 'relative',
-        backgroundColor: 'var(--color)',
         borderRadius: '50%',
         height: 8,
         left: 0,
@@ -34,7 +39,7 @@ const s = makeStyles()((theme) => ({
     },
 }))
 
-type PortfolioPropsLabel = [label: string, value: number]
+type PortfolioPropsLabel = [string, number]
 
 type Props = {
     total: number
@@ -42,7 +47,7 @@ type Props = {
 }
 
 const PortfolioBalance: React.FC<Props> = (props: Props) => {
-    const { classes } = s()
+    const { classes } = useStyles()
     const { t } = useI18N()
     const {
         total,
@@ -52,13 +57,13 @@ const PortfolioBalance: React.FC<Props> = (props: Props) => {
     const progress = ((value1 ?? 0) * 100) / ((value1 ?? 0) + (value2 ?? 0))
 
     return (
-        <div className="card">
-            <div className="card-header">
+        <div>
+            <div>
                 <Typography variant="body1" color="#fff">
                     {t('plugin_barnbridge_sy_portfolio_balance')}
                 </Typography>
             </div>
-            <div className="p-24 flexbox-grid flow-col gap-16">
+            <div>
                 <div>
                     <Typography variant="h2" color="#fff">
                         {formatUSDValue(total)}
@@ -73,8 +78,8 @@ const PortfolioBalance: React.FC<Props> = (props: Props) => {
                 value={progress}
             />
             <div className={classes.portfolioAmountContainer}>
-                <div style={{ '--color': COLOR_SY_SENIOR_TEXT } as React.CSSProperties}>
-                    <Typography variant="subtitle1" color={COLOR_SY_SENIOR_TEXT} className="mb-4">
+                <div>
+                    <Typography variant="subtitle1" color={COLOR_SY_SENIOR_TEXT}>
                         {label1}
                     </Typography>
                     <Typography variant="body1" color="#fff">
@@ -82,7 +87,7 @@ const PortfolioBalance: React.FC<Props> = (props: Props) => {
                     </Typography>
                 </div>
                 <div>
-                    <Typography variant="subtitle1" color={COLOR_SY_JUNIOR_TEXT} className="mb-4">
+                    <Typography variant="subtitle1" color={COLOR_SY_JUNIOR_TEXT}>
                         {label2}
                     </Typography>
                     <Typography variant="body1" color="#fff">

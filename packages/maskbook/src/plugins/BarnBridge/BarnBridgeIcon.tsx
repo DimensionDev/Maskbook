@@ -4,29 +4,29 @@ import type { FC } from 'react'
 export const BarnBridgeYieldFarmingIcon: FC<SvgIconProps> = (props) => (
     <SvgIcon {...props}>
         <svg width="50" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="5.369" cy="16.631" r="4.369" stroke="currentColor" stroke-width="1.5" />
-            <circle cx="5.369" cy="16.63" r="1.311" stroke="currentColor" stroke-width="1.5" />
+            <circle cx="5.369" cy="16.631" r="4.369" stroke="currentColor" strokeWidth="1.5" />
+            <circle cx="5.369" cy="16.63" r="1.311" stroke="currentColor" strokeWidth="1.5" />
             <path
                 d="M12.36 16.63a6.991 6.991 0 0 0-10.705-5.923"
                 stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
             />
-            <circle cx="18.915" cy="17.941" r="3.059" stroke="currentColor" stroke-width="1.5" />
+            <circle cx="18.915" cy="17.941" r="3.059" stroke="currentColor" strokeWidth="1.5" />
             <path
                 d="M8.865 10.514h10.4a4.894 4.894 0 0 1 4.893 4.893v0c0 .676-.548 1.224-1.223 1.224h-1.18"
                 stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
             />
-            <path d="M16.293 16.63H12.36" stroke="currentColor" stroke-width="1.5" />
-            <path d="M3.403 1h8.958" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-            <path d="M4.158 1v8.36M10.32 1l2.26 9.474" stroke="currentColor" stroke-width="1.5" />
+            <path d="M16.293 16.63H12.36" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M3.403 1h8.958" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <path d="M4.158 1v8.36M10.32 1l2.26 9.474" stroke="currentColor" strokeWidth="1.5" />
             <path
                 d="M18.04 10.513V8.018a1 1 0 0 1 1-1h1.185"
                 stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
             />
         </svg>
     </SvgIcon>
@@ -38,8 +38,8 @@ export const BarnBridgeSmartYieldIcon: FC<SvgIconProps> = (props) => (
             <path
                 d="M18.8 13.2V3.8a3 3 0 0 0-3-3H4.2a3 3 0 0 0-3 3v16.4a3 3 0 0 0 3 3h7M6.8 8.8h6.4M6.8 12h2.4"
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="1.5"
+                strokeLinecap="round"
+                strokeWidth="1.5"
             />
             <path
                 d="M19.232 20.403c0 .5-.158.926-.475 1.282s-.757.593-1.32.715v1.084a.5.5 0 0 1-.5.5h-.296a.5.5 0 0 1-.5-.5v-1.017c-.864-.077-1.578-.39-2.141-.94l.922-1.009c.48.41 1.001.615 1.564.615.263 0 .46-.052.59-.154s.198-.24.198-.413c0-.128-.03-.235-.087-.321s-.158-.165-.302-.236-.357-.15-.639-.24c-.736-.23-1.25-.508-1.54-.835s-.437-.733-.437-1.219c0-.506.171-.925.513-1.258s.796-.544 1.359-.633v-.93a.5.5 0 0 1 .5-.5h.296a.5.5 0 0 1 .5.5v.94c.653.102 1.197.37 1.632.806l-.826.979c-.429-.34-.883-.509-1.363-.509-.224 0-.394.04-.509.12s-.173.19-.173.331c0 .11.032.199.096.27s.172.137.322.2.392.148.725.25c.665.218 1.147.487 1.445.807s.446.758.446 1.315z"
@@ -55,8 +55,8 @@ export const BarnBridgeSmartAlphaIcon: FC<SvgIconProps> = (props) => (
             <path
                 d="M20.8 13.2V3.8a3 3 0 0 0-3-3H6.2a3 3 0 0 0-3 3v16.4a3 3 0 0 0 3 3h7M8.8 8.8h6.4M8.8 12h2.4"
                 stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
             />
             <path
                 d="M23.984 22.704a4.265 4.265 0 0 1-1.01.145c-.986 0-1.65-.635-1.987-1.912h-.041C20.133 22.315 18.992 23 17.555 23c-1.075 0-1.938-.354-2.586-1.068-.649-.714-.969-1.608-.969-2.69 0-1.263.37-2.273 1.1-3.059.73-.786 1.724-1.183 2.98-1.183.674 0 1.281.166 1.807.49.525.332.927.794 1.207 1.393h.032l.583-1.731h2.102l-1.757 3.837c.197.895.402 1.508.632 1.832.197.325.477.491.821.491.197 0 .353-.029.493-.08l-.016 1.472Zm-3.498-3.78c-.172-.815-.451-1.45-.83-1.883-.369-.44-.82-.656-1.337-.656-.674 0-1.216.267-1.618.793-.402.534-.583 1.19-.583 1.963 0 .707.156 1.29.51 1.767.344.476.812.707 1.395.707.493 0 .944-.21 1.346-.606.411-.411.748-1.01 1.018-1.796l.099-.289Z"
@@ -111,20 +111,20 @@ export const BarnBridgeSmartYieldWallet: FC<SvgIconProps> = (props) => (
             <path
                 d="m22.4 16.8v2.6c0 1.6568-1.3431 3-3 3h-14.8c-1.6568 0-3-1.3432-3-3v-14.8c0-1.6569 1.3432-3 3-3h14.8c1.6569 0 3 1.3431 3 3v5.8"
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="1.5"
+                strokeLinecap="round"
+                strokeWidth="1.5"
             />
             <path
                 d="m12.8 13.4c0-1.6568 1.3432-3 3-3h6.6v6.4h-6.6c-1.6569 0-3-1.3431-3-3v-0.4z"
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="1.5"
+                strokeLinecap="round"
+                strokeWidth="1.5"
             />
             <path
                 d="m15.999 14.4c0.4418 0 0.8-0.3581 0.8-0.8 0-0.4418-0.3582-0.8-0.8-0.8s-0.8 0.3582-0.8 0.8c0 0.4419 0.3582 0.8 0.8 0.8z"
                 fill="currentColor"
             />
-            <path d="m2.3994 4.8h20" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" />
+            <path d="m2.3994 4.8h20" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" />
         </svg>
     </SvgIcon>
 )
@@ -139,14 +139,14 @@ export const BarnBridgeSmartYieldBarChart: FC<SvgIconProps> = (props) => (
                 height="20.8"
                 rx="3"
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="1.5"
+                strokeLinecap="round"
+                strokeWidth="1.5"
             />
             <path
                 d="M7.2 6.4v11.2M12 12.8v4.8M16.799 9.6v8"
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="1.5"
+                strokeLinecap="round"
+                strokeWidth="1.5"
             />
         </svg>
     </SvgIcon>

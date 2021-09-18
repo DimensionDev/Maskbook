@@ -13,7 +13,6 @@ export const base: Plugin.Shared.Definition = {
     enableRequirement: {
         architecture: { app: false, web: true },
         networks: { type: 'opt-out', networks: {} },
-        target: 'insider',
+        target: 'stable',
     },
-    experimentalMark: true,
 }

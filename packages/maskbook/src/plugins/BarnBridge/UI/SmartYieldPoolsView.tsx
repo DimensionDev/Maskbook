@@ -1,7 +1,12 @@
 import { makeStyles } from '@masknet/theme'
+
+import { useValueRef } from '@masknet/shared'
+import { currentAccountSettings } from '../../Wallet/settings'
+
 import { SmartYieldPoolView } from './SmartYieldPoolView'
-import { SmartYieldPoolModelGetData, SYPoolModelData } from './../Model/SYPoolModel'
-import { SmartYieldPortfolioModelGetData, SYPortoflioModelData } from './../Model/SYPortfolioModel'
+import type { SYPoolModelData } from './../Model/SYPoolModel'
+import type { SYPortfolioModelData } from './../Model/SYPortfolioModel'
+import { useSYPoolData, useSYPortfolioData } from '../hooks/useModels'
 
 import { useEffect } from 'react'
 import { useI18N, I18NFunction } from '../../../utils/i18n-next-ui'
@@ -62,20 +67,21 @@ interface SmartYieldPoolsViewProps {}
 
 export function SmartYieldPoolsView() {
     const [tabIndex, setTabIndex] = useState(0)
-    const [_syDataState, setPools] = useState<[SYPoolModelData, SYPortoflioModelData]>([
+    const [_syDataState, setPools] = useState<[SYPoolModelData, SYPortfolioModelData]>([
         {},
         { seniorValue: 0, juniorValue: 0 },
     ])
     const { t } = useI18N()
+    const walletAddress = useValueRef(currentAccountSettings)
 
     //#region data
-    const { value: syData, error: error, loading: loadingPools, retry: retry } = SmartYieldPoolModelGetData()
+    const { value: syData, error: error, loading: loadingPools, retry: retry } = useSYPoolData()
     const {
         value: syPortfolioData,
         error: syPortfolioError,
         loading: loadingPortfolio,
-        retry: syPortfolioretry,
-    } = SmartYieldPortfolioModelGetData()
+        retry: syPortfolioRetry,
+    } = useSYPortfolioData(walletAddress)
     const { classes } = useStyles()
 
     useEffect(() => {
@@ -148,7 +154,7 @@ export function SmartYieldPoolsView() {
     )
 }
 
-function GenerateSmartYieldPositions(t: I18NFunction, syPortfolioData: SYPortoflioModelData) {
+function GenerateSmartYieldPositions(t: I18NFunction, syPortfolioData: SYPortfolioModelData) {
     return (
         <PortfolioBalance
             total={syPortfolioData.seniorValue + syPortfolioData.juniorValue}
@@ -164,7 +170,7 @@ function GenerateSmartYieldPoolViews(classes: Record<string, string>, syData: SY
     return (
         <div className={classes.root}>
             {protocols.map((name: string) => (
-                <SmartYieldPoolView protocolName={name} coins={syData[name]} />
+                <SmartYieldPoolView protocolName={name} key={name} coins={syData[name]} />
             ))}
         </div>
     )

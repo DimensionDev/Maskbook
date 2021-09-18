@@ -1,17 +1,15 @@
 import { last } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
-import { currentAccountSettings } from '../../Wallet/settings'
 
-export interface SYPortoflioModelData {
+export interface SYPortfolioModelData {
     seniorValue: number
     juniorValue: number
 }
 
-export function SmartYieldPortfolioModelGetData() {
+export function SmartYieldPortfolioModelGetData(walletAddress: string) {
     return useAsyncRetry(async () => {
-        const walletAddress = currentAccountSettings.value
         const response = await fetch(
-            `https://api.barnbridge.com/api/smartyield/users/${walletAddress}/portfolio-value`,
+            `https://api-v2.barnbridge.com/api/smartyield/users/${walletAddress}/portfolio-value`,
             {
                 body: null,
                 method: 'GET',
@@ -24,7 +22,7 @@ export function SmartYieldPortfolioModelGetData() {
             data: T
         }
 
-        const payload: Payload<SYPortoflioModelData[]> = await response.json()
+        const payload: Payload<SYPortfolioModelData[]> = await response.json()
 
         return last(payload.data) ?? { seniorValue: 0, juniorValue: 0 }
     }, [])

@@ -1,6 +1,5 @@
 import { Typography, Grid } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { useChainId } from '@masknet/web3-shared'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'
 import {
@@ -102,9 +101,6 @@ function GenerateHeader() {
     const { classes } = useStyles()
     const { t } = useI18N()
 
-    const poolURL = ''
-    const chainId = useChainId()
-
     return (
         <Grid container spacing={1} direction="row" className={classes.headerContainer}>
             <Grid container item xs>
@@ -159,8 +155,6 @@ function GeneratePoolCell(props: SYCoinProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
 
-    const poolURL = ''
-    const chainId = useChainId()
     const [prize, setPrize] = useState('TBD')
     const [period, setPeriod] = useState('Custom Period')
 
@@ -237,8 +231,6 @@ interface SYProtocolNameProps {
 export function SmartYieldPoolView(props: SYPoolProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const chainId = useChainId()
-    const coins = props.coins
 
     return (
         <Grid container direction="column" className={classes.root}>
@@ -246,6 +238,7 @@ export function SmartYieldPoolView(props: SYPoolProps) {
             <GenerateHeader />
             {props.coins.map((coin) => (
                 <GeneratePoolCell
+                    key={coin.coinName}
                     coinName={coin.coinName}
                     seniorLiquidity={coin.seniorLiquidity}
                     seniorAPY={coin.seniorAPY}

@@ -9,5 +9,9 @@ registerPlugin({
             import.meta.webpackHot && import.meta.webpackHot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor'))),
     },
     Dashboard: undefined,
-    Worker: undefined,
+    Worker: {
+        load: () => import('./Worker'),
+        hotModuleReload: (hot) =>
+            import.meta.webpackHot && import.meta.webpackHot.accept('./Worker', () => hot(import('./Worker'))),
+    },
 })

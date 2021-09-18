@@ -1,5 +1,4 @@
 import { makeStyles } from '@masknet/theme'
-import { SmartYieldPoolModelGetData } from './../Model/SYPoolModel'
 
 import { CardContent, Paper, Typography, Grid, Divider } from '@material-ui/core'
 import { BondTokenIconCircle } from '../BarnBridgeIcon'
@@ -125,7 +124,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function YieldFarmingView() {
-    const syData = SmartYieldPoolModelGetData()
     const { classes } = useStyles()
     const { t } = useI18N()
 

@@ -1,4 +1,4 @@
-import { BB_SY_CREAM, BB_SY_AAVE, BB_SY_COMPOUND, APP_URL, SY_URL } from '../constants'
+import { BB_SY_CREAM, BB_SY_AAVE, BB_SY_COMPOUND, APP_URL, SY_URL_FRAGMENT } from '../constants'
 import type { SYCoinProps } from '../UI/SmartYieldPoolView'
 import { useAsyncRetry } from 'react-use'
 import urlcat from 'urlcat'
@@ -7,7 +7,7 @@ export type SYPoolModelData = { [id: string]: SYCoinProps[] }
 
 export function SmartYieldPoolModelGetData() {
     return useAsyncRetry(async () => {
-        const response = await fetch('https://api.barnbridge.com/api/smartyield/pools?originator=all', {
+        const response = await fetch('https://api-v2.barnbridge.com/api/smartyield/pools?originator=all', {
             body: null,
             method: 'GET',
             mode: 'cors',
@@ -66,11 +66,11 @@ function PrettifyProtocolName(name: string) {
 }
 
 function ConstructRedirectUrl(protocolName: string, coin: string) {
-    return urlcat(APP_URL, `${SY_URL}/stats`, { m: protocolName, t: coin })
+    return urlcat(APP_URL, `${SY_URL_FRAGMENT}/stats`, { m: protocolName, t: coin })
 }
 
-function PrettifyLiquidity(liqudity: string) {
-    const intLiquidity = Number.parseInt(liqudity, 10)
+function PrettifyLiquidity(liquidity: string) {
+    const intLiquidity = Number.parseInt(liquidity, 10)
     if (intLiquidity >= 1000000) {
         return Math.round(intLiquidity / 1000000).toString() + 'M'
     }
