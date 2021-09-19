@@ -23,6 +23,8 @@ import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
 import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
+import { useAsyncRetry } from 'react-use'
+import Services from '../../service'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -177,6 +179,13 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                 return null
         }
     }, [tabIndex, classes, wallet, transactionType])
+
+    const asyncResult = useAsyncRetry(async () => {
+        return Services.Wallet.getLibVersion({})
+    }, [])
+
+    console.log('DEBUG: mask wallet version')
+    console.log(asyncResult)
 
     if (!chainIdValid)
         return (
