@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import { Grid, Button } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { BigNumber } from 'bignumber.js'
@@ -178,7 +179,14 @@ export function CardRight(props: any) {
         coinId === 'ETH-GAS'
             ? `${InitialPriceNUM ? initialPriceTEXT : '-'}Gwei`
             : `$${InitialPriceNUM ? initialPriceTEXT : '-'}`
-    const isLocked = usePoolStatus(chainId, props.poolId) === PoolStatus.Accepting
+    const poolStatus = usePoolStatus(chainId, props.poolId)
+    const isLocked = Number(poolStatus) !== PoolStatus.Accepting
+
+    // console.log(' ************************')
+    // console.log(props.poolId, ' usePoolStatus ?: ', poolStatus)
+    // console.log(props.poolId, ' PoolStatus.Accepting ?: ', PoolStatus.Accepting)
+    // console.log(props.poolId, ' isLocked?: ', isLocked)
+    // console.log(' *************************')
 
     //#region the deposit dialog
     const { setDialog: openDepositDialog } = useRemoteControlledDialog(PluginEntropyfiMessages.DepositDialogUpdated)
@@ -208,7 +216,7 @@ export function CardRight(props: any) {
                     <span>{isLocked ? 'Result Countdown' : 'Deposit Countdown'}</span>
                 </nav>
             </Grid>
-            <CountDown poolId={props.poolId} show={show} />
+            <CountDown poolId={props.poolId} locked={isLocked} show={show} />
             <Grid item container className={classes.cardTips}>
                 <TIPS show={show} locked={isLocked} />
             </Grid>

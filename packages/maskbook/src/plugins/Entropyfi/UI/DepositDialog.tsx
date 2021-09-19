@@ -1,5 +1,14 @@
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { pow10, useAccount, useChainId, useERC20TokenBalance, isZero, TransactionStateType } from '@masknet/web3-shared'
+import {
+    useAccount,
+    useChainId,
+    useERC20TokenDetailed,
+    useERC20TokenBalance,
+    isZero,
+    TransactionStateType,
+    EthereumTokenType,
+    pow10,
+} from '@masknet/web3-shared'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@material-ui/core'
 import { useCallback, useState, useEffect, useMemo } from 'react'
@@ -82,8 +91,16 @@ export function DepositDialog() {
     const principalToken = TOKEN_MAP?.principalToken
     const decimals = TOKEN_MAP?.principalToken.decimals
     const pool = usePool(poolAddress)
-
+    //#region pool token
+    const {
+        value: token,
+        loading: loadingToken,
+        retry: retryToken,
+        error: errorToken,
+    } = useERC20TokenDetailed(TOKEN_MAP?.principalToken.address)
+    //#endregion
     const [depositAmount, setDepositAmount] = useState('')
+    // const formattedAmount = new BigNumber(depositAmount || '0').toString()
     const formattedAmount = new BigNumber(depositAmount || '0').multipliedBy(pow10(decimals ?? 0)).toString()
 
     //#region remote controlled dialog from set position
@@ -115,6 +132,7 @@ export function DepositDialog() {
         console.log('balance', tokenBalance)
         console.log('pid', poolId)
         console.log('poolAddress', poolAddress)
+        console.log('formattedAmount', formattedAmount)
     }, [depositAmount])
 
     //#region  handleDeposit
@@ -145,7 +163,9 @@ export function DepositDialog() {
     //#region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(coinName ? `I just deposit ${coinName} into the pool Can I win the prediction?` : '')
+        .getShareLinkURL?.(
+            coinName ? `I just deposit ${depositAmount}  ${coinName} into the pool, Can I win the prediction? ` : '',
+        )
         .toString()
 
     // on close transaction dialog
@@ -172,7 +192,7 @@ export function DepositDialog() {
             open: true,
             shareLink,
             state: depositState,
-            summary: `Depositing ${formattedAmount} ${coinName} on ${poolId} pool.`,
+            summary: `Depositing ${depositAmount}  ${coinName} on ${poolId} pool.`,
         })
     }, [depositState /* update tx dialog only if state changed */])
     //#endregion
@@ -211,14 +231,13 @@ export function DepositDialog() {
                                 onClick={openSwap}
                                 variant="contained"
                                 loading={loadingTokenBalance}>
-                                Buy {coinName} from Uniswap
+                                Please get some {coinName} test Coin before playing the game
                             </ActionButton>
                         ) : (
                             <EthereumERC20TokenApprovedBoundary
                                 amount={formattedAmount}
                                 spender={poolAddress}
-                                // token={ principalToken }
-                            >
+                                token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth

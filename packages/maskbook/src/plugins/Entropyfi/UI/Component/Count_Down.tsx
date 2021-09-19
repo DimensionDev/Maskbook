@@ -5,7 +5,7 @@ import { getSlicePoolId } from '../../utils'
 import { initialState } from '../../hooks/slice'
 import { useChainId } from '@masknet/web3-shared'
 
-import { usePoolStatus, useLastUpdateTimestamp } from '../../hooks/usePoolData'
+import { useLastUpdateTimestamp } from '../../hooks/usePoolData'
 const useStyles = makeStyles()((theme) => ({
     countDownValue: {
         justifyContent: 'space-evenly',
@@ -51,8 +51,6 @@ export function CountDown(props: any) {
     const chainId = useChainId()
     const bidDuration = initialState[chainId][props.poolId].bidDuration // 2days
     const gameDuration = initialState[chainId][props.poolId].gameDuration // 5 days
-    const locked = usePoolStatus(chainId, props.poolId) ?? 4
-    const isLocked = locked === 2 ? false : true
     const lastUpdateTimestamp = useLastUpdateTimestamp(chainId, props.poolId) ?? 1
 
     const [CountDown, setCountDown] = useState<any>({
@@ -66,7 +64,7 @@ export function CountDown(props: any) {
     // but i think this is not the correct way!!!
     useEffect(() => {
         const timer = setInterval(() => {
-            const newCount = changeCountDown(isLocked, gameDuration, bidDuration, lastUpdateTimestamp)
+            const newCount = changeCountDown(props.locked, gameDuration, bidDuration, lastUpdateTimestamp)
             if (newCount === false) {
                 setCountDown({
                     day: 0,
