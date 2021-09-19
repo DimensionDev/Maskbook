@@ -159,6 +159,7 @@ export enum TradeProvider {
     PANCAKESWAP = 6,
     DODO = 7,
     UNISWAP_V3 = 8,
+    BANCOR = 9,
 }
 /** Supported language settings */
 export enum LanguageOptions {
