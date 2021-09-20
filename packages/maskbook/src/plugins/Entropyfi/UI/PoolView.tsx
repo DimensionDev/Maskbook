@@ -1,7 +1,6 @@
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { getSlicePoolId } from '../utils'
 import { useChainId } from '@masknet/web3-shared'
 // import { usePoolState } from '../hooks/usePoolData'
 
@@ -38,7 +37,6 @@ const useStyles = makeStyles()((theme) => ({
 export function PoolView(props: any) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const [coinId, coinName] = getSlicePoolId(props.poolId)
     const chainId = useChainId()
 
     console.log('props.poolId:', props.poolId)

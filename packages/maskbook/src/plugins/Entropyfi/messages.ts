@@ -1,3 +1,4 @@
+import type { ERC20TokenDetailed } from '@masknet/web3-shared'
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
 import { ENTROPYFI_PLUGIN_ID } from './constants'
 
@@ -6,6 +7,8 @@ type DepositDialogUpdated =
           open: true
           poolId: string
           choose: string
+          token: ERC20TokenDetailed
+          chainId: number
       }
     | {
           open: false

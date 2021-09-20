@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import React, { useState, useEffect } from 'react'
-import { getSlicePoolId } from '../../utils'
+// import { getSlicePoolId } from '../../utils'
 import { initialState } from '../../hooks/slice'
 import { useChainId } from '@masknet/web3-shared'
 
@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function CountDown(props: any) {
     const { classes } = useStyles()
-    const [coinId, coinName] = getSlicePoolId(props.poolId)
+    // const [coinId, coinName] = getSlicePoolId(props.poolId)
     const chainId = useChainId()
     const bidDuration = initialState[chainId][props.poolId].bidDuration // 2days
     const gameDuration = initialState[chainId][props.poolId].gameDuration // 5 days
@@ -59,9 +59,7 @@ export function CountDown(props: any) {
         min: 0,
         sec: 0,
     })
-
-    // Xilin: I need to change "noImplicitReturns":  in the tsconfig.json to false to make this useEffect to work
-    // but i think this is not the correct way!!!
+    //#region
     useEffect(() => {
         const timer = setInterval(() => {
             const newCount = changeCountDown(props.locked, gameDuration, bidDuration, lastUpdateTimestamp)
@@ -76,9 +74,12 @@ export function CountDown(props: any) {
                 return () => {}
             }
             setCountDown(newCount)
+            return () => {}
         }, 1000)
         return () => clearInterval(timer)
     }, [CountDown])
+    //#endregion
+
     return (
         <Grid item container>
             <Grid

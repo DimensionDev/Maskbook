@@ -60,4 +60,39 @@ export const initialState: PoolState = {
             lastUpdateTimestamp: 0,
         },
     },
+    80001: {
+        'BTC-USDT': {
+            shortValue: '0', // ethers BigNumber => string
+            longValue: '0', // ethers BigNumber => string
+            sponsorValue: '0', // ethers BigNumber => string
+            // shortAPY: "50", // (short+long+ sponsor)/short bigNumberjs bignumber => string
+            initialPrice: '0', // coundDownValue in entropy-app
+            locked: false,
+            bidDuration: 172800,
+            gameDuration: 432000,
+            lastUpdateTimestamp: 0,
+        },
+        'BTC-USDC': {
+            shortValue: '0', // ethers BigNumber => string
+            longValue: '0', // ethers BigNumber => string
+            sponsorValue: '0', // ethers BigNumber => string
+            // shortAPY: "50", // (short+long+ sponsor)/short bigNumberjs bignumber => string
+            initialPrice: '0', // coundDownValue in entropy-app
+            locked: false,
+            bidDuration: 172800,
+            gameDuration: 432000,
+            lastUpdateTimestamp: 0,
+        },
+        'BTC-DAI': {
+            shortValue: '0', // ethers BigNumber => string
+            longValue: '0', // ethers BigNumber => string
+            sponsorValue: '0', // ethers BigNumber => string
+            // shortAPY: "50", // (short+long+ sponsor)/short bigNumberjs bignumber => string
+            initialPrice: '0', // coundDownValue in entropy-app
+            locked: false,
+            bidDuration: 172800,
+            gameDuration: 432000,
+            lastUpdateTimestamp: 0,
+        },
+    },
 }

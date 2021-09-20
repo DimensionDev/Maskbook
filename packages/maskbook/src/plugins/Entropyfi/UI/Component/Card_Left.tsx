@@ -77,13 +77,18 @@ const useStyles = makeStyles()((theme) => ({
 export function CardLeft(props: any) {
     const { classes } = useStyles()
     const [coinId, coinName] = getSlicePoolId(props.poolId)
-    const [value, setValue] = useState(0)
     const [colorValue, setColorValue] = useState('69,231,221')
     const chainId = useChainId()
     const sponsorValue = useTokenTotalSupply(tokenMap[chainId][props.poolId]?.sponsorToken)
 
     const shortValue = useShortTokenValue(chainId, props.poolId) || '0'
     const longValue = useLongTokenValue(chainId, props.poolId) || '0'
+
+    console.log('props.poolId:', props.poolId)
+    console.log('PoolView.chainId:', chainId)
+    console.log('shortValue:', shortValue)
+    console.log('longValue:', longValue)
+
     const poolValue = new BigNumber(shortValue)
         .plus(new BigNumber(longValue))
         .plus(new BigNumber(sponsorValue ? sponsorValue.toExact() : '0'))

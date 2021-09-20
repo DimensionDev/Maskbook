@@ -3,7 +3,7 @@ import { Grid, Button } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
-import { useChainId } from '@masknet/web3-shared'
+import { useChainId, useERC20TokenDetailed } from '@masknet/web3-shared'
 
 import useToggle from '../../hooks/useToggle'
 import { getSlicePoolId } from '../../utils'
@@ -17,7 +17,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginEntropyfiMessages } from '../../messages'
 
 import { CountDown } from './Count_Down'
-import { PoolStatus } from '../../constants'
+import { PoolStatus, tokenMap } from '../../constants'
 
 const useStyles = makeStyles()((theme) => ({
     metaDeposit: {
@@ -181,30 +181,43 @@ export function CardRight(props: any) {
             : `$${InitialPriceNUM ? initialPriceTEXT : '-'}`
     const poolStatus = usePoolStatus(chainId, props.poolId)
     const isLocked = Number(poolStatus) !== PoolStatus.Accepting
+    const TOKEN_MAP = tokenMap[chainId][props.poolId]
+    console.log(' ************************')
+    console.log(props.poolId, ' usePoolStatus ?: ', poolStatus)
+    console.log(props.poolId, ' PoolStatus.Accepting ?: ', PoolStatus.Accepting)
+    console.log(props.poolId, ' isLocked?: ', isLocked)
+    console.log(' *************************')
 
-    // console.log(' ************************')
-    // console.log(props.poolId, ' usePoolStatus ?: ', poolStatus)
-    // console.log(props.poolId, ' PoolStatus.Accepting ?: ', PoolStatus.Accepting)
-    // console.log(props.poolId, ' isLocked?: ', isLocked)
-    // console.log(' *************************')
+    //#region pool token
+    const {
+        value: token,
+        loading: loadingToken,
+        retry: retryToken,
+        error: errorToken,
+    } = useERC20TokenDetailed(TOKEN_MAP?.principalToken.address)
+    //#endregion
 
     //#region the deposit dialog
     const { setDialog: openDepositDialog } = useRemoteControlledDialog(PluginEntropyfiMessages.DepositDialogUpdated)
     const onDepositLong = useCallback(() => {
-        if (!props.poolId) return
+        if (!props.poolId || !token) return
         openDepositDialog({
             open: true,
             poolId: props.poolId,
             choose: 'Long',
+            token: token,
+            chainId: chainId,
         })
     }, [props.poolId, openDepositDialog])
 
     const onDepositShort = useCallback(() => {
-        if (!props.poolId) return
+        if (!props.poolId || !token) return
         openDepositDialog({
             open: true,
             poolId: props.poolId,
             choose: 'Short',
+            token: token,
+            chainId: chainId,
         })
     }, [props.poolId, openDepositDialog])
 

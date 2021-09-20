@@ -10,14 +10,14 @@ import { ENTROPYFI_URL_PATTERN } from '../constants'
 import { EntropyfiView } from '../UI/EntropyfiView'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
-const isPoolTogetherUrl = (url: string) => ENTROPYFI_URL_PATTERN.test(url)
+const isEntropyfiUrl = (url: string) => ENTROPYFI_URL_PATTERN.test(url)
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector: function Component(props) {
         const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isPoolTogetherUrl)
+        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isEntropyfiUrl)
         if (!text.ok) return null
         if (!link) return null
         return <Renderer url={link} />
@@ -26,7 +26,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const link = usePostInfoDetails
             .postMetadataMentionedLinks()
             .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isPoolTogetherUrl)
+            .find(isEntropyfiUrl)
 
         if (!link) return null
         return <Renderer url={link} />
@@ -44,8 +44,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary
                     chainId={ChainId.Kovan}
-                    // isValidChainId={(chainId) => [ChainId.Kovan].includes(chainId)}
-                >
+                    isValidChainId={(chainId) => [ChainId.Kovan, ChainId.Mumbai].includes(chainId)}>
                     <EntropyfiView />
                 </EthereumChainBoundary>
             </Suspense>

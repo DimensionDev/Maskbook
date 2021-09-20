@@ -1,12 +1,12 @@
 import { useRemoteControlledDialog } from '@masknet/shared'
 import {
     useAccount,
-    useChainId,
-    useERC20TokenDetailed,
+    // useChainId,
     useERC20TokenBalance,
     isZero,
     TransactionStateType,
     EthereumTokenType,
+    FungibleTokenDetailed,
     pow10,
 } from '@masknet/web3-shared'
 import { makeStyles } from '@masknet/theme'
@@ -81,8 +81,8 @@ export function DepositDialog() {
 
     const [poolId, setPoolId] = useState('')
     const [choose, setChoose] = useState('')
-
-    const chainId = useChainId()
+    const [token, setToken] = useState<FungibleTokenDetailed>()
+    const [chainId, setchainId] = useState(42)
     const [coinId, coinName] = getSlicePoolId(poolId)
     const account = useAccount()
 
@@ -91,16 +91,8 @@ export function DepositDialog() {
     const principalToken = TOKEN_MAP?.principalToken
     const decimals = TOKEN_MAP?.principalToken.decimals
     const pool = usePool(poolAddress)
-    //#region pool token
-    const {
-        value: token,
-        loading: loadingToken,
-        retry: retryToken,
-        error: errorToken,
-    } = useERC20TokenDetailed(TOKEN_MAP?.principalToken.address)
-    //#endregion
+
     const [depositAmount, setDepositAmount] = useState('')
-    // const formattedAmount = new BigNumber(depositAmount || '0').toString()
     const formattedAmount = new BigNumber(depositAmount || '0').multipliedBy(pow10(decimals ?? 0)).toString()
 
     //#region remote controlled dialog from set position
@@ -108,11 +100,21 @@ export function DepositDialog() {
         if (!ev.open) return
         setPoolId(ev.poolId)
         setChoose(ev.choose)
+        setToken(ev.token)
+        setchainId(ev.chainId)
     })
     const onClose = useCallback(() => {
         closeDialog()
         setDepositAmount('')
     }, [closeDialog])
+
+    useEffect(() => {
+        console.log('rawAmount value change', depositAmount)
+        console.log('balance', tokenBalance)
+        console.log('pid', poolId)
+        console.log('poolAddress', poolAddress)
+        console.log('formattedAmount', formattedAmount)
+    }, [depositAmount])
     //#endregion
 
     const openSwap = () => {
@@ -224,7 +226,6 @@ export function DepositDialog() {
                     </form>
                     <EthereumWalletConnectedBoundary>
                         {isZero(tokenBalance) ? (
-                            // TODO if no money in the account, go to uniswap to buy
                             <ActionButton
                                 className={classes.button}
                                 fullWidth
