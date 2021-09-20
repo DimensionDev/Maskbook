@@ -170,4 +170,4 @@ packages/storybook-shared/*.map
 packages/storybook-shared/*.d.ts
 
 # Mask Wallet
-packages/maskbook/src/extension/background-script/WalletService/maskwallet/*.js
+packages/maskbook/src/plugins/Wallet/services/wallet/*.js

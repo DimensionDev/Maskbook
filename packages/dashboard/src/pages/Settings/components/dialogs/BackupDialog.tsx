@@ -45,11 +45,11 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
         if (showPassword.wallet) {
             // for test
             // await PluginServices.Wallet.createEncryptedWalletStore(paymentPassword)
-            const result = await PluginServices.Wallet.decryptWallet(paymentPassword)
-            if (!result.ok) {
-                setIncorrectPaymentPassword(true)
-                return
-            }
+            // const result = await PluginServices.Wallet.decryptWallet(paymentPassword)
+            // if (!result.ok) {
+            //     setIncorrectPaymentPassword(true)
+            //     return
+            // }
         }
 
         try {

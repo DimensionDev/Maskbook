@@ -1,4 +1,6 @@
 import { forwardRef, useCallback, useMemo, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { useHistory, useLocation } from 'react-router'
 import { Alert, Box, Button, IconButton, MenuItem, Tab, Tabs } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import AddIcon from '@material-ui/icons/Add'
@@ -18,13 +20,10 @@ import { Flags, useMenu, useI18N, useColorStyles, useMatchXS } from '../../../ut
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletAssetsTable } from './WalletAssetsTable'
 import { PluginTransakMessages } from '../../../plugins/Transak/messages'
-import { WalletMessages } from '../../../plugins/Wallet/messages'
+import { WalletMessages, WalletRPC } from '../../../plugins/Wallet/messages'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
-import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
-import { useAsyncRetry } from 'react-use'
-import Services from '../../service'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -181,7 +180,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     }, [tabIndex, classes, wallet, transactionType])
 
     const asyncResult = useAsyncRetry(async () => {
-        return Services.Wallet.getLibVersion({})
+        return WalletRPC.getLibVersion({})
     }, [])
 
     console.log('DEBUG: mask wallet version')

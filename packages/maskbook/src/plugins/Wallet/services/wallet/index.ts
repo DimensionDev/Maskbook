@@ -1,11 +1,11 @@
 import { api } from '@dimensiondev/mask-wallet-core/proto'
-import { sideEffect } from '../../../utils'
-import { OnDemandWorker } from '../../../web-workers/OnDemandWorker'
+import { sideEffect } from '../../../../utils'
+import { OnDemandWorker } from '../../../../web-workers/OnDemandWorker'
 
 let worker: OnDemandWorker
 
 sideEffect.then(() => {
-    worker = new OnDemandWorker(new URL('./maskwallet/index.ts', import.meta.url), {
+    worker = new OnDemandWorker(new URL('./maskwallet/worker.ts', import.meta.url), {
         name: 'maskwallet',
         type: 'module',
     })

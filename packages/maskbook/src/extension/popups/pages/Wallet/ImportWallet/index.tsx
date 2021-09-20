@@ -106,11 +106,12 @@ const ImportWallet = memo(() => {
     const [keyStorePassword, setKeyStorePassword] = useState('')
     const [privateKey, setPrivateKey] = useState('')
 
-    const {
-        value: hasEncryptedWallet,
-        retry,
-        loading: getHasEncryptedWalletLoading,
-    } = useAsyncRetry(async () => WalletRPC.hasEncryptedWalletStore(), [])
+    // const {
+    //     value: hasEncryptedWallet,
+    //     retry,
+    //     loading: getHasEncryptedWalletLoading,
+    // } = useAsyncRetry(async () => WalletRPC.hasEncryptedWalletStore(), [])
+    const retry = () => {}
 
     useEffect(() => {
         return WalletMessages.events.walletLockStatusUpdated.on(retry)

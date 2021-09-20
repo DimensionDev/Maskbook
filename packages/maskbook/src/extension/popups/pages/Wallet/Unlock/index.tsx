@@ -53,11 +53,14 @@ const Unlock = memo(() => {
 
     const history = useHistory()
     const [{ loading, value }, handleUnlock] = useAsyncFn(async () => {
-        const result = await WalletRPC.decryptWallet(password)
-        if (result.ok) {
-            history.replace(PopupRoutes.Wallet)
+        return {
+            err: 'Error',
         }
-        return result
+        // const result = await WalletRPC.decryptWallet(password)
+        // if (result.ok) {
+        //     history.replace(PopupRoutes.Wallet)
+        // }
+        // return result
     }, [password])
 
     return (
@@ -73,7 +76,6 @@ const Unlock = memo(() => {
                         value={password}
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
-                        error={value?.err}
                         helperText={value?.err ? t('popups_wallet_unlock_error_password') : ''}
                     />
                 </div>

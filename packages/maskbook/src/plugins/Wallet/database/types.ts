@@ -115,16 +115,3 @@ export interface TransactionChunkRecordInDatabase extends TransactionChunkRecord
 export interface UnconfirmedRequestChunkRecordInDatabase extends UnconfirmedRequestChunkRecord {
     record_id: string
 }
-
-export interface EncryptedWallet {
-    type: 'wallet'
-    id: 'wallet'
-    encrypted: ArrayBuffer
-    iv: ArrayBuffer
-}
-export interface EncryptedWalletPrimaryKey {
-    type: 'primary-key'
-    id: 'wallet'
-    wrappedKey: ArrayBuffer
-    iv: ArrayBuffer
-}
