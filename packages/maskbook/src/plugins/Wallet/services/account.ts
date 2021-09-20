@@ -4,6 +4,7 @@ import {
     NetworkType,
     getNetworkTypeFromChainId,
     getChainIdFromNetworkType,
+    resolveProviderName,
 } from '@masknet/web3-shared'
 import { EthereumAddress } from 'wallet.ts'
 import type { WalletRecord } from '../database/types'
@@ -14,7 +15,7 @@ import {
     currentNetworkSettings,
     currentProviderSettings,
 } from '../settings'
-import { updateExoticWalletFromSource } from './wallet'
+import { updateWallet } from './wallet/index'
 import { Flags, hasNativeAPI, nativeAPI } from '../../../utils'
 
 export async function updateAccount(
@@ -43,7 +44,9 @@ export async function updateAccount(
     if (account && providerType && EthereumAddress.isValid(account) && providerType !== ProviderType.MaskWallet) {
         const updates: Partial<WalletRecord> = { address: account }
         if (name) updates.name = name
-        await updateExoticWalletFromSource(providerType, new Map([[account, updates]]))
+        await updateWallet(account, {
+            name: resolveProviderName(providerType),
+        })
     }
 
     // update global settings

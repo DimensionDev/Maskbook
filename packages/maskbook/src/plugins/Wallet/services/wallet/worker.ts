@@ -1,4 +1,4 @@
-import init, { request } from './wbg'
+import init, { request } from './maskwallet/wbg'
 // @ts-ignore
 import * as index_bg from './index_bg'
 

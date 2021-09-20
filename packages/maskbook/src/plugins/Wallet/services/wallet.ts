@@ -45,12 +45,6 @@ function createWalletRecord(address: string, name: string): WalletRecord {
     }
 }
 
-export async function isEmptyWallets() {
-    const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
-    const count = await t.objectStore('Wallet').count()
-    return count === 0
-}
-
 export async function getWallet(address: string = currentAccountSettings.value) {
     const wallets = await getWallets()
     return wallets.find(currySameAddress(address))
@@ -90,73 +84,6 @@ export async function getWallets(provider?: ProviderType) {
             : await recoverWalletFromMnemonicWords(record.mnemonic, record.passphrase, record.path)
         return `0x${buf2hex(privateKey)}`
     }
-}
-
-export async function updateExoticWalletFromSource(
-    provider: ProviderType,
-    updates: Map<string, Partial<WalletRecord>>,
-): Promise<void> {
-    const walletStore = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet').objectStore('Wallet')
-    let modified = false
-    for await (const cursor of walletStore) {
-        const wallet = cursor.value
-        {
-            if (updates.has(formatEthereumAddress(wallet.address))) {
-                await cursor.update(
-                    WalletRecordIntoDB({
-                        ...WalletRecordOutDB(cursor.value),
-                        ...updates.get(wallet.address)!,
-                        updatedAt: new Date(),
-                    }),
-                )
-            }
-            modified = true
-        }
-    }
-    for (const address of updates.keys()) {
-        const wallet = await walletStore.get(formatEthereumAddress(address))
-        if (wallet) continue
-        await walletStore.put(
-            WalletRecordIntoDB({
-                address,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                erc20_token_blacklist: new Set(),
-                erc20_token_whitelist: new Set(),
-                erc721_token_blacklist: new Set(),
-                erc721_token_whitelist: new Set(),
-                erc1155_token_blacklist: new Set(),
-                erc1155_token_whitelist: new Set(),
-                name: resolveProviderName(provider),
-                mnemonic: [] as string[],
-                passphrase: '',
-                ...updates.get(address)!,
-            }),
-        )
-        modified = true
-    }
-    if (modified) WalletMessages.events.walletsUpdated.sendToAll(undefined)
-}
-
-export function createNewWallet(
-    rec: Omit<
-        WalletRecord,
-        | 'id'
-        | 'address'
-        | 'mnemonic'
-        | 'eth_balance'
-        | 'erc20_token_whitelist'
-        | 'erc20_token_blacklist'
-        | 'erc721_token_whitelist'
-        | 'erc721_token_blacklist'
-        | 'erc1155_token_whitelist'
-        | 'erc1155_token_blacklist'
-        | 'createdAt'
-        | 'updatedAt'
-    >,
-) {
-    const mnemonic = bip39.generateMnemonic().split(' ')
-    return importNewWallet({ mnemonic, ...rec })
 }
 
 export function createMnemonicWords() {
