@@ -87,6 +87,7 @@ export async function updateUnconfirmedRequest(payload: JsonRpcPayload) {
             return payload
         }) ?? []
 
+    console.log(requests)
     const chunk = {
         ...chunk_,
         updateAt: now,

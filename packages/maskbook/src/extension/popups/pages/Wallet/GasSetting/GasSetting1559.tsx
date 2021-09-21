@@ -230,16 +230,16 @@ export const GasSetting1559 = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (value) {
-                const config = {
-                    ...value.payload.params[0],
+                const config = value.payload.params.map((param) => ({
+                    ...param,
                     gas: `0x${new BigNumber(data.gasLimit).toString(16)}`,
                     maxPriorityFeePerGas: `0x${formatGweiToWei(data.maxPriorityFeePerGas).toString(16)}`,
                     maxFeePerGas: `0x${formatGweiToWei(data.maxFeePerGas).toString(16)}`,
-                }
+                }))
 
                 await WalletRPC.updateUnconfirmedRequest({
                     ...value.payload,
-                    params: [config, ...value.payload.params],
+                    params: config,
                 })
                 history.goBack()
             }

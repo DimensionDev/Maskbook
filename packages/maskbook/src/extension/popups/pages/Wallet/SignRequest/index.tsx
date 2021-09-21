@@ -46,6 +46,7 @@ const useStyles = makeStyles()(() => ({
         fontSize: 12,
         lineHeight: '16px',
         flex: 1,
+        wordBreak: 'break-all',
     },
     controller: {
         display: 'grid',
@@ -114,7 +115,7 @@ const SignRequest = memo(() => {
                     loading={rejectLoading}
                     variant="contained"
                     className={classes.button}
-                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
+                    style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
                     onClick={handleReject}>
                     {t('cancel')}
                 </LoadingButton>

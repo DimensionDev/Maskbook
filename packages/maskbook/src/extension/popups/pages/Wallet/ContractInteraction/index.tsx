@@ -363,7 +363,7 @@ const ContractInteraction = memo(() => {
                     loading={rejectLoading}
                     variant="contained"
                     className={classes.button}
-                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
+                    style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
                     onClick={handleReject}>
                     {t('cancel')}
                 </LoadingButton>

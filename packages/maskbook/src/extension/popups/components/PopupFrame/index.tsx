@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Box, Paper, GlobalStyles } from '@material-ui/core'
+import { Box, GlobalStyles, Paper } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
@@ -86,6 +86,11 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
         exact: true,
     })
 
+    const excludePersonaPath = useRouteMatch({
+        path: [PopupRoutes.ContractInteraction, PopupRoutes.WalletSignRequest],
+        exact: true,
+    })
+
     return (
         <>
             <GlobalCss />
@@ -109,9 +114,11 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                             activeClassName={classes.active}>
                             {t('wallets')}
                         </NavLink>
-                        <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
-                            {t('personas')}
-                        </NavLink>
+                        {!excludePersonaPath ? (
+                            <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
+                                {t('personas')}
+                            </NavLink>
+                        ) : null}
                     </Box>
                 </Box>
                 <Box className={classes.container}>

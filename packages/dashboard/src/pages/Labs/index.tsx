@@ -60,10 +60,11 @@ export default function Plugins() {
 
     const account = useAccount()
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
-    const openTransakDialog = useCallback(() => {
+    const openTransakDialog = useCallback((code?: string) => {
         setBuyDialog({
             open: true,
             address: account,
+            code,
         })
     }, [])
 
@@ -106,9 +107,12 @@ export default function Plugins() {
     }, [])
 
     useEffect(() => {
-        const open = new URLSearchParams(location.search).get('open')
+        const search = new URLSearchParams(location.search)
+        const open = search.get('open')
+        const code = search.get('code')
+
         if (open === 'Transak') {
-            openTransakDialog()
+            openTransakDialog(code ?? '')
         } else if (open === 'Swap') {
             openSwapDialog()
         }

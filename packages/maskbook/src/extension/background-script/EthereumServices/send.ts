@@ -206,8 +206,6 @@ export async function INTERNAL_send(
             config.gasPrice = undefined
         }
 
-        console.log(config)
-
         // send the transaction
         switch (providerType) {
             case ProviderType.MaskWallet:

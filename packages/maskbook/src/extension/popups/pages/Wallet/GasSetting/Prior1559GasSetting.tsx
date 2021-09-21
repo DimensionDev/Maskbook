@@ -125,6 +125,7 @@ export const Prior1559GasSetting = memo(() => {
             (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
                 value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
         ) {
+            console.log(value?.computedPayload?._tx.gas)
             return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
         }
         return '0'
@@ -185,15 +186,15 @@ export const Prior1559GasSetting = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (value) {
-                const config = {
-                    ...value.payload.params[0],
+                const config = value.payload.params.map((param) => ({
+                    ...param,
                     gas: `0x${new BigNumber(data.gasLimit).toString(16)}`,
                     gasPrice: `0x${formatGweiToWei(data.gasPrice).toString(16)}`,
-                }
+                }))
 
                 await WalletRPC.updateUnconfirmedRequest({
                     ...value.payload,
-                    params: [config, ...value.payload.params],
+                    params: config,
                 })
                 history.goBack()
             }

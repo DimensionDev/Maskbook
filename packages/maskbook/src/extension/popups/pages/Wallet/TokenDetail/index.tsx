@@ -84,7 +84,10 @@ const TokenDetail = memo(() => {
                 code: currentToken?.token.symbol ?? currentToken?.token.name,
             })
         } else {
-            const url = urlcat('next.html#', 'labs', { open: 'Transak' })
+            const url = urlcat('next.html#', 'labs', {
+                open: 'Transak',
+                code: currentToken?.token.symbol ?? currentToken?.token.name,
+            })
             window.open(browser.runtime.getURL(url), 'BUY_DIALOG')
         }
     }, [wallet?.address, isActiveSocialNetwork, currentToken])
