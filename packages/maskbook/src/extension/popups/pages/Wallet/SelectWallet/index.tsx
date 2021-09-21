@@ -50,7 +50,7 @@ const useStyles = makeStyles()({
         fontWeight: 500,
     },
     text: {
-        marginLeft: 15,
+        marginLeft: 4,
     },
     controller: {
         display: 'grid',
