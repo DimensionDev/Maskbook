@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core'
 import { useI18N } from '../../../../../utils'
 import { EthereumRpcType, ProviderType, useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useAsyncFn } from 'react-use'
+import { useAsyncFn, useUpdateEffect } from 'react-use'
 import Services from '../../../../service'
 import { LoadingButton } from '@material-ui/lab'
 import { useHistory, useLocation } from 'react-router'
@@ -67,7 +67,7 @@ const SignRequest = memo(() => {
     const history = useHistory()
     const location = useLocation()
     const { classes } = useStyles()
-    const { value } = useUnconfirmedRequest()
+    const { value, loading: requestLoading } = useUnconfirmedRequest()
     const wallet = useWallet(ProviderType.MaskWallet)
 
     const { data, address } = useMemo(() => {
@@ -97,6 +97,13 @@ const SignRequest = memo(() => {
             history.replace(PopupRoutes.Wallet)
         }
     }, [value])
+
+    useUpdateEffect(() => {
+        if (!value && !requestLoading) {
+            history.replace(PopupRoutes.Wallet)
+        }
+    }, [value, requestLoading])
+
     return (
         <main className={classes.container}>
             <div className={classes.info}>

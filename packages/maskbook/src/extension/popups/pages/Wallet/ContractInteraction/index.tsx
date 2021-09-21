@@ -22,7 +22,7 @@ import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { LoadingButton } from '@material-ui/lab'
 import { unreachable } from '@dimensiondev/kit'
-import { useAsync, useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
 import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
@@ -274,21 +274,27 @@ const ContractInteraction = memo(() => {
         .toString()
 
     const totalUSD = new BigNumber(formatWeiToEther(gasFee)).times(nativeTokenPrice).plus(tokenValueUSD).toString()
+    //
+    // console.log('DEBUG: ContractInteraction')
+    // console.log({
+    //     amount,
+    //     gasFee,
+    //     gas,
+    //     maxPriorityFeePerGas: maxPriorityFeePerGas ?? defaultPrices?.maxPriorityFeePerGas,
+    //     maxFeePerGas: maxFeePerGas ?? defaultPrices?.maxFeePerGas,
+    //     defaultPrice: (gasPrice as string) ?? defaultPrices?.gasPrice,
+    //     request,
+    //     tokenPrice,
+    //     tokenAmount,
+    //     tokenDecimals,
+    //     nativeTokenPrice,
+    // })
 
-    console.log('DEBUG: ContractInteraction')
-    console.log({
-        amount,
-        gasFee,
-        gas,
-        maxPriorityFeePerGas: maxPriorityFeePerGas ?? defaultPrices?.maxPriorityFeePerGas,
-        maxFeePerGas: maxFeePerGas ?? defaultPrices?.maxFeePerGas,
-        defaultPrice: (gasPrice as string) ?? defaultPrices?.gasPrice,
-        request,
-        tokenPrice,
-        tokenAmount,
-        tokenDecimals,
-        nativeTokenPrice,
-    })
+    useUpdateEffect(() => {
+        if (!request && !requestLoading) {
+            history.replace(PopupRoutes.Wallet)
+        }
+    }, [request, requestLoading])
 
     return requestLoading ? (
         <LoadingPlaceholder />
