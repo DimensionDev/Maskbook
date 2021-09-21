@@ -1,6 +1,6 @@
 import { useStylesExtends } from '@masknet/shared'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { formatEthereumAddress, resolveAddressLinkOnExplorer, useChainId, ChainId } from '@masknet/web3-shared'
+import { formatEthereumAddress, resolveAddressLinkOnExplorer, ChainId } from '@masknet/web3-shared'
 import { Box, Link, Typography } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { useState, useEffect } from 'react'
@@ -44,7 +44,6 @@ interface EnhancedProfilePageProps extends withClasses<'text' | 'button'> {
 
 export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const [show, setShow] = useState(false)
-    const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
     const { bioDescription, nickname, twitterId } = props
     const { t } = useI18N()
