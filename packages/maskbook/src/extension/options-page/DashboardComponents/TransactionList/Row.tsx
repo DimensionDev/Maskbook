@@ -29,8 +29,8 @@ const useStyles = makeStyles()({
 })
 
 export const Row: FC<Props> = ({ transaction, chainId }) => {
-    const { classes: styles } = useStyles()
     const { t } = useI18N()
+    const { classes: styles } = useStyles()
     const chainDetailed = useChainDetailed()
     return (
         <TableRow component="div" className={classNames({ [styles.failed]: transaction.failed })}>
@@ -58,13 +58,13 @@ export const Row: FC<Props> = ({ transaction, chainId }) => {
                     {t('gas_fee')}
                 </Typography>
                 <Typography className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })} variant="body2">
-                    {transaction.gasFee?.eth.toFixed(4)} {chainDetailed?.nativeCurrency.symbol}
+                    {transaction.gasFee?.eth?.toFixed(4)} {chainDetailed?.nativeCurrency.symbol}
                 </Typography>
                 <Typography
                     className={classNames({ [styles.hidden]: isNil(transaction.gasFee) })}
                     color="textSecondary"
                     variant="body2">
-                    {transaction.gasFee?.usd.toFixed(2)} USD
+                    {transaction.gasFee?.usd?.toFixed(2)} USD
                 </Typography>
             </TableCell>
         </TableRow>
