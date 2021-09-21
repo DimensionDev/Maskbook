@@ -1,9 +1,10 @@
 import { useAsyncRetry } from 'react-use'
 import { useChainId } from '.'
+import { ChainId } from '..'
 import { useWeb3 } from './useWeb3'
 
 export function useResolveENS(name: string) {
-    const web3 = useWeb3()
+    const web3 = useWeb3(true, ChainId.Mainnet)
     const chainId = useChainId()
 
     return useAsyncRetry(async () => {
