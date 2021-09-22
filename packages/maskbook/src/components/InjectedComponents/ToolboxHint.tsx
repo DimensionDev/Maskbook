@@ -36,7 +36,14 @@ import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 
-const useStyles = makeStyles()(({ palette, breakpoints, spacing }) => {
+import { activatedSocialNetworkUI } from '../../social-network'
+import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
+
+interface StyleProps {
+    snsId: string
+}
+
+const useStyles = makeStyles<StyleProps>()(({ palette, breakpoints, spacing }, { snsId }) => {
     const isDark = palette.mode === 'dark'
     return {
         paper: {
@@ -72,7 +79,7 @@ const useStyles = makeStyles()(({ palette, breakpoints, spacing }) => {
         },
         button: {
             display: 'flex',
-            padding: '12px 26px 12px 14px',
+            padding: `12px 26px 12px ${snsId === MINDS_ID ? '0px' : '14px'}`,
             borderRadius: 50,
             justifyContent: 'center',
             alignItems: 'center',
@@ -127,7 +134,8 @@ interface ToolboxHintProps extends withClasses<'wrapper' | 'menuItem' | 'title' 
 
 export function ToolboxHint(props: ToolboxHintProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    console.log({ a: activatedSocialNetworkUI.networkIdentifier })
+    const classes = useStylesExtends(useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }), props)
     const account = useAccount()
     const selectedWallet = useWallet()
     const chainColor = useChainColor()
