@@ -111,11 +111,11 @@ const WalletStateBarUI = memo<WalletStateBarUIProps>(
                         </Typography>
                     </Stack>
                 )}
-                <Stack direction="row" onClick={openConnectWalletDialog}>
-                    <Stack mx={1} justifyContent="center" sx={{ cursor: 'pointer' }}>
+                <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
+                    <Stack mx={1} justifyContent="center">
                         <ProviderIcon providerType={providerType} />
                     </Stack>
-                    <Box sx={{ userSelect: 'none', cursor: 'pointer' }}>
+                    <Box sx={{ userSelect: 'none' }}>
                         <Box fontSize={16}>{walletName}</Box>
                         <Box fontSize={12}>
                             <FormattedAddress address={walletAddress} size={10} />
