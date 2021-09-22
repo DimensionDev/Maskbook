@@ -17,8 +17,13 @@ import { useI18N, usePortalShadowRoot } from '../../utils'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
 import { ErrorBoundary, useStylesExtends, mergeClasses } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../social-network'
+import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
 
-const useStyles = makeStyles()((theme) => ({
+interface StyleProps {
+    snsId: string
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
         borderBottom: `1px solid ${theme.palette.divider}`,
@@ -30,6 +35,9 @@ const useStyles = makeStyles()((theme) => ({
     dialogBackdropRoot: {},
     dialogCloseButton: {
         color: theme.palette.text.primary,
+    },
+    paper: {
+        ...(snsId === MINDS_ID ? { width: 'auto' } : {}),
     },
 }))
 
@@ -62,7 +70,11 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogBackdropRoot,
         container,
         ...dialogClasses
-    } = useStylesExtends(useStyles(), props, overwrite.InjectedDialog?.classes)
+    } = useStylesExtends(
+        useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }),
+        props,
+        overwrite.InjectedDialog?.classes,
+    )
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
 
     const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, ...rest } = props

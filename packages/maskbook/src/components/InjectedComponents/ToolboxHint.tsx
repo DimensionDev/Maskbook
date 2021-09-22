@@ -134,7 +134,6 @@ interface ToolboxHintProps extends withClasses<'wrapper' | 'menuItem' | 'title' 
 
 export function ToolboxHint(props: ToolboxHintProps) {
     const { t } = useI18N()
-    console.log({ a: activatedSocialNetworkUI.networkIdentifier })
     const classes = useStylesExtends(useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }), props)
     const account = useAccount()
     const selectedWallet = useWallet()
@@ -323,7 +322,7 @@ interface ToolboxItemDescriptor {
 // TODO: this should be rendered in the ErrorBoundary
 const ToolboxItem = forwardRef<any, MenuItemProps & ToolboxItemDescriptor>((props, ref) => {
     const { image, label, hide, priority, useShouldDisplay, ...rest } = props
-    const { classes } = useStyles()
+    const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const shouldDisplay = useRef(useShouldDisplay || (() => true)).current() && !hide
 
     if (!shouldDisplay) return null
