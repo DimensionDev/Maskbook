@@ -73,7 +73,7 @@ export const RestoreFromMnemonic = () => {
                     {t.confirm()}
                 </LoadingButton>
             </ButtonContainer>
-            <Box sx={{ marginTop: '35px' }}>
+            <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_identity_warning()} />
             </Box>
         </>

@@ -5,13 +5,13 @@ import { MaskColorVar } from '@masknet/theme'
 
 const HeaderContainer = styled('header')(
     ({ theme }) => `
-    flex: 1;
+    flex: 5 1;
     width: 78%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     max-height: 30%;
-    min-height: 25%;`,
+    min-height: 15%;`,
 )
 
 const TitleContainer = styled('div')(

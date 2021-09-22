@@ -15,7 +15,7 @@ export const ColumnContentLayout = styled('div')(
 
 export const Body = styled('main')(
     ({ theme }) => `
-    flex: 2;
+    flex: 1 5;
     width: 78%;
 `,
 )
