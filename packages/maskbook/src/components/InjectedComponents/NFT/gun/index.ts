@@ -41,7 +41,7 @@ export async function getNFTAvatars() {
     const NFTAvatarKeys = Object.keys(NFTAvatarNodes).filter((x) => x !== '_')
     const resultPromise = NFTAvatarKeys.map((key) => getNFTAvatar(key))
     const result = (await Promise.all(resultPromise)).filter((x) => x) as AvatarMetaDB[]
-    console.log(result)
+
     return result
 }
 

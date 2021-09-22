@@ -78,8 +78,12 @@ export function NFTBadge(props: NFTBadgeProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { avatar, size = 18 } = props
 
-    const { value = { amount: '0', symbol: 'ETH' }, loading } = useNFT(avatar.userId, avatar.address, avatar.tokenId)
-    const { amount, symbol } = value
+    const { value = { amount: '0', symbol: 'ETH', name: '' }, loading } = useNFT(
+        avatar.userId,
+        avatar.address,
+        avatar.tokenId,
+    )
+    const { amount, symbol, name } = value
 
     return (
         <div
@@ -102,9 +106,9 @@ export function NFTBadge(props: NFTBadgeProps) {
                         </div>
                     ) : (
                         <ShowPrice
-                            name={avatar.name ?? ''}
+                            name={name ?? ''}
                             price={formatPrice(amount)}
-                            symbol={formatText(symbol, 3)}
+                            symbol={formatText(symbol, 4)}
                             tokenId={formatText(avatar.tokenId, 6)}
                         />
                     )}
@@ -135,7 +139,7 @@ function ShowPrice({ name, symbol, tokenId, price }: ShowPriceProps) {
         <>
             {symbol && name && price !== '0' ? (
                 <>
-                    {text(`${name} #${tokenId}`)} {text(`${price} ${symbol}`, true)}
+                    {text(`${name}`)} {text(`${price} ${symbol}`, true)}
                 </>
             ) : !symbol && !name && price !== '0' ? (
                 <>
@@ -143,7 +147,7 @@ function ShowPrice({ name, symbol, tokenId, price }: ShowPriceProps) {
                 </>
             ) : symbol && name && price === '0' ? (
                 <>
-                    {text(`${name} #${tokenId}`)} {text('NFT', true)}
+                    {text(`${name}`)} {text('NFT', true)}
                 </>
             ) : (
                 <> {text('NFT', true)}</>
