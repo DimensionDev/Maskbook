@@ -1,4 +1,4 @@
-import type { ChainId, FungibleTokenDetailed } from '@masknet/web3-shared'
+import type { ChainId, FungibleTokenDetailed, FungibleTokenOutMask } from '@masknet/web3-shared'
 
 export interface JSON_PayloadInMask {
     contract_address: string
@@ -41,15 +41,9 @@ export interface ClaimablePool {
     token: FungibleTokenDetailed
 }
 
-//#region TokenOutMask
-export type TokenOutMask = Omit<FungibleTokenDetailed, 'chainId'> & {
-    chain_id: ChainId
-}
-//#endregion
-
 export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
-    token: TokenOutMask
-    exchange_tokens: TokenOutMask[]
+    token: FungibleTokenOutMask
+    exchange_tokens: FungibleTokenOutMask[]
 }
 
 export interface JSON_PayloadComposeMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {

@@ -41,7 +41,7 @@ export function useSubmit(onClose: () => void) {
             if (encode === 'image') {
                 if (redPacketMetadata.ok) {
                     const isErc20 =
-                        redPacketMetadata.val?.token && redPacketMetadata.val.token_type === EthereumTokenType.ERC20
+                        redPacketMetadata.val?.token && redPacketMetadata.val.token?.type === EthereumTokenType.ERC20
                     const isDai = isErc20 && isDAI(redPacketMetadata.val.token?.address ?? '')
                     const isOkb = isErc20 && isOKB(redPacketMetadata.val.token?.address ?? '')
                     const template: ImageTemplateTypes = isDai ? 'dai' : isOkb ? 'okb' : 'eth'

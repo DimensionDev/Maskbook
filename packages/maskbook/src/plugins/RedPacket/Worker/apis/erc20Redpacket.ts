@@ -1,34 +1,18 @@
 import {
     ChainId,
-    EthereumTokenType,
-    getChainDetailed,
-    getChainName,
+    FungibleTokenDetailed,
+    FungibleTokenOutMask,
+    getTokenConstants,
     getRedPacketConstants,
-    NativeTokenDetailed,
+    resolveChainName,
+    isSameAddress,
+    getChainDetailed,
 } from '@masknet/web3-shared'
 import stringify from 'json-stable-stringify'
-import { first, pick } from 'lodash-es'
+import { first } from 'lodash-es'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
 import { currentChainIdSettings } from '../../../Wallet/settings'
-import type {
-    RedPacketHistory,
-    RedPacketJSONPayload,
-    RedPacketSubgraphInMask,
-    RedPacketSubgraphOutMask,
-} from '../../types'
-
-const redPacketBasicKeys = [
-    'contract_address',
-    'contract_version',
-    'rpid',
-    'txid',
-    'password',
-    'shares',
-    'is_random',
-    'total',
-    'creation_time',
-    'duration',
-]
+import type { RedPacketJSONPayload } from '../../types'
 
 const TOKEN_FIELDS = `
     type
@@ -57,7 +41,6 @@ const RED_PACKET_FIELDS = `
     total
     total_remaining
     creation_time
-    last_updated_time
     duration
     chain_id
     token {
@@ -71,10 +54,28 @@ const RED_PACKET_FIELDS = `
     }
 `
 
+type RedpacketFromSubgraphType = {
+    chain_id: ChainId
+    claimers: { name: string; address: string }[]
+    contract_address: string
+    contract_version: number
+    creation_time: number
+    creator: { name: string; address: string }
+    duration: number
+    is_random: boolean
+    message: string
+    rpid: string
+    shares: number
+    token: FungibleTokenOutMask
+    total: string
+    total_remaining: string
+    txid: string
+}
+
 async function fetchFromRedPacketSubgraph<T>(query: string) {
-    const subgraphURL = getRedPacketConstants(currentChainIdSettings.value).SUBGRAPH_URL
-    if (!subgraphURL) return null
-    const response = await fetch(subgraphURL, {
+    const { SUBGRAPH_URL } = getRedPacketConstants(currentChainIdSettings.value)
+    if (!SUBGRAPH_URL) return null
+    const response = await fetch(SUBGRAPH_URL, {
         method: 'POST',
         mode: 'cors',
         body: stringify({ query }),
@@ -86,7 +87,7 @@ async function fetchFromRedPacketSubgraph<T>(query: string) {
 }
 
 export async function getRedPacketTxid(rpid: string) {
-    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedPacketSubgraphOutMask[] }>(`
+    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(`
     {
         redPackets (where: { rpid: "${rpid.toLowerCase()}" }) {
             ${RED_PACKET_FIELDS}
@@ -97,7 +98,9 @@ export async function getRedPacketTxid(rpid: string) {
 }
 
 export async function getRedPacketHistory(address: string, chainId: ChainId) {
-    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedPacketSubgraphOutMask[] }>(`
+    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(currentChainIdSettings.value)
+
+    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(`
     {
         redPackets (where: { creator: "${address.toLowerCase()}" }) {
             ${RED_PACKET_FIELDS}
@@ -106,45 +109,39 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
     `)
 
     if (!data?.redPackets) return []
+
     return data.redPackets
         .map((x) => {
-            const redPacketSubgraphInMask = {
-                ...x,
-                token: tokenIntoMask(x.token),
-                duration: x.duration * 1000,
+            const token = tokenIntoMask({ ...x.token }) as FungibleTokenDetailed
+            console.log({ token })
+            if (isSameAddress(x.token.address, NATIVE_TOKEN_ADDRESS)) {
+                token.name = getChainDetailed(x.token.chain_id)?.nativeCurrency.name
+                token.symbol = getChainDetailed(chainId)?.nativeCurrency.symbol
+            }
+
+            const redpacketPayload: RedPacketJSONPayload = {
+                contract_address: x.contract_address,
+                rpid: x.rpid,
+                txid: x.txid,
+                password: '',
+                shares: x.shares,
+                is_random: x.is_random,
+                total: x.total,
                 creation_time: x.creation_time * 1000,
-                last_updated_time: x.last_updated_time * 1000,
-            } as RedPacketSubgraphInMask
-            const redPacketBasic = pick(redPacketSubgraphInMask, redPacketBasicKeys)
-            redPacketBasic.creation_time = redPacketSubgraphInMask.creation_time * 1000
-            const sender = {
-                address: redPacketSubgraphInMask.creator.address,
-                name: redPacketSubgraphInMask.creator.name,
-                message: redPacketSubgraphInMask.message,
+                duration: x.duration * 1000,
+                sender: {
+                    address: x.creator.address,
+                    name: x.creator.name,
+                    message: x.message,
+                },
+                contract_version: x.contract_version,
+                network: resolveChainName(x.chain_id),
+                token: token,
+                claimers: x.claimers,
+                total_remaining: x.total_remaining,
             }
-            const network = getChainName(redPacketSubgraphInMask.chain_id)
 
-            if (redPacketSubgraphInMask.token.type === EthereumTokenType.Native) {
-                const detailed = getChainDetailed(redPacketSubgraphInMask.token.chainId)
-                const token = {
-                    ...redPacketSubgraphInMask.token,
-                    name: detailed?.nativeCurrency.name ?? 'Ether',
-                    symbol: detailed?.nativeCurrency.symbol ?? 'ETH',
-                } as NativeTokenDetailed
-                redPacketSubgraphInMask.token = token
-            }
-            const payload = {
-                sender,
-                network,
-                token_type: redPacketSubgraphInMask.token.type,
-                token: pick(redPacketSubgraphInMask.token, ['symbol', 'address', 'name', 'decimals']),
-                ...redPacketBasic,
-            } as RedPacketJSONPayload
-
-            return {
-                payload,
-                ...redPacketSubgraphInMask,
-            } as RedPacketHistory
+            return redpacketPayload
         })
         .sort((a, b) => b.creation_time - a.creation_time)
 }

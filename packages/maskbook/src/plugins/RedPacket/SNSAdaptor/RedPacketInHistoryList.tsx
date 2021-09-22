@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { Box, ListItem, Typography, Popper } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import { RedPacketHistory, RedPacketJSONPayload, RedPacketStatus } from '../types'
+import { RedPacketJSONPayload, RedPacketStatus } from '../types'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { formatBalance, TransactionStateType, useAccount } from '@masknet/web3-shared'
@@ -137,7 +137,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface RedPacketInHistoryListProps {
-    history: RedPacketHistory
+    history: RedPacketJSONPayload
     onSelect: (payload: RedPacketJSONPayload) => void
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
@@ -149,14 +149,14 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         value: availability,
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
         retry: revalidateAvailability,
-    } = useAvailabilityComputed(account, history.payload)
+    } = useAvailabilityComputed(account, history)
 
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
-        history.payload.contract_version,
+        history.contract_version,
         account,
         history.rpid,
     )
-
+    console.log({ history })
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
@@ -171,9 +171,9 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                 summary: availability
                     ? `Refunding red packet for ${formatBalance(
                           new BigNumber(availability.balance),
-                          history.token.decimals ?? 0,
-                          history.token.decimals ?? 0,
-                      )} ${history.token.symbol}`
+                          history.token?.decimals ?? 0,
+                          history.token?.decimals ?? 0,
+                      )} ${history.token?.symbol}`
                     : '',
             })
         } else if (refundState.type === TransactionStateType.CONFIRMED) {
@@ -185,7 +185,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) await refundCallback()
-        if (canSend) onSelect(history.payload)
+        if (canSend) onSelect(history)
     }, [onSelect, refundCallback, canRefund, canSend, history])
 
     //#region password lost tips
@@ -196,7 +196,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     //#region refund time
     const refundDuration =
         canSend && !isPasswordValid
-            ? intervalToDuration({ start: Date.now(), end: nextDay(history.payload.creation_time, 1) })
+            ? intervalToDuration({ start: Date.now(), end: nextDay(history.creation_time, 1) })
             : null
     const formatRefundDuration = `${refundDuration?.hours}h ${refundDuration?.minutes}m`
     //#endregion
@@ -206,15 +206,17 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             <Box className={classes.box}>
                 <TokenIcon
                     classes={{ icon: classes.icon }}
-                    address={history.token.address}
-                    name={history.token.name}
-                    logoURI={history.token.logoURI}
+                    address={history.token?.address ?? ''}
+                    name={history.token?.name}
+                    logoURI={history.token?.logoURI}
                 />
                 <Box className={classes.content}>
                     <section className={classes.section}>
                         <div className={classes.div}>
                             <Typography variant="body1" className={classNames(classes.title, classes.message)}>
-                                {history.message === '' ? t('plugin_red_packet_best_wishes') : history.message}
+                                {history.sender.message === ''
+                                    ? t('plugin_red_packet_best_wishes')
+                                    : history.sender.message}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t('plugin_red_packet_history_duration', {
@@ -224,8 +226,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t('plugin_red_packet_history_total_amount', {
-                                    amount: formatBalance(history.total, history.token.decimals, 6),
-                                    symbol: history.token.symbol,
+                                    amount: formatBalance(history.total, history.token?.decimals, 6),
+                                    symbol: history.token?.symbol,
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
@@ -296,7 +298,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     strong: <strong />,
                                 }}
                                 values={{
-                                    claimedShares: history.claimers.length,
+                                    claimedShares: history.claimers?.length ?? 0,
                                     shares: history.shares,
                                 }}
                             />
@@ -309,13 +311,13 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     span: <span className={classes.span} />,
                                 }}
                                 values={{
-                                    amount: formatBalance(history.total, history.token.decimals, 6),
+                                    amount: formatBalance(history.total, history.token?.decimals, 6),
                                     claimedAmount: formatBalance(
-                                        new BigNumber(history.total).minus(history.total_remaining),
-                                        history.token.decimals,
+                                        new BigNumber(history.total).minus(history?.total_remaining ?? 0),
+                                        history.token?.decimals,
                                         6,
                                     ),
-                                    symbol: history.token.symbol,
+                                    symbol: history.token?.symbol,
                                 }}
                             />
                         </Typography>

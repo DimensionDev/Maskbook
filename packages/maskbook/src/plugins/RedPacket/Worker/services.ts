@@ -24,10 +24,6 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
         return {
             ...x,
             password: record.password,
-            payload: {
-                ...x.payload,
-                password: record.password,
-            },
         }
     })
 }

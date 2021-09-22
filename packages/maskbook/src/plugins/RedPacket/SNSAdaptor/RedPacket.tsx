@@ -11,6 +11,7 @@ import {
     useFungibleTokenDetailed,
     useNetworkType,
     useWeb3,
+    EthereumTokenType,
 } from '@masknet/web3-shared'
 import { Box, Card, Skeleton, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
@@ -142,7 +143,7 @@ export interface RedPacketProps {
 
 export function RedPacket(props: RedPacketProps) {
     const { payload } = props
-
+    console.log({ payload })
     const { t } = useI18N()
     const { classes } = useStyles()
     // context
@@ -157,7 +158,8 @@ export function RedPacket(props: RedPacketProps) {
         computed: availabilityComputed,
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, payload)
-    const { value: tokenDetailed } = useFungibleTokenDetailed(payload.token_type, payload.token?.address ?? '')
+    const tokenType = payload.token ? EthereumTokenType.Native : EthereumTokenType.ERC20
+    const { value: tokenDetailed } = useFungibleTokenDetailed(tokenType, payload.token?.address ?? '')
     const token = payload.token ?? tokenDetailed
     //#endregion
 
