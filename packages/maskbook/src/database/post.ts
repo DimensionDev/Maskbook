@@ -11,7 +11,7 @@ import { ECKeyIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 type UpgradeKnowledge = { version: 4; data: Map<string, AESJsonWebKey> } | undefined
 const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
     4,
-    6,
+    7,
     (currentTryOpen, knowledge) =>
         openDB<PostDB>('maskbook-post-v2', currentTryOpen, {
             async upgrade(db, oldVersion, _newVersion, transaction): Promise<void> {
@@ -143,13 +143,18 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                     }
                 }
 
-                if (oldVersion <= 5) {
+                // version 6 ships a wrong db migration.
+                // therefore need to upgrade again to fix it.
+                if (oldVersion <= 6) {
                     const store = transaction.objectStore('post')
                     for await (const cursor of store) {
                         const v5Record: Version5PostRecord = cursor.value as any
                         const by = v5Record.encryptBy
+                        // This is the correct data type
+                        if (typeof by === 'string') continue
                         if (!by) continue
                         cursor.value.encryptBy = restorePrototype(by, ECKeyIdentifier.prototype).toText()
+                        cursor.update(cursor.value)
                     }
                     store.createIndex('persona, date', ['encryptBy', 'foundAt'], { unique: false })
                 }

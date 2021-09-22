@@ -137,8 +137,8 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                     </Box>
                 ) : (
                     <Box className={classes.root}>
-                        {collectibles.map((x) => (
-                            <div className={classes.card} key={x.tokenId}>
+                        {collectibles.map((x, i) => (
+                            <div className={classes.card} key={i}>
                                 <CollectibleCard token={x} provider={provider} wallet={wallet} readonly={readonly} />
                                 <div className={classes.description}>
                                     <Typography className={classes.name} color="textSecondary" variant="body2">
