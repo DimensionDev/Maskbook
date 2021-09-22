@@ -1,7 +1,6 @@
 import { memo, useCallback } from 'react'
 import { Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { WalletInfo } from '../components/WalletInfo'
 import { WarningIcon } from '@masknet/icons'
 import { useHistory } from 'react-router-dom'
 import { ProviderType, useWallet } from '@masknet/web3-shared'
@@ -89,7 +88,6 @@ const DeleteWallet = memo(() => {
 
     return (
         <>
-            <WalletInfo />
             <div className={classes.content}>
                 <div className={classes.warning}>
                     <WarningIcon style={{ fontSize: 48 }} />

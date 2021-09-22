@@ -200,7 +200,10 @@ const ImportWallet = memo(() => {
                         const { address: walletAddress, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(
                             privateKey,
                         )
-                        if (!privateKeyValid) enqueueSnackbar(t('import_failed'), { variant: 'error' })
+                        if (!privateKeyValid) {
+                            enqueueSnackbar(t('import_failed'), { variant: 'error' })
+                            return
+                        }
                         await WalletRPC.importNewWallet({
                             name: data.name,
                             address: walletAddress,
