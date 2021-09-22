@@ -8,6 +8,7 @@ import {
     NetworkType,
     ProviderType,
     resolveNetworkName,
+    useAccount,
     useChainId,
     useWeb3StateContext,
 } from '@masknet/web3-shared'
@@ -32,7 +33,9 @@ const useStyles = makeStyles()((theme) => ({
 
 export const useNetworkSelector = () => {
     const { classes } = useStyles()
+
     const currentChainId = useChainId()
+    const account = useAccount()
     const { providerType } = useWeb3StateContext()
 
     const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
@@ -46,6 +49,7 @@ export const useNetworkSelector = () => {
             switch (providerType) {
                 case ProviderType.MaskWallet:
                     await PluginServices.Wallet.updateAccount({
+                        account,
                         chainId,
                         providerType: ProviderType.MaskWallet,
                     })

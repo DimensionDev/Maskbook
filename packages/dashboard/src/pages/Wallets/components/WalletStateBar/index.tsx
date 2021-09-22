@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 30,
         lineHeight: '28px',
         height: '28px',
-        cursor: 'default',
+        cursor: 'pointer',
     },
     dot: {
         position: 'relative',
@@ -94,7 +94,7 @@ const WalletStateBarUI = memo<WalletStateBarUIProps>(
                     className={classes.bar}
                     onClick={openMenu}>
                     <Typography component="span" sx={{ background: chainColor }} className={classes.dot} />
-                    <Typography component="span" sx={{ cursor: 'pointer' }} fontSize={12}>
+                    <Typography component="span" fontSize={12}>
                         {networkName}
                     </Typography>
                 </Stack>
@@ -111,15 +111,17 @@ const WalletStateBarUI = memo<WalletStateBarUIProps>(
                         </Typography>
                     </Stack>
                 )}
-                <Stack mx={1} justifyContent="center" sx={{ cursor: 'pointer' }} onClick={openConnectWalletDialog}>
-                    <ProviderIcon providerType={providerType} />
-                </Stack>
-                <Box sx={{ userSelect: 'none', cursor: 'pointer' }} onClick={openConnectWalletDialog}>
-                    <Box fontSize={16}>{walletName}</Box>
-                    <Box fontSize={12}>
-                        <FormattedAddress address={walletAddress} size={10} />
+                <Stack direction="row" onClick={openConnectWalletDialog}>
+                    <Stack mx={1} justifyContent="center" sx={{ cursor: 'pointer' }}>
+                        <ProviderIcon providerType={providerType} />
+                    </Stack>
+                    <Box sx={{ userSelect: 'none', cursor: 'pointer' }}>
+                        <Box fontSize={16}>{walletName}</Box>
+                        <Box fontSize={12}>
+                            <FormattedAddress address={walletAddress} size={10} />
+                        </Box>
                     </Box>
-                </Box>
+                </Stack>
                 {menu}
             </Stack>
         )
