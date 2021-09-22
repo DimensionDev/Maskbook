@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { WalletInfo } from '../components/WalletInfo'
 import { WarningIcon } from '@masknet/icons'
 import { useHistory } from 'react-router-dom'
-import { ProviderType, useWallet } from '@masknet/web3-shared'
+import { isSameAddress, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PopupRoutes } from '../../../index'
@@ -72,6 +72,7 @@ const DeleteWallet = memo(() => {
     const history = useHistory()
     const wallet = useWallet()
     const { classes } = useStyles()
+    const maskWallets = useWallets(ProviderType.MaskWallet)
     // const [password, setPassword] = useState('')
 
     const onConfirm = useCallback(async () => {
@@ -80,19 +81,12 @@ const DeleteWallet = memo(() => {
             const wallets = await WalletRPC.getWallets()
             if (wallets.length) {
                 await WalletRPC.resetAccount({
-                    account: first(
-                        wallets.filter(
-                            (x) =>
-                                ![ProviderType.MetaMask.toString(), ProviderType.WalletConnect.toString()].includes(
-                                    x.name ?? '',
-                                ),
-                        ),
-                    )?.address,
+                    account: first(maskWallets.filter((x) => !isSameAddress(x.address, wallet.address)))?.address,
                 })
             }
             history.replace(PopupRoutes.Wallet)
         }
-    }, [wallet])
+    }, [wallet, maskWallets])
 
     return (
         <>
