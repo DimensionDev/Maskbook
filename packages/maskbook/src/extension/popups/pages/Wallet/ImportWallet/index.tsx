@@ -16,6 +16,8 @@ import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { useSnackbar } from '@masknet/theme'
 import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
+import Services from '../../../../service'
+import { useLocation } from 'react-router'
 
 const useStyles = makeStyles()({
     container: {
@@ -99,6 +101,7 @@ const ImportWallet = memo(() => {
     const { t } = useI18N()
     const { enqueueSnackbar } = useSnackbar()
     const history = useHistory()
+    const location = useLocation()
     const { classes } = useStyles()
     const [currentTab, setCurrentTab] = useState(ImportWalletTab.Mnemonic)
     const [mnemonic, setMnemonic] = useState('')
@@ -151,49 +154,6 @@ const ImportWallet = memo(() => {
         },
     })
 
-    const [{ loading }, onDerivedWallet] = useAsyncFn(
-        async (data: zod.infer<typeof schema>) => {
-            switch (currentTab) {
-                case ImportWalletTab.Mnemonic:
-                    const params = query({ mnemonic, name: data.name })
-                    history.replace({
-                        pathname: PopupRoutes.AddDeriveWallet,
-                        search: `?${params}`,
-                    })
-                    break
-                case ImportWalletTab.JsonFile:
-                    const { address, privateKey: _private_key_ } = await WalletRPC.fromKeyStore(
-                        keyStoreContent,
-                        Buffer.from(keyStorePassword, 'utf-8'),
-                    )
-                    await WalletRPC.importNewWallet({
-                        name: data.name,
-                        address,
-                        _private_key_,
-                    })
-                    history.goBack()
-                    break
-                case ImportWalletTab.PrivateKey:
-                    const { address: walletAddress, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(
-                        privateKey,
-                    )
-                    if (!privateKeyValid) enqueueSnackbar(t('import_failed'), { variant: 'error' })
-                    await WalletRPC.importNewWallet({
-                        name: data.name,
-                        address: walletAddress,
-                        _private_key_: privateKey,
-                    })
-                    history.goBack()
-                    break
-                default:
-                    break
-            }
-        },
-        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey],
-    )
-
-    const onSubmit = handleSubmit(onDerivedWallet)
-
     const disabled = useMemo(() => {
         if (!isValid) return true
         switch (currentTab) {
@@ -207,6 +167,60 @@ const ImportWallet = memo(() => {
                 return true
         }
     }, [currentTab, mnemonic, keyStorePassword, keyStoreContent, privateKey, isValid])
+
+    const [{ loading }, onDerivedWallet] = useAsyncFn(
+        async (data: zod.infer<typeof schema>) => {
+            if (!disabled) {
+                const toBeClose = new URLSearchParams(location.search).get('toBeClose')
+                switch (currentTab) {
+                    case ImportWalletTab.Mnemonic:
+                        const params = query({ mnemonic, name: data.name })
+                        history.replace({
+                            pathname: PopupRoutes.AddDeriveWallet,
+                            search: `?${params}`,
+                        })
+                        break
+                    case ImportWalletTab.JsonFile:
+                        const { address, privateKey: _private_key_ } = await WalletRPC.fromKeyStore(
+                            keyStoreContent,
+                            Buffer.from(keyStorePassword, 'utf-8'),
+                        )
+                        await WalletRPC.importNewWallet({
+                            name: data.name,
+                            address,
+                            _private_key_,
+                        })
+                        if (toBeClose) {
+                            await Services.Helper.removePopupWindow()
+                        } else {
+                            history.goBack()
+                        }
+                        break
+                    case ImportWalletTab.PrivateKey:
+                        const { address: walletAddress, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(
+                            privateKey,
+                        )
+                        if (!privateKeyValid) enqueueSnackbar(t('import_failed'), { variant: 'error' })
+                        await WalletRPC.importNewWallet({
+                            name: data.name,
+                            address: walletAddress,
+                            _private_key_: privateKey,
+                        })
+                        if (toBeClose) {
+                            await Services.Helper.removePopupWindow()
+                        } else {
+                            history.goBack()
+                        }
+                        break
+                    default:
+                        break
+                }
+            }
+        },
+        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, location.search, disabled],
+    )
+
+    const onSubmit = handleSubmit(onDerivedWallet)
 
     return (
         <div className={classes.container}>
