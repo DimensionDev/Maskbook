@@ -283,13 +283,16 @@ export async function queryPostPagedDB(
     for await (const cursor of t.objectStore('post').iterate()) {
         if (cursor.value.encryptBy !== linked.toText()) continue
 
+        const postIdentifier = Identifier.fromString(cursor.value.identifier, PostIVIdentifier).unwrap()
+        if (postIdentifier.network !== options.network) continue
+
         if (firstRecord && options.after) {
             cursor.continue(options.after.toText())
             firstRecord = false
             continue
         }
 
-        if (Identifier.fromString(cursor.value.identifier, PostIVIdentifier).unwrap() === options.after) continue
+        if (postIdentifier === options.after) continue
 
         if (count <= 0) break
         const outData = postOutDB(cursor.value)
