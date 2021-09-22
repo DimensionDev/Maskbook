@@ -125,7 +125,6 @@ export const Prior1559GasSetting = memo(() => {
             (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
                 value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
         ) {
-            console.log(value?.computedPayload?._tx.gas)
             return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
         }
         return '0'

@@ -8,6 +8,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 import Services from '../../../../service'
 import { LoadingButton } from '@material-ui/lab'
+import { toUtf8 } from 'web3-utils'
 import { useHistory, useLocation } from 'react-router'
 import { PopupRoutes } from '../../../index'
 
@@ -72,9 +73,15 @@ const SignRequest = memo(() => {
 
     const { data, address } = useMemo(() => {
         if (value?.computedPayload?.type === EthereumRpcType.SIGN) {
+            let message = value.computedPayload.data
+            try {
+                message = toUtf8(data)
+            } catch (error) {
+                console.log(error)
+            }
             return {
                 address: value.computedPayload.to,
-                data: value.computedPayload.data,
+                data: message,
             }
         }
         return {

@@ -76,12 +76,12 @@ const DeleteWallet = memo(() => {
     const onConfirm = useCallback(async () => {
         if (wallet?.address) {
             await WalletRPC.removeWallet(wallet.address)
-            const wallets = await WalletRPC.getWallets()
-            if (wallets.length) {
-                await WalletRPC.resetAccount({
-                    account: first(wallets)?.address,
-                })
-            }
+            const wallets = await WalletRPC.getWallets(ProviderType.MaskWallet)
+
+            await WalletRPC.resetAccount({
+                account: wallets.length ? first(wallets)?.address : '',
+            })
+
             history.replace(PopupRoutes.Wallet)
         }
     }, [wallet])
