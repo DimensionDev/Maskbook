@@ -1,14 +1,14 @@
 {
     "RPC": {
-        "Mainnet": ["https://mainnet.infura.io/v3/5f7fac811236419899f2ffb0936a5b91"],
-        "Ropsten": ["https://ropsten.infura.io/v3/5f7fac811236419899f2ffb0936a5b91"],
-        "Rinkeby": ["https://rinkeby.infura.io/v3/5f7fac811236419899f2ffb0936a5b91"],
-        "Kovan": ["https://kovan.infura.io/v3/5f7fac811236419899f2ffb0936a5b91"],
-        "Gorli": ["https://goerli.infura.io/v3/5f7fac811236419899f2ffb0936a5b91"],
+        "Mainnet": ["https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
+        "Ropsten": ["https://ropsten.infura.io/v3/d65858b010d249419cf8687eca12b094"],
+        "Rinkeby": ["https://rinkeby.infura.io/v3/d65858b010d249419cf8687eca12b094"],
+        "Kovan": ["https://kovan.infura.io/v3/d65858b010d249419cf8687eca12b094"],
+        "Gorli": ["https://goerli.infura.io/v3/d65858b010d249419cf8687eca12b094"],
         "BSC": ["https://bsc-dataseed.binance.org/"],
         "BSCT": ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-        "Matic": ["https://polygon-mainnet.infura.io/v3/5f7fac811236419899f2ffb0936a5b91"],
-        "Mumbai": ["https://polygon-mumbai.infura.io/v3/5f7fac811236419899f2ffb0936a5b91"],
+        "Matic": ["https://polygon-mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
+        "Mumbai": ["https://polygon-mumbai.infura.io/v3/d65858b010d249419cf8687eca12b094"],
         "Arbitrum": ["https://arb1.arbitrum.io/rpc"],
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
         "xDai": ["https://rpc.xdaichain.com/"]
