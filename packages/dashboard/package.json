@@ -25,6 +25,7 @@
     "@msgpack/msgpack": "^2.7.1",
     "@servie/events": "^3.0.0",
     "@types/color": "^3.0.2",
+    "@types/react-avatar-editor": "^10.3.6",
     "async-call-rpc": "^6.0.0",
     "bignumber.js": "^9.0.1",
     "classnames": "^2.3.1",
@@ -47,12 +48,16 @@
     "zod": "^3.8.2"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^6.3.8",
-    "@storybook/addon-essentials": "^6.3.8",
-    "@storybook/addon-links": "^6.3.8",
-    "@storybook/addons": "^6.3.8",
-    "@storybook/react": "^6.3.8",
-    "@storybook/theming": "^6.3.8",
-    "@types/react-avatar-editor": "^10.3.6"
+    "@babel/core": "^7.15.5",
+    "@storybook/addon-actions": "^6.4.0-alpha.38",
+    "@storybook/addon-essentials": "^6.4.0-alpha.38",
+    "@storybook/addon-links": "^6.4.0-alpha.38",
+    "@storybook/builder-webpack5": "^6.4.0-alpha.38",
+    "@storybook/manager-webpack5": "^6.4.0-alpha.38",
+    "@storybook/react": "^6.4.0-alpha.38",
+    "babel-loader": "^8.2.2",
+    "buffer": "^6.0.3",
+    "stream-browserify": "^3.0.0",
+    "webpack": "^5.53.0"
   }
 }

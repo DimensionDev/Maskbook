@@ -11,7 +11,7 @@ const SelectItem = styled('div')(({ theme }) => ({
     borderRadius: 8,
     backgroundColor: MaskColorVar.lightBackground,
     padding: theme.spacing(2),
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(2),
     display: 'flex',
 }))
 
