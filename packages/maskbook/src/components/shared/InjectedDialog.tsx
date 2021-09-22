@@ -37,7 +37,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         color: theme.palette.text.primary,
     },
     paper: {
-        ...(snsId === MINDS_ID ? { width: 'auto' } : {}),
+        ...(snsId === MINDS_ID ? { width: 'auto', backgroundImage: 'none' } : {}),
     },
 }))
 
