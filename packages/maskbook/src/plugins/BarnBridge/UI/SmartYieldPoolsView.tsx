@@ -1,6 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 
 import { useValueRef } from '@masknet/shared'
+import { useCallback } from 'react'
+import { useRemoteControlledDialog } from '@masknet/shared'
+
 import { currentAccountSettings } from '../../Wallet/settings'
 
 import { SmartYieldPoolView } from './SmartYieldPoolView'
@@ -10,6 +13,8 @@ import { useSYPoolData, useSYPortfolioData } from '../hooks/useModels'
 
 import { useEffect } from 'react'
 import { useI18N, I18NFunction } from '../../../utils/i18n-next-ui'
+
+import { PluginBarnBridgeMessages } from '../messages'
 
 import PortfolioBalance from './../Import/BarnBridgeFrontEnd/PortfolioBalance'
 
@@ -87,6 +92,18 @@ export function SmartYieldPoolsView() {
     useEffect(() => {
         if (syData && syPortfolioData) setPools([syData, syPortfolioData])
     }, [syData, syPortfolioData])
+
+    //#region the donation dialog
+    const { setDialog: setDonationDialog } = useRemoteControlledDialog(PluginBarnBridgeMessages.DepositDialogUpdated)
+    const onDonate = useCallback(() => {
+        if (!syData || !syPortfolioData) return
+        setDonationDialog({
+            open: true,
+            address: '',
+            title: '',
+        })
+    }, [syData, setDonationDialog])
+    //#endregion
 
     if (_syDataState.length <= 1 || loadingPools || loadingPortfolio) {
         return <CircularProgress className={classes.progress} size={50} />

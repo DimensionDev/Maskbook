@@ -82,8 +82,8 @@ export const BarnBridgeSmartYieldAAVEToken: FC<SvgIconProps> = (props) => (
     <SvgIcon {...props}>
         <svg width="30" height="30" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
             <linearGradient id="a" x1="34.912" x2="5.152" y1="7.453" y2="32.493" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#B6509E" />
-                <stop offset="1" stop-color="#2EBAC6" />
+                <stop stopColor="#B6509E" />
+                <stop offset="1" stopColor="#2EBAC6" />
             </linearGradient>
             <path fill="url(#a)" d="M20 40c11.046 0 20-8.954 20-20S31.046 0 20 0 0 8.954 0 20s8.954 20 20 20z" />
             <path

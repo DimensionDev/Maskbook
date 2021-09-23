@@ -1,11 +1,24 @@
 import { BB_SY_CREAM, BB_SY_AAVE, BB_SY_COMPOUND, APP_URL, SY_URL_FRAGMENT, API_URL } from '../constants'
-import type { SYCoinProps } from '../UI/SmartYieldPoolView'
+// import type { SYCoinProps } from '../UI/SmartYieldPoolView'
 import urlcat from 'urlcat'
 import { last } from 'lodash-es'
 
 export interface SYPortfolioModelData {
     seniorValue: number
     juniorValue: number
+}
+
+export interface SYPoolProps {
+    protocolName: string
+    coins: SYCoinProps[]
+}
+export interface SYCoinProps {
+    coinName: string
+    seniorLiquidity: string
+    seniorAPY: number
+    juniorLiquidity: string
+    juniorAPY: number
+    redirectUrl: string
 }
 
 export type SYPoolModelData = { [id: string]: SYCoinProps[] }
@@ -54,7 +67,7 @@ export async function SYGetPools() {
         ])
     })
 
-    return protocolsMap ?? {}
+    return protocolsMap
 }
 
 function PrettifyProtocolName(name: string) {
@@ -73,29 +86,28 @@ function ConstructRedirectUrl(protocolName: string, coin: string) {
 }
 
 function PrettifyLiquidity(liquidity: string) {
-    const intLiquidity = Number.parseInt(liquidity, 10)
-    if (intLiquidity >= 1000000) {
-        return Math.round(intLiquidity / 1000000).toString() + 'M'
-    }
-    if (intLiquidity >= 1000) {
-        return Math.round(intLiquidity / 1000).toString() + 'K'
-    }
-    return Math.round(intLiquidity).toString()
+    const value = Number.parseInt(liquidity, 10)
+    const unit = Math.round(Math.log(value) / Math.log(1000))
+    const symbols = ['', 'k', 'M', 'G', 'T'] // see https://en.wikipedia.org/wiki/Metric_prefix
+    return Math.round(value / Math.pow(1000, unit)) + symbols[unit]
 }
 
 export async function SYGetPortfolio(walletAddress: string) {
-    const response = await fetch(urlcat(API_URL, '/smartyield/pools', { originator: 'all' }), {
-        body: null,
-        method: 'GET',
-        mode: 'cors',
-        credentials: 'omit',
-    })
+    const response = await fetch(
+        `https://api-v2.barnbridge.com/api/smartyield/users/${walletAddress}/portfolio-value`,
+        {
+            body: null,
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'omit',
+        },
+    )
 
     interface Payload<T> {
         data: T
     }
 
-    const payload = (await response.json()) as Payload<SYPortfolioModelData[]> | undefined
+    const payload = (await response.json()) as Payload<SYPortfolioModelData[]>
 
-    return payload ? last(payload.data) ?? { seniorValue: 5, juniorValue: 5 } : { seniorValue: 10, juniorValue: 5 }
+    return last(payload.data) ?? { seniorValue: 5, juniorValue: 5 }
 }

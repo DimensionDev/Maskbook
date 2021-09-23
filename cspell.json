@@ -221,7 +221,8 @@
         "Swither",
         "nftscan",
         "apikey",
-        "BarnBridge"
+        "BarnBridge",
+        "SmartYield"
     ],
     "ignoreWords": [
         "cryptopunks",

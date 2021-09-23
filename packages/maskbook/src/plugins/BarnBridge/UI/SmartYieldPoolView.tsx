@@ -148,7 +148,7 @@ function GenerateHeader() {
 }
 
 function onClickPoolCell(clickUrl: string) {
-    window.open(clickUrl)
+    window.open(clickUrl, '_blank', 'noopener noreferrer')
 }
 
 function GeneratePoolCell(props: SYCoinProps) {
