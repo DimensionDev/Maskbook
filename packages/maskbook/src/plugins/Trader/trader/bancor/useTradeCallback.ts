@@ -4,6 +4,7 @@ import { TransactionState, TransactionStateType, useAccount, useChainId, useWeb3
 import type { SwapBancorRequest } from '../../types/bancor'
 import type { TradeComputed } from '../../types'
 import { PluginTraderRPC } from '../../messages'
+import { pick } from 'lodash-es'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null) {
     const web3 = useWeb3()
@@ -30,9 +31,9 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const data = await PluginTraderRPC.swapTransactionBancor(trade)
-        if (!data) {
-            const error = new Error('Unknown Error')
+        const [data, err] = await PluginTraderRPC.swapTransactionBancor(trade)
+        if (err) {
+            const error = new Error(err.error.messages?.[0] || 'Unknown Error')
             setTradeState({
                 type: TransactionStateType.FAILED,
                 error: error,
@@ -42,9 +43,10 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
 
         const [transaction] = data
 
+        const config = pick(transaction.transaction, ['to', 'data', 'value', 'from'])
         const config_ = {
-            ...transaction.transaction,
-            gas: await web3.eth.estimateGas(transaction.transaction).catch((error) => {
+            ...config,
+            gas: await web3.eth.estimateGas(config).catch((error) => {
                 setTradeState({
                     type: TransactionStateType.FAILED,
                     error,
