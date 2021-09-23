@@ -182,11 +182,11 @@ export function CardRight(props: any) {
     const poolStatus = usePoolStatus(chainId, props.poolId)
     const isLocked = Number(poolStatus) !== PoolStatus.Accepting
     const TOKEN_MAP = tokenMap[chainId][props.poolId]
-    console.log(' ************************')
-    console.log(props.poolId, ' usePoolStatus ?: ', poolStatus)
-    console.log(props.poolId, ' PoolStatus.Accepting ?: ', PoolStatus.Accepting)
-    console.log(props.poolId, ' isLocked?: ', isLocked)
-    console.log(' *************************')
+    // console.log(' ************************')
+    // console.log(props.poolId, ' usePoolStatus ?: ', poolStatus)
+    // console.log(props.poolId, ' PoolStatus.Accepting ?: ', PoolStatus.Accepting)
+    // console.log(props.poolId, ' isLocked?: ', isLocked)
+    // console.log(' *************************')
 
     //#region pool token
     const {

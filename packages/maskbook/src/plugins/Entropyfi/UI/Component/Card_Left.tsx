@@ -14,19 +14,6 @@ import { BigNumber } from 'bignumber.js'
 import { useTokenTotalSupply, useShortTokenValue, useLongTokenValue } from '../../hooks/usePoolData'
 import { useChainId } from '@masknet/web3-shared'
 const useStyles = makeStyles()((theme) => ({
-    metaTitle: {
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(1),
-        justifyContent: 'inherit',
-        alignItems: 'center',
-    },
-    metaFooter: {
-        justifyContent: 'start',
-        alignItems: 'center',
-        marginLeft: theme.spacing(-5),
-        marginTop: theme.spacing(-3.5),
-    },
-
     metaPrize: {
         marginTop: theme.spacing(1),
         padding: theme.spacing(1),
@@ -35,6 +22,19 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         maxWidth: '50%',
     },
+    metaTitle: {
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(1),
+        justifyContent: 'end',
+        alignItems: 'center',
+    },
+    metaFooter: {
+        justifyContent: 'start',
+        alignItems: 'center',
+        marginLeft: theme.spacing(-2),
+        marginTop: theme.spacing(-3.5),
+    },
+
     icon: {
         backgroundColor: 'transparent',
         position: 'relative',
@@ -84,10 +84,10 @@ export function CardLeft(props: any) {
     const shortValue = useShortTokenValue(chainId, props.poolId) || '0'
     const longValue = useLongTokenValue(chainId, props.poolId) || '0'
 
-    console.log('props.poolId:', props.poolId)
-    console.log('PoolView.chainId:', chainId)
-    console.log('shortValue:', shortValue)
-    console.log('longValue:', longValue)
+    // console.log('props.poolId:', props.poolId)
+    // console.log('PoolView.chainId:', chainId)
+    // console.log('shortValue:', shortValue)
+    // console.log('longValue:', longValue)
 
     const poolValue = new BigNumber(shortValue)
         .plus(new BigNumber(longValue))
@@ -120,9 +120,9 @@ export function CardLeft(props: any) {
                 </Grid>
             </Grid>
             <Grid item container wrap="nowrap" className={classes.metaTitle}>
-                <Grid item xs={3} marginLeft="-16px">
+                {/* <Grid item xs={3} marginLeft="-16px">
                     {iconArr[coinName]}
-                </Grid>
+                </Grid> */}
                 <Grid item container>
                     <Grid item>
                         <Typography

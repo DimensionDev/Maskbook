@@ -7,7 +7,6 @@ import { EntropyfiIcon } from '../../../resources/EntropyfiIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
 // import { usePool, usePools } from '../hooks/usePools'
 // import type { Pool } from '../types'
-import { Account } from './Account'
 import { PoolsView } from './PoolsView'
 
 const backgroundImage_1 = new URL('../constants/assets/image_2.jpg', import.meta.url).toString()
@@ -124,10 +123,10 @@ export function EntropyfiView() {
     //#region tabs
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
-        <Tab className={classes.tab} key="pools" label={t('plugin_pooltogether_tab_pools')} />,
-        <Tab className={classes.tab} key="account" label={t('plugin_pooltogether_tab_account')} />,
+        <Tab className={classes.tab} key="pools" label="Lossless prediction game" />,
+        // <Tab className={classes.tab} key="account" label="account" />,
     ].filter(Boolean)
-    console.log('tabs', tabs)
+    // console.log('tabs', tabs)
     //#endregion
 
     return (
@@ -150,7 +149,7 @@ export function EntropyfiView() {
                 </Tabs>
                 <Paper className={classes.body}>
                     {tabIndex === 0 ? <PoolsView /> : null}
-                    {tabIndex === 1 ? <Account /> : null}
+                    {/* {tabIndex === 1 ? <Account /> : null} */}
                 </Paper>
             </CardContent>
             <CardActions className={classes.footer}>

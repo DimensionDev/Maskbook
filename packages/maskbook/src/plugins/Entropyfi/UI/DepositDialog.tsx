@@ -107,14 +107,6 @@ export function DepositDialog() {
         closeDialog()
         setDepositAmount('')
     }, [closeDialog])
-
-    useEffect(() => {
-        console.log('rawAmount value change', depositAmount)
-        console.log('balance', tokenBalance)
-        console.log('pid', poolId)
-        console.log('poolAddress', poolAddress)
-        console.log('formattedAmount', formattedAmount)
-    }, [depositAmount])
     //#endregion
 
     const openSwap = () => {
@@ -129,13 +121,13 @@ export function DepositDialog() {
         retry: retryLoadTokenBalance,
     } = useERC20TokenBalance(principalToken?.address)
 
-    useEffect(() => {
-        console.log('rawAmount value change', depositAmount)
-        console.log('balance', tokenBalance)
-        console.log('pid', poolId)
-        console.log('poolAddress', poolAddress)
-        console.log('formattedAmount', formattedAmount)
-    }, [depositAmount])
+    // useEffect(() => {
+    //     console.log('rawAmount value change', depositAmount)
+    //     console.log('balance', tokenBalance)
+    //     console.log('pid', poolId)
+    //     console.log('poolAddress', poolAddress)
+    //     console.log('formattedAmount', formattedAmount)
+    // }, [depositAmount])
 
     //#region  handleDeposit
     const handleDeposit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

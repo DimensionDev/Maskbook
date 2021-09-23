@@ -10,6 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: '11px',
         lineHeight: '15px',
         fontFamily: '-apple-system,system-ui,sans-serif',
+        paddingLeft: theme.spacing(1),
     },
     bar: {
         transform: 'translateY(5px)',

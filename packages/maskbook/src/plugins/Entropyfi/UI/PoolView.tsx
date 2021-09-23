@@ -10,7 +10,7 @@ import { CardLeft } from './Component/Card_Left'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        padding: theme.spacing(1, 2),
+        padding: theme.spacing(1, 1),
         alignItems: 'stretch',
         backgroundColor: 'rgba(255, 255, 255, 0.03)',
         margin: theme.spacing(1, 0),
@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
     },
     root_top: {
-        padding: theme.spacing(1, 2),
+        padding: theme.spacing(1, 1),
         alignItems: 'stretch',
         margin: theme.spacing(1, 0),
         display: 'flex',
@@ -39,8 +39,8 @@ export function PoolView(props: any) {
     const { t } = useI18N()
     const chainId = useChainId()
 
-    console.log('props.poolId:', props.poolId)
-    console.log('PoolView.chainId:', chainId)
+    // console.log('props.poolId:', props.poolId)
+    // console.log('PoolView.chainId:', chainId)
 
     // const poolValue = new BigNumber(poolState.shortValue)
 

@@ -8,7 +8,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         position: 'relative',
-        padding: theme.spacing(0.5),
+        padding: theme.spacing(0.6),
         justifyContent: 'center',
         flexDirection: 'column',
     },
@@ -29,7 +29,7 @@ export function PoolsView() {
 //=> Functions
 const GETDATA = (): Array<any> => {
     const chainId = useChainId()
-    console.log('CHAIND ID', chainId)
+    // console.log('CHAIND ID', chainId)
     const PoolIDs = []
     const SelectorList = [{ name: 'ALL' }]
     for (const poolId of Object.keys(poolAddressMap[chainId])) {

@@ -44,7 +44,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary
                     chainId={ChainId.Kovan}
-                    isValidChainId={(chainId) => [ChainId.Kovan, ChainId.Mumbai].includes(chainId)}>
+                    isValidChainId={(chainId) => [ChainId.Kovan].includes(chainId)}>
                     <EntropyfiView />
                 </EthereumChainBoundary>
             </Suspense>
