@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
-import { hasEncryptedWalletStore } from '../../../../../../maskbook/src/plugins/Wallet/database/decrypt'
+// import { hasEncryptedWalletStore } from '../../../../../../maskbook/src/plugins/Wallet/database/decrypt'
 
 const useStyles = makeStyles()({
     container: {
@@ -112,7 +112,7 @@ const CreateWalletForm = memo(() => {
             // password: '',
             // confirm: '',
         },
-        context: hasEncryptedWalletStore,
+        // context: hasEncryptedWalletStore,
     })
 
     const onSubmit = handleSubmit((data) => {

@@ -180,7 +180,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     }, [tabIndex, classes, wallet, transactionType])
 
     const asyncResult = useAsyncRetry(async () => {
-        return WalletRPC.getLibVersion({})
+        return WalletRPC.getLibVersion()
     }, [])
 
     console.log('DEBUG: mask wallet version')

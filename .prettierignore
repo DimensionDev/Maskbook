@@ -168,6 +168,3 @@ common/autoinstallers/*/.npmrc
 packages/storybook-shared/*.js
 packages/storybook-shared/*.map
 packages/storybook-shared/*.d.ts
-
-# Mask Wallet
-packages/maskbook/src/plugins/Wallet/services/wallet/maskwallet/*.js

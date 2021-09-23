@@ -306,8 +306,7 @@
         "**/node_modules/**",
         "pnpm-lock.yaml",
         "tsconfig.tsbuildinfo",
-        ".prettierignore",
-        "**/maskwallet/*.js"
+        ".prettierignore"
     ],
     "overrides": [
         {

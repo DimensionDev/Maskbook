@@ -1,32 +1,22 @@
 import { api } from '@dimensiondev/mask-wallet-core/proto'
-import { sideEffect } from '../../../../../utils'
-import { OnDemandWorker } from '../../../../../web-workers/OnDemandWorker'
-
-let worker: OnDemandWorker
-
-sideEffect.then(() => {
-    worker = new OnDemandWorker(new URL('./maskwallet/worker.ts', import.meta.url), {
-        name: 'maskwallet',
-        type: 'module',
-    })
-    return () => worker.terminate()
-})
+import init, { request } from '@dimensiondev/mask-wallet-core/web'
 
 type Request = InstanceType<typeof api.MWRequest>
 type Response = InstanceType<typeof api.MWResponse>
-
+let loaded = false
 function send<I extends keyof Request, O extends keyof Response>(input: I, output: O) {
-    return (value: Request[I]) => {
-        return new Promise<Response[O]>((resolve, reject) => {
-            const payload: Uint8Array = api.MWRequest.encode({ [input]: value }).finish()
-            worker.addEventListener('message', (ev: MessageEvent) => {
-                const response = api.MWResponse.decode(ev.data as Uint8Array)
-                if (response.error) reject(new Error(response.error.errorMsg ?? 'Unknown Error'))
-                else resolve(response[output])
-            })
-            worker.addEventListener('error', reject)
-            worker.postMessage(payload)
-        })
+    return async (value: Request[I]) => {
+        if (!loaded) {
+            await init()
+            loaded = true
+        }
+
+        const payload = api.MWRequest.encode({ [input]: value }).finish()
+        const response = api.MWResponse.decode(request(payload))
+        if (response.error) {
+            throw new Error(response.error.errorMsg ?? 'Unknown Error')
+        }
+        return response[output]
     }
 }
 
@@ -51,7 +41,7 @@ export const exportKeyStoreJSONOfAddress = send('param_export_key_store_json_of_
 export const exportKeyStoreJSONOfPath = send('param_export_key_store_json_of_path', 'resp_export_key_store_json')
 export const exportUpdateKeyStorePassword = send('param_update_key_store_password', 'resp_update_key_store_password')
 export const signTransaction = send('param_sign_transaction', 'resp_sign_transaction')
-export const getLibVersion = send('param_get_version', 'resp_get_version')
+export const getLibVersion = send('param_get_version', 'resp_get_version').bind(null, {})
 export const validate = send('param_validation', 'resp_validate')
 export const getSupportImportTypes = send('param_get_stored_key_import_type', 'resp_get_stored_key_import_type')
 export const getSupportExportTypes = send('param_get_stored_key_export_type', 'resp_get_stored_key_export_type')

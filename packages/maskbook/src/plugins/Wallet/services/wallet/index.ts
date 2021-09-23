@@ -8,6 +8,8 @@ import * as sdk from './maskwallet'
 import * as database from './database'
 import * as password from './password'
 
+console.log('sdk=', sdk)
+
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const splitted = path.split('/')
     const index = Number.parseInt(last(splitted) ?? '', 10)
