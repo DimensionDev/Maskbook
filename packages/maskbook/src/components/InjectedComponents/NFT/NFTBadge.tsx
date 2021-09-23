@@ -13,7 +13,7 @@ const useStyles = makeStyles()({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        transform: 'scale(0.5)',
+        transform: 'scale(0.55)',
         paddingTop: 8,
         paddingBottom: 8,
     },
@@ -86,7 +86,6 @@ export function NFTBadge(props: NFTBadgeProps) {
         avatar.tokenId,
     )
     const { amount, symbol, name } = value
-
     return (
         <div
             className={classes.root}
@@ -150,6 +149,10 @@ function ShowPrice({ name, symbol, tokenId, price }: ShowPriceProps) {
             ) : symbol && name && price === '0' ? (
                 <>
                     {text(`${name}`)} {text('NFT', true)}
+                </>
+            ) : symbol && !name && price !== '0' ? (
+                <>
+                    {text('NFT', true)} {text(`${price} ${symbol}`)}
                 </>
             ) : (
                 <> {text('NFT', true)}</>
