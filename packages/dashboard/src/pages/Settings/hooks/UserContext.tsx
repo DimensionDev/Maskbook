@@ -42,6 +42,7 @@ export type ConfirmPasswordOption = {
     tipTitle?: string
     tipContent?: string
     confirmTitle?: string
+    force?: boolean
 }
 
 export function UserProvider({ children }: PropsWithChildren<{}>) {
@@ -73,8 +74,13 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
     }
 
     const confirmPassword = (f: ConfirmPasswordCallback, option?: ConfirmPasswordOption) => {
-        setConfirmCallback([f])
-        setConfirmOption(option)
+        const { force = true } = option ?? {}
+        if (!force && !user.backupPassword) {
+            f()
+        } else {
+            setConfirmCallback([f])
+            setConfirmOption(option)
+        }
     }
 
     const onSet = () => {
