@@ -1,16 +1,18 @@
 import {
     ChainId,
-    ProviderType,
-    NetworkType,
-    getNetworkTypeFromChainId,
     getChainIdFromNetworkType,
+    getNetworkTypeFromChainId,
+    NetworkType,
+    ProviderType,
 } from '@masknet/web3-shared'
 import { EthereumAddress } from 'wallet.ts'
 import type { WalletRecord } from '../database/types'
 import {
-    currentAccountSettings,
     currentAccountMaskWalletSettings,
+    currentAccountSettings,
     currentChainIdSettings,
+    currentMaskWalletChainIdSettings,
+    currentMaskWalletNetworkSettings,
     currentNetworkSettings,
     currentProviderSettings,
 } from '../settings'
@@ -34,8 +36,8 @@ export async function updateAccount(
         throw new Error('Account and provider type must be updating both')
 
     // make sure chain id and network type to be updating both
-    if ((options.chainId && !options.networkType) || (!options.chainId && options.networkType))
-        throw new Error('Chain id and network type must be updating both')
+    // if ((options.chainId && !options.networkType) || (!options.chainId && options.networkType))
+    //     throw new Error('Chain id and network type must be updating both')
 
     const { name, account, chainId, providerType, networkType } = options
 
@@ -52,6 +54,10 @@ export async function updateAccount(
         if (hasNativeAPI) {
             nativeAPI?.api.wallet_switchBlockChain({ networkId: chainId })
         }
+    }
+    if (chainId && providerType === ProviderType.MaskWallet) {
+        currentMaskWalletChainIdSettings.value = chainId
+        if (networkType) currentMaskWalletNetworkSettings.value = networkType
     }
     if (networkType) currentNetworkSettings.value = networkType
     if (account) currentAccountSettings.value = account

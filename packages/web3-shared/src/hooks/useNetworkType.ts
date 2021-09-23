@@ -1,5 +1,8 @@
 import { useWeb3StateContext } from '../context'
 
 export function useNetworkType() {
-    return useWeb3StateContext().networkType
+    const { networkType, maskWalletNetworkType } = useWeb3StateContext()
+
+    if (location.pathname === '/popups.html') return maskWalletNetworkType
+    return networkType
 }

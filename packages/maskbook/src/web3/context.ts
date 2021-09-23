@@ -15,6 +15,8 @@ import {
     currentEtherPriceSettings,
     currentTokenPricesSettings,
     currentAccountMaskWalletSettings,
+    currentMaskWalletChainIdSettings,
+    currentMaskWalletNetworkSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
@@ -35,6 +37,7 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
         chainId: createSubscriptionFromSettings(currentChainIdSettings),
         account: createSubscriptionFromSettings(currentAccountSettings),
         accountMaskWallet: createSubscriptionFromSettings(currentAccountMaskWalletSettings),
+        maskWalletChainId: createSubscriptionFromSettings(currentMaskWalletChainIdSettings),
         balance: createSubscriptionFromSettings(currentBalanceSettings),
         gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
         blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
@@ -44,6 +47,7 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
         wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
         providerType: createSubscriptionFromSettings(currentProviderSettings),
         networkType: createSubscriptionFromSettings(currentNetworkSettings),
+        maskWalletNetworkType: createSubscriptionFromSettings(currentMaskWalletNetworkSettings),
         erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
         erc20TokensCount: createSubscriptionFromAsync(
             WalletRPC.getERC20TokensCount,

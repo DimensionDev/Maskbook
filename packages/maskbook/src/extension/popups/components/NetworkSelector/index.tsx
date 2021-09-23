@@ -7,12 +7,16 @@ import {
     getChainIdFromNetworkType,
     getChainName,
     getNetworkName,
+    getNetworkTypeFromChainId,
     NetworkType,
     ProviderType,
     resolveNetworkName,
-    useAccount,
 } from '@masknet/web3-shared'
-import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
+import {
+    currentMaskWalletChainIdSettings,
+    currentMaskWalletNetworkSettings,
+    currentProviderSettings,
+} from '../../../../plugins/Wallet/settings'
 import { ChainIcon, useMenu, useValueRef } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'
 import { getEnumAsArray } from '@dimensiondev/kit'
@@ -52,18 +56,27 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const NetworkSelector = memo(() => {
-    const currentChainId = useValueRef(currentChainIdSettings)
-    const account = useAccount(ProviderType.MaskWallet)
+    const currentChainId = useValueRef(currentMaskWalletChainIdSettings)
+    const currentProvider = useValueRef(currentProviderSettings)
     const { value: networks } = useAsync(async () => WalletRPC.getSupportedNetworks(), [])
     const onChainChange = useCallback(
         async (chainId: ChainId) => {
-            await WalletRPC.updateAccount({
-                chainId,
-                account,
-                providerType: ProviderType.MaskWallet,
-            })
+            if (currentProvider === ProviderType.MaskWallet) {
+                await WalletRPC.updateAccount({
+                    chainId,
+                    providerType: currentProvider,
+                })
+            } else {
+                currentMaskWalletChainIdSettings.value = chainId
+                const networkType = getNetworkTypeFromChainId(chainId)
+                console.log('networkType', networkType)
+                if (networkType) {
+                    console.log('done')
+                    currentMaskWalletNetworkSettings.value = networkType
+                }
+            }
         },
-        [account],
+        [currentProvider],
     )
 
     return <NetworkSelectorUI currentChainId={currentChainId} onChainChange={onChainChange} networks={networks} />

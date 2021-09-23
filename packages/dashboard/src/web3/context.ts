@@ -24,6 +24,11 @@ export const Web3Context: Web3ProviderType = {
         '',
         Messages.events.currentAccountMaskWalletSettings.on,
     ),
+    maskWalletChainId: createSubscriptionFromAsync(
+        Services.Settings.getCurrentMaskWalletChainId,
+        ChainId.Mainnet,
+        Messages.events.currentMaskWalletChainIdSettings.on,
+    ),
     nonce: createSubscriptionFromAsync(
         Services.Settings.getBlockNumber,
         0,
@@ -64,6 +69,11 @@ export const Web3Context: Web3ProviderType = {
         Services.Settings.getCurrentSelectedWalletNetwork,
         NetworkType.Ethereum,
         Messages.events.currentNetworkSettings.on,
+    ),
+    maskWalletNetworkType: createSubscriptionFromAsync(
+        Services.Settings.getCurrentMaskWalletNetworkType,
+        NetworkType.Ethereum,
+        Messages.events.currentMaskWalletNetworkSettings.on,
     ),
     wallets: createSubscriptionFromAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
     erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),

@@ -1,5 +1,9 @@
 import { useWeb3StateContext } from '../context'
 
 export function useChainDetailed() {
-    return useWeb3StateContext().chainDetailed
+    const { chainDetailed, maskWalletChainDetail } = useWeb3StateContext()
+
+    if (location.pathname === '/popups.html') return maskWalletChainDetail
+
+    return chainDetailed
 }

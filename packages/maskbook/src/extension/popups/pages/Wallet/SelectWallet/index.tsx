@@ -2,8 +2,7 @@ import { memo, useCallback, useMemo } from 'react'
 import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { WalletHeader } from '../components/WalletHeader'
-import { WalletInfo } from '../components/WalletInfo'
-import { isSameAddress, ProviderType, useAccount, useWallet, useWallets } from '@masknet/web3-shared'
+import { isSameAddress, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
 import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress, useValueRef } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
@@ -12,9 +11,10 @@ import { useI18N } from '../../../../../utils'
 import { useWalletHD } from '../../../../../plugins/Wallet/hooks/useWalletHD'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useCopyToClipboard } from 'react-use'
-import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
+import { currentAccountMaskWalletSettings, currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { useLocation } from 'react-router'
 import Services from '../../../../service'
+import { WalletInfo } from '../components/WalletInfo'
 
 const useStyles = makeStyles()({
     content: {
@@ -70,20 +70,22 @@ const SelectWallet = memo(() => {
     const { t } = useI18N()
     const walletHD = useWalletHD()
     const { classes } = useStyles()
+
     const currentProvider = useValueRef(currentProviderSettings)
     const location = useLocation()
     const history = useHistory()
-    const account = useAccount()
-    const wallet = useWallet(ProviderType.MaskWallet)
+    const wallet = useWallet()
     const wallets = useWallets(ProviderType.MaskWallet)
 
     const [, copyToClipboard] = useCopyToClipboard()
 
-    const isMaskWalletSelected = currentProvider === ProviderType.MaskWallet && isSameAddress(account, wallet?.address)
+    const toBeClose = new URLSearchParams(location.search).get('toBeClose')
 
     const walletList = useMemo(() => {
-        return !isMaskWalletSelected ? wallets : wallets.filter((item) => !isSameAddress(item.address, wallet?.address))
-    }, [wallet, wallets, isMaskWalletSelected])
+        return currentProvider !== ProviderType.MaskWallet && toBeClose
+            ? wallets
+            : wallets.filter((item) => !isSameAddress(item.address, wallet?.address))
+    }, [wallet, wallets, currentProvider])
 
     const handleClickCreate = useCallback(() => {
         if (!walletHD) {
@@ -98,15 +100,18 @@ const SelectWallet = memo(() => {
 
     const handleSelect = useCallback(
         async (address) => {
-            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
-            await WalletRPC.updateAccount({
-                account: address,
-                providerType: ProviderType.MaskWallet,
-            })
-            if (toBeClose) await Services.Helper.removePopupWindow()
-            else history.replace(PopupRoutes.Wallet)
+            if (toBeClose) {
+                await WalletRPC.updateAccount({
+                    account: address,
+                    providerType: ProviderType.MaskWallet,
+                })
+                await Services.Helper.removePopupWindow()
+            } else {
+                currentAccountMaskWalletSettings.value = address
+                history.replace(PopupRoutes.Wallet)
+            }
         },
-        [history, location],
+        [history, toBeClose],
     )
 
     const onCopy = useCallback(
@@ -119,7 +124,7 @@ const SelectWallet = memo(() => {
     return (
         <>
             <WalletHeader />
-            {isMaskWalletSelected ? <WalletInfo /> : null}
+            {currentProvider === ProviderType.MaskWallet || !toBeClose ? <WalletInfo /> : null}
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     {walletList.map((item, index) => (
