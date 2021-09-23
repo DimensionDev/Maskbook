@@ -67,12 +67,12 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     //#region validation
     const validationMessage = useMemo(() => {
         if (!transferAmount || isZero(transferAmount)) return t.wallets_transfer_error_amount_absence()
-        if (isGreaterThan(new BigNumber(amount).multipliedBy(pow10(selectedToken.decimals)).toFixed(), transferAmount))
+        if (isGreaterThan(new BigNumber(amount).multipliedBy(pow10(selectedToken.decimals)).toFixed(), maxAmount))
             return t.wallets_transfer_error_insufficient_balance({ symbol: selectedToken.symbol ?? '' })
         if (!address) return t.wallets_transfer_error_address_absence()
         if (!EthereumAddress.isValid(address)) return t.wallets_transfer_error_invalid_address()
         return ''
-    }, [transferAmount, address, tokenBalance, selectedToken, amount])
+    }, [transferAmount, maxAmount, address, tokenBalance, selectedToken, amount])
     //#endregion
 
     useEffect(() => {
