@@ -19,10 +19,11 @@ export interface EthereumWalletConnectedBoundaryProps
     offChain?: boolean
     children?: React.ReactNode
     ableToSendTx?: boolean
+    hideRiskWarningConfirmed?: boolean
 }
 
 export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
-    const { children = null, offChain = false, ableToSendTx = true } = props
+    const { children = null, offChain = false, ableToSendTx = true, hideRiskWarningConfirmed = false } = props
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -55,7 +56,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    if (!isRiskWarningConfirmed && ableToSendTx)
+    if (!isRiskWarningConfirmed && ableToSendTx && !hideRiskWarningConfirmed)
         return (
             <Grid container>
                 <ActionButton
