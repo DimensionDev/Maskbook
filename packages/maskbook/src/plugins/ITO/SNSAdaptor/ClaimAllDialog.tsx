@@ -413,7 +413,8 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             </div>
                         ) : null}
                         {(swappedTokens && swappedTokens.length > 0) ||
-                        (swappedTokensOld && swappedTokensOld.length > 0) ? (
+                        (swappedTokensOld && swappedTokensOld.length > 0) ||
+                        chainId === ChainId.Matic ? (
                             <div className={classes.actionButtonWrapper}>
                                 <EthereumChainBoundary
                                     chainId={chainId}
