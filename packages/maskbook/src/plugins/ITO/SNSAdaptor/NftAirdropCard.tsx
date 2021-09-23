@@ -84,7 +84,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     gallery: {
         marginBottom: theme.spacing(0.5),
-        overflowX: 'scroll',
         whiteSpace: 'nowrap',
     },
     actionButton: {
