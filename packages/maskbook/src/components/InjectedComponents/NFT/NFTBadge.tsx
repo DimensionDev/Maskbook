@@ -55,6 +55,9 @@ const useStyles = makeStyles()({
         alignItems: 'center',
         height: '100%',
     },
+    nft: {
+        marginTop: 20,
+    },
 })
 
 interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
@@ -85,7 +88,7 @@ export function NFTBadge(props: NFTBadgeProps) {
         avatar.tokenId,
     )
     const { amount, symbol, name } = value
-    console.log(value)
+
     return (
         <div
             className={classes.root}
@@ -136,6 +139,7 @@ function ShowPrice({ name, symbol, tokenId, price }: ShowPriceProps) {
             </Typography>
         </div>
     )
+
     return (
         <>
             {symbol && name && price !== '0' ? (
@@ -155,7 +159,7 @@ function ShowPrice({ name, symbol, tokenId, price }: ShowPriceProps) {
                     {text('NFT', true)} {text(`${price} ${symbol}`)}
                 </>
             ) : (
-                <> {text('NFT', true)}</>
+                <div className={classes.nft}> {text('NFT', true)}</div>
             )}
         </>
     )
