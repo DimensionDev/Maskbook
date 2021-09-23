@@ -12,6 +12,7 @@ import {
     getChainFromChainId,
     useChainId,
     useNativeTokenDetailed,
+    useWeb3,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { z as zod } from 'zod'
@@ -81,6 +82,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const Prior1559GasSetting = memo(() => {
     const { classes } = useStyles()
+    const web3 = useWeb3()
     const { t } = useI18N()
     const chainId = useChainId()
     const { value } = useUnconfirmedRequest()
@@ -130,18 +132,30 @@ export const Prior1559GasSetting = memo(() => {
         return '0'
     }, [value])
 
+    const { value: minGasLimit } = useAsync(async () => {
+        if (
+            value &&
+            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
+                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
+        ) {
+            return web3.eth.estimateGas(value.computedPayload._tx)
+        }
+
+        return 0
+    }, [value, web3])
+
     const schema = useMemo(() => {
         return zod.object({
             gasLimit: zod
                 .string()
                 .min(1, t('wallet_transfer_error_gasLimit_absence'))
                 .refine(
-                    (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(gas),
-                    `Gas limit must be at least ${gas}.`,
+                    (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimit ?? 0),
+                    `Gas limit must be at least ${minGasLimit}.`,
                 ),
             gasPrice: zod.string().min(1, t('wallet_transfer_error_gasPrice_absence')),
         })
-    }, [gas])
+    }, [minGasLimit])
 
     const {
         control,
@@ -156,7 +170,7 @@ export const Prior1559GasSetting = memo(() => {
             gasPrice: '',
         },
         context: {
-            gas,
+            minGasLimit,
         },
     })
 

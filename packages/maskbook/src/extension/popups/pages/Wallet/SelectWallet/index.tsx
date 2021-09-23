@@ -79,11 +79,11 @@ const SelectWallet = memo(() => {
 
     const [, copyToClipboard] = useCopyToClipboard()
 
-    const currentWalletBeMask = currentProvider === ProviderType.MaskWallet && isSameAddress(account, wallet?.address)
+    const isMaskWalletSelected = currentProvider === ProviderType.MaskWallet && isSameAddress(account, wallet?.address)
 
     const walletList = useMemo(() => {
-        return !currentWalletBeMask ? wallets : wallets.filter((item) => !isSameAddress(item.address, wallet?.address))
-    }, [wallet, wallets, currentWalletBeMask])
+        return !isMaskWalletSelected ? wallets : wallets.filter((item) => !isSameAddress(item.address, wallet?.address))
+    }, [wallet, wallets, isMaskWalletSelected])
 
     const handleClickCreate = useCallback(() => {
         if (!walletHD) {
@@ -119,7 +119,7 @@ const SelectWallet = memo(() => {
     return (
         <>
             <WalletHeader />
-            {currentWalletBeMask ? <WalletInfo /> : null}
+            {isMaskWalletSelected ? <WalletInfo /> : null}
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     {walletList.map((item, index) => (

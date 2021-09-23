@@ -275,20 +275,20 @@ const ContractInteraction = memo(() => {
 
     const totalUSD = new BigNumber(formatWeiToEther(gasFee)).times(nativeTokenPrice).plus(tokenValueUSD).toString()
     //
-    // console.log('DEBUG: ContractInteraction')
-    // console.log({
-    //     amount,
-    //     gasFee,
-    //     gas,
-    //     maxPriorityFeePerGas: maxPriorityFeePerGas ?? defaultPrices?.maxPriorityFeePerGas,
-    //     maxFeePerGas: maxFeePerGas ?? defaultPrices?.maxFeePerGas,
-    //     defaultPrice: (gasPrice as string) ?? defaultPrices?.gasPrice,
-    //     request,
-    //     tokenPrice,
-    //     tokenAmount,
-    //     tokenDecimals,
-    //     nativeTokenPrice,
-    // })
+    console.log('DEBUG: ContractInteraction')
+    console.log({
+        amount,
+        gasFee,
+        gas,
+        maxPriorityFeePerGas: maxPriorityFeePerGas ?? defaultPrices?.maxPriorityFeePerGas,
+        maxFeePerGas: maxFeePerGas ?? defaultPrices?.maxFeePerGas,
+        defaultPrice: (gasPrice as string) ?? defaultPrices?.gasPrice,
+        request,
+        tokenPrice,
+        tokenAmount,
+        tokenDecimals,
+        nativeTokenPrice,
+    })
 
     useUpdateEffect(() => {
         if (!request && !requestLoading) {

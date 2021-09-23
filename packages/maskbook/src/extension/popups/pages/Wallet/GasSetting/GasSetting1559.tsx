@@ -6,6 +6,7 @@ import {
     formatWeiToGwei,
     useChainId,
     useNativeTokenDetailed,
+    useWeb3,
 } from '@masknet/web3-shared'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
@@ -95,6 +96,7 @@ const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
 export const GasSetting1559 = memo(() => {
     const { classes } = useStyles()
+    const web3 = useWeb3()
     const { t } = useI18N()
     const chainId = useChainId()
     const history = useHistory()
@@ -142,6 +144,18 @@ export const GasSetting1559 = memo(() => {
         return '0'
     }, [value])
 
+    const { value: minGasLimit } = useAsync(async () => {
+        if (
+            value &&
+            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
+                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
+        ) {
+            return web3.eth.estimateGas(value.computedPayload._tx)
+        }
+
+        return 0
+    }, [value, web3])
+
     //#region Form field define schema
     const schema = useMemo(() => {
         return zod
@@ -150,8 +164,8 @@ export const GasSetting1559 = memo(() => {
                     .string()
                     .min(1, t('wallet_transfer_error_gasLimit_absence'))
                     .refine(
-                        (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(gas),
-                        `Gas limit must be at least ${gas}.`,
+                        (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimit ?? 0),
+                        `Gas limit must be at least ${minGasLimit}.`,
                     ),
                 maxPriorityFeePerGas: zod
                     .string()
@@ -166,7 +180,7 @@ export const GasSetting1559 = memo(() => {
                 message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
                 path: ['maxFeePerGas'],
             })
-    }, [gas, gasNow])
+    }, [minGasLimit, gasNow])
     //#endregion
 
     const {
@@ -184,7 +198,7 @@ export const GasSetting1559 = memo(() => {
             maxFeePerGas: '0',
         },
         context: {
-            gas,
+            minGasLimit,
             gasNow,
         },
     })

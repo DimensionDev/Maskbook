@@ -79,7 +79,7 @@ const DeleteWallet = memo(() => {
             const wallets = await WalletRPC.getWallets(ProviderType.MaskWallet)
 
             await WalletRPC.resetAccount({
-                account: wallets.length ? first(wallets)?.address : '',
+                account: first(wallets)?.address ?? '',
             })
 
             history.replace(PopupRoutes.Wallet)

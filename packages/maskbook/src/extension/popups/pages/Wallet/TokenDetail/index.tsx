@@ -88,7 +88,7 @@ const TokenDetail = memo(() => {
                 open: 'Transak',
                 code: currentToken?.token.symbol ?? currentToken?.token.name,
             })
-            window.open(browser.runtime.getURL(url), 'BUY_DIALOG')
+            window.open(browser.runtime.getURL(url), 'BUY_DIALOG', 'noopener noreferrer')
         }
     }, [wallet?.address, isActiveSocialNetwork, currentToken])
 
@@ -108,7 +108,7 @@ const TokenDetail = memo(() => {
             })
         } else {
             const url = urlcat('next.html#', 'labs', { open: 'Swap' })
-            window.open(browser.runtime.getURL(url), 'SWAP_DIALOG')
+            window.open(browser.runtime.getURL(url), 'SWAP_DIALOG', 'noopener noreferrer')
         }
     }, [isActiveSocialNetwork, currentToken])
 
