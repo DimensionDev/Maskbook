@@ -25,13 +25,25 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 if (!avatarIdNode) return
                 const avatarId = getAvatarId(avatarIdNode.getAttribute('src') ?? '')
                 if (avatarId !== avatar.avatarId) return
-                const nftDom = ele.firstChild?.firstChild?.firstChild?.nextSibling?.firstChild?.firstChild
+                const nftDom = ele.firstChild?.firstChild?.firstChild?.nextSibling?.firstChild
                     ?.firstChild as HTMLElement
                 if (!nftDom) return
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
                 proxy.realCurrent = nftDom
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
-                root.render(<NFTBadge avatar={avatar} />)
+                root.render(
+                    <div
+                        style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            top: 22,
+                            zIndex: 1,
+                            transform: 'scale(0.65)',
+                        }}>
+                        <NFTBadge avatar={avatar} />
+                    </div>,
+                )
                 remover = root.destory
             }
 
