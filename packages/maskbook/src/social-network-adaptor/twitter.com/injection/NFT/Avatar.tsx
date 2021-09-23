@@ -32,7 +32,15 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 proxy.realCurrent = nftDom
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
                 root.render(
-                    <div style={{ position: 'absolute', left: 0, right: 0, top: 20, zIndex: 1 }}>
+                    <div
+                        style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            top: 22,
+                            zIndex: 1,
+                            transform: 'scale(0.65)',
+                        }}>
                         <NFTBadge avatar={avatar} />
                     </div>,
                 )

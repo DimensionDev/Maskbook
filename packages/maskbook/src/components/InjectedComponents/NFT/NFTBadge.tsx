@@ -13,7 +13,6 @@ const useStyles = makeStyles()({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        transform: 'scale(0.55)',
         paddingTop: 8,
         paddingBottom: 8,
     },
@@ -108,7 +107,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                         </div>
                     ) : (
                         <ShowPrice
-                            name={name ?? ''}
+                            name={formatText(name ?? '', 13)}
                             price={formatPrice(amount)}
                             symbol={formatText(symbol, 4)}
                             tokenId={formatText(avatar.tokenId, 6)}
