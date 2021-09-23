@@ -12,7 +12,7 @@ import { PopupRoutes } from '../../../index'
 import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
 import { WalletMessages, WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
+import { useAsyncFn } from 'react-use'
 import { useSnackbar } from '@masknet/theme'
 import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
@@ -108,11 +108,12 @@ const ImportWallet = memo(() => {
     const [keyStorePassword, setKeyStorePassword] = useState('')
     const [privateKey, setPrivateKey] = useState('')
 
-    const {
-        value: hasEncryptedWallet,
-        retry,
-        loading: getHasEncryptedWalletLoading,
-    } = useAsyncRetry(async () => WalletRPC.hasEncryptedWalletStore(), [])
+    // const {
+    //     value: hasEncryptedWallet,
+    //     retry,
+    //     loading: getHasEncryptedWalletLoading,
+    // } = useAsyncRetry(async () => WalletRPC.hasEncryptedWalletStore(), [])
+    const retry = () => {}
 
     useEffect(() => {
         return WalletMessages.events.walletLockStatusUpdated.on(retry)
@@ -179,39 +180,12 @@ const ImportWallet = memo(() => {
                         })
                         break
                     case ImportWalletTab.JsonFile:
-                        const { address, privateKey: _private_key_ } = await WalletRPC.fromKeyStore(
-                            keyStoreContent,
-                            Buffer.from(keyStorePassword, 'utf-8'),
-                        )
-                        await WalletRPC.importNewWallet(
-                            {
-                                name: data.name,
-                                address,
-                                _private_key_,
-                            },
-                            true,
-                        )
+                        await WalletRPC.recoverWalletFromKeyStoreJSON(data.name, keyStoreContent, keyStorePassword)
                         history.replace(PopupRoutes.Wallet)
                         break
                     case ImportWalletTab.PrivateKey:
-                        const { address: walletAddress, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(
-                            privateKey,
-                        )
-                        if (!privateKeyValid) {
-                            enqueueSnackbar(t('import_failed'), { variant: 'error' })
-                            return
-                        }
-                        await WalletRPC.importNewWallet(
-                            {
-                                name: data.name,
-                                address: walletAddress,
-                                _private_key_: privateKey,
-                            },
-                            true,
-                        )
-
                         await WalletRPC.updateMaskAccount({
-                            account: walletAddress,
+                            account: await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey),
                         })
                         history.replace(PopupRoutes.Wallet)
                         break

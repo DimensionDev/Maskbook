@@ -4,7 +4,7 @@ import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
 import type { ERC1155TokenDetailed } from '@masknet/web3-shared'
 import { formatEthereumAddress } from '@masknet/web3-shared'
-import { ERC1155TokenRecordIntoDB, getWalletByAddress, WalletRecordIntoDB } from './helpers'
+import { ERC1155TokenRecordIntoDB, getWalletByAddress, LegacyWalletRecordIntoDB } from './helpers'
 
 export async function getERC1155Tokens() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC1155Token', 'Wallet')
@@ -41,7 +41,7 @@ export async function trustERC1155Token(
         updated = true
     }
     if (!updated) return false
-    await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
+    await t.objectStore('Wallet').put(LegacyWalletRecordIntoDB(wallet))
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
     return updated
 }
@@ -64,6 +64,6 @@ export async function blockERC1155Token(
         updated = true
     }
     if (!updated) return
-    await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
+    await t.objectStore('Wallet').put(LegacyWalletRecordIntoDB(wallet))
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }

@@ -1,18 +1,12 @@
-import { useEffect, useCallback } from 'react'
-import { Button } from '@material-ui/core'
+import { useEffect } from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
 import { makeStyles } from '@masknet/theme'
 import AddIcon from '@material-ui/icons/Add'
-import AddCircleIcon from '@material-ui/icons/AddCircle'
 import { useWallet } from '@masknet/web3-shared'
 import { useI18N, useQueryParams, Flags, extendsTheme } from '../../../utils'
 import DashboardRouterContainer from './Container'
 import { useModal } from '../DashboardDialogs/Base'
-import {
-    DashboardWalletImportDialog,
-    DashboardWalletAddERC20TokenDialog,
-    DashboardWalletErrorDialog,
-} from '../DashboardDialogs/Wallet'
+import { DashboardWalletAddERC20TokenDialog, DashboardWalletErrorDialog } from '../DashboardDialogs/Wallet'
 import { WalletContent } from '../DashboardComponents/WalletContent'
 import { EthereumStatusBar } from '../../../web3/UI/EthereumStatusBar'
 
@@ -77,15 +71,10 @@ export default function DashboardWalletsRouter() {
     const { classes } = useStyles()
     const { create, error } = useQueryParams(['create', 'error', 'rpid'])
 
-    const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
     const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
 
     const selectedWallet = useWallet()
-
-    //#region import wallet
-    const onImport = useCallback(() => openWalletImport(), [])
-    //#endregion
 
     //#region open dialogs externally
     // show error dialog
@@ -93,19 +82,12 @@ export default function DashboardWalletsRouter() {
         if (error) openWalletError()
     }, [error, openWalletError])
 
-    // show create dialog
-    useEffect(() => {
-        if (create) onImport()
-    }, [create, onImport])
-    //#endregion
-
     //#region right icons from mobile devices
     const floatingButtons = [
         {
             icon: <AddIcon />,
             handler: () => {
                 if (selectedWallet) openAddToken({ wallet: selectedWallet })
-                else openWalletImport()
             },
         },
     ]
@@ -121,12 +103,7 @@ export default function DashboardWalletsRouter() {
         <DashboardRouterContainer
             empty={!selectedWallet}
             title={t('my_wallets')}
-            actions={[
-                <EthereumStatusBar disableNativeToken BoxProps={{ sx: { justifyContent: 'flex-end' } }} />,
-                <Button variant="contained" onClick={onImport} endIcon={<AddCircleIcon />} data-testid="create_button">
-                    {t('plugin_wallet_on_create')}
-                </Button>,
-            ]}
+            actions={[<EthereumStatusBar disableNativeToken BoxProps={{ sx: { justifyContent: 'flex-end' } }} />]}
             floatingButtons={floatingButtons}>
             <ThemeProvider theme={walletsTheme}>
                 <div className={classes.root}>
@@ -138,7 +115,6 @@ export default function DashboardWalletsRouter() {
                 </div>
             </ThemeProvider>
             {addToken}
-            {walletImport}
             {walletError}
         </DashboardRouterContainer>
     )

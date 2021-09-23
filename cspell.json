@@ -293,7 +293,9 @@
         "gamification",
         "Defi",
         "powah",
-        "Switcher"
+        "Switcher",
+        "maskwallet",
+        "acccount"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [
@@ -303,7 +305,8 @@
         "**/*.json",
         "**/node_modules/**",
         "pnpm-lock.yaml",
-        "tsconfig.tsbuildinfo"
+        "tsconfig.tsbuildinfo",
+        ".prettierignore"
     ],
     "overrides": [
         {

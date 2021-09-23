@@ -57,6 +57,7 @@
     "sign_in_account_mnemonic_confirm_failed": "Incorrect identity",
     "sign_in_account_cloud_backup_send_email_success": "Verification code was sent to your {{type}}. Please check your {{type}}.",
     "sign_in_account_local_backup_warning": "Local backup can recover all the data that has been stored locally.",
+    "sign_in_account_local_backup_payment_password": "Payment Password",
     "sign_in_account_local_backup_file_drag": "Please click or drag the file here",
     "sign_in_account_cloud_backup_warning": "The cloud backup hosts and encrypts your data.",
     "sign_in_account_cloud_backup_not_support": "Unsupported data backup",

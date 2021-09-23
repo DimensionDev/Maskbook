@@ -1,4 +1,5 @@
 import { forwardRef, useCallback, useMemo, useState } from 'react'
+import { useHistory, useLocation } from 'react-router'
 import { Alert, Box, Button, IconButton, MenuItem, Tab, Tabs } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import AddIcon from '@material-ui/icons/Add'
@@ -11,7 +12,6 @@ import { useModal } from '../DashboardDialogs/Base'
 import {
     DashboardWalletAddERC20TokenDialog,
     DashboardWalletAddERC721TokenDialog,
-    DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
 } from '../DashboardDialogs/Wallet'
 import { Flags, useMenu, useI18N, useColorStyles, useMatchXS } from '../../../utils'
@@ -21,7 +21,6 @@ import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
-import { useHistory, useLocation } from 'react-router'
 import { DashboardWalletRoute } from '../Route'
 
 const useStyles = makeStyles()((theme) => ({
@@ -85,7 +84,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
     const [transactionType, setTransactionType] = useState<FilterTransactionType>(FilterTransactionType.ALL)
 
     const [addToken, , openAddToken] = useModal(DashboardWalletAddERC20TokenDialog)
-    const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [addAsset, , openAddAsset] = useModal(DashboardWalletAddERC721TokenDialog)
     const { setDialog: setWalletRenameDialog } = useRemoteControlledDialog(
@@ -103,11 +101,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
             }}>
             {t('rename')}
         </MenuItem>,
-        wallet.hasPrivateKey ? (
-            <MenuItem key="backup" onClick={() => openWalletBackup({ wallet })}>
-                {t('backup')}
-            </MenuItem>
-        ) : null,
         <MenuItem
             key="delete"
             onClick={() => openWalletDelete({ wallet })}
@@ -281,7 +274,6 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
             {transactionTypeMenu}
             {addToken}
             {addAsset}
-            {walletBackup}
             {walletDelete}
         </div>
     )

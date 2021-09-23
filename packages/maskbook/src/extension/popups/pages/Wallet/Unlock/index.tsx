@@ -1,14 +1,14 @@
 import { memo, useState } from 'react'
+import { useAsyncFn } from 'react-use'
+import { useHistory } from 'react-router'
 import { makeStyles } from '@masknet/theme'
-import { EnterDashboard } from '../../../components/EnterDashboard'
 import { MaskWalletIcon } from '@masknet/icons'
 import { Typography } from '@material-ui/core'
+import { LoadingButton } from '@material-ui/lab'
+import { EnterDashboard } from '../../../components/EnterDashboard'
 import { useI18N } from '../../../../../utils'
 import { StyledInput } from '../../../components/StyledInput'
-import { LoadingButton } from '@material-ui/lab'
-import { useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useHistory } from 'react-router'
 import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()((theme) => ({
@@ -52,12 +52,10 @@ const Unlock = memo(() => {
     const [password, setPassword] = useState('')
 
     const history = useHistory()
-    const [{ loading, value }, handleUnlock] = useAsyncFn(async () => {
-        const result = await WalletRPC.decryptWallet(password)
-        if (result.ok) {
-            history.replace(PopupRoutes.Wallet)
-        }
-        return result
+    const [unlocked, handleUnlock] = useAsyncFn(async () => {
+        await WalletRPC.unlockWallet(password)
+        history.replace(PopupRoutes.Wallet)
+        return true
     }, [password])
 
     return (
@@ -73,12 +71,11 @@ const Unlock = memo(() => {
                         value={password}
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
-                        error={value?.err}
-                        helperText={value?.err ? t('popups_wallet_unlock_error_password') : ''}
+                        helperText={unlocked.value ? t('popups_wallet_unlock_error_password') : ''}
                     />
                 </div>
                 <LoadingButton
-                    loading={loading}
+                    loading={unlocked.loading}
                     fullWidth
                     variant="contained"
                     className={classes.button}

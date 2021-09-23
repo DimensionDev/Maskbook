@@ -58,20 +58,6 @@ export type SelectWalletDialogEvent =
           open: false
       }
 
-export type CreateImportWalletDialogEvent = {
-    open: boolean
-}
-
-export type CreateWalletDialogEvent = {
-    name?: string
-    open: boolean
-}
-
-export type ImportWalletDialogEvent = {
-    name?: string
-    open: boolean
-}
-
 export type WalletStatusDialogEvent = {
     open: boolean
 }
@@ -156,21 +142,6 @@ export interface WalletMessage {
      * Select wallet dialog
      */
     selectWalletDialogUpdated: SelectWalletDialogEvent
-
-    /**
-     * Create or import wallet choose dialog
-     */
-    createImportWalletDialogUpdated: CreateImportWalletDialogEvent
-
-    /**
-     * Create wallet dialog
-     */
-    createWalletDialogUpdated: CreateWalletDialogEvent
-
-    /**
-     * import wallet dialog
-     */
-    importWalletDialogUpdated: ImportWalletDialogEvent
 
     /**
      * Select provider dialog

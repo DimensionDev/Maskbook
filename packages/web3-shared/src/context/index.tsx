@@ -27,6 +27,7 @@ export function useWeb3State() {
     const tokenPrices = useSubscription(_.tokenPrices)
     const providerType = useSubscription(_.providerType)
     const networkType = useSubscription(_.networkType)
+    const walletPrimary = useSubscription(_.walletPrimary)
     const wallets = useSubscription(_.wallets)
     const chainId = useSubscription(_.chainId)
     const chainDetailed = useMemo(() => getChainDetailed(chainId), [chainId])
@@ -44,6 +45,7 @@ export function useWeb3State() {
         blockNumber,
         providerType,
         networkType,
+        walletPrimary,
         wallets,
         chainId,
         chainDetailed,

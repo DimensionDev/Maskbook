@@ -1,6 +1,6 @@
-import { noop, pick } from 'lodash-es'
+import { noop, omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderType } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, Web3ProviderType } from '@masknet/web3-shared'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
@@ -46,6 +46,7 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
         nonce: createSubscriptionFromSettings(currentNonceSettings),
         etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
+        walletPrimary: createSubscriptionFromAsync(getWalletPrimary, null, WalletMessages.events.walletsUpdated.on),
         wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
         providerType: createSubscriptionFromSettings(currentProviderSettings),
         networkType: createSubscriptionFromSettings(
@@ -57,10 +58,10 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
             0,
             WalletMessages.events.erc20TokensUpdated.on,
         ),
+        portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
         addERC20Token: WalletRPC.addERC20Token,
         trustERC20Token: WalletRPC.trustERC20Token,
         getERC20TokensPaged,
-        portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
         getAssetsList: WalletRPC.getAssetsList,
         getAssetsListNFT: WalletRPC.getAssetsListNFT,
         getAddressNamesList: WalletRPC.getAddressNames,
@@ -76,20 +77,22 @@ export const Web3Context = createWeb3Context()
 export const Web3ContextWithoutConfirm = createWeb3Context(true)
 
 async function getWallets() {
-    const raw = await WalletRPC.getWallets()
-    return raw.map<Wallet>((record) => ({
-        ...pick(record, [
-            'address',
-            'name',
-            'erc1155_token_whitelist',
-            'erc1155_token_blacklist',
-            'erc20_token_whitelist',
-            'erc20_token_blacklist',
-            'erc721_token_whitelist',
-            'erc721_token_blacklist',
-        ] as (keyof typeof record)[]),
-        hasPrivateKey: Boolean(record._private_key_ || record.mnemonic.length),
+    const wallets = await WalletRPC.getWallets()
+    return wallets.map((x) => ({
+        ...omit(x, 'derivationPath', 'storedKeyInfo'),
+        hasStoredKeyInfo: !!x.storedKeyInfo,
+        hasDerivationPath: !!x.derivationPath,
     }))
+}
+
+export async function getWalletPrimary() {
+    const wallet = await WalletRPC.getWalletPrimary()
+    if (!wallet) return null
+    return {
+        ...omit(wallet, 'derivationPath', 'storedKeyInfo'),
+        hasStoredKeyInfo: !!wallet.storedKeyInfo,
+        hasDerivationPath: !!wallet.derivationPath,
+    }
 }
 
 async function getERC20Tokens() {

@@ -58,7 +58,9 @@ export * from './useChainColor'
 export * from './useResolveENS'
 export * from './useResolveUNS'
 export * from './useGasLimit'
+
 // wallet plugin related
+export * from './useWalletPrimary'
 export * from './useWallet'
 export * from './useWallets'
 export * from './useERC20Tokens'

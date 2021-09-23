@@ -1,6 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Box, Card } from '@material-ui/core'
+import type { BackupPreview } from '@masknet/public-api'
 import { MaskTextField, useSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { Services } from '../../API'
@@ -31,10 +32,11 @@ export const RestoreFromLocal = memo(() => {
     const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
 
     const [file, setFile] = useState<File | null>(null)
-    const [json, setJSON] = useState<any | null>(null)
+    const [json, setJSON] = useState<BackupPreview | null>(null)
     const [backupValue, setBackupValue] = useState('')
     const [backupId, setBackupId] = useState('')
     const [password, setPassword] = useState('')
+    const [paymentPassword, setPaymentPassword] = useState('')
     const [error, setError] = useState('')
     const [restoreStatus, setRestoreStatus] = useState(RestoreStatus.WaitingInput)
 
@@ -107,7 +109,22 @@ export const RestoreFromLocal = memo(() => {
                         <FileUpload onChange={handleSetFile} accept="application/octet-stream, application/json" />
                     </Card>
                 )}
-                {restoreStatus === RestoreStatus.Verified && <BackupPreviewCard json={json} />}
+                {restoreStatus === RestoreStatus.Verified && json && (
+                    <>
+                        {json.wallets > 0 ? (
+                            <MaskTextField
+                                sx={{ marginBottom: 2 }}
+                                label={t.sign_in_account_local_backup_payment_password()}
+                                placeholder={t.sign_in_account_local_backup_payment_password()}
+                                type="password"
+                                onChange={(e) => setPaymentPassword(e.currentTarget.value)}
+                                error={!!error}
+                                helperText={error}
+                            />
+                        ) : null}
+                        <BackupPreviewCard json={json} />
+                    </>
+                )}
                 {restoreStatus === RestoreStatus.Decrypting && (
                     <Box sx={{ mt: 4 }}>
                         <MaskTextField
@@ -125,7 +142,11 @@ export const RestoreFromLocal = memo(() => {
                     variant="rounded"
                     color="primary"
                     onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
-                    disabled={!file}>
+                    disabled={
+                        restoreStatus === RestoreStatus.Verified
+                            ? !json || json.wallets <= 0 || !paymentPassword
+                            : !file
+                    }>
                     {restoreStatus !== RestoreStatus.Verified ? t.next() : t.restore()}
                 </LoadingButton>
             </ButtonContainer>

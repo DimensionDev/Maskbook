@@ -59,11 +59,10 @@ export enum NetworkType {
 }
 
 export interface Wallet {
-    /** ethereum hex address */
-    address: string
     /** User define wallet name. Default address.prefix(6) */
-    name: string | null
-    hasPrivateKey: boolean
+    name: string
+    /** The address of wallet */
+    address: string
     /** A list of trusted ERC20 contract address */
     erc20_token_whitelist: Set<string>
     /** A list of untrusted ERC20 contract address */
@@ -76,6 +75,10 @@ export interface Wallet {
     erc1155_token_whitelist: Set<string>
     /** A list of untrusted ERC1155 contract address */
     erc1155_token_blacklist: Set<string>
+    /** yep: Mask Wallet, nope: External Wallet */
+    hasStoredKeyInfo: boolean
+    /** yep: Derivable Wallet. nope: Underivable Wallet */
+    hasDerivationPath: boolean
 }
 
 //#region Ether
