@@ -7,13 +7,16 @@ import {
     NativeTokenDetailed,
     ERC20TokenDetailed,
     FungibleTokenDetailed,
+    pow10,
 } from '@masknet/web3-shared'
 import type Services from '../../../../extension/service'
 
-function getTokenAmountDescription(amount?: string, tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {
-    return `${negative ? '-' : ''}${formatBalance(amount ?? '0', tokenDetailed?.decimals ?? 0, 4)} ${
-        tokenDetailed?.symbol
-    }`.trim()
+function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {
+    return `${negative ? '-' : ''}${
+        pow10(9 + (tokenDetailed?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
+            ? formatBalance(amount, tokenDetailed?.decimals ?? 0, 4)
+            : 'infinite'
+    } ${tokenDetailed?.symbol}`.trim()
 }
 
 function getTransactionDescription(
