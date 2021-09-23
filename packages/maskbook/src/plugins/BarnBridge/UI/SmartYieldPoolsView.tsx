@@ -7,8 +7,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { currentAccountSettings } from '../../Wallet/settings'
 
 import { SmartYieldPoolView } from './SmartYieldPoolView'
-import type { SYPoolModelData } from './../Model/SYPoolModel'
-import type { SYPortfolioModelData } from './../Model/SYPortfolioModel'
+import type { SYPoolModelData, SYPortfolioModelData } from './../apis'
 import { useSYPoolData, useSYPortfolioData } from '../hooks/useModels'
 
 import { useEffect } from 'react'

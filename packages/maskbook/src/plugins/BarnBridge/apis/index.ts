@@ -82,14 +82,14 @@ function PrettifyProtocolName(name: string) {
 }
 
 function ConstructRedirectUrl(protocolName: string, coin: string) {
-    return urlcat(APP_URL, `${SY_URL_FRAGMENT}/stats`, { m: protocolName, t: coin })
+    return urlcat(APP_URL, `${SY_URL_FRAGMENT}stats`, { m: protocolName, t: coin })
 }
 
 function PrettifyLiquidity(liquidity: string) {
     const value = Number.parseInt(liquidity, 10)
-    const unit = Math.round(Math.log(value) / Math.log(1000))
+    const unit = Math.max(Math.round(Math.log(value) / Math.log(10000)), 0)
     const symbols = ['', 'k', 'M', 'G', 'T'] // see https://en.wikipedia.org/wiki/Metric_prefix
-    return Math.round(value / Math.pow(1000, unit)) + symbols[unit]
+    return (value / Math.pow(1000, unit)).toFixed(1) + symbols[unit]
 }
 
 export async function SYGetPortfolio(walletAddress: string) {
