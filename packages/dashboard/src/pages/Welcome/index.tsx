@@ -26,7 +26,7 @@ const IFrame = styled('iframe')(
     ({ theme }) => `
     border: none;
     width: 100%;
-    min-height: 520px;
+    min-height: 500px;
 `,
 )
 
