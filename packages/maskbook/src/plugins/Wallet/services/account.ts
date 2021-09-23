@@ -17,7 +17,7 @@ import {
     currentProviderSettings,
 } from '../settings'
 import { updateExoticWalletFromSource } from './wallet'
-import { Flags, hasNativeAPI, nativeAPI } from '../../../utils'
+import { Flags, hasNativeAPI, MaskMessage, nativeAPI } from '../../../utils'
 
 export async function updateAccount(
     options: {
@@ -51,6 +51,7 @@ export async function updateAccount(
     // update global settings
     if (chainId) {
         currentChainIdSettings.value = chainId
+        MaskMessage.events.currentChainIdSettings.sendToAll(chainId)
         if (hasNativeAPI) {
             nativeAPI?.api.wallet_switchBlockChain({ networkId: chainId })
         }
