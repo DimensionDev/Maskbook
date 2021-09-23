@@ -41,9 +41,10 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
             throw error
         }
 
-        const [transaction] = data
+        // Note that if approval is required, the API will also return the necessary approval transaction.
+        const tradeTransaction = data.length === 1 ? data[0] : data[1]
 
-        const config = pick(transaction.transaction, ['to', 'data', 'value', 'from'])
+        const config = pick(tradeTransaction.transaction, ['to', 'data', 'value', 'from'])
         const config_ = {
             ...config,
             gas: await web3.eth.estimateGas(config).catch((error) => {
