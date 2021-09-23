@@ -94,7 +94,7 @@ function PrettifyLiquidity(liquidity: string) {
 
 export async function SYGetPortfolio(walletAddress: string) {
     const response = await fetch(
-        `https://api-v2.barnbridge.com/api/smartyield/users/${walletAddress}/portfolio-value`,
+        urlcat(API_URL, '/smartyield/users/:walletAddress/portfolio-value', { walletAddress }),
         {
             body: null,
             method: 'GET',
