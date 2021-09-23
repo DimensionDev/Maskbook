@@ -271,6 +271,7 @@ export async function queryPostPagedDB(
     linked: PersonaIdentifier,
     options: {
         network: string
+        userIds: string[]
         after?: PostIVIdentifier
     },
     count: number,
@@ -282,6 +283,7 @@ export async function queryPostPagedDB(
 
     for await (const cursor of t.objectStore('post').iterate()) {
         if (cursor.value.encryptBy !== linked.toText()) continue
+        if (!options.userIds.includes(cursor.value.postBy.userId)) continue
 
         const postIdentifier = Identifier.fromString(cursor.value.identifier, PostIVIdentifier).unwrap()
         if (postIdentifier.network !== options.network) continue
