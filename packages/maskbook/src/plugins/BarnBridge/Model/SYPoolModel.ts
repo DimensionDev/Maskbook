@@ -70,12 +70,8 @@ function ConstructRedirectUrl(protocolName: string, coin: string) {
 }
 
 function PrettifyLiquidity(liquidity: string) {
-    const intLiquidity = Number.parseInt(liquidity, 10)
-    if (intLiquidity >= 1000000) {
-        return Math.round(intLiquidity / 1000000).toString() + 'M'
-    }
-    if (intLiquidity >= 1000) {
-        return Math.round(intLiquidity / 1000).toString() + 'K'
-    }
-    return Math.round(intLiquidity).toString()
+    const value = Number.parseInt(liquidity, 10)
+    const unit = Math.round(Math.log(value) / Math.log(1000))
+    const symbols = ['', 'k', 'M', 'G', 'T'] // see https://en.wikipedia.org/wiki/Metric_prefix
+    return Math.round(value / Math.pow(1000, unit)) + symbols[unit]
 }
