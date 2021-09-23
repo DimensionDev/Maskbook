@@ -24,6 +24,10 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         right: '-1rem',
         top: '-1rem',
+        [theme.breakpoints.down('md')]: {
+            right: 0,
+            top: 0,
+        },
     },
     icon: {
         cursor: 'pointer',

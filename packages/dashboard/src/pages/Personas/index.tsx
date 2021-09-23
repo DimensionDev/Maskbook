@@ -29,6 +29,13 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         overflow: 'hidden',
     },
+    personaCard: {
+        padding: theme.spacing(4),
+        marginBottom: theme.spacing(3),
+        [theme.breakpoints.down('md')]: {
+            padding: theme.spacing(2),
+        },
+    },
 }))
 
 function firstProfileNetwork(x: PersonaInformation | undefined) {
@@ -61,7 +68,7 @@ function Personas() {
                         toggleDrawer={toggleDrawer}
                     />
                 }>
-                <Paper variant="rounded" sx={{ mb: 3, p: 4 }}>
+                <Paper variant="rounded" className={classes.personaCard}>
                     <PersonaRowCard />
                 </Paper>
                 <ContentContainer style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
