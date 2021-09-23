@@ -66,8 +66,8 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
 function formatPrice(amount: string) {
     const _amount = new BigNumber(amount ?? '0')
     if (_amount.isZero()) return '0'
-    if (_amount.isLessThan(1)) return _amount.toFixed(1, 2)
-    if (_amount.isLessThan(1e3)) return _amount.toFixed(2)
+    if (_amount.isLessThan(1)) return _amount.toFixed(2)
+    if (_amount.isLessThan(1e3)) return _amount.toFixed(1)
     if (_amount.isLessThan(1e6)) return `${_amount.div(1e6).toFixed(1)}K`
     return `${_amount.div(1e6).toFixed(1)}M`
 }
@@ -86,6 +86,7 @@ export function NFTBadge(props: NFTBadgeProps) {
         avatar.tokenId,
     )
     const { amount, symbol, name } = value
+    console.log(value)
     return (
         <div
             className={classes.root}
