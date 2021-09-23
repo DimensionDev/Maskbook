@@ -29,6 +29,8 @@ const useStyles = makeStyles()({
         transform: 'translate(0px, 2px)',
     },
     text: {
+        paddingLeft: 4,
+        paddingRight: 4,
         fontSize: 10,
         whiteSpace: 'nowrap',
         margin: 0,
