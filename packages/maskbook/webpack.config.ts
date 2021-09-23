@@ -13,7 +13,7 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
 import WebExtensionTarget from 'webpack-target-webextension'
-import ManifestPlugin from 'webpack-extension-manifest-plugin'
+import { emitFile } from '@nice-labs/emit-file-webpack-plugin'
 import { ReadonlyCachePlugin } from './miscs/ReadonlyCachePlugin'
 //#endregion
 
@@ -310,7 +310,11 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
             new CopyPlugin({ patterns: [{ from: publicDir, to: dist }] }),
             new CopyPlugin({ patterns: [{ from: src('../injected-script/dist/injected-script.js'), to: dist }] }),
             new CopyPlugin({ patterns: [{ from: src('../mask-sdk/dist/mask-sdk.js'), to: dist }] }),
-            getManifestPlugin(),
+            emitManifestFile(),
+            emitFile({
+                name: 'git-info.json',
+                content: () => JSON.stringify(getGitInfo(target.isReproducibleBuild), null, 4),
+            }),
         )
         main.entry = {
             'options-page': withBrowserPolyfill(...withReactDevTools(src('./src/extension/options-page/index.tsx'))),
@@ -365,22 +369,27 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
         if (target.iOS || target.runtimeEnv.target === 'firefox') return path
         return [src('./miscs/browser-loader.js'), ...path]
     }
-    function getManifestPlugin() {
-        const manifest = require('./src/manifest.json')
-        if (target.Chromium) modifiers.chromium(manifest)
-        else if (target.Firefox) modifiers.firefox(manifest)
-        else if (target.Android) modifiers.geckoview(manifest)
-        else if (target.iOS) modifiers.safari(manifest)
+    function emitManifestFile() {
+        return emitFile({
+            name: 'manifest.json',
+            content() {
+                const manifest = require('./src/manifest.json')
+                if (target.Chromium) modifiers.chromium(manifest)
+                else if (target.Firefox) modifiers.firefox(manifest)
+                else if (target.Android) modifiers.geckoview(manifest)
+                else if (target.iOS) modifiers.safari(manifest)
 
-        if (mode === 'development') modifiers.development(manifest)
-        else modifiers.production(manifest)
+                if (mode === 'development') modifiers.development(manifest)
+                else modifiers.production(manifest)
 
-        if (isManifestV3) modifiers.manifestV3(manifest)
+                if (isManifestV3) modifiers.manifestV3(manifest)
 
-        if (target.runtimeEnv.build === 'beta') modifiers.beta(manifest)
-        else if (target.runtimeEnv.build === 'insider') modifiers.nightly(manifest)
+                if (target.runtimeEnv.build === 'beta') modifiers.beta(manifest)
+                else if (target.runtimeEnv.build === 'insider') modifiers.nightly(manifest)
 
-        return new ManifestPlugin({ config: { base: manifest } })
+                return JSON.stringify(manifest, null, 4)
+            },
+        })
     }
 }
 

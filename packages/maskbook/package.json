@@ -133,6 +133,7 @@
   },
   "devDependencies": {
     "@dimensiondev/webextension-shim": "0.0.3-20210823035705-4257e12",
+    "@nice-labs/emit-file-webpack-plugin": "^1.0.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.1",
     "@sinonjs/text-encoding": "^0.7.1",
     "@swc/core": "^1.2.83",
@@ -152,7 +153,6 @@
     "webpack": "^5.53.0",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.2.1",
-    "webpack-extension-manifest-plugin": "^0.8.0",
     "webpack-target-webextension": "^0.4.4"
   },
   "peerDependencies": {
