@@ -8,6 +8,8 @@ export interface InternalEvents {
     input: [text: string]
     /** Simulate a image upload on the activeElement on instagram */
     instagramUpload: [url: string]
+
+    change: [number[]]
 }
 
 export type EventItemBeforeSerialization = [keyof InternalEvents, unknown[]]

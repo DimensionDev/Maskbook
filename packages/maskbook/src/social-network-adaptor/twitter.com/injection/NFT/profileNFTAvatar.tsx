@@ -3,18 +3,20 @@ import type { ProfileIdentifier } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared'
 import { useCallback, useEffect, useState } from 'react'
+import { blobToArrayBuffer } from '@dimensiondev/kit'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { useNFTAvatar } from '../../../../components/InjectedComponents/NFT/hooks'
 import { NFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
 import { activatedSocialNetworkUI } from '../../../../social-network'
-import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
+import { createReactRootShadowed, downloadUrl, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
 import {
     searchProfileAvatarParentSelector,
     searchProfileAvatarSelector,
     searchProfileSaveSelector,
 } from '../../utils/selector'
 import { updateAvatarImage } from '../../utils/updateAvatarImage'
-import { getAvatar, getAvatarId, getTwitterId } from '../../utils/user'
+import { getTwitterId } from '../../utils/user'
+import { changeImage } from '@masknet/injected-script'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -45,6 +47,10 @@ function useCurrentUserInfo(): { userId?: string; identifier?: ProfileIdentifier
     return userInfo?.[0]
 }
 
+export async function changeImageToActiveElements(image: File | Blob): Promise<void> {
+    changeImage(new Uint8Array(await blobToArrayBuffer(image)))
+}
+
 interface NFTAvatarInTwitterProps {}
 
 function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
@@ -56,6 +62,10 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent>({} as NFTAvatarEvent)
 
     const onChange = useCallback(async (token: ERC721TokenDetailed) => {
+        if (!token.info.image) return
+        const image = await downloadUrl(token.info.image)
+        changeImageToActiveElements(image)
+        /*
         const parent = searchProfileAvatarParentSelector()
         if (!parent) return
 
@@ -70,6 +80,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         })
 
         updateAvatarImage(parent, token.info.image)
+        */
     }, [])
 
     const handler = () => {

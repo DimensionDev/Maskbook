@@ -4,6 +4,7 @@ import { apply, getCustomEventDetail, warn } from '../intrinsic'
 import { dispatchInput } from './dispatchInput'
 import { dispatchPaste } from './dispatchPaste'
 import { dispatchPasteImage } from './dispatchPasteImage'
+import { dispatchChange } from './dispatchChange'
 
 const { parse } = JSON
 document.addEventListener(CustomEventId, (e) => {
@@ -18,6 +19,7 @@ document.addEventListener(CustomEventId, (e) => {
     if (f === 'paste') return apply(dispatchPaste, null, param)
     if (f === 'instagramUpload') return apply(instagramUpload, null, param)
     if (f === 'pasteImage') return apply(dispatchPasteImage, null, param)
+    if (f === 'change') return apply(dispatchChange, null, param)
 
     const neverEvent: never = f
     warn('[@masknet/injected-script]', neverEvent, 'not handled')
