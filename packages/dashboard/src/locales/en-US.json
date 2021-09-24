@@ -87,6 +87,8 @@
     "wallets_sell": "Sell",
     "wallets_history": "History",
     "settings": "Settings",
+    "gas_fee": "Transaction fee",
+    "transfer_cost": "Cost {{gasFee}} {{symbol}} ≈ ${{usd}}",
     "done": "Done!",
     "labs": "Mask Labs",
     "wallet_transactions_pending": "Pending",

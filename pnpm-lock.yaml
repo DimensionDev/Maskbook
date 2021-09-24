@@ -584,6 +584,7 @@ importers:
       '@masknet/shared': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared': workspace:*
+      bignumber.js: ^9.0.1
       react-use: ^17.3.1
       web3-core: ^1.5.2
     dependencies:
@@ -591,7 +592,8 @@ importers:
       '@masknet/shared': link:../../shared
       '@masknet/theme': link:../../theme
       '@masknet/web3-shared': link:../../web3-shared
-      react-use: 17.3.1_f991c289939c8299bed5e4a6a5a79a62
+      bignumber.js: 9.0.1
+      react-use: 17.3.1
       web3-core: 1.5.2
 
   packages/plugins/example:

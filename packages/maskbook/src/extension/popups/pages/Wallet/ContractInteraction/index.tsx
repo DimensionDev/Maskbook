@@ -4,7 +4,6 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     EthereumRpcType,
     formatWeiToEther,
-    getChainFromChainId,
     getChainIdFromNetworkType,
     isEIP1559Supported,
     NetworkType,
@@ -210,9 +209,7 @@ const ContractInteraction = memo(() => {
                 maxFeePerGas: response?.medium.suggestedMaxFeePerGas ?? 0,
             }
         } else if (!gasPrice) {
-            const response = await WalletRPC.getGasPriceDictFromDeBank(
-                getChainFromChainId(chainId)?.toLowerCase() ?? '',
-            )
+            const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
             return {
                 gasPrice: response.data.normal.price,
             }
