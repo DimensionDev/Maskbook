@@ -29,12 +29,6 @@ type TradeTransaction = {
 
 // https://docs.bancor.network/rest-api/api-reference
 export type TradeTransactionCreationResponse = [TradeTransaction] | [TradeTransaction, TradeTransaction]
-export type TradeTransactionCreationError = {
-    error: {
-        status: 400
-        messages?: string[]
-    }
-}
 
 export type ExpectedTargetAmountResponse = {
     amount: string
@@ -42,4 +36,11 @@ export type ExpectedTargetAmountResponse = {
 
 export type ExpectedSourceAmountResponse = {
     amount: string
+}
+
+export type BancorApiErrorResponse = {
+    error: {
+        status: number
+        messages?: string[]
+    }
 }

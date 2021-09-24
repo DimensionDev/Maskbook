@@ -1,20 +1,23 @@
 import type {
-    SwapBancorRequest,
+    BancorApiErrorResponse,
     ExpectedTargetAmountResponse,
     ExpectedSourceAmountResponse,
+    SwapBancorRequest,
     TradeTransactionCreationResponse,
-    TradeTransactionCreationError,
 } from '../../types/bancor'
 import urlcat from 'urlcat'
 import { BANCOR_API_BASE_URL } from '../../constants'
 import { calculateMinimumReturn } from './calculateMinimumReturn'
 import { toChecksumAddress } from 'web3-utils'
+import { TradeStrategy } from '../../types'
 
 const roundDecimal = (value: number | string | undefined, decimals: number) => {
     return Math.round(Number(value || 0) * Math.pow(10, decimals)) / Math.pow(10, decimals)
 }
 
-const getTargetAmount = async (request: SwapBancorRequest) => {
+const getTargetAmount = async (
+    request: SwapBancorRequest,
+): Promise<ExpectedTargetAmountResponse | BancorApiErrorResponse> => {
     const baseUrl = BANCOR_API_BASE_URL[request.chainId!]
     const url = urlcat(baseUrl, '/pricing/target-amount', {
         source_dlt_type: 'ethereum',
@@ -24,14 +27,13 @@ const getTargetAmount = async (request: SwapBancorRequest) => {
         amount: roundDecimal(request.fromAmount, request.fromToken.decimals),
     })
     const response = await fetch(url)
-    if (response.ok) {
-        const data: ExpectedTargetAmountResponse = await response.json()
-        return data.amount
-    }
-    return undefined
+    const data = await response.json()
+    return data
 }
 
-const getSourceAmount = async (request: SwapBancorRequest) => {
+const getSourceAmount = async (
+    request: SwapBancorRequest,
+): Promise<ExpectedSourceAmountResponse | BancorApiErrorResponse> => {
     const baseUrl = BANCOR_API_BASE_URL[request.chainId!]
     const url = urlcat(baseUrl, '/pricing/source-amount', {
         source_dlt_type: 'ethereum',
@@ -41,16 +43,13 @@ const getSourceAmount = async (request: SwapBancorRequest) => {
         amount: roundDecimal(request.toAmount, request.toToken.decimals),
     })
     const response = await fetch(url)
-    if (response.ok) {
-        const data: ExpectedSourceAmountResponse = await response.json()
-        return data.amount
-    }
-    return undefined
+    const data = await response.json()
+    return data
 }
 
 export const swapTransactionBancor = async (
     request: SwapBancorRequest,
-): Promise<[TradeTransactionCreationResponse, TradeTransactionCreationError | null]> => {
+): Promise<[TradeTransactionCreationResponse, BancorApiErrorResponse | null]> => {
     const baseUrl = BANCOR_API_BASE_URL[request.chainId]
     const url = urlcat(baseUrl, '/transactions/swap', {
         source_dlt_type: 'ethereum',
@@ -63,17 +62,28 @@ export const swapTransactionBancor = async (
     })
     const response = await fetch(url)
     if (response.ok) {
-        const data: TradeTransactionCreationResponse = await response.json()
+        const data = await response.json()
         return [data, null]
     }
-    const error: TradeTransactionCreationError = await response.json()
+    const error = await response.json()
     return [null as any, error]
 }
 
-export async function swapBancor(request: SwapBancorRequest): Promise<SwapBancorRequest> {
-    const { fromToken, toToken, slippage } = request
-    const toAmount = request.toAmount ? request.toAmount : await getTargetAmount(request)
-    const fromAmount = request.fromAmount ? request.fromAmount : await getSourceAmount(request)
+export async function swapBancor(request: SwapBancorRequest): Promise<SwapBancorRequest | null> {
+    const { fromToken, toToken, slippage, strategy } = request
+    const isExactIn = strategy === TradeStrategy.ExactIn
+
+    const response = isExactIn ? await getTargetAmount(request) : await getSourceAmount(request)
+    const validationErrorResponse = response as BancorApiErrorResponse
+
+    if (validationErrorResponse.error) {
+        throw new Error(validationErrorResponse.error?.messages?.[0] || 'Unknown Error')
+    }
+
+    const { amount } = response as ExpectedTargetAmountResponse
+    const toAmount = isExactIn ? amount : request.toAmount
+    const fromAmount = isExactIn ? request.fromAmount : amount
+
     return {
         ...request,
         toAmount,
