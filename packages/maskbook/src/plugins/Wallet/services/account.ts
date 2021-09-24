@@ -64,7 +64,7 @@ export async function updateMaskAccount(options: { account?: string; chainId?: C
 
     if (chainId) currentMaskWalletChainIdSettings.value = chainId
     if (networkType) currentMaskWalletNetworkSettings.value = networkType
-    if (account) currentAccountMaskWalletSettings.value = account
+    if (account && EthereumAddress.isValid(account)) currentAccountMaskWalletSettings.value = account
 }
 
 export async function resetAccount(

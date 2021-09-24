@@ -209,7 +209,10 @@ const ImportWallet = memo(() => {
                             },
                             true,
                         )
-                        WalletMessages.events.walletsUpdated.sendToAll(undefined)
+
+                        await WalletRPC.updateMaskAccount({
+                            account: walletAddress,
+                        })
                         history.replace(PopupRoutes.Wallet)
                         break
                     default:
