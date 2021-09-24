@@ -56,7 +56,6 @@ export const NetworkSelector = memo(() => {
     const currentChainId = useValueRef(currentMaskWalletChainIdSettings)
     const currentProvider = useValueRef(currentProviderSettings)
     const { value: networks } = useAsync(async () => WalletRPC.getSupportedNetworks(), [])
-    console.log(currentChainId)
     const onChainChange = useCallback(
         async (chainId: ChainId) => {
             if (currentProvider === ProviderType.MaskWallet) {

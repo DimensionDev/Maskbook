@@ -25,6 +25,7 @@ import { isEmpty } from 'lodash-es'
 import { useHistory } from 'react-router'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { PopupRoutes } from '../../../index'
+import { toHex } from 'web3-utils'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -202,8 +203,8 @@ export const Prior1559GasSetting = memo(() => {
             if (value) {
                 const config = value.payload.params.map((param) => ({
                     ...param,
-                    gas: `0x${new BigNumber(data.gasLimit).toString(16)}`,
-                    gasPrice: `0x${formatGweiToWei(data.gasPrice).toString(16)}`,
+                    gas: toHex(new BigNumber(data.gasLimit).toString()),
+                    gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
                 }))
 
                 await WalletRPC.updateUnconfirmedRequest({

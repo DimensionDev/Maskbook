@@ -59,6 +59,7 @@ export function useWeb3State() {
         erc20TokensCount,
         portfolioProvider,
         chainIdValid: !account || isChainIdValid(chainId, allowTestnet),
+        // maskChainIdValid: !ac
     }
 }
 

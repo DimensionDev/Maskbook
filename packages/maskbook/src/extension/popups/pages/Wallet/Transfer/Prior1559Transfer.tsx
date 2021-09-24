@@ -33,6 +33,7 @@ import { ExpandMore } from '@material-ui/icons'
 import { useHistory } from 'react-router'
 import { LoadingButton } from '@material-ui/lab'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { toHex } from 'web3-utils'
 
 const useStyles = makeStyles()({
     container: {
@@ -238,7 +239,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 .multipliedBy(pow10(selectedAsset?.token.decimals || 0))
                 .toFixed()
             await transferCallback(transferAmount, data.address, {
-                gasPrice: formatGweiToWei(data.gasPrice).toNumber(),
+                gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
         },

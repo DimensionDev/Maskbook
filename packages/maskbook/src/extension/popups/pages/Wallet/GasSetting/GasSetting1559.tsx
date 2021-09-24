@@ -24,6 +24,7 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { useHistory } from 'react-router'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { PopupRoutes } from '../../../index'
+import { toHex } from 'web3-utils'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -252,9 +253,9 @@ export const GasSetting1559 = memo(() => {
             if (value) {
                 const config = value.payload.params.map((param) => ({
                     ...param,
-                    gas: `0x${new BigNumber(data.gasLimit).toString(16)}`,
-                    maxPriorityFeePerGas: `0x${formatGweiToWei(data.maxPriorityFeePerGas).toString(16)}`,
-                    maxFeePerGas: `0x${formatGweiToWei(data.maxFeePerGas).toString(16)}`,
+                    gas: toHex(new BigNumber(data.gasLimit).toString()),
+                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
+                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
                 }))
 
                 await WalletRPC.updateUnconfirmedRequest({

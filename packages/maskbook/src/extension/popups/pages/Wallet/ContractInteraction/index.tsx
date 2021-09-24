@@ -31,6 +31,7 @@ import { useLocation } from 'react-router'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
+import { toHex } from 'web3-utils'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -216,8 +217,10 @@ const ContractInteraction = memo(() => {
             const response = await WalletRPC.getEstimateGasFees(chainId)
             // Gwei to wei
             return {
-                maxPriorityFeePerGas: formatGweiToWei(response?.medium.suggestedMaxPriorityFeePerGas ?? 0).toString(16),
-                maxFeePerGas: formatGweiToWei(response?.medium.suggestedMaxFeePerGas ?? 0).toString(16),
+                maxPriorityFeePerGas: toHex(
+                    formatGweiToWei(response?.medium.suggestedMaxPriorityFeePerGas ?? 0).toString(),
+                ),
+                maxFeePerGas: toHex(formatGweiToWei(response?.medium.suggestedMaxFeePerGas ?? 0).toString()),
             }
         } else if (!gasPrice) {
             const response = await WalletRPC.getGasPriceDictFromDeBank(

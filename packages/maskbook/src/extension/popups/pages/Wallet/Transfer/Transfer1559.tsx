@@ -34,6 +34,7 @@ import { ExpandMore } from '@material-ui/icons'
 import { useHistory } from 'react-router'
 import { LoadingButton } from '@material-ui/lab'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
+import { toHex } from 'web3-utils'
 
 const useStyles = makeStyles()({
     container: {
@@ -298,8 +299,8 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 .toFixed()
 
             await transferCallback(transferAmount, data.address, {
-                maxFeePerGas: `0x${formatGweiToWei(data.maxFeePerGas).toString(16)}`,
-                maxPriorityFeePerGas: `0x${formatGweiToWei(data.maxPriorityFeePerGas).toString(16)}`,
+                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
         },

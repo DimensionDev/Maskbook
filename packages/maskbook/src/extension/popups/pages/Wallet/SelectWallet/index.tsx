@@ -8,9 +8,9 @@ import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/c
 import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { SuccessIcon } from '@masknet/icons'
-import { useHistory } from 'react-router-dom'
 import Services from '../../../../service'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { parseInt } from 'lodash-es'
 
 const useStyles = makeStyles()({
     content: {
@@ -97,7 +97,6 @@ const useStyles = makeStyles()({
 const SelectWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const history = useHistory()
     const location = useLocation()
     const wallet = useAccount()
     const wallets = useWallets()
@@ -107,7 +106,7 @@ const SelectWallet = memo(() => {
 
     const search = new URLSearchParams(location.search)
 
-    const chainId = Number(search.get('chainId')) as unknown as ChainId
+    const chainId = parseInt(search.get('chainId') ?? '0', 10) as ChainId
 
     const onCopy = useCallback(
         (address: string) => {
