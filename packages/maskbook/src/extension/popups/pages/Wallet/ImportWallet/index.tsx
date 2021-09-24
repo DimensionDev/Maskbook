@@ -16,7 +16,6 @@ import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { useSnackbar } from '@masknet/theme'
 import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
-import Services from '../../../../service'
 import { useLocation } from 'react-router'
 
 const useStyles = makeStyles()({
@@ -171,7 +170,6 @@ const ImportWallet = memo(() => {
     const [{ loading }, onDerivedWallet] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (!disabled) {
-                const toBeClose = new URLSearchParams(location.search).get('toBeClose')
                 switch (currentTab) {
                     case ImportWalletTab.Mnemonic:
                         const params = query({ mnemonic, name: data.name })
@@ -193,11 +191,7 @@ const ImportWallet = memo(() => {
                             },
                             true,
                         )
-                        if (toBeClose) {
-                            await Services.Helper.removePopupWindow()
-                        } else {
-                            history.goBack()
-                        }
+                        history.replace(PopupRoutes.Wallet)
                         break
                     case ImportWalletTab.PrivateKey:
                         const { address: walletAddress, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(
@@ -215,11 +209,8 @@ const ImportWallet = memo(() => {
                             },
                             true,
                         )
-                        if (toBeClose) {
-                            await Services.Helper.removePopupWindow()
-                        } else {
-                            history.goBack()
-                        }
+                        WalletMessages.events.walletsUpdated.sendToAll(undefined)
+                        history.replace(PopupRoutes.Wallet)
                         break
                     default:
                         break
