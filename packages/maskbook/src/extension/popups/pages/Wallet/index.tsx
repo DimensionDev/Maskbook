@@ -10,6 +10,7 @@ import { useLocation } from 'react-router'
 import { useAsyncRetry } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import Services from '../../../service'
+import SelectWallet from './SelectWallet'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -17,7 +18,7 @@ const WalletSettings = lazy(() => import('./WalletSettings'))
 const WalletRename = lazy(() => import('./WalletRename'))
 const DeleteWallet = lazy(() => import('./DeleteWallet'))
 const CreateWallet = lazy(() => import('./CreateWallet'))
-const SelectWallet = lazy(() => import('./SelectWallet'))
+const SwitchWallet = lazy(() => import('./SwitchWallet'))
 const BackupWallet = lazy(() => import('./BackupWallet'))
 const AddToken = lazy(() => import('./AddToken'))
 const TokenDetail = lazy(() => import('./TokenDetail'))
@@ -92,7 +93,7 @@ export default function Wallet() {
                         <Route path={PopupRoutes.WalletRename} children={<WalletRename />} exact />
                         <Route path={PopupRoutes.DeleteWallet} children={<DeleteWallet />} exact />
                         <Route path={PopupRoutes.CreateWallet} children={<CreateWallet />} exact />
-                        <Route path={PopupRoutes.SelectWallet} children={<SelectWallet />} exact />
+                        <Route path={PopupRoutes.SwitchWallet} children={<SwitchWallet />} exact />
                         <Route path={PopupRoutes.BackupWallet} children={<BackupWallet />} exact />
                         <Route path={PopupRoutes.AddToken} children={<AddToken />} exact />
                         <Route path={PopupRoutes.WalletSignRequest} children={<SignRequest />} />
@@ -100,6 +101,7 @@ export default function Wallet() {
                         <Route path={PopupRoutes.TokenDetail} children={<TokenDetail />} exact />
                         <Route path={PopupRoutes.Transfer} children={<Transfer />} exact />
                         <Route path={PopupRoutes.ContractInteraction} children={<ContractInteraction />} />
+                        <Route path={PopupRoutes.SelectWallet} children={<SelectWallet />} />
                         {/*<Route path={PopupRoutes.Unlock} children={<Unlock />} />*/}
                     </Switch>
                 )}

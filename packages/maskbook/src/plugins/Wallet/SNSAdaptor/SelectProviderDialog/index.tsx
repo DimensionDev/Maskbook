@@ -155,7 +155,9 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
 
             switch (providerType) {
                 case ProviderType.MaskWallet:
-                    await Services.Helper.openPopupsWindow(wallets.length > 0 ? '/wallet/select' : '')
+                    await Services.Helper.openPopupsWindow(wallets.length > 0 ? '/wallet/select' : '', {
+                        chainId: getChainIdFromNetworkType(undeterminedNetworkType),
+                    })
 
                     break
                 case ProviderType.MetaMask:

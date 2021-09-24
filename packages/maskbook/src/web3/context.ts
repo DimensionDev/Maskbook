@@ -14,9 +14,9 @@ import {
     currentPortfolioDataProviderSettings,
     currentEtherPriceSettings,
     currentTokenPricesSettings,
-    currentAccountMaskWalletSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
+    currentAccountMaskWalletSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'

@@ -17,7 +17,7 @@ import {
     currentProviderSettings,
 } from '../settings'
 import { updateExoticWalletFromSource } from './wallet'
-import { Flags, hasNativeAPI, MaskMessage, nativeAPI } from '../../../utils'
+import { Flags, hasNativeAPI, nativeAPI } from '../../../utils'
 
 export async function updateAccount(
     options: {
@@ -35,10 +35,6 @@ export async function updateAccount(
     if ((options.account && !options.providerType) || (!options.account && options.providerType))
         throw new Error('Account and provider type must be updating both')
 
-    // make sure chain id and network type to be updating both
-    // if ((options.chainId && !options.networkType) || (!options.chainId && options.networkType))
-    //     throw new Error('Chain id and network type must be updating both')
-
     const { name, account, chainId, providerType, networkType } = options
 
     // update wallet in the DB
@@ -51,26 +47,24 @@ export async function updateAccount(
     // update global settings
     if (chainId) {
         currentChainIdSettings.value = chainId
-        MaskMessage.events.currentChainIdSettings.sendToAll(chainId)
         if (hasNativeAPI) {
             nativeAPI?.api.wallet_switchBlockChain({ networkId: chainId })
         }
     }
-    if (chainId && providerType === ProviderType.MaskWallet) {
-        currentMaskWalletChainIdSettings.value = chainId
-        MaskMessage.events.currentMaskWalletChainIdSettings.sendToAll(chainId)
-        if (networkType) {
-            currentMaskWalletNetworkSettings.value = networkType
-            MaskMessage.events.currentMaskWalletNetworkSettings.sendToAll(networkType)
-        }
-    }
     if (networkType) currentNetworkSettings.value = networkType
     if (account) currentAccountSettings.value = account
-    if (account && providerType === ProviderType.MaskWallet) {
-        currentAccountMaskWalletSettings.value = account
-        MaskMessage.events.currentAccountMaskWalletSettings.sendToAll(account)
-    }
     if (providerType) currentProviderSettings.value = providerType
+}
+
+export async function updateMaskAccount(options: { account?: string; chainId?: ChainId; networkType?: NetworkType }) {
+    if (options.chainId && !options.networkType) options.networkType = getNetworkTypeFromChainId(options.chainId)
+    if (!options.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
+
+    const { account, chainId, networkType } = options
+
+    if (chainId) currentMaskWalletChainIdSettings.value = chainId
+    if (networkType) currentMaskWalletNetworkSettings.value = networkType
+    if (account) currentAccountMaskWalletSettings.value = account
 }
 
 export async function resetAccount(

@@ -7,17 +7,12 @@ import {
     getChainIdFromNetworkType,
     getChainName,
     getNetworkName,
-    getNetworkTypeFromChainId,
     NetworkType,
     ProviderType,
     resolveNetworkName,
     useAccount,
 } from '@masknet/web3-shared'
-import {
-    currentMaskWalletChainIdSettings,
-    currentMaskWalletNetworkSettings,
-    currentProviderSettings,
-} from '../../../../plugins/Wallet/settings'
+import { currentMaskWalletChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 import { ChainIcon, useMenu, useValueRef } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'
 import { getEnumAsArray } from '@dimensiondev/kit'
@@ -61,22 +56,17 @@ export const NetworkSelector = memo(() => {
     const currentChainId = useValueRef(currentMaskWalletChainIdSettings)
     const currentProvider = useValueRef(currentProviderSettings)
     const { value: networks } = useAsync(async () => WalletRPC.getSupportedNetworks(), [])
+    console.log(currentChainId)
     const onChainChange = useCallback(
         async (chainId: ChainId) => {
             if (currentProvider === ProviderType.MaskWallet) {
-                return WalletRPC.updateAccount({
+                await WalletRPC.updateAccount({
                     chainId,
-                    account,
-                    providerType: currentProvider,
                 })
-            } else {
-                currentMaskWalletChainIdSettings.value = chainId
-                const networkType = getNetworkTypeFromChainId(chainId)
-
-                if (networkType) {
-                    currentMaskWalletNetworkSettings.value = networkType
-                }
             }
+            return WalletRPC.updateMaskAccount({
+                chainId,
+            })
         },
         [currentProvider, account],
     )
