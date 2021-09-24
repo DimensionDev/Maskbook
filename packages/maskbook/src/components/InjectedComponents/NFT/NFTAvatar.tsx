@@ -190,7 +190,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 variant="contained"
                                 size="medium"
                                 className={classes.setNFTAvatar}
-                                onClick={() => onClick()}
+                                onClick={onClick}
                                 disabled={!selectedToken}>
                                 {t('profile_nft_avatar_set')}
                             </Button>

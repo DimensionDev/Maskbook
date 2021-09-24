@@ -1,6 +1,6 @@
 import { FormattedAddress } from '@masknet/shared'
 import { makeStyles, useSnackbar } from '@masknet/theme'
-import { resolveOpenSeaLink } from '@masknet/web3-shared'
+import { resolveOpenSeaLink, useAccount } from '@masknet/web3-shared'
 import {
     Box,
     Button,
@@ -32,6 +32,7 @@ import { remove } from 'lodash-es'
 import { useNFTAvatars } from '../../../components/InjectedComponents/NFT/hooks'
 import type { AvatarMetaDB } from '../../../components/InjectedComponents/NFT/types'
 import { saveNFTAvatar, setOrClearAvatar } from '../../../components/InjectedComponents/NFT/gun'
+import { createNFT } from '../../../components/InjectedComponents/NFT/utils'
 
 const settingsTheme = extendsTheme((theme) => ({
     wrapper: {
@@ -105,14 +106,15 @@ const useStyles = makeStyles()((theme) => ({
 function NFTAvatarWhitelist() {
     const { t } = useI18N()
     const { classes } = useStyles()
-
+    const account = useAccount()
     const { value: _avatars, loading } = useNFTAvatars()
     const { enqueueSnackbar } = useSnackbar()
     const [avatars, setAvatars] = useState<AvatarMetaDB[]>([])
 
     const onAdd = useCallback(
         async (userId: string, avatarId: string, address: string, tokenId: string) => {
-            const avatar = await saveNFTAvatar(userId, avatarId, address, tokenId)
+            const nft = await createNFT(account, address, tokenId)
+            const avatar = await saveNFTAvatar(userId, avatarId, nft)
 
             enqueueSnackbar('Add Success', { variant: 'success' })
             setAvatars((v) => [...v, avatar])

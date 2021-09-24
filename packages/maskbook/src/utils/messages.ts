@@ -6,6 +6,7 @@ import Serialization from './type-transform/Serialization'
 import type { ProfileIdentifier, PersonaIdentifier } from '../database/type'
 import type { TypedMessage } from '../protocols/typed-message'
 import type { SettingsEvents } from '../settings/listener'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared'
 
 // This file is designed as HMR-safe.
 import.meta.webpackHot && import.meta.webpackHot.accept()
@@ -35,12 +36,8 @@ export interface ProfileNFTsPageEvent {
     show: boolean
 }
 
-export interface NFTAvatarEvent {
+export interface NFTAvatarEvent extends ERC721TokenDetailed {
     userId: string
-    tokenId: string
-    image?: string
-    amount: string
-    address: string
     avatarId: string
 }
 

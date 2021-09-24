@@ -1,5 +1,5 @@
+import type { ERC721TokenDetailed } from '@masknet/web3-shared'
 import type { AvatarMetaDB } from '../types'
-import { getNFT } from '../utils'
 
 const NFTAvatarCache = new Map<string, AvatarMetaDB>()
 async function getAvatarGun() {
@@ -9,16 +9,20 @@ async function getAvatarGun() {
 }
 
 export async function getNFTAvatar(userId: string) {
-    if (NFTAvatarCache.has(userId)) return NFTAvatarCache.get(userId)
-    const avatarDB = await (
-        await getAvatarGun()
-    ).gun2
-        .get('com.maskbook.nft.avatar')
-        // @ts-expect-error
-        .get(userId).then!()
+    const avatar = NFTAvatarCache.get(userId)
+    if (!avatar) {
+        NFTAvatarCache.set(
+            userId,
+            await (
+                await getAvatarGun()
+            ).gun2
+                .get('com.maskbook.nft.avatar')
+                // @ts-expect-error
+                .get(userId).then!(),
+        )
+    }
 
-    NFTAvatarCache.set(userId, avatarDB)
-    return avatarDB as AvatarMetaDB
+    return NFTAvatarCache.get(userId)
 }
 
 export async function setOrClearAvatar(userId: string, avatar?: AvatarMetaDB) {
@@ -41,21 +45,19 @@ export async function getNFTAvatars() {
     const NFTAvatarKeys = Object.keys(NFTAvatarNodes).filter((x) => x !== '_')
     const resultPromise = NFTAvatarKeys.map((key) => getNFTAvatar(key))
     const result = (await Promise.all(resultPromise)).filter((x) => x) as AvatarMetaDB[]
-    console.log(result)
     return result
 }
 
-export async function saveNFTAvatar(userId: string, avatarId: string, address: string, tokenId: string) {
-    const { name, symbol, amount, image } = await getNFT(address, tokenId)
+export async function saveNFTAvatar(userId: string, avatarId: string, token: ERC721TokenDetailed) {
     const avatarMeta: AvatarMetaDB = {
-        name,
-        amount,
-        symbol,
-        image,
+        name: token.info.name,
+        symbol: token.contractDetailed.symbol ?? 'ETH',
+        image: token.info.image ?? '',
         userId,
-        address,
-        tokenId,
+        address: token.contractDetailed.address,
+        tokenId: token.tokenId,
         avatarId,
+        amount: '0',
     }
 
     await setOrClearAvatar(userId)

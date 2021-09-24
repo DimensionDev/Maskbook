@@ -31,8 +31,8 @@ export async function getNFT(address: string, tokenId: string) {
     }
 }
 
-export async function createNFT(account: string, contract: string, tokenId: string) {
-    const asset = await PluginCollectibleRPC.getAsset(contract, tokenId, ChainId.Mainnet)
+export async function createNFT(account: string, address: string, tokenId: string) {
+    const asset = await PluginCollectibleRPC.getAsset(address, tokenId, ChainId.Mainnet)
     if (!isSameAddress(asset.owner.address, account)) throw new Error('TokenId does not belong to account')
     return createERC721Token(
         {
