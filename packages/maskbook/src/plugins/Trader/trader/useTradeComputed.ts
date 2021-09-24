@@ -10,9 +10,12 @@ import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeC
 import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
 import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
 import { useTradeComputed as useDODOTradeComputed } from './dodo/useTradeComputed'
+import { useTradeComputed as useBancorTradeComputed } from './bancor/useTradeComputed'
 import { useTrade as useZrxTrade } from './0x/useTrade'
 import { useTrade as useBalancerTrade } from './balancer/useTrade'
 import { useTrade as useDODOTrade } from './dodo/useTrade'
+import { useTrade as useBancorTrade } from './bancor/useTrade'
+
 import { unreachable } from '@dimensiondev/kit'
 import { TradeProvider } from '@masknet/public-api'
 import { TradeContext } from './useTradeContext'
@@ -101,6 +104,16 @@ export function useTradeComputed(
     )
     const dodo = useDODOTradeComputed(dodo_.value ?? null, strategy, inputToken, outputToken)
 
+    const bancor_ = useBancorTrade(
+        strategy,
+        provider === TradeProvider.BANCOR ? inputAmount_ : '0',
+        provider === TradeProvider.BANCOR ? outputAmount_ : '0',
+        inputToken,
+        outputToken,
+    )
+
+    const bancor = useBancorTradeComputed(bancor_.value ?? null, strategy, inputToken, outputToken)
+
     if (nativeToken_.value)
         return {
             ...nativeToken_,
@@ -136,6 +149,11 @@ export function useTradeComputed(
             return {
                 ...dodo_,
                 value: dodo,
+            }
+        case TradeProvider.BANCOR:
+            return {
+                ...bancor_,
+                value: bancor,
             }
         default:
             unreachable(provider)
