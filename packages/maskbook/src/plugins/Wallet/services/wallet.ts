@@ -10,11 +10,12 @@ import { WalletMessages } from '../messages'
 import { assert, buf2hex, hex2buf } from '../../../utils/utils'
 import { currySameAddress, formatEthereumAddress, ProviderType, resolveProviderName } from '@masknet/web3-shared'
 import { getWalletByAddress, WalletRecordIntoDB, WalletRecordOutDB } from './helpers'
-import { currentAccountSettings, currentProviderSettings } from '../settings'
+import { currentAccountMaskWalletSettings, currentAccountSettings, currentProviderSettings } from '../settings'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
 import { updateAccount } from './account'
 import { hasNativeAPI } from '../../../utils/native-rpc'
 import { getAccounts } from '../../../extension/background-script/EthereumService'
+import { MaskMessage } from '../../../utils'
 
 function sortWallet(a: WalletRecord, b: WalletRecord) {
     const address = currentAccountSettings.value
@@ -201,6 +202,10 @@ export async function importNewWallet(
             providerType: ProviderType.MaskWallet,
         })
     }
+
+    currentAccountMaskWalletSettings.value = record.address
+    MaskMessage.events.currentAccountMaskWalletSettings.sendToAll(record.address)
+
     return address
     async function getWalletAddress() {
         if (rec.address) return rec.address

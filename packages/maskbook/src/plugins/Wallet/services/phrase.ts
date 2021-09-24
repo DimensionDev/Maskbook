@@ -149,12 +149,15 @@ export async function deriveWalletFromIndex(mnemonic: string[], passphrase: stri
     }
 
     // create a wallet from mnemonic
-    await wallet.importNewWallet({
-        name: `${name}${index + 1}`,
-        path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}`,
-        mnemonic: phrase.mnemonic,
-        passphrase: phrase.passphrase,
-    })
+    await wallet.importNewWallet(
+        {
+            name: `${name}${index + 1}`,
+            path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}`,
+            mnemonic: phrase.mnemonic,
+            passphrase: phrase.passphrase,
+        },
+        true,
+    )
 
     // update the largest index
     if (index + 1 > phrase.index && index + 1 < MAX_DERIVE_COUNT) {

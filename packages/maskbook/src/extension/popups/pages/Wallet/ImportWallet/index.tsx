@@ -185,11 +185,14 @@ const ImportWallet = memo(() => {
                             keyStoreContent,
                             Buffer.from(keyStorePassword, 'utf-8'),
                         )
-                        await WalletRPC.importNewWallet({
-                            name: data.name,
-                            address,
-                            _private_key_,
-                        })
+                        await WalletRPC.importNewWallet(
+                            {
+                                name: data.name,
+                                address,
+                                _private_key_,
+                            },
+                            true,
+                        )
                         if (toBeClose) {
                             await Services.Helper.removePopupWindow()
                         } else {
@@ -204,11 +207,14 @@ const ImportWallet = memo(() => {
                             enqueueSnackbar(t('import_failed'), { variant: 'error' })
                             return
                         }
-                        await WalletRPC.importNewWallet({
-                            name: data.name,
-                            address: walletAddress,
-                            _private_key_: privateKey,
-                        })
+                        await WalletRPC.importNewWallet(
+                            {
+                                name: data.name,
+                                address: walletAddress,
+                                _private_key_: privateKey,
+                            },
+                            true,
+                        )
                         if (toBeClose) {
                             await Services.Helper.removePopupWindow()
                         } else {

@@ -3,6 +3,7 @@ import { memo, useEffect, useMemo, useState } from 'react'
 import {
     EthereumRpcType,
     formatGweiToWei,
+    formatWeiToEther,
     formatWeiToGwei,
     useChainId,
     useNativeTokenDetailed,
@@ -319,7 +320,7 @@ export const GasSetting1559 = memo(() => {
                         </Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatWeiToGwei(content?.suggestedMaxFeePerGas ?? 0)
+                                usd: formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                     .times(nativeTokenPrice)
                                     .toPrecision(3),
                             })}

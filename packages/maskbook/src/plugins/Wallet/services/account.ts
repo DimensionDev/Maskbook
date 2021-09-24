@@ -58,11 +58,18 @@ export async function updateAccount(
     }
     if (chainId && providerType === ProviderType.MaskWallet) {
         currentMaskWalletChainIdSettings.value = chainId
-        if (networkType) currentMaskWalletNetworkSettings.value = networkType
+        MaskMessage.events.currentMaskWalletChainIdSettings.sendToAll(chainId)
+        if (networkType) {
+            currentMaskWalletNetworkSettings.value = networkType
+            MaskMessage.events.currentMaskWalletNetworkSettings.sendToAll(networkType)
+        }
     }
     if (networkType) currentNetworkSettings.value = networkType
     if (account) currentAccountSettings.value = account
-    if (account && providerType === ProviderType.MaskWallet) currentAccountMaskWalletSettings.value = account
+    if (account && providerType === ProviderType.MaskWallet) {
+        currentAccountMaskWalletSettings.value = account
+        MaskMessage.events.currentAccountMaskWalletSettings.sendToAll(account)
+    }
     if (providerType) currentProviderSettings.value = providerType
 }
 
