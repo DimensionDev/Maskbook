@@ -41,7 +41,6 @@ export function CommentBox(props: CommentBoxProps) {
                 const node = e.target as HTMLInputElement
                 if (!node.value) return
                 if (e.key === 'Enter') {
-                    console.log('enter!')
                     props.onSubmit(node.value)
                     node.value = ''
                 }

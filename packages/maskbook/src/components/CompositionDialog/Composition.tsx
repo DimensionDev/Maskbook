@@ -25,9 +25,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [])
     useEffect(() => {
         return MaskMessage.events.requestComposition.on(({ reason, open, content, options }) => {
-            console.log('open!!!', globalUIState.profiles.value.length, reason, type)
             if (reason !== type || globalUIState.profiles.value.length <= 0) return
-            console.log('open!!!$')
             setOpen(open)
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
