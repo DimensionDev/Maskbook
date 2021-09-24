@@ -8,6 +8,7 @@ import type {
 import urlcat from 'urlcat'
 import { BANCOR_API_BASE_URL } from '../../constants'
 import { calculateMinimumReturn } from './calculateMinimumReturn'
+import { toChecksumAddress } from 'web3-utils'
 
 const roundDecimal = (value: number | string | undefined, decimals: number) => {
     return Math.round(Number(value || 0) * Math.pow(10, decimals)) / Math.pow(10, decimals)
@@ -34,7 +35,7 @@ const getSourceAmount = async (request: SwapBancorRequest) => {
     const baseUrl = BANCOR_API_BASE_URL[request.chainId!]
     const url = urlcat(baseUrl, '/pricing/source-amount', {
         source_dlt_type: 'ethereum',
-        source_dlt_id: request.fromToken?.address,
+        source_dlt_id: toChecksumAddress(request.fromToken?.address),
         target_dlt_type: 'ethereum',
         target_dlt_id: request.toToken?.address,
         amount: roundDecimal(request.toAmount, request.toToken.decimals),
@@ -53,9 +54,9 @@ export const swapTransactionBancor = async (
     const baseUrl = BANCOR_API_BASE_URL[request.chainId]
     const url = urlcat(baseUrl, '/transactions/swap', {
         source_dlt_type: 'ethereum',
-        source_dlt_id: request.fromToken!.address,
+        source_dlt_id: toChecksumAddress(request.fromToken.address),
         target_dlt_type: 'ethereum',
-        target_dlt_id: request.toToken.address,
+        target_dlt_id: toChecksumAddress(request.toToken.address),
         amount: roundDecimal(request.fromAmount, request.fromToken.decimals),
         min_return: roundDecimal(request.minimumReceived, request.toToken.decimals),
         user_source_dlt_id: request.user,
