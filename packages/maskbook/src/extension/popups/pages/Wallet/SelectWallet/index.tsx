@@ -81,6 +81,7 @@ const SelectWallet = memo(() => {
 
     const toBeClose = new URLSearchParams(location.search).get('toBeClose')
 
+    console.log(toBeClose)
     const walletList = useMemo(() => {
         return currentProvider !== ProviderType.MaskWallet && toBeClose
             ? wallets

@@ -93,7 +93,7 @@ export async function openPopupsWindow(route?: string) {
     if (popup) {
         await browser.windows.update(currentPopupWindowId.value, { focused: true })
     } else {
-        const url = urlcat('popups.html#', route ?? PopupRoutes.Wallet)
+        const url = urlcat('popups.html#', route ?? PopupRoutes.Wallet, { toBeClose: 1 })
 
         let left: number
         let top: number
