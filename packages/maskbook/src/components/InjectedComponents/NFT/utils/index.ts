@@ -25,7 +25,7 @@ export async function getNFT(address: string, tokenId: string) {
         amount: order
             ? new BigNumber(getOrderUnitPrice(order) ?? 0).toFixed()
             : getLastSalePrice(asset.lastSale) ?? '0',
-        name: asset.assetContract.name,
+        name: asset.name,
         symbol: order?.paymentTokenContract?.symbol ?? asset.lastSale?.paymentToken?.symbol ?? 'ETH',
         image: asset.imageUrl ?? asset.imagePreviewUrl ?? '',
     }

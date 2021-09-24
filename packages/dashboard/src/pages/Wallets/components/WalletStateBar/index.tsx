@@ -15,6 +15,7 @@ import { PluginMessages } from '../../../../API'
 import { LoadingIcon } from '@masknet/icons'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useDashboardI18N } from '../../../../locales'
+import { useNetworkSelector } from './useNetworkSelector'
 
 const useStyles = makeStyles()((theme) => ({
     bar: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 30,
         lineHeight: '28px',
         height: '28px',
-        cursor: 'default',
+        cursor: 'pointer',
     },
     dot: {
         position: 'relative',
@@ -80,6 +81,7 @@ const WalletStateBarUI = memo<WalletStateBarUIProps>(
     ({ networkName, isPending, providerType, chainColor, walletAddress, walletName, openConnectWalletDialog }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
+        const [menu, openMenu] = useNetworkSelector()
 
         return (
             <Stack justifyContent="center" direction="row" alignItems="center">
@@ -89,7 +91,8 @@ const WalletStateBarUI = memo<WalletStateBarUIProps>(
                     justifyContent="center"
                     sx={{ background: chainColor.replace(')', ', 0.1)'), px: 2, mr: 1 }}
                     color={chainColor}
-                    className={classes.bar}>
+                    className={classes.bar}
+                    onClick={openMenu}>
                     <Typography component="span" sx={{ background: chainColor }} className={classes.dot} />
                     <Typography component="span" fontSize={12}>
                         {networkName}
@@ -108,15 +111,18 @@ const WalletStateBarUI = memo<WalletStateBarUIProps>(
                         </Typography>
                     </Stack>
                 )}
-                <Stack mx={1} justifyContent="center" sx={{ cursor: 'pointer' }} onClick={openConnectWalletDialog}>
-                    <ProviderIcon providerType={providerType} />
-                </Stack>
-                <Box sx={{ userSelect: 'none', cursor: 'pointer' }} onClick={openConnectWalletDialog}>
-                    <Box fontSize={16}>{walletName}</Box>
-                    <Box fontSize={12}>
-                        <FormattedAddress address={walletAddress} size={10} />
+                <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
+                    <Stack mx={1} justifyContent="center">
+                        <ProviderIcon providerType={providerType} />
+                    </Stack>
+                    <Box sx={{ userSelect: 'none' }}>
+                        <Box fontSize={16}>{walletName}</Box>
+                        <Box fontSize={12}>
+                            <FormattedAddress address={walletAddress} size={10} />
+                        </Box>
                     </Box>
-                </Box>
+                </Stack>
+                {menu}
             </Stack>
         )
     },

@@ -13,10 +13,9 @@ import {
     useAccount,
 } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
-import { useMenu, useValueRef } from '@masknet/shared'
+import { ChainIcon, useMenu, useValueRef } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { ChainIcon } from '../ChainIcon'
 import { useAsync } from 'react-use'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 

@@ -1,4 +1,5 @@
 import { Suspense, useMemo } from 'react'
+import { ChainId } from '@masknet/web3-shared'
 import type { Plugin } from '@masknet/plugin-infra'
 import { SnackbarContent } from '@material-ui/core'
 import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
@@ -9,6 +10,7 @@ import { base } from '../base'
 import { PLUGIN_NAME, PLUGIN_META_KEY } from '../constants'
 import { DonateDialog } from './DonateDialog'
 import { parseURL } from '../../../utils/utils'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
@@ -41,7 +43,9 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     return (
         <MaskbookPluginWrapper pluginName="Gitcoin">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <PreviewCard id={id} />
+                <EthereumChainBoundary chainId={ChainId.Mainnet}>
+                    <PreviewCard id={id} />
+                </EthereumChainBoundary>
             </Suspense>
         </MaskbookPluginWrapper>
     )
