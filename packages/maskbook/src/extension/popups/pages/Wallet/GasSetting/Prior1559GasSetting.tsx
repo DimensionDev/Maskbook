@@ -9,7 +9,6 @@ import {
     formatGweiToWei,
     formatWeiToEther,
     formatWeiToGwei,
-    getChainFromChainId,
     useChainId,
     useNativeTokenDetailed,
     useWeb3,
@@ -96,7 +95,7 @@ export const Prior1559GasSetting = memo(() => {
 
     //#region Get gas now from debank
     const { value: gasNow } = useAsync(async () => {
-        const response = await WalletRPC.getGasPriceDictFromDeBank(getChainFromChainId(chainId)?.toLowerCase() ?? '')
+        const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
         return {
             slow: response.data.slow.price,
             standard: response.data.normal.price,
@@ -131,7 +130,7 @@ export const Prior1559GasSetting = memo(() => {
         ) {
             return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
         }
-        return '0'
+        return 0
     }, [value])
 
     const { value: minGasLimit } = useAsync(async () => {
@@ -152,7 +151,7 @@ export const Prior1559GasSetting = memo(() => {
                 .string()
                 .min(1, t('wallet_transfer_error_gasLimit_absence'))
                 .refine(
-                    (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimit ?? 0),
+                    (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit ?? 0),
                     `Gas limit must be at least ${minGasLimit}.`,
                 ),
             gasPrice: zod.string().min(1, t('wallet_transfer_error_gasPrice_absence')),
@@ -252,6 +251,10 @@ export const Prior1559GasSetting = memo(() => {
                         return (
                             <StyledInput
                                 {...field}
+                                onChange={(e) => {
+                                    setOption(null)
+                                    field.onChange(e)
+                                }}
                                 error={!!errors.gasLimit?.message}
                                 helperText={errors.gasLimit?.message}
                                 inputProps={{

@@ -107,35 +107,35 @@ export const GasSetting1559 = memo(() => {
     const { value: nativeToken } = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-    const { value: gasNow, loading: getGasNowLoading } = useAsync(async () => {
-        const response = await WalletRPC.getEstimateGasFees(chainId)
-        return {
-            slow: response?.low,
-            standard: response?.medium,
-            fast: response?.high,
-        }
-    }, [chainId])
-
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
 
+    //#region Get suggest gas now data from meta swap api
+    const { value: gasNow, loading: getGasNowLoading } = useAsync(async () => {
+        return WalletRPC.getEstimateGasFees(chainId)
+    }, [chainId])
+    //#endregion
+
+    //#region Gas now options
     const options = useMemo(
         () => [
             {
                 title: t('popups_wallet_gas_fee_settings_low'),
-                content: gasNow?.slow,
+                content: gasNow?.low,
             },
             {
                 title: t('popups_wallet_gas_fee_settings_medium'),
-                content: gasNow?.standard,
+                content: gasNow?.medium,
             },
             {
                 title: t('popups_wallet_gas_fee_settings_high'),
-                content: gasNow?.fast,
+                content: gasNow?.high,
             },
         ],
         [gasNow],
     )
+    //#endregion
 
+    //#region If the payload type be SEND_ETHER or CONTRACT_INTERACTION, get the gas from the payload
     const gas = useMemo(() => {
         if (
             value &&
@@ -144,9 +144,11 @@ export const GasSetting1559 = memo(() => {
         ) {
             return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
         }
-        return '0'
+        return 0
     }, [value])
+    //#endregion
 
+    //#region If the payload type be SEND_ETHER or CONTRACT_INTERACTION, estimate min gas limit by tx data
     const { value: minGasLimit } = useAsync(async () => {
         if (
             value &&
@@ -162,6 +164,7 @@ export const GasSetting1559 = memo(() => {
 
         return 0
     }, [value, web3])
+    //#endregion
 
     //#region Form field define schema
     const schema = useMemo(() => {
@@ -210,12 +213,12 @@ export const GasSetting1559 = memo(() => {
         },
     })
 
+    //#region If the payload type be SEND_ETHER or CONTRACT_INTERACTION and there are maxFeePerGas and maxPriorityFeePerGas parameters on tx, set them to the form data
     useUpdateEffect(() => {
         if (
             value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
             value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION
         ) {
-            // if rpc payload contain max fee and max priority fee, set them to default values
             if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
@@ -230,11 +233,15 @@ export const GasSetting1559 = memo(() => {
             }
         }
     }, [value, setValue])
+    //#endregion
 
+    //#region Set gas on tx to form data
     useUpdateEffect(() => {
         if (gas) setValue('gasLimit', new BigNumber(gas).toString())
     }, [gas, setValue])
+    //#endregion
 
+    //#region If the selected changed, set the value on the option to the form data
     useEffect(() => {
         if (selected !== null) {
             setValue(
@@ -247,6 +254,7 @@ export const GasSetting1559 = memo(() => {
             )
         }
     }, [selected, setValue, options])
+    //#endregion
 
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
@@ -272,13 +280,14 @@ export const GasSetting1559 = memo(() => {
 
     const [maxPriorityFeePerGas, maxFeePerGas] = watch(['maxPriorityFeePerGas', 'maxFeePerGas'])
 
+    //#region These are additional form rules that need to be prompted for but do not affect the validation of the form
     const maxPriorFeeHelperText = useMemo(() => {
         if (getGasNowLoading) return undefined
-        if (new BigNumber(maxPriorityFeePerGas).isLessThan(gasNow?.slow?.suggestedMaxPriorityFeePerGas ?? 0))
+        if (new BigNumber(maxPriorityFeePerGas).isLessThan(gasNow?.low?.suggestedMaxPriorityFeePerGas ?? 0))
             return t('wallet_transfer_error_max_priority_gas_fee_too_low')
         if (
             new BigNumber(maxPriorityFeePerGas).isGreaterThan(
-                new BigNumber(gasNow?.fast?.suggestedMaxPriorityFeePerGas ?? 0).multipliedBy(
+                new BigNumber(gasNow?.high?.suggestedMaxPriorityFeePerGas ?? 0).multipliedBy(
                     HIGH_FEE_WARNING_MULTIPLIER,
                 ),
             )
@@ -289,22 +298,25 @@ export const GasSetting1559 = memo(() => {
 
     const maxFeeGasHelperText = useMemo(() => {
         if (getGasNowLoading) return undefined
-        if (new BigNumber(maxFeePerGas).isLessThan(gasNow?.slow?.suggestedMaxFeePerGas ?? 0))
+        if (new BigNumber(maxFeePerGas).isLessThan(gasNow?.estimatedBaseFee ?? 0))
             return t('wallet_transfer_error_max_fee_too_low')
         if (
             new BigNumber(maxFeePerGas).isGreaterThan(
-                new BigNumber(gasNow?.fast?.suggestedMaxFeePerGas ?? 0).multipliedBy(HIGH_FEE_WARNING_MULTIPLIER),
+                new BigNumber(gasNow?.high?.suggestedMaxFeePerGas ?? 0).multipliedBy(HIGH_FEE_WARNING_MULTIPLIER),
             )
         )
             return t('wallet_transfer_error_max_fee_too_high')
         return undefined
     }, [maxFeePerGas, gasNow, getGasNowLoading])
+    //endregion
 
+    //#region If the payload is consumed it needs to be redirected
     useUpdateEffect(() => {
         if (!value && !getValueLoading) {
             history.replace(PopupRoutes.Wallet)
         }
     }, [value, getValueLoading])
+    //#endregion
 
     return (
         <>
@@ -338,6 +350,10 @@ export const GasSetting1559 = memo(() => {
                         return (
                             <StyledInput
                                 {...field}
+                                onChange={(e) => {
+                                    setOption(null)
+                                    field.onChange(e)
+                                }}
                                 error={!!errors.gasLimit?.message}
                                 helperText={errors.gasLimit?.message}
                                 inputProps={{

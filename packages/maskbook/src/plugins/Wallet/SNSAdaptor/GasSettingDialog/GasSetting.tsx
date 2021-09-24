@@ -7,5 +7,5 @@ import type { GasSettingProps } from '../../../../extension/popups/pages/Wallet/
 export const GasSetting: FC<GasSettingProps> = (props) => {
     const chainId = useChainId()
     const is1559Supported = isEIP1559Supported(chainId)
-    return is1559Supported ? <GasSetting1559 {...props} /> : <Prior1559GasSetting {...props} />
+    return is1559Supported ? <GasSetting1559 /> : <Prior1559GasSetting />
 }
