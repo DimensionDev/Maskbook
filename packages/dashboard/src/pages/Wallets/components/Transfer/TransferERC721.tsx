@@ -158,7 +158,7 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
                         )}
                     </Box>
                     <Box mt={4}>
-                        <Button sx={{ width: 240 }} type="submit" disabled={isSubmitting || !isValid}>
+                        <Button sx={{ width: 240 }} type="submit" disabled={isSubmitting}>
                             {t.wallets_transfer_send()}
                         </Button>
                     </Box>
