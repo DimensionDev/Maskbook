@@ -175,7 +175,7 @@ export const GasSetting1559 = memo(() => {
                     .min(1, t('wallet_transfer_error_gasLimit_absence'))
                     .refine(
                         (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimit ?? 0),
-                        `Gas limit must be at least ${minGasLimit}.`,
+                        t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
                     ),
                 maxPriorityFeePerGas: zod
                     .string()
@@ -341,7 +341,6 @@ export const GasSetting1559 = memo(() => {
                     </div>
                 ))}
             </div>
-            <Typography className={classes.or}>{t('popups_wallet_gas_fee_settings_or')}</Typography>
             <form onSubmit={onSubmit}>
                 <Typography className={classes.label}>{t('popups_wallet_gas_fee_settings_gas_limit')}</Typography>
                 <Controller

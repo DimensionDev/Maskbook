@@ -152,7 +152,7 @@ export const Prior1559GasSetting = memo(() => {
                 .min(1, t('wallet_transfer_error_gasLimit_absence'))
                 .refine(
                     (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit ?? 0),
-                    `Gas limit must be at least ${minGasLimit}.`,
+                    t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
                 ),
             gasPrice: zod.string().min(1, t('wallet_transfer_error_gasPrice_absence')),
         })
@@ -242,7 +242,6 @@ export const Prior1559GasSetting = memo(() => {
                     </div>
                 ))}
             </div>
-            <Typography className={classes.or}>{t('popups_wallet_gas_fee_settings_or')}</Typography>
             <form onSubmit={onSubmit}>
                 <Typography className={classes.label}>{t('popups_wallet_gas_fee_settings_gas_limit')}</Typography>
                 <Controller

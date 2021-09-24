@@ -160,7 +160,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 .min(1, t('wallet_transfer_error_gasLimit_absence'))
                 .refine(
                     (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimitContext),
-                    ` Gas limit must be at least ${minGasLimitContext}.`,
+                    t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
                 ),
             gasPrice: zod.string().min(1, t('wallet_transfer_error_gasPrice_absence')),
         })
