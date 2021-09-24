@@ -2,8 +2,8 @@ import { makeStyles } from '@masknet/theme'
 import { memo, useEffect, useMemo, useState } from 'react'
 import {
     EthereumRpcType,
+    formatGweiToEther,
     formatGweiToWei,
-    formatWeiToEther,
     formatWeiToGwei,
     useChainId,
     useNativeTokenDetailed,
@@ -320,7 +320,7 @@ export const GasSetting1559 = memo(() => {
                         </Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
+                                usd: formatGweiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                     .times(nativeTokenPrice)
                                     .toPrecision(3),
                             })}
@@ -354,7 +354,7 @@ export const GasSetting1559 = memo(() => {
                     </Typography>
                     <Typography component="span" className={classes.price}>
                         {t('popups_wallet_gas_fee_settings_usd', {
-                            usd: formatWeiToGwei(Number(maxPriorityFeePerGas) ?? 0)
+                            usd: formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
                                 .times(nativeTokenPrice)
                                 .toPrecision(3),
                         })}
@@ -385,7 +385,7 @@ export const GasSetting1559 = memo(() => {
                     </Typography>
                     <Typography component="span" className={classes.price}>
                         {t('popups_wallet_gas_fee_settings_usd', {
-                            usd: formatWeiToGwei(Number(maxFeePerGas) ?? 0)
+                            usd: formatGweiToEther(Number(maxFeePerGas) ?? 0)
                                 .times(nativeTokenPrice)
                                 .toPrecision(3),
                         })}

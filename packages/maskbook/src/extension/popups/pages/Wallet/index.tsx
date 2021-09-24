@@ -32,10 +32,6 @@ export default function Wallet() {
     const wallet = useWallet(ProviderType.MaskWallet)
     const location = useLocation()
     const history = useHistory()
-    const wallets = useWallets(ProviderType.MaskWallet)
-    console.log(wallets)
-    console.log(wallet)
-    console.log(currentAccountMaskWalletSettings.value)
 
     // const lockStatus = useValueRef(currentIsMaskWalletLockedSettings)
 

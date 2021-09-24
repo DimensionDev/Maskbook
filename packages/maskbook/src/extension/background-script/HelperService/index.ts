@@ -85,7 +85,7 @@ export async function createNewWindowAndPasteShareContent(SNSIdentifier: string,
     browser.tabs.create({ active: true, url: url.toString() })
 }
 
-export async function openPopupsWindow(route?: string) {
+export async function openPopupsWindow(route?: string, params?: Record<string, any>) {
     const windows = await browser.windows.getAll()
     const popup = windows.find((win) => win && win.type === 'popup' && win.id === currentPopupWindowId.value)
 
@@ -93,7 +93,7 @@ export async function openPopupsWindow(route?: string) {
     if (popup) {
         await browser.windows.update(currentPopupWindowId.value, { focused: true })
     } else {
-        const url = urlcat('popups.html#', route ?? PopupRoutes.Wallet, { toBeClose: 1 })
+        const url = urlcat('popups.html#', route ?? PopupRoutes.Wallet, { toBeClose: 1, ...params })
 
         let left: number
         let top: number
