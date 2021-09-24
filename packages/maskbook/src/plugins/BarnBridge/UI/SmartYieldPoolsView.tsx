@@ -1,31 +1,25 @@
-import { makeStyles } from '@masknet/theme'
+import { CardContent, CircularProgress, Paper, Tab, Tabs } from '@material-ui/core'
+import { useCallback, useEffect, useState } from 'react'
 
+import { makeStyles } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared'
-import { useCallback } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared'
+import { useChainId } from '@masknet/web3-shared'
 
 import { currentAccountSettings } from '../../Wallet/settings'
+import { useI18N, I18NFunction } from '../../../utils/i18n-next-ui'
 
 import { SmartYieldPoolView } from './SmartYieldPoolView'
 import type { SYPoolModelData, SYPortfolioModelData } from './../apis'
 import { useSYPoolData, useSYPortfolioData } from '../hooks/useModels'
-
-import { useEffect } from 'react'
-import { useI18N, I18NFunction } from '../../../utils/i18n-next-ui'
-
 import { PluginBarnBridgeMessages } from '../messages'
-
 import PortfolioBalance from './../Import/BarnBridgeFrontEnd/PortfolioBalance'
-
-import { CardContent, CircularProgress, Paper, Tab, Tabs } from '@material-ui/core'
 import { BarnBridgeSmartYieldBarChart, BarnBridgeSmartYieldWallet } from '../BarnBridgeIcon'
 import {
     COLOR_BARNBRIDGE_ORANGE,
     COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
     COLOR_BARNBRIDGE_BACKGROUND_DARK,
 } from '../constants'
-
-import React, { useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -71,21 +65,22 @@ interface SmartYieldPoolsViewProps {}
 
 export function SmartYieldPoolsView() {
     const [tabIndex, setTabIndex] = useState(0)
+    const { t } = useI18N()
+    const walletAddress = useValueRef(currentAccountSettings)
+    const chainId = useChainId()
     const [_syDataState, setPools] = useState<[SYPoolModelData, SYPortfolioModelData]>([
         {},
         { seniorValue: 0, juniorValue: 0 },
     ])
-    const { t } = useI18N()
-    const walletAddress = useValueRef(currentAccountSettings)
 
     //#region data
-    const { value: syData, error: error, loading: loadingPools, retry: retry } = useSYPoolData()
+    const { value: syData, error: error, loading: loadingPools, retry: retry } = useSYPoolData(chainId)
     const {
         value: syPortfolioData,
         error: syPortfolioError,
         loading: loadingPortfolio,
         retry: syPortfolioRetry,
-    } = useSYPortfolioData(walletAddress)
+    } = useSYPortfolioData(chainId, walletAddress)
     const { classes } = useStyles()
 
     useEffect(() => {
@@ -158,8 +153,7 @@ export function SmartYieldPoolsView() {
                 orientation="horizontal"
                 onChange={(ev: React.ChangeEvent<{}>, newValue: number) => {
                     setTabIndex(newValue)
-                }}
-            >
+                }}>
                 {tabs}
             </Tabs>
             <Paper className={classes.paper}>

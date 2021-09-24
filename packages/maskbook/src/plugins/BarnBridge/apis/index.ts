@@ -1,7 +1,15 @@
-import { BB_SY_CREAM, BB_SY_AAVE, BB_SY_COMPOUND, APP_URL, SY_URL_FRAGMENT, API_URL } from '../constants'
-// import type { SYCoinProps } from '../UI/SmartYieldPoolView'
+import {
+    BB_SY_CREAM,
+    BB_SY_AAVE,
+    BB_SY_COMPOUND,
+    APP_URL,
+    SY_URL_FRAGMENT,
+    API_URL,
+    POLYGON_API_URL,
+} from '../constants'
 import urlcat from 'urlcat'
 import { last } from 'lodash-es'
+import { ChainId } from '@masknet/web3-shared'
 
 export interface SYPortfolioModelData {
     seniorValue: number
@@ -23,8 +31,19 @@ export interface SYCoinProps {
 
 export type SYPoolModelData = { [id: string]: SYCoinProps[] }
 
-export async function SYGetPools() {
-    const response = await fetch(urlcat(API_URL, '/smartyield/pools', { originator: 'all' }), {
+function ChainIdToBaseUrl(chainId: ChainId) {
+    switch (chainId) {
+        case ChainId.Mainnet:
+            return API_URL
+        case ChainId.Matic:
+            return POLYGON_API_URL
+        default:
+            return API_URL
+    }
+}
+
+export async function SYGetPools(chainId: ChainId) {
+    const response = await fetch(urlcat(ChainIdToBaseUrl(chainId), '/smartyield/pools', { originator: 'all' }), {
         body: null,
         method: 'GET',
         mode: 'cors',
@@ -53,8 +72,8 @@ export async function SYGetPools() {
         if (!(protocolId in protocolsMap)) {
             protocolsMap[protocolId] = []
         }
-        const seniorAPY = Number.parseInt((entry.state.seniorApy * 100).toFixed(2), 10)
-        const juniorAPY = Number.parseInt((entry.state.juniorApy * 100).toFixed(2), 10)
+        const seniorAPY = Number.parseFloat((entry.state.seniorApy * 100).toFixed(2))
+        const juniorAPY = Number.parseFloat((entry.state.juniorApy * 100).toFixed(2))
         protocolsMap[protocolId] = protocolsMap[protocolId].concat([
             {
                 coinName: entry.underlyingSymbol,
@@ -86,15 +105,19 @@ function ConstructRedirectUrl(protocolName: string, coin: string) {
 }
 
 function PrettifyLiquidity(liquidity: string) {
-    const value = Number.parseInt(liquidity, 10)
-    const unit = Math.max(Math.round(Math.log(value) / Math.log(10000)), 0)
-    const symbols = ['', 'k', 'M', 'G', 'T'] // see https://en.wikipedia.org/wiki/Metric_prefix
-    return (value / Math.pow(1000, unit)).toFixed(1) + symbols[unit]
+    const intLiquidity = Number.parseInt(liquidity, 10)
+    if (intLiquidity >= 1000000) {
+        return Math.round(intLiquidity / 1000000).toString() + 'M'
+    }
+    if (intLiquidity >= 1000) {
+        return Math.round(intLiquidity / 1000).toString() + 'K'
+    }
+    return Math.round(intLiquidity).toString()
 }
 
-export async function SYGetPortfolio(walletAddress: string) {
+export async function SYGetPortfolio(chainId: ChainId, walletAddress: string) {
     const response = await fetch(
-        urlcat(API_URL, '/smartyield/users/:walletAddress/portfolio-value', { walletAddress }),
+        urlcat(ChainIdToBaseUrl(chainId), '/smartyield/users/:walletAddress/portfolio-value', { walletAddress }),
         {
             body: null,
             method: 'GET',

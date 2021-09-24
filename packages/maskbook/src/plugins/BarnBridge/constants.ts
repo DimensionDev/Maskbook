@@ -5,6 +5,7 @@ export const BARNBRIDGE_PLUGIN_ID = 'com.barnbridge'
 export const BASE_URL = 'barnbridge.com'
 export const APP_URL = 'https://app.barnbridge.com/'
 export const API_URL = 'https://api-v2.barnbridge.com/api/'
+export const POLYGON_API_URL = 'https://polygon.api.barnbridge.com/api/'
 export const SY_URL_FRAGMENT = 'smart-yield/'
 
 export const URL_PATTERN = new RegExp(`https?\:\/\/.*\.?${escapeRegExp(BASE_URL)}`)
