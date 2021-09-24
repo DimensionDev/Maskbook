@@ -1,7 +1,7 @@
 import { story } from '../utils'
-import { InputBox as Box } from '../../src/Components/InputBox'
+import { InputBox as Component } from '../../src/Components/InputBox'
 
-const { meta, of } = story(Box)
+const { meta, of } = story(Component)
 export default meta({
     title: 'Components/InputBox',
     argTypes: {},

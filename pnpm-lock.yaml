@@ -722,6 +722,7 @@ importers:
   packages/theme:
     specifiers:
       '@babel/core': ^7.15.5
+      '@masknet/icons': workspace:*
       '@masknet/storybook-shared': workspace:*
       '@storybook/addon-actions': ^6.4.0-alpha.38
       '@storybook/addon-essentials': ^6.4.0-alpha.38
@@ -743,6 +744,7 @@ importers:
       use-subscription: ^1.5.1
       webpack: ^5.53.0
     dependencies:
+      '@masknet/icons': link:../icons
       '@masknet/storybook-shared': link:../storybook-shared
       '@types/qrcode': 1.4.1
       '@types/tinycolor2': 1.4.3
