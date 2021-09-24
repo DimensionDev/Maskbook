@@ -1,6 +1,6 @@
 import { MaskTextField } from '@masknet/theme'
 import { Box, Button, Stack } from '@material-ui/core'
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import {
     ERC721ContractDetailed,
@@ -20,6 +20,7 @@ import { z } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
 interface TransferERC721Props {
     token: FungibleTokenDetailed
@@ -83,6 +84,15 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
         defaultValues: { recipient: '', contract: '', tokenId: '' },
     })
 
+    const contractIcon = useMemo(() => {
+        if (!contract?.iconURL) return null
+        return (
+            <Box width={20} height={20} mr={1}>
+                <img style={{ borderRadius: 10 }} width="20px" height="20px" src={contract.iconURL} alt="" />
+            </Box>
+        )
+    }, [contract])
+
     return (
         <Stack direction="row" justifyContent="center" mt={4}>
             <form onSubmit={handleSubmit(onTransfer)}>
@@ -112,6 +122,10 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
                                         helperText={errors.contract?.message || errors.tokenId?.message}
                                         placeholder={t.wallets_transfer_contract_placeholder()}
                                         disabled
+                                        InputProps={{
+                                            startAdornment: contractIcon,
+                                            endAdornment: <KeyboardArrowDownIcon />,
+                                        }}
                                         inputProps={{
                                             sx: { cursor: 'pointer' },
                                         }}
