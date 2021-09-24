@@ -123,6 +123,9 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                                 {t('personas')}
                             </NavLink>
                         ) : null}
+                        <NavLink to={PopupRoutes.Swap} className={classes.nav} activeClassName={classes.active}>
+                            Swap
+                        </NavLink>
                     </Box>
                 </Box>
                 <Box className={classes.container}>

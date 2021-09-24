@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { FC, memo } from 'react'
 import { Box, Button, Stack, Typography } from '@material-ui/core'
 import {
     getNetworkName,
@@ -51,6 +51,7 @@ export const WalletStateBar = memo(() => {
         PluginMessages.Wallet.events.selectProviderDialogUpdated,
     )
 
+    const [menu, openMenu] = useNetworkSelector()
     if (!wallet) {
         return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
     }
@@ -61,9 +62,11 @@ export const WalletStateBar = memo(() => {
             chainColor={chainColor}
             providerType={providerType}
             openConnectWalletDialog={openConnectWalletDialog}
+            openMenu={openMenu}
             walletName={wallet.name ?? ''}
-            walletAddress={wallet.address}
-        />
+            walletAddress={wallet.address}>
+            {menu}
+        </WalletStateBarUI>
     )
 })
 
@@ -75,55 +78,63 @@ interface WalletStateBarUIProps {
     walletName: string
     walletAddress: string
     openConnectWalletDialog(): void
+    openMenu: ReturnType<typeof useNetworkSelector>[1]
 }
 
-const WalletStateBarUI = memo<WalletStateBarUIProps>(
-    ({ networkName, isPending, providerType, chainColor, walletAddress, walletName, openConnectWalletDialog }) => {
-        const t = useDashboardI18N()
-        const { classes } = useStyles()
-        const [menu, openMenu] = useNetworkSelector()
+export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
+    networkName,
+    isPending,
+    providerType,
+    chainColor,
+    walletAddress,
+    walletName,
+    openConnectWalletDialog,
+    openMenu,
+    children,
+}) => {
+    const t = useDashboardI18N()
+    const { classes } = useStyles()
 
-        return (
-            <Stack justifyContent="center" direction="row" alignItems="center">
+    return (
+        <Stack justifyContent="center" direction="row" alignItems="center">
+            <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+                sx={{ background: chainColor.replace(')', ', 0.1)'), px: 2, mr: 1 }}
+                color={chainColor}
+                className={classes.bar}
+                onClick={openMenu}>
+                <Typography component="span" sx={{ background: chainColor }} className={classes.dot} />
+                <Typography component="span" fontSize={12}>
+                    {networkName}
+                </Typography>
+            </Stack>
+            {isPending && (
                 <Stack
                     direction="row"
                     alignItems="center"
                     justifyContent="center"
-                    sx={{ background: chainColor.replace(')', ', 0.1)'), px: 2, mr: 1 }}
-                    color={chainColor}
-                    className={classes.bar}
-                    onClick={openMenu}>
-                    <Typography component="span" sx={{ background: chainColor }} className={classes.dot} />
-                    <Typography component="span" fontSize={12}>
-                        {networkName}
+                    sx={{ px: 2, background: MaskColorVar.orangeMain.alpha(0.1), color: MaskColorVar.orangeMain }}
+                    className={classes.bar}>
+                    <LoadingIcon sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
+                    <Typography component="span" fontSize={12} display="inline-block">
+                        {t.wallet_transactions_pending()}
                     </Typography>
                 </Stack>
-                {isPending && (
-                    <Stack
-                        direction="row"
-                        alignItems="center"
-                        justifyContent="center"
-                        sx={{ px: 2, background: MaskColorVar.orangeMain.alpha(0.1), color: MaskColorVar.orangeMain }}
-                        className={classes.bar}>
-                        <LoadingIcon sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
-                        <Typography component="span" fontSize={12} display="inline-block">
-                            {t.wallet_transactions_pending()}
-                        </Typography>
-                    </Stack>
-                )}
-                <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
-                    <Stack mx={1} justifyContent="center">
-                        <ProviderIcon providerType={providerType} />
-                    </Stack>
-                    <Box sx={{ userSelect: 'none' }}>
-                        <Box fontSize={16}>{walletName}</Box>
-                        <Box fontSize={12}>
-                            <FormattedAddress address={walletAddress} size={10} />
-                        </Box>
-                    </Box>
+            )}
+            <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
+                <Stack mx={1} justifyContent="center">
+                    <ProviderIcon providerType={providerType} />
                 </Stack>
-                {menu}
+                <Box sx={{ userSelect: 'none' }}>
+                    <Box fontSize={16}>{walletName}</Box>
+                    <Box fontSize={12}>
+                        <FormattedAddress address={walletAddress} size={10} />
+                    </Box>
+                </Box>
             </Stack>
-        )
-    },
-)
+            {children}
+        </Stack>
+    )
+}
