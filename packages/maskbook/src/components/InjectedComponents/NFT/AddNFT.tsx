@@ -11,7 +11,7 @@ const useStyles = makeStyles()((theme) => ({
     addNFT: {
         position: 'absolute',
         right: 20,
-        top: 20,
+        top: 10,
     },
     input: {
         marginTop: theme.spacing(1),
@@ -73,7 +73,7 @@ export function AddNFT(props: AddNFTProps) {
     return (
         <InjectedDialog title="Add collectibles" open={open} onClose={handleClose}>
             <DialogContent>
-                <Button className={classes.addNFT} variant="outlined" size="small" onClick={onClick}>
+                <Button className={classes.addNFT} variant="contained" size="small" onClick={onClick}>
                     Add
                 </Button>
                 <div className={classes.input}>

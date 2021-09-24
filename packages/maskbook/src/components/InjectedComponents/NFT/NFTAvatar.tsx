@@ -9,7 +9,7 @@ import {
     useCollectibles,
 } from '@masknet/web3-shared'
 import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
-import classnames from 'classnames'
+import classNames from 'classnames'
 import { uniqBy } from 'lodash-es'
 import { useCallback, useEffect, useState } from 'react'
 import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
@@ -23,6 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         display: 'flex',
         justifyContent: 'space-between',
+        fontSize: 14,
     },
     AddCollectible: {
         textAlign: 'right',
@@ -44,11 +45,9 @@ const useStyles = makeStyles()((theme) => ({
         width: 97,
         height: 97,
         objectFit: 'cover',
-        margin: theme.spacing(0.5, 1.5),
+
         borderRadius: '100%',
-        '&:hover': {
-            border: `1px solid ${getMaskColor(theme).blue}`,
-        },
+
         boxSizing: 'border-box',
     },
     button: {
@@ -59,10 +58,29 @@ const useStyles = makeStyles()((theme) => ({
         paddingLeft: 64,
         paddingRight: 64,
     },
-    selected: {
-        border: `1px solid ${getMaskColor(theme).blue}`,
+    imgBackground: {
+        '&:hover': {
+            backgroundColor: getMaskColor(theme).blue,
+        },
+        padding: 6,
+        borderRadius: '100%',
+        margin: theme.spacing(0.5, 1),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    error: {},
+    selected: {
+        backgroundColor: getMaskColor(theme).blue,
+    },
+    error: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    changeButton: {
+        fontSize: 14,
+    },
 }))
 
 export interface NFTAvatarProps extends withClasses<'root'> {
@@ -88,7 +106,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         loading,
         retry,
         error,
-    } = useCollectibles('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', chainId, provider, page, 50)
+    } = useCollectibles(account, chainId, provider, page, 50)
     //0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
 
     const { collectibles, hasNextPage } = value
@@ -100,7 +118,8 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const onClick = useCallback(async () => {
         if (!selectedToken) return
         onChange(selectedToken)
-    }, [onChange, selectedToken])
+        setSelectedToken(undefined)
+    }, [onChange, selectedToken, setSelectedToken])
 
     const onAddClick = useCallback((token) => {
         setSelectedToken(token)
@@ -133,7 +152,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     {account ? (
                         <Typography variant="body1" color="textPrimary">
                             Wallet: {formatEthereumAddress(account, 4)}
-                            <Button onClick={openSelectProviderDialog} size="small">
+                            <Button onClick={openSelectProviderDialog} size="small" className={classes.changeButton}>
                                 Change
                             </Button>
                         </Typography>
@@ -152,15 +171,18 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 : error || collectibles_.length === 0
                                 ? Retry
                                 : collectibles_.map((token: ERC721TokenDetailed, i) => (
-                                      <img
-                                          key={i}
-                                          onClick={() => setSelectedToken(token)}
-                                          src={token.info.image}
-                                          className={classnames(
-                                              classes.image,
+                                      <div
+                                          className={classNames(
+                                              classes.imgBackground,
                                               selectedToken === token ? classes.selected : '',
-                                          )}
-                                      />
+                                          )}>
+                                          <img
+                                              key={i}
+                                              onClick={() => setSelectedToken(token)}
+                                              src={token.info.image}
+                                              className={classes.image}
+                                          />
+                                      </div>
                                   ))}
                         </Box>
 
