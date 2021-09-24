@@ -54,6 +54,7 @@ export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSetting
 export const [getEtherPrice, setEtherPrice] = create(currentEtherPriceSettings)
 export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSettings)
 export const [getGasNow, setGasNow] = create(currentGasNowSettings)
+export const [getGasPrice, setGasPrice] = create(currentGasNowSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
 export const [getEthereumNetworkTradeProvider, setEthNetworkTradeProvider] = create(
     ethereumNetworkTradeProviderSettings,

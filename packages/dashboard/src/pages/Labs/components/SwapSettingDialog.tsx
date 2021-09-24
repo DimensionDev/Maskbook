@@ -26,6 +26,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: '0x', value: TradeProvider.ZRX },
         { label: 'Balancer', value: TradeProvider.BALANCER },
         { label: 'DODO', value: TradeProvider.DODO },
+        { label: 'Bancor', value: TradeProvider.BANCOR },
     ]
 
     const polygonOptions = [

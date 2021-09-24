@@ -6,7 +6,6 @@ import {
     formatBalance,
     formatGweiToWei,
     formatWeiToEther,
-    getChainFromChainId,
     getChainIdFromNetworkType,
     isEIP1559Supported,
     NetworkType,
@@ -223,9 +222,7 @@ const ContractInteraction = memo(() => {
                 maxFeePerGas: toHex(formatGweiToWei(response?.medium.suggestedMaxFeePerGas ?? 0).toString()),
             }
         } else if (!gasPrice) {
-            const response = await WalletRPC.getGasPriceDictFromDeBank(
-                getChainFromChainId(chainId)?.toLowerCase() ?? '',
-            )
+            const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
             return {
                 gasPrice: response.data.normal.price,
             }

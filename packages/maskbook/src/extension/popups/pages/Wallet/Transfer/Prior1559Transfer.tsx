@@ -9,7 +9,6 @@ import {
     formatBalance,
     formatGweiToWei,
     formatWeiToGwei,
-    getChainFromChainId,
     isGreaterThan,
     isZero,
     pow10,
@@ -187,7 +186,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     //#region Set default gas price
     useAsync(async () => {
-        const gasNow = await WalletRPC.getGasPriceDictFromDeBank(getChainFromChainId(chainId)?.toLowerCase() ?? '')
+        const gasNow = await WalletRPC.getGasPriceDictFromDeBank(chainId)
         const gasPrice = methods.getValues('gasPrice')
         if (gasNow && !gasPrice) {
             const gasPrice = new BigNumber(gasNow.data.fast.price)
