@@ -38,6 +38,7 @@ import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket
 import classNames from 'classnames'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -346,16 +347,26 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             availability?.isClaimed
-                ? t('plugin_red_packet_nft_share_claimed_message', {
-                      sender: payload.senderName,
-                      payload: postLink,
-                      network: resolveNetworkName(networkType),
-                  }).trim()
-                : t('plugin_red_packet_nft_share_foreshow_message', {
-                      sender: payload.senderName,
-                      payload: postLink,
-                      network: resolveNetworkName(networkType),
-                  }).trim(),
+                ? t(
+                      isTwitter(activatedSocialNetworkUI)
+                          ? 'plugin_red_packet_nft_share_claimed_message'
+                          : 'plugin_red_packet_nft_share_claimed_message_not_twitter',
+                      {
+                          sender: payload.senderName,
+                          payload: postLink,
+                          network: resolveNetworkName(networkType),
+                      },
+                  ).trim()
+                : t(
+                      isTwitter(activatedSocialNetworkUI)
+                          ? 'plugin_red_packet_nft_share_foreshow_message'
+                          : 'plugin_red_packet_nft_share_foreshow_message_not_twitter',
+                      {
+                          sender: payload.senderName,
+                          payload: postLink,
+                          network: resolveNetworkName(networkType),
+                      },
+                  ).trim(),
         )
         .toString()
 
