@@ -34,7 +34,7 @@ function MaskTheme(mode: PaletteMode) {
 export const MaskLightTheme = MaskTheme('light')
 export const MaskDarkTheme = MaskTheme('dark')
 export * from './makeStyles'
-export * from './Components/index'
+export * from './Components'
 export * from './hooks/index'
 export * from './ShadowRoot'
 export { getMaskColor, useMaskColor, MaskColorVar, applyMaskColorVars } from './constants'

@@ -1,33 +1,30 @@
-import { useCallback, useState } from 'react'
+import { FC, useCallback, useState, createContext } from 'react'
 import { DialogContent } from '@material-ui/core'
-import { makeStyles, SearchInput } from '@masknet/theme'
+import { SearchInput } from '@masknet/theme'
 import { delay, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { FungibleTokenDetailed, useNativeTokenDetailed, useChainDetailed } from '@masknet/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 import { WalletMessages } from '../../Wallet/messages'
-import { useI18N } from '../../../utils'
+import { useStyles } from './styles'
 
-const useStyles = makeStyles()((theme) => ({
-    list: {
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    placeholder: {
-        textAlign: 'center',
-        height: 288,
-        paddingTop: theme.spacing(14),
-        boxSizing: 'border-box',
-    },
-}))
+interface SelectTokenDialogOptions {}
 
-export interface SelectTokenDialogProps extends withClasses<never> {}
+export const SelectTokenDialogContext = createContext<SelectTokenDialogProps>({})
+
+export interface SelectTokenDialogProps {}
+
+export const SelectTokenDialogProvider: FC = ({ children }) => {
+    return (
+        <SelectTokenDialogContext.Provider>
+            {children}
+            <SelectTokenDialog />
+        </SelectTokenDialogContext.Provider>
+    )
+}
 
 export function SelectTokenDialog(props: SelectTokenDialogProps) {
-    const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const classes = useStyles()
 
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
@@ -76,9 +73,11 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     }, [])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_token')} maxWidth="xs">
+        <InjectedDialog open={open} onClose={onClose} title="Select a Token" maxWidth="xs">
             <DialogContent>
-                {!disableSearchBar ? <SearchInput label={t('add_token_search_hint')} onChange={onChange} /> : null}
+                {!disableSearchBar ? (
+                    <SearchInput label="Search Tokens Symbols Name or Contract address" onChange={onChange} />
+                ) : null}
                 <FixedTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     keyword={keyword}

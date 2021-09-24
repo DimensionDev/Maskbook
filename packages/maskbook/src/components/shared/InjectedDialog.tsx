@@ -12,10 +12,10 @@ import {
     useMediaQuery,
 } from '@material-ui/core'
 import { makeStyles, useDialogStackConsumer } from '@masknet/theme'
+import { ErrorBoundary, useStylesExtends, mergeClasses } from '@masknet/shared'
 import { Children, cloneElement } from 'react'
 import { useI18N, usePortalShadowRoot } from '../../utils'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
-import { ErrorBoundary, useStylesExtends, mergeClasses } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../social-network'
 
 const useStyles = makeStyles()((theme) => ({

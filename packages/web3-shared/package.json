@@ -7,6 +7,7 @@
     "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
+    "@masknet/theme": "workspace:*",
     "@unstoppabledomains/resolution": "^5.0.1",
     "bignumber.js": "9.0.1",
     "ethereum-blockies": "^0.1.1",
