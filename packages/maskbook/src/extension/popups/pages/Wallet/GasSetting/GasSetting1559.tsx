@@ -22,6 +22,7 @@ import { isEmpty } from 'lodash-es'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { useHistory } from 'react-router'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
+import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -104,7 +105,7 @@ export const GasSetting1559 = memo(() => {
     const { value: nativeToken } = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-    const { value: gasNow } = useAsync(async () => {
+    const { value: gasNow, loading: getGasNowLoading } = useAsync(async () => {
         const response = await WalletRPC.getEstimateGasFees(chainId)
         return {
             slow: response?.low,
@@ -113,7 +114,7 @@ export const GasSetting1559 = memo(() => {
         }
     }, [chainId])
 
-    const { value } = useUnconfirmedRequest()
+    const { value, loading: getValueLoading } = useUnconfirmedRequest()
 
     const options = useMemo(
         () => [
@@ -139,7 +140,7 @@ export const GasSetting1559 = memo(() => {
             (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
                 value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
         ) {
-            return new BigNumber(value?.computedPayload?._tx.gas ?? 0, 16).toNumber()
+            return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
         }
         return '0'
     }, [value])
@@ -150,7 +151,11 @@ export const GasSetting1559 = memo(() => {
             (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
                 value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
         ) {
-            return web3.eth.estimateGas(value.computedPayload._tx)
+            return web3.eth.estimateGas({
+                data: value.computedPayload._tx.data,
+                from: value.computedPayload._tx.from,
+                to: value.computedPayload._tx.to,
+            })
         }
 
         return 0
@@ -212,11 +217,11 @@ export const GasSetting1559 = memo(() => {
             if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
-                    new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas, 16).idiv(10 ** 9).toString(),
+                    formatWeiToGwei(new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas, 16)).toString(),
                 )
                 setValue(
                     'maxFeePerGas',
-                    new BigNumber(value.computedPayload._tx.maxFeePerGas, 16).idiv(10 ** 9).toString(),
+                    formatWeiToGwei(new BigNumber(value.computedPayload._tx.maxFeePerGas, 16)).toString(),
                 )
             } else {
                 setOption(1)
@@ -266,6 +271,7 @@ export const GasSetting1559 = memo(() => {
     const [maxPriorityFeePerGas, maxFeePerGas] = watch(['maxPriorityFeePerGas', 'maxFeePerGas'])
 
     const maxPriorFeeHelperText = useMemo(() => {
+        if (getGasNowLoading) return undefined
         if (new BigNumber(maxPriorityFeePerGas).isLessThan(gasNow?.slow?.suggestedMaxPriorityFeePerGas ?? 0))
             return t('wallet_transfer_error_max_priority_gas_fee_too_low')
         if (
@@ -277,9 +283,10 @@ export const GasSetting1559 = memo(() => {
         )
             return t('wallet_transfer_error_max_priority_gas_fee_too_high')
         return undefined
-    }, [maxPriorityFeePerGas, gasNow])
+    }, [maxPriorityFeePerGas, gasNow, getGasNowLoading])
 
     const maxFeeGasHelperText = useMemo(() => {
+        if (getGasNowLoading) return undefined
         if (new BigNumber(maxFeePerGas).isLessThan(gasNow?.slow?.suggestedMaxFeePerGas ?? 0))
             return t('wallet_transfer_error_max_fee_too_low')
         if (
@@ -289,7 +296,13 @@ export const GasSetting1559 = memo(() => {
         )
             return t('wallet_transfer_error_max_fee_too_high')
         return undefined
-    }, [maxFeePerGas, gasNow])
+    }, [maxFeePerGas, gasNow, getGasNowLoading])
+
+    useUpdateEffect(() => {
+        if (!value && !getValueLoading) {
+            history.replace(PopupRoutes.Wallet)
+        }
+    }, [value, getValueLoading])
 
     return (
         <>
@@ -300,7 +313,10 @@ export const GasSetting1559 = memo(() => {
                         onClick={() => setOption(index)}
                         className={selected === index ? classes.selected : undefined}>
                         <Typography className={classes.optionsTitle}>{title}</Typography>
-                        <Typography>{new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)} Gwei</Typography>
+                        <Typography component="div">
+                            {new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)}
+                            <Typography variant="inherit">Gwei</Typography>
+                        </Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {
                                 usd: formatWeiToGwei(content?.suggestedMaxFeePerGas ?? 0)

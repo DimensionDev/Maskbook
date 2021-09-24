@@ -214,9 +214,10 @@ const ContractInteraction = memo(() => {
     const { value: defaultPrices } = useAsync(async () => {
         if (networkType === NetworkType.Ethereum && !maxFeePerGas && !maxPriorityFeePerGas) {
             const response = await WalletRPC.getEstimateGasFees(chainId)
+            // Gwei to wei
             return {
-                maxPriorityFeePerGas: response?.medium.suggestedMaxPriorityFeePerGas ?? 0,
-                maxFeePerGas: response?.medium.suggestedMaxFeePerGas ?? 0,
+                maxPriorityFeePerGas: formatGweiToWei(response?.medium.suggestedMaxPriorityFeePerGas ?? 0).toString(16),
+                maxFeePerGas: formatGweiToWei(response?.medium.suggestedMaxFeePerGas ?? 0).toString(16),
             }
         } else if (!gasPrice) {
             const response = await WalletRPC.getGasPriceDictFromDeBank(
@@ -249,10 +250,9 @@ const ContractInteraction = memo(() => {
         }
     }, [request])
 
-    // gas fee
-    const gasPriceEIP1559 = maxFeePerGas
-        ? new BigNumber(maxFeePerGas, 16).idiv(10 ** 9).toString()
-        : formatGweiToWei(defaultPrices?.maxFeePerGas ?? 0)
+    // Wei
+    const gasPriceEIP1559 = new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0, 16)
+
     const gasPricePriorEIP1559 = (gasPrice as string) ?? defaultPrices?.gasPrice ?? 0
     const gasFee = new BigNumber(
         isEIP1559Supported(getChainIdFromNetworkType(networkType)) ? gasPriceEIP1559 : gasPricePriorEIP1559,

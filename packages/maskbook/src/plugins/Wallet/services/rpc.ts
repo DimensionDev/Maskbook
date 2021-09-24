@@ -79,7 +79,7 @@ export async function updateUnconfirmedRequest(payload: JsonRpcPayload) {
 
     const chunk_ = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
 
-    if (!chunk_?.requests.length) throw new Error('No requests to updated')
+    if (!chunk_?.requests.length) throw new Error('No request to update.')
 
     const requests =
         chunk_?.requests?.map((item) => {
@@ -89,7 +89,7 @@ export async function updateUnconfirmedRequest(payload: JsonRpcPayload) {
 
     const chunk = {
         ...chunk_,
-        updateAt: now,
+        updatedAt: now,
         requests,
     }
 

@@ -24,6 +24,7 @@ import { LoadingButton } from '@material-ui/lab'
 import { isEmpty } from 'lodash-es'
 import { useHistory } from 'react-router'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
+import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -85,7 +86,7 @@ export const Prior1559GasSetting = memo(() => {
     const web3 = useWeb3()
     const { t } = useI18N()
     const chainId = useChainId()
-    const { value } = useUnconfirmedRequest()
+    const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeTokenDetailed()
@@ -216,6 +217,12 @@ export const Prior1559GasSetting = memo(() => {
     )
 
     const onSubmit = handleSubmit((data) => handleConfirm(data))
+
+    useUpdateEffect(() => {
+        if (!value && !getValueLoading) {
+            history.replace(PopupRoutes.Wallet)
+        }
+    }, [value, getValueLoading])
 
     return (
         <>
