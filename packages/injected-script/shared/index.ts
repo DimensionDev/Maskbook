@@ -8,8 +8,13 @@ export interface InternalEvents {
     input: [text: string]
     /** Simulate a image upload on the activeElement on instagram */
     instagramUpload: [url: string]
-
-    change: [number[]]
+    /**
+     * Simulate an image upload event.
+     *
+     * How to use:
+     * Call this event, then invoke the file selector (SNS). It will invoke click on some input, then let's replace with the result.
+     */
+    hookInputUploadOnce: [format: string, fileName: string, file: number[]]
 }
 
 export type EventItemBeforeSerialization = [keyof InternalEvents, unknown[]]

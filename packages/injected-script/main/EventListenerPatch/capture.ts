@@ -1,7 +1,7 @@
 import { clone_into, redefineEventTargetPrototype, unwrapXRay_CPPBindingObject } from '../utils'
 import { apply, error, no_xray_Proxy, warn, xray_Map } from '../intrinsic'
 
-const CapturingEvents: Set<string> = new Set(['keyup', 'input', 'paste'] as (keyof DocumentEventMap)[])
+const CapturingEvents: Set<string> = new Set(['keyup', 'input', 'paste', 'change'] as (keyof DocumentEventMap)[])
 
 type EventListenerDescriptor = { once: boolean; passive: boolean; capture: boolean }
 const CapturedListeners = new WeakMap<Node | Document, Map<string, Map<EventListener, EventListenerDescriptor>>>()

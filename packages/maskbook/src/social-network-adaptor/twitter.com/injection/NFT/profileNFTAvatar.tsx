@@ -16,7 +16,7 @@ import {
 } from '../../utils/selector'
 import { updateAvatarImage } from '../../utils/updateAvatarImage'
 import { getTwitterId } from '../../utils/user'
-import { changeImage } from '@masknet/injected-script'
+import { hookInputUploadOnce } from '@masknet/injected-script'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -48,7 +48,13 @@ function useCurrentUserInfo(): { userId?: string; identifier?: ProfileIdentifier
 }
 
 export async function changeImageToActiveElements(image: File | Blob): Promise<void> {
-    changeImage(new Uint8Array(await blobToArrayBuffer(image)))
+    hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(await blobToArrayBuffer(image)))
+    setTimeout(() => {
+        ;(
+            document.querySelectorAll(`[accept="image/jpeg,image/png,image/webp"]`)[1]?.parentElement
+                ?.children[0] as HTMLElement
+        )?.click()
+    }, 50)
 }
 
 interface NFTAvatarInTwitterProps {}
@@ -62,8 +68,8 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent>({} as NFTAvatarEvent)
 
     const onChange = useCallback(async (token: ERC721TokenDetailed) => {
-        if (!token.info.image) return
-        const image = await downloadUrl(token.info.image)
+        // if (!token.info.image) return
+        const image = await downloadUrl('https://pbs.twimg.com/media/E__DmrWVkAAlCUd?format=jpg&name=medium')
         changeImageToActiveElements(image)
         /*
         const parent = searchProfileAvatarParentSelector()
@@ -81,6 +87,10 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
 
         updateAvatarImage(parent, token.info.image)
         */
+    }, [])
+
+    useEffect(() => {
+        document.addEventListener('upload', () => onChange({} as any))
     }, [])
 
     const handler = () => {

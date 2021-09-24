@@ -17,6 +17,6 @@ export function pasteInstagram(url: string) {
 export function inputText(text: string) {
     raw_send('input', text)
 }
-export function changeImage(image: Uint8Array) {
-    raw_send('change', Array.from(image))
+export function hookInputUploadOnce(format: string, fileName: string, image: Uint8Array) {
+    raw_send('hookInputUploadOnce', format, fileName, Array.from(image))
 }
