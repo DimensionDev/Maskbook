@@ -864,7 +864,6 @@
     "popups_wallet_gas_fee_settings_medium": "보통",
     "popups_wallet_gas_fee_settings_high": "높음",
     "popups_wallet_gas_fee_settings_usd": " ≈ ${{usd}}",
-    "popups_wallet_gas_fee_settings_or": "혹은",
     "popups_wallet_gas_fee_settings_gas_limit": "가스 한도",
     "popups_wallet_gas_fee_settings_max_priority_fee": "최대 우선 가스비",
     "popups_wallet_gas_fee_settings_max_fee": "최대 가스비",
