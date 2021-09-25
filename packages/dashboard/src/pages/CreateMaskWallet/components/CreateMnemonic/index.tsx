@@ -81,8 +81,6 @@ const CreateMnemonic = memo(() => {
         if (!name) {
             resetCallback()
             navigate(RoutePaths.CreateMaskWalletForm)
-            // cc @albert
-            // do you forget to add return?
             return
         }
 
@@ -93,6 +91,12 @@ const CreateMnemonic = memo(() => {
         )
     }, [location.search, words, resetCallback])
 
+    const onClose = useCallback(() => {
+        refreshCallback()
+        resetCallback()
+        setOpen(false)
+    }, [refreshCallback, resetCallback])
+
     return (
         <>
             <CreateMnemonicUI words={words} onRefreshWords={refreshCallback} onVerifyClick={onVerifyClick} />
@@ -102,7 +106,7 @@ const CreateMnemonic = memo(() => {
                 indexes={indexes}
                 puzzleWords={puzzleWords}
                 open={open}
-                onClose={() => setOpen(false)}
+                onClose={onClose}
                 onSubmit={onSubmit}
                 loading={walletState.loading}
                 address={walletState.value}

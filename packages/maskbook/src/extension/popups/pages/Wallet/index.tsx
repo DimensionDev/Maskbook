@@ -7,7 +7,7 @@ import { PopupRoutes } from '../../index'
 import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 import { useLocation } from 'react-router'
-import { useAsyncRetry } from 'react-use'
+import { useAsync, useAsyncRetry } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import Services from '../../../service'
 import SelectWallet from './SelectWallet'
@@ -32,8 +32,6 @@ export default function Wallet() {
     const wallet = useWallet()
     const location = useLocation()
     const history = useHistory()
-
-    // const lockStatus = useValueRef(currentMaskWalletLockedSettings)
 
     const { loading: getRequestLoading, retry } = useAsyncRetry(async () => {
         if (
@@ -71,16 +69,18 @@ export default function Wallet() {
         return WalletMessages.events.requestsUpdated.on(retry)
     }, [retry])
 
-    // useEffect(() => {
-    //     if (lockStatus) {
-    //         history.push(PopupRoutes.Unlock)
-    //     }
-    // }, [lockStatus])
+    const { loading: getLockStatusLoading } = useAsync(async () => {
+        const isLocked = await WalletRPC.isLocked()
+
+        if (isLocked) {
+            history.replace(PopupRoutes.Unlock)
+        }
+    }, [history])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletContext.Provider>
-                {getRequestLoading ? (
+                {getRequestLoading || getLockStatusLoading ? (
                     <LoadingPlaceholder />
                 ) : (
                     <Switch>
@@ -102,7 +102,7 @@ export default function Wallet() {
                         <Route path={PopupRoutes.Transfer} children={<Transfer />} exact />
                         <Route path={PopupRoutes.ContractInteraction} children={<ContractInteraction />} />
                         <Route path={PopupRoutes.SelectWallet} children={<SelectWallet />} />
-                        {/*<Route path={PopupRoutes.Unlock} children={<Unlock />} />*/}
+                        <Route path={PopupRoutes.Unlock} children={<Unlock />} />
                     </Switch>
                 )}
             </WalletContext.Provider>

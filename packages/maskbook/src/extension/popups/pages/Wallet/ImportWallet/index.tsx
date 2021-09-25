@@ -12,11 +12,12 @@ import { PopupRoutes } from '../../../index'
 import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
 import { WalletMessages, WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import { useSnackbar } from '@masknet/theme'
 import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
 import { useLocation } from 'react-router'
+import { noop } from 'lodash-es'
 
 const useStyles = makeStyles()({
     container: {
@@ -108,37 +109,29 @@ const ImportWallet = memo(() => {
     const [keyStorePassword, setKeyStorePassword] = useState('')
     const [privateKey, setPrivateKey] = useState('')
 
-    // const {
-    //     value: hasEncryptedWallet,
-    //     retry,
-    //     loading: getHasEncryptedWalletLoading,
-    // } = useAsyncRetry(async () => WalletRPC.hasEncryptedWalletStore(), [])
-    const retry = () => {}
-
-    useEffect(() => {
-        return WalletMessages.events.walletLockStatusUpdated.on(retry)
-    }, [retry])
+    const { value: hasPassword } = useAsync(WalletRPC.hasPassword, [])
 
     const schema = useMemo(() => {
-        // const passwordRule = zod
-        //     .string()
-        //     .min(8)
-        //     .max(20)
-        //     .refine((input) => /[A-Z]/.test(input), t('popups_wallet_password_uppercase_tip'))
-        //     .refine((input) => /[a-z]/.test(input), t('popups_wallet_password_lowercase_tip'))
-        //     .refine((input) => /\d/.test(input), t('popups_wallet_password_number_tip'))
-        //     .refine((input) => /[^\dA-Za-z]/.test(input), t('popups_wallet_password_special_character_tip'))
+        const passwordRule = zod
+            .string()
+            .min(8, t('popups_wallet_password_length_error'))
+            .max(20, t('popups_wallet_password_length_error'))
+            .refine(
+                (input) => [/[A-Z]/, /[a-z]/, /\d/, /[^\dA-Za-z]/].filter((regex) => regex.test(input)).length >= 2,
+                t('popups_wallet_password_dont_match'),
+            )
         const confirmRule = zod.string().min(8).max(20)
-        return zod.object({
-            name: zod.string().min(1).max(12),
-            // password: hasEncryptedWallet ? passwordRule.optional() : passwordRule,
-            // confirm: hasEncryptedWallet ? confirmRule.optional() : confirmRule,
-        })
-        // .refine((data) => hasEncryptedWallet ?? data.password === data.confirm, {
-        //     message: t('popups_wallet_password_dont_match'),
-        //     path: ['confirm'],
-        // })
-    }, [])
+        return zod
+            .object({
+                name: zod.string().min(1).max(12),
+                password: hasPassword ? passwordRule.optional() : passwordRule,
+                confirm: hasPassword ? confirmRule.optional() : confirmRule,
+            })
+            .refine((data) => hasPassword ?? data.password === data.confirm, {
+                message: t('popups_wallet_password_dont_match'),
+                path: ['confirm'],
+            })
+    }, [hasPassword])
 
     const {
         control,
@@ -149,8 +142,8 @@ const ImportWallet = memo(() => {
         resolver: zodResolver(schema),
         defaultValues: {
             name: '',
-            // password: '',
-            // confirm: '',
+            password: '',
+            confirm: '',
         },
     })
 

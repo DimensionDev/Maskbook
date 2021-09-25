@@ -11,8 +11,13 @@ export async function lockWallet() {
 }
 
 export async function unlockWallet(unverifiedPassword: string) {
-    if (!isLocked()) return
-    await password.verifyPasswordRequired(unverifiedPassword)
-    password.INTERNAL_setPassword(unverifiedPassword)
-    currentMaskWalletLockedSettings.value = false
+    if (!isLocked()) return true
+    try {
+        await password.verifyPasswordRequired(unverifiedPassword)
+        password.INTERNAL_setPassword(unverifiedPassword)
+        currentMaskWalletLockedSettings.value = false
+        return true
+    } catch {
+        return false
+    }
 }

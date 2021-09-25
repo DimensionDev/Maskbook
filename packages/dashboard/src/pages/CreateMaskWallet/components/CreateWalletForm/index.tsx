@@ -78,15 +78,11 @@ const CreateWalletForm = memo(() => {
     // }, [retry])
 
     const schema = useMemo(() => {
-        // const passwordRule = zod
-        //     .string()
-        //     .min(8)
-        //     .max(20)
-        //     .refine((input) => [/[A-Z]/, /[a-z]/, /\d/, /[^\dA-Za-z]/].filter((regex) => regex.test(input)).length >= 2)
-        // .refine((input) => /[A-Z]/.test(input), t.create_wallet_password_uppercase_tip())
-        // .refine((input) => /[a-z]/.test(input), t.create_wallet_password_lowercase_tip())
-        // .refine((input) => /\d/.test(input), t.create_wallet_password_number_tip())
-        // .refine((input) => /[^\dA-Za-z]/.test(input), t.create_wallet_password_special_tip())
+        const passwordRule = zod
+            .string()
+            .min(8)
+            .max(20)
+            .refine((input) => [/[A-Z]/, /[a-z]/, /\d/, /[^\dA-Za-z]/].filter((regex) => regex.test(input)).length >= 2)
         const confirmRule = zod.string().min(8).max(20)
         return zod.object({
             name: zod.string().min(1).max(12),
