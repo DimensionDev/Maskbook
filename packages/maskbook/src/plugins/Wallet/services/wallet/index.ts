@@ -87,7 +87,7 @@ export async function signTransaction(
         coin: api.Coin.Ethereum,
         storedKeyData: wallet.storedKeyInfo?.data,
         sign_input: {
-            amount: config.value as string ?? null,
+            amount: (config.value as string) ?? null,
             gas_limit: config.gas?.toString() ?? null,
             gas_price: config.gasPrice?.toString() ?? null,
             max_fee_per_gas: config.maxFeePerGas?.toString() ?? null,
