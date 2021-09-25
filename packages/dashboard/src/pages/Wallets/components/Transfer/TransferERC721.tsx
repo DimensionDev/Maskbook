@@ -47,6 +47,7 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
     const [gasLimit, setGasLimit] = useState<string | number>(0)
     const [offset, setOffset] = useState(0)
+    const [ownerList, setOwnerList] = useState([])
     const [id] = useState(uuid())
 
     const account = useAccount()
@@ -82,6 +83,8 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
         clearTokenDetailedOwnerList,
     } = useERC721TokenDetailedOwnerList(contract, account, offset)
     const { tokenDetailedOwnerList, loadMore } = value
+
+    const addOffset = useCallback(() => (loadMore ? setOffset(offset + 8) : void 0), [offset, loadMore])
 
     useEffect(() => {
         return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
@@ -141,7 +144,7 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
     }, [contract])
 
     return (
-        <Stack direction="row" justifyContent="center" mt={4}>
+        <Stack direction="row" justifyContent="center" mt={4} maxHeight="100%">
             <form onSubmit={handleSubmit(onTransfer)}>
                 <Stack maxWidth={640} minWidth={500} alignItems="center">
                     <Box width="100%">
@@ -185,17 +188,18 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
                             name="contract"
                         />
                     </Box>
-                    {loadingOwnerList && (
+                    {loadingOwnerList && tokenDetailedOwnerList.length === 0 && (
                         <Box pt={4}>
                             <LoadingPlaceholder />
                         </Box>
                     )}
                     <Box width="100%" mt={2}>
-                        {!loadingOwnerList && tokenDetailedOwnerList.length > 0 && (
+                        {tokenDetailedOwnerList.length > 0 && (
                             <Controller
                                 control={control}
                                 render={(field) => (
                                     <SelectNFTList
+                                        onScroll={addOffset}
                                         onSelect={(value) => setValue('tokenId', value)}
                                         list={tokenDetailedOwnerList}
                                         selected={field.field.value}
