@@ -54,7 +54,7 @@ export function validatePassword(unverifiedPassword: string) {
 }
 
 export function validatePasswordRequired(unverifiedPassword: string) {
-    if (!validatePassword(unverifiedPassword)) throw new Error('An invalid password.')
+    if (!validatePassword(unverifiedPassword)) throw new Error('Incorrect payment password')
     return true
 }
 
