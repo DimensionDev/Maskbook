@@ -43,10 +43,10 @@ export async function updateAccount(
         providerType &&
         EthereumAddress.isValid(account) &&
         providerType !== ProviderType.MaskWallet &&
-        (await hasWallet(account))
+        !(await hasWallet(account))
     ) {
         await updateWallet(account, {
-            name: resolveProviderName(providerType),
+            name: name || resolveProviderName(providerType),
         })
     }
 
