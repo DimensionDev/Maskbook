@@ -87,6 +87,8 @@
     "wallets_sell": "crwdns1659:0crwdne1659:0",
     "wallets_history": "crwdns1661:0crwdne1661:0",
     "settings": "crwdns1663:0crwdne1663:0",
+    "gas_fee": "crwdns8989:0crwdne8989:0",
+    "transfer_cost": "crwdns8991:0{{gasFee}}crwdnd8991:0{{symbol}}crwdnd8991:0{{usd}}crwdne8991:0",
     "done": "crwdns1665:0crwdne1665:0",
     "labs": "crwdns1667:0crwdne1667:0",
     "wallet_transactions_pending": "crwdns7921:0crwdne7921:0",
