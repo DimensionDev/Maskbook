@@ -33,6 +33,15 @@ export const currentMaskWalletChainIdSettings = createGlobalSettings<number>(
     },
 )
 
+export const currentMaskWalletBalanceSettings = createGlobalSettings<string>(
+    `${PLUGIN_IDENTIFIER}+maskWalletBalance`,
+    '0',
+    {
+        primary: () => i18n.t('settings_choose_eth_network'),
+        secondary: () => 'This only affects the built-in wallet.',
+    },
+)
+
 /**
  * The network type of the selected wallet
  */

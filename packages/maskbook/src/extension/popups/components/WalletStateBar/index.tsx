@@ -73,7 +73,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                     <Stack mx={1} justifyContent="center">
                         <ProviderIcon providerType={providerType} />
                     </Stack>
-                    <Box sx={{ userSelect: 'none' }}>
+                    <Box sx={{ userSelect: 'none', color: 'rgba(0, 0, 0, 0.87)' }}>
                         <Box fontSize={16}>{walletName}</Box>
                         <Box fontSize={12}>
                             <FormattedAddress address={walletAddress} size={10} />

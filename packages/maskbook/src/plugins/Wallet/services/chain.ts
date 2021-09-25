@@ -4,10 +4,12 @@ import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/ba
 import { startEffects } from '../../../utils'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 import {
+    currentAccountMaskWalletSettings,
     currentAccountSettings,
     currentBalanceSettings,
     currentBlockNumberSettings,
     currentChainIdSettings,
+    currentMaskWalletBalanceSettings,
     currentProviderSettings,
 } from '../settings'
 import { getGasPriceDict } from '../apis/debank'
@@ -31,10 +33,14 @@ export async function updateChainState() {
 
     // update chain state
     try {
-        ;[currentBlockNumberSettings.value, currentBalanceSettings.value] = await Promise.all([
-            getBlockNumber(),
-            currentAccountSettings.value ? getBalance(currentAccountSettings.value) : currentBalanceSettings.value,
-        ])
+        ;[currentBlockNumberSettings.value, currentBalanceSettings.value, currentMaskWalletBalanceSettings.value] =
+            await Promise.all([
+                getBlockNumber(),
+                currentAccountSettings.value ? getBalance(currentAccountSettings.value) : currentBalanceSettings.value,
+                currentAccountMaskWalletSettings.value
+                    ? getBalance(currentAccountMaskWalletSettings.value)
+                    : currentBalanceSettings.value,
+            ])
     } catch {
         // do nothing
     } finally {
