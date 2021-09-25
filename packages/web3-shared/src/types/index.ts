@@ -77,7 +77,7 @@ export interface Wallet {
     erc1155_token_blacklist: Set<string>
     /** yep: Mask Wallet, nope: External Wallet */
     hasStoredKeyInfo: boolean
-    /** yep: Derivable Wallet. nope: Underivable Wallet */
+    /** yep: Derivable Wallet. nope: UnDerivable Wallet */
     hasDerivationPath: boolean
 }
 
