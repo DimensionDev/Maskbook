@@ -15,6 +15,9 @@ const useStyles = makeStyles()({
         height: '100%',
         overflow: 'auto',
     },
+    tabs: {
+        width: '288px',
+    },
 })
 
 enum PersonaContentTab {
@@ -32,7 +35,10 @@ export const PersonaContent = memo<PersonaContentProps>(({ network }) => {
     return (
         <Box className={classes.container}>
             <TabContext value={String(tab)}>
-                <ButtonGroupTabList onChange={(e, v) => setTab(v)} aria-label="persona-post-contacts-button-group">
+                <ButtonGroupTabList
+                    classes={{ root: classes.tabs }}
+                    onChange={(e, v) => setTab(v)}
+                    aria-label="persona-post-contacts-button-group">
                     <Tab value={PersonaContentTab.Posts} label="Posts" />
                     <Tab value={PersonaContentTab.Contacts} label="Contacts" />
                 </ButtonGroupTabList>
