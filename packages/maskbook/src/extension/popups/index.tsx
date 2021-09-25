@@ -27,6 +27,7 @@ export enum PopupRoutes {
     RequestPermission = '/request-permission',
     ThirdPartyRequestPermission = '/3rd-request-permission',
     SignRequest = '/sign-request',
+    Swap = '/swap',
 }
 
 export function getRouteURLWithNoParam(kind: PopupRoutes) {

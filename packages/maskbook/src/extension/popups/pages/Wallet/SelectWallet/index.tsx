@@ -185,7 +185,7 @@ const SelectWallet = memo(() => {
                     onClick={handleCancel}>
                     {t('cancel')}
                 </Button>
-                <Button variant="contained" className={classes.button} onClick={handleConfirm} disabled={!selected}>
+                <Button variant="contained" className={classes.button} disabled={!selected} onClick={handleConfirm}>
                     {t('confirm')}
                 </Button>
             </div>
