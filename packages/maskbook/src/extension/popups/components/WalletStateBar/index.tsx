@@ -49,7 +49,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
         openMenu,
         children,
     }) => {
-        const t = useI18N()
+        const { t } = useI18N()
         const { classes } = useStyles()
 
         return (
@@ -76,7 +76,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                         className={classes.bar}>
                         <LoadingIcon sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
                         <Typography component="span" fontSize={12} display="inline-block">
-                            {t.popups_wallet_transactions_pending()}
+                            {t('popups_wallet_transactions_pending')}
                         </Typography>
                     </Stack>
                 )}
