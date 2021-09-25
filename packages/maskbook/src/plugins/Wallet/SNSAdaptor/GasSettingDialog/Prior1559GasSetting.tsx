@@ -1,20 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { makeStyles } from '@masknet/theme'
-import { formatWeiToEther, formatWeiToGwei, useChainId, useNativeTokenDetailed, useWeb3 } from '@masknet/web3-shared'
+import { formatWeiToEther, formatWeiToGwei, useChainId, useNativeTokenDetailed } from '@masknet/web3-shared'
 import { Typography } from '@material-ui/core'
 import { LoadingButton } from '@material-ui/lab'
 import BigNumber from 'bignumber.js'
 import { isEmpty } from 'lodash-es'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useHistory } from 'react-router'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { z as zod } from 'zod'
-import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
+import { StyledInput } from '../../../../extension/popups/components/StyledInput'
 import { useI18N } from '../../../../utils'
-import { StyledInput } from '../../../components/StyledInput'
 import { WalletRPC } from '../../../Wallet/messages'
-import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
+import { useNativeTokenPrice } from '../../hooks/useTokenPrice'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -73,11 +71,8 @@ const useStyles = makeStyles()((theme) => ({
 
 export const Prior1559GasSetting = memo(() => {
     const { classes } = useStyles()
-    const web3 = useWeb3()
     const { t } = useI18N()
     const chainId = useChainId()
-    const { value } = useUnconfirmedRequest()
-    const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeTokenDetailed()
 
@@ -153,12 +148,9 @@ export const Prior1559GasSetting = memo(() => {
         if (selected !== null) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
     }, [selected, setValue, options])
 
-    const [{ loading }, handleConfirm] = useAsyncFn(
-        async (data: zod.infer<typeof schema>) => {
-            // TODO call onConfirm
-        },
-        [value],
-    )
+    const [{ loading }, handleConfirm] = useAsyncFn(async (data: zod.infer<typeof schema>) => {
+        // TODO call onConfirm
+    }, [])
 
     const onSubmit = handleSubmit((data) => handleConfirm(data))
 
