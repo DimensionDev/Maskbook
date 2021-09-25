@@ -10,14 +10,12 @@ import { InteractionCircleIcon } from '@masknet/icons'
 import { useI18N } from '../../../../../utils'
 import { useHistory } from 'react-router'
 import { PopupRoutes } from '../../../index'
-import { PluginTraderMessages } from '../../../../../plugins/Trader/messages'
 import { PluginTransakMessages } from '../../../../../plugins/Transak/messages'
-import { useWallet } from '@masknet/web3-shared'
+import { isSameAddress, useNativeTokenDetailed, useWallet } from '@masknet/web3-shared'
 import { useAsync } from 'react-use'
 import Services from '../../../../service'
 import { compact, intersectionWith } from 'lodash-es'
 import urlcat from 'urlcat'
-import type { Coin } from '../../../../../plugins/Trader/types'
 import { ActivityList } from '../components/ActivityList'
 
 const useStyles = makeStyles()({
@@ -66,6 +64,7 @@ const TokenDetail = memo(() => {
     const { classes } = useStyles()
     const history = useHistory()
     const { currentToken } = useContainer(WalletContext)
+    const { value: nativeToken } = useNativeTokenDetailed()
 
     const { value: isActiveSocialNetwork } = useAsync(async () => {
         const urls = compact((await browser.tabs.query({ active: true })).map((tab) => tab.url))
@@ -93,24 +92,26 @@ const TokenDetail = memo(() => {
     }, [wallet?.address, isActiveSocialNetwork, currentToken])
 
     const openSwapDialog = useCallback(async () => {
-        if (isActiveSocialNetwork && currentToken) {
-            PluginTraderMessages.swapDialogUpdated.sendToVisiblePages({
-                open: true,
-                traderProps: {
-                    coin: {
-                        id: currentToken.token.address,
-                        name: currentToken.token.name,
-                        symbol: currentToken.token.symbol,
-                        contract_address: currentToken.token.address,
-                        decimals: currentToken.token.decimals,
-                    } as Coin,
-                },
-            })
-        } else {
-            const url = urlcat('next.html#', 'labs', { open: 'Swap' })
-            window.open(browser.runtime.getURL(url), 'SWAP_DIALOG', 'noopener noreferrer')
-        }
-    }, [isActiveSocialNetwork, currentToken])
+        window.open(
+            browser.runtime.getURL(
+                urlcat(
+                    'popups.html#/',
+                    PopupRoutes.Swap,
+                    !isSameAddress(nativeToken?.address, currentToken?.token.address)
+                        ? {
+                              id: currentToken?.token.address,
+                              name: currentToken?.token.name,
+                              symbol: currentToken?.token.symbol,
+                              contract_address: currentToken?.token.address,
+                              decimals: currentToken?.token.decimals,
+                          }
+                        : {},
+                ),
+            ),
+            'SWAP_DIALOG',
+            'noopener noreferrer',
+        )
+    }, [currentToken, nativeToken])
 
     if (!currentToken) return null
 

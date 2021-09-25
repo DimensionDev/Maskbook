@@ -7,7 +7,7 @@ import { Typography } from '@material-ui/core'
 import { LoadingButton } from '@material-ui/lab'
 import { EnterDashboard } from '../../../components/EnterDashboard'
 import { useI18N } from '../../../../../utils'
-import { StyledInput } from '../../../components/StyledInput'
+import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { PopupRoutes } from '../../../index'
 
@@ -67,7 +67,7 @@ const Unlock = memo(() => {
                 </div>
                 <div>
                     <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
-                    <StyledInput
+                    <PasswordField
                         value={password}
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}

@@ -412,7 +412,7 @@ importers:
       '@balancer-labs/sor': 1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd_webextension-polyfill@0.8.0
-      '@dimensiondev/kit': 0.0.0-20210913111737-84c17d7_react-router@5.2.1
+      '@dimensiondev/kit': 0.0.0-20210913111737-84c17d7_fa0cae67c57a0203deaa63f96955d7ee
       '@dimensiondev/mask-wallet-core': 0.1.0-20210924093144-ddecbc3_protobufjs@6.11.2
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/snapshot.js': 0.2.0
@@ -844,7 +844,7 @@ packages:
       bintrees: 1.0.2
       bn.js: 4.12.0
       compare-versions: 3.6.0
-      ethereumjs-abi: 0.6.6
+      ethereumjs-abi: 0.6.8
       ethereumjs-blockstream: 2.0.7
       ethereumjs-util: 5.2.1
       find-versions: 2.0.0
@@ -13964,11 +13964,11 @@ packages:
     resolution: {integrity: sha512-5qwJ5n3YhjSpE6O/WEBXCAb2nagUgyagJ6C0lGUBWC4LjKp/rRzD+pwtDJ6KCiITFEAoX4eIrWOjRy0Sylq5Hg==}
     dev: false
 
-  /ethereumjs-abi/0.6.6:
-    resolution: {integrity: sha512-w8KubDsA/+OAuqtIR9RGsMcoZ5nhM8vxwjJAJvEIY+clhxA3BHoLG3+ClYQaQhD0n3mlDt3U5rBrmSVJvI3c8A==}
+  /ethereumjs-abi/0.6.8:
+    resolution: {integrity: sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==}
     dependencies:
       bn.js: 4.12.0
-      ethereumjs-util: 5.2.1
+      ethereumjs-util: 6.2.1
     dev: false
 
   /ethereumjs-account/2.0.5:

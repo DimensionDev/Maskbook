@@ -45,6 +45,7 @@ const useStyles = makeStyles()((theme) => {
         title: {
             fontSize: 32,
             fontWeight: 'bold',
+            color: 'rgba(0, 0, 0, 0.87)',
         },
         main: {
             width: 520,

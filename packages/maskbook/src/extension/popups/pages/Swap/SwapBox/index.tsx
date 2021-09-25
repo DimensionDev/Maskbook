@@ -8,9 +8,11 @@ import { useCurrentTradeProvider } from '../../../../../plugins/Trader/trending/
 import { useAvailableTraderProviders } from '../../../../../plugins/Trader/trending/useAvailableTraderProviders'
 import { SelectTokenDialog } from '../../../../../plugins/Wallet/SNSAdaptor/SelectTokenDialog'
 import { WalletRiskWarningDialog } from '../../../../../plugins/Wallet/SNSAdaptor/RiskWarningDialog'
-import { TagType } from '../../../../../plugins/Trader/types'
+import { Coin, TagType } from '../../../../../plugins/Trader/types'
+import { useLocation } from 'react-router'
 
 export function SwapBox() {
+    const location = useLocation()
     const [currentProvider, setCurrentProvider] = useState<TradeProvider | null>(null)
     const tradeProvider = useCurrentTradeProvider()
     const tradeContext = useTradeContext(tradeProvider)
@@ -20,9 +22,21 @@ export function SwapBox() {
         return currentProvider ?? tradeProvider
     }, [currentProvider, tradeProvider])
 
+    const coin = useMemo(() => {
+        if (!location.search) return undefined
+        const params = new URLSearchParams(location.search)
+        return {
+            id: params.get('id'),
+            name: params.get('name'),
+            symbol: params.get('symbol'),
+            contract_address: params.get('contract_address'),
+            decimals: Number.parseInt(params.get('decimals') ?? '0', 10),
+        } as Coin
+    }, [location])
+
     return (
         <TradeContext.Provider value={tradeContext}>
-            <Trader />
+            <Trader coin={coin} />
             <TradeFooter
                 showDataProviderIcon={false}
                 showTradeProviderIcon
