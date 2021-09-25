@@ -77,8 +77,8 @@ export const Balance = memo<BalanceCardProps>(({ balance, chainName, onSend, onB
     return (
         <BalanceContainer>
             <Box display="flex">
-                <IconContainer>
-                    <MaskWalletIcon fontSize="inherit" />
+                <IconContainer sx={{ width: 48, height: 48 }}>
+                    <MaskWalletIcon viewBox="0 0 48 48" fontSize="inherit" />
                 </IconContainer>
                 <BalanceDisplayContainer>
                     <BalanceTitle>
