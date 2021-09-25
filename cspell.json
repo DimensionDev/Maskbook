@@ -294,8 +294,7 @@
         "Defi",
         "powah",
         "Switcher",
-        "maskwallet",
-        "acccount"
+        "maskwallet"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [
