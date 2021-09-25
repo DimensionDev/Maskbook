@@ -50,13 +50,13 @@ export async function fetchMarket(
     const ammContract = createContract(web3, ammAddress, AugurAmmFactoryABI as AbiItem[]) as AugurAmmFactory
     const sportLinkMarketFactoryContract = createContract(
         web3,
-        ammAddress,
+        basicMarket.address,
         SportsLinkMarketFactoryABI as AbiItem[],
     ) as AugurSportsLinkMarketFactoryV2
 
     const mmaMarketFactoryContract = createContract(
         web3,
-        ammAddress,
+        basicMarket.address,
         MmaLinkMarketFactoryABI as AbiItem[],
     ) as AugurMmaLinkMarketFactoryV2
 
@@ -125,8 +125,6 @@ export async function fetchMarket(
         }
     } else if (marketInfo.mmaMarket && marketInfo.mmaMarket.length !== 0) {
         const mmaMarket = marketInfo.mmaMarket[0]
-        console.log(marketInfo)
-
         const collateral = await mmaMarketFactoryContract.methods.collateral().call()
         const sportId = await mmaMarketFactoryContract.methods.sportId().call()
         const sport = getSport(sportId)

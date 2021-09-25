@@ -22,9 +22,14 @@
                 "type": "address"
             },
             {
-                "internalType": "uint256[3]",
-                "name": "_fees",
-                "type": "uint256[3]"
+                "internalType": "uint256",
+                "name": "_stakerFee",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_settlementFee",
+                "type": "uint256"
             },
             {
                 "internalType": "address",
@@ -32,9 +37,19 @@
                 "type": "address"
             },
             {
+                "internalType": "uint256",
+                "name": "_protocolFee",
+                "type": "uint256"
+            },
+            {
                 "internalType": "address",
                 "name": "_linkNode",
                 "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_sportId",
+                "type": "uint256"
             }
         ],
         "stateMutability": "nonpayable",
@@ -61,31 +76,60 @@
                 "internalType": "uint256",
                 "name": "id",
                 "type": "uint256"
-            }
-        ],
-        "name": "MarketActivated",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "creator",
+                "type": "address"
+            },
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "id",
+                "name": "endTime",
                 "type": "uint256"
             },
             {
                 "indexed": false,
-                "internalType": "string[]",
-                "name": "names",
-                "type": "string[]"
+                "internalType": "enum MMALinkMarketFactory.MarketType",
+                "name": "marketType",
+                "type": "uint8"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "eventId",
+                "type": "uint256"
             },
             {
                 "indexed": false,
-                "internalType": "uint256[]",
-                "name": "initialOdds",
-                "type": "uint256[]"
+                "internalType": "string",
+                "name": "homeFighterName",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "homeFighterId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "awayFighterName",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "awayFighterId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "estimatedStartTime",
+                "type": "uint256"
             }
         ],
         "name": "MarketCreated",
@@ -105,21 +149,92 @@
                 "internalType": "address",
                 "name": "winner",
                 "type": "address"
+            }
+        ],
+        "name": "MarketResolved",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "protocol",
+                "type": "address"
+            }
+        ],
+        "name": "ProtocolChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "fee",
+                "type": "uint256"
+            }
+        ],
+        "name": "ProtocolFeeChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "protocol",
+                "type": "address"
             },
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "winnerIndex",
+                "name": "amount",
                 "type": "uint256"
+            }
+        ],
+        "name": "ProtocolFeeClaimed",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "fee",
+                "type": "uint256"
+            }
+        ],
+        "name": "SettlementFeeChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "settlementAddress",
+                "type": "address"
             },
             {
                 "indexed": false,
-                "internalType": "string",
-                "name": "winnerName",
-                "type": "string"
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "receiver",
+                "type": "address"
             }
         ],
-        "name": "MarketResolved",
+        "name": "SettlementFeeClaimed",
         "type": "event"
     },
     {
@@ -178,53 +293,11 @@
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256[]",
-                "name": "markets",
-                "type": "uint256[]"
-            },
-            {
-                "indexed": false,
-                "internalType": "int256[]",
-                "name": "lines",
-                "type": "int256[]"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "homeTeamId",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "awayTeamId",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "homeTeamName",
-                "type": "string"
-            },
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "awayTeamName",
-                "type": "string"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "estimatedStartTime",
+                "name": "fee",
                 "type": "uint256"
             }
         ],
-        "name": "SportsEventCreated",
+        "name": "StakerFeeChanged",
         "type": "event"
     },
     {
@@ -241,18 +314,6 @@
                 "internalType": "address",
                 "name": "winningOutcome",
                 "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "winningIndex",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "winningName",
-                "type": "string"
             },
             {
                 "indexed": false,
@@ -483,22 +544,22 @@
             },
             {
                 "internalType": "string",
-                "name": "_homeTeamName",
+                "name": "_homeFighterName",
                 "type": "string"
             },
             {
                 "internalType": "uint256",
-                "name": "_homeTeamId",
+                "name": "_homeFighterId",
                 "type": "uint256"
             },
             {
                 "internalType": "string",
-                "name": "_awayTeamName",
+                "name": "_awayFighterName",
                 "type": "string"
             },
             {
                 "internalType": "uint256",
-                "name": "_awayTeamId",
+                "name": "_awayFighterId",
                 "type": "uint256"
             },
             {
@@ -512,25 +573,40 @@
                 "type": "int256[2]"
             }
         ],
-        "name": "createEvent",
-        "outputs": [
-            {
-                "internalType": "uint256[]",
-                "name": "_marketIds",
-                "type": "uint256[]"
-            }
-        ],
+        "name": "createMarket",
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "eventCount",
-        "outputs": [
+        "inputs": [
             {
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            }
+        ],
+        "name": "events",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "homeFighterId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "awayFighterId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "startTime",
+                "type": "uint256"
+            },
+            {
+                "internalType": "enum MMALinkMarketFactory.EventStatus",
+                "name": "eventStatus",
+                "type": "uint8"
             }
         ],
         "stateMutability": "view",
@@ -557,12 +633,39 @@
                 "type": "uint256"
             }
         ],
-        "name": "getEventMarkets",
+        "name": "getEvent",
         "outputs": [
             {
-                "internalType": "uint256[]",
-                "name": "_markets",
-                "type": "uint256[]"
+                "components": [
+                    {
+                        "internalType": "uint256[1]",
+                        "name": "markets",
+                        "type": "uint256[1]"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "homeFighterId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "awayFighterId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "startTime",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "enum MMALinkMarketFactory.EventStatus",
+                        "name": "eventStatus",
+                        "type": "uint8"
+                    }
+                ],
+                "internalType": "struct MMALinkMarketFactory.EventDetails",
+                "name": "_event",
+                "type": "tuple"
             }
         ],
         "stateMutability": "view",
@@ -591,14 +694,14 @@
                         "type": "address[]"
                     },
                     {
+                        "internalType": "uint256",
+                        "name": "endTime",
+                        "type": "uint256"
+                    },
+                    {
                         "internalType": "contract OwnedERC20",
                         "name": "winner",
                         "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "winnerIndex",
-                        "type": "uint256"
                     },
                     {
                         "internalType": "uint256",
@@ -624,14 +727,70 @@
                         "internalType": "uint256[]",
                         "name": "initialOdds",
                         "type": "uint256[]"
-                    },
-                    {
-                        "internalType": "bool",
-                        "name": "active",
-                        "type": "bool"
                     }
                 ],
-                "internalType": "struct AbstractMarketFactoryV3.Market",
+                "internalType": "struct AbstractMarketFactoryV2.Market",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_marketId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getMarketDetails",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "eventId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "homeFighterName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "homeFighterId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "awayFighterName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "awayFighterId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "estimatedStartTime",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "enum MMALinkMarketFactory.MarketType",
+                        "name": "marketType",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "enum MMALinkMarketFactory.EventStatus",
+                        "name": "eventStatus",
+                        "type": "uint8"
+                    }
+                ],
+                "internalType": "struct MMALinkMarketFactory.MarketDetails",
                 "name": "",
                 "type": "tuple"
             }
@@ -647,166 +806,6 @@
                 "internalType": "address",
                 "name": "",
                 "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_eventId",
-                "type": "uint256"
-            }
-        ],
-        "name": "getSportsEvent",
-        "outputs": [
-            {
-                "components": [
-                    {
-                        "internalType": "enum Sport.SportsEventStatus",
-                        "name": "status",
-                        "type": "uint8"
-                    },
-                    {
-                        "internalType": "uint256[]",
-                        "name": "markets",
-                        "type": "uint256[]"
-                    },
-                    {
-                        "internalType": "int256[]",
-                        "name": "lines",
-                        "type": "int256[]"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "estimatedStartTime",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "homeTeamId",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "awayTeamId",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "homeTeamName",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "awayTeamName",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "homeScore",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "awayScore",
-                        "type": "uint256"
-                    }
-                ],
-                "internalType": "struct Sport.SportsEvent",
-                "name": "",
-                "type": "tuple"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_index",
-                "type": "uint256"
-            }
-        ],
-        "name": "getSportsEventByIndex",
-        "outputs": [
-            {
-                "components": [
-                    {
-                        "internalType": "enum Sport.SportsEventStatus",
-                        "name": "status",
-                        "type": "uint8"
-                    },
-                    {
-                        "internalType": "uint256[]",
-                        "name": "markets",
-                        "type": "uint256[]"
-                    },
-                    {
-                        "internalType": "int256[]",
-                        "name": "lines",
-                        "type": "int256[]"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "estimatedStartTime",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "homeTeamId",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "awayTeamId",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "homeTeamName",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "awayTeamName",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "homeScore",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "awayScore",
-                        "type": "uint256"
-                    }
-                ],
-                "internalType": "struct Sport.SportsEvent",
-                "name": "_event",
-                "type": "tuple"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_eventId",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getVersion",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
             }
         ],
         "stateMutability": "view",
@@ -852,7 +851,7 @@
                 "type": "uint256"
             }
         ],
-        "name": "listOfSportsEvents",
+        "name": "listOfEvents",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -866,6 +865,19 @@
     {
         "inputs": [],
         "name": "listResolvableEvents",
+        "outputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "listUnresolvedMarkets",
         "outputs": [
             {
                 "internalType": "uint256[]",
@@ -942,33 +954,13 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_eventId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "enum Sport.SportsEventStatus",
-                "name": "_eventStatus",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_homeTeamId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_awayTeamId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_whoWon",
+                "name": "",
                 "type": "uint256"
             }
         ],
-        "name": "resolveEvent",
+        "name": "resolveMarket",
         "outputs": [],
-        "stateMutability": "nonpayable",
+        "stateMutability": "pure",
         "type": "function"
     },
     {
@@ -1068,53 +1060,12 @@
         "type": "function"
     },
     {
-        "inputs": [
+        "inputs": [],
+        "name": "sportId",
+        "outputs": [
             {
                 "internalType": "uint256",
                 "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "sportsEvents",
-        "outputs": [
-            {
-                "internalType": "enum Sport.SportsEventStatus",
-                "name": "status",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "estimatedStartTime",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "homeTeamId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "awayTeamId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "string",
-                "name": "homeTeamName",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "awayTeamName",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "homeScore",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "awayScore",
                 "type": "uint256"
             }
         ],
@@ -1150,6 +1101,39 @@
                 "type": "bool"
             }
         ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_eventId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "enum MMALinkMarketFactory.EventStatus",
+                "name": "_eventStatus",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_homeFighterId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_awayFighterId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "enum MMALinkMarketFactory.WhoWon",
+                "name": "_whoWon",
+                "type": "uint8"
+            }
+        ],
+        "name": "trustedResolveMarkets",
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     }
