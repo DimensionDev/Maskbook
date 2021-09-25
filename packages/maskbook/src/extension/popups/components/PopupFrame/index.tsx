@@ -15,7 +15,6 @@ function GlobalCss() {
                 body: {
                     overflowX: 'hidden',
                     margin: '0 auto !important',
-                    width: 350,
                     maxWidth: '100%',
                     '&::-webkit-scrollbar': {
                         display: 'none',
@@ -28,7 +27,7 @@ function GlobalCss() {
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        height: 474,
+        minHeight: 494,
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
@@ -87,7 +86,12 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     })
 
     const excludePersonaPath = useRouteMatch({
-        path: [PopupRoutes.ContractInteraction, PopupRoutes.WalletSignRequest],
+        path: [
+            PopupRoutes.ContractInteraction,
+            PopupRoutes.WalletSignRequest,
+            PopupRoutes.GasSetting,
+            PopupRoutes.SelectWallet,
+        ],
         exact: true,
     })
 
