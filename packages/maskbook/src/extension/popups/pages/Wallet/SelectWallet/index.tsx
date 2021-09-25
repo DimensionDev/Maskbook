@@ -112,7 +112,7 @@ const SelectWallet = memo(() => {
     const { classes } = useStyles()
     const location = useLocation()
     const wallet = useAccount()
-    const wallets = useWallets()
+    const wallets = useWallets(ProviderType.MaskWallet)
 
     const [selected, setSelected] = useState(wallet)
     const [, copyToClipboard] = useCopyToClipboard()
