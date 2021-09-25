@@ -7,6 +7,8 @@ import { EnterDashboard } from '../../../../components/EnterDashboard'
 import { NetworkSelector } from '../../../../components/NetworkSelector'
 import { PopupRoutes } from '../../../../index'
 import { useI18N } from '../../../../../../utils'
+import { useHasPassword } from '../../../../hook/useHasPassword'
+import Services from '../../../../../service'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -65,12 +67,16 @@ const useStyles = makeStyles()((theme) => ({
 export const WalletStartUp = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const onEnterCreateWallet = useCallback(() => {
-        browser.tabs.create({
+
+    const onEnterCreateWallet = useCallback(async () => {
+        await browser.tabs.create({
             active: true,
             url: browser.runtime.getURL('/next.html#/create-mask-wallet'),
         })
+        await Services.Helper.removePopupWindow()
     }, [])
+
+    const { hasPassword, loading } = useHasPassword()
 
     return (
         <Box className={classes.container}>
@@ -87,12 +93,16 @@ export const WalletStartUp = memo(() => {
                     <MaskWalletIcon sx={{ fontSize: 20 }} />
                     <Typography className={classes.itemTitle}>{t('wallet_new')}</Typography>
                 </Box>
-                <Link to={PopupRoutes.ImportWallet} style={{ textDecoration: 'none' }}>
-                    <Box className={classes.item}>
-                        <ImportWalletIcon sx={{ fontSize: 20 }} />
-                        <Typography className={classes.itemTitle}>{t('plugin_wallet_import_wallet')}</Typography>
-                    </Box>
-                </Link>
+                {!loading ? (
+                    <Link
+                        to={!hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ImportWallet}
+                        style={{ textDecoration: 'none' }}>
+                        <Box className={classes.item}>
+                            <ImportWalletIcon sx={{ fontSize: 20 }} />
+                            <Typography className={classes.itemTitle}>{t('plugin_wallet_import_wallet')}</Typography>
+                        </Box>
+                    </Link>
+                ) : null}
             </Box>
             <EnterDashboard />
         </Box>

@@ -19,6 +19,7 @@ export enum PopupRoutes {
     ContractInteraction = '/wallet/contract-interaction',
     Unlock = '/wallet/unlock',
     Transfer = '/wallet/transfer',
+    SetPaymentPassword = '/wallet/password',
     Personas = '/personas',
     Logout = '/personas/logout',
     PersonaRename = '/personas/rename',

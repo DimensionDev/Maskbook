@@ -79,8 +79,6 @@ const CreateWalletForm = memo(() => {
         WalletMessages.events.walletLockStatusUpdated.on(retry)
     }, [retry])
 
-    console.log(hasPassword)
-
     const schema = useMemo(() => {
         const passwordRule = zod
             .string()
