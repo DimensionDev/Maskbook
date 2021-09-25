@@ -91,7 +91,11 @@ export async function decryptSecret(password: string) {
     const secret = await getSecret()
     if (!secret) throw new Error('Failed to decrypt secret.')
 
-    const key = await deriveKey(secret.iv, password)
-    const primaryKey = await unwrapKey(secret.key, key)
-    return decodeText(await decrypt(secret.encrypted, primaryKey, secret.iv))
+    try {
+        const key = await deriveKey(secret.iv, password)
+        const primaryKey = await unwrapKey(secret.key, key)
+        return decodeText(await decrypt(secret.encrypted, primaryKey, secret.iv))
+    } catch {
+        return ''
+    }
 }
