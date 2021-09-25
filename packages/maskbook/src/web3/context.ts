@@ -1,6 +1,6 @@
 import { noop, pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderType } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, ProviderType, Wallet, Web3ProviderType } from '@masknet/web3-shared'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
@@ -26,14 +26,8 @@ import Services from '../extension/service'
 function createWeb3Context(disablePopup = false): Web3ProviderType {
     const Web3Provider = createExternalProvider(disablePopup)
     return {
-        provider: {
-            getCurrentValue: () => Web3Provider,
-            subscribe: () => noop,
-        },
-        allowTestnet: {
-            getCurrentValue: () => Flags.wallet_allow_testnet,
-            subscribe: () => noop,
-        },
+        provider: createStaticSubscription(Web3Provider),
+        allowTestnet: createStaticSubscription(Flags.wallet_allow_testnet),
         chainId: createSubscriptionFromSettings(
             disablePopup ? currentMaskWalletChainIdSettings : currentChainIdSettings,
         ),
@@ -47,7 +41,9 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
         etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
         wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
-        providerType: createSubscriptionFromSettings(currentProviderSettings),
+        providerType: disablePopup
+            ? createStaticSubscription(ProviderType.MaskWallet)
+            : createSubscriptionFromSettings(currentProviderSettings),
         networkType: createSubscriptionFromSettings(
             disablePopup ? currentMaskWalletNetworkSettings : currentNetworkSettings,
         ),
@@ -126,6 +122,13 @@ function createSubscriptionFromSettings<T>(settings: InternalSettings<T>): Subsc
             const b = settings.addListener(() => trigger())
             return () => void [a(), b()]
         },
+    }
+}
+
+function createStaticSubscription<T>(val: T) {
+    return {
+        getCurrentValue: () => val,
+        subscribe: () => noop,
     }
 }
 function createSubscriptionFromAsync<T>(
