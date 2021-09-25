@@ -8,13 +8,10 @@ import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { NFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { createReactRootShadowed, downloadUrl, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
-import {
-    searchProfileAvatarSelector,
-    searchProfileCloseSelector,
-    searchProfileSaveSelector,
-} from '../../utils/selector'
+import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
+import { getAvatarId } from '../../utils/user'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -70,7 +67,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         setAvatarEvent({
             ...token,
             userId: identity.identifier.userId,
-            avatarId: 'unknown',
+            avatarId: getAvatarId(identity.avatar ?? ''),
         })
     }, [])
 
@@ -87,14 +84,6 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         profileSave.addEventListener('click', handler)
         return () => profileSave.removeEventListener('click', handler)
     }, [handler])
-
-    useEffect(() => {
-        const closeNode = searchProfileCloseSelector().evaluate()
-        if (!closeNode) return
-        closeNode.addEventListener('click', () => {})
-
-        return () => closeNode.removeEventListener('click', () => {})
-    })
 
     if (identity.identifier.userId !== useInfo?.userId) return null
     if (!Flags.nft_avatar_enabled) return null

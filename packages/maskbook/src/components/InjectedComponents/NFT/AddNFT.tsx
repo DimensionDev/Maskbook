@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, useAccount } from '@masknet/web3-shared'
+import { ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared'
 import { Button, DialogContent, Typography } from '@material-ui/core'
 import { useCallback, useState } from 'react'
 import { InputBox } from '../../../extension/options-page/DashboardComponents/InputBox'
@@ -48,9 +48,13 @@ export function AddNFT(props: AddNFTProps) {
             return
         }
 
-        createNFT(account, address, tokenId)
-            .then((token) => {
-                onAddClick(token)
+        createNFT(address, tokenId)
+            .then((value) => {
+                if (!isSameAddress(value.account, account)) {
+                    setMessage('This NFT does not exist or does not belong to you.')
+                    return
+                }
+                onAddClick(value.token)
                 handleClose()
             })
             .catch((error) => setMessage(error.message))

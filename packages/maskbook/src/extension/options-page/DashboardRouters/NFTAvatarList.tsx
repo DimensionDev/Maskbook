@@ -1,6 +1,6 @@
 import { FormattedAddress } from '@masknet/shared'
 import { makeStyles, useSnackbar } from '@masknet/theme'
-import { resolveOpenSeaLink, useAccount } from '@masknet/web3-shared'
+import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import {
     Box,
     Button,
@@ -106,15 +106,14 @@ const useStyles = makeStyles()((theme) => ({
 function NFTAvatarWhitelist() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const account = useAccount()
     const { value: _avatars, loading } = useNFTAvatars()
     const { enqueueSnackbar } = useSnackbar()
     const [avatars, setAvatars] = useState<AvatarMetaDB[]>([])
 
     const onAdd = useCallback(
         async (userId: string, avatarId: string, address: string, tokenId: string) => {
-            const nft = await createNFT(account, address, tokenId)
-            const avatar = await saveNFTAvatar(userId, avatarId, nft)
+            const { token } = await createNFT(address, tokenId)
+            const avatar = await saveNFTAvatar(userId, avatarId, token)
 
             enqueueSnackbar('Add Success', { variant: 'success' })
             setAvatars((v) => [...v, avatar])

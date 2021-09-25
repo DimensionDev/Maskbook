@@ -1,4 +1,4 @@
-import { ChainId, createERC721Token, EthereumTokenType, isSameAddress } from '@masknet/web3-shared'
+import { ChainId, createERC721Token, EthereumTokenType } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { head } from 'lodash-es'
 import type { Order } from 'opensea-js/lib/types'
@@ -31,10 +31,9 @@ export async function getNFT(address: string, tokenId: string) {
     }
 }
 
-export async function createNFT(account: string, address: string, tokenId: string) {
+export async function createNFT(address: string, tokenId: string) {
     const asset = await PluginCollectibleRPC.getAsset(address, tokenId, ChainId.Mainnet)
-    if (!isSameAddress(asset.owner.address, account)) throw new Error('TokenId does not belong to account')
-    return createERC721Token(
+    const token = createERC721Token(
         {
             chainId: ChainId.Mainnet,
             type: EthereumTokenType.ERC721,
@@ -45,4 +44,5 @@ export async function createNFT(account: string, address: string, tokenId: strin
         { name: asset.name, description: asset.description, image: asset.imageUrl ?? asset.imagePreviewUrl ?? '' },
         tokenId,
     )
+    return { account: asset.owner.address, token }
 }

@@ -170,20 +170,26 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 ? LoadStatus
                                 : error || collectibles_.length === 0
                                 ? Retry
-                                : collectibles_.map((token: ERC721TokenDetailed, i) => (
-                                      <div
-                                          className={classNames(
-                                              classes.imgBackground,
-                                              selectedToken === token ? classes.selected : '',
-                                          )}>
-                                          <img
-                                              key={i}
-                                              onClick={() => setSelectedToken(token)}
-                                              src={token.info.image}
-                                              className={classes.image}
-                                          />
-                                      </div>
-                                  ))}
+                                : collectibles_
+                                      .filter(
+                                          (token: ERC721TokenDetailed) =>
+                                              token.info.image &&
+                                              !token.info.image?.match(/\.(mp4|webm|mov|ogg|mp3|wav)$/i),
+                                      )
+                                      .map((token: ERC721TokenDetailed, i) => (
+                                          <div
+                                              className={classNames(
+                                                  classes.imgBackground,
+                                                  selectedToken === token ? classes.selected : '',
+                                              )}
+                                              key={i}>
+                                              <img
+                                                  onClick={() => setSelectedToken(token)}
+                                                  src={token.info.image}
+                                                  className={classes.image}
+                                              />
+                                          </div>
+                                      ))}
                         </Box>
 
                         {!(page === 0 && collectibles_.length === 0) ? (
