@@ -77,7 +77,7 @@ const CreateMnemonic = memo(() => {
 
     const [walletState, onSubmit] = useAsyncFn(async () => {
         const name = new URLSearchParams(location.search).get('name')
-        // if the name isn't exist, navigate to form page
+        // if the name doesn't exist, navigate to form page
         if (!name) {
             resetCallback()
             navigate(RoutePaths.CreateMaskWalletForm)
