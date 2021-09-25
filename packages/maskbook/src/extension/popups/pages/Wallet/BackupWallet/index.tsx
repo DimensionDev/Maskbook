@@ -8,7 +8,7 @@ import { useWallet } from '@masknet/web3-shared'
 import { useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
-import PasswordField from '@masknet/dashboard/dist/src/components/PasswordField'
+import { PasswordField } from '../../../components/PasswordField'
 
 const useStyles = makeStyles()({
     header: {
