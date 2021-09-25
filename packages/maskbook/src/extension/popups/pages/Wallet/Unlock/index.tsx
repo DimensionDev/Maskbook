@@ -71,6 +71,7 @@ const Unlock = memo(() => {
                         value={password}
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
+                        error={unlocked.value}
                         helperText={unlocked.value ? t('popups_wallet_unlock_error_password') : ''}
                     />
                 </div>
