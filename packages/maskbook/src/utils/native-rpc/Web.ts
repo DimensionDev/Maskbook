@@ -182,11 +182,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return encodeArrayBuffer(encodeText(JSON.stringify(file)))
     },
     persona_backupPrivateKey: async ({ identifier }) => {
-        const privateKey = await Services.Identity.backupPersonaPrivateKey(stringToPersonaIdentifier(identifier))
-        if (privateKey) {
-            return JSON.stringify(privateKey)
-        }
-
+        const privateKey = await Services.Identity.exportPersonaPrivateKey(stringToPersonaIdentifier(identifier))
         return privateKey
     },
     profile_queryProfiles: async ({ network }) => {
