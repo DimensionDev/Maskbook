@@ -3,13 +3,14 @@ import * as database from './database'
 
 let password = ''
 
-export function INTERNAL_getPassword() {
-    return password
+export async function INTERNAL_getPassword() {
+    return password ? database.decryptSecret(password) : ''
 }
 
-export function INTERNAL_getPasswordRequired() {
-    if (!password) throw new Error('No password set yet or expired.')
-    return password
+export async function INTERNAL_getPasswordRequired() {
+    const password_ = await INTERNAL_getPassword()
+    if (!password_) throw new Error('No password set yet or expired.')
+    return password_
 }
 
 export function INTERNAL_setPassword(newPassword: string) {
@@ -18,6 +19,7 @@ export function INTERNAL_setPassword(newPassword: string) {
 }
 
 export async function setPassword(newPassword: string) {
+    validatePasswordRequired(newPassword)
     await database.encryptSecret(newPassword)
     INTERNAL_setPassword(newPassword)
 }
@@ -39,7 +41,7 @@ export async function verifyPasswordRequired(unverifiedPassword: string) {
 
 export async function changePassword(newPassword: string) {
     validatePasswordRequired(newPassword)
-    const oldPassword = INTERNAL_getPasswordRequired()
+    const oldPassword = await INTERNAL_getPasswordRequired()
     if (oldPassword === newPassword) throw new Error('Failed to set the same password as the old one.')
     await database.updateSecret(oldPassword, newPassword)
 }

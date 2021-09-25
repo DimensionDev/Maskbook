@@ -10,7 +10,7 @@ import { PersonaRecordToJSONFormat } from '../../../utils/type-transform/BackupF
 import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
 import { Identifier, PersonaIdentifier, ProfileIdentifier } from '../../../database/type'
-import { getWallets } from '../../../plugins/Wallet/services'
+import { exportMnemonic, exportPrivateKey, getWallets } from '../../../plugins/Wallet/services'
 import { WalletRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { activatedPluginsWorker } from '@masknet/plugin-infra'
 import { timeout } from '@masknet/shared'
@@ -65,6 +65,10 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         userGroups: [],
     }
     if (Object.keys(plugins).length) file.plugin = plugins
+
+    console.log('DEBUG: generateBackupJSON')
+    console.log(file)
+
     return file
 
     async function backupAllPosts() {
@@ -101,8 +105,21 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     }
 
     async function backupAllWallets() {
-        const wallets_ = (await getWallets(ProviderType.MaskWallet)).map(WalletRecordToJSONFormat)
-        wallets.push(...wallets_)
+        const allSettled = await Promise.allSettled(
+            (
+                await getWallets(ProviderType.MaskWallet)
+            ).map(async (wallet) => {
+                return {
+                    ...wallet,
+                    mnemonic: wallet.derivationPath
+                        ? await exportMnemonic(wallet.address)
+                        : await exportPrivateKey(wallet.address),
+                }
+            }),
+        )
+        const wallets_ = allSettled.map((x) => (x.status === 'fulfilled' ? WalletRecordToJSONFormat(x.value) : null))
+        if (wallets_.some((x) => !x)) throw new Error('Failed to backup wallets.')
+        wallets.push(...(wallets_ as BackupJSONFileLatest['wallets']))
     }
 
     async function backupAllPlugins() {

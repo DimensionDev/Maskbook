@@ -75,8 +75,6 @@ export interface BackupJSONFileVersion2 {
         passphrase?: string
         publicKey?: EC_Public_JsonWebKey
         privateKey?: EC_Private_JsonWebKey
-        derivationPath?: string
-        storedKeyInfo?: api.IStoredKeyInfo
         mnemonic?: {
             words: string
             parameter: { path: string; withPassword: boolean }

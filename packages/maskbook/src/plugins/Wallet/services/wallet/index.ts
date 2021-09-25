@@ -17,9 +17,6 @@ function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     return [...splitted.slice(0, -1), index + 1].join('/')
 }
 
-// sdk
-export { importMnemonic, importPrivateKey } from './maskwallet'
-
 // db
 export { getWallet, getWallets, removeWallet, updateWallet, hasWallet } from './database/wallet'
 
@@ -79,7 +76,7 @@ export async function signTransaction(
         maxPriorityFeePerGas?: string
     },
 ) {
-    const password_ = password.INTERNAL_getPasswordRequired()
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const wallet = await database.getWalletRequired(address)
     return sdk.signTransaction({
         address,
@@ -100,7 +97,7 @@ export async function signTransaction(
 }
 
 export async function deriveWallet(name: string) {
-    const password_ = password.INTERNAL_getPasswordRequired()
+    const password_ = await password.INTERNAL_getPasswordRequired()
 
     // derive wallet base on the primary wallet
     const primaryWallet = await getWalletPrimary()
@@ -161,9 +158,9 @@ export async function renameWallet(address: string, name: string) {
     })
 }
 
-export async function exportMnemonic(address: string, unverifiedPassword: string) {
-    await password.verifyPasswordRequired(unverifiedPassword)
-    const password_ = password.INTERNAL_getPasswordRequired()
+export async function exportMnemonic(address: string, unverifiedPassword?: string) {
+    if (unverifiedPassword) await password.verifyPasswordRequired(unverifiedPassword)
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const wallet = await database.getWalletRequired(address)
     if (wallet.storedKeyInfo?.type !== api.StoredKeyType.Mnemonic)
         throw new Error(`Cannot export mnemonic words of ${address}.`)
@@ -175,9 +172,9 @@ export async function exportMnemonic(address: string, unverifiedPassword: string
     return exported.mnemonic
 }
 
-export async function exportPrivateKey(address: string, unverifiedPassword: string) {
-    await password.verifyPasswordRequired(unverifiedPassword)
-    const password_ = password.INTERNAL_getPasswordRequired()
+export async function exportPrivateKey(address: string, unverifiedPassword?: string) {
+    if (unverifiedPassword) await password.verifyPasswordRequired(unverifiedPassword)
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const wallet = await database.getWalletRequired(address)
     if (typeof wallet.storedKeyInfo?.type === 'undefined' || wallet.storedKeyInfo?.type === null)
         throw new Error(`Cannot export private key of ${address}.`)
@@ -206,9 +203,9 @@ export async function exportPrivateKey(address: string, unverifiedPassword: stri
     }
 }
 
-export async function exportKeyStoreJSON(address: string, unverifiedPassword: string) {
-    await password.verifyPasswordRequired(unverifiedPassword)
-    const password_ = password.INTERNAL_getPasswordRequired()
+export async function exportKeyStoreJSON(address: string, unverifiedPassword?: string) {
+    if (unverifiedPassword) await password.verifyPasswordRequired(unverifiedPassword)
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const wallet = await database.getWalletRequired(address)
     if (typeof wallet.storedKeyInfo?.type === 'undefined' || wallet.storedKeyInfo?.type === null)
         throw new Error(`Cannot export keystore JSON of ${address}.`)
@@ -242,7 +239,7 @@ export async function recoverWalletFromMnemonic(
     mnemonic: string,
     derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
 ) {
-    const password_ = password.INTERNAL_getPasswordRequired()
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const imported = await sdk.importMnemonic({
         mnemonic,
         password: password_,
@@ -271,7 +268,7 @@ export async function recoverWalletFromMnemonic(
 }
 
 export async function recoverWalletFromPrivateKey(name: string, privateKey: string) {
-    const password_ = password.INTERNAL_getPasswordRequired()
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const imported = await sdk.importPrivateKey({
         coin: api.Coin.Ethereum,
         name,
@@ -291,7 +288,7 @@ export async function recoverWalletFromPrivateKey(name: string, privateKey: stri
 }
 
 export async function recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string) {
-    const password_ = password.INTERNAL_getPasswordRequired()
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const imported = await sdk.importJSON({
         coin: api.Coin.Ethereum,
         json,
