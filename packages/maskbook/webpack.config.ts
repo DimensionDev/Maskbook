@@ -373,7 +373,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
         return emitFile({
             name: 'manifest.json',
             content() {
-                const manifest = require('./src/manifest.json')
+                const manifest = { ...require('./src/manifest.json') }
                 if (target.Chromium) modifiers.chromium(manifest)
                 else if (target.Firefox) modifiers.firefox(manifest)
                 else if (target.Android) modifiers.geckoview(manifest)
