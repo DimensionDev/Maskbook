@@ -2,7 +2,7 @@ import { currentMaskWalletLockedSettings } from '../../settings'
 import * as password from './password'
 
 export async function isLocked() {
-    return (await password.hasPassword()) && !password.INTERNAL_getPassword()
+    return (await password.hasPassword()) && !(await password.INTERNAL_getPassword())
 }
 
 export async function lockWallet() {

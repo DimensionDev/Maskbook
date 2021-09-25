@@ -10,7 +10,7 @@ import type { WalletRecord } from '../type'
 export async function getWallet(address = currentAccountMaskWalletSettings.value) {
     if (!address) return null
     if (!EthereumAddress.isValid(address)) throw new Error('Not a valid address.')
-    return PluginDB.get('wallet', formatEthereumAddress(address))
+    return (await PluginDB.get('wallet', formatEthereumAddress(address))) ?? null
 }
 
 export async function getWalletRequired(address: string) {
@@ -115,10 +115,6 @@ export async function updateWallet(
     >,
 ) {
     const wallet = await getWallet(address)
-
-    // overwrite with storedKeyInfo is not allowed
-    if (wallet?.storedKeyInfo?.data) throw new Error('Failed to update wallet.')
-
     const now = new Date()
     const address_ = formatEthereumAddress(address)
     await PluginDB.add({
