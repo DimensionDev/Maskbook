@@ -139,6 +139,7 @@ async function getERC721TokensPaged(index: number, count: number, query?: string
     return PluginServices.Wallet.getERC721TokensPaged(index, count, query)
 }
 
+// double check
 function createSubscriptionFromAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,

@@ -6,7 +6,7 @@ import { useContext } from 'react'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         height: '220px',
@@ -45,9 +45,10 @@ const useStyles = makeStyles()({
         height: '100%',
         top: 0,
         left: 0,
-        background: 'rgba(255,255,255,.5)',
+        background: theme.palette.mode === 'dark' ? 'rgba(0,0,0,.4)' : 'rgba(255,255,255,.5)',
+        borderRadius: '8px',
     },
-})
+}))
 export interface BackupModeSelectDialogProps {
     open: boolean
     onClose(): void

@@ -549,3 +549,9 @@ export interface AddressName {
     resolvedAddress?: string
 }
 //#endregion
+
+export enum GasOption {
+    Slow = 'slow',
+    Medium = 'medium',
+    High = 'high',
+}

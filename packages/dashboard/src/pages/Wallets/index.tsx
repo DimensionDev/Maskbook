@@ -53,7 +53,7 @@ function Wallets() {
             title={wallets.length === 0 ? t.create_wallet_form_title() : t.wallets()}
             noBackgroundFill
             primaryAction={<WalletStateBar />}>
-            {wallets.length === 0 ? (
+            {!wallet ? (
                 <StartUp />
             ) : (
                 <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>

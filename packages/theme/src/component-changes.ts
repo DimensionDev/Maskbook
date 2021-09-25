@@ -92,11 +92,11 @@ export const Button: Theme = (mode, colors): ThemeOptions => ({
     },
 })
 
-export const Dialog: Theme = {
+export const Dialog: Theme = (mode, colors) => ({
     components: {
         MuiDialog: {
             styleOverrides: {
-                paper: { minHeight: 200, minWidth: 440 },
+                paper: { minHeight: 200, minWidth: 440, background: mode === 'light' ? '#fff' : '#111432' },
             },
         },
         MuiDialogActions: {
@@ -105,7 +105,7 @@ export const Dialog: Theme = {
             },
         },
     },
-}
+})
 
 export const TextField: Theme = {
     components: {

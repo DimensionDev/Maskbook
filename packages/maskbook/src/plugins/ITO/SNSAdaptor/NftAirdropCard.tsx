@@ -84,7 +84,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     gallery: {
         marginBottom: theme.spacing(0.5),
-        overflowX: 'scroll',
         whiteSpace: 'nowrap',
     },
     actionButton: {
@@ -357,7 +356,7 @@ function ClaimItem(props: ClaimItemProps) {
                 </div>
                 <div>
                     <EthereumWalletConnectedBoundary
-                        ableToSendTx={!unClaimable}
+                        hideRiskWarningConfirmed={true}
                         classes={{
                             connectWallet: classNames(classes.actionButton, classes.connectWallet),
                             gasFeeButton: classNames(classes.actionButton, classes.connectWallet),

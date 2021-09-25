@@ -55,6 +55,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.QUICKSWAP]: 'QuickSwap',
         [TradeProvider.PANCAKESWAP]: 'PancakeSwap',
         [TradeProvider.DODO]: 'DODO',
+        [TradeProvider.BANCOR]: 'Bancor',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -95,6 +96,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://exchange.pancakeswap.finance/#/swap'
         case TradeProvider.DODO:
             return 'https://app.dodoex.io'
+        case TradeProvider.BANCOR:
+            return 'https://app.bancor.network/eth/swap'
         default:
             unreachable(tradeProvider)
     }
@@ -143,6 +146,9 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://info.quickswap.exchange/pair/${address}`
         case TradeProvider.PANCAKESWAP:
             return `https://pancakeswap.info/pool/${address}`
+        case TradeProvider.BANCOR:
+            // TODO - Bancor analytics should be available with V3
+            return ``
         default:
             unreachable(tradeProvider)
     }

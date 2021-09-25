@@ -1,27 +1,35 @@
 import { MaskTextField } from '@masknet/theme'
-import { Box, Button, Stack } from '@material-ui/core'
+import { Box, Button, IconButton, Stack, Typography } from '@material-ui/core'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import {
     EthereumTokenType,
+    formatWeiToEther,
     FungibleTokenDetailed,
     isGreaterThan,
     isZero,
     pow10,
     TransactionStateType,
     useFungibleTokenBalance,
+    useGasLimit,
     useGasPrice,
+    useNativeTokenDetailed,
     useTokenTransferCallback,
+    GasOption,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
-import { TokenAmountPanel } from '@masknet/shared'
+import { TokenAmountPanel, useRemoteControlledDialog } from '@masknet/shared'
+import TuneIcon from '@material-ui/icons/Tune'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { EthereumAddress } from 'wallet.ts'
 import { SelectTokenDialog } from '../SelectTokenDialog'
 import { useDashboardI18N } from '../../../../locales'
-import { EthereumAddress } from 'wallet.ts'
+import { useNativeTokenPrice } from './useNativeTokenPrice'
 
 interface TransferERC20Props {
     token: FungibleTokenDetailed
 }
 
+const GAS_LIMIT = 30000
 export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()
     const [amount, setAmount] = useState('')
@@ -29,24 +37,33 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const [memo, setMemo] = useState('')
     const [selectedToken, setToken] = useState<FungibleTokenDetailed>(token)
     const [isOpenSelectTokenDialog, openSelectTokenDialog] = useState(false)
+    const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
 
     // gas price
-    const { value: gasPrice = '0' } = useGasPrice()
+    const { value: defaultGasPrice = '0' } = useGasPrice()
+    const [customGasPrice, setCustomGasPrice] = useState<BigNumber.Value>(0)
+    const gasPrice = customGasPrice || defaultGasPrice
 
     // balance
     const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useFungibleTokenBalance(
         selectedToken?.type ?? EthereumTokenType.Native,
         selectedToken?.address ?? '',
     )
+    const nativeToken = useNativeTokenDetailed()
+    const nativeTokenPrice = useNativeTokenPrice()
+    const isNativeToken = selectedToken.type === EthereumTokenType.Native
 
     // transfer amount
-    const transferAmount = new BigNumber(amount || '0').multipliedBy(pow10(token.decimals)).toFixed()
+    const transferAmount = new BigNumber(amount || '0').multipliedBy(pow10(selectedToken.decimals)).toFixed()
+    const erc20GasLimit = useGasLimit(selectedToken.type, selectedToken.address, transferAmount, address)
+    const [gasLimit, setGasLimit] = useState<string | number>(0)
+    useEffect(() => {
+        setGasLimit(isNativeToken ? GAS_LIMIT : erc20GasLimit.value?.toFixed() ?? 0)
+    }, [isNativeToken, erc20GasLimit.value])
+    const gasFee = useMemo(() => new BigNumber(gasLimit).multipliedBy(gasPrice), [gasLimit, gasPrice])
     const maxAmount = useMemo(() => {
         let amount_ = new BigNumber(tokenBalance || '0')
-        amount_ =
-            selectedToken.type === EthereumTokenType.Native
-                ? amount_.minus(new BigNumber(30000).multipliedBy(gasPrice))
-                : amount_
+        amount_ = selectedToken.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
         return amount_.toFixed()
     }, [tokenBalance, gasPrice, selectedToken?.type, amount])
 
@@ -55,24 +72,35 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         selectedToken.address,
     )
 
+    const { setDialog: setGasSettingDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated)
+    const openGasSettingDialog = useCallback(() => {
+        setGasSettingDialog({
+            open: true,
+            gasLimit,
+            gasOption,
+        })
+    }, [gasLimit, gasOption])
+
+    useEffect(() => {
+        return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
+            if (evt.gasPrice) setCustomGasPrice(evt.gasPrice)
+            if (evt.gasOption) setGasOption(evt.gasOption)
+            if (evt.gasLimit) setGasLimit(evt.gasLimit)
+        })
+    }, [])
     const onTransfer = useCallback(async () => {
-        await transferCallback(
-            new BigNumber(amount).multipliedBy(pow10(selectedToken.decimals)).toFixed(),
-            address,
-            undefined,
-            memo,
-        )
-    }, [amount, address, memo, selectedToken.decimals, transferCallback])
+        await transferCallback(transferAmount, address, undefined, memo)
+    }, [transferAmount, address, memo, selectedToken.decimals, transferCallback])
 
     //#region validation
     const validationMessage = useMemo(() => {
         if (!transferAmount || isZero(transferAmount)) return t.wallets_transfer_error_amount_absence()
-        if (isGreaterThan(new BigNumber(amount).multipliedBy(pow10(selectedToken.decimals)).toFixed(), transferAmount))
+        if (isGreaterThan(new BigNumber(amount).multipliedBy(pow10(selectedToken.decimals)).toFixed(), maxAmount))
             return t.wallets_transfer_error_insufficient_balance({ symbol: selectedToken.symbol ?? '' })
         if (!address) return t.wallets_transfer_error_address_absence()
         if (!EthereumAddress.isValid(address)) return t.wallets_transfer_error_invalid_address()
         return ''
-    }, [transferAmount, address, tokenBalance, selectedToken, amount])
+    }, [transferAmount, maxAmount, address, tokenBalance, selectedToken, amount])
     //#endregion
 
     useEffect(() => {
@@ -86,15 +114,16 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     return (
         <Stack direction="row" justifyContent="center" mt={4}>
-            <Stack maxWidth={640} minWidth={500} alignItems="center">
-                <Box width="100%">
+            <Stack maxWidth={640} minWidth={500}>
+                <Box>
                     <MaskTextField
+                        required
                         value={address}
                         onChange={(e) => setAddress(e.currentTarget.value)}
                         label={t.wallets_transfer_to_address()}
                     />
                 </Box>
-                <Box mt={2} width="100%">
+                <Box mt={2}>
                     <TokenAmountPanel
                         amount={amount}
                         maxAmount={maxAmount}
@@ -110,16 +139,34 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         }}
                     />
                 </Box>
-                <Box mt={2} width="100%">
-                    <MaskTextField
-                        value={memo}
-                        placeholder={t.wallets_transfer_memo_placeholder()}
-                        disabled={selectedToken.type === EthereumTokenType.ERC20}
-                        onChange={(e) => setMemo(e.currentTarget.value)}
-                        label={t.wallets_transfer_memo()}
-                    />
+                <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" mt="16px">
+                    <Typography fontSize="12px" fontWeight="bold">
+                        {t.gas_fee()}
+                    </Typography>
+                    <Box display="flex" flexDirection="row" alignItems="center">
+                        <Typography fontSize="14px">
+                            {t.transfer_cost({
+                                gasFee: formatWeiToEther(gasFee).toFixed(6),
+                                symbol: nativeToken.value?.symbol ?? '',
+                                usd: formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice).toFixed(2),
+                            })}
+                        </Typography>
+                        <IconButton size="small" onClick={openGasSettingDialog}>
+                            <TuneIcon fontSize="small" />
+                        </IconButton>
+                    </Box>
                 </Box>
-                <Box mt={4}>
+                {isNativeToken ? (
+                    <Box mt={2}>
+                        <MaskTextField
+                            value={memo}
+                            placeholder={t.wallets_transfer_memo_placeholder()}
+                            onChange={(e) => setMemo(e.currentTarget.value)}
+                            label={t.wallets_transfer_memo()}
+                        />
+                    </Box>
+                ) : null}
+                <Box mt={4} display="flex" flexDirection="row" justifyContent="center">
                     <Button
                         sx={{ width: 240 }}
                         disabled={
