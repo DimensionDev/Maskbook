@@ -18,7 +18,6 @@ import { useCopyToClipboard } from 'react-use'
 import { SuccessIcon } from '@masknet/icons'
 import Services from '../../../../service'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { parseInt } from 'lodash-es'
 
 const useStyles = makeStyles()({
     content: {
@@ -186,7 +185,7 @@ const SelectWallet = memo(() => {
                     onClick={handleCancel}>
                     {t('cancel')}
                 </Button>
-                <Button variant="contained" className={classes.button} onClick={handleConfirm}>
+                <Button variant="contained" className={classes.button} onClick={handleConfirm} disabled={!selected}>
                     {t('confirm')}
                 </Button>
             </div>
