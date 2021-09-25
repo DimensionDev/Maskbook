@@ -87,15 +87,14 @@ export async function signTransaction(
         coin: api.Coin.Ethereum,
         storedKeyData: wallet.storedKeyInfo?.data,
         sign_input: {
-            amount: config.value as string,
-            chain_id: config.chainId,
-            gas_limit: config.gas?.toString(),
-            gas_price: config.gasPrice?.toString(),
-            max_fee_per_gas: config.maxFeePerGas?.toString(),
-            max_inclusion_fee_per_gas: config.maxFeePerGas?.toString(),
-            nonce: config.nonce?.toString(),
+            amount: config.value as string ?? null,
+            gas_limit: config.gas?.toString() ?? null,
+            gas_price: config.gasPrice?.toString() ?? null,
+            max_fee_per_gas: config.maxFeePerGas?.toString() ?? null,
+            max_inclusion_fee_per_gas: config.maxFeePerGas?.toString() ?? null,
+            nonce: config.nonce?.toString() ?? null,
             to_address: config.to,
-            payload: config.data ? encodeText(config.data) : undefined,
+            payload: config.data ? encodeText(config.data) : null,
         },
     })
 }

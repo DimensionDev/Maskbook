@@ -1,6 +1,7 @@
 import { EthereumAddress } from 'wallet.ts'
 import { first } from 'lodash-es'
 import type { HttpProvider } from 'web3-core'
+import { toHex } from 'web3-utils'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
     addGasMargin,
@@ -187,7 +188,7 @@ export async function INTERNAL_send(
             config.nonce = await getNonce(config.from as string)
 
         // add gas margin
-        if (config.gas && !Flags.v2_enabled) config.gas = `0x${addGasMargin(config.gas).toString(16)}`
+        if (config.gas && !Flags.v2_enabled) config.gas = toHex(addGasMargin(config.gas).toString(16))
 
         // pricing transaction
         const isGasPriceValid = parseGasPrice(config.gasPrice as string) > 0

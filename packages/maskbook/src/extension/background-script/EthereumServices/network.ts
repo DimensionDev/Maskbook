@@ -6,6 +6,7 @@ import type {
     PastLogsOptions,
     Log,
 } from 'web3-core'
+import { toHex } from 'web3-utils'
 import { ChainId, EthereumChainDetailed, EthereumMethodType } from '@masknet/web3-shared'
 import { request } from './request'
 import type { SendOverrides } from './send'
@@ -150,7 +151,7 @@ export async function switchEthereumChain(chainId: ChainId, overrides?: SendOver
             method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
             params: [
                 {
-                    chainId: `0x${chainId.toString(16)}`,
+                    chainId: toHex(chainId),
                 },
             ],
         },

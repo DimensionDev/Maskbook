@@ -1,10 +1,11 @@
+import { upperFirst } from 'lodash-es'
+import { toHex } from 'web3-utils'
 import { createLookupTableResolver } from './enum'
 import CHAINS from '../assets/chains.json'
 import { getRPCConstants } from '../constants'
 import { ChainId, NetworkType } from '../types'
 import COINGECKO_PLATFORMS from '../assets/coingecko-asset-platforms.json'
 import COINGECKO_COIN_LIST from '../assets/coingecko-coin-list.json'
-import { upperFirst } from 'lodash-es'
 
 export function isChainIdValid(chainId: ChainId, allowTestnet = false) {
     const chainDetailed = getChainDetailed(chainId)
@@ -31,7 +32,7 @@ export function getChainDetailedCAIP(chainId = ChainId.Mainnet) {
     const { RPC = [] } = getRPCConstants(chainId)
     if (!chainDetailed) return
     return {
-        chainId: `0x${chainDetailed.chainId.toString(16)}`,
+        chainId: toHex(chainDetailed.chainId),
         chainName: chainDetailed.name,
         nativeCurrency: chainDetailed.nativeCurrency,
         rpcUrls: RPC,
