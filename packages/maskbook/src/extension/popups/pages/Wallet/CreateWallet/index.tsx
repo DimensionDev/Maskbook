@@ -4,7 +4,6 @@ import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { StyledInput } from '../../../components/StyledInput'
 import { useHistory } from 'react-router-dom'
-import { useWalletHD } from '../../../../../plugins/Wallet/hooks/useWalletHD'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 
@@ -44,14 +43,11 @@ const CreateWallet = memo(() => {
     const history = useHistory()
     const { classes } = useStyles()
     const [name, setName] = useState('')
-    const hdWallet = useWalletHD()
 
     const onCreate = useCallback(async () => {
-        if (hdWallet) {
-            await WalletRPC.deriveWalletFromPhrase(name, hdWallet.mnemonic, hdWallet.passphrase)
-            history.goBack()
-        }
-    }, [hdWallet, name])
+        await WalletRPC.deriveWallet(name)
+        history.goBack()
+    }, [name])
 
     return (
         <>

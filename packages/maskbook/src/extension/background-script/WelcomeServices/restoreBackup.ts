@@ -13,9 +13,10 @@ import { createOrUpdatePostDB } from '../../../database/post'
 import { i18n } from '../../../utils/i18n-next'
 import { currentImportingBackup } from '../../../settings/settings'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
-import { importNewWallet } from '../../../plugins/Wallet/services'
+import { recoverWalletFromMnemonic, recoverWalletFromPrivateKey } from '../../../plugins/Wallet/services'
 import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra'
 import { Result } from 'ts-results'
+import { addWallet } from '../../../plugins/Wallet/services/wallet/database'
 
 /**
  * Restore the backup
@@ -51,9 +52,13 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
             })
         }
 
-        for (const [i, x] of data.wallets.entries()) {
+        for (const [_, x] of data.wallets.entries()) {
             const record = WalletRecordFromJSONFormat(x)
-            if (record.mnemonic || record._private_key_) await importNewWallet(record, i !== 0)
+            const name = record.name
+            if (record.storedKeyInfo && record.derivationPath)
+                await addWallet(record.address, name, record.derivationPath, record.storedKeyInfo)
+            else if (record.mnemonic) await recoverWalletFromMnemonic(name, record.mnemonic)
+            else if (record.privateKey) await recoverWalletFromPrivateKey(name, record.privateKey)
         }
 
         for (const x of data.posts) {

@@ -68,10 +68,10 @@ const CreateWalletForm = memo(() => {
     const navigate = useNavigate()
 
     // const {
-    //     value: hasEncryptedWallet,
+    //     value: hasPassword,
     //     retry,
     //     loading,
-    // } = useAsyncRetry(async () => PluginServices.Wallet.hasEncryptedWalletStore(), [])
+    // } = useAsyncRetry(async () => PluginServices.Wallet.hasPassword(), [])
 
     // useEffect(() => {
     //     WalletMessages.events.walletLockStatusUpdated.on(retry)

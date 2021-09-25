@@ -8,6 +8,8 @@ export const PLUGIN_DESCRIPTION = 'Mask Wallet'
 // Private key at m/purpose'/coin_type'/account'/change
 export const HD_PATH_WITHOUT_INDEX_ETHEREUM = "m/44'/60'/0'/0"
 
+export const MAX_DERIVE_COUNT = 99
+
 // https://www.jsonrpc.org/specification#error_object
 export enum JSON_RPC_ErrorCode {
     INTERNAL_ERROR = -32603,

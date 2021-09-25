@@ -1,7 +1,7 @@
-import { pick, noop } from 'lodash-es'
+import { omit, noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { ChainId, PortfolioProvider, ProviderType } from '@masknet/web3-shared'
-import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Wallet, Web3ProviderType } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Web3ProviderType } from '@masknet/web3-shared'
 import { Messages, PluginMessages, PluginServices, Services } from '../API'
 
 const Web3Provider = createExternalProvider()
@@ -60,6 +60,7 @@ export const Web3Context: Web3ProviderType = {
         NetworkType.Ethereum,
         Messages.events.currentNetworkSettings.on,
     ),
+    walletPrimary: createSubscriptionFromAsync(getWalletPrimary, null, PluginMessages.Wallet.events.walletsUpdated.on),
     wallets: createSubscriptionFromAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
     erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
     addERC20Token: PluginServices.Wallet.addERC20Token,
@@ -98,20 +99,22 @@ export function createExternalProvider() {
 }
 
 async function getWallets() {
-    const raw = await PluginServices.Wallet.getWallets()
-    return raw.map<Wallet>((record) => ({
-        ...pick(record, [
-            'address',
-            'name',
-            'erc1155_token_whitelist',
-            'erc1155_token_blacklist',
-            'erc20_token_whitelist',
-            'erc20_token_blacklist',
-            'erc721_token_whitelist',
-            'erc721_token_blacklist',
-        ] as (keyof typeof record)[]),
-        hasPrivateKey: Boolean(record._private_key_ || record.mnemonic.length),
+    const wallets = await PluginServices.Wallet.getWallets()
+    return wallets.map((x) => ({
+        ...omit(x, 'derivationPath', 'storedKeyInfo'),
+        hasStoredKeyInfo: !!x.storedKeyInfo,
+        hasDerivationPath: !!x.derivationPath,
     }))
+}
+
+export async function getWalletPrimary() {
+    const wallet = await PluginServices.Wallet.getWalletPrimary()
+    if (!wallet) return null
+    return {
+        ...omit(wallet, 'derivationPath', 'storedKeyInfo'),
+        hasStoredKeyInfo: !!wallet.storedKeyInfo,
+        hasDerivationPath: !!wallet.derivationPath,
+    }
 }
 
 async function getERC20Tokens() {

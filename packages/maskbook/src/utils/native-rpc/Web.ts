@@ -213,8 +213,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         })
     },
     wallet_getLegacyWalletInfo: async () => {
-        const wallets = await WalletRPC.getWallets()
-
+        const wallets = await WalletRPC.getLegacyWallets()
         return wallets.map((x) => ({
             address: x.address,
             name: x.name || undefined,

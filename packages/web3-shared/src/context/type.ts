@@ -27,6 +27,7 @@ export interface Web3ProviderType {
     chainId: Subscription<ChainId>
     balance: Subscription<string>
     blockNumber: Subscription<number>
+    walletPrimary: Subscription<Wallet | null>
     wallets: Subscription<Wallet[]>
     providerType: Subscription<ProviderType>
     networkType: Subscription<NetworkType>

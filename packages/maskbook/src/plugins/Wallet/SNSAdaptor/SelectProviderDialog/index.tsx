@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useAsync } from 'react-use'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typography } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
@@ -16,8 +17,6 @@ import { WalletMessages, WalletRPC } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { currentNetworkSettings, currentProviderSettings } from '../../settings'
 import { Flags } from '../../../../utils'
-import { getMaskColor } from '@masknet/theme'
-import { useAsync } from 'react-use'
 import Services from '../../../../extension/service'
 
 const useStyles = makeStyles()((theme) => ({
@@ -117,12 +116,6 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     )
     //#endregion
 
-    //#region create or import wallet dialog
-    const { openDialog: openCreateImportDialog } = useRemoteControlledDialog(
-        WalletMessages.events.createImportWalletDialogUpdated,
-    )
-    //#endregion
-
     //#region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
@@ -158,7 +151,6 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     await Services.Helper.openPopupsWindow(wallets.length > 0 ? '/wallet/select' : '', {
                         chainId: getChainIdFromNetworkType(undeterminedNetworkType),
                     })
-
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:

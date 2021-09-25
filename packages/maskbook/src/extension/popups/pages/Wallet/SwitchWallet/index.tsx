@@ -2,13 +2,12 @@ import { memo, useCallback, useMemo } from 'react'
 import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { WalletHeader } from '../components/WalletHeader'
-import { isSameAddress, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
+import { isSameAddress, ProviderType, useWallet, useWalletPrimary, useWallets } from '@masknet/web3-shared'
 import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { useI18N } from '../../../../../utils'
-import { useWalletHD } from '../../../../../plugins/Wallet/hooks/useWalletHD'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useCopyToClipboard } from 'react-use'
 import { WalletInfo } from '../components/WalletInfo'
@@ -65,7 +64,7 @@ const useStyles = makeStyles()({
 
 const SwitchWallet = memo(() => {
     const { t } = useI18N()
-    const walletHD = useWalletHD()
+    const walletPrimary = useWalletPrimary()
     const { classes } = useStyles()
 
     const history = useHistory()
@@ -80,7 +79,7 @@ const SwitchWallet = memo(() => {
     )
 
     const handleClickCreate = useCallback(() => {
-        if (!walletHD) {
+        if (!walletPrimary) {
             browser.tabs.create({
                 active: true,
                 url: browser.runtime.getURL('/next.html#/create-mask-wallet'),
@@ -88,7 +87,7 @@ const SwitchWallet = memo(() => {
         } else {
             history.push(PopupRoutes.CreateWallet)
         }
-    }, [walletHD, history])
+    }, [walletPrimary, history])
 
     const handleSelect = useCallback(
         async (address) => {

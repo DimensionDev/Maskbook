@@ -263,6 +263,7 @@ importers:
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/holoflows-kit': '=0.9.0-20210726055325-dfbe7fd'
       '@dimensiondev/kit': ^0.0.0-20210913111737-84c17d7
+      '@dimensiondev/mask-wallet-core': 0.1.0-20210924093144-ddecbc3
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/snapshot.js': 0.2.0
       '@dimensiondev/stego-js': '=0.11.1-20201027083223-8ab41be'
@@ -360,6 +361,7 @@ importers:
       opensea-js: ^1.1.11
       openzeppelin-solidity: ^3.2.0
       promievent: ^0.1.4
+      protobufjs: ^6.11.2
       pvtsutils: ^1.0.14
       qrcode: ^1.4.4
       react-devtools-core: ^4.18.0
@@ -411,6 +413,7 @@ importers:
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd_webextension-polyfill@0.8.0
       '@dimensiondev/kit': 0.0.0-20210913111737-84c17d7_react-router@5.2.1
+      '@dimensiondev/mask-wallet-core': 0.1.0-20210924093144-ddecbc3_protobufjs@6.11.2
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/snapshot.js': 0.2.0
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
@@ -495,6 +498,7 @@ importers:
       next-tick: 1.1.0
       opensea-js: 1.1.11
       promievent: 0.1.5
+      protobufjs: 6.11.2
       pvtsutils: 1.1.7
       qrcode: 1.4.4
       react-draggable: 4.4.4
@@ -840,7 +844,7 @@ packages:
       bintrees: 1.0.2
       bn.js: 4.12.0
       compare-versions: 3.6.0
-      ethereumjs-abi: 0.6.8
+      ethereumjs-abi: 0.6.6
       ethereumjs-blockstream: 2.0.7
       ethereumjs-util: 5.2.1
       find-versions: 2.0.0
@@ -856,7 +860,7 @@ packages:
     dependencies:
       '@0xproject/utils': 0.3.4
       chalk: 2.4.2
-      glob: 7.1.7
+      glob: 7.2.0
       handlebars: 4.7.7
       lodash: 4.17.21
       mkdirp: 0.5.5
@@ -3875,6 +3879,14 @@ packages:
       - react-dom
     dev: false
 
+  /@dimensiondev/mask-wallet-core/0.1.0-20210924093144-ddecbc3_protobufjs@6.11.2:
+    resolution: {integrity: sha512-OZKJsBjklpnhsAZOr/l6QC89IF5C7ZmnoLWW8DBCRrD8nF/f2kOxwfKeJFT+V0j/BiV7H3qebOxTYXubfFusPg==, tarball: download/@dimensiondev/mask-wallet-core/0.1.0-20210924093144-ddecbc3/bfa279cf644e3466227bb83bc57777e6d6669f0ca914cfd5f3f53c961a5a45e9}
+    peerDependencies:
+      protobufjs: '>= 6.10 < 7'
+    dependencies:
+      protobufjs: 6.11.2
+    dev: false
+
   /@dimensiondev/metamask-extension-provider/3.0.6-20210519045409-1835d4d:
     resolution: {integrity: sha512-t8GFIKV7/FFqfS2AOqHmKB+VwzvtyaOnNr8BgJmLJ+O4OEtQJ2ObRvg6WYAC1dJqc3DtVdEHBJdIoTZhsMEuIw==, tarball: download/@dimensiondev/metamask-extension-provider/3.0.6-20210519045409-1835d4d/4de201e24ff4e7094b4fdbf0838a09c81798d95294556824e5dc708451078835}
     dependencies:
@@ -5451,6 +5463,49 @@ packages:
 
   /@popperjs/core/2.10.1:
     resolution: {integrity: sha512-HnUhk1Sy9IuKrxEMdIRCxpIqPw6BFsbYSEUO9p/hNw5sMld/+3OLMWQP80F8/db9qsv3qUjs7ZR5bS/R+iinXw==}
+
+  /@protobufjs/aspromise/1.1.2:
+    resolution: {integrity: sha1-m4sMxmPWaafY9vXQiToU00jzD78=}
+    dev: false
+
+  /@protobufjs/base64/1.1.2:
+    resolution: {integrity: sha512-AZkcAA5vnN/v4PDqKyMR5lx7hZttPDgClv83E//FMNhR2TMcLUhfRUBHCmSl0oi9zMgDDqRUJkSxO3wm85+XLg==}
+    dev: false
+
+  /@protobufjs/codegen/2.0.4:
+    resolution: {integrity: sha512-YyFaikqM5sH0ziFZCN3xDC7zeGaB/d0IUb9CATugHWbd1FRFwWwt4ld4OYMPWu5a3Xe01mGAULCdqhMlPl29Jg==}
+    dev: false
+
+  /@protobufjs/eventemitter/1.1.0:
+    resolution: {integrity: sha1-NVy8mLr61ZePntCV85diHx0Ga3A=}
+    dev: false
+
+  /@protobufjs/fetch/1.1.0:
+    resolution: {integrity: sha1-upn7WYYUr2VwDBYZ/wbUVLDYTEU=}
+    dependencies:
+      '@protobufjs/aspromise': 1.1.2
+      '@protobufjs/inquire': 1.1.0
+    dev: false
+
+  /@protobufjs/float/1.0.2:
+    resolution: {integrity: sha1-Xp4avctz/Ap8uLKR33jIy9l7h9E=}
+    dev: false
+
+  /@protobufjs/inquire/1.1.0:
+    resolution: {integrity: sha1-/yAOPnzyQp4tyvwRQIKOjMY48Ik=}
+    dev: false
+
+  /@protobufjs/path/1.1.2:
+    resolution: {integrity: sha1-bMKyDFya1q0NzP0hynZz2Nf79o0=}
+    dev: false
+
+  /@protobufjs/pool/1.1.0:
+    resolution: {integrity: sha1-Cf0V8tbTq/qbZbw2ZQbWrXhG/1Q=}
+    dev: false
+
+  /@protobufjs/utf8/1.1.0:
+    resolution: {integrity: sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=}
+    dev: false
 
   /@reach/router/1.3.4_f991c289939c8299bed5e4a6a5a79a62:
     resolution: {integrity: sha512-+mtn9wjlB9NN2CNnnC/BRYtwdKBfSyyasPYraNAyvaV1occr/5NnB4CVzjEZipNHwYebQwcndGUmpFzxAUoqSA==}
@@ -8215,8 +8270,12 @@ packages:
     resolution: {integrity: sha512-/BHF5HAx3em7/KkzVKm3LrsD6HZAXuXO1AJZQ3cRRBZj4oHZDviWPYu0aEplAqDFNHZPW6d3G7KN+ONcCCC7pw==}
     dev: true
 
-  /@types/lodash/4.14.173:
-    resolution: {integrity: sha512-vv0CAYoaEjCw/mLy96GBTnRoZrSxkGE0BKzKimdR8P3OzrNYNvBgtW7p055A+E8C31vXNUhWKoFCbhq7gbyhFg==}
+  /@types/lodash/4.14.174:
+    resolution: {integrity: sha512-KMBLT6+g9qrGXpDt7ohjWPUD34WA/jasrtjTEHStF0NPdEwJ1N9SZ+4GaMVDeuk/y0+X5j9xFm6mNiXS7UoaLQ==}
+    dev: false
+
+  /@types/long/4.0.1:
+    resolution: {integrity: sha512-5tXH6Bx/kNGd3MgffdmP4dy2Z+G4eaXw0SE81Tq3BNadtnMR5/ySMzX4SLEzHJzSmPNn4HIdpQsBvXMUykr58w==}
     dev: false
 
   /@types/markdown-to-jsx/6.11.3:
@@ -8277,6 +8336,10 @@ packages:
 
   /@types/node/16.9.1:
     resolution: {integrity: sha512-QpLcX9ZSsq3YYUUnD3nFDY8H7wctAhQj/TFKL8Ya8v5fMm3CFXxo8zStsLAl780ltoYoo1WvKUVGBQK+1ifr7g==}
+
+  /@types/node/16.9.6:
+    resolution: {integrity: sha512-YHUZhBOMTM3mjFkXVcK+WwAcYmyhe1wL4lfqNtzI0b3qAy7yuSetnM7QJazgE5PFmgVTNGiLOgRFfJMqW7XpSQ==}
+    dev: false
 
   /@types/node/8.10.66:
     resolution: {integrity: sha512-tktOkFUA4kXx2hhhrB8bIFb5TbwzS4uOhKEmwiD+NoiL0qtP2OQ9mFldbgD4dV1djrlBYP6eBuQZiWjuHUpqFw==}
@@ -10939,8 +11002,8 @@ packages:
     resolution: {integrity: sha512-WHVocJYavUwVgVViC0ORikPHQquXwVh939TaelZ4WDqpWgTX/FsGhl/+P4qBUAGcRvtOgDgC+xftNWWp2RUTAQ==}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001257
-      electron-to-chromium: 1.3.840
+      caniuse-lite: 1.0.30001260
+      electron-to-chromium: 1.3.850
     dev: false
 
   /browserslist/4.14.2:
@@ -11265,6 +11328,13 @@ packages:
 
   /caniuse-lite/1.0.30001257:
     resolution: {integrity: sha512-JN49KplOgHSXpIsVSF+LUyhD8PUp6xPpAXeRrrcBh4KBeP7W864jHn6RvzJgDlrReyeVjMFJL3PLpPvKIxlIHA==}
+    dev: true
+
+  /caniuse-lite/1.0.30001260:
+    resolution: {integrity: sha512-Fhjc/k8725ItmrvW5QomzxLeojewxvqiYCKeFcfFEhut28IVLdpHU19dneOmltZQIE5HNbawj1HYD+1f2bM1Dg==}
+    dependencies:
+      nanocolors: 0.1.12
+    dev: false
 
   /capture-exit/2.0.0:
     resolution: {integrity: sha512-PiT/hQmTonHhl/HFGN+Lx3JJUznrVYJ3+AQsnthneZbvW7x+f08Tk7yLJTLEOUvBTbduLeeBkxEaYXUOUrRq6g==}
@@ -13056,6 +13126,11 @@ packages:
 
   /electron-to-chromium/1.3.840:
     resolution: {integrity: sha512-yRoUmTLDJnkIJx23xLY7GbSvnmDCq++NSuxHDQ0jiyDJ9YZBUGJcrdUqm+ZwZFzMbCciVzfem2N2AWiHJcWlbw==}
+    dev: true
+
+  /electron-to-chromium/1.3.850:
+    resolution: {integrity: sha512-ZzkDcdzePeF4dhoGZQT77V2CyJOpwfTZEOg4h0x6R/jQhGt/rIRpbRyVreWLtD7B/WsVxo91URm2WxMKR9JQZA==}
+    dev: false
 
   /element-resize-detector/1.2.3:
     resolution: {integrity: sha512-+dhNzUgLpq9ol5tyhoG7YLoXL3ssjfFW+0gpszXPwRU6NjGr1fVHMEAF8fVzIiRJq57Nre0RFeIjJwI8Nh2NmQ==}
@@ -13890,11 +13965,11 @@ packages:
     resolution: {integrity: sha512-5qwJ5n3YhjSpE6O/WEBXCAb2nagUgyagJ6C0lGUBWC4LjKp/rRzD+pwtDJ6KCiITFEAoX4eIrWOjRy0Sylq5Hg==}
     dev: false
 
-  /ethereumjs-abi/0.6.8:
-    resolution: {integrity: sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==}
+  /ethereumjs-abi/0.6.6:
+    resolution: {integrity: sha512-w8KubDsA/+OAuqtIR9RGsMcoZ5nhM8vxwjJAJvEIY+clhxA3BHoLG3+ClYQaQhD0n3mlDt3U5rBrmSVJvI3c8A==}
     dependencies:
       bn.js: 4.12.0
-      ethereumjs-util: 6.2.1
+      ethereumjs-util: 5.2.1
     dev: false
 
   /ethereumjs-account/2.0.5:
@@ -15047,6 +15122,16 @@ packages:
 
   /glob/7.1.7:
     resolution: {integrity: sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==}
+    dependencies:
+      fs.realpath: 1.0.0
+      inflight: 1.0.6
+      inherits: 2.0.4
+      minimatch: 3.0.4
+      once: 1.4.0
+      path-is-absolute: 1.0.1
+
+  /glob/7.2.0:
+    resolution: {integrity: sha512-lmLf6gtyrPq8tTjSmrO94wBeQbFR3HbLHbuyD69wuyQkImp2hWqMGB47OX65FBkPffO641IP9jWa1z4ivqG26Q==}
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6
@@ -17871,6 +17956,10 @@ packages:
     engines: {node: '>= 0.6.0'}
     dev: false
 
+  /long/4.0.0:
+    resolution: {integrity: sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA==}
+    dev: false
+
   /longest/1.0.1:
     resolution: {integrity: sha1-MKCy2jj3N3DoKUoNIuZiXtd9AJc=}
     engines: {node: '>=0.10.0'}
@@ -18573,6 +18662,10 @@ packages:
 
   /nano-json-stream-parser/0.1.2:
     resolution: {integrity: sha1-DMj20OK2IrR5xA1JnEbWS3Vcb18=}
+    dev: false
+
+  /nanocolors/0.1.12:
+    resolution: {integrity: sha512-2nMHqg1x5PU+unxX7PGY7AuYxl2qDx7PSrTRjizr8sxdd3l/3hBuWWaki62qmtYm2U5i4Z5E7GbjlyDFhs9/EQ==}
     dev: false
 
   /nanoid/3.1.25:
@@ -19882,6 +19975,26 @@ packages:
       xtend: 4.0.2
     dev: true
 
+  /protobufjs/6.11.2:
+    resolution: {integrity: sha512-4BQJoPooKJl2G9j3XftkIXjoC9C0Av2NOrWmbLWT1vH32GcSUHjM0Arra6UfTsVyfMAuFzaLucXn1sadxJydAw==}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@protobufjs/aspromise': 1.1.2
+      '@protobufjs/base64': 1.1.2
+      '@protobufjs/codegen': 2.0.4
+      '@protobufjs/eventemitter': 1.1.0
+      '@protobufjs/fetch': 1.1.0
+      '@protobufjs/float': 1.0.2
+      '@protobufjs/inquire': 1.1.0
+      '@protobufjs/path': 1.1.2
+      '@protobufjs/pool': 1.1.0
+      '@protobufjs/utf8': 1.1.0
+      '@types/long': 4.0.1
+      '@types/node': 16.9.6
+      long: 4.0.0
+    dev: false
+
   /proxy-addr/2.0.7:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
     engines: {node: '>= 0.10'}
@@ -21169,7 +21282,7 @@ packages:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
     hasBin: true
     dependencies:
-      glob: 7.1.7
+      glob: 7.2.0
 
   /rimraf/3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
@@ -23047,7 +23160,7 @@ packages:
       chalk: 2.4.2
       commander: 2.20.3
       diff: 4.0.2
-      glob: 7.1.7
+      glob: 7.2.0
       js-yaml: 3.14.1
       minimatch: 3.0.4
       mkdirp: 0.5.5
@@ -25442,7 +25555,7 @@ packages:
       '@0xproject/types': 0.1.9
       '@0xproject/utils': 0.1.3
       '@0xproject/web3-wrapper': 0.1.14
-      '@types/lodash': 4.14.173
+      '@types/lodash': 4.14.174
       '@types/node': 9.6.61
       0x.js: 0.29.2
       awesome-typescript-loader: 3.5.0_typescript@2.9.2

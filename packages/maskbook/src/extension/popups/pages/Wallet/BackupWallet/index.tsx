@@ -115,15 +115,10 @@ const BackupWallet = memo(() => {
     const [currentTab, setCurrentTab] = useState(BackupTabs.JsonFile)
     const [password, setPassword] = useState('')
 
-    const { value: [privateKeyInHex] = ['', []] } = useAsync(async () => {
-        if (!wallet) return
-        const record = await WalletRPC.getWallet(wallet.address)
-        if (!record) return
-        const { privateKeyInHex } = record._private_key_
-            ? await WalletRPC.recoverWalletFromPrivateKey(record._private_key_)
-            : await WalletRPC.recoverWalletFromMnemonicWords(record.mnemonic, record.passphrase)
-        return [privateKeyInHex, record.mnemonic] as const
-    }, [wallet])
+    const { value: privateKey } = useAsync(async () => {
+        if (!wallet?.hasStoredKeyInfo) return
+        return WalletRPC.exportPrivateKey(wallet.address, password)
+    }, [wallet, password])
 
     const onConfirm = useCallback(() => {
         setConfirmed(true)
@@ -158,7 +153,7 @@ const BackupWallet = memo(() => {
                                 value={BackupTabs.PrivateKey}
                                 className={classes.tabPanel}
                                 style={{ flex: currentTab === BackupTabs.PrivateKey ? '1' : '0' }}>
-                                <Typography className={classes.privateKey}>{privateKeyInHex}</Typography>
+                                <Typography className={classes.privateKey}>{privateKey ?? ''}</Typography>
                                 <Typography className={classes.tip}>
                                     {t('popups_wallet_backup_private_key_tip')}
                                 </Typography>

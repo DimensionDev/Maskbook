@@ -3,10 +3,9 @@ import { createDBAccess } from '../../../database/helpers/openDB'
 import type {
     ERC1155TokenRecordInDatabase,
     ERC20TokenRecordInDatabase,
-    PhraseRecordInDatabase,
     TransactionChunkRecordInDatabase,
     UnconfirmedRequestChunkRecordInDatabase,
-    WalletRecordInDatabase,
+    LegacyWalletRecordInDatabase,
 } from './types'
 import type { ERC721TokenRecordInDatabase } from '@masknet/web3-shared'
 
@@ -19,14 +18,11 @@ export const createWalletDBAccess = createDBAccess(() => {
         async upgrade(db, oldVersion, newVersion, tx) {
             function v0_v1() {
                 db.createObjectStore('ERC20Token', { keyPath: path<keyof ERC20TokenRecordInDatabase>('address') })
-                db.createObjectStore('Wallet', { keyPath: path<keyof WalletRecordInDatabase>('address') })
+                db.createObjectStore('Wallet', { keyPath: path<keyof LegacyWalletRecordInDatabase>('address') })
             }
             function v5_v6() {
                 db.createObjectStore('ERC721Token', { keyPath: path<keyof ERC721TokenRecordInDatabase>('record_id') })
                 db.createObjectStore('ERC1155Token', { keyPath: path<keyof ERC1155TokenRecordInDatabase>('record_id') })
-            }
-            function v6_v7() {
-                db.createObjectStore('Phrase', { keyPath: path<keyof PhraseRecordInDatabase>('id') })
             }
             function v7_v8() {
                 db.createObjectStore('TransactionChunk', {
@@ -43,7 +39,6 @@ export const createWalletDBAccess = createDBAccess(() => {
 
             if (oldVersion < 1) v0_v1()
             if (oldVersion < 6) v5_v6()
-            if (oldVersion < 7) v6_v7()
             if (oldVersion < 8) v7_v8()
             if (oldVersion < 9) v8_v9()
         },
@@ -51,13 +46,8 @@ export const createWalletDBAccess = createDBAccess(() => {
 })
 
 export interface WalletDB extends DBSchema {
-    // the object store "PluginStore" has been removed.
-    Phrase: {
-        value: PhraseRecordInDatabase
-        key: string
-    }
     Wallet: {
-        value: WalletRecordInDatabase
+        value: LegacyWalletRecordInDatabase
         key: string
     }
     TransactionChunk: {

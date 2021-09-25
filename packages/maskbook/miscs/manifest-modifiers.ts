@@ -27,6 +27,7 @@ export function firefox(manifest: Manifest) {
     // we need an extra permission "tabs".
     // Switch to browser.userScripts (Firefox only) API can resolve the problem.
     manifest.permissions.push('tabs')
+    delete manifest.content_security_policy
 }
 /** Geckoview is firefox with some quirks. */
 export function geckoview(manifest: Manifest) {
@@ -41,12 +42,13 @@ export function geckoview(manifest: Manifest) {
 export function chromium(manifest: Manifest) {}
 export function safari(manifest: Manifest) {
     manifest.permissions.push('<all_urls>')
+    delete manifest.content_security_policy
 }
 export function development(manifest: Manifest) {
     manifest.name += ' (development)'
     // required by Webpack HMR
     manifest.web_accessible_resources.push('*.json', '*.js')
-    manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; object-src 'self';`
+    manifest.content_security_policy = `script-src 'self' 'wasm-eval' 'unsafe-eval'; object-src 'self';`
     manifest.browser_action = { default_popup: 'popups.html' }
     acceptExternalConnect(manifest)
     jkoeaghipilijlahjplgbfiocjhldnap(manifest)

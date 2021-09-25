@@ -6,12 +6,10 @@ import type {
     ERC1155TokenRecordInDatabase,
     ERC20TokenRecord,
     ERC20TokenRecordInDatabase,
-    PhraseRecord,
-    PhraseRecordInDatabase,
+    LegacyWalletRecord,
     TransactionChunkRecord,
     TransactionChunkRecordInDatabase,
-    WalletRecord,
-    WalletRecordInDatabase,
+    LegacyWalletRecordInDatabase,
 } from '../database/types'
 import {
     ChainId,
@@ -23,17 +21,17 @@ import {
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatEthereumAddress(address))
-    return record ? WalletRecordOutDB(record) : null
+    return record ? LegacyWalletRecordOutDB(record) : null
 }
 
-export function WalletRecordIntoDB(x: WalletRecord) {
-    const record = x as WalletRecordInDatabase
+export function LegacyWalletRecordIntoDB(x: LegacyWalletRecord) {
+    const record = x as LegacyWalletRecordInDatabase
     record.address = formatEthereumAddress(x.address)
     return record
 }
 
-export function WalletRecordOutDB(x: WalletRecordInDatabase) {
-    const record = x as WalletRecord
+export function LegacyWalletRecordOutDB(x: LegacyWalletRecordInDatabase) {
+    const record = x as LegacyWalletRecord
     record.address = formatEthereumAddress(record.address)
     record.erc20_token_whitelist = x.erc20_token_whitelist ?? new Set()
     record.erc20_token_blacklist = x.erc20_token_blacklist ?? new Set()
@@ -42,14 +40,6 @@ export function WalletRecordOutDB(x: WalletRecordInDatabase) {
     record.erc1155_token_whitelist = x.erc1155_token_whitelist ?? new Set()
     record.erc1155_token_blacklist = x.erc1155_token_blacklist ?? new Set()
     return record
-}
-
-export function PhraseRecordIntoDB(x: PhraseRecord) {
-    return x as PhraseRecordInDatabase
-}
-
-export function PhraseRecordOutDB(x: PhraseRecordInDatabase) {
-    return x as PhraseRecord
 }
 
 export function ERC20TokenRecordIntoDB(x: ERC20TokenRecord) {

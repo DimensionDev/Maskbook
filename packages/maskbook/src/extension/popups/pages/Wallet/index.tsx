@@ -33,7 +33,7 @@ export default function Wallet() {
     const location = useLocation()
     const history = useHistory()
 
-    // const lockStatus = useValueRef(currentIsMaskWalletLockedSettings)
+    // const lockStatus = useValueRef(currentMaskWalletLockedSettings)
 
     const { loading: getRequestLoading, retry } = useAsyncRetry(async () => {
         if (

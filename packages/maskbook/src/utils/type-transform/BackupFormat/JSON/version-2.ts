@@ -1,4 +1,5 @@
 /* eslint-disable import/no-deprecated */
+import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
 import type { BackupJSONFileVersion1 } from './version-1'
 import { ProfileIdentifier, ECKeyIdentifierFromJsonWebKey } from '../../../../database/type'
@@ -74,6 +75,8 @@ export interface BackupJSONFileVersion2 {
         passphrase?: string
         publicKey?: EC_Public_JsonWebKey
         privateKey?: EC_Private_JsonWebKey
+        derivationPath?: string
+        storedKeyInfo?: api.IStoredKeyInfo
         mnemonic?: {
             words: string
             parameter: { path: string; withPassword: boolean }

@@ -4,7 +4,7 @@ import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
-import { ERC20TokenRecordIntoDB, getWalletByAddress, WalletRecordIntoDB } from './helpers'
+import { ERC20TokenRecordIntoDB, getWalletByAddress, LegacyWalletRecordIntoDB } from './helpers'
 import type { ERC20TokenRecord } from '../database/types'
 import { ERC20TokenDetailed, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared'
 import { queryTransactionPaged } from '../../../database/helpers/pagination'
@@ -77,7 +77,7 @@ export async function trustERC20Token(address: string, token: ERC20TokenDetailed
         updated = true
     }
     if (!updated) return
-    await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
+    await t.objectStore('Wallet').put(LegacyWalletRecordIntoDB(wallet))
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
@@ -96,6 +96,6 @@ export async function blockERC20Token(address: string, token: PartialRequired<ER
         updated = true
     }
     if (!updated) return
-    await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
+    await t.objectStore('Wallet').put(LegacyWalletRecordIntoDB(wallet))
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }

@@ -10,7 +10,7 @@ import {
     ERC721TokenRecordOutDB,
     getERC721TokenRecordIntoDBKey,
     getWalletByAddress,
-    WalletRecordIntoDB,
+    LegacyWalletRecordIntoDB,
 } from './helpers'
 import { queryTransactionPaged } from '../../../database/helpers/pagination'
 
@@ -76,7 +76,7 @@ export async function trustERC721Token(address: string, token: ERC721TokenDetail
         updated = true
     }
     if (!updated) return false
-    await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
+    await t.objectStore('Wallet').put(LegacyWalletRecordIntoDB(wallet))
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
     return updated
 }
@@ -96,6 +96,6 @@ export async function blockERC721Token(address: string, token: ERC721TokenDetail
         updated = true
     }
     if (!updated) return
-    await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
+    await t.objectStore('Wallet').put(LegacyWalletRecordIntoDB(wallet))
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }

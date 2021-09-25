@@ -59,15 +59,17 @@ const AddDeriveWallet = memo(() => {
 
     const { loading, value: dataSource } = useAsync(async () => {
         if (mnemonic) {
-            const derivedWallets = await WalletRPC.queryDerivableWalletFromPhrase(mnemonic.split(' '), '', page + 1)
+            const derivableAccounts = await WalletRPC.getDerivableAccounts(mnemonic, page)
 
-            return derivedWallets.map((derivedWallet) => {
+            return derivableAccounts.map((derivedWallet) => {
                 const added = !!wallets.find(currySameAddress(derivedWallet.address))
 
                 return {
                     added,
                     address: derivedWallet.address,
-                    balance: derivedWallet.balance ?? '0',
+
+                    // TODO: useBalance
+                    balance: '0',
                 }
             })
         }
@@ -76,9 +78,12 @@ const AddDeriveWallet = memo(() => {
 
     const onAdd = useCallback(
         async (index) => {
-            if (mnemonic) {
-                await WalletRPC.deriveWalletFromIndex(mnemonic.split(' '), '', index, walletName ?? 'Account')
-            }
+            if (!mnemonic) return
+            await WalletRPC.recoverWalletFromMnemonic(
+                walletName ?? 'Account',
+                mnemonic,
+                `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}`,
+            )
         },
         [mnemonic],
     )

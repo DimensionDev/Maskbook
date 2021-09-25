@@ -77,29 +77,20 @@ const CreateMnemonic = memo(() => {
 
     const [walletState, onSubmit] = useAsyncFn(async () => {
         const name = new URLSearchParams(location.search).get('name')
-        //#region if the name isn't exist, navigate to form page
+        // if the name doesn't exist, navigate to form page
         if (!name) {
             resetCallback()
             navigate(RoutePaths.CreateMaskWalletForm)
+            // cc @albert
+            // do you forget to add return?
+            return
         }
 
-        const address = await PluginServices.Wallet.importNewWallet(
-            {
-                name,
-                path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-                mnemonic: words,
-                passphrase: '',
-            },
-            true,
+        return PluginServices.Wallet.recoverWalletFromMnemonic(
+            name,
+            words.join(' '),
+            `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
         )
-
-        await PluginServices.Wallet.addPhrase({
-            path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
-            mnemonic: words,
-            passphrase: '',
-        })
-
-        return address
     }, [location.search, words, resetCallback])
 
     return (
