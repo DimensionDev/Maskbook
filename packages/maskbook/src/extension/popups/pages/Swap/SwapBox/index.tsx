@@ -9,10 +9,15 @@ import { useAvailableTraderProviders } from '../../../../../plugins/Trader/trend
 import { SelectTokenDialog } from '../../../../../plugins/Wallet/SNSAdaptor/SelectTokenDialog'
 import { WalletRiskWarningDialog } from '../../../../../plugins/Wallet/SNSAdaptor/RiskWarningDialog'
 import { Coin, TagType } from '../../../../../plugins/Trader/types'
-import { useLocation } from 'react-router'
+import { useLocation, useHistory } from 'react-router'
+import { useChainId } from '@masknet/web3-shared'
+import { useUpdateEffect } from 'react-use'
+import { PopupRoutes } from '../../../index'
 
 export function SwapBox() {
     const location = useLocation()
+    const history = useHistory()
+    const chainId = useChainId()
     const [currentProvider, setCurrentProvider] = useState<TradeProvider | null>(null)
     const tradeProvider = useCurrentTradeProvider()
     const tradeContext = useTradeContext(tradeProvider)
@@ -33,6 +38,10 @@ export function SwapBox() {
             decimals: Number.parseInt(params.get('decimals') ?? '0', 10),
         } as Coin
     }, [location])
+
+    useUpdateEffect(() => {
+        history.replace(PopupRoutes.Swap)
+    }, [chainId])
 
     return (
         <TradeContext.Provider value={tradeContext}>
