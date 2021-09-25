@@ -47,7 +47,6 @@ const useStyles = makeStyles()((theme) => ({
         left: 0,
         borderRadius: '8px',
         background: theme.palette.mode === 'dark' ? 'rgba(0,0,0,.4)' : 'rgba(255,255,255,.4)',
-        borderRadius: '8px',
     },
 }))
 export interface BackupModeSelectDialogProps {

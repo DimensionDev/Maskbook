@@ -127,7 +127,6 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
                             fullWidth
                             value={backupPassword}
                             onChange={(event) => setBackupPassword(event.target.value)}
-
                             placeholder={t.settings_label_backup_password()}
                             sx={{ marginBottom: '16px' }}
                             error={incorrectBackupPassword}
@@ -139,7 +138,6 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
                                 fullWidth
                                 value={paymentPassword}
                                 onChange={(event) => setPaymentPassword(event.target.value)}
-
                                 placeholder={t.settings_label_payment_password()}
                                 sx={{ marginBottom: '16px' }}
                                 error={incorrectPaymentPassword}
