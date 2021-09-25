@@ -11,13 +11,13 @@ import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
-import { WalletMessages, WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useAsync, useAsyncFn } from 'react-use'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { useAsyncRetry, useAsyncFn } from 'react-use'
 import { useSnackbar } from '@masknet/theme'
 import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
 import { useLocation } from 'react-router'
-import { noop } from 'lodash-es'
+import { WalletMessages } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles()({
     container: {
@@ -109,7 +109,11 @@ const ImportWallet = memo(() => {
     const [keyStorePassword, setKeyStorePassword] = useState('')
     const [privateKey, setPrivateKey] = useState('')
 
-    const { value: hasPassword } = useAsync(WalletRPC.hasPassword, [])
+    const { value: hasPassword, retry } = useAsyncRetry(WalletRPC.hasPassword, [])
+
+    useEffect(() => {
+        return WalletMessages.events.walletLockStatusUpdated.on(retry)
+    }, [retry])
 
     const schema = useMemo(() => {
         const passwordRule = zod
@@ -121,16 +125,15 @@ const ImportWallet = memo(() => {
                 t('popups_wallet_password_dont_match'),
             )
         const confirmRule = zod.string().min(8).max(20)
-        return zod
-            .object({
-                name: zod.string().min(1).max(12),
-                password: hasPassword ? passwordRule.optional() : passwordRule,
-                confirm: hasPassword ? confirmRule.optional() : confirmRule,
-            })
-            .refine((data) => hasPassword ?? data.password === data.confirm, {
-                message: t('popups_wallet_password_dont_match'),
-                path: ['confirm'],
-            })
+        return zod.object({
+            name: zod.string().min(1).max(12),
+            // password: hasPassword ? passwordRule.optional() : passwordRule,
+            // confirm: hasPassword ? confirmRule.optional() : confirmRule,
+        })
+        // .refine((data) => hasPassword ?? data.password === data.confirm, {
+        //     message: t('popups_wallet_password_dont_match'),
+        //     path: ['confirm'],
+        // })
     }, [hasPassword])
 
     const {
@@ -142,8 +145,8 @@ const ImportWallet = memo(() => {
         resolver: zodResolver(schema),
         defaultValues: {
             name: '',
-            password: '',
-            confirm: '',
+            // password: '',
+            // confirm: '',
         },
     })
 

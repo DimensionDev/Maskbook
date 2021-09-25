@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { Alert, Box, Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
@@ -11,6 +11,7 @@ import { useAsyncFn } from 'react-use'
 import { useLocation, useNavigate } from 'react-router'
 import { PluginServices } from '../../../../API'
 import { RoutePaths } from '../../../../type'
+import type { Search } from 'history'
 
 // Private key at m/purpose'/coin_type'/account'/change
 export const HD_PATH_WITHOUT_INDEX_ETHEREUM = "m/44'/60'/0'/0"
@@ -66,7 +67,7 @@ const useStyles = makeStyles()({
 })
 
 const CreateMnemonic = memo(() => {
-    const location = useLocation()
+    const location = useLocation() as { search: Search; state: { password: string } }
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
@@ -77,12 +78,15 @@ const CreateMnemonic = memo(() => {
 
     const [walletState, onSubmit] = useAsyncFn(async () => {
         const name = new URLSearchParams(location.search).get('name')
+        const password = location.state?.password
         // if the name doesn't exist, navigate to form page
         if (!name) {
             resetCallback()
             navigate(RoutePaths.CreateMaskWalletForm)
             return
         }
+
+        await PluginServices.Wallet.setPassword(password)
 
         return PluginServices.Wallet.recoverWalletFromMnemonic(
             name,
@@ -96,6 +100,10 @@ const CreateMnemonic = memo(() => {
         resetCallback()
         setOpen(false)
     }, [refreshCallback, resetCallback])
+
+    useEffect(() => {
+        if (!location.state.password) navigate(-1)
+    }, [location.state])
 
     return (
         <>
