@@ -112,7 +112,7 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region remote controlled swap settings dialog
-    const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
+    const { openDialog: openSwapSettingDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
     //#endregion
 
     //#region form controls
@@ -227,7 +227,7 @@ export function TradeForm(props: TradeFormProps) {
                     <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
                         <RefreshOutlined fontSize="small" />
                     </IconButton>
-                    <IconButton className={classes.icon} size="small" onClick={openDialog}>
+                    <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
                         <TuneIcon fontSize="small" />
                     </IconButton>
                 </div>

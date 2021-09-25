@@ -2,7 +2,7 @@ name: Check Spell
 
 on:
   pull_request:
-    branches: [develop]
+    branches: [develop*]
 
 jobs:
   check-spell:

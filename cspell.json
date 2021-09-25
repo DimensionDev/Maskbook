@@ -305,7 +305,8 @@
         "**/node_modules/**",
         "pnpm-lock.yaml",
         "tsconfig.tsbuildinfo",
-        ".prettierignore"
+        ".prettierignore",
+        ".github"
     ],
     "overrides": [
         {

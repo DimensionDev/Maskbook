@@ -15,6 +15,7 @@ import { status } from '../../setup.ui'
 
 const Wallet = lazy(() => import('./pages/Wallet'))
 const Personas = lazy(() => import('./pages/Personas'))
+const SwapPage = lazy(() => import('./pages/Swap'))
 const RequestPermissionPage = lazy(() => import('./RequestPermission'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission'))
@@ -31,6 +32,7 @@ function Dialogs() {
                             <Switch>
                                 <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
                                 <Route path={PopupRoutes.Personas} children={frame(<Personas />)} />
+                                <Route path={PopupRoutes.Swap} children={<SwapPage />} />
                                 <Route path={PopupRoutes.RequestPermission} exact>
                                     <RequestPermissionPage />
                                 </Route>

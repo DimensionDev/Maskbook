@@ -882,6 +882,7 @@
     "popups_wallet_unlock_error_password": "Password is incorrect",
     "popups_wallet_activity_to_address": "To: {{address}}",
     "popups_wallet_transfer_error_tip": "Network connection failure or contract error, send transaction failure.",
+    "popups_wallet_transactions_pending": "Pending...",
     "popups_wallet_re_send": "Re-Send",
     "popups_wallet_choose_token": "Choose Token",
     "popups_wallet_gas_price": "Gas Price",
