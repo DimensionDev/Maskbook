@@ -136,12 +136,7 @@ export async function updateWallet(
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
-export async function removeWallet(address: string) {
-    const wallet = await getWalletRequired(address)
-
-    // delete a wallet with mnemonic is not allowed
-    if (wallet.derivationPath) throw new Error('Illegal operation.')
-
+export async function deleteWallet(address: string) {
     await PluginDB.remove('wallet', address)
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }

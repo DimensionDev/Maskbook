@@ -7,6 +7,7 @@ import { PopupRoutes } from '../../index'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { InitialPlaceholder } from '../InitialPlaceholder'
 import { useI18N } from '../../../../utils'
+import { useLocation } from 'react-router'
 
 function GlobalCss() {
     return (
@@ -73,6 +74,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     const { t } = useI18N()
     const history = useHistory()
     const { classes } = useStyles()
+    const location = useLocation()
     const personas = useMyPersonas()
 
     const excludePath = useRouteMatch({
@@ -114,7 +116,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                     <Box className={classes.right}>
                         <NavLink
                             style={{ marginRight: 5 }}
-                            to={PopupRoutes.Wallet}
+                            to={!excludePersonaPath ? PopupRoutes.Wallet : location}
                             className={classes.nav}
                             activeClassName={classes.active}>
                             {t('wallets')}

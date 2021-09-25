@@ -9,6 +9,7 @@ import * as sdk from './maskwallet'
 import * as database from './database'
 import * as password from './password'
 import type { TransactionConfig } from 'web3-core'
+import { deleteWallet } from './database'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const splitted = path.split('/')
@@ -18,7 +19,7 @@ function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
 }
 
 // db
-export { getWallet, getWallets, removeWallet, updateWallet, hasWallet } from './database/wallet'
+export { getWallet, getWallets, deleteWallet, updateWallet, hasWallet } from './database/wallet'
 
 // password
 export { setPassword, hasPassword, verifyPassword, changePassword, validatePassword, clearPassword } from './password'
@@ -156,6 +157,15 @@ export async function renameWallet(address: string, name: string) {
     await database.updateWallet(address, {
         name: name_,
     })
+}
+
+export async function removeWallet(address: string, unverifiedPassword: string) {
+    await password.verifyPasswordRequired(unverifiedPassword)
+    const wallet = await database.getWalletRequired(address)
+
+    if (wallet.derivationPath) throw new Error('Illegal operation.')
+
+    await deleteWallet(wallet.address)
 }
 
 export async function exportMnemonic(address: string, unverifiedPassword?: string) {
