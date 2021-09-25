@@ -1,16 +1,16 @@
 import { memo, useMemo } from 'react'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
-import { Button, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { useI18N } from '../../../../../utils'
 import { EthereumRpcType, useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useAsyncFn } from 'react-use'
+import { useAsyncFn, useUpdateEffect } from 'react-use'
 import Services from '../../../../service'
 import { LoadingButton } from '@material-ui/lab'
+import { toUtf8 } from 'web3-utils'
 import { useHistory, useLocation } from 'react-router'
 import { PopupRoutes } from '../../../index'
-import { useRejectHandler } from '../hooks/useRejectHandler'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -47,6 +47,7 @@ const useStyles = makeStyles()(() => ({
         fontSize: 12,
         lineHeight: '16px',
         flex: 1,
+        wordBreak: 'break-all',
     },
     controller: {
         display: 'grid',
@@ -67,14 +68,20 @@ const SignRequest = memo(() => {
     const history = useHistory()
     const location = useLocation()
     const { classes } = useStyles()
-    const { value } = useUnconfirmedRequest()
+    const { value, loading: requestLoading } = useUnconfirmedRequest()
     const wallet = useWallet()
 
     const { data, address } = useMemo(() => {
         if (value?.computedPayload?.type === EthereumRpcType.SIGN) {
+            let message = value.computedPayload.data
+            try {
+                message = toUtf8(data)
+            } catch (error) {
+                console.log(error)
+            }
             return {
                 address: value.computedPayload.to,
-                data: value.computedPayload.data,
+                data: message,
             }
         }
         return {
@@ -85,20 +92,24 @@ const SignRequest = memo(() => {
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (value) {
-            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
-
             await WalletRPC.deleteUnconfirmedRequest(value.payload)
             await Services.Ethereum.confirmRequest(value.payload)
-
-            if (toBeClose) {
-                window.close()
-            } else {
-                history.replace(PopupRoutes.Wallet)
-            }
+            history.replace(PopupRoutes.Wallet)
         }
     }, [value, location.search, history])
 
-    const handleReject = useRejectHandler(() => history.replace(PopupRoutes.Wallet), value)
+    const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
+        if (value) {
+            await Services.Ethereum.rejectRequest(value.payload)
+            history.replace(PopupRoutes.Wallet)
+        }
+    }, [value])
+
+    useUpdateEffect(() => {
+        if (!value && !requestLoading) {
+            history.replace(PopupRoutes.Wallet)
+        }
+    }, [value, requestLoading])
 
     return (
         <main className={classes.container}>
@@ -114,13 +125,14 @@ const SignRequest = memo(() => {
             </Typography>
             <Typography className={classes.message}>{data}</Typography>
             <div className={classes.controller}>
-                <Button
+                <LoadingButton
+                    loading={rejectLoading}
                     variant="contained"
                     className={classes.button}
-                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
+                    style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
                     onClick={handleReject}>
                     {t('cancel')}
-                </Button>
+                </LoadingButton>
                 <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
                     {t('confirm')}
                 </LoadingButton>

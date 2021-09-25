@@ -1,16 +1,18 @@
 import {
     ChainId,
-    ProviderType,
-    NetworkType,
-    getNetworkTypeFromChainId,
     getChainIdFromNetworkType,
+    getNetworkTypeFromChainId,
+    NetworkType,
+    ProviderType,
 } from '@masknet/web3-shared'
 import { EthereumAddress } from 'wallet.ts'
 import type { WalletRecord } from '../database/types'
 import {
-    currentAccountSettings,
     currentAccountMaskWalletSettings,
+    currentAccountSettings,
     currentChainIdSettings,
+    currentMaskWalletChainIdSettings,
+    currentMaskWalletNetworkSettings,
     currentNetworkSettings,
     currentProviderSettings,
 } from '../settings'
@@ -33,10 +35,6 @@ export async function updateAccount(
     if ((options.account && !options.providerType) || (!options.account && options.providerType))
         throw new Error('Account and provider type must be updating both')
 
-    // make sure chain id and network type to be updating both
-    if ((options.chainId && !options.networkType) || (!options.chainId && options.networkType))
-        throw new Error('Chain id and network type must be updating both')
-
     const { name, account, chainId, providerType, networkType } = options
 
     // update wallet in the DB
@@ -55,8 +53,18 @@ export async function updateAccount(
     }
     if (networkType) currentNetworkSettings.value = networkType
     if (account) currentAccountSettings.value = account
-    if (account && providerType === ProviderType.MaskWallet) currentAccountMaskWalletSettings.value = account
     if (providerType) currentProviderSettings.value = providerType
+}
+
+export async function updateMaskAccount(options: { account?: string; chainId?: ChainId; networkType?: NetworkType }) {
+    if (options.chainId && !options.networkType) options.networkType = getNetworkTypeFromChainId(options.chainId)
+    if (!options.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
+
+    const { account, chainId, networkType } = options
+
+    if (chainId) currentMaskWalletChainIdSettings.value = chainId
+    if (networkType) currentMaskWalletNetworkSettings.value = networkType
+    if (account && EthereumAddress.isValid(account)) currentAccountMaskWalletSettings.value = account
 }
 
 export async function resetAccount(

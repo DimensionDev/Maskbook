@@ -29,7 +29,7 @@ export const WalletHeader = memo(() => {
         <div>
             <div className={classes.container}>
                 <NetworkSelector />
-                <SettingIcon className={classes.setting} onClick={() => history.push(PopupRoutes.SelectWallet)} />
+                <SettingIcon className={classes.setting} onClick={() => history.push(PopupRoutes.SwitchWallet)} />
             </div>
         </div>
     )

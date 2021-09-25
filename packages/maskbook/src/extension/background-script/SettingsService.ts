@@ -30,6 +30,8 @@ import {
     currentTokenPricesSettings,
     currentIsMaskWalletLockedSettings,
     currentAccountMaskWalletSettings,
+    currentMaskWalletChainIdSettings,
+    currentMaskWalletNetworkSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
 
@@ -75,6 +77,12 @@ export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] 
 export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentAccountSettings)
 
 export const [getSelectedMaskWalletAddress, setSelectedMaskWalletAddress] = create(currentAccountMaskWalletSettings)
+
+export const [getCurrentMaskWalletChainId, setCurrentMaskWalletChainId] = create(currentMaskWalletChainIdSettings)
+
+export const [getCurrentMaskWalletNetworkType, setCurrentMaskWalletNetworkType] = create(
+    currentMaskWalletNetworkSettings,
+)
 
 export const [getCurrentPortfolioDataProvider, setCurrentPortfolioDataProvider] = create(
     currentPortfolioDataProviderSettings,

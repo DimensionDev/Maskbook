@@ -83,12 +83,15 @@ const CreateMnemonic = memo(() => {
             navigate(RoutePaths.CreateMaskWalletForm)
         }
 
-        const address = await PluginServices.Wallet.importNewWallet({
-            name,
-            path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-            mnemonic: words,
-            passphrase: '',
-        })
+        const address = await PluginServices.Wallet.importNewWallet(
+            {
+                name,
+                path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+                mnemonic: words,
+                passphrase: '',
+            },
+            true,
+        )
 
         await PluginServices.Wallet.addPhrase({
             path: HD_PATH_WITHOUT_INDEX_ETHEREUM,

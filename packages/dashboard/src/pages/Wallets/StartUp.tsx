@@ -5,6 +5,7 @@ import { Paper, Stack, Box } from '@material-ui/core'
 import { ActionCard } from '../../components/ActionCard'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages, Services } from '../../API'
+import urlcat from 'urlcat'
 
 const Container = styled('div')`
     display: flex;
@@ -42,7 +43,8 @@ export function StartUp() {
                             action={{
                                 type: 'primary',
                                 text: t.wallets_startup_import_action(),
-                                handler: () => Services.Helper.openPopupsWindow('/wallet/import'),
+                                handler: () =>
+                                    Services.Helper.openPopupsWindow(urlcat('/wallet/import', { toBeClose: 1 })),
                             }}
                         />
                         <ActionCard

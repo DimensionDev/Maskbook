@@ -12,7 +12,7 @@ import { useHistory } from 'react-router'
 import { PopupRoutes } from '../../../index'
 import { PluginTraderMessages } from '../../../../../plugins/Trader/messages'
 import { PluginTransakMessages } from '../../../../../plugins/Transak/messages'
-import { useChainId, useWallet } from '@masknet/web3-shared'
+import { useWallet } from '@masknet/web3-shared'
 import { useAsync } from 'react-use'
 import Services from '../../../../service'
 import { compact, intersectionWith } from 'lodash-es'
@@ -63,7 +63,6 @@ const useStyles = makeStyles()({
 const TokenDetail = memo(() => {
     const { t } = useI18N()
     const wallet = useWallet()
-    const chainId = useChainId()
     const { classes } = useStyles()
     const history = useHistory()
     const { currentToken } = useContainer(WalletContext)
@@ -85,8 +84,11 @@ const TokenDetail = memo(() => {
                 code: currentToken?.token.symbol ?? currentToken?.token.name,
             })
         } else {
-            const url = urlcat('next.html#', 'labs', { open: 'Transak' })
-            window.open(browser.runtime.getURL(url), 'BUY_DIALOG')
+            const url = urlcat('next.html#', 'labs', {
+                open: 'Transak',
+                code: currentToken?.token.symbol ?? currentToken?.token.name,
+            })
+            window.open(browser.runtime.getURL(url), 'BUY_DIALOG', 'noopener noreferrer')
         }
     }, [wallet?.address, isActiveSocialNetwork, currentToken])
 
@@ -106,7 +108,7 @@ const TokenDetail = memo(() => {
             })
         } else {
             const url = urlcat('next.html#', 'labs', { open: 'Swap' })
-            window.open(browser.runtime.getURL(url), 'SWAP_DIALOG')
+            window.open(browser.runtime.getURL(url), 'SWAP_DIALOG', 'noopener noreferrer')
         }
     }, [isActiveSocialNetwork, currentToken])
 

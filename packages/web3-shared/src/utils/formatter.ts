@@ -105,3 +105,11 @@ export function formatWeiToGwei(value: BigNumber.Value) {
 export function formatWeiToEther(value: BigNumber.Value) {
     return new BigNumber(value).div(new BigNumber(10 ** 18))
 }
+
+export function formatGweiToWei(value: BigNumber.Value) {
+    return new BigNumber(value).multipliedBy(10 ** 9)
+}
+
+export function formatGweiToEther(value: BigNumber.Value) {
+    return new BigNumber(value).div(10 ** 9)
+}

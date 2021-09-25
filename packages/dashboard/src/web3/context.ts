@@ -19,11 +19,6 @@ export const Web3Context: Web3ProviderType = {
         '',
         Messages.events.currentAccountSettings.on,
     ),
-    accountMaskWallet: createSubscriptionFromAsync(
-        Services.Settings.getSelectedMaskWalletAddress,
-        '',
-        Messages.events.currentAccountMaskWalletSettings.on,
-    ),
     nonce: createSubscriptionFromAsync(
         Services.Settings.getBlockNumber,
         0,

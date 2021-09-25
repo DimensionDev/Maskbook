@@ -20,7 +20,6 @@ export interface Web3ProviderType {
     provider: Subscription<Provider>
     allowTestnet: Subscription<boolean>
     account: Subscription<string>
-    accountMaskWallet: Subscription<string>
     nonce: Subscription<number>
     gasPrice: Subscription<number>
     etherPrice: Subscription<number>

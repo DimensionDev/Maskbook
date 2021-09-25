@@ -86,6 +86,10 @@ export const currentPersonaIdentifier = createGlobalSettings<string>('currentPer
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
+export const currentPopupWindowId = createGlobalSettings<number>('currentPopupWindowId', 0, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
 sideEffect.then(() => {
     // reset it to false after Mask startup
     currentImportingBackup.value = false
