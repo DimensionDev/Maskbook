@@ -26,8 +26,8 @@ import Services from '../extension/service'
 function createWeb3Context(disablePopup = false): Web3ProviderType {
     const Web3Provider = createExternalProvider(disablePopup)
     return {
-        provider: createStaticSubscription(Web3Provider),
-        allowTestnet: createStaticSubscription(Flags.wallet_allow_testnet),
+        provider: createStaticSubscription(() => Web3Provider),
+        allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
         chainId: createSubscriptionFromSettings(
             disablePopup ? currentMaskWalletChainIdSettings : currentChainIdSettings,
         ),
@@ -42,7 +42,7 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
         wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
         providerType: disablePopup
-            ? createStaticSubscription(ProviderType.MaskWallet)
+            ? createStaticSubscription(() => ProviderType.MaskWallet)
             : createSubscriptionFromSettings(currentProviderSettings),
         networkType: createSubscriptionFromSettings(
             disablePopup ? currentMaskWalletNetworkSettings : currentNetworkSettings,
@@ -125,9 +125,9 @@ function createSubscriptionFromSettings<T>(settings: InternalSettings<T>): Subsc
     }
 }
 
-function createStaticSubscription<T>(val: T) {
+function createStaticSubscription<T>(getter: () => T) {
     return {
-        getCurrentValue: () => val,
+        getCurrentValue: getter,
         subscribe: () => noop,
     }
 }

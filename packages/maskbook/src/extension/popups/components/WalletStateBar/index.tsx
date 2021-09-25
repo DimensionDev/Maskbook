@@ -4,6 +4,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { ProviderType } from '@masknet/web3-shared'
 import { Box, Stack, Typography } from '@material-ui/core'
 import { FC, memo } from 'react'
+import { NetworkSelector } from '../../components/NetworkSelector'
 import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
@@ -54,19 +55,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
 
         return (
             <Stack justifyContent="center" direction="row" alignItems="center">
-                <Stack
-                    direction="row"
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{ background: chainColor.replace(')', ', 0.1)'), px: 2, mr: 1 }}
-                    color={chainColor}
-                    className={classes.bar}
-                    onClick={openMenu}>
-                    <Typography component="span" sx={{ background: chainColor }} className={classes.dot} />
-                    <Typography component="span" fontSize={12}>
-                        {networkName}
-                    </Typography>
-                </Stack>
+                <NetworkSelector />
                 {isPending && (
                     <Stack
                         direction="row"
