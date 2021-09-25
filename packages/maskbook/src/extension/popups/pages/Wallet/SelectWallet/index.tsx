@@ -2,7 +2,15 @@ import { memo, useCallback, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { makeStyles } from '@masknet/theme'
 import { useLocation } from 'react-router'
-import { ChainId, getNetworkName, isSameAddress, ProviderType, useAccount, useWallets } from '@masknet/web3-shared'
+import {
+    ChainId,
+    getNetworkName,
+    isSameAddress,
+    ProviderType,
+    useAccount,
+    useChainIdValid,
+    useWallets,
+} from '@masknet/web3-shared'
 import { ChainIcon, FormattedAddress } from '@masknet/shared'
 import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/core'
 import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
@@ -18,6 +26,12 @@ const useStyles = makeStyles()({
         backgroundColor: '#F7F9FA',
         display: 'flex',
         flexDirection: 'column',
+    },
+    placeholder: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     header: {
         padding: 10,
@@ -108,6 +122,8 @@ const SelectWallet = memo(() => {
 
     const chainId = parseInt(search.get('chainId') ?? '0', 10) as ChainId
 
+    const chainIdValid = useChainIdValid()
+
     const onCopy = useCallback(
         (address: string) => {
             copyToClipboard(address)
@@ -131,7 +147,7 @@ const SelectWallet = memo(() => {
         return Services.Helper.removePopupWindow()
     }, [chainId, selected])
 
-    return (
+    return chainIdValid ? (
         <>
             <div className={classes.content}>
                 <div className={classes.header}>
@@ -175,6 +191,10 @@ const SelectWallet = memo(() => {
                 </Button>
             </div>
         </>
+    ) : (
+        <div className={classes.placeholder}>
+            <Typography>{t('popups_wallet_unsupported_network')}</Typography>
+        </div>
     )
 })
 

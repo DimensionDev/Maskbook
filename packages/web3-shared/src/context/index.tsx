@@ -18,7 +18,6 @@ export function useWeb3Context() {
 export function useWeb3State() {
     const _ = useWeb3Context()
     const account = useSubscription(_.account)
-    const accountMaskWallet = useSubscription(_.accountMaskWallet)
     const allowTestnet = useSubscription(_.allowTestnet)
     const balance = useSubscription(_.balance)
     const blockNumber = useSubscription(_.blockNumber)
@@ -28,19 +27,15 @@ export function useWeb3State() {
     const tokenPrices = useSubscription(_.tokenPrices)
     const providerType = useSubscription(_.providerType)
     const networkType = useSubscription(_.networkType)
-    const maskWalletNetworkType = useSubscription(_.maskWalletNetworkType)
     const wallets = useSubscription(_.wallets)
     const chainId = useSubscription(_.chainId)
-    const maskWalletChainId = useSubscription(_.maskWalletChainId)
     const chainDetailed = useMemo(() => getChainDetailed(chainId), [chainId])
-    const maskWalletChainDetail = useMemo(() => getChainDetailed(maskWalletChainId), [maskWalletChainId])
     const erc20Tokens = useSubscription(_.erc20Tokens)
     const erc20TokensCount = useSubscription(_.erc20TokensCount)
     const portfolioProvider = useSubscription(_.portfolioProvider)
     return {
         allowTestnet,
         account,
-        accountMaskWallet,
         nonce,
         gasPrice,
         etherPrice,
@@ -51,15 +46,11 @@ export function useWeb3State() {
         networkType,
         wallets,
         chainId,
-        maskWalletChainId,
-        maskWalletChainDetail,
-        maskWalletNetworkType,
         chainDetailed,
         erc20Tokens,
         erc20TokensCount,
         portfolioProvider,
         chainIdValid: !account || isChainIdValid(chainId, allowTestnet),
-        // maskChainIdValid: !ac
     }
 }
 

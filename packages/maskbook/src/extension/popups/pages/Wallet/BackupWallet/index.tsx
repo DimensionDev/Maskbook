@@ -5,7 +5,7 @@ import { NetworkSelector } from '../../../components/NetworkSelector'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { StyledInput } from '../../../components/StyledInput'
 import { File as FileIcon } from '@masknet/icons'
-import { ProviderType, useWallet } from '@masknet/web3-shared'
+import { useWallet } from '@masknet/web3-shared'
 import { useAsync } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
@@ -110,7 +110,7 @@ enum BackupTabs {
 const BackupWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const wallet = useWallet(ProviderType.MaskWallet)
+    const wallet = useWallet()
     const [confirmed, setConfirmed] = useState(true)
     const [currentTab, setCurrentTab] = useState(BackupTabs.JsonFile)
     const [password, setPassword] = useState('')

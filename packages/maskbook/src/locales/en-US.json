@@ -894,6 +894,7 @@
     "popups_wallet_gas_fee_settings_max_priority_fee": "Max priority fee",
     "popups_wallet_gas_fee_settings_max_fee": "Max fee",
     "popups_wallet_gas_fee_settings_min_gas_limit_tips": "Gas limit must be at least {{limit}}",
+    "popups_wallet_unsupported_network": "Unsupported network type",
     "popups_wallet_signature_request": "Signature request",
     "popups_wallet_signature_request_message": "Message",
     "popups_wallet_contract_interaction": "Contract Interaction",

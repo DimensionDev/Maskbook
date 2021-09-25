@@ -6,7 +6,7 @@ import { CopyIcon, EditIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { PopupRoutes } from '../../../../index'
-import { ProviderType, useWallet } from '@masknet/web3-shared'
+import { useWallet } from '@masknet/web3-shared'
 import { useCopyToClipboard } from 'react-use'
 
 const useStyles = makeStyles()({
@@ -62,7 +62,7 @@ const useStyles = makeStyles()({
 })
 
 export const WalletInfo = memo(() => {
-    const wallet = useWallet(ProviderType.MaskWallet)
+    const wallet = useWallet()
     const history = useHistory()
 
     const excludePath = useRouteMatch({

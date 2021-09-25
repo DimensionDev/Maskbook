@@ -20,8 +20,6 @@ export interface Web3ProviderType {
     provider: Subscription<Provider>
     allowTestnet: Subscription<boolean>
     account: Subscription<string>
-    accountMaskWallet: Subscription<string>
-    maskWalletChainId: Subscription<ChainId>
     nonce: Subscription<number>
     gasPrice: Subscription<number>
     etherPrice: Subscription<number>
@@ -32,7 +30,6 @@ export interface Web3ProviderType {
     wallets: Subscription<Wallet[]>
     providerType: Subscription<ProviderType>
     networkType: Subscription<NetworkType>
-    maskWalletNetworkType: Subscription<NetworkType>
     erc20TokensCount: Subscription<number>
     erc20Tokens: Subscription<ERC20TokenDetailed[]>
     addERC20Token: (token: ERC20TokenDetailed) => Promise<void>

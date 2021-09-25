@@ -7,10 +7,7 @@ import { useChainDetailed } from './useChainDetailed'
  * It will always yield Mainnet in production mode
  */
 export function useChainId(): ChainId {
-    const { chainId, maskWalletChainId } = useWeb3StateContext()
-
-    if (location.pathname === '/popups.html') return maskWalletChainId
-    return chainId
+    return useWeb3StateContext().chainId
 }
 
 /**

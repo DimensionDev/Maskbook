@@ -12,7 +12,6 @@ import {
     isGreaterThan,
     isZero,
     pow10,
-    ProviderType,
     useChainId,
     useGasLimit,
     useTokenTransferCallback,
@@ -129,7 +128,7 @@ export interface Prior1559TransferProps {
 export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, openAssetMenu, otherWallets }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const wallet = useWallet(ProviderType.MaskWallet)
+    const wallet = useWallet()
     const chainId = useChainId()
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const history = useHistory()

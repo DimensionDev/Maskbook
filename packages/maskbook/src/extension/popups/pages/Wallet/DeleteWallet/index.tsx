@@ -69,7 +69,7 @@ const useStyles = makeStyles()({
 const DeleteWallet = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
-    const wallet = useWallet(ProviderType.MaskWallet)
+    const wallet = useWallet()
     const { classes } = useStyles()
     // const [password, setPassword] = useState('')
 

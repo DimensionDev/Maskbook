@@ -1,5 +1,5 @@
 import { WalletStartUp } from './components/StartUp'
-import { EthereumRpcType, ProviderType, useWallet } from '@masknet/web3-shared'
+import { EthereumRpcType, useWallet } from '@masknet/web3-shared'
 import { WalletAssets } from './components/WalletAssets'
 import { Route, Switch, useHistory } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
@@ -29,7 +29,7 @@ const ContractInteraction = lazy(() => import('./ContractInteraction'))
 const Unlock = lazy(() => import('./Unlock'))
 
 export default function Wallet() {
-    const wallet = useWallet(ProviderType.MaskWallet)
+    const wallet = useWallet()
     const location = useLocation()
     const history = useHistory()
 

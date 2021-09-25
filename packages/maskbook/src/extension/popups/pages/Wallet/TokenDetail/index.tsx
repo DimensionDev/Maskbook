@@ -12,7 +12,7 @@ import { useHistory } from 'react-router'
 import { PopupRoutes } from '../../../index'
 import { PluginTraderMessages } from '../../../../../plugins/Trader/messages'
 import { PluginTransakMessages } from '../../../../../plugins/Transak/messages'
-import { ProviderType, useWallet } from '@masknet/web3-shared'
+import { useWallet } from '@masknet/web3-shared'
 import { useAsync } from 'react-use'
 import Services from '../../../../service'
 import { compact, intersectionWith } from 'lodash-es'
@@ -62,7 +62,7 @@ const useStyles = makeStyles()({
 
 const TokenDetail = memo(() => {
     const { t } = useI18N()
-    const wallet = useWallet(ProviderType.MaskWallet)
+    const wallet = useWallet()
     const { classes } = useStyles()
     const history = useHistory()
     const { currentToken } = useContainer(WalletContext)

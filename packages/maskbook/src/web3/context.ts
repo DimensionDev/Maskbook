@@ -34,10 +34,12 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
             getCurrentValue: () => Flags.wallet_allow_testnet,
             subscribe: () => noop,
         },
-        chainId: createSubscriptionFromSettings(currentChainIdSettings),
-        account: createSubscriptionFromSettings(currentAccountSettings),
-        accountMaskWallet: createSubscriptionFromSettings(currentAccountMaskWalletSettings),
-        maskWalletChainId: createSubscriptionFromSettings(currentMaskWalletChainIdSettings),
+        chainId: createSubscriptionFromSettings(
+            disablePopup ? currentMaskWalletChainIdSettings : currentChainIdSettings,
+        ),
+        account: createSubscriptionFromSettings(
+            disablePopup ? currentAccountMaskWalletSettings : currentAccountSettings,
+        ),
         balance: createSubscriptionFromSettings(currentBalanceSettings),
         gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
         blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
@@ -46,8 +48,9 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
         wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
         providerType: createSubscriptionFromSettings(currentProviderSettings),
-        networkType: createSubscriptionFromSettings(currentNetworkSettings),
-        maskWalletNetworkType: createSubscriptionFromSettings(currentMaskWalletNetworkSettings),
+        networkType: createSubscriptionFromSettings(
+            disablePopup ? currentMaskWalletNetworkSettings : currentNetworkSettings,
+        ),
         erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
         erc20TokensCount: createSubscriptionFromAsync(
             WalletRPC.getERC20TokensCount,
