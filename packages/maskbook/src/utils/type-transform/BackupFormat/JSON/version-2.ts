@@ -1,13 +1,8 @@
 /* eslint-disable import/no-deprecated */
-import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
 import type { BackupJSONFileVersion1 } from './version-1'
 import { ProfileIdentifier, ECKeyIdentifierFromJsonWebKey } from '../../../../database/type'
-import type {
-    AESJsonWebKey,
-    EC_Public_JsonWebKey,
-    EC_Private_JsonWebKey,
-} from '../../../../modules/CryptoAlgorithm/interfaces/utils'
+import type { AESJsonWebKey, EC_Public_JsonWebKey, EC_Private_JsonWebKey } from '@masknet/shared-base'
 import { twitterBase } from '../../../../social-network-adaptor/twitter.com/base'
 import { facebookBase } from '../../../../social-network-adaptor/facebook.com/base'
 
