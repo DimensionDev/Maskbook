@@ -55,10 +55,14 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
         for (const [_, x] of data.wallets.entries()) {
             const record = WalletRecordFromJSONFormat(x)
             const name = record.name
-            if (record.storedKeyInfo && record.derivationPath)
-                await addWallet(record.address, name, record.derivationPath, record.storedKeyInfo)
-            else if (record.mnemonic) await recoverWalletFromMnemonic(name, record.mnemonic)
-            else if (record.privateKey) await recoverWalletFromPrivateKey(name, record.privateKey)
+            try {
+                if (record.storedKeyInfo && record.derivationPath)
+                    await addWallet(record.address, name, record.derivationPath, record.storedKeyInfo)
+                else if (record.mnemonic) await recoverWalletFromMnemonic(name, record.mnemonic)
+                else if (record.privateKey) await recoverWalletFromPrivateKey(name, record.privateKey)
+            } catch (error) {
+                console.error(error)
+            }
         }
 
         for (const x of data.posts) {

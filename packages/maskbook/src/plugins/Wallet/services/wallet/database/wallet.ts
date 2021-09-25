@@ -67,7 +67,11 @@ export async function addWallet(
     derivationPath?: string,
     storedKeyInfo?: api.IStoredKeyInfo,
 ) {
-    if (await hasWallet(address)) throw new Error('The wallet already exists.')
+    const wallet = await getWallet(address)
+
+    // overwrite mask wallet is not allowed
+    if (wallet?.storedKeyInfo?.data) throw new Error('The wallet already exists.')
+
     const now = new Date()
     const address_ = formatEthereumAddress(address)
     await PluginDB.add({
@@ -100,6 +104,7 @@ export async function updateWallet(
             | 'address'
             | 'createdAt'
             | 'updatedAt'
+            | 'storedKeyInfo'
             | 'erc20_token_whitelist'
             | 'erc20_token_blacklist'
             | 'erc721_token_whitelist'
@@ -109,11 +114,28 @@ export async function updateWallet(
         >
     >,
 ) {
-    const wallet = await getWalletRequired(address)
+    const wallet = await getWallet(address)
+
+    // overwrite with storedKeyInfo is not allowed
+    if (wallet?.storedKeyInfo?.data) throw new Error('Failed to update wallet.')
+
+    const now = new Date()
+    const address_ = formatEthereumAddress(address)
     await PluginDB.add({
+        type: 'wallet',
+        id: address_,
+        address: address_,
+        name: `Account ${(await getWallets()).length + 1}`,
+        erc20_token_whitelist: new Set(),
+        erc20_token_blacklist: new Set(),
+        erc721_token_whitelist: new Set(),
+        erc721_token_blacklist: new Set(),
+        erc1155_token_whitelist: new Set(),
+        erc1155_token_blacklist: new Set(),
         ...wallet,
         ...updates,
-        updatedAt: new Date(),
+        createdAt: wallet?.createdAt ?? now,
+        updatedAt: now,
     })
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }
