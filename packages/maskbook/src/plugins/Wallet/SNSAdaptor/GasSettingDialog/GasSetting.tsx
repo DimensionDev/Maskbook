@@ -1,8 +1,8 @@
 import type { FC } from 'react'
 import { isEIP1559Supported, useChainId } from '@masknet/web3-shared'
-import { GasSetting1559 } from '../../../../extension/popups/pages/Wallet/GasSetting/GasSetting1559'
-import { Prior1559GasSetting } from '../../../../extension/popups/pages/Wallet/GasSetting/Prior1559GasSetting'
-import type { GasSettingProps } from '../../../../extension/popups/pages/Wallet/GasSetting/types'
+import { GasSetting1559 } from './GasSetting1559'
+import { Prior1559GasSetting } from './Prior1559GasSetting'
+import type { GasSettingProps } from './types'
 
 export const GasSetting: FC<GasSettingProps> = (props) => {
     const chainId = useChainId()
