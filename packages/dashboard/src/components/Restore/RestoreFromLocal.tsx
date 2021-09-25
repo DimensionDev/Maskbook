@@ -4,7 +4,7 @@ import { Box, Card } from '@material-ui/core'
 import type { BackupPreview } from '@masknet/public-api'
 import { MaskTextField, useSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
-import { Services } from '../../API'
+import { PluginServices, Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { MaskAlert } from '../MaskAlert'
 import FileUpload from '../FileUpload'
@@ -87,6 +87,12 @@ export const RestoreFromLocal = memo(() => {
 
     const restoreDB = useCallback(async () => {
         try {
+            // setup password
+            if (json?.wallets) {
+                if (await PluginServices.Wallet.hasPassword()) await PluginServices.Wallet.unlockWallet(paymentPassword)
+                else await PluginServices.Wallet.setPassword(paymentPassword)
+            }
+
             await Services.Welcome.checkPermissionsAndRestore(backupId)
             if (!currentPersona) {
                 const lastedPersona = await Services.Identity.queryLastPersonaCreated()
@@ -98,7 +104,7 @@ export const RestoreFromLocal = memo(() => {
         } catch {
             enqueueSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
         }
-    }, [backupId])
+    }, [backupId, json, paymentPassword])
 
     return (
         <>

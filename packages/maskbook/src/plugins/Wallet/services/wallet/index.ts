@@ -24,7 +24,7 @@ export { importMnemonic, importPrivateKey } from './maskwallet'
 export { getWallet, getWallets, removeWallet, updateWallet, hasWallet } from './database/wallet'
 
 // password
-export { hasPassword, verifyPassword, changePassword, validatePassword, clearPassword } from './password'
+export { setPassword, hasPassword, verifyPassword, changePassword, validatePassword, clearPassword } from './password'
 
 // locker
 export { isLocked, lockWallet, unlockWallet } from './locker'
@@ -277,7 +277,7 @@ export async function recoverWalletFromPrivateKey(name: string, privateKey: stri
         coin: api.Coin.Ethereum,
         name,
         password: password_,
-        privateKey,
+        privateKey: privateKey.replace(/^0x/, ''),
     })
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
     const created = await sdk.createAccountOfCoinAtPath({

@@ -17,6 +17,11 @@ export function INTERNAL_setPassword(newPassword: string) {
     password = newPassword
 }
 
+export async function setPassword(newPassword: string) {
+    await database.encryptSecret(newPassword)
+    INTERNAL_setPassword(newPassword)
+}
+
 export async function hasPassword() {
     return database.hasSecret()
 }
@@ -43,7 +48,7 @@ export function validatePassword(unverifiedPassword: string) {
     if (!unverifiedPassword) return false
     if (unverifiedPassword.length < 8) return false
     if (unverifiedPassword.length > 20) return false
-    return [/\d/, /[a-z]/i, /[^\da-z]/i].filter((x) => x.test(unverifiedPassword)).length > 2
+    return [/\d/, /[a-z]/i, /[^\da-z]/i].filter((x) => x.test(unverifiedPassword)).length >= 2
 }
 
 export function validatePasswordRequired(unverifiedPassword: string) {
