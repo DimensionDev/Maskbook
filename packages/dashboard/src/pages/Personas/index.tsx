@@ -1,5 +1,5 @@
 import { Paper, Stack, Tab, Tabs } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
 import { useEffect, useState } from 'react'
 import { capitalize } from 'lodash-es'
@@ -32,6 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     personaCard: {
         padding: theme.spacing(4),
         marginBottom: theme.spacing(3),
+        backgroundColor: MaskColorVar.primaryBackground,
         [theme.breakpoints.down('md')]: {
             padding: theme.spacing(2),
         },

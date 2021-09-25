@@ -92,16 +92,42 @@ export const Button: Theme = (mode, colors): ThemeOptions => ({
     },
 })
 
-export const Dialog: Theme = (mode, colors) => ({
+export const Dialog: Theme = (mode, colors): ThemeOptions => ({
     components: {
         MuiDialog: {
             styleOverrides: {
-                paper: { minHeight: 200, minWidth: 440, background: mode === 'light' ? '#fff' : '#111432' },
+                paper: { minHeight: 200, minWidth: 440, backgroundColor: colors.mainBackground },
+            },
+            defaultProps: {
+                BackdropProps: {
+                    sx: {
+                        backdropFilter: 'blur(8px)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    },
+                },
+            },
+        },
+        MuiDialogTitle: {
+            styleOverrides: {
+                root: { backgroundColor: colors.mainBackground },
+            },
+        },
+        MuiDialogContent: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: colors.mainBackground,
+                    [`& .dashboard-style`]: { backgroundColor: 'initial' },
+                },
             },
         },
         MuiDialogActions: {
             styleOverrides: {
-                root: { justifyContent: 'center', paddingBottom: 24, '&>:not(:first-of-type)': { marginLeft: 18 } },
+                root: {
+                    justifyContent: 'center',
+                    paddingBottom: 24,
+                    '&>:not(:first-of-type)': { marginLeft: 18 },
+                    backgroundColor: colors.mainBackground,
+                },
             },
         },
     },

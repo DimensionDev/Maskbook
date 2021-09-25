@@ -1,3 +1,4 @@
+import { DocumentIcon } from '@masknet/icons'
 import { MaskDialog } from '@masknet/theme'
 import { Box, Button, DialogContent, Slider } from '@material-ui/core'
 import { memo, useCallback, useState } from 'react'
@@ -46,6 +47,7 @@ export const UploadAvatarDialog = memo<UploadAvatarDialogProps>(({ open, onClose
                                 next()
                             }}
                             accept="image/png, image/jpeg"
+                            icon={<DocumentIcon />}
                         />
                     </Box>
                 )}

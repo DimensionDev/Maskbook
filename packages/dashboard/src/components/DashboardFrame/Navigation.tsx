@@ -17,6 +17,7 @@ import { useContext } from 'react'
 import { useMatch, useNavigate } from 'react-router'
 import { DashboardContext } from './context'
 import {
+    MaskBannerIcon,
     MaskNotSquareIcon,
     MenuLabsActiveIcon,
     MenuLabsIcon,
@@ -30,6 +31,7 @@ import {
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { RoutePaths } from '../../type'
+import { useAppearance } from '../../pages/Personas/api'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
     const navigate = useNavigate()
@@ -115,14 +117,11 @@ export function Navigation({}: NavigationProps) {
 
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const t = useDashboardI18N()
+    const mode = useAppearance()
 
     return (
         <List>
-            {isLargeScreen && (
-                <LogoItem>
-                    <MaskNotSquareIcon />
-                </LogoItem>
-            )}
+            {isLargeScreen && <LogoItem>{mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}</LogoItem>}
             <ListItemLink to={RoutePaths.Personas}>
                 <ItemIcon>{useMatch(RoutePaths.Personas) ? <MenuPersonasActiveIcon /> : <MenuPersonasIcon />}</ItemIcon>
                 <ListItemText primary={t.personas()} />

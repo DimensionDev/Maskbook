@@ -1,5 +1,5 @@
 import { MaskColorVar, MaskDialog } from '@masknet/theme'
-import { Box, Tooltip, Typography } from '@material-ui/core'
+import { Box, DialogContent, Tooltip, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { LocalBackupIcon, CloudBackupIcon } from '@masknet/icons'
 import { useContext } from 'react'
@@ -45,7 +45,8 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         top: 0,
         left: 0,
-        background: theme.palette.mode === 'dark' ? 'rgba(0,0,0,.4)' : 'rgba(255,255,255,.5)',
+        borderRadius: '8px',
+        background: theme.palette.mode === 'dark' ? 'rgba(0,0,0,.4)' : 'rgba(255,255,255,.4)',
         borderRadius: '8px',
     },
 }))
@@ -61,22 +62,24 @@ export default function BackupModeSelectDialog({ open, onClose, onSelect }: Back
     const { user } = useContext(UserContext)
     return (
         <MaskDialog title={t.settings_button_backup()} open={open} onClose={onClose}>
-            <Box className={classes.container}>
-                <Box className={classes.mode} onClick={() => onSelect('local')}>
-                    <LocalBackupIcon className={classes.icon} />
-                    <Typography className={classes.label}>Local Backup</Typography>
-                </Box>
-                <Box className={classes.mode}>
-                    {!(user.email || user.phone) ? (
-                        <Tooltip title={t.settings_dialogs_bind_email_or_phone()} placement="top" arrow>
-                            <div className={classes.mask} />
-                        </Tooltip>
-                    ) : null}
+            <DialogContent>
+                <Box className={classes.container}>
+                    <Box className={classes.mode} onClick={() => onSelect('local')}>
+                        <LocalBackupIcon className={classes.icon} />
+                        <Typography className={classes.label}>Local Backup</Typography>
+                    </Box>
+                    <Box className={classes.mode}>
+                        {!(user.email || user.phone) ? (
+                            <Tooltip title={t.settings_dialogs_bind_email_or_phone()} placement="top" arrow>
+                                <div className={classes.mask} />
+                            </Tooltip>
+                        ) : null}
 
-                    <CloudBackupIcon className={classes.icon} onClick={() => onSelect('cloud')} />
-                    <Typography className={classes.label}>Cloud Backup</Typography>
+                        <CloudBackupIcon className={classes.icon} onClick={() => onSelect('cloud')} />
+                        <Typography className={classes.label}>Cloud Backup</Typography>
+                    </Box>
                 </Box>
-            </Box>
+            </DialogContent>
         </MaskDialog>
     )
 }

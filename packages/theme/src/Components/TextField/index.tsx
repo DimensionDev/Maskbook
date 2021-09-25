@@ -34,6 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         lineHeight: '16px',
         borderRadius: 6,
+        border: `1px solid ${theme.palette.mode === 'dark' ? '#3D4166' : MaskColorVar.lineLighter}`,
         [`&.${formHelperTextClasses.error}`]: {
             boxShadow: `0 0 0 ${theme.spacing(0.5)} ${MaskColorVar.redMain.alpha(0.2)}`,
             border: `1px solid ${MaskColorVar.redMain.alpha(0.8)}`,
