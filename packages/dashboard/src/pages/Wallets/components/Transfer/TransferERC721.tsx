@@ -1,14 +1,19 @@
 import { MaskTextField } from '@masknet/theme'
-import { Box, Button, Stack } from '@material-ui/core'
-import { memo, useCallback, useMemo, useState } from 'react'
+import { Box, Button, IconButton, Stack, Typography } from '@material-ui/core'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import {
     ERC721ContractDetailed,
     EthereumTokenType,
+    formatWeiToEther,
     FungibleTokenDetailed,
+    GasOption,
+    TransactionStateType,
     useAccount,
     useERC721TokenDetailedOwnerList,
+    useGasLimit,
     useGasPrice,
+    useNativeTokenDetailed,
     useTokenTransferCallback,
 } from '@masknet/web3-shared'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -21,6 +26,9 @@ import { EthereumAddress } from 'wallet.ts'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import TuneIcon from '@mui/icons-material/Tune'
+import BigNumber from 'bignumber.js'
+import { useNativeTokenPrice } from './useNativeTokenPrice'
 
 interface TransferERC721Props {
     token: FungibleTokenDetailed
@@ -30,22 +38,33 @@ type FormInputs = {
     recipient: string
     contract: string
     tokenId: string
+    memo: string
 }
 
 export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
     const t = useDashboardI18N()
-    const [id] = useState(uuid())
-    const account = useAccount()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
+    const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
+    const [gasLimit, setGasLimit] = useState<string | number>(0)
+    const [offset, setOffset] = useState(0)
+    const [id] = useState(uuid())
+
+    const account = useAccount()
+    const nativeToken = useNativeTokenDetailed()
+    const nativeTokenPrice = useNativeTokenPrice()
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         EthereumTokenType.ERC721,
         contract?.address ?? '',
     )
-    const [offset, setOffset] = useState(0)
 
     // gas price
-    const { value: gasPrice = '0' } = useGasPrice()
+    const { value: defaultGasPrice = '0' } = useGasPrice()
+    const [customGasPrice, setCustomGasPrice] = useState<BigNumber.Value>(0)
+    const gasPrice = customGasPrice || defaultGasPrice
+    const gasFee = useMemo(() => new BigNumber(gasLimit).multipliedBy(gasPrice), [gasLimit, gasPrice])
 
+    // dialog
+    const { setDialog: setGasSettingDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated)
     const { setDialog: setSelectContractDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
@@ -54,12 +73,56 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
             setContract(ev.contract)
         },
     )
+    const openGasSettingDialog = useCallback(() => {
+        setGasSettingDialog({ open: true, gasLimit, gasOption })
+    }, [gasLimit, gasOption])
+
     const {
         asyncRetry: { value = { tokenDetailedOwnerList: [], loadMore: true }, loading: loadingOwnerList },
         clearTokenDetailedOwnerList,
     } = useERC721TokenDetailedOwnerList(contract, account, offset)
-
     const { tokenDetailedOwnerList, loadMore } = value
+
+    useEffect(() => {
+        return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
+            if (evt.gasPrice) setCustomGasPrice(evt.gasPrice)
+            if (evt.gasOption) setGasOption(evt.gasOption)
+            if (evt.gasLimit) setGasLimit(evt.gasLimit)
+        })
+    }, [])
+
+    // form
+    const schema = z.object({
+        recipient: z.string().refine((address) => !EthereumAddress.isValid(address), t.wallets_incorrect_address()),
+        contract: z.string().min(1),
+        tokenId: z.string().min(1),
+        memo: z.string(),
+    })
+
+    const {
+        control,
+        handleSubmit,
+        setValue,
+        watch,
+        formState: { errors, isSubmitting, isDirty },
+    } = useForm<FormInputs>({
+        resolver: zodResolver(schema),
+        defaultValues: { recipient: '', contract: '', tokenId: '' },
+    })
+
+    const allFormFields = watch()
+
+    const erc721GasLimit = useGasLimit(
+        EthereumTokenType.ERC721,
+        contract?.address,
+        undefined,
+        allFormFields.recipient,
+        allFormFields.tokenId,
+    )
+
+    useEffect(() => {
+        setGasLimit(erc721GasLimit.value?.toFixed() ?? 0)
+    }, [erc721GasLimit.value])
 
     const onTransfer = useCallback(
         async (data) => {
@@ -67,22 +130,6 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
         },
         [transferCallback],
     )
-
-    const schema = z.object({
-        recipient: z.string().refine((address) => !EthereumAddress.isValid(address), t.wallets_incorrect_address()),
-        contract: z.string().min(1),
-        tokenId: z.string().min(1),
-    })
-
-    const {
-        control,
-        handleSubmit,
-        setValue,
-        formState: { errors, isSubmitting, isValid },
-    } = useForm<FormInputs>({
-        resolver: zodResolver(schema),
-        defaultValues: { recipient: '', contract: '', tokenId: '' },
-    })
 
     const contractIcon = useMemo(() => {
         if (!contract?.iconURL) return null
@@ -103,6 +150,7 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
                             render={(field) => (
                                 <MaskTextField
                                     {...field}
+                                    onChange={(e) => setValue('recipient', e.currentTarget.value)}
                                     helperText={errors.recipient?.message}
                                     error={!!errors.recipient}
                                     label={t.wallets_transfer_to_address()}
@@ -157,8 +205,48 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
                             />
                         )}
                     </Box>
+                    <Box
+                        width="100%"
+                        display="flex"
+                        flexDirection="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        mt="16px">
+                        <Typography fontSize="12px" fontWeight="bold">
+                            {t.gas_fee()}
+                        </Typography>
+                        <Box display="flex" flexDirection="row" alignItems="center">
+                            <Typography fontSize="14px">
+                                {t.transfer_cost({
+                                    gasFee: formatWeiToEther(gasFee).toFixed(6),
+                                    symbol: nativeToken.value?.symbol ?? '',
+                                    usd: formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice).toFixed(2),
+                                })}
+                            </Typography>
+                            <IconButton size="small" onClick={openGasSettingDialog}>
+                                <TuneIcon fontSize="small" />
+                            </IconButton>
+                        </Box>
+                    </Box>
+                    <Box mt={2} width="100%">
+                        <Controller
+                            control={control}
+                            render={(field) => (
+                                <MaskTextField
+                                    {...field}
+                                    placeholder={t.wallets_transfer_memo_placeholder()}
+                                    label={t.wallets_transfer_memo()}
+                                    onChange={(e) => setValue('memo', e.currentTarget.value)}
+                                />
+                            )}
+                            name="memo"
+                        />
+                    </Box>
                     <Box mt={4}>
-                        <Button sx={{ width: 240 }} type="submit" disabled={isSubmitting}>
+                        <Button
+                            sx={{ width: 240 }}
+                            type="submit"
+                            disabled={isSubmitting || transferState.type === TransactionStateType.WAIT_FOR_CONFIRMING}>
                             {t.wallets_transfer_send()}
                         </Button>
                     </Box>
