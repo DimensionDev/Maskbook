@@ -15,8 +15,10 @@ import { Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
-import { useStylesExtends, TokenInList } from '@masknet/shared'
 import { EthereumAddress } from 'wallet.ts'
+import { TokenInList } from '../TokenInList'
+import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
+
 export interface FixedTokenListProps extends withClasses<'list' | 'placeholder'> {
     keyword?: string
     whitelist?: string[]

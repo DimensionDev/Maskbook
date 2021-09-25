@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, forwardRef, useImperativeHandle } from 'react'
 import type { InputBaseComponentProps } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useDebounce } from 'react-use'
 import {
     Typography,
@@ -14,7 +14,7 @@ import {
     FilledInput,
 } from '@material-ui/core'
 
-import { Flags, useI18N, usePortalShadowRoot } from '../../../utils'
+import { Flags, useI18N } from '../../../utils'
 import { useRegionList } from './hooks/useRegion'
 import type { RegionCode } from './hooks/useRegion'
 

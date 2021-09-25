@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react'
 import { DialogContent } from '@material-ui/core'
-import { makeStyles, SearchInput } from '@masknet/theme'
-import { delay, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import { FungibleTokenDetailed, useNativeTokenDetailed, useChainDetailed } from '@masknet/web3-shared'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 import { WalletMessages } from '../../Wallet/messages'
-import { useI18N } from '../../../utils'
+import { delay, useI18N } from '../../../utils'
+import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -76,7 +76,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     }, [])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_token')} maxWidth="xs">
+        <InjectedDialog open={open} onClose={onClose} title={'xxxx'} maxWidth="xs">
             <DialogContent>
                 {!disableSearchBar ? <SearchInput label={t('add_token_search_hint')} onChange={onChange} /> : null}
                 <FixedTokenList

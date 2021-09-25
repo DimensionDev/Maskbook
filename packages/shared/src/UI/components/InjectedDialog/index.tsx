@@ -12,11 +12,11 @@ import {
     useMediaQuery,
 } from '@material-ui/core'
 import { makeStyles, useDialogStackConsumer, usePortalShadowRoot } from '@masknet/theme'
-import { Children, cloneElement } from 'react'
 import { DialogDismissIconUI } from '@masknet/icons'
-import { ErrorBoundary, useStylesExtends, mergeClasses } from '@masknet/shared'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { useI18N } from '../../utils'
+import { Children, cloneElement } from 'react'
+
+import { ErrorBoundary } from '../ErrorBoundary'
+import { useStylesExtends, mergeClasses } from '../../UIHelper/custom-ui-helper'
 
 const useStyles = makeStyles()((theme) => ({
     dialogTitle: {
@@ -50,8 +50,8 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     titleBarIconStyle?: 'auto' | 'back' | 'close'
 }
 
+// TODO: overwrite according to social network UI
 export function InjectedDialog(props: InjectedDialogProps) {
-    const overwrite = activatedSocialNetworkUI.customization.componentOverwrite || {}
     const {
         dialogActions,
         dialogCloseButton,
@@ -65,7 +65,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
 
     const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, ...rest } = props
-    const { t } = useI18N()
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
     const { extraProps, shouldReplaceExitWithBack } = useDialogStackConsumer(open)
@@ -98,7 +97,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                         <IconButton
                             size="large"
                             classes={{ root: dialogCloseButton }}
-                            aria-label={t('post_dialog__dismiss_aria')}
+                            aria-label="Dismiss"
                             onClick={onClose}>
                             <DialogDismissIconUI style={shouldReplaceExitWithBack ? 'back' : titleBarIconStyle} />
                         </IconButton>

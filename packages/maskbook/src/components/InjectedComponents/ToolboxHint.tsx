@@ -24,7 +24,7 @@ import { MaskMessage } from '../../utils/messages'
 import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
 import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog, useStylesExtends, useSelectTokenDialog } from '@masknet/shared'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -134,6 +134,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
     const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
+    const { openDialog: openSelectTokenDialog } = useSelectTokenDialog()
 
     //#region recent pending transactions
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
@@ -264,7 +265,13 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     return (
         <>
-            <div className={classes.wrapper} onClick={openMenu}>
+            <div
+                className={classes.wrapper}
+                onClick={() => {
+                    openSelectTokenDialog({
+                        uuid: 'x',
+                    })
+                }}>
                 <div className={classes.button}>
                     <MaskbookSharpIconOfSize classes={{ root: classes.icon }} size={22} />
                     <Typography className={classes.title}>Mask Network</Typography>
