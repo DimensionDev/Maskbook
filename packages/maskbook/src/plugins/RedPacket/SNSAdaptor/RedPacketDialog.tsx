@@ -13,7 +13,6 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import Services from '../../../extension/service'
 import Web3Utils from 'web3-utils'
 import {
-    EthereumTokenType,
     formatBalance,
     getChainName,
     TransactionStateType,
@@ -169,8 +168,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             payload.current.total = CreationSuccess.total
             payload.current.duration = createSettings.duration
             payload.current.creation_time = Number.parseInt(CreationSuccess.creation_time, 10) * 1000
-
-            if (createSettings.token.type === EthereumTokenType.ERC20) payload.current.token = createSettings.token
+            payload.current.token = createSettings.token
 
             setSettings(undefined)
             // output the redpacket as JSON payload

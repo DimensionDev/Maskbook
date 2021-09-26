@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
 import { RedPacketRPC } from '../../messages'
-import type { ChainId } from '@masknet/web3-shared'
+import { ChainId, useBlockNumber } from '@masknet/web3-shared'
 
 export function useRedPacketHistory(address: string, chainId: ChainId) {
+    const blockNumber = useBlockNumber()
     return useAsyncRetry(async () => {
-        const payloads = await RedPacketRPC.getRedPacketHistory(address, chainId)
-        return payloads
-    }, [address, chainId])
+        return RedPacketRPC.getRedPacketHistory(address, chainId, blockNumber)
+    }, [address, chainId, blockNumber])
 }

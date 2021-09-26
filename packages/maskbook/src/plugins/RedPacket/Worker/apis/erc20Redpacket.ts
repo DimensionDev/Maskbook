@@ -32,6 +32,7 @@ const RED_PACKET_FIELDS = `
     rpid
     txid
     contract_address
+    block_number
     contract_version
     password
     shares
@@ -59,6 +60,7 @@ type RedpacketFromSubgraphType = {
     claimers: { name: string; address: string }[]
     contract_address: string
     contract_version: number
+    block_number: number
     creation_time: number
     creator: { name: string; address: string }
     duration: number
@@ -139,6 +141,7 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
                 token: token,
                 claimers: x.claimers,
                 total_remaining: x.total_remaining,
+                block_number: x.block_number,
             }
 
             return redpacketPayload

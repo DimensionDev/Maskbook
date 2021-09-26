@@ -79,13 +79,13 @@ export async function discoverPool(from: string, payload: JSON_PayloadInMask) {
 }
 
 function getLatestBlockNumberFromSubgraph(
-    poolsFromSubgraph: PoolFromNetwork | undefined,
+    poolFromSubgraph: PoolFromNetwork | undefined,
     page: number,
     creationBlockNumber: number | undefined,
 ) {
     return page === 0
-        ? poolsFromSubgraph?.pool
-            ? poolsFromSubgraph.pool.block_number! + 1
+        ? poolFromSubgraph?.pool
+            ? poolFromSubgraph.pool.block_number! + 1
             : creationBlockNumber
         : undefined
 }

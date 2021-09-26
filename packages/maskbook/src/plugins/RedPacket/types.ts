@@ -48,6 +48,7 @@ interface RedPacketBasic {
     total: string
     creation_time: number
     duration: number
+    block_number?: number
 }
 
 export interface RedPacketJSONPayload extends RedPacketBasic {
@@ -61,6 +62,19 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     token?: FungibleTokenDetailed
     claimers?: { address: string; name: string }[]
     total_remaining?: string
+}
+
+export interface RedPacketJSONPayloadFromChain extends Omit<RedPacketJSONPayload, 'token'> {
+    token_address: string
+}
+
+export interface RedpacketAvailability {
+    token_address: string
+    balance: string
+    total: number
+    claimed: number
+    expired: boolean
+    claimed_amount: string
 }
 //#endregion
 

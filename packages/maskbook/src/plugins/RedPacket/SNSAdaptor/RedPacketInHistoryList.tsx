@@ -4,10 +4,18 @@ import classNames from 'classnames'
 import { Box, ListItem, Typography, Popper } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import { RedPacketJSONPayload, RedPacketStatus } from '../types'
+import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } from '../types'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { formatBalance, TransactionStateType, useAccount } from '@masknet/web3-shared'
+import {
+    formatBalance,
+    TransactionStateType,
+    useAccount,
+    isSameAddress,
+    EthereumTokenType,
+    useFungibleTokenDetailed,
+    useTokenConstants,
+} from '@masknet/web3-shared'
 import { TokenIcon } from '@masknet/shared'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -137,7 +145,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface RedPacketInHistoryListProps {
-    history: RedPacketJSONPayload
+    history: RedPacketJSONPayload | RedPacketJSONPayloadFromChain
     onSelect: (payload: RedPacketJSONPayload) => void
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
@@ -150,13 +158,22 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, history)
-
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
         history.contract_version,
         account,
         history.rpid,
     )
-    console.log({ history })
+    const tokenAddress =
+        (history as RedPacketJSONPayload).token?.address ?? (history as RedPacketJSONPayloadFromChain).token_address
+
+    const { value: tokenDetailed } = useFungibleTokenDetailed(
+        isSameAddress(NATIVE_TOKEN_ADDRESS, tokenAddress) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+        tokenAddress ?? '',
+    )
+
+    const historyToken = (history as RedPacketJSONPayload).token ?? tokenDetailed
+
     //#region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
@@ -171,9 +188,9 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                 summary: availability
                     ? `Refunding red packet for ${formatBalance(
                           new BigNumber(availability.balance),
-                          history.token?.decimals ?? 0,
-                          history.token?.decimals ?? 0,
-                      )} ${history.token?.symbol}`
+                          historyToken?.decimals ?? 0,
+                          historyToken?.decimals ?? 0,
+                      )} ${historyToken?.symbol}`
                     : '',
             })
         } else if (refundState.type === TransactionStateType.CONFIRMED) {
@@ -185,7 +202,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) await refundCallback()
-        if (canSend) onSelect(history)
+        if (canSend) onSelect({ ...history, token: historyToken })
     }, [onSelect, refundCallback, canRefund, canSend, history])
 
     //#region password lost tips
@@ -206,9 +223,9 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             <Box className={classes.box}>
                 <TokenIcon
                     classes={{ icon: classes.icon }}
-                    address={history.token?.address ?? ''}
-                    name={history.token?.name}
-                    logoURI={history.token?.logoURI}
+                    address={historyToken?.address ?? ''}
+                    name={historyToken?.name}
+                    logoURI={historyToken?.logoURI}
                 />
                 <Box className={classes.content}>
                     <section className={classes.section}>
@@ -226,8 +243,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t('plugin_red_packet_history_total_amount', {
-                                    amount: formatBalance(history.total, history.token?.decimals, 6),
-                                    symbol: history.token?.symbol,
+                                    amount: formatBalance(history.total, historyToken?.decimals, 6),
+                                    symbol: historyToken?.symbol,
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
@@ -311,13 +328,13 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     span: <span className={classes.span} />,
                                 }}
                                 values={{
-                                    amount: formatBalance(history.total, history.token?.decimals, 6),
+                                    amount: formatBalance(history.total, historyToken?.decimals, 6),
                                     claimedAmount: formatBalance(
                                         new BigNumber(history.total).minus(history?.total_remaining ?? 0),
-                                        history.token?.decimals,
+                                        historyToken?.decimals,
                                         6,
                                     ),
-                                    symbol: history.token?.symbol,
+                                    symbol: historyToken?.symbol,
                                 }}
                             />
                         </Typography>

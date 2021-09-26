@@ -143,7 +143,7 @@ export interface RedPacketProps {
 
 export function RedPacket(props: RedPacketProps) {
     const { payload } = props
-    console.log({ payload })
+
     const { t } = useI18N()
     const { classes } = useStyles()
     // context
@@ -160,6 +160,7 @@ export function RedPacket(props: RedPacketProps) {
     } = useAvailabilityComputed(account, payload)
     const tokenType = payload.token ? EthereumTokenType.Native : EthereumTokenType.ERC20
     const { value: tokenDetailed } = useFungibleTokenDetailed(tokenType, payload.token?.address ?? '')
+
     const token = payload.token ?? tokenDetailed
     //#endregion
 
