@@ -1,20 +1,28 @@
 import { api } from '@dimensiondev/mask-wallet-core/proto'
-import init, { request } from '@dimensiondev/mask-wallet-core/web'
+import { OnDemandWorker } from '../../../../../web-workers/OnDemandWorker'
+import type { Input, Output } from '../../../../../../src-workers/wallet'
 
 type Request = InstanceType<typeof api.MWRequest>
 type Response = InstanceType<typeof api.MWResponse>
 
-let loaded = false
+const Worker = new OnDemandWorker(new URL('../../../../../../src-workers/wallet.ts', import.meta.url), {
+    name: 'MaskWallet',
+})
+
 function send<I extends keyof Request, O extends keyof Response>(input: I, output: O) {
-    return async (value: Request[I]) => {
-        if (!loaded) {
-            await init()
-            loaded = true
-        }
-        const payload = api.MWRequest.encode({ [input]: value }).finish()
-        const response = api.MWResponse.decode(request(payload))
-        if (response.error) throw new Error(response.error.errorMsg ?? 'Unknown Error')
-        return response[output]
+    return (value: Request[I]) => {
+        return new Promise<Response[O]>((resolve, reject) => {
+            const req: Input = { id: Math.random(), data: { [input]: value } }
+            Worker.postMessage(req)
+            Worker.addEventListener('message', function f(message) {
+                if (message.data.id !== req.id) return
+
+                Worker.removeEventListener('message', f)
+                const data: Output = message.data
+                if (data.response.error) return reject(new Error(data.response.error.errorCode ?? 'Unknown Error'))
+                resolve(data.response[output])
+            })
+        })
     }
 }
 
