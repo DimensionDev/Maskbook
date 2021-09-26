@@ -94,7 +94,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1),
     },
     button: {
-        marginTop: 0,
+        marginTop: '0px !important',
         minHeight: 38,
         height: 38,
         backgroundColor: '#1C68F3',
