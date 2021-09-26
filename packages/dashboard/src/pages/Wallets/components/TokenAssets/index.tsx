@@ -96,7 +96,9 @@ export const TokenAssets = memo(() => {
                     </TabPanel>
                 </TabContext>
             </ContentContainer>
-            <AddCollectibleDialog open={addCollectibleOpen} onClose={() => setAddCollectibleOpen(false)} />
+            {addCollectibleOpen && (
+                <AddCollectibleDialog open={addCollectibleOpen} onClose={() => setAddCollectibleOpen(false)} />
+            )}
         </>
     )
 })

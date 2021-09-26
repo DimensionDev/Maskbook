@@ -108,6 +108,17 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: Colle
     }
 }
 
+export function resolveCollectibleAssetLink(chainId: ChainId, provider: CollectibleProvider) {
+    switch (provider) {
+        case CollectibleProvider.OPENSEA:
+            if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io`
+            if (chainId === ChainId.Matic) return `https://opensea.io/assets/matic`
+            return `https://opensea.io/assets`
+        default:
+            unreachable(provider)
+    }
+}
+
 export function resolveCollectibleLink(
     chainId: ChainId,
     provider: CollectibleProvider,
@@ -115,7 +126,7 @@ export function resolveCollectibleLink(
 ) {
     switch (provider) {
         case CollectibleProvider.OPENSEA:
-            return urlcat(resolveCollectibleProviderLink(chainId, provider), '/assets/:address/:tokenId', {
+            return urlcat(resolveCollectibleAssetLink(chainId, provider), '/:address/:tokenId', {
                 address,
                 tokenId,
             })

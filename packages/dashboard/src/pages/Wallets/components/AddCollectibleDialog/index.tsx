@@ -83,9 +83,9 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
         const schema = z.object({
             address: z
                 .string()
-                .min(1)
+                .min(1, t.wallets_collectible_field_contract_require())
                 .refine((address) => EthereumAddress.isValid(address), t.wallets_incorrect_address()),
-            tokenId: z.string().min(1),
+            tokenId: z.string().min(1, t.wallets_collectible_field_token_id_require()),
         })
 
         const {
@@ -94,7 +94,7 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
             setError,
             watch,
             reset,
-            formState: { errors, isSubmitting, isValid },
+            formState: { errors, isSubmitting, isDirty },
         } = useForm<FormInputs>({
             resolver: zodResolver(schema),
             defaultValues: { address: '', tokenId: '' },
@@ -127,7 +127,7 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
 
         return (
             <MaskDialog open={open} title={t.wallets_add_collectible()} onClose={handleClose}>
-                <form onSubmit={handleFormSubmit}>
+                <form noValidate onSubmit={handleFormSubmit}>
                     <DialogContent>
                         <Box>
                             <Controller
@@ -160,12 +160,12 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
                             />
                         </Box>
                     </DialogContent>
-                    <DialogActions sx={{ mt: 3 }}>
+                    <DialogActions sx={{ pt: 3 }}>
                         <Button sx={{ minWidth: 100 }} variant="outlined" color="primary" onClick={onClose}>
                             {t.cancel()}
                         </Button>
                         <Button
-                            disabled={isSubmitting || !isValid}
+                            disabled={isSubmitting || !isDirty}
                             sx={{ minWidth: 100 }}
                             color="primary"
                             type="submit">
