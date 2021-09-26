@@ -60,7 +60,7 @@ export default function SwapPage() {
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
     const wallet = useWallet()
     const openPopupsWindow = useCallback(() => {
-        Services.Helper.openPopupsWindow('/wallets')
+        Services.Helper.openPopupsWindow('/wallets/select')
     }, [])
     return (
         <div className={classes.page}>

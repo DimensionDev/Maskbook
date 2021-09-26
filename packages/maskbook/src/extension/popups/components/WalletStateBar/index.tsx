@@ -39,17 +39,7 @@ interface WalletStateBarUIProps {
 }
 
 export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
-    ({
-        networkName,
-        isPending,
-        providerType,
-        chainColor,
-        walletAddress,
-        walletName,
-        openConnectWalletDialog,
-        openMenu,
-        children,
-    }) => {
+    ({ isPending, providerType, walletAddress, walletName, openConnectWalletDialog, children }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
 
