@@ -41,7 +41,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const [isOpenSelectTokenDialog, openSelectTokenDialog] = useState(false)
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
     const chainId = useChainId()
-    const is1559Supported = isEIP1559Supported(chainId)
+    const is1559Supported = useMemo(() => isEIP1559Supported(chainId), [chainId])
 
     // gas price
     const { value: defaultGasPrice = '0' } = useGasPrice()
