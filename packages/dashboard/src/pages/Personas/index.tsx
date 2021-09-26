@@ -14,6 +14,8 @@ import { PersonaContent } from './components/PersonaContent'
 import { PersonaRowCard } from './components/PersonaCard/Row'
 import { PersonaStateBar } from './components/PersonaStateBar'
 import { UserProvider } from '../Settings/hooks/UserContext'
+import { useNavigate } from 'react-router'
+import { RoutePaths } from '../../type'
 
 const useStyles = makeStyles()((theme) => ({
     tabPanel: {
@@ -45,8 +47,15 @@ function firstProfileNetwork(x: PersonaInformation | undefined) {
 function Personas() {
     const { classes } = useStyles()
     const t = useDashboardI18N()
+    const navigate = useNavigate()
     const { drawerOpen, toggleDrawer, personas, currentPersona, connectPersona, definedSocialNetworks } =
         PersonaContext.useContainer()
+
+    useEffect(() => {
+        if (personas.length === 0 || !currentPersona) {
+            navigate(RoutePaths.Setup)
+        }
+    }, [personas])
 
     const [activeTab, setActiveTab] = useState(
         firstProfileNetwork(currentPersona) ?? definedSocialNetworks[0].networkIdentifier,
