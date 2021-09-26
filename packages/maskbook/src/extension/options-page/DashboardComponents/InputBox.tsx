@@ -13,6 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
     },
     search: {
+        marginBottom: 0,
         display: 'flex',
         alignItems: 'center',
     },

@@ -14,9 +14,16 @@ import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { JSON_RPC_ErrorCode } from '../constants'
+import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
-const useStyles = makeStyles()((theme) => ({
+interface StyleProps {
+    snsId: string
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     content: {
+        ...(snsId === MINDS_ID ? { minWidth: 600 } : {}),
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
@@ -44,7 +51,7 @@ interface TransactionDialogUIProps extends withClasses<never> {}
 
 function TransactionDialogUI(props: TransactionDialogUIProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const classes = useStylesExtends(useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }), props)
 
     const chainId = useChainId()
 
@@ -72,7 +79,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
 
     if (!state) return null
     return (
-        <InjectedDialog open={open} onClose={closeDialog} title={title} maxWidth="xs">
+        <InjectedDialog open={open} onClose={closeDialog} title={title}>
             <DialogContent className={classes.content}>
                 {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ? (
                     <>
