@@ -101,7 +101,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
 
         return (
             <TableRow>
-                <TableCell align="left" variant="body">
+                <TableCell align="left" variant="body" sx={{ border: 'none' }}>
                     <Box display="flex" alignItems="center">
                         <Typography>{index}</Typography>
                         <Box className={classes.favorite}>
@@ -135,7 +135,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                         </Box>
                     </Box>
                 </TableCell>
-                <TableCell align="center">
+                <TableCell align="center" sx={{ border: 'none' }}>
                     {!contact.fingerprint ? (
                         <LoadingButton
                             loading={loading}

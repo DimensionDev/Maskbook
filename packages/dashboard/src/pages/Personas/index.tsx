@@ -1,5 +1,5 @@
 import { Paper, Stack, Tab, Tabs } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
 import { useEffect, useState } from 'react'
 import { capitalize } from 'lodash-es'
@@ -28,6 +28,14 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
+    },
+    personaCard: {
+        padding: theme.spacing(4),
+        marginBottom: theme.spacing(3),
+        backgroundColor: MaskColorVar.primaryBackground,
+        [theme.breakpoints.down('md')]: {
+            padding: theme.spacing(2),
+        },
     },
 }))
 
@@ -61,7 +69,7 @@ function Personas() {
                         toggleDrawer={toggleDrawer}
                     />
                 }>
-                <Paper variant="rounded" sx={{ mb: 3, p: 4 }}>
+                <Paper variant="rounded" className={classes.personaCard}>
                     <PersonaRowCard />
                 </Paper>
                 <ContentContainer style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>

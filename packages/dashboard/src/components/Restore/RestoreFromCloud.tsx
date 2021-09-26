@@ -168,7 +168,7 @@ export const RestoreFromCloud = memo(() => {
                     onConform={synchronizePassword}
                 />
             )}
-            <Box sx={{ marginTop: '35px', width: '100%' }}>
+            <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_cloud_backup_warning()} />
             </Box>
         </>

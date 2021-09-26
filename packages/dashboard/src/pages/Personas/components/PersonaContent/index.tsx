@@ -13,7 +13,10 @@ const useStyles = makeStyles()({
     tab: {
         maxHeight: '100%',
         height: '100%',
-        overflow: 'scroll',
+        overflow: 'auto',
+    },
+    tabs: {
+        width: '288px',
     },
 })
 
@@ -32,7 +35,10 @@ export const PersonaContent = memo<PersonaContentProps>(({ network }) => {
     return (
         <Box className={classes.container}>
             <TabContext value={String(tab)}>
-                <ButtonGroupTabList onChange={(e, v) => setTab(v)} aria-label="persona-post-contacts-button-group">
+                <ButtonGroupTabList
+                    classes={{ root: classes.tabs }}
+                    onChange={(e, v) => setTab(v)}
+                    aria-label="persona-post-contacts-button-group">
                     <Tab value={PersonaContentTab.Posts} label="Posts" />
                     <Tab value={PersonaContentTab.Contacts} label="Contacts" />
                 </ButtonGroupTabList>
