@@ -23,7 +23,7 @@ export function useGasOptions() {
         () => [
             {
                 title: t('popups_wallet_gas_fee_settings_low'),
-                gasOption: GasOption.Slow,
+                gasOption: GasOption.Low,
                 gasPrice: gasNow?.slow ?? 0,
             },
             {

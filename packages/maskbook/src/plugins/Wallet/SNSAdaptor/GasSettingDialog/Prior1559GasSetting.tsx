@@ -41,7 +41,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             () => [
                 {
                     title: t('popups_wallet_gas_fee_settings_low'),
-                    gasOption: GasOption.Slow,
+                    gasOption: GasOption.Low,
                     gasPrice: gasNow?.slow ?? 0,
                 },
                 {

@@ -551,7 +551,7 @@ export interface AddressName {
 //#endregion
 
 export enum GasOption {
-    Slow = 'slow',
+    Low = 'low',
     Medium = 'medium',
     High = 'high',
 }
