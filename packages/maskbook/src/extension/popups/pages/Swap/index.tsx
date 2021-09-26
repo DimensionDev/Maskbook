@@ -1,12 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import {
-    getNetworkName,
-    TransactionStatusType,
-    useChainColor,
-    useChainId,
-    useWallet,
-    useWeb3StateContext,
-} from '@masknet/web3-shared'
+import { TransactionStatusType, useChainColor, useChainId, useWallet, useWeb3StateContext } from '@masknet/web3-shared'
 import { Typography } from '@material-ui/core'
 import { useCallback } from 'react'
 import { useRecentTransactions } from '../../../../plugins/Wallet/hooks/useRecentTransactions'
@@ -16,6 +9,9 @@ import { SwapBox } from './SwapBox'
 
 const useStyles = makeStyles()((theme) => {
     return {
+        walletStateBar: {
+            color: theme.palette.grey['900'],
+        },
         page: {
             minHeight: '100vh',
             maxWidth: '100vw',
@@ -67,9 +63,8 @@ export default function SwapPage() {
             <div className={classes.container}>
                 <header className={classes.header}>
                     <WalletStateBarUI
+                        className={classes.walletStateBar}
                         isPending={pendingTransactions.length > 0}
-                        networkName={getNetworkName(chainId) ?? ''}
-                        chainColor={chainColor}
                         providerType={providerType}
                         openConnectWalletDialog={openPopupsWindow}
                         walletName={wallet?.name ?? '-'}
