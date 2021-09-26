@@ -62,7 +62,8 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                         : { value: `0x${Number.parseInt(value, 16).toString(16)}` }),
                 }
 
-                return Services.Ethereum.estimateGas(config)
+                return web3.eth
+                    .estimateGas(config)
                     .then((gasEstimate) => {
                         return {
                             call: x,
@@ -70,7 +71,8 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                         }
                     })
                     .catch((error) => {
-                        return Services.Ethereum.call(config)
+                        return web3.eth
+                            .call(config)
                             .then(() => {
                                 return {
                                     call: x,

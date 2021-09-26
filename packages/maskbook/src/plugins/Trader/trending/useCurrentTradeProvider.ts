@@ -6,13 +6,13 @@ import {
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
 } from '../settings'
-import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
-import { currentChainIdSettings } from '../../Wallet/settings'
+import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
 import { unreachable } from '@dimensiondev/kit'
 import { TradeProvider } from '@masknet/public-api'
+import { currentChainIdSettings } from '../../Wallet/settings'
 
-export function useCurrentTradeProvider() {
-    const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
+export function useCurrentTradeProvider(chainId?: ChainId) {
+    const networkType = getNetworkTypeFromChainId(chainId ?? currentChainIdSettings.value)
     const ethNetworkTradeProvider = useValueRef(ethereumNetworkTradeProviderSettings)
     const polygonNetworkTradeProvider = useValueRef(polygonNetworkTradeProviderSettings)
     const binanceNetworkTradeProvider = useValueRef(binanceNetworkTradeProviderSettings)

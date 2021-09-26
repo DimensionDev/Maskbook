@@ -16,7 +16,7 @@ export function SwapBox() {
     const history = useHistory()
     const chainId = useChainId()
     const [currentProvider, setCurrentProvider] = useState<TradeProvider | null>(null)
-    const tradeProvider = useCurrentTradeProvider()
+    const tradeProvider = useCurrentTradeProvider(chainId)
     const tradeContext = useTradeContext(tradeProvider)
     const { value: tradeProviders = [] } = useAvailableTraderProviders(TagType.CASH, 'MASK')
 

@@ -42,7 +42,8 @@
     "idb": "5.0.8",
     "react": "=18.0.0-alpha-aecb3b6d1",
     "react-dom": "=18.0.0-alpha-aecb3b6d1",
-    "react-i18next": "^11.12.0"
+    "react-i18next": "^11.12.0",
+    "web3-core-method": "1.5.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
