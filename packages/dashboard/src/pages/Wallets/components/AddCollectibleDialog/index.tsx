@@ -94,7 +94,7 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
             setError,
             watch,
             reset,
-            formState: { errors, isSubmitting, isValid },
+            formState: { errors, isSubmitting, isDirty },
         } = useForm<FormInputs>({
             resolver: zodResolver(schema),
             defaultValues: { address: '', tokenId: '' },
@@ -165,7 +165,7 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
                             {t.cancel()}
                         </Button>
                         <Button
-                            disabled={isSubmitting || !isValid}
+                            disabled={isSubmitting || !isDirty}
                             sx={{ minWidth: 100 }}
                             color="primary"
                             type="submit">
