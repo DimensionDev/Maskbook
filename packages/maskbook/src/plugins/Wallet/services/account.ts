@@ -8,7 +8,7 @@ import {
 } from '@masknet/web3-shared'
 import { EthereumAddress } from 'wallet.ts'
 import {
-    currentAccountMaskWalletSettings,
+    currentMaskWalletAccountWalletSettings,
     currentAccountSettings,
     currentChainIdSettings,
     currentMaskWalletChainIdSettings,
@@ -77,7 +77,7 @@ export async function updateMaskAccount(options: { account?: string; chainId?: C
 
     if (chainId) currentMaskWalletChainIdSettings.value = chainId
     if (networkType) currentMaskWalletNetworkSettings.value = networkType
-    if (account && EthereumAddress.isValid(account)) currentAccountMaskWalletSettings.value = account
+    if (account && EthereumAddress.isValid(account)) currentMaskWalletAccountWalletSettings.value = account
 }
 
 export async function resetAccount(
@@ -90,7 +90,7 @@ export async function resetAccount(
 ) {
     const { account = '', chainId, networkType, providerType } = options
     currentAccountSettings.value = account
-    if (providerType === ProviderType.MaskWallet) currentAccountMaskWalletSettings.value = account
+    if (providerType === ProviderType.MaskWallet) currentMaskWalletAccountWalletSettings.value = account
     if (chainId) currentChainIdSettings.value = chainId
     if (networkType) currentNetworkSettings.value = networkType
     if (providerType) currentProviderSettings.value = providerType

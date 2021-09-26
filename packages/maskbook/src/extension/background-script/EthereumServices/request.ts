@@ -4,14 +4,13 @@ import { INTERNAL_nativeSend, INTERNAL_send, SendOverrides } from './send'
 import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
 import { EthereumMethodType, ProviderType } from '@masknet/web3-shared'
 import {
-    currentAccountMaskWalletSettings,
+    currentMaskWalletAccountWalletSettings,
     currentMaskWalletChainIdSettings,
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
 import { defer, Flags } from '../../../utils'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { openPopupsWindow } from '../HelperService'
-import { memoizePromise } from '@dimensiondev/kit'
 import Services from '../../service'
 
 let id = 0
@@ -26,7 +25,7 @@ const RISK_METHOD_LIST = [
     EthereumMethodType.ETH_SEND_TRANSACTION,
 ]
 
-interface RequestOptions {
+export interface RequestOptions {
     popupsWindow?: boolean
 }
 
@@ -66,24 +65,6 @@ export async function request<T extends unknown>(
     })
 }
 
-export const requestWithCache = memoizePromise(request, (requestArguments) => JSON.stringify(requestArguments))
-
-export async function requestWithoutPopup<T extends unknown>(
-    requestArguments: RequestArguments,
-    overrides?: SendOverrides,
-) {
-    return request(
-        requestArguments,
-        {
-            ...overrides,
-            account: currentAccountMaskWalletSettings.value,
-            chainId: currentMaskWalletChainIdSettings.value,
-            providerType: ProviderType.MaskWallet,
-        },
-        { popupsWindow: false },
-    )
-}
-
 export async function requestSend(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
@@ -115,19 +96,6 @@ export async function requestSend(
     getSendMethod()(payload_, callback, overrides)
 }
 
-export async function requestSendWithoutPopup(
-    payload: JsonRpcPayload,
-    callback: (error: Error | null, response?: JsonRpcResponse) => void,
-    overrides?: SendOverrides,
-) {
-    return requestSend(payload, callback, {
-        ...overrides,
-        account: currentAccountMaskWalletSettings.value,
-        chainId: currentMaskWalletChainIdSettings.value,
-        providerType: ProviderType.MaskWallet,
-    })
-}
-
 export async function confirmRequest(payload: JsonRpcPayload) {
     const pid = getPayloadId(payload)
     if (!pid) return
@@ -150,9 +118,9 @@ export async function confirmRequest(payload: JsonRpcPayload) {
             }
         },
         {
-            account: currentAccountMaskWalletSettings.value,
-            providerType: ProviderType.MaskWallet,
+            account: currentMaskWalletAccountWalletSettings.value,
             chainId: currentMaskWalletChainIdSettings.value,
+            providerType: ProviderType.MaskWallet,
         },
     )
     return deferred

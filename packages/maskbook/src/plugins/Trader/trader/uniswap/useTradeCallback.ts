@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import type { SwapParameters } from '@uniswap/v2-sdk'
-import { TransactionState, TransactionStateType, useAccount } from '@masknet/web3-shared'
+import { TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
@@ -28,6 +28,7 @@ interface FailedCall extends SwapCallEstimate {
 }
 
 export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlippage = SLIPPAGE_DEFAULT) {
+    const web3 = useWeb3()
     const account = useAccount()
     const tradeParameters = useTradeParameters(trade, allowedSlippage)
 
@@ -127,7 +128,7 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
             } = bestCallOption
 
             try {
-                const hash = await Services.Ethereum.sendTransaction({
+                const { transactionHash } = await web3.eth.sendTransaction({
                     from: account,
                     to: address,
                     data: calldata,
@@ -136,9 +137,9 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                 })
                 setTradeState({
                     type: TransactionStateType.HASH,
-                    hash,
+                    hash: transactionHash,
                 })
-                resolve(hash)
+                resolve(transactionHash)
             } catch (error) {
                 if ((error as any)?.code) {
                     const error_ = new Error(
@@ -159,7 +160,7 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                 }
             }
         })
-    }, [account, tradeParameters])
+    }, [web3, account, tradeParameters])
 
     const resetCallback = useCallback(() => {
         setTradeState({

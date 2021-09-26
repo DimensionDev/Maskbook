@@ -29,7 +29,7 @@ import {
     currentEtherPriceSettings,
     currentTokenPricesSettings,
     currentMaskWalletLockStatusSettings,
-    currentAccountMaskWalletSettings,
+    currentMaskWalletAccountWalletSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
 } from '../../plugins/Wallet/settings'
@@ -76,7 +76,9 @@ export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] 
 
 export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentAccountSettings)
 
-export const [getSelectedMaskWalletAddress, setSelectedMaskWalletAddress] = create(currentAccountMaskWalletSettings)
+export const [getSelectedMaskWalletAddress, setSelectedMaskWalletAddress] = create(
+    currentMaskWalletAccountWalletSettings,
+)
 
 export const [getCurrentMaskWalletChainId, setCurrentMaskWalletChainId] = create(currentMaskWalletChainIdSettings)
 

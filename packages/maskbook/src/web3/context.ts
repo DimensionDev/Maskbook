@@ -13,7 +13,7 @@ import {
     currentTokenPricesSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
-    currentAccountMaskWalletSettings,
+    currentMaskWalletAccountWalletSettings,
     currentMaskWalletBalanceSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
@@ -22,12 +22,33 @@ import { createExternalProvider } from './helpers'
 import Services from '../extension/service'
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
-    const Web3Provider = createExternalProvider(disablePopup)
+    const Web3Provider = createExternalProvider(
+        () => {
+            return isMask
+                ? {
+                      account: currentMaskWalletAccountWalletSettings.value,
+                      chainId: currentMaskWalletChainIdSettings.value,
+                      providerType: ProviderType.MaskWallet,
+                  }
+                : {
+                      account: currentAccountSettings.value,
+                      chainId: currentChainIdSettings.value,
+                      providerType: currentProviderSettings.value,
+                  }
+        },
+        () => {
+            return {
+                popupsWindow: !disablePopup,
+            }
+        },
+    )
     return {
         provider: createStaticSubscription(() => Web3Provider),
         allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
         chainId: createSubscriptionFromSettings(isMask ? currentMaskWalletChainIdSettings : currentChainIdSettings),
-        account: createSubscriptionFromSettings(isMask ? currentAccountMaskWalletSettings : currentAccountSettings),
+        account: createSubscriptionFromSettings(
+            isMask ? currentMaskWalletAccountWalletSettings : currentAccountSettings,
+        ),
         balance: createSubscriptionFromSettings(isMask ? currentMaskWalletBalanceSettings : currentBalanceSettings),
         blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
