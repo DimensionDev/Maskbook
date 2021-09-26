@@ -1,11 +1,12 @@
 import { useState } from 'react'
+import { useChainId } from '@masknet/web3-shared'
+import { Link, Typography } from '@material-ui/core'
 import {
     TypedMessageAnchor,
     registerTypedMessageRenderer,
     TypedMessage,
     isTypedMessageAnchor,
 } from '../../../protocols/typed-message'
-import { Link, Typography } from '@material-ui/core'
 import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
 import { PluginTraderMessages, PluginTraderRPC } from '../messages'
 import { TagType } from '../types'
@@ -32,6 +33,7 @@ registerTypedMessageRenderer('x-cash-trending', {
 })
 
 function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProps<TypedMessageCashTrending>) {
+    const chainId = useChainId()
     const [openTimer, setOpenTimer] = useState<NodeJS.Timeout | null>(null)
     const onMouseOver = (ev: React.MouseEvent<HTMLAnchorElement>) => {
         // cache for async operations
@@ -43,7 +45,7 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
                 const { name, category } = props.message
                 const type = category === 'cash' ? TagType.CASH : TagType.HASH
                 const dataProviders = await PluginTraderRPC.getAvailableDataProviders(type, name)
-                const tradeProviders = await PluginTraderRPC.getAvailableTraderProviders(type, name)
+                const tradeProviders = await PluginTraderRPC.getAvailableTraderProviders(chainId)
                 if (!dataProviders.length) return
                 PluginTraderMessages.cashTagObserved.sendToLocal({
                     name,
