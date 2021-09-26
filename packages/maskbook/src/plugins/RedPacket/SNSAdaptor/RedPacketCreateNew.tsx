@@ -3,10 +3,16 @@ import { RedPacketFormProps, RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../../../utils'
+import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 import { IconURLs } from './IconURL'
 
-const useStyles = makeStyles()((theme) => ({
+interface StyleProps {
+    snsId: string
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     tab: {
         height: 36,
         minHeight: 36,
@@ -18,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 544,
         height: 36,
         minHeight: 36,
-        margin: '0 auto',
+        margin: `0 ${snsId === MINDS_ID ? '12px' : 'auto'}`,
         '& .Mui-selected': {
             backgroundColor: '#1C68F3',
             color: '#fff !important',
@@ -46,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
 export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly [number, (next: number) => void] }) {
     const { origin, onNext, onChange, onClose, SelectMenuProps, state } = props
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const tabProps: AbstractTabProps = {
         tabs: [
             {

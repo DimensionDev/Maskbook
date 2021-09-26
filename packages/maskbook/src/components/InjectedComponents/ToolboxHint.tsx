@@ -66,7 +66,11 @@ const useStyles = makeStyles<StyleProps>()(({ palette, breakpoints, spacing }, {
             width: '100%',
             cursor: 'pointer',
             [breakpoints.down('lg')]: {
+                justifyContent: snsId === MINDS_ID ? 'left' : 'center',
+            },
+            [breakpoints.down(snsId === MINDS_ID ? 1220 : 1265)]: {
                 transform: 'translateX(0px)',
+                justifyContent: 'center !important',
             },
             '&:hover': {
                 '& $title': {
@@ -83,7 +87,7 @@ const useStyles = makeStyles<StyleProps>()(({ palette, breakpoints, spacing }, {
             borderRadius: 50,
             justifyContent: 'center',
             alignItems: 'center',
-            [breakpoints.down('lg')]: {
+            [breakpoints.down(snsId === MINDS_ID ? 1220 : 1265)]: {
                 transform: 'translateX(0px)',
                 padding: 14,
             },
@@ -95,7 +99,7 @@ const useStyles = makeStyles<StyleProps>()(({ palette, breakpoints, spacing }, {
             fontSize: 20,
             marginLeft: 22,
             lineHeight: 1.35,
-            [breakpoints.down('lg')]: {
+            [breakpoints.down(snsId === MINDS_ID ? 1220 : 1265)]: {
                 display: 'none',
             },
         },
