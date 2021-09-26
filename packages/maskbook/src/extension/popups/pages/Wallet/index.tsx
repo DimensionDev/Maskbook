@@ -37,10 +37,9 @@ export default function Wallet() {
     const history = useHistory()
     const wallets = useWallets(ProviderType.MaskWallet)
 
-    const isLock = useWalletLockStatus()
+    const { isLock, loading: getLockStatusLoading } = useWalletLockStatus()
 
     const { loading, retry } = useAsyncRetry(async () => {
-        // If the wallet be locked
         if (isLock) {
             history.replace(PopupRoutes.Unlock)
             return
@@ -75,7 +74,7 @@ export default function Wallet() {
                     break
             }
         }
-    }, [location, isLock])
+    }, [location.search, isLock])
 
     useEffect(() => {
         return WalletMessages.events.requestsUpdated.on(({ hasRequest }) => {
@@ -94,7 +93,7 @@ export default function Wallet() {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletContext.Provider>
-                {loading ? (
+                {loading || getLockStatusLoading ? (
                     <LoadingPlaceholder />
                 ) : (
                     <Switch>

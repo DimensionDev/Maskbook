@@ -12,7 +12,7 @@ import { useAsyncRetry } from 'react-use'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { PluginServices } from '../../../../API'
 import urlcat from 'urlcat'
-import { MaskTextField } from '../../../../../../theme/src'
+import { MaskTextField } from '@masknet/theme'
 import PasswordField from '../../../../components/PasswordField'
 
 const useStyles = makeStyles()({
@@ -89,16 +89,15 @@ const CreateWalletForm = memo(() => {
                 t.create_wallet_password_match_tip(),
             )
         const confirmRule = zod.string().min(8).max(20)
-        return zod
-            .object({
-                name: zod.string().min(1).max(12),
-                password: hasPassword ? passwordRule.optional() : passwordRule,
-                confirm: hasPassword ? confirmRule.optional() : confirmRule,
-            })
-            .refine((data) => (!hasPassword ? data.password === data.confirm : null), {
-                message: t.create_wallet_password_match_tip(),
-                path: ['confirm'],
-            })
+        return zod.object(
+            hasPassword
+                ? { name: zod.string().min(1).max(12) }
+                : {
+                      name: zod.string().min(1).max(12),
+                      password: hasPassword ? passwordRule.optional() : passwordRule,
+                      confirm: hasPassword ? confirmRule.optional() : confirmRule,
+                  },
+        )
     }, [hasPassword])
 
     const {
@@ -116,9 +115,14 @@ const CreateWalletForm = memo(() => {
     })
 
     const onSubmit = handleSubmit((data) => {
-        navigate(urlcat(RoutePaths.CreateMaskWalletMnemonic, { name: data.name }), {
-            state: { password: data.password },
-        })
+        navigate(
+            urlcat(RoutePaths.CreateMaskWalletMnemonic, { name: data.name }),
+            data.password
+                ? {
+                      state: { password: data.password },
+                  }
+                : undefined,
+        )
     })
 
     return (

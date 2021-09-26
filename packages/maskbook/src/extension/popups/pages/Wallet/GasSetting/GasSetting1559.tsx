@@ -104,6 +104,7 @@ export const GasSetting1559 = memo(() => {
     const chainId = useChainId()
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
+    const [getGasLimitError, setGetGasLimitError] = useState(false)
     const { value: nativeToken } = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
@@ -163,6 +164,7 @@ export const GasSetting1559 = memo(() => {
                     value: value.computedPayload._tx.value,
                 })
             } catch {
+                setGetGasLimitError(true)
                 return 0
             }
         }
@@ -326,8 +328,8 @@ export const GasSetting1559 = memo(() => {
 
     //#region If the estimate gas be 0, Set error
     useUpdateEffect(() => {
-        if (!minGasLimit) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
-    }, [minGasLimit])
+        if (!getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
+    }, [getGasLimitError])
 
     return (
         <>

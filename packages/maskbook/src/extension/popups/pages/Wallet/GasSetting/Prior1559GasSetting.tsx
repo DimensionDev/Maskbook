@@ -87,6 +87,7 @@ export const Prior1559GasSetting = memo(() => {
     const { t } = useI18N()
     const chainId = useChainId()
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
+    const [getGasLimitError, setGetGasLimitError] = useState(false)
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeTokenDetailed()
@@ -231,8 +232,8 @@ export const Prior1559GasSetting = memo(() => {
 
     //#region If the estimate gas be 0, Set error
     useUpdateEffect(() => {
-        if (!minGasLimit) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
-    }, [minGasLimit])
+        if (!getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
+    }, [getGasLimitError])
 
     return (
         <>

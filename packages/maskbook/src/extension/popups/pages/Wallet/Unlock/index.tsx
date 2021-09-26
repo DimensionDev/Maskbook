@@ -54,8 +54,12 @@ const Unlock = memo(() => {
     const history = useHistory()
     const [{ value: hasError, loading }, handleUnlock] = useAsyncFn(async () => {
         const result = await WalletRPC.unlockWallet(password)
-        if (result) history.replace(PopupRoutes.Wallet)
-        return true
+        if (result) {
+            history.replace(PopupRoutes.Wallet)
+            return false
+        } else {
+            return true
+        }
     }, [password])
 
     return (

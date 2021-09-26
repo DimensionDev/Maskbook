@@ -7,11 +7,12 @@ import { useDashboardI18N } from '../../../../locales'
 import { useMnemonicWordsPuzzle } from '@masknet/web3-shared'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog'
-import { useAsyncFn } from 'react-use'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
+import { useLocation, useNavigate } from 'react-router'
 import { PluginServices } from '../../../../API'
 import { RoutePaths } from '../../../../type'
 import type { Search } from 'history'
+import { WalletMessages } from '@masknet/plugin-wallet'
 
 // Private key at m/purpose'/coin_type'/account'/change
 export const HD_PATH_WITHOUT_INDEX_ETHEREUM = "m/44'/60'/0'/0"
@@ -72,6 +73,13 @@ const CreateMnemonic = memo(() => {
     const [open, setOpen] = useState(false)
     const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
 
+    const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
+
+    useEffect(() => {
+        WalletMessages.events.walletLockStatusUpdated.on(retry)
+    }, [retry])
+
+    console.log(hasPassword)
     const onVerifyClick = useCallback(() => {
         setOpen(true)
     }, [])
@@ -86,14 +94,16 @@ const CreateMnemonic = memo(() => {
             return
         }
 
-        await PluginServices.Wallet.setPassword(password)
+        if (!hasPassword) {
+            await PluginServices.Wallet.setPassword(password)
+        }
 
         return PluginServices.Wallet.recoverWalletFromMnemonic(
             name,
             words.join(' '),
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
         )
-    }, [location.search, words, resetCallback])
+    }, [location.search, words, resetCallback, hasPassword])
 
     const onClose = useCallback(() => {
         refreshCallback()
@@ -102,8 +112,8 @@ const CreateMnemonic = memo(() => {
     }, [refreshCallback, resetCallback])
 
     useEffect(() => {
-        if (!location.state.password) navigate(-1)
-    }, [location.state])
+        if (!location.state?.password && !hasPassword && !loading) navigate(-1)
+    }, [location.state, hasPassword, loading])
 
     return (
         <>
