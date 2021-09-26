@@ -160,7 +160,7 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
                             />
                         </Box>
                     </DialogContent>
-                    <DialogActions sx={{ mt: 3 }}>
+                    <DialogActions sx={{ pt: 3 }}>
                         <Button sx={{ minWidth: 100 }} variant="outlined" color="primary" onClick={onClose}>
                             {t.cancel()}
                         </Button>
