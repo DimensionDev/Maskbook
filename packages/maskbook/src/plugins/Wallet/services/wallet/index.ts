@@ -1,15 +1,14 @@
 import * as bip39 from 'bip39'
 import { first, last } from 'lodash-es'
-import { unreachable } from '@dimensiondev/kit'
+import { toHex } from 'web3-utils'
+import { encodeText, unreachable } from '@dimensiondev/kit'
 import { ProviderType } from '@masknet/web3-shared'
-import { encodeText } from '@dimensiondev/kit'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import * as sdk from './maskwallet'
 import * as database from './database'
 import * as password from './password'
 import type { TransactionConfig } from 'web3-core'
-import { deleteWallet } from './database'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const splitted = path.split('/')
@@ -19,7 +18,7 @@ function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
 }
 
 // db
-export { getWallet, getWallets, deleteWallet, updateWallet, hasWallet } from './database/wallet'
+export { getWallet, getWallets, updateWallet, hasWallet } from './database/wallet'
 
 // password
 export { setPassword, hasPassword, verifyPassword, changePassword, validatePassword, clearPassword } from './password'
@@ -86,14 +85,15 @@ export async function signTransaction(
         coin: api.Coin.Ethereum,
         storedKeyData: wallet.storedKeyInfo?.data,
         sign_input: {
-            amount: (config.value as string) ?? null,
-            gas_limit: config.gas?.toString() ?? null,
-            gas_price: config.gasPrice?.toString() ?? null,
-            max_fee_per_gas: config.maxFeePerGas?.toString() ?? null,
-            max_inclusion_fee_per_gas: config.maxFeePerGas?.toString() ?? null,
-            nonce: config.nonce?.toString() ?? null,
+            amount: (config.value as string) ?? '0x0',
+            gas_limit: config.gas?.toString() ?? '0x0',
+            gas_price: config.gasPrice?.toString() ?? '0x0',
+            chain_id: config.chainId ? toHex(config.chainId?.toString()) : '0x1',
+            max_fee_per_gas: config.maxFeePerGas?.toString() ?? '0x0',
+            max_inclusion_fee_per_gas: config.maxFeePerGas?.toString() ?? '0x0',
+            nonce: config.nonce ? toHex(config.nonce) : '0x0',
             to_address: config.to,
-            payload: config.data ? encodeText(config.data) : null,
+            payload: config.data ? encodeText(config.data) : new Uint8Array(),
         },
     })
 }
@@ -162,11 +162,12 @@ export async function renameWallet(address: string, name: string) {
 
 export async function removeWallet(address: string, unverifiedPassword: string) {
     await password.verifyPasswordRequired(unverifiedPassword)
-    const wallet = await database.getWalletRequired(address)
 
+    // delete a wallet with derivationPath is not allowed
+    const wallet = await database.getWalletRequired(address)
     if (wallet.derivationPath) throw new Error('Illegal operation.')
 
-    await deleteWallet(wallet.address)
+    await database.deleteWallet(wallet.address)
 }
 
 export async function exportMnemonic(address: string, unverifiedPassword?: string) {
@@ -187,31 +188,22 @@ export async function exportPrivateKey(address: string, unverifiedPassword?: str
     if (unverifiedPassword) await password.verifyPasswordRequired(unverifiedPassword)
     const password_ = await password.INTERNAL_getPasswordRequired()
     const wallet = await database.getWalletRequired(address)
-    if (typeof wallet.storedKeyInfo?.type === 'undefined' || wallet.storedKeyInfo?.type === null)
-        throw new Error(`Cannot export private key of ${address}.`)
-    switch (wallet.storedKeyInfo.type) {
-        case api.StoredKeyType.Mnemonic: {
-            const exported = await sdk.exportPrivateKeyOfPath({
-                coin: api.Coin.Ethereum,
-                derivationPath: wallet.derivationPath ?? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-                password: password_,
-                StoredKeyData: wallet.storedKeyInfo.data,
-            })
-            if (!exported?.privateKey) throw new Error(`Failed to export private key of ${address}.`)
-            return exported.privateKey
-        }
-        case api.StoredKeyType.PrivateKey: {
-            const exported = await sdk.exportPrivateKey({
-                coin: api.Coin.Ethereum,
-                password: password_,
-                StoredKeyData: wallet.storedKeyInfo.data,
-            })
-            if (!exported?.privateKey) throw new Error(`Failed to export private key of ${address}.`)
-            return exported.privateKey
-        }
-        default:
-            unreachable(wallet.storedKeyInfo.type)
-    }
+    if (!wallet.storedKeyInfo) throw new Error(`Cannot export private key of ${address}.`)
+    const exported = wallet.derivationPath
+        ? await sdk.exportPrivateKeyOfPath({
+              coin: api.Coin.Ethereum,
+              derivationPath: wallet.derivationPath ?? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+              password: password_,
+              StoredKeyData: wallet.storedKeyInfo.data,
+          })
+        : await sdk.exportPrivateKey({
+              coin: api.Coin.Ethereum,
+              password: password_,
+              StoredKeyData: wallet.storedKeyInfo.data,
+          })
+
+    if (!exported?.privateKey) throw new Error(`Failed to export private key of ${address}.`)
+    return exported.privateKey
 }
 
 export async function exportKeyStoreJSON(address: string, unverifiedPassword?: string) {

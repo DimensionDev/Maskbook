@@ -1,7 +1,8 @@
 import { EthereumAddress } from 'wallet.ts'
 import { first } from 'lodash-es'
 import type { HttpProvider } from 'web3-core'
-import { toHex } from 'web3-utils'
+import { bytesToHex, toHex } from 'web3-utils'
+import { decodeText } from '@dimensiondev/kit'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
     addGasMargin,
@@ -19,7 +20,7 @@ import { createWeb3 } from './web3'
 import * as WalletConnect from './providers/WalletConnect'
 import { getWallet } from '../../../plugins/Wallet/services'
 import { commitNonce, getNonce, resetNonce } from './nonce'
-import { getGasPrice } from './network'
+import { getGasPrice, signTransaction } from './network'
 import {
     currentAccountSettings,
     currentChainIdSettings,
@@ -99,7 +100,7 @@ async function handleNonce(account: string, error: Error | null, response: JsonR
     // nonce too high
     // transaction too old
     if (/\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)) resetNonce(account)
-    else commitNonce(account)
+    else if (!error) commitNonce(account)
 }
 
 /**
@@ -188,7 +189,11 @@ export async function INTERNAL_send(
             config.nonce = await getNonce(config.from as string)
 
         // add gas margin
-        if (config.gas && !Flags.v2_enabled) config.gas = toHex(addGasMargin(config.gas).toString(16))
+        if (config.gas && !Flags.v2_enabled) config.gas = addGasMargin(config.gas).toString(16)
+        config.gas = toHex(config.gas ?? '0')
+
+        // add chain id
+        if (!config.chainId) config.chainId = chainId
 
         // pricing transaction
         const isGasPriceValid = parseGasPrice(config.gasPrice as string) > 0
@@ -211,15 +216,17 @@ export async function INTERNAL_send(
             case ProviderType.MaskWallet:
                 if (!wallet?.storedKeyInfo) throw new Error('Unable to sign transaction.')
 
+                const privateKey = await WalletRPC.exportPrivateKey(wallet.address)
+
                 // send the signed transaction
-                const signedTransaction = await WalletRPC.signTransaction(wallet.address, config)
-                if (!signedTransaction?.sign_output?.data) throw new Error('Failed to sign transaction.')
+                const signed = await web3.eth.accounts.signTransaction(config, privateKey)
+                if (!signed.rawTransaction) throw new Error('Failed to sign transaction.')
 
                 provider?.send(
                     {
                         ...payload,
                         method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                        params: [signedTransaction.sign_output.data],
+                        params: [signed.rawTransaction],
                     },
                     (error, response) => {
                         callback(error, response)

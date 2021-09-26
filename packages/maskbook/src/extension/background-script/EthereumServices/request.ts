@@ -128,7 +128,7 @@ export async function confirmRequest(payload: JsonRpcPayload) {
             UNCONFIRMED_CALLBACK_MAP.get(pid)?.(error, response)
 
             if (error) reject(error)
-            else if (response?.error) reject(new Error('Transaction error!'))
+            else if (response?.error) reject(new Error('Failed to send transaction.'))
             else {
                 WalletRPC.deleteUnconfirmedRequest(payload)
                     // Close pop-up window when request is confirmed
