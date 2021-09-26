@@ -14,10 +14,13 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    TextField,
     ThemeProvider,
     Typography,
 } from '@material-ui/core'
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined'
+import ClearIcon from '@material-ui/icons/Clear'
+import SearchIcon from '@material-ui/icons/Search'
 
 import { extendsTheme, useI18N } from '../../../utils'
 import { DashboardBindNFTAvatarDialog } from '../DashboardDialogs/Avatar'
@@ -27,7 +30,7 @@ import LaunchIcon from '@material-ui/icons/Launch'
 import urlcat from 'urlcat'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { DashboardUnbindNFTAvatarDialog } from '../DashboardDialogs/Avatar/confirm'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { remove } from 'lodash-es'
 import { useNFTAvatars } from '../../../components/InjectedComponents/NFT/hooks'
 import type { AvatarMetaDB } from '../../../components/InjectedComponents/NFT/types'
@@ -72,11 +75,63 @@ const settingsTheme = extendsTheme((theme) => ({
 
 export function DashboardNFTAvatarsRouter() {
     const { t } = useI18N()
+    const { classes } = useStyles()
+    const [search, setSearch] = useState('')
+    const { enqueueSnackbar } = useSnackbar()
+    const { value: _avatarList, loading } = useNFTAvatars()
+    const [avatars, setAvatars] = useState<AvatarMetaDB[]>([])
+
+    const onAdd = useCallback(
+        async (userId: string, avatarId: string, address: string, tokenId: string) => {
+            const { token } = await createNFT(address, tokenId)
+            const avatar = await saveNFTAvatar(userId, avatarId, token)
+
+            setAvatars((avatars) => [...avatars, avatar])
+            enqueueSnackbar(t('nft_dashboard_add_hint'), { variant: 'success' })
+        },
+        [saveNFTAvatar, enqueueSnackbar],
+    )
+
+    useEffect(() => {
+        setAvatars(_avatarList ?? [])
+    }, [_avatarList])
+
+    const [bindNFTAvatarDialog, openBindNFTAvatarDialog] = useModal(DashboardBindNFTAvatarDialog, { onAdd })
+
+    const actions = [
+        <TextField
+            placeholder={t('search')}
+            size="small"
+            value={search}
+            onChange={(e) => {
+                setSearch(e.target.value)
+            }}
+            InputProps={{
+                endAdornment: (
+                    <IconButton size="small" onClick={() => setSearch('')}>
+                        {search ? <ClearIcon /> : <SearchIcon />}
+                    </IconButton>
+                ),
+            }}
+        />,
+        <Box className={classes.addToken}>
+            <Button variant="outlined" onClick={openBindNFTAvatarDialog} size="medium">
+                {t('nft_dashboard_add_avatar_label')}
+            </Button>
+        </Box>,
+    ]
+
+    useEffect(() => {
+        if (!search) return
+        setAvatars(_avatarList?.filter((x) => x.userId.includes(search)) ?? [])
+    }, [search, _avatarList])
+
     return (
-        <DashboardRouterContainer title={t('settings_nft_avatar_whitelist')}>
+        <DashboardRouterContainer title={t('settings_nft_avatar_whitelist')} actions={actions}>
             <ThemeProvider theme={settingsTheme}>
-                <NFTAvatarWhitelist />
+                <NFTAvatarWhitelist avatarList={avatars} loading={loading} />
             </ThemeProvider>
+            {bindNFTAvatarDialog}
         </DashboardRouterContainer>
     )
 }
@@ -88,7 +143,6 @@ const useStyles = makeStyles()((theme) => ({
         overflowY: 'auto',
     },
     addToken: {
-        paddingTop: theme.spacing(1),
         textAlign: 'right',
         paddingRight: theme.spacing(4),
     },
@@ -103,25 +157,20 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function NFTAvatarWhitelist() {
+interface NFTAvatarWhitelistProps {
+    loading: boolean
+    avatarList: AvatarMetaDB[]
+}
+function NFTAvatarWhitelist({ loading, avatarList }: NFTAvatarWhitelistProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { value: _avatars, loading } = useNFTAvatars()
+
     const { enqueueSnackbar } = useSnackbar()
     const [avatars, setAvatars] = useState<AvatarMetaDB[]>([])
 
-    const onAdd = useCallback(
-        async (userId: string, avatarId: string, address: string, tokenId: string) => {
-            const { token } = await createNFT(address, tokenId)
-            const avatar = await saveNFTAvatar(userId, avatarId, token)
-
-            enqueueSnackbar(t('nft_dashboard_add_hint'), { variant: 'success' })
-            setAvatars((v) => [...v, avatar])
-        },
-        [saveNFTAvatar, enqueueSnackbar],
-    )
-
-    const [bindNFTAvatarDialog, openBindNFTAvatarDialog] = useModal(DashboardBindNFTAvatarDialog, { onAdd })
+    useEffect(() => {
+        setAvatars(avatarList)
+    }, [avatarList])
     const onDeleted = useCallback(
         async (avatar) => {
             setAvatars((x) => remove([...x], (i) => i.userId !== avatar.userId))
@@ -134,18 +183,8 @@ function NFTAvatarWhitelist() {
         [setOrClearAvatar],
     )
 
-    useEffect(() => {
-        if (!_avatars) return
-        setAvatars(_avatars)
-    }, [_avatars])
-
     return (
         <Paper elevation={0}>
-            <Box className={classes.addToken}>
-                <Button variant="outlined" onClick={openBindNFTAvatarDialog}>
-                    {t('nft_dashboard_add_avatar_label')}
-                </Button>
-            </Box>
             <Box className={classes.list}>
                 <TableContainer>
                     <Table component="table" size="medium" stickyHeader>
@@ -179,6 +218,12 @@ function NFTAvatarWhitelist() {
                         <TableBody>
                             {loading ? (
                                 <LoadingStatus />
+                            ) : avatars.length === 0 ? (
+                                <TableRow className={classes.cell}>
+                                    <Typography align="center" variant="body1" color="textPrimary">
+                                        {t('nft_dashboard_search_not_found')}
+                                    </Typography>
+                                </TableRow>
                             ) : (
                                 avatars
                                     ?.filter((x) => x)
@@ -190,7 +235,6 @@ function NFTAvatarWhitelist() {
                     </Table>
                 </TableContainer>
             </Box>
-            {bindNFTAvatarDialog}
         </Paper>
     )
 }
