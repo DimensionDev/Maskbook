@@ -8,6 +8,7 @@ import { useCurrentTradeProvider } from '../../../../../plugins/Trader/trending/
 import { useAvailableTraderProviders } from '../../../../../plugins/Trader/trending/useAvailableTraderProviders'
 import { SelectTokenDialog } from '../../../../../plugins/Wallet/SNSAdaptor/SelectTokenDialog'
 import { WalletRiskWarningDialog } from '../../../../../plugins/Wallet/SNSAdaptor/RiskWarningDialog'
+import { TransactionDialog } from '../../../../../plugins/Wallet/SNSAdaptor/TransactionDialog'
 import { TagType } from '../../../../../plugins/Trader/types'
 
 export function SwapBox() {
@@ -33,6 +34,7 @@ export function SwapBox() {
             <SelectTokenDialog />
             <SettingsDialog />
             <WalletRiskWarningDialog />
+            <TransactionDialog />
         </TradeContext.Provider>
     )
 }
