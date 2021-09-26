@@ -8,7 +8,7 @@ interface EIP1559ConfirmOptions {
 
 export interface GasSettingProps {
     gasLimit?: string
-    onGasLimitChange?: (newVal: number | string) => void
+    onGasLimitChange?: (newVal: string) => void
     gasOption?: GasOption
     onGasOptionChange?: (newOption: GasOption) => void
     onConfirm?: (options: EIP1559ConfirmOptions) => void
