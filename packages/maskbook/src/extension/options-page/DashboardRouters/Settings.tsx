@@ -51,7 +51,7 @@ import { useCurrentDataProvider } from '../../../plugins/Trader/trending/useCurr
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { safeUnreachable } from '@dimensiondev/kit'
 import StorageIcon from '@material-ui/icons/Storage'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { DashboardRoute } from '../Route'
 
 const useStyles = makeStyles()((theme) => ({

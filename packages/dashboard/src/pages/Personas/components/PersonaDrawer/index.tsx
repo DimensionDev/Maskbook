@@ -6,7 +6,7 @@ import { PersonaCard } from '../PersonaCard'
 import { useDashboardI18N } from '../../../../locales'
 import type { PersonaIdentifier, PersonaInformation } from '@masknet/shared'
 import { RoutePaths } from '../../../../type'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

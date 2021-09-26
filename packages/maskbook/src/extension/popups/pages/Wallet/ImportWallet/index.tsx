@@ -16,7 +16,7 @@ import { useAsyncFn } from 'react-use'
 import { useSnackbar } from '@masknet/theme'
 import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
-import { useLocation } from 'react-router'
+import { useLocation } from 'react-router-dom'
 
 const useStyles = makeStyles()({
     container: {

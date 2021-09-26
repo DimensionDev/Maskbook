@@ -4,7 +4,7 @@ import { Box, Container, Stack, Typography } from '@material-ui/core'
 import { RestoreIcon, SignUpAccountIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { RoutePaths } from '../../type'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { ActionCard } from '../../components/ActionCard'
 
 const Title = styled('div')(

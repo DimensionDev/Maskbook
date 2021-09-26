@@ -3,16 +3,18 @@ import { styled } from '@material-ui/core/styles'
 import { Button, Typography } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
 
-const HeaderContainer = styled('header')(
-    ({ theme }) => `
-    flex: 1;
-    width: 78%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-height: 30%;
-    min-height: 25%;`,
-)
+const HeaderContainer = styled('header')(({ theme }) => ({
+    flex: '5 1',
+    width: '78%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    maxHeight: '30%',
+    minHeight: '15%',
+    [theme.breakpoints.down('md')]: {
+        width: '95%',
+    },
+}))
 
 const TitleContainer = styled('div')(
     ({ theme }) => `
@@ -33,6 +35,7 @@ const Action = styled(Button)(
     ({ theme }) => `
     color: ${theme.palette.mode === 'dark' ? MaskColorVar.textPrimary : MaskColorVar.primary};
     font-weight: bold;
+    min-width: 150px;
 `,
 )
 

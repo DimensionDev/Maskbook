@@ -344,6 +344,7 @@ importers:
       graphql: ^15.5.1
       graphql-request: ^3.4.0
       gun: ^0.2020.1234
+      history: ^5.0.1
       html-webpack-plugin: ^5.3.2
       https-browserify: ^1.0.0
       i18next-browser-languagedetector: ^6.1.2
@@ -371,8 +372,7 @@ importers:
       react-hook-form: 7.15.3
       react-middle-ellipsis: ^1.2.1
       react-refresh: ^0.10.0
-      react-router: ^5.2.1
-      react-router-dom: ^5.2.1
+      react-router-dom: ^5.3.0
       react-use: ^17.3.1
       react-virtualized-auto-sizer: ^1.0.6
       react-window: ^1.8.6
@@ -412,7 +412,7 @@ importers:
       '@balancer-labs/sor': 1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2
       '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd_webextension-polyfill@0.8.0
-      '@dimensiondev/kit': 0.0.0-20210913111737-84c17d7_react-router@5.2.1
+      '@dimensiondev/kit': 0.0.0-20210913111737-84c17d7
       '@dimensiondev/mask-wallet-core': 0.1.0-20210924093144-ddecbc3_protobufjs@6.11.2
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/snapshot.js': 0.2.0
@@ -483,6 +483,7 @@ importers:
       graphql: 15.5.3
       graphql-request: 3.5.0_graphql@15.5.3
       gun: 0.2020.1234
+      history: 5.0.1
       https-browserify: 1.0.0
       i18next-browser-languagedetector: 6.1.2
       immer: 9.0.6
@@ -506,8 +507,7 @@ importers:
       react-highlight-words: 0.17.0
       react-hook-form: 7.15.3
       react-middle-ellipsis: 1.2.1
-      react-router: 5.2.1
-      react-router-dom: 5.2.1
+      react-router-dom: 5.3.0
       react-use: 17.3.1
       react-virtualized-auto-sizer: 1.0.6
       react-window: 1.8.6
@@ -3836,6 +3836,19 @@ packages:
       webextension-polyfill: 0.8.0
     dev: false
 
+  /@dimensiondev/kit/0.0.0-20210913111737-84c17d7:
+    resolution: {integrity: sha512-a4gj6wHSzaonu+yvKaoOOYHWy74cEY1OPkIcmMMK2wJN++XzrZed0Trdth+F0bZCpj2XzWzolyYMHbmYiaX5ww==, tarball: download/@dimensiondev/kit/0.0.0-20210913111737-84c17d7/128b9a70ddf0e296c03baa891a25148518d15de3c3c750c2c58e507c31d4a0ad}
+    peerDependencies:
+      react: ^17 || ^18
+      react-router: ^5 || ^6
+    dependencies:
+      bignumber.js: 9.0.1
+      lodash-es: 4.17.21
+      react-use: 15.3.8
+    transitivePeerDependencies:
+      - react-dom
+    dev: false
+
   /@dimensiondev/kit/0.0.0-20210913111737-84c17d7_4db16c70edcd20fc2dadc16ba33a34e4:
     resolution: {integrity: sha512-a4gj6wHSzaonu+yvKaoOOYHWy74cEY1OPkIcmMMK2wJN++XzrZed0Trdth+F0bZCpj2XzWzolyYMHbmYiaX5ww==, tarball: download/@dimensiondev/kit/0.0.0-20210913111737-84c17d7/128b9a70ddf0e296c03baa891a25148518d15de3c3c750c2c58e507c31d4a0ad}
     peerDependencies:
@@ -3861,20 +3874,6 @@ packages:
       lodash-es: 4.17.21
       react: 18.0.0-alpha-aecb3b6d1
       react-use: 15.3.8_f991c289939c8299bed5e4a6a5a79a62
-    transitivePeerDependencies:
-      - react-dom
-    dev: false
-
-  /@dimensiondev/kit/0.0.0-20210913111737-84c17d7_react-router@5.2.1:
-    resolution: {integrity: sha512-a4gj6wHSzaonu+yvKaoOOYHWy74cEY1OPkIcmMMK2wJN++XzrZed0Trdth+F0bZCpj2XzWzolyYMHbmYiaX5ww==, tarball: download/@dimensiondev/kit/0.0.0-20210913111737-84c17d7/128b9a70ddf0e296c03baa891a25148518d15de3c3c750c2c58e507c31d4a0ad}
-    peerDependencies:
-      react: ^17 || ^18
-      react-router: ^5 || ^6
-    dependencies:
-      bignumber.js: 9.0.1
-      lodash-es: 4.17.21
-      react-router: 5.2.1
-      react-use: 15.3.8
     transitivePeerDependencies:
       - react-dom
     dev: false
@@ -8323,6 +8322,10 @@ packages:
   /@types/node/14.17.15:
     resolution: {integrity: sha512-D1sdW0EcSCmNdLKBGMYb38YsHUS6JcM7yQ6sLQ9KuZ35ck7LYCKE7kYFHOO59ayFOY3zobWVZxf4KXhYHcHYFA==}
 
+  /@types/node/16.10.1:
+    resolution: {integrity: sha512-4/Z9DMPKFexZj/Gn3LylFgamNKHm4K3QDi0gz9B26Uk0c8izYf97B5fxfpspMNkWlFupblKM/nV8+NA9Ffvr+w==}
+    dev: false
+
   /@types/node/16.4.3:
     resolution: {integrity: sha512-GKM4FLMkWDc0sfx7tXqPWkM6NBow1kge0fgQh0bOnlqo4iT1kvTvMEKE0c1RtUGnbLlGRXiAA8SumE//90uKAg==}
 
@@ -8336,10 +8339,6 @@ packages:
 
   /@types/node/16.9.1:
     resolution: {integrity: sha512-QpLcX9ZSsq3YYUUnD3nFDY8H7wctAhQj/TFKL8Ya8v5fMm3CFXxo8zStsLAl780ltoYoo1WvKUVGBQK+1ifr7g==}
-
-  /@types/node/16.9.6:
-    resolution: {integrity: sha512-YHUZhBOMTM3mjFkXVcK+WwAcYmyhe1wL4lfqNtzI0b3qAy7yuSetnM7QJazgE5PFmgVTNGiLOgRFfJMqW7XpSQ==}
-    dev: false
 
   /@types/node/8.10.66:
     resolution: {integrity: sha512-tktOkFUA4kXx2hhhrB8bIFb5TbwzS4uOhKEmwiD+NoiL0qtP2OQ9mFldbgD4dV1djrlBYP6eBuQZiWjuHUpqFw==}
@@ -15636,7 +15635,7 @@ packages:
   /history/4.10.1:
     resolution: {integrity: sha512-36nwAD620w12kuzPAsyINPWJqlNbij+hpK1k9XRloDtym8mxzGYl2c17LnV6IAGB2Dmg4tEa7G7DlawS0+qjew==}
     dependencies:
-      '@babel/runtime': 7.15.3
+      '@babel/runtime': 7.15.4
       loose-envify: 1.4.0
       resolve-pathname: 3.0.0
       tiny-invariant: 1.1.0
@@ -15647,7 +15646,7 @@ packages:
   /history/5.0.1:
     resolution: {integrity: sha512-5qC/tFUKfVci5kzgRxZxN5Mf1CV8NmJx9ByaPX0YTLx5Vz3Svh7NYp6eA4CpDq4iA9D0C1t8BNIfvQIrUI3mVw==}
     dependencies:
-      '@babel/runtime': 7.15.3
+      '@babel/runtime': 7.15.4
     dev: false
 
   /hmac-drbg/1.0.1:
@@ -18393,7 +18392,7 @@ packages:
       prop-types: ^15.0.0
       react: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@babel/runtime': 7.15.3
+      '@babel/runtime': 7.15.4
       prop-types: 15.7.2
       tiny-warning: 1.0.3
     dev: false
@@ -19991,7 +19990,7 @@ packages:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.1
-      '@types/node': 16.9.6
+      '@types/node': 16.10.1
       long: 4.0.0
     dev: false
 
@@ -20471,12 +20470,12 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /react-router-dom/5.2.1:
-    resolution: {integrity: sha512-xhFFkBGVcIVPbWM2KEYzED+nuHQPmulVa7sqIs3ESxzYd1pYg8N8rxPnQ4T2o1zu/2QeDUWcaqST131SO1LR3w==}
+  /react-router-dom/5.3.0:
+    resolution: {integrity: sha512-ObVBLjUZsphUUMVycibxgMdh5jJ1e3o+KpAZBVeHcNQZ4W+uUGGWsokurzlF4YOldQYRQL4y6yFRWM4m3svmuQ==}
     peerDependencies:
       react: '>=15'
     dependencies:
-      '@babel/runtime': 7.15.3
+      '@babel/runtime': 7.15.4
       history: 4.10.1
       loose-envify: 1.4.0
       prop-types: 15.7.2
@@ -20504,7 +20503,7 @@ packages:
     peerDependencies:
       react: '>=15'
     dependencies:
-      '@babel/runtime': 7.15.3
+      '@babel/runtime': 7.15.4
       history: 4.10.1
       hoist-non-react-statics: 3.3.2
       loose-envify: 1.4.0

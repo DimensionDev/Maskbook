@@ -10,7 +10,7 @@ import {
 } from '@masknet/web3-shared'
 import { StartUp } from './StartUp'
 import { TokenAssets } from './components/TokenAssets'
-import { Route, Routes, useNavigate } from 'react-router'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import { Balance } from './components/Balance'
 import { Transfer } from './components/Transfer'
 import { History } from './components/History'

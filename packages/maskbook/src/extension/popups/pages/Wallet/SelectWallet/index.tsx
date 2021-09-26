@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { makeStyles } from '@masknet/theme'
-import { useLocation } from 'react-router'
+import { useLocation } from 'react-router-dom'
 import {
     ChainId,
     getNetworkName,

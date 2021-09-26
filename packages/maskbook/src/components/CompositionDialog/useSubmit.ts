@@ -4,16 +4,17 @@ import { useCallback } from 'react'
 import Services from '../../extension/service'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
 import type { ImageTemplateTypes } from '../../resources/image-payload'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { i18n, useI18N } from '../../utils'
 import { SteganographyTextPayload } from '../InjectedComponents/SteganographyTextPayload'
 import type { SubmitComposition } from './CompositionUI'
-import { globalUIState } from '../../social-network'
 import { unreachable } from '@dimensiondev/kit'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 
 export function useSubmit(onClose: () => void) {
     const { t } = useI18N()
+    const whoAmI = useLastRecognizedIdentity()
 
     const onRequestPost = useCallback(
         async (info: SubmitComposition) => {
@@ -29,7 +30,7 @@ export function useSubmit(onClose: () => void) {
             const [encrypted, token] = await Services.Crypto.encryptTo(
                 content,
                 target === 'Everyone' ? [] : target.map((x) => x.identifier),
-                currentProfile,
+                whoAmI?.identifier ?? currentProfile,
                 target === 'Everyone',
             )
             const redPacketPreText = isTwitter(activatedSocialNetworkUI)

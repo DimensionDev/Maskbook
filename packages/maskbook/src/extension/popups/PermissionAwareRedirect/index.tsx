@@ -1,7 +1,7 @@
 export { PermissionAwareRedirectUI } from './ui'
 
 import { useEffect } from 'react'
-import { useLocation } from 'react-router'
+import { useLocation } from 'react-router-dom'
 import { useAsyncRetry } from 'react-use'
 import { MissingParameter } from '../MissingParameter'
 import { PermissionAwareRedirectUI } from './ui'

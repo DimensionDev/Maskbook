@@ -18,6 +18,7 @@ export const usePostHistory = (network: string, page: number, size = 20) => {
         const values = await Services.Identity.queryPagedPostHistory(
             {
                 network,
+                userIds: currentPersona?.linkedProfiles.map((profile) => profile.identifier.userId) ?? [],
                 after: lastValue?.identifier,
             },
             size,

@@ -9,7 +9,7 @@ import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { Services } from '../../API'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { RoutePaths } from '../../type'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath'
 import { LoadingButton } from '../LoadingButton'
@@ -73,7 +73,7 @@ export const RestoreFromMnemonic = () => {
                     {t.confirm()}
                 </LoadingButton>
             </ButtonContainer>
-            <Box sx={{ marginTop: '35px' }}>
+            <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_identity_warning()} />
             </Box>
         </>

@@ -18,7 +18,7 @@ export const PostHistory = memo(({ network }: PostHistoryProps) => {
 
     return (
         <Stack justifyContent="space-between" height="100%">
-            <Box flex={1}>
+            <Box flex={1} mt={1}>
                 {value?.map((x) => (
                     <PostHistoryRow network={network} post={x} key={x.url} />
                 ))}

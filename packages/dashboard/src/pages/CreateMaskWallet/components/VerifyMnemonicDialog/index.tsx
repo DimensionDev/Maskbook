@@ -8,7 +8,7 @@ import { SuccessIcon, CopyIcon } from '@masknet/icons'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
 import { useDashboardI18N } from '../../../../locales'
 import { useCopyToClipboard } from 'react-use'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../../type'
 
 const useStyles = makeStyles()({

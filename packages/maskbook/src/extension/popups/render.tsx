@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { Redirect, Route, Switch } from 'react-router'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import { HashRouter } from 'react-router-dom'
 import { PopupRoutes } from '.'
 import { createNormalReactRoot, useClassicMaskTheme } from '../../utils'
