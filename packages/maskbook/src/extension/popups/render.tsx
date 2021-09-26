@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { HashRouter } from 'react-router-dom'
+import { createInjectHooksRenderer, startPluginDashboard, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { PopupRoutes } from '.'
 import { createNormalReactRoot, useClassicMaskTheme } from '../../utils'
 import '../../social-network-adaptor/browser-action'
@@ -10,6 +11,7 @@ import { Web3ContextWithoutConfirm } from '../../web3/context'
 import { PopupFrame } from './components/PopupFrame'
 import { StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { Appearance } from '@masknet/theme'
+import { createPluginHost } from '../../../src/plugin-infra/host'
 import { MaskUIRoot } from '../../UIRoot'
 import { status } from '../../setup.ui'
 
@@ -20,6 +22,8 @@ const RequestPermissionPage = lazy(() => import('./RequestPermission'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission'))
 const SignRequest = lazy(() => import('./SignRequest'))
+
+const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
 function Dialogs() {
     const theme = useClassicMaskTheme({ appearance: Appearance.light })
@@ -49,12 +53,14 @@ function Dialogs() {
                             </Switch>
                         </Suspense>
                     </HashRouter>
+                    <PluginRender />
                 </Web3Provider>
             </ThemeProvider>
         </StyledEngineProvider>,
     )
 }
 status.then(() => createNormalReactRoot(<Dialogs />))
+startPluginDashboard(createPluginHost())
 
 function frame(x: React.ReactNode) {
     return <PopupFrame children={x} />
