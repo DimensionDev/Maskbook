@@ -5,7 +5,6 @@ import { TransactionState, TransactionStateType, useAccount, useWeb3 } from '@ma
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
-import Services from '../../../../extension/service'
 import { swapErrorToUserReadableMessage } from '../../helpers'
 
 interface FailedCall {
