@@ -186,7 +186,7 @@ const BackupWallet = memo(() => {
                         className={classes.button}
                         disabled={!privateKey && !password}
                         onClick={onConfirm}>
-                        {!privateKey ? t('popups_wallet_next') : t('download')}
+                        {!privateKey ? t('popups_wallet_next') : t('export')}
                     </Button>
                 </div>
             ) : null}

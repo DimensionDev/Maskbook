@@ -81,6 +81,7 @@ const useStyles = makeStyles()(() => ({
         fontSize: 12,
         lineHeight: '16px',
         padding: '0px 16px 20px 16px',
+        wordBreak: 'break-all',
     },
     controller: {
         display: 'grid',

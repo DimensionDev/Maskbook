@@ -1,18 +1,21 @@
-import { memo, useCallback, useState } from 'react'
-import { Button, Typography } from '@material-ui/core'
+import { memo, useCallback, useRef, useState } from 'react'
+import { Typography, TablePagination } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
-import { useLocation } from 'react-router-dom'
-import { useAsync } from 'react-use'
+import { useHistory, useLocation } from 'react-router'
+import { useAsync, useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { DeriveWalletTable } from '../components/DeriveWalletTable'
 import { currySameAddress, useWallets } from '@masknet/web3-shared'
 import { useI18N } from '../../../../../utils'
+import { LoadingButton } from '@material-ui/lab'
+import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()({
     container: {
         padding: '16px 10px',
+        backgroundColor: '#ffffff',
     },
     header: {
         display: 'flex',
@@ -33,22 +36,35 @@ const useStyles = makeStyles()({
         lineHeight: '16px',
         fontWeight: 600,
     },
-    controller: {
-        display: 'grid',
-        marginTop: 24,
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 20,
-    },
     button: {
         padding: '10px 0',
         borderRadius: 20,
         fontSize: 14,
         lineHeight: '20px',
+        marginTop: 10,
+    },
+    pagination: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: '12px 0',
+        gap: 4,
+    },
+    paginationIcon: {
+        border: '1px solid #E4E8F1',
+        borderRadius: 4,
+        fontSize: 20,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 4,
     },
 })
 
 const AddDeriveWallet = memo(() => {
+    const indexes = useRef(new Set())
     const { t } = useI18N()
+    const history = useHistory()
     const location = useLocation()
     const { classes } = useStyles()
     const wallets = useWallets()
@@ -67,26 +83,37 @@ const AddDeriveWallet = memo(() => {
                 return {
                     added,
                     address: derivedWallet.address,
-
-                    // TODO: useBalance
-                    balance: '0',
                 }
             })
         }
         return []
     }, [mnemonic, wallets, page])
 
-    const onAdd = useCallback(
-        async (index) => {
-            if (!mnemonic) return
-            await WalletRPC.recoverWalletFromMnemonic(
-                walletName ?? 'Account',
-                mnemonic,
-                `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}`,
-            )
+    const onCheck = useCallback(
+        async (checked, index) => {
+            if (checked) {
+                indexes.current.add(page + index)
+            } else {
+                indexes.current.delete(page + index)
+            }
         },
-        [mnemonic],
+        [page],
     )
+
+    const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
+        const unDeriveWallets = Array.from(indexes.current)
+        if (!mnemonic) return
+        await Promise.all(
+            unDeriveWallets.map(async (pathIndex) =>
+                WalletRPC.recoverWalletFromMnemonic(
+                    walletName ?? 'Account',
+                    mnemonic,
+                    `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
+                ),
+            ),
+        )
+        history.replace(PopupRoutes.Wallet)
+    }, [mnemonic, walletName])
 
     return (
         <div className={classes.container}>
@@ -99,23 +126,43 @@ const AddDeriveWallet = memo(() => {
                     path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
                 })}
             </Typography>
-            <DeriveWalletTable loading={loading} dataSource={dataSource} onAdd={onAdd} />
-            <div className={classes.controller}>
-                <Button
-                    variant="contained"
-                    className={classes.button}
-                    disabled={page === 0 || loading}
-                    onClick={() => setPage((prev) => prev - 1)}>
-                    {t('popups_wallet_previous')}
-                </Button>
-                <Button
-                    variant="contained"
-                    className={classes.button}
-                    onClick={() => setPage((prev) => prev + 1)}
-                    disabled={loading}>
-                    {t('popups_wallet_next')}
-                </Button>
-            </div>
+            <DeriveWalletTable
+                loading={loading}
+                dataSource={dataSource}
+                onCheck={onCheck}
+                confirmLoading={confirmLoading}
+            />
+            {!loading ? (
+                <TablePagination
+                    count={-1}
+                    component="div"
+                    onPageChange={() => {}}
+                    page={page}
+                    rowsPerPage={10}
+                    rowsPerPageOptions={[10]}
+                    labelDisplayedRows={() => null}
+                    backIconButtonProps={{
+                        onClick: () => setPage((prev) => prev - 1),
+                        size: 'small',
+                        disabled: page === 0 || confirmLoading,
+                    }}
+                    nextIconButtonProps={{
+                        onClick: () => setPage((prev) => prev + 1),
+                        size: 'small',
+                        disabled: confirmLoading,
+                    }}
+                    className={classes.pagination}
+                />
+            ) : null}
+            <LoadingButton
+                loading={confirmLoading}
+                disabled={confirmLoading || loading}
+                variant="contained"
+                className={classes.button}
+                onClick={onConfirm}
+                fullWidth>
+                {t('popups_wallet_done')}
+            </LoadingButton>
         </div>
     )
 })

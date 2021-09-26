@@ -5,14 +5,12 @@ type Request = InstanceType<typeof api.MWRequest>
 type Response = InstanceType<typeof api.MWResponse>
 
 let loaded = false
-
 function send<I extends keyof Request, O extends keyof Response>(input: I, output: O) {
     return async (value: Request[I]) => {
         if (!loaded) {
             await init()
             loaded = true
         }
-
         const payload = api.MWRequest.encode({ [input]: value }).finish()
         const response = api.MWResponse.decode(request(payload))
         if (response.error) throw new Error(response.error.errorMsg ?? 'Unknown Error')

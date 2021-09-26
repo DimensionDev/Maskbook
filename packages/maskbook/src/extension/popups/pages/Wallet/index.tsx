@@ -7,10 +7,11 @@ import { PopupRoutes } from '../../index'
 import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 import { useLocation } from 'react-router'
-import { useAsync, useAsyncRetry } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import Services from '../../../service'
 import SelectWallet from './SelectWallet'
+import { useWalletLockStatus } from './hooks/useWalletLockStatus'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -34,7 +35,15 @@ export default function Wallet() {
     const location = useLocation()
     const history = useHistory()
 
-    const { loading: getRequestLoading, retry } = useAsyncRetry(async () => {
+    const isLock = useWalletLockStatus()
+
+    const { loading, retry } = useAsyncRetry(async () => {
+        // If the wallet be locked
+        if (isLock) {
+            history.replace(PopupRoutes.Unlock)
+            return
+        }
+
         if (
             [PopupRoutes.ContractInteraction, PopupRoutes.WalletSignRequest, PopupRoutes.GasSetting].some(
                 (item) => item === location.pathname,
@@ -64,24 +73,18 @@ export default function Wallet() {
                     break
             }
         }
-    }, [location])
+    }, [location, isLock])
 
     useEffect(() => {
-        return WalletMessages.events.requestsUpdated.on(retry)
+        return WalletMessages.events.requestsUpdated.on(({ hasRequest }) => {
+            if (hasRequest) retry()
+        })
     }, [retry])
-
-    const { loading: getLockStatusLoading } = useAsync(async () => {
-        const isLocked = await WalletRPC.isLocked()
-
-        if (isLocked) {
-            history.replace(PopupRoutes.Unlock)
-        }
-    }, [history])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletContext.Provider>
-                {getRequestLoading || getLockStatusLoading ? (
+                {loading ? (
                     <LoadingPlaceholder />
                 ) : (
                     <Switch>

@@ -16,9 +16,13 @@ import { useAsyncFn } from 'react-use'
 import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
 import { useLocation } from 'react-router'
+import Services from '../../../../service'
 
 const useStyles = makeStyles()({
     container: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
         padding: '16px 10px',
     },
     header: {
@@ -83,9 +87,18 @@ const useStyles = makeStyles()({
         fontSize: 12,
     },
     button: {
-        marginTop: 20,
         padding: '9px 10px',
         borderRadius: 20,
+    },
+    error: {
+        color: '#FF5F5F',
+        fontSize: 12,
+        marginTop: 8,
+        lineHeight: '16px',
+        wordBreak: 'break-all',
+    },
+    controller: {
+        padding: '20px 10px',
     },
 })
 
@@ -105,6 +118,7 @@ const ImportWallet = memo(() => {
     const [keyStoreContent, setKeyStoreContent] = useState('')
     const [keyStorePassword, setKeyStorePassword] = useState('')
     const [privateKey, setPrivateKey] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
     const schema = useMemo(() => {
         return zod.object({
@@ -141,26 +155,34 @@ const ImportWallet = memo(() => {
     const [{ loading }, onDerivedWallet] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (!disabled) {
-                switch (currentTab) {
-                    case ImportWalletTab.Mnemonic:
-                        const params = query({ mnemonic, name: data.name })
-                        history.replace({
-                            pathname: PopupRoutes.AddDeriveWallet,
-                            search: `?${params}`,
-                        })
-                        break
-                    case ImportWalletTab.JsonFile:
-                        await WalletRPC.recoverWalletFromKeyStoreJSON(data.name, keyStoreContent, keyStorePassword)
-                        history.replace(PopupRoutes.Wallet)
-                        break
-                    case ImportWalletTab.PrivateKey:
-                        await WalletRPC.updateMaskAccount({
-                            account: await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey),
-                        })
-                        history.replace(PopupRoutes.Wallet)
-                        break
-                    default:
-                        break
+                try {
+                    switch (currentTab) {
+                        case ImportWalletTab.Mnemonic:
+                            const params = query({ mnemonic, name: data.name })
+                            history.replace({
+                                pathname: PopupRoutes.AddDeriveWallet,
+                                search: `?${params}`,
+                            })
+                            break
+                        case ImportWalletTab.JsonFile:
+                            await WalletRPC.recoverWalletFromKeyStoreJSON(data.name, keyStoreContent, keyStorePassword)
+                            history.replace(PopupRoutes.Wallet)
+                            await Services.Helper.removePopupWindow()
+                            break
+                        case ImportWalletTab.PrivateKey:
+                            await WalletRPC.updateMaskAccount({
+                                account: await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey),
+                            })
+                            await Services.Helper.removePopupWindow()
+                            history.replace(PopupRoutes.Wallet)
+                            break
+                        default:
+                            break
+                    }
+                } catch (error) {
+                    if (error instanceof Error) {
+                        setErrorMessage(error.message)
+                    }
                 }
             }
         },
@@ -170,93 +192,107 @@ const ImportWallet = memo(() => {
     const onSubmit = handleSubmit(onDerivedWallet)
 
     return (
-        <div className={classes.container}>
-            <div className={classes.header}>
-                <Typography className={classes.title}>{t('plugin_wallet_import_wallet')}</Typography>
-                <NetworkSelector />
-            </div>
-            <form className={classes.form} onSubmit={onSubmit}>
-                <div>
-                    <Typography className={classes.label}>{t('wallet_name')}</Typography>
-                    <Controller
-                        render={({ field }) => (
-                            <StyledInput
-                                {...field}
-                                classes={{ root: classes.textField }}
-                                error={!!errors.name?.message}
-                                helperText={errors.name?.message}
-                                variant="filled"
-                                placeholder={t('popups_wallet_name_placeholder')}
-                            />
-                        )}
-                        control={control}
-                        name="name"
-                    />
+        <>
+            <div className={classes.container}>
+                <div className={classes.header}>
+                    <Typography className={classes.title}>{t('plugin_wallet_import_wallet')}</Typography>
+                    <NetworkSelector />
                 </div>
-            </form>
-            <TabContext value={currentTab}>
-                <Tabs
-                    value={currentTab}
-                    variant="fullWidth"
-                    className={classes.tabs}
-                    classes={{ indicator: classes.indicator }}
-                    onChange={(event, tab) => setCurrentTab(tab)}>
-                    {getEnumAsArray(ImportWalletTab).map(({ key, value }) => (
-                        <Tab
-                            key={key}
-                            label={key}
-                            value={value}
-                            classes={{ root: classes.tab, selected: classes.selected }}
+                <form className={classes.form} onSubmit={onSubmit}>
+                    <div>
+                        <Typography className={classes.label}>{t('wallet_name')}</Typography>
+                        <Controller
+                            render={({ field }) => (
+                                <StyledInput
+                                    {...field}
+                                    classes={{ root: classes.textField }}
+                                    error={!!errors.name?.message}
+                                    helperText={errors.name?.message}
+                                    variant="filled"
+                                    placeholder={t('popups_wallet_name_placeholder')}
+                                />
+                            )}
+                            control={control}
+                            name="name"
                         />
-                    ))}
-                </Tabs>
-                <TabPanel value={ImportWalletTab.Mnemonic} className={classes.tabPanel}>
-                    <TextField
-                        variant="filled"
-                        multiline
-                        value={mnemonic}
-                        onChange={(e) => setMnemonic(e.target.value)}
-                        rows={4}
-                        placeholder="Please enter 12 mnemonic words separated by spaces"
-                        InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
-                        className={classes.multiline}
-                        inputProps={{ className: classes.textArea }}
-                    />
-                </TabPanel>
-                <TabPanel value={ImportWalletTab.JsonFile} className={classes.tabPanel}>
-                    <JsonFileBox onChange={(content: string) => setKeyStoreContent(content)} />
-                    <StyledInput
-                        type="password"
-                        classes={{ root: classes.textField }}
-                        placeholder="Original Password"
-                        onChange={(e) => setKeyStorePassword(e.target.value)}
-                        value={keyStorePassword}
-                    />
-                </TabPanel>
-                <TabPanel value={ImportWalletTab.PrivateKey} className={classes.tabPanel}>
-                    <TextField
-                        variant="filled"
-                        multiline
-                        value={privateKey}
-                        onChange={(e) => setPrivateKey(e.target.value)}
-                        rows={4}
-                        placeholder="Private Key"
-                        InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
-                        className={classes.multiline}
-                        inputProps={{ className: classes.textArea }}
-                    />
-                </TabPanel>
-            </TabContext>
-            <LoadingButton
-                loading={loading}
-                variant="contained"
-                fullWidth
-                className={classes.button}
-                disabled={disabled}
-                onClick={onSubmit}>
-                {t('import')}
-            </LoadingButton>
-        </div>
+                    </div>
+                </form>
+                <TabContext value={currentTab}>
+                    <Tabs
+                        value={currentTab}
+                        variant="fullWidth"
+                        className={classes.tabs}
+                        classes={{ indicator: classes.indicator }}
+                        onChange={(event, tab) => setCurrentTab(tab)}>
+                        {getEnumAsArray(ImportWalletTab).map(({ key, value }) => (
+                            <Tab
+                                key={key}
+                                label={key}
+                                value={value}
+                                classes={{ root: classes.tab, selected: classes.selected }}
+                            />
+                        ))}
+                    </Tabs>
+                    <TabPanel value={ImportWalletTab.Mnemonic} className={classes.tabPanel}>
+                        <TextField
+                            variant="filled"
+                            multiline
+                            value={mnemonic}
+                            onChange={(e) => {
+                                if (errorMessage) setErrorMessage('')
+                                setMnemonic(e.target.value)
+                            }}
+                            rows={4}
+                            placeholder="Please enter 12 mnemonic words separated by spaces"
+                            InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
+                            className={classes.multiline}
+                            inputProps={{ className: classes.textArea }}
+                        />
+                    </TabPanel>
+                    <TabPanel value={ImportWalletTab.JsonFile} className={classes.tabPanel}>
+                        <JsonFileBox onChange={(content: string) => setKeyStoreContent(content)} />
+                        <StyledInput
+                            type="password"
+                            classes={{ root: classes.textField }}
+                            placeholder="Original Password"
+                            onChange={(e) => {
+                                if (errorMessage) setErrorMessage('')
+                                setKeyStorePassword(e.target.value)
+                            }}
+                            value={keyStorePassword}
+                        />
+                    </TabPanel>
+                    <TabPanel value={ImportWalletTab.PrivateKey} className={classes.tabPanel}>
+                        <TextField
+                            variant="filled"
+                            multiline
+                            value={privateKey}
+                            onChange={(e) => {
+                                if (errorMessage) setErrorMessage('')
+                                setPrivateKey(e.target.value)
+                            }}
+                            rows={4}
+                            placeholder="Private Key"
+                            InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
+                            className={classes.multiline}
+                            inputProps={{ className: classes.textArea }}
+                        />
+                    </TabPanel>
+                </TabContext>
+                <Typography className={classes.error}>{errorMessage}</Typography>
+            </div>
+            <div className={classes.controller}>
+                <LoadingButton
+                    loading={loading}
+                    variant="contained"
+                    fullWidth
+                    className={classes.button}
+                    disabled={disabled}
+                    onClick={onSubmit}>
+                    {t('import')}
+                </LoadingButton>
+            </div>
+        </>
     )
 })
 

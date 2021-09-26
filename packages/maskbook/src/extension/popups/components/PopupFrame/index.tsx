@@ -29,7 +29,7 @@ function GlobalCss() {
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        minHeight: 494,
+        minHeight: 550,
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
@@ -101,7 +101,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     return (
         <>
             <GlobalCss />
-            <Paper elevation={0} style={{ height: '100vh' }}>
+            <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto' }}>
                 <Box className={classes.header}>
                     <Box className={classes.left}>
                         {excludePath || history.length === 1 ? (

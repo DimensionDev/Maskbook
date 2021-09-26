@@ -21,30 +21,22 @@ import type { InternalSettings } from '../settings/createSettings'
 import { createExternalProvider } from './helpers'
 import Services from '../extension/service'
 
-function createWeb3Context(disablePopup = false): Web3ProviderType {
+function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
     const Web3Provider = createExternalProvider(disablePopup)
     return {
         provider: createStaticSubscription(() => Web3Provider),
         allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
-        chainId: createSubscriptionFromSettings(
-            disablePopup ? currentMaskWalletChainIdSettings : currentChainIdSettings,
-        ),
-        account: createSubscriptionFromSettings(
-            disablePopup ? currentAccountMaskWalletSettings : currentAccountSettings,
-        ),
-        balance: createSubscriptionFromSettings(
-            disablePopup ? currentMaskWalletBalanceSettings : currentBalanceSettings,
-        ),
+        chainId: createSubscriptionFromSettings(isMask ? currentMaskWalletChainIdSettings : currentChainIdSettings),
+        account: createSubscriptionFromSettings(isMask ? currentAccountMaskWalletSettings : currentAccountSettings),
+        balance: createSubscriptionFromSettings(isMask ? currentMaskWalletBalanceSettings : currentBalanceSettings),
         blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
         walletPrimary: createSubscriptionFromAsync(getWalletPrimary, null, WalletMessages.events.walletsUpdated.on),
         wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
-        providerType: disablePopup
+        providerType: isMask
             ? createStaticSubscription(() => ProviderType.MaskWallet)
             : createSubscriptionFromSettings(currentProviderSettings),
-        networkType: createSubscriptionFromSettings(
-            disablePopup ? currentMaskWalletNetworkSettings : currentNetworkSettings,
-        ),
+        networkType: createSubscriptionFromSettings(isMask ? currentMaskWalletNetworkSettings : currentNetworkSettings),
         erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
         erc20TokensCount: createSubscriptionFromAsync(
             WalletRPC.getERC20TokensCount,
@@ -67,7 +59,8 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
 }
 
 export const Web3Context = createWeb3Context()
-export const Web3ContextWithoutConfirm = createWeb3Context(true)
+export const PopupWeb3Context = createWeb3Context(true, true)
+export const SwapWeb3Context = createWeb3Context(false, true)
 
 async function getWallets() {
     const wallets = await WalletRPC.getWallets()
