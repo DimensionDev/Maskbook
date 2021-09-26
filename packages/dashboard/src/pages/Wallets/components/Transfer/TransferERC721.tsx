@@ -256,6 +256,8 @@ export const TransferERC721 = memo(() => {
                                         onSelect={(value) => setValue('tokenId', value)}
                                         list={tokenDetailedOwnerList}
                                         selected={field.field.value}
+                                        loading={loadingOwnerList}
+                                        loadMore={loadMore}
                                     />
                                 )}
                                 name="tokenId"
