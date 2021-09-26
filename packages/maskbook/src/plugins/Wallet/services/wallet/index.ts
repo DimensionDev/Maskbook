@@ -210,31 +210,21 @@ export async function exportKeyStoreJSON(address: string, unverifiedPassword?: s
     if (unverifiedPassword) await password.verifyPasswordRequired(unverifiedPassword)
     const password_ = await password.INTERNAL_getPasswordRequired()
     const wallet = await database.getWalletRequired(address)
-    if (typeof wallet.storedKeyInfo?.type === 'undefined' || wallet.storedKeyInfo?.type === null)
-        throw new Error(`Cannot export keystore JSON of ${address}.`)
-    switch (wallet.storedKeyInfo.type) {
-        case api.StoredKeyType.Mnemonic: {
-            const exported = await sdk.exportKeyStoreJSONOfPath({
-                coin: api.Coin.Ethereum,
-                derivationPath: wallet.derivationPath ?? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-                password: password_,
-                StoredKeyData: wallet.storedKeyInfo.data,
-            })
-            if (!exported?.json) throw new Error(`Failed to export keystore JSON of ${address}.`)
-            return exported.json
-        }
-        case api.StoredKeyType.PrivateKey: {
-            const exported = await sdk.exportKeyStoreJSONOfAddress({
-                coin: api.Coin.Ethereum,
-                password: password_,
-                StoredKeyData: wallet.storedKeyInfo.data,
-            })
-            if (!exported?.json) throw new Error(`Failed to export keystore JSON of ${address}.`)
-            return exported.json
-        }
-        default:
-            unreachable(wallet.storedKeyInfo.type)
-    }
+    if (!wallet.storedKeyInfo) throw new Error(`Cannot export private key of ${address}.`)
+    const exported = wallet.derivationPath
+        ? await sdk.exportKeyStoreJSONOfPath({
+              coin: api.Coin.Ethereum,
+              derivationPath: wallet.derivationPath ?? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+              password: password_,
+              StoredKeyData: wallet.storedKeyInfo.data,
+          })
+        : await sdk.exportKeyStoreJSONOfAddress({
+              coin: api.Coin.Ethereum,
+              password: password_,
+              StoredKeyData: wallet.storedKeyInfo.data,
+          })
+    if (!exported?.json) throw new Error(`Failed to export keystore JSON of ${address}.`)
+    return exported.json
 }
 
 export async function recoverWalletFromMnemonic(
