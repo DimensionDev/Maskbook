@@ -11,7 +11,7 @@ export function useWalletLockStatus() {
         loading,
         error,
     } = useAsync(async () => {
-        if (lockStatus === LockStatus.INIT) return WalletRPC.isLocked()
+        if (lockStatus === LockStatus.INIT || lockStatus === LockStatus.UNLOCK) return WalletRPC.isLocked()
         return lockStatus === LockStatus.LOCKED
     }, [lockStatus])
 
