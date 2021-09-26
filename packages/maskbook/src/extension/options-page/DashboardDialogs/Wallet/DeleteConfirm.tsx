@@ -13,7 +13,7 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
     const { wallet } = props.ComponentProps!
     const onConfirm = useSnackbarCallback(
         async () => {
-            await WalletRPC.deleteWallet(wallet.address)
+            await WalletRPC.removeWallet(wallet.address, '')
             await WalletRPC.resetAccount()
         },
         [wallet.address],
