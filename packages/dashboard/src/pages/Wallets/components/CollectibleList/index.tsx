@@ -1,4 +1,4 @@
-import { Dispatch, memo, SetStateAction, useState } from 'react'
+import { Dispatch, memo, SetStateAction, useEffect, useState } from 'react'
 import { Box, TablePagination } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -17,6 +17,7 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
+import { PluginMessages } from '../../../../API'
 
 const useStyles = makeStyles()({
     container: {
@@ -51,7 +52,14 @@ export const CollectibleList = memo(() => {
         value = { collectibles: [], hasNextPage: false },
         loading: collectiblesLoading,
         error: collectiblesError,
+        retry,
     } = useCollectibles(account, chainId, provider, page, 20)
+
+    useEffect(() => {
+        PluginMessages.Wallet.events.erc721TokensUpdated.on(() => {
+            retry()
+        })
+    }, [retry])
 
     const { collectibles = [], hasNextPage } = value
 

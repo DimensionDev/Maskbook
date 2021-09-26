@@ -10,10 +10,10 @@ import { useDashboardI18N } from '../../../../locales'
 
 export enum TransferTab {
     Token = 'Token',
-    Collectibles = 'Collectibles',
+    // Collectibles = 'Collectibles',
 }
 
-const assetTabs = [TransferTab.Token, TransferTab.Collectibles] as const
+const assetTabs = [TransferTab.Token] as const
 
 export const Transfer = memo(() => {
     // todo: token and chain
@@ -22,9 +22,9 @@ export const Transfer = memo(() => {
     const { value: nativeToken } = useNativeTokenDetailed()
     const transferTabsLabel: Record<TransferTab, string> = {
         [TransferTab.Token]: t.wallets_assets_token(),
-        [TransferTab.Collectibles]: t.wallets_assets_collectibles(),
+        // [TransferTab.Collectibles]: t.wallets_assets_collectibles(),
     }
-    const [currentTab, onChange] = useTabs(TransferTab.Token, TransferTab.Collectibles)
+    const [currentTab, onChange] = useTabs(TransferTab.Token)
 
     if (!nativeToken && !state?.token) return null
 
@@ -40,7 +40,7 @@ export const Transfer = memo(() => {
                     <TabPanel value={TransferTab.Token}>
                         <TransferERC20 token={state?.token! || nativeToken} />
                     </TabPanel>
-                    <TabPanel value={TransferTab.Collectibles}>todo</TabPanel>
+                    {/*<TabPanel value={TransferTab.Collectibles}>todo</TabPanel>*/}
                 </TabContext>
             </Box>
         </ContentContainer>
