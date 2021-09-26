@@ -59,6 +59,10 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const { gasNow } = useGasOptions()
 
     useEffect(() => {
+        setToken(token)
+    }, [token])
+
+    useEffect(() => {
         if (!gasNow) return
 
         // aka is1559Supported
