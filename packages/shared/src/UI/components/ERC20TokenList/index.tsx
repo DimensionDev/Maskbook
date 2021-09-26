@@ -1,10 +1,11 @@
-import React, { memo, useMemo, useState } from 'react'
+import React, { memo, useEffect, useMemo, useState } from 'react'
 import { getERC20TokenListItem } from './ERC20TokenListItem'
 import { uniqBy } from 'lodash-es'
 import {
     Asset,
     currySameAddress,
     FungibleTokenDetailed,
+    isSameAddress,
     isValidAddress,
     makeSortAssertFn,
     makeSortTokenFn,
@@ -19,6 +20,7 @@ import {
 } from '@masknet/web3-shared'
 import { MaskFixedSizeListProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
+import { useSharedI18N } from '../../../locales'
 
 export interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     whitelist?: string[]
@@ -38,6 +40,7 @@ const Placeholder = memo(({ message }: { message: string }) => (
 ))
 
 export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
+    const t = useSharedI18N()
     const account = useAccount()
     const chainId = useChainId()
     const trustedERC20Tokens = useTrustedERC20Tokens()
@@ -45,7 +48,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     const [keyword, setKeyword] = useState('')
 
     const {
-        whitelist: includeTokens = [],
+        whitelist: includeTokens,
         blacklist: excludeTokens = [],
         selectedTokens = [],
         tokens = [],
@@ -64,16 +67,16 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
 
     //#region add token by address
     const matchedTokenAddress = useMemo(() => {
-        if (!keyword || !isValidAddress(keyword) || erc20TokensDetailed.length) return
+        if (!keyword || !isValidAddress(keyword) || erc20TokensDetailedLoading) return
         return keyword
-    }, [keyword, erc20TokensDetailed.length])
+    }, [keyword, erc20TokensDetailedLoading])
 
     const { value: searchedToken, loading: searchedTokenLoading } = useERC20TokenDetailed(matchedTokenAddress ?? '')
     //#endregion
 
     const filteredTokens = erc20TokensDetailed.filter(
         (token) =>
-            (!includeTokens.length || includeTokens.some(currySameAddress(token.address))) &&
+            (!includeTokens || includeTokens.some(currySameAddress(token.address))) &&
             (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
     )
 
@@ -85,7 +88,12 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
         value: assets,
         loading: assetsLoading,
         error: assetsError,
+        retry: retryLoadAsset,
     } = useAssetsByTokenList(renderTokens.filter((x) => isValidAddress(x.address)))
+
+    useEffect(() => {
+        if (assetsError) retryLoadAsset()
+    }, [assetsError])
 
     const renderAssets =
         !account || assetsError || assetsLoading
@@ -99,18 +107,30 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     const getPlaceHolder = () => {
         if (erc20TokensDetailedLoading) return <Placeholder message="Loading token lists..." />
         if (searchedTokenLoading) return <Placeholder message="Loading token..." />
-        if (assetsLoading) return <Placeholder message="Loading token assets..." />
+        // if (assetsLoading) return <Placeholder message="Loading token assets..." />
         if (!renderAssets.length) return <Placeholder message="No token found" />
         return null
     }
 
     return (
         <SearchableList<Asset>
+            textFieldProps={{
+                placeholder: t.erc20_token_list_placeholder(),
+            }}
             onSelect={(asset) => onSelect?.(asset.token)}
             onSearch={setKeyword}
             data={renderAssets as Asset[]}
             searchKey={['token.address', 'token.symbol', 'token.name']}
-            itemRender={getERC20TokenListItem(trustedERC20Tokens, searchedToken ? [searchedToken] : [], account)}
+            itemRender={getERC20TokenListItem(
+                trustedERC20Tokens,
+                searchedToken ? [searchedToken] : [],
+                searchedToken
+                    ? [...tokens, ...erc20TokensDetailed].find((x) => isSameAddress(x.address, searchedToken.address))
+                        ? { from: 'search', inList: true }
+                        : { from: 'search', inList: false }
+                    : { from: 'defaultList', inList: true },
+                account,
+            )}
             placeholder={getPlaceHolder()}
             FixedSizeListProps={FixedSizeListProps}
         />

@@ -8,7 +8,7 @@ import { formatFingerprint } from '@masknet/shared'
 const useStyles = makeStyles()((theme) => ({
     iconButton: {
         padding: 0,
-        fontSize: 16,
+        fontSize: 24,
         width: 28,
         height: 28,
         borderRadius: '50%',

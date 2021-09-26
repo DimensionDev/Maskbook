@@ -17,7 +17,7 @@ import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
 import { RoutePaths } from '../../../../type'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

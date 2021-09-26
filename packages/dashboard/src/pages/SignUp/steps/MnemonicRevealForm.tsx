@@ -5,7 +5,7 @@ import {
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { useMnemonicWordsPuzzle } from '@masknet/web3-shared'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../type'
 import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'

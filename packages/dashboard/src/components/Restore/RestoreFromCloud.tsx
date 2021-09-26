@@ -9,7 +9,7 @@ import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { useSnackbar } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { Step, Stepper } from '../Stepper'
 import { LoadingCard } from './steps/LoadingCard'
@@ -168,7 +168,7 @@ export const RestoreFromCloud = memo(() => {
                     onConform={synchronizePassword}
                 />
             )}
-            <Box sx={{ marginTop: '35px', width: '100%' }}>
+            <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_cloud_backup_warning()} />
             </Box>
         </>

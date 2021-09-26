@@ -7,7 +7,7 @@ import { makeStyles } from '../../makeStyles'
 import { Search } from '@mui/icons-material'
 import { MaskColorVar } from '../../constants'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
-import { MaskTextField } from '../TextField'
+import { MaskTextField, MaskTextFieldProps } from '../TextField'
 
 export interface MaskSearchableListProps<T> {
     /** The list data should be render */
@@ -26,6 +26,7 @@ export interface MaskSearchableListProps<T> {
     onSelect(selected: T): void
     /** The hook when search */
     onSearch?(key: string): void
+    textFieldProps?: MaskTextFieldProps
 }
 
 /**
@@ -54,6 +55,7 @@ export function SearchableList<T>({
     searchKey,
     itemRender,
     FixedSizeListProps = {},
+    textFieldProps,
 }: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
     const { classes } = useStyles()
@@ -98,6 +100,7 @@ export function SearchableList<T>({
                     ),
                 }}
                 onChange={(e) => handleSearch(e.currentTarget.value)}
+                {...textFieldProps}
             />
             {placeholder}
             {!placeholder && (

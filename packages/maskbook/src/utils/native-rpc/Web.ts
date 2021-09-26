@@ -172,16 +172,17 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             filter: { type: 'persona', wanted: [persona.identifier] },
         })
     },
+    persona_restoreFromPrivateKey: async ({ privateKey, nickname }) => {
+        const identifier = await Services.Identity.createPersonaByPrivateKey(privateKey, nickname)
+        const persona = await Services.Identity.queryPersona(identifier)
+        return personaFormatter(persona)
+    },
     persona_backupBase64: async ({ identifier }) => {
         const file = await MaskNetworkAPI.persona_backupJson({ identifier })
         return encodeArrayBuffer(encodeText(JSON.stringify(file)))
     },
     persona_backupPrivateKey: async ({ identifier }) => {
-        const privateKey = await Services.Identity.backupPersonaPrivateKey(stringToPersonaIdentifier(identifier))
-        if (privateKey) {
-            return JSON.stringify(privateKey)
-        }
-
+        const privateKey = await Services.Identity.exportPersonaPrivateKey(stringToPersonaIdentifier(identifier))
         return privateKey
     },
     profile_queryProfiles: async ({ network }) => {

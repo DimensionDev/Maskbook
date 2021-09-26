@@ -9,7 +9,7 @@ import { CloudBackupVerifyDialog, VerifyNextData } from './dialogs/CloudBackupVe
 import { UserContext } from '../hooks/UserContext'
 import type { VerifyCodeRequest } from '../api'
 import type { BackupFileInfo } from '../type'
-import { useLocation } from 'react-router'
+import { useLocation } from 'react-router-dom'
 
 export default function BackupSetting() {
     const t = useDashboardI18N()

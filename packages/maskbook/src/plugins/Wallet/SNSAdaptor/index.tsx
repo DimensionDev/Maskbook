@@ -12,6 +12,7 @@ import { ConnectWalletDialog } from './ConnectWalletDialog'
 import { useStartWatchChainState } from '../hooks/useStartWatchChainState'
 import { WalletRiskWarningDialog } from './RiskWarningDialog'
 import { GasSettingDialog } from './GasSettingDialog'
+import { ERC20TokenListDialog } from './RRC20TokenListDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -31,6 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 <WalletRenameWalletDialog />
                 <WalletRiskWarningDialog />
                 <GasSettingDialog />
+                <ERC20TokenListDialog />
             </>
         )
     },
