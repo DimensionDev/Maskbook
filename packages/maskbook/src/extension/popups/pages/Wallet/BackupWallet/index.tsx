@@ -120,7 +120,7 @@ const BackupWallet = memo(() => {
         if (!wallet?.hasStoredKeyInfo) return
         try {
             return {
-                jsonFile: await WalletRPC.exportKeyStoreJSON(wallet.address, password, password),
+                jsonFile: await WalletRPC.exportKeyStoreJSON(wallet.address, password),
                 privateKey: await WalletRPC.exportPrivateKey(wallet.address, password),
             }
         } catch (error) {

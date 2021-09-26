@@ -9,6 +9,38 @@ const Worker = new OnDemandWorker(new URL('../../../../../../src-workers/wallet.
     name: 'MaskWallet',
 })
 
+export enum ErrorCode {
+    KdfParamsInvalid = '-3001',
+    PasswordIncorrect = '-3002',
+    InvalidKeyIvLength = '-3003',
+    InvalidCiphertext = '-3004',
+    InvalidPrivateKey = '-3005',
+    InvalidPublicKey = '-3006',
+    InvalidMnemonic = '-3007',
+    InvalidSeed = '-3008',
+    InvalidDerivationpath = '-3009',
+    InvalidKeyStoreJson = '-3010',
+    NotSupportedPublicKeyType = '-3011',
+    NotSupportedCurve = '-3012',
+    NotSupportedCipher = '-3013',
+}
+
+const ErrorMessage = {
+    [ErrorCode.KdfParamsInvalid]: 'Invalid kdf parameters.',
+    [ErrorCode.PasswordIncorrect]: 'Incorrect payment password.',
+    [ErrorCode.InvalidKeyIvLength]: 'Invalid key IV length.',
+    [ErrorCode.InvalidCiphertext]: 'Invalid cipher text.',
+    [ErrorCode.InvalidPrivateKey]: 'Invalid private key.',
+    [ErrorCode.InvalidPublicKey]: 'Invalid public key.',
+    [ErrorCode.InvalidMnemonic]: 'Invalid mnemonic words.',
+    [ErrorCode.InvalidSeed]: 'Invalid seed.',
+    [ErrorCode.InvalidDerivationpath]: 'Invalid derivation path.',
+    [ErrorCode.InvalidKeyStoreJson]: 'Invalid keystore JSON.',
+    [ErrorCode.NotSupportedPublicKeyType]: 'Not supported public key type.',
+    [ErrorCode.NotSupportedCurve]: 'Not supported curve.',
+    [ErrorCode.NotSupportedCipher]: 'Not supported chiper.',
+}
+
 function send<I extends keyof Request, O extends keyof Response>(input: I, output: O) {
     return (value: Request[I]) => {
         return new Promise<Response[O]>((resolve, reject) => {
@@ -19,7 +51,10 @@ function send<I extends keyof Request, O extends keyof Response>(input: I, outpu
 
                 Worker.removeEventListener('message', f)
                 const data: Output = message.data
-                if (data.response.error) return reject(new Error(data.response.error.errorCode ?? 'Unknown Error'))
+                if (data.response.error)
+                    return reject(
+                        new Error(ErrorMessage[data.response.error.errorCode as ErrorCode] || 'Unknown Error'),
+                    )
                 resolve(data.response[output])
             })
         })
