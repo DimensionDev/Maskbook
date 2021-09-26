@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { DialogContent } from '@material-ui/core'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { makeStyles } from '@masknet/theme'
@@ -18,15 +18,15 @@ export const GasSettingDialog: FC = () => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
-    const [gasLimit, setGasLimit] = useState<number | string>(0)
-    const { open, closeDialog, setDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated)
-
-    useEffect(() => {
-        return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
+    const [gasLimit, setGasLimit] = useState<string>('0')
+    const { open, closeDialog, setDialog } = useRemoteControlledDialog(
+        WalletMessages.events.gasSettingDialogUpdated,
+        (evt) => {
+            if (!evt.open) return
             if (evt.gasOption) setGasOption(evt.gasOption)
             if (evt.gasLimit) setGasLimit(evt.gasLimit)
-        })
-    }, [])
+        },
+    )
 
     return (
         <InjectedDialog title={t('popups_wallet_gas_fee_settings')} open={open} onClose={closeDialog}>
@@ -36,12 +36,13 @@ export const GasSettingDialog: FC = () => {
                     onGasLimitChange={setGasLimit}
                     gasOption={gasOption}
                     onGasOptionChange={setGasOption}
-                    onConfirm={({ gasPrice, gasLimit }) => {
+                    onConfirm={({ gasPrice, gasLimit, maxFee }) => {
                         setDialog({
                             open: false,
                             gasOption,
                             gasPrice,
                             gasLimit,
+                            maxFee,
                         })
                     }}
                 />
