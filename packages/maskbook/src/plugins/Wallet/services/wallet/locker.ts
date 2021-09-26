@@ -8,7 +8,7 @@ export async function isLocked() {
 
 export async function lockWallet() {
     password.clearPassword()
-    currentMaskWalletLockStatusSettings.value = LockStatus.UNLOCK
+    currentMaskWalletLockStatusSettings.value = LockStatus.LOCKED
 }
 
 export async function unlockWallet(unverifiedPassword: string) {

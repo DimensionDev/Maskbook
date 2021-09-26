@@ -6,7 +6,11 @@ import { LockStatus } from '@masknet/web3-shared'
 
 export function useWalletLockStatus() {
     const lockStatus = useValueRef(currentMaskWalletLockStatusSettings)
-    const { value: isLocked, loading, error, } = useAsync(async () => {
+    const {
+        value: isLocked,
+        loading,
+        error,
+    } = useAsync(async () => {
         if (lockStatus === LockStatus.INIT) return WalletRPC.isLocked()
         return lockStatus === LockStatus.LOCKED
     }, [lockStatus])
