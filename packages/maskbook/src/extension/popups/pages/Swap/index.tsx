@@ -66,7 +66,7 @@ export default function SwapPage() {
         Services.Helper.openPopupsWindow('/wallet/select', {
             chainId,
         })
-    }, [])
+    }, [chainId])
     return (
         <Web3Provider value={SwapWeb3Context}>
             <div className={classes.page}>

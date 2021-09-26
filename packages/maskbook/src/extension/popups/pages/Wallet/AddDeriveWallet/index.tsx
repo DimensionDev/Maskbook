@@ -106,7 +106,7 @@ const AddDeriveWallet = memo(() => {
         await Promise.all(
             unDeriveWallets.map(async (pathIndex) =>
                 WalletRPC.recoverWalletFromMnemonic(
-                    walletName ?? 'Account',
+                    walletName ?? '',
                     mnemonic,
                     `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
                 ),

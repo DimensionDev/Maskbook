@@ -10,6 +10,7 @@ import {
     currentBlockNumberSettings,
     currentChainIdSettings,
     currentMaskWalletBalanceSettings,
+    currentMaskWalletChainIdSettings,
     currentProviderSettings,
 } from '../settings'
 import { getGasPriceDict } from '../apis/debank'
@@ -36,9 +37,15 @@ export async function updateChainState() {
         ;[currentBlockNumberSettings.value, currentBalanceSettings.value, currentMaskWalletBalanceSettings.value] =
             await Promise.all([
                 getBlockNumber(),
-                currentAccountSettings.value ? getBalance(currentAccountSettings.value) : currentBalanceSettings.value,
+                currentAccountSettings.value
+                    ? getBalance(currentAccountSettings.value, {
+                          chainId: currentChainIdSettings.value,
+                      })
+                    : currentBalanceSettings.value,
                 currentAccountMaskWalletSettings.value
-                    ? getBalance(currentAccountMaskWalletSettings.value)
+                    ? getBalance(currentAccountMaskWalletSettings.value, {
+                          chainId: currentMaskWalletChainIdSettings.value,
+                      })
                     : currentBalanceSettings.value,
             ])
     } catch {
