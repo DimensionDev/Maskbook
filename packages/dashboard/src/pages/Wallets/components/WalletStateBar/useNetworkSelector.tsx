@@ -53,10 +53,6 @@ export const useNetworkSelector = () => {
                         chainId,
                         providerType: ProviderType.MaskWallet,
                     })
-                    await PluginServices.Wallet.updateMaskAccount({
-                        account,
-                        chainId,
-                    })
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:

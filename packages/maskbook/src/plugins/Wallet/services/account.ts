@@ -60,6 +60,13 @@ export async function updateAccount(
     if (networkType) currentNetworkSettings.value = networkType
     if (account) currentAccountSettings.value = account
     if (providerType) currentProviderSettings.value = providerType
+    if (currentProviderSettings.value === ProviderType.MaskWallet) {
+        await updateMaskAccount({
+            account,
+            chainId,
+            networkType,
+        })
+    }
 }
 
 export async function updateMaskAccount(options: { account?: string; chainId?: ChainId; networkType?: NetworkType }) {
