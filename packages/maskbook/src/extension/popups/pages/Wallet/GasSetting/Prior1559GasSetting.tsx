@@ -87,6 +87,7 @@ export const Prior1559GasSetting = memo(() => {
     const { t } = useI18N()
     const chainId = useChainId()
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
+    const [getGasLimitError, setGetGasLimitError] = useState(false)
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeTokenDetailed()
@@ -139,7 +140,11 @@ export const Prior1559GasSetting = memo(() => {
             (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
                 value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
         ) {
-            return web3.eth.estimateGas(value.computedPayload._tx)
+            try {
+                return web3.eth.estimateGas(value.computedPayload._tx)
+            } catch {
+                return 0
+            }
         }
 
         return 0
@@ -161,6 +166,7 @@ export const Prior1559GasSetting = memo(() => {
     const {
         control,
         handleSubmit,
+        setError,
         setValue,
         formState: { errors },
     } = useForm<zod.infer<typeof schema>>({
@@ -223,6 +229,11 @@ export const Prior1559GasSetting = memo(() => {
             history.replace(PopupRoutes.Wallet)
         }
     }, [value, getValueLoading])
+
+    //#region If the estimate gas be 0, Set error
+    useUpdateEffect(() => {
+        if (!getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
+    }, [getGasLimitError])
 
     return (
         <>

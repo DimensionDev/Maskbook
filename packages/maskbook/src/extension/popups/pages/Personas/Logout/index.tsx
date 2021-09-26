@@ -76,7 +76,6 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: '#F7F9FA',
         borderRadius: 8,
         padding: '8px 16px',
-        alignSelf: 'normal',
         margin: '20px 0',
     },
 }))

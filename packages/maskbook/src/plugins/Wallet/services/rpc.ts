@@ -39,7 +39,8 @@ export async function popUnconfirmedRequest() {
         requests: requests.slice(1),
     }
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
-    WalletMessages.events.requestsUpdated.sendToAll(undefined)
+    //TODO: hasRequest is not the best definition
+    WalletMessages.events.requestsUpdated.sendToAll({ hasRequest: false })
     return payload
 }
 
@@ -69,7 +70,7 @@ export async function pushUnconfirmedRequest(payload: JsonRpcPayload) {
               requests: [payload],
           }
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
-    WalletMessages.events.requestsUpdated.sendToAll(undefined)
+    WalletMessages.events.requestsUpdated.sendToAll({ hasRequest: true })
     return payload
 }
 
@@ -94,7 +95,7 @@ export async function updateUnconfirmedRequest(payload: JsonRpcPayload) {
     }
 
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
-    WalletMessages.events.requestsUpdated.sendToAll(undefined)
+    WalletMessages.events.requestsUpdated.sendToAll({ hasRequest: true })
     return payload
 }
 
@@ -112,7 +113,7 @@ export async function deleteUnconfirmedRequest(payload: JsonRpcPayload) {
         requests: requests,
     }
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
-    WalletMessages.events.requestsUpdated.sendToAll(undefined)
+    WalletMessages.events.requestsUpdated.sendToAll({ hasRequest: false })
     return payload
 }
 
@@ -131,5 +132,5 @@ export async function clearUnconfirmedRequests() {
         requests: [],
     }
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
-    WalletMessages.events.requestsUpdated.sendToAll(undefined)
+    WalletMessages.events.requestsUpdated.sendToAll({ hasRequest: false })
 }

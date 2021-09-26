@@ -19,21 +19,6 @@ export const Web3Context: Web3ProviderType = {
         '',
         Messages.events.currentAccountSettings.on,
     ),
-    nonce: createSubscriptionFromAsync(
-        Services.Settings.getBlockNumber,
-        0,
-        Messages.events.currentBlockNumberSettings.on,
-    ),
-    gasPrice: createSubscriptionFromAsync(
-        Services.Settings.getBlockNumber,
-        0,
-        Messages.events.currentBlockNumberSettings.on,
-    ),
-    etherPrice: createSubscriptionFromAsync(
-        Services.Settings.getEtherPrice,
-        0,
-        Messages.events.currentEtherPriceSettings.on,
-    ),
     tokenPrices: createSubscriptionFromAsync(
         Services.Settings.getTokenPrices,
         {},

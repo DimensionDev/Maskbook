@@ -54,10 +54,12 @@ const WalletSettings = memo(() => {
                         <BackUpIcon className={classes.icon} />
                         <ListItemText className={classes.text}>{t('popups_wallet_backup_wallet')}</ListItemText>
                     </ListItem>
-                    <ListItem className={classes.item} onClick={() => history.push(PopupRoutes.DeleteWallet)}>
-                        <TrashIcon className={classes.icon} />
-                        <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
-                    </ListItem>
+                    {!wallet?.hasDerivationPath ? (
+                        <ListItem className={classes.item} onClick={() => history.push(PopupRoutes.DeleteWallet)}>
+                            <TrashIcon className={classes.icon} />
+                            <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
+                        </ListItem>
+                    ) : null}
                     <Link
                         href={resolveAddressLinkOnExplorer(chainId, wallet?.address ?? '')}
                         target="_blank"

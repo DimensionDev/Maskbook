@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { MaskWalletIcon } from '@masknet/icons'
@@ -7,9 +7,10 @@ import { Typography } from '@material-ui/core'
 import { LoadingButton } from '@material-ui/lab'
 import { EnterDashboard } from '../../../components/EnterDashboard'
 import { useI18N } from '../../../../../utils'
-import { StyledInput } from '../../../components/StyledInput'
+import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { PopupRoutes } from '../../../index'
+import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
 
 const useStyles = makeStyles()((theme) => ({
     contain: {
@@ -52,11 +53,17 @@ const Unlock = memo(() => {
     const [password, setPassword] = useState('')
 
     const history = useHistory()
-    const [unlocked, handleUnlock] = useAsyncFn(async () => {
-        await WalletRPC.unlockWallet(password)
-        history.replace(PopupRoutes.Wallet)
-        return true
+    const [{ value: hasError, loading }, handleUnlock] = useAsyncFn(async () => {
+        return WalletRPC.unlockWallet(password)
     }, [password])
+
+    const { isLock, loading: getLockStatusLoading } = useWalletLockStatus()
+
+    useAsync(async () => {
+        if (!isLock && !getLockStatusLoading) {
+            history.replace(PopupRoutes.Wallet)
+        }
+    }, [isLock, getLockStatusLoading])
 
     return (
         <>
@@ -67,15 +74,16 @@ const Unlock = memo(() => {
                 </div>
                 <div>
                     <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
-                    <StyledInput
+                    <PasswordField
                         value={password}
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
-                        helperText={unlocked.value ? t('popups_wallet_unlock_error_password') : ''}
+                        error={hasError}
+                        helperText={hasError ? t('popups_wallet_unlock_error_password') : ''}
                     />
                 </div>
                 <LoadingButton
-                    loading={unlocked.loading}
+                    loading={loading}
                     fullWidth
                     variant="contained"
                     className={classes.button}

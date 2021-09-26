@@ -17,6 +17,8 @@ import { recoverWalletFromMnemonic, recoverWalletFromPrivateKey } from '../../..
 import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra'
 import { Result } from 'ts-results'
 import { addWallet } from '../../../plugins/Wallet/services/wallet/database'
+import { RelationRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
+import { createNewRelation } from '../IdentityService'
 
 /**
  * Restore the backup
@@ -67,6 +69,11 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
 
         for (const x of data.posts) {
             await createOrUpdatePostDB(PostRecordFromJSONFormat(x), 'append')
+        }
+
+        for (const x of data.relations) {
+            const relation = RelationRecordFromJSONFormat(x)
+            await createNewRelation(relation.profile, relation.linked, relation.favor)
         }
 
         const plugins = [...activatedPluginsWorker]

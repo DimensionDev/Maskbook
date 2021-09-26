@@ -36,7 +36,6 @@ export const RestoreFromLocal = memo(() => {
     const [backupValue, setBackupValue] = useState('')
     const [backupId, setBackupId] = useState('')
     const [password, setPassword] = useState('')
-    const [paymentPassword, setPaymentPassword] = useState('')
     const [error, setError] = useState('')
     const [restoreStatus, setRestoreStatus] = useState(RestoreStatus.WaitingInput)
 
@@ -87,10 +86,12 @@ export const RestoreFromLocal = memo(() => {
 
     const restoreDB = useCallback(async () => {
         try {
-            // setup password
-            if (json?.wallets) {
-                if (await PluginServices.Wallet.hasPassword()) await PluginServices.Wallet.unlockWallet(paymentPassword)
-                else await PluginServices.Wallet.setPassword(paymentPassword)
+            if (
+                json?.wallets &&
+                (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
+            ) {
+                await Services.Helper.openPopupsWindow('/wallet/recovered', { backupId })
+                return
             }
 
             await Services.Welcome.checkPermissionsAndRestore(backupId)
@@ -104,7 +105,7 @@ export const RestoreFromLocal = memo(() => {
         } catch {
             enqueueSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
         }
-    }, [backupId, json, paymentPassword])
+    }, [backupId, json])
 
     return (
         <>
@@ -115,22 +116,7 @@ export const RestoreFromLocal = memo(() => {
                         <FileUpload onChange={handleSetFile} accept="application/octet-stream, application/json" />
                     </Card>
                 )}
-                {restoreStatus === RestoreStatus.Verified && json && (
-                    <>
-                        {json.wallets > 0 ? (
-                            <MaskTextField
-                                sx={{ marginBottom: 2 }}
-                                label={t.sign_in_account_local_backup_payment_password()}
-                                placeholder={t.sign_in_account_local_backup_payment_password()}
-                                type="password"
-                                onChange={(e) => setPaymentPassword(e.currentTarget.value)}
-                                error={!!error}
-                                helperText={error}
-                            />
-                        ) : null}
-                        <BackupPreviewCard json={json} />
-                    </>
-                )}
+                {restoreStatus === RestoreStatus.Verified && json && <BackupPreviewCard json={json} />}
                 {restoreStatus === RestoreStatus.Decrypting && (
                     <Box sx={{ mt: 4 }}>
                         <MaskTextField
@@ -148,11 +134,7 @@ export const RestoreFromLocal = memo(() => {
                     variant="rounded"
                     color="primary"
                     onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
-                    disabled={
-                        restoreStatus === RestoreStatus.Verified
-                            ? !json || (json.wallets > 0 && !paymentPassword)
-                            : !file
-                    }>
+                    disabled={restoreStatus === RestoreStatus.Verified ? !json?.wallets : !file}>
                     {restoreStatus !== RestoreStatus.Verified ? t.next() : t.restore()}
                 </LoadingButton>
             </ButtonContainer>

@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Box, GlobalStyles, Paper } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
@@ -13,6 +14,7 @@ function GlobalCss() {
         <GlobalStyles
             styles={{
                 body: {
+                    minWidth: 350,
                     overflowX: 'hidden',
                     margin: '0 auto !important',
                     maxWidth: '100%',
@@ -27,7 +29,7 @@ function GlobalCss() {
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        minHeight: 494,
+        minHeight: 550,
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
@@ -72,6 +74,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     const { t } = useI18N()
     const history = useHistory()
     const { classes } = useStyles()
+    const location = useLocation()
     const personas = useMyPersonas()
 
     const excludePath = useRouteMatch({
@@ -95,10 +98,15 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
         exact: true,
     })
 
+    const matchRecovery = useRouteMatch({
+        path: PopupRoutes.WalletRecovered,
+        exact: true,
+    })
+
     return (
         <>
             <GlobalCss />
-            <Paper elevation={0}>
+            <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto', minHeight: 600 }}>
                 <Box className={classes.header}>
                     <Box className={classes.left}>
                         {excludePath || history.length === 1 ? (
@@ -113,7 +121,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                     <Box className={classes.right}>
                         <NavLink
                             style={{ marginRight: 5 }}
-                            to={PopupRoutes.Wallet}
+                            to={!excludePersonaPath ? PopupRoutes.Wallet : location}
                             className={classes.nav}
                             activeClassName={classes.active}>
                             {t('wallets')}
@@ -126,7 +134,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                     </Box>
                 </Box>
                 <Box className={classes.container}>
-                    {personas.length === 0 ? <InitialPlaceholder /> : props.children}
+                    {personas.length === 0 && !matchRecovery ? <InitialPlaceholder /> : props.children}
                 </Box>
             </Paper>
         </>

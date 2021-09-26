@@ -1,13 +1,8 @@
 /* eslint-disable import/no-deprecated */
-import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
 import type { BackupJSONFileVersion1 } from './version-1'
 import { ProfileIdentifier, ECKeyIdentifierFromJsonWebKey } from '../../../../database/type'
-import type {
-    AESJsonWebKey,
-    EC_Public_JsonWebKey,
-    EC_Private_JsonWebKey,
-} from '../../../../modules/CryptoAlgorithm/interfaces/utils'
+import type { AESJsonWebKey, EC_Public_JsonWebKey, EC_Private_JsonWebKey } from '@masknet/shared-base'
 import { twitterBase } from '../../../../social-network-adaptor/twitter.com/base'
 import { facebookBase } from '../../../../social-network-adaptor/facebook.com/base'
 
@@ -54,6 +49,11 @@ export interface BackupJSONFileVersion2 {
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
     }>
+    relations: Array<{
+        profile: string // ProfileIdentifier.toText()
+        persona: string // PersonaIdentifier.toText()
+        favor: 0 | 1
+    }>
     /** @deprecated */
     userGroups: never[]
     posts: Array<{
@@ -75,8 +75,6 @@ export interface BackupJSONFileVersion2 {
         passphrase?: string
         publicKey?: EC_Public_JsonWebKey
         privateKey?: EC_Private_JsonWebKey
-        derivationPath?: string
-        storedKeyInfo?: api.IStoredKeyInfo
         mnemonic?: {
             words: string
             parameter: { path: string; withPassword: boolean }
@@ -160,6 +158,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
         wallets: [],
         personas,
         profiles,
+        relations: [],
         userGroups: [],
         grantedHostPermissions: json.grantedHostPermissions,
     }
@@ -167,6 +166,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
 
 export function patchNonBreakingUpgradeForBackupJSONFileVersion2(json: BackupJSONFileVersion2): BackupJSONFileVersion2 {
     json.wallets = json.wallets ?? []
+    json.relations = json.relations ?? []
     const permissions = new Set<string>(json.grantedHostPermissions)
     if (json.grantedHostPermissions.some((x) => x.includes('twitter.com'))) {
         const a = twitterBase.declarativePermissions.origins

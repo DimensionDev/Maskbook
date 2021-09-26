@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { makeStyles } from '@masknet/theme'
 import { useLocation } from 'react-router-dom'
@@ -18,7 +18,7 @@ import { useCopyToClipboard } from 'react-use'
 import { SuccessIcon } from '@masknet/icons'
 import Services from '../../../../service'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { parseInt } from 'lodash-es'
+import { first } from 'lodash-es'
 
 const useStyles = makeStyles()({
     content: {
@@ -113,7 +113,7 @@ const SelectWallet = memo(() => {
     const { classes } = useStyles()
     const location = useLocation()
     const wallet = useAccount()
-    const wallets = useWallets()
+    const wallets = useWallets(ProviderType.MaskWallet)
 
     const [selected, setSelected] = useState(wallet)
     const [, copyToClipboard] = useCopyToClipboard()
@@ -146,6 +146,10 @@ const SelectWallet = memo(() => {
 
         return Services.Helper.removePopupWindow()
     }, [chainId, selected])
+
+    useEffect(() => {
+        if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
+    }, [selected, wallets])
 
     return chainIdValid ? (
         <>

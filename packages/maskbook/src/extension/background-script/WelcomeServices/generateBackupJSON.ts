@@ -4,16 +4,17 @@ import {
     BackupPreview,
     getBackupPreviewInfo,
 } from '../../../utils/type-transform/BackupFormat/JSON/latest'
-import { queryPersonasDB, queryProfilesDB } from '../../../database/Persona/Persona.db'
+import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../../database/Persona/Persona.db'
 import { queryPostsDB } from '../../../database/post'
 import { PersonaRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
 import { Identifier, PersonaIdentifier, ProfileIdentifier } from '../../../database/type'
-import { getWallets } from '../../../plugins/Wallet/services'
+import { exportMnemonic, exportPrivateKey, getWallets } from '../../../plugins/Wallet/services'
 import { WalletRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { activatedPluginsWorker } from '@masknet/plugin-infra'
 import { timeout } from '@masknet/shared'
+import { RelationRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
 
 export type { BackupPreview } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 export interface BackupOptions {
@@ -21,6 +22,7 @@ export interface BackupOptions {
     noWallets: boolean
     noPersonas: boolean
     noProfiles: boolean
+    noRelations: boolean
     noPlugins: boolean
     hasPrivateKeyOnly: boolean
     filter: { type: 'persona'; wanted: PersonaIdentifier[] }
@@ -30,6 +32,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     const posts: BackupJSONFileLatest['posts'] = []
     const wallets: BackupJSONFileLatest['wallets'] = []
     const profiles: BackupJSONFileLatest['profiles'] = []
+    const relations: BackupJSONFileLatest['relations'] = []
     const plugins: NonNullable<BackupJSONFileLatest['plugin']> = {}
 
     if (!opts.filter) {
@@ -47,6 +50,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         if (!opts.noProfiles) await backProfiles(wantedProfiles)
     }
     if (!opts.noPosts) await backupAllPosts()
+    if (!opts.noRelations) await backupAllRelations()
     if (!opts.noWallets) await backupAllWallets()
     if (!opts.noPlugins) await backupAllPlugins()
 
@@ -62,9 +66,11 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         posts,
         wallets,
         profiles,
+        relations,
         userGroups: [],
     }
     if (Object.keys(plugins).length) file.plugin = plugins
+
     return file
 
     async function backupAllPosts() {
@@ -100,9 +106,26 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         personas.push(...data)
     }
 
+    async function backupAllRelations() {
+        const data = (await queryRelations(() => true)).map(RelationRecordToJSONFormat)
+        relations.push(...data)
+    }
+
     async function backupAllWallets() {
-        const wallets_ = (await getWallets(ProviderType.MaskWallet)).map(WalletRecordToJSONFormat)
-        wallets.push(...wallets_)
+        const allSettled = await Promise.allSettled(
+            (
+                await getWallets(ProviderType.MaskWallet)
+            ).map(async (wallet) => {
+                return {
+                    ...wallet,
+                    mnemonic: wallet.derivationPath ? await exportMnemonic(wallet.address) : undefined,
+                    privateKey: wallet.derivationPath ? undefined : await exportPrivateKey(wallet.address),
+                }
+            }),
+        )
+        const wallets_ = allSettled.map((x) => (x.status === 'fulfilled' ? WalletRecordToJSONFormat(x.value) : null))
+        if (wallets_.some((x) => !x)) throw new Error('Failed to backup wallets.')
+        wallets.push(...(wallets_ as BackupJSONFileLatest['wallets']))
     }
 
     async function backupAllPlugins() {

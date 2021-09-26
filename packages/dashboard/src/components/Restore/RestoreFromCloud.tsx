@@ -4,7 +4,7 @@ import { Box } from '@material-ui/core'
 import { MaskAlert } from '../MaskAlert'
 import { CodeValidation } from './CodeValidation'
 import { fetchBackupValue } from '../../pages/Settings/api'
-import { Services } from '../../API'
+import { PluginServices, Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { useSnackbar } from '@masknet/theme'
@@ -20,6 +20,7 @@ import { AccountType } from '../../pages/Settings/type'
 import { UserContext } from '../../pages/Settings/hooks/UserContext'
 import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog'
 import { LoadingButton } from '../LoadingButton'
+import type { BackupPreview } from '../../../../maskbook/src/utils'
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
@@ -72,7 +73,7 @@ export const RestoreFromCloud = memo(() => {
                     name: 'restore',
                     params: {
                         backupJson: backupInfo.info,
-                        handleRestore: () => onRestore(backupInfo.id, { type, value: accountValue, password }),
+                        handleRestore: () => onRestore(backupInfo, { type, value: accountValue, password }),
                     },
                 })
                 return null
@@ -83,9 +84,17 @@ export const RestoreFromCloud = memo(() => {
     )
 
     const onRestore = useCallback(
-        async (backupId: string, account: any) => {
+        async (backupInfo: { info: BackupPreview; id: string }, account: any) => {
             try {
-                await Services.Welcome.checkPermissionsAndRestore(backupId)
+                if (
+                    backupInfo.info?.wallets &&
+                    (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
+                ) {
+                    await Services.Helper.openPopupsWindow('/wallet/recovered', { backupId: backupInfo.id })
+                    return
+                }
+
+                await Services.Welcome.checkPermissionsAndRestore(backupInfo.id)
 
                 if (!currentPersona) {
                     const lastedPersona = await Services.Identity.queryLastPersonaCreated()

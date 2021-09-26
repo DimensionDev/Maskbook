@@ -5,7 +5,7 @@ import LoadingButton from '@material-ui/lab/LoadingButton'
 import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard'
 import type { BackupFileInfo } from '../../type'
 import { useDashboardI18N } from '../../../../locales'
-import { Services } from '../../../../API'
+import { PluginServices, Services } from '../../../../API'
 import { fetchBackupValue } from '../../api'
 import { useAsyncFn } from 'react-use'
 import { decryptBackup } from '@masknet/backup-format'
@@ -30,6 +30,14 @@ export function CloudBackupMergeDialog({ account, info, open, onClose }: CloudBa
             const decrypted = await decryptBackup(encode(account + backupPassword), encrypted)
             const backupText = JSON.stringify(decode(decrypted))
             const data = await Services.Welcome.parseBackupStr(backupText)
+
+            if (
+                data?.info.wallets &&
+                (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
+            ) {
+                await Services.Helper.openPopupsWindow('/wallet/recovered', { backupId: data.id })
+                return
+            }
 
             if (data?.id) {
                 await Services.Welcome.checkPermissionsAndRestore(data.id)

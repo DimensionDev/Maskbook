@@ -48,6 +48,13 @@ export enum ProviderType {
     WalletConnect = 'WalletConnect',
     CustomNetwork = 'CustomNetwork',
 }
+
+export enum LockStatus {
+    INIT = 0,
+    UNLOCK = 1,
+    LOCKED = 2,
+}
+
 // If you change this enum, please sync it to packages/public-api/src/web.ts
 // (it's a breaking change. Please notify the iOS and Android dev)
 export enum NetworkType {
@@ -77,7 +84,7 @@ export interface Wallet {
     erc1155_token_blacklist: Set<string>
     /** yep: Mask Wallet, nope: External Wallet */
     hasStoredKeyInfo: boolean
-    /** yep: Derivable Wallet. nope: Underivable Wallet */
+    /** yep: Derivable Wallet. nope: UnDerivable Wallet */
     hasDerivationPath: boolean
 }
 

@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useMemo } from 'react'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { StyledInput } from '../../../components/StyledInput'
@@ -8,6 +8,9 @@ import { useHistory } from 'react-router-dom'
 import { useI18N } from '../../../../../utils'
 import { useAsyncFn } from 'react-use'
 import { LoadingButton } from '@material-ui/lab'
+import { z as zod } from 'zod'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const useStyles = makeStyles()({
     header: {
@@ -37,12 +40,35 @@ const WalletRename = memo(() => {
     const history = useHistory()
     const { classes } = useStyles()
     const wallet = useWallet()
-    const [name, setName] = useState('')
-    const [{ loading }, renameWallet] = useAsyncFn(async () => {
-        if (!wallet?.address || !name) return
-        await WalletRPC.renameWallet(wallet.address, name)
-        return history.goBack()
-    }, [wallet?.address, name])
+
+    const schema = useMemo(() => {
+        return zod.object({
+            name: zod.string().min(1).max(12),
+        })
+    }, [])
+
+    const {
+        control,
+        handleSubmit,
+        formState: { errors, isValid },
+    } = useForm<zod.infer<typeof schema>>({
+        mode: 'onChange',
+        resolver: zodResolver(schema),
+        defaultValues: {
+            name: wallet?.name,
+        },
+    })
+
+    const [{ loading }, renameWallet] = useAsyncFn(
+        async ({ name }: zod.infer<typeof schema>) => {
+            if (!wallet?.address || !name) return
+            await WalletRPC.renameWallet(wallet.address, name)
+            return history.goBack()
+        },
+        [wallet?.address],
+    )
+
+    const onSubmit = handleSubmit(renameWallet)
 
     return (
         <>
@@ -50,14 +76,25 @@ const WalletRename = memo(() => {
                 <Typography className={classes.title}>{t('rename')}</Typography>
             </div>
             <div className={classes.content}>
-                <StyledInput onChange={(e) => setName(e.target.value)} defaultValue={wallet?.name} />
+                <Controller
+                    name="name"
+                    control={control}
+                    render={({ field }) => (
+                        <StyledInput
+                            {...field}
+                            error={!!errors.name?.message}
+                            helperText={errors.name?.message}
+                            defaultValue={wallet?.name}
+                        />
+                    )}
+                />
                 <LoadingButton
                     fullWidth
                     loading={loading}
                     variant="contained"
-                    disabled={!name}
+                    disabled={!isValid}
                     className={classes.button}
-                    onClick={renameWallet}>
+                    onClick={onSubmit}>
                     {t('confirm')}
                 </LoadingButton>
             </div>

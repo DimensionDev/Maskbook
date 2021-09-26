@@ -43,25 +43,37 @@ const CreateWallet = memo(() => {
     const history = useHistory()
     const { classes } = useStyles()
     const [name, setName] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
     const onCreate = useCallback(async () => {
-        await WalletRPC.deriveWallet(name)
-        history.goBack()
+        try {
+            await WalletRPC.deriveWallet(name)
+            history.goBack()
+        } catch (error) {
+            if (error instanceof Error) {
+                setErrorMessage(errorMessage)
+            }
+        }
     }, [name])
 
     return (
         <>
             <div className={classes.header}>
-                <Typography className={classes.title}>New Wallet</Typography>
+                <Typography className={classes.title}>{t('wallet_new')}</Typography>
                 <NetworkSelector />
             </div>
             <div className={classes.content}>
                 <div>
-                    <Typography className={classes.label}>Wallet Name</Typography>
+                    <Typography className={classes.label}>{t('wallet_name')}</Typography>
                     <StyledInput
                         placeholder={t('popups_wallet_enter_your_wallet_name')}
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        error={!!errorMessage}
+                        helperText={errorMessage}
+                        onChange={(e) => {
+                            if (errorMessage) setErrorMessage('')
+                            setName(e.target.value)
+                        }}
                     />
                 </div>
                 <Button variant="contained" className={classes.button} disabled={!name} onClick={onCreate}>

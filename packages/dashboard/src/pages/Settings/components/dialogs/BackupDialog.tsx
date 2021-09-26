@@ -43,15 +43,15 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
             return
         }
 
-        if (showPassword.wallet) {
-            const verified = await PluginServices.Wallet.verifyPassword(paymentPassword)
-            if (!verified) {
-                setIncorrectPaymentPassword(true)
-                return
-            }
-        }
-
         try {
+            if (showPassword.wallet) {
+                const verified = await PluginServices.Wallet.verifyPassword(paymentPassword)
+                if (!verified) {
+                    setIncorrectPaymentPassword(true)
+                    return
+                }
+            }
+
             const fileJson = await Services.Welcome.createBackupFile({
                 noPosts: !showPassword.base,
                 noPersonas: !showPassword.base,

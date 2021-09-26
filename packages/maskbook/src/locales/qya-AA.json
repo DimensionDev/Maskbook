@@ -840,7 +840,6 @@
     "popups_wallet_tab_assets": "crwdns7781:0crwdne7781:0",
     "popups_wallet_tab_activity": "crwdns7783:0crwdne7783:0",
     "popups_wallet_derivation_path": "crwdns7785:0{{ path }}crwdne7785:0",
-    "popups_wallet_previous": "crwdns7787:0crwdne7787:0",
     "popups_wallet_next": "crwdns7789:0crwdne7789:0",
     "popups_wallet_backup_wallet": "crwdns7797:0crwdne7797:0",
     "popups_wallet_backup_json_file": "crwdns7799:0crwdne7799:0",

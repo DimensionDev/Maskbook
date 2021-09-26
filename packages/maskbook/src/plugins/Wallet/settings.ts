@@ -2,12 +2,13 @@ import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
 import {
     ChainId,
-    ProviderType,
-    PortfolioProvider,
     CollectibleProvider,
-    NetworkType,
-    GasNow,
     CryptoPrice,
+    GasNow,
+    NetworkType,
+    PortfolioProvider,
+    ProviderType,
+    LockStatus,
 } from '@masknet/web3-shared'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { isEqual } from 'lodash-es'
@@ -27,6 +28,15 @@ export const currentAccountMaskWalletSettings = createGlobalSettings<string>(
 export const currentMaskWalletChainIdSettings = createGlobalSettings<number>(
     `${PLUGIN_IDENTIFIER}+maskWalletChainId`,
     ChainId.Mainnet,
+    {
+        primary: () => i18n.t('settings_choose_eth_network'),
+        secondary: () => 'This only affects the built-in wallet.',
+    },
+)
+
+export const currentMaskWalletBalanceSettings = createGlobalSettings<string>(
+    `${PLUGIN_IDENTIFIER}+maskWalletBalance`,
+    '0',
     {
         primary: () => i18n.t('settings_choose_eth_network'),
         secondary: () => 'This only affects the built-in wallet.',
@@ -90,9 +100,9 @@ export const currentCollectibleDataProviderSettings = createGlobalSettings<Colle
 /**
  * Is the current selected wallet has been locked?
  */
-export const currentMaskWalletLockedSettings = createGlobalSettings<boolean>(
-    `${PLUGIN_IDENTIFIER}+maskWalletLocked`,
-    false,
+export const currentMaskWalletLockedSettings = createGlobalSettings<LockStatus>(
+    `${PLUGIN_IDENTIFIER}+maskWalletIsLock`,
+    LockStatus.INIT,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },

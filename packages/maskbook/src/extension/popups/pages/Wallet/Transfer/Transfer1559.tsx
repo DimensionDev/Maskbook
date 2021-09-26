@@ -4,8 +4,8 @@ import {
     Asset,
     EthereumTokenType,
     formatBalance,
+    formatGweiToEther,
     formatGweiToWei,
-    formatWeiToGwei,
     isGreaterThan,
     isZero,
     pow10,
@@ -517,7 +517,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         </Typography>
                         <Typography component="span" className={classes.price}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatWeiToGwei(Number(maxPriorityFeePerGas) ?? 0)
+                                usd: formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
                                     .times(etherPrice)
                                     .toPrecision(3),
                             })}
@@ -543,7 +543,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         </Typography>
                         <Typography component="span" className={classes.price}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatWeiToGwei(Number(maxFeePerGas) ?? 0)
+                                usd: formatGweiToEther(Number(maxFeePerGas) ?? 0)
                                     .times(etherPrice)
                                     .toPrecision(3),
                             })}

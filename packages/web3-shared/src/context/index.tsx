@@ -21,9 +21,6 @@ export function useWeb3State() {
     const allowTestnet = useSubscription(_.allowTestnet)
     const balance = useSubscription(_.balance)
     const blockNumber = useSubscription(_.blockNumber)
-    const nonce = useSubscription(_.nonce)
-    const gasPrice = useSubscription(_.gasPrice)
-    const etherPrice = useSubscription(_.etherPrice)
     const tokenPrices = useSubscription(_.tokenPrices)
     const providerType = useSubscription(_.providerType)
     const networkType = useSubscription(_.networkType)
@@ -37,9 +34,6 @@ export function useWeb3State() {
     return {
         allowTestnet,
         account,
-        nonce,
-        gasPrice,
-        etherPrice,
         tokenPrices,
         balance,
         blockNumber,

@@ -37,7 +37,7 @@ function unwrapKey(key: ArrayBuffer, wrapKey: CryptoKey) {
     return crypto.subtle.unwrapKey('raw', key, wrapKey, 'AES-KW', 'AES-GCM', false, ['encrypt', 'decrypt'])
 }
 function getIV() {
-    return crypto.getRandomValues(new Uint8Array(16))
+    return crypto.getRandomValues(new Uint8Array(16)).buffer
 }
 async function deriveKey(iv: ArrayBuffer, password: string) {
     return deriveAES(await derivePBKDF2(password), iv)

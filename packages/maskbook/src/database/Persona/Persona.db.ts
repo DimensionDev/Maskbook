@@ -502,6 +502,18 @@ export async function createRelationDB(
     MaskMessage.events.relationsChanged.sendToAll([{ of: record.profile, reason: 'update', favor: record.favor }])
 }
 
+export async function queryRelations(query: (record: RelationRecord) => boolean, t?: RelationTransaction<'readonly'>) {
+    t = t || createTransaction(await db(), 'readonly')('relations')
+    const records: RelationRecord[] = []
+
+    for await (const each of t.objectStore('relations')) {
+        const out = relationRecordOutDB(each.value)
+        if (query(out)) records.push(out)
+    }
+
+    return records
+}
+
 /**
  * Query relations by paged
  */

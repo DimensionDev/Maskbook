@@ -1,11 +1,16 @@
 import { omit } from 'lodash-es'
 import type { BackupJSONFileLatest } from '../latest'
 import type { WalletRecord } from '../../../../../plugins/Wallet/services/wallet/type'
-import { JWKToKey } from '../../..'
+import { JWKToKey, keyToJWK } from '../../..'
 
 type WalletBackup = BackupJSONFileLatest['wallets'][0]
 
-export function WalletRecordToJSONFormat(wallet: WalletRecord): WalletBackup {
+export function WalletRecordToJSONFormat(
+    wallet: WalletRecord & {
+        mnemonic?: string
+        privateKey?: string
+    },
+): WalletBackup {
     return {
         ...omit(
             wallet,
@@ -17,7 +22,20 @@ export function WalletRecordToJSONFormat(wallet: WalletRecord): WalletBackup {
             'erc721_token_blacklist',
             'erc1155_token_whitelist',
             'erc1155_token_blacklist',
+            'derivationPath',
+            'storedKeyInfo',
         ),
+        mnemonic:
+            wallet.mnemonic && wallet.derivationPath
+                ? {
+                      words: wallet.mnemonic,
+                      parameter: {
+                          path: wallet.derivationPath,
+                          withPassword: false,
+                      },
+                  }
+                : undefined,
+        privateKey: wallet.privateKey ? keyToJWK(wallet.privateKey, 'private') : undefined,
         createdAt: wallet.createdAt.getTime(),
         updatedAt: wallet.updatedAt.getTime(),
     }
