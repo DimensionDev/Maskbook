@@ -3,10 +3,11 @@ import { formatWeiToEther, formatWeiToGwei, GasOption, useChainId, useNativeToke
 import { Typography } from '@material-ui/core'
 import { LoadingButton } from '@material-ui/lab'
 import BigNumber from 'bignumber.js'
-import { isEmpty } from 'lodash-es'
-import { FC, memo, useEffect, useMemo, useState } from 'react'
+import { isEmpty, noop } from 'lodash-es'
+import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
+import { useAsync, useUpdateEffect } from 'react-use'
+import { toWei } from 'web3-utils'
 import { z as zod } from 'zod'
 import { StyledInput } from '../../../../extension/popups/components/StyledInput'
 import { useI18N } from '../../../../utils'
@@ -16,7 +17,7 @@ import type { GasSettingProps } from './types'
 import { useGasSettingStyles } from './useGasSettingStyles'
 
 export const Prior1559GasSetting: FC<GasSettingProps> = memo(
-    ({ gasLimit = 0, gasOption = GasOption.Medium, onConfirm }) => {
+    ({ gasLimit, gasOption = GasOption.Medium, onConfirm = noop }) => {
         const { classes } = useGasSettingStyles()
         const { t } = useI18N()
         const chainId = useChainId()
@@ -26,7 +27,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
         //#region Get gas now from debank
-        const { value: gasNow } = useAsync(async () => {
+        const { value: gasNow, loading: getGasNowLoading } = useAsync(async () => {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
             return {
                 slow: response.data.slow.price,
@@ -58,7 +59,6 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         )
         const currentGasOption = options.find((opt) => opt.gasOption === selectedGasOption)
 
-        const gas = 0
         const minGasLimit = gasLimit
 
         const schema = useMemo(() => {
@@ -83,7 +83,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             mode: 'onChange',
             resolver: zodResolver(schema),
             defaultValues: {
-                gasLimit: `${gasLimit ?? ''}`,
+                gasLimit: gasLimit ?? '',
                 gasPrice: '',
             },
             context: {
@@ -101,11 +101,14 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             }
         }, [currentGasOption, setValue])
 
-        const [{ loading }, handleConfirm] = useAsyncFn(async (data: zod.infer<typeof schema>) => {
-            // TODO call onConfirm
+        const handleConfirm = useCallback((data: zod.infer<typeof schema>) => {
+            onConfirm({
+                gasLimit: data.gasLimit,
+                gasPrice: toWei(data.gasPrice, 'gwei'),
+            })
         }, [])
 
-        const onSubmit = handleSubmit((data) => handleConfirm(data))
+        const onSubmit = handleSubmit(handleConfirm)
 
         return (
             <>
@@ -168,7 +171,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                     />
                 </form>
                 <LoadingButton
-                    loading={loading}
+                    loading={getGasNowLoading}
                     variant="contained"
                     fullWidth
                     className={classes.button}

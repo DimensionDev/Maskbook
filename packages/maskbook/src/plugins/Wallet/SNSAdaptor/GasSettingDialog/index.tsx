@@ -22,6 +22,7 @@ export const GasSettingDialog: FC = () => {
     const { open, closeDialog, setDialog } = useRemoteControlledDialog(
         WalletMessages.events.gasSettingDialogUpdated,
         (evt) => {
+            if (!evt.open) return
             if (evt.gasOption) setGasOption(evt.gasOption)
             if (evt.gasLimit) setGasLimit(evt.gasLimit)
         },
@@ -37,12 +38,13 @@ export const GasSettingDialog: FC = () => {
                     onGasLimitChange={setGasLimit}
                     gasOption={gasOption}
                     onGasOptionChange={setGasOption}
-                    onConfirm={({ gasPrice, gasLimit }) => {
+                    onConfirm={({ gasPrice, gasLimit, maxFee }) => {
                         setDialog({
                             open: false,
                             gasOption,
                             gasPrice,
                             gasLimit,
+                            maxFee,
                         })
                     }}
                 />

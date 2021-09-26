@@ -15,6 +15,8 @@ import {
     useNativeTokenDetailed,
     useTokenTransferCallback,
     GasOption,
+    isEIP1559Supported,
+    useChainId,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { TokenAmountPanel, useRemoteControlledDialog } from '@masknet/shared'
@@ -38,6 +40,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const [selectedToken, setToken] = useState<FungibleTokenDetailed>(token)
     const [isOpenSelectTokenDialog, openSelectTokenDialog] = useState(false)
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
+    const chainId = useChainId()
+    const is1559Supported = isEIP1559Supported(chainId)
 
     // gas price
     const { value: defaultGasPrice = '0' } = useGasPrice()
@@ -57,10 +61,14 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const transferAmount = new BigNumber(amount || '0').multipliedBy(pow10(selectedToken.decimals)).toFixed()
     const erc20GasLimit = useGasLimit(selectedToken.type, selectedToken.address, transferAmount, address)
     const [gasLimit, setGasLimit] = useState<string | number>(0)
+    const [maxFee, setMaxFee] = useState<string | null>(null)
     useEffect(() => {
         setGasLimit(isNativeToken ? GAS_LIMIT : erc20GasLimit.value?.toFixed() ?? 0)
     }, [isNativeToken, erc20GasLimit.value])
-    const gasFee = useMemo(() => new BigNumber(gasLimit).multipliedBy(gasPrice), [gasLimit, gasPrice])
+    const gasFee = useMemo(() => {
+        const price = is1559Supported && maxFee ? new BigNumber(maxFee) : gasPrice
+        return new BigNumber(gasLimit).multipliedBy(price)
+    }, [gasLimit, gasPrice, maxFee, is1559Supported])
     const maxAmount = useMemo(() => {
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ = selectedToken.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
@@ -83,9 +91,11 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     useEffect(() => {
         return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
+            if (evt.open) return
             if (evt.gasPrice) setCustomGasPrice(evt.gasPrice)
             if (evt.gasOption) setGasOption(evt.gasOption)
             if (evt.gasLimit) setGasLimit(evt.gasLimit)
+            if (evt.maxFee) setMaxFee(evt.maxFee)
         })
     }, [])
     const onTransfer = useCallback(async () => {
