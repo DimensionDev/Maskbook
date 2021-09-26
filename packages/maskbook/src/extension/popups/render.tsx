@@ -25,35 +25,37 @@ const SignRequest = lazy(() => import('./SignRequest'))
 function Dialogs() {
     const theme = useClassicMaskTheme({ appearance: Appearance.light })
     return MaskUIRoot(
-        <Web3Provider value={Web3Context}>
-            <HashRouter>
-                <Suspense fallback="">
-                    <Switch>
-                        <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
-                        <Route path={PopupRoutes.Personas} children={frame(<Personas />)} exact />
-                        <Route path={PopupRoutes.RequestPermission} exact>
-                            <RequestPermissionPage />
-                        </Route>
-                        <Route path={PopupRoutes.PermissionAwareRedirect} exact>
-                            <PermissionAwareRedirect />
-                        </Route>
-                        <Route path={PopupRoutes.ThirdPartyRequestPermission} exact>
-                            <ThirdPartyRequestPermission />
-                        </Route>
-                        <Route path={PopupRoutes.SignRequest} exact>
-                            <SignRequest />
-                        </Route>
-                        <Route path={PopupRoutes.PostInspector + '/:SNSAdaptor/'}>
-                            <PostInspectorReplica />
-                        </Route>
-                        <Route path={PopupRoutes.PostInspector + '/:SNSAdaptor/'}>
-                            <PostInspectorReplica />
-                        </Route>
-                        <Route children={<Redirect to={PopupRoutes.Wallet} />} />
-                    </Switch>
-                </Suspense>
-            </HashRouter>
-        </Web3Provider>,
+        <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={theme}>
+                <Web3Provider value={Web3ContextWithoutConfirm}>
+                    <HashRouter>
+                        <Suspense fallback="">
+                            <Switch>
+                                <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
+                                <Route path={PopupRoutes.Personas} children={frame(<Personas />)} />
+                                <Route path={PopupRoutes.Swap} children={<SwapPage />} />
+                                <Route path={PopupRoutes.RequestPermission} exact>
+                                    <RequestPermissionPage />
+                                </Route>
+                                <Route path={PopupRoutes.PermissionAwareRedirect} exact>
+                                    <PermissionAwareRedirect />
+                                </Route>
+                                <Route path={PopupRoutes.ThirdPartyRequestPermission} exact>
+                                    <ThirdPartyRequestPermission />
+                                </Route>
+                                <Route path={PopupRoutes.SignRequest} exact>
+                                    <SignRequest />
+                                </Route>
+                                <Route path={PopupRoutes.PostInspector + '/:SNSAdaptor/'}>
+                                    <PostInspectorReplica />
+                                </Route>
+                                <Route children={<Redirect to={PopupRoutes.Wallet} />} />
+                            </Switch>
+                        </Suspense>
+                    </HashRouter>
+                </Web3Provider>
+            </ThemeProvider>
+        </StyledEngineProvider>,
     )
 }
 status.then(() => createNormalReactRoot(<Dialogs />))
