@@ -1,16 +1,7 @@
 import { Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useContacts } from '../../hooks/useContacts'
 import type { RelationProfile } from '@masknet/shared'
-import {
-    Table,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TableBody,
-    Box,
-    TablePagination,
-} from '@material-ui/core'
+import { Table, TableContainer, TableBody, Box, TablePagination } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { ContactTableRow } from '../ContactTableRow'
@@ -122,16 +113,6 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
                         </Box>
                     ) : (
                         <Table stickyHeader>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell variant="head" align="left" className={classes.header}>
-                                        {t.personas_contacts_name()}
-                                    </TableCell>
-                                    <TableCell variant="head" align="center" className={classes.header}>
-                                        {t.personas_contacts_operation()}
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
                             {dataSource.length ? (
                                 <TableBody>
                                     {dataSource.map((item, index) => (

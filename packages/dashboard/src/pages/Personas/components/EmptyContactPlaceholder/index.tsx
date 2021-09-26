@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const downloadUrl = 'https: //mask.io/download-links/'
+const downloadUrl = 'https://mask.io/download-links/'
 
 export const EmptyContactPlaceholder = memo(() => {
     const [, copyToClipboard] = useCopyToClipboard()

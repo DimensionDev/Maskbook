@@ -101,7 +101,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
 
         return (
             <TableRow>
-                <TableCell align="left" variant="body" sx={{ border: 'none' }}>
+                <TableCell align="left" variant="body" sx={{ border: 'none', p: 1.5 }}>
                     <Box display="flex" alignItems="center">
                         <Typography>{index}</Typography>
                         <Box className={classes.favorite}>
