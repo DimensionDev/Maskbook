@@ -14,10 +14,10 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { TradeProvider } from '@masknet/public-api'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { useI18N } from '../../../../utils'
-import { TradeProvider, ZrxTradePool } from '../../types'
-import { SelectPoolPanel } from './SelectPoolPanel'
+import { ZrxTradePool } from '../../types'
 import { SlippageSlider } from './SlippageSlider'
 import {
     currentSingleHopOnlySettings,
@@ -83,7 +83,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                             <Accordion className={classes.accordion} elevation={0}>
                                 <AccordionSummary>
                                     <Typography className={classes.heading}>
-                                        {t('plugin_trader_slipage_tolerance')}
+                                        {t('plugin_trader_slippage_tolerance')}
                                     </Typography>
                                     <Typography>{slippage / 100}%</Typography>
                                 </AccordionSummary>
@@ -112,24 +112,6 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                             }}
                                         />
                                     </AccordionSummary>
-                                </Accordion>
-                            ) : null}
-                            {provider === TradeProvider.ZRX ? (
-                                <Accordion className={classes.accordion} elevation={0}>
-                                    <AccordionSummary>
-                                        <Typography className={classes.heading}>Exchanges</Typography>
-                                        <Typography>{pools.length}</Typography>
-                                    </AccordionSummary>
-                                    <AccordionDetails className={classes.details}>
-                                        <SelectPoolPanel
-                                            value={pools}
-                                            onChange={(pools) => {
-                                                getCurrentTradeProviderGeneralSettings(provider).value = stringify({
-                                                    pools,
-                                                })
-                                            }}
-                                        />
-                                    </AccordionDetails>
                                 </Accordion>
                             ) : null}
                         </CardContent>

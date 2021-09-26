@@ -20,14 +20,17 @@ export function PostRecordToJSONFormat(post: PostRecord): BackupJSONFileLatest['
         identifier: post.identifier.toText(),
         postBy: post.postBy.toText(),
         recipientGroups: [],
-        recipients: Array.from(post.recipients).map(
-            ([identifier, detail]): [string, { reason: RecipientReasonJSON[] }] => [
-                identifier.toText(),
-                {
-                    reason: Array.from(detail.reason).map<RecipientReasonJSON>(RecipientReasonToJSON),
-                },
-            ],
-        ),
+        recipients:
+            post.recipients === 'everyone'
+                ? 'everyone'
+                : Array.from(post.recipients).map(
+                      ([identifier, detail]): [string, { reason: RecipientReasonJSON[] }] => [
+                          identifier.toText(),
+                          {
+                              reason: Array.from(detail.reason).map<RecipientReasonJSON>(RecipientReasonToJSON),
+                          },
+                      ],
+                  ),
         encryptBy: post.encryptBy?.toText(),
         interestedMeta: MetaToJson(post.interestedMeta),
         summary: post.summary,
@@ -41,14 +44,17 @@ export function PostRecordFromJSONFormat(post: BackupJSONFileLatest['posts'][0])
         foundAt: new Date(post.foundAt),
         identifier: Identifier.fromString(post.identifier, PostIVIdentifier).unwrap(),
         postBy: Identifier.fromString(post.postBy, ProfileIdentifier).unwrap(),
-        recipients: new IdentifierMap<ProfileIdentifier, RecipientDetail>(
-            new Map<string, RecipientDetail>(
-                post.recipients.map(([x, y]) => [
-                    x,
-                    { reason: y.reason.map(RecipientReasonFromJSON) } as RecipientDetail,
-                ]),
-            ),
-        ),
+        recipients:
+            post.recipients === 'everyone'
+                ? 'everyone'
+                : new IdentifierMap<ProfileIdentifier, RecipientDetail>(
+                      new Map<string, RecipientDetail>(
+                          post.recipients.map(([x, y]) => [
+                              x,
+                              { reason: y.reason.map(RecipientReasonFromJSON) } as RecipientDetail,
+                          ]),
+                      ),
+                  ),
         encryptBy: post.encryptBy ? Identifier.fromString(post.encryptBy, ECKeyIdentifier).unwrap() : undefined,
         interestedMeta: MetaFromJson(post.interestedMeta),
         summary: post.summary,

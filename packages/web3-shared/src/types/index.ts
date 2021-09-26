@@ -5,6 +5,14 @@ export enum CurrencyType {
     USD = 'usd',
 }
 
+export interface PriceRecord {
+    [currency: string]: number
+}
+/** Base on response of coingecko's token price API */
+export interface CryptoPrice {
+    [token: string]: PriceRecord
+}
+
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 
@@ -29,10 +37,13 @@ export enum ChainId {
     // Arbitrum
     Arbitrum = 42161,
     Arbitrum_Rinkeby = 421611,
+
+    // xDai
+    xDai = 100,
 }
 
 export enum ProviderType {
-    Maskbook = 'Maskbook',
+    MaskWallet = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
     CustomNetwork = 'CustomNetwork',
@@ -44,6 +55,7 @@ export enum NetworkType {
     Binance = 'Binance',
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
+    xDai = 'xDai',
 }
 
 export interface Wallet {
@@ -209,6 +221,19 @@ export enum EthereumTokenType {
     ERC1155 = 3,
 }
 
+export type EIP1559GasConfig = {
+    gas: number
+    maxFeePerGas: number | string
+    maxPriorityFeePerGas: number | string
+}
+
+export type PriorEIP1559GasConfig = {
+    gas: number
+    gasPrice: number | string
+}
+
+export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
+
 // Learn more for a full list of supported JSON RPC methods
 // https://eth.wiki/json-rpc/API#json-rpc-methods
 export enum EthereumMethodType {
@@ -217,6 +242,7 @@ export enum EthereumMethodType {
     PERSONAL_SIGN = 'personal_sign',
     WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
+    ETH_ACCOUNTS = 'eth_accounts',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_GET_CODE = 'eth_getCode',
@@ -237,7 +263,7 @@ export enum EthereumMethodType {
 }
 
 export type EthereumTransactionConfig = TransactionConfig_ & {
-    // EIP1159
+    // EIP1559
     maxFeePerGas?: string
     maxPriorityFeePerGas?: string
 }
@@ -273,7 +299,7 @@ export type EthereumRpcComputed =
           type: EthereumRpcType.CANCEL | EthereumRpcType.RETRY
 
           /**
-           * The replacemnet transaction
+           * The replacement transaction
            */
           tx: EthereumTransactionConfig
 
@@ -434,13 +460,18 @@ export interface Asset {
     logoURI?: string
 }
 
+export enum DomainProvider {
+    ENS = 'ENS',
+    UNS = 'UNS',
+}
+
 export enum PortfolioProvider {
     ZERION = 0,
     DEBANK = 1,
 }
 
 export enum CollectibleProvider {
-    OPENSEAN = 0,
+    OPENSEA = 0,
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
@@ -453,6 +484,19 @@ export enum FilterTransactionType {
     ALL = 'all',
     SEND = 'send',
     RECEIVE = 'receive',
+    CREATE_RED_PACKET = 'create_red_packet',
+    FILL_POOL = 'fill_pool',
+}
+
+export enum TransactionType {
+    SEND = 'Send',
+    SWAP = 'swap',
+    RECEIVE = 'Receive',
+    TRANSFER = 'transfer',
+    CREATE_RED_PACKET = 'create_red_packet',
+    FILL_POOL = 'fill_pool',
+    CLAIM = 'claim',
+    REFUND = 'refund',
 }
 
 export enum DebankTransactionDirection {
@@ -490,4 +534,24 @@ export interface Transaction {
     pairs: TransactionPair[]
     gasFee: TransactionGasFee | undefined
     transactionType: string
+}
+
+//#region address name
+export enum AddressNameType {
+    ENS = 'ENS',
+    UNS = 'UNS',
+    DNS = 'DNS',
+}
+
+export interface AddressName {
+    label: string
+    ownerAddress: string
+    resolvedAddress?: string
+}
+//#endregion
+
+export enum GasOption {
+    Slow = 'slow',
+    Medium = 'medium',
+    High = 'high',
 }

@@ -11,7 +11,7 @@ import { ECKeyIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 type UpgradeKnowledge = { version: 4; data: Map<string, AESJsonWebKey> } | undefined
 const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
     4,
-    5,
+    7,
     (currentTryOpen, knowledge) =>
         openDB<PostDB>('maskbook-post-v2', currentTryOpen, {
             async upgrade(db, oldVersion, _newVersion, transaction): Promise<void> {
@@ -33,18 +33,22 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                 type Version4PostRecord = Omit<Version3PostRecord, 'recipients'> & {
                     recipients: Map<string, Version3RecipientDetail>
                 }
-                type Version5PostRecord = Omit<Version4PostRecord, 'postCryptoKey'> & {
+                type Version5PostRecord = Omit<Version4PostRecord, 'postCryptoKey' | 'recipients'> & {
                     postCryptoKey?: AESJsonWebKey
                     encryptBy?: PrototypeLess<PersonaIdentifier>
                     url?: string
                     summary?: string
                     interestedMeta?: ReadonlyMap<string, unknown>
+                    recipients: true | Map<string, Version3RecipientDetail>
+                }
+                type Version6PostRecord = Omit<Version5PostRecord, 'encryptBy'> & {
+                    encryptBy?: string
                 }
                 /**
                  * A type assert that make sure a and b are the same type
                  * @param a The latest version PostRecord
                  */
-                function _assert(a: Version5PostRecord, b: PostDBRecord) {
+                function _assert(a: Version6PostRecord, b: PostDBRecord) {
                     a = b
                     b = a
                 }
@@ -138,6 +142,22 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                         await cursor.update(v5Record as any)
                     }
                 }
+
+                // version 6 ships a wrong db migration.
+                // therefore need to upgrade again to fix it.
+                if (oldVersion <= 6) {
+                    const store = transaction.objectStore('post')
+                    for await (const cursor of store) {
+                        const v5Record: Version5PostRecord = cursor.value as any
+                        const by = v5Record.encryptBy
+                        // This is the correct data type
+                        if (typeof by === 'string') continue
+                        if (!by) continue
+                        cursor.value.encryptBy = restorePrototype(by, ECKeyIdentifier.prototype).toText()
+                        cursor.update(cursor.value)
+                    }
+                    store.createIndex('persona, date', ['encryptBy', 'foundAt'], { unique: false })
+                }
             },
         }),
     async (db): Promise<UpgradeKnowledge> => {
@@ -186,16 +206,20 @@ export async function updatePostDB(
         mode === 'override' ? postToDB(nextRecord).recipients : postToDB(currentRecord).recipients
     if (mode === 'append') {
         if (updateRecord.recipients) {
-            for (const [id, patchDetail] of updateRecord.recipients) {
-                const idText = id.toText()
-                if (nextRecipients.has(idText)) {
-                    const { reason, ...rest } = patchDetail
-                    const nextDetail = nextRecipients.get(idText)!
-                    Object.assign(nextDetail, rest)
-                    nextDetail.reason = [...nextDetail.reason, ...patchDetail.reason]
-                } else {
-                    nextRecipients.set(idText, patchDetail)
+            if (typeof updateRecord.recipients === 'object' && typeof nextRecipients === 'object') {
+                for (const [id, patchDetail] of updateRecord.recipients) {
+                    const idText = id.toText()
+                    if (nextRecipients.has(idText)) {
+                        const { reason, ...rest } = patchDetail
+                        const nextDetail = nextRecipients.get(idText)!
+                        Object.assign(nextDetail, rest)
+                        nextDetail.reason = [...nextDetail.reason, ...patchDetail.reason]
+                    } else {
+                        nextRecipients.set(idText, patchDetail)
+                    }
                 }
+            } else {
+                nextRecord.recipients = 'everyone'
             }
         }
     }
@@ -240,19 +264,56 @@ export async function deletePostCryptoKeyDB(record: PostIVIdentifier, t?: PostTr
     await t.objectStore('post').delete(record.toText())
 }
 
+/**
+ * Query posts by paged
+ */
+export async function queryPostPagedDB(
+    linked: PersonaIdentifier,
+    options: {
+        network: string
+        after?: PostIVIdentifier
+    },
+    count: number,
+) {
+    const t = createTransaction(await db(), 'readonly')('post')
+
+    const data: PostRecord[] = []
+    let firstRecord = true
+
+    for await (const cursor of t.objectStore('post').iterate()) {
+        if (cursor.value.encryptBy !== linked.toText()) continue
+
+        if (firstRecord && options.after) {
+            cursor.continue(options.after.toText())
+            firstRecord = false
+            continue
+        }
+
+        if (Identifier.fromString(cursor.value.identifier, PostIVIdentifier).unwrap() === options.after) continue
+
+        if (count <= 0) break
+        const outData = postOutDB(cursor.value)
+        count -= 1
+        data.push(outData)
+    }
+    return data
+}
+
 //#region db in and out
 function postOutDB(db: PostDBRecord): PostRecord {
     const { identifier, foundAt, postBy, recipients, postCryptoKey, encryptBy, interestedMeta, summary, url } = db
-    for (const detail of recipients.values()) {
-        detail.reason.forEach((x) => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
+    if (typeof recipients === 'object') {
+        for (const detail of recipients.values()) {
+            detail.reason.forEach((x) => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
+        }
     }
     return {
         identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(),
         postBy: restorePrototype(postBy, ProfileIdentifier.prototype),
-        recipients: new IdentifierMap(recipients, ProfileIdentifier),
+        recipients: recipients === true ? 'everyone' : new IdentifierMap(recipients, ProfileIdentifier),
         foundAt: foundAt,
         postCryptoKey: postCryptoKey,
-        encryptBy: restorePrototype(encryptBy, ECKeyIdentifier.prototype),
+        encryptBy: encryptBy ? Identifier.fromString(encryptBy, ECKeyIdentifier).unwrapOr(undefined) : undefined,
         interestedMeta,
         summary,
         url,
@@ -262,7 +323,8 @@ function postToDB(out: PostRecord): PostDBRecord {
     return {
         ...out,
         identifier: out.identifier.toText(),
-        recipients: out.recipients.__raw_map__,
+        recipients: out.recipients === 'everyone' ? true : out.recipients.__raw_map__,
+        encryptBy: out.encryptBy?.toText(),
     }
 }
 //#endregion
@@ -297,7 +359,7 @@ export interface PostRecord {
     /**
      * Receivers
      */
-    recipients: IdentifierMap<ProfileIdentifier, RecipientDetail>
+    recipients: 'everyone' | IdentifierMap<ProfileIdentifier, RecipientDetail>
     /** @deprecated */
     recipientGroups?: unknown
     /**
@@ -318,8 +380,8 @@ export interface PostRecord {
 interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients' | 'encryptBy'> {
     postBy: PrototypeLess<ProfileIdentifier>
     identifier: string
-    recipients: Map<string, RecipientDetail>
-    encryptBy?: PrototypeLess<PersonaIdentifier>
+    recipients: true | Map<string, RecipientDetail>
+    encryptBy?: string
 }
 
 interface PostDB extends DBSchema {
@@ -327,6 +389,9 @@ interface PostDB extends DBSchema {
     post: {
         value: PostDBRecord
         key: string
+        indexes: {
+            'persona, date': [string, Date]
+        }
     }
 }
 //#endregion

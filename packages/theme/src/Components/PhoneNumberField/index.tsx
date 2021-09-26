@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core'
+import { Box, InputBaseProps } from '@mui/material'
 import { makeStyles } from '../../makeStyles'
 import { MaskTextField } from '../TextField'
 import { ChangeEvent, ReactNode, useState } from 'react'
@@ -22,14 +22,11 @@ export interface PhoneNumberFieldProps {
     label?: ReactNode
     countryPlaceholder?: string
     phoneErrorMessage?: string
-    error?: boolean
+    error?: string
     value: PhoneNumberFieldValue
-    onBlur?(value: PhoneNumberFieldValue): void
+    onBlur?: InputBaseProps['onBlur']
     onChange?(value: PhoneNumberFieldValue): void
 }
-
-// todo: remove regex, 123123d
-export const phoneRegexp = /(\+?([ .-])?\d{1,2}([ .-])?)?(\(?\d{3}\)?|\d{3})([ .-])?(\d{3}([ .-])?\d{4})/
 
 export const PhoneNumberField = ({
     label,
@@ -37,13 +34,11 @@ export const PhoneNumberField = ({
     error,
     onBlur,
     countryPlaceholder = '+1',
-    phoneErrorMessage = 'The phone number is incorrect.',
     onChange,
 }: PhoneNumberFieldProps) => {
     const { classes } = useStyles()
     const [phone, setPhone] = useState<string>(value.phone)
     const [countryCode, setCountryCode] = useState<string>(value.country)
-    const [invalidPhone, setInvalidPhone] = useState(false)
 
     const handleCountryCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value
@@ -58,20 +53,6 @@ export const PhoneNumberField = ({
 
         setPhone(inputValue)
         onChange?.({ country: countryCode, phone: inputValue })
-    }
-
-    const validCheck = () => {
-        if (!phone) return
-
-        const isValid = phoneRegexp.test(countryCode + phone)
-
-        if (isValid) {
-            onBlur?.({
-                country: countryCode,
-                phone: phone,
-            })
-        }
-        setInvalidPhone(!isValid)
     }
 
     return (
@@ -90,10 +71,10 @@ export const PhoneNumberField = ({
                         fullWidth
                         value={phone}
                         onChange={handlePhoneChange}
-                        onBlur={validCheck}
+                        onBlur={onBlur}
                         type="text"
-                        error={invalidPhone || error}
-                        helperText={invalidPhone || error ? phoneErrorMessage : ''}
+                        error={!!error}
+                        helperText={error}
                     />
                 </div>
             </Box>

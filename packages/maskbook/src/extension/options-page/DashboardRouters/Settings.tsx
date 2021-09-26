@@ -1,13 +1,14 @@
 import { useRef } from 'react'
-import { Typography, Card, List, Paper, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
+import { Typography, Card, List, Paper, ListItemText, ListItemIcon } from '@material-ui/core'
+import ListItemButton from '@material-ui/core/ListItemButton'
 import { ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { makeStyles } from '@masknet/theme'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
-import { getEnumAsObject } from '@masknet/shared'
+import { getEnumAsObject, useValueRef } from '@masknet/shared'
 import { getChainName, ChainId, ProviderType, useAccount, PortfolioProvider } from '@masknet/web3-shared'
 
-import { useMatchXS, extendsTheme, useI18N, Flags, useValueRef } from '../../../utils'
+import { useMatchXS, extendsTheme, useI18N, Flags } from '../../../utils'
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
 import {
     debugModeSetting,
@@ -49,6 +50,9 @@ import { useCurrentTradeProvider } from '../../../plugins/Trader/trending/useCur
 import { useCurrentDataProvider } from '../../../plugins/Trader/trending/useCurrentDataProvider'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { safeUnreachable } from '@dimensiondev/kit'
+import StorageIcon from '@material-ui/icons/Storage'
+import { useHistory } from 'react-router-dom'
+import { DashboardRoute } from '../Route'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -144,6 +148,7 @@ export default function DashboardSettingsRouter() {
         LanguageOptions.frFR,
     ]
     const langMapper = useRef((x: LanguageOptions) => {
+        /* spell-checker: disable */
         if (x === LanguageOptions.enUS) return 'English'
         if (x === LanguageOptions.zhTW) return '正體中文'
         if (x === LanguageOptions.zhCN) return '简体中文'
@@ -155,6 +160,7 @@ export default function DashboardSettingsRouter() {
         if (x === LanguageOptions.frFR) return 'langue française'
         if (x === LanguageOptions.faIR) return 'زبان فارسی'
         if (x === LanguageOptions.__auto__) return t('language_auto')
+        /* spell-checker: enable */
         safeUnreachable(x)
         return x
     }).current
@@ -184,6 +190,7 @@ export default function DashboardSettingsRouter() {
         listItemRoot: classes.listItemRoot,
         listItemIcon: classes.listItemIcon,
     }
+    const history = useHistory()
 
     //#region the trader plugin
     const { value: dataProviders = [] } = useAvailableDataProviders()
@@ -203,13 +210,13 @@ export default function DashboardSettingsRouter() {
                         <Card elevation={0}>
                             <List className={classes.list} disablePadding>
                                 {Flags.v2_enabled && (
-                                    <ListItem button onClick={() => (location.href = '/next.html')}>
+                                    <ListItemButton onClick={() => (location.href = '/next.html')}>
                                         <ListItemIcon children={<NewIcon />} />
                                         <ListItemText
                                             primary="Open new dashboard (integrated) (dev-only)"
                                             secondary="/packages/dashboard/"
                                         />
-                                    </ListItem>
+                                    </ListItemButton>
                                 )}
                                 <SettingsUIEnum
                                     classes={listStyle}
@@ -228,7 +235,7 @@ export default function DashboardSettingsRouter() {
                                 />
                                 {Flags.support_eth_network_switch &&
                                 account &&
-                                providerType === ProviderType.Maskbook ? (
+                                providerType === ProviderType.MaskWallet ? (
                                     <SettingsUIEnum
                                         classes={listStyle}
                                         enumObject={ChainId}
@@ -280,6 +287,25 @@ export default function DashboardSettingsRouter() {
                             </List>
                         </Card>
                     </Paper>
+
+                    {Flags.nft_avatar_enabled ? (
+                        <Paper component="section" className={classes.section} elevation={elevation}>
+                            <Typography className={classes.title} variant="h6" color="textPrimary">
+                                {t('settings_title_bind_nft_avatar')}
+                            </Typography>
+                            <Card elevation={0}>
+                                <List className={classes.list} disablePadding>
+                                    <SettingsUIDummy
+                                        classes={listStyle}
+                                        icon={<StorageIcon />}
+                                        primary="Bind NFT Avatar"
+                                        secondary=""
+                                        onClick={() => history.push(DashboardRoute.NFTAvatars)}
+                                    />
+                                </List>
+                            </Card>
+                        </Paper>
+                    ) : null}
 
                     <Paper component="section" className={classes.section} elevation={elevation}>
                         <Typography className={classes.title} variant="h6" color="textPrimary">

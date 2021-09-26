@@ -1,4 +1,4 @@
-import { unreachable, safeUnreachable } from '@dimensiondev/kit'
+import { unreachable } from '@dimensiondev/kit'
 import {
     ChainId,
     ERC20Token,
@@ -9,56 +9,40 @@ import {
     ProviderType,
     CollectibleProvider,
 } from '../types'
-import { getChainDetailed } from '../utils'
+import { getChainDetailed, createLookupTableResolver } from '../utils'
 import urlcat from 'urlcat'
 
-export function resolveProviderName(providerType: ProviderType) {
-    switch (providerType) {
-        case ProviderType.Maskbook:
-            return 'Mask'
-        case ProviderType.MetaMask:
-            return 'MetaMask'
-        case ProviderType.WalletConnect:
-            return 'WalletConnect'
-        case ProviderType.CustomNetwork:
-            return 'CustomNetwork'
-        default:
-            safeUnreachable(providerType)
-            return 'Unknown Network'
-    }
-}
+export const resolveProviderName = createLookupTableResolver<ProviderType, string>(
+    {
+        [ProviderType.MaskWallet]: 'Mask',
+        [ProviderType.MetaMask]: 'MetaMask',
+        [ProviderType.WalletConnect]: 'WalletConnect',
+        [ProviderType.CustomNetwork]: 'CustomNetwork',
+    },
+    'Unknown Network',
+)
 
-export function resolveNetworkAddress(networkType: NetworkType, address: string) {
-    switch (networkType) {
-        case NetworkType.Binance:
-            return `binance:${address}`
-        case NetworkType.Polygon:
-            return `polygon:${address}`
-        case NetworkType.Ethereum:
-            return `ethereum:${address}`
-        case NetworkType.Arbitrum:
-            return `arbitrum:${address}`
-        default:
-            safeUnreachable(networkType)
-            return address
-    }
-}
+export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType, string>(
+    {
+        [NetworkType.Ethereum]: 'ethereum',
+        [NetworkType.Binance]: 'binance',
+        [NetworkType.Polygon]: 'polygon',
+        [NetworkType.Arbitrum]: 'arbitrum',
+        [NetworkType.xDai]: 'xdai',
+    },
+    'ethereum',
+)
 
-export function resolveNetworkName(networkType: NetworkType) {
-    switch (networkType) {
-        case NetworkType.Binance:
-            return 'Binance Smart Chain'
-        case NetworkType.Polygon:
-            return 'Polygon'
-        case NetworkType.Ethereum:
-            return 'Ethereum'
-        case NetworkType.Arbitrum:
-            return 'Arbitrum'
-        default:
-            safeUnreachable(networkType)
-            return 'Unknown'
-    }
-}
+export const resolveNetworkName = createLookupTableResolver<NetworkType, string>(
+    {
+        [NetworkType.Binance]: 'Binance Smart Chain',
+        [NetworkType.Polygon]: 'Polygon',
+        [NetworkType.Ethereum]: 'Ethereum',
+        [NetworkType.Arbitrum]: 'Arbitrum',
+        [NetworkType.xDai]: 'xDai',
+    },
+    'Unknown',
+)
 
 export function resolveChainName(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
@@ -70,26 +54,23 @@ export function resolveChainFullName(chainId: ChainId) {
     return chainDetailed?.fullName ?? 'Unknown'
 }
 
-export function resolveChainColor(chainId: ChainId) {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return 'rgb(41, 182, 175)'
-        case ChainId.Ropsten:
-            return 'rgb(255, 74, 141)'
-        case ChainId.Kovan:
-            return 'rgb(112, 87, 255)'
-        case ChainId.Rinkeby:
-            return 'rgb(246, 195, 67)'
-        case ChainId.Gorli:
-            return 'rgb(48, 153, 242)'
-        case ChainId.BSCT:
-            return 'rgb(240, 185, 10)'
-        case ChainId.Mumbai:
-            return 'rgb(130, 71, 229)'
-        default:
-            return 'rgb(214, 217, 220)'
-    }
-}
+export const resolveChainColor = createLookupTableResolver<ChainId, string>(
+    {
+        [ChainId.Mainnet]: 'rgb(28, 104, 243)',
+        [ChainId.Ropsten]: 'rgb(255, 65, 130)',
+        [ChainId.Kovan]: 'rgb(133, 89,255)',
+        [ChainId.Rinkeby]: 'rgb(133, 89, 255)',
+        [ChainId.Gorli]: 'rgb(48, 153, 242)',
+        [ChainId.BSC]: 'rgb(240, 185, 10)',
+        [ChainId.BSCT]: 'rgb(240, 185, 10)',
+        [ChainId.Matic]: 'rgb(119, 62, 225)',
+        [ChainId.Mumbai]: 'rgb(130, 71, 229)',
+        [ChainId.Arbitrum]: 'rgb(36, 150, 238)',
+        [ChainId.Arbitrum_Rinkeby]: 'rgb(36, 150, 238)',
+        [ChainId.xDai]: 'rgb(73, 169, 166)',
+    },
+    'rgb(214, 217, 220)',
+)
 
 export function resolveLinkOnExplorer(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
@@ -119,7 +100,7 @@ export function resolveIPFSLink(ipfs: string): string {
 
 export function resolveCollectibleProviderLink(chainId: ChainId, provider: CollectibleProvider) {
     switch (provider) {
-        case CollectibleProvider.OPENSEAN:
+        case CollectibleProvider.OPENSEA:
             if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io`
             return `https://opensea.io`
         default:
@@ -133,7 +114,7 @@ export function resolveCollectibleLink(
     { contractDetailed: { address }, tokenId }: ERC721TokenDetailed,
 ) {
     switch (provider) {
-        case CollectibleProvider.OPENSEAN:
+        case CollectibleProvider.OPENSEA:
             return urlcat(resolveCollectibleProviderLink(chainId, provider), '/assets/:address/:tokenId', {
                 address,
                 tokenId,
@@ -141,4 +122,11 @@ export function resolveCollectibleLink(
         default:
             unreachable(provider)
     }
+}
+
+export function resolveOpenSeaLink(address: string, tokenId: string) {
+    return urlcat('https://opensea.io/assets/:address/:tokenId', {
+        address,
+        tokenId,
+    })
 }

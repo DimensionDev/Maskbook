@@ -34,6 +34,11 @@ export const Web3Context: Web3ProviderType = {
         0,
         Messages.events.currentEtherPriceSettings.on,
     ),
+    tokenPrices: createSubscriptionFromAsync(
+        Services.Settings.getTokenPrices,
+        {},
+        Messages.events.currentTokenPricesSettings.on,
+    ),
     balance: createSubscriptionFromAsync(Services.Settings.getBalance, '0', Messages.events.currentBalanceSettings.on),
     blockNumber: createSubscriptionFromAsync(
         Services.Settings.getBlockNumber,
@@ -47,7 +52,7 @@ export const Web3Context: Web3ProviderType = {
     ),
     providerType: createSubscriptionFromAsync(
         Services.Settings.getCurrentSelectedWalletProvider,
-        ProviderType.Maskbook,
+        ProviderType.MaskWallet,
         Messages.events.currentProviderSettings.on,
     ),
     networkType: createSubscriptionFromAsync(
@@ -57,6 +62,8 @@ export const Web3Context: Web3ProviderType = {
     ),
     wallets: createSubscriptionFromAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
     erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
+    addERC20Token: PluginServices.Wallet.addERC20Token,
+    trustERC20Token: PluginServices.Wallet.trustERC20Token,
     erc20TokensCount: createSubscriptionFromAsync(
         PluginServices.Wallet.getERC20TokensCount,
         0,
@@ -68,12 +75,14 @@ export const Web3Context: Web3ProviderType = {
         PortfolioProvider.DEBANK,
         Messages.events.currentPortfolioDataProviderSettings.on,
     ),
-    getAssetList: PluginServices.Wallet.getAssetsList,
+    getAssetsList: PluginServices.Wallet.getAssetsList,
     getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,
+    getAddressNamesList: PluginServices.Wallet.getAddressNames,
     getERC721TokensPaged,
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
     createMnemonicWords: PluginServices.Wallet.createMnemonicWords,
+    getNonce: Services.Ethereum.getNonce,
 }
 
 export function createExternalProvider() {
@@ -125,23 +134,37 @@ async function getERC721TokensPaged(index: number, count: number, query?: string
     return PluginServices.Wallet.getERC721TokensPaged(index, count, query)
 }
 
+// double check
 function createSubscriptionFromAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,
     onChange: (callback: () => void) => () => void,
 ): Subscription<T> {
+    // 0 - idle, 1 - updating state, > 1 - waiting state
+    let beats = 0
     let state = defaultValue
     const { subscribe, trigger } = getEventTarget()
     f()
         .then((v) => (state = v))
         .finally(trigger)
+    const flush = async () => {
+        state = await f()
+        beats -= 1
+        if (beats > 0) {
+            beats = 1
+            setTimeout(flush, 0)
+        } else if (beats < 0) {
+            beats = 0
+        }
+        trigger()
+    }
     return {
         getCurrentValue: () => state,
         subscribe: (sub) => {
             const a = subscribe(sub)
             const b = onChange(async () => {
-                state = await f()
-                sub()
+                beats += 1
+                if (beats === 1) flush()
             })
             return () => void [a(), b()]
         },

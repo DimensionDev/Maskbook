@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../../type'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
@@ -16,6 +16,7 @@ const useStyles = makeStyles()({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
+        height: '100%',
     },
     title: {
         fontSize: 24,
@@ -66,37 +67,49 @@ const CreateWalletForm = memo(() => {
     const { classes } = useStyles()
     const navigate = useNavigate()
 
+    // const {
+    //     value: hasEncryptedWallet,
+    //     retry,
+    //     loading,
+    // } = useAsyncRetry(async () => PluginServices.Wallet.hasEncryptedWalletStore(), [])
+
+    // useEffect(() => {
+    //     WalletMessages.events.walletLockStatusUpdated.on(retry)
+    // }, [retry])
+
     const schema = useMemo(() => {
-        return zod
-            .object({
-                name: zod.string().min(1).max(12),
-                password: zod
-                    .string()
-                    .min(8)
-                    .max(20)
-                    .refine((input) => /[A-Z]/.test(input), t.create_wallet_password_uppercase_tip())
-                    .refine((input) => /[a-z]/.test(input), t.create_wallet_password_lowercase_tip())
-                    .refine((input) => /\d/.test(input), t.create_wallet_password_number_tip())
-                    .refine((input) => /[^\dA-Za-z]/.test(input), t.create_wallet_password_special_tip()),
-                confirm: zod.string().min(8).max(20),
-            })
-            .refine((data) => data.password === data.confirm, {
-                message: t.create_wallet_password_match_tip(),
-                path: ['confirm'],
-            })
+        // const passwordRule = zod
+        //     .string()
+        //     .min(8)
+        //     .max(20)
+        //     .refine((input) => [/[A-Z]/, /[a-z]/, /\d/, /[^\dA-Za-z]/].filter((regex) => regex.test(input)).length >= 2)
+        // .refine((input) => /[A-Z]/.test(input), t.create_wallet_password_uppercase_tip())
+        // .refine((input) => /[a-z]/.test(input), t.create_wallet_password_lowercase_tip())
+        // .refine((input) => /\d/.test(input), t.create_wallet_password_number_tip())
+        // .refine((input) => /[^\dA-Za-z]/.test(input), t.create_wallet_password_special_tip())
+        const confirmRule = zod.string().min(8).max(20)
+        return zod.object({
+            name: zod.string().min(1).max(12),
+            // password: hasEncryptedWallet ? passwordRule.optional() : passwordRule,
+            // confirm: hasEncryptedWallet ? confirmRule.optional() : confirmRule,
+        })
+        // .refine((data) => hasEncryptedWallet ?? data.password === data.confirm, {
+        //     message: t.create_wallet_password_match_tip(),
+        //     path: ['confirm'],
+        // })
     }, [])
 
     const {
         control,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isValid },
     } = useForm<zod.infer<typeof schema>>({
         mode: 'onChange',
         resolver: zodResolver(schema),
         defaultValues: {
             name: '',
-            password: '',
-            confirm: '',
+            // password: '',
+            // confirm: '',
         },
     })
 
@@ -112,7 +125,7 @@ const CreateWalletForm = memo(() => {
     return (
         <div className={classes.container}>
             <Typography className={classes.title}>{t.create_wallet_form_title()}</Typography>
-            <form className={classes.form}>
+            <form className={classes.form} onSubmit={onSubmit}>
                 <Box>
                     <Typography className={classes.label}>{t.create_wallet_wallet_name()}</Typography>
                     <Controller
@@ -131,47 +144,51 @@ const CreateWalletForm = memo(() => {
                         name="name"
                     />
                 </Box>
-                <Box style={{ marginTop: 24 }}>
-                    <Typography className={classes.label}>{t.create_wallet_payment_password()}</Typography>
-                    <Controller
-                        control={control}
-                        render={({ field }) => (
-                            <TextField
-                                {...field}
-                                type="password"
-                                variant="filled"
-                                placeholder={t.create_wallet_payment_password()}
-                                error={!!errors.password?.message}
-                                helperText={errors.password?.message}
-                                className={classes.input}
-                                InputProps={{ disableUnderline: true }}
-                            />
-                        )}
-                        name="password"
-                    />
-                    <Controller
-                        render={({ field }) => (
-                            <TextField
-                                {...field}
-                                error={!!errors.confirm?.message}
-                                helperText={errors.confirm?.message}
-                                type="password"
-                                variant="filled"
-                                placeholder={t.create_wallet_re_enter_payment_password()}
-                                className={classes.input}
-                                InputProps={{ disableUnderline: true }}
-                            />
-                        )}
-                        name="confirm"
-                        control={control}
-                    />
-                </Box>
-                <Typography className={classes.tips}>{t.create_wallet_payment_password_tip()}</Typography>
+                {/*{!loading && !hasEncryptedWallet ? (*/}
+                {/*    <>*/}
+                {/*        <Box style={{ marginTop: 24 }}>*/}
+                {/*            <Typography className={classes.label}>{t.create_wallet_payment_password()}</Typography>*/}
+                {/*            <Controller*/}
+                {/*                control={control}*/}
+                {/*                render={({ field }) => (*/}
+                {/*                    <TextField*/}
+                {/*                        {...field}*/}
+                {/*                        type="password"*/}
+                {/*                        variant="filled"*/}
+                {/*                        placeholder={t.create_wallet_payment_password()}*/}
+                {/*                        error={!isValid && !!errors.password?.message}*/}
+                {/*                        helperText={!isValid ? errors.password?.message : ''}*/}
+                {/*                        className={classes.input}*/}
+                {/*                        InputProps={{ disableUnderline: true }}*/}
+                {/*                    />*/}
+                {/*                )}*/}
+                {/*                name="password"*/}
+                {/*            />*/}
+                {/*            <Controller*/}
+                {/*                render={({ field }) => (*/}
+                {/*                    <TextField*/}
+                {/*                        {...field}*/}
+                {/*                        error={!isValid && !!errors.confirm?.message}*/}
+                {/*                        helperText={!isValid ? errors.confirm?.message : ''}*/}
+                {/*                        type="password"*/}
+                {/*                        variant="filled"*/}
+                {/*                        placeholder={t.create_wallet_re_enter_payment_password()}*/}
+                {/*                        className={classes.input}*/}
+                {/*                        InputProps={{ disableUnderline: true }}*/}
+                {/*                    />*/}
+                {/*                )}*/}
+                {/*                name="confirm"*/}
+                {/*                control={control}*/}
+                {/*            />*/}
+                {/*        </Box>*/}
+                {/*        <Typography className={classes.tips}>{t.create_wallet_payment_password_tip()}</Typography>*/}
+                {/*    </>*/}
+                {/*) : null}*/}
                 <Box className={classes.controller}>
                     <Button color="secondary" className={classes.button} onClick={() => navigate(-1)}>
                         {t.cancel()}
                     </Button>
-                    <Button className={classes.button} onClick={onSubmit}>
+                    <Button className={classes.button} onClick={onSubmit} disabled={!isValid}>
                         {t.next()}
                     </Button>
                 </Box>

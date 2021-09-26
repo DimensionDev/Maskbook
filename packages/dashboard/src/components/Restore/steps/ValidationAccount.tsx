@@ -1,27 +1,36 @@
 import { useDashboardI18N } from '../../../locales'
 import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { sendCode } from '../../../pages/Settings/api'
-import { SendingCodeField } from '@masknet/theme'
+import { sendCode, useLanguage } from '../../../pages/Settings/api'
+import { SendingCodeField, useSnackbar } from '@masknet/theme'
 import { Button, Typography } from '@material-ui/core'
 import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
 import type { StepCommonProps } from '../../Stepper'
-import { ValidationCodeStep } from './Commont'
-import type { AccountValidationType, BackupFileInfo } from '../../../pages/Settings/type'
+import { ValidationCodeStep } from './common'
+import { AccountType, BackupFileInfo, Scenario, Locale } from '../../../pages/Settings/type'
 
 interface ValidationAccountProps extends StepCommonProps {
     account: string
-    type: AccountValidationType
-    onNext(account: string, type: AccountValidationType, code: string): Promise<BackupFileInfo | { message: string }>
+    type: AccountType
+    onNext(account: string, type: AccountType, code: string): Promise<BackupFileInfo | { message: string }>
 }
 
 export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationAccountProps) => {
+    const language = useLanguage()
     const t = useDashboardI18N()
+    const { enqueueSnackbar } = useSnackbar()
+
     const [code, setCode] = useState('')
     const [error, setError] = useState('')
 
     const [{ error: sendCodeError }, handleSendCodeFn] = useAsyncFn(async () => {
-        return sendCode({ account: account, type: type })
+        enqueueSnackbar(t.sign_in_account_cloud_backup_send_email_success({ type }), { variant: 'success' })
+        await sendCode({
+            account: account.replace(' ', ''),
+            type,
+            scenario: Scenario.backup,
+            locale: language.includes('zh') ? Locale.zh : Locale.en,
+        })
     }, [account, type])
 
     const handleNext = async () => {
@@ -29,7 +38,7 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
 
         if ((backupInfo as BackupFileInfo).downloadURL) {
             setError('')
-            toStep(ValidationCodeStep.ConfirmBackupInfo, { backupInfo: backupInfo, account: account })
+            toStep(ValidationCodeStep.ConfirmBackupInfo, { backupInfo: backupInfo, account: account, type: type })
         } else {
             setError((backupInfo as { message: string }).message)
         }
@@ -40,9 +49,10 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
             <SendingCodeField
                 label={
                     <Typography variant="body2" sx={{ fontWeight: 'bolder' }} lineHeight="30px" color="textPrimary">
-                        Send to {account}
+                        {t.sign_in_account_cloud_send_verification_code_tip()} {account}
                     </Typography>
                 }
+                autoSend
                 onChange={(c) => setCode(c)}
                 errorMessage={sendCodeError?.message || error}
                 onSend={handleSendCodeFn}

@@ -1,15 +1,18 @@
-import { useContext, useMemo, useState, useEffect } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { PluginServices, Services } from '../../../../API'
 import { useAsync, useAsyncFn } from 'react-use'
 import BackupContentSelector, { BackupContentCheckedStatus } from '../BackupContentSelector'
 import { useDashboardI18N } from '../../../../locales'
-import { MaskDialog, MaskTextField, useSnackbar } from '@masknet/theme'
-import { Box } from '@material-ui/core'
+import { MaskDialog, useSnackbar } from '@masknet/theme'
+import { Box, DialogContent } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import LoadingButton from '@material-ui/lab/LoadingButton'
-import { VerifyCodeRequest, fetchUploadLink, uploadBackupValue } from '../../api'
+import { fetchUploadLink, uploadBackupValue, VerifyCodeRequest } from '../../api'
 import formatDateTime from 'date-fns/format'
 import { LoadingCard } from '../../../../components/Restore/steps/LoadingCard'
+import { encryptBackup } from '@masknet/backup-format'
+import { encode } from '@msgpack/msgpack'
+import PasswordFiled from '../../../../components/PasswordField'
 
 export interface BackupDialogProps {
     local?: boolean
@@ -51,26 +54,26 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
         }
 
         try {
-            const file = await Services.Welcome.createBackupFile({
+            const fileJson = await Services.Welcome.createBackupFile({
                 noPosts: !showPassword.base,
                 noPersonas: !showPassword.base,
                 noProfiles: !showPassword.base,
                 noWallets: !showPassword.wallet,
-                download: local,
+                download: false,
                 onlyBackupWhoAmI: false,
             })
 
-            if (!local && params) {
-                const abstract = file.personas
+            if (local) {
+                // local backup, no account
+                const encrypted = await encryptBackup(encode(backupPassword), encode(fileJson))
+                await Services.Welcome.downloadBackupV2(encrypted)
+            } else if (params) {
+                const abstract = fileJson.personas
                     .filter((x) => x.nickname)
                     .map((x) => x.nickname)
                     .join(', ')
                 const uploadUrl = await fetchUploadLink({ ...params, abstract })
-                const encrypted = await Services.Crypto.encryptBackup(
-                    backupPassword,
-                    params.account,
-                    JSON.stringify(file),
-                )
+                const encrypted = await encryptBackup(encode(params.account + backupPassword), encode(fileJson))
 
                 uploadBackupValue(uploadUrl, encrypted).then(() => {
                     snackbar.enqueueSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
@@ -109,43 +112,45 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
 
     return (
         <MaskDialog maxWidth="xs" title={title} open={open} onClose={onClose}>
-            {searching ? (
-                <Box sx={{ padding: '0 24px 24px' }}>
-                    <LoadingCard text={t.searching()} />
-                </Box>
-            ) : (
-                <Box sx={{ padding: '0 24px 24px' }}>
-                    {previewInfo ? <BackupContentSelector json={previewInfo} onChange={handleContentChange} /> : null}
+            <DialogContent>
+                {searching ? (
+                    <Box sx={{ padding: '0 24px 24px' }}>
+                        <LoadingCard text={t.searching()} />
+                    </Box>
+                ) : (
+                    <Box sx={{ padding: '0 24px 24px' }}>
+                        {previewInfo ? (
+                            <BackupContentSelector json={previewInfo} onChange={handleContentChange} />
+                        ) : null}
 
-                    <MaskTextField
-                        fullWidth
-                        value={backupPassword}
-                        onChange={(event) => setBackupPassword(event.target.value)}
-                        type="password"
-                        placeholder={t.settings_label_backup_password()}
-                        sx={{ marginBottom: '24px' }}
-                        error={incorrectBackupPassword}
-                        helperText={incorrectBackupPassword ? t.settings_dialogs_incorrect_password() : ''}
-                    />
-
-                    {showPassword.wallet ? (
-                        <MaskTextField
+                        <PasswordFiled
                             fullWidth
-                            value={paymentPassword}
-                            onChange={(event) => setPaymentPassword(event.target.value)}
-                            type="password"
-                            placeholder={t.settings_label_payment_password()}
-                            sx={{ marginBottom: '24px' }}
-                            error={incorrectPaymentPassword}
-                            helperText={incorrectPaymentPassword ? t.settings_dialogs_incorrect_password() : ''}
+                            value={backupPassword}
+                            onChange={(event) => setBackupPassword(event.target.value)}
+                            placeholder={t.settings_label_backup_password()}
+                            sx={{ marginBottom: '16px' }}
+                            error={incorrectBackupPassword}
+                            helperText={incorrectBackupPassword ? t.settings_dialogs_incorrect_password() : ''}
                         />
-                    ) : null}
 
-                    <LoadingButton fullWidth disabled={backupDisabled} onClick={handleBackup} loading={loading}>
-                        {t.settings_button_backup()}
-                    </LoadingButton>
-                </Box>
-            )}
+                        {showPassword.wallet ? (
+                            <PasswordFiled
+                                fullWidth
+                                value={paymentPassword}
+                                onChange={(event) => setPaymentPassword(event.target.value)}
+                                placeholder={t.settings_label_payment_password()}
+                                sx={{ marginBottom: '16px' }}
+                                error={incorrectPaymentPassword}
+                                helperText={incorrectPaymentPassword ? t.settings_dialogs_incorrect_password() : ''}
+                            />
+                        ) : null}
+
+                        <LoadingButton fullWidth disabled={backupDisabled} onClick={handleBackup} loading={loading}>
+                            {t.settings_button_backup()}
+                        </LoadingButton>
+                    </Box>
+                )}
+            </DialogContent>
         </MaskDialog>
     )
 }

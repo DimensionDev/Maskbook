@@ -12,17 +12,17 @@ export function useTrade(
     outputToken?: FungibleTokenDetailed,
 ) {
     const blockNumber = useBlockNumber()
-    const { WETH_ADDRESS } = useTokenConstants()
+    const { WNATIVE_ADDRESS } = useTokenConstants()
 
     return useAsyncRetry(async () => {
-        if (!WETH_ADDRESS) return null
+        if (!WNATIVE_ADDRESS) return null
         if (!inputToken || !outputToken) return null
         const isExactIn = strategy === TradeStrategy.ExactIn
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
         // the WETH address is used for looking for available pools
-        const sellToken = isNative(inputToken.address) ? WETH_ADDRESS : inputToken.address
-        const buyToken = isNative(outputToken.address) ? WETH_ADDRESS : outputToken.address
+        const sellToken = isNative(inputToken.address) ? WNATIVE_ADDRESS : inputToken.address
+        const buyToken = isNative(outputToken.address) ? WNATIVE_ADDRESS : outputToken.address
         const { swaps, routes } = await PluginTraderRPC.getSwaps(
             sellToken,
             buyToken,
@@ -33,7 +33,7 @@ export function useTrade(
         if (!swaps[0].length) return null
         return { swaps, routes } as SwapResponse
     }, [
-        WETH_ADDRESS,
+        WNATIVE_ADDRESS,
         strategy,
         inputAmount,
         outputAmount,

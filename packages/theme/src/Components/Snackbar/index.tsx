@@ -1,12 +1,12 @@
 import { useRef, memo } from 'react'
 import { SnackbarProvider } from 'notistack'
-import { IconButton } from '@material-ui/core'
+import { IconButton } from '@mui/material'
 import { makeStyles } from '../../makeStyles'
-import { Close as CloseIcon } from '@material-ui/icons'
+import { Close as CloseIcon } from '@mui/icons-material'
 import { MaskColorVar } from '../../constants'
 
 export { SnackbarProvider, useSnackbar } from 'notistack'
-export type { VariantType } from 'notistack'
+export type { VariantType, OptionsObject } from 'notistack'
 
 const useStyles = makeStyles()({
     root: {
@@ -46,7 +46,7 @@ export const CustomSnackbarProvider = memo(({ children }) => {
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             hideIconVariant={true}
             action={(key) => (
-                <IconButton onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
+                <IconButton size="large" onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
                     <CloseIcon color="inherit" />
                 </IconButton>
             )}

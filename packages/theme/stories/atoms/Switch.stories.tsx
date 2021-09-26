@@ -1,4 +1,4 @@
-import { Switch as MuiSwitch, FormControlLabel } from '@material-ui/core'
+import { Switch as MuiSwitch, FormControlLabel } from '@mui/material'
 import { story } from '../utils'
 
 function C() {

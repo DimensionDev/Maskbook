@@ -1,4 +1,4 @@
-import { useTheme, SvgIcon, SvgIconProps, Theme } from '@material-ui/core'
+import { useTheme, SvgIcon, SvgIconProps, Theme } from '@mui/material'
 import { forwardRef, memo, ForwardedRef } from 'react'
 
 /** @internal */
@@ -12,7 +12,7 @@ export type SvgIconRaw = JSX.Element | ((theme: Theme) => JSX.Element)
  * @param svg SVG content. Do not include <svg> tag
  * @param viewBox The viewbox
  * @param defaultSize Only use this when the icon is not square. Unit: px
- * @returns A component that same type as icons from @material-ui/icons
+ * @returns A component that same type as icons from @mui/icons-material
  */
 export function createIcon(name: string, svg: SvgIconRaw, viewBox?: string, defaultSize?: Size): typeof SvgIcon {
     const [width, height] = defaultSize || []
@@ -43,7 +43,7 @@ export function createIcon(name: string, svg: SvgIconRaw, viewBox?: string, defa
  * @param dark SVG content when the theme is light theme. Do not include <svg> tag
  * @param viewBox The viewbox
  * @param defaultSize Only use this when the icon is not square. Unit: px
- * @returns A component that same type as icons from @material-ui/icons
+ * @returns A component that same type as icons from @mui/icons-material
  */
 export function createPaletteAwareIcon(
     name: string,

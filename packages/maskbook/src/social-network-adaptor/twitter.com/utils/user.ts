@@ -1,6 +1,7 @@
 import { isNull } from 'lodash-es'
 import type { SocialNetwork } from '../../../social-network'
-import { bioDescriptionSelector, searchNickNameSelector } from './selector'
+import { bioDescriptionSelector, searchAvatarSelector, searchNickNameSelector } from './selector'
+import { serializeToText } from './fetch'
 
 /**
  * @link https://help.twitter.com/en/managing-your-account/twitter-username-rules
@@ -20,10 +21,10 @@ export const getNickname = () => {
         ?.nextSibling as HTMLDivElement
     if (!node) return ''
 
-    const nicknameNode = node.querySelector('div span span')
+    const nicknameNode = node.querySelector('div span')
     if (!nicknameNode) return ''
 
-    return nicknameNode.innerHTML.trim()
+    return serializeToText(nicknameNode)
 }
 
 export const getTwitterId = () => {
@@ -38,5 +39,24 @@ export const getTwitterId = () => {
 
 export const getBioDescription = () => {
     const node = bioDescriptionSelector().evaluate()
-    return node?.innerText ?? ''
+    return node ? serializeToText(node) : ''
+}
+
+export const getAvatar = () => {
+    const node = searchAvatarSelector().evaluate() as HTMLImageElement
+    if (!node) return ''
+
+    const imageURL = node.getAttribute('src') ?? ''
+    return imageURL.trim()
+}
+
+const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
+
+export const getAvatarId = (avatarURL: string) => {
+    if (!avatarURL) return ''
+    const _url = new URL(avatarURL)
+    const match = _url.pathname.match(TWITTER_AVATAR_ID_MATCH)
+    if (!match) return ''
+
+    return match[1]
 }

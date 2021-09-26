@@ -5,13 +5,13 @@ import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import { currentChainIdSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
 
-export function createWeb3({
+export async function createWeb3({
     chainId = currentChainIdSettings.value,
     providerType = currentProviderSettings.value,
     privKeys = [] as string[],
 } = {}) {
     switch (providerType) {
-        case ProviderType.Maskbook:
+        case ProviderType.MaskWallet:
             return Maskbook.createWeb3({
                 chainId,
                 privKeys,

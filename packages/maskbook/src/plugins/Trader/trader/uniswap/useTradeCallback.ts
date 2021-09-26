@@ -56,7 +56,9 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                     from: account,
                     to: address,
                     data: calldata,
-                    ...(!value || /^0x0*$/.test(value) ? {} : { value }),
+                    ...(!value || /^0x0*$/.test(value)
+                        ? {}
+                        : { value: `0x${Number.parseInt(value, 16).toString(16)}` }),
                 }
 
                 return Services.Ethereum.estimateGas(config)
@@ -139,7 +141,11 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                 resolve(hash)
             } catch (error) {
                 if ((error as any)?.code) {
-                    const error_ = new Error('Transaction rejected.')
+                    const error_ = new Error(
+                        (error as any)?.message === 'Unable to add more requests.'
+                            ? 'Unable to add more requests.'
+                            : 'Transaction rejected.',
+                    )
                     setTradeState({
                         type: TransactionStateType.FAILED,
                         error: error_,

@@ -6,10 +6,11 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "start": "snowpack dev",
     "build": "node --es-module-specifier-resolution=node ./dist/utils/ssr.js"
   },
   "devDependencies": {
-    "snowpack": "^3.8.3"
+  },
+  "dependencies": {
+    "@emotion/server": "^11.4.0"
   }
 }

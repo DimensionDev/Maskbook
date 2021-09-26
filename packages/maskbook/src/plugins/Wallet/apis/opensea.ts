@@ -1,4 +1,5 @@
 import { ChainId } from '@masknet/web3-shared'
+import { OPENSEA_API_KEY } from '../constants'
 
 interface AssetContract {
     address: string
@@ -118,7 +119,6 @@ export interface AssetsListResponse {
 export async function getAssetsList(from: string, opts: { chainId?: ChainId; page?: number; size?: number }) {
     const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
     const params = new URLSearchParams()
-    params.append('exclude_currencies', 'true')
     params.append('owner', from.toLowerCase())
     params.append('limit', String(size))
     params.append('offset', String(size * page))
@@ -133,6 +133,9 @@ export async function getAssetsList(from: string, opts: { chainId?: ChainId; pag
         {
             method: 'GET',
             mode: 'cors',
+            headers: {
+                'x-api-key': OPENSEA_API_KEY,
+            },
         },
     )
     return (await response.json()) as AssetsListResponse

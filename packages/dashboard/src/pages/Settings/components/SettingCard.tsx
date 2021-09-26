@@ -1,8 +1,9 @@
-import { Typography, experimentalStyled as styled } from '@material-ui/core'
+import { Typography, styled } from '@material-ui/core'
+import { MaskColorVar } from '@masknet/theme'
 
 const Card = styled('div')(({ theme }) => ({
     borderRadius: Number(theme.shape.borderRadius) * 3,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: MaskColorVar.primaryBackground,
     padding: theme.spacing(5),
     marginBottom: theme.spacing(2),
 }))

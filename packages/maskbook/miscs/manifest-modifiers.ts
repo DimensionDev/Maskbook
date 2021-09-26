@@ -1,3 +1,4 @@
+/* spell-checker: disable */
 import base from '../src/manifest.json'
 type Manifest = typeof base & Record<string, any>
 export function manifestV3(manifest: Manifest) {
@@ -39,16 +40,13 @@ export function geckoview(manifest: Manifest) {
 }
 export function chromium(manifest: Manifest) {}
 export function safari(manifest: Manifest) {
-    manifest['iOS-injected-scripts'] = ['js/injected-script.js']
     manifest.permissions.push('<all_urls>')
 }
 export function development(manifest: Manifest) {
     manifest.name += ' (development)'
     // required by Webpack HMR
     manifest.web_accessible_resources.push('*.json', '*.js')
-    // 8097 is react devtools
-    // connect-src is used by firefox
-    manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; connect-src * https://localhost:8080/ http://localhost:8097; object-src 'self';`
+    manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; object-src 'self';`
     manifest.browser_action = { default_popup: 'popups.html' }
     acceptExternalConnect(manifest)
     jkoeaghipilijlahjplgbfiocjhldnap(manifest)
@@ -74,14 +72,6 @@ function acceptExternalConnect(manifest: Manifest) {
     }
 }
 export function production(manifest: Manifest) {}
-export function E2E(manifest: Manifest) {
-    development(manifest)
-    // can not capture permission dialog in pptr
-    manifest.permissions = Array.from(
-        new Set([...manifest.permissions, ...manifest.optional_permissions, ...['<all_urls>']]),
-    )
-    manifest.optional_permissions = []
-}
 export function beta(manifest: Manifest) {
     manifest.name += ' (Beta)'
     manifest.browser_action = { default_popup: 'popups.html' }

@@ -93,7 +93,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
     }
 }
 
-const uncomfirmedBackup = new Map<string, BackupJSONFileLatest>()
+const unconfirmedBackup = new Map<string, BackupJSONFileLatest>()
 
 /**
  * Restore backup step 1: store the unconfirmed backup in cached
@@ -101,7 +101,7 @@ const uncomfirmedBackup = new Map<string, BackupJSONFileLatest>()
  * @param json the backup to be cached
  */
 export async function setUnconfirmedBackup(id: string, json: BackupJSONFileLatest) {
-    uncomfirmedBackup.set(id, json)
+    unconfirmedBackup.set(id, json)
 }
 
 /**
@@ -109,7 +109,7 @@ export async function setUnconfirmedBackup(id: string, json: BackupJSONFileLates
  * @param id the uuid for each restoration
  */
 export async function getUnconfirmedBackup(id: string) {
-    return uncomfirmedBackup.get(id)
+    return unconfirmedBackup.get(id)
 }
 
 /**
@@ -117,9 +117,9 @@ export async function getUnconfirmedBackup(id: string) {
  * @param id the uuid for each restoration
  */
 export async function confirmBackup(id: string, whoAmI?: ProfileIdentifier) {
-    if (uncomfirmedBackup.has(id)) {
-        await restoreBackup(uncomfirmedBackup.get(id)!, whoAmI)
-        uncomfirmedBackup.delete(id)
+    if (unconfirmedBackup.has(id)) {
+        await restoreBackup(unconfirmedBackup.get(id)!, whoAmI)
+        unconfirmedBackup.delete(id)
     } else {
         throw new Error('cannot find backup')
     }

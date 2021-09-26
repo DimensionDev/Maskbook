@@ -3,7 +3,6 @@ import { useChainId } from './useChainId'
 import { uniqBy } from 'lodash-es'
 import { formatEthereumAddress, makeSortAssertFn } from '../utils'
 import { useTokenConstants } from '../constants'
-import { useChainDetailed } from './useChainDetailed'
 
 /**
  * Merge multiple token lists into one which sorted by balance.
@@ -12,7 +11,6 @@ import { useChainDetailed } from './useChainDetailed'
  */
 export function useAssetsMerged(...listOfTokens: Asset[][]) {
     const chainId = useChainId()
-    const chainDetailed = useChainDetailed()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     if (!NATIVE_TOKEN_ADDRESS) return []
     return uniqBy(

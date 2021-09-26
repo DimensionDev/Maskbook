@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Box, Paper, GlobalStyles } from '@material-ui/core'
+import { Box, GlobalStyles, Paper } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
@@ -14,10 +14,8 @@ function GlobalCss() {
             styles={{
                 body: {
                     overflowX: 'hidden',
-                    margin: '0 auto',
-                    width: 310,
+                    margin: '0 auto !important',
                     maxWidth: '100%',
-                    backgroundColor: 'transparent',
                     '&::-webkit-scrollbar': {
                         display: 'none',
                     },
@@ -29,15 +27,15 @@ function GlobalCss() {
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        height: 474,
+        minHeight: 494,
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
     },
     header: {
-        padding: '0px 10px',
+        padding: '0 10px',
         backgroundColor: theme.palette.primary.main,
-        height: 40,
+        height: 50,
         display: 'flex',
         justifyContent: 'space-between',
     },
@@ -56,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         backgroundColor: 'transparent',
         borderRadius: '4px 4px 0px 0px',
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: 500,
         color: theme.palette.primary.contrastText,
         textDecoration: 'none',
@@ -77,7 +75,23 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     const personas = useMyPersonas()
 
     const excludePath = useRouteMatch({
-        path: [PopupRoutes.Wallet, PopupRoutes.Personas, PopupRoutes.GasSetting, PopupRoutes.WalletSignRequest],
+        path: [
+            PopupRoutes.Wallet,
+            PopupRoutes.Personas,
+            PopupRoutes.WalletSignRequest,
+            PopupRoutes.ContractInteraction,
+            PopupRoutes.Unlock,
+        ],
+        exact: true,
+    })
+
+    const excludePersonaPath = useRouteMatch({
+        path: [
+            PopupRoutes.ContractInteraction,
+            PopupRoutes.WalletSignRequest,
+            PopupRoutes.GasSetting,
+            PopupRoutes.SelectWallet,
+        ],
         exact: true,
     })
 
@@ -87,10 +101,13 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
             <Paper elevation={0}>
                 <Box className={classes.header}>
                     <Box className={classes.left}>
-                        {excludePath || history.length > 1 ? (
-                            <MiniMaskIcon />
+                        {excludePath || history.length === 1 ? (
+                            <MiniMaskIcon style={{ fontSize: 30 }} />
                         ) : (
-                            <ArrowBackIcon onClick={history.goBack} style={{ fill: '#ffffff', cursor: 'pointer' }} />
+                            <ArrowBackIcon
+                                onClick={history.goBack}
+                                style={{ fill: '#ffffff', cursor: 'pointer', fontSize: 30 }}
+                            />
                         )}
                     </Box>
                     <Box className={classes.right}>
@@ -101,9 +118,11 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                             activeClassName={classes.active}>
                             {t('wallets')}
                         </NavLink>
-                        <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
-                            {t('personas')}
-                        </NavLink>
+                        {!excludePersonaPath ? (
+                            <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
+                                {t('personas')}
+                            </NavLink>
+                        ) : null}
                     </Box>
                 </Box>
                 <Box className={classes.container}>

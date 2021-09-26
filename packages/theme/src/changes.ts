@@ -1,6 +1,7 @@
-import type { ThemeOptions } from '@material-ui/core'
+import type { ThemeOptions } from '@mui/material'
 
 export const Font: ThemeOptions = {
+    // cspell:ignore Jheng
     typography: {
         // TODO: lang=JP? offer different font list for different lang target?
         // Firefox doesn't support "system-ui" so we need fallback

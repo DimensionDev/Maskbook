@@ -1,9 +1,8 @@
-import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
-import stringify from 'json-stable-stringify'
+import { unreachable } from '@dimensiondev/kit'
 import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
 import { PLUGIN_IDENTIFIER, SLIPPAGE_DEFAULT } from './constants'
-import { ZrxTradePool } from './types'
+import type { ZrxTradePool } from './types'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 
 /**
@@ -72,6 +71,12 @@ export const arbitrumNetworkTradeProviderSettings = createGlobalSettings<TradePr
     { primary: () => '' },
 )
 
+export const xdaiNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+xdai+tradeProvider`,
+    TradeProvider.SUSHISWAP,
+    { primary: () => '' },
+)
+
 //#region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]
@@ -79,18 +84,14 @@ export interface TradeProviderSettings {
 
 const uniswapV2Settings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+uniswap+v2`, '')
 const uniswapV3Settings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+uniswap+v3`, '')
-const zrxSettings = createInternalSettings<string>(
-    `${PLUGIN_IDENTIFIER}+tradeProvider+zrx`,
-    stringify({
-        pools: getEnumAsArray(ZrxTradePool).map((x) => x.value),
-    }),
-)
+const zrxSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+zrx`, '')
 const sushiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sushiswap`, '')
 const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sashimiswap`, '')
-const qucikswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
+const quickswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
 const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+pancakeswap`, '')
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+balancer`, '')
 const dodoSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+dodo`, '')
+const bancorSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+bancor`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -108,13 +109,15 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
         case TradeProvider.SASHIMISWAP:
             return sashimiswapSettings
         case TradeProvider.QUICKSWAP:
-            return qucikswapSettings
+            return quickswapSettings
         case TradeProvider.PANCAKESWAP:
             return pancakeswapSettings
         case TradeProvider.BALANCER:
             return balancerSettings
         case TradeProvider.DODO:
             return dodoSettings
+        case TradeProvider.BANCOR:
+            return bancorSettings
         default:
             unreachable(tradeProvider)
     }

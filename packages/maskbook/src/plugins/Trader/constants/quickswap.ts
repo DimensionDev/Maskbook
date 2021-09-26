@@ -1,5 +1,5 @@
 import { ChainId } from '@masknet/web3-shared'
-import { DAI, ETHER, maUSDC, QUICK, USDC, USDT, WBTC, WETH, WETH_ONLY } from './trader'
+import { DAI, ETHER, maUSDC, QUICK, USDC, USDT, WBTC, WNATIVE, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
@@ -9,6 +9,6 @@ import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 export const QUICKSWAP_CUSTOM_BASES: ERC20TokenCustomizedBase = {}
 
 export const QUICKSWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
-    ...WETH_ONLY,
-    [ChainId.Matic]: [WETH, DAI, USDC, USDT, QUICK, ETHER, WBTC, maUSDC].map((x) => x[ChainId.Matic]),
+    ...WNATIVE_ONLY,
+    [ChainId.Matic]: [WNATIVE, DAI, USDC, USDT, QUICK, ETHER, WBTC, maUSDC].map((x) => x[ChainId.Matic]),
 }

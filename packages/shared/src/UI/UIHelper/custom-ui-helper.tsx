@@ -1,29 +1,14 @@
 /// <reference path="./custom-ui.d.ts" />
-import type { ClassNameMap } from '@material-ui/styles'
+type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Priority: classes from props > configHooks > defaultStyles
 export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
     defaultStyles: { classes?: ClassNameMap<InternalKeys> },
     props: { classes?: Partial<ClassNameMap<OverwrittenKeys>> },
-    useConfigHooks?: () => { classes: Partial<ClassNameMap<OverwrittenKeys>> } | Partial<ClassNameMap<OverwrittenKeys>>,
-): ClassNameMap<InternalKeys> & Partial<ClassNameMap<OverwrittenKeys>>
-export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
-    defaultStyles: ClassNameMap<InternalKeys>,
-    props: { classes?: Partial<ClassNameMap<OverwrittenKeys>> },
-    useConfigHooks?: () => { classes: Partial<ClassNameMap<OverwrittenKeys>> } | Partial<ClassNameMap<OverwrittenKeys>>,
-): ClassNameMap<InternalKeys> & Partial<ClassNameMap<OverwrittenKeys>>
-export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
-    defaultStyles: { classes?: ClassNameMap<InternalKeys> } | ClassNameMap<InternalKeys>,
-    props: { classes?: Partial<ClassNameMap<OverwrittenKeys>> },
-    useConfigHooks?: () => { classes: Partial<ClassNameMap<OverwrittenKeys>> } | Partial<ClassNameMap<OverwrittenKeys>>,
+    useConfigHooks?: () => { classes: Partial<ClassNameMap<OverwrittenKeys>> },
 ): ClassNameMap<InternalKeys> & Partial<ClassNameMap<OverwrittenKeys>> {
     // Note: this is a React hooks
-    const configOverwrite = useConfigHooks?.() || ({} as any)
-    const overwriteResult: ClassNameMap<InternalKeys> =
-        'classes' in configOverwrite ? configOverwrite.classes : configOverwrite
-    const propsOverwrite = props.classes
-    const result: ClassNameMap<InternalKeys> =
-        'classes' in defaultStyles ? defaultStyles.classes : (defaultStyles as any)
-    return mergeClasses(result, overwriteResult, propsOverwrite) as any
+    const configOverwrite = useConfigHooks?.() || { classes: {} }
+    return mergeClasses(defaultStyles.classes, configOverwrite.classes, props.classes) as any
 }
 
 export function mergeClasses(...args: (Partial<ClassNameMap<string>> | undefined)[]): Partial<ClassNameMap<string>> {

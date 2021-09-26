@@ -21,7 +21,7 @@ import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
-import { useHistory, useLocation } from 'react-router'
+import { useHistory, useLocation } from 'react-router-dom'
 import { DashboardWalletRoute } from '../Route'
 
 const useStyles = makeStyles()((theme) => ({
@@ -53,7 +53,6 @@ const useStyles = makeStyles()((theme) => ({
         flex: 1,
         paddingLeft: theme.spacing(1),
     },
-    tabs: {},
     addButton: {
         color: theme.palette.primary.main,
     },
@@ -202,12 +201,7 @@ export const WalletContent = forwardRef<HTMLDivElement, WalletContentProps>(({ w
                         display: 'flex',
                         alignItems: 'center',
                     }}>
-                    <Tabs
-                        className={classes.tabs}
-                        value={tabIndex}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        onChange={onTabChange}>
+                    <Tabs value={tabIndex} indicatorColor="primary" textColor="primary" onChange={onTabChange}>
                         <Tab label={t('dashboard_tab_assets')} />
                         <Tab label={t('dashboard_tab_collectibles')} />
                         <Tab

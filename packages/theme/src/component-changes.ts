@@ -1,4 +1,4 @@
-import type { PaletteMode, ThemeOptions } from '@material-ui/core'
+import type { PaletteMode, ThemeOptions } from '@mui/material'
 import type { Color } from './constants'
 
 function css_var<T extends Record<string, unknown>>(
@@ -92,20 +92,48 @@ export const Button: Theme = (mode, colors): ThemeOptions => ({
     },
 })
 
-export const Dialog: Theme = {
+export const Dialog: Theme = (mode, colors): ThemeOptions => ({
     components: {
         MuiDialog: {
             styleOverrides: {
-                paper: { minHeight: 200, minWidth: 440 },
+                root: {
+                    [`& .dashboard-style`]: { backgroundColor: 'initial' },
+                },
+                paper: { minHeight: 200, minWidth: 440, backgroundColor: colors.mainBackground },
+            },
+            defaultProps: {
+                BackdropProps: {
+                    sx: {
+                        backdropFilter: 'blur(8px)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    },
+                },
+            },
+        },
+        MuiDialogTitle: {
+            styleOverrides: {
+                root: { backgroundColor: colors.mainBackground },
+            },
+        },
+        MuiDialogContent: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: colors.mainBackground,
+                },
             },
         },
         MuiDialogActions: {
             styleOverrides: {
-                root: { justifyContent: 'center', paddingBottom: 24, '&>:not(:first-of-type)': { marginLeft: 18 } },
+                root: {
+                    justifyContent: 'center',
+                    paddingBottom: 24,
+                    '&>:not(:first-of-type)': { marginLeft: 18 },
+                    backgroundColor: colors.mainBackground,
+                },
             },
         },
     },
-}
+})
 
 export const TextField: Theme = {
     components: {
@@ -180,8 +208,35 @@ export const Paper: Theme = (mode, colors) => ({
                         borderRadius: 12,
                     },
                 },
+                {
+                    props: { variant: 'rounded' },
+                    style: {
+                        borderRadius: 16,
+                        backgroundColor: colors.primaryBackground,
+                    },
+                },
             ],
         },
+    },
+})
+
+export const Tabs: Theme = () => ({
+    components: {
+        MuiTab: {
+            styleOverrides: {
+                root: {
+                    // up-sm
+                    '@media screen and (min-width: 600px)': {
+                        minWidth: 160,
+                    },
+                },
+            },
+        },
+    },
+})
+export const Link: Theme = () => ({
+    components: {
+        MuiLink: { defaultProps: { underline: 'hover' } },
     },
 })
 

@@ -3,6 +3,7 @@ import type {} from 'react/next'
 import type {} from 'react-dom/next'
 import { createReactRootShadowedPartial, ReactRootShadowed } from '@masknet/theme'
 import * as Components from './Components'
+import { RenderContext } from '.'
 
 const createReactRootShadowed = createReactRootShadowedPartial({
     preventEventPropagationList: [],
@@ -56,11 +57,28 @@ function createElement(element: string, options: ElementCreationOptions) {
 function render(f: Components.Component<any>, props: any, shadow: ShadowRoot) {
     const root: ReactRootShadowed =
         (shadow as any).__root || ((shadow as any).__root = createReactRootShadowed(shadow, { tag: 'span' }))
-    root.render(<HooksContainer f={() => f(props, (event) => void shadow.host.dispatchEvent(event))} />)
+    root.render(
+        <RenderContext.Provider value={createRenderContextProxy(shadow)}>
+            <HooksContainer f={() => f(props, (event) => void shadow.host.dispatchEvent(event))} />
+        </RenderContext.Provider>,
+    )
 }
 // Need use a JSX component to hold hooks
 function HooksContainer(props: { f: () => React.ReactNode }) {
     return <>{props.f()}</>
+}
+
+function createRenderContextProxy(dom: ShadowRoot): RenderContext {
+    return new Proxy({} as any, { get: (_, key) => getContext(dom)[key] })
+}
+function getContext(node: Node | ShadowRoot | null): any {
+    if (!node) return null
+    if (node instanceof Element && (node as any).__mask__context__) {
+        return (node as any).__mask__context__
+    }
+    if (node instanceof ShadowRoot) return getContext(node.host)
+    if (node.parentNode) return getContext(node.parentNode)
+    return null
 }
 
 const unknown = ['span', (() => null) as any as Components.Component<any>] as const

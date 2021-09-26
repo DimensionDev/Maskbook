@@ -17,7 +17,7 @@ import {
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
-    useTokenBalance,
+    useFungibleTokenBalance,
     ZERO,
     useFungibleTokenDetailed,
     isSameAddress,
@@ -55,7 +55,6 @@ const useStyles = makeStyles()((theme) => ({
         '& .MuiSlider-thumb': {
             width: 28,
             height: 28,
-            marginTop: -12,
             background: theme.palette.mode === 'dark' ? '#fff' : '2CA4EF, 100%',
         },
         '& .MuiSlider-rail': {
@@ -189,7 +188,7 @@ export function SwapDialog(props: SwapDialogProps) {
     //#endregion
 
     //#region balance
-    const { value: tokenBalance = '0' } = useTokenBalance(
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(
         swapToken ? swapToken.type : EthereumTokenType.Native,
         swapToken ? swapToken.address : NATIVE_TOKEN_ADDRESS,
     )

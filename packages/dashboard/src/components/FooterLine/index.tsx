@@ -1,5 +1,5 @@
-import { experimentalStyled as styled } from '@material-ui/core'
-import { useHref, useNavigate } from 'react-router'
+import { styled } from '@material-ui/core'
+import { useHref, useNavigate } from 'react-router-dom'
 import { Breadcrumbs, Dialog, IconButton, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
@@ -131,7 +131,12 @@ export const FooterLine = memo(() => {
             </Breadcrumbs>
             <AboutDialog open={isOpen} title="" onClose={() => setOpen(false)}>
                 <About />
-                <IconButton className={classes.closeButton} onClick={() => setOpen(false)} edge="end" color="inherit">
+                <IconButton
+                    size="large"
+                    className={classes.closeButton}
+                    onClick={() => setOpen(false)}
+                    edge="end"
+                    color="inherit">
                     <Close />
                 </IconButton>
             </AboutDialog>

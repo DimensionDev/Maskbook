@@ -10,7 +10,7 @@ import {
     useChainId,
     useTokenAssetBaseURLConstants,
 } from '@masknet/web3-shared'
-import { Avatar, AvatarProps } from '@material-ui/core'
+import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useImageFailOver } from '../../index'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
@@ -31,8 +31,6 @@ function getFallbackIcons(address: string, baseURIs: string[]) {
 }
 const useStyles = makeStyles()((theme) => ({
     icon: {
-        width: 16,
-        height: 16,
         backgroundColor: theme.palette.common.white,
         margin: 0,
     },

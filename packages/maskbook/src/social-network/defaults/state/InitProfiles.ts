@@ -12,7 +12,7 @@ export function InitAutonomousStateProfiles(
     query(network, ref)
     signal.addEventListener(
         'abort',
-        MaskMessage.events.personaChanged.on((e) => e.some((x) => x.owned) && query(network, ref)),
+        MaskMessage.events.ownPersonaChanged.on(() => query(network, ref)),
     )
 
     async function query(network: string, ref: ValueRef<readonly Profile[]>) {

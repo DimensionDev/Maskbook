@@ -43,6 +43,7 @@ import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import urlcat from 'urlcat'
+import { startCase } from 'lodash-es'
 
 export interface IconProps {
     size?: number
@@ -246,7 +247,7 @@ export function ITO(props: ITO_Props) {
 
     const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime, endTime, qualificationAddress } =
         availabilityComputed
-    //#ednregion
+    //#endregion
 
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(availability?.remaining ?? '0')
@@ -259,6 +260,7 @@ export function ITO(props: ITO_Props) {
         !isRegionRestrict || !currentRegion || (!loadingRegion && allowRegions.includes(currentRegion.code))
 
     //#region if qualified
+    type Qual_V2 = { qualified: boolean; errorMsg: string }
     const {
         value: ifQualified = false,
         loading: loadingIfQualified,
@@ -380,7 +382,12 @@ export function ITO(props: ITO_Props) {
 
     useEffect(() => {
         const timeToExpired = endTime - Date.now()
-        if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired)) return
+
+        // https://stackoverflow.com/q/3468607
+        // SetTimeout using a 32 bit int to store the delay so the max value allowed would be 2147483647.
+        // Meanwhile, no need to refresh ITO card when expired time is a large value (more than one day).
+        if (timeToExpired < 0 || listOfStatus.includes(ITO_Status.expired) || timeToExpired > 1000 * 60 * 60 * 24)
+            return
 
         const timer = setTimeout(() => {
             setOpenClaimDialog(false)
@@ -670,14 +677,20 @@ export function ITO(props: ITO_Props) {
                             </ActionButton>
                         </Grid>
                     </Grid>
-                ) : !ifQualified ? (
+                ) : !ifQualified || !(ifQualified as Qual_V2).qualified ? (
                     <ActionButton
                         onClick={retryIfQualified}
                         loading={loadingIfQualified}
                         variant="contained"
                         size="large"
                         className={classes.actionButton}>
-                        {t(loadingIfQualified ? 'plugin_ito_qualification_loading' : 'plugin_ito_qualification_failed')}
+                        {loadingIfQualified
+                            ? t('plugin_ito_qualification_loading')
+                            : !ifQualified
+                            ? t('plugin_ito_qualification_failed')
+                            : !(ifQualified as Qual_V2).qualified
+                            ? startCase((ifQualified as Qual_V2).errorMsg)
+                            : null}
                     </ActionButton>
                 ) : listOfStatus.includes(ITO_Status.expired) ? (
                     <ActionButton
@@ -761,7 +774,7 @@ export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }
             elevation={0}
             style={{ backgroundImage: `url(${PoolBackground})` }}>
             <Typography variant="body1" className={classes.loadingITO}>
-                {t('plugin_ito_loading_failed')}
+                {t('loading_failed')}
             </Typography>
             <ActionButton
                 onClick={retryPoolPayload}
@@ -769,7 +782,7 @@ export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }
                 size="large"
                 color="primary"
                 className={classes.loadingITO_Button}>
-                {t('plugin_ito_loading_try_again')}
+                {t('try_again')}
             </ActionButton>
         </Card>
     )

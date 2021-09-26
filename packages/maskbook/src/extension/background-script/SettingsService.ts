@@ -12,6 +12,8 @@ import {
     ethereumNetworkTradeProviderSettings,
     binanceNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
+    arbitrumNetworkTradeProviderSettings,
+    xdaiNetworkTradeProviderSettings,
 } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
@@ -25,6 +27,11 @@ import {
     currentPortfolioDataProviderSettings,
     currentGasNowSettings,
     currentEtherPriceSettings,
+    currentTokenPricesSettings,
+    currentIsMaskWalletLockedSettings,
+    currentAccountMaskWalletSettings,
+    currentMaskWalletChainIdSettings,
+    currentMaskWalletNetworkSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
 
@@ -45,7 +52,9 @@ export const [getChainId, setChainId] = create(currentChainIdSettings)
 export const [getBalance, setBalance] = create(currentBalanceSettings)
 export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
 export const [getEtherPrice, setEtherPrice] = create(currentEtherPriceSettings)
+export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSettings)
 export const [getGasNow, setGasNow] = create(currentGasNowSettings)
+export const [getGasPrice, setGasPrice] = create(currentGasNowSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
 export const [getEthereumNetworkTradeProvider, setEthNetworkTradeProvider] = create(
     ethereumNetworkTradeProviderSettings,
@@ -56,6 +65,10 @@ export const [getPolygonNetworkTradeProvider, setPolygonNetworkTradeProvider] = 
 export const [getBinanceNetworkTradeProvider, setBinanceNetworkTradeProvider] = create(
     binanceNetworkTradeProviderSettings,
 )
+export const [getArbitrumNetworkTradeProvider, setArbitrumNetworkTradeProvider] = create(
+    arbitrumNetworkTradeProviderSettings,
+)
+export const [getxDaiNetworkTradeProvider, setxDaiNetworkTradeProvider] = create(xdaiNetworkTradeProviderSettings)
 
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 
@@ -63,12 +76,24 @@ export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] 
 
 export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentAccountSettings)
 
+export const [getSelectedMaskWalletAddress, setSelectedMaskWalletAddress] = create(currentAccountMaskWalletSettings)
+
+export const [getCurrentMaskWalletChainId, setCurrentMaskWalletChainId] = create(currentMaskWalletChainIdSettings)
+
+export const [getCurrentMaskWalletNetworkType, setCurrentMaskWalletNetworkType] = create(
+    currentMaskWalletNetworkSettings,
+)
+
 export const [getCurrentPortfolioDataProvider, setCurrentPortfolioDataProvider] = create(
     currentPortfolioDataProviderSettings,
 )
 
 export const [getCurrentCollectibleDataProvider, setCurrentCollectibleDataProvider] = create(
     currentCollectibleDataProviderSettings,
+)
+
+export const [getCurrentIsMaskWalletLockedSettings, setCurrentIsMaskWalletLockedSettings] = create(
+    currentIsMaskWalletLockedSettings,
 )
 
 export async function getWalletAllowTestChain() {
@@ -112,4 +137,8 @@ export async function shouldActivatePluginOnSNSStart() {
     const val = sessionStorage.getItem(key)
     sessionStorage.removeItem(key)
     return val
+}
+
+export async function openTab(url: string) {
+    await browser.tabs.create({ active: true, url })
 }

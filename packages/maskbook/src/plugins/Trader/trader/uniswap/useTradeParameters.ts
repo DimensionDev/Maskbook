@@ -69,7 +69,7 @@ export function useSwapParameters(
             const { value, calldata } = SwapRouter.swapCallParameters(trade_, {
                 recipient: account,
                 slippageTolerance: allowedSlippage_,
-                deadline: deadline.toString(),
+                deadline: deadline.toNumber(),
             })
             return [
                 {

@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { Button, Tab, Tabs, experimentalStyled as styled, tabClasses, tabsClasses } from '@material-ui/core'
+import { Button, Tab, Tabs, styled, tabClasses, tabsClasses } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { WalletHeader } from '../WalletHeader'
 import { WalletInfo } from '../WalletInfo'
@@ -10,6 +10,9 @@ import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../../index'
 import { ActivityList } from '../ActivityList'
 import { useI18N } from '../../../../../../utils'
+import { useContainer } from 'unstated-next'
+import { WalletContext } from '../../hooks/useWalletContext'
+import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 
 const useStyles = makeStyles()({
     content: {
@@ -22,7 +25,6 @@ const useStyles = makeStyles()({
         padding: 0,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
     },
     addToken: {
         padding: 16,
@@ -40,10 +42,10 @@ const StyledTabs = styled(Tabs)`
         background-color: #f7f9fa;
         padding-top: 6px;
     }
-    &.${tabsClasses.indicator} {
+    & .${tabsClasses.indicator} {
         display: none;
     }
-    &.${tabsClasses.flexContainer} {
+    & .${tabsClasses.flexContainer} {
         justify-content: center;
     }
 `
@@ -53,7 +55,7 @@ const StyledTab = styled(Tab)`
         font-size: 12px;
         line-height: 16px;
         min-height: unset;
-        min-width: 145px;
+        min-width: 165px;
         padding: 7px 0;
         background-color: #f7f9fa;
         border-radius: 4px 4px 0px 0px;
@@ -82,9 +84,12 @@ export interface WalletAssetsUIProps {
 export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const { assetsLoading } = useContainer(WalletContext)
     const [currentTab, setCurrentTab] = useState(WalletTabs.Assets)
 
-    return (
+    return assetsLoading ? (
+        <LoadingPlaceholder />
+    ) : (
         <>
             <WalletHeader />
             <WalletInfo />

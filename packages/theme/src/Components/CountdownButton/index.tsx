@@ -1,19 +1,28 @@
-import { useEffect, useState } from 'react'
-import { Button, ButtonProps } from '@material-ui/core'
+import { useEffect, useState, forwardRef, useMemo, ReactNode } from 'react'
+import { Button, ButtonProps } from '@mui/material'
 
 export interface CountdownButtonProps extends ButtonProps {
     duration?: number
+    repeatContent?: ReactNode | string
 }
 
-export function CountdownButton(props: CountdownButtonProps) {
-    const { duration = 60, children, onClick, disabled, ...others } = props
-    const [countdown, setCountdown] = useState(0)
+export const CountdownButton = forwardRef<HTMLButtonElement, CountdownButtonProps>((props, ref) => {
+    const { duration = 60, children, repeatContent = 'Resend', onClick, disabled, ...others } = props
+    const [countdown, setCountdown] = useState<number | undefined>(undefined)
     const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setCountdown(duration)
         onClick?.(event)
     }
 
-    useEffect(() => () => clearTimeout(countdown))
+    const content = useMemo(() => {
+        if (countdown) {
+            return `${children} (${countdown})`
+        } else if (countdown === 0) {
+            return repeatContent
+        } else {
+            return children
+        }
+    }, [countdown])
 
     useEffect(() => {
         if (countdown) {
@@ -30,9 +39,8 @@ export function CountdownButton(props: CountdownButtonProps) {
     }, [countdown])
 
     return (
-        <Button {...others} onClick={handleClick} disabled={!!countdown || disabled}>
-            {children}
-            {countdown ? ` (${countdown})` : ''}
+        <Button ref={ref} {...others} onClick={handleClick} disabled={!!countdown || disabled}>
+            {content}
         </Button>
     )
-}
+})

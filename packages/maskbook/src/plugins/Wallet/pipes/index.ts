@@ -1,5 +1,11 @@
-import { safeUnreachable, unreachable } from '@dimensiondev/kit'
-import { ChainId, FilterTransactionType, NetworkType, PortfolioProvider } from '@masknet/web3-shared'
+import { unreachable } from '@dimensiondev/kit'
+import {
+    ChainId,
+    createLookupTableResolver,
+    FilterTransactionType,
+    NetworkType,
+    PortfolioProvider,
+} from '@masknet/web3-shared'
 import type { SocketRequestAssetScope } from '../types'
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
@@ -24,75 +30,61 @@ export function resolveDebankTransactionType(category: string) {
     }
 }
 
-export function resolveDebankChainName(network: NetworkType) {
-    switch (network) {
-        case NetworkType.Ethereum:
-            return 'eth'
-        case NetworkType.Binance:
-            return 'bsc'
-        case NetworkType.Polygon:
-            return 'matic'
-        case NetworkType.Arbitrum:
-            return 'arbitrum'
-        default:
-            safeUnreachable(network)
-            return ''
-    }
-}
+export const resolveDebankChainName = createLookupTableResolver<NetworkType, string>(
+    {
+        [NetworkType.Ethereum]: 'eth',
+        [NetworkType.Binance]: 'bsc',
+        [NetworkType.Polygon]: 'matic',
+        [NetworkType.Arbitrum]: 'arbitrum',
+        [NetworkType.xDai]: 'xdai',
+    },
+    '',
+)
 
-export function resolveZerionAssetsScopeName(network: NetworkType) {
-    switch (network) {
-        case NetworkType.Ethereum:
-            return 'assets'
-        case NetworkType.Binance:
-            return 'bsc-assets'
-        case NetworkType.Polygon:
-            return 'polygon-assets'
-        case NetworkType.Arbitrum:
-            return ''
-        default:
-            safeUnreachable(network)
-            return ''
-    }
-}
+export const resolveZerionAssetsScopeName = createLookupTableResolver<NetworkType, string>(
+    {
+        [NetworkType.Ethereum]: 'assets',
+        [NetworkType.Binance]: 'bsc-assets',
+        [NetworkType.Polygon]: 'polygon-assets',
+        [NetworkType.Arbitrum]: 'arbitrum-assets',
+        [NetworkType.xDai]: 'xdai-assets',
+    },
+    '',
+)
 
-export function resolveZerionTransactionsScopeName(network: NetworkType) {
-    switch (network) {
-        case NetworkType.Ethereum:
-            return 'transactions'
-        case NetworkType.Binance:
-            return ''
-        case NetworkType.Polygon:
-            return ''
-        case NetworkType.Arbitrum:
-            return ''
-        default:
-            safeUnreachable(network)
-            return ''
-    }
-}
+export const resolveZerionTransactionsScopeName = createLookupTableResolver<NetworkType, string>(
+    {
+        [NetworkType.Ethereum]: 'transactions',
+        [NetworkType.Binance]: 'bsc-transactions',
+        [NetworkType.Polygon]: 'polygon-transactions',
+        [NetworkType.Arbitrum]: 'arbitrum-transactions',
+        [NetworkType.xDai]: 'xdai-transactions',
+    },
+    '',
+)
 
-export function resolveChainByScope(scope: SocketRequestAssetScope) {
-    switch (scope) {
-        case 'assets':
-            return {
-                chain: 'eth',
-                chainId: ChainId.Mainnet,
-            }
-        case 'bsc-assets':
-            return {
-                chain: 'bsc',
-                chainId: ChainId.BSC,
-            }
-        case 'polygon-assets':
-            return {
-                chain: 'matic',
-                chainId: ChainId.Matic,
-            }
-        default:
-            safeUnreachable(scope)
-            return {
-                chain: 'unknown',
-            }
+export const resolveChainByScope = createLookupTableResolver<
+    SocketRequestAssetScope,
+    {
+        chain: string
+        chainId?: ChainId
     }
-}
+>(
+    {
+        assets: {
+            chain: 'eth',
+            chainId: ChainId.Mainnet,
+        },
+        'bsc-assets': {
+            chain: 'bsc',
+            chainId: ChainId.BSC,
+        },
+        'polygon-assets': {
+            chain: 'matic',
+            chainId: ChainId.Matic,
+        },
+    },
+    {
+        chain: 'unknown',
+    },
+)

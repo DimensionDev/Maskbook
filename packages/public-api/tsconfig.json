@@ -5,10 +5,7 @@
     "outDir": "./dist/",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./src/**/*"],
-  "ts-node": {
-    "compilerOptions": { "module": "CommonJS" }
-  },
+  "include": ["./src"],
   // This package MUST NOT use any other package.
   "references": []
 }

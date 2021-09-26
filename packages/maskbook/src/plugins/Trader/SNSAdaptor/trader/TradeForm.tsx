@@ -8,7 +8,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import TuneIcon from '@material-ui/icons/Tune'
 import RefreshOutlined from '@material-ui/icons/RefreshOutlined'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenPanelType, TradeComputed, TradeProvider, TradeStrategy, WarningLevel } from '../../types'
+import { TokenPanelType, TradeComputed, TradeStrategy, WarningLevel } from '../../types'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
@@ -21,6 +21,7 @@ import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWal
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { MINIMUM_AMOUNT } from '../../constants'
+import type { TradeProvider } from '@masknet/public-api'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -111,7 +112,7 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region remote controlled swap settings dialog
-    const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
+    const { openDialog: openSwapSettingDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
     //#endregion
 
     //#region form controls
@@ -220,12 +221,13 @@ export function TradeForm(props: TradeFormProps) {
             <div className={classes.section}>
                 <div className={classes.status}>
                     <Typography className={classes.label} color="textSecondary" variant="body2">
-                        {t('plugin_trader_slipage_tolerance')} {formatPercentage(toBips(currentSlippageSettings.value))}
+                        {t('plugin_trader_slippage_tolerance')}{' '}
+                        {formatPercentage(toBips(currentSlippageSettings.value))}
                     </Typography>
                     <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
                         <RefreshOutlined fontSize="small" />
                     </IconButton>
-                    <IconButton className={classes.icon} size="small" onClick={openDialog}>
+                    <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
                         <TuneIcon fontSize="small" />
                     </IconButton>
                 </div>

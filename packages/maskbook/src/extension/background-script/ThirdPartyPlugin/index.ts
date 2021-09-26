@@ -1,3 +1,4 @@
+import type { MaskSDK_SNS_ContextIdentifier } from '../../../plugins/External/sns-context'
 import type { Manifest } from '../../../plugins/External/types'
 import { constructThirdPartyRequestPermissionURL } from '../../popups/ThirdPartyRequestPermission/utils'
 import { ThirdPartyPluginPermission } from './types'
@@ -15,8 +16,16 @@ export async function fetchManifest(addr: string): Promise<Manifest> {
             .join('\n')
     }
 }
-export async function openPluginPopup(url: string) {
+const hostedMeta = new Map<MaskSDK_SNS_ContextIdentifier, [string, unknown]>()
+export async function getHostedMeta(context: MaskSDK_SNS_ContextIdentifier) {
+    return hostedMeta.get(context)
+}
+export async function openPluginPopup(
+    url: string,
+    meta?: [context: MaskSDK_SNS_ContextIdentifier, metaKey: string, meta: unknown],
+) {
     new URL(url) // it must be a full qualified URL otherwise throws
+    if (meta) hostedMeta.set(meta[0], [meta[1], meta[2]])
     const { id: windowID } = await browser.windows.create({
         type: 'popup',
         width: 350,
@@ -30,12 +39,6 @@ export async function openPluginPopup(url: string) {
             resolve()
         })
     })
-}
-export async function isSDKEnabled(baseURL: string) {
-    return hasPermission(baseURL, [ThirdPartyPluginPermission.SDKEnabled])
-}
-export async function enableSDK(baseURL: string) {
-    return grantPermission(baseURL, [ThirdPartyPluginPermission.SDKEnabled])
 }
 /**
  * Check if the given URL has the permissions.

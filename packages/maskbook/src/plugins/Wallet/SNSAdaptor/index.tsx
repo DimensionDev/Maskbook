@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
 import { SelectTokenDialog } from './SelectTokenDialog'
-import { GasNowDialog } from './GasNowDialog'
+import { SelectNftContractDialog } from './SelectNftContractDialog'
 import { CreateWalletDialog } from './CreateWalletDialog'
 import { CreateImportChooseDialog } from './CreateImportChooseDialog'
 import { ImportWalletDialog } from './ImportWalletDialog'
@@ -14,6 +14,7 @@ import { TransactionDialog } from './TransactionDialog'
 import { ConnectWalletDialog } from './ConnectWalletDialog'
 import { useStartWatchChainState } from '../hooks/useStartWatchChainState'
 import { WalletRiskWarningDialog } from './RiskWarningDialog'
+import { GasSettingDialog } from './GasSettingDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -26,7 +27,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 <SelectWalletDialog />
                 <SelectProviderDialog />
                 <SelectTokenDialog />
-                <GasNowDialog />
+                <SelectNftContractDialog />
                 <CreateWalletDialog />
                 <CreateImportChooseDialog />
                 <ImportWalletDialog />
@@ -35,6 +36,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 <WalletConnectQRCodeDialog />
                 <WalletRenameWalletDialog />
                 <WalletRiskWarningDialog />
+                <GasSettingDialog />
             </>
         )
     },

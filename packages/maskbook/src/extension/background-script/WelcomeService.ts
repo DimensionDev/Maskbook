@@ -1,4 +1,4 @@
-import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
+import { encodeText } from '@dimensiondev/kit'
 import { delay } from '../../utils/utils'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey } from '../../database'
@@ -58,10 +58,21 @@ export async function restoreNewIdentityWithMnemonicWord(
     return ecKeyID
 }
 
-export async function downloadBackup<T>(obj: T) {
-    const { buffer, mimeType, fileName } = await createBackupInfo(obj)
+export async function downloadBackup<T>(obj: T, type?: 'txt' | 'json') {
+    const { buffer, mimeType, fileName } = await createBackupInfo(obj, type)
     saveAsFileFromBuffer(buffer, mimeType, fileName)
     return obj
+}
+
+export async function downloadBackupV2(buffer: ArrayBuffer) {
+    const date = new Date()
+    const today = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
+        .getDate()
+        .toString()
+        .padStart(2, '0')}`
+    const fileName = `maskbook-keystore-backup-${today}.bin`
+
+    saveAsFileFromBuffer(buffer, 'application/octet-stream', fileName)
 }
 
 export async function createBackupFile(
@@ -84,7 +95,7 @@ export async function createBackupUrl(
     return { url, fileName }
 }
 
-async function createBackupInfo<T>(obj: T) {
+async function createBackupInfo<T>(obj: T, type?: 'txt' | 'json') {
     const string = typeof obj === 'string' ? obj : JSON.stringify(obj)
     const buffer = encodeText(string)
     const date = new Date()
@@ -92,8 +103,8 @@ async function createBackupInfo<T>(obj: T) {
         .getDate()
         .toString()
         .padStart(2, '0')}`
-    const fileName = `maskbook-keystore-backup-${today}.json`
-    const mimeType = 'application/json'
+    const fileName = `maskbook-keystore-backup-${today}.${type ?? 'json'}`
+    const mimeType = type === 'txt' ? 'text/plain' : 'application/json'
     return { buffer, mimeType, fileName }
 }
 

@@ -1,11 +1,11 @@
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
-import { experimentalStyled as styled } from '@material-ui/core/styles'
-import { Box, Button, Card, Container, Stack, Typography } from '@material-ui/core'
-import type { ReactNode } from 'react'
-import { SignUpAccountIcon, RestoreIcon } from '@masknet/icons'
+import { styled } from '@material-ui/core/styles'
+import { Box, Container, Stack, Typography } from '@material-ui/core'
+import { RestoreIcon, SignUpAccountIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { RoutePaths } from '../../type'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
+import { ActionCard } from '../../components/ActionCard'
 
 const Title = styled('div')(
     ({ theme }) => `
@@ -14,66 +14,6 @@ const Title = styled('div')(
 `,
 )
 
-const ActionCardIcon = styled('div')(
-    ({ theme }) => `
-    width: 36px;
-    height: 36px;
-
-    & > svg {
-        width: 100%;
-        height: 100%;
-    }
-`,
-)
-
-const ActionCardButton = styled('div')(
-    ({ theme }) => `
-    font-size: 14px;
-
-    & > button {
-        width: 140px;
-        border-radius: ${theme.spacing(2)};
-    }
-`,
-)
-
-interface ISetupActionCardProps {
-    icon: ReactNode
-    title: string
-    subtitle?: string
-    action: {
-        type: 'secondary' | 'primary'
-        text: string
-        handler: () => void
-    }
-}
-
-export const SetupActionCard = ({ icon, title, subtitle, action }: ISetupActionCardProps) => {
-    return (
-        <Card
-            variant="outlined"
-            sx={{ padding: (theme) => theme.spacing(2.5), marginBottom: (theme) => theme.spacing(2.5) }}>
-            <Stack spacing={2} direction="row" alignItems="center" justifyContent="space-between" width="100%">
-                <ActionCardIcon>{icon}</ActionCardIcon>
-                <Box flex={1}>
-                    <Typography variant="body1" paragraph sx={{ marginBottom: 0 }}>
-                        {title}
-                    </Typography>
-                    <Typography variant="body2" paragraph sx={{ marginBottom: 0 }}>
-                        {subtitle}
-                    </Typography>
-                </Box>
-                <ActionCardButton>
-                    <Button size="small" variant="contained" color={action.type} onClick={action.handler}>
-                        {action.text}
-                    </Button>
-                </ActionCardButton>
-            </Stack>
-        </Card>
-    )
-}
-
-// todo: dark theme style
 const Setup = () => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
@@ -89,8 +29,8 @@ const Setup = () => {
                         {t.setup_page_description()}
                     </Typography>
                 </Box>
-                <Stack justifyContent="space-between" width="545px" margin="0 auto">
-                    <SetupActionCard
+                <Stack justifyContent="space-between" maxWidth="600px" margin="0 auto">
+                    <ActionCard
                         title={t.setup_page_create_account_title()}
                         subtitle={t.setup_page_create_account_subtitle()}
                         icon={<SignUpAccountIcon />}
@@ -100,7 +40,7 @@ const Setup = () => {
                             handler: () => navigate(RoutePaths.SignUp),
                         }}
                     />
-                    <SetupActionCard
+                    <ActionCard
                         title={t.setup_page_create_restore_title()}
                         subtitle={t.setup_page_create_restore_subtitle()}
                         icon={<RestoreIcon />}

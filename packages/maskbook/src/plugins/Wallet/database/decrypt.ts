@@ -1,14 +1,13 @@
 import { decodeText, encodeText } from '@dimensiondev/kit'
-import { PLUGIN_IDENTIFIER, WalletMessages } from '@masknet/plugin-wallet'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { Err, None, Ok, Option, Result, Some } from 'ts-results'
-import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
 import { startEffect } from '../../../utils'
-import type { EncryptedWallet, EncryptedWalletPrimaryKey } from './types'
+import { PluginDB } from './Plugin.db'
+
 type WalletRecordEncrypted = unknown
 
 let primaryKey: null | CryptoKey = null
 let decrypted: WalletRecordEncrypted = null
-const EncryptedDB = createPluginDatabase<EncryptedWallet | EncryptedWalletPrimaryKey>(PLUGIN_IDENTIFIER)
 
 export enum DecryptWalletError {
     EncryptedStoreNotExist = 1,
@@ -29,12 +28,12 @@ startEffect(import.meta.webpackHot, () => {
 })
 /** Detect if there is an encrypted wallet store. If there is, we should use the encrypted store. */
 export function hasEncryptedWalletStore(): Promise<boolean> {
-    return EncryptedDB.has('primary-key', 'wallet')
+    return PluginDB.has('primary-key', 'wallet')
 }
 /** Verify and decrypt the wallet database. If the password is correct, it will return true. */
 export async function decryptWallet(passwordCandidate: string): Promise<Result<void, DecryptWalletError>> {
-    const encryptedWallets = await EncryptedDB.get('wallet', 'wallet')
-    const primaryRecord = await EncryptedDB.get('primary-key', 'wallet')
+    const encryptedWallets = await PluginDB.get('wallet', 'wallet')
+    const primaryRecord = await PluginDB.get('primary-key', 'wallet')
     if (!encryptedWallets || !primaryRecord) return Err(DecryptWalletError.EncryptedStoreNotExist)
 
     const pbkdf2 = await derivePBKDF2(passwordCandidate)
@@ -55,6 +54,8 @@ export async function lockWallet() {
     WalletMessages.events.walletLockStatusUpdated.sendToAll(true)
 }
 
+export async function unlockWallet(password: string) {}
+
 export async function updateWalletStore(newStore: WalletRecordEncrypted): Promise<Result<void, UpdateWalletError>> {
     if (!(await hasEncryptedWalletStore())) return Err(UpdateWalletError.EncryptedStoreNotExist)
     if (!primaryKey) return Err(UpdateWalletError.EncryptedStoreLocked)
@@ -73,13 +74,13 @@ export async function createEncryptedWalletStore(password: string, force = false
     const pendingPrimaryKey = await createAES()
     const wrappedKey = await wrapKey(pendingPrimaryKey, aesKW)
     try {
-        await EncryptedDB.add({ type: 'primary-key', id: 'wallet', iv, wrappedKey })
+        await PluginDB.add({ type: 'primary-key', id: 'wallet', iv, wrappedKey })
         const empty: WalletRecordEncrypted = {}
         await writeStore(empty, pendingPrimaryKey)
         primaryKey = pendingPrimaryKey
         decrypted = empty
     } catch (error) {
-        await EncryptedDB.remove('primary-key', 'wallet')
+        await PluginDB.remove('primary-key', 'wallet')
         throw error
     }
 }
@@ -93,7 +94,7 @@ async function writeStore(data: WalletRecordEncrypted, primaryKey: CryptoKey) {
     const store = encodeText(JSON.stringify(data)).buffer
     const iv = getIV()
     const encrypted = await encrypt(store, primaryKey, iv)
-    await EncryptedDB.add({ type: 'wallet', id: 'wallet', encrypted, iv })
+    await PluginDB.add({ type: 'wallet', id: 'wallet', encrypted, iv })
 }
 function derivePBKDF2(password: string) {
     return crypto.subtle.importKey('raw', encodeText(password), 'PBKDF2', false, ['deriveBits', 'deriveKey'])

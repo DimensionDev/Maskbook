@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Box } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
-import PluginItem, { PluginItemPlaceHodler } from './components/PluginItem'
+import PluginItem, { PluginItemPlaceholder } from './components/PluginItem'
 import {
     FileServiceIcon,
     MarketsIcon,
@@ -24,6 +24,7 @@ import { PluginMessages } from '../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { Services } from '../../API'
 import { PLUGIN_IDS } from './constants'
+import { useLocation } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -40,6 +41,7 @@ const useStyles = makeStyles()((theme) => ({
 export default function Plugins() {
     const t = useDashboardI18N()
     const { classes } = useStyles()
+    const location = useLocation()
     const [openTrendSetting, setOpenTrendSetting] = useState(false)
     const [openSwapSetting, setOpenSwapSetting] = useState(false)
     const [pluginStatus, setPluginStatus] = useState({
@@ -58,10 +60,11 @@ export default function Plugins() {
 
     const account = useAccount()
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
-    const openTransakDialog = useCallback(() => {
+    const openTransakDialog = useCallback((code?: string) => {
         setBuyDialog({
             open: true,
             address: account,
+            code,
         })
     }, [])
 
@@ -102,6 +105,18 @@ export default function Plugins() {
             setPluginStatus((status) => ({ ...status, [id]: enabled }))
         })
     }, [])
+
+    useEffect(() => {
+        const search = new URLSearchParams(location.search)
+        const open = search.get('open')
+        const code = search.get('code')
+
+        if (open === 'Transak') {
+            openTransakDialog(code ?? '')
+        } else if (open === 'Swap') {
+            openSwapDialog()
+        }
+    }, [location.search, openTransakDialog, openSwapDialog])
 
     return (
         <PageFrame title={t.labs()}>
@@ -158,7 +173,7 @@ export default function Plugins() {
                         onExplore={onExplore}
                         onSwitch={onSwitch}
                     />
-                    <PluginItemPlaceHodler />
+                    <PluginItemPlaceholder />
                 </Box>
                 <Box className={classes.list}>
                     <PluginItem

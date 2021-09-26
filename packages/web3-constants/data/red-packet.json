@@ -10,7 +10,8 @@
         "Matic": "",
         "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V2": {
         "Mainnet": "0x8D8912E1237F9FF3EF661F32743CFB276E052F98",
@@ -23,7 +24,8 @@
         "Matic": "",
         "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V3": {
         "Mainnet": "",
@@ -36,7 +38,8 @@
         "Matic": "0x913975af2bb8a6be4100d7dc5e9765b77f6a5d6c",
         "Mumbai": "0x0061E06c9f640a03C4981f43762d2AE5e03873c5",
         "Arbitrum": "0x02Ea0720254F7fa4eca7d09A1b9C783F1020EbEF",
-        "Arbitrum_Rinkeby": "0x6B70EC653c4331bdD0D0DCC7C941eb594e69a91d"
+        "Arbitrum_Rinkeby": "0x6B70EC653c4331bdD0D0DCC7C941eb594e69a91d",
+        "xDai": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4": {
         "Mainnet": "0xaBBe1101FD8fa5847c452A6D70C8655532B03C33",
@@ -48,8 +51,9 @@
         "BSCT": "",
         "Matic": "0x93e0b87A0aD0C991dc1B5176ddCD850c9a78aabb",
         "Mumbai": "",
-        "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum": "0x83D6b366f21e413f214EB077D5378478e71a5eD2",
+        "Arbitrum_Rinkeby": "0x4A77E797031257db72F7D2C3Ec08a4FAc5c8CfE9",
+        "xDai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B"
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mainnet",
@@ -61,7 +65,8 @@
         "BSCT": "",
         "Matic": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-polygon",
         "Mumbai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mumbai",
-        "Arbitrum": "https://thegraph.com/legacy-explorer/subgraph/dimensiondev/mask-red-packet-arbitrum-one",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-arbitrum-one",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-xdai"
     }
 }

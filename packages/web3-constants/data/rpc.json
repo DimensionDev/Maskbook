@@ -10,7 +10,8 @@
         "Matic": ["https://polygon-mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
         "Mumbai": ["https://polygon-mumbai.infura.io/v3/d65858b010d249419cf8687eca12b094"],
         "Arbitrum": ["https://arb1.arbitrum.io/rpc"],
-        "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"]
+        "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
+        "xDai": ["https://rpc.xdaichain.com/"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 0, 0, 0],
@@ -23,6 +24,7 @@
         "Matic": [0, 0, 0, 0],
         "Mumbai": [0, 0, 0, 0],
         "Arbitrum": [0, 0, 0, 0],
-        "Arbitrum_Rinkeby": [0, 0, 0, 0]
+        "Arbitrum_Rinkeby": [0, 0, 0, 0],
+        "xDai": [0, 0, 0, 0]
     }
 }

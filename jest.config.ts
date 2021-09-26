@@ -1,29 +1,26 @@
-import type { Config } from '@jest/types'
-import { resolve } from 'path'
+/*
+ * For a detailed explanation regarding each configuration property and type check, visit:
+ * https://jestjs.io/docs/configuration
+ */
+import type { InitialOptionsTsJest } from 'ts-jest/dist/types'
+import { defaultsESM as tsjPreset } from 'ts-jest/presets'
 
-const options: Config.InitialOptions = {
-    testRegex: ['/__tests__/.*\\.[jt]sx?$'],
-    preset: 'ts-jest',
-    testEnvironment: 'jest-environment-jsdom-fourteen',
-    globals: {
-        'ts-jest': { isolatedModules: true },
-    },
-    globalTeardown: resolve(__dirname, 'scripts', 'jest-global-teardown'),
-    setupFiles: [
-        require.resolve('jest-webextension-mock'),
-        require.resolve('fake-indexeddb/auto'),
-        resolve(__dirname, 'scripts', 'jest-setup.js'),
-    ],
-    transformIgnorePatterns: [
-        // skip packages other than 'holoflows/kit'
-    ],
+Error.stackTraceLimit = Infinity
+const config: InitialOptionsTsJest = {
     transform: {
-        'node_modules.+(holoflows).+.js$': 'jest-esm-transformer',
+        ...tsjPreset.transform,
     },
-    moduleNameMapper: {
-        'lodash-es': require.resolve('lodash'),
-        'idb/with-async-ittr-cjs': require.resolve('idb/with-async-ittr-cjs.js'),
+    globals: {
+        'ts-jest': {
+            useESM: true,
+            isolatedModules: true,
+        },
     },
+    cacheDirectory: './node_modules/.cache/jest/',
+    clearMocks: true,
+    coverageProvider: 'v8',
+    testMatch: ['**/tests/**/*.[jt]s?(x)'],
+    extensionsToTreatAsEsm: ['.ts', '.tsx'],
 }
 
-export default options
+export default config

@@ -11,8 +11,8 @@ export default function PasswordSettingItem() {
     return (
         <SettingItem
             icon={<SettingsEmailIcon />}
-            title={t.settigns_email_title()}
-            desc={user.email ? user.email : t.settigns_email_desc()}>
+            title={t.settings_email_title()}
+            desc={user.email ? user.email : t.settings_email_desc()}>
             <EmailSetting />
         </SettingItem>
     )

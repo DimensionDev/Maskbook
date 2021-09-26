@@ -2,12 +2,12 @@ import { formatBalance } from '@masknet/web3-shared'
 import { Grid, Typography, Box, Button } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import type { GoodGhostingInfo, LendingPoolData } from '../types'
+import type { GameAssets, GoodGhostingInfo, LendingPoolData, Player } from '../types'
 import { CircularDataDisplay } from './CircularDataDisplay'
 import BigNumber from 'bignumber.js'
 import { useGameToken, useRewardToken } from '../hooks/usePoolData'
 import { useI18N } from '../../../utils'
-import { getReadableInterval } from '../utils'
+import { getGameFinancialData, getPlayerStandings, getReadableInterval } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({
     infoRow: {
@@ -29,26 +29,45 @@ const useStyles = makeStyles()((theme) => ({
 interface GameStatsViewProps {
     info: GoodGhostingInfo
     finDataResult: AsyncStateRetry<LendingPoolData>
+    otherPlayerResult: AsyncStateRetry<Player[]>
+    poolAssetsResult: AsyncStateRetry<GameAssets>
 }
 
 export function GameStatsView(props: GameStatsViewProps) {
     const { classes } = useStyles()
     const { value: financialData, loading, error, retry } = props.finDataResult
+    const {
+        value: otherPlayerData,
+        loading: otherPlayerLoading,
+        error: otherPlayerError,
+        retry: otherPlayerRetry,
+    } = props.otherPlayerResult
     const gameToken = useGameToken()
     const rewardToken = useRewardToken()
+    const {
+        value: poolAssetsValue,
+        loading: poolAssetsLoading,
+        error: poolAssetsError,
+        retry: poolAssetsRetry,
+    } = props.poolAssetsResult
     const { t } = useI18N()
 
-    if (loading && !financialData) {
+    if ((loading && !financialData) || otherPlayerLoading || poolAssetsLoading) {
         return (
             <Typography variant="h6" color="textSecondary">
                 Loading game stats
             </Typography>
         )
-    } else if (error || !financialData) {
+    } else if (error || !financialData || otherPlayerError || !otherPlayerData || poolAssetsError || !poolAssetsValue) {
+        const retryFailed = () => {
+            if (error || !financialData) retry()
+            else if (otherPlayerError || !otherPlayerData) otherPlayerRetry()
+            else if (poolAssetsError || !poolAssetsValue) poolAssetsRetry()
+        }
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
                 <Typography color="textPrimary">Something went wrong.</Typography>
-                <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
+                <Button sx={{ marginTop: 1 }} size="small" onClick={retryFailed}>
                     Retry
                 </Button>
             </Box>
@@ -56,6 +75,14 @@ export function GameStatsView(props: GameStatsViewProps) {
     }
     const gameLengthFormatted = getReadableInterval(props.info.segmentLength * (props.info.lastSegment + 1))
     const segmentLengthFormatted = getReadableInterval(props.info.segmentLength)
+    const playerStandings = getPlayerStandings(otherPlayerData, props.info)
+    const { poolAPY, poolEarnings, extraRewards } = getGameFinancialData(
+        props.info,
+        financialData,
+        playerStandings,
+        poolAssetsValue,
+    )
+
     return (
         <>
             <Grid className={classes.infoRow} container spacing={2}>
@@ -117,7 +144,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={t('plugin_good_ghosting_pool_apy')}
-                                title={financialData.poolAPY.toFixed(1)}
+                                title={poolAPY.toFixed(2)}
                                 subtitle="%"
                             />
                         </div>
@@ -126,9 +153,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={t('plugin_good_ghosting_pool_earnings')}
-                                title={new BigNumber(
-                                    formatBalance(financialData.poolEarnings, gameToken.decimals),
-                                ).toFixed(1)}
+                                title={new BigNumber(formatBalance(poolEarnings, gameToken.decimals)).toFixed(2)}
                                 subtitle={gameToken.symbol}
                             />
                         </div>
@@ -139,9 +164,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={t('plugin_good_ghosting_extra_rewards')}
-                                title={new BigNumber(formatBalance(financialData.reward, rewardToken.decimals)).toFixed(
-                                    4,
-                                )}
+                                title={new BigNumber(formatBalance(extraRewards, rewardToken.decimals)).toFixed(2)}
                                 subtitle={rewardToken.symbol}
                             />
                         </div>

@@ -5,7 +5,6 @@ import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import Serialization from './type-transform/Serialization'
 import type { ProfileIdentifier, PersonaIdentifier } from '../database/type'
 import type { TypedMessage } from '../protocols/typed-message'
-import type { ThirdPartyPopupContextIdentifier } from '../plugins/External/popup-context'
 import type { SettingsEvents } from '../settings/listener'
 
 // This file is designed as HMR-safe.
@@ -36,6 +35,15 @@ export interface ProfileNFTsPageEvent {
     show: boolean
 }
 
+export interface NFTAvatarEvent {
+    userId: string
+    tokenId: string
+    image?: string
+    amount: string
+    address: string
+    avatarId: string
+}
+
 export interface MaskMessages extends SettingsEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: { text: string; image?: Blob }
@@ -50,31 +58,24 @@ export interface MaskMessages extends SettingsEvents {
     /** emit when the settings finished syncing with storage. */
     createInternalSettingsUpdated: SettingsUpdateEvent
     requestComposition: CompositionRequest
-    personaChanged: (UpdateEvent<PersonaIdentifier> & { owned: boolean })[]
+    replaceComposition: TypedMessage
+    ownPersonaChanged: void
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
-    /** Public Key found / Changed */
-    linkedProfilesChanged: {
-        of: ProfileIdentifier
-        before: PersonaIdentifier | undefined
-        after: PersonaIdentifier | undefined
-    }[]
-    // When a SNS page get this event, if it know this context, it should response the challenge with pong.
-    thirdPartyPing: { context: ThirdPartyPopupContextIdentifier; challenge: number }
-    thirdPartyPong: number
-    thirdPartySetPayload: {
-        payload: Record<string, unknown>
-        appendText: string
-        context: ThirdPartyPopupContextIdentifier
-    }
+    relationsChanged: (UpdateEvent<ProfileIdentifier> & { favor: 0 | 1 })[]
     pluginEnabled: string
     pluginDisabled: string
 
+    // TODO: move to plugin message
     profileNFTsPageUpdated: ProfileNFTsPageEvent
+    // TODO: move to plugin message
     profileNFTsTabUpdated: 'reset'
     signRequestApproved: {
         requestID: string
         selectedPersona: PersonaIdentifier
     }
+
+    NFTAvatarUpdated: NFTAvatarEvent
+    maskSDKHotModuleReload: void
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })

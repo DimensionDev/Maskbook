@@ -11,11 +11,14 @@ const useStyles = makeStyles()({
     },
     container: {
         contain: 'strict',
-        backgroundColor: MaskColorVar.white,
+        backgroundColor: MaskColorVar.mainBackground,
         borderRadius: 24,
         width: '100%',
         height: '100%',
-        minHeight: 832,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 })
 

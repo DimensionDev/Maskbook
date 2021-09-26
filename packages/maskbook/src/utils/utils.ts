@@ -2,8 +2,8 @@
  * Prefer function declaration than const f = () => ...
  * in this file please.
  */
-import { CustomEventId, WALLET_OR_PERSONA_NAME_MAX_LEN } from './constants'
-import type { CustomEvents } from '../extension/injected-script/CustomEvents'
+import { WALLET_OR_PERSONA_NAME_MAX_LEN } from './constants'
+import { pasteImage } from '@masknet/injected-script'
 
 import { isNull, noop } from 'lodash-es'
 
@@ -23,29 +23,12 @@ export async function downloadUrl(url: string) {
 }
 
 /**
- * Dispatch a fake event.
- * @param element The event target
- * @param event Event name
- * @param x parameters
- */
-export function dispatchCustomEvents<T extends keyof CustomEvents>(
-    element: Element | Document | null = document,
-    event: T,
-    ...x: CustomEvents[T]
-) {
-    document.dispatchEvent(new CustomEvent(CustomEventId, { detail: JSON.stringify([event, x]) }))
-}
-
-/**
  * paste image to activeElements
  * @param image
  */
 export async function pasteImageToActiveElements(image: File | Blob): Promise<void> {
-    const bytes = new Uint8Array(await blobToArrayBuffer(image))
-    dispatchCustomEvents(document.activeElement, 'paste', { type: 'image', value: Array.from(bytes) })
+    pasteImage(new Uint8Array(await blobToArrayBuffer(image)))
 }
-
-Object.assign(globalThis, { dispatchCustomEvents })
 
 /**
  * Select all text in a node

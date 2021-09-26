@@ -1,4 +1,4 @@
-import { EthereumTokenType, FungibleTokenDetailed, useTokenBalance } from '@masknet/web3-shared'
+import { EthereumTokenType, FungibleTokenDetailed, useFungibleTokenBalance } from '@masknet/web3-shared'
 import { IconButton, Paper } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import AddIcon from '@material-ui/icons/AddOutlined'
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ExchangetokenPanelProps {
+export interface ExchangeTokenPanelProps {
     onAmountChange: (amount: string, key: string) => void
     inputAmount: string
 
@@ -55,7 +55,7 @@ export interface ExchangetokenPanelProps {
     TokenAmountPanelProps: Partial<TokenAmountPanelProps>
 }
 
-export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
+export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     const {
         onAmountChange,
         dataIndex,
@@ -100,7 +100,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
     //#endregion
 
     //#region balance
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
+    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         exchangeToken?.type ?? EthereumTokenType.Native,
         exchangeToken?.address ?? '',
     )
@@ -142,12 +142,12 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
                 {...props.TokenAmountPanelProps}
             />
             {showAdd ? (
-                <IconButton onClick={onAdd} className={classes.button}>
+                <IconButton size="large" onClick={onAdd} className={classes.button}>
                     <AddIcon color="primary" />
                 </IconButton>
             ) : null}
             {showRemove ? (
-                <IconButton onClick={onRemove} className={classes.button}>
+                <IconButton size="large" onClick={onRemove} className={classes.button}>
                     <RemoveIcon color="secondary" />
                 </IconButton>
             ) : null}

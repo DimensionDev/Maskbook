@@ -1,14 +1,14 @@
 import Services from '../extension/service'
 
-export function createExternalProvider() {
+export function createExternalProvider(disablePopup = false) {
     return {
         isMetaMask: false,
         isMask: true,
         isStatus: true,
         host: '',
         path: '',
-        sendAsync: Services.Ethereum.requestSend,
-        send: Services.Ethereum.requestSend,
-        request: Services.Ethereum.request,
+        sendAsync: disablePopup ? Services.Ethereum.requestSendWithoutPopup : Services.Ethereum.requestSend,
+        send: disablePopup ? Services.Ethereum.requestSendWithoutPopup : Services.Ethereum.requestSend,
+        request: disablePopup ? Services.Ethereum.requestWithoutPopup : Services.Ethereum.request,
     }
 }

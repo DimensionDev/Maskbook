@@ -2,8 +2,9 @@ import { ExternalLink } from 'react-feather'
 import { Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { resolveTradePairLink } from '../../pipes'
-import type { SwapRouteData, TradeComputed, TradeProvider } from '../../types'
+import type { TradeComputed } from '../../types'
 import { useNetworkType } from '@masknet/web3-shared'
+import type { TradeProvider } from '@masknet/public-api'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -24,18 +25,18 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface TradePairViewerProps {
-    trade: TradeComputed<SwapRouteData>
-    provider: TradeProvider
-}
+type Tokens = { fromTokenSymbol?: string; toTokenSymbol?: string }
 
-export function TradePairViewer(props: TradePairViewerProps) {
+export function TradePairViewer<T extends Tokens>(props: { trade: TradeComputed<T>; provider: TradeProvider }) {
     const { trade, provider } = props
     const { classes } = useStyles()
     const networkType = useNetworkType()
 
     if (!trade.trade_?.fromTokenSymbol || !trade.trade_?.toTokenSymbol) return null
     const address = `${trade.trade_?.fromTokenSymbol}-${trade.trade_?.toTokenSymbol}`
+    const tradePairLink = resolveTradePairLink(provider, address, networkType)
+
+    if (!tradePairLink) return null
 
     return (
         <div className={classes.root}>
@@ -43,7 +44,7 @@ export function TradePairViewer(props: TradePairViewerProps) {
                 className={classes.link}
                 align="center"
                 color="textSecondary"
-                href={resolveTradePairLink(provider, address, networkType)}
+                href={tradePairLink}
                 target="_blank"
                 rel="noopener noreferrer">
                 <Typography className={classes.text} color="textSecondary" variant="body2" component="span">

@@ -6,16 +6,18 @@ import {
     Collapse,
     Theme,
     useMediaQuery,
-    experimentalStyled as styled,
+    styled,
     listItemClasses,
     listItemIconClasses,
     ListItemProps,
+    listItemTextClasses,
 } from '@material-ui/core'
 import { ExpandLess, ExpandMore } from '@material-ui/icons'
 import { useContext } from 'react'
-import { useMatch, useNavigate } from 'react-router'
+import { useMatch, useNavigate } from 'react-router-dom'
 import { DashboardContext } from './context'
 import {
+    MaskBannerIcon,
     MaskNotSquareIcon,
     MenuLabsActiveIcon,
     MenuLabsIcon,
@@ -29,6 +31,7 @@ import {
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { RoutePaths } from '../../type'
+import { useAppearance } from '../../pages/Personas/api'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
     const navigate = useNavigate()
@@ -82,61 +85,79 @@ const LogoItem = styled(MuiListItem)(({ theme }) => ({
     },
 })) as any as typeof MuiListItem
 
-const ListItem = styled(MuiListItem)(({ theme }) => ({
-    [`&.${listItemClasses.selected}`]: {
-        backgroundColor: 'transparent',
-        borderRight: '4px solid ' + (theme.palette.mode === 'light' ? theme.palette.action.selected : 'white'),
+const ItemIcon = styled(ListItemIcon)(({ theme }) => ({
+    [`& svg`]: {
+        fontSize: 36,
+    },
+}))
+
+const ListSubTextItem = styled(ListItemText)(({ theme }) => ({
+    [`&.${listItemTextClasses.inset}`]: {
+        marginLeft: theme.spacing(2),
+        '&:before': {
+            content: '""',
+            display: 'inline-block',
+            width: 4,
+            height: 4,
+            borderRadius: 2,
+            background: 'currentColor',
+            position: 'absolute',
+            left: theme.spacing(9),
+            top: 22,
+        },
     },
 }))
 
 export interface NavigationProps {}
 export function Navigation({}: NavigationProps) {
     const { expanded, toggleNavigationExpand } = useContext(DashboardContext)
+    const isWalletPath = useMatch(RoutePaths.Wallets)
+    const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
+    const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
 
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const t = useDashboardI18N()
+    const mode = useAppearance()
 
     return (
         <List>
-            {isLargeScreen && (
-                <LogoItem>
-                    <MaskNotSquareIcon />
-                </LogoItem>
-            )}
+            {isLargeScreen && <LogoItem>{mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}</LogoItem>}
             <ListItemLink to={RoutePaths.Personas}>
-                <ListItemIcon>
-                    {useMatch(RoutePaths.Personas) ? <MenuPersonasActiveIcon /> : <MenuPersonasIcon />}
-                </ListItemIcon>
+                <ItemIcon>{useMatch(RoutePaths.Personas) ? <MenuPersonasActiveIcon /> : <MenuPersonasIcon />}</ItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
-            <ListItemLink
-                to={RoutePaths.Wallets}
-                selected={!!useMatch(RoutePaths.Wallets)}
-                onClick={toggleNavigationExpand}>
-                <ListItemIcon>
-                    {useMatch(RoutePaths.Wallets) ? <MenuWalletsActiveIcon /> : <MenuWalletsIcon />}
-                </ListItemIcon>
+            <ListItemLink to="" selected={!!useMatch(RoutePaths.Wallets)} onClick={toggleNavigationExpand}>
+                <ItemIcon>
+                    {isWalletPath || isWalletHistoryPath || isWalletTransferPath ? (
+                        <MenuWalletsActiveIcon />
+                    ) : (
+                        <MenuWalletsIcon />
+                    )}
+                </ItemIcon>
                 <ListItemText>{t.wallets()}</ListItemText>
                 {expanded ? <ExpandLess /> : <ExpandMore />}
             </ListItemLink>
             <Collapse in={expanded}>
                 <List disablePadding>
+                    <ListItemLink to={RoutePaths.Wallets}>
+                        <ListSubTextItem inset primary={t.wallets_assets()} />
+                    </ListItemLink>
                     <ListItemLink to={RoutePaths.WalletsTransfer}>
-                        <ListItemText inset primary={t.wallets_transfer()} />
+                        <ListSubTextItem inset primary={t.wallets_transfer()} />
                     </ListItemLink>
                     <ListItemLink to={RoutePaths.WalletsHistory}>
-                        <ListItemText inset primary={t.wallets_history()} />
+                        <ListSubTextItem inset primary={t.wallets_history()} />
                     </ListItemLink>
                 </List>
             </Collapse>
             <ListItemLink to={RoutePaths.Labs}>
-                <ListItemIcon>{useMatch(RoutePaths.Labs) ? <MenuLabsActiveIcon /> : <MenuLabsIcon />}</ListItemIcon>
+                <ItemIcon>{useMatch(RoutePaths.Labs) ? <MenuLabsActiveIcon /> : <MenuLabsIcon />}</ItemIcon>
                 <ListItemText primary={t.labs()} />
             </ListItemLink>
             <ListItemLink to={RoutePaths.Settings}>
-                <ListItemIcon>
+                <ItemIcon sx={{ fontSize: 36 }}>
                     {useMatch(RoutePaths.Settings) ? <MenuSettingsActiveIcon /> : <MenuSettingsIcon />}
-                </ListItemIcon>
+                </ItemIcon>
                 <ListItemText primary={t.settings()} />
             </ListItemLink>
         </List>

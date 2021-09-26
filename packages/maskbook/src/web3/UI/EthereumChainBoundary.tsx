@@ -18,7 +18,7 @@ import { useValueRef, delay, useRemoteControlledDialog } from '@masknet/shared'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import Services from '../../extension/service'
-import { useI18N } from '../../utils'
+import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 
 export interface EthereumChainBoundaryProps {
@@ -56,14 +56,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         if (!chainDetailedCAIP) throw new Error('Unknown network type.')
 
         // if mask wallet was used it can switch network automatically
-        if (providerType === ProviderType.Maskbook) {
+        if (providerType === ProviderType.MaskWallet) {
             await WalletRPC.updateAccount({
                 chainId: expectedChainId,
             })
             return
         }
 
-        // request ethereum-compatiable network
+        // request ethereum-compatible network
         const networkType = getNetworkTypeFromChainId(expectedChainId)
         if (!networkType) return
         try {
@@ -105,7 +105,9 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     variant="contained"
                     size="small"
                     sx={{ marginTop: 1.5 }}
-                    onClick={openSelectProviderDialog}>
+                    onClick={() => {
+                        hasNativeAPI ? nativeAPI?.api.misc_openCreateWalletView() : openSelectProviderDialog()
+                    }}>
                     {t('plugin_wallet_connect_wallet')}
                 </ActionButton>
             </Box>
@@ -118,7 +120,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             <Box display="flex" flexDirection="column" alignItems="center" sx={{ paddingTop: 1, paddingBottom: 1 }}>
                 <Typography color="textPrimary">
                     <span>
-                        {t('plugin_wallet_not_availabe_on', {
+                        {t('plugin_wallet_not_available_on', {
                             network: actualNetwork,
                         })}
                     </span>
@@ -131,7 +133,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             {!noSwitchNetworkTip ? (
                 <Typography color="textPrimary">
                     <span>
-                        {t('plugin_wallet_not_availabe_on', {
+                        {t('plugin_wallet_not_available_on', {
                             network: actualNetwork,
                         })}
                     </span>

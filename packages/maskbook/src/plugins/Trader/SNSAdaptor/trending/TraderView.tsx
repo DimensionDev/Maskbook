@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, Tab, Tabs } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { useI18N, useSettingsSwitcher, useValueRef } from '../../../../utils'
+import { useValueRef } from '@masknet/shared'
+import { useI18N, useSettingsSwitcher } from '../../../../utils'
 import type { TagType } from '../../types'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
@@ -27,52 +28,69 @@ import { currentNetworkSettings } from '../../../Wallet/settings'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
-        root: {
-            width: '100%',
-            boxShadow: 'none',
-            borderRadius: 0,
-            marginBottom: theme.spacing(2),
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        body: {
-            minHeight: 303,
-            overflow: 'hidden',
-            border: `solid 1px ${theme.palette.divider}`,
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        footer: {
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            borderBottom: `solid 1px ${theme.palette.divider}`,
-        },
-        skeletonFooter: {
-            borderBottom: `solid 1px ${theme.palette.divider}`,
-        },
+        root: props.isPopper
+            ? {
+                  width: 450,
+                  boxShadow: `${
+                      theme.palette.mode === 'dark'
+                          ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
+                          : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
+                  }`,
+              }
+            : {
+                  width: '100%',
+                  boxShadow: 'none',
+                  borderRadius: 0,
+                  marginBottom: theme.spacing(2),
+              },
+        body: props.isPopper
+            ? {
+                  minHeight: 303,
+                  overflow: 'hidden',
+                  border: `solid 1px ${theme.palette.divider}`,
+                  display: 'flex',
+                  flexDirection: 'column',
+              }
+            : {},
+        footer: props.isPopper
+            ? {}
+            : {
+                  borderTop: `solid 1px ${theme.palette.divider}`,
+                  borderBottom: `solid 1px ${theme.palette.divider}`,
+              },
+        footerSkeleton: props.isPopper
+            ? {}
+            : {
+                  borderBottom: `solid 1px ${theme.palette.divider}`,
+              },
         tabs: {
             height: props.isPopper ? 35 : 'auto',
             width: '100%',
             minHeight: 'unset',
-
             borderTop: props.isPopper ? 'unset' : `solid 1px ${theme.palette.divider}`,
             borderBottom: props.isPopper ? 'unset' : `solid 1px ${theme.palette.divider}`,
         },
-        content: {
-            padding: 0,
-            border: 'none',
-        },
+        content: props.isPopper
+            ? {}
+            : {
+                  padding: 0,
+                  border: 'none',
+              },
         tab: {
             height: props.isPopper ? 35 : 'auto',
             minHeight: 'unset',
             minWidth: 'unset',
         },
-        tradeViewRoot: {
-            maxWidth: 380,
-        },
-        priceChartRoot: {
-            flex: 1,
-        },
+        tradeViewRoot: props.isPopper
+            ? {
+                  maxWidth: 380,
+              }
+            : {},
+        priceChartRoot: props.isPopper
+            ? {
+                  flex: 1,
+              }
+            : {},
     }
 })
 
@@ -107,7 +125,7 @@ export function TraderView(props: TraderViewProps) {
 
     //#region merge trending
     const coinId = usePreferredCoinId(name, dataProvider)
-    const trendingById = useTrendingById(coinId, dataProvider)
+    const trendingById = useTrendingById(name ? '' : coinId, dataProvider)
     const trendingByKeyword = useTrendingByKeyword(tagType, coinId ? '' : name, dataProvider)
     const {
         value: { currency, trending },
@@ -182,14 +200,14 @@ export function TraderView(props: TraderViewProps) {
                     </span>
                 }
                 reaction={DataProviderSwitcher}
-                TrendingCardProps={{ classes: { root: isPopper ? '' : classes.root } }}
+                TrendingCardProps={{ classes: { root: classes.root } }}
             />
         )
     //#endregion
 
     //#region if the coin is a native token or contract address exists
 
-    const isSwapable =
+    const isSwappable =
         (!!trending?.coin.contract_address ||
             ['eth', 'matic', 'bnb'].includes(trending?.coin.symbol.toLowerCase() ?? '')) &&
         chainIdValid &&
@@ -200,8 +218,8 @@ export function TraderView(props: TraderViewProps) {
     if (!currency || !trending || loadingTrending)
         return (
             <TrendingViewSkeleton
-                classes={{ footer: isPopper ? '' : classes.skeletonFooter }}
-                TrendingCardProps={{ classes: { root: isPopper ? '' : classes.root } }}
+                classes={{ footer: classes.footerSkeleton }}
+                TrendingCardProps={{ classes: { root: classes.root } }}
             />
         )
     //#endregion
@@ -212,7 +230,7 @@ export function TraderView(props: TraderViewProps) {
         <Tab className={classes.tab} key="market" label={t('plugin_trader_tab_market')} />,
         <Tab className={classes.tab} key="price" label={t('plugin_trader_tab_price')} />,
         <Tab className={classes.tab} key="exchange" label={t('plugin_trader_tab_exchange')} />,
-        isSwapable ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
+        isSwappable ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
     ].filter(Boolean)
     //#endregion
 
@@ -220,9 +238,9 @@ export function TraderView(props: TraderViewProps) {
         <TradeContext.Provider value={tradeContext}>
             <TrendingViewDeck
                 classes={{
-                    body: isPopper ? classes.body : '',
-                    footer: isPopper ? '' : classes.footer,
-                    content: isPopper ? '' : classes.content,
+                    body: classes.body,
+                    footer: classes.footer,
+                    content: classes.content,
                 }}
                 stats={stats}
                 coins={coins}
@@ -232,9 +250,9 @@ export function TraderView(props: TraderViewProps) {
                 tradeProvider={tradeProvider}
                 showDataProviderIcon={tabIndex < 3}
                 showTradeProviderIcon={tabIndex === 3}
-                TrendingCardProps={{ classes: { root: isPopper ? '' : classes.root } }}
                 dataProviders={dataProviders}
-                tradeProviders={tradeProviders}>
+                tradeProviders={tradeProviders}
+                TrendingCardProps={{ classes: { root: classes.root } }}>
                 <Tabs
                     className={classes.tabs}
                     indicatorColor="primary"
@@ -254,7 +272,7 @@ export function TraderView(props: TraderViewProps) {
                     <>
                         {market ? <PriceChangedTable market={market} /> : null}
                         <PriceChart
-                            classes={{ root: isPopper ? classes.priceChartRoot : '' }}
+                            classes={{ root: classes.priceChartRoot }}
                             coin={coin}
                             currency={currency}
                             stats={stats}
@@ -265,9 +283,9 @@ export function TraderView(props: TraderViewProps) {
                     </>
                 ) : null}
                 {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
-                {tabIndex === 3 && isSwapable ? (
+                {tabIndex === 3 && isSwappable ? (
                     <TradeView
-                        classes={{ root: isPopper ? classes.tradeViewRoot : '' }}
+                        classes={{ root: classes.tradeViewRoot }}
                         TraderProps={{
                             coin,
                             tokenDetailed,

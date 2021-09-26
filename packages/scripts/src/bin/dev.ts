@@ -18,5 +18,5 @@ async function main() {
 }
 
 main().then(async (child) => {
-    child && process.exit(await awaitChildProcess(child))
+    typeof child === 'number' ? process.exit(child) : process.exit(await awaitChildProcess(child))
 })

@@ -1,3 +1,4 @@
+export * from './addressBook'
 export * from './account'
 export * from './wallet'
 export * from './chain'
@@ -7,9 +8,18 @@ export * from './erc721'
 export * from './erc1155'
 export * from './assets'
 export * from './transactions'
-export * from './recentTransactions'
+export * from './recentTransactions/index'
 export * from './rpc'
 export * from './keystore'
 export * from './chain'
+export * from './domain'
 export * from './cloud'
-export { decryptWallet, createEncryptedWalletStore } from '../database/decrypt'
+export * from './estimateGasFee'
+export * from './tokenPrice'
+export * from './nftscan'
+export {
+    decryptWallet,
+    createEncryptedWalletStore,
+    hasEncryptedWalletStore,
+    getEncryptedWalletStore,
+} from '../database/decrypt'

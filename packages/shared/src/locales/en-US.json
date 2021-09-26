@@ -3,5 +3,8 @@
     "error_boundary_try_to_recover": "Try to recover",
     "error_boundary_report_github": "Report on GitHub",
     "error_boundary_report_email": "Report by Email",
-    "snackbar_done": "Done"
+    "snackbar_done": "Done",
+    "import": "Import",
+    "balance": "Balance",
+    "select_token": "Select Token"
 }

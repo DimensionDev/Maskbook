@@ -14,7 +14,7 @@
             "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "faucets": [],
-        "features": ["EIP1159"],
+        "features": ["EIP1559"],
         "explorers": [
             {
                 "name": "etherscan",
@@ -38,7 +38,7 @@
             "decimals": 18
         },
         "faucets": ["https://faucet.ropsten.be?${ADDRESS}"],
-        "features": ["EIP1159"],
+        "features": ["EIP1559"],
         "explorers": [
             {
                 "name": "etherscan",
@@ -229,14 +229,15 @@
         "nativeCurrency": {
             "name": "Arbitrum Ether",
             "symbol": "ARETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "faucets": [],
         "features": [],
         "explorers": [
             {
                 "name": "arbitrum",
-                "url": "https://explorer.arbitrum.io",
+                "url": "https://arbiscan.io",
                 "standard": "EIP3091"
             }
         ],
@@ -983,8 +984,8 @@
         "networkId": 99
     },
     {
-        "name": "xDAI Chain",
-        "chain": "XDAI",
+        "name": "xDai Chain",
+        "chain": "xDai",
         "network": "mainnet",
         "rpc": [
             "https://rpc.xdaichain.com",
@@ -997,9 +998,14 @@
         ],
         "faucets": [],
         "features": [],
-        "nativeCurrency": { "name": "xDAI", "symbol": "xDAI", "decimals": 18 },
-        "infoURL": "https://forum.poa.network/c/xdai-chain",
-        "shortName": "xdai",
+        "nativeCurrency": {
+            "name": "xDai",
+            "symbol": "xDai",
+            "decimals": 18,
+            "logoURI": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/xdai/assets/0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d/logo.png"
+        },
+        "infoURL": "https://blockscout.com/xdai/mainnet",
+        "shortName": "xDai",
         "chainId": 100,
         "networkId": 100,
         "slip44": 700

@@ -8,7 +8,7 @@ import { useMnemonicWordsPuzzle } from '@masknet/web3-shared'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog'
 import { useAsyncFn } from 'react-use'
-import { useLocation, useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { PluginServices } from '../../../../API'
 import { RoutePaths } from '../../../../type'
 
@@ -83,12 +83,15 @@ const CreateMnemonic = memo(() => {
             navigate(RoutePaths.CreateMaskWalletForm)
         }
 
-        const address = await PluginServices.Wallet.importNewWallet({
-            name,
-            path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-            mnemonic: words,
-            passphrase: '',
-        })
+        const address = await PluginServices.Wallet.importNewWallet(
+            {
+                name,
+                path: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+                mnemonic: words,
+                passphrase: '',
+            },
+            true,
+        )
 
         await PluginServices.Wallet.addPhrase({
             path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
@@ -126,6 +129,7 @@ export interface CreateMnemonicUIProps {
 export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshWords, onVerifyClick }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
+    const navigate = useNavigate()
     const [open, setOpen] = useState(true)
 
     return (
@@ -141,7 +145,7 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
                 <MnemonicReveal words={words} />
             </div>
             <Box className={classes.controller}>
-                <Button color="secondary" className={classes.button}>
+                <Button color="secondary" className={classes.button} onClick={() => navigate(-1)}>
                     {t.cancel()}
                 </Button>
                 <Button className={classes.button} onClick={onVerifyClick}>

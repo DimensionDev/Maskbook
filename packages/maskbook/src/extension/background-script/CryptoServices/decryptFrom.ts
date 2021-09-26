@@ -1,7 +1,7 @@
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
 import { GunAPI as Gun2, GunAPISubscribe as Gun2Subscribe, GunWorker } from '../../../network/gun/'
-import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
+import { decodeText } from '@dimensiondev/kit'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../utils/i18n-next'
 import { queryPersonaRecord, queryLocalKey } from '../../../database'

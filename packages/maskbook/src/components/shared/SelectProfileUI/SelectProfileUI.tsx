@@ -1,4 +1,4 @@
-import { useState, useCallback, CSSProperties } from 'react'
+import { useState, useCallback } from 'react'
 import { ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
@@ -133,14 +133,14 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                         width="100%"
                         height={400}>
                         {({ index, style }) =>
-                            listAfterSearch[index] ? ProfileListItem(listAfterSearch[index], style) : null
+                            listAfterSearch[index] ? ProfileListItem(listAfterSearch[index], style as any) : null
                         }
                     </FixedSizeList>
                 </List>
             </Box>
         </div>
     )
-    function ProfileListItem(item: Profile, style: CSSProperties) {
+    function ProfileListItem(item: Profile, style: React.CSSProperties) {
         return (
             <ProfileInList
                 key={item.identifier.toText()}

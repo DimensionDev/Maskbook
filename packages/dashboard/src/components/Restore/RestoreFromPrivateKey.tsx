@@ -10,13 +10,18 @@ import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller } from 'react-hook-form'
 import { z } from 'zod'
+import { useNavigate } from 'react-router-dom'
+import { RoutePaths } from '../../type'
+import { SignUpRoutePath } from '../../pages/SignUp/routePath'
 type FormInputs = {
     privateKey: string
 }
 
 export const RestoreFromPrivateKey = memo(() => {
-    const { changeCurrentPersona } = PersonaContext.useContainer()
+    const navigate = useNavigate()
     const t = useDashboardI18N()
+    const { changeCurrentPersona } = PersonaContext.useContainer()
+
     const schema = z.object({
         privateKey: z.string(),
     })
@@ -25,7 +30,7 @@ export const RestoreFromPrivateKey = memo(() => {
         control,
         handleSubmit,
         setError,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -37,9 +42,13 @@ export const RestoreFromPrivateKey = memo(() => {
         try {
             const persona = await Services.Identity.queryPersonaByPrivateKey(data.privateKey)
             if (persona) {
-                changeCurrentPersona(persona.identifier)
+                await changeCurrentPersona(persona.identifier)
+                navigate(RoutePaths.Personas)
             } else {
-                setError('privateKey', { type: 'value', message: t.sign_in_account_private_key_persona_not_found() })
+                navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
+                    replace: false,
+                    state: { privateKey: data.privateKey },
+                })
             }
         } catch {
             setError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
@@ -68,13 +77,13 @@ export const RestoreFromPrivateKey = memo(() => {
                         />
                     </Box>
                     <ButtonContainer>
-                        <Button variant="rounded" color="primary" type="submit">
+                        <Button variant="rounded" color="primary" type="submit" disabled={isSubmitting}>
                             {t.confirm()}
                         </Button>
                     </ButtonContainer>
                 </form>
             </Box>
-            <Box sx={{ marginTop: '35px' }}>
+            <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_private_key_warning()} />
             </Box>
         </>

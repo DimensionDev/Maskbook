@@ -1,16 +1,16 @@
 import { createIcon } from '../utils'
-import type { SvgIcon } from '@material-ui/core'
+import type { SvgIcon } from '@mui/material'
 
 export const AirdropNotSquareIcon: typeof SvgIcon = createIcon(
     'AirdropIcon',
     <g>
         <path
             d="M35.523 70.684l-12.818-1.13 4.489-11.115 12.817 1.13-4.488 11.115z"
-            fill="url(#airdrop_panint0_linear)"
+            fill="url(#airdrop_paint0_linear)"
         />
         <path
             d="M12.627 61.571l10.058 7.966 4.488-11.116-10.058-7.965-4.488 11.115z"
-            fill="url(#airdrop_panint1_linear)"
+            fill="url(#airdrop_paint1_linear)"
         />
         <g clipPath="url(#clip0)">
             <path
@@ -31,7 +31,7 @@ export const AirdropNotSquareIcon: typeof SvgIcon = createIcon(
         <path d="M29.933 51.6L17.1 50.463l10.074 7.98 12.833 1.136L29.933 51.6z" fill="#64ACFF" />
         <path
             d="M15.085 23.35s7.58 2.652 7.6 8.526c0 0 11.926-2.642 22.271 8.862 0 0 5.713-4.768 15.328.622l-1.685-7.621-21.316-10.88-14.076-5.6-8.122 6.091z"
-            fill="url(#airdrop_panint2_linear)"
+            fill="url(#airdrop_paint2_linear)"
         />
         <path d="M23.005 55.144l12.834 1.137-2.298-1.824-12.834-1.136 2.298 1.823z" fill="#538DFF" />
         <path d="M31.969 58.892l-10.074-7.98 2.93.258L34.9 59.15l-2.93-.258z" fill="#538DFF" />
@@ -58,19 +58,19 @@ export const AirdropNotSquareIcon: typeof SvgIcon = createIcon(
         />
         <path
             d="M60.272 41.374l.125-.3c5.033-12.47-1.002-26.602-13.48-31.566 0 0 12.577 8.503 5.278 27.215.36.108.72.227 1.08.358 2.751.997 5.125 2.496 6.997 4.293z"
-            fill="url(#airdrop_panint3_linear)"
+            fill="url(#airdrop_paint3_linear)"
         />
         <path
             d="M46.89 9.482C34.414 4.52 20.219 10.603 15.186 23.073c-.038.093-.072.187-.109.28 3.171-.617 6.761-.367 10.288.911 3.46 1.254 6.326 3.303 8.345 5.74C38.447 13.214 46.89 9.482 46.89 9.482z"
-            fill="url(#airdrop_panint4_linear)"
+            fill="url(#airdrop_paint4_linear)"
         />
         <path
             d="M46.91 9.503s-8.443 3.732-13.18 20.52c3.126-.574 6.649-.308 10.108.945 3.463 1.255 6.33 3.306 8.35 5.746 7.297-18.709-5.279-27.211-5.279-27.211z"
-            fill="url(#airdrop_panint5_linear)"
+            fill="url(#airdrop_paint5_linear)"
         />
         <defs>
             <linearGradient
-                id="airdrop_panint0_linear"
+                id="airdrop_paint0_linear"
                 x1="37.636"
                 y1="65.271"
                 x2="25.459"
@@ -80,7 +80,7 @@ export const AirdropNotSquareIcon: typeof SvgIcon = createIcon(
                 <stop offset="1" stopColor="#4780EF" />
             </linearGradient>
             <linearGradient
-                id="airdrop_panint1_linear"
+                id="airdrop_paint1_linear"
                 x1="14.488"
                 y1="55.309"
                 x2="24.65"
@@ -90,7 +90,7 @@ export const AirdropNotSquareIcon: typeof SvgIcon = createIcon(
                 <stop offset="1" stopColor="#A3C2FF" />
             </linearGradient>
             <linearGradient
-                id="airdrop_panint2_linear"
+                id="airdrop_paint2_linear"
                 x1="38.367"
                 y1="22.928"
                 x2="33.288"
@@ -100,7 +100,7 @@ export const AirdropNotSquareIcon: typeof SvgIcon = createIcon(
                 <stop offset="1" stopColor="#91CFFF" />
             </linearGradient>
             <linearGradient
-                id="airdrop_panint3_linear"
+                id="airdrop_paint3_linear"
                 x1="58.213"
                 y1="14.002"
                 x2="49.094"
@@ -110,7 +110,7 @@ export const AirdropNotSquareIcon: typeof SvgIcon = createIcon(
                 <stop offset="1" stopColor="#D9E3FF" />
             </linearGradient>
             <linearGradient
-                id="airdrop_panint4_linear"
+                id="airdrop_paint4_linear"
                 x1="46.891"
                 y1="7.7"
                 x2="12.819"
@@ -120,7 +120,7 @@ export const AirdropNotSquareIcon: typeof SvgIcon = createIcon(
                 <stop offset="1" stopColor="#fff" />
             </linearGradient>
             <linearGradient
-                id="airdrop_panint5_linear"
+                id="airdrop_paint5_linear"
                 x1="51.643"
                 y1="11.386"
                 x2="42.795"

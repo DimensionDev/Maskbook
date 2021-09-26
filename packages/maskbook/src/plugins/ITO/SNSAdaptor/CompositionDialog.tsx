@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { DialogContent } from '@material-ui/core'
-import { usePortalShadowRoot } from '@masknet/theme'
+import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
@@ -16,10 +16,22 @@ import Services from '../../../extension/service'
 import { formatBalance, useChainId, useAccount, TransactionStateType, useITOConstants } from '@masknet/web3-shared'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
-import { currentGasPriceSettings, currentGasNowSettings } from '../../Wallet/settings'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-es'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+
+const useStyles = makeStyles()((theme) => ({
+    content: {
+        position: 'relative',
+        paddingTop: 50,
+    },
+    tabs: {
+        top: 0,
+        left: 0,
+        right: 0,
+        position: 'absolute',
+    },
+}))
 
 export enum ITOCreateFormPageStep {
     NewItoPage = 'new-ito',
@@ -36,6 +48,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const account = useAccount()
     const chainId = useChainId()
+    const { classes } = useStyles()
     const { attachMetadata, dropMetadata } = useCompositionContext()
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
@@ -49,8 +62,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const onBack = useCallback(() => {
         if (step === ITOCreateFormPageStep.ConfirmItoPage) setStep(ITOCreateFormPageStep.NewItoPage)
-        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
-    }, [step, currentGasPriceSettings])
+    }, [step])
     //#endregion
 
     const [poolSettings, setPoolSettings] = useState<PoolSettings>()
@@ -59,8 +71,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings)
     const onDone = useCallback(() => {
         fillCallback()
-        currentGasPriceSettings.value = currentGasNowSettings.value?.fast ?? 0
-    }, [fillCallback, currentGasPriceSettings])
+    }, [fillCallback])
     //#endregion
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -77,7 +88,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             // the settings is not available
             if (!fillSettings?.token) return
 
-            // earily return happended
+            // early return happened
             if (fillState.type !== TransactionStateType.CONFIRMED) return
 
             const { receipt } = fillState
@@ -103,7 +114,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 seller: {
                     address: FillSuccess.creator,
                 },
-                buyers: [],
                 chain_id: chainId,
                 start_time: fillSettings.startTime.getTime(),
                 end_time: fillSettings.endTime.getTime(),
@@ -148,7 +158,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
                     'creation_time',
                     'unlock_time',
                     'total_remaining',
-                    'buyers',
                     'regions',
                     'start_time',
                     'end_time',
@@ -173,11 +182,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
         setStep(ITOCreateFormPageStep.NewItoPage)
         setPoolSettings(undefined)
         setValue(DialogTabs.create)
-        // After close this tx dialog, it should set the gas price to zero
-        //  to let Metamask to determine the gas price for the further tx.
-        currentGasPriceSettings.value = 0
         props.onClose()
-    }, [props, state, currentGasPriceSettings])
+    }, [props, state])
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -222,8 +228,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     return (
         <InjectedDialog disableBackdropClick open={props.open} title={t('plugin_ito_display_name')} onClose={onClose}>
-            <DialogContent>
-                {step === ITOCreateFormPageStep.NewItoPage ? <AbstractTab height={540} {...tabProps} /> : null}
+            <DialogContent className={classes.content}>
+                {step === ITOCreateFormPageStep.NewItoPage ? (
+                    <AbstractTab classes={{ tabs: classes.tabs }} height={540} {...tabProps} />
+                ) : null}
                 {step === ITOCreateFormPageStep.ConfirmItoPage ? (
                     <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={onDone} onClose={onClose} />
                 ) : null}

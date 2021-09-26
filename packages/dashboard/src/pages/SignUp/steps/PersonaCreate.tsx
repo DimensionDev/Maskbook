@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router'
-import { MaskTextField } from '@masknet/theme'
+import { useCallback, useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { MaskTextField, useSnackbar } from '@masknet/theme'
 import {
     Body,
     ColumnContentLayout,
@@ -9,13 +9,15 @@ import {
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { RoutePaths } from '../../../type'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { Box, Button, Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
-import { useSnackbarCallback } from '@masknet/shared'
-import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
+import { delay } from '@masknet/shared'
+import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
 import { Services } from '../../../API'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
+import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
+import { LoadingButton } from '../../../components/LoadingButton'
 
 const Label = ({ value }: { value: string }) => (
     <Typography
@@ -29,25 +31,38 @@ export const PersonaCreate = () => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const createPersona = useCreatePersonaV2()
-    const {
-        state: { mnemonic },
-    } = useLocation() as { state: { mnemonic: string[] } }
+    const createPersonaByPrivateKey = useCreatePersonaByPrivateKey()
+    const { enqueueSnackbar } = useSnackbar()
+    const { changeCurrentPersona } = PersonaContext.useContainer()
+    const { state } = useLocation() as { state: { mnemonic: string[]; privateKey: string } }
 
     const [personaName, setPersonaName] = useState('')
+    const [error, setError] = useState('')
 
     useEffect(() => {
-        if (!mnemonic || !Services.Identity.validateMnemonic(mnemonic.join(' '))) {
+        if (
+            (!state?.mnemonic || !Services.Identity.validateMnemonic(state?.mnemonic.join(' '))) &&
+            !state?.privateKey
+        ) {
             navigate(RoutePaths.SignUp, { replace: true })
         }
-    }, [mnemonic])
+    }, [state?.mnemonic, state?.privateKey])
 
-    const handleCreatePersona = useSnackbarCallback({
-        executor: () => createPersona(mnemonic.join(' '), personaName),
-        onSuccess: () => navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`),
-        onError: () => navigate(`${RoutePaths.SignUp}`),
-        successText: t.create_account_persona_successfully(),
-        deps: [],
-    })
+    const create = useCallback(async () => {
+        try {
+            const identifier = state?.mnemonic
+                ? await createPersona(state?.mnemonic.join(' '), personaName)
+                : await createPersonaByPrivateKey(state?.privateKey, personaName)
+
+            await changeCurrentPersona(identifier)
+            enqueueSnackbar(t.create_account_persona_successfully(), { variant: 'success' })
+
+            await delay(300)
+            navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
+        } catch (error) {
+            setError((error as Error).message)
+        }
+    }, [state?.mnemonic, state?.privateKey, personaName])
 
     return (
         <ColumnContentLayout>
@@ -65,11 +80,13 @@ export const PersonaCreate = () => {
                         InputProps={{ disableUnderline: true }}
                         onChange={(e) => setPersonaName(e.currentTarget.value)}
                         inputProps={{ maxLength: 24 }}
+                        error={!!error}
+                        helperText={error}
                     />
                     <ButtonContainer>
-                        <Button variant="rounded" color="primary" onClick={handleCreatePersona} disabled={!personaName}>
+                        <LoadingButton variant="rounded" color="primary" onClick={create} disabled={!personaName}>
                             {t.next()}
-                        </Button>
+                        </LoadingButton>
                     </ButtonContainer>
                 </Box>
             </Body>

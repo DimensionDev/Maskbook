@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import { ChainId, getChainRPC } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
-import { getWalletsCached } from '../wallet'
+import { getWallets } from '../../../../plugins/Wallet/services'
 
 //#region providers
 const providerPool = new Map<string, HttpProvider>()
@@ -65,7 +65,7 @@ export function createWeb3({
 //#endregion
 
 export async function requestAccounts() {
-    const wallets = getWalletsCached()
+    const wallets = await getWallets()
     const accounts = wallets.filter((x) => x._private_key_ || x.mnemonic.length).map((y) => y.address)
     return {
         accounts,

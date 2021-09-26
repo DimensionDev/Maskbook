@@ -27,7 +27,7 @@ export function ActionsBarNFT(props: ActionsBarNFT_Props) {
 
     const chainIdValid = useChainIdValid()
 
-    const [transeferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogNFT)
+    const [transferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogNFT)
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu([
         token.contractDetailed.type === EthereumTokenType.ERC721 ? (
@@ -53,7 +53,7 @@ export function ActionsBarNFT(props: ActionsBarNFT_Props) {
             </IconButton>
             {menu}
             {hideTokenConfirmDialog}
-            {transeferDialog}
+            {transferDialog}
         </>
     )
 }

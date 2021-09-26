@@ -1,46 +1,41 @@
-import { Tab, Tabs, Box, Typography, IconButton } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { Paper, Stack, Tab, Tabs } from '@material-ui/core'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
 import { useEffect, useState } from 'react'
 import { capitalize } from 'lodash-es'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { PersonaSetup } from './components/PersonaSetup'
-import { AuthorIcon, ArrowDownRound, ArrowUpRound } from '@masknet/icons'
-import { MaskColorVar } from '@masknet/theme'
 import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaContext } from './hooks/usePersonaContext'
 import { useDashboardI18N } from '../../locales'
 import type { PersonaInformation } from '@masknet/shared'
 import { ContentContainer } from '../../components/ContentContainer'
+import { PersonaContent } from './components/PersonaContent'
+import { PersonaRowCard } from './components/PersonaCard/Row'
+import { PersonaStateBar } from './components/PersonaStateBar'
+import { UserProvider } from '../Settings/hooks/UserContext'
 
 const useStyles = makeStyles()((theme) => ({
     tabPanel: {
         padding: 0,
         flex: 1,
     },
-    author: {
-        fill: MaskColorVar.secondaryBackground,
-        width: 36,
-        height: 36,
-    },
-    iconButton: {
-        padding: 0,
-        fontSize: 16,
-        width: 28,
-        height: 28,
-        borderRadius: '50%',
-        border: `1px solid ${MaskColorVar.blue.alpha(0.1)}`,
-    },
-    arrow: {
-        fill: 'none',
-        stroke: MaskColorVar.primary,
-    },
     label: {
         width: 'auto',
     },
-    nickname: {
-        margin: theme.spacing(0, 1.5),
-        lineHeight: 1.375,
+    tab: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+    },
+    personaCard: {
+        padding: theme.spacing(4),
+        marginBottom: theme.spacing(3),
+        backgroundColor: MaskColorVar.primaryBackground,
+        [theme.breakpoints.down('md')]: {
+            padding: theme.spacing(2),
+        },
     },
 }))
 
@@ -62,52 +57,69 @@ function Personas() {
     }, [currentPersona, definedSocialNetworks])
 
     return (
-        <PageFrame
-            title={t.personas()}
-            primaryAction={
-                <Box display="flex" alignItems="center">
-                    <AuthorIcon onClick={toggleDrawer} className={classes.author} />
-                    <Typography className={classes.nickname}>{currentPersona?.nickname}</Typography>
-                    <IconButton onClick={toggleDrawer} size="small" className={classes.iconButton}>
-                        {drawerOpen ? (
-                            <ArrowUpRound className={classes.arrow} fontSize="inherit" />
-                        ) : (
-                            <ArrowDownRound className={classes.arrow} fontSize="inherit" />
-                        )}
-                    </IconButton>
-                </Box>
-            }>
-            <ContentContainer>
-                <TabContext value={activeTab}>
-                    <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
-                        {definedSocialNetworks.map(({ networkIdentifier }) => (
-                            <Tab
-                                key={networkIdentifier}
-                                value={networkIdentifier}
-                                // They should be localized
-                                label={capitalize(networkIdentifier.replace('.com', ''))}
-                            />
-                        ))}
-                    </Tabs>
-                    {definedSocialNetworks.map(({ networkIdentifier }) => {
-                        if (!currentPersona) return null
-                        const profile = currentPersona.linkedProfiles.find(
-                            (x) => x.identifier.network === networkIdentifier,
-                        )
-                        if (profile) return <TabPanel key={networkIdentifier} value={networkIdentifier} />
-                        return (
-                            <TabPanel key={networkIdentifier} value={networkIdentifier} sx={{ flex: 1 }}>
-                                <PersonaSetup
-                                    networkIdentifier={networkIdentifier}
-                                    onConnect={() => connectPersona(currentPersona.identifier, networkIdentifier)}
+        <UserProvider>
+            <PageFrame
+                title={t.personas()}
+                noBackgroundFill={true}
+                primaryAction={
+                    <PersonaStateBar
+                        nickname={currentPersona?.nickname}
+                        fingerprint={currentPersona?.identifier.compressedPoint}
+                        drawerOpen={drawerOpen}
+                        toggleDrawer={toggleDrawer}
+                    />
+                }>
+                <Paper variant="rounded" className={classes.personaCard}>
+                    <PersonaRowCard />
+                </Paper>
+                <ContentContainer style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    <TabContext value={activeTab}>
+                        <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
+                            {definedSocialNetworks.map(({ networkIdentifier }) => (
+                                <Tab
+                                    key={networkIdentifier}
+                                    value={networkIdentifier}
+                                    // They should be localized
+                                    label={capitalize(networkIdentifier.replace('.com', ''))}
                                 />
-                            </TabPanel>
-                        )
-                    })}
-                </TabContext>
-            </ContentContainer>
-            <PersonaDrawer personas={personas} />
-        </PageFrame>
+                            ))}
+                        </Tabs>
+                        {definedSocialNetworks.map(({ networkIdentifier }) => {
+                            if (!currentPersona) return null
+                            const profile = currentPersona.linkedProfiles.find(
+                                (x) => x.identifier.network === networkIdentifier,
+                            )
+                            if (profile)
+                                return (
+                                    <TabPanel
+                                        key={networkIdentifier}
+                                        value={networkIdentifier}
+                                        className={activeTab === networkIdentifier ? classes.tab : undefined}>
+                                        <PersonaContent network={networkIdentifier} />
+                                    </TabPanel>
+                                )
+                            return (
+                                <TabPanel
+                                    key={networkIdentifier}
+                                    value={networkIdentifier}
+                                    className={activeTab === networkIdentifier ? classes.tab : undefined}
+                                    sx={{ flex: 1, height: 'calc(100% - 48px)' }}>
+                                    <Stack alignItems="center" height="100%">
+                                        <PersonaSetup
+                                            networkIdentifier={networkIdentifier}
+                                            onConnect={() =>
+                                                connectPersona(currentPersona.identifier, networkIdentifier)
+                                            }
+                                        />
+                                    </Stack>
+                                </TabPanel>
+                            )
+                        })}
+                    </TabContext>
+                </ContentContainer>
+                <PersonaDrawer personas={personas} />
+            </PageFrame>
+        </UserProvider>
     )
 }
 

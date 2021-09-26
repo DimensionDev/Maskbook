@@ -9,7 +9,7 @@ export function pollingTask(
     } = {},
 ) {
     let canceled = !autoStart
-    let timer: NodeJS.Timeout
+    let timer: number
 
     const runTask = async () => {
         if (canceled) return

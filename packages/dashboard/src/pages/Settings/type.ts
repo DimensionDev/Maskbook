@@ -5,4 +5,18 @@ export interface BackupFileInfo {
     abstract: string
 }
 
-export type AccountValidationType = 'email' | 'phone'
+export enum AccountType {
+    email = 'email',
+    phone = 'phone',
+}
+
+export enum Scenario {
+    backup = 'backup',
+    create = 'create_binding',
+    change = 'change_binding',
+}
+
+export enum Locale {
+    en = 'en',
+    zh = 'zh',
+}

@@ -2,10 +2,9 @@ import { IconButton, InputAdornment, TextField } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../../../utils'
-import { QRCode } from '@masknet/shared'
+import { QRCode, useSnackbarCallback } from '@masknet/shared'
 import type { Wallet } from '@masknet/web3-shared'
-import { useSnackbarCallback } from '../Base'
+import { useI18N } from '../../../../utils'
 
 const useReceiveTabStyles = makeStyles()((theme) => ({
     qr: {

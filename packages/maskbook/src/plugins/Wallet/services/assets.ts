@@ -16,6 +16,8 @@ import {
     NetworkType,
     PortfolioProvider,
     pow10,
+    getChainShortName,
+    getChainIdFromNetworkType,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-es'
@@ -40,11 +42,15 @@ export async function getAssetsListNFT(
     page?: number,
     size?: number,
 ): Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }> {
-    if (provider === CollectibleProvider.OPENSEAN) {
+    if (provider === CollectibleProvider.OPENSEA) {
         const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size })
         return {
             assets: assets
-                .filter((x) => ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name))
+                .filter(
+                    (x) =>
+                        ['non-fungible', 'semi-fungible'].includes(x.asset_contract.asset_contract_type) ||
+                        ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
+                )
                 .map((x) =>
                     createERC721Token(
                         {
@@ -55,9 +61,9 @@ export async function getAssetsListNFT(
                             address: x.asset_contract.address,
                         },
                         {
-                            name: x.name,
-                            description: x.description,
-                            image: x.image_url ?? x.image_preview_url ?? '',
+                            name: x.name || x.asset_contract.name,
+                            description: x.description || x.asset_contract.symbol,
+                            image: x.image_url || x.image_preview_url || x.asset_contract.image_url || '',
                         },
                         x.token_id,
                     ),
@@ -104,26 +110,26 @@ export async function getAssetsList(
             return assets.flat()
         case PortfolioProvider.DEBANK:
             const { data = [], error_code } = await DebankAPI.getAssetsList(address)
-            if (error_code === 0) return formatAssetsFromDebank(data)
+            if (error_code === 0) return formatAssetsFromDebank(data, network)
             return []
         default:
             unreachable(provider)
     }
 }
 
-function formatAssetsFromDebank(data: BalanceRecord[]) {
+function formatAssetsFromDebank(data: BalanceRecord[], network: NetworkType) {
     return data
-        .filter((x) => getChainIdFromName(x.chain))
+        .filter((x) => getChainIdFromName(x.chain) === getChainIdFromNetworkType(network))
         .map((y): Asset => {
-            const chainId = getChainIdFromName(y.chain) ?? ChainId.Mainnet
+            const chainIdFromChain = getChainIdFromName(y.chain) ?? ChainId.Mainnet
             // the asset id is the token address or the name of the chain
-            const chainIdFormId = getChainIdFromName(y.id)
+            const chainIdFromId = getChainIdFromName(y.id)
             return {
-                chain: y.chain,
+                chain: getChainShortName(chainIdFromChain).toLowerCase(),
                 token:
-                    chainIdFormId && isChainIdMainnet(chainIdFormId)
-                        ? createNativeToken(chainId)
-                        : createERC20Token(chainId, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
+                    chainIdFromId && isChainIdMainnet(chainIdFromId)
+                        ? createNativeToken(chainIdFromChain)
+                        : createERC20Token(chainIdFromChain, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
                 balance: new BigNumber(y.balance).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
