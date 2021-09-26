@@ -1,8 +1,7 @@
 import { EthereumAddress } from 'wallet.ts'
 import { first } from 'lodash-es'
 import type { HttpProvider } from 'web3-core'
-import { bytesToHex, toHex } from 'web3-utils'
-import { decodeText } from '@dimensiondev/kit'
+import { toHex } from 'web3-utils'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
     addGasMargin,
@@ -20,7 +19,7 @@ import { createWeb3 } from './web3'
 import * as WalletConnect from './providers/WalletConnect'
 import { getWallet } from '../../../plugins/Wallet/services'
 import { commitNonce, getNonce, resetNonce } from './nonce'
-import { getGasPrice, signTransaction } from './network'
+import { getGasPrice } from './network'
 import {
     currentAccountSettings,
     currentChainIdSettings,
@@ -216,10 +215,11 @@ export async function INTERNAL_send(
             case ProviderType.MaskWallet:
                 if (!wallet?.storedKeyInfo) throw new Error('Unable to sign transaction.')
 
-                const privateKey = await WalletRPC.exportPrivateKey(wallet.address)
-
                 // send the signed transaction
-                const signed = await web3.eth.accounts.signTransaction(config, privateKey)
+                const signed = await web3.eth.accounts.signTransaction(
+                    config,
+                    await WalletRPC.exportPrivateKey(wallet.address),
+                )
                 if (!signed.rawTransaction) throw new Error('Failed to sign transaction.')
 
                 provider?.send(
