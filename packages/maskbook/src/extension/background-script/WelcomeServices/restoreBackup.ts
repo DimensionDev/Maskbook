@@ -5,7 +5,6 @@ import {
     createOrUpdatePersonaDB,
     createOrUpdateProfileDB,
     consistentPersonaDBWriteAccess,
-    createRelationDB,
 } from '../../../database/Persona/Persona.db'
 import { PersonaRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
