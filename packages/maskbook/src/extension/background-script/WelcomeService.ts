@@ -70,7 +70,7 @@ export async function downloadBackupV2(buffer: ArrayBuffer) {
         .getDate()
         .toString()
         .padStart(2, '0')}`
-    const fileName = `maskbook-keystore-backup-${today}.bin`
+    const fileName = `mask-network-keystore-backup-${today}.bin`
 
     saveAsFileFromBuffer(buffer, 'application/octet-stream', fileName)
 }
@@ -103,7 +103,7 @@ async function createBackupInfo<T>(obj: T, type?: 'txt' | 'json') {
         .getDate()
         .toString()
         .padStart(2, '0')}`
-    const fileName = `maskbook-keystore-backup-${today}.${type ?? 'json'}`
+    const fileName = `mask-network-keystore-backup-${today}.${type ?? 'json'}`
     const mimeType = type === 'txt' ? 'text/plain' : 'application/json'
     return { buffer, mimeType, fileName }
 }

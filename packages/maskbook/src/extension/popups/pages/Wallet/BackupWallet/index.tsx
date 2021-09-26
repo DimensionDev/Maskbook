@@ -9,6 +9,7 @@ import { useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
+import Services from '../../../../service'
 
 const useStyles = makeStyles()({
     header: {
@@ -115,18 +116,37 @@ const BackupWallet = memo(() => {
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
 
-    const [{ value: privateKey }, onConfirm] = useAsyncFn(async () => {
-        if (!wallet?.hasStoredKeyInfo) return ''
-        //TODO: KeyStore
+    const [{ value: exportValue }, onConfirm] = useAsyncFn(async () => {
+        if (!wallet?.hasStoredKeyInfo) return
         try {
-            return WalletRPC.exportPrivateKey(wallet.address, password)
+            return {
+                jsonFile: await WalletRPC.exportKeyStoreJSON(wallet.address, password),
+                privateKey: await WalletRPC.exportPrivateKey(wallet.address, password),
+            }
         } catch (error) {
             if (error instanceof Error) {
                 setErrorMessage(error.message)
             }
-            return ''
+            return
         }
     }, [wallet, password])
+
+    const { jsonFile, privateKey } = exportValue ?? {
+        jsonFile: '',
+        privateKey: '',
+    }
+
+    const [{ value: downloadValue }, onExport] = useAsyncFn(async () => {
+        try {
+            await Services.Welcome.downloadBackup(jsonFile, 'json')
+            return true
+        } catch (error) {
+            if (error instanceof Error) {
+                setErrorMessage(error.message)
+            }
+            return false
+        }
+    }, [jsonFile])
 
     return (
         <>
@@ -140,30 +160,29 @@ const BackupWallet = memo(() => {
                         <StyledTab label={t('popups_wallet_backup_json_file')} value={BackupTabs.JsonFile} />
                         <StyledTab label={t('popups_wallet_backup_private_key')} value={BackupTabs.PrivateKey} />
                     </StyledTabs>
+                    {jsonFile ? (
+                        <TabPanel
+                            value={BackupTabs.JsonFile}
+                            className={classes.tabPanel}
+                            style={{ flex: currentTab === BackupTabs.JsonFile ? '1' : '0' }}>
+                            <div className={classes.placeholder}>
+                                <FileIcon style={{ fontSize: 32, width: 32, height: 32 }} />
+                            </div>
+                            <Typography className={classes.tip}>
+                                {t('popups_wallet_backup_json_file_confirm_password_tip')}
+                            </Typography>
+                        </TabPanel>
+                    ) : null}
                     {privateKey ? (
-                        <>
-                            <TabPanel
-                                value={BackupTabs.JsonFile}
-                                className={classes.tabPanel}
-                                style={{ flex: currentTab === BackupTabs.JsonFile ? '1' : '0' }}>
-                                <div className={classes.placeholder}>
-                                    <FileIcon style={{ fontSize: 32, width: 32, height: 32 }} />
-                                </div>
-                                <Typography className={classes.tip}>
-                                    {t('popups_wallet_backup_json_file_confirm_password_tip')}
-                                </Typography>
-                            </TabPanel>
-                            <TabPanel
-                                value={BackupTabs.PrivateKey}
-                                className={classes.tabPanel}
-                                style={{ flex: currentTab === BackupTabs.PrivateKey ? '1' : '0' }}>
-                                <Typography className={classes.privateKey}>{privateKey ?? ''}</Typography>
-                                <Typography className={classes.tip}>
-                                    {t('popups_wallet_backup_private_key_tip')}
-                                </Typography>
-                            </TabPanel>
-                        </>
-                    ) : (
+                        <TabPanel
+                            value={BackupTabs.PrivateKey}
+                            className={classes.tabPanel}
+                            style={{ flex: currentTab === BackupTabs.PrivateKey ? '1' : '0' }}>
+                            <Typography className={classes.privateKey}>{privateKey ?? ''}</Typography>
+                            <Typography className={classes.tip}>{t('popups_wallet_backup_private_key_tip')}</Typography>
+                        </TabPanel>
+                    ) : null}
+                    {!jsonFile && !privateKey ? (
                         <div className={classes.tabPanel} style={{ flex: 1 }}>
                             <Typography className={classes.label}>Confirm with password</Typography>
                             <PasswordField
@@ -174,19 +193,18 @@ const BackupWallet = memo(() => {
                                 placeholder={t('popups_wallet_backup_input_password')}
                             />
                         </div>
-                    )}
+                    ) : null}
                 </TabContext>
             </div>
             {!(privateKey && currentTab === BackupTabs.PrivateKey) ? (
                 <div style={{ padding: 16 }}>
-                    {/*TODO: Download*/}
                     <Button
                         variant="contained"
                         fullWidth
                         className={classes.button}
-                        disabled={!privateKey && !password}
-                        onClick={onConfirm}>
-                        {!privateKey ? t('popups_wallet_next') : t('export')}
+                        disabled={!jsonFile && !password}
+                        onClick={jsonFile ? onExport : onConfirm}>
+                        {jsonFile ? t('export') : t('popups_wallet_next')}
                     </Button>
                 </div>
             ) : null}
