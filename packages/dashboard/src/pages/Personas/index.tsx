@@ -53,7 +53,7 @@ function Personas() {
         PersonaContext.useContainer()
 
     useEffect(() => {
-        if (personas.length === 0 || !currentPersona) {
+        if (personas?.length === 0) {
             enqueueSnackbar(t.personas_setup_tip(), { variant: 'warning' })
             navigate(RoutePaths.Setup)
         }
