@@ -84,7 +84,6 @@ export function TradeForm(props: TradeFormProps) {
     const { t } = useI18N()
     const {
         trade,
-        provider,
         loading,
         strategy,
         inputToken,
@@ -201,6 +200,7 @@ export function TradeForm(props: TradeFormProps) {
             return t('plugin_trader_error_price_impact_too_high')
         return ''
     }, [
+        trade,
         loading,
         inputToken,
         outputToken,

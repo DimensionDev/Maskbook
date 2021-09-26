@@ -45,6 +45,7 @@
     "use-subscription": "^1.5.1",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
+    "web3-utils": "^1.5.3",
     "zod": "^3.8.2"
   },
   "devDependencies": {

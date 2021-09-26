@@ -3,16 +3,18 @@ import { TextFieldProps, TextField } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()(({ palette }) => ({
     textField: {
         width: '100%',
     },
     textFieldInput: {
-        backgroundColor: '#F7F9FA',
+        backgroundColor: palette.mode === 'light' ? '#F7F9FA' : palette.background.default,
+        borderRadius: 6,
     },
     input: {
         padding: '11px 9px',
         fontSize: 12,
+        borderRadius: 6,
     },
 }))
 

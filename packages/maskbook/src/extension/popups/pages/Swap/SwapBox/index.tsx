@@ -6,11 +6,8 @@ import { useChainId } from '@masknet/web3-shared'
 import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader'
 import { TradeFooter } from '../../../../../plugins/Trader/SNSAdaptor/trader/TradeFooter'
 import { TradeContext, useTradeContext } from '../../../../../plugins/Trader/trader/useTradeContext'
-import { SettingsDialog } from '../../../../../plugins/Trader/SNSAdaptor/trader/SettingsDialog'
 import { useCurrentTradeProvider } from '../../../../../plugins/Trader/trending/useCurrentTradeProvider'
 import { useAvailableTraderProviders } from '../../../../../plugins/Trader/trending/useAvailableTraderProviders'
-import { SelectTokenDialog } from '../../../../../plugins/Wallet/SNSAdaptor/SelectTokenDialog'
-import { WalletRiskWarningDialog } from '../../../../../plugins/Wallet/SNSAdaptor/RiskWarningDialog'
 import { Coin, TagType } from '../../../../../plugins/Trader/types'
 import { PopupRoutes } from '../../../index'
 
@@ -53,9 +50,6 @@ export function SwapBox() {
                 tradeProviders={tradeProviders}
                 onTradeProviderChange={(newProvider) => setCurrentProvider(newProvider.value)}
             />
-            <SelectTokenDialog />
-            <SettingsDialog />
-            <WalletRiskWarningDialog />
         </TradeContext.Provider>
     )
 }

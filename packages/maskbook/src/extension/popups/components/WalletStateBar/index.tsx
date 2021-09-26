@@ -2,7 +2,7 @@ import { LoadingIcon } from '@masknet/icons'
 import { FormattedAddress, ProviderIcon } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { ProviderType } from '@masknet/web3-shared'
-import { Box, Stack, Typography } from '@material-ui/core'
+import { Box, Stack, StackProps, Typography } from '@material-ui/core'
 import { FC, memo } from 'react'
 import { NetworkSelector } from '../../components/NetworkSelector'
 import { useI18N } from '../../../../utils'
@@ -27,34 +27,21 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface WalletStateBarUIProps {
-    networkName?: string
-    chainColor: string
+interface WalletStateBarUIProps extends StackProps {
     isPending: boolean
     providerType: ProviderType
     walletName: string
     walletAddress: string
     openConnectWalletDialog(): void
-    openMenu?: (...args: any[]) => void
 }
 
 export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
-    ({
-        networkName,
-        isPending,
-        providerType,
-        chainColor,
-        walletAddress,
-        walletName,
-        openConnectWalletDialog,
-        openMenu,
-        children,
-    }) => {
+    ({ isPending, providerType, walletAddress, walletName, openConnectWalletDialog, children, ...rest }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
 
         return (
-            <Stack justifyContent="center" direction="row" alignItems="center">
+            <Stack justifyContent="center" direction="row" alignItems="center" {...rest}>
                 <NetworkSelector />
                 {isPending && (
                     <Stack
@@ -73,7 +60,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                     <Stack mx={1} justifyContent="center">
                         <ProviderIcon providerType={providerType} />
                     </Stack>
-                    <Box sx={{ userSelect: 'none', color: 'rgba(0, 0, 0, 0.87)' }}>
+                    <Box sx={{ userSelect: 'none' }}>
                         <Box fontSize={16}>{walletName}</Box>
                         <Box fontSize={12}>
                             <FormattedAddress address={walletAddress} size={10} />

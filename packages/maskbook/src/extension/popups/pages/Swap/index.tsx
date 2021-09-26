@@ -1,8 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import {
-    getNetworkName,
     TransactionStatusType,
-    useChainColor,
     useChainId,
     useWallet,
     useWeb3StateContext,
@@ -18,6 +16,9 @@ import { SwapWeb3Context } from '../../../../web3/context'
 
 const useStyles = makeStyles()((theme) => {
     return {
+        walletStateBar: {
+            color: theme.palette.grey['900'],
+        },
         page: {
             minHeight: '100vh',
             maxWidth: '100vw',
@@ -58,7 +59,6 @@ const useStyles = makeStyles()((theme) => {
 export default function SwapPage() {
     const { classes } = useStyles()
     const chainId = useChainId()
-    const chainColor = useChainColor()
     const { providerType } = useWeb3StateContext()
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
     const wallet = useWallet()
@@ -70,25 +70,24 @@ export default function SwapPage() {
     return (
         <Web3Provider value={SwapWeb3Context}>
             <div className={classes.page}>
-                <div className={classes.container}>
-                    <header className={classes.header}>
-                        <WalletStateBarUI
-                            isPending={pendingTransactions.length > 0}
-                            networkName={getNetworkName(chainId) ?? ''}
-                            chainColor={chainColor}
-                            providerType={providerType}
-                            openConnectWalletDialog={openPopupsWindow}
-                            walletName={wallet?.name ?? '-'}
-                            walletAddress={wallet?.address ?? '-'}
-                        />
-                    </header>
-                    <main className={classes.main}>
-                        <Typography variant="h1" className={classes.title}>
-                            Swap
-                        </Typography>
-                        <SwapBox />
-                    </main>
-                </div>
+            <div className={classes.container}>
+                <header className={classes.header}>
+                    <WalletStateBarUI
+                        className={classes.walletStateBar}
+                        isPending={pendingTransactions.length > 0}
+                        providerType={providerType}
+                        openConnectWalletDialog={openPopupsWindow}
+                        walletName={wallet?.name ?? '-'}
+                        walletAddress={wallet?.address ?? '-'}
+                    />
+                </header>
+                <main className={classes.main}>
+                    <Typography variant="h1" className={classes.title}>
+                        Swap
+                    </Typography>
+                    <SwapBox />
+                </main>
+            </div>
             </div>
         </Web3Provider>
     )
