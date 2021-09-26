@@ -263,7 +263,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             {t('popups_wallet_gas_fee_settings_usd', {
                                 usd: formatGweiToEther(Number(maxFeePerGas) ?? 0)
                                     .times(nativeTokenPrice)
-                                    .times(inputGasLimit ?? 1)
+                                    .times(inputGasLimit || 1)
                                     .toPrecision(3),
                             })}
                         </Typography>
