@@ -30,7 +30,7 @@ import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet
 import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-es'
 import { ExpandMore } from '@material-ui/icons'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { LoadingButton } from '@material-ui/lab'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { toHex } from 'web3-utils'

@@ -10,7 +10,7 @@ import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller } from 'react-hook-form'
 import { z } from 'zod'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath'
 type FormInputs = {

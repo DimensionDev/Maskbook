@@ -4,7 +4,7 @@ import { PluginMessages, Services } from '../../../API'
 import { PLUGIN_IDS } from '../../../pages/Labs/constants'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../type'
 import { useAccount } from '@masknet/web3-shared'
 

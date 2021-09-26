@@ -9,7 +9,7 @@ import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { useSnackbar } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { Step, Stepper } from '../Stepper'
 import { LoadingCard } from './steps/LoadingCard'

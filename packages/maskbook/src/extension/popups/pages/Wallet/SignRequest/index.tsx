@@ -9,7 +9,7 @@ import { useAsyncFn, useUpdateEffect } from 'react-use'
 import Services from '../../../../service'
 import { LoadingButton } from '@material-ui/lab'
 import { toUtf8 } from 'web3-utils'
-import { useHistory, useLocation } from 'react-router'
+import { useHistory, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()(() => ({

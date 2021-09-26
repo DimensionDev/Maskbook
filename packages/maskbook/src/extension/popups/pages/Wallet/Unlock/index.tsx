@@ -8,7 +8,7 @@ import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@material-ui/lab'
 import { useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()((theme) => ({
