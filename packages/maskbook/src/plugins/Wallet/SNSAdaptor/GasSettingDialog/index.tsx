@@ -18,7 +18,7 @@ export const GasSettingDialog: FC = () => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
-    const [gasLimit, setGasLimit] = useState<number | string>(0)
+    const [gasLimit, setGasLimit] = useState<string>('0')
     const { open, closeDialog, setDialog } = useRemoteControlledDialog(
         WalletMessages.events.gasSettingDialogUpdated,
         (evt) => {
@@ -27,8 +27,6 @@ export const GasSettingDialog: FC = () => {
             if (evt.gasLimit) setGasLimit(evt.gasLimit)
         },
     )
-
-    console.log('gasLimit', gasLimit)
 
     return (
         <InjectedDialog title={t('popups_wallet_gas_fee_settings')} open={open} onClose={closeDialog}>
