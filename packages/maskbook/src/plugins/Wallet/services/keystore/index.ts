@@ -42,5 +42,5 @@ async function makeDerivedKey(keystore: CryptoKeyStore, password: Uint8Array) {
         const params: Pbkdf2Params = { name: 'PBKDF2', salt, iterations, hash: 'SHA-256' }
         return new Uint8Array(await crypto.subtle.deriveBits(params, key, 256))
     }
-    throw new Error('Unsupport key derivation scheme')
+    throw new Error('Unsupported key derivation scheme')
 }

@@ -7,6 +7,10 @@ export function useConnectSocialNetwork() {
     return useAsyncFn(Services.SocialNetwork.connectSocialNetwork)
 }
 
+export function useOpenProfilePage() {
+    return useAsyncFn(Services.SocialNetwork.openProfilePage)
+}
+
 export function useDisconnectSocialNetwork(): AsyncFnReturn<(identifier: ProfileIdentifier) => Promise<void>> {
     return useAsyncFn((identifier: ProfileIdentifier) => Services.Identity.detachProfile(identifier))
 }

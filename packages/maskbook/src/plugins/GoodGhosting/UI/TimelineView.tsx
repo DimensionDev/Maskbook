@@ -68,10 +68,10 @@ const useStyles = makeStyles()((theme) => ({
         background: '#D9E0F0',
         marginBottom: theme.spacing(1),
     },
-    tallVeritcalLine: {
+    tallVerticalLine: {
         height: '120px',
     },
-    shortVeritcalLine: {
+    shortVerticalLine: {
         height: '50px',
     },
 }))
@@ -100,7 +100,7 @@ export function TimelineView(props: TimelineViewProps) {
                             <div
                                 className={classNames(
                                     classes.verticalLine,
-                                    index % 2 === 0 ? classes.tallVeritcalLine : classes.shortVeritcalLine,
+                                    index % 2 === 0 ? classes.tallVerticalLine : classes.shortVerticalLine,
                                 )}
                             />
                             <div

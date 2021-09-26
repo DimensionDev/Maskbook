@@ -8,6 +8,8 @@ import { useDashboardI18N } from '../../../../locales'
 import { Services } from '../../../../API'
 import { fetchBackupValue } from '../../api'
 import { useAsyncFn } from 'react-use'
+import { decryptBackup } from '@masknet/backup-format'
+import { decode, encode } from '@msgpack/msgpack'
 
 export interface CloudBackupMergeDialogProps {
     account: string
@@ -25,14 +27,16 @@ export function CloudBackupMergeDialog({ account, info, open, onClose }: CloudBa
     const [{ loading }, handleMerge] = useAsyncFn(async () => {
         try {
             const encrypted = await fetchBackupValue(info.downloadURL)
-            const decrypted = await Services.Crypto.decryptBackup(backupPassword, account, encrypted)
-            const data = await Services.Welcome.parseBackupStr(decrypted)
+            const decrypted = await decryptBackup(encode(account + backupPassword), encrypted)
+            const backupText = JSON.stringify(decode(decrypted))
+            const data = await Services.Welcome.parseBackupStr(backupText)
+
             if (data?.id) {
                 await Services.Welcome.checkPermissionsAndRestore(data.id)
             }
+
             onClose()
             snackbar.enqueueSnackbar(t.settings_alert_merge_success(), { variant: 'success' })
-            console.log('merge success')
         } catch (error) {
             setIncorrectBackupPassword(true)
         }

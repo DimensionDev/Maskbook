@@ -34,16 +34,16 @@ jobs:
           path: packages/**/dist
           # actions/cache will not upload changes in cache if primary key hits
           # by adding date to the primary key, we can ensure the cache updates on the first build of the day
-          key: ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
           # Allow fallback to cache of different dependencies but not allowing fallback to different tsconfig
           # because that might indicates a structural/flags changes in tsc emit.
           restore-keys: |
-            ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
-            ${{ runner.os }}-tsc-${{ hashFiles('packages/**/tsconfig.json') }}
+            ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}
       - name: Restore Webpack cache
         uses: actions/cache@v2
         with:
-          path: packages/maskbook/node_modules/.cache/webpack
+          path: packages/maskbook/node_modules/.cache/
           key: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
           # Not fallback to different dependencies. Webpack seems like have bug.
           # An example caused by the webpack cache bug: https://github.com/facebook/react/issues/21587

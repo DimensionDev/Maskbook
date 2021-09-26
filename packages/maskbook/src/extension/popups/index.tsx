@@ -1,4 +1,4 @@
-import type { ThirdPartyPopupContextIdentifier } from '../../plugins/External/popup-context'
+import type { MaskSDK_SNS_ContextIdentifier } from '../../plugins/External/sns-context'
 
 export enum PopupRoutes {
     Root = '/',
@@ -9,24 +9,31 @@ export enum PopupRoutes {
     WalletRename = '/wallet/rename',
     DeleteWallet = '/wallet/delete',
     CreateWallet = '/wallet/create',
+    SwitchWallet = '/wallet/switch',
     SelectWallet = '/wallet/select',
     BackupWallet = '/wallet/backup',
     AddToken = '/wallet/addToken',
     WalletSignRequest = '/wallet/sign',
     GasSetting = '/wallet/gas',
     TokenDetail = '/wallet/tokenDetail',
+    ContractInteraction = '/wallet/contract-interaction',
+    Unlock = '/wallet/unlock',
+    Transfer = '/wallet/transfer',
     Personas = '/personas',
+    Logout = '/personas/logout',
+    PersonaRename = '/personas/rename',
     PermissionAwareRedirect = '/redirect',
     RequestPermission = '/request-permission',
     ThirdPartyRequestPermission = '/3rd-request-permission',
     PostInspector = '/post-inspector',
     SignRequest = '/sign-request',
+    Swap = '/swap',
 }
 
 export function getRouteURLWithNoParam(kind: PopupRoutes) {
     return browser.runtime.getURL(`/popups.html#${kind}`)
 }
-export function PermissionAwareRedirectOf(url: string, context: ThirdPartyPopupContextIdentifier) {
+export function PermissionAwareRedirectOf(url: string, context: MaskSDK_SNS_ContextIdentifier) {
     return (
         getRouteURLWithNoParam(PopupRoutes.PermissionAwareRedirect) +
         `?url=${encodeURIComponent(url)}&context=${context}`

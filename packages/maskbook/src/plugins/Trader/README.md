@@ -11,7 +11,7 @@
 - `./apis/` - data vendor APIs
 - `./graphs/` - hooks for drawing graphs and charts
 - `./hooks/` - customized hooks
-- `./messages/` - customized typed messags
+- `./messages/` - customized typed messages
 - `./UI/` - UI related stuff
 - `./services.ts` - A plugin specific messages center
 - `./settings.ts` - Some plugin specific settings

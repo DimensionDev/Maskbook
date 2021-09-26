@@ -29,6 +29,7 @@ import { useClaimCallback } from './hooks/useClaimCallback'
 import { useRefundCallback } from './hooks/useRefundCallback'
 import type { RedPacketAvailability, RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
+import { IconURLs } from './IconURL'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -90,13 +91,13 @@ const useStyles = makeStyles()((theme) => ({
         backgroundPosition: 'center',
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
-        backgroundImage: `url(${new URL('./present-default.png', import.meta.url)})`,
+        backgroundImage: `url(${IconURLs.presentDefault})`,
     },
     dai: {
-        backgroundImage: `url(${new URL('./present-dai.png', import.meta.url)})`,
+        backgroundImage: `url(${IconURLs.presentDai})`,
     },
     okb: {
-        backgroundImage: `url(${new URL('./present-okb.png', import.meta.url)})`,
+        backgroundImage: `url(${IconURLs.presentOkb})`,
     },
     text: {
         padding: theme.spacing(0.5, 2),
@@ -130,6 +131,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'space-around',
     },
+    connectWallet: {
+        marginTop: 16,
+    },
 }))
 
 export interface RedPacketProps {
@@ -155,7 +159,7 @@ export function RedPacket(props: RedPacketProps) {
     } = useAvailabilityComputed(account, payload)
     const { value: tokenDetailed } = useFungibleTokenDetailed(payload.token_type, payload.token?.address ?? '')
     const token = payload.token ?? tokenDetailed
-    //#ednregion
+    //#endregion
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
 
@@ -197,7 +201,7 @@ export function RedPacket(props: RedPacketProps) {
         (ev) => undefined,
     )
 
-    // open the transation dialog
+    // open the transaction dialog
     useEffect(() => {
         const state = canClaim ? claimState : refundState
         if (state.type === TransactionStateType.UNKNOWN) return
@@ -326,7 +330,10 @@ export function RedPacket(props: RedPacketProps) {
                 />
             </Card>
             {canClaim || canRefund ? (
-                <EthereumWalletConnectedBoundary>
+                <EthereumWalletConnectedBoundary
+                    classes={{
+                        connectWallet: classes.connectWallet,
+                    }}>
                     <Box className={classes.footer}>
                         {!account ? (
                             <ActionButton variant="contained" size="large" onClick={openSelectProviderDialog}>

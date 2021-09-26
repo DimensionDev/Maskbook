@@ -1,9 +1,9 @@
 import React from 'react'
 import { ThemeProvider, StyledEngineProvider } from '@material-ui/core'
-import { StylesProvider } from '@material-ui/styles'
 import { MaskLightTheme, applyMaskColorVars, CustomSnackbarProvider } from '@masknet/theme'
-import { addMaskSharedI18N, fallbackLng } from '@masknet/shared'
-import { withMatrix } from 'storybook-addon-matrix'
+// import { addMaskSharedI18N, fallbackLng } from '@masknet/shared'
+import { fallbackLng } from '../../shared-base/src/i18n/fallbackRule'
+// import { withMatrix } from 'storybook-addon-matrix'
 import { addDashboardI18N } from '../src/locales'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
 import i18n from 'i18next'
@@ -15,15 +15,15 @@ i18n.init({
 })
 i18n.use(initReactI18next)
 addDashboardI18N(i18n)
-addMaskSharedI18N(i18n)
+// addMaskSharedI18N(i18n)
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
 }
 export const decorators = [
-    withMatrix,
+    // withMatrix,
     (Story) => (
-        <StyledEngineProvider injectFirst>
-            <StylesProvider>
+        <React.Suspense fallback="">
+            <StyledEngineProvider injectFirst>
                 <ThemeProvider theme={MaskLightTheme}>
                     <I18nextProvider i18n={i18n}>
                         <CustomSnackbarProvider>
@@ -31,8 +31,8 @@ export const decorators = [
                         </CustomSnackbarProvider>
                     </I18nextProvider>
                 </ThemeProvider>
-            </StylesProvider>
-        </StyledEngineProvider>
+            </StyledEngineProvider>
+        </React.Suspense>
     ),
 ]
 applyMaskColorVars(document.body, 'light')

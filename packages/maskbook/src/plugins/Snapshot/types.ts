@@ -45,6 +45,7 @@ export interface Strategy {
         decimals?: number
         symbol: string
     }
+    __typename: string
 }
 
 export interface ProposalPayload {

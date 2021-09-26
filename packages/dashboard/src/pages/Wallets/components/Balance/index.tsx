@@ -1,11 +1,12 @@
 import { memo } from 'react'
-import { experimentalStyled as styled, Typography, Box, Button, buttonClasses } from '@material-ui/core'
+import { styled, Typography, Box, Button, buttonClasses } from '@material-ui/core'
 import { useDashboardI18N } from '../../../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { MaskWalletIcon, SendIcon, CardIcon, SwapIcon, DownloadIcon } from '@masknet/icons'
 
 export interface BalanceCardProps {
     balance: number
+    chainName: string
     onSend(): void
     onBuy(): void
     onSwap(): void
@@ -24,13 +25,14 @@ const BalanceContainer = styled('div')(
 )
 
 const IconContainer = styled('div')`
-    // TODO: mobile
+    width: 48px;
+    height: 48px;
     font-size: 48px;
     display: flex;
     justify-content: center;
     align-items: center;
     background: ${MaskColorVar.infoBackground};
-    border-radius: 50%;
+    border-radius: 24px;
 `
 
 const BalanceDisplayContainer = styled('div')(
@@ -70,7 +72,7 @@ const ButtonGroup = styled('div')`
     }
 `
 
-export const Balance = memo<BalanceCardProps>(({ balance, onSend, onBuy, onSwap, onReceive }) => {
+export const Balance = memo<BalanceCardProps>(({ balance, chainName, onSend, onBuy, onSwap, onReceive }) => {
     const t = useDashboardI18N()
 
     return (
@@ -80,7 +82,9 @@ export const Balance = memo<BalanceCardProps>(({ balance, onSend, onBuy, onSwap,
                     <MaskWalletIcon fontSize="inherit" />
                 </IconContainer>
                 <BalanceDisplayContainer>
-                    <BalanceTitle>{t.wallets_balance()}</BalanceTitle>
+                    <BalanceTitle>
+                        {t.wallets_balance()} {chainName}
+                    </BalanceTitle>
                     <BalanceContent>
                         {isNaN(balance)
                             ? '-'

@@ -4,16 +4,17 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/holoflows-kit": "=0.9.0-20210726055325-dfbe7fd",
-    "@dimensiondev/kit": "=0.0.0-20210630045432-e05621c",
+    "@dimensiondev/kit": "^0.0.0-20210913111737-84c17d7",
+    "@masknet/icons": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared": "workspace:*",
-    "classnames": "^2.3.1",
     "anchorme": "^2.1.2",
     "bignumber.js": "^9.0.1",
+    "classnames": "^2.3.1",
     "lodash-es": "^4.17.21",
     "qrcode": "^1.4.4",
-    "react-use": "^17.2.4",
+    "react-use": "^17.3.1",
     "use-subscription": "^1.5.1",
     "uuid": "^8.3.2"
   }

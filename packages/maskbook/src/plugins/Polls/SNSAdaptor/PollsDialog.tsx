@@ -116,7 +116,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
         })
     }
 
-    // react hooks are not binded with the function identity but hooks order
+    // react hooks are not bound with the function identity but hooks order
     const useSelect = (count: number, fn: (newVal: number) => void, defaultIndex = 0) => {
         const options = Array.from<string>({ length: count }).fill('')
 
@@ -125,6 +125,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                 variant="standard"
                 MenuProps={{
                     container,
+                    anchorOrigin: { horizontal: 'left', vertical: 'bottom' },
                     classes: { paper: classes.menuPaper },
                 }}
                 value={defaultIndex}
@@ -162,7 +163,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                             />
                         </FormControl>
                     ))}
-                    <IconButton onClick={addNewOption} classes={{ root: classes.addButton }}>
+                    <IconButton size="large" onClick={addNewOption} classes={{ root: classes.addButton }}>
                         <AddIcon color="primary" />
                     </IconButton>
                 </div>

@@ -1,17 +1,21 @@
 import { lazy, Suspense } from 'react'
-import { Route, Switch, Redirect } from 'react-router'
+import { Redirect, Route, Switch } from 'react-router'
 import { HashRouter } from 'react-router-dom'
-import { MaskUIRoot } from '../../UIRoot'
 import { PopupRoutes } from '.'
-import { createNormalReactRoot } from '../../utils'
+import { createNormalReactRoot, useClassicMaskTheme } from '../../utils'
 import '../../social-network-adaptor/browser-action'
 
 import { Web3Provider } from '@masknet/web3-shared'
-import { Web3Context } from '../../web3/context'
+import { Web3ContextWithoutConfirm } from '../../web3/context'
 import { PopupFrame } from './components/PopupFrame'
+import { StyledEngineProvider, ThemeProvider } from '@material-ui/core'
+import { Appearance } from '@masknet/theme'
+import { MaskUIRoot } from '../../UIRoot'
+import { status } from '../../setup.ui'
 
 const Wallet = lazy(() => import('./pages/Wallet'))
 const Personas = lazy(() => import('./pages/Personas'))
+const SwapPage = lazy(() => import('./pages/Swap'))
 const RequestPermissionPage = lazy(() => import('./RequestPermission'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission'))
@@ -19,6 +23,7 @@ const PostInspectorReplica = lazy(() => import('./PostInspector'))
 const SignRequest = lazy(() => import('./SignRequest'))
 
 function Dialogs() {
+    const theme = useClassicMaskTheme({ appearance: Appearance.light })
     return MaskUIRoot(
         <Web3Provider value={Web3Context}>
             <HashRouter>
@@ -41,6 +46,9 @@ function Dialogs() {
                         <Route path={PopupRoutes.PostInspector + '/:SNSAdaptor/'}>
                             <PostInspectorReplica />
                         </Route>
+                        <Route path={PopupRoutes.PostInspector + '/:SNSAdaptor/'}>
+                            <PostInspectorReplica />
+                        </Route>
                         <Route children={<Redirect to={PopupRoutes.Wallet} />} />
                     </Switch>
                 </Suspense>
@@ -48,7 +56,7 @@ function Dialogs() {
         </Web3Provider>,
     )
 }
-createNormalReactRoot(<Dialogs />)
+status.then(() => createNormalReactRoot(<Dialogs />))
 
 function frame(x: React.ReactNode) {
     return <PopupFrame children={x} />

@@ -1,10 +1,11 @@
 import { Button } from '@material-ui/core'
 import { CreditCard as CreditCardIcon } from 'react-feather'
+import { useSnackbarCallback } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'
-import { DashboardDialogCore, DashboardDialogWrapper, useSnackbarCallback, WrappedDialogProps } from '../Base'
+import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import type { WalletProps } from './types'
 
 export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<WalletProps>) {

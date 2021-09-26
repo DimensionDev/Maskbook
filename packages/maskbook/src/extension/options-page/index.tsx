@@ -36,6 +36,7 @@ import { withErrorBoundary } from '../../components/shared/ErrorBoundary'
 import { MaskUIRoot } from '../../UIRoot'
 import { createInjectHooksRenderer, startPluginDashboard, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
+import { DashboardNFTAvatarsRouter } from './DashboardRouters/NFTAvatarList'
 
 const useStyles = makeStyles()((theme) => {
     const dark = theme.palette.mode === 'dark'
@@ -126,7 +127,6 @@ function DashboardUI() {
     // jump to persona if needed
     const [reloadSpy, setReloadSpy] = useState(false)
     const { loading, error } = useAsync(async () => {
-        if (process.env.target === 'E2E' && location.hash.includes('noredirect=true')) return
         if (location.hash.includes(SetupStep.ConsentDataCollection)) return
         const personas = (await Services.Identity.queryMyPersonas()).filter((x) => !x.uninitialized)
         // the user need setup at least one persona
@@ -195,6 +195,7 @@ function DashboardUI() {
                 <Route path={DashboardRoute.Plugins} component={withErrorBoundary(DashboardPluginsRouter)} />
                 <Route path={DashboardRoute.Settings} component={withErrorBoundary(DashboardSettingsRouter)} />
                 <Route path={DashboardRoute.Setup} component={withErrorBoundary(DashboardSetupRouter)} />
+                <Route path={DashboardRoute.NFTAvatars} component={withErrorBoundary(DashboardNFTAvatarsRouter)} />
                 <Redirect
                     path="*"
                     to={Flags.has_no_browser_tab_ui && xsMatched ? DashboardRoute.Nav : DashboardRoute.Personas}

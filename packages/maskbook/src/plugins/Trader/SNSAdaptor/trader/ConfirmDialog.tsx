@@ -6,11 +6,12 @@ import type BigNumber from 'bignumber.js'
 import { useStylesExtends } from '@masknet/shared'
 import { TradeSummary, TradeSummaryProps } from './TradeSummary'
 import { TokenPanel } from './TokenPanel'
-import { PriceStaleWarnning } from './PriceStaleWarnning'
-import type { TradeComputed, TradeProvider } from '../../types'
+import { PriceStaleWarning } from './PriceStaleWarning'
+import type { TradeComputed } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 import { formatBalance } from '@masknet/web3-shared'
+import type { TradeProvider } from '@masknet/public-api'
 
 const useStyles = makeStyles()((theme) => ({
     reverseIcon: {
@@ -81,7 +82,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                         </>
                     ) : null}
                     {staled ? (
-                        <PriceStaleWarnning
+                        <PriceStaleWarning
                             onAccept={() => {
                                 setExecutionPrice(trade.executionPrice)
                             }}

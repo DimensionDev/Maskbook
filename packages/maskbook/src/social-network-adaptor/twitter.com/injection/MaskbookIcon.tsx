@@ -79,7 +79,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         remover()
     }
 }
-const ifUsingMaskbook = memoizePromise(
+export const ifUsingMaskbook = memoizePromise(
     (pid: ProfileIdentifier) =>
         Services.Identity.queryProfile(pid).then((x) => (!!x.linkedPersona ? Promise.resolve() : Promise.reject())),
     (pid: ProfileIdentifier) => pid.toText(),

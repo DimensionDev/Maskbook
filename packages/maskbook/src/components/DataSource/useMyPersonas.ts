@@ -4,9 +4,9 @@ import Services from '../../extension/service'
 import { PersonaArrayComparer } from '../../utils/comparer'
 import { MaskMessage } from '../../utils/messages'
 import type { Persona } from '../../database'
-import { setStorage } from '../../extension/background-script/StorageService'
-import { sideEffect } from '../../utils/side-effects'
 import { debounce } from 'lodash-es'
+
+let isLoading: Promise<void> | null
 
 const independentRef = {
     myPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),
@@ -14,25 +14,30 @@ const independentRef = {
 }
 
 {
-    const query = debounce(
-        () => {
-            Services.Identity.queryMyPersonas().then((p) => {
-                independentRef.myPersonasRef.value = p.filter((x) => !x.uninitialized)
-                independentRef.myUninitializedPersonasRef.value = p.filter((x) => x.uninitialized)
-                setStorage<boolean>('mobileIsMyPersonasInitialized', independentRef.myPersonasRef.value.length > 0)
-            })
-        },
-        500,
-        { trailing: true },
-    )
-    sideEffect.then(query)
-    MaskMessage.events.personaChanged.on((x) => x.some((x) => x.owned) && query())
+    const query = () => {
+        return Services.Identity.queryMyPersonas().then((p) => {
+            independentRef.myPersonasRef.value = p.filter((x) => !x.uninitialized)
+            independentRef.myUninitializedPersonasRef.value = p.filter((x) => x.uninitialized)
+            isLoading = null
+            Services.Helper.setStorage<boolean>(
+                'mobileIsMyPersonasInitialized',
+                independentRef.myPersonasRef.value.length > 0,
+            )
+        })
+    }
+
+    const debounceQuery = debounce(query, 500, { trailing: true })
+
+    isLoading = query()
+    MaskMessage.events.ownPersonaChanged.on(debounceQuery)
 }
 
 export function useMyPersonas() {
+    if (isLoading) throw isLoading
     return useValueRef(independentRef.myPersonasRef)
 }
 
 export function useMyUninitializedPersonas() {
+    if (isLoading) throw isLoading
     return useValueRef(independentRef.myUninitializedPersonasRef)
 }

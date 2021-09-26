@@ -170,7 +170,7 @@ export function DecryptPost(props: DecryptPostProps) {
     // }, [decryptedPostContent])
 
     // pass 3:
-    // inovke callback
+    // invoke callback
     const firstSucceedDecrypted = progress.find((p) => p.progress.type === 'success')
     useEffect(() => {
         if (firstSucceedDecrypted?.progress.type !== 'success') return

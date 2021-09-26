@@ -1,7 +1,7 @@
 import { createGlobalState } from '@masknet/shared'
 import { Messages, Services } from '../../API'
 import type { DataProvider } from '@masknet/public-api'
-import type { AccountValidationType, BackupFileInfo } from './type'
+import type { AccountType, BackupFileInfo, Scenario, Locale } from './type'
 export const [useLanguage] = createGlobalState(Services.Settings.getLanguage, Messages.events.languageSettings.on)
 
 export const [useTrendingDataSource] = createGlobalState<DataProvider>(
@@ -24,14 +24,27 @@ export const [useBinanceNetworkTradeProvider] = createGlobalState(
     Messages.events.binanceNetworkTradeProviderSettings.on,
 )
 
+export const [useArbitrumNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getArbitrumNetworkTradeProvider,
+    Messages.events.arbitrumNetworkTradeProviderSettings.on,
+)
+
+export const [useXDaiNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getxDaiNetworkTradeProvider,
+    Messages.events.xdaiNetworkTradeProviderSettings.on,
+)
+
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 
 interface BackupBaseRequest {
     account: string
-    type: AccountValidationType
+    type: AccountType
 }
 
-interface SendCodeRequest extends BackupBaseRequest {}
+interface SendCodeRequest extends BackupBaseRequest {
+    scenario: Scenario
+    locale: Locale
+}
 
 export interface VerifyCodeRequest extends BackupBaseRequest {
     code: string
@@ -63,12 +76,14 @@ const fetchBaseInstance = (baseURL: string) => (input: RequestInfo, init?: Reque
 
 const fetchBackupInstance = fetchBaseInstance(BASE_RUL)
 
-export const sendCode = ({ account, type }: SendCodeRequest) => {
+export const sendCode = ({ account, type, scenario, locale }: SendCodeRequest) => {
     return fetchBackupInstance('v1/backup/send_code', {
         method: 'POST',
         body: JSON.stringify({
             account,
             account_type: type,
+            scenario,
+            locale,
         }),
     })
 }
@@ -115,14 +130,14 @@ export const verifyCode = ({ account, type, code }: VerifyCodeRequest) => {
 }
 
 export const fetchBackupValue = (downloadLink: string) => {
-    return fetchBase<string>(downloadLink, { method: 'GET' }, (res) => res.text())
+    return fetchBase<ArrayBuffer>(downloadLink, { method: 'GET' }, (res) => res.arrayBuffer())
 }
 
-export const uploadBackupValue = (uploadLink: string, content: string) => {
+export const uploadBackupValue = (uploadLink: string, content: ArrayBuffer) => {
     return fetch(uploadLink, {
         method: 'PUT',
         // mode: 'no-cors',
-        headers: new Headers({ 'content-type': 'text/plain' }),
+        headers: new Headers({ 'content-type': 'application/octet-stream' }),
         body: content,
     })
 }

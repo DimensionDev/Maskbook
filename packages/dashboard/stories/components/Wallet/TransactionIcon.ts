@@ -8,6 +8,7 @@ export const TransactionIcon = of({
     args: {
         isRedPacket: false,
         isFailed: false,
+        type: 'Sent',
         transactionType: 'sent',
     },
 })

@@ -31,96 +31,97 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags } from '../../utils/flags'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { WalletIcon } from '../shared/WalletIcon'
-import { useI18N } from '../../utils'
-import { base as ITO_Plugin } from '../../plugins/ITO/base'
+import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 
-const useStyles = makeStyles()((theme) => ({
-    paper: {
-        borderRadius: 4,
-        transform: 'translateY(-150px) !important',
-        boxShadow: `${
-            theme.palette.mode === 'dark'
-                ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
-                : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
-        }`,
-        backgroundImage: 'none',
-    },
-    menu: {
-        paddingTop: 0,
-        paddingBottom: 0,
-    },
-
-    wrapper: {
-        display: 'flex',
-        alignItems: 'center',
-        width: '100%',
-        cursor: 'pointer',
-        [theme.breakpoints.down('lg')]: {
-            transform: 'translateX(0px)',
+const useStyles = makeStyles()(({ palette, breakpoints, spacing }) => {
+    const isDark = palette.mode === 'dark'
+    return {
+        paper: {
+            borderRadius: 4,
+            transform: 'translateY(-150px) !important',
+            boxShadow: `${
+                isDark
+                    ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
+                    : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
+            }`,
+            backgroundImage: 'none',
         },
-        '&:hover': {
-            '& $title': {
-                color: theme.palette.primary.main,
+        menu: {
+            paddingTop: 0,
+            paddingBottom: 0,
+        },
+        wrapper: {
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
+            cursor: 'pointer',
+            [breakpoints.down('lg')]: {
+                transform: 'translateX(0px)',
             },
-            '& $icon': {
-                color: theme.palette.primary.main,
+            '&:hover': {
+                '& $title': {
+                    color: palette.primary.main,
+                },
+                '& $icon': {
+                    color: palette.primary.main,
+                },
             },
         },
-    },
-    button: {
-        display: 'flex',
-        padding: '12px 26px 12px 14px',
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        [theme.breakpoints.down('lg')]: {
-            transform: 'translateX(0px)',
-            padding: 14,
+        button: {
+            display: 'flex',
+            padding: '12px 26px 12px 14px',
+            borderRadius: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            [breakpoints.down('lg')]: {
+                transform: 'translateX(0px)',
+                padding: 14,
+            },
         },
-    },
-    title: {
-        display: 'flex',
-        alignItems: 'center',
-        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
-        fontSize: 20,
-        marginLeft: 22,
-        lineHeight: 1.35,
-        [theme.breakpoints.down('lg')]: {
-            display: 'none',
+        title: {
+            display: 'flex',
+            alignItems: 'center',
+            color: isDark ? palette.text.primary : 'rgb(15, 20, 25)',
+            fontSize: 20,
+            marginLeft: 22,
+            lineHeight: 1.35,
+            [breakpoints.down('lg')]: {
+                display: 'none',
+            },
         },
-    },
-    menuItem: {},
-    text: {
-        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
-        marginLeft: 22,
-    },
-    iconWrapper: {
-        position: 'relative',
-        height: 24,
-        width: 24,
-    },
-    icon: {
-        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
-        width: 24,
-        height: 24,
-        fontSize: 24,
-    },
-    mask: {
-        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
-        width: 22,
-        height: 22,
-        fontSize: 22,
-    },
-    chainIcon: {
-        fontSize: 18,
-        width: 18,
-        height: 18,
-        marginLeft: theme.spacing(0.5),
-    },
-}))
+        menuItem: {},
+        text: {
+            color: isDark ? palette.text.primary : 'rgb(15, 20, 25)',
+            marginLeft: 22,
+        },
+        iconWrapper: {
+            position: 'relative',
+            height: 24,
+            width: 24,
+        },
+        icon: {
+            color: isDark ? palette.text.primary : 'rgb(15, 20, 25)',
+            width: 24,
+            height: 24,
+            fontSize: 24,
+        },
+        mask: {
+            color: isDark ? palette.text.primary : 'rgb(15, 20, 25)',
+            width: 22,
+            height: 22,
+            fontSize: 22,
+        },
+        chainIcon: {
+            fontSize: 18,
+            width: 18,
+            height: 18,
+            marginLeft: spacing(0.5),
+        },
+    }
+})
 
 interface ToolboxHintProps extends withClasses<'wrapper' | 'menuItem' | 'title' | 'text' | 'button' | 'icon'> {}
 
@@ -135,9 +136,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
 
     //#region recent pending transactions
-    const { value: pendingTransactions = [], retry: retryTransactions } = useRecentTransactions(
-        TransactionStatusType.NOT_DEPEND,
-    )
+    const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
     //#endregion
 
     //#region Encrypted message
@@ -202,7 +201,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
         {
             ...ToolIconURLs.claim,
             onClick: onClaimAllDialogOpen,
-            hide: !operatingSupportedChainMapping[ITO_Plugin.ID],
+            hide: !account,
         },
     ]
 
@@ -273,7 +272,15 @@ export function ToolboxHint(props: ToolboxHintProps) {
             </div>
             {menu}
 
-            <div className={classes.wrapper} onClick={isWalletValid ? openWalletStatusDialog : openSelectWalletDialog}>
+            <div
+                className={classes.wrapper}
+                onClick={() => {
+                    hasNativeAPI
+                        ? nativeAPI?.api.misc_openCreateWalletView()
+                        : isWalletValid
+                        ? openWalletStatusDialog()
+                        : openSelectWalletDialog()
+                }}>
                 <div className={classes.button}>
                     {isWalletValid ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} size={24} />}
 

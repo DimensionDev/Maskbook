@@ -1,0 +1,20 @@
+{
+  "name": "@masknet/sdk",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./dist/server/index.js",
+  "types": "./dist/server/index.d.ts",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.0.4",
+    "@rollup/plugin-sucrase": "^4.0.0",
+    "rollup": "^2.56.3",
+    "rollup-plugin-terser": "^7.0.2"
+  },
+  "scripts": {
+    "start": "rollup -c -w",
+    "build": "rollup -c"
+  },
+  "dependencies": {
+    "async-call-rpc": "^6.0.0"
+  }
+}

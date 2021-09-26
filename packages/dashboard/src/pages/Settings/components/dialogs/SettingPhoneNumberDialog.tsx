@@ -1,12 +1,13 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
-import { sendCode, verifyCode } from '../../api'
+import { sendCode, useLanguage, verifyCode } from '../../api'
 import { phoneRegexp } from '../../regexp'
 import { CountdownButton, MaskTextField, useSnackbar } from '@masknet/theme'
+import { Scenario, Locale, AccountType } from '../../type'
 
 const useStyles = makeStyles()({
     container: {
@@ -22,6 +23,7 @@ interface SettingPhoneNumberDialogProps {
 }
 
 export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhoneNumberDialogProps) {
+    const language = useLanguage()
     const snackbar = useSnackbar()
     const t = useDashboardI18N()
     const { classes } = useStyles()
@@ -32,6 +34,8 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
     const [code, setCode] = useState('')
     const [invalidPhone, setInvalidPhone] = useState(false)
     const [invalidCode, setInvalidCode] = useState(false)
+
+    const sendButton = useRef<HTMLButtonElement>(null)
 
     const handleCountryCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value
@@ -44,19 +48,24 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
     }
     const handleConfirm = async () => {
         if (step === 1) {
-            if (!invalidPhone) {
+            if (phone && !invalidPhone) {
                 setStep(2)
+            } else {
+                validCheck()
             }
         } else {
             const result = await verifyCode({
                 account: countryCode + phone,
-                type: 'phone',
+                type: AccountType.phone,
                 code,
+            }).catch((err) => {
+                if (err.status === 400) {
+                    // incorrect code
+                    setInvalidCode(true)
+                }
             })
 
-            if (result.message) {
-                setInvalidCode(true)
-            } else {
+            if (result) {
                 if (step === 0) {
                     // original email verified
                     setCountryCode('')
@@ -77,7 +86,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
     }
 
     const validCheck = () => {
-        if (!phone) return
+        if (!phone) return setInvalidPhone(true)
 
         const isValid = phoneRegexp.test(countryCode + phone)
         setInvalidPhone(!isValid)
@@ -86,7 +95,9 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
     const sendValidationCode = () => {
         sendCode({
             account: countryCode + phone,
-            type: 'phone',
+            type: AccountType.phone,
+            scenario: user.email ? Scenario.change : Scenario.create,
+            locale: language.includes('zh') ? Locale.zh : Locale.en,
         })
             .then(() => {
                 snackbar.enqueueSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
@@ -95,6 +106,10 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                 snackbar.enqueueSnackbar(error.message, { variant: 'error' })
             })
     }
+
+    useEffect(() => {
+        if (step === 2) sendButton.current?.click()
+    }, [step])
 
     return (
         <ConfirmDialog
@@ -127,7 +142,11 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                 </Box>
             ) : (
                 <Box className={classes.container} sx={{ paddingTop: '24px' }}>
-                    <Typography>{t.settings_dialogs_current_phone_validation()}</Typography>
+                    <Typography sx={{ paddingBottom: '8px' }}>
+                        {step === 0
+                            ? t.settings_dialogs_change_phone_validation()
+                            : t.settings_dialogs_current_phone_validation()}
+                    </Typography>
                     <Typography color="primary" fontWeight="bold" variant="h4">
                         {countryCode} {phone}
                     </Typography>
@@ -141,10 +160,12 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                             helperText={invalidCode ? t.settings_dialogs_incorrect_code() : ''}
                         />
                         <CountdownButton
+                            ref={sendButton}
                             size="medium"
                             sx={{ width: '100px', height: '40px' }}
+                            repeatContent={t.resend()}
                             onClick={sendValidationCode}>
-                            {t.settings_button_send()}
+                            {t.send()}
                         </CountdownButton>
                     </Box>
                 </Box>

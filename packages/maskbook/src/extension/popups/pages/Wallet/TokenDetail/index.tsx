@@ -8,6 +8,17 @@ import { getTokenUSDValue } from '../../../../../plugins/Wallet/helpers'
 import { ArrowDownCircle, ArrowUpCircle } from 'react-feather'
 import { InteractionCircleIcon } from '@masknet/icons'
 import { useI18N } from '../../../../../utils'
+import { useHistory } from 'react-router'
+import { PopupRoutes } from '../../../index'
+import { PluginTraderMessages } from '../../../../../plugins/Trader/messages'
+import { PluginTransakMessages } from '../../../../../plugins/Transak/messages'
+import { useWallet } from '@masknet/web3-shared'
+import { useAsync } from 'react-use'
+import Services from '../../../../service'
+import { compact, intersectionWith } from 'lodash-es'
+import urlcat from 'urlcat'
+import type { Coin } from '../../../../../plugins/Trader/types'
+import { ActivityList } from '../components/ActivityList'
 
 const useStyles = makeStyles()({
     content: {
@@ -51,14 +62,55 @@ const useStyles = makeStyles()({
 
 const TokenDetail = memo(() => {
     const { t } = useI18N()
+    const wallet = useWallet()
     const { classes } = useStyles()
+    const history = useHistory()
     const { currentToken } = useContainer(WalletContext)
 
-    const openLabPage = useCallback(() => {
-        browser.windows.create({
-            url: browser.runtime.getURL('/next.html#/labs'),
-        })
+    const { value: isActiveSocialNetwork } = useAsync(async () => {
+        const urls = compact((await browser.tabs.query({ active: true })).map((tab) => tab.url))
+        const definedSocialNetworkUrls = (await Services.SocialNetwork.getDefinedSocialNetworkUIs()).map(
+            ({ networkIdentifier }) => networkIdentifier,
+        )
+
+        return !!intersectionWith(urls, definedSocialNetworkUrls, (a, b) => a.includes(b)).length
     }, [])
+
+    const openBuyDialog = useCallback(async () => {
+        if (isActiveSocialNetwork) {
+            PluginTransakMessages.buyTokenDialogUpdated.sendToVisiblePages({
+                open: true,
+                address: wallet?.address ?? '',
+                code: currentToken?.token.symbol ?? currentToken?.token.name,
+            })
+        } else {
+            const url = urlcat('next.html#', 'labs', {
+                open: 'Transak',
+                code: currentToken?.token.symbol ?? currentToken?.token.name,
+            })
+            window.open(browser.runtime.getURL(url), 'BUY_DIALOG', 'noopener noreferrer')
+        }
+    }, [wallet?.address, isActiveSocialNetwork, currentToken])
+
+    const openSwapDialog = useCallback(async () => {
+        if (isActiveSocialNetwork && currentToken) {
+            PluginTraderMessages.swapDialogUpdated.sendToVisiblePages({
+                open: true,
+                traderProps: {
+                    coin: {
+                        id: currentToken.token.address,
+                        name: currentToken.token.name,
+                        symbol: currentToken.token.symbol,
+                        contract_address: currentToken.token.address,
+                        decimals: currentToken.token.decimals,
+                    } as Coin,
+                },
+            })
+        } else {
+            const url = urlcat('next.html#', 'labs', { open: 'Swap' })
+            window.open(browser.runtime.getURL(url), 'SWAP_DIALOG', 'noopener noreferrer')
+        }
+    }, [isActiveSocialNetwork, currentToken])
 
     if (!currentToken) return null
 
@@ -78,26 +130,28 @@ const TokenDetail = memo(() => {
                         value={currentToken.balance}
                         decimals={currentToken.token.decimals}
                         symbol={currentToken.token.symbol}
+                        significant={4}
                     />
                 </Typography>
                 <Typography className={classes.text}>
-                    <FormattedCurrency value={getTokenUSDValue(currentToken).toFixed(2)} sign="$" />
+                    <FormattedCurrency value={getTokenUSDValue(currentToken)} sign="$" />
                 </Typography>
                 <div className={classes.controller}>
-                    <div onClick={openLabPage}>
+                    <div onClick={openBuyDialog}>
                         <ArrowDownCircle className={classes.icon} />
                         <Typography className={classes.text}>{t('popups_wallet_token_buy')}</Typography>
                     </div>
-                    <div>
+                    <div onClick={() => history.push(PopupRoutes.Transfer)}>
                         <ArrowUpCircle className={classes.icon} />
                         <Typography className={classes.text}>{t('popups_wallet_token_send')}</Typography>
                     </div>
-                    <div onClick={openLabPage}>
+                    <div onClick={openSwapDialog}>
                         <InteractionCircleIcon className={classes.icon} />
                         <Typography className={classes.text}>{t('popups_wallet_token_swap')}</Typography>
                     </div>
                 </div>
             </div>
+            <ActivityList tokenAddress={currentToken.token.address} />
         </>
     )
 })

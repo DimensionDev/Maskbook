@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import type { Trade } from '@uniswap/v2-sdk'
+import { TradeProvider } from '@masknet/public-api'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
 import {
     ChainId,
@@ -13,7 +14,7 @@ import {
     TransactionStateType,
     useChainId,
     useChainIdValid,
-    useTokenBalance,
+    useFungibleTokenBalance,
 } from '@masknet/web3-shared'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { TradeForm } from './TradeForm'
@@ -22,7 +23,7 @@ import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
 import { TradeSummary } from './TradeSummary'
 import { ConfirmDialog } from './ConfirmDialog'
 import { TradeActionType } from '../../trader/useTradeState'
-import { Coin, SwapResponse, SwapRouteData, TokenPanelType, TradeComputed, TradeProvider } from '../../types'
+import { Coin, SwapResponse, SwapRouteData, TokenPanelType, TradeComputed, SwapBancorRequest } from '../../types'
 import { TradePairViewer as UniswapPairViewer } from '../uniswap/TradePairViewer'
 import { TradePairViewer as DODOPairViewer } from '../dodo/TradePairViewer'
 import { useTradeCallback } from '../../trader/useTradeCallback'
@@ -122,12 +123,12 @@ export function Trader(props: TraderProps) {
         value: inputTokenBalance_,
         loading: loadingInputTokenBalance,
         retry: retryInputTokenBalance,
-    } = useTokenBalance(inputToken?.type ?? EthereumTokenType.Native, inputToken?.address ?? '')
+    } = useFungibleTokenBalance(inputToken?.type ?? EthereumTokenType.Native, inputToken?.address ?? '')
     const {
         value: outputTokenBalance_,
         loading: loadingOutputTokenBalance,
         retry: retryOutputTokenBalance,
-    } = useTokenBalance(outputToken?.type ?? EthereumTokenType.Native, outputToken?.address ?? '')
+    } = useFungibleTokenBalance(outputToken?.type ?? EthereumTokenType.Native, outputToken?.address ?? '')
 
     useEffect(() => {
         if (inputTokenBalance_ && !loadingInputTokenBalance)
@@ -229,7 +230,7 @@ export function Trader(props: TraderProps) {
                           inputToken.symbol
                       } for ${formatBalance(tradeComputed.outputAmount, outputToken.decimals, 6)} ${cashTag}${
                           outputToken.symbol
-                      }. Follow @realMaskbook (mask.io) to swap cryptocurrencies on Twitter.`,
+                      }. Follow @realMaskNetwork (mask.io) to swap cryptocurrencies on Twitter.`,
                       '#mask_io',
                   ].join('\n')
                 : '',
@@ -329,6 +330,9 @@ export function Trader(props: TraderProps) {
                     ) : null}
                     {TradeProvider.DODO === provider ? (
                         <DODOPairViewer trade={tradeComputed as TradeComputed<SwapRouteData>} provider={provider} />
+                    ) : null}
+                    {TradeProvider.BANCOR === provider ? (
+                        <DODOPairViewer trade={tradeComputed as TradeComputed<SwapBancorRequest>} provider={provider} />
                     ) : null}
                 </>
             ) : null}

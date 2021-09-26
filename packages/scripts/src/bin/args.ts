@@ -1,8 +1,10 @@
 import yargs from 'yargs'
 import type { ExtensionBuildArgs } from '..'
-const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base'] as const
+
+const { hideBin } = require('yargs/helpers')
+const presets = ['chromium', 'firefox', 'android', 'iOS', 'base'] as const
 export function extensionArgsParser() {
-    const opts = yargs(process.argv)
+    const opts = yargs(hideBin(process.argv))
         .options<'preset', { choices: typeof presets[number][] }>('preset', {
             // @ts-ignore
             type: 'string',
@@ -30,7 +32,6 @@ export function extensionArgsParser() {
         .strict().argv
     const extensionOpts = {
         'manifest-v3': opts['manifest-v3'],
-        E2E: opts.preset === 'E2E',
         android: opts.preset === 'android',
         chromium: opts.preset === 'chromium',
         firefox: opts.preset === 'firefox',

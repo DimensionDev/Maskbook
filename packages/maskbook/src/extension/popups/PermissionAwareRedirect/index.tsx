@@ -3,7 +3,6 @@ export { PermissionAwareRedirectUI } from './ui'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router'
 import { useAsyncRetry } from 'react-use'
-import Services from '../../service'
 import { MissingParameter } from '../MissingParameter'
 import { PermissionAwareRedirectUI } from './ui'
 import { getHostPermissionFieldFromURL, isValidURL } from './utils'
@@ -22,17 +21,16 @@ function Inner({ url, context }: { url: string; context: string }) {
     }, [url])
     useEffect(() => {
         if (hasPermission) {
-            Services.ThirdPartyPlugin.enableSDK(new URL('./', url).href).then(() => {
-                const u = new URL(url)
-                u.searchParams.append('mask_context', context)
-                location.href = u.toString()
-            })
+            const u = new URL(url)
+            u.searchParams.append('mask_context', context)
+            location.href = u.toString()
         }
     }, [hasPermission, url])
     return (
         <PermissionAwareRedirectUI
             url={url}
             granted={!!hasPermission}
+            onCancel={() => window.close()}
             onRequest={() => {
                 browser.permissions.request({ origins: [getHostPermissionFieldFromURL(url)] }).finally(retry)
             }}

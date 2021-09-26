@@ -10,7 +10,8 @@
         "Matic": "https://api.thegraph.com/subgraphs/name/pooltogether/polygon-v3_3_8",
         "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     },
     "MASK_POOL_ADDRESS": {
         "Mainnet": "",
@@ -23,6 +24,7 @@
         "Matic": "0x345dc966180d5cf6b57a476362e9c859b725991e",
         "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     }
 }

@@ -237,7 +237,7 @@ export namespace Plugin.SNSAdaptor {
     }
     //#endregion
 
-    //#region Toolbal entry
+    //#region Toolbar entry
     export interface ToolbarEntry {
         image: string
         // TODO: remove string

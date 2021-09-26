@@ -11,6 +11,7 @@ const useStyles = makeStyles()({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        backgroundColor: '#ffffff',
     },
     setting: {
         stroke: '#1C68F3',
@@ -28,7 +29,7 @@ export const WalletHeader = memo(() => {
         <div>
             <div className={classes.container}>
                 <NetworkSelector />
-                <SettingIcon className={classes.setting} onClick={() => history.push(PopupRoutes.SelectWallet)} />
+                <SettingIcon className={classes.setting} onClick={() => history.push(PopupRoutes.SwitchWallet)} />
             </div>
         </div>
     )

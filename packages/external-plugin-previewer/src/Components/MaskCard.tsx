@@ -1,11 +1,11 @@
-import { Card, CardContent, Typography, CardActions, Button } from '@material-ui/core'
-import { hostConfig } from '../host'
+import { Card, CardContent, Typography, CardActions, Button } from '@mui/material'
+import { RenderContext } from '../index'
 import type { Component } from './index'
-import { useRef } from 'react'
+import { useContext } from 'react'
 export const MaskCard: Component<MaskCardProps> = (props) => {
-    const ref = useRef<HTMLDivElement>(null)
+    const context = useContext(RenderContext)
     return (
-        <Card ref={ref}>
+        <Card>
             <CardContent>
                 <Typography color="textSecondary" gutterBottom>
                     {String(props.caption)}
@@ -20,9 +20,9 @@ export const MaskCard: Component<MaskCardProps> = (props) => {
             <CardActions>
                 <Button
                     onClick={() => {
-                        const base = getContext(ref.current)?.trim()
+                        const base = context.baseURL
                         const url = base ? new URL(props.href, base) : new URL(props.href)
-                        hostConfig.permissionAwareOpen(url.toString())
+                        context.permissionAwareOpen(url.toString())
                     }}
                     size="small">
                     {String(props.button)}
@@ -37,13 +37,4 @@ export interface MaskCardProps {
     title: string
     button: string
     href: string
-}
-function getContext(node: Node | ShadowRoot | null): string | null {
-    if (!node) return null
-    if (node instanceof Element && node.hasAttribute('data-plugin')) {
-        return node.getAttribute('data-plugin')
-    }
-    if (node instanceof ShadowRoot) return getContext(node.host)
-    if (node.parentNode) return getContext(node.parentNode)
-    return null
 }

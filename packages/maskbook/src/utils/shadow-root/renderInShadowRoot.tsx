@@ -2,11 +2,10 @@ import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 import { applyMaskColorVars } from '@masknet/theme'
 import { appearanceSettings } from '../../settings/settings'
 import { getMaskbookTheme } from '../theme'
-import { createReactRootShadowedPartial, disableJSSDisconnectedWarning, setupPortalShadowRoot } from '@masknet/theme'
+import { createReactRootShadowedPartial, setupPortalShadowRoot } from '@masknet/theme'
 import { untilDomLoaded } from '../dom'
 import { Flags } from '../flags'
 import { MaskInShadow } from './MaskInShadow'
-if (process.env.NODE_ENV === 'development') disableJSSDisconnectedWarning()
 
 const captureEvents: (keyof HTMLElementEventMap)[] = [
     'paste',

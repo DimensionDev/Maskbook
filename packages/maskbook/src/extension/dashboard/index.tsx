@@ -1,5 +1,5 @@
 // @ts-ignore in case circle dependency make typescript complains
-import { setService, setPluginMessages, setMessages, setPluginServices, IntergratedDashboard } from '@masknet/dashboard'
+import { setService, setPluginMessages, setMessages, setPluginServices, IntegratedDashboard } from '@masknet/dashboard'
 import Services from '../service'
 import { WalletRPC, WalletMessages } from '../../plugins/Wallet/messages'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
@@ -28,4 +28,4 @@ setPluginServices(rpc)
 // @ts-ignore
 setPluginMessages(msg)
 startPluginDashboard(createPluginHost())
-createNormalReactRoot(<IntergratedDashboard />)
+createNormalReactRoot(<IntegratedDashboard />)

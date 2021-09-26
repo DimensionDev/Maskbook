@@ -1,4 +1,4 @@
-import { Switch, experimentalStyled as styled, switchClasses } from '@material-ui/core'
+import { Switch, styled, switchClasses } from '@material-ui/core'
 
 export default styled<typeof Switch>(Switch)(({ size }) => {
     const isSmall = size === 'small'

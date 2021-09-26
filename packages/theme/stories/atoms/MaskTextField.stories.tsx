@@ -1,4 +1,4 @@
-import type { TextFieldProps } from '@material-ui/core'
+import type { TextFieldProps } from '@mui/material'
 import { story, MuiArgs, matrix } from '../utils'
 import { MaskTextField as TextField } from '../../src/Components/TextField'
 

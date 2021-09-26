@@ -4,12 +4,14 @@ import type { BackupPreview } from './BackupPreviewCard'
 import { MaskColorVar } from '@masknet/theme'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 
 const SelectItem = styled('div')(({ theme }) => ({
     borderRadius: 8,
     backgroundColor: MaskColorVar.lightBackground,
     padding: theme.spacing(2),
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(2),
     display: 'flex',
 }))
 
@@ -84,6 +86,8 @@ export default function BackupContentSelector({ json, onChange }: BackupContentS
                         checked={baseChecked}
                         onChange={(event) => setBaseChecked(event.target.checked)}
                         name="base"
+                        icon={<RadioButtonUncheckedIcon />}
+                        checkedIcon={<CheckCircleIcon />}
                     />
                 </CheckboxContainer>
                 <Box sx={{ flex: 1 }}>
@@ -95,20 +99,23 @@ export default function BackupContentSelector({ json, onChange }: BackupContentS
                     ))}
                 </Box>
             </SelectItem>
-            <SelectItem>
-                <CheckboxContainer>
-                    <Checkbox
-                        checked={walletChecked}
-                        onChange={(event) => setWalletChecked(event.target.checked)}
-                        disabled={!json.wallets}
-                        name="wallet"
-                    />
-                </CheckboxContainer>
-                <BackupItem sx={{ flex: 1 }}>
-                    <Typography variant="body2">{t.settings_backup_preview_wallets()}</Typography>
-                    <Typography variant="body2">{json.wallets}</Typography>
-                </BackupItem>
-            </SelectItem>
+            {json.wallets ? (
+                <SelectItem>
+                    <CheckboxContainer>
+                        <Checkbox
+                            checked={walletChecked}
+                            onChange={(event) => setWalletChecked(event.target.checked)}
+                            name="wallet"
+                            icon={<RadioButtonUncheckedIcon />}
+                            checkedIcon={<CheckCircleIcon />}
+                        />
+                    </CheckboxContainer>
+                    <BackupItem sx={{ flex: 1 }}>
+                        <Typography variant="body2">{t.settings_backup_preview_wallets()}</Typography>
+                        <Typography variant="body2">{json.wallets}</Typography>
+                    </BackupItem>
+                </SelectItem>
+            ) : null}
         </Box>
     )
 }

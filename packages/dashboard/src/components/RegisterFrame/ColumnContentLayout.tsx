@@ -1,5 +1,5 @@
-import { RestoreIcon, RestoreBlueIcon, SignUpAccountIcon } from '@masknet/icons'
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { RestoreBlueIcon, SignUpAccountIcon } from '@masknet/icons'
+import { styled } from '@material-ui/core/styles'
 
 export const ColumnContentLayout = styled('div')(
     ({ theme }) => `
@@ -13,40 +13,36 @@ export const ColumnContentLayout = styled('div')(
 `,
 )
 
-export const Body = styled('main')(
-    ({ theme }) => `
-    flex: 2;
-    width: 78%;
-`,
-)
+export const Body = styled('main')(({ theme }) => ({
+    flex: '1 5',
+    width: '78%',
+    [theme.breakpoints.down('md')]: {
+        width: '95%',
+    },
+}))
 
-export const Footer = styled('footer')(
-    ({ theme }) => `
-    flex: 1;
-    width: 78%;
-`,
-)
+export const Footer = styled('footer')(({ theme }) => ({
+    flex: 1,
+    width: '78%',
+    [theme.breakpoints.down('md')]: {
+        width: '95%',
+    },
+}))
 
-export const SignUpAccountLogo = styled(SignUpAccountIcon)(
-    ({ theme }) => `
-    width: 100%;
-    height: 96px;
-    margin-bottom: ${theme.spacing(10)};
-`,
-)
+export const SignUpAccountLogo = styled(SignUpAccountIcon)(({ theme }) => ({
+    width: '100%',
+    height: '96px',
+    marginBottom: theme.spacing(10),
+    [theme.breakpoints.down('md')]: {
+        marginBottom: theme.spacing(2),
+    },
+}))
 
-export const RestoreBlueLogo = styled(RestoreBlueIcon)(
-    ({ theme }) => `
-    width: 100%;
-    height: 96px;
-    margin-bottom: ${theme.spacing(10)};
-`,
-)
-
-export const RestoreLogo = styled(RestoreIcon)(
-    ({ theme }) => `
-    width: 100%;
-    height: 96px;
-    margin-bottom: ${theme.spacing(10)};
-`,
-)
+export const RestoreBlueLogo = styled(RestoreBlueIcon)(({ theme }) => ({
+    width: '100%',
+    height: '96px',
+    marginBottom: theme.spacing(10),
+    [theme.breakpoints.down('md')]: {
+        marginBottom: theme.spacing(2),
+    },
+}))

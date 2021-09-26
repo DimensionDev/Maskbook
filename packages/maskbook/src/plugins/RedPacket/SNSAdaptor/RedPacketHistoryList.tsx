@@ -9,10 +9,13 @@ import { useEffect } from 'react'
 const useStyles = makeStyles()({
     root: {
         display: 'flex',
-        width: '100%',
+        width: 568,
+        padding: '0 12px',
+        boxSizing: 'border-box',
         height: '100%',
         flexDirection: 'column',
         margin: '0 auto',
+        overflow: 'auto',
     },
     placeholder: {
         textAlign: 'center',
@@ -21,11 +24,10 @@ const useStyles = makeStyles()({
 
 interface RedPacketHistoryListProps {
     onSelect: (payload: RedPacketJSONPayload) => void
-    onClose: () => void
 }
 
 export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
-    const { onSelect, onClose } = props
+    const { onSelect } = props
     const { classes } = useStyles()
     const account = useAccount()
     const chainId = useChainId()
@@ -53,7 +55,7 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
                 <List>
                     {histories.map((history) => (
                         <div key={history.rpid}>
-                            <RedPacketInHistoryList history={history} onSelect={onSelect} onClose={onClose} />
+                            <RedPacketInHistoryList history={history} onSelect={onSelect} />
                         </div>
                     ))}
                 </List>

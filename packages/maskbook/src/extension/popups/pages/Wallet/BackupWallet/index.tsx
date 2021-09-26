@@ -1,5 +1,5 @@
 import { memo, useCallback, useState } from 'react'
-import { Button, Tab, Tabs, Typography, experimentalStyled as styled, tabsClasses, tabClasses } from '@material-ui/core'
+import { Button, styled, Tab, tabClasses, Tabs, tabsClasses, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { TabContext, TabPanel } from '@material-ui/lab'
@@ -77,10 +77,10 @@ const StyledTabs = styled(Tabs)`
         background-color: #f7f9fa;
         padding-top: 6px;
     }
-    &.${tabsClasses.indicator} {
+    & .${tabsClasses.indicator} {
         display: none;
     }
-    &.${tabsClasses.flexContainer} {
+    & .${tabsClasses.flexContainer} {
         justify-content: center;
     }
 `
@@ -90,7 +90,7 @@ const StyledTab = styled(Tab)`
         font-size: 12px;
         line-height: 16px;
         min-height: unset;
-        min-width: 145px;
+        min-width: 165px;
         padding: 7px 0;
         background-color: #f7f9fa;
         border-radius: 4px 4px 0px 0px;
@@ -111,7 +111,7 @@ const BackupWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const wallet = useWallet()
-    const [confirmed, setConfirmed] = useState(false)
+    const [confirmed, setConfirmed] = useState(true)
     const [currentTab, setCurrentTab] = useState(BackupTabs.JsonFile)
     const [password, setPassword] = useState('')
 

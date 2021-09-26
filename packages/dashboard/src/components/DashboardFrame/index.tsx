@@ -1,33 +1,33 @@
 import {
-    useMediaQuery,
-    Toolbar,
-    Theme,
-    Typography,
     AppBar,
+    Box,
+    Drawer,
     Grid,
     IconButton,
-    Drawer,
-    experimentalStyled as styled,
-    Box,
     paperClasses,
+    styled,
+    Theme,
+    Toolbar,
+    Typography,
+    useMediaQuery,
 } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
-import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { Close as CloseIcon, Menu as MenuIcon } from '@material-ui/icons'
 import Color from 'color'
 import { ErrorBoundary } from '@masknet/shared'
-import { useState, useContext, useMemo, Suspense } from 'react'
+import { memo, Suspense, useContext, useMemo, useState } from 'react'
 import { DashboardContext } from './context'
 import { Navigation } from './Navigation'
-import { MaskNotSquareIcon } from '@masknet/icons'
-import { memo } from 'react'
+import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
 import { FeaturePromotions } from './FeaturePromotions'
 import { useLocation } from 'react-router'
 import { RoutePaths } from '../../type'
+import { useAppearance } from '../../pages/Personas/api'
 
 const featurePromotionsEnabled = [RoutePaths.Wallets, RoutePaths.WalletsTransfer, RoutePaths.WalletsHistory]
 
 const Root = styled(Grid)(({ theme }) => ({
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: MaskColorVar.primaryBackground,
 }))
 
 const LeftContainer = styled(Grid)(({ theme }) => ({
@@ -119,7 +119,7 @@ const ShapeHelper = styled('div')(({ theme }) => ({
     padding: theme.spacing(3),
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.mode === 'dark' ? '#1B1E38' : MaskColorVar.secondaryBackground,
     overflow: 'auto',
     flex: 1,
     display: 'flex',
@@ -128,12 +128,15 @@ const ShapeHelper = styled('div')(({ theme }) => ({
 
 const ContentContainer = styled('div')(({ theme }) => ({
     height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
 }))
 
 const useStyle = makeStyles()((theme) => ({
     toolbarGutters: {
+        backgroundColor: MaskColorVar.primaryBackground,
         [theme.breakpoints.up('lg')]: {
             paddingLeft: theme.spacing(0),
         },
@@ -159,15 +162,19 @@ export const PageFrame = memo((props: PageFrameProps) => {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
     const showFeaturePromotions = featurePromotionsEnabled.some((path: string) => path === location.pathname)
+    const mode = useAppearance()
     const { classes } = useStyle()
+
     return (
         <>
             <AppBar position="relative" color="inherit" elevation={0}>
                 <Toolbar classes={{ gutters: classes.toolbarGutters }}>
                     {!isLargeScreen && (
                         <MaskLogo item container alignItems="center">
-                            <MenuButton onClick={toggleDrawer}>{drawerOpen ? <CloseIcon /> : <MenuIcon />}</MenuButton>
-                            <MaskNotSquareIcon />
+                            <MenuButton size="large" onClick={toggleDrawer}>
+                                {drawerOpen ? <CloseIcon /> : <MenuIcon />}
+                            </MenuButton>
+                            {mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}
                         </MaskLogo>
                     )}
                     <PageTitle item xs={isLargeScreen ? 12 : 10} container>
@@ -182,7 +189,12 @@ export const PageFrame = memo((props: PageFrameProps) => {
                     <NavigationDrawer
                         open={drawerOpen}
                         onClose={toggleDrawer}
-                        hideBackdrop
+                        ModalProps={{
+                            BackdropProps: {
+                                sx: { background: 'transparent' },
+                            },
+                        }}
+                        transitionDuration={300}
                         variant="temporary"
                         elevation={0}>
                         <Navigation />

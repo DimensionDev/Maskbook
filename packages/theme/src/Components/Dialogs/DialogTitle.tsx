@@ -1,5 +1,5 @@
-import { DialogTitle, IconButton, Typography, Box, experimentalStyled as styled } from '@material-ui/core'
-import { Close, ArrowBack } from '@material-ui/icons'
+import { DialogTitle, IconButton, Typography, Box, styled } from '@mui/material'
+import { Close, ArrowBack } from '@mui/icons-material'
 import { memo } from 'react'
 
 const Title = styled(DialogTitle)(({ theme }) => ({
@@ -16,19 +16,19 @@ export interface MaskDialogTitleProps {
 export const MaskDialogTitle = memo((props: MaskDialogTitleProps) => {
     const { children, onBack, onClose } = props
     const backButton = onBack ? (
-        <IconButton onClick={onBack} edge="start" color="inherit" sx={{ marginRight: '8px' }}>
+        <IconButton size="large" onClick={onBack} edge="start" color="inherit" sx={{ marginRight: '8px' }}>
             <ArrowBack />
         </IconButton>
     ) : null
     const closeButton = onClose ? (
-        <IconButton onClick={onClose} edge="end" color="inherit">
+        <IconButton size="large" onClick={onClose} edge="end" color="inherit">
             <Close />
         </IconButton>
     ) : null
     return (
-        <Title disableTypography>
+        <Title>
             {backButton}
-            <Typography component="h2" variant="h6">
+            <Typography component="span" variant="h6">
                 {children}
             </Typography>
             <Box sx={{ flex: 1 }} />

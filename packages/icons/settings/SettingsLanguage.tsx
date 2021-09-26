@@ -1,4 +1,4 @@
-import type { SvgIcon } from '@material-ui/core'
+import type { SvgIcon } from '@mui/material'
 import { createPaletteAwareIcon } from '../utils'
 
 export const SettingsLanguageIcon: typeof SvgIcon = createPaletteAwareIcon(

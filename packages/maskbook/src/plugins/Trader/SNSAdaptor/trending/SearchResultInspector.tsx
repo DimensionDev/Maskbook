@@ -15,14 +15,12 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     if (!name || !dataProviders?.length) return null
     return (
-        <div>
-            <TraderView
-                isPopper={false}
-                name={name}
-                tagType={type_}
-                dataProviders={dataProviders}
-                tradeProviders={traderProviders}
-            />
-        </div>
+        <TraderView
+            isPopper={false}
+            name={name}
+            tagType={type_}
+            dataProviders={dataProviders}
+            tradeProviders={traderProviders}
+        />
     )
 }

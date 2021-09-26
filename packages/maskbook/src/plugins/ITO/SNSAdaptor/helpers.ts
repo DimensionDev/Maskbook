@@ -6,7 +6,7 @@ import { ITO_MetaKey_1, ITO_MetaKey_2 } from '../constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from '../types'
 import schemaV1 from '../schema-v1.json'
 import schemaV2 from '../schema-v2.json'
-import { FungibleTokenDetailed, isNative } from '@masknet/web3-shared'
+import { ChainId, isNative } from '@masknet/web3-shared'
 import type { Result } from 'ts-results'
 
 const reader_v1 = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_MetaKey_1, schemaV1)
@@ -53,18 +53,22 @@ export function timestampOutMask(timestamp: number) {
     return Math.floor(timestamp / 1000)
 }
 
-export function tokenIntoMask(token: JSON_PayloadOutMask['token']) {
+export function tokenIntoMask<T extends { chain_id: ChainId }>(token: T) {
     return {
         ...omit(token, 'chain_id'),
         chainId: token.chain_id,
-    } as unknown as FungibleTokenDetailed
+    } as unknown as Omit<T, 'chain_id'> & {
+        chainId: ChainId
+    }
 }
 
-export function tokenOutMask(token: FungibleTokenDetailed) {
+export function tokenOutMask<T extends { chainId: ChainId }>(token: T) {
     return {
         ...omit(token, 'chainId'),
         chain_id: token.chainId,
-    } as JSON_PayloadOutMask['token']
+    } as Omit<T, 'chainId'> & {
+        chain_id: ChainId
+    }
 }
 
 export function payloadIntoMask(payload: JSON_PayloadOutMask) {
@@ -103,7 +107,6 @@ export function payloadOutMaskCompact(payload: JSON_PayloadInMask) {
         creation_time: 0,
         limit: '0',
         total_remaining: '0',
-        buyers: [],
         exchange_amounts: [],
         exchange_tokens: [],
     } as JSON_PayloadOutMask

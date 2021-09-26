@@ -85,19 +85,23 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
 
     async function backupPersonas(of?: PersonaIdentifier[]) {
         const data = (
-            await queryPersonasDB((p) => {
-                if (p.uninitialized) return false
-                if (opts.hasPrivateKeyOnly && !p.privateKey) return false
-                if (of === undefined) return true
-                if (!of.some((x) => x.equals(p.identifier))) return false
-                return true
-            })
+            await queryPersonasDB(
+                (p) => {
+                    if (p.uninitialized) return false
+                    if (opts.hasPrivateKeyOnly && !p.privateKey) return false
+                    if (of === undefined) return true
+                    if (!of.some((x) => x.equals(p.identifier))) return false
+                    return true
+                },
+                undefined,
+                true,
+            )
         ).map(PersonaRecordToJSONFormat)
         personas.push(...data)
     }
 
     async function backupAllWallets() {
-        const wallets_ = (await getWallets(ProviderType.Maskbook)).map(WalletRecordToJSONFormat)
+        const wallets_ = (await getWallets(ProviderType.MaskWallet)).map(WalletRecordToJSONFormat)
         wallets.push(...wallets_)
     }
 

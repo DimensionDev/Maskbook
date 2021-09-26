@@ -1,13 +1,8 @@
 import * as ABICoder from 'web3-eth-abi'
-import {
-    EthereumRpcComputed,
-    EthereumTransactionConfig,
-    EthereumRpcType,
-    EthereumMethodType,
-    getChainDetailedCAIP,
-} from '@masknet/web3-shared'
-import { getCode } from '../network'
+import { EthereumRpcComputed, EthereumRpcType, EthereumMethodType, getChainDetailedCAIP } from '@masknet/web3-shared'
+import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
+import { getCode } from '../network'
 import ABI_LIST from './abi_list.json'
 
 type AbiItem = {
@@ -18,21 +13,21 @@ type AbiItem = {
     }[]
 }
 
-// fix the type eror
+// fix the type error
 const coder = ABICoder as unknown as ABICoder.AbiCoder
 
 const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 
 const ABI_LIST_WITH_SIGNATURE = (ABI_LIST as AbiItem[]).map((x) => ({
     ...x,
-    signature: coder.encodeFunctionSignature(`${x.name}(${x.parameters.join(',')})`),
+    signature: coder.encodeFunctionSignature(`${x.name}(${x.parameters.map((y) => y.type).join(',')})`),
 }))
 
 function isEmptyHex(hex: string) {
     return !hex || ['0x', '0x0'].includes(hex)
 }
 
-function getData(tx: EthereumTransactionConfig) {
+function getData(tx: TransactionConfig) {
     const { data } = tx
     if (!data) return
     if (isEmptyHex(data)) return
@@ -40,24 +35,24 @@ function getData(tx: EthereumTransactionConfig) {
     return data
 }
 
-function getTo(tx: EthereumTransactionConfig) {
+function getTo(tx: TransactionConfig) {
     const { to } = tx
     if (!to) return ADDRESS_ZERO
     if (isEmptyHex(to)) return ADDRESS_ZERO
     return to
 }
 
-function getFunctionSignature(tx: EthereumTransactionConfig) {
+function getFunctionSignature(tx: TransactionConfig) {
     const data = getData(tx)
     return data?.slice(0, 10)
 }
 
-function getFunctionParameters(tx: EthereumTransactionConfig) {
+function getFunctionParameters(tx: TransactionConfig) {
     const data = getData(tx)
     return data?.slice(10)
 }
 
-export async function getJsonRpcComputed(payload: JsonRpcPayload): Promise<EthereumRpcComputed | undefined> {
+export async function getComputedPayload(payload: JsonRpcPayload): Promise<EthereumRpcComputed | undefined> {
     switch (payload.method) {
         // sign
         case EthereumMethodType.ETH_SIGN:
@@ -107,22 +102,21 @@ export async function getJsonRpcComputed(payload: JsonRpcPayload): Promise<Ether
                 chain: payload.params[0],
             }
 
-        // contract interation
+        // contract interaction
         case EthereumMethodType.ETH_SEND_TRANSACTION:
-            return getSendTransactionRpcComputed(payload.params[0])
+            return getSendTransactionComputedPayload(payload) as Promise<EthereumRpcComputed | undefined>
 
         default:
             return
     }
 }
 
-export async function getSendTransactionRpcComputed(
-    tx: EthereumTransactionConfig,
-): Promise<EthereumRpcComputed | undefined> {
-    const data = getData(tx)
-    const to = getTo(tx)
-    const signature = getFunctionSignature(tx)
-    const parameters = getFunctionParameters(tx)
+export async function getSendTransactionComputedPayload(payload: JsonRpcPayload) {
+    const [config] = payload.params as [TransactionConfig]
+    const data = getData(config)
+    const to = getTo(config)
+    const signature = getFunctionSignature(config)
+    const parameters = getFunctionParameters(config)
 
     if (data) {
         // contract interaction
@@ -134,7 +128,7 @@ export async function getSendTransactionRpcComputed(
                     type: EthereumRpcType.CONTRACT_INTERACTION,
                     name: abi.name,
                     parameters: coder.decodeParameters(abi.parameters, parameters ?? ''),
-                    _tx: tx,
+                    _tx: config,
                 }
             } catch {
                 // do nothing
@@ -146,25 +140,30 @@ export async function getSendTransactionRpcComputed(
             return {
                 type: EthereumRpcType.CONTRACT_DEPLOYMENT,
                 code: data,
-                _tx: tx,
+                _tx: config,
             }
         }
     }
 
     if (to) {
-        const code = await getCode(to)
+        let code: string = ''
+        try {
+            code = await getCode(to)
+        } catch {
+            code = ''
+        }
 
         // send ether
         if (isEmptyHex(code)) {
             return {
                 type: EthereumRpcType.SEND_ETHER,
-                _tx: tx,
+                _tx: config,
             }
         } else {
             return {
                 type: EthereumRpcType.CONTRACT_INTERACTION,
                 name: 'Unknown',
-                _tx: tx,
+                _tx: config,
             }
         }
     }

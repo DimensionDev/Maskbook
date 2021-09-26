@@ -19,7 +19,7 @@ export async function createConnector() {
     connector = new WalletConnect({
         bridge: 'https://uniswap.bridge.walletconnect.org',
         clientMeta: {
-            name: 'Mask Netowrk',
+            name: 'Mask Network',
             description: 'Mask Network',
             url: 'https://mask.io',
             icons: ['https://mask.io/apple-touch-icon.png'],
@@ -101,7 +101,6 @@ const onUpdate = async (
         account: first(connector.accounts),
         chainId: connector.chainId,
         providerType: ProviderType.WalletConnect,
-        networkType: undefined,
     })
 }
 

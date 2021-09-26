@@ -1,14 +1,24 @@
-import { memo, useMemo } from 'react'
-import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
-import { WalletHeader } from '../components/WalletHeader'
-import { WalletInfo } from '../components/WalletInfo'
-import { isSameAddress, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
-import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
-import { FormattedAddress } from '@masknet/shared'
-import { useHistory } from 'react-router-dom'
-import { PopupRoutes } from '../../../index'
+import { memo, useCallback, useState } from 'react'
 import { useI18N } from '../../../../../utils'
+import { makeStyles } from '@masknet/theme'
+import { useLocation } from 'react-router'
+import {
+    ChainId,
+    getNetworkName,
+    isSameAddress,
+    ProviderType,
+    useAccount,
+    useChainIdValid,
+    useWallets,
+} from '@masknet/web3-shared'
+import { ChainIcon, FormattedAddress } from '@masknet/shared'
+import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/core'
+import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
+import { useCopyToClipboard } from 'react-use'
+import { SuccessIcon } from '@masknet/icons'
+import Services from '../../../../service'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { parseInt } from 'lodash-es'
 
 const useStyles = makeStyles()({
     content: {
@@ -16,6 +26,39 @@ const useStyles = makeStyles()({
         backgroundColor: '#F7F9FA',
         display: 'flex',
         flexDirection: 'column',
+    },
+    placeholder: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    header: {
+        padding: 10,
+        display: 'flex',
+        marginBottom: 1,
+        backgroundColor: '#ffffff',
+    },
+    network: {
+        minWidth: 114,
+        padding: '4px 12px 4px 4px',
+        minHeight: 28,
+        borderRadius: 18,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: '#1c68f3',
+    },
+    title: {
+        color: '#ffffff',
+        fontSize: 12,
+        lineHeight: '16px',
+    },
+    iconWrapper: {
+        width: 20,
+        height: 20,
+        borderRadius: 20,
+        marginRight: 10,
     },
     list: {
         backgroundColor: '#ffffff',
@@ -44,7 +87,12 @@ const useStyles = makeStyles()({
         fontWeight: 500,
     },
     text: {
-        marginLeft: 15,
+        marginLeft: 4,
+    },
+    listItem: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     controller: {
         display: 'grid',
@@ -63,30 +111,68 @@ const useStyles = makeStyles()({
 const SelectWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const history = useHistory()
-    const wallet = useWallet()
-    const wallets = useWallets(ProviderType.Maskbook)
+    const location = useLocation()
+    const wallet = useAccount()
+    const wallets = useWallets()
 
-    const walletList = useMemo(
-        () => wallets.filter((item) => isSameAddress(item.address, wallet?.address)),
-        [wallet, wallets],
+    const [selected, setSelected] = useState(wallet)
+    const [, copyToClipboard] = useCopyToClipboard()
+
+    const search = new URLSearchParams(location.search)
+
+    const chainId = parseInt(search.get('chainId') ?? '0', 10) as ChainId
+
+    const chainIdValid = useChainIdValid()
+
+    const onCopy = useCallback(
+        (address: string) => {
+            copyToClipboard(address)
+        },
+        [copyToClipboard],
     )
 
-    return (
+    const handleCancel = useCallback(() => Services.Helper.removePopupWindow(), [])
+
+    const handleConfirm = useCallback(async () => {
+        await WalletRPC.updateAccount({
+            chainId,
+            account: selected,
+            providerType: ProviderType.MaskWallet,
+        })
+        await WalletRPC.updateMaskAccount({
+            chainId,
+            account: selected,
+        })
+
+        return Services.Helper.removePopupWindow()
+    }, [chainId, selected])
+
+    return chainIdValid ? (
         <>
-            <WalletHeader />
-            <WalletInfo />
             <div className={classes.content}>
+                <div className={classes.header}>
+                    <div className={classes.network}>
+                        <div className={classes.iconWrapper}>
+                            <ChainIcon chainId={chainId} />
+                        </div>
+                        <Typography className={classes.title}>{getNetworkName(chainId)}</Typography>
+                    </div>
+                </div>
                 <List dense className={classes.list}>
-                    {walletList.map((item, index) => (
-                        <ListItem className={classes.item} key={index}>
+                    {wallets.map((item, index) => (
+                        <ListItem className={classes.item} key={index} onClick={() => setSelected(item.address)}>
                             <MaskWalletIcon />
                             <ListItemText className={classes.text}>
-                                <Typography className={classes.name}>{item.name}</Typography>
-                                <Typography className={classes.address}>
-                                    <FormattedAddress address={item.address} size={12} />
-                                    <CopyIcon className={classes.copy} />
-                                </Typography>
+                                <div className={classes.listItem}>
+                                    <div>
+                                        <Typography className={classes.name}>{item.name}</Typography>
+                                        <Typography className={classes.address}>
+                                            <FormattedAddress address={item.address} size={12} />
+                                            <CopyIcon className={classes.copy} onClick={() => onCopy(item.address)} />
+                                        </Typography>
+                                    </div>
+                                    {isSameAddress(item.address, selected) ? <SuccessIcon /> : null}
+                                </div>
                             </ListItemText>
                         </ListItem>
                     ))}
@@ -96,18 +182,19 @@ const SelectWallet = memo(() => {
                 <Button
                     variant="contained"
                     className={classes.button}
-                    onClick={() => history.goBack()}
-                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}>
+                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
+                    onClick={handleCancel}>
                     {t('cancel')}
                 </Button>
-                <Button
-                    variant="contained"
-                    className={classes.button}
-                    onClick={() => history.push(PopupRoutes.CreateWallet)}>
-                    {t('import')}
+                <Button variant="contained" disabled={!selected} className={classes.button} onClick={handleConfirm}>
+                    {t('confirm')}
                 </Button>
             </div>
         </>
+    ) : (
+        <div className={classes.placeholder}>
+            <Typography>{t('popups_wallet_unsupported_network')}</Typography>
+        </div>
     )
 })
 

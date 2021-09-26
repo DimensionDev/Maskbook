@@ -1,9 +1,7 @@
-import { useValueRef } from '@masknet/shared'
+import { NetworkIcon, ProviderIcon, useValueRef } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { FC } from 'react'
 import { currentNetworkSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
-import { NetworkIcon } from './NetworkIcon'
-import { ProviderIcon } from './ProviderIcon'
 
 const useStyles = makeStyles()({
     root: {

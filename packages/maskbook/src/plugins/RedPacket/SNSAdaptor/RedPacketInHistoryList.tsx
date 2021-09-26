@@ -1,12 +1,12 @@
-import { useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, MouseEvent } from 'react'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
-import { Box, ListItem, Typography } from '@material-ui/core'
+import { Box, ListItem, Typography, Popper } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { RedPacketHistory, RedPacketJSONPayload, RedPacketStatus } from '../types'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
 import { formatBalance, TransactionStateType, useAccount } from '@masknet/web3-shared'
 import { TokenIcon } from '@masknet/shared'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
@@ -15,6 +15,8 @@ import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useRefundCallback } from './hooks/useRefundCallback'
 import { WalletMessages } from '../../Wallet/messages'
+import intervalToDuration from 'date-fns/intervalToDuration'
+import nextDay from 'date-fns/nextDay'
 
 const useStyles = makeStyles()((theme) => ({
     primary: {
@@ -98,21 +100,54 @@ const useStyles = makeStyles()((theme) => ({
             color: theme.palette.text.primary,
         },
     },
+    popper: {
+        overflow: 'visible',
+        backgroundColor: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff',
+        transform: 'translate(183px, -32px)',
+        borderRadius: 8,
+        width: 328,
+        padding: 10,
+    },
+    arrow: {
+        position: 'absolute',
+        bottom: 0,
+        right: 80,
+        width: 0,
+        height: 0,
+        borderLeft: '6px solid transparent',
+        borderRight: '6px solid transparent',
+        borderTop: `6px solid ${theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff'}`,
+        transform: 'translateY(6px)',
+    },
+    popperText: {
+        cursor: 'default',
+        color: theme.palette.mode === 'light' ? '#fff' : 'rgba(15, 20, 25, 1)',
+        fontSize: 12,
+    },
+    disabledButton: {
+        color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
+        boxShadow: 'none',
+        backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
+        cursor: 'default',
+        '&:hover': {
+            backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
+            color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
+        },
+    },
 }))
 
 export interface RedPacketInHistoryListProps {
     history: RedPacketHistory
     onSelect: (payload: RedPacketJSONPayload) => void
-    onClose: () => void
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const account = useAccount()
-    const { history, onSelect, onClose } = props
+    const { history, onSelect } = props
     const { t } = useI18N()
     const { classes } = useStyles()
     const {
         value: availability,
-        computed: { canRefund, canSend, listOfStatus },
+        computed: { canRefund, canSend, listOfStatus, isPasswordValid },
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, history.payload)
 
@@ -123,15 +158,14 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     )
 
     //#region remote controlled transaction dialog
-    const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
-        (ev) => undefined,
     )
 
     useEffect(() => {
         if (refundState.type === TransactionStateType.UNKNOWN || !availability) return
         if (refundState.type === TransactionStateType.HASH) {
-            setTransactionDialogOpen({
+            setTransactionDialog({
                 open: true,
                 state: refundState,
                 summary: availability
@@ -152,7 +186,20 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) await refundCallback()
         if (canSend) onSelect(history.payload)
-    }, [onSelect, onClose, refundCallback, canRefund, canSend, history])
+    }, [onSelect, refundCallback, canRefund, canSend, history])
+
+    //#region password lost tips
+    const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
+    const openPopper = Boolean(anchorEl)
+    //#endregion
+
+    //#region refund time
+    const refundDuration =
+        canSend && !isPasswordValid
+            ? intervalToDuration({ start: Date.now(), end: nextDay(history.payload.creation_time, 1) })
+            : null
+    const formatRefundDuration = `${refundDuration?.hours}h ${refundDuration?.minutes}m`
+    //#endregion
 
     return (
         <ListItem className={classes.root}>
@@ -171,11 +218,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t('plugin_red_packet_history_duration', {
-                                    startTime: dateTimeFormat(new Date(history.creation_time * 1000)),
-                                    endTime: dateTimeFormat(
-                                        new Date((history.creation_time + history.duration) * 1000),
-                                        false,
-                                    ),
+                                    startTime: dateTimeFormat(new Date(history.creation_time)),
+                                    endTime: dateTimeFormat(new Date(history.creation_time + history.duration), false),
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
@@ -196,23 +240,46 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                         canSend ||
                         listOfStatus.includes(RedPacketStatus.empty) ||
                         refundState.type === TransactionStateType.HASH ? (
-                            <ActionButton
-                                onClick={onSendOrRefund}
-                                disabled={
-                                    listOfStatus.includes(RedPacketStatus.empty) ||
-                                    refundState.type === TransactionStateType.HASH
-                                }
-                                className={classes.actionButton}
-                                variant="contained"
-                                size="large">
-                                {canSend
-                                    ? t('plugin_red_packet_history_send')
-                                    : refundState.type === TransactionStateType.HASH
-                                    ? t('plugin_red_packet_refunding')
-                                    : listOfStatus.includes(RedPacketStatus.empty)
-                                    ? t('plugin_red_packet_empty')
-                                    : t('plugin_red_packet_refund')}
-                            </ActionButton>
+                            <>
+                                <ActionButton
+                                    onClick={canSend && !isPasswordValid ? () => undefined : onSendOrRefund}
+                                    onMouseEnter={(event: MouseEvent<HTMLButtonElement>) => {
+                                        canSend && !isPasswordValid ? setAnchorEl(event.currentTarget) : undefined
+                                    }}
+                                    onMouseLeave={(_event: MouseEvent<HTMLButtonElement>) => {
+                                        canSend && !isPasswordValid ? setAnchorEl(null) : undefined
+                                    }}
+                                    disabled={
+                                        listOfStatus.includes(RedPacketStatus.empty) ||
+                                        refundState.type === TransactionStateType.HASH
+                                    }
+                                    className={classNames(
+                                        classes.actionButton,
+                                        canSend && !isPasswordValid ? classes.disabledButton : '',
+                                    )}
+                                    variant="contained"
+                                    size="large">
+                                    {canSend
+                                        ? t('plugin_red_packet_history_send')
+                                        : refundState.type === TransactionStateType.HASH
+                                        ? t('plugin_red_packet_refunding')
+                                        : listOfStatus.includes(RedPacketStatus.empty)
+                                        ? t('plugin_red_packet_empty')
+                                        : t('plugin_red_packet_refund')}
+                                </ActionButton>
+                                <Popper
+                                    className={classes.popper}
+                                    id="popper"
+                                    open={openPopper}
+                                    anchorEl={anchorEl}
+                                    transition
+                                    disablePortal>
+                                    <Typography className={classes.popperText}>
+                                        {t('plugin_red_packet_data_broken', { duration: formatRefundDuration })}
+                                    </Typography>
+                                    <div className={classes.arrow} />
+                                </Popper>
+                            </>
                         ) : null}
                     </section>
                     <StyledLinearProgress

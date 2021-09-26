@@ -8,21 +8,21 @@ import type {
 } from '../types'
 
 const ZERION_API = 'wss://api-v4.zerion.io'
-
-//TODO: get token from ci env
 const ZERION_TOKEN = 'Mask.yEUEfDnoxgLBwNEcYPVussxxjdrGwapj'
 
-export const addressSocket = {
-    namespace: 'address',
-    socket: io(`${ZERION_API}/address`, {
+let socket: SocketIOClient.Socket | null = null
+
+function createSocket() {
+    if (socket?.connected) return socket
+    if (socket) socket.removeAllListeners()
+    return (socket = io(`${ZERION_API}/address`, {
         transports: ['websocket'],
-        timeout: 60000,
-        reconnection: false,
-        reconnectionAttempts: 0,
         query: {
             api_token: ZERION_TOKEN,
         },
-    }),
+        // disable the auto reconnection
+        reconnection: false,
+    }))
 }
 
 function verify(request: SocketRequestBody, response: any) {
@@ -51,24 +51,36 @@ function subscribeFromZerion(socketNamespace: SocketNameSpace, requestBody: Sock
 }
 
 export async function getTransactionList(address: string, scope: string, page?: number, size = 30) {
-    return (await subscribeFromZerion(addressSocket, {
-        scope: [scope],
-        payload: {
-            address,
-            currency: 'usd',
-            transactions_limit: size,
-            transactions_offset: (page ?? 0) * size,
-            transactions_search_query: '',
+    return (await subscribeFromZerion(
+        {
+            namespace: 'address',
+            socket: createSocket(),
         },
-    })) as ZerionTransactionResponseBody
+        {
+            scope: [scope],
+            payload: {
+                address,
+                currency: 'usd',
+                transactions_limit: size,
+                transactions_offset: (page ?? 0) * size,
+                transactions_search_query: '',
+            },
+        },
+    )) as ZerionTransactionResponseBody
 }
 
 export async function getAssetsList(address: string, scope: string) {
-    return (await subscribeFromZerion(addressSocket, {
-        scope: [scope],
-        payload: {
-            address,
-            currency: 'usd',
+    return (await subscribeFromZerion(
+        {
+            namespace: 'address',
+            socket: createSocket(),
         },
-    })) as ZerionAssetResponseBody
+        {
+            scope: [scope],
+            payload: {
+                address,
+                currency: 'usd',
+            },
+        },
+    )) as ZerionAssetResponseBody
 }

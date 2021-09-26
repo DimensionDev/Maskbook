@@ -6,13 +6,13 @@ import { EthereumAddress } from 'wallet.ts'
 import { useWeb3Context } from '../context'
 import { useChainId } from './useChainId'
 import { currySameAddress } from '../utils'
-import type { ERC20TokenDetailed } from '../types'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '../types'
 
 export function useERC20TokensDetailedFromTokenLists(
     lists?: string[],
     keyword: string = '',
-    additionalTokens: ERC20TokenDetailed[] = [],
-): AsyncStateRetry<ERC20TokenDetailed[]> {
+    additionalTokens: (ERC20TokenDetailed | NativeTokenDetailed)[] = [],
+): AsyncStateRetry<(ERC20TokenDetailed | NativeTokenDetailed)[]> {
     //#region fetch token lists
     const chainId = useChainId()
     const { fetchERC20TokensFromTokenLists } = useWeb3Context()

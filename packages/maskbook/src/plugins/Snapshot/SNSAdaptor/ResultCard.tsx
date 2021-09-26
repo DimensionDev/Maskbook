@@ -6,7 +6,7 @@ import {
     ListItem,
     Typography,
     LinearProgress,
-    experimentalStyled as styled,
+    styled,
     Button,
     linearProgressClasses,
 } from '@material-ui/core'

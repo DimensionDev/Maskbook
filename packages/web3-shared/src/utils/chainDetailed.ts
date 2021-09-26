@@ -1,7 +1,10 @@
-import { safeUnreachable } from '@dimensiondev/kit'
+import { createLookupTableResolver } from './enum'
 import CHAINS from '../assets/chains.json'
 import { getRPCConstants } from '../constants'
 import { ChainId, NetworkType } from '../types'
+import COINGECKO_PLATFORMS from '../assets/coingecko-asset-platforms.json'
+import COINGECKO_COIN_LIST from '../assets/coingecko-coin-list.json'
+import { upperFirst } from 'lodash-es'
 
 export function isChainIdValid(chainId: ChainId, allowTestnet = false) {
     const chainDetailed = getChainDetailed(chainId)
@@ -13,9 +16,9 @@ export function isChainIdMainnet(chainId: ChainId) {
     return chainDetailed?.network === 'mainnet'
 }
 
-export function isEIP1159Supported(chainId: ChainId) {
+export function isEIP1559Supported(chainId: ChainId) {
     const features = getChainDetailed(chainId)?.features ?? []
-    return features.includes('EIP1159')
+    return features.includes('EIP1559')
 }
 
 export function getChainDetailed(chainId = ChainId.Mainnet) {
@@ -42,7 +45,7 @@ export function getChainDetailedCAIP(chainId = ChainId.Mainnet) {
 
 export function getChainRPC(chainId: ChainId, seed: number) {
     const { RPC, RPC_WEIGHTS } = getRPCConstants(chainId)
-    if (!RPC || !RPC_WEIGHTS) throw new Error('Unknown chain id.')
+    if (!RPC || !RPC_WEIGHTS) throw new Error(`Unknown chain id: ${chainId}.`)
     return RPC[RPC_WEIGHTS[seed]]
 }
 
@@ -74,34 +77,49 @@ export function getChainIdFromName(name: string) {
         : undefined
 }
 
-export function getChainIdFromNetworkType(networkType: NetworkType) {
-    switch (networkType) {
-        case NetworkType.Ethereum:
-            return ChainId.Mainnet
-        case NetworkType.Binance:
-            return ChainId.BSC
-        case NetworkType.Polygon:
-            return ChainId.Matic
-        case NetworkType.Arbitrum:
-            return ChainId.Arbitrum
-        default:
-            safeUnreachable(networkType)
-            return ChainId.Mainnet
-    }
-}
+export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, ChainId>(
+    {
+        [NetworkType.Ethereum]: ChainId.Mainnet,
+        [NetworkType.Binance]: ChainId.BSC,
+        [NetworkType.Polygon]: ChainId.Matic,
+        [NetworkType.Arbitrum]: ChainId.Arbitrum,
+        [NetworkType.xDai]: ChainId.xDai,
+    },
+    ChainId.Mainnet,
+)
 
 export function getNetworkTypeFromChainId(chainId: ChainId) {
-    const chainDetailed = getChainDetailed(chainId)
-    switch (chainDetailed?.chain) {
-        case 'ETH':
-            return NetworkType.Ethereum
-        case 'BSC':
-            return NetworkType.Binance
-        case 'Matic':
-            return NetworkType.Polygon
-        case 'Arbitrum':
-            return NetworkType.Arbitrum
-        default:
-            return
+    const map: Record<NetworkType, string> = {
+        [NetworkType.Ethereum]: 'ETH',
+        [NetworkType.Binance]: 'BSC',
+        [NetworkType.Polygon]: 'Matic',
+        [NetworkType.Arbitrum]: 'Arbitrum',
+        [NetworkType.xDai]: 'xDai',
     }
+    const chainDetailed = getChainDetailed(chainId)
+    const entry = Object.entries(map).find(([key, value]) => {
+        if (value === chainDetailed?.chain) return true
+        return false
+    })
+    return entry?.[0] as NetworkType | undefined
+}
+export function getChainFromChainId(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    return chainDetailed?.chain
+}
+
+export function getCoingeckoPlatformId(chainId: ChainId) {
+    return COINGECKO_PLATFORMS.find((platform) => platform.chainId === chainId)?.id
+}
+
+export function getCoingeckoCoinId(chainId: ChainId) {
+    return COINGECKO_COIN_LIST.find((coin) => coin.chainId === chainId)?.id
+}
+
+export function getNetworkName(chainId: ChainId) {
+    const chainDetailed = getChainDetailed(chainId)
+    if (!chainDetailed) return 'Unknown Network'
+    if (chainDetailed.networkId === ChainId.Matic) return chainDetailed.fullName
+    if (chainDetailed.network === 'mainnet') return chainDetailed.chain
+    return upperFirst(chainDetailed.network)
 }

@@ -9,7 +9,7 @@ export interface DictItem {
     en: string
 }
 
-export interface PorjectItem {
+export interface ProjectItem {
     id: string
     log_url: string
     name: Omit<DictItem, 'id'>
@@ -89,7 +89,7 @@ export interface HistoryRecord {
     }
     history_list: HistoryItem[]
     project_dict: {
-        [key in string]: PorjectItem
+        [key in string]: ProjectItem
     }
     token_dict: {
         [key in string | 'eth']: TokenItem
@@ -125,5 +125,22 @@ export interface BalanceListResponse {
     data?: BalanceRecord[]
     error_code: number
     _cache_seconds: number
+    _seconds: number
+}
+
+export interface GasPriceRecord {
+    estimated_seconds: number
+    front_tx_count: number
+    price: number
+}
+
+export interface GasPriceDictResponse {
+    data: {
+        fast: GasPriceRecord
+        normal: GasPriceRecord
+        slow: GasPriceRecord
+        update_at: number
+    }
+    error_code: number
     _seconds: number
 }

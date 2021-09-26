@@ -11,6 +11,9 @@ import type {
     Asset,
     CollectibleProvider,
     Transaction,
+    AddressName,
+    AddressNameType,
+    CryptoPrice,
 } from '../types'
 
 export interface Web3ProviderType {
@@ -20,6 +23,7 @@ export interface Web3ProviderType {
     nonce: Subscription<number>
     gasPrice: Subscription<number>
     etherPrice: Subscription<number>
+    tokenPrices: Subscription<CryptoPrice>
     chainId: Subscription<ChainId>
     balance: Subscription<string>
     blockNumber: Subscription<number>
@@ -28,9 +32,11 @@ export interface Web3ProviderType {
     networkType: Subscription<NetworkType>
     erc20TokensCount: Subscription<number>
     erc20Tokens: Subscription<ERC20TokenDetailed[]>
+    addERC20Token: (token: ERC20TokenDetailed) => Promise<void>
+    trustERC20Token: (address: string, token: ERC20TokenDetailed) => Promise<void>
     getERC20TokensPaged: (index: number, count: number, query?: string) => Promise<ERC20TokenDetailed[]>
     portfolioProvider: Subscription<PortfolioProvider>
-    getAssetList: (address: string, network: NetworkType, provider: PortfolioProvider) => Promise<Asset[]>
+    getAssetsList: (address: string, network: NetworkType, provider: PortfolioProvider) => Promise<Asset[]>
     getAssetsListNFT: (
         address: string,
         chainId: ChainId,
@@ -38,6 +44,7 @@ export interface Web3ProviderType {
         page?: number,
         size?: number,
     ) => Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }>
+    getAddressNamesList: (twitterId: string, addressNameType: AddressNameType) => Promise<AddressName[]>
     getERC721TokensPaged: (index: number, count: number, query?: string) => Promise<ERC721TokenDetailed[]>
     getTransactionList: (
         address: string,
@@ -51,4 +58,5 @@ export interface Web3ProviderType {
     }>
     fetchERC20TokensFromTokenLists: (urls: string[], chainId: ChainId) => Promise<ERC20TokenDetailed[]>
     createMnemonicWords: () => Promise<string[]>
+    getNonce: (address: string) => Promise<number>
 }

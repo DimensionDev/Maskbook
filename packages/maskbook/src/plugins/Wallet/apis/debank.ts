@@ -1,4 +1,6 @@
-import type { BalanceListResponse, HistoryResponse } from '../types'
+import type { BalanceListResponse, HistoryResponse, GasPriceDictResponse } from '../types'
+import urlcat from 'urlcat'
+import type { ChainId } from '@masknet/web3-shared'
 
 const DEBANK_API = 'https://api.debank.com'
 
@@ -10,4 +12,9 @@ export async function getTransactionList(address: string, chain: string) {
 export async function getAssetsList(address: string) {
     const response = await fetch(`${DEBANK_API}/token/balance_list?is_all=true&user_addr=${address.toLowerCase()}`)
     return (await response.json()) as BalanceListResponse
+}
+
+export async function getGasPriceDict(chainId: ChainId) {
+    const response = await fetch(urlcat(DEBANK_API, '/chain/gas_price_dict_v2', { chainId }))
+    return (await response.json()) as GasPriceDictResponse
 }

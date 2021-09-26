@@ -1,9 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import qr from 'qrcode'
 import { useEffect, useRef, useState } from 'react'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { Trans } from 'react-i18next'
-import { blue } from '@material-ui/core/colors'
+import { blue } from '@mui/material/colors'
 import { SessionStorageCache } from '@masknet/shared-base'
 
 interface QRProps {

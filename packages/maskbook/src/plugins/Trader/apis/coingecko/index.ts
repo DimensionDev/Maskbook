@@ -2,7 +2,7 @@ import { COIN_GECKO_BASE_URL } from '../../constants'
 import { Flags } from '../../../../utils/flags'
 
 //#region get currency
-export async function getAllCurrenies() {
+export async function getAllCurrencies() {
     const response = await fetch(`${COIN_GECKO_BASE_URL}/simple/supported_vs_currencies`, { cache: 'force-cache' })
     return response.json() as Promise<string[]>
 }

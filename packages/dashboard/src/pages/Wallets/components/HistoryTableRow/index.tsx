@@ -6,7 +6,8 @@ import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
     DebankTransactionDirection,
-    resolveLinkOnExplorer,
+    formatEthereumAddress,
+    resolveTransactionLinkOnExplorer,
     useChainId,
     ZerionTransactionDirection,
 } from '@masknet/web3-shared'
@@ -14,11 +15,15 @@ import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import classNames from 'classnames'
-import { formatEthereumAddress } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
         marginLeft: 14,
+        maxWidth: '240px',
+        textOverflow: 'ellipsis',
+        textTransform: 'capitalize',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
     },
     cell: {
         padding: '16px 28px',
@@ -26,9 +31,10 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: theme.typography.pxToRem(14),
     },
     link: {
-        display: 'flex',
+        display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
+        height: 21,
         color: MaskColorVar.textPrimary,
     },
     linkIcon: {
@@ -65,10 +71,11 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                 <Box style={{ display: 'flex', alignItems: 'center' }}>
                     <TransactionIcon
                         transactionType={transaction.transactionType}
+                        type={transaction.type}
                         address={transaction.toAddress}
                         failed={transaction.failed}
                     />
-                    <Typography className={classes.type}>{transaction.type}</Typography>
+                    <Typography className={classes.type}>{(transaction.type ?? '').replace(/_/g, ' ')}</Typography>
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center">
@@ -89,12 +96,16 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                 <Typography fontSize="inherit">{formatDateTime(transaction.timeAt, 'yyyy-MM-dd HH:mm')}</Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center">
-                <Link
-                    href={`${resolveLinkOnExplorer(chainId)}/address/${transaction.toAddress}`}
-                    className={classes.link}>
+                <Box className={classes.link}>
                     <span>{formatEthereumAddress(transaction.toAddress, 5)}</span>
-                    <LinkOutIcon className={classes.linkIcon} />
-                </Link>
+                    <Link
+                        sx={{ height: 21 }}
+                        href={resolveTransactionLinkOnExplorer(chainId, transaction.id)}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <LinkOutIcon className={classes.linkIcon} />
+                    </Link>
+                </Box>
             </TableCell>
         </TableRow>
     )

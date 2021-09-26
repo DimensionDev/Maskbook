@@ -1,5 +1,6 @@
 import { makeStyles } from '@masknet/theme'
-import { useI18N, useValueRef } from '../../../utils'
+import { useValueRef } from '@masknet/shared'
+import { useI18N } from '../../../utils'
 import PluginCard, { PluginCardProps } from '../DashboardComponents/PluginCard'
 
 import DashboardRouterContainer from './Container'

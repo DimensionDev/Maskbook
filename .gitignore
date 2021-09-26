@@ -24,7 +24,7 @@ dist
 build
 /build-*
 storybook-static
-packages/netlify/snowpack/
+packages/netlify/sites/
 /Maskbook.*.zip
 
 # Environment files
