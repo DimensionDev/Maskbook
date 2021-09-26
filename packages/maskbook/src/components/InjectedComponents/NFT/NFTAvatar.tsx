@@ -139,8 +139,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                         ? nativeAPI?.api.misc_openCreateWalletView()
                                         : openSelectProviderDialog()
                                 }}
-                                size="small"
-                            >
+                                size="small">
                                 Change
                             </Button>
                         </Typography>
@@ -198,8 +197,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 size="medium"
                                 className={classes.setNFTAvatar}
                                 onClick={() => onClick()}
-                                disabled={!selectedToken}
-                            >
+                                disabled={!selectedToken}>
                                 {t('profile_nft_avatar_set')}
                             </Button>
                         </Box>

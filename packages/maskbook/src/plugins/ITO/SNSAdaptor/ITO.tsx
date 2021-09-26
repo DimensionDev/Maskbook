@@ -538,8 +538,7 @@ export function ITO(props: ITO_Props) {
                             address: token.address,
                         })}
                         target="_blank"
-                        rel="noopener noreferrer"
-                    >
+                        rel="noopener noreferrer">
                         <OpenInNewIcon fontSize="small" className={classes.totalIcon} />
                     </Link>
                 </Typography>
@@ -591,8 +590,7 @@ export function ITO(props: ITO_Props) {
                         onClick={() => undefined}
                         variant="contained"
                         size="large"
-                        className={classes.actionButton}
-                    >
+                        className={classes.actionButton}>
                         {t('plugin_ito_region_ban')}
                     </ActionButton>
                 ) : total_remaining.isZero() && !isBuyer && !canWithdraw ? (
@@ -601,8 +599,7 @@ export function ITO(props: ITO_Props) {
                         onClick={() => undefined}
                         variant="contained"
                         size="large"
-                        className={classes.actionButton}
-                    >
+                        className={classes.actionButton}>
                         {t('plugin_ito_status_out_of_stock')}
                     </ActionButton>
                 ) : loadingTradeInfo || loadingAvailability ? (
@@ -611,8 +608,7 @@ export function ITO(props: ITO_Props) {
                         onClick={() => undefined}
                         variant="contained"
                         size="large"
-                        className={classes.actionButton}
-                    >
+                        className={classes.actionButton}>
                         {t('plugin_ito_loading')}
                     </ActionButton>
                 ) : !account || !chainIdValid ? (
@@ -622,8 +618,7 @@ export function ITO(props: ITO_Props) {
                         }}
                         variant="contained"
                         size="large"
-                        className={classes.actionButton}
-                    >
+                        className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
                 ) : canWithdraw ? (
@@ -631,8 +626,7 @@ export function ITO(props: ITO_Props) {
                         onClick={onWithdraw}
                         variant="contained"
                         size="large"
-                        className={classes.actionButton}
-                    >
+                        className={classes.actionButton}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : isBuyer ? (
@@ -646,8 +640,7 @@ export function ITO(props: ITO_Props) {
                                             variant="contained"
                                             size="large"
                                             disabled={claimState.type === TransactionStateType.HASH}
-                                            className={classes.actionButton}
-                                        >
+                                            className={classes.actionButton}>
                                             {claimState.type === TransactionStateType.HASH
                                                 ? t('plugin_ito_claiming')
                                                 : t('plugin_ito_claim')}
@@ -658,8 +651,7 @@ export function ITO(props: ITO_Props) {
                                             disabled
                                             variant="contained"
                                             size="large"
-                                            className={classes.actionButton}
-                                        >
+                                            className={classes.actionButton}>
                                             {t('plugin_ito_claimed')}
                                         </ActionButton>
                                     )
@@ -669,8 +661,7 @@ export function ITO(props: ITO_Props) {
                                         variant="contained"
                                         disabled
                                         size="large"
-                                        className={classNames(classes.actionButton, classes.textInOneLine)}
-                                    >
+                                        className={classNames(classes.actionButton, classes.textInOneLine)}>
                                         {t('plugin_ito_wait_unlock_time', {
                                             unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
                                         })}
@@ -683,8 +674,7 @@ export function ITO(props: ITO_Props) {
                                 onClick={onShareSuccess}
                                 variant="contained"
                                 size="large"
-                                className={classes.actionButton}
-                            >
+                                className={classes.actionButton}>
                                 {t('plugin_ito_share')}
                             </ActionButton>
                         </Grid>
@@ -695,8 +685,7 @@ export function ITO(props: ITO_Props) {
                         loading={loadingIfQualified}
                         variant="contained"
                         size="large"
-                        className={classes.actionButton}
-                    >
+                        className={classes.actionButton}>
                         {loadingIfQualified
                             ? t('plugin_ito_qualification_loading')
                             : !ifQualified
@@ -711,8 +700,7 @@ export function ITO(props: ITO_Props) {
                         onClick={() => undefined}
                         variant="contained"
                         size="large"
-                        className={classes.actionButton}
-                    >
+                        className={classes.actionButton}>
                         {t('plugin_ito_expired')}
                     </ActionButton>
                 ) : listOfStatus.includes(ITO_Status.waited) ? (
@@ -722,8 +710,7 @@ export function ITO(props: ITO_Props) {
                                 onClick={onUnlock}
                                 variant="contained"
                                 size="large"
-                                className={classes.actionButton}
-                            >
+                                className={classes.actionButton}>
                                 {t('plugin_ito_unlock_in_advance')}
                             </ActionButton>
                         </Grid>
@@ -733,8 +720,7 @@ export function ITO(props: ITO_Props) {
                                     onClick={onShare}
                                     variant="contained"
                                     size="large"
-                                    className={classes.actionButton}
-                                >
+                                    className={classes.actionButton}>
                                     {t('plugin_ito_share')}
                                 </ActionButton>
                             </Grid>
@@ -771,8 +757,7 @@ export function ITO_Loading() {
             <Card
                 className={classNames(classes.root, classes.loadingWrap)}
                 elevation={0}
-                style={{ backgroundImage: `url(${PoolBackground})` }}
-            >
+                style={{ backgroundImage: `url(${PoolBackground})` }}>
                 <Typography variant="body1" className={classes.loadingITO}>
                     {t('plugin_ito_loading')}
                 </Typography>
@@ -789,8 +774,7 @@ export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }
         <Card
             className={classNames(classes.root, classes.loadingWrap)}
             elevation={0}
-            style={{ backgroundImage: `url(${PoolBackground})` }}
-        >
+            style={{ backgroundImage: `url(${PoolBackground})` }}>
             <Typography variant="body1" className={classes.loadingITO}>
                 {t('loading_failed')}
             </Typography>
@@ -799,8 +783,7 @@ export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }
                 variant="outlined"
                 size="large"
                 color="primary"
-                className={classes.loadingITO_Button}
-            >
+                className={classes.loadingITO_Button}>
                 {t('try_again')}
             </ActionButton>
         </Card>

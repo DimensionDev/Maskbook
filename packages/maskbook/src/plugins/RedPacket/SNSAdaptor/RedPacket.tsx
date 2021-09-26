@@ -333,8 +333,7 @@ export function RedPacket(props: RedPacketProps) {
                 <EthereumWalletConnectedBoundary
                     classes={{
                         connectWallet: classes.connectWallet,
-                    }}
-                >
+                    }}>
                     <Box className={classes.footer}>
                         {!account ? (
                             <ActionButton
@@ -344,8 +343,7 @@ export function RedPacket(props: RedPacketProps) {
                                     hasNativeAPI
                                         ? nativeAPI?.api.misc_openCreateWalletView()
                                         : openSelectProviderDialog()
-                                }}
-                            >
+                                }}>
                                 {t('plugin_wallet_connect_a_wallet')}
                             </ActionButton>
                         ) : !chainIdValid ? (
@@ -360,8 +358,7 @@ export function RedPacket(props: RedPacketProps) {
                                 }
                                 variant="contained"
                                 size="large"
-                                onClick={onClaimOrRefund}
-                            >
+                                onClick={onClaimOrRefund}>
                                 {canClaim
                                     ? claimState.type === TransactionStateType.HASH
                                         ? t('plugin_red_packet_claiming')

@@ -98,8 +98,7 @@ export function EthereumAccountButton(props: EthereumAccountButtonProps) {
                 onClick={() => {
                     hasNativeAPI ? nativeAPI?.api.misc_openCreateWalletView() : onOpen()
                 }}
-                {...props.ButtonProps}
-            >
+                {...props.ButtonProps}>
                 {account
                     ? chainIdValid
                         ? `${selectedWallet?.name ?? ''} (${formatEthereumAddress(account, 4)})`
