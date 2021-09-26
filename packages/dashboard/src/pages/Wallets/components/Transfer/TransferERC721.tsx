@@ -195,9 +195,6 @@ export const TransferERC721 = memo(() => {
         )
     }, [contract])
 
-    console.log(allFormFields)
-    console.log(tokenDetailedOwnerList)
-
     return (
         <Stack direction="row" justifyContent="center" mt={4} maxHeight="100%">
             <form onSubmit={handleSubmit(onTransfer)}>
