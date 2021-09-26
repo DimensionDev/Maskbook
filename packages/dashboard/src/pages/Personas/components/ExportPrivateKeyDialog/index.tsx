@@ -2,7 +2,7 @@ import { Box, Button, DialogActions, DialogContent, Typography } from '@material
 import { memo } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../../type'
 import type { PersonaIdentifier } from '@masknet/shared'
 import { useExportPrivateKey } from '../../hooks/useExportPrivateKey'

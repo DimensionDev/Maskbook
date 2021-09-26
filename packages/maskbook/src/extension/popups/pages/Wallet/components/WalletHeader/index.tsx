@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { SettingIcon } from '@masknet/icons'
 import { NetworkSelector } from '../../../../components/NetworkSelector'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../../index'
 
 const useStyles = makeStyles()({

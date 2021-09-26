@@ -3,7 +3,7 @@ import { Button, DialogActions, DialogContent, Typography } from '@material-ui/c
 import { ConfirmPasswordOption, UserContext } from '../../pages/Settings/hooks/UserContext'
 import { MaskDialog } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import PasswordField from '../PasswordField'
 

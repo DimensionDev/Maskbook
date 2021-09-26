@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core'
 import { ExpandLess, ExpandMore } from '@material-ui/icons'
 import { useContext } from 'react'
-import { useMatch, useNavigate } from 'react-router'
+import { useMatch, useNavigate } from 'react-router-dom'
 import { DashboardContext } from './context'
 import {
     MaskBannerIcon,

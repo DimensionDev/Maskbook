@@ -1,5 +1,5 @@
 import { PersonaContext } from './pages/Personas/hooks/usePersonaContext'
-import { Navigate, Route, RouteProps } from 'react-router'
+import { Navigate, Route, RouteProps } from 'react-router-dom'
 
 interface GuardRouteProps extends RouteProps {
     redirectTo?: string

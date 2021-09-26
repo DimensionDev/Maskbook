@@ -3,7 +3,7 @@ import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 
 import { PersonaContext } from './hooks/usePersonaContext'
 import { PopupRoutes } from '../../index'
-import { Route, Switch } from 'react-router'
+import { Route, Switch } from 'react-router-dom'
 
 const Home = lazy(() => import('./Home'))
 const Logout = lazy(() => import('./Logout'))

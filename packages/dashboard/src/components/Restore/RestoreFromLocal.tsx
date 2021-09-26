@@ -8,7 +8,7 @@ import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard
 import { MaskAlert } from '../MaskAlert'
 import FileUpload from '../FileUpload'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { blobToText } from '@dimensiondev/kit'
 import { LoadingCard } from './steps/LoadingCard'

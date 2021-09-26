@@ -1,4 +1,4 @@
-import { MemoryRouter, Redirect, Route, Switch } from 'react-router'
+import { MemoryRouter, Redirect, Route, Switch } from 'react-router-dom'
 import { FileRouter } from '../../constants'
 import { Upload } from './Upload'
 import { Uploaded } from './Uploaded'

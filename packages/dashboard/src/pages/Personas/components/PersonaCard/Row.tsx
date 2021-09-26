@@ -13,7 +13,7 @@ import { UploadAvatarDialog } from '../UploadAvatarDialog'
 import { MaskAvatar } from '../../../../components/MaskAvatar'
 import { ExportPrivateKeyDialog } from '../ExportPrivateKeyDialog'
 import { RoutePaths } from '../../../../type'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { LogoutPersonaDialog } from '../LogoutPersonaDialog'
 import { UserContext } from '../../../Settings/hooks/UserContext'
 
