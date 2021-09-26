@@ -1,7 +1,7 @@
 import * as bip39 from 'bip39'
 import { first, last } from 'lodash-es'
 import { toHex } from 'web3-utils'
-import { encodeText, unreachable } from '@dimensiondev/kit'
+import { encodeText } from '@dimensiondev/kit'
 import { ProviderType } from '@masknet/web3-shared'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'

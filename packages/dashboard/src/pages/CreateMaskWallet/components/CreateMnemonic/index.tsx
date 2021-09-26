@@ -79,7 +79,6 @@ const CreateMnemonic = memo(() => {
         WalletMessages.events.walletLockStatusUpdated.on(retry)
     }, [retry])
 
-    console.log(hasPassword)
     const onVerifyClick = useCallback(() => {
         setOpen(true)
     }, [])
