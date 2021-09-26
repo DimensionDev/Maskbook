@@ -78,6 +78,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             control,
             handleSubmit,
             setValue,
+            watch,
             formState: { errors },
         } = useForm<zod.infer<typeof schema>>({
             mode: 'onChange',
@@ -90,6 +91,8 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                 minGasLimit,
             },
         })
+
+        const [inputGasLimit] = watch(['gasLimit'])
 
         useUpdateEffect(() => {
             if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
@@ -122,7 +125,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                             <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
                             <Typography className={classes.gasUSD}>
                                 {t('popups_wallet_gas_fee_settings_usd', {
-                                    usd: formatWeiToEther(gasPrice).times(nativeTokenPrice).toPrecision(3),
+                                    usd: formatWeiToEther(gasPrice).times(nativeTokenPrice).times(21000).toPrecision(3),
                                 })}
                             </Typography>
                         </div>
