@@ -18,8 +18,8 @@ enum ErrorCode {
     InvalidPublicKey = '-3006',
     InvalidMnemonic = '-3007',
     InvalidSeed = '-3008',
-    InvalidDerivationpath = '-3009',
-    InvalidKeyStoreJson = '-3010',
+    InvalidDerivationPath = '-3009',
+    InvalidKeyStoreJSON = '-3010',
     NotSupportedPublicKeyType = '-3011',
     NotSupportedCurve = '-3012',
     NotSupportedCipher = '-3013',
@@ -34,11 +34,11 @@ const ErrorMessage = {
     [ErrorCode.InvalidPublicKey]: 'Invalid public key.',
     [ErrorCode.InvalidMnemonic]: 'Invalid mnemonic words.',
     [ErrorCode.InvalidSeed]: 'Invalid seed.',
-    [ErrorCode.InvalidDerivationpath]: 'Invalid derivation path.',
-    [ErrorCode.InvalidKeyStoreJson]: 'Invalid keystore JSON.',
+    [ErrorCode.InvalidDerivationPath]: 'Invalid derivation path.',
+    [ErrorCode.InvalidKeyStoreJSON]: 'Invalid keystore JSON.',
     [ErrorCode.NotSupportedPublicKeyType]: 'Not supported public key type.',
     [ErrorCode.NotSupportedCurve]: 'Not supported curve.',
-    [ErrorCode.NotSupportedCipher]: 'Not supported chiper.',
+    [ErrorCode.NotSupportedCipher]: 'Not supported cipher.',
 }
 
 function send<I extends keyof Request, O extends keyof Response>(input: I, output: O) {
