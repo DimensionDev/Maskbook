@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formatGweiToEther, useChainId, useNativeTokenDetailed } from '@masknet/web3-shared'
+import { formatGweiToEther, useChainId, useNativeTokenDetailed, GasOption } from '@masknet/web3-shared'
 import { Typography } from '@material-ui/core'
 import { LoadingButton } from '@material-ui/lab'
 import BigNumber from 'bignumber.js'
@@ -12,16 +12,16 @@ import { StyledInput } from '../../../../extension/popups/components/StyledInput
 import { useI18N } from '../../../../utils'
 import { WalletRPC } from '../../../Wallet/messages'
 import { useNativeTokenPrice } from '../../hooks/useTokenPrice'
-import type { GasSettingProps } from './types'
 import { useGasSettingStyles } from './useGasSettingStyles'
+import type { GasSettingProps } from './types'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
-export const GasSetting1559: FC<GasSettingProps> = memo(({ gasLimit = 0, onConfirm }) => {
+export const GasSetting1559: FC<GasSettingProps> = memo(({ gasLimit = 0, gasOption = GasOption.Medium, onConfirm }) => {
     const { classes } = useGasSettingStyles()
     const { t } = useI18N()
     const chainId = useChainId()
-    const [selected, setOption] = useState<number | null>(null)
+    const [selectedGasOption, setGasOption] = useState<GasOption | null>(gasOption)
     const { value: nativeToken } = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
@@ -36,20 +36,24 @@ export const GasSetting1559: FC<GasSettingProps> = memo(({ gasLimit = 0, onConfi
         () => [
             {
                 title: t('popups_wallet_gas_fee_settings_low'),
+                gasOption: GasOption.Slow,
                 content: gasNow?.low,
             },
             {
                 title: t('popups_wallet_gas_fee_settings_medium'),
+                gasOption: GasOption.Medium,
                 content: gasNow?.medium,
             },
             {
                 title: t('popups_wallet_gas_fee_settings_high'),
+                gasOption: GasOption.High,
                 content: gasNow?.high,
             },
         ],
         [gasNow],
     )
     //#endregion
+    const currentGasOption = options.find((opt) => opt.gasOption === selectedGasOption)
     const minGasLimit = gasLimit
 
     //#region Form field define schema
@@ -107,17 +111,17 @@ export const GasSetting1559: FC<GasSettingProps> = memo(({ gasLimit = 0, onConfi
 
     //#region If the selected changed, set the value on the option to the form data
     useEffect(() => {
-        if (selected !== null) {
+        if (selectedGasOption !== null) {
             setValue(
                 'maxPriorityFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
+                new BigNumber(currentGasOption?.content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
             )
             setValue(
                 'maxFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
+                new BigNumber(currentGasOption?.content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
             )
         }
-    }, [selected, setValue, options])
+    }, [currentGasOption, setValue, options])
     //#endregion
     //
     const gasPrice = 0
@@ -169,11 +173,11 @@ export const GasSetting1559: FC<GasSettingProps> = memo(({ gasLimit = 0, onConfi
     return (
         <>
             <div className={classes.options}>
-                {options.map(({ title, content }, index) => (
+                {options.map(({ title, content, gasOption }, index) => (
                     <div
                         key={index}
-                        onClick={() => setOption(index)}
-                        className={selected === index ? classes.selected : undefined}>
+                        onClick={() => setGasOption(gasOption)}
+                        className={selectedGasOption === gasOption ? classes.selected : undefined}>
                         <Typography className={classes.optionsTitle}>{title}</Typography>
                         <Typography component="div">
                             {new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)}
@@ -198,7 +202,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(({ gasLimit = 0, onConfi
                             <StyledInput
                                 {...field}
                                 onChange={(e) => {
-                                    setOption(null)
+                                    setGasOption(null)
                                     field.onChange(e)
                                 }}
                                 error={!!errors.gasLimit?.message}
@@ -230,7 +234,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(({ gasLimit = 0, onConfi
                         <StyledInput
                             {...field}
                             onChange={(e) => {
-                                setOption(null)
+                                setGasOption(null)
                                 field.onChange(e)
                             }}
                             error={!!errors.maxPriorityFeePerGas?.message || !!maxPriorFeeHelperText}
@@ -261,7 +265,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(({ gasLimit = 0, onConfi
                         <StyledInput
                             {...field}
                             onChange={(e) => {
-                                setOption(null)
+                                setGasOption(null)
                                 field.onChange(e)
                             }}
                             error={!!errors.maxFeePerGas?.message || !!maxFeeGasHelperText}
