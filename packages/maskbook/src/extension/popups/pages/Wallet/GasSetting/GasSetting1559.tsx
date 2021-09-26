@@ -87,6 +87,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         lineHeight: '16px',
         flex: 1,
+        marginLeft: '0.5em',
     },
     price: {
         fontSize: 12,
