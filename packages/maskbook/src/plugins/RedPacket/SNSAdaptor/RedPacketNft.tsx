@@ -94,6 +94,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1),
     },
     button: {
+        marginTop: 0,
         minHeight: 38,
         height: 38,
         backgroundColor: '#1C68F3',
@@ -491,6 +492,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                 classes={{
                                     connectWallet: classes.button,
                                     unlockMetaMask: classes.button,
+                                    gasFeeButton: classes.button,
                                 }}>
                                 <ActionButton
                                     variant="contained"
