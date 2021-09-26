@@ -493,7 +493,7 @@ export namespace Plugin.ContextFree {
              * This action make the render quit the edit state.
              * If save is true, the render MUST report the new result via onEditComplete.
              *
-             * If this action does not exist, the render should handle the save/cancel by themself.
+             * If this action does not exist, the render should handle the save/cancel by themselves.
              */
             quitEdit?(save: boolean): void
         }
@@ -508,7 +508,7 @@ export namespace Plugin.ContextFree {
             onEditComplete(metaKey: string, replaceMeta: T): void
         }
         /**
-         * This metadat render is called in the decrypted post.
+         * This metadata render is called in the decrypted post.
          */
         export interface DecryptedPostContext {
             context: 'post'
