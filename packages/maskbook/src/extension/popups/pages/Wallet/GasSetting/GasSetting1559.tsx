@@ -326,7 +326,7 @@ export const GasSetting1559 = memo(() => {
 
     //#region If the estimate gas be 0, Set error
     useUpdateEffect(() => {
-        if (!minGasLimit) setError({ message: 'Cant not get estimate gas from contract' })
+        if (!minGasLimit) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
     }, [minGasLimit])
 
     return (
