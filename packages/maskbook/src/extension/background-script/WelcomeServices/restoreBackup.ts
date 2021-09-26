@@ -60,8 +60,8 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
             try {
                 if (record.storedKeyInfo && record.derivationPath)
                     await addWallet(record.address, name, record.derivationPath, record.storedKeyInfo)
-                else if (record.mnemonic) await recoverWalletFromMnemonic(name, record.mnemonic)
                 else if (record.privateKey) await recoverWalletFromPrivateKey(name, record.privateKey)
+                else if (record.mnemonic) await recoverWalletFromMnemonic(name, record.mnemonic)
             } catch (error) {
                 console.error(error)
             }
