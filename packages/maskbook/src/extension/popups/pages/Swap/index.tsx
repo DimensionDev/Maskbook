@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { TransactionStatusType, useChainColor, useChainId, useWallet, useWeb3StateContext } from '@masknet/web3-shared'
+import { TransactionStatusType, useWallet, useWeb3StateContext } from '@masknet/web3-shared'
 import { Typography } from '@material-ui/core'
 import { useCallback } from 'react'
 import { useRecentTransactions } from '../../../../plugins/Wallet/hooks/useRecentTransactions'
@@ -50,8 +50,6 @@ const useStyles = makeStyles()((theme) => {
 
 export default function SwapPage() {
     const { classes } = useStyles()
-    const chainId = useChainId()
-    const chainColor = useChainColor()
     const { providerType } = useWeb3StateContext()
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
     const wallet = useWallet()

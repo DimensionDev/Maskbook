@@ -3,12 +3,8 @@ import type { TradeProvider } from '@masknet/public-api'
 import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader'
 import { TradeFooter } from '../../../../../plugins/Trader/SNSAdaptor/trader/TradeFooter'
 import { TradeContext, useTradeContext } from '../../../../../plugins/Trader/trader/useTradeContext'
-import { SettingsDialog } from '../../../../../plugins/Trader/SNSAdaptor/trader/SettingsDialog'
 import { useCurrentTradeProvider } from '../../../../../plugins/Trader/trending/useCurrentTradeProvider'
 import { useAvailableTraderProviders } from '../../../../../plugins/Trader/trending/useAvailableTraderProviders'
-import { SelectTokenDialog } from '../../../../../plugins/Wallet/SNSAdaptor/SelectTokenDialog'
-import { WalletRiskWarningDialog } from '../../../../../plugins/Wallet/SNSAdaptor/RiskWarningDialog'
-import { TransactionDialog } from '../../../../../plugins/Wallet/SNSAdaptor/TransactionDialog'
 import { TagType } from '../../../../../plugins/Trader/types'
 
 export function SwapBox() {
@@ -31,10 +27,6 @@ export function SwapBox() {
                 tradeProviders={tradeProviders}
                 onTradeProviderChange={(newProvider) => setCurrentProvider(newProvider.value)}
             />
-            <SelectTokenDialog />
-            <SettingsDialog />
-            <WalletRiskWarningDialog />
-            <TransactionDialog />
         </TradeContext.Provider>
     )
 }
