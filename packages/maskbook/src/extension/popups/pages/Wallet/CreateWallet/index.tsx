@@ -1,11 +1,15 @@
 import { memo, useCallback, useState } from 'react'
 import { Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
+import { Controller } from 'react-hook-form'
+import type { z as zod } from 'zod'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { StyledInput } from '../../../components/StyledInput'
 import { useHistory } from 'react-router-dom'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
+
+import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
 
 const useStyles = makeStyles()({
     header: {
@@ -42,10 +46,16 @@ const CreateWallet = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
     const { classes } = useStyles()
-    const [name, setName] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
 
-    const onCreate = useCallback(async () => {
+    const {
+        control,
+        handleSubmit,
+        formState: { errors, isValid },
+        schema,
+    } = useSetWalletNameForm()
+
+    const onCreate = useCallback(async ({ name }: zod.infer<typeof schema>) => {
         try {
             await WalletRPC.deriveWallet(name)
             history.goBack()
@@ -54,7 +64,9 @@ const CreateWallet = memo(() => {
                 setErrorMessage(errorMessage)
             }
         }
-    }, [name])
+    }, [])
+
+    const onSubmit = handleSubmit(onCreate)
 
     return (
         <>
@@ -65,18 +77,20 @@ const CreateWallet = memo(() => {
             <div className={classes.content}>
                 <div>
                     <Typography className={classes.label}>{t('wallet_name')}</Typography>
-                    <StyledInput
-                        placeholder={t('popups_wallet_enter_your_wallet_name')}
-                        value={name}
-                        error={!!errorMessage}
-                        helperText={errorMessage}
-                        onChange={(e) => {
-                            if (errorMessage) setErrorMessage('')
-                            setName(e.target.value)
-                        }}
+                    <Controller
+                        name="name"
+                        control={control}
+                        render={({ field }) => (
+                            <StyledInput
+                                {...field}
+                                placeholder={t('popups_wallet_enter_your_wallet_name')}
+                                error={!!errorMessage || !!errors.name?.message}
+                                helperText={errorMessage || errors.name?.message}
+                            />
+                        )}
                     />
                 </div>
-                <Button variant="contained" className={classes.button} disabled={!name} onClick={onCreate}>
+                <Button variant="contained" className={classes.button} disabled={!isValid} onClick={onSubmit}>
                     {t('confirm')}
                 </Button>
             </div>

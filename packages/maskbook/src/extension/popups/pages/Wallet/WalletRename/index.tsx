@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { StyledInput } from '../../../components/StyledInput'
@@ -8,9 +8,9 @@ import { useHistory } from 'react-router-dom'
 import { useI18N } from '../../../../../utils'
 import { useAsyncFn } from 'react-use'
 import { LoadingButton } from '@material-ui/lab'
-import { z as zod } from 'zod'
-import { useForm, Controller } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import type { z as zod } from 'zod'
+import { Controller } from 'react-hook-form'
+import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
 
 const useStyles = makeStyles()({
     header: {
@@ -41,23 +41,12 @@ const WalletRename = memo(() => {
     const { classes } = useStyles()
     const wallet = useWallet()
 
-    const schema = useMemo(() => {
-        return zod.object({
-            name: zod.string().min(1).max(12),
-        })
-    }, [])
-
     const {
         control,
         handleSubmit,
         formState: { errors, isValid },
-    } = useForm<zod.infer<typeof schema>>({
-        mode: 'onChange',
-        resolver: zodResolver(schema),
-        defaultValues: {
-            name: wallet?.name,
-        },
-    })
+        schema,
+    } = useSetWalletNameForm()
 
     const [{ loading }, renameWallet] = useAsyncFn(
         async ({ name }: zod.infer<typeof schema>) => {
