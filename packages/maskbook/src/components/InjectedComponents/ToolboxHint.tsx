@@ -1,5 +1,5 @@
 import { CircularProgress, MenuItem, MenuItemProps, Typography } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useSnackbar, CustomSnackbarContentProps, CustomSnackbarContent } from '@masknet/theme'
 import classNames from 'classnames'
 import {
     useAccount,
@@ -246,6 +246,28 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
 
+    const snackbar = useSnackbar()
+
+    const snackbarKeyRef = useRef<string | number>()
+    const showSnackbar = useCallback(
+        (options: Partial<CustomSnackbarContentProps & { persist: boolean }>) => {
+            if (snackbarKeyRef.current) {
+                snackbar.closeSnackbar(snackbarKeyRef.current)
+            }
+            snackbarKeyRef.current = snackbar.enqueueSnackbar('Creating', {
+                variant: options.variant,
+                persist: options.persist ?? true,
+                content: (key, title) => {
+                    return <CustomSnackbarContent id={key} title={title} {...options} />
+                },
+            })
+            return () => {
+                snackbar.closeSnackbar(snackbarKeyRef.current)
+            }
+        },
+        [snackbar],
+    )
+
     function renderButtonText() {
         if (!account) return t('plugin_wallet_on_connect')
         if (!chainIdValid) return t('plugin_wallet_wrong_network')
@@ -264,7 +286,14 @@ export function ToolboxHint(props: ToolboxHintProps) {
 
     return (
         <>
-            <div className={classes.wrapper} onClick={openMenu}>
+            <div
+                className={classes.wrapper}
+                onClick={() => {
+                    showSnackbar({
+                        processing: true,
+                        message: 'Processing',
+                    })
+                }}>
                 <div className={classes.button}>
                     <MaskbookSharpIconOfSize classes={{ root: classes.icon }} size={22} />
                     <Typography className={classes.title}>Mask Network</Typography>

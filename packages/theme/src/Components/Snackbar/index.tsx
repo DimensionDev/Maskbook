@@ -24,49 +24,72 @@ import { MaskColorVar } from '../../constants'
 export { SnackbarProvider, useSnackbar } from 'notistack'
 export type { VariantType, OptionsObject, SnackbarKey } from 'notistack'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles()((theme, _, createRef) => {
     const spinningAnimationKeyFrames = keyframes`
 to {
   transform: rotate(360deg)
 }`
+
+    const title = {
+        ref: createRef(),
+        color: MaskColorVar.textPrimary,
+        fontSize: 14,
+    } as const
+    const message = {
+        ref: createRef(),
+        color: MaskColorVar.textSecondary,
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: 12,
+    } as const
+    const success = {
+        background: MaskColorVar.greenMain,
+        color: MaskColorVar.lightestBackground,
+        [`& .${title.ref}`]: {
+            color: 'inherit',
+        },
+        [`& .${message.ref}`]: {
+            color: 'inherit',
+        },
+    } as const
+
+    const error = {
+        background: MaskColorVar.redMain,
+        color: MaskColorVar.lightestBackground,
+        [`& .${title.ref}`]: {
+            color: 'inherit',
+        },
+        [`& .${message.ref}`]: {
+            color: 'inherit',
+        },
+    } as const
+
+    const info = {
+        ref: createRef(),
+        background: MaskColorVar.secondaryInfoText,
+        color: MaskColorVar.lightestBackground,
+    } as const
+
+    const warning = {
+        ref: createRef(),
+        background: MaskColorVar.warning,
+        color: MaskColorVar.lightestBackground,
+    } as const
+
     return {
         root: {
             zIndex: 9999,
             color: MaskColorVar.textLight,
             pointerEvents: 'inherit',
         },
-        success: {
-            background: MaskColorVar.greenMain,
-            color: MaskColorVar.lightestBackground,
-            '& $title': {
-                color: 'inherit',
-            },
-            '& $message': {
-                color: 'inherit',
-            },
-        },
-        error: {
-            background: MaskColorVar.redMain,
-            color: MaskColorVar.lightestBackground,
-            '& $title': {
-                color: 'inherit',
-            },
-            '& $message': {
-                color: 'inherit',
-            },
-        },
+        success,
+        error,
         default: {
             background: MaskColorVar.secondaryInfoText,
             color: MaskColorVar.lightestBackground,
         },
-        info: {
-            background: MaskColorVar.secondaryInfoText,
-            color: MaskColorVar.lightestBackground,
-        },
-        warning: {
-            background: MaskColorVar.warning,
-            color: MaskColorVar.lightestBackground,
-        },
+        info,
+        warning,
         icon: {},
         spinning: {
             display: 'flex',
@@ -84,38 +107,30 @@ to {
             padding: theme.spacing(1.5, 2),
             borderRadius: 12,
             width: 380,
-            '&$success': {
+            [`&.${success.ref}`]: {
                 background: MaskColorVar.greenMain,
                 color: MaskColorVar.lightestBackground,
             },
-            '&$error': {
+            [`&.${error.ref}`]: {
                 background: MaskColorVar.redMain,
                 color: MaskColorVar.lightestBackground,
                 title: {
                     color: 'inherit',
                 },
             },
-            '&$info': {
+            [`&.${info.ref}`]: {
                 background: MaskColorVar.secondaryInfoText,
                 color: MaskColorVar.lightestBackground,
             },
-            '&$warning': {
+            [`&.${warning.ref}`]: {
                 color: MaskColorVar.textPrimary,
             },
         },
         texts: {
             marginLeft: theme.spacing(2),
         },
-        title: {
-            color: MaskColorVar.textPrimary,
-            fontSize: 14,
-        },
-        message: {
-            color: MaskColorVar.textSecondary,
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: 12,
-        },
+        title,
+        message,
         link: {
             display: 'flex',
             marginLeft: theme.spacing(0.5),
