@@ -3,7 +3,11 @@ import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { INTERNAL_nativeSend, INTERNAL_send, SendOverrides } from './send'
 import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
 import { EthereumMethodType, ProviderType } from '@masknet/web3-shared'
-import { currentAccountMaskWalletSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
+import {
+    currentAccountMaskWalletSettings,
+    currentMaskWalletChainIdSettings,
+    currentProviderSettings,
+} from '../../../plugins/Wallet/settings'
 import { defer, Flags } from '../../../utils'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { openPopupsWindow } from '../HelperService'
@@ -70,7 +74,12 @@ export async function requestWithoutPopup<T extends unknown>(
 ) {
     return request(
         requestArguments,
-        { ...overrides, account: currentAccountMaskWalletSettings.value, providerType: ProviderType.MaskWallet },
+        {
+            ...overrides,
+            account: currentAccountMaskWalletSettings.value,
+            chainId: currentMaskWalletChainIdSettings.value,
+            providerType: ProviderType.MaskWallet,
+        },
         { popupsWindow: false },
     )
 }
@@ -114,6 +123,7 @@ export async function requestSendWithoutPopup(
     return requestSend(payload, callback, {
         ...overrides,
         account: currentAccountMaskWalletSettings.value,
+        chainId: currentMaskWalletChainIdSettings.value,
         providerType: ProviderType.MaskWallet,
     })
 }
@@ -142,6 +152,7 @@ export async function confirmRequest(payload: JsonRpcPayload) {
         {
             account: currentAccountMaskWalletSettings.value,
             providerType: ProviderType.MaskWallet,
+            chainId: currentMaskWalletChainIdSettings.value,
         },
     )
     return deferred
