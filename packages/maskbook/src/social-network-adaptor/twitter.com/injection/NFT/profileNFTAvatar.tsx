@@ -7,7 +7,11 @@ import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { NFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { createReactRootShadowed, downloadUrl, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
-import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector'
+import {
+    searchAvatarOpenFileSelector,
+    searchProfileAvatarSelector,
+    searchProfileSaveSelector,
+} from '../../utils/selector'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
@@ -45,9 +49,7 @@ function useCurrentUserInfo(): { userId?: string; identifier?: ProfileIdentifier
 export async function changeImageToActiveElements(image: File | Blob): Promise<void> {
     hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(await blobToArrayBuffer(image)))
     setTimeout(() => {
-        ;(
-            document.querySelectorAll(`input[data-testid="fileInput"]`)[1]?.parentElement?.children[0] as HTMLElement
-        )?.click()
+        ;(searchAvatarOpenFileSelector().evaluate()[0]?.parentElement?.children[0] as HTMLElement)?.click()
     }, 50)
 }
 

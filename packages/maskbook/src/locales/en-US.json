@@ -937,5 +937,6 @@
     "nft_dashboard_input_tokenid_label": "Token ID",
     "nft_dashboard_add_hint": "Add Success",
     "nft_dashboard_remove_hint": "Remove Success",
-    "nft_dashboard_add_avatar_label": "Add NFT Avatar"
+    "nft_dashboard_add_avatar_label": "Add NFT Avatar",
+    "nft_dashboard_search_not_found": "Not Found"
 }

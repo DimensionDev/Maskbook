@@ -11,7 +11,7 @@ import {
 import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { uniqBy } from 'lodash-es'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -62,6 +62,7 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             backgroundColor: getMaskColor(theme).blue,
         },
+        height: 97,
         padding: 6,
         borderRadius: '100%',
         margin: theme.spacing(0.5, 1),
@@ -111,10 +112,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
 
     const { collectibles, hasNextPage } = value
 
-    useEffect(() => {
-        setCollectibles_(collectibles)
-    }, [collectibles])
-
     const onClick = useCallback(async () => {
         if (!selectedToken) return
         onChange(selectedToken)
@@ -132,7 +129,11 @@ export function NFTAvatar(props: NFTAvatarProps) {
 
     const LoadStatus = Array.from({ length: 6 })
         .fill(0)
-        .map((_, i) => <Skeleton animation="wave" variant="rectangular" className={classes.image} key={i} />)
+        .map((_, i) => (
+            <div className={classes.imgBackground}>
+                <Skeleton animation="wave" variant="rectangular" className={classes.image} key={i} />
+            </div>
+        ))
     const Retry = (
         <Box className={classes.error}>
             <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
@@ -168,9 +169,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
                         <Box className={classes.NFTImage}>
                             {loading
                                 ? LoadStatus
-                                : error || collectibles_.length === 0
+                                : error || collectibles.length === 0
                                 ? Retry
-                                : collectibles_
+                                : collectibles
                                       .filter(
                                           (token: ERC721TokenDetailed) =>
                                               token.info.image &&
@@ -192,7 +193,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                       ))}
                         </Box>
 
-                        {!(page === 0 && collectibles_.length === 0) ? (
+                        {!(page === 0 && collectibles.length === 0) ? (
                             <TablePagination
                                 count={-1}
                                 component="div"

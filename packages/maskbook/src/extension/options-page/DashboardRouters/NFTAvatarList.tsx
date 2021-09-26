@@ -4,7 +4,10 @@ import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import {
     Box,
     Button,
+    DialogActions,
+    DialogContent,
     IconButton,
+    LinearProgress,
     Link,
     Paper,
     Skeleton,
@@ -14,10 +17,13 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    TextField,
     ThemeProvider,
     Typography,
 } from '@material-ui/core'
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined'
+import ClearIcon from '@material-ui/icons/Clear'
+import SearchIcon from '@material-ui/icons/Search'
 
 import { extendsTheme, useI18N } from '../../../utils'
 import { DashboardBindNFTAvatarDialog } from '../DashboardDialogs/Avatar'
@@ -27,12 +33,13 @@ import LaunchIcon from '@material-ui/icons/Launch'
 import urlcat from 'urlcat'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { DashboardUnbindNFTAvatarDialog } from '../DashboardDialogs/Avatar/confirm'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState, useEffect, useRef } from 'react'
 import { remove } from 'lodash-es'
 import { useNFTAvatars } from '../../../components/InjectedComponents/NFT/hooks'
 import type { AvatarMetaDB } from '../../../components/InjectedComponents/NFT/types'
 import { saveNFTAvatar, setOrClearAvatar } from '../../../components/InjectedComponents/NFT/gun'
 import { createNFT } from '../../../components/InjectedComponents/NFT/utils'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
 const settingsTheme = extendsTheme((theme) => ({
     wrapper: {
@@ -72,11 +79,87 @@ const settingsTheme = extendsTheme((theme) => ({
 
 export function DashboardNFTAvatarsRouter() {
     const { t } = useI18N()
+    const { classes } = useStyles()
+    const [search, setSearch] = useState('')
+    const { enqueueSnackbar } = useSnackbar()
+    const { value: _avatarList, loading } = useNFTAvatars()
+    const [avatars, setAvatars] = useState<AvatarMetaDB[]>([])
+    const inputRef = useRef<HTMLInputElement>(null)
+    const [open, setOpen] = useState(false)
+
+    const onAdd = useCallback(
+        async (userId: string, avatarId: string, address: string, tokenId: string) => {
+            const { token } = await createNFT(address, tokenId)
+            const avatar = await saveNFTAvatar(userId, avatarId, token)
+
+            setAvatars((avatars) => [...avatars, avatar])
+            enqueueSnackbar(t('nft_dashboard_add_hint'), { variant: 'success' })
+        },
+        [saveNFTAvatar, enqueueSnackbar],
+    )
+
+    useEffect(() => {
+        setAvatars(_avatarList ?? [])
+        const a = _avatarList?.map((x) => ({
+            userId: x.userId,
+            avatarId: x.avatarId,
+            address: x.address,
+            tokenId: x.tokenId,
+        }))
+        console.log(a)
+    }, [_avatarList])
+
+    const [bindNFTAvatarDialog, openBindNFTAvatarDialog] = useModal(DashboardBindNFTAvatarDialog, { onAdd })
+
+    const actions = [
+        <TextField
+            placeholder={t('search')}
+            size="small"
+            value={search}
+            onChange={(e) => {
+                setSearch(e.target.value)
+            }}
+            InputProps={{
+                endAdornment: (
+                    <IconButton size="small" onClick={() => setSearch('')}>
+                        {search ? <ClearIcon /> : <SearchIcon />}
+                    </IconButton>
+                ),
+            }}
+        />,
+        <Box className={classes.addToken}>
+            <Button variant="outlined" onClick={openBindNFTAvatarDialog} size="medium">
+                {t('nft_dashboard_add_avatar_label')}
+            </Button>
+        </Box>,
+        <Box className={classes.addToken}>
+            <Button variant="outlined" onClick={() => setOpen(true)} size="medium">
+                Import
+            </Button>
+        </Box>,
+    ]
+
+    useEffect(() => {
+        if (!search) return
+        setAvatars(_avatarList?.filter((x) => x.userId.includes(search)) ?? [])
+    }, [search, _avatarList])
+
     return (
-        <DashboardRouterContainer title={t('settings_nft_avatar_whitelist')}>
+        <DashboardRouterContainer title={t('settings_nft_avatar_whitelist')} actions={actions}>
             <ThemeProvider theme={settingsTheme}>
-                <NFTAvatarWhitelist />
+                <NFTAvatarWhitelist avatarList={avatars} loading={loading} />
             </ThemeProvider>
+            {bindNFTAvatarDialog}
+            <input
+                type="file"
+                ref={inputRef}
+                accept="files/*.csv"
+                hidden
+                onChange={({ currentTarget }: React.ChangeEvent<HTMLInputElement>) => {
+                    if (currentTarget.files) console.log(currentTarget.files.item(0))
+                }}
+            />
+            <ImportFileDialog open={open} onClose={() => setOpen(false)} />
         </DashboardRouterContainer>
     )
 }
@@ -88,7 +171,6 @@ const useStyles = makeStyles()((theme) => ({
         overflowY: 'auto',
     },
     addToken: {
-        paddingTop: theme.spacing(1),
         textAlign: 'right',
         paddingRight: theme.spacing(4),
     },
@@ -103,25 +185,20 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function NFTAvatarWhitelist() {
+interface NFTAvatarWhitelistProps {
+    loading: boolean
+    avatarList: AvatarMetaDB[]
+}
+function NFTAvatarWhitelist({ loading, avatarList }: NFTAvatarWhitelistProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { value: _avatars, loading } = useNFTAvatars()
+
     const { enqueueSnackbar } = useSnackbar()
     const [avatars, setAvatars] = useState<AvatarMetaDB[]>([])
 
-    const onAdd = useCallback(
-        async (userId: string, avatarId: string, address: string, tokenId: string) => {
-            const { token } = await createNFT(address, tokenId)
-            const avatar = await saveNFTAvatar(userId, avatarId, token)
-
-            enqueueSnackbar(t('nft_dashboard_add_hint'), { variant: 'success' })
-            setAvatars((v) => [...v, avatar])
-        },
-        [saveNFTAvatar, enqueueSnackbar],
-    )
-
-    const [bindNFTAvatarDialog, openBindNFTAvatarDialog] = useModal(DashboardBindNFTAvatarDialog, { onAdd })
+    useEffect(() => {
+        setAvatars(avatarList)
+    }, [avatarList])
     const onDeleted = useCallback(
         async (avatar) => {
             setAvatars((x) => remove([...x], (i) => i.userId !== avatar.userId))
@@ -134,18 +211,8 @@ function NFTAvatarWhitelist() {
         [setOrClearAvatar],
     )
 
-    useEffect(() => {
-        if (!_avatars) return
-        setAvatars(_avatars)
-    }, [_avatars])
-
     return (
         <Paper elevation={0}>
-            <Box className={classes.addToken}>
-                <Button variant="outlined" onClick={openBindNFTAvatarDialog}>
-                    {t('nft_dashboard_add_avatar_label')}
-                </Button>
-            </Box>
             <Box className={classes.list}>
                 <TableContainer>
                     <Table component="table" size="medium" stickyHeader>
@@ -179,6 +246,12 @@ function NFTAvatarWhitelist() {
                         <TableBody>
                             {loading ? (
                                 <LoadingStatus />
+                            ) : avatars.length === 0 ? (
+                                <TableRow className={classes.cell}>
+                                    <Typography align="center" variant="body1" color="textPrimary">
+                                        {t('nft_dashboard_search_not_found')}
+                                    </Typography>
+                                </TableRow>
                             ) : (
                                 avatars
                                     ?.filter((x) => x)
@@ -190,7 +263,6 @@ function NFTAvatarWhitelist() {
                     </Table>
                 </TableContainer>
             </Box>
-            {bindNFTAvatarDialog}
         </Paper>
     )
 }
@@ -316,5 +388,67 @@ function FormatLinkUser({ userId }: FormatLinkUserProps) {
             title={urlcat('https://:network/:userId', { network: currentIdentity?.identifier.network, userId })}>
             {userId}
         </Link>
+    )
+}
+
+interface ImportFileDialogProps {
+    open: boolean
+    onClose: () => void
+}
+
+function ImportFileDialog(props: ImportFileDialogProps) {
+    const { open, onClose } = props
+    const [jsonData, setJsonData] = useState('')
+    const [importing, setImporting] = useState(false)
+    const [json, setJson] = useState()
+    const [message, setMessage] = useState('')
+    const [value, setValue] = useState(0)
+
+    const onConfirm = useCallback(() => {
+        try {
+            const json = JSON.parse(jsonData)
+            setJson(json)
+            setImporting(true)
+            json.map(
+                async (data: { userId: string; avatarId: string; tokenId: string; address: string }, i: number) => {
+                    setTimeout(async () => {
+                        const { token } = await createNFT(data.address, data.tokenId)
+                        console.log(token)
+                    }, 5000)
+
+                    /*
+                    saveNFTAvatar(data.userId, data.avatarId, token)
+                        .then(() => {
+                            setValue((i / json.length) * 100)
+                            setMessage(data.userId)
+                        })
+                        .catch((error: Error) => setMessage(error.message))
+                        */
+                },
+            )
+        } catch {
+            console.log('json error')
+        }
+    }, [jsonData])
+
+    return (
+        <InjectedDialog title="Import File" open={open}>
+            <DialogContent>
+                {importing ? (
+                    <Box sx={{ width: '100%' }}>
+                        <Typography variant="body1" color="textPrimary">
+                            {message}
+                        </Typography>
+                        <LinearProgress variant="determinate" value={value} />
+                    </Box>
+                ) : (
+                    <TextField fullWidth multiline rows={10} onChange={(e) => setJsonData(e.target.value)} />
+                )}
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose}>Cancel</Button>
+                <Button onClick={onConfirm}>Import</Button>
+            </DialogActions>
+        </InjectedDialog>
     )
 }
