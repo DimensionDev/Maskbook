@@ -6,5 +6,6 @@
     "snackbar_done": "crwdns1977:0crwdne1977:0",
     "import": "crwdns8001:0crwdne8001:0",
     "balance": "crwdns8023:0crwdne8023:0",
-    "select_token": "crwdns8025:0crwdne8025:0"
+    "select_token": "crwdns8025:0crwdne8025:0",
+    "erc20_token_list_placeholder": "crwdns9007:0crwdne9007:0"
 }
