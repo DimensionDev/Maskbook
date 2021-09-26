@@ -66,9 +66,6 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     }
     if (Object.keys(plugins).length) file.plugin = plugins
 
-    console.log('DEBUG: generateBackupJSON')
-    console.log(file)
-
     return file
 
     async function backupAllPosts() {
