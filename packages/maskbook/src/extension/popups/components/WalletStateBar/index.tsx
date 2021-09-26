@@ -1,6 +1,6 @@
 import { LoadingIcon } from '@masknet/icons'
 import { FormattedAddress, ProviderIcon } from '@masknet/shared'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import type { ProviderType } from '@masknet/web3-shared'
 import { Box, Stack, StackProps, Typography } from '@material-ui/core'
 import { FC, memo } from 'react'
@@ -48,9 +48,11 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                         direction="row"
                         alignItems="center"
                         justifyContent="center"
-                        sx={{ px: 2, background: MaskColorVar.orangeMain.alpha(0.1), color: MaskColorVar.orangeMain }}
+                        sx={{ px: 2, color: '#ffb915', backgroundColor: 'rgba(255, 185, 21, 0.1)' }}
                         className={classes.bar}>
-                        <LoadingIcon sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
+                        <LoadingIcon
+                            sx={{ fontSize: 12, mr: 0.8, color: '#ffb915', backgroundColor: 'rgba(255, 185, 21, 0.1)' }}
+                        />
                         <Typography component="span" fontSize={12} display="inline-block">
                             {t('popups_wallet_transactions_pending')}
                         </Typography>
