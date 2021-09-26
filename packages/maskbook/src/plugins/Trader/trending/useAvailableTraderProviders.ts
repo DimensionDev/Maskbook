@@ -8,6 +8,6 @@ import type { TagType } from '../types'
 export function useAvailableTraderProviders(type?: TagType, keyword?: string): AsyncState<TradeProvider[]> {
     const chainId = useChainId()
     return useAsync(async () => {
-        return PluginTraderRPC.getAvailableTraderProviders(type, keyword)
+        return PluginTraderRPC.getAvailableTraderProviders(chainId)
     }, [chainId, type, keyword])
 }
