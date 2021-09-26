@@ -28,6 +28,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import TuneIcon from '@mui/icons-material/Tune'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice } from './useNativeTokenPrice'
+import { useNavigate } from 'react-router'
+import { RoutePaths } from '../../../../type'
 
 type FormInputs = {
     recipient: string
@@ -38,12 +40,12 @@ type FormInputs = {
 
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
+    const navigate = useNavigate()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
     const [gasLimit, setGasLimit] = useState<string>('0')
     const [maxFee, setMaxFee] = useState<string | null>(null)
     const [offset, setOffset] = useState(0)
-    const [ownerList, setOwnerList] = useState([])
     const [id] = useState(uuid())
 
     const account = useAccount()
@@ -76,6 +78,7 @@ export const TransferERC721 = memo(() => {
 
     const {
         asyncRetry: { value = { tokenDetailedOwnerList: [], loadMore: true }, loading: loadingOwnerList },
+        clearTokenDetailedOwnerList,
     } = useERC721TokenDetailedOwnerList(contract, account, offset)
     const { tokenDetailedOwnerList, loadMore } = value
 
@@ -103,6 +106,7 @@ export const TransferERC721 = memo(() => {
         handleSubmit,
         setValue,
         watch,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
@@ -122,6 +126,18 @@ export const TransferERC721 = memo(() => {
     useEffect(() => {
         setGasLimit(erc721GasLimit.value?.toFixed() ?? '0')
     }, [erc721GasLimit.value])
+
+    useEffect(() => {
+        if (transferState.type === TransactionStateType.FAILED || transferState.type === TransactionStateType.HASH) {
+            setValue('recipient', '')
+            reset()
+            clearTokenDetailedOwnerList()
+            resetTransferCallback()
+        }
+        if (transferState.type === TransactionStateType.HASH) {
+            navigate(RoutePaths.WalletsHistory)
+        }
+    }, [transferState])
 
     const onTransfer = useCallback(
         async (data) => {
