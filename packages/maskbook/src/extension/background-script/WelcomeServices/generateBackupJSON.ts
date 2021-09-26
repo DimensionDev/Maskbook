@@ -66,9 +66,6 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     }
     if (Object.keys(plugins).length) file.plugin = plugins
 
-    console.log('DEBUG: generateBackupJSON')
-    console.log(file)
-
     return file
 
     async function backupAllPosts() {
@@ -111,9 +108,8 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
             ).map(async (wallet) => {
                 return {
                     ...wallet,
-                    mnemonic: wallet.derivationPath
-                        ? await exportMnemonic(wallet.address)
-                        : await exportPrivateKey(wallet.address),
+                    mnemonic: wallet.derivationPath ? await exportMnemonic(wallet.address) : undefined,
+                    privateKey: wallet.derivationPath ? undefined : await exportPrivateKey(wallet.address),
                 }
             }),
         )
