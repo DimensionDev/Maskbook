@@ -9,7 +9,7 @@ const Worker = new OnDemandWorker(new URL('../../../../../../src-workers/wallet.
     name: 'MaskWallet',
 })
 
-export enum ErrorCode {
+enum ErrorCode {
     KdfParamsInvalid = '-3001',
     PasswordIncorrect = '-3002',
     InvalidKeyIvLength = '-3003',
