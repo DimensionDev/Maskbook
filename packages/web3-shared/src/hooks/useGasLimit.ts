@@ -41,5 +41,5 @@ export function useGasLimit(
             default:
                 unreachable(type)
         }
-    }, [erc20Contract, type, amount, account, recipient])
+    }, [erc20Contract, type, amount, account, recipient, tokenId])
 }

@@ -6,7 +6,6 @@ import {
     ERC721ContractDetailed,
     EthereumTokenType,
     formatWeiToEther,
-    FungibleTokenDetailed,
     GasOption,
     TransactionStateType,
     useAccount,
@@ -30,10 +29,6 @@ import TuneIcon from '@mui/icons-material/Tune'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice } from './useNativeTokenPrice'
 
-interface TransferERC721Props {
-    token: FungibleTokenDetailed
-}
-
 type FormInputs = {
     recipient: string
     contract: string
@@ -41,11 +36,12 @@ type FormInputs = {
     memo: string
 }
 
-export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
+export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
-    const [gasLimit, setGasLimit] = useState<string | number>(0)
+    const [gasLimit, setGasLimit] = useState<string>('0')
+    const [maxFee, setMaxFee] = useState<string | null>(null)
     const [offset, setOffset] = useState(0)
     const [ownerList, setOwnerList] = useState([])
     const [id] = useState(uuid())
@@ -80,7 +76,6 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
 
     const {
         asyncRetry: { value = { tokenDetailedOwnerList: [], loadMore: true }, loading: loadingOwnerList },
-        clearTokenDetailedOwnerList,
     } = useERC721TokenDetailedOwnerList(contract, account, offset)
     const { tokenDetailedOwnerList, loadMore } = value
 
@@ -88,18 +83,19 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
 
     useEffect(() => {
         return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
+            if (evt.open) return
             if (evt.gasPrice) setCustomGasPrice(evt.gasPrice)
             if (evt.gasOption) setGasOption(evt.gasOption)
             if (evt.gasLimit) setGasLimit(evt.gasLimit)
+            if (evt.maxFee) setMaxFee(evt.maxFee)
         })
     }, [])
 
     // form
     const schema = z.object({
-        recipient: z.string().refine((address) => !EthereumAddress.isValid(address), t.wallets_incorrect_address()),
+        recipient: z.string().refine((address) => EthereumAddress.isValid(address), t.wallets_incorrect_address()),
         contract: z.string().min(1),
         tokenId: z.string().min(1),
-        memo: z.string(),
     })
 
     const {
@@ -107,7 +103,7 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
         handleSubmit,
         setValue,
         watch,
-        formState: { errors, isSubmitting, isDirty },
+        formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
         defaultValues: { recipient: '', contract: '', tokenId: '' },
@@ -124,14 +120,14 @@ export const TransferERC721 = memo<TransferERC721Props>(({ token }) => {
     )
 
     useEffect(() => {
-        setGasLimit(erc721GasLimit.value?.toFixed() ?? 0)
+        setGasLimit(erc721GasLimit.value?.toFixed() ?? '0')
     }, [erc721GasLimit.value])
 
     const onTransfer = useCallback(
         async (data) => {
             await transferCallback(data.tokenId, data.recipient)
         },
-        [transferCallback],
+        [transferCallback, contract?.address],
     )
 
     const contractIcon = useMemo(() => {

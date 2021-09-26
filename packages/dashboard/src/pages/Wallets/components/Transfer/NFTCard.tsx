@@ -71,7 +71,6 @@ export const NFTCard = memo<NFTCardProps>(({ token, selected, onSelect }) => {
                         size="small"
                         onChange={(e) => {
                             const value = e.target.checked
-                            console.log(value)
                             onSelect(value ? token.tokenId : '')
                             setChecked(value)
                         }}
