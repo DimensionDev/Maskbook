@@ -1,7 +1,7 @@
 import { I18nextProvider } from 'react-i18next'
 import { CssBaseline, StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { Web3Provider } from '@masknet/web3-shared'
-import { SnackbarProvider } from '@masknet/theme'
+import { CustomSnackbarProvider } from '@masknet/theme'
 import { ErrorBoundary, ErrorBoundaryBuildInfoContext } from '@masknet/shared'
 import i18nNextInstance from './utils/i18n-next'
 import { useClassicMaskTheme } from './utils/theme'
@@ -16,9 +16,11 @@ export function MaskUIRootWithinShadow(JSX: JSX.Element) {
                 <I18nextProvider i18n={i18nNextInstance}>
                     <ErrorBoundaryBuildInfoContext.Provider value={buildInfoMarkdown}>
                         <ErrorBoundary>
-                            <SnackbarProvider maxSnack={30} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                            <CustomSnackbarProvider
+                                disableWindowBlurListener={false}
+                                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
                                 {JSX}
-                            </SnackbarProvider>
+                            </CustomSnackbarProvider>
                         </ErrorBoundary>
                     </ErrorBoundaryBuildInfoContext.Provider>
                 </I18nextProvider>
