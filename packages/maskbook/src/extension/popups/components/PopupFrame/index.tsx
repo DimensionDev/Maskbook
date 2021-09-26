@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Box, GlobalStyles, Paper } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
@@ -7,7 +8,6 @@ import { PopupRoutes } from '../../index'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { InitialPlaceholder } from '../InitialPlaceholder'
 import { useI18N } from '../../../../utils'
-import { useLocation } from 'react-router'
 
 function GlobalCss() {
     return (

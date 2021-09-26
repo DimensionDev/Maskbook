@@ -1,5 +1,8 @@
 import { useState, useMemo } from 'react'
+import { useUpdateEffect } from 'react-use'
+import { useLocation, useHistory } from 'react-router-dom'
 import type { TradeProvider } from '@masknet/public-api'
+import { useChainId } from '@masknet/web3-shared'
 import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader'
 import { TradeFooter } from '../../../../../plugins/Trader/SNSAdaptor/trader/TradeFooter'
 import { TradeContext, useTradeContext } from '../../../../../plugins/Trader/trader/useTradeContext'
@@ -9,9 +12,6 @@ import { useAvailableTraderProviders } from '../../../../../plugins/Trader/trend
 import { SelectTokenDialog } from '../../../../../plugins/Wallet/SNSAdaptor/SelectTokenDialog'
 import { WalletRiskWarningDialog } from '../../../../../plugins/Wallet/SNSAdaptor/RiskWarningDialog'
 import { Coin, TagType } from '../../../../../plugins/Trader/types'
-import { useLocation, useHistory } from 'react-router'
-import { useChainId } from '@masknet/web3-shared'
-import { useUpdateEffect } from 'react-use'
 import { PopupRoutes } from '../../../index'
 
 export function SwapBox() {
