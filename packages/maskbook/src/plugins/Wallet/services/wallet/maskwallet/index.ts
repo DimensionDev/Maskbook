@@ -9,7 +9,7 @@ const Worker = new OnDemandWorker(new URL('../../../../../../src-workers/wallet.
 
 function send<I extends keyof Request, O extends keyof Response>(input: I, output: O) {
     return (value: Request[I]) => {
-        return new Promise((resolve, reject) => {
+        return new Promise<Response[O]>((resolve, reject) => {
             const req: Input = { id: Math.random(), data: { [input]: value } }
             Worker.postMessage(req)
             Worker.addEventListener('message', function f(message) {
