@@ -5,7 +5,7 @@ import {
     Footer,
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../type'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { useDashboardI18N } from '../../../locales'

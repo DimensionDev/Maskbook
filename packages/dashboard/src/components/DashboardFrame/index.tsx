@@ -20,7 +20,7 @@ import { DashboardContext } from './context'
 import { Navigation } from './Navigation'
 import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
 import { FeaturePromotions } from './FeaturePromotions'
-import { useLocation } from 'react-router'
+import { useLocation } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { useAppearance } from '../../pages/Personas/api'
 

@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 import { styled } from '@material-ui/core/styles'
