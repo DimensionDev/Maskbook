@@ -17,7 +17,6 @@ import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { LoadingButton } from '../LoadingButton'
-import urlcat from 'urlcat'
 
 enum RestoreStatus {
     WaitingInput = 0,
@@ -92,12 +91,7 @@ export const RestoreFromLocal = memo(() => {
                 json?.wallets &&
                 (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
             ) {
-                // TOOD:
-                // open popup with backup id
-                console.log(backupId)
-                await Services.Helper.openPopupsWindow(
-                    browser.runtime.getURL(urlcat('popups.html#', '/wallet/recovered', { backupId })),
-                )
+                await Services.Helper.openPopupsWindow('/wallet/recovered', { backupId })
                 return
             }
 

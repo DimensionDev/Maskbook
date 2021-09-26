@@ -98,6 +98,11 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
         exact: true,
     })
 
+    const matchRecovery = useRouteMatch({
+        path: PopupRoutes.WalletRecovered,
+        exact: true,
+    })
+
     return (
         <>
             <GlobalCss />
@@ -129,7 +134,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                     </Box>
                 </Box>
                 <Box className={classes.container}>
-                    {personas.length === 0 ? <InitialPlaceholder /> : props.children}
+                    {personas.length === 0 && !matchRecovery ? <InitialPlaceholder /> : props.children}
                 </Box>
             </Paper>
         </>

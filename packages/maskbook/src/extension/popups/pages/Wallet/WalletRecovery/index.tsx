@@ -1,11 +1,22 @@
-import { memo } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { PageHeader } from '../components/PageHeader'
 import { useI18N } from '../../../../../utils'
-import { useLocation } from 'react-router-dom'
-import { useAsync } from 'react-use'
+import { useHistory, useLocation } from 'react-router-dom'
+import { useAsync, useAsyncFn } from 'react-use'
 import Services from '../../../../service'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
+import { Typography } from '@material-ui/core'
+import { FormattedAddress } from '@masknet/shared'
+import { useHasPassword } from '../../../hook/useHasPassword'
+import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
+import type { z as zod } from 'zod'
+import { Controller } from 'react-hook-form'
+import { usePasswordForm } from '../hooks/usePasswordForm'
+import { PasswordField } from '../../../components/PasswordField'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { PopupRoutes } from '../../../index'
+import { LoadingButton } from '@material-ui/lab'
 
 const useStyles = makeStyles()({
     container: {
@@ -18,13 +29,13 @@ const useStyles = makeStyles()({
         marginTop: 10,
     },
     form: {
-        marginTop: 26,
         width: '100%',
     },
     label: {
         fontSize: 12,
         lineHeight: '16px',
         color: '#1C68F3',
+        marginBottom: 10,
     },
     tips: {
         color: '#7B8192',
@@ -32,69 +43,166 @@ const useStyles = makeStyles()({
         lineHeight: '16px',
         marginTop: 10,
     },
-    tabs: {
-        marginTop: 20,
-        minHeight: 'unset',
+    wallet: {
+        marginBottom: 20,
     },
-    tab: {
+    address: {
         fontSize: 12,
         lineHeight: '16px',
-        padding: 9,
-        minWidth: 0,
-        backgroundColor: '#F7F9FA',
-        minHeight: 'unset',
+        color: '#15181B',
+        fontWeight: 600,
     },
-    indicator: {
-        display: 'none',
-    },
-    selected: {
-        backgroundColor: '#ffffff',
-    },
-    tabPanel: {
-        padding: '16px 0 0 0',
-    },
-    multiline: {
-        width: '100%',
-    },
-    multilineInput: {
-        padding: 6,
-        backgroundColor: '#F7F9FA',
-    },
-    textArea: {
-        padding: 0,
-        fontSize: 12,
+    controller: {
+        padding: '20px 10px',
     },
     button: {
         padding: '9px 10px',
         borderRadius: 20,
     },
-    error: {
-        color: '#FF5F5F',
-        fontSize: 12,
-        marginTop: 8,
-        lineHeight: '16px',
-        wordBreak: 'break-all',
-    },
-    controller: {
-        padding: '20px 10px',
-    },
 })
 
 const WalletRecovery = memo(() => {
     const { t } = useI18N()
+    const { classes } = useStyles()
     const location = useLocation()
+    const [password, setPassword] = useState('')
+    const history = useHistory()
+    const [{ value: hasError, loading: unlockLoading }, handleUnlock] = useAsyncFn(async () => {
+        const result = await WalletRPC.unlockWallet(password)
+        if (result) {
+            history.replace(PopupRoutes.Wallet)
+            return false
+        } else {
+            return true
+        }
+    }, [password])
 
     const backupId = new URLSearchParams(location.search).get('backupId')
+
     const { loading, value } = useAsync(async () => {
         if (backupId) return Services.Welcome.getUnconfirmedBackup(backupId)
         return undefined
     }, [backupId])
 
-    return loading ? (
+    const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
+    const { isLock, loading: getLockStatusLoading } = useWalletLockStatus()
+
+    const {
+        control,
+        handleSubmit,
+        setError,
+        formState: { errors, isValid },
+        schema,
+    } = usePasswordForm()
+
+    const [{ loading: setPasswordLoading }, handleSetPassword] = useAsyncFn(
+        async (data: zod.infer<typeof schema>) => {
+            try {
+                await WalletRPC.setPassword(data.password)
+                history.replace(PopupRoutes.ImportWallet)
+            } catch (error) {
+                if (error instanceof Error) {
+                    setError('password', { message: error.message })
+                }
+            }
+        },
+        [history, setError],
+    )
+
+    const onSubmit = handleSubmit(handleSetPassword)
+
+    const onConfirm = useCallback(async () => {
+        if (!hasPassword) {
+            await onSubmit()
+        }
+        if (isLock) await handleUnlock()
+
+        await Services.Helper.removePopupWindow()
+    }, [onSubmit, isLock, handleUnlock, hasPassword])
+
+    return loading || getHasPasswordLoading || getLockStatusLoading ? (
         <LoadingPlaceholder />
     ) : (
         <>
-            <PageHeader title={t('popups_wallet_recovered')} />
+            <div className={classes.container}>
+                <PageHeader title={t('popups_wallet_recovered')} />
+                <div style={{ padding: 6 }}>
+                    {value?.wallets.map((wallet) => {
+                        return (
+                            <div className={classes.wallet} key={wallet.address}>
+                                <Typography className={classes.label}>{wallet.name}</Typography>
+                                <Typography className={classes.address}>
+                                    <FormattedAddress address={wallet.address} size={16} />
+                                </Typography>
+                            </div>
+                        )
+                    })}
+
+                    {!hasPassword ? (
+                        <form className={classes.form}>
+                            <div style={{ marginTop: 16 }}>
+                                <Typography className={classes.label}>
+                                    {t('popups_wallet_set_up_payment_password')}
+                                </Typography>
+                                <Controller
+                                    control={control}
+                                    render={({ field }) => (
+                                        <PasswordField
+                                            {...field}
+                                            classes={{ root: classes.textField }}
+                                            type="password"
+                                            variant="filled"
+                                            placeholder={t('popups_wallet_payment_password')}
+                                            error={!isValid && !!errors.password?.message}
+                                            helperText={!isValid ? errors.password?.message : ''}
+                                        />
+                                    )}
+                                    name="password"
+                                />
+                                <Controller
+                                    render={({ field }) => (
+                                        <PasswordField
+                                            classes={{ root: classes.textField }}
+                                            {...field}
+                                            error={!isValid && !!errors.confirm?.message}
+                                            helperText={!isValid ? errors.confirm?.message : ''}
+                                            type="password"
+                                            variant="filled"
+                                            placeholder="Re-enter the payment password"
+                                        />
+                                    )}
+                                    name="confirm"
+                                    control={control}
+                                />
+                            </div>
+                            <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>
+                        </form>
+                    ) : null}
+                    {hasPassword && isLock ? (
+                        <div>
+                            <Typography className={classes.label}>{t('popups_wallet_payment_password')}</Typography>
+                            <PasswordField
+                                value={password}
+                                type="password"
+                                onChange={(e) => setPassword(e.target.value)}
+                                error={hasError}
+                                placeholder={t('popups_wallet_payment_password')}
+                                helperText={hasError ? t('popups_wallet_unlock_error_password') : ''}
+                            />
+                        </div>
+                    ) : null}
+                </div>
+            </div>
+            <div className={classes.controller}>
+                <LoadingButton
+                    loading={unlockLoading || setPasswordLoading}
+                    fullWidth
+                    className={classes.button}
+                    variant="contained"
+                    onClick={onConfirm}>
+                    {t('confirm')}
+                </LoadingButton>
+            </div>
         </>
     )
 })
