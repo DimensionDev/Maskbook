@@ -1,5 +1,4 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { delay, ProfileIdentifier } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared'
 import { useCallback, useEffect, useState } from 'react'
@@ -12,6 +11,7 @@ import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../ut
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -71,9 +71,8 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         })
     }, [])
 
-    const handler = async () => {
+    const handler = () => {
         if (!avatarEvent) return
-        await delay(500)
         MaskMessage.events.NFTAvatarUpdated.sendToLocal(avatarEvent)
     }
 

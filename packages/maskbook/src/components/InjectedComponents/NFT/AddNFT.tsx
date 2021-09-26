@@ -3,6 +3,7 @@ import { ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-sh
 import { Button, DialogContent, Typography } from '@material-ui/core'
 import { useCallback, useState } from 'react'
 import { InputBox } from '../../../extension/options-page/DashboardComponents/InputBox'
+import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../shared/InjectedDialog'
 import { createNFT } from './utils'
 
@@ -31,6 +32,7 @@ export interface AddNFTProps {
     open: boolean
 }
 export function AddNFT(props: AddNFTProps) {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
@@ -40,18 +42,18 @@ export function AddNFT(props: AddNFTProps) {
 
     const onClick = useCallback(async () => {
         if (!address) {
-            setMessage('Please input contract address')
+            setMessage(t('nft_input_address_label'))
             return
         }
         if (!tokenId) {
-            setMessage('Please input token ID')
+            setMessage(t('nft_input_tokenid_label'))
             return
         }
 
         createNFT(address, tokenId)
             .then((value) => {
                 if (!isSameAddress(value.account, account)) {
-                    setMessage('This NFT does not exist or does not belong to you.')
+                    setMessage(t('nft_owner_hint'))
                     return
                 }
                 onAddClick(value.token)
@@ -75,10 +77,10 @@ export function AddNFT(props: AddNFTProps) {
     }
 
     return (
-        <InjectedDialog title="Add collectibles" open={open} onClose={handleClose}>
+        <InjectedDialog title={t('nft_add_dialog_title')} open={open} onClose={handleClose}>
             <DialogContent>
                 <Button className={classes.addNFT} variant="contained" size="small" onClick={onClick}>
-                    Add
+                    {t('nft_add_button_label')}
                 </Button>
                 <div className={classes.input}>
                     <InputBox label="Input Contract Address" onChange={(address) => onAddressChange(address)} />

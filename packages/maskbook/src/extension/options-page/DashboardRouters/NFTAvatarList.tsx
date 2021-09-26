@@ -115,7 +115,7 @@ function NFTAvatarWhitelist() {
             const { token } = await createNFT(address, tokenId)
             const avatar = await saveNFTAvatar(userId, avatarId, token)
 
-            enqueueSnackbar('Add Success', { variant: 'success' })
+            enqueueSnackbar(t('nft_dashboard_add_hint'), { variant: 'success' })
             setAvatars((v) => [...v, avatar])
         },
         [saveNFTAvatar, enqueueSnackbar],
@@ -127,7 +127,7 @@ function NFTAvatarWhitelist() {
             setAvatars((x) => remove([...x], (i) => i.userId !== avatar.userId))
             setOrClearAvatar(avatar.userId)
                 .then(() => {
-                    enqueueSnackbar('Remove Success', { variant: 'success' })
+                    enqueueSnackbar(t('nft_dashboard_remove_hint'), { variant: 'success' })
                 })
                 .catch((error) => enqueueSnackbar(error.message, { variant: 'error' }))
         },
@@ -143,7 +143,7 @@ function NFTAvatarWhitelist() {
         <Paper elevation={0}>
             <Box className={classes.addToken}>
                 <Button variant="outlined" onClick={openBindNFTAvatarDialog}>
-                    Add NFT Avatar
+                    {t('nft_dashboard_add_avatar_label')}
                 </Button>
             </Box>
             <Box className={classes.list}>
@@ -153,22 +153,22 @@ function NFTAvatarWhitelist() {
                             <TableRow>
                                 <TableCell align="left">
                                     <Typography variant="body1" color="textPrimary" className={classes.title}>
-                                        User ID
+                                        {t('nft_dashboard_input_userid_label')}
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="center">
                                     <Typography variant="body1" color="textPrimary" className={classes.title}>
-                                        Avatar ID
+                                        {t('nft_dashboard_input_avatarid_label')}
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="center">
                                     <Typography variant="body1" color="textPrimary" className={classes.title}>
-                                        Contract Address
+                                        {t('nft_dashboard_input_address_label')}
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="left">
                                     <Typography variant="body1" color="textPrimary" className={classes.title}>
-                                        Token ID
+                                        {t('nft_dashboard_input_tokenid_label')}
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="left">

@@ -137,7 +137,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         <Box className={classes.error}>
             <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
 
-            <Button className={classes.button} variant="text" onClick={() => retry()}>
+            <Button className={classes.button} variant="text" onClick={retry}>
                 {t('plugin_collectible_retry')}
             </Button>
         </Box>
@@ -147,13 +147,13 @@ export function NFTAvatar(props: NFTAvatarProps) {
             <Box className={classes.root}>
                 <Box className={classes.title}>
                     <Typography variant="body1" color="textPrimary">
-                        NFT Avatar Setting
+                        {t('nft_list_title')}
                     </Typography>
                     {account ? (
                         <Typography variant="body1" color="textPrimary">
-                            Wallet: {formatEthereumAddress(account, 4)}
+                            {t('nft_wallet_label')}: {formatEthereumAddress(account, 4)}
                             <Button onClick={openSelectProviderDialog} size="small" className={classes.changeButton}>
-                                Change
+                                {t('nft_wallet_change')}
                             </Button>
                         </Typography>
                     ) : null}
@@ -162,7 +162,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     <Box className={classes.NFTBox}>
                         <Box className={classes.AddCollectible}>
                             <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
-                                Add Collectibles
+                                {t('nft_collectible_add')}
                             </Button>
                         </Box>
                         <Box className={classes.NFTImage}>

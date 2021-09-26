@@ -46,19 +46,19 @@ export function DashboardBindNFTAvatarDialog(
 
     const _onAdd = useCallback(() => {
         if (!userId) {
-            setMessage('Please Input User ID')
+            setMessage(t('nft_dashboard_input_userid_hint'))
             return
         }
         if (!avatarId) {
-            setMessage('Please Input Avatar ID')
+            setMessage(t('nft_dashboard_input_avatarid_hint'))
             return
         }
         if (!address) {
-            setMessage('Please Input Contract address')
+            setMessage(t('nft_dashboard_input_address_hint'))
             return
         }
         if (!tokenId) {
-            setMessage('Please Input Token ID')
+            setMessage(t('nft_dashboard_input_tokenid_hint'))
             return
         }
 
@@ -85,7 +85,7 @@ export function DashboardBindNFTAvatarDialog(
                             },
                         }}>
                         <InputBox
-                            label="User ID"
+                            label={t('nft_dashboard_input_userid_label')}
                             classes={{ root: classes.root }}
                             inputBaseProps={{ autoFocus: true }}
                             value={userId}
@@ -95,7 +95,7 @@ export function DashboardBindNFTAvatarDialog(
                             }}
                         />
                         <InputBox
-                            label="Avatar ID"
+                            label={t('nft_dashboard_input_avatarid_label')}
                             value={avatarId}
                             onChange={(val: string) => {
                                 setAvatarId(val)
@@ -103,7 +103,7 @@ export function DashboardBindNFTAvatarDialog(
                             }}
                         />
                         <InputBox
-                            label="Contract Address"
+                            label={t('nft_dashboard_input_address_label')}
                             value={address}
                             onChange={(val: string) => {
                                 setAddress(val)
@@ -111,7 +111,7 @@ export function DashboardBindNFTAvatarDialog(
                             }}
                         />
                         <InputBox
-                            label="Token ID"
+                            label={t('nft_dashboard_input_tokenid_label')}
                             value={tokenId}
                             onChange={(val: string) => {
                                 setTokenId(val)
@@ -125,7 +125,7 @@ export function DashboardBindNFTAvatarDialog(
                             </Typography>
                         ) : null}
                         <Button variant="contained" onClick={_onAdd}>
-                            Add
+                            {t('nft_add_button_label')}
                         </Button>
                     </Box>
                 }
