@@ -94,8 +94,8 @@ export const TransferERC721 = memo(() => {
     // form
     const schema = z.object({
         recipient: z.string().refine((address) => EthereumAddress.isValid(address), t.wallets_incorrect_address()),
-        contract: z.string().min(1),
-        tokenId: z.string().min(1),
+        contract: z.string().min(1, t.wallets_collectible_contract_is_empty()),
+        tokenId: z.string().min(1, t.wallets_collectible_token_id_is_empty()),
     })
 
     const {
