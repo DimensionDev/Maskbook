@@ -19,9 +19,16 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-es'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
-const useStyles = makeStyles()((theme) => ({
+interface StyleProps {
+    snsId: string
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     content: {
+        ...(snsId === MINDS_ID ? { minWidth: 600 } : {}),
         position: 'relative',
         paddingTop: 50,
     },
@@ -48,7 +55,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const account = useAccount()
     const chainId = useChainId()
-    const { classes } = useStyles()
+    const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()

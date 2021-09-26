@@ -8,29 +8,36 @@ import { startWatch } from '../../../utils/watcher'
 import { postEditorInPopupSelector, postEditorInTimelineSelector } from '../utils/selector'
 
 export function injectPostDialogHintAtMinds(signal: AbortSignal) {
-    renderPostDialogHintTo(postEditorInPopupSelector(), signal)
-    renderPostDialogHintTo(postEditorInTimelineSelector(), signal)
+    renderPostDialogHintTo(postEditorInPopupSelector(), signal, 'popup')
+    renderPostDialogHintTo(postEditorInTimelineSelector(), signal, 'timeline')
 }
 
-function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>, signal: AbortSignal) {
+function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>, signal: AbortSignal, reason: 'popup' | 'timeline') {
     const watcher = new MutationObserverWatcher(ls, document.querySelector('m-page')!)
     startWatch(watcher, signal)
 
     watcher.useForeach((node, key, meta) => {
         createReactRootShadowed(watcher.firstDOMProxy.afterShadow, {
             signal,
-        }).render(<PostDialogHintAtMinds reason="popup" />)
+        }).render(<PostDialogHintAtMinds reason={reason} />)
     })
 }
 
-const useStyles = makeStyles()({
+interface StyleProps {
+    reason: string
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, { reason }) => ({
     buttonText: {
         margin: 0,
     },
-})
+    buttonTransform: {
+        ...(reason === 'timeline' ? { width: '40px', transform: 'translateX(160px) translateY(-70px)' } : {}),
+    },
+}))
 
 function PostDialogHintAtMinds({ reason }: { reason: 'timeline' | 'popup' }) {
-    const { classes } = useStyles()
+    const { classes } = useStyles({ reason })
 
     const onHintButtonClicked = useCallback(
         () => MaskMessage.events.requestComposition.sendToLocal({ reason, open: true }),
@@ -39,6 +46,9 @@ function PostDialogHintAtMinds({ reason }: { reason: 'timeline' | 'popup' }) {
     return (
         <PostDialogHint
             onHintButtonClicked={onHintButtonClicked}
+            classes={{
+                buttonTransform: classes.buttonTransform,
+            }}
             NotSetupYetPromptProps={{
                 classes: {
                     button: classes.buttonText,
