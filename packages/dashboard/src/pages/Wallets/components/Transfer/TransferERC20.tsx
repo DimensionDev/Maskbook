@@ -51,7 +51,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const { value: defaultGasPrice = '0' } = useGasPrice()
     const [customGasPrice, setCustomGasPrice] = useState<BigNumber.Value>(0)
 
-    const [selectedToken, setToken] = useState<FungibleTokenDetailed>(token)
+    const [selectedToken, setSelectedToken] = useState<FungibleTokenDetailed>(token)
     const [isOpenSelectTokenDialog, openSelectTokenDialog] = useState(false)
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
     const chainId = useChainId()
@@ -59,7 +59,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const { gasNow } = useGasOptions()
 
     useEffect(() => {
-        setToken(token)
+        setSelectedToken(token)
     }, [token])
 
     useEffect(() => {
@@ -231,7 +231,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
             {isOpenSelectTokenDialog && (
                 <SelectTokenDialog
                     onSelect={(token) => {
-                        setToken(token!)
+                        setSelectedToken(token!)
                         openSelectTokenDialog(false)
                     }}
                     open={isOpenSelectTokenDialog}
