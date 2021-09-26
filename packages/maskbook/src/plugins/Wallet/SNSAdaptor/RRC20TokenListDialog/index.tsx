@@ -5,7 +5,7 @@ import { DialogContent } from '@material-ui/core'
 import { MaskDialog } from '@masknet/theme'
 import { useState } from 'react'
 
-export const RRC20TokenListDialog = () => {
+export const ERC20TokenListDialog = () => {
     const { t } = useI18N()
     const [dialogProps, setDialogProps] = useState<any>()
     const { open, closeDialog } = useRemoteControlledDialog(
