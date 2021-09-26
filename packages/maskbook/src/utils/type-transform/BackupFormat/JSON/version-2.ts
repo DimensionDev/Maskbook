@@ -166,6 +166,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
 
 export function patchNonBreakingUpgradeForBackupJSONFileVersion2(json: BackupJSONFileVersion2): BackupJSONFileVersion2 {
     json.wallets = json.wallets ?? []
+    json.relations = json.relations ?? []
     const permissions = new Set<string>(json.grantedHostPermissions)
     if (json.grantedHostPermissions.some((x) => x.includes('twitter.com'))) {
         const a = twitterBase.declarativePermissions.origins
