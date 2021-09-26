@@ -83,9 +83,9 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
         const schema = z.object({
             address: z
                 .string()
-                .min(1)
+                .min(1, t.wallets_collectible_field_contract_require())
                 .refine((address) => EthereumAddress.isValid(address), t.wallets_incorrect_address()),
-            tokenId: z.string().min(1),
+            tokenId: z.string().min(1, t.wallets_collectible_field_token_id_require()),
         })
 
         const {
@@ -127,7 +127,7 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
 
         return (
             <MaskDialog open={open} title={t.wallets_add_collectible()} onClose={handleClose}>
-                <form onSubmit={handleFormSubmit}>
+                <form noValidate onSubmit={handleFormSubmit}>
                     <DialogContent>
                         <Box>
                             <Controller
