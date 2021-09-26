@@ -17,6 +17,7 @@ import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
 import { useLocation } from 'react-router'
 import Services from '../../../../service'
+import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
 
 const useStyles = makeStyles()({
     container: {
@@ -158,6 +159,9 @@ const ImportWallet = memo(() => {
                 try {
                     switch (currentTab) {
                         case ImportWalletTab.Mnemonic:
+                            // valid the mnemonic
+                            await getDerivableAccounts(mnemonic, 0, 1)
+
                             const params = query({ mnemonic, name: data.name })
                             history.replace({
                                 pathname: PopupRoutes.AddDeriveWallet,
@@ -170,9 +174,7 @@ const ImportWallet = memo(() => {
                             await Services.Helper.removePopupWindow()
                             break
                         case ImportWalletTab.PrivateKey:
-                            await WalletRPC.updateMaskAccount({
-                                account: await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey),
-                            })
+                            await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey)
                             await Services.Helper.removePopupWindow()
                             history.replace(PopupRoutes.Wallet)
                             break

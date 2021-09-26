@@ -4,9 +4,8 @@ import { HashRouter } from 'react-router-dom'
 import { PopupRoutes } from '.'
 import { createNormalReactRoot, useClassicMaskTheme } from '../../utils'
 import '../../social-network-adaptor/browser-action'
-
 import { Web3Provider } from '@masknet/web3-shared'
-import { PopupWeb3Context, SwapWeb3Context } from '../../web3/context'
+import { PopupWeb3Context } from '../../web3/context'
 import { PopupFrame } from './components/PopupFrame'
 import { StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { Appearance } from '@masknet/theme'
@@ -32,9 +31,7 @@ function Dialogs() {
                             <Switch>
                                 <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
                                 <Route path={PopupRoutes.Personas} children={frame(<Personas />)} />
-                                <Web3Provider value={SwapWeb3Context}>
-                                    <Route path={PopupRoutes.Swap} children={<SwapPage />} />
-                                </Web3Provider>
+                                <Route path={PopupRoutes.Swap} children={<SwapPage />} />
                                 <Route path={PopupRoutes.RequestPermission} exact>
                                     <RequestPermissionPage />
                                 </Route>

@@ -814,7 +814,6 @@
     "popups_wallet_tab_assets": "자산",
     "popups_wallet_tab_activity": "활동",
     "popups_wallet_derivation_path": "파생 경로 ({{ path }})",
-    "popups_wallet_previous": "이전",
     "popups_wallet_next": "다음",
     "popups_wallet_backup_wallet": "월렛 백업",
     "popups_wallet_backup_json_file": "JSON 파일",

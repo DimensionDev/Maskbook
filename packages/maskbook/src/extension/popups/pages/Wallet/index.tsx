@@ -1,5 +1,5 @@
 import { WalletStartUp } from './components/StartUp'
-import { EthereumRpcType, useWallet } from '@masknet/web3-shared'
+import { EthereumRpcType, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
 import { WalletAssets } from './components/WalletAssets'
 import { Route, Switch, useHistory } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
@@ -12,6 +12,7 @@ import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import Services from '../../../service'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
+import { first } from 'lodash-es'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -34,6 +35,7 @@ export default function Wallet() {
     const wallet = useWallet()
     const location = useLocation()
     const history = useHistory()
+    const wallets = useWallets(ProviderType.MaskWallet)
 
     const isLock = useWalletLockStatus()
 
@@ -80,6 +82,14 @@ export default function Wallet() {
             if (hasRequest) retry()
         })
     }, [retry])
+
+    useEffect(() => {
+        if (!wallet && wallets.length) {
+            WalletRPC.updateMaskAccount({
+                account: first(wallets)?.address,
+            })
+        }
+    }, [wallets, wallet])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
