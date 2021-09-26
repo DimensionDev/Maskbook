@@ -86,7 +86,6 @@ export const RestoreFromLocal = memo(() => {
 
     const restoreDB = useCallback(async () => {
         try {
-            // setup or unlock password
             if (
                 json?.wallets &&
                 (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
