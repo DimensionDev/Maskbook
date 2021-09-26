@@ -155,11 +155,16 @@ export const GasSetting1559 = memo(() => {
             (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
                 value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
         ) {
-            return web3.eth.estimateGas({
-                data: value.computedPayload._tx.data,
-                from: value.computedPayload._tx.from,
-                to: value.computedPayload._tx.to,
-            })
+            try {
+                return web3.eth.estimateGas({
+                    data: value.computedPayload._tx.data,
+                    from: value.computedPayload._tx.from,
+                    to: value.computedPayload._tx.to,
+                    value: value.computedPayload._tx.value,
+                })
+            } catch {
+                return 0
+            }
         }
 
         return 0
@@ -197,6 +202,7 @@ export const GasSetting1559 = memo(() => {
         control,
         handleSubmit,
         setValue,
+        setError,
         watch,
         formState: { errors },
     } = useForm<zod.infer<typeof schema>>({
@@ -317,6 +323,11 @@ export const GasSetting1559 = memo(() => {
         }
     }, [value, getValueLoading])
     //#endregion
+
+    //#region If the estimate gas be 0, Set error
+    useUpdateEffect(() => {
+        if (!minGasLimit) setError({ message: 'Cant not get estimate gas from contract' })
+    }, [minGasLimit])
 
     return (
         <>

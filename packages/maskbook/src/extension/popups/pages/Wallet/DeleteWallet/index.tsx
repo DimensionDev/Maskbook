@@ -144,7 +144,10 @@ const DeleteWallet = memo(() => {
                     value={password}
                     error={!!errorMessage}
                     helperText={errorMessage}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                        if (errorMessage) setErrorMessage('')
+                        setPassword(e.target.value)
+                    }}
                 />
             </div>
             <div className={classes.controller}>
