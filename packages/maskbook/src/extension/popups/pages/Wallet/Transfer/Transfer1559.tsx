@@ -392,7 +392,11 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
             formState: { errors },
         } = useFormContext<TransferFormData>()
 
-        const [maxPriorityFeePerGas, maxFeePerGas] = watch(['maxPriorityFeePerGas', 'maxFeePerGas'])
+        const [maxPriorityFeePerGas, maxFeePerGas, gasLimit] = watch([
+            'maxPriorityFeePerGas',
+            'maxFeePerGas',
+            'gasLimit',
+        ])
 
         return (
             <>
@@ -519,6 +523,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                             {t('popups_wallet_gas_fee_settings_usd', {
                                 usd: formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
                                     .times(etherPrice)
+                                    .times(gasLimit)
                                     .toPrecision(3),
                             })}
                         </Typography>
@@ -545,6 +550,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                             {t('popups_wallet_gas_fee_settings_usd', {
                                 usd: formatGweiToEther(Number(maxFeePerGas) ?? 0)
                                     .times(etherPrice)
+                                    .times(gasLimit)
                                     .toPrecision(3),
                             })}
                         </Typography>
