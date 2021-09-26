@@ -4,7 +4,7 @@ import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/ba
 import { startEffects } from '../../../utils'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 import {
-    currentAccountMaskWalletSettings,
+    currentMaskWalletAccountWalletSettings,
     currentAccountSettings,
     currentBalanceSettings,
     currentBlockNumberSettings,
@@ -40,11 +40,13 @@ export async function updateChainState() {
                 currentAccountSettings.value
                     ? getBalance(currentAccountSettings.value, {
                           chainId: currentChainIdSettings.value,
+                          providerType: currentProviderSettings.value,
                       })
                     : currentBalanceSettings.value,
-                currentAccountMaskWalletSettings.value
-                    ? getBalance(currentAccountMaskWalletSettings.value, {
+                currentMaskWalletAccountWalletSettings.value
+                    ? getBalance(currentMaskWalletAccountWalletSettings.value, {
                           chainId: currentMaskWalletChainIdSettings.value,
+                          providerType: ProviderType.MaskWallet,
                       })
                     : currentBalanceSettings.value,
             ])
@@ -77,12 +79,15 @@ effect(() => {
 })
 
 // revalidate chain state if the chainId of current provider was changed
-effect(() =>
-    currentChainIdSettings.addListener(() => {
+effect(() => {
+    const callback = () => {
         updateChainState()
         if (currentProviderSettings.value === ProviderType.MaskWallet) resetAllNonce()
-    }),
-)
+    }
+    const a = currentChainIdSettings.addListener(callback)
+    const b = currentMaskWalletChainIdSettings.addListener(callback)
+    return () => void [a(), b()]
+})
 
 // revalidate chain state if the current wallet was changed
 effect(() => currentAccountSettings.addListener(() => updateChainState()))

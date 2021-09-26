@@ -299,6 +299,7 @@
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [
         "**/__tests__/**",
+        "patches/**",
         "*generated*",
         "**/dist/**",
         "**/*.json",

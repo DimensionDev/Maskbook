@@ -4,10 +4,14 @@ import { currySameAddress, formatEthereumAddress, isSameAddress, ProviderType } 
 import { EthereumAddress } from 'wallet.ts'
 import { asyncIteratorToArray } from '../../../../../utils'
 import { PluginDB } from '../../../database/Plugin.db'
-import { currentAccountMaskWalletSettings, currentAccountSettings, currentProviderSettings } from '../../../settings'
+import {
+    currentMaskWalletAccountWalletSettings,
+    currentAccountSettings,
+    currentProviderSettings,
+} from '../../../settings'
 import type { WalletRecord } from '../type'
 
-export async function getWallet(address = currentAccountMaskWalletSettings.value) {
+export async function getWallet(address = currentMaskWalletAccountWalletSettings.value) {
     if (!address) return null
     if (!EthereumAddress.isValid(address)) throw new Error('Not a valid address.')
     return (await PluginDB.get('wallet', formatEthereumAddress(address))) ?? null
@@ -44,7 +48,9 @@ export async function hasStoredKeyInfoRequired(storedKeyInfo?: api.IStoredKeyInf
 export async function getWallets(provider?: ProviderType) {
     const wallets = await asyncIteratorToArray(PluginDB.iterate('wallet'))
     const address =
-        provider === ProviderType.MaskWallet ? currentAccountMaskWalletSettings.value : currentAccountSettings.value
+        provider === ProviderType.MaskWallet
+            ? currentMaskWalletAccountWalletSettings.value
+            : currentAccountSettings.value
 
     wallets.sort((a, z) => {
         if (isSameAddress(a.address, address)) return -1
