@@ -59,7 +59,7 @@ export function AddNFT(props: AddNFTProps) {
                 onAddClick(value.token)
                 handleClose()
             })
-            .catch((error) => setMessage(error.message))
+            .catch((error) => setMessage(t('nft_owner_hint')))
     }, [tokenId, address, onAddClick, onClose])
 
     const onAddressChange = useCallback((address: string) => {
