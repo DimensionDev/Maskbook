@@ -4,7 +4,6 @@ import { makeStyles } from '@masknet/theme'
 import { useForm, Controller } from 'react-hook-form'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { NetworkSelector } from '../../../components/NetworkSelector'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { LoadingButton, TabContext, TabPanel } from '@material-ui/lab'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -17,6 +16,7 @@ import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
 import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
+import { PageHeader } from '../components/PageHeader'
 
 const useStyles = makeStyles()({
     container: {
@@ -24,17 +24,6 @@ const useStyles = makeStyles()({
         display: 'flex',
         flexDirection: 'column',
         padding: '16px 10px',
-    },
-    header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    title: {
-        fontSize: 12,
-        color: '#151818',
-        lineHeight: 1.5,
-        fontWeight: 500,
     },
     textField: {
         marginTop: 10,
@@ -195,10 +184,7 @@ const ImportWallet = memo(() => {
     return (
         <>
             <div className={classes.container}>
-                <div className={classes.header}>
-                    <Typography className={classes.title}>{t('plugin_wallet_import_wallet')}</Typography>
-                    <NetworkSelector />
-                </div>
+                <PageHeader title={t('plugin_wallet_import_wallet')} />
                 <form className={classes.form} onSubmit={onSubmit}>
                     <div>
                         <Typography className={classes.label}>{t('wallet_name')}</Typography>

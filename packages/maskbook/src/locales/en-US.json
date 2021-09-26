@@ -890,6 +890,7 @@
     "popups_wallet_choose_token": "Choose Token",
     "popups_wallet_gas_price": "Gas Price",
     "popups_wallet_done": "Done",
+    "popups_wallet_recovered": "Wallet recovered",
     "popups_missing_parameter_caption": "Please close this page.",
     "popups_persona_connect_to": "Connect to {{type}}",
     "popups_persona_disconnect": "Disconnect",

@@ -17,6 +17,7 @@ import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { LoadingButton } from '../LoadingButton'
+import urlcat from 'urlcat'
 
 enum RestoreStatus {
     WaitingInput = 0,
@@ -93,6 +94,10 @@ export const RestoreFromLocal = memo(() => {
             ) {
                 // TOOD:
                 // open popup with backup id
+                console.log(backupId)
+                await Services.Helper.openPopupsWindow(
+                    browser.runtime.getURL(urlcat('popups.html#', '/wallet/recovered', { backupId })),
+                )
                 return
             }
 
@@ -136,7 +141,7 @@ export const RestoreFromLocal = memo(() => {
                     variant="rounded"
                     color="primary"
                     onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
-                    disabled={restoreStatus === RestoreStatus.Verified ? !json || json.wallets > 0 : !file}>
+                    disabled={restoreStatus === RestoreStatus.Verified ? !json?.wallets : !file}>
                     {restoreStatus !== RestoreStatus.Verified ? t.next() : t.restore()}
                 </LoadingButton>
             </ButtonContainer>
