@@ -21,7 +21,8 @@
     { "path": "../plugins/Wallet" },
     { "path": "../external-plugin-previewer" },
     { "path": "../injected-script/sdk" },
-    { "path": "../mask-sdk/server" }
+    { "path": "../mask-sdk/server" },
+    { "path": "./src-workers" }
   ],
   "ts-node": {
     "transpileOnly": true,
