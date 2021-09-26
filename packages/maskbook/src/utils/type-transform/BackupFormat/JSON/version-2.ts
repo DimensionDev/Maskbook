@@ -49,6 +49,11 @@ export interface BackupJSONFileVersion2 {
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
     }>
+    relations: Array<{
+        profile: string // ProfileIdentifier.toText()
+        persona: string // PersonaIdentifier.toText()
+        favor: 0 | 1
+    }>
     /** @deprecated */
     userGroups: never[]
     posts: Array<{
@@ -153,6 +158,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
         wallets: [],
         personas,
         profiles,
+        relations: [],
         userGroups: [],
         grantedHostPermissions: json.grantedHostPermissions,
     }

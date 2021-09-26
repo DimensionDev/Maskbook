@@ -1,14 +1,35 @@
 {
     "RPC": {
-        "Mainnet": ["https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
-        "Ropsten": ["https://ropsten.infura.io/v3/d65858b010d249419cf8687eca12b094"],
-        "Rinkeby": ["https://rinkeby.infura.io/v3/d65858b010d249419cf8687eca12b094"],
-        "Kovan": ["https://kovan.infura.io/v3/d65858b010d249419cf8687eca12b094"],
-        "Gorli": ["https://goerli.infura.io/v3/d65858b010d249419cf8687eca12b094"],
+        "Mainnet": [
+            "https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
+        "Ropsten": [
+            "https://ropsten.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://ropsten.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
+        "Rinkeby": [
+            "https://rinkeby.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://rinkeby.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
+        "Kovan": [
+            "https://kovan.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://kovan.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
+        "Gorli": [
+            "https://goerli.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://goerli.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
         "BSC": ["https://bsc-dataseed.binance.org/"],
         "BSCT": ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-        "Matic": ["https://polygon-mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
-        "Mumbai": ["https://polygon-mumbai.infura.io/v3/d65858b010d249419cf8687eca12b094"],
+        "Matic": [
+            "https://polygon-mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://polygon-mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
+        "Mumbai": [
+            "https://polygon-mumbai.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://polygon-mumbai.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
         "Arbitrum": ["https://arb1.arbitrum.io/rpc"],
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
         "xDai": ["https://rpc.xdaichain.com/"]

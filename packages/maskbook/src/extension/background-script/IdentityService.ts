@@ -245,8 +245,8 @@ export async function queryPagedPostHistory(
 //#endregion
 
 //#region Relation
-export async function createNewRelation(profile: ProfileIdentifier, linked: PersonaIdentifier) {
-    await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked, favor: 0 }, t))
+export async function createNewRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: 0 | 1 = 0) {
+    await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked, favor }, t))
 }
 
 export async function queryRelationPaged(
