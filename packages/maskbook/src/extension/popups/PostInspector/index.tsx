@@ -1,7 +1,7 @@
 import { CurrentSNSNetwork } from '@masknet/plugin-infra'
 import { Box } from '@material-ui/core'
 import { Mock } from './mock'
-import { useParams, useHistory } from 'react-router'
+import { useParams, useHistory } from 'react-router-dom'
 import { useQueryParams } from '../../../utils'
 import { PopupRoutes } from '..'
 import { MockPostInfoProvider, PostInfoItems } from './provider'

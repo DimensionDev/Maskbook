@@ -36,7 +36,7 @@ export function Mock(props: MockProps) {
                     variant="standard"
                     sx={{ minWidth: 250 }}
                     value={props.network}
-                    onChange={(e) => props.onNetworkChange(e.target.value)}>
+                    onChange={(e) => props.onNetworkChange(e.target.value as CurrentSNSNetwork)}>
                     <MenuItem value={CurrentSNSNetwork.Twitter}>Twitter</MenuItem>
                     <MenuItem value={CurrentSNSNetwork.Facebook}>Facebook</MenuItem>
                     <MenuItem value={CurrentSNSNetwork.Instagram}>Instagram</MenuItem>
