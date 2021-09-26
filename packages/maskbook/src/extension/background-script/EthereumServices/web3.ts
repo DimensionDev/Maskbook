@@ -8,10 +8,11 @@ import { currentChainIdSettings, currentProviderSettings } from '../../../plugin
 export async function createWeb3({
     chainId = currentChainIdSettings.value,
     providerType = currentProviderSettings.value,
+    privKeys = [] as string[],
 } = {}) {
     switch (providerType) {
         case ProviderType.MaskWallet:
-            return Maskbook.createWeb3({ chainId })
+            return Maskbook.createWeb3({ chainId, privKeys })
         case ProviderType.MetaMask:
             return MetaMask.createWeb3()
         case ProviderType.WalletConnect:

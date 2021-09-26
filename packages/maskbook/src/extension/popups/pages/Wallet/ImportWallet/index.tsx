@@ -210,7 +210,10 @@ const ImportWallet = memo(() => {
                         variant="fullWidth"
                         className={classes.tabs}
                         classes={{ indicator: classes.indicator }}
-                        onChange={(event, tab) => setCurrentTab(tab)}>
+                        onChange={(event, tab) => {
+                            if (errorMessage) setErrorMessage('')
+                            setCurrentTab(tab)
+                        }}>
                         {getEnumAsArray(ImportWalletTab).map(({ key, value }) => (
                             <Tab
                                 key={key}

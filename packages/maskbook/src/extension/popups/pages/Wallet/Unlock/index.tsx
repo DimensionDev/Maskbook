@@ -53,17 +53,16 @@ const Unlock = memo(() => {
     const [password, setPassword] = useState('')
 
     const history = useHistory()
-    const [{ value: hasError, loading }, handleUnlock] = useAsyncFn(async () => {
+    const [{ value: verified, loading }, handleUnlock] = useAsyncFn(async () => {
         return WalletRPC.unlockWallet(password)
     }, [password])
-
-    const { isLock, loading: getLockStatusLoading } = useWalletLockStatus()
+    const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     useAsync(async () => {
-        if (!isLock && !getLockStatusLoading) {
+        if (!isLocked && !getLockStatusLoading) {
             history.replace(PopupRoutes.Wallet)
         }
-    }, [isLock, getLockStatusLoading])
+    }, [isLocked, getLockStatusLoading])
 
     return (
         <>
@@ -78,8 +77,8 @@ const Unlock = memo(() => {
                         value={password}
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
-                        error={hasError}
-                        helperText={hasError ? t('popups_wallet_unlock_error_password') : ''}
+                        error={verified === false}
+                        helperText={verified === false ? t('popups_wallet_unlock_error_password') : ''}
                     />
                 </div>
                 <LoadingButton

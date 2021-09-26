@@ -56,6 +56,16 @@ function isReadOnlyMethod(payload: JsonRpcPayload) {
     ].includes(payload.method as EthereumMethodType)
 }
 
+function isSignableMethod(payload: JsonRpcPayload) {
+    return [
+        EthereumMethodType.ETH_SIGN,
+        EthereumMethodType.PERSONAL_SIGN,
+        EthereumMethodType.ETH_SIGN_TRANSACTION,
+        EthereumMethodType.ETH_SIGN_TYPED_DATA,
+        EthereumMethodType.ETH_SEND_TRANSACTION,
+    ].includes(payload.method as EthereumMethodType)
+}
+
 function getChainIdFromPayload(payload: JsonRpcPayload) {
     switch (payload.method) {
         // here are methods that contracts may emit
@@ -123,8 +133,10 @@ export async function INTERNAL_send(
     }
 
     const wallet = providerType === ProviderType.MaskWallet ? await getWallet(account) : null
+    const privKey = isSignableMethod(payload) && wallet ? await WalletRPC.exportPrivateKey(wallet.address) : undefined
     const web3 = await createWeb3({
         chainId: getChainIdFromPayload(payload) ?? chainId,
+        privKeys: privKey ? [privKey] : [],
         providerType: isReadOnlyMethod(payload) ? ProviderType.MaskWallet : providerType,
     })
     const provider = web3.currentProvider as HttpProvider | undefined
@@ -145,11 +157,16 @@ export async function INTERNAL_send(
         const [data, address] = payload.params as [string, string]
         switch (providerType) {
             case ProviderType.MaskWallet:
-                callback(null, {
-                    jsonrpc: '2.0',
-                    id: payload.id as number,
-                    result: await web3.eth.sign(data, address),
-                })
+                try {
+                    const signed = await web3.eth.sign(data, address)
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: signed,
+                    })
+                } catch (error: unknown) {
+                    callback(error instanceof Error ? error : new Error('Failed to sign message.'))
+                }
                 break
             case ProviderType.MetaMask:
                 try {
@@ -213,13 +230,10 @@ export async function INTERNAL_send(
         // send the transaction
         switch (providerType) {
             case ProviderType.MaskWallet:
-                if (!wallet?.storedKeyInfo) throw new Error('Unable to sign transaction.')
+                if (!wallet?.storedKeyInfo || !privKey) throw new Error('Unable to sign transaction.')
 
                 // send the signed transaction
-                const signed = await web3.eth.accounts.signTransaction(
-                    config,
-                    await WalletRPC.exportPrivateKey(wallet.address),
-                )
+                const signed = await web3.eth.accounts.signTransaction(config, privKey)
                 if (!signed.rawTransaction) throw new Error('Failed to sign transaction.')
 
                 provider?.send(

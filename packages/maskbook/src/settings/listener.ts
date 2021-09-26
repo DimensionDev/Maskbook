@@ -19,7 +19,7 @@ import {
     currentNetworkSettings,
     currentPortfolioDataProviderSettings,
     currentProviderSettings,
-    currentMaskWalletLockedSettings,
+    currentMaskWalletLockStatusSettings,
     currentTokenPricesSettings,
 } from '../plugins/Wallet/settings'
 import {
@@ -57,7 +57,7 @@ export function ToBeListened() {
         binanceNetworkTradeProviderSettings,
         arbitrumNetworkTradeProviderSettings,
         xdaiNetworkTradeProviderSettings,
-        currentMaskWalletLockedSettings,
+        currentMaskWalletLockedSettings: currentMaskWalletLockStatusSettings,
     }
 }
 export type SettingsEventName = ReturnType<typeof ToBeListened>

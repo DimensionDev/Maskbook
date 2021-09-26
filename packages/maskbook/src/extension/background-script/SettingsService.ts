@@ -28,7 +28,7 @@ import {
     currentGasNowSettings,
     currentEtherPriceSettings,
     currentTokenPricesSettings,
-    currentMaskWalletLockedSettings,
+    currentMaskWalletLockStatusSettings,
     currentAccountMaskWalletSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
@@ -93,7 +93,7 @@ export const [getCurrentCollectibleDataProvider, setCurrentCollectibleDataProvid
 )
 
 export const [getCurrentMaskWalletLockedSettings, setCurrentMaskWalletLockedSettings] = create(
-    currentMaskWalletLockedSettings,
+    currentMaskWalletLockStatusSettings,
 )
 
 export async function getWalletAllowTestChain() {

@@ -1,11 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import {
-    TransactionStatusType,
-    useChainId,
-    useWallet,
-    useWeb3StateContext,
-    Web3Provider,
-} from '@masknet/web3-shared'
+import { TransactionStatusType, useChainId, useWallet, useWeb3StateContext, Web3Provider } from '@masknet/web3-shared'
 import { Typography } from '@material-ui/core'
 import { useCallback } from 'react'
 import { useRecentTransactions } from '../../../../plugins/Wallet/hooks/useRecentTransactions'
@@ -70,24 +64,24 @@ export default function SwapPage() {
     return (
         <Web3Provider value={SwapWeb3Context}>
             <div className={classes.page}>
-            <div className={classes.container}>
-                <header className={classes.header}>
-                    <WalletStateBarUI
-                        className={classes.walletStateBar}
-                        isPending={pendingTransactions.length > 0}
-                        providerType={providerType}
-                        openConnectWalletDialog={openPopupsWindow}
-                        walletName={wallet?.name ?? '-'}
-                        walletAddress={wallet?.address ?? '-'}
-                    />
-                </header>
-                <main className={classes.main}>
-                    <Typography variant="h1" className={classes.title}>
-                        Swap
-                    </Typography>
-                    <SwapBox />
-                </main>
-            </div>
+                <div className={classes.container}>
+                    <header className={classes.header}>
+                        <WalletStateBarUI
+                            className={classes.walletStateBar}
+                            isPending={pendingTransactions.length > 0}
+                            providerType={providerType}
+                            openConnectWalletDialog={openPopupsWindow}
+                            walletName={wallet?.name ?? '-'}
+                            walletAddress={wallet?.address ?? '-'}
+                        />
+                    </header>
+                    <main className={classes.main}>
+                        <Typography variant="h1" className={classes.title}>
+                            Swap
+                        </Typography>
+                        <SwapBox />
+                    </main>
+                </div>
             </div>
         </Web3Provider>
     )

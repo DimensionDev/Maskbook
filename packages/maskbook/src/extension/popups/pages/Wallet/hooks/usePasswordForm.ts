@@ -17,12 +17,12 @@ export function usePasswordForm() {
                     .refine(
                         (input) =>
                             [/[A-Z]/, /[a-z]/, /\d/, /[^\dA-Za-z]/].filter((regex) => regex.test(input)).length >= 2,
-                        t('popups_wallet_password_dont_match'),
+                        t('popups_wallet_password_satisfied_requirement'),
                     ),
                 confirm: zod.string().min(8).max(20),
             })
             .refine((data) => data.password === data.confirm, {
-                message: t('popups_wallet_password_satisfied_requirement'),
+                message: t('popups_wallet_password_dont_match'),
                 path: ['confirm'],
             })
     }, [])

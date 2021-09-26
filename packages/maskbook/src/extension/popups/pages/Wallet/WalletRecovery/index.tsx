@@ -85,7 +85,7 @@ const WalletRecovery = memo(() => {
     }, [backupId])
 
     const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
-    const { isLock, loading: getLockStatusLoading } = useWalletLockStatus()
+    const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     const {
         control,
@@ -115,10 +115,10 @@ const WalletRecovery = memo(() => {
         if (!hasPassword) {
             await onSubmit()
         }
-        if (isLock) await handleUnlock()
+        if (isLocked) await handleUnlock()
 
         await Services.Helper.removePopupWindow()
-    }, [onSubmit, isLock, handleUnlock, hasPassword])
+    }, [onSubmit, isLocked, handleUnlock, hasPassword])
 
     return loading || getHasPasswordLoading || getLockStatusLoading ? (
         <LoadingPlaceholder />
@@ -178,7 +178,7 @@ const WalletRecovery = memo(() => {
                             <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>
                         </form>
                     ) : null}
-                    {hasPassword && isLock ? (
+                    {hasPassword && isLocked ? (
                         <div>
                             <Typography className={classes.label}>{t('popups_wallet_payment_password')}</Typography>
                             <PasswordField
