@@ -22,7 +22,7 @@ export function usePasswordForm() {
                 confirm: zod.string().min(8).max(20),
             })
             .refine((data) => data.password === data.confirm, {
-                message: t('popups_wallet_password_dont_match'),
+                message: t('popups_wallet_password_satisfied_requirement'),
                 path: ['confirm'],
             })
     }, [])

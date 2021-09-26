@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { MaskWalletIcon } from '@masknet/icons'
@@ -10,6 +10,7 @@ import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { PopupRoutes } from '../../../index'
+import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
 
 const useStyles = makeStyles()((theme) => ({
     contain: {
@@ -53,14 +54,16 @@ const Unlock = memo(() => {
 
     const history = useHistory()
     const [{ value: hasError, loading }, handleUnlock] = useAsyncFn(async () => {
-        const result = await WalletRPC.unlockWallet(password)
-        if (result) {
-            history.replace(PopupRoutes.Wallet)
-            return false
-        } else {
-            return true
-        }
+        return WalletRPC.unlockWallet(password)
     }, [password])
+
+    const { isLock, loading: getLockStatusLoading } = useWalletLockStatus()
+
+    useAsync(async () => {
+        if (!isLock && !getLockStatusLoading) {
+            history.replace(PopupRoutes.Wallet)
+        }
+    }, [isLock, getLockStatusLoading])
 
     return (
         <>

@@ -86,18 +86,23 @@ const CreateWalletForm = memo(() => {
             .max(20, t.create_wallet_password_length_error())
             .refine(
                 (input) => [/[A-Z]/, /[a-z]/, /\d/, /[^\dA-Za-z]/].filter((regex) => regex.test(input)).length >= 2,
-                t.create_wallet_password_match_tip(),
+                t.create_wallet_password_satisfied_requirement(),
             )
         const confirmRule = zod.string().min(8).max(20)
-        return zod.object(
-            hasPassword
-                ? { name: zod.string().min(1).max(12) }
-                : {
-                      name: zod.string().min(1).max(12),
-                      password: hasPassword ? passwordRule.optional() : passwordRule,
-                      confirm: hasPassword ? confirmRule.optional() : confirmRule,
-                  },
-        )
+        return zod
+            .object(
+                hasPassword
+                    ? { name: zod.string().min(1).max(12) }
+                    : {
+                          name: zod.string().min(1).max(12),
+                          password: hasPassword ? passwordRule.optional() : passwordRule,
+                          confirm: hasPassword ? confirmRule.optional() : confirmRule,
+                      },
+            )
+            .refine((data) => (!hasPassword ? data.password === data.confirm : true), {
+                message: t.create_wallet_password_match_tip(),
+                path: ['confirm'],
+            })
     }, [hasPassword])
 
     const {
