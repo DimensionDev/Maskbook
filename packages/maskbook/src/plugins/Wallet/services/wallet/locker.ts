@@ -1,4 +1,4 @@
-import { currentMaskWalletLockedSettings } from '../../settings'
+import { currentMaskWalletLockStatusSettings } from '../../settings'
 import * as password from './password'
 import { LockStatus } from '@masknet/web3-shared'
 
@@ -8,7 +8,7 @@ export async function isLocked() {
 
 export async function lockWallet() {
     password.clearPassword()
-    currentMaskWalletLockedSettings.value = LockStatus.UNLOCK
+    currentMaskWalletLockStatusSettings.value = LockStatus.UNLOCK
 }
 
 export async function unlockWallet(unverifiedPassword: string) {
@@ -16,7 +16,7 @@ export async function unlockWallet(unverifiedPassword: string) {
     try {
         await password.verifyPasswordRequired(unverifiedPassword)
         password.INTERNAL_setPassword(unverifiedPassword)
-        currentMaskWalletLockedSettings.value = LockStatus.UNLOCK
+        currentMaskWalletLockStatusSettings.value = LockStatus.UNLOCK
         return true
     } catch {
         return false

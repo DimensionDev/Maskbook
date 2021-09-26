@@ -206,25 +206,31 @@ export async function exportPrivateKey(address: string, unverifiedPassword?: str
     return exported.privateKey
 }
 
-export async function exportKeyStoreJSON(address: string, unverifiedPassword?: string) {
+export async function exportKeyStoreJSON(address: string, contentPassword: string, unverifiedPassword?: string) {
     if (unverifiedPassword) await password.verifyPasswordRequired(unverifiedPassword)
     const password_ = await password.INTERNAL_getPasswordRequired()
     const wallet = await database.getWalletRequired(address)
     if (!wallet.storedKeyInfo) throw new Error(`Cannot export private key of ${address}.`)
-    const exported = wallet.derivationPath
-        ? await sdk.exportKeyStoreJSONOfPath({
-              coin: api.Coin.Ethereum,
-              derivationPath: wallet.derivationPath ?? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-              password: password_,
-              StoredKeyData: wallet.storedKeyInfo.data,
-          })
-        : await sdk.exportKeyStoreJSONOfAddress({
-              coin: api.Coin.Ethereum,
-              password: password_,
-              StoredKeyData: wallet.storedKeyInfo.data,
-          })
-    if (!exported?.json) throw new Error(`Failed to export keystore JSON of ${address}.`)
-    return exported.json
+    try {
+        const exported = wallet.derivationPath
+            ? await sdk.exportKeyStoreJSONOfPath({
+                  coin: api.Coin.Ethereum,
+                  derivationPath: wallet.derivationPath ?? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+                  password: password_,
+                  newPassword: contentPassword,
+                  StoredKeyData: wallet.storedKeyInfo.data,
+              })
+            : await sdk.exportKeyStoreJSONOfAddress({
+                  coin: api.Coin.Ethereum,
+                  password: password_,
+                  StoredKeyData: wallet.storedKeyInfo.data,
+              })
+        if (!exported?.json) throw new Error(`Failed to export keystore JSON of ${address}.`)
+        return exported.json
+    } catch (error) {
+        if (error instanceof Error && error.message.includes('-3002')) throw new Error('Incorrect Password.')
+        throw error
+    }
 }
 
 export async function recoverWalletFromMnemonic(

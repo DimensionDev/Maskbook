@@ -38,10 +38,10 @@ export default function Wallet() {
     const history = useHistory()
     const wallets = useWallets(ProviderType.MaskWallet)
 
-    const { isLock, loading: getLockStatusLoading } = useWalletLockStatus()
+    const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     const { loading, retry } = useAsyncRetry(async () => {
-        if (isLock && location.pathname !== PopupRoutes.WalletRecovered && !getLockStatusLoading) {
+        if (isLocked && location.pathname !== PopupRoutes.WalletRecovered && !getLockStatusLoading) {
             history.replace(PopupRoutes.Unlock)
             return
         }
@@ -75,7 +75,7 @@ export default function Wallet() {
                     break
             }
         }
-    }, [location.search, isLock, location.pathname, getLockStatusLoading])
+    }, [location.search, isLocked, location.pathname, getLockStatusLoading])
 
     useEffect(() => {
         return WalletMessages.events.requestsUpdated.on(({ hasRequest }) => {

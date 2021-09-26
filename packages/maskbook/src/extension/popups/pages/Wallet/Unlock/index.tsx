@@ -57,13 +57,13 @@ const Unlock = memo(() => {
         return WalletRPC.unlockWallet(password)
     }, [password])
 
-    const { isLock, loading: getLockStatusLoading } = useWalletLockStatus()
+    const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     useAsync(async () => {
-        if (!isLock && !getLockStatusLoading) {
+        if (!isLocked && !getLockStatusLoading) {
             history.replace(PopupRoutes.Wallet)
         }
-    }, [isLock, getLockStatusLoading])
+    }, [isLocked, getLockStatusLoading])
 
     return (
         <>

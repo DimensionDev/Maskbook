@@ -100,8 +100,8 @@ export const currentCollectibleDataProviderSettings = createGlobalSettings<Colle
 /**
  * Is the current selected wallet has been locked?
  */
-export const currentMaskWalletLockedSettings = createGlobalSettings<LockStatus>(
-    `${PLUGIN_IDENTIFIER}+maskWalletIsLock`,
+export const currentMaskWalletLockStatusSettings = createGlobalSettings<LockStatus>(
+    `${PLUGIN_IDENTIFIER}+maskWalletLockStatus`,
     LockStatus.INIT,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
