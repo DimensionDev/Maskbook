@@ -115,7 +115,6 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
     return data.redPackets
         .map((x) => {
             const token = tokenIntoMask({ ...x.token }) as FungibleTokenDetailed
-            console.log({ token })
             if (isSameAddress(x.token.address, NATIVE_TOKEN_ADDRESS)) {
                 token.name = getChainDetailed(x.token.chain_id)?.nativeCurrency.name
                 token.symbol = getChainDetailed(chainId)?.nativeCurrency.symbol
