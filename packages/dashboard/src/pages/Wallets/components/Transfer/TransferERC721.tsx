@@ -7,8 +7,10 @@ import {
     EthereumTokenType,
     formatWeiToEther,
     GasOption,
+    isEIP1559Supported,
     TransactionStateType,
     useAccount,
+    useChainId,
     useERC721TokenDetailedOwnerList,
     useGasLimit,
     useGasPrice,
@@ -30,31 +32,58 @@ import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice } from './useNativeTokenPrice'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
+import { toHex, toWei } from 'web3-utils'
+import { useGasOptions } from '../../../../hooks/useGasOptions'
 
 type FormInputs = {
     recipient: string
     contract: string
     tokenId: string
-    memo: string
+}
+
+function gweiToWei(gwei: number | string) {
+    // gwei might have more than 9 decimal places
+    return toWei(new BigNumber(gwei).toFixed(9), 'gwei')
 }
 
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
+    const chainId = useChainId()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
     const [gasLimit, setGasLimit] = useState<string>('0')
     const [maxFee, setMaxFee] = useState<string | null>(null)
+    const [priorityFee, setPriorityFee] = useState<string | null>(null)
     const [offset, setOffset] = useState(0)
     const [id] = useState(uuid())
+    const { gasNow } = useGasOptions()
 
     const account = useAccount()
     const nativeToken = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice()
+    const is1559Supported = useMemo(() => isEIP1559Supported(chainId), [chainId])
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         EthereumTokenType.ERC721,
         contract?.address ?? '',
     )
+
+    useEffect(() => {
+        if (!gasNow) return
+
+        // aka is1559Supported
+        if (typeof gasNow.medium !== 'number') {
+            const gasLevel = gasNow.medium as Exclude<typeof gasNow.medium, number>
+            setMaxFee((oldVal) => {
+                return !oldVal ? gweiToWei(gasLevel.suggestedMaxFeePerGas) : oldVal
+            })
+            setPriorityFee((oldVal) => {
+                return !oldVal ? gweiToWei(gasLevel.suggestedMaxPriorityFeePerGas) : oldVal
+            })
+        } else {
+            setCustomGasPrice((oldVal) => (!oldVal ? (gasNow.medium as number) : oldVal))
+        }
+    }, [is1559Supported, gasNow])
 
     // gas price
     const { value: defaultGasPrice = '0' } = useGasPrice()
@@ -129,9 +158,10 @@ export const TransferERC721 = memo(() => {
 
     useEffect(() => {
         if (transferState.type === TransactionStateType.FAILED || transferState.type === TransactionStateType.HASH) {
-            setValue('recipient', '')
-            reset()
+            reset({ recipient: '', tokenId: '', contract: '' })
             clearTokenDetailedOwnerList()
+            setOffset(0)
+            setContract(undefined)
             resetTransferCallback()
         }
         if (transferState.type === TransactionStateType.HASH) {
@@ -139,11 +169,21 @@ export const TransferERC721 = memo(() => {
         }
     }, [transferState])
 
+    const gasConfig = useMemo(() => {
+        return is1559Supported
+            ? {
+                  gas: Number.parseInt(gasLimit, 10),
+                  maxFeePerGas: toHex(maxFee ?? '0'),
+                  maxPriorityFeePerGas: toHex(priorityFee ?? '0'),
+              }
+            : { gas: Number.parseInt(gasLimit, 10), gasPrice: new BigNumber(gasPrice).toNumber() }
+    }, [is1559Supported, gasLimit, maxFee, priorityFee, gasPrice])
+
     const onTransfer = useCallback(
         async (data) => {
-            await transferCallback(data.tokenId, data.recipient)
+            await transferCallback(data.tokenId, data.recipient, gasConfig)
         },
-        [transferCallback, contract?.address],
+        [transferCallback, contract?.address, gasConfig],
     )
 
     const contractIcon = useMemo(() => {
@@ -154,6 +194,9 @@ export const TransferERC721 = memo(() => {
             </Box>
         )
     }, [contract])
+
+    console.log(allFormFields)
+    console.log(tokenDetailedOwnerList)
 
     return (
         <Stack direction="row" justifyContent="center" mt={4} maxHeight="100%">
@@ -168,6 +211,7 @@ export const TransferERC721 = memo(() => {
                                     onChange={(e) => setValue('recipient', e.currentTarget.value)}
                                     helperText={errors.recipient?.message}
                                     error={!!errors.recipient}
+                                    value={field.field.value}
                                     label={t.wallets_transfer_to_address()}
                                 />
                             )}
@@ -243,20 +287,6 @@ export const TransferERC721 = memo(() => {
                                 <TuneIcon fontSize="small" />
                             </IconButton>
                         </Box>
-                    </Box>
-                    <Box mt={2} width="100%">
-                        <Controller
-                            control={control}
-                            render={(field) => (
-                                <MaskTextField
-                                    {...field}
-                                    placeholder={t.wallets_transfer_memo_placeholder()}
-                                    label={t.wallets_transfer_memo()}
-                                    onChange={(e) => setValue('memo', e.currentTarget.value)}
-                                />
-                            )}
-                            name="memo"
-                        />
                     </Box>
                     <Box mt={4}>
                         <Button
