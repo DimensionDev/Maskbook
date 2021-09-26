@@ -116,7 +116,7 @@ export async function openPopupsWindow(route?: string, params?: Record<string, a
         const { id } = await browser.windows.create({
             url: browser.runtime.getURL(url),
             width: 350,
-            height: 600,
+            height: 640,
             type: 'popup',
             state: 'normal',
             left,

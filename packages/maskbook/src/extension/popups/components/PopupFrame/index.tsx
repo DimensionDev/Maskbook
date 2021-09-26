@@ -101,7 +101,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     return (
         <>
             <GlobalCss />
-            <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto' }}>
+            <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto', minHeight: 600 }}>
                 <Box className={classes.header}>
                     <Box className={classes.left}>
                         {excludePath || history.length === 1 ? (
