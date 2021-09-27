@@ -27,7 +27,7 @@ export const SelectNFTList = memo<SelectNFTListProps>(({ list, onSelect, selecte
                 </Typography>
             )
         return null
-    }, [])
+    }, [loading, loadMore])
 
     return (
         <Box>
