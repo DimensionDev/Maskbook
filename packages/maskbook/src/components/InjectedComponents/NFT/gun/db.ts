@@ -1,7 +1,7 @@
 import { delay } from '@masknet/shared-base'
 import { AvatarMetaDB, NFT_AVATAR_JSON_SERVER } from '../types'
 
-const EXPIRED_TIME = 5 * 60
+const EXPIRED_TIME = 5 * 60 * 1000
 const cache = new Map<'avatar', [number, Promise<AvatarMetaDB[]>]>()
 
 async function fetchData() {
