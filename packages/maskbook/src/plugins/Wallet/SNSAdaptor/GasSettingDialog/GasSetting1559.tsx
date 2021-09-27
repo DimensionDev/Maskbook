@@ -140,7 +140,11 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
 
         const onSubmit = handleSubmit(handleConfirm)
 
-        const [maxPriorityFeePerGas, maxFeePerGas] = watch(['maxPriorityFeePerGas', 'maxFeePerGas'])
+        const [maxPriorityFeePerGas, maxFeePerGas, inputGasLimit] = watch([
+            'maxPriorityFeePerGas',
+            'maxFeePerGas',
+            'gasLimit',
+        ])
 
         //#region These are additional form rules that need to be prompted for but do not affect the validation of the form
         const maxPriorFeeHelperText = useMemo(() => {
@@ -189,6 +193,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                                 {t('popups_wallet_gas_fee_settings_usd', {
                                     usd: formatGweiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                         .times(nativeTokenPrice)
+                                        .times(21000)
                                         .toPrecision(3),
                                 })}
                             </Typography>
@@ -226,6 +231,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             {t('popups_wallet_gas_fee_settings_usd', {
                                 usd: formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
                                     .times(nativeTokenPrice)
+                                    .times(inputGasLimit || 1)
                                     .toPrecision(3),
                             })}
                         </Typography>
@@ -257,6 +263,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             {t('popups_wallet_gas_fee_settings_usd', {
                                 usd: formatGweiToEther(Number(maxFeePerGas) ?? 0)
                                     .times(nativeTokenPrice)
+                                    .times(inputGasLimit || 1)
                                     .toPrecision(3),
                             })}
                         </Typography>
