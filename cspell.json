@@ -121,6 +121,7 @@
         "maskbookjsonrpc",
         "maskface",
         "masknet",
+        "masknetwork",
         "masknightly",
         "masktext",
         "messagepack",

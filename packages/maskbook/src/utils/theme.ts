@@ -107,10 +107,10 @@ const baseTheme = (theme: 'dark' | 'light') => {
 }
 
 // Theme
-const MaskbookLightTheme = unstable_createMuiStrictModeTheme(baseTheme('light'))
-const MaskbookDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))
+const MaskLightTheme = unstable_createMuiStrictModeTheme(baseTheme('light'))
+const MaskDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))
 
-export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: SupportedLanguages }) {
+export function getMaskTheme(opt?: { appearance?: Appearance; language?: SupportedLanguages }) {
     let language = opt?.language
     if (!language) {
         const settings = languageSettings.value
@@ -133,7 +133,7 @@ export function getMaskbookTheme(opt?: { appearance?: Appearance; language?: Sup
     } else {
         isDark = preference === Appearance.dark
     }
-    const baseTheme = isDark ? MaskbookDarkTheme : MaskbookLightTheme
+    const baseTheme = isDark ? MaskDarkTheme : MaskLightTheme
     switch (language) {
         case SupportedLanguages.enUS:
             return baseTheme
@@ -177,12 +177,12 @@ export function useClassicMaskTheme(opt?: { appearance?: Appearance; language?: 
         activatedSocialNetworkUI.customization.paletteMode?.current || new ValueRef('light'),
     ).current
     const palette = useValueRef(paletteProvider)
-    return useMemo(() => getMaskbookTheme({ appearance, language }), [language, appearance, systemPreference, palette])
+    return useMemo(() => getMaskTheme({ appearance, language }), [language, appearance, systemPreference, palette])
 }
 
 export const useColorStyles: (params: void) => {
     classes: Record<'error' | 'success' | 'info', string>
-} = makeStyles()((theme: typeof MaskbookDarkTheme) => {
+} = makeStyles()((theme: typeof MaskDarkTheme) => {
     const dark = theme.palette.mode === 'dark'
     return {
         error: {

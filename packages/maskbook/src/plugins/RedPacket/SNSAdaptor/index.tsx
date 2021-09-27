@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ChainId, EthereumTokenType, formatBalance, getChainDetailed, getChainIdFromName } from '@masknet/web3-shared'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { base } from '../base'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
 import {
@@ -21,20 +21,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
     DecryptedInspector(props) {
         if (RedPacketMetadataReader(props.message.meta).ok)
             return (
-                <MaskbookPluginWrapper pluginName="Red Packet">
+                <MaskPluginWrapper pluginName="Red Packet">
                     {renderWithRedPacketMetadata(props.message.meta, (r) => (
                         <RedPacketInPost payload={r} />
                     ))}
-                </MaskbookPluginWrapper>
+                </MaskPluginWrapper>
             )
 
         if (RedPacketNftMetadataReader(props.message.meta).ok)
             return (
-                <MaskbookPluginWrapper pluginName="Red Packet NFT">
+                <MaskPluginWrapper pluginName="Red Packet NFT">
                     {renderWithRedPacketNftMetadata(props.message.meta, (r) => (
                         <RedPacketNftInPost payload={r} />
                     ))}
-                </MaskbookPluginWrapper>
+                </MaskPluginWrapper>
             )
         return null
     },

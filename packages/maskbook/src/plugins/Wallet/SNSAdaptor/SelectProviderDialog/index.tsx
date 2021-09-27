@@ -11,7 +11,7 @@ import classnames from 'classnames'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { Provider } from '../Provider'
 import { MetaMaskIcon } from '../../../../resources/MetaMaskIcon'
-import { MaskbookIcon } from '../../../../resources/MaskbookIcon'
+import { MaskIcon } from '../../../../resources/MaskIcon'
 import { WalletConnectIcon } from '../../../../resources/WalletConnectIcon'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
@@ -222,7 +222,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                         rowHeight={151}>
                         <ImageListItem>
                             <Provider
-                                logo={<MaskbookIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
+                                logo={<MaskIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
                                 name="Mask Network"
                                 onClick={() => onConnectProvider(ProviderType.MaskWallet)}
                             />
