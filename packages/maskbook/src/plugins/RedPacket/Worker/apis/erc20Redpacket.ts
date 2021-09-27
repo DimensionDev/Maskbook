@@ -77,15 +77,19 @@ type RedpacketFromSubgraphType = {
 async function fetchFromRedPacketSubgraph<T>(query: string) {
     const { SUBGRAPH_URL } = getRedPacketConstants(currentChainIdSettings.value)
     if (!SUBGRAPH_URL) return null
-    const response = await fetch(SUBGRAPH_URL, {
-        method: 'POST',
-        mode: 'cors',
-        body: stringify({ query }),
-    })
-    const { data } = (await response.json()) as {
-        data: T
+    try {
+        const response = await fetch(SUBGRAPH_URL, {
+            method: 'POST',
+            mode: 'cors',
+            body: stringify({ query }),
+        })
+        const { data } = (await response.json()) as {
+            data: T
+        }
+        return data
+    } catch (error) {
+        return null
     }
-    return data
 }
 
 export async function getRedPacketTxid(rpid: string) {
