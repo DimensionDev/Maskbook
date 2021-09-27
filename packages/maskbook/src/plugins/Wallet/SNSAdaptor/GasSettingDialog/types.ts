@@ -4,6 +4,7 @@ interface EIP1559ConfirmOptions {
     gasLimit: string
     gasPrice?: string
     maxFee?: string
+    gasOption: GasOption | null
 }
 
 export interface GasSettingProps {

@@ -100,6 +100,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         const price = is1559Supported && maxFee ? new BigNumber(maxFee) : gasPrice
         return new BigNumber(gasLimit).multipliedBy(price)
     }, [gasLimit, gasPrice, maxFee, is1559Supported])
+    const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice)
     const maxAmount = useMemo(() => {
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ = selectedToken.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
@@ -195,11 +196,11 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         {t.gas_fee()}
                     </Typography>
                     <Box display="flex" flexDirection="row" alignItems="center">
-                        <Typography fontSize="14px">
+                        <Typography fontSize="14px" title={`$${gasFeeInUsd.toString()}`}>
                             {t.transfer_cost({
                                 gasFee: formatWeiToEther(gasFee).toFixed(6),
                                 symbol: nativeToken.value?.symbol ?? '',
-                                usd: formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice).toFixed(2),
+                                usd: gasFeeInUsd.toFixed(2),
                             })}
                         </Typography>
                         <IconButton size="small" onClick={openGasSettingDialog}>

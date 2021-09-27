@@ -64,7 +64,7 @@ export type WalletStatusDialogEvent = {
 
 export type GasSettingDialogEvent = {
     open: boolean
-    gasOption?: GasOption
+    gasOption: GasOption | null
     gasLimit?: string
     gasPrice?: BigNumber.Value
     maxFee?: string
