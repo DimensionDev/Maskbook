@@ -5,10 +5,9 @@ import { makeStyles, useSnackbar } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 
-import { updateAvatarImage } from '../../utils/updateAvatarImage'
 import { getAvatarId } from '../../utils/user'
 import { NFTBadge } from '../../../../components/InjectedComponents/NFT/NFTBadge'
-import { saveNFTAvatar, setOrClearAvatar } from '../../../../components/InjectedComponents/NFT/gun'
+import { saveNFTAvatar } from '../../../../components/InjectedComponents/NFT/gun'
 import { useNFTAvatar } from '../../../../components/InjectedComponents/NFT/hooks'
 import type { AvatarMetaDB } from '../../../../components/InjectedComponents/NFT/types'
 
@@ -42,22 +41,16 @@ interface NFTAvatarInTwitterProps {}
 function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const { classes } = useStyles()
     const identity = useCurrentVisitingIdentity()
-    const [amount, setAmount] = useState('')
     const _avatar = useNFTAvatar(identity.identifier.userId)
     const { enqueueSnackbar } = useSnackbar()
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>(_avatar)
-    const getParentDom = () =>
-        searchTwitterAvatarSelector().querySelector<HTMLElement>('div > :nth-child(2) > div').evaluate()
+
     const [avatarId, setAvatarId] = useState('')
 
     const onUpdate = useCallback(
         (data: NFTAvatarEvent) => {
             saveNFTAvatar(data.userId, data.avatarId, data.address, data.tokenId)
                 .then((avatar: AvatarMetaDB) => {
-                    const parent = getParentDom()
-                    if (!parent) return
-                    updateAvatarImage(parent, avatar.image ?? '')
-                    setAmount(avatar.amount)
                     setAvatar(avatar)
                 })
                 .catch((error: Error) => {
@@ -80,20 +73,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
 
     useEffect(() => {
         setAvatar(_avatar)
-        const parent = getParentDom()
-        if (!parent) return
-        if (!_avatar) return
-        setAmount(_avatar?.amount ?? '0')
-        updateAvatarImage(parent, _avatar?.image ?? '')
     }, [_avatar])
-
-    const onClick = async () => {
-        const parent = getParentDom()
-        if (!parent) return
-        await setOrClearAvatar(identity.identifier.userId)
-        updateAvatarImage(parent)
-        setAvatar(undefined)
-    }
 
     if (!avatar) return null
     return (

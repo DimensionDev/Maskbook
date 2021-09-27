@@ -38,8 +38,6 @@ export interface ProfileNFTsPageEvent {
 export interface NFTAvatarEvent {
     userId: string
     tokenId: string
-    image?: string
-    amount: string
     address: string
     avatarId: string
 }

@@ -1,12 +1,8 @@
 export interface AvatarMetaDB {
     userId: string
     tokenId: string
-    amount: string
-    image?: string
-    name?: string
     address: string
-    avatarId?: string
-    symbol: string
+    avatarId: string
 }
 
 export interface NFT {
@@ -15,3 +11,7 @@ export interface NFT {
     name: string
     image: string
 }
+
+export const NFT_AVATAR_SERVER = 'com.maskbook.nft.avatar'
+export const NFT_AVATAR_JSON_SERVER =
+    'https://raw.githubusercontent.com/DimensionDev/Maskbook-Configuration/master/development/com.maskbook.avatar.json'
