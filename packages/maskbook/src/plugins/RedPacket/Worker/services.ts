@@ -36,8 +36,8 @@ export async function getRedPacketHistory(address: string, chainId: ChainId, end
         redpacketsFromChain as (RedPacketJSONPayloadFromChain | RedPacketJSONPayload)[]
     ).concat(redpacketsFromSubgraph)
     //#region Inject password from database
-    const redpacketsFromDatabase = await database.getAllRedpackets(redpacketsFromSubgraph.map((x) => x.txid))
-
+    const redpacketsFromDatabase = await database.getAllRedpackets(redpacketsFromNetwork.map((x) => x.txid))
+    console.log({ redpacketsFromDatabase, redpacketsFromNetwork })
     return Promise.all(
         redpacketsFromNetwork.map(async (x) => {
             await database.updateV1ToV2(x)
