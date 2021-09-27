@@ -4,7 +4,7 @@ import { extractTextFromTypedMessage, parseURL } from '@masknet/shared'
 import { ChainId } from '@masknet/web3-shared'
 import { SnackbarContent } from '@material-ui/core'
 import { base } from '../base'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { DepositDialog } from '../UI/DepositDialog'
 import { URL_PATTERN } from '../constants'
 import { PoolTogetherView } from '../UI/PoolTogetherView'
@@ -40,7 +40,7 @@ export default sns
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     return (
-        <MaskbookPluginWrapper pluginName="PoolTogether">
+        <MaskPluginWrapper pluginName="PoolTogether">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary
                     chainId={ChainId.Mainnet}
@@ -48,6 +48,6 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
                     <PoolTogetherView />
                 </EthereumChainBoundary>
             </Suspense>
-        </MaskbookPluginWrapper>
+        </MaskPluginWrapper>
     )
 }

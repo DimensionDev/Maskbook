@@ -4,7 +4,7 @@
 #
 version: 2.1
 executors:
-  maskbook_node:
+  mask_node:
     docker:
       - image: circleci/node:15.3.0
     working_directory: ~/repo
@@ -16,7 +16,7 @@ commands:
           at: ~/
 jobs:
   install_dependencies:
-    executor: maskbook_node
+    executor: mask_node
     environment:
       WEB3_CONSTANTS_RPC: ${WEB3_CONSTANTS_RPC}
     steps:
@@ -24,13 +24,13 @@ jobs:
       - restore_cache:
           name: Restore PNPM Package Cache
           keys:
-            - v3-maskbook-cache-pnpm
+            - v3-mask-cache-pnpm
       - run:
           name: Install Dependencies
           command: npx pnpm@6.4.0 install --frozen-lockfile --store-dir ~/.pnpm/
       - save_cache:
           name: Save NPM Package Cache
-          key: v3-maskbook-cache-npm
+          key: v3-mask-cache-npm
           paths:
             - ~/.pnpm/
       - persist_to_workspace:
@@ -38,39 +38,39 @@ jobs:
           paths:
             - repo
   build:
-    executor: maskbook_node
+    executor: mask_node
     steps:
       - restore_workspace
       - run:
-          name: Build Maskbook
+          name: Build Mask Network
           command: npx gulp build-ci
       - store_artifacts:
-          path: Maskbook.base.zip
-          destination: /Maskbook.base.zip
+          path: MaskNetwork.base.zip
+          destination: /MaskNetwork.base.zip
       - store_artifacts:
-          path: Maskbook.iOS.zip
-          destination: /Maskbook.iOS.zip
+          path: MaskNetwork.iOS.zip
+          destination: /MaskNetwork.iOS.zip
       - store_artifacts:
-          path: Maskbook.chromium.zip
-          destination: /Maskbook.chromium.zip
+          path: MaskNetwork.chromium.zip
+          destination: /MaskNetwork.chromium.zip
       - store_artifacts:
-          path: Maskbook.firefox.zip
-          destination: /Maskbook.firefox.zip
+          path: MaskNetwork.firefox.zip
+          destination: /MaskNetwork.firefox.zip
       - store_artifacts:
-          path: Maskbook.gecko.zip
-          destination: /Maskbook.gecko.zip
+          path: MaskNetwork.gecko.zip
+          destination: /MaskNetwork.gecko.zip
       - store_artifacts:
-          path: Maskbook.chromium-beta.zip
-          destination: /Maskbook.chromium-beta.zip
+          path: MaskNetwork.chromium-beta.zip
+          destination: /MaskNetwork.chromium-beta.zip
       - persist_to_workspace:
           root: ~/repo/
           paths:
-            - Maskbook.base.zip
-            - Maskbook.iOS.zip
-            - Maskbook.chromium.zip
-            - Maskbook.chromium-beta.zip
-            - Maskbook.firefox.zip
-            - Maskbook.gecko.zip
+            - MaskNetwork.base.zip
+            - MaskNetwork.iOS.zip
+            - MaskNetwork.chromium.zip
+            - MaskNetwork.chromium-beta.zip
+            - MaskNetwork.firefox.zip
+            - MaskNetwork.gecko.zip
   publish-github-release:
     docker:
       - image: cibuilds/github:0.10

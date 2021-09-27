@@ -7,7 +7,7 @@ export function GlobalComponent() {
 }
 export function PluginDialog(props: { open: boolean; onClose: () => void }) {
     if (!props.open) return null
-    // TODO: the ShadowRoot related items are in the maskbook-shared package
+    // TODO: the ShadowRoot related items are in the shared package
     // TODO: but plugins should only rely on the plugin-infra package
     // TODO: so it's not possible to display a proper dialog in an isolated package
     return <h1 onClick={props.onClose}>Hi~</h1>

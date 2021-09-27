@@ -6,7 +6,7 @@ import Services from '../../extension/service'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useStylesExtends } from '@masknet/shared'
 import { DashboardRoute } from '../../extension/options-page/Route'
-import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
+import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
 import { hasNativeAPI, nativeAPI } from '../../utils'
 
@@ -37,7 +37,7 @@ export function BannerUI(props: BannerUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     return props.nextStep === 'hidden' ? null : (
         <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
-            <MaskbookSharpIcon color="primary" />
+            <MaskSharpIcon color="primary" />
         </IconButton>
     )
 }

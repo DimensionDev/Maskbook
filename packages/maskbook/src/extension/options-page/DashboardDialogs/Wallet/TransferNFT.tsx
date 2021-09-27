@@ -12,7 +12,7 @@ import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { Image } from '../../../../components/shared/Image'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
-import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
+import { MaskIconOutlined } from '../../../../resources/MaskIcon'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 
@@ -99,7 +99,7 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
                             src={token.info.image}
                         />
                     ) : (
-                        <MaskbookIconOutlined className={classes.placeholder} />
+                        <MaskIconOutlined className={classes.placeholder} />
                     )
                 }
                 size="medium"

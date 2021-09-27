@@ -31,7 +31,7 @@ pnpm install
 ```
 
 If you encounter with error `EACCES: permission denied, open...'`,
-please run `chown -R $USER /pathToYourProject/Maskbook` to solve.
+please run `chown -R $USER /pathToYourProject/Mask` to solve.
 
 ### Start the development server
 

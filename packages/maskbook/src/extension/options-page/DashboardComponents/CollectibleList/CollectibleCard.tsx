@@ -8,7 +8,7 @@ import {
     CollectibleProvider,
 } from '@masknet/web3-shared'
 import { Image } from '../../../../components/shared/Image'
-import { MaskbookSharpIconOfSize } from '../../../../resources/MaskbookIcon'
+import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 import { Video } from '../../../../components/shared/Video'
 
@@ -72,7 +72,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                         />
                     )
                 ) : (
-                    <MaskbookSharpIconOfSize classes={{ root: classes.placeholderIcon }} size={22} />
+                    <MaskSharpIconOfSize classes={{ root: classes.placeholderIcon }} size={22} />
                 )}
             </Card>
         </Link>

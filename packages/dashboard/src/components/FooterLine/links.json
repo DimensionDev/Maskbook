@@ -1,6 +1,6 @@
 {
     "MASK_OFFICIAL_WEBSITE": "https://mask.io",
-    "MASKBOOK_GITHUB": "https://github.com/DimensionDev/Maskbook",
+    "MASK_GITHUB": "https://github.com/DimensionDev/Maskbook",
     "MASK_EMAIL": "info@mask.io",
     "MOBILE_DOWNLOAD_LINK": "https://mask.io/download-links/#mobile",
     "BOUNTY_LIST": "https://github.com/DimensionDev/Maskbook/issues?q=is%3Aissue+is%3Aopen+label%3A%22Bounty%3A+Open%22",

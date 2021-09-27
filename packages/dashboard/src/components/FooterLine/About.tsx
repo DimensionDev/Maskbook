@@ -149,8 +149,8 @@ export function About() {
                     </Typography>
                     <Typography component="p" variant="inherit">
                         <span>{t.about_dialog_source_code()}</span>
-                        <Link classes={{ root: classes.link }} href={links.MASKBOOK_GITHUB}>
-                            {links.MASKBOOK_GITHUB}
+                        <Link classes={{ root: classes.link }} href={links.MASK_GITHUB}>
+                            {links.MASK_GITHUB}
                         </Link>
                     </Typography>
                     <Typography component="p" variant="inherit">

@@ -15,7 +15,7 @@ import {
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
+import { MaskSharpIconOfSize, WalletSharp } from '../../resources/MaskIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
 import { useMenu } from '../../utils/hooks/useMenu'
@@ -277,7 +277,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
         <>
             <div className={classes.wrapper} onClick={openMenu}>
                 <div className={classes.button}>
-                    <MaskbookSharpIconOfSize classes={{ root: classes.icon }} size={22} />
+                    <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
                     <Typography className={classes.title}>Mask Network</Typography>
                 </div>
             </div>

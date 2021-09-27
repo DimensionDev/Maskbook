@@ -3,7 +3,7 @@
  */
 import { SvgIcon, SvgIconProps } from '@material-ui/core'
 
-const MaskbookSmileFaceSVG = (
+const MaskSmileFaceSVG = (
     <svg viewBox="0 0 600 600">
         <g fillRule="evenodd">
             <circle cx="300" cy="300" r="300" fill="#1C68F3" />
@@ -15,7 +15,7 @@ const MaskbookSmileFaceSVG = (
     </svg>
 )
 
-const MaskbookSmileFaceSharpSVG = ({ size = 20 }: { size?: number }) => (
+const MaskSmileFaceSharpSVG = ({ size = 20 }: { size?: number }) => (
     <svg width={size} height={size} viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
         <path
             fillRule="evenodd"
@@ -43,7 +43,7 @@ const WalletSharpSVG = ({ size = 20 }: { size?: number }) => (
     </svg>
 )
 
-const MaskbookSmileFaceOutlinedSVG = (
+const MaskSmileFaceOutlinedSVG = (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 42 42">
         <path stroke="#fff" strokeWidth="3" d="M39.55 21a18.55 18.55 0 11-37.1 0 18.55 18.55 0 0137.1 0z" />
         <path
@@ -55,7 +55,7 @@ const MaskbookSmileFaceOutlinedSVG = (
     </svg>
 )
 
-const MaskbookTextSVG = (
+const MaskTextSVG = (
     <svg viewBox="0 0 80 20">
         <path
             d="m18.902 25.67h1.82v18.33h-3.744v-10.14l-5.668 7.956-5.694-7.956v10.14h-3.718v-18.33h1.82l7.592 10.504zm15.912 4.212h3.614v14.118h-3.614v-1.04c-1.17.78-2.574 1.248-4.134 1.248-4.42 0-7.02-3.562-7.02-7.306 0-3.77 2.6-7.306 7.02-7.306 1.482 0 2.938.468 4.134 1.17zm0 9.88v-5.668c-.884-.754-2.132-1.222-3.484-1.222-2.574 0-4.186 1.924-4.186 4.03 0 2.132 1.638 4.056 4.186 4.056 1.378 0 2.6-.442 3.484-1.196zm6.084 3.094 1.352-2.678c1.742.754 3.068 1.144 4.836 1.144 1.664 0 2.314-.624 2.314-1.352 0-.806-.806-1.17-2.99-1.638-3.042-.676-5.252-1.664-5.252-4.394 0-2.548 2.106-4.316 5.382-4.316 2.21 0 3.978.52 5.512 1.144l-1.196 2.652c-1.378-.52-2.99-.91-4.394-.91-1.378 0-2.08.494-2.08 1.248 0 .78.858 1.144 3.12 1.612 3.276.676 5.174 1.82 5.174 4.394 0 2.678-2.054 4.446-5.668 4.446-2.444 0-4.03-.338-6.11-1.352zm23.062-7.462 5.226 8.606h-4.004l-3.614-5.772-2.73 2.626v3.146h-3.614v-19.604h3.614v11.544l6.032-6.058h4.238z"
@@ -65,34 +65,34 @@ const MaskbookTextSVG = (
     </svg>
 )
 
-export function MaskbookTextIcon(props: SvgIconProps) {
-    return <SvgIcon {...props}>{MaskbookTextSVG}</SvgIcon>
+export function MaskTextIcon(props: SvgIconProps) {
+    return <SvgIcon {...props}>{MaskTextSVG}</SvgIcon>
 }
 
-export function MaskbookIcon(props: SvgIconProps) {
-    return <SvgIcon {...props}>{MaskbookSmileFaceSVG}</SvgIcon>
+export function MaskIcon(props: SvgIconProps) {
+    return <SvgIcon {...props}>{MaskSmileFaceSVG}</SvgIcon>
 }
 
-export function MaskbookIconOutlined(props: SvgIconProps) {
-    return <SvgIcon {...props}>{MaskbookSmileFaceOutlinedSVG}</SvgIcon>
+export function MaskIconOutlined(props: SvgIconProps) {
+    return <SvgIcon {...props}>{MaskSmileFaceOutlinedSVG}</SvgIcon>
 }
 
-export function MaskbookSharpIcon(props: SvgIconProps) {
+export function MaskSharpIcon(props: SvgIconProps) {
     return (
         <SvgIcon style={{ transform: 'translate(2px, 1.5px)' }} {...props}>
-            <MaskbookSmileFaceSharpSVG />
+            <MaskSmileFaceSharpSVG />
         </SvgIcon>
     )
 }
 
-interface MaskbookSharpIconOfSizeProps extends SvgIconProps {
+interface MaskSharpIconOfSizeProps extends SvgIconProps {
     size: number
 }
 
-export function MaskbookSharpIconOfSize(props: MaskbookSharpIconOfSizeProps) {
+export function MaskSharpIconOfSize(props: MaskSharpIconOfSizeProps) {
     return (
         <SvgIcon {...props}>
-            <MaskbookSmileFaceSharpSVG size={props.size} />
+            <MaskSmileFaceSharpSVG size={props.size} />
         </SvgIcon>
     )
 }

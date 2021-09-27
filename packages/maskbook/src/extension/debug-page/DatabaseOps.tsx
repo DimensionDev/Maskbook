@@ -19,7 +19,7 @@ export const DatabaseOps: React.FC = () => {
             ]
             return values.map((value) => value.toString().padStart(2, '0')).join('')
         })(new Date())
-        download(`maskbook-dump-${timestamp}.json`, payload)
+        download(`masknetwork-dump-${timestamp}.json`, payload)
     }
     const onRestore = async () => {
         const file = await select()
