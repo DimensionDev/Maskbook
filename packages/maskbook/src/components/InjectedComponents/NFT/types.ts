@@ -13,5 +13,4 @@ export interface NFT {
 }
 
 export const NFT_AVATAR_SERVER = 'com.maskbook.nft.avatar'
-export const NFT_AVATAR_JSON_SERVER =
-    'https://raw.githubusercontent.com/DimensionDev/Maskbook-Configuration/master/development/com.maskbook.avatar.json'
+export const NFT_AVATAR_JSON_SERVER = 'https://dimensiondev.github.io/Maskbook-Configuration/com.maskbook.avatar.json'
