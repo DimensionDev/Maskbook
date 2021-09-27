@@ -1,23 +1,37 @@
 import { delay } from '@masknet/shared-base'
 import { AvatarMetaDB, NFT_AVATAR_JSON_SERVER } from '../types'
 
-const cache = new Map<'avatardb', Promise<AvatarMetaDB[]>>()
+const EXPIRED_TIME = 5 * 60
+const cache = new Map<'avatar', [number, Promise<AvatarMetaDB[]>]>()
 
 async function fetchData() {
     const response = await fetch(NFT_AVATAR_JSON_SERVER)
-    const json = await response.json()
+    if (!response.ok) return []
+    const json = (await response.json()) as AvatarMetaDB[]
     return json
 }
 
 async function _fetch() {
-    let f = cache.get('avatardb')
-    if (!f) {
+    const c = cache.get('avatar')
+    let f, json
+    if (c) {
+        f = c[1]
+        if (!f) {
+            f = fetchData()
+            cache.set('avatar', [Date.now(), f])
+        }
+        if (Date.now() - c[0] >= EXPIRED_TIME) {
+            json = await f
+            f = fetchData()
+            cache.set('avatar', [Date.now(), f])
+            return json
+        }
+    } else {
         f = fetchData()
-        cache.set('avatardb', f)
+        cache.set('avatar', [Date.now(), f])
     }
 
-    const json = await f
-
+    json = await f
     return json
 }
 
