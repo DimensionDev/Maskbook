@@ -1,4 +1,4 @@
-import { forwardRef, useRef, memo } from 'react'
+import { forwardRef, useRef, memo, useCallback } from 'react'
 import { keyframes } from 'tss-react'
 import {
     SnackbarProvider,
@@ -25,6 +25,7 @@ export { SnackbarProvider, useSnackbar } from 'notistack'
 export type { VariantType, OptionsObject, SnackbarKey } from 'notistack'
 
 const useStyles = makeStyles()((theme, _, createRef) => {
+    const { palette } = theme
     const spinningAnimationKeyFrames = keyframes`
 to {
   transform: rotate(360deg)
@@ -34,6 +35,7 @@ to {
         ref: createRef(),
         color: MaskColorVar.textPrimary,
         fontSize: 14,
+        lineHeight: '20px',
     } as const
     const message = {
         ref: createRef(),
@@ -42,9 +44,16 @@ to {
         alignItems: 'center',
         fontSize: 12,
     } as const
+    const defaultVariant = {
+        background: palette.background.default,
+        color: palette.grey['800'],
+        [`& .${title.ref}`]: {
+            color: '#0F1419',
+        },
+    }
     const success = {
-        background: MaskColorVar.greenMain,
-        color: MaskColorVar.lightestBackground,
+        backgroundColor: '#77E0B5',
+        color: '#ffffff',
         [`& .${title.ref}`]: {
             color: 'inherit',
         },
@@ -55,7 +64,7 @@ to {
 
     const error = {
         background: MaskColorVar.redMain,
-        color: MaskColorVar.lightestBackground,
+        color: '#ffffff',
         [`& .${title.ref}`]: {
             color: 'inherit',
         },
@@ -72,8 +81,13 @@ to {
 
     const warning = {
         ref: createRef(),
-        background: MaskColorVar.warning,
-        color: MaskColorVar.lightestBackground,
+        color: MaskColorVar.warning,
+        [`& .${title.ref}`]: {
+            color: '#0F1419',
+        },
+        [`& .${message.ref}`]: {
+            color: MaskColorVar.warning,
+        },
     } as const
 
     return {
@@ -82,28 +96,10 @@ to {
             color: MaskColorVar.textLight,
             pointerEvents: 'inherit',
         },
-        success,
-        error,
-        default: {
-            background: MaskColorVar.secondaryInfoText,
-            color: MaskColorVar.lightestBackground,
-        },
-        info,
-        warning,
-        icon: {},
-        spinning: {
-            display: 'flex',
-            animation: `${spinningAnimationKeyFrames} 2s infinite linear`,
-        },
-        action: {
-            marginLeft: 'auto',
-            width: 50,
-            height: 50,
-            color: 'inherit',
-        },
         content: {
             alignItems: 'center',
-            backgroundColor: MaskColorVar.primaryBackground,
+            backgroundColor: palette.background.default,
+            color: '#0F1419',
             padding: theme.spacing(1.5, 2),
             borderRadius: 12,
             width: 380,
@@ -119,12 +115,27 @@ to {
                 },
             },
             [`&.${info.ref}`]: {
-                background: MaskColorVar.secondaryInfoText,
                 color: MaskColorVar.lightestBackground,
             },
             [`&.${warning.ref}`]: {
-                color: MaskColorVar.textPrimary,
+                color: '#FF5F5F',
             },
+        },
+        default: defaultVariant,
+        success,
+        error,
+        info,
+        warning,
+        icon: {},
+        spinning: {
+            display: 'flex',
+            animation: `${spinningAnimationKeyFrames} 2s infinite linear`,
+        },
+        action: {
+            marginLeft: 'auto',
+            width: 50,
+            height: 50,
+            color: 'inherit',
         },
         texts: {
             marginLeft: theme.spacing(2),
@@ -174,15 +185,17 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
                 {props.message && (
                     <Typography className={classes.message} variant="body1">
                         {props.message}
-                        <Link
-                            color="inherit"
-                            className={classes.link}
-                            href={props.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={stop}>
-                            <LaunchIcon color="inherit" fontSize="inherit" />
-                        </Link>
+                        {!!props.link && (
+                            <Link
+                                color="inherit"
+                                className={classes.link}
+                                href={props.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={stop}>
+                                <LaunchIcon color="inherit" fontSize="inherit" />
+                            </Link>
+                        )}
                     </Typography>
                 )}
             </div>
@@ -207,7 +220,9 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps>((props) => {
             disableWindowBlurListener
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             hideIconVariant
-            content={(key, title) => <CustomSnackbarContent id={key} variant={props.variant} title={title} />}
+            content={(key, title) => (
+                <CustomSnackbarContent id={key} variant={props.variant ?? 'default'} title={title} />
+            )}
             action={(key) => (
                 <IconButton size="large" onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
                     <CloseIcon color="inherit" />
@@ -224,3 +239,25 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps>((props) => {
         />
     )
 })
+
+export function useShowCostomSnackbar() {
+    const snackbar = useSnackbar()
+    const showSnackbar = useCallback(
+        (
+            message: string,
+            options: Partial<CustomSnackbarContentProps & { persist: boolean }> = {
+                variant: 'default',
+            },
+        ) => {
+            return snackbar.enqueueSnackbar(message, {
+                variant: options.variant,
+                content: (key, title) => {
+                    return <CustomSnackbarContent id={key} title={title} {...options} />
+                },
+            })
+        },
+        [snackbar],
+    )
+
+    return showSnackbar
+}
