@@ -962,6 +962,8 @@
     "plugin_augur_smt_wrong": "Something went wrong!",
     "plugin_augur_tab_description": "Description",
     "plugin_augur_tab_buysell": "Buy / Sell",
+    "plugin_augur_tab_positions": "Positions",
+    "plugin_augur_tab_liquidity": "Liquidity",
     "plugin_augur_24hr_volume": "24hr Volume",
     "plugin_augur_total_volume": "Total Volume",
     "plugin_augur_liquidity": "Liquidity",
@@ -992,5 +994,16 @@
     "plugin_augur_add_liquidity_summary": "Adding {{amount}} {{symbol}} liquidity to {{title}} pool.",
     "plugin_augur_remove_liquidity_summary": "Removing {{amount}} liquidity from {{title}} pool.",
     "plugin_augur_add_liquidity_footer": "By adding liquidity you'll earn 1.50% of all trades on this market proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.<br/><strong>Remove liquidity before the winning outcome is known to prevent any loss of funds.</strong>",
-    "plugin_augur_remove_liquidity_footer": "Removing liquidity may return shares; these shares may be sold for USDC if there is still liquidity in the pool. Winning shares can be redeemed for USDC after the market has finalized."
+    "plugin_augur_remove_liquidity_footer": "Removing liquidity may return shares; these shares may be sold for USDC if there is still liquidity in the pool. Winning shares can be redeemed for USDC after the market has finalized.",
+    "plugin_augur_no_liquidity": "No liquidity to show",
+    "plugin_augur_no_positions": "No positions to show",
+    "plugin_augur_tab_positions_column_outcome": "Outcome",
+    "plugin_augur_tab_positions_column_quantity_owned": "Quantity Owned",
+    "plugin_augur_tab_positions_column_avg_price_paid": "Avg. Price Paid",
+    "plugin_augur_tab_positions_column_init_value": "Init. Value",
+    "plugin_augur_tab_positions_column_cur_value": "Cur. Value",
+    "plugin_augur_tab_positions_column_p_l": "P/L",
+    "plugin_augur_tab_liquidity_column_share_of_liquidity_pool": "Share Of Liquidity Pool",
+    "plugin_augur_tab_liquidity_column_init_value": "Init. Value",
+    "plugin_augur_tab_liquidity_column_cur_value": "Cur. Value"
 }

@@ -23,6 +23,8 @@ import { useMarket } from '../hooks/useMarket'
 import { useAmmOutcomes } from '../hooks/useAmmOutcomes'
 import { useAugurConstants, useERC20TokenDetailed } from '@masknet/web3-shared'
 import { ChartView } from './ChartView'
+import { PositionsView } from './PositionsView'
+import { LiquidityView } from './LiquidityView'
 import { useUserPositions } from '../hooks/useUserPositions'
 import type { BasicMarket } from '../types'
 
@@ -127,6 +129,8 @@ export function MarketView(props: MarketViewProps) {
         <Tab className={classes.tab} key="trade" label={t('plugin_augur_tab_buysell')} />,
         <Tab className={classes.tab} key="description" label={t('plugin_augur_tab_description')} />,
         <Tab className={classes.tab} key="chart" label={t('plugin_dhedge_tab_chart')} />,
+        <Tab className={classes.tab} key="positions" label={t('plugin_augur_tab_positions')} />,
+        <Tab className={classes.tab} key="liquidity" label={t('plugin_augur_tab_liquidity')} />,
     ].filter(Boolean)
     //#endregion
 
@@ -209,6 +213,8 @@ export function MarketView(props: MarketViewProps) {
                     ) : null}
                     {tabIndex === 1 ? <MarketDescription market={market} collateral={cashToken} /> : null}
                     {tabIndex === 2 ? <ChartView market={market} /> : null}
+                    {tabIndex === 3 ? <PositionsView market={market} /> : null}
+                    {tabIndex === 4 ? <LiquidityView market={market} /> : null}
                 </Paper>
             </CardContent>
             <CardActions className={classes.footer}>
