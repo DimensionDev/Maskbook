@@ -34,7 +34,8 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     wrapper: {
-        padding: theme.spacing(0, 4),
+        paddingBottom: '0px !important',
+        paddingTop: '0px !important',
     },
     actionButton: {
         margin: '0 auto',
