@@ -17,4 +17,4 @@ This plugin fetch and show [Furucombo](https://furucombo.app) pools data.
 
 ## Pull requests
 
-- <https://github.com/DimensionDev/Maskbook/pull/3119>
+- <https://github.com/DimensionDev/Maskbook/pull/4501>
