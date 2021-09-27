@@ -117,6 +117,7 @@ const NavigationDrawer = styled(Drawer)(({ theme }) => ({
 const ShapeHelper = styled('div')(({ theme }) => ({
     height: '100%',
     padding: theme.spacing(3),
+    paddingBottom: 0,
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
     backgroundColor: theme.palette.mode === 'dark' ? '#1B1E38' : MaskColorVar.secondaryBackground,
@@ -124,14 +125,16 @@ const ShapeHelper = styled('div')(({ theme }) => ({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    '& > :last-child': {
+        marginBottom: theme.spacing(3),
+    },
 }))
 
 const ContentContainer = styled('div')(({ theme }) => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
-    borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
+    borderRadius: Number(theme.shape.borderRadius) * 5,
 }))
 
 const useStyle = makeStyles()((theme) => ({
