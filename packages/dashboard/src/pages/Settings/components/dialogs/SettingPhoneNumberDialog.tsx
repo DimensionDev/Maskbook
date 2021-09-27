@@ -29,7 +29,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
     const { classes } = useStyles()
     const { user, updateUser } = useContext(UserContext)
     const [step, setStep] = useState(user.phone ? 0 : 1)
-    const [countryCode, setCountryCode] = useState(user.phone ? user.phone.split(' ')[0] : '')
+    const [countryCode, setCountryCode] = useState(user.phone ? user.phone.split(' ')[0] : '+1')
     const [phone, setPhone] = useState(user.phone ? user.phone.split(' ')[1] : '')
     const [code, setCode] = useState('')
     const [invalidPhone, setInvalidPhone] = useState(false)
@@ -68,7 +68,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
             if (result) {
                 if (step === 0) {
                     // original email verified
-                    setCountryCode('')
+                    setCountryCode('+1')
                     setPhone('')
                     setCode('')
                     setStep(1)
