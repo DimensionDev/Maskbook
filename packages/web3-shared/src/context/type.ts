@@ -4,6 +4,7 @@ import type {
     ChainId,
     ERC20TokenDetailed,
     ERC721TokenDetailed,
+    ERC1155TokenDetailed,
     NetworkType,
     ProviderType,
     Wallet,
@@ -28,11 +29,9 @@ export interface Web3ProviderType {
     wallets: Subscription<Wallet[]>
     providerType: Subscription<ProviderType>
     networkType: Subscription<NetworkType>
-    erc20TokensCount: Subscription<number>
     erc20Tokens: Subscription<ERC20TokenDetailed[]>
-    addERC20Token: (token: ERC20TokenDetailed) => Promise<void>
-    trustERC20Token: (address: string, token: ERC20TokenDetailed) => Promise<void>
-    getERC20TokensPaged: (index: number, count: number, query?: string) => Promise<ERC20TokenDetailed[]>
+    erc721Tokens: Subscription<ERC721TokenDetailed[]>
+    erc1155Tokens: Subscription<ERC1155TokenDetailed[]>
     portfolioProvider: Subscription<PortfolioProvider>
     getAssetsList: (address: string, network: NetworkType, provider: PortfolioProvider) => Promise<Asset[]>
     getAssetsListNFT: (
@@ -43,7 +42,6 @@ export interface Web3ProviderType {
         size?: number,
     ) => Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }>
     getAddressNamesList: (twitterId: string, addressNameType: AddressNameType) => Promise<AddressName[]>
-    getERC721TokensPaged: (index: number, count: number, query?: string) => Promise<ERC721TokenDetailed[]>
     getTransactionList: (
         address: string,
         network: NetworkType,
@@ -56,5 +54,4 @@ export interface Web3ProviderType {
     }>
     fetchERC20TokensFromTokenLists: (urls: string[], chainId: ChainId) => Promise<ERC20TokenDetailed[]>
     createMnemonicWords: () => Promise<string[]>
-    getNonce: (address: string) => Promise<number>
 }

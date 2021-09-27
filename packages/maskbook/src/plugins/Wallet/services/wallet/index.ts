@@ -18,7 +18,8 @@ function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
 }
 
 // db
-export { getWallet, getWallets, updateWallet, hasWallet } from './database/wallet'
+export { getToken, getTokens, getTokensCount, getTokensPaged, hasToken, addToken, removeToken } from './database/token'
+export { getWallet, getWallets, hasWallet, updateWallet, updateWalletToken } from './database/wallet'
 
 // password
 export { setPassword, hasPassword, verifyPassword, changePassword, validatePassword, clearPassword } from './password'

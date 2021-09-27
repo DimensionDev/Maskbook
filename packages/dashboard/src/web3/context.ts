@@ -1,6 +1,12 @@
 import { omit, noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ChainId, PortfolioProvider, ProviderType } from '@masknet/web3-shared'
+import {
+    ChainId,
+    ERC1155TokenDetailed,
+    ERC721TokenDetailed,
+    PortfolioProvider,
+    ProviderType,
+} from '@masknet/web3-shared'
 import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Web3ProviderType } from '@masknet/web3-shared'
 import { Messages, PluginMessages, PluginServices, Services } from '../API'
 
@@ -47,15 +53,21 @@ export const Web3Context: Web3ProviderType = {
     ),
     walletPrimary: createSubscriptionFromAsync(getWalletPrimary, null, PluginMessages.Wallet.events.walletsUpdated.on),
     wallets: createSubscriptionFromAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
-    erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
-    addERC20Token: PluginServices.Wallet.addERC20Token,
-    trustERC20Token: PluginServices.Wallet.trustERC20Token,
-    erc20TokensCount: createSubscriptionFromAsync(
-        PluginServices.Wallet.getERC20TokensCount,
-        0,
+    erc20Tokens: createSubscriptionFromAsync(
+        () => PluginServices.Wallet.getTokens<ERC20TokenDetailed>(EthereumTokenType.ERC20),
+        [],
         PluginMessages.Wallet.events.erc20TokensUpdated.on,
     ),
-    getERC20TokensPaged,
+    erc721Tokens: createSubscriptionFromAsync(
+        () => PluginServices.Wallet.getTokens<ERC721TokenDetailed>(EthereumTokenType.ERC721),
+        [],
+        PluginMessages.Wallet.events.erc721TokensUpdated.on,
+    ),
+    erc1155Tokens: createSubscriptionFromAsync(
+        () => PluginServices.Wallet.getTokens<ERC1155TokenDetailed>(EthereumTokenType.ERC1155),
+        [],
+        PluginMessages.Wallet.events.erc1155TokensUpdated.on,
+    ),
     portfolioProvider: createSubscriptionFromAsync(
         Services.Settings.getCurrentPortfolioDataProvider,
         PortfolioProvider.DEBANK,
@@ -64,11 +76,9 @@ export const Web3Context: Web3ProviderType = {
     getAssetsList: PluginServices.Wallet.getAssetsList,
     getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
-    getERC721TokensPaged,
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
     createMnemonicWords: PluginServices.Wallet.createMnemonicWords,
-    getNonce: Services.Ethereum.getNonce,
 }
 
 export function createExternalProvider() {
@@ -92,7 +102,7 @@ async function getWallets() {
     }))
 }
 
-export async function getWalletPrimary() {
+async function getWalletPrimary() {
     const wallet = await PluginServices.Wallet.getWalletPrimary()
     if (!wallet) return null
     return {
@@ -100,26 +110,6 @@ export async function getWalletPrimary() {
         hasStoredKeyInfo: !!wallet.storedKeyInfo,
         hasDerivationPath: !!wallet.derivationPath,
     }
-}
-
-async function getERC20Tokens() {
-    const raw = await PluginServices.Wallet.getERC20Tokens()
-    return raw.map<ERC20TokenDetailed>((x) => ({
-        type: EthereumTokenType.ERC20,
-        ...x,
-    }))
-}
-
-async function getERC20TokensPaged(index: number, count: number, query?: string) {
-    const raw = await PluginServices.Wallet.getERC20TokensPaged(index, count, query)
-    return raw.map<ERC20TokenDetailed>((x) => ({
-        type: EthereumTokenType.ERC20,
-        ...x,
-    }))
-}
-
-async function getERC721TokensPaged(index: number, count: number, query?: string) {
-    return PluginServices.Wallet.getERC721TokensPaged(index, count, query)
 }
 
 // double check
