@@ -250,7 +250,7 @@ function toJsonWebKey(key) {
 
 ### Why the version number is negative?
 
-The pre 1.0 version of the Mask Network extension (called Maskbook) uses `-42` as its initial payload version. The number `42` comes from the book _The Hitchhiker's Guide to the Galaxy_ and the minus sign indicates this is an early version. When a new payload format is drafted, it's a natural idea that the version number should add by 1, therefore it should be `-41`. At the time of this RFC written, the latest payload is version `-38`, therefore this RFC follows the convention to mark the version as `-37`.
+The pre 1.0 version of the Mask Network extension uses `-42` as its initial payload version. The number `42` comes from the book _The Hitchhiker's Guide to the Galaxy_ and the minus sign indicates this is an early version. When a new payload format is drafted, it's a natural idea that the version number should add by 1, therefore it should be `-41`. At the time of this RFC written, the latest payload is version `-38`, therefore this RFC follows the convention to mark the version as `-37`.
 
 ### Why not uses the `raw` format defined in the Web Crypto specification for AES key?
 

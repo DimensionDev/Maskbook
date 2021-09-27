@@ -3,7 +3,7 @@ import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSele
 import type { PostInfo } from '../../../social-network/PostInfo'
 import Services from '../../../extension/service'
 import { ProfileIdentifier } from '../../../database/type'
-import { MaskbookIcon } from '../../../resources/MaskbookIcon'
+import { MaskIcon } from '../../../resources/MaskIcon'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { memoizePromise } from '../../../utils/memoize'
 import { Flags } from '../../../utils/flags'
@@ -11,7 +11,7 @@ import { startWatch } from '../../../utils/watcher'
 
 function Icon(props: { size: number }) {
     return (
-        <MaskbookIcon
+        <MaskIcon
             style={{
                 width: props.size,
                 height: props.size,

@@ -7,7 +7,7 @@ import { base } from '../base'
 import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
 import type { JSON_PayloadComposeMask } from '../types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-es'
 import { ToolIconURLs } from '../../../resources/tool-icon'
@@ -30,11 +30,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const payload = ITO_MetadataReader(props.message.meta)
         if (!payload.ok) return null
         return (
-            <MaskbookPluginWrapper pluginName="ITO">
+            <MaskPluginWrapper pluginName="ITO">
                 <EthereumChainBoundary chainId={payload.val.chain_id}>
                     <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
                 </EthereumChainBoundary>
-            </MaskbookPluginWrapper>
+            </MaskPluginWrapper>
         )
     },
     CompositionDialogMetadataBadgeRender: new Map([

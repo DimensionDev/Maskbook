@@ -8,7 +8,7 @@ import { useValueRef, useStylesExtends } from '@masknet/shared'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
-import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
+import { MaskSharpIcon } from '../../resources/MaskIcon'
 import GuideStep from '../GuideStep'
 
 export interface PostDialogHintUIProps extends withClasses<'buttonTransform'> {
@@ -41,7 +41,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     return (
         <GuideStep step={4} total={4} tip={t('user_guide_tip_4')} onComplete={props.onHintButtonClicked}>
             <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
-                <MaskbookSharpIcon color="primary" />
+                <MaskSharpIcon color="primary" />
             </IconButton>
         </GuideStep>
     )
