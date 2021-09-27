@@ -18,6 +18,10 @@ export function liquidityFormatter(num: number, digits: number) {
     return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0'
 }
 
-export function apyFormatter(num: number) {
-    return (num * 100).toFixed(2) + '%'
+export function shortenApy(num: string) {
+    return num.length > 9 ? num.slice(0, 9).concat('...') : num
+}
+
+export function apyFormatter(num: string) {
+    return (+num * 100).toFixed(2) + '%'
 }
