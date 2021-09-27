@@ -24,11 +24,28 @@ export const currentAccountMaskWalletSettings = createGlobalSettings<string>(
     },
 )
 
+export const currentMaskWalletChainIdSettings = createGlobalSettings<number>(
+    `${PLUGIN_IDENTIFIER}+maskWalletChainId`,
+    ChainId.Mainnet,
+    {
+        primary: () => i18n.t('settings_choose_eth_network'),
+        secondary: () => 'This only affects the built-in wallet.',
+    },
+)
+
 /**
  * The network type of the selected wallet
  */
 export const currentNetworkSettings = createGlobalSettings<NetworkType>(
     `${PLUGIN_IDENTIFIER}+selectedWalletNetwork`,
+    NetworkType.Ethereum,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
+export const currentMaskWalletNetworkSettings = createGlobalSettings<NetworkType>(
+    `${PLUGIN_IDENTIFIER}+selectedMaskWalletNetwork`,
     NetworkType.Ethereum,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',

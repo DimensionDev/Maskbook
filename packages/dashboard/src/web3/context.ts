@@ -19,11 +19,6 @@ export const Web3Context: Web3ProviderType = {
         '',
         Messages.events.currentAccountSettings.on,
     ),
-    accountMaskWallet: createSubscriptionFromAsync(
-        Services.Settings.getSelectedMaskWalletAddress,
-        '',
-        Messages.events.currentAccountMaskWalletSettings.on,
-    ),
     nonce: createSubscriptionFromAsync(
         Services.Settings.getBlockNumber,
         0,
@@ -139,6 +134,7 @@ async function getERC721TokensPaged(index: number, count: number, query?: string
     return PluginServices.Wallet.getERC721TokensPaged(index, count, query)
 }
 
+// double check
 function createSubscriptionFromAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,

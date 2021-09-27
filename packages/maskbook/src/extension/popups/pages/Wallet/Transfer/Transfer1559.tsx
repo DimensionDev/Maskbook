@@ -4,6 +4,8 @@ import {
     Asset,
     EthereumTokenType,
     formatBalance,
+    formatGweiToWei,
+    formatWeiToGwei,
     isGreaterThan,
     isZero,
     pow10,
@@ -28,9 +30,10 @@ import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet
 import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-es'
 import { ExpandMore } from '@material-ui/icons'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { LoadingButton } from '@material-ui/lab'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
+import { toHex } from 'web3-utils'
 
 const useStyles = makeStyles()({
     container: {
@@ -180,7 +183,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .min(1, t('wallet_transfer_error_gasLimit_absence'))
                     .refine(
                         (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimitContext),
-                        ` Gas limit must be at least ${minGasLimitContext}.`,
+                        t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
                     ),
                 maxPriorityFeePerGas: zod
                     .string()
@@ -293,9 +296,10 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             const transferAmount = new BigNumber(data.amount || '0')
                 .multipliedBy(pow10(selectedAsset?.token.decimals || 0))
                 .toFixed()
+
             await transferCallback(transferAmount, data.address, {
-                maxFeePerGas: new BigNumber(data.maxFeePerGas).toNumber(),
-                maxPriorityFeePerGas: new BigNumber(data.maxPriorityFeePerGas).toNumber(),
+                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
         },
@@ -414,9 +418,9 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         name="address"
                     />
                     <Typography className={classes.label}>
-                        <span>Choose Token</span>
+                        <span>{t('popups_wallet_choose_token')}</span>
                         <Typography className={classes.balance} component="span">
-                            Balance:
+                            {t('wallet_balance')}:
                             <FormattedBalance
                                 value={selectedAsset?.balance}
                                 decimals={selectedAsset?.token?.decimals}
@@ -507,14 +511,13 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         name="gasLimit"
                     />
                     <Typography className={classes.label}>
-                        Max priority Fee
+                        {t('popups_wallet_gas_fee_settings_max_priority_fee')}
                         <Typography component="span" className={classes.unit}>
                             ({t('wallet_transfer_gwei')})
                         </Typography>
                         <Typography component="span" className={classes.price}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: new BigNumber(Number(maxPriorityFeePerGas) ?? 0)
-                                    .div(10 ** 9)
+                                usd: formatWeiToGwei(Number(maxPriorityFeePerGas) ?? 0)
                                     .times(etherPrice)
                                     .toPrecision(3),
                             })}
@@ -534,14 +537,13 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         name="maxPriorityFeePerGas"
                     />
                     <Typography className={classes.label}>
-                        Max Fee
+                        {t('popups_wallet_gas_fee_settings_max_fee')}
                         <Typography component="span" className={classes.unit}>
                             ({t('wallet_transfer_gwei')})
                         </Typography>
                         <Typography component="span" className={classes.price}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: new BigNumber(Number(maxFeePerGas) ?? 0)
-                                    .div(10 ** 9)
+                                usd: formatWeiToGwei(Number(maxFeePerGas) ?? 0)
                                     .times(etherPrice)
                                     .toPrecision(3),
                             })}

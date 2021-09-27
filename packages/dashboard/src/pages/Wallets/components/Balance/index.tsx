@@ -25,13 +25,14 @@ const BalanceContainer = styled('div')(
 )
 
 const IconContainer = styled('div')`
-    // TODO: mobile
+    width: 48px;
+    height: 48px;
     font-size: 48px;
     display: flex;
     justify-content: center;
     align-items: center;
     background: ${MaskColorVar.infoBackground};
-    border-radius: 50%;
+    border-radius: 24px;
 `
 
 const BalanceDisplayContainer = styled('div')(

@@ -9,6 +9,7 @@ export enum PopupRoutes {
     WalletRename = '/wallet/rename',
     DeleteWallet = '/wallet/delete',
     CreateWallet = '/wallet/create',
+    SwitchWallet = '/wallet/switch',
     SelectWallet = '/wallet/select',
     BackupWallet = '/wallet/backup',
     AddToken = '/wallet/addToken',
@@ -25,6 +26,7 @@ export enum PopupRoutes {
     RequestPermission = '/request-permission',
     ThirdPartyRequestPermission = '/3rd-request-permission',
     SignRequest = '/sign-request',
+    Swap = '/swap',
 }
 
 export function getRouteURLWithNoParam(kind: PopupRoutes) {

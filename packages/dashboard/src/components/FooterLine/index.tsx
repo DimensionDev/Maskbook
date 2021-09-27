@@ -1,5 +1,5 @@
 import { styled } from '@material-ui/core'
-import { useHref, useNavigate } from 'react-router'
+import { useHref, useNavigate } from 'react-router-dom'
 import { Breadcrumbs, Dialog, IconButton, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'

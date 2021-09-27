@@ -1,4 +1,4 @@
-import { Route, Routes, useParams } from 'react-router'
+import { Route, Routes, useParams } from 'react-router-dom'
 import { ConnectSocialMedia, MnemonicRevealForm, PersonaCreate } from './steps'
 import { SignUpRoutePath } from './routePath'
 

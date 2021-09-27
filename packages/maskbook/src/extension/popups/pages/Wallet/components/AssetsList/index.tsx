@@ -6,7 +6,7 @@ import { ArrowRightIcon } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../../hooks/useWalletContext'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../../index'
 
 const useStyles = makeStyles()({

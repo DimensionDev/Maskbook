@@ -5,7 +5,7 @@ import { DashboardTrans, useDashboardI18N } from '../../../../locales'
 import { Services } from '../../../../API'
 import type { PersonaIdentifier } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../../type'
 
 export interface DeletePersonaDialogProps {

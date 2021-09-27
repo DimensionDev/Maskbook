@@ -31,6 +31,7 @@ import { useRefundCallback } from './hooks/useRefundCallback'
 import type { RedPacketAvailability, RedPacketJSONPayload } from '../types'
 import { RedPacketStatus } from '../types'
 import { IconURLs } from './IconURL'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -177,11 +178,16 @@ export function RedPacket(props: RedPacketProps) {
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             canClaim
-                ? t('plugin_red_packet_share_message', {
-                      sender: payload.sender.name,
-                      payload: postLink,
-                      network: resolveNetworkName(networkType),
-                  }).trim()
+                ? t(
+                      isTwitter(activatedSocialNetworkUI)
+                          ? 'plugin_red_packet_share_message'
+                          : 'plugin_red_packet_share_message_not_twitter',
+                      {
+                          sender: payload.sender.name,
+                          payload: postLink,
+                          network: resolveNetworkName(networkType),
+                      },
+                  ).trim()
                 : '',
         )
         .toString()

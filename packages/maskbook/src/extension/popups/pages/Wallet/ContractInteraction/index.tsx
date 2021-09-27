@@ -1,10 +1,11 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     EthereumRpcType,
+    formatBalance,
+    formatGweiToWei,
     formatWeiToEther,
-    getChainFromChainId,
     getChainIdFromNetworkType,
     isEIP1559Supported,
     NetworkType,
@@ -14,21 +15,21 @@ import {
     useNativeTokenDetailed,
 } from '@masknet/web3-shared'
 import { useValueRef, FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
-import { Button, Link, Typography } from '@material-ui/core'
+import { Link, Typography } from '@material-ui/core'
 import { useI18N } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { LoadingButton } from '@material-ui/lab'
 import { unreachable } from '@dimensiondev/kit'
-import { useAsync, useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
 import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
-import { useLocation } from 'react-router'
-import { useRejectHandler } from '../hooks/useRejectHandler'
+import { useLocation } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
+import { toHex } from 'web3-utils'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -74,11 +75,17 @@ const useStyles = makeStyles()(() => ({
         lineHeight: '16px',
         color: '#7B8192',
     },
+    error: {
+        color: '#FF5F5F',
+        fontSize: 12,
+        lineHeight: '16px',
+        padding: '0px 16px 20px 16px',
+    },
     controller: {
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
         gap: 20,
-        padding: 16,
+        padding: '0px 16px 16px 16px',
     },
     button: {
         padding: '9px 0',
@@ -115,6 +122,7 @@ const ContractInteraction = memo(() => {
     const history = useHistory()
     const chainId = useChainId()
     const networkType = useValueRef(currentNetworkSettings)
+    const [transferError, setTransferError] = useState(false)
     const { value: request, loading: requestLoading } = useUnconfirmedRequest()
 
     const {
@@ -205,14 +213,15 @@ const ContractInteraction = memo(() => {
     const { value: defaultPrices } = useAsync(async () => {
         if (networkType === NetworkType.Ethereum && !maxFeePerGas && !maxPriorityFeePerGas) {
             const response = await WalletRPC.getEstimateGasFees(chainId)
+            // Gwei to wei
             return {
-                maxPriorityFeePerGas: response?.medium.suggestedMaxPriorityFeePerGas ?? 0,
-                maxFeePerGas: response?.medium.suggestedMaxFeePerGas ?? 0,
+                maxPriorityFeePerGas: toHex(
+                    formatGweiToWei(response?.medium.suggestedMaxPriorityFeePerGas ?? 0).toString(),
+                ),
+                maxFeePerGas: toHex(formatGweiToWei(response?.medium.suggestedMaxFeePerGas ?? 0).toString()),
             }
         } else if (!gasPrice) {
-            const response = await WalletRPC.getGasPriceDictFromDeBank(
-                getChainFromChainId(chainId)?.toLowerCase() ?? '',
-            )
+            const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
             return {
                 gasPrice: response.data.normal.price,
             }
@@ -223,21 +232,26 @@ const ContractInteraction = memo(() => {
     // handlers
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (request) {
-            const toBeClose = new URLSearchParams(location.search).get('toBeClose')
-            await Services.Ethereum.confirmRequest(request.payload)
-
-            if (toBeClose) {
-                window.close()
-            } else {
+            try {
+                await Services.Ethereum.confirmRequest(request.payload)
                 history.goBack()
+            } catch (error_) {
+                setTransferError(true)
             }
         }
+        return
     }, [request, location.search, history])
 
-    const handleReject = useRejectHandler(() => history.replace(PopupRoutes.Wallet), request)
+    const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
+        if (request) {
+            await Services.Ethereum.rejectRequest(request.payload)
+            history.replace(PopupRoutes.Wallet)
+        }
+    }, [request])
 
-    // gas fee
-    const gasPriceEIP1559 = new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0).multipliedBy(10 ** 9)
+    // Wei
+    const gasPriceEIP1559 = new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0, 16)
+
     const gasPricePriorEIP1559 = (gasPrice as string) ?? defaultPrices?.gasPrice ?? 0
     const gasFee = new BigNumber(
         isEIP1559Supported(getChainIdFromNetworkType(networkType)) ? gasPriceEIP1559 : gasPricePriorEIP1559,
@@ -259,11 +273,13 @@ const ContractInteraction = memo(() => {
         .toString()
 
     const totalUSD = new BigNumber(formatWeiToEther(gasFee)).times(nativeTokenPrice).plus(tokenValueUSD).toString()
-
+    //
     console.log('DEBUG: ContractInteraction')
     console.log({
         amount,
         gasFee,
+        gas,
+        maxPriorityFeePerGas: maxPriorityFeePerGas ?? defaultPrices?.maxPriorityFeePerGas,
         maxFeePerGas: maxFeePerGas ?? defaultPrices?.maxFeePerGas,
         defaultPrice: (gasPrice as string) ?? defaultPrices?.gasPrice,
         request,
@@ -272,6 +288,12 @@ const ContractInteraction = memo(() => {
         tokenDecimals,
         nativeTokenPrice,
     })
+
+    useUpdateEffect(() => {
+        if (!request && !requestLoading) {
+            history.replace(PopupRoutes.Wallet)
+        }
+    }, [request, requestLoading])
 
     return requestLoading ? (
         <LoadingPlaceholder />
@@ -292,10 +314,18 @@ const ContractInteraction = memo(() => {
                     {tokenDecimals !== undefined ? (
                         <>
                             <Typography className={classes.amount}>
-                                <FormattedBalance value={tokenAmount} decimals={tokenDecimals} significant={4} />
+                                {new BigNumber(formatBalance(tokenAmount, tokenDecimals)).isGreaterThan(10 ** 9) ? (
+                                    new BigNumber(formatBalance(tokenAmount, tokenDecimals)).toPrecision(3)
+                                ) : (
+                                    <FormattedBalance value={tokenAmount} decimals={tokenDecimals} significant={4} />
+                                )}
                             </Typography>
                             <Typography>
-                                <FormattedCurrency value={tokenValueUSD} sign="$" />
+                                {new BigNumber(tokenValueUSD).isGreaterThan(10 ** 9) ? (
+                                    new BigNumber(tokenValueUSD).toPrecision(3)
+                                ) : (
+                                    <FormattedCurrency value={tokenValueUSD} sign="$" />
+                                )}
                             </Typography>
                         </>
                     ) : null}
@@ -322,20 +352,28 @@ const ContractInteraction = memo(() => {
                 <div className={classes.item} style={{ marginTop: 10 }}>
                     <Typography className={classes.label}>{t('popups_wallet_contract_interaction_total')}</Typography>
                     <Typography className={classes.gasPrice}>
-                        <FormattedCurrency value={totalUSD} sign="$" />
+                        {new BigNumber(totalUSD).isGreaterThan(10 ** 9) ? (
+                            new BigNumber(totalUSD).toPrecision(3)
+                        ) : (
+                            <FormattedCurrency value={totalUSD} sign="$" />
+                        )}
                     </Typography>
                 </div>
             </div>
+            {transferError ? (
+                <Typography className={classes.error}>{t('popups_wallet_transfer_error_tip')}</Typography>
+            ) : null}
             <div className={classes.controller}>
-                <Button
+                <LoadingButton
+                    loading={rejectLoading}
                     variant="contained"
                     className={classes.button}
-                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
+                    style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
                     onClick={handleReject}>
                     {t('cancel')}
-                </Button>
+                </LoadingButton>
                 <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
-                    {t('confirm')}
+                    {transferError ? t('popups_wallet_re_send') : t('confirm')}
                 </LoadingButton>
             </div>
         </main>

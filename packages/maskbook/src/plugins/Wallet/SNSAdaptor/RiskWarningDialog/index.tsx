@@ -97,7 +97,7 @@ export function WalletRiskWarningDialog() {
                         variant="body2"
                         children={<Trans i18nKey="multiline">{t('wallet_risk_warning_content')}</Trans>}
                     />
-                    <Paper elevation={0} className={classes.wallet}>
+                    <Paper elevation={0} className={`${classes.wallet} dashboard-style`}>
                         <Typography variant="body1" color="textSecondary">
                             Wallet
                         </Typography>
@@ -109,7 +109,7 @@ export function WalletRiskWarningDialog() {
             </DialogContent>
             <DialogActions className={classes.buttons}>
                 <Button
-                    className={classnames(classes.button, classes.cancel)}
+                    className={classnames(classes.button, classes.cancel, 'dashboard-style')}
                     fullWidth
                     variant="outlined"
                     onClick={onClose}

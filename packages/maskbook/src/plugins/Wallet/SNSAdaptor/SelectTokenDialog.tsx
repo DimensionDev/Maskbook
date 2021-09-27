@@ -8,9 +8,19 @@ import { WalletMessages } from '../../Wallet/messages'
 import { delay, useI18N } from '../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
+import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
-const useStyles = makeStyles()((theme) => ({
+interface StyleProps {
+    snsId: string
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
+    content: {
+        ...(snsId === MINDS_ID ? { minWidth: 552 } : {}),
+    },
     list: {
+        marginTop: 16,
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -28,7 +38,7 @@ export interface SelectTokenDialogProps extends withClasses<never> {}
 
 export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const classes = useStylesExtends(useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }), props)
 
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
@@ -77,8 +87,8 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     }, [])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_token')} maxWidth="xs">
-            <DialogContent>
+        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_token')}>
+            <DialogContent className={classes.content}>
                 {!disableSearchBar ? <SearchInput label={t('add_token_search_hint')} onChange={onChange} /> : null}
                 <FixedTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}

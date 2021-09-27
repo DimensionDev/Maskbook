@@ -7,8 +7,8 @@ import {
     Asset,
     EthereumTokenType,
     formatBalance,
+    formatGweiToWei,
     formatWeiToGwei,
-    getChainFromChainId,
     isGreaterThan,
     isZero,
     pow10,
@@ -28,9 +28,10 @@ import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
 import { ExpandMore } from '@material-ui/icons'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { LoadingButton } from '@material-ui/lab'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { toHex } from 'web3-utils'
 
 const useStyles = makeStyles()({
     container: {
@@ -158,7 +159,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 .min(1, t('wallet_transfer_error_gasLimit_absence'))
                 .refine(
                     (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimitContext),
-                    ` Gas limit must be at least ${minGasLimitContext}.`,
+                    t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
                 ),
             gasPrice: zod.string().min(1, t('wallet_transfer_error_gasPrice_absence')),
         })
@@ -184,7 +185,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     //#region Set default gas price
     useAsync(async () => {
-        const gasNow = await WalletRPC.getGasPriceDictFromDeBank(getChainFromChainId(chainId)?.toLowerCase() ?? '')
+        const gasNow = await WalletRPC.getGasPriceDictFromDeBank(chainId)
         const gasPrice = methods.getValues('gasPrice')
         if (gasNow && !gasPrice) {
             const gasPrice = new BigNumber(gasNow.data.fast.price)
@@ -236,7 +237,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 .multipliedBy(pow10(selectedAsset?.token.decimals || 0))
                 .toFixed()
             await transferCallback(transferAmount, data.address, {
-                gasPrice: new BigNumber(data.gasPrice).multipliedBy(10 ** 9).toNumber(),
+                gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
         },
@@ -351,9 +352,9 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                         name="address"
                     />
                     <Typography className={classes.label}>
-                        <span>Choose Token</span>
+                        <span>{t('popups_wallet_choose_token')}</span>
                         <Typography className={classes.balance} component="span">
-                            Balance:
+                            {t('wallet_balance')}:
                             <FormattedBalance
                                 value={maxAmount}
                                 decimals={selectedAsset?.token?.decimals}

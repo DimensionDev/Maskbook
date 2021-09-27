@@ -13,7 +13,7 @@ import { UploadAvatarDialog } from '../UploadAvatarDialog'
 import { MaskAvatar } from '../../../../components/MaskAvatar'
 import { ExportPrivateKeyDialog } from '../ExportPrivateKeyDialog'
 import { RoutePaths } from '../../../../type'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { LogoutPersonaDialog } from '../LogoutPersonaDialog'
 import { UserContext } from '../../../Settings/hooks/UserContext'
 
@@ -24,6 +24,10 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         right: '-1rem',
         top: '-1rem',
+        [theme.breakpoints.down('md')]: {
+            right: 0,
+            top: 0,
+        },
     },
     icon: {
         cursor: 'pointer',
@@ -86,6 +90,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
             tipTitle: t.personas_logout(),
             tipContent: t.personas_logout_confirm_password_tip(),
             confirmTitle: t.personas_logout(),
+            force: false,
         })
 
     const exportPrivateKeyConfirmedPasswordCallback = () =>

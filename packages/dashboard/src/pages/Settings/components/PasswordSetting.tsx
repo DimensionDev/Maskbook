@@ -3,7 +3,7 @@ import SettingPasswordDialog from './dialogs/SettingPasswordDialog'
 import { useState, useContext, useEffect } from 'react'
 import { UserContext } from '../hooks/UserContext'
 import { useDashboardI18N } from '../../../locales'
-import { useLocation } from 'react-router'
+import { useLocation } from 'react-router-dom'
 
 export default function PasswordSetting() {
     const t = useDashboardI18N()

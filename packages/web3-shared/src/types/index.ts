@@ -233,13 +233,13 @@ export enum EthereumTokenType {
 
 export type EIP1559GasConfig = {
     gas: number
-    maxFeePerGas: number
-    maxPriorityFeePerGas: number
+    maxFeePerGas: number | string
+    maxPriorityFeePerGas: number | string
 }
 
 export type PriorEIP1559GasConfig = {
     gas: number
-    gasPrice: number
+    gasPrice: number | string
 }
 
 export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
@@ -559,3 +559,9 @@ export interface AddressName {
     resolvedAddress?: string
 }
 //#endregion
+
+export enum GasOption {
+    Low = 'low',
+    Medium = 'medium',
+    High = 'high',
+}

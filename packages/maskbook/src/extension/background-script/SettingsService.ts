@@ -30,6 +30,8 @@ import {
     currentTokenPricesSettings,
     currentIsMaskWalletLockedSettings,
     currentAccountMaskWalletSettings,
+    currentMaskWalletChainIdSettings,
+    currentMaskWalletNetworkSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
 
@@ -52,6 +54,7 @@ export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSetting
 export const [getEtherPrice, setEtherPrice] = create(currentEtherPriceSettings)
 export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSettings)
 export const [getGasNow, setGasNow] = create(currentGasNowSettings)
+export const [getGasPrice, setGasPrice] = create(currentGasNowSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
 export const [getEthereumNetworkTradeProvider, setEthNetworkTradeProvider] = create(
     ethereumNetworkTradeProviderSettings,
@@ -74,6 +77,12 @@ export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] 
 export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentAccountSettings)
 
 export const [getSelectedMaskWalletAddress, setSelectedMaskWalletAddress] = create(currentAccountMaskWalletSettings)
+
+export const [getCurrentMaskWalletChainId, setCurrentMaskWalletChainId] = create(currentMaskWalletChainIdSettings)
+
+export const [getCurrentMaskWalletNetworkType, setCurrentMaskWalletNetworkType] = create(
+    currentMaskWalletNetworkSettings,
+)
 
 export const [getCurrentPortfolioDataProvider, setCurrentPortfolioDataProvider] = create(
     currentPortfolioDataProviderSettings,

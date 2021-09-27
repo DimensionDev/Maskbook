@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
-import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
 import { getChainIdFromNetworkType, ProviderType, useAccount, useChainId, useWallets } from '@masknet/web3-shared'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
@@ -14,13 +13,12 @@ import { MetaMaskIcon } from '../../../../resources/MetaMaskIcon'
 import { MaskbookIcon } from '../../../../resources/MaskbookIcon'
 import { WalletConnectIcon } from '../../../../resources/WalletConnectIcon'
 import { WalletMessages, WalletRPC } from '../../messages'
-import { DashboardRoute } from '../../../../extension/options-page/Route'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { NetworkIcon } from '../../../../components/shared/NetworkIcon'
 import { currentNetworkSettings, currentProviderSettings } from '../../settings'
 import { Flags } from '../../../../utils'
 import { getMaskColor } from '@masknet/theme'
 import { useAsync } from 'react-use'
+import Services from '../../../../extension/service'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -157,18 +155,10 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
 
             switch (providerType) {
                 case ProviderType.MaskWallet:
-                    // choose a wallet
-                    if (wallets.length > 0) {
-                        setSelectWalletDialog({
-                            open: true,
-                            networkType: undeterminedNetworkType,
-                        })
-                        return
-                    }
-                    // create a new wallet
-                    if (isEnvironment(Environment.ManifestOptions))
-                        history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
-                    else openCreateImportDialog()
+                    await Services.Helper.openPopupsWindow(wallets.length > 0 ? '/wallet/select' : '', {
+                        chainId: getChainIdFromNetworkType(undeterminedNetworkType),
+                    })
+
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:

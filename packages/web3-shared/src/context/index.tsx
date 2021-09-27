@@ -18,7 +18,6 @@ export function useWeb3Context() {
 export function useWeb3State() {
     const _ = useWeb3Context()
     const account = useSubscription(_.account)
-    const accountMaskWallet = useSubscription(_.accountMaskWallet)
     const allowTestnet = useSubscription(_.allowTestnet)
     const balance = useSubscription(_.balance)
     const blockNumber = useSubscription(_.blockNumber)
@@ -37,7 +36,6 @@ export function useWeb3State() {
     return {
         allowTestnet,
         account,
-        accountMaskWallet,
         nonce,
         gasPrice,
         etherPrice,

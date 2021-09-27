@@ -3,6 +3,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
+import { openPopupsWindow } from '../../../extension/background-script/HelperService'
 
 const MAX_UNCONFIRMED_REQUESTS_SIZE = 1
 const MAIN_RECORD_ID = '0'
@@ -50,7 +51,10 @@ export async function pushUnconfirmedRequest(payload: JsonRpcPayload) {
     const requests = chunk_?.requests ?? []
 
     // validate if it's still possible to push a new request
-    if (requests.length >= MAX_UNCONFIRMED_REQUESTS_SIZE) throw new Error('Unable to add more requests.')
+    if (requests.length >= MAX_UNCONFIRMED_REQUESTS_SIZE) {
+        await openPopupsWindow()
+        throw new Error('Unable to add more request.')
+    }
 
     const chunk = chunk_
         ? {
@@ -64,6 +68,31 @@ export async function pushUnconfirmedRequest(payload: JsonRpcPayload) {
               updatedAt: now,
               requests: [payload],
           }
+    await t.objectStore('UnconfirmedRequestChunk').put(chunk)
+    WalletMessages.events.requestsUpdated.sendToAll(undefined)
+    return payload
+}
+
+export async function updateUnconfirmedRequest(payload: JsonRpcPayload) {
+    const now = new Date()
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
+
+    const chunk_ = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
+
+    if (!chunk_?.requests.length) throw new Error('No request to update.')
+
+    const requests =
+        chunk_?.requests?.map((item) => {
+            if (item.id !== payload.id) return item
+            return payload
+        }) ?? []
+
+    const chunk = {
+        ...chunk_,
+        updatedAt: now,
+        requests,
+    }
+
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
     WalletMessages.events.requestsUpdated.sendToAll(undefined)
     return payload

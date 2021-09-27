@@ -1,4 +1,4 @@
-import { ProviderType } from '@masknet/web3-shared'
+import { ChainId, ProviderType } from '@masknet/web3-shared'
 import { pollingTask } from '@masknet/shared'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
 import { startEffects } from '../../../utils'
@@ -14,8 +14,8 @@ import { getGasPriceDict } from '../apis/debank'
 
 const beats: true[] = []
 
-export function getGasPriceDictFromDeBank(chain: string) {
-    return getGasPriceDict(chain)
+export function getGasPriceDictFromDeBank(chainId: ChainId) {
+    return getGasPriceDict(chainId)
 }
 
 export async function kickToUpdateChainState() {

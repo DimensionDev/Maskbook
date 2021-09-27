@@ -1,10 +1,9 @@
 import { memo, useCallback } from 'react'
 import { Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { WalletInfo } from '../components/WalletInfo'
 import { WarningIcon } from '@masknet/icons'
 import { useHistory } from 'react-router-dom'
-import { useWallet } from '@masknet/web3-shared'
+import { ProviderType, useWallet } from '@masknet/web3-shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PopupRoutes } from '../../../index'
@@ -77,19 +76,18 @@ const DeleteWallet = memo(() => {
     const onConfirm = useCallback(async () => {
         if (wallet?.address) {
             await WalletRPC.removeWallet(wallet.address)
-            const wallets = await WalletRPC.getWallets()
-            if (wallets.length) {
-                await WalletRPC.resetAccount({
-                    account: first(wallets)?.address,
-                })
-            }
+            const wallets = await WalletRPC.getWallets(ProviderType.MaskWallet)
+
+            await WalletRPC.resetAccount({
+                account: first(wallets)?.address ?? '',
+            })
+
             history.replace(PopupRoutes.Wallet)
         }
     }, [wallet])
 
     return (
         <>
-            <WalletInfo />
             <div className={classes.content}>
                 <div className={classes.warning}>
                     <WarningIcon style={{ fontSize: 48 }} />

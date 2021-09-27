@@ -1,16 +1,16 @@
 import { WalletStartUp } from './components/StartUp'
-import { EthereumRpcType, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
+import { EthereumRpcType, useWallet } from '@masknet/web3-shared'
 import { WalletAssets } from './components/WalletAssets'
 import { Route, Switch, useHistory } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { PopupRoutes } from '../../index'
 import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
-import { useLocation } from 'react-router'
-import urlcat from 'urlcat'
+import { useLocation } from 'react-router-dom'
 import { useAsyncRetry } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import Services from '../../../service'
+import SelectWallet from './SelectWallet'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -18,7 +18,7 @@ const WalletSettings = lazy(() => import('./WalletSettings'))
 const WalletRename = lazy(() => import('./WalletRename'))
 const DeleteWallet = lazy(() => import('./DeleteWallet'))
 const CreateWallet = lazy(() => import('./CreateWallet'))
-const SelectWallet = lazy(() => import('./SelectWallet'))
+const SwitchWallet = lazy(() => import('./SwitchWallet'))
 const BackupWallet = lazy(() => import('./BackupWallet'))
 const AddToken = lazy(() => import('./AddToken'))
 const TokenDetail = lazy(() => import('./TokenDetail'))
@@ -30,7 +30,6 @@ const Unlock = lazy(() => import('./Unlock'))
 
 export default function Wallet() {
     const wallet = useWallet()
-    const wallets = useWallets(ProviderType.MaskWallet)
     const location = useLocation()
     const history = useHistory()
 
@@ -53,15 +52,14 @@ export default function Wallet() {
             computedPayload,
         }
 
-        const toBeClose = new URLSearchParams(location.search).get('toBeClose')
         if (value?.computedPayload) {
             switch (value.computedPayload.type) {
                 case EthereumRpcType.SIGN:
-                    history.replace(urlcat(PopupRoutes.WalletSignRequest, { toBeClose }))
+                    history.replace(PopupRoutes.WalletSignRequest)
                     break
                 case EthereumRpcType.CONTRACT_INTERACTION:
                 case EthereumRpcType.SEND_ETHER:
-                    history.replace(urlcat(PopupRoutes.ContractInteraction, { toBeClose }))
+                    history.replace(PopupRoutes.ContractInteraction)
                     break
                 default:
                     break
@@ -87,8 +85,7 @@ export default function Wallet() {
                 ) : (
                     <Switch>
                         <Route path={PopupRoutes.Wallet} exact>
-                            {/* TODO: recovery page */}
-                            {wallets.length === 0 && !wallet ? <WalletStartUp /> : <WalletAssets />}
+                            {!wallet ? <WalletStartUp /> : <WalletAssets />}
                         </Route>
                         <Route path={PopupRoutes.ImportWallet} children={<ImportWallet />} exact />
                         <Route path={PopupRoutes.AddDeriveWallet} children={<AddDeriveWallet />} exact />
@@ -96,7 +93,7 @@ export default function Wallet() {
                         <Route path={PopupRoutes.WalletRename} children={<WalletRename />} exact />
                         <Route path={PopupRoutes.DeleteWallet} children={<DeleteWallet />} exact />
                         <Route path={PopupRoutes.CreateWallet} children={<CreateWallet />} exact />
-                        <Route path={PopupRoutes.SelectWallet} children={<SelectWallet />} exact />
+                        <Route path={PopupRoutes.SwitchWallet} children={<SwitchWallet />} exact />
                         <Route path={PopupRoutes.BackupWallet} children={<BackupWallet />} exact />
                         <Route path={PopupRoutes.AddToken} children={<AddToken />} exact />
                         <Route path={PopupRoutes.WalletSignRequest} children={<SignRequest />} />
@@ -104,6 +101,7 @@ export default function Wallet() {
                         <Route path={PopupRoutes.TokenDetail} children={<TokenDetail />} exact />
                         <Route path={PopupRoutes.Transfer} children={<Transfer />} exact />
                         <Route path={PopupRoutes.ContractInteraction} children={<ContractInteraction />} />
+                        <Route path={PopupRoutes.SelectWallet} children={<SelectWallet />} />
                         {/*<Route path={PopupRoutes.Unlock} children={<Unlock />} />*/}
                     </Switch>
                 )}

@@ -890,7 +890,6 @@
     "popups_wallet_gas_fee_settings_medium": "crwdns7843:0crwdne7843:0",
     "popups_wallet_gas_fee_settings_high": "crwdns7845:0crwdne7845:0",
     "popups_wallet_gas_fee_settings_usd": "crwdns7847:0{{usd}}crwdne7847:0",
-    "popups_wallet_gas_fee_settings_or": "crwdns7853:0crwdne7853:0",
     "popups_wallet_gas_fee_settings_gas_limit": "crwdns7855:0crwdne7855:0",
     "popups_wallet_gas_fee_settings_max_priority_fee": "crwdns7857:0crwdne7857:0",
     "popups_wallet_gas_fee_settings_max_fee": "crwdns7859:0crwdne7859:0",

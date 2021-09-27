@@ -1,5 +1,5 @@
 import { ERC721ContractDetailed, EthereumTokenType, ChainId } from '@masknet/web3-shared'
-const NFTSCAN_TOKEN_ID = '78c4b5ca3590487f9f806be2549e8502'
+const NFTSCAN_TOKEN_ID = 'bcaa7c6850d2489e8cb0247e0abdce50'
 const CORS_PROXY = 'https://whispering-harbor-49523.herokuapp.com'
 const BASE_API = 'https://api.nftscan.com/api/v1'
 

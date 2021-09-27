@@ -10,7 +10,7 @@ import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller } from 'react-hook-form'
 import { z } from 'zod'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath'
 type FormInputs = {
@@ -83,7 +83,7 @@ export const RestoreFromPrivateKey = memo(() => {
                     </ButtonContainer>
                 </form>
             </Box>
-            <Box sx={{ marginTop: '35px' }}>
+            <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_private_key_warning()} />
             </Box>
         </>
