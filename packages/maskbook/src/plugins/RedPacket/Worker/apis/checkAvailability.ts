@@ -7,7 +7,7 @@ import type { RedpacketAvailability } from '../../types'
 
 const interFace = new Interface(REDPACKET_ABI)
 
-// ITO Contract readonly method, read it no matter on whatever chains you are.
+// red-packet contract readonly method, read it no matter on whatever chains you are.
 export async function checkAvailability(pid: string, from: string, to: string, chainId: ChainId) {
     const { RPC } = getRPCConstants(chainId)
     const providerURL = first(RPC)
