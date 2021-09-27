@@ -1,4 +1,4 @@
-import { FC, memo } from 'react'
+import { FC, memo, useMemo } from 'react'
 import { Box, Button, Stack, Typography } from '@material-ui/core'
 import {
     getNetworkName,
@@ -51,10 +51,13 @@ export const WalletStateBar = memo(() => {
         PluginMessages.Wallet.events.selectProviderDialogUpdated,
     )
 
+    const walletName = useMemo(() => wallet?.name ?? '', [wallet, providerType])
+
     const [menu, openMenu] = useNetworkSelector()
     if (!wallet) {
         return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
     }
+
     return (
         <WalletStateBarUI
             isPending={!!pendingTransactions.length}
@@ -63,7 +66,7 @@ export const WalletStateBar = memo(() => {
             providerType={providerType}
             openConnectWalletDialog={openConnectWalletDialog}
             openMenu={openMenu}
-            walletName={wallet.name ?? ''}
+            walletName={walletName}
             walletAddress={wallet.address}>
             {menu}
         </WalletStateBarUI>
