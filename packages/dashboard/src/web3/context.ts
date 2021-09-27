@@ -130,8 +130,8 @@ async function getERC20TokensPaged(index: number, count: number, query?: string)
     }))
 }
 
-async function getERC721TokensPaged(index: number, count: number, query?: string) {
-    return PluginServices.Wallet.getERC721TokensPaged(index, count, query)
+async function getERC721TokensPaged(index: number, count: number, query?: string, chainId?: ChainId) {
+    return PluginServices.Wallet.getERC721TokensPaged(index, count, query, chainId)
 }
 
 // double check

@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js'
 import { EthereumAddress } from 'wallet.ts'
-import { ERC721TokenDetailed, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared'
+import { ChainId, ERC721TokenDetailed, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
@@ -34,12 +34,13 @@ const fuse = new Fuse([] as ERC721TokenDetailed[], {
     ],
 })
 
-export async function getERC721TokensPaged(index: number, count: number, query?: string) {
+export async function getERC721TokensPaged(index: number, count: number, query?: string, chainId?: ChainId) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC721Token')
     const records = await queryTransactionPaged(t, 'ERC721Token', {
         skip: index * count,
         count,
         predicate: (record) => {
+            if (chainId && chainId !== record.contractDetailed.chainId) return false
             if (!query) return true
             if (EthereumAddress.isValid(query) && !isSameAddress(query, record.contractDetailed.address)) return false
             fuse.setCollection([record])

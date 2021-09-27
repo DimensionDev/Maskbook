@@ -1,6 +1,13 @@
 import { noop, pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ERC20TokenDetailed, EthereumTokenType, ProviderType, Wallet, Web3ProviderType } from '@masknet/web3-shared'
+import {
+    ChainId,
+    ERC20TokenDetailed,
+    EthereumTokenType,
+    ProviderType,
+    Wallet,
+    Web3ProviderType,
+} from '@masknet/web3-shared'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
@@ -104,8 +111,8 @@ async function getERC20TokensPaged(index: number, count: number, query?: string)
     }))
 }
 
-async function getERC721TokensPaged(index: number, count: number, query?: string) {
-    return WalletRPC.getERC721TokensPaged(index, count, query)
+async function getERC721TokensPaged(index: number, count: number, query?: string, chainId?: ChainId) {
+    return WalletRPC.getERC721TokensPaged(index, count, query, chainId)
 }
 
 // utils

@@ -29,7 +29,7 @@ export function useCollectibles(
         // 0x65c1b9ae4e4d8dcccfd3dc41b940840fe8570f2a
         // 0xa357a589a37cf7b6edb31b707e8ed3219c8249ac
         const result = await getAssetsListNFT(address.toLowerCase(), chainId, provider, page, size)
-        const erc721Tokens = await getERC721TokensPaged(page, size)
+        const erc721Tokens = await getERC721TokensPaged(page, size, undefined, chainId)
 
         return {
             collectibles: uniqWith(
@@ -39,5 +39,5 @@ export function useCollectibles(
             ),
             hasNextPage: result.hasNextPage,
         }
-    }, [address, provider, page])
+    }, [address, provider, page, chainId])
 }
