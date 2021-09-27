@@ -216,8 +216,8 @@ export function SwapDialog(props: SwapDialogProps) {
     const onSwap = useCallback(async () => {
         await swapCallback()
         if (payload.token.type !== EthereumTokenType.ERC20) return
-        await WalletRPC.addERC20Token(payload.token)
-        await WalletRPC.trustERC20Token(account, payload.token)
+        await WalletRPC.addToken(payload.token)
+        await WalletRPC.updateWalletToken(account, payload.token, { strategy: 'trust' })
     }, [swapCallback, payload.token.address])
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(

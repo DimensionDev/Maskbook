@@ -17,7 +17,7 @@ export function DashboardWalletAddERC20TokenDialog(props: WrappedDialogProps<Wal
     const onSubmit = useSnackbarCallback(
         async () => {
             if (!token) return
-            await Promise.all([WalletRPC.addERC20Token(token), WalletRPC.trustERC20Token(wallet.address, token)])
+            await Promise.all([WalletRPC.addToken(token), WalletRPC.trustToken(wallet.address, token)])
         },
         [token],
         props.onClose,

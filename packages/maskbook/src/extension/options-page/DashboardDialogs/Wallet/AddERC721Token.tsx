@@ -38,7 +38,7 @@ export function DashboardWalletAddERC721TokenDialog(props: WrappedDialogProps<Wa
                 setLoadingTokenFailMessage(t('wallet_add_nft_invalid_collectible'))
                 throw new Error(t('wallet_add_nft_invalid_collectible'))
             } else {
-                await WalletRPC.addERC721Token(_tokenDetailed)
+                await WalletRPC.addToken(_tokenDetailed)
                 props.onClose()
             }
         },
