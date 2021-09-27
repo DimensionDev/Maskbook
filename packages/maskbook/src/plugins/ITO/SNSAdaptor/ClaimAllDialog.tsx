@@ -63,10 +63,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
             marginRight: 0,
         },
     },
-    maskbook: {
-        width: 40,
-        height: 10,
-    },
     tokenCardWrapper: {
         width: '100%',
         color: 'white',

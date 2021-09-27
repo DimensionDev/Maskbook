@@ -15,17 +15,17 @@ export const ciBuild = series(
     // If we build parallel on CI, it will be slower eventually
     (process.env.CI ? series : parallel)(
         // zip base version to zip
-        zipTo(BUILD_PATH, 'Maskbook.base.zip'),
+        zipTo(BUILD_PATH, 'MaskNetwork.base.zip'),
         // Chrome version is the same with base version
-        zipTo(BUILD_PATH, 'Maskbook.chromium.zip'),
-        buildTarget('Firefox', { firefox: true, 'output-path': 'build-firefox' }, 'Maskbook.firefox.zip'),
-        buildTarget('Android', { android: true, 'output-path': 'build-android' }, 'Maskbook.gecko.zip'),
-        buildTarget('iOS', { iOS: true, 'output-path': 'build-iOS' }, 'Maskbook.iOS.zip'),
-        buildTarget('Firefox', { firefox: true, 'output-path': 'build-firefox' }, 'Maskbook.firefox.zip'),
+        zipTo(BUILD_PATH, 'MaskNetwork.chromium.zip'),
+        buildTarget('Firefox', { firefox: true, 'output-path': 'build-firefox' }, 'MaskNetwork.firefox.zip'),
+        buildTarget('Android', { android: true, 'output-path': 'build-android' }, 'MaskNetwork.gecko.zip'),
+        buildTarget('iOS', { iOS: true, 'output-path': 'build-iOS' }, 'MaskNetwork.iOS.zip'),
+        buildTarget('Firefox', { firefox: true, 'output-path': 'build-firefox' }, 'MaskNetwork.firefox.zip'),
         buildTarget(
             'Chromium-beta',
             { chromium: true, beta: true, 'output-path': 'build-chromium-beta' },
-            'Maskbook.chromium-beta.zip',
+            'MaskNetwork.chromium-beta.zip',
         ),
     ),
 )

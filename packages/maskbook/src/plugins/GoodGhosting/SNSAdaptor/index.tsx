@@ -2,7 +2,7 @@ import { Suspense, useMemo } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
 import { SnackbarContent } from '@material-ui/core'
 import { parseURL } from '../../../utils/utils'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { PreviewCard } from '../UI/PreviewCard'
@@ -39,13 +39,13 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     }
 
     return (
-        <MaskbookPluginWrapper pluginName="GoodGhosting">
+        <MaskPluginWrapper pluginName="GoodGhosting">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary chainId={ChainId.Matic}>
                     <PreviewCard id={id} />
                 </EthereumChainBoundary>
             </Suspense>
-        </MaskbookPluginWrapper>
+        </MaskPluginWrapper>
     )
 }
 
