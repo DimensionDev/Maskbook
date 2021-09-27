@@ -38,7 +38,7 @@ export async function getRedPacketHistory(address: string, chainId: ChainId, end
 
     //#region Inject password from database
     const redpacketsFromDatabase = await database.getAllRedpackets(redpacketsFromNetwork.map((x) => x.txid))
-    return redpacketsFromNetwork.map(async (x) => {
+    return redpacketsFromNetwork.map((x) => {
         const record = redpacketsFromDatabase.find((y) => y.id === x.txid)
         if (!record) return x
         return {
