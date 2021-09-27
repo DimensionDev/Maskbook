@@ -104,12 +104,16 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             }
         }, [currentGasOption, setValue])
 
-        const handleConfirm = useCallback((data: zod.infer<typeof schema>) => {
-            onConfirm({
-                gasLimit: data.gasLimit,
-                gasPrice: toWei(data.gasPrice, 'gwei'),
-            })
-        }, [])
+        const handleConfirm = useCallback(
+            (data: zod.infer<typeof schema>) => {
+                onConfirm({
+                    gasLimit: data.gasLimit,
+                    gasPrice: toWei(data.gasPrice, 'gwei'),
+                    gasOption: selectedGasOption,
+                })
+            },
+            [selectedGasOption],
+        )
 
         const onSubmit = handleSubmit(handleConfirm)
 

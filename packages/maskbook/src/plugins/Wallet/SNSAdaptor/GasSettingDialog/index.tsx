@@ -36,7 +36,7 @@ export const GasSettingDialog: FC = () => {
                     onGasLimitChange={setGasLimit}
                     gasOption={gasOption}
                     onGasOptionChange={setGasOption}
-                    onConfirm={({ gasPrice, gasLimit, maxFee }) => {
+                    onConfirm={({ gasPrice, gasLimit, maxFee, gasOption }) => {
                         setDialog({
                             open: false,
                             gasOption,

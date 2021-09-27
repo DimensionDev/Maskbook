@@ -133,9 +133,10 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                 onConfirm?.({
                     gasLimit: data.gasLimit,
                     maxFee: toWei(data.maxFeePerGas, 'gwei'),
+                    gasOption: selectedGasOption,
                 })
             },
-            [onConfirm],
+            [onConfirm, selectedGasOption],
         )
 
         const onSubmit = handleSubmit(handleConfirm)
