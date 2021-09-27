@@ -16,6 +16,9 @@ const useStyles = makeStyles()((theme) => ({
         '& > *': {
             marginBottom: theme.spacing(2),
         },
+        [theme.breakpoints.down('md')]: {
+            display: 'none',
+        },
     },
     img: {
         fill: 'none',
