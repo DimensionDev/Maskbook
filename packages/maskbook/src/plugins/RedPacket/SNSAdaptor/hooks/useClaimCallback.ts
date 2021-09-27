@@ -2,14 +2,20 @@ import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { useTransactionState, TransactionStateType, TransactionEventType } from '@masknet/web3-shared'
+import {
+    useTransactionState,
+    TransactionStateType,
+    useSpeedUpTransaction,
+    TransactionEventType,
+} from '@masknet/web3-shared'
 import type { TransactionReceipt } from 'web3-core'
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 
-export function useClaimCallback(version: number, from: string, id?: string, password?: string) {
+export function useClaimCallback(version: number, from: string, id: string, password?: string) {
     const [claimState, setClaimState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
+    useSpeedUpTransaction(claimState, from, redPacketContract?.options, 'claim', 30000)
     const claimCallback = useCallback(async () => {
         if (!redPacketContract || !id || !password) {
             setClaimState({

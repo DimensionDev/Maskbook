@@ -5,6 +5,8 @@
   "dependencies": {
     "@dimensiondev/kit": "^0.0.0-20210913111737-84c17d7",
     "@ensdomains/address-encoder": "^0.2.6",
+    "@ethersproject/abi": "^5.4.0",
+    "web3-eth-contract": "1.5.2",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
     "@unstoppabledomains/resolution": "^5.0.1",
