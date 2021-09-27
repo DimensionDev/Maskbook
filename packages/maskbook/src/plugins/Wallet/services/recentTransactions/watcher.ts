@@ -7,12 +7,14 @@ import { MAX_RECENT_TRANSACTIONS_SIZE } from './database'
 
 let timer: NodeJS.Timer | null = null
 const WATCHED_TRANSACTION_CHECK_DELAY = 15 * 1000 // 15s
+const WATCHED_TRANSACTION_CHECK_TIMES = 5 // 40 * 15s = 10m
 const WATCHED_TRANSACTION_MAP = new Map<
     ChainId,
     Map<
         string,
         {
             at: number
+            limits: number
             receipt: Promise<TransactionReceipt | null> | null
         }
     >
@@ -48,10 +50,22 @@ async function checkReceipt() {
 
     const checkResult = await Promise.allSettled(
         watchedTransactions.map(async ([hash, transaction]) => {
-            const receipt = await map.get(hash)?.receipt
+            const record = map.get(hash)
+
+            // the receipt is already fetched
+            const receipt = await record?.receipt
             if (receipt) return true
+
+            // excess the fetch limits
+            const limits = record?.limits ?? WATCHED_TRANSACTION_CHECK_TIMES
+
+            console.log(`The transaction receipt fetch limits of ${hash} is ${limits}.`)
+
+            if (limits <= 0) return true
+
             map.set(hash, {
                 at: transaction.at,
+                limits: limits - 1,
                 receipt: getTransactionReceipt(hash),
             })
             return false
@@ -65,16 +79,22 @@ async function checkReceipt() {
 
 export async function watchTransaction(hash: string) {
     const map = getTransactionMap()
-    if (!map.has(hash))
-        map.set(hash, {
-            at: Date.now(),
-            receipt: getTransactionReceipt(hash),
-        })
+    const record = map.get(hash)
+    map.set(hash, {
+        at: record?.at ?? Date.now(),
+        limits: WATCHED_TRANSACTION_CHECK_TIMES,
+        receipt: getTransactionReceipt(hash),
+    })
     if (timer === null) timer = setTimeout(checkReceipt, WATCHED_TRANSACTION_CHECK_DELAY)
 }
 
 export function unwatchTransaction(hash: string) {
     getTransactionMap().delete(hash)
+}
+
+export function getState(hash: string) {
+    // 0 for inactivated, 1 for activated
+    return (getTransactionMap().get(hash)?.limits ?? 0) <= 0 ? 0 : 1
 }
 
 export async function getReceipt(hash: string) {

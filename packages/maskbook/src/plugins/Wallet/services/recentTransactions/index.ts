@@ -16,6 +16,7 @@ function getReceiptStatus(receipt: TransactionReceipt | null) {
 export interface RecentTransaction {
     at: Date
     hash: string
+    state: 0 | 1
     status: TransactionStatusType
     receipt?: TransactionReceipt | null
     payload?: JsonRpcPayload
@@ -43,10 +44,12 @@ export async function getRecentTransactionList(address: string): Promise<RecentT
     const allSettled = await Promise.allSettled(
         transactions.map<Promise<RecentTransaction>>(async ({ at, hash, payload }) => {
             watcher.watchTransaction(hash)
+            const state = await watcher.getState(hash)
             const receipt = await watcher.getReceipt(hash)
             return {
                 at,
                 hash,
+                state,
                 status: getReceiptStatus(receipt),
                 receipt,
                 payload,

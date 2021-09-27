@@ -1,4 +1,4 @@
-import { Check, XCircle } from 'react-feather'
+import { Check, RefreshCw, XCircle } from 'react-feather'
 import { Box, Button, CircularProgress, Link, List, ListItem, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
@@ -93,8 +93,10 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
                                 <CircularProgress size={14} color="primary" />
                             ) : transaction.status === TransactionStatusType.SUCCEED ? (
                                 <Check size={14} color="#77E0B5" />
-                            ) : (
+                            ) : transaction.state ? (
                                 <XCircle size={14} color="#FF5555" />
+                            ) : (
+                                <RefreshCw size={14} color="#FF5555" />
                             )}
                         </Link>
                     </ListItem>
