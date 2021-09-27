@@ -10,7 +10,7 @@ import type {
 //#region erc20 red packet
 export interface RedPacketRecord {
     id: string
-    // From twitter/facebook url */
+    /** From twitter/facebook url */
     from: string
     password: string
     contract_version: number
