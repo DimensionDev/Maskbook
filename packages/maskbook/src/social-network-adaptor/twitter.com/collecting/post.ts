@@ -20,7 +20,6 @@ import {
 import { twitterBase } from '../base'
 import { twitterShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
-import { currentSelectedIdentity } from '../../../settings/settings'
 
 function registerPostCollectorInner(
     postStore: Next.CollectingCapabilities.PostsProvider['posts'],
@@ -50,9 +49,10 @@ function registerPostCollectorInner(
     }
 
     const getCurrentIdentifier = () => {
-        const current = currentSelectedIdentity[activatedSocialNetworkUI.networkIdentifier]
+        const current = activatedSocialNetworkUI.collecting.identityProvider?.recognized.value
+
         return (
-            globalUIState.profiles.value.find((i) => i.identifier.toText() === current.value) ||
+            globalUIState.profiles.value.find((i) => i.identifier.equals(current?.identifier)) ||
             globalUIState.profiles.value[0]
         )
     }
