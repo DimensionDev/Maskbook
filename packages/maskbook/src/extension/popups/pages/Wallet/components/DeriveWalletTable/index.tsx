@@ -114,7 +114,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, 
                     <CircularProgress sx={{ color: '#15181B' }} size={12} />
                 ) : (
                     <Typography className={classes.title}>
-                        <FormattedBalance value={0} decimals={18} significant={4} symbol="ETH" />
+                        <FormattedBalance value={balance} decimals={18} significant={4} symbol="ETH" />
                     </Typography>
                 )}
             </TableCell>
