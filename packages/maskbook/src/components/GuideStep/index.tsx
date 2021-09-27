@@ -112,10 +112,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     }
 
     const onTry = () => {
-        setOpen(false)
-        resetOverflow()
-        currentSetupGuideStatus[ui.networkIdentifier].value = ''
-
+        onSkip()
         onComplete?.()
     }
 

@@ -43,12 +43,12 @@ const wizardTheme = extendsTheme((theme: Theme) => ({
         MuiOutlinedInput: {
             styleOverrides: {
                 input: {
-                    paddingTop: 10.5,
-                    paddingBottom: 10.5,
+                    paddingTop: 8,
+                    paddingBottom: 8,
                 },
                 multiline: {
-                    paddingTop: 10.5,
-                    paddingBottom: 10.5,
+                    paddingTop: 8,
+                    paddingBottom: 8,
                 },
             },
         },
@@ -91,11 +91,11 @@ const wizardTheme = extendsTheme((theme: Theme) => ({
 
 const useWizardDialogStyles = makeStyles()((theme) => ({
     root: {
-        padding: '56px 20px 48px',
+        padding: '12px 16px 20px',
         position: 'relative',
         boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
         border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
-        borderRadius: 12,
+        borderRadius: 20,
         [theme.breakpoints.down('sm')]: {
             padding: '35px 20px 16px',
             position: 'fixed',
@@ -110,12 +110,13 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         },
         userSelect: 'none',
         boxSizing: 'border-box',
-        width: 320,
+        width: 260,
         overflow: 'hidden',
     },
     button: {
         width: '100%',
-        height: 40,
+        height: 32,
+        minHeight: 32,
         marginLeft: 0,
         marginTop: 0,
         [theme.breakpoints.down('sm')]: {
@@ -140,7 +141,7 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         top: 10,
     },
     primary: {
-        fontSize: 22,
+        fontSize: 18,
         fontWeight: 600,
         lineHeight: '30px',
     },
@@ -158,7 +159,6 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         fontWeight: 600,
         lineHeight: '20px',
         paddingTop: 16,
-        marginBottom: 24,
     },
     textButton: {
         fontSize: 14,
@@ -320,8 +320,8 @@ function WizardDialog(props: WizardDialogProps) {
 //#region find username
 const useFindUsernameStyles = makeStyles()((theme) => ({
     input: {
-        marginTop: '45px !important',
-        marginBottom: 24,
+        marginTop: '30px !important',
+        marginBottom: 16,
     },
     inputFocus: {
         '& svg': {
@@ -333,6 +333,7 @@ const useFindUsernameStyles = makeStyles()((theme) => ({
     },
     icon: {
         color: 'inherit',
+        fontSize: 16,
     },
 }))
 
@@ -425,6 +426,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     failed={t('setup_guide_connect_failed')}
                     executor={onConnect}
                     completeOnClick={onDone}
+                    autoComplete
                     disabled={!username}
                     completeIcon={null}
                     failIcon={null}
@@ -567,8 +569,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const onNext = async () => {
         switch (step) {
             case SetupGuideStep.FindUsername:
-                currentSetupGuideStatus[ui.networkIdentifier].value = '1'
                 onClose()
+                currentSetupGuideStatus[ui.networkIdentifier].value = '1'
                 break
             case SetupGuideStep.SayHelloWorld:
                 onClose()
