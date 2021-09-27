@@ -131,6 +131,14 @@ export async function openPopupsWindow(route?: string, params?: Record<string, a
                     currentPopupWindowId.value = 0
                 }
             })
+
+            // firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1271047
+            if (process.env.target === 'firefox') {
+                browser.windows.update(id, {
+                    left,
+                    top,
+                })
+            }
         }
     }
 }
