@@ -114,7 +114,7 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
     },
     button: {
-        width: 200,
+        width: '100%',
         height: 40,
         marginLeft: 0,
         marginTop: 0,
@@ -140,9 +140,9 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         top: 10,
     },
     primary: {
-        fontSize: 30,
-        fontWeight: 500,
-        lineHeight: '37px',
+        fontSize: 22,
+        fontWeight: 600,
+        lineHeight: '30px',
     },
     secondary: {
         fontSize: 14,
@@ -154,8 +154,10 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         marginTop: 16,
     },
     tip: {
-        fontSize: 16,
-        lineHeight: 1.75,
+        fontSize: 14,
+        fontWeight: 600,
+        lineHeight: '20px',
+        paddingTop: 16,
         marginBottom: 24,
     },
     textButton: {
@@ -181,9 +183,7 @@ const useStyles = makeStyles()({
     root: {
         alignItems: 'center',
     },
-    content: {
-        marginRight: 16,
-    },
+    content: {},
     footer: {
         marginLeft: 0,
         marginTop: 0,
@@ -282,7 +282,7 @@ function WizardDialog(props: WizardDialogProps) {
                 }}>
                 <Paper className={classes.root}>
                     <header className={classes.header}>
-                        <Typography className={classes.primary} color="textPrimary" variant="h1">
+                        <Typography className={classes.primary} color="textPrimary" variant="h3">
                             {title}
                         </Typography>
                         {optional ? (
@@ -567,17 +567,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const onNext = async () => {
         switch (step) {
             case SetupGuideStep.FindUsername:
-                currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
-                    status: SetupGuideStep.SayHelloWorld,
-                    username,
-                    persona: persona.toText(),
-                } as SetupGuideCrossContextStatus)
-                if (activatedSocialNetworkUI.configuration.setupWizard?.disableSayHello) {
-                    onConnect().then(onClose)
-                } else {
-                    ui.automation.redirect?.newsFeed?.()
-                    setStep(SetupGuideStep.SayHelloWorld)
-                }
+                currentSetupGuideStatus[ui.networkIdentifier].value = '1'
+                onClose()
                 break
             case SetupGuideStep.SayHelloWorld:
                 onClose()

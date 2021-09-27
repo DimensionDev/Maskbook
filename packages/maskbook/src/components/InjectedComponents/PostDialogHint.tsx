@@ -9,6 +9,7 @@ import { currentSetupGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
 import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
+import GuideStep from '../GuideStep'
 
 export interface PostDialogHintUIProps extends withClasses<'buttonTransform'> {
     onHintButtonClicked: () => void
@@ -35,10 +36,14 @@ const useStyles = makeStyles()((theme) => ({
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const classes = useStylesExtends(useStyles(), props)
+    const { t } = useI18N()
+
     return (
-        <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
-            <MaskbookSharpIcon color="primary" />
-        </IconButton>
+        <GuideStep step={4} total={4} tip={t('user_guide_tip_4')} onComplete={props.onHintButtonClicked}>
+            <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
+                <MaskbookSharpIcon color="primary" />
+            </IconButton>
+        </GuideStep>
     )
 })
 
@@ -65,6 +70,7 @@ export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
 export function PostDialogHint(props: PostDialogHintProps) {
     const identities = useMyIdentities()
     const connecting = useValueRef(currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier])
-    if (connecting || identities.length === 0) return null
+
+    if ((connecting && !/[1-4]/.test(connecting)) || identities.length === 0) return null
     return <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
 }
