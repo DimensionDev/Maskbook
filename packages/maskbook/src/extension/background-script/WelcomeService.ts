@@ -134,7 +134,7 @@ export async function checkPermissionsAndRestore(id: string) {
     if (json) {
         const permissions = await extraPermissions(json.grantedHostPermissions)
         if (permissions.length) {
-            const granted = await requestBrowserPermission({origins: permissions})
+            const granted = await requestBrowserPermission({ origins: permissions })
             if (!granted) return
         }
 
