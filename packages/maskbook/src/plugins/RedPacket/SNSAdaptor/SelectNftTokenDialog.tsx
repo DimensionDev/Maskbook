@@ -291,7 +291,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 <DialogContent className={classes.dialogContent}>
                     <Box className={classes.tokenBox}>
                         <div className={classes.searchWrapperSingle}>
-                            <Paper component="form" className={classes.search} elevation={0}>
+                            <Paper className={classes.search} elevation={0}>
                                 <SearchIcon className={classes.iconButton} />
                                 <InputBase
                                     value={tokenId}
@@ -345,7 +345,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 <DialogContent className={classNames(classes.dialogContent, classes.dialogContentFixedHeight)}>
                     <Box className={classes.ownerTokenBox}>
                         <div className={classes.searchWrapper}>
-                            <Paper component="form" className={classes.search} elevation={0}>
+                            <Paper className={classes.search} elevation={0}>
                                 <SearchIcon className={classes.iconButton} />
                                 <InputBase
                                     value={tokenId}
