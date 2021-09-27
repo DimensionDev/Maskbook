@@ -41,11 +41,6 @@ export default function Wallet() {
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     const { loading, retry } = useAsyncRetry(async () => {
-        if (isLocked && location.pathname !== PopupRoutes.WalletRecovered && !getLockStatusLoading) {
-            history.replace(PopupRoutes.Unlock)
-            return
-        }
-
         if (
             [PopupRoutes.ContractInteraction, PopupRoutes.WalletSignRequest, PopupRoutes.GasSetting].some(
                 (item) => item === location.pathname,
@@ -75,7 +70,18 @@ export default function Wallet() {
                     break
             }
         }
-    }, [location.search, isLocked, location.pathname, getLockStatusLoading])
+    }, [location.search, location.pathname])
+
+    useEffect(() => {
+        if (
+            isLocked &&
+            !getLockStatusLoading &&
+            ![PopupRoutes.WalletRecovered, PopupRoutes.Unlock].some((item) => item === location.pathname)
+        ) {
+            history.replace(PopupRoutes.Unlock)
+            return
+        }
+    }, [isLocked, location.pathname, getLockStatusLoading])
 
     useEffect(() => {
         return WalletMessages.events.requestsUpdated.on(({ hasRequest }) => {
@@ -94,7 +100,7 @@ export default function Wallet() {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletContext.Provider>
-                {loading || getLockStatusLoading ? (
+                {loading ? (
                     <LoadingPlaceholder />
                 ) : (
                     <Switch>

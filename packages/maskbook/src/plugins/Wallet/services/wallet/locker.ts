@@ -22,7 +22,7 @@ export async function unlockWallet(unverifiedPassword: string) {
         WalletMessages.events.walletLockStatusUpdated.sendToAll(false)
         return true
     } catch {
-        WalletMessages.events.walletLockStatusUpdated.sendToAll(false)
+        WalletMessages.events.walletLockStatusUpdated.sendToAll(true)
         return false
     }
 }
