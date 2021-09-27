@@ -1,10 +1,5 @@
 import { omit } from 'lodash-es'
-import type {
-    RedPacketRecord,
-    RedPacketRecordInDatabase,
-    RedPacketNftRecordInDatabase,
-    RedPacketJSONPayload,
-} from '../types'
+import type { RedPacketRecord, RedPacketRecordInDatabase, RedPacketNftRecordInDatabase } from '../types'
 import { RedPacketPluginID } from '../constants'
 import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
 
@@ -23,23 +18,6 @@ export async function getAllRedpackets(ids: string[]) {
 export async function getRedPacket(id: string) {
     const record = await RedPacketDatabase.get('red-packet', id)
     return record ? RedPacketRecordOutDB(record) : undefined
-}
-
-export async function updateV1ToV2(history: RedPacketJSONPayload) {
-    const record_v1 = await getRedPacket(history.rpid)
-    if (record_v1?.contract_version === 1) {
-        const record_v1_updated = await getRedPacket(history.txid)
-        if (!record_v1_updated) {
-            await addRedPacket({
-                password: record_v1.password,
-                id: history.txid,
-                contract_version: 1,
-                from: '',
-            })
-            // TODO: remove the v1 database record after test pass?
-            // await RedPacketDatabase.remove('red-packet', history.txid)
-        }
-    }
 }
 
 export async function addRedPacket(record: RedPacketRecord) {
