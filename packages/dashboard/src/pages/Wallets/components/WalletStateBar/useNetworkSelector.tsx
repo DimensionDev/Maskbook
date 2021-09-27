@@ -68,7 +68,7 @@ export const useNetworkSelector = () => {
                     throw new Error('Unreachable case:' + providerType)
             }
         },
-        [providerType],
+        [providerType, account],
     )
 
     const networkMenu = useMenu(
