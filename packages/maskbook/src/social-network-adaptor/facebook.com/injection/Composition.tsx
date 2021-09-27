@@ -11,10 +11,13 @@ if (isMobileFacebook) {
     composeBox = new LiveSelector().querySelector('#structured_composer_form')
 } else {
     composeBox = new LiveSelector()
-        .querySelector('[role="dialog"] form')
+        .querySelector(
+            '[role="dialog"] form > div:first-child > div:first-child > div:first-child > div:first-child > div:first-child > div:last-child > div:first-child',
+        )
         .querySelectorAll('[role="button"][tabindex="0"], [role="button"][tabindex="-1"]')
         .map((x) => x.parentElement)
-        .at(-1)
+        .at(-2)
+        .map((x) => x.parentElement)
         .map((x) => x.parentElement)
 }
 
