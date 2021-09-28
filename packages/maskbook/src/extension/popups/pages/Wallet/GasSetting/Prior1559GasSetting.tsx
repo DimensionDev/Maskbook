@@ -96,6 +96,8 @@ export const Prior1559GasSetting = memo(() => {
     //#region Get gas now from debank
     const { value: gasNow } = useAsync(async () => {
         const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+        if (!response) return { slow: 0, standard: 0, fast: 0 }
+
         return {
             slow: response.data.slow.price,
             standard: response.data.normal.price,

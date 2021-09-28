@@ -14,7 +14,24 @@ export async function getAssetsList(address: string) {
     return (await response.json()) as BalanceListResponse
 }
 
+const chainIdMap: Record<number, string> = {
+    1: 'eth',
+    56: 'bsc',
+    100: 'xdai',
+    137: 'matic',
+    200: 'arb',
+}
+
+const getDebankChain = (chainId: number) => {
+    return chainIdMap[chainId] ?? ''
+}
+
 export async function getGasPriceDict(chainId: ChainId) {
-    const response = await fetch(urlcat(DEBANK_API, '/chain/gas_price_dict_v2', { chainId }))
-    return (await response.json()) as GasPriceDictResponse
+    const chain = getDebankChain(chainId)
+    const response = await fetch(urlcat(DEBANK_API, '/chain/gas_price_dict_v2', { chain }))
+    const result = await response.json()
+    if (result.error_code === 0) {
+        return result as GasPriceDictResponse
+    }
+    return null
 }
