@@ -2,6 +2,7 @@ import type { SocialNetworkUI } from '../../../social-network'
 import { MaskMessage } from '../../../utils/messages'
 import { downloadUrl } from '../../../utils/utils'
 import { composerModalTextAreaSelector, composerPreviewSelector } from '../utils/selector'
+import { pasteTextToCompositionMinds } from './pasteTextToComposition'
 
 const hasSucceed = () => composerPreviewSelector().evaluate()
 
@@ -12,6 +13,9 @@ export function pasteImageToCompositionMinds() {
     ) {
         const image = typeof url === 'string' ? await downloadUrl(url) : url
         const data = [new ClipboardItem({ [image.type]: image })]
+
+        pasteTextToCompositionMinds!(relatedTextPayload || '', { recover: false })
+
         await navigator.clipboard.write(data)
         composerModalTextAreaSelector().evaluate()?.focus()
         document.execCommand('paste')
