@@ -6,11 +6,8 @@ import {
     ERC721ContractDetailed,
     EthereumTokenType,
     formatWeiToEther,
-    GasOption,
-    isEIP1559Supported,
     TransactionStateType,
     useAccount,
-    useChainId,
     useERC721TokenDetailedOwnerList,
     useGasLimit,
     useGasPrice,
@@ -32,8 +29,7 @@ import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice } from './useNativeTokenPrice'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
-import { toHex, toWei } from 'web3-utils'
-import { useGasOptions } from '../../../../hooks/useGasOptions'
+import { useGasConfig } from '../../hooks/useGasConfig'
 
 type FormInputs = {
     recipient: string
@@ -41,87 +37,13 @@ type FormInputs = {
     tokenId: string
 }
 
-function gweiToWei(gwei: number | string) {
-    // gwei might have more than 9 decimal places
-    return toWei(new BigNumber(gwei).toFixed(9), 'gwei')
-}
-
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
-    const chainId = useChainId()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
-    const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
-    const [gasLimit, setGasLimit] = useState<string>('0')
-    const [maxFee, setMaxFee] = useState<string | null>(null)
-    const [priorityFee, setPriorityFee] = useState<string | null>(null)
     const [offset, setOffset] = useState(0)
     const [id] = useState(uuid())
-    const { gasNow } = useGasOptions()
-
-    const account = useAccount()
-    const nativeToken = useNativeTokenDetailed()
-    const nativeTokenPrice = useNativeTokenPrice()
-    const is1559Supported = useMemo(() => isEIP1559Supported(chainId), [chainId])
-    const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
-        EthereumTokenType.ERC721,
-        contract?.address ?? '',
-    )
-
-    useEffect(() => {
-        if (!gasNow) return
-
-        // aka is1559Supported
-        if (typeof gasNow.medium !== 'number') {
-            const gasLevel = gasNow.medium as Exclude<typeof gasNow.medium, number>
-            setMaxFee((oldVal) => {
-                return !oldVal ? gweiToWei(gasLevel.suggestedMaxFeePerGas) : oldVal
-            })
-            setPriorityFee((oldVal) => {
-                return !oldVal ? gweiToWei(gasLevel.suggestedMaxPriorityFeePerGas) : oldVal
-            })
-        } else {
-            setCustomGasPrice((oldVal) => (!oldVal ? (gasNow.medium as number) : oldVal))
-        }
-    }, [is1559Supported, gasNow])
-
-    // gas price
-    const { value: defaultGasPrice = '0' } = useGasPrice()
-    const [customGasPrice, setCustomGasPrice] = useState<BigNumber.Value>(0)
-    const gasPrice = customGasPrice || defaultGasPrice
-    const gasFee = useMemo(() => new BigNumber(gasLimit).multipliedBy(gasPrice), [gasLimit, gasPrice])
-
-    // dialog
-    const { setDialog: setGasSettingDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated)
-    const { setDialog: setSelectContractDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectNftContractDialogUpdated,
-        (ev) => {
-            if (ev.open || !ev.contract || ev.uuid !== id) return
-            setValue('contract', ev.contract.name, { shouldValidate: true })
-            setContract(ev.contract)
-        },
-    )
-    const openGasSettingDialog = useCallback(() => {
-        setGasSettingDialog({ open: true, gasLimit, gasOption })
-    }, [gasLimit, gasOption])
-
-    const {
-        asyncRetry: { value = { tokenDetailedOwnerList: [], loadMore: true }, loading: loadingOwnerList },
-        clearTokenDetailedOwnerList,
-    } = useERC721TokenDetailedOwnerList(contract, account, offset)
-    const { tokenDetailedOwnerList, loadMore } = value
-
-    const addOffset = useCallback(() => (loadMore ? setOffset(offset + 8) : void 0), [offset, loadMore])
-
-    useEffect(() => {
-        return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
-            if (evt.open) return
-            if (evt.gasPrice) setCustomGasPrice(evt.gasPrice)
-            if (evt.gasOption) setGasOption(evt.gasOption)
-            if (evt.gasLimit) setGasLimit(evt.gasLimit)
-            if (evt.maxFee) setMaxFee(evt.maxFee)
-        })
-    }, [])
+    const [gasLimit_, setGasLimit_] = useState('0')
 
     // form
     const schema = z.object({
@@ -153,31 +75,46 @@ export const TransferERC721 = memo(() => {
     )
 
     useEffect(() => {
-        setGasLimit(erc721GasLimit.value?.toFixed() ?? '0')
+        setGasLimit_(erc721GasLimit.value?.toFixed() ?? '0')
     }, [erc721GasLimit.value])
+    const { gasConfig, onCustomGasSetting, gasLimit } = useGasConfig(gasLimit_)
+
+    const account = useAccount()
+    const nativeToken = useNativeTokenDetailed()
+    const nativeTokenPrice = useNativeTokenPrice()
+    const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
+        EthereumTokenType.ERC721,
+        contract?.address ?? '',
+    )
+
+    // gas price
+    const { value: defaultGasPrice = '0' } = useGasPrice()
+    const gasPrice = gasConfig.gasPrice || defaultGasPrice
+    const gasFee = useMemo(() => new BigNumber(gasLimit).multipliedBy(gasPrice), [gasLimit, gasPrice])
+    const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice)
+
+    // dialog
+    const { setDialog: setSelectContractDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectNftContractDialogUpdated,
+        (ev) => {
+            if (ev.open || !ev.contract || ev.uuid !== id) return
+            setValue('contract', ev.contract.name, { shouldValidate: true })
+            setContract(ev.contract)
+        },
+    )
+
+    const {
+        asyncRetry: { value = { tokenDetailedOwnerList: [], loadMore: true }, loading: loadingOwnerList },
+    } = useERC721TokenDetailedOwnerList(contract, account, offset)
+    const { tokenDetailedOwnerList, loadMore } = value
+
+    const addOffset = useCallback(() => (loadMore ? setOffset(offset + 8) : void 0), [offset, loadMore])
 
     useEffect(() => {
-        if (transferState.type === TransactionStateType.FAILED || transferState.type === TransactionStateType.HASH) {
-            reset({ recipient: '', tokenId: '', contract: '' })
-            clearTokenDetailedOwnerList()
-            setOffset(0)
-            setContract(undefined)
-            resetTransferCallback()
-        }
         if (transferState.type === TransactionStateType.HASH) {
             navigate(RoutePaths.WalletsHistory)
         }
     }, [transferState])
-
-    const gasConfig = useMemo(() => {
-        return is1559Supported
-            ? {
-                  gas: Number.parseInt(gasLimit, 10),
-                  maxFeePerGas: toHex(maxFee ?? '0'),
-                  maxPriorityFeePerGas: toHex(priorityFee ?? '0'),
-              }
-            : { gas: Number.parseInt(gasLimit, 10), gasPrice: new BigNumber(gasPrice).toNumber() }
-    }, [is1559Supported, gasLimit, maxFee, priorityFee, gasPrice])
 
     const onTransfer = useCallback(
         async (data) => {
@@ -198,7 +135,7 @@ export const TransferERC721 = memo(() => {
     return (
         <Stack direction="row" justifyContent="center" mt={4} maxHeight="100%">
             <form onSubmit={handleSubmit(onTransfer)}>
-                <Stack maxWidth={640} minWidth={500} alignItems="center">
+                <Stack width={640} minWidth={500} alignItems="center">
                     <Box width="100%">
                         <Controller
                             control={control}
@@ -279,10 +216,10 @@ export const TransferERC721 = memo(() => {
                                 {t.transfer_cost({
                                     gasFee: formatWeiToEther(gasFee).toFixed(6),
                                     symbol: nativeToken.value?.symbol ?? '',
-                                    usd: formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice).toFixed(2),
+                                    usd: gasFeeInUsd.toFixed(2),
                                 })}
                             </Typography>
-                            <IconButton size="small" onClick={openGasSettingDialog}>
+                            <IconButton size="small" onClick={onCustomGasSetting}>
                                 <TuneIcon fontSize="small" />
                             </IconButton>
                         </Box>
