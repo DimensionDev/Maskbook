@@ -4,10 +4,21 @@ import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
-import { sendCode, useLanguage, verifyCode } from '../../api'
 import { phoneRegexp } from '../../regexp'
 import { CountdownButton, MaskTextField, useSnackbar } from '@masknet/theme'
 import { Scenario, Locale, AccountType } from '../../type'
+import {
+    fetchBackupValue,
+    fetchDownloadLink,
+    fetchUploadLink,
+    sendCode,
+    uploadBackupValue,
+    useLanguage,
+    verifyCode,
+    VerifyCodeRequest,
+} from '../../api'
+import { decryptBackup, encryptBackup } from '@masknet/backup-format'
+import { encode } from '@msgpack/msgpack'
 
 const useStyles = makeStyles()({
     container: {
@@ -35,6 +46,12 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
     const [invalidPhone, setInvalidPhone] = useState(false)
     const [invalidCode, setInvalidCode] = useState(false)
 
+    // cloud backup
+    const [backupInfo, setBackupInfo] = useState({
+        url: '',
+        abstract: '',
+    })
+
     const sendButton = useRef<HTMLButtonElement>(null)
 
     const handleCountryCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,11 +71,19 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                 validCheck()
             }
         } else {
-            const result = await verifyCode({
+            const params = {
                 account: countryCode + phone,
                 type: AccountType.phone,
                 code,
-            }).catch((err) => {
+            }
+
+            if (step === 0) {
+                return checkCloudBackup(params)
+            } else if (backupInfo.abstract) {
+                return uploadCloudBackup(params)
+            }
+
+            const result = await verifyCode(params).catch((err) => {
                 if (err.status === 400) {
                     // incorrect code
                     setInvalidCode(true)
@@ -66,22 +91,60 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
             })
 
             if (result) {
-                if (step === 0) {
-                    // original email verified
-                    setCountryCode('+1')
-                    setPhone('')
-                    setCode('')
-                    setStep(1)
-                } else {
-                    const msg = user.phone
-                        ? t.settings_alert_phone_number_updated()
-                        : t.settings_alert_phone_number_set()
-                    snackbar.enqueueSnackbar(msg, { variant: 'success' })
-
-                    updateUser({ phone: `${countryCode} ${phone}` })
-                    onClose()
-                }
+                onSuccess()
             }
+        }
+    }
+
+    const originalPhoneVerified = () => {
+        setCountryCode('+1')
+        setPhone('')
+        setCode('')
+        setStep(1)
+    }
+
+    const onSuccess = () => {
+        const msg = user.phone ? t.settings_alert_phone_number_updated() : t.settings_alert_phone_number_set()
+        snackbar.enqueueSnackbar(msg, { variant: 'success' })
+
+        updateUser({ phone: `${countryCode} ${phone}` })
+        onClose()
+    }
+
+    const checkCloudBackup = async (params: VerifyCodeRequest) => {
+        const res = await fetchDownloadLink(params).catch((error) => {
+            if (error.status === 400) {
+                setInvalidCode(true)
+            } else if (error.status === 404) {
+                // no cloud backup file
+                originalPhoneVerified()
+            }
+        })
+
+        if (res) {
+            originalPhoneVerified()
+            setBackupInfo({
+                url: res.downloadURL,
+                abstract: res.abstract,
+            })
+        }
+    }
+
+    const uploadCloudBackup = async (params: VerifyCodeRequest) => {
+        if (!user.phone || !user.backupPassword) return
+
+        const encrypted = await fetchBackupValue(backupInfo.url)
+        const decrypted = await decryptBackup(encode(user.phone.replace(' ', '') + user.backupPassword), encrypted)
+        const data = await encryptBackup(encode(countryCode + phone + user.backupPassword), decrypted)
+        const uploadUrl = await fetchUploadLink({ ...params, abstract: backupInfo.abstract }).catch((error) => {
+            if (error.status === 400) {
+                setInvalidCode(true)
+            }
+        })
+
+        if (uploadUrl) {
+            await uploadBackupValue(uploadUrl, data)
+            onSuccess()
         }
     }
 
