@@ -1,6 +1,6 @@
 import type { BalanceListResponse, HistoryResponse, GasPriceDictResponse } from '../types'
 import urlcat from 'urlcat'
-import type { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared'
 
 const DEBANK_API = 'https://api.debank.com'
 
@@ -15,11 +15,11 @@ export async function getAssetsList(address: string) {
 }
 
 const chainIdMap: Record<number, string> = {
-    1: 'eth',
-    56: 'bsc',
-    100: 'xdai',
-    137: 'matic',
-    200: 'arb',
+    [ChainId.Mainnet]: 'eth',
+    [ChainId.BSC]: 'bsc',
+    [ChainId.xDai]: 'xdai',
+    [ChainId.Matic]: 'matic',
+    [ChainId.Arbitrum]: 'arb',
 }
 
 const getDebankChain = (chainId: number) => {
