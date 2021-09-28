@@ -13,15 +13,17 @@ import { LoadingCard } from '../../../../components/Restore/steps/LoadingCard'
 import { encryptBackup } from '@masknet/backup-format'
 import { encode } from '@msgpack/msgpack'
 import PasswordFiled from '../../../../components/PasswordField'
+import { MaskAlert } from '../../../../components/MaskAlert'
 
 export interface BackupDialogProps {
     local?: boolean
     params?: VerifyCodeRequest
     open: boolean
+    merged?: boolean
     onClose(): void
 }
 
-export default function BackupDialog({ local = true, params, open, onClose }: BackupDialogProps) {
+export default function BackupDialog({ local = true, params, open, merged, onClose }: BackupDialogProps) {
     const snackbar = useSnackbar()
     const t = useDashboardI18N()
     const [backupPassword, setBackupPassword] = useState('')
@@ -118,6 +120,12 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
                 </Box>
             ) : (
                 <Box sx={{ padding: '0 24px 24px' }}>
+                    {merged ? (
+                        <Box sx={{ marginBottom: '16px' }}>
+                            <MaskAlert description={t.settings_dialogs_backup_merged_tip()} type="success" />
+                        </Box>
+                    ) : null}
+
                     {previewInfo ? <BackupContentSelector json={previewInfo} onChange={handleContentChange} /> : null}
 
                     <PasswordFiled
