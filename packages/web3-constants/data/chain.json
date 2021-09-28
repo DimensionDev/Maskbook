@@ -26,5 +26,19 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""
+    },
+    "TIME_INTERVAL_TO_QUERY_API": {
+        "Mainnet": 30000,
+        "Ropsten": 30000,
+        "Rinkeby": 30000,
+        "Kovan": 30000,
+        "Gorli": 30000,
+        "BSC": 15000,
+        "BSCT": 15000,
+        "Matic": 15000,
+        "Mumbai": 15000,
+        "Arbitrum": 15000,
+        "Arbitrum_Rinkeby": 15000,
+        "xDai": 15000
     }
 }

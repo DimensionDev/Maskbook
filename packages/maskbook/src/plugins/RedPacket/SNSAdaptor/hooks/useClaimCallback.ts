@@ -1,12 +1,13 @@
-import { useCallback } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import {
     useTransactionState,
     TransactionStateType,
-    useSpeedUpTransaction,
     TransactionEventType,
+    useSpeedUpTransaction,
+    useWeb3,
 } from '@masknet/web3-shared'
 import type { TransactionReceipt } from 'web3-core'
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1'
@@ -14,8 +15,39 @@ import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPac
 
 export function useClaimCallback(version: number, from: string, id: string, password?: string) {
     const [claimState, setClaimState] = useTransactionState()
+    const web3 = useWeb3()
+    const [blockNumber, setBlockNumber] = useState(0)
     const redPacketContract = useRedPacketContract(version)
-    useSpeedUpTransaction(claimState, from, redPacketContract?.options, 'claim', 30000)
+
+    //#region handle transaction speed up
+    const checkSpeedUpTx = useCallback(
+        (decodedInputParam: any) => {
+            return decodedInputParam.id === id
+        },
+        [id],
+    )
+
+    const speedUpTx = useSpeedUpTransaction(
+        claimState,
+        from,
+        redPacketContract?.options,
+        'claim',
+        checkSpeedUpTx,
+        blockNumber,
+    )
+
+    useEffect(() => {
+        if (!speedUpTx) return
+
+        setClaimState({
+            type: TransactionStateType.CONFIRMED,
+            // `receipt` and `no` is not needed here.
+            no: 0,
+            receipt: {} as unknown as TransactionReceipt,
+        })
+    }, [speedUpTx])
+    //#endregion
+
     const claimCallback = useCallback(async () => {
         if (!redPacketContract || !id || !password) {
             setClaimState({
@@ -58,6 +90,9 @@ export function useClaimCallback(version: number, from: string, id: string, pass
                 }),
         }
 
+        // prepare for speed up tx query.
+        setBlockNumber(await web3.eth.getBlockNumber())
+
         // step 2-1: blocking
         return new Promise<void>((resolve, reject) => {
             const promiEvent = claim().send(config as NonPayableTx)
@@ -86,7 +121,7 @@ export function useClaimCallback(version: number, from: string, id: string, pass
                 reject(error)
             })
         })
-    }, [id, password, from, redPacketContract])
+    }, [id, password, from, redPacketContract, web3])
 
     const resetCallback = useCallback(() => {
         setClaimState({
