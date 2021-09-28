@@ -17,6 +17,7 @@ import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
 import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
 import { PageHeader } from '../components/PageHeader'
+import { PasswordField } from '../../../components/PasswordField'
 
 const useStyles = makeStyles()({
     container: {
@@ -241,8 +242,7 @@ const ImportWallet = memo(() => {
                     </TabPanel>
                     <TabPanel value={ImportWalletTab.JsonFile} className={classes.tabPanel}>
                         <JsonFileBox onChange={(content: string) => setKeyStoreContent(content)} />
-                        <StyledInput
-                            type="password"
+                        <PasswordField
                             classes={{ root: classes.textField }}
                             placeholder="Original Password"
                             onChange={(e) => {
