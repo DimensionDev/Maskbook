@@ -19,6 +19,7 @@ export function useGasOptions() {
     const { value: gasFromDebank, loading: getFromDebankLoading } = useAsync(async () => {
         if (is1559Supported) return
         const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+        if (!response) return { slow: 0, standard: 0, fast: 0 }
         return {
             low: response.data.slow.price,
             medium: response.data.normal.price,
