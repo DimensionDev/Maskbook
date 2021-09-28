@@ -1,6 +1,6 @@
 import { useState, ChangeEvent } from 'react'
 import { v4 as uuid } from 'uuid'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import classNames from 'classnames'
 import {
     Typography,
@@ -420,7 +420,7 @@ export function RestoreDatabase() {
     const history = useHistory<unknown>()
     const { classes } = useSetupFormStyles()
     const { classes: restoreDatabaseClasses } = useRestoreDatabaseStyle()
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const [file, setFile] = useState<File | null>(null)
     const [json, setJSON] = useState<BackupJSONFileLatest | null>(null)
@@ -487,7 +487,7 @@ export function RestoreDatabase() {
             await Services.Welcome.setUnconfirmedBackup(restoreId, json)
             history.push(`${SetupStep.RestoreDatabaseConfirmation}?${restoreParams.toString()}`)
         } catch {
-            enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
+            showSnackbar(t('set_up_restore_fail'), { variant: 'error' })
         }
     }
 
@@ -535,7 +535,7 @@ export function RestoreDatabase() {
 //#region advance restore
 export function RestoreDatabaseAdvance() {
     const { t } = useI18N()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const history = useHistory<unknown>()
     const { classes } = useSetupFormStyles()
     const [nickname, setNickname] = useState('')
@@ -549,7 +549,7 @@ export function RestoreDatabaseAdvance() {
     const [tabState] = state
 
     const importPersona = (persona: null | Persona) => {
-        const failToRestore = () => enqueueSnackbar(t('set_up_advance_restore_fail'), { variant: 'error' })
+        const failToRestore = () => showSnackbar(t('set_up_advance_restore_fail'), { variant: 'error' })
         try {
             if (persona) {
                 history.push(
@@ -635,7 +635,7 @@ export function RestoreDatabaseAdvance() {
                             onChange={setFile}
                             onScan={setScannedValue}
                             onError={() => {
-                                enqueueSnackbar(t('set_up_qr_scanner_fail'), {
+                                showSnackbar(t('set_up_qr_scanner_fail'), {
                                     variant: 'error',
                                 })
                             }}
@@ -646,7 +646,7 @@ export function RestoreDatabaseAdvance() {
                                 setScannedValue(scannedValue)
                             }}
                             onError={() => {
-                                enqueueSnackbar(t('set_up_qr_scanner_fail'), {
+                                showSnackbar(t('set_up_qr_scanner_fail'), {
                                     variant: 'error',
                                 })
                             }}
@@ -685,7 +685,7 @@ export function RestoreDatabaseAdvance() {
 
                                 importPersona(persona)
                             } catch {
-                                enqueueSnackbar(t('set_up_advance_restore_fail'), { variant: 'error' })
+                                showSnackbar(t('set_up_advance_restore_fail'), { variant: 'error' })
                             }
                         }}
                         data-testid="import_button">
@@ -734,7 +734,7 @@ export function RestoreDatabaseConfirmation() {
     const { classes } = useSetupFormStyles()
     const { classes: restoreDatabaseConfirmationClasses } = useRestoreDatabaseConfirmationStyles()
     const history = useHistory<unknown>()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const { uuid } = useQueryParams(['uuid'])
     const [imported, setImported] = useState<boolean | 'loading'>(false)
@@ -762,7 +762,7 @@ export function RestoreDatabaseConfirmation() {
         }
     }
     const restoreConfirmation = async () => {
-        const failToRestore = () => enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
+        const failToRestore = () => showSnackbar(t('set_up_restore_fail'), { variant: 'error' })
         if (uuid) {
             try {
                 setImported('loading')

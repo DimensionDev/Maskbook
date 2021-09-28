@@ -22,7 +22,7 @@ import { useI18N } from '../../../utils'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useMemo, useCallback, useEffect, useState } from 'react'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 import { RedPacketNftMetaKey } from '../constants'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
@@ -181,7 +181,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     )
 
     const isSending = createState.type === TransactionStateType.WAIT_FOR_CONFIRMING
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const onSendTx = useCallback(() => createCallback(publicKey), [publicKey])
     const [txid, setTxid] = useState('')
     const onSendPost = useCallback(
@@ -213,7 +213,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         }
 
         if (createState.type === TransactionStateType.FAILED) {
-            enqueueSnackbar(createState.error.message, { variant: 'error' })
+            showSnackbar(createState.error.message, { variant: 'error' })
         } else if (createState.type === TransactionStateType.CONFIRMED && createState.no === 0) {
             const { receipt } = createState
 
@@ -221,7 +221,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 id: string
             }
             onSendPost(id)
-            enqueueSnackbar(
+            showSnackbar(
                 <div className={classes.snackBar}>
                     <Typography className={classes.snackBarText}>{t('plugin_wallet_transaction_confirmed')}</Typography>
                     <Link

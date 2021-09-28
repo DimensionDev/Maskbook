@@ -11,7 +11,7 @@ import {
     Link,
 } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { useAccount } from '@masknet/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -66,7 +66,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const account = useAccount()
 
@@ -85,14 +85,14 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
             })
         } catch (error) {
             if (error instanceof Error) {
-                enqueueSnackbar(error.message, {
+                showSnackbar(error.message, {
                     variant: 'error',
                     preventDuplicate: true,
                 })
             }
             throw error
         }
-    }, [asset?.value, account, enqueueSnackbar])
+    }, [asset?.value, account, showSnackbar])
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 

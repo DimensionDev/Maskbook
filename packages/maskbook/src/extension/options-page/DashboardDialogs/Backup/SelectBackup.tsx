@@ -1,6 +1,6 @@
 import { Box, InputBase } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { Database as DatabaseIcon } from 'react-feather'
 import { useAsync } from 'react-use'
@@ -47,7 +47,7 @@ interface SelectBackupProps {
 export function SelectBackup({ onConfirm }: SelectBackupProps) {
     const { t } = useI18N()
     const { classes } = useSelectBackupStyles()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const [file, setFile] = useState<File | null>(null)
     const [json, setJSON] = useState<BackupJSONFileLatest | null>(null)
@@ -112,7 +112,7 @@ export function SelectBackup({ onConfirm }: SelectBackupProps) {
             await Services.Welcome.setUnconfirmedBackup(restoreId, json)
             onConfirm?.(restoreId, json)
         } catch {
-            enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
+            showSnackbar(t('set_up_restore_fail'), { variant: 'error' })
         }
     }
 
