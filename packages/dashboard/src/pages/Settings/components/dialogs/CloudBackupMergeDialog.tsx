@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react'
-import { MaskDialog, useSnackbar } from '@masknet/theme'
-import { Box, Typography } from '@material-ui/core'
+import { MaskColorVar, MaskDialog, useSnackbar } from '@masknet/theme'
+import {
+    Box,
+    FormControlLabel,
+    formControlLabelClasses,
+    Radio,
+    RadioGroup,
+    styled,
+    Typography,
+} from '@material-ui/core'
 import LoadingButton from '@material-ui/lab/LoadingButton'
 import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard'
 import type { BackupFileInfo } from '../../type'
@@ -12,15 +20,28 @@ import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import PasswordField from '../../../../components/PasswordField'
 
+const StyledFormControlLabel = styled(FormControlLabel)({
+    [`&.${formControlLabelClasses.root}`]: {
+        background: MaskColorVar.lightBackground,
+        margin: '0 0 16px',
+        padding: '2px 0',
+        borderRadius: 8,
+    },
+    [`& .${formControlLabelClasses.label}`]: {
+        fontSize: 14,
+    },
+})
+
 export interface CloudBackupMergeDialogProps {
     account: string
     info: BackupFileInfo
     open: boolean
     onClose(): void
-    onMerged(): void
+    onMerged(merged: boolean): void
 }
 
 export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged }: CloudBackupMergeDialogProps) {
+    const [mode, setMode] = useState('1')
     const [backupPassword, setBackupPassword] = useState('')
     const [incorrectBackupPassword, setIncorrectBackupPassword] = useState(false)
     const t = useDashboardI18N()
@@ -37,12 +58,20 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
                 await Services.Welcome.checkPermissionsAndRestore(data.id)
             }
 
-            onMerged()
+            onMerged(true)
             snackbar.enqueueSnackbar(t.settings_alert_merge_success(), { variant: 'success' })
         } catch (error) {
             setIncorrectBackupPassword(true)
         }
     }, [backupPassword, account, info])
+
+    const onBackup = () => {
+        if (mode === '1') {
+            onMerged(false)
+        } else {
+            handleMerge()
+        }
+    }
 
     useEffect(() => {
         setIncorrectBackupPassword(false)
@@ -55,18 +84,35 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
                 <Typography sx={{ fontSize: '13px', padding: '24px 0' }}>
                     {t.settings_dialogs_backup_action_desc()}
                 </Typography>
-                <PasswordField
-                    fullWidth
-                    value={backupPassword}
-                    onChange={(event) => setBackupPassword(event.target.value)}
-                    placeholder={t.settings_label_backup_password_cloud()}
-                    sx={{ marginBottom: '24px' }}
-                    error={incorrectBackupPassword}
-                    helperText={incorrectBackupPassword ? t.settings_dialogs_incorrect_password() : ''}
-                />
 
-                <LoadingButton fullWidth onClick={handleMerge} loading={loading} disabled={incorrectBackupPassword}>
-                    {t.settings_dialogs_merge_to_local_data()}
+                <RadioGroup aria-label="mode" name="mode" value={mode} onChange={(e) => setMode(e.target.value)}>
+                    <StyledFormControlLabel
+                        value="1"
+                        control={<Radio size="small" />}
+                        label={t.settings_dialogs_backup_to_cloud()}
+                    />
+                    <StyledFormControlLabel
+                        sx={{ fontSize: 14 }}
+                        value="2"
+                        control={<Radio size="small" />}
+                        label={t.settings_dialogs_merge_to_local_data()}
+                    />
+                </RadioGroup>
+
+                {mode === '2' ? (
+                    <PasswordField
+                        fullWidth
+                        value={backupPassword}
+                        onChange={(event) => setBackupPassword(event.target.value)}
+                        placeholder={t.settings_label_backup_password_cloud()}
+                        sx={{ marginBottom: '24px' }}
+                        error={incorrectBackupPassword}
+                        helperText={incorrectBackupPassword ? t.settings_dialogs_incorrect_password() : ''}
+                    />
+                ) : null}
+
+                <LoadingButton fullWidth onClick={onBackup} loading={loading} disabled={incorrectBackupPassword}>
+                    {t.settings_button_backup()}
                 </LoadingButton>
             </Box>
         </MaskDialog>

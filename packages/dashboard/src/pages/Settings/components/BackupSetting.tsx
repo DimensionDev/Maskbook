@@ -14,6 +14,7 @@ export default function BackupSetting() {
     const t = useDashboardI18N()
     const { state } = useLocation() as { state: { open: 'setting' | null } }
     const { ensurePasswordSet } = useContext(UserContext)
+    const [merged, setMerged] = useState(false)
     const [showDialog, setShowDialog] = useState({
         backup: false,
         mode: false,
@@ -62,6 +63,7 @@ export default function BackupSetting() {
                     local={localMode}
                     params={params}
                     open={showDialog.backup}
+                    merged={merged}
                     onClose={() => setShowDialog({ ...showDialog, backup: false })}
                 />
             ) : null}
@@ -85,7 +87,10 @@ export default function BackupSetting() {
                     info={cloudFileInfo}
                     open={showDialog.merge}
                     onClose={() => setShowDialog({ ...showDialog, merge: false })}
-                    onMerged={() => setShowDialog({ ...showDialog, merge: false, backup: true })}
+                    onMerged={(merged) => {
+                        setMerged(merged)
+                        setShowDialog({ ...showDialog, merge: false, backup: true })
+                    }}
                 />
             ) : null}
         </>
