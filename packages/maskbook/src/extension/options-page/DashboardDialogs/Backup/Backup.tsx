@@ -1,5 +1,5 @@
 import { Box, Button, Link } from '@material-ui/core'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { Database as DatabaseIcon } from 'react-feather'
 import { useAsync } from 'react-use'
 import { useI18N } from '../../../../utils'
@@ -24,7 +24,7 @@ const useDatabaseStyles = makeStyles()({
 export function DashboardBackupDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
     const { classes } = useDatabaseStyles()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const { value, loading } = useAsync(() => Services.Welcome.generateBackupJSON())
 
@@ -44,7 +44,7 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
             await Services.Welcome.createBackupFile({ download: true, onlyBackupWhoAmI: false })
             props.onClose()
         } catch {
-            enqueueSnackbar(t('set_up_backup_fail'), {
+            showSnackbar(t('set_up_backup_fail'), {
                 variant: 'error',
             })
         }

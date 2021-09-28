@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { Paper, Typography, TypographyProps } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { selectElementContents, useI18N, useMatchXS } from '../../../utils'
 
 const useStyle = makeStyles()((theme) => ({
@@ -44,11 +44,11 @@ export default function ShowcaseBox(props: ShowcaseBoxProps) {
     const ref = useRef<HTMLDivElement>(null)
     const xsMatch = useMatchXS()
     const [, copy] = useCopyToClipboard()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const copyText = xsMatch
         ? () => {
               copy(ref.current!.innerText)
-              enqueueSnackbar(t('copy_success_of_text'), {
+              showSnackbar(t('copy_success_of_text'), {
                   variant: 'success',
                   preventDuplicate: false,
                   anchorOrigin: {

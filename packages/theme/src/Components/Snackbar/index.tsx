@@ -248,17 +248,17 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps>((props) => {
 
 interface Options extends OptionsObject, Pick<CustomSnackbarContentProps, 'message' | 'processing' | 'icon'> {}
 
-export function useShowCustomSnackbar() {
-    const snackbar = useSnackbar()
+export function useCustomSnackbar() {
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const showSnackbar = useCallback(
         (
-            text: string,
+            text: SnackbarMessage,
             options: Options = {
                 variant: 'default',
             },
         ) => {
             const { processing, message, variant, ...rest } = options
-            return snackbar.enqueueSnackbar(text, {
+            return enqueueSnackbar(text, {
                 variant: options.variant,
                 content: (key, title) => {
                     return (
@@ -275,14 +275,7 @@ export function useShowCustomSnackbar() {
                 ...rest,
             })
         },
-        [snackbar],
-    )
-
-    const closeSnackbar = useCallback(
-        (key: SnackbarKey) => {
-            snackbar.closeSnackbar(key)
-        },
-        [snackbar],
+        [enqueueSnackbar],
     )
 
     return { showSnackbar, closeSnackbar }

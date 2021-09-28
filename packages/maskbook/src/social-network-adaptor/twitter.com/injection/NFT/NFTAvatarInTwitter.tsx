@@ -1,7 +1,7 @@
 import { createReactRootShadowed, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
 import { searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles, useSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 
@@ -44,7 +44,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const identity = useCurrentVisitingIdentity()
     const [amount, setAmount] = useState('')
     const _avatar = useNFTAvatar(identity.identifier.userId)
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>(_avatar)
     const getParentDom = () =>
         searchTwitterAvatarSelector().querySelector<HTMLElement>('div > :nth-child(2) > div').evaluate()
@@ -61,10 +61,10 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                     setAvatar(avatar)
                 })
                 .catch((error: Error) => {
-                    enqueueSnackbar(error.message, { variant: 'error' })
+                    showSnackbar(error.message, { variant: 'error' })
                 })
         },
-        [enqueueSnackbar],
+        [showSnackbar],
     )
 
     useEffect(() => {

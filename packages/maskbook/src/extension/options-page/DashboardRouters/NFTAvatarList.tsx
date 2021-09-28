@@ -1,5 +1,5 @@
 import { FormattedAddress } from '@masknet/shared'
-import { makeStyles, useSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import {
     Box,
@@ -107,17 +107,17 @@ function NFTAvatarWhitelist() {
     const { classes } = useStyles()
 
     const { value: _avatars, loading } = useNFTAvatars()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const [avatars, setAvatars] = useState<AvatarMetaDB[]>([])
 
     const onAdd = useCallback(
         async (userId: string, avatarId: string, address: string, tokenId: string) => {
             const avatar = await saveNFTAvatar(userId, avatarId, address, tokenId)
 
-            enqueueSnackbar('Add Success', { variant: 'success' })
+            showSnackbar('Add Success', { variant: 'success' })
             setAvatars((v) => [...v, avatar])
         },
-        [saveNFTAvatar, enqueueSnackbar],
+        [saveNFTAvatar, showSnackbar],
     )
 
     const [bindNFTAvatarDialog, openBindNFTAvatarDialog] = useModal(DashboardBindNFTAvatarDialog, { onAdd })
@@ -126,9 +126,9 @@ function NFTAvatarWhitelist() {
             setAvatars((x) => remove([...x], (i) => i.userId !== avatar.userId))
             setOrClearAvatar(avatar.userId)
                 .then(() => {
-                    enqueueSnackbar('Remove Success', { variant: 'success' })
+                    showSnackbar('Remove Success', { variant: 'success' })
                 })
-                .catch((error) => enqueueSnackbar(error.message, { variant: 'error' }))
+                .catch((error) => showSnackbar(error.message, { variant: 'error' }))
         },
         [setOrClearAvatar],
     )

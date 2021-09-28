@@ -12,7 +12,7 @@ import { useSpaceStationClaimableTokenCountCallback } from './hooks/useSpaceStat
 import { useSpaceStationContractClaimCallback } from './hooks/useSpaceStationContractClaimCallback'
 import { useI18N } from '../../../utils'
 import { useState, useEffect } from 'react'
-import { makeStyles, useSnackbar, OptionsObject } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar, OptionsObject } from '@masknet/theme'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import CloseIcon from '@material-ui/icons/Close'
 import classNames from 'classnames'
@@ -284,7 +284,7 @@ function ClaimItem(props: ClaimItemProps) {
     const [claimState, claimCallback] = useSpaceStationContractClaimCallback(campaignInfo)
     const now = Date.now()
     const { classes } = useStyles()
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const snackbarOptions = {
         preventDuplicate: true,
         anchorOrigin: {
@@ -294,7 +294,7 @@ function ClaimItem(props: ClaimItemProps) {
     }
     useEffect(() => {
         if (claimState.type === TransactionStateType.CONFIRMED && claimState.no === 0) {
-            enqueueSnackbar(
+            showSnackbar(
                 <div className={classes.snackbarContent}>
                     <div className={classes.snackbarTipContent}>
                         <Typography>{t('plugin_airdrop_nft_claim_all')}</Typography>
@@ -322,7 +322,7 @@ function ClaimItem(props: ClaimItemProps) {
 
             retry()
         } else if (claimState.type === TransactionStateType.FAILED) {
-            enqueueSnackbar(
+            showSnackbar(
                 <div className={classes.snackbarContent}>
                     <div className={classes.snackbarTipContent}>
                         <Typography>{t('plugin_airdrop_nft_claim_all')}</Typography>

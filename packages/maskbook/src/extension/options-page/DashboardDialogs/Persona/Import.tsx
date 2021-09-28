@@ -1,5 +1,5 @@
 import { TextField } from '@material-ui/core'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { UserCheck } from 'react-feather'
 import { useHistory } from 'react-router-dom'
@@ -16,7 +16,7 @@ import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from 
 
 export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const history = useHistory<unknown>()
 
     const [nickname, setNickname] = useState('')
@@ -27,7 +27,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
     const [scannedValue, setScannedValue] = useState('')
 
     const importPersona = (persona: null | Persona) => {
-        const failToRestore = () => enqueueSnackbar(t('set_up_advance_restore_fail'), { variant: 'error' })
+        const failToRestore = () => showSnackbar(t('set_up_advance_restore_fail'), { variant: 'error' })
         try {
             if (persona) {
                 history.push(
@@ -106,7 +106,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                             onChange={setFile}
                             onScan={setScannedValue}
                             onError={() => {
-                                enqueueSnackbar(t('set_up_qr_scanner_fail'), { variant: 'error' })
+                                showSnackbar(t('set_up_qr_scanner_fail'), { variant: 'error' })
                             }}
                         />
                         <RestoreFromQRCodeCameraBox
@@ -115,7 +115,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                                 setScannedValue(scannedValue)
                             }}
                             onError={() => {
-                                enqueueSnackbar(t('set_up_qr_scanner_fail'), { variant: 'error' })
+                                showSnackbar(t('set_up_qr_scanner_fail'), { variant: 'error' })
                             }}
                         />
                     </>
@@ -152,7 +152,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
 
                                 importPersona(persona)
                             } catch {
-                                enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
+                                showSnackbar(t('set_up_restore_fail'), { variant: 'error' })
                             }
                         }}
                         data-testid="import_button">

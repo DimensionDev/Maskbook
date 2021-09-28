@@ -1,5 +1,5 @@
 import { CircularProgress, MenuItem, MenuItemProps, Typography } from '@material-ui/core'
-import { makeStyles, useShowCustomSnackbar, useSnackbar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import {
     useAccount,
@@ -273,100 +273,8 @@ export function ToolboxHint(props: ToolboxHintProps) {
         )
     }
 
-    const { showSnackbar, closeSnackbar } = useShowCustomSnackbar()
-
     return (
         <>
-            <div
-                className={classes.wrapper}
-                onClick={() => {
-                    showSnackbar(t('auto_paste_failed_snackbar'), {
-                        message: 'message',
-                        action: (key) => <button onClick={() => closeSnackbar(key)}>my close button</button>,
-                    })
-                }}>
-                <div className={classes.button}>
-                    <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
-                    <Typography className={classes.title}>default</Typography>
-                </div>
-            </div>
-            <div
-                className={classes.wrapper}
-                onClick={() => {
-                    showSnackbar('Default without message')
-                }}>
-                <div className={classes.button}>
-                    <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
-                    <Typography className={classes.title}>default</Typography>
-                </div>
-            </div>
-            <div
-                className={classes.wrapper}
-                onClick={() => {
-                    showSnackbar('Default mode, processing', {
-                        variant: 'default',
-                        processing: true,
-                    })
-                }}>
-                <div className={classes.button}>
-                    <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
-                    <Typography className={classes.title}>default</Typography>
-                </div>
-            </div>
-            <div
-                className={classes.wrapper}
-                onClick={() => {
-                    showSnackbar('Info mode', {
-                        variant: 'info',
-                    })
-                }}>
-                <div className={classes.button}>
-                    <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
-                    <Typography className={classes.title}>default</Typography>
-                </div>
-            </div>
-            <div
-                className={classes.wrapper}
-                onClick={() => {
-                    showSnackbar('Success mode', {
-                        variant: 'success',
-                        processing: true,
-                        message: <b style={{ color: 'blue' }}>bold text</b>,
-                    })
-                }}>
-                <div className={classes.button}>
-                    <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
-                    <Typography className={classes.title}>error</Typography>
-                </div>
-            </div>
-            <div
-                className={classes.wrapper}
-                onClick={() => {
-                    showSnackbar('Warning mode', {
-                        processing: true,
-                        variant: 'warning',
-                        message: 'Warning Text',
-                    })
-                }}>
-                <div className={classes.button}>
-                    <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
-                    <Typography className={classes.title}>error</Typography>
-                </div>
-            </div>
-            <div
-                className={classes.wrapper}
-                onClick={() => {
-                    showSnackbar('Error mode', {
-                        variant: 'error',
-                        link: 'http://mask.io',
-                        message: 'Error Message',
-                    })
-                }}>
-                <div className={classes.button}>
-                    <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
-                    <Typography className={classes.title}>error</Typography>
-                </div>
-            </div>
             <div className={classes.wrapper} onClick={openMenu}>
                 <div className={classes.button}>
                     <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
