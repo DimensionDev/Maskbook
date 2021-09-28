@@ -8,11 +8,12 @@ import {
     VariantType,
     SnackbarMessage,
     SnackbarContent,
+    SnackbarAction,
+    OptionsObject,
 } from 'notistack'
-import { Link, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { IconButton } from '@mui/material'
 import classnames from 'classnames'
-import LaunchIcon from '@material-ui/icons/Launch'
 import { Close as CloseIcon } from '@mui/icons-material'
 import WarningIcon from '@material-ui/icons/Warning'
 import InfoIcon from '@material-ui/icons/Info'
@@ -26,6 +27,7 @@ export type { VariantType, OptionsObject, SnackbarKey } from 'notistack'
 
 const useStyles = makeStyles()((theme, _, createRef) => {
     const { palette } = theme
+    const isDark = palette.mode === 'dark'
     const spinningAnimationKeyFrames = keyframes`
 to {
   transform: rotate(360deg)
@@ -45,10 +47,10 @@ to {
         fontSize: 12,
     } as const
     const defaultVariant = {
-        background: palette.background.default,
-        color: palette.grey['800'],
+        background: isDark ? '#17191D' : '#F7F9FA',
+        color: isDark ? '#D9D9D9' : '#0F1419',
         [`& .${title.ref}`]: {
-            color: '#0F1419',
+            color: isDark ? '#D9D9D9' : palette.grey['800'],
         },
     }
     const success = {
@@ -74,19 +76,25 @@ to {
     } as const
 
     const info = {
-        ref: createRef(),
-        background: MaskColorVar.secondaryInfoText,
-        color: MaskColorVar.lightestBackground,
-    } as const
+        background: '#B9CDF0',
+        color: '#ffffff',
+        [`& .${title.ref}`]: {
+            color: 'inherit',
+        },
+        [`& .${message.ref}`]: {
+            color: 'inherit',
+        },
+    }
 
     const warning = {
         ref: createRef(),
-        color: MaskColorVar.warning,
+        backgroundColor: '#FFB110',
+        color: '#ffffff',
         [`& .${title.ref}`]: {
-            color: '#0F1419',
+            color: 'inherit',
         },
         [`& .${message.ref}`]: {
-            color: MaskColorVar.warning,
+            color: 'inherit',
         },
     } as const
 
@@ -98,11 +106,10 @@ to {
         },
         content: {
             alignItems: 'center',
-            backgroundColor: palette.background.default,
-            color: '#0F1419',
             padding: theme.spacing(1.5, 2),
             borderRadius: 12,
             width: 380,
+            flexWrap: 'nowrap !important' as 'nowrap',
             [`&.${success.ref}`]: {
                 background: MaskColorVar.greenMain,
                 color: MaskColorVar.lightestBackground,
@@ -118,7 +125,7 @@ to {
                 color: MaskColorVar.lightestBackground,
             },
             [`&.${warning.ref}`]: {
-                color: '#FF5F5F',
+                color: '#ffffff',
             },
         },
         default: defaultVariant,
@@ -133,9 +140,12 @@ to {
         },
         action: {
             marginLeft: 'auto',
+            padding: theme.spacing(0, 1),
+        },
+        closeButton: {
+            color: 'inherit',
             width: 50,
             height: 50,
-            color: 'inherit',
         },
         texts: {
             marginLeft: theme.spacing(2),
@@ -152,11 +162,12 @@ to {
 export interface CustomSnackbarContentProps {
     id: SnackbarKey
     title: SnackbarMessage
-    message?: string
+    message?: string | React.ReactNode
     icon?: React.ReactNode
     processing?: boolean
     variant?: VariantType
     link?: string
+    action?: SnackbarAction
 }
 const IconMap: Record<VariantType, React.ReactNode> = {
     default: <InfoIcon color="inherit" />,
@@ -175,6 +186,14 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
     const snackbar = useSnackbar()
     const loadingIcon = <LoadingIcon color="inherit" className={classes.spinning} />
     const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
+    let renderedAction = (
+        <IconButton className={classes.closeButton} onClick={() => snackbar.closeSnackbar(props.id)}>
+            <CloseIcon />
+        </IconButton>
+    )
+    if (props.action) {
+        renderedAction = typeof props.action === 'function' ? props.action(props.id) : props.action
+    }
     return (
         <SnackbarContent ref={ref} className={classnames(classes.content, classes[props.variant!])}>
             {variantIcon && <div className={classes.icon}>{variantIcon}</div>}
@@ -185,23 +204,10 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
                 {props.message && (
                     <Typography className={classes.message} variant="body1">
                         {props.message}
-                        {!!props.link && (
-                            <Link
-                                color="inherit"
-                                className={classes.link}
-                                href={props.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={stop}>
-                                <LaunchIcon color="inherit" fontSize="inherit" />
-                            </Link>
-                        )}
                     </Typography>
                 )}
             </div>
-            <IconButton className={classes.action} onClick={() => snackbar.closeSnackbar(props.id)}>
-                <CloseIcon />
-            </IconButton>
+            <div className={classes.action}>{renderedAction}</div>
         </SnackbarContent>
     )
 })
@@ -240,24 +246,44 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps>((props) => {
     )
 })
 
+interface Options extends OptionsObject, Pick<CustomSnackbarContentProps, 'message' | 'processing' | 'icon'> {}
+
 export function useShowCustomSnackbar() {
     const snackbar = useSnackbar()
     const showSnackbar = useCallback(
         (
-            message: string,
-            options: Partial<CustomSnackbarContentProps & { persist: boolean }> = {
+            text: string,
+            options: Options = {
                 variant: 'default',
             },
         ) => {
-            return snackbar.enqueueSnackbar(message, {
+            const { processing, message, variant, ...rest } = options
+            return snackbar.enqueueSnackbar(text, {
                 variant: options.variant,
                 content: (key, title) => {
-                    return <CustomSnackbarContent id={key} title={title} {...options} />
+                    return (
+                        <CustomSnackbarContent
+                            variant={variant ?? 'default'}
+                            id={key}
+                            title={title}
+                            message={message}
+                            processing={processing}
+                            action={rest.action}
+                        />
+                    )
                 },
+                ...rest,
             })
         },
         [snackbar],
     )
 
-    return showSnackbar
+    const closeSnackbar = useCallback(
+        (key: SnackbarKey) => {
+            snackbar.closeSnackbar(key)
+        },
+        [snackbar],
+    )
+
+    return { showSnackbar, closeSnackbar }
 }
