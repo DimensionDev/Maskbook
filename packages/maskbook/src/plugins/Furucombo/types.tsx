@@ -19,7 +19,7 @@ export interface Investable {
 
 export interface Angel {
     address: string
-    rewardToken: Token[]
+    rewardToken: Token
 }
 
 export interface Token {

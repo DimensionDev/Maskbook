@@ -114,6 +114,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     head: {
         borderBottom: '3px solid #393b4a',
+        textTransform: 'uppercase',
     },
     row: {
         color: 'white',
@@ -199,6 +200,7 @@ export function InvestmentsView(props: any) {
                 <TableHead>
                     <TableRow className={classes.head}>
                         {headCells.map((headCell) => {
+                            const label: any = `plugin_furucombo_${headCell.label}`
                             return (
                                 <TableCell className={classes.cell} key={headCell.id}>
                                     {headCell.id === 'apy' || headCell.id === 'liquidity' ? (
@@ -207,10 +209,10 @@ export function InvestmentsView(props: any) {
                                             active={orderBy === headCell.id}
                                             onClick={(e) => handleRequestSort(e, headCell.id)}
                                             direction={orderBy === headCell.id ? order : 'asc'}>
-                                            {t(`plugin_furucombo_${headCell.label}`).toUpperCase()}
+                                            {t(label)}
                                         </TableSortLabel>
                                     ) : (
-                                        t(`plugin_furucombo_${headCell.label}`).toUpperCase()
+                                        t(label)
                                     )}
                                 </TableCell>
                             )

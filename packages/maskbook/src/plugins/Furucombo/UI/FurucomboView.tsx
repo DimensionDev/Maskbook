@@ -3,7 +3,7 @@ import { useChainId } from '@masknet/web3-shared'
 import { Card, CardContent, CardActions, Tabs, Tab, Typography, Link, Paper } from '@material-ui/core'
 import { useState } from 'react'
 import { FurucomboIcon } from '../../../resources/FurucomboIcon'
-import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
+import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useFetchPools } from '../hooks/usePool'
 import type { Investable } from '../types'
@@ -143,7 +143,7 @@ export function FurucomboView(props: PoolViewProps) {
                         rel="noopener noreferrer"
                         title="Mask"
                         href="https://mask.io">
-                        <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
+                        <MaskTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
                     </Link>
                 </Typography>
                 <Typography className={classes.footnote} variant="subtitle2">

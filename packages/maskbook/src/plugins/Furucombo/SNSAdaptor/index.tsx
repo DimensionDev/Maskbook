@@ -4,7 +4,7 @@ import { SnackbarContent } from '@material-ui/core'
 import { base } from '../base'
 import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 import { parseURL } from '../../../utils/utils'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { FurucomboView } from '../UI/FurucomboView'
 
 const matchLink = /^https:\/\/furucombo.app\/invest\/(pool|farm)\/(137|1)\/(0x[\dA-Fa-f]+)/
@@ -34,11 +34,11 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const [, category, chainId, address] = props.url.match(matchLink) ?? []
 
     return (
-        <MaskbookPluginWrapper pluginName="Furucombo">
+        <MaskPluginWrapper pluginName="Furucombo">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <FurucomboView chainId={chainId} category={category} address={address} />
             </Suspense>
-        </MaskbookPluginWrapper>
+        </MaskPluginWrapper>
     )
 }
 
