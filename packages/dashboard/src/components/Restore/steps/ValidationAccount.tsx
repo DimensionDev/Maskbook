@@ -26,7 +26,7 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
     const [{ error: sendCodeError }, handleSendCodeFn] = useAsyncFn(async () => {
         enqueueSnackbar(t.sign_in_account_cloud_backup_send_email_success({ type }), { variant: 'success' })
         await sendCode({
-            account: account.replace(' ', ''),
+            account: account,
             type,
             scenario: Scenario.backup,
             locale: language.includes('zh') ? Locale.zh : Locale.en,
