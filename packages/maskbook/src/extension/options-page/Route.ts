@@ -6,7 +6,6 @@ export enum DashboardRoute {
     Settings = '/settings',
     Plugins = '/plugins',
     Setup = '/setup',
-    NFTAvatars = '/NFTAvatars',
 }
 
 export enum DashboardWalletRoute {

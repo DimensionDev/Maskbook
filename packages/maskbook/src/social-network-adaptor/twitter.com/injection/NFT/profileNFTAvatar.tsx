@@ -67,9 +67,10 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         changeImageToActiveElements(image)
 
         setAvatarEvent({
-            ...token,
             userId: identity.identifier.userId,
             avatarId: getAvatarId(identity.avatar ?? ''),
+            address: token.contractDetailed.address,
+            tokenId: token.tokenId,
         })
     }, [])
 

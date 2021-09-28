@@ -10,7 +10,8 @@ import { NFTBadge } from '../../../../components/InjectedComponents/NFT/NFTBadge
 import { useNFTAvatar } from '../../../../components/InjectedComponents/NFT/hooks'
 import type { AvatarMetaDB } from '../../../../components/InjectedComponents/NFT/types'
 import { saveNFTAvatar } from '../../../../components/InjectedComponents/NFT/gun'
-import type { ERC721TokenDetailed } from '@masknet/web3-shared'
+
+const RETRIES_NUMBER = 10
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -46,24 +47,29 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const { enqueueSnackbar } = useSnackbar()
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const [avatarId, setAvatarId] = useState('')
+    const [retries, setRetries] = useState(RETRIES_NUMBER)
     const getProfileImageSelector = () =>
         searchTwitterAvatarSelector().querySelector<HTMLElement>('div > :nth-child(2) > div img')
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent | undefined>()
-    const onUpdate = useCallback((data: NFTAvatarEvent) => {
-        const timer = setInterval(() => {
-            const imgNode = getProfileImageSelector().evaluate()
-            const avatarId = getAvatarId(imgNode?.getAttribute('src') ?? '')
+    const onUpdate = useCallback(
+        (data: NFTAvatarEvent) => {
             const oldAvatarId = getAvatarId(identity.avatar ?? '')
-            if (oldAvatarId && avatarId && oldAvatarId !== avatarId) {
-                clearInterval(timer)
-                setNFTEvent({
-                    ...data,
-                    avatarId,
-                })
-            }
-        }, 500)
-    }, [])
+            const timer = setInterval(() => {
+                const imgNode = getProfileImageSelector().evaluate()
+                const avatarId = getAvatarId(imgNode?.getAttribute('src') ?? '')
+                if ((oldAvatarId && avatarId && oldAvatarId !== avatarId) || retries <= 0) {
+                    clearInterval(timer)
+                    setNFTEvent({
+                        ...data,
+                        avatarId: retries <= 0 ? '' : avatarId,
+                    })
+                }
+                setRetries((retries) => retries - 1)
+            }, 500)
+        },
+        [retries],
+    )
 
     useEffect(() => {
         setAvatarId(getAvatarId(identity.avatar ?? ''))
@@ -71,7 +77,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
 
     useEffect(() => {
         if (!NFTEvent) return
-        saveNFTAvatar(NFTEvent?.userId, NFTEvent?.avatarId, NFTEvent as ERC721TokenDetailed)
+        saveNFTAvatar(NFTEvent?.userId, NFTEvent?.avatarId, NFTEvent.address, NFTEvent.tokenId)
             .then((avatar: AvatarMetaDB) => {
                 setAvatar(avatar)
             })
@@ -95,7 +101,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     if (!avatar) return null
     return (
         <>
-            {avatarId === avatar.avatarId ? (
+            {avatarId === avatar.avatarId && avatar.avatarId ? (
                 <NFTBadge
                     avatar={avatar}
                     size={14}
