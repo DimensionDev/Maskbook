@@ -1,7 +1,7 @@
 import { isNull } from 'lodash-es'
 import type { SocialNetwork } from '../../../social-network'
 import { bioDescriptionSelector, searchAvatarSelector, searchNickNameSelector } from './selector'
-import { serializeToText } from './fetch'
+import { collectNodeText } from '../../../utils'
 
 /**
  * @link https://help.twitter.com/en/managing-your-account/twitter-username-rules
@@ -21,10 +21,10 @@ export const getNickname = () => {
         ?.nextSibling as HTMLDivElement
     if (!node) return ''
 
-    const nicknameNode = node.querySelector('div span')
+    const nicknameNode = node.querySelector<HTMLSpanElement>('div span')
     if (!nicknameNode) return ''
 
-    return serializeToText(nicknameNode)
+    return collectNodeText(nicknameNode)
 }
 
 export const getTwitterId = () => {
@@ -39,7 +39,7 @@ export const getTwitterId = () => {
 
 export const getBioDescription = () => {
     const node = bioDescriptionSelector().evaluate()
-    return node ? serializeToText(node) : ''
+    return node ? collectNodeText(node) : ''
 }
 
 export const getAvatar = () => {
