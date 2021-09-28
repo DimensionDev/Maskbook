@@ -50,7 +50,7 @@ import { useCurrentTradeProvider } from '../../../plugins/Trader/trending/useCur
 import { useCurrentDataProvider } from '../../../plugins/Trader/trending/useCurrentDataProvider'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { safeUnreachable } from '@dimensiondev/kit'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
