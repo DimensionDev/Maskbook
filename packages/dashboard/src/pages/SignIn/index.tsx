@@ -1,8 +1,8 @@
 import { RowLayout } from '../../components/RegisterFrame/RowLayout'
 import { Header } from '../../components/RegisterFrame/ColumnContentHeader'
 import { useDashboardI18N } from '../../locales'
-import { Body, ColumnContentLayout, Footer } from '../../components/RegisterFrame/ColumnContentLayout'
-import { useNavigate } from 'react-router'
+import { Body, ColumnContentLayout } from '../../components/RegisterFrame/ColumnContentLayout'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { Restore } from '../../components/Restore'
 import { UserProvider } from '../Settings/hooks/UserContext'
@@ -40,7 +40,6 @@ export default function SignIn() {
                     <Body>
                         <Restore />
                     </Body>
-                    <Footer />
                 </ColumnContentLayout>
             </RowLayout>
         </UserProvider>

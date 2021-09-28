@@ -32,7 +32,7 @@ import { SetupStep } from './SetupStep'
 import DashboardNavRouter from './DashboardRouters/Nav'
 import ActionButton from './DashboardComponents/ActionButton'
 import ShowcaseBox from './DashboardComponents/ShowcaseBox'
-import { withErrorBoundary } from '../../components/shared/ErrorBoundary'
+import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 import { MaskUIRoot } from '../../UIRoot'
 import { createInjectHooksRenderer, startPluginDashboard, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
@@ -186,20 +186,28 @@ function DashboardUI() {
             {xsMatched ? null : drawer}
             <Switch>
                 {Flags.has_no_browser_tab_ui ? (
-                    <Route path={DashboardRoute.Nav} component={() => <DashboardNavRouter children={drawer} />} />
+                    <Route path={DashboardRoute.Nav} children={<DashboardNavRouter children={drawer} />} />
                 ) : null}
-                <Route path={DashboardRoute.Personas} component={withErrorBoundary(DashboardPersonasRouter)} />
-                <Route path={DashboardRoute.Wallets} component={withErrorBoundary(DashboardWalletsRouter)} />
-                <Route path={DashboardRoute.Contacts} component={withErrorBoundary(DashboardContactsRouter)} />
-                <Route path={DashboardRoute.Plugins} component={withErrorBoundary(DashboardPluginsRouter)} />
-                <Route path={DashboardRoute.Settings} component={withErrorBoundary(DashboardSettingsRouter)} />
-                <Route path={DashboardRoute.Setup} component={withErrorBoundary(DashboardSetupRouter)} />
+                <Route path={DashboardRoute.Personas} children={RenderWithErrorBoundary(DashboardPersonasRouter)} />
+                <Route path={DashboardRoute.Wallets} children={RenderWithErrorBoundary(DashboardWalletsRouter)} />
+                <Route path={DashboardRoute.Contacts} children={RenderWithErrorBoundary(DashboardContactsRouter)} />
+                <Route path={DashboardRoute.Plugins} children={RenderWithErrorBoundary(DashboardPluginsRouter)} />
+                <Route path={DashboardRoute.Settings} children={RenderWithErrorBoundary(DashboardSettingsRouter)} />
+                <Route path={DashboardRoute.Setup} children={RenderWithErrorBoundary(DashboardSetupRouter)} />
                 <Redirect
                     path="*"
                     to={Flags.has_no_browser_tab_ui && xsMatched ? DashboardRoute.Nav : DashboardRoute.Personas}
                 />
             </Switch>
         </>,
+    )
+}
+
+function RenderWithErrorBoundary(Component: React.ComponentType) {
+    return (
+        <ErrorBoundary>
+            <Component />
+        </ErrorBoundary>
     )
 }
 

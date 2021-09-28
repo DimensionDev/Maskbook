@@ -1,6 +1,6 @@
 import { memo, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkType, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
+import { NetworkType, ProviderType, useWallets } from '@masknet/web3-shared'
 import { MenuItem, Typography } from '@material-ui/core'
 import { FormattedBalance, TokenIcon, useMenu, useValueRef } from '@masknet/shared'
 import { useContainer } from 'unstated-next'
@@ -27,17 +27,13 @@ const useStyles = makeStyles()({
 const Transfer = memo(() => {
     const { classes } = useStyles()
     const networkType = useValueRef(currentNetworkSettings)
-    const wallet = useWallet()
     const wallets = useWallets(ProviderType.MaskWallet)
     const { assets, currentToken } = useContainer(WalletContext)
     const [selectedAsset, setSelectedAsset] = useState(currentToken)
 
     const otherWallets = useMemo(
-        () =>
-            wallets
-                .filter((item) => isSameAddress(item.address, wallet?.address))
-                .map((wallet) => ({ name: wallet.name ?? '', address: wallet.address })),
-        [wallet, wallets],
+        () => wallets.map((wallet) => ({ name: wallet.name ?? '', address: wallet.address })),
+        [wallets],
     )
 
     const [assetsMenu, openAssetMenu] = useMenu(

@@ -121,7 +121,7 @@ export async function INTERNAL_send(
         console.debug(new Error().stack)
     }
 
-    const wallet = providerType === ProviderType.MaskWallet ? await getWallet() : null
+    const wallet = providerType === ProviderType.MaskWallet ? await getWallet(account) : null
     const web3 = await createWeb3({
         chainId: getChainIdFromPayload(payload) ?? chainId,
         privKeys: wallet?._private_key_ ? [wallet._private_key_] : [],
@@ -199,6 +199,11 @@ export async function INTERNAL_send(
             throw new Error('To be implemented.')
         } else if (!isGasPriceValid) {
             config.gasPrice = await getGasPrice()
+        }
+
+        // if the transaction is eip-1559, need to remove gasPrice from the config
+        if (Flags.EIP1559_enabled && isEIP1559Valid) {
+            config.gasPrice = undefined
         }
 
         // send the transaction

@@ -1,5 +1,5 @@
 import { styled } from '@material-ui/core'
-import { useHref, useNavigate } from 'react-router'
+import { useHref, useNavigate } from 'react-router-dom'
 import { Breadcrumbs, Dialog, IconButton, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
@@ -125,7 +125,7 @@ export const FooterLine = memo(() => {
                     <Version />
                 </FooterLinkButton>
                 <FooterLinkExternal href={links.MOBILE_DOWNLOAD_LINK}>{t.dashboard_mobile_test()}</FooterLinkExternal>
-                <FooterLinkExternal href={links.MASKBOOK_GITHUB}>{t.dashboard_source_code()}</FooterLinkExternal>
+                <FooterLinkExternal href={links.MASK_GITHUB}>{t.dashboard_source_code()}</FooterLinkExternal>
                 <FooterLinkExternal href={links.BOUNTY_LIST}>{t.footer_bounty_list()}</FooterLinkExternal>
                 <FooterLinkTo to={RoutePaths.PrivacyPolicy}>{t.privacy_policy()}</FooterLinkTo>
             </Breadcrumbs>

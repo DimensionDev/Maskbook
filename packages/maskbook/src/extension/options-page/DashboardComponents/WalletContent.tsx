@@ -21,7 +21,7 @@ import { PluginTransakMessages } from '../../../plugins/Transak/messages'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { TransactionList } from './TransactionList'
 import { CollectibleList } from './CollectibleList'
-import { useHistory, useLocation } from 'react-router'
+import { useHistory, useLocation } from 'react-router-dom'
 import { DashboardWalletRoute } from '../Route'
 
 const useStyles = makeStyles()((theme) => ({

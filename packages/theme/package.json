@@ -21,6 +21,7 @@
     "start": "dev -- start-storybook -p 6006"
   },
   "dependencies": {
+    "@masknet/icons": "workspace:*",
     "@masknet/storybook-shared": "workspace:*",
     "@types/qrcode": "^1.4.1",
     "@types/tinycolor2": "^1.4.3",

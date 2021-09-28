@@ -4,13 +4,13 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
 import { useMyIdentities } from '../DataSource/useActivatedUI'
 import type { BannerProps } from '../Welcomes/Banner'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef, useStylesExtends } from '@masknet/shared'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
-import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
+import { MaskSharpIcon } from '../../resources/MaskIcon'
 
-export interface PostDialogHintUIProps {
+export interface PostDialogHintUIProps extends withClasses<'buttonTransform'> {
     onHintButtonClicked: () => void
 }
 
@@ -34,16 +34,17 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
-    const { classes } = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
     return (
         <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
-            <MaskbookSharpIcon color="primary" />
+            <MaskSharpIcon color="primary" />
         </IconButton>
     )
 })
 
-export const PostDialogHintUI = memo(function PostDialogHintUI({ onHintButtonClicked }: PostDialogHintUIProps) {
-    const { classes } = useStyles()
+export const PostDialogHintUI = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
+    const { onHintButtonClicked } = props
+    const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
     return isMobileFacebook ? (
@@ -52,7 +53,9 @@ export const PostDialogHintUI = memo(function PostDialogHintUI({ onHintButtonCli
             <span className={classes.text}>{t('post_modal_hint__button')}</span>
         </div>
     ) : (
-        <EntryIconButton onHintButtonClicked={onHintButtonClicked} />
+        <div className={classes.buttonTransform}>
+            <EntryIconButton onHintButtonClicked={onHintButtonClicked} />
+        </div>
     )
 })
 

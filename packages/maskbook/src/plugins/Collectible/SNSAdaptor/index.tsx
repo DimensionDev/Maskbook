@@ -1,7 +1,7 @@
 import { uniq } from 'lodash-es'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import { getTypedMessageContent } from '../../../protocols/typed-message'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import type { CollectibleJSON_Payload } from '../types'
@@ -30,8 +30,8 @@ export default sns
 
 function renderPostInspector(payload: CollectibleJSON_Payload) {
     return (
-        <MaskbookPluginWrapper pluginName={PLUGIN_NAME}>
+        <MaskPluginWrapper pluginName={PLUGIN_NAME}>
             <PostInspector payload={payload} />
-        </MaskbookPluginWrapper>
+        </MaskPluginWrapper>
     )
 }

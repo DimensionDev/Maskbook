@@ -64,7 +64,8 @@ function config(opts: {
     if (disableHMR) disableReactHMR = true
 
     /** On iOS, eval is async (it is hooked by webextension-shim). */
-    const sourceMapKind: Configuration['devtool'] = target.iOS || isManifestV3 || noEval ? false : 'eval-source-map'
+    const sourceMapKind: Configuration['devtool'] =
+        target.iOS || isManifestV3 || noEval ? false : 'eval-cheap-source-map'
     const config: Configuration = {
         name,
         mode,
@@ -373,7 +374,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
         return emitFile({
             name: 'manifest.json',
             content() {
-                const manifest = require('./src/manifest.json')
+                const manifest = { ...require('./src/manifest.json') }
                 if (target.Chromium) modifiers.chromium(manifest)
                 else if (target.Firefox) modifiers.firefox(manifest)
                 else if (target.Android) modifiers.geckoview(manifest)

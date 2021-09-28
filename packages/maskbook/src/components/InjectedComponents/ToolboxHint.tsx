@@ -15,7 +15,7 @@ import {
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-import { MaskbookSharpIconOfSize, WalletSharp } from '../../resources/MaskbookIcon'
+import { MaskSharpIconOfSize, WalletSharp } from '../../resources/MaskIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
 import { useMenu } from '../../utils/hooks/useMenu'
@@ -36,7 +36,14 @@ import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 
-const useStyles = makeStyles()(({ palette, breakpoints, spacing }) => {
+import { activatedSocialNetworkUI } from '../../social-network'
+import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
+
+interface StyleProps {
+    snsId: string
+}
+
+const useStyles = makeStyles<StyleProps>()(({ palette, breakpoints, spacing }, { snsId }) => {
     const isDark = palette.mode === 'dark'
     return {
         paper: {
@@ -59,7 +66,11 @@ const useStyles = makeStyles()(({ palette, breakpoints, spacing }) => {
             width: '100%',
             cursor: 'pointer',
             [breakpoints.down('lg')]: {
+                justifyContent: snsId === MINDS_ID ? 'left' : 'center',
+            },
+            [breakpoints.down(snsId === MINDS_ID ? 1220 : 1265)]: {
                 transform: 'translateX(0px)',
+                justifyContent: 'center !important',
             },
             '&:hover': {
                 '& $title': {
@@ -72,11 +83,11 @@ const useStyles = makeStyles()(({ palette, breakpoints, spacing }) => {
         },
         button: {
             display: 'flex',
-            padding: '12px 26px 12px 14px',
+            padding: `12px 26px 12px ${snsId === MINDS_ID ? '0px' : '14px'}`,
             borderRadius: 50,
             justifyContent: 'center',
             alignItems: 'center',
-            [breakpoints.down('lg')]: {
+            [breakpoints.down(snsId === MINDS_ID ? 1220 : 1265)]: {
                 transform: 'translateX(0px)',
                 padding: 14,
             },
@@ -88,7 +99,7 @@ const useStyles = makeStyles()(({ palette, breakpoints, spacing }) => {
             fontSize: 20,
             marginLeft: 22,
             lineHeight: 1.35,
-            [breakpoints.down('lg')]: {
+            [breakpoints.down(snsId === MINDS_ID ? 1220 : 1265)]: {
                 display: 'none',
             },
         },
@@ -127,7 +138,7 @@ interface ToolboxHintProps extends withClasses<'wrapper' | 'menuItem' | 'title' 
 
 export function ToolboxHint(props: ToolboxHintProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const classes = useStylesExtends(useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }), props)
     const account = useAccount()
     const selectedWallet = useWallet()
     const chainColor = useChainColor()
@@ -266,7 +277,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
         <>
             <div className={classes.wrapper} onClick={openMenu}>
                 <div className={classes.button}>
-                    <MaskbookSharpIconOfSize classes={{ root: classes.icon }} size={22} />
+                    <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
                     <Typography className={classes.title}>Mask Network</Typography>
                 </div>
             </div>
@@ -315,7 +326,7 @@ interface ToolboxItemDescriptor {
 // TODO: this should be rendered in the ErrorBoundary
 const ToolboxItem = forwardRef<any, MenuItemProps & ToolboxItemDescriptor>((props, ref) => {
     const { image, label, hide, priority, useShouldDisplay, ...rest } = props
-    const { classes } = useStyles()
+    const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const shouldDisplay = useRef(useShouldDisplay || (() => true)).current() && !hide
 
     if (!shouldDisplay) return null

@@ -1,6 +1,6 @@
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { useAppearance } from '../../../Personas/api'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../../type'
 import { styled } from '@mui/material/styles'
 import { useDashboardI18N } from '../../../../locales'

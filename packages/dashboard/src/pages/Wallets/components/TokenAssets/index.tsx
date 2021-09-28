@@ -6,9 +6,10 @@ import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { TokenTable } from '../TokenTable'
 import { useDashboardI18N } from '../../../../locales'
-import { AddTokenDialog } from '../AddTokenDialog'
 import { CollectibleList } from '../CollectibleList'
 import { AddCollectibleDialog } from '../AddCollectibleDialog'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { PluginMessages } from '../../../../API'
 
 const useStyles = makeStyles()((theme) => ({
     caption: {
@@ -51,8 +52,10 @@ export const TokenAssets = memo(() => {
 
     const [activeTab, setActiveTab] = useState<AssetTab>(assetTabs[0])
 
-    const [addTokenOpen, setAddTokenOpen] = useState(false)
     const [addCollectibleOpen, setAddCollectibleOpen] = useState(false)
+    const { setDialog: setSelectToken } = useRemoteControlledDialog(
+        PluginMessages.Wallet.events.selectERC20TokenDialogUpdated,
+    )
 
     return (
         <>
@@ -69,7 +72,9 @@ export const TokenAssets = memo(() => {
                             color="secondary"
                             className={classes.addCustomTokenButton}
                             onClick={() =>
-                                activeTab === AssetTab.Token ? setAddTokenOpen(true) : setAddCollectibleOpen(true)
+                                activeTab === AssetTab.Token
+                                    ? setSelectToken({ open: true, props: { whitelist: [] } })
+                                    : setAddCollectibleOpen(true)
                             }>
                             +{' '}
                             {activeTab === AssetTab.Token
@@ -91,8 +96,9 @@ export const TokenAssets = memo(() => {
                     </TabPanel>
                 </TabContext>
             </ContentContainer>
-            <AddTokenDialog open={addTokenOpen} onClose={() => setAddTokenOpen(false)} />
-            <AddCollectibleDialog open={addCollectibleOpen} onClose={() => setAddCollectibleOpen(false)} />
+            {addCollectibleOpen && (
+                <AddCollectibleDialog open={addCollectibleOpen} onClose={() => setAddCollectibleOpen(false)} />
+            )}
         </>
     )
 })

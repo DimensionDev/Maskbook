@@ -230,6 +230,7 @@ export { queryPostsDB } from '../../database'
 export async function queryPagedPostHistory(
     options: {
         network: string
+        userIds: string[]
         after?: PostIVIdentifier
     },
     count: number,

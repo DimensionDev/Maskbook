@@ -59,7 +59,7 @@ export function toPng(image: string) {
         img.addEventListener('load', () => {
             ;[canvas.width, canvas.height] = [img.width, img.height]
             ctx.drawImage(img, 0, 0, img.width, img.height)
-            const url = canvas.toBlob((blob) => {
+            canvas.toBlob((blob) => {
                 resolve(blob)
             })
         })

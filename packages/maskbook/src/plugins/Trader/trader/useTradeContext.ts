@@ -108,6 +108,11 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     TYPE: tradeProvider,
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).DODO_EXCHANGE_PROXY_ADDRESS,
                 }
+            case TradeProvider.BANCOR:
+                return {
+                    TYPE: tradeProvider,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).BANCOR_EXCHANGE_PROXY_ADDRESS,
+                }
             default:
                 unreachable(tradeProvider)
         }

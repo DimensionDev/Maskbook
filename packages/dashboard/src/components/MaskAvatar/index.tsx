@@ -1,6 +1,6 @@
 import { Avatar } from '@material-ui/core'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { AuthorIcon } from '@masknet/icons'
+import { MenuPersonasActiveIcon } from '@masknet/icons'
 import { memo } from 'react'
 import { usePersonaAvatar } from '../../pages/Personas/api'
 
@@ -26,7 +26,7 @@ export const MaskAvatar = memo<MaskAvatarProps>(({ size = 36, onClick }) => {
     }
 
     if (!avatar) {
-        return <AuthorIcon {...commonProps} />
+        return <MenuPersonasActiveIcon {...commonProps} />
     }
 
     return <Avatar src={avatar} {...commonProps} />

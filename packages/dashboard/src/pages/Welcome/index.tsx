@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 import { styled } from '@material-ui/core/styles'
@@ -26,7 +26,7 @@ const IFrame = styled('iframe')(
     ({ theme }) => `
     border: none;
     width: 100%;
-    min-height: 520px;
+    min-height: 500px;
 `,
 )
 

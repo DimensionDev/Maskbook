@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { base } from '../base'
 import { AirdropMetadataReader } from '../helpers'
 import { Airdrop } from './Airdrop'
@@ -14,9 +14,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const payload = AirdropMetadataReader(props.message.meta)
         if (!payload.ok) return null
         return (
-            <MaskbookPluginWrapper pluginName={PLUGIN_NAME}>
+            <MaskPluginWrapper pluginName={PLUGIN_NAME}>
                 <Airdrop payload={payload.val} />
-            </MaskbookPluginWrapper>
+            </MaskPluginWrapper>
         )
     },
     CompositionDialogMetadataBadgeRender: new Map([

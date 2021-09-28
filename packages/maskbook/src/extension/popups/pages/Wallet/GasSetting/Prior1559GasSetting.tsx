@@ -3,14 +3,15 @@ import { memo, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import Services from '../../../../service'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     EthereumRpcType,
+    formatGweiToWei,
+    formatWeiToEther,
     formatWeiToGwei,
-    getChainFromChainId,
     useChainId,
     useNativeTokenDetailed,
+    useWeb3,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { z as zod } from 'zod'
@@ -19,11 +20,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@material-ui/core'
 import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@material-ui/lab'
-import { isEmpty, noop } from 'lodash-es'
-import { useHistory, useLocation } from 'react-router'
-import { PopupRoutes } from '../../../index'
-import { useRejectHandler } from '../hooks/useRejectHandler'
+import { isEmpty } from 'lodash-es'
+import { useHistory } from 'react-router-dom'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
+import { PopupRoutes } from '../../../index'
+import { toHex } from 'web3-utils'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -82,10 +83,10 @@ const useStyles = makeStyles()((theme) => ({
 
 export const Prior1559GasSetting = memo(() => {
     const { classes } = useStyles()
+    const web3 = useWeb3()
     const { t } = useI18N()
     const chainId = useChainId()
-    const { value } = useUnconfirmedRequest()
-    const location = useLocation()
+    const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeTokenDetailed()
@@ -94,7 +95,7 @@ export const Prior1559GasSetting = memo(() => {
 
     //#region Get gas now from debank
     const { value: gasNow } = useAsync(async () => {
-        const response = await WalletRPC.getGasPriceDictFromDeBank(getChainFromChainId(chainId)?.toLowerCase() ?? '')
+        const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
         return {
             slow: response.data.slow.price,
             standard: response.data.normal.price,
@@ -129,8 +130,20 @@ export const Prior1559GasSetting = memo(() => {
         ) {
             return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
         }
-        return '0'
+        return 0
     }, [value])
+
+    const { value: minGasLimit } = useAsync(async () => {
+        if (
+            value &&
+            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
+                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
+        ) {
+            return web3.eth.estimateGas(value.computedPayload._tx)
+        }
+
+        return 0
+    }, [value, web3])
 
     const schema = useMemo(() => {
         return zod.object({
@@ -138,12 +151,12 @@ export const Prior1559GasSetting = memo(() => {
                 .string()
                 .min(1, t('wallet_transfer_error_gasLimit_absence'))
                 .refine(
-                    (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(gas),
-                    `Gas limit must be at least ${gas}.`,
+                    (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit ?? 0),
+                    t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
                 ),
             gasPrice: zod.string().min(1, t('wallet_transfer_error_gasPrice_absence')),
         })
-    }, [gas])
+    }, [minGasLimit])
 
     const {
         control,
@@ -158,7 +171,7 @@ export const Prior1559GasSetting = memo(() => {
             gasPrice: '',
         },
         context: {
-            gas,
+            minGasLimit,
         },
     })
 
@@ -169,7 +182,7 @@ export const Prior1559GasSetting = memo(() => {
         ) {
             // if rpc payload contain gas price, set it to default values
             if (value?.computedPayload._tx.gasPrice) {
-                setValue('gasPrice', new BigNumber(value.computedPayload._tx.gasPrice as number, 16).toString())
+                setValue('gasPrice', formatWeiToGwei(value.computedPayload._tx.gasPrice as number).toString())
             } else {
                 setOption(1)
             }
@@ -181,31 +194,23 @@ export const Prior1559GasSetting = memo(() => {
     }, [gas, setValue])
 
     useEffect(() => {
-        if (selected) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
+        if (selected !== null) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
     }, [selected, setValue, options])
 
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (value) {
-                const toBeClose = new URLSearchParams(location.search).get('toBeClose')
+                const config = value.payload.params.map((param) => ({
+                    ...param,
+                    gas: toHex(new BigNumber(data.gasLimit).toString()),
+                    gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
+                }))
 
-                const config = {
-                    ...value.payload.params[0],
-                    gas: data.gasLimit,
-                    gasPrice: new BigNumber(data.gasPrice).toString(16),
-                }
-
-                await WalletRPC.deleteUnconfirmedRequest(value.payload)
-                await Services.Ethereum.confirmRequest({
+                await WalletRPC.updateUnconfirmedRequest({
                     ...value.payload,
-                    params: [config, ...value.payload.params],
+                    params: config,
                 })
-
-                if (toBeClose) {
-                    window.close()
-                } else {
-                    history.replace(PopupRoutes.TokenDetail)
-                }
+                history.goBack()
             }
         },
         [value],
@@ -213,7 +218,11 @@ export const Prior1559GasSetting = memo(() => {
 
     const onSubmit = handleSubmit((data) => handleConfirm(data))
 
-    useRejectHandler(noop, value)
+    useUpdateEffect(() => {
+        if (!value && !getValueLoading) {
+            history.replace(PopupRoutes.Wallet)
+        }
+    }, [value, getValueLoading])
 
     return (
         <>
@@ -227,16 +236,12 @@ export const Prior1559GasSetting = memo(() => {
                         <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: new BigNumber(gasPrice)
-                                    .div(10 ** 9)
-                                    .times(nativeTokenPrice)
-                                    .toPrecision(3),
+                                usd: formatWeiToEther(gasPrice).times(nativeTokenPrice).toPrecision(3),
                             })}
                         </Typography>
                     </div>
                 ))}
             </div>
-            <Typography className={classes.or}>{t('popups_wallet_gas_fee_settings_or')}</Typography>
             <form onSubmit={onSubmit}>
                 <Typography className={classes.label}>{t('popups_wallet_gas_fee_settings_gas_limit')}</Typography>
                 <Controller
@@ -245,6 +250,10 @@ export const Prior1559GasSetting = memo(() => {
                         return (
                             <StyledInput
                                 {...field}
+                                onChange={(e) => {
+                                    setOption(null)
+                                    field.onChange(e)
+                                }}
                                 error={!!errors.gasLimit?.message}
                                 helperText={errors.gasLimit?.message}
                                 inputProps={{
@@ -255,12 +264,16 @@ export const Prior1559GasSetting = memo(() => {
                     }}
                     name="gasLimit"
                 />
-                <Typography className={classes.label}>Gas Price</Typography>
+                <Typography className={classes.label}>{t('popups_wallet_gas_price')}</Typography>
                 <Controller
                     control={control}
                     render={({ field }) => (
                         <StyledInput
                             {...field}
+                            onChange={(e) => {
+                                setOption(null)
+                                field.onChange(e)
+                            }}
                             error={!!errors.gasPrice?.message}
                             helperText={errors.gasPrice?.message}
                             inputProps={{

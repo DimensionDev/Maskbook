@@ -1,3 +1,4 @@
+import type BigNumber from 'bignumber.js'
 import type {
     FungibleTokenDetailed,
     ERC721ContractDetailed,
@@ -6,6 +7,7 @@ import type {
     ProviderType,
     TransactionState,
     Wallet,
+    GasOption,
 } from '@masknet/web3-shared'
 import type { TransactionReceipt } from 'web3-core'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
@@ -74,6 +76,15 @@ export type WalletStatusDialogEvent = {
     open: boolean
 }
 
+export type GasSettingDialogEvent = {
+    open: boolean
+    gasOption?: GasOption
+    gasLimit?: string
+    gasPrice?: BigNumber.Value
+    maxFee?: string
+    priorityFee?: string
+}
+
 export type WalletRenameDialogEvent = {
     open: boolean
     wallet: Wallet | null
@@ -120,6 +131,20 @@ export type SelectTokenDialogEvent =
            * The selected detailed token.
            */
           token?: FungibleTokenDetailed
+      }
+export type SelectERC20TokenDialogEvent =
+    | {
+          open: true
+          props?: {
+              whitelist?: string[]
+              blacklist?: string[]
+              tokens?: FungibleTokenDetailed[]
+              selectedTokens?: string[]
+              onSelect?(token: FungibleTokenDetailed | null): void
+          }
+      }
+    | {
+          open: false
       }
 
 export type SelectNftContractDialogEvent = {
@@ -184,6 +209,11 @@ export interface WalletMessage {
     walletRenameDialogUpdated: WalletRenameDialogEvent
 
     /**
+     * Gas setting dialog
+     */
+    gasSettingDialogUpdated: GasSettingDialogEvent
+
+    /**
      * Select token dialog
      */
     selectTokenDialogUpdated: SelectTokenDialogEvent
@@ -202,6 +232,10 @@ export interface WalletMessage {
      * Wallet Risk Warning dialog
      */
     walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
+    /**
+     * Select token dialog
+     */
+    selectERC20TokenDialogUpdated: SelectERC20TokenDialogEvent
 
     walletsUpdated: void
     phrasesUpdated: void

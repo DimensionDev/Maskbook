@@ -84,7 +84,6 @@ export function TradeForm(props: TradeFormProps) {
     const { t } = useI18N()
     const {
         trade,
-        provider,
         loading,
         strategy,
         inputToken,
@@ -112,7 +111,7 @@ export function TradeForm(props: TradeFormProps) {
     //#endregion
 
     //#region remote controlled swap settings dialog
-    const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
+    const { openDialog: openSwapSettingDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
     //#endregion
 
     //#region form controls
@@ -201,6 +200,7 @@ export function TradeForm(props: TradeFormProps) {
             return t('plugin_trader_error_price_impact_too_high')
         return ''
     }, [
+        trade,
         loading,
         inputToken,
         outputToken,
@@ -227,7 +227,7 @@ export function TradeForm(props: TradeFormProps) {
                     <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
                         <RefreshOutlined fontSize="small" />
                     </IconButton>
-                    <IconButton className={classes.icon} size="small" onClick={openDialog}>
+                    <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
                         <TuneIcon fontSize="small" />
                     </IconButton>
                 </div>

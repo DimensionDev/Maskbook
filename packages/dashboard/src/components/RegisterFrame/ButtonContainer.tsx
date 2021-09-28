@@ -9,6 +9,9 @@ const ButtonContainerUI = styled(Stack)(({ theme }) => ({
         width: '100%',
         fontSize: 16,
     },
+    [theme.breakpoints.down('md')]: {
+        margin: `${theme.spacing(4)} auto`,
+    },
 }))
 
 interface ButtonGroupProps extends PropsWithChildren<{}> {}

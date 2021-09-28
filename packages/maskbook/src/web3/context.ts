@@ -1,6 +1,6 @@
 import { noop, pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ERC20TokenDetailed, EthereumTokenType, Wallet, Web3ProviderType } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, ProviderType, Wallet, Web3ProviderType } from '@masknet/web3-shared'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
@@ -14,6 +14,8 @@ import {
     currentPortfolioDataProviderSettings,
     currentEtherPriceSettings,
     currentTokenPricesSettings,
+    currentMaskWalletChainIdSettings,
+    currentMaskWalletNetworkSettings,
     currentAccountMaskWalletSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
@@ -24,17 +26,14 @@ import Services from '../extension/service'
 function createWeb3Context(disablePopup = false): Web3ProviderType {
     const Web3Provider = createExternalProvider(disablePopup)
     return {
-        provider: {
-            getCurrentValue: () => Web3Provider,
-            subscribe: () => noop,
-        },
-        allowTestnet: {
-            getCurrentValue: () => Flags.wallet_allow_testnet,
-            subscribe: () => noop,
-        },
-        chainId: createSubscriptionFromSettings(currentChainIdSettings),
-        account: createSubscriptionFromSettings(currentAccountSettings),
-        accountMaskWallet: createSubscriptionFromSettings(currentAccountMaskWalletSettings),
+        provider: createStaticSubscription(() => Web3Provider),
+        allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
+        chainId: createSubscriptionFromSettings(
+            disablePopup ? currentMaskWalletChainIdSettings : currentChainIdSettings,
+        ),
+        account: createSubscriptionFromSettings(
+            disablePopup ? currentAccountMaskWalletSettings : currentAccountSettings,
+        ),
         balance: createSubscriptionFromSettings(currentBalanceSettings),
         gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
         blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
@@ -42,8 +41,12 @@ function createWeb3Context(disablePopup = false): Web3ProviderType {
         etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
         wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
-        providerType: createSubscriptionFromSettings(currentProviderSettings),
-        networkType: createSubscriptionFromSettings(currentNetworkSettings),
+        providerType: disablePopup
+            ? createStaticSubscription(() => ProviderType.MaskWallet)
+            : createSubscriptionFromSettings(currentProviderSettings),
+        networkType: createSubscriptionFromSettings(
+            disablePopup ? currentMaskWalletNetworkSettings : currentNetworkSettings,
+        ),
         erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
         erc20TokensCount: createSubscriptionFromAsync(
             WalletRPC.getERC20TokensCount,
@@ -119,6 +122,13 @@ function createSubscriptionFromSettings<T>(settings: InternalSettings<T>): Subsc
             const b = settings.addListener(() => trigger())
             return () => void [a(), b()]
         },
+    }
+}
+
+function createStaticSubscription<T>(getter: () => T) {
+    return {
+        getCurrentValue: getter,
+        subscribe: () => noop,
     }
 }
 function createSubscriptionFromAsync<T>(

@@ -194,13 +194,15 @@ export async function importNewWallet(
         else if (!record_.mnemonic.length && !record_._private_key_)
             await t.objectStore('Wallet').put(WalletRecordIntoDB(record))
     }
+
+    WalletMessages.events.walletsUpdated.sendToAll(undefined)
     if (!silent) {
-        WalletMessages.events.walletsUpdated.sendToAll(undefined)
         await updateAccount({
             account: record.address,
             providerType: ProviderType.MaskWallet,
         })
     }
+
     return address
     async function getWalletAddress() {
         if (rec.address) return rec.address

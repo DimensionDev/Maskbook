@@ -9,7 +9,7 @@ maintainer:
 
 Hi, Welcome to the Mask Network. Here is some note for developing Mask Network.
 
-Storybooks are depolyed to <https://compassionate-northcutt-326a3a.netlify.app/>
+Storybooks are deployed to <https://compassionate-northcutt-326a3a.netlify.app/>
 
 ## Setup
 
@@ -31,7 +31,7 @@ pnpm install
 ```
 
 If you encounter with error `EACCES: permission denied, open...'`,
-please run `chown -R $USER /pathToYourProject/Maskbook` to solve.
+please run `chown -R $USER /pathToYourProject/Mask` to solve.
 
 ### Start the development server
 

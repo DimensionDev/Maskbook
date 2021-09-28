@@ -14,8 +14,9 @@ export function useEthereumName(nickname: string, twitterId: string, bio: string
         setEthereumName(matched ? matched[0] : '')
     }, [bio])
     const name = useMemo(() => {
-        if (ENS_RE_FULL.test(nickname)) {
-            return nickname
+        const matched = nickname.match(ENS_RE)
+        if (matched) {
+            return matched[0]
         }
         if (ethereumName) return ethereumName
         return twitterId ? `${twitterId}.eth` : ''

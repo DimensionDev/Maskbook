@@ -34,7 +34,8 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     wrapper: {
-        padding: theme.spacing(0, 4),
+        paddingBottom: '0px !important',
+        paddingTop: '0px !important',
     },
     actionButton: {
         margin: '0 auto',
@@ -61,10 +62,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         '&:last-child': {
             marginRight: 0,
         },
-    },
-    maskbook: {
-        width: 40,
-        height: 10,
     },
     tokenCardWrapper: {
         width: '100%',
