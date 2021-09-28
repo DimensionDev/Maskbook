@@ -11,9 +11,7 @@ export function useGasOptions() {
     //#region Get gas now from debank
     const { value: gasNow } = useAsync(async () => {
         const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-        if (!response) {
-            return { slow: 0, standard: 0, fast: 0 }
-        }
+        if (!response) return { slow: 0, standard: 0, fast: 0 }
         const { data } = response
         return {
             slow: data.slow.price,
