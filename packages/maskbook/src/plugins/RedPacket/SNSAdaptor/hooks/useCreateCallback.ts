@@ -1,4 +1,5 @@
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
+import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
@@ -11,14 +12,19 @@ import {
     useChainId,
     useTokenConstants,
     useTransactionState,
+    useSpeedUpTransaction,
+    useBlockNumber,
+    isSameAddress,
 } from '@masknet/web3-shared'
 import { omit } from 'lodash-es'
 import { useAsync } from 'react-use'
 import BigNumber from 'bignumber.js'
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useMemo } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
+import { getTransactionReceipt } from '../../../../extension/background-script/EthereumService'
+import { Interface } from '@ethersproject/abi'
 
 export interface RedPacketSettings {
     publicKey: string
@@ -122,6 +128,8 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
     }, [redPacketSettings, account, redPacketContract]).value
 }
 
+const interFace = new Interface(REDPACKET_ABI)
+
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number) {
     const account = useAccount()
     const chainId = useChainId()
@@ -129,6 +137,75 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
     const paramResult = useCreateParams(redPacketSettings, version)
+
+    //#region handle transaction speed up
+    const _blockNumber = useBlockNumber()
+    const originalBlockNumber = useMemo(() => _blockNumber, [])
+
+    const checkSpeedUpTx = useCallback(
+        (decodedInputParam: { _public_key: string }) => {
+            return decodedInputParam._public_key === redPacketSettings.publicKey
+        },
+        [redPacketSettings],
+    )
+
+    const speedUpTx = useSpeedUpTransaction(
+        createState,
+        account,
+        redPacketContract?.options,
+        'create_red_packet',
+        checkSpeedUpTx,
+        originalBlockNumber,
+    )
+
+    useAsync(async () => {
+        if (!speedUpTx) return
+
+        const result = await getTransactionReceipt(speedUpTx.hash)
+
+        if (!result) return
+
+        const log = result.logs.find((log) => isSameAddress(log.address, redPacketContract?.options.address))
+
+        if (!log) return
+
+        type CreateRedpacketEventParam = {
+            creation_time: BigNumber
+            creator: string
+            id: string
+            token_address: string
+            total: BigNumber
+        }
+
+        const eventParams = interFace.decodeEventLog(
+            'CreationSuccess',
+            log.data,
+            log.topics,
+        ) as unknown as CreateRedpacketEventParam
+
+        const returnValues = {
+            creator: eventParams.creator,
+            id: eventParams.id,
+            token_address: eventParams.token_address,
+            creation_time: eventParams.creation_time.toString(),
+            total: eventParams.total.toString(),
+        }
+
+        setCreateState({
+            type: TransactionStateType.CONFIRMED,
+            no: 0,
+            receipt: {
+                status: true,
+                transactionHash: result.transactionHash,
+                events: {
+                    CreationSuccess: {
+                        returnValues,
+                    },
+                },
+            } as unknown as TransactionReceipt,
+        })
+    }, [speedUpTx])
+    //#endregion
 
     const createCallback = useCallback(async () => {
         const { token } = redPacketSettings

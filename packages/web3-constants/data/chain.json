@@ -28,17 +28,17 @@
         "xDai": ""
     },
     "TIME_INTERVAL_TO_QUERY_API": {
-        "Mainnet": 30000,
-        "Ropsten": 30000,
-        "Rinkeby": 30000,
-        "Kovan": 30000,
-        "Gorli": 30000,
-        "BSC": 15000,
-        "BSCT": 15000,
-        "Matic": 15000,
-        "Mumbai": 15000,
-        "Arbitrum": 15000,
-        "Arbitrum_Rinkeby": 15000,
-        "xDai": 15000
+        "Mainnet": 20000,
+        "Ropsten": 20000,
+        "Rinkeby": 20000,
+        "Kovan": 20000,
+        "Gorli": 20000,
+        "BSC": 10000,
+        "BSCT": 10000,
+        "Matic": 10000,
+        "Mumbai": 10000,
+        "Arbitrum": 10000,
+        "Arbitrum_Rinkeby": 10000,
+        "xDai": 10000
     }
 }

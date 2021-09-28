@@ -16,75 +16,70 @@ export function useSpeedUpTransaction(
 ) {
     const web3 = useWeb3()
     const chainId = useChainId()
+
     const [speedUpTx, setSpeedUpTx] = useState<Transaction | null>(null)
     const { EXPLORER_API, EXPLORER_API_KEY, TIME_INTERVAL_TO_QUERY_API } = useChainConstants()
-    const [openTimer, setOpenTimer] = useState<NodeJS.Timeout | null>(null)
+    const [openTimer, setOpenTimer] = useState<NodeJS.Timer | null>(null)
     const interFace = contractData
         ? new Interface(contractData.jsonInterface as readonly (string | Fragment | JsonFragment)[])
         : null
 
     useEffect(() => {
-        if (openTimer && speedUpTx) {
-            clearInterval(openTimer)
-            setOpenTimer(null)
-        }
+        if (speedUpTx && openTimer) clearInterval(openTimer as NodeJS.Timer)
     }, [speedUpTx, openTimer])
 
     useAsync(async () => {
         if (
-            state.type !== TransactionStateType.HASH ||
+            (state.type !== TransactionStateType.HASH && state.type !== TransactionStateType.WAIT_FOR_CONFIRMING) ||
             !contractData ||
             !interFace ||
             !EXPLORER_API ||
-            !TIME_INTERVAL_TO_QUERY_API
+            !TIME_INTERVAL_TO_QUERY_API ||
+            openTimer
         ) {
-            if (openTimer) {
-                clearInterval(openTimer)
-                setOpenTimer(null)
-            }
             return
         }
 
-        if (!openTimer)
-            setOpenTimer(
-                setInterval(async () => {
-                    const latestBlockNumber = await web3.eth.getBlockNumber()
-                    const response = await fetch(
-                        urlcat(EXPLORER_API, {
-                            apikey: EXPLORER_API_KEY,
-                            action: 'txlist',
-                            module: 'account',
-                            sort: 'desc',
-                            startBlock: originalTxBlockNumber,
-                            endBlock: latestBlockNumber,
-                            address: contractData.address,
-                        }),
-                    )
+        setOpenTimer(
+            setInterval(async () => {
+                const latestBlockNumber = await web3.eth.getBlockNumber()
+                const response = await fetch(
+                    urlcat(EXPLORER_API, {
+                        apikey: EXPLORER_API_KEY,
+                        action: 'txlist',
+                        module: 'account',
+                        sort: 'desc',
+                        startBlock: originalTxBlockNumber,
+                        endBlock: latestBlockNumber,
+                        address: contractData.address,
+                    }),
+                )
 
-                    if (!response.ok) return
+                if (!response.ok) return
 
-                    const { result }: { result: Transaction[] } = await response.json()
+                const { result }: { result: Transaction[] } = await response.json()
 
-                    if (!result.length) return
+                if (!result.length) return
 
-                    const _speedUpTx =
-                        result.find((tx: Transaction) => {
-                            if (!isSameAddress(tx.to ?? '', contractData.address) || !isSameAddress(tx.from, from)) {
-                                return false
-                            }
-                            try {
-                                const decodedInputParam = interFace.decodeFunctionData(contractFunctionName, tx.input)
-                                return checkSpeedUpTx(decodedInputParam)
-                            } catch {
-                                return false
-                            }
-                        }) ?? null
-                    setSpeedUpTx(_speedUpTx)
-                }, TIME_INTERVAL_TO_QUERY_API),
-            )
+                const _speedUpTx =
+                    result.find((tx: Transaction) => {
+                        if (!isSameAddress(tx.to ?? '', contractData.address) || !isSameAddress(tx.from, from)) {
+                            return false
+                        }
+                        try {
+                            const decodedInputParam = interFace.decodeFunctionData(contractFunctionName, tx.input)
+                            return checkSpeedUpTx(decodedInputParam)
+                        } catch {
+                            return false
+                        }
+                    }) ?? null
+
+                setSpeedUpTx(_speedUpTx)
+            }, TIME_INTERVAL_TO_QUERY_API),
+        )
 
         return
-    }, [state, openTimer, from, contractData, interFace, chainId, originalTxBlockNumber, web3])
+    }, [state, from, openTimer, contractData, chainId, originalTxBlockNumber, web3])
 
     return speedUpTx
 }
