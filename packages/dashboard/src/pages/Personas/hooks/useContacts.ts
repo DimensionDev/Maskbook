@@ -28,7 +28,6 @@ export const useContacts = (network: string, page: number, size = 20) => {
         // Cache the last record of  each page
         cache.current.set(page, last(values))
 
-        console.log(values.map((x) => x.profile))
         const profiles = await Services.Identity.queryProfilesWithIdentifiers(values.map((x) => x.profile))
         return profiles.map((profile) => {
             const favor = values.find((x) => x.profile.equals(profile.identifier))?.favor
