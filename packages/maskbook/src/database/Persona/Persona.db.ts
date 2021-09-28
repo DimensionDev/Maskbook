@@ -497,9 +497,11 @@ export async function deleteProfileDB(id: ProfileIdentifier, t: ProfileTransacti
 export async function createRelationDB(
     record: Omit<RelationRecord, 'network'>,
     t: RelationTransaction<'readwrite'>,
+    sendEvent = true,
 ): Promise<void> {
     await t.objectStore('relations').add(relationRecordToDB(record))
-    MaskMessage.events.relationsChanged.sendToAll([{ of: record.profile, reason: 'update', favor: record.favor }])
+    if (sendEvent)
+        MaskMessage.events.relationsChanged.sendToAll([{ of: record.profile, reason: 'update', favor: record.favor }])
 }
 
 export async function queryRelations(query: (record: RelationRecord) => boolean, t?: RelationTransaction<'readonly'>) {
