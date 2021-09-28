@@ -240,7 +240,7 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps>((props) => {
     )
 })
 
-export function useShowCostomSnackbar() {
+export function useShowCustomSnackbar() {
     const snackbar = useSnackbar()
     const showSnackbar = useCallback(
         (
