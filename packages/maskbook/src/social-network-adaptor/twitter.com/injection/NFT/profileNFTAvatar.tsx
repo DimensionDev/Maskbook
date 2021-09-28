@@ -1,11 +1,8 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import type { ERC721TokenDetailed } from '@masknet/web3-shared'
 import { useCallback, useEffect, useState } from 'react'
 import { blobToArrayBuffer } from '@dimensiondev/kit'
-import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { NFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
-import { activatedSocialNetworkUI } from '../../../../social-network'
 import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
 import {
     searchAvatarOpenFileSelector,
@@ -14,9 +11,10 @@ import {
 } from '../../utils/selector'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import type { ProfileIdentifier } from '@masknet/shared-base'
 import { getAvatarId } from '../../utils/user'
 import { toPng } from '../../../../components/InjectedComponents/NFT/utils'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared'
+import { useCurrentProfileIdentifier } from '../../../../components/InjectedComponents/NFT/hooks/useCrrentUserInfo'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -30,24 +28,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function useCurrentUserInfo(): { userId?: string; identifier?: ProfileIdentifier } | undefined {
-    const personas = useMyPersonas()
-    if (personas.length === 0) return undefined
-    const userInfo = personas
-        .map((persona) => {
-            const profiles = persona ? [...persona.linkedProfiles] : []
-            const profile = profiles.find(([key, value]) => key.network === activatedSocialNetworkUI.networkIdentifier)
-            return {
-                userId: profile?.[0].userId,
-                identifier: profile?.[0],
-            }
-        })
-        .filter((x) => x)
-
-    return userInfo?.[0]
-}
-
-export async function changeImageToActiveElements(image: File | Blob): Promise<void> {
+async function changeImageToActiveElements(image: File | Blob): Promise<void> {
     hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(await blobToArrayBuffer(image)))
     setTimeout(() => {
         ;(searchAvatarOpenFileSelector().evaluate()[0]?.parentElement?.children[0] as HTMLElement)?.click()
@@ -58,7 +39,7 @@ interface NFTAvatarInTwitterProps {}
 
 function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const { classes } = useStyles()
-    const useInfo = useCurrentUserInfo()
+    const currentIdentifier = useCurrentProfileIdentifier()
     const identity = useCurrentVisitingIdentity()
     const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent>({} as NFTAvatarEvent)
 
@@ -89,7 +70,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         return () => profileSave.removeEventListener('click', handler)
     }, [handler])
 
-    if (identity.identifier.userId !== useInfo?.userId) return null
+    if (identity.identifier.userId !== currentIdentifier?.userId) return null
     if (!Flags.nft_avatar_enabled) return null
     return <NFTAvatar onChange={onChange} classes={classes} />
 }

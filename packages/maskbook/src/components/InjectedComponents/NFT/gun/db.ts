@@ -1,3 +1,4 @@
+import { first } from 'lodash-es'
 import { AvatarMetaDB, NFT_AVATAR_JSON_SERVER } from '../types'
 
 const EXPIRED_TIME = 5 * 60 * 1000
@@ -36,7 +37,5 @@ async function _fetch() {
 
 export async function getNFTAvatarFromJSON(userId: string) {
     const db = (await _fetch()).filter((x) => x.userId === userId)
-    if (db.length === 0) return
-
-    return db[0]
+    return first(db)
 }
