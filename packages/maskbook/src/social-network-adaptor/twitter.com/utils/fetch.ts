@@ -15,11 +15,7 @@ import { collectNodeText } from '../../../utils'
 
 /**
  * @example
- * parseNameArea("TheMirror\n(●'◡'●)@1\n@MisakaMirror")
- * >>> {
- *      name: "TheMirror(●'◡'●)@1",
- *      handle: "MisakaMirror"
- * }
+ * parseNameArea("nickname@handle")
  */
 const parseNameArea = (nameArea: string) => {
     const atIndex = nameArea.lastIndexOf('@')
@@ -56,23 +52,14 @@ export const postIdParser = (node: HTMLElement) => {
 
 export const postNameParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
+    const nameElement = collectNodeText(tweetElement.querySelector<HTMLElement>('a[role] div[id]'))
 
-    // type 1:
-    // normal tweet
-    const anchorElement = tweetElement.querySelectorAll<HTMLAnchorElement>('a[role="link"]')[1]
-    const nameInUniqueAnchorTweet = collectNodeText(anchorElement as HTMLElement)
-
-    // type 2:
-    const nameInDoubleAnchorsTweet = collectNodeText(tweetElement.children[1] as HTMLElement)
-
-    // type 3:
-    // parse name in quoted tweet
-    const nameElementInQuoted = nthChild(tweetElement, 0, 0, 1)
+    const nameElementInQuoted = nthChild(tweetElement, 0, 0, 0, 0, 0)
     const nameInQuoteTweet = nameElementInQuoted ? collectNodeText(nameElementInQuoted) : ''
 
     return (
-        [nameInUniqueAnchorTweet, nameInDoubleAnchorsTweet, nameInQuoteTweet]
-            .filter(Boolean)
+        [nameElement, nameInQuoteTweet]
+            .filter((x) => x?.includes('@'))
             .map(parseNameArea)
             .find((r) => r.name && r.handle) ?? {
             name: '',
