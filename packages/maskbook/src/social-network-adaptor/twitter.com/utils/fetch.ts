@@ -89,8 +89,8 @@ export const postNameParser = (node: HTMLElement) => {
 
     // type 3:
     // parse name in quoted tweet
-    const nameElementInQuoted = nthChild(tweetElement, 0, 0, 0, 0, 0)
-    const nameInQuoteTweet = nameElementInQuoted ? serializeToText(nameElementInQuoted) : ''
+    const nameElementInQuoted = nthChild(tweetElement, 0, 0, 1)
+    const nameInQuoteTweet = nameElementInQuoted  ? serializeToText(nameElementInQuoted) : ''
     return (
         [nameInUniqueAnchorTweet, nameInDoubleAnchorsTweet, nameInQuoteTweet]
             .filter(Boolean)
