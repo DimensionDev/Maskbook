@@ -15,13 +15,7 @@ export function MaskUIRootWithinShadow(JSX: JSX.Element) {
             <Web3Provider value={Web3Context}>
                 <I18nextProvider i18n={i18nNextInstance}>
                     <ErrorBoundaryBuildInfoContext.Provider value={buildInfoMarkdown}>
-                        <ErrorBoundary>
-                            <CustomSnackbarProvider
-                                disableWindowBlurListener={false}
-                                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                                {JSX}
-                            </CustomSnackbarProvider>
-                        </ErrorBoundary>
+                        <ErrorBoundary>{JSX}</ErrorBoundary>
                     </ErrorBoundaryBuildInfoContext.Provider>
                 </I18nextProvider>
             </Web3Provider>
@@ -35,7 +29,11 @@ export function MaskUIRoot(JSX: JSX.Element) {
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={useClassicMaskTheme()}>
                 <CssBaseline />
-                {JSX}
+                <CustomSnackbarProvider
+                    disableWindowBlurListener={false}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                    {JSX}
+                </CustomSnackbarProvider>
             </ThemeProvider>
         </StyledEngineProvider>,
     )

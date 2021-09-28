@@ -48,6 +48,10 @@ function registerPostCollectorInner(
         return root
     }
 
+    const getParentTweetNode = (node: HTMLElement) => {
+        return node.closest<HTMLElement>('[data-testid="tweet"]')
+    }
+
     const getCurrentIdentifier = () => {
         const current = activatedSocialNetworkUI.collecting.identityProvider?.recognized.value
 
@@ -105,10 +109,11 @@ function registerPostCollectorInner(
         })
         .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
-            const isQuotedTweet = tweetNode?.getAttribute('role') === 'link'
-            return tweetNode
-                ? `${isQuotedTweet ? 'QUOTED' : ''}${postIdParser(tweetNode)}${node.innerText.replace(/\s/gm, '')}`
-                : node.innerText
+            const parentTweetNode = tweetNode?.getAttribute('role') === 'link' ? getParentTweetNode(tweetNode) : null
+            if (!tweetNode) return node.innerText
+            const parentTweetId = parentTweetNode ? postIdParser(parentTweetNode) : ''
+            const tweetId = postIdParser(tweetNode)
+            return `${parentTweetId}/${tweetId}`
         })
     watcher.startWatch(250)
     cancel.addEventListener('abort', () => watcher.stopWatch())
