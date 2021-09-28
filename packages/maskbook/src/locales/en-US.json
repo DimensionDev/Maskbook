@@ -1005,5 +1005,8 @@
     "plugin_augur_tab_positions_column_p_l": "P/L",
     "plugin_augur_tab_liquidity_column_share_of_liquidity_pool": "Share Of Liquidity Pool",
     "plugin_augur_tab_liquidity_column_init_value": "Init. Value",
-    "plugin_augur_tab_liquidity_column_cur_value": "Cur. Value"
+    "plugin_augur_tab_liquidity_column_cur_value": "Cur. Value",
+    "plugin_augur_tab_positions_column_p_l_tooltip": "Display values might be rounded. Dashes are displayed when liquidity is depleted.",
+    "plugin_augur_tab_positions_info_title": "Why do I have position after adding liquidity?",
+    "plugin_augur_tab_positions_info_desc": "To maintain the Yes to No percentage ratio, a number of shares are returned to the liquidity provider."
 }
