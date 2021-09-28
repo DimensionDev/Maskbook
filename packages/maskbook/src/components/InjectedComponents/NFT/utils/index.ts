@@ -1,6 +1,6 @@
 import { ChainId, createERC721Token, EthereumTokenType } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
-import { head } from 'lodash-es'
+import { head, isNull } from 'lodash-es'
 import type { Order } from 'opensea-js/lib/types'
 import { PluginCollectibleRPC } from '../../../../plugins/Collectible/messages'
 import { getLastSalePrice, getOrderUnitPrice, getOrderUSDPrice } from '../../../../plugins/Collectible/utils'
@@ -45,4 +45,26 @@ export async function createNFT(address: string, tokenId: string) {
         tokenId,
     )
     return { account: asset.owner.address, token }
+}
+
+export function toPng(image: string) {
+    return new Promise<Blob | null>((resolve, reject) => {
+        const img = new Image()
+        img.src = image
+        img.setAttribute('CrossOrigin', 'Anonymous')
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        if (isNull(ctx)) throw new Error('Canvas was not supported')
+
+        img.addEventListener('load', () => {
+            ;[canvas.width, canvas.height] = [img.width, img.height]
+            ctx.drawImage(img, 0, 0, img.width, img.height)
+            const url = canvas.toBlob((blob) => {
+                resolve(blob)
+            })
+        })
+        img.addEventListener('error', () => {
+            reject(new Error('Could not load image'))
+        })
+    })
 }

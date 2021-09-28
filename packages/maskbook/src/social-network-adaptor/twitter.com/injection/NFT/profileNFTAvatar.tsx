@@ -6,7 +6,7 @@ import { blobToArrayBuffer } from '@dimensiondev/kit'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { NFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
 import { activatedSocialNetworkUI } from '../../../../social-network'
-import { createReactRootShadowed, downloadUrl, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
+import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
 import {
     searchAvatarOpenFileSelector,
     searchProfileAvatarSelector,
@@ -14,8 +14,9 @@ import {
 } from '../../utils/selector'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { getAvatarId } from '../../utils/user'
 import type { ProfileIdentifier } from '@masknet/shared-base'
+import { getAvatarId } from '../../utils/user'
+import { toPng } from '../../../../components/InjectedComponents/NFT/utils'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -63,7 +64,8 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
 
     const onChange = useCallback(async (token: ERC721TokenDetailed) => {
         if (!token.info.image) return
-        const image = await downloadUrl(token.info.image)
+        const image = await toPng(token.info.image)
+        if (!image) return
         changeImageToActiveElements(image)
 
         setAvatarEvent({

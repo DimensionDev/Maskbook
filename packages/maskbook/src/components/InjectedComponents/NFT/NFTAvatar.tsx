@@ -24,6 +24,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         fontSize: 14,
+        alignItems: 'center',
+    },
+    account: {
+        display: 'flex',
+        alignItems: 'center',
     },
     AddCollectible: {
         textAlign: 'right',
@@ -45,9 +50,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 97,
         height: 97,
         objectFit: 'cover',
-
         borderRadius: '100%',
-
         boxSizing: 'border-box',
     },
     button: {
@@ -107,11 +110,12 @@ export function NFTAvatar(props: NFTAvatarProps) {
         loading,
         retry,
         error,
-    } = useCollectibles(account, chainId, provider, page, 50)
+    } = useCollectibles('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', chainId, provider, page, 50)
     //0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
 
     const { collectibles, hasNextPage } = value
 
+    console.log(collectibles)
     const onClick = useCallback(async () => {
         if (!selectedToken) return
         onChange(selectedToken)
@@ -127,7 +131,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    const LoadStatus = Array.from({ length: 6 })
+    const LoadStatus = Array.from({ length: 8 })
         .fill(0)
         .map((_, i) => (
             <div className={classes.imgBackground}>
@@ -151,7 +155,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                         {t('nft_list_title')}
                     </Typography>
                     {account ? (
-                        <Typography variant="body1" color="textPrimary">
+                        <Typography variant="body1" color="textPrimary" className={classes.account}>
                             {t('nft_wallet_label')}: {formatEthereumAddress(account, 4)}
                             <Button onClick={openSelectProviderDialog} size="small" className={classes.changeButton}>
                                 {t('nft_wallet_change')}

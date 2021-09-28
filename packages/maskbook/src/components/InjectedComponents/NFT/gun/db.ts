@@ -36,7 +36,7 @@ async function _fetch() {
 
 export async function getNFTAvatarFromJSON(userId: string) {
     const db = (await _fetch()).filter((x) => x.userId === userId)
-    if (db?.length === 0) return
+    if (db.length === 0) return
 
     return db[0]
 }
