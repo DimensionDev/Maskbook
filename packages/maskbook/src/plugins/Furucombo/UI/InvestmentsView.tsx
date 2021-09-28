@@ -37,30 +37,6 @@ interface TablePaginationActionsProps {
     onPageChange: (event: React.MouseEvent<HTMLButtonElement>, newPage: number) => void
 }
 
-interface HeadCell {
-    id: string
-    label: string
-}
-
-const headCells: readonly HeadCell[] = [
-    {
-        id: 'investables',
-        label: 'investables',
-    },
-    {
-        id: 'apy',
-        label: 'apy',
-    },
-    {
-        id: 'liquidity',
-        label: 'liquidity',
-    },
-    {
-        id: 'action',
-        label: 'action',
-    },
-]
-
 function TablePaginationActions(props: TablePaginationActionsProps) {
     const theme = useTheme()
     const { count, page, rowsPerPage, onPageChange } = props
@@ -160,7 +136,16 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function InvestmentsView(props: any) {
+interface InvestmentsProps {
+    investables: Investable[]
+}
+
+enum Sortable {
+    apy = 'apy',
+    liquidity = 'liquidity',
+}
+
+export function InvestmentsView(props: InvestmentsProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const investables = props.investables
@@ -170,11 +155,13 @@ export function InvestmentsView(props: any) {
     const [order, setOrder] = React.useState<Order>('desc')
     const [orderBy, setOrderBy] = React.useState<string>('apy')
 
-    const sortOrder = (a: any, b: any) => {
-        return order === 'asc' ? a - b : b - a
-    }
-
-    investables.sort((a: any, b: any) => sortOrder(a[orderBy], b[orderBy]))
+    investables.sort((a: object, b: object) => {
+        const orderByA = orderBy as keyof typeof a
+        const orderByB = orderBy as keyof typeof b
+        return order === 'asc'
+            ? parseFloat(a[orderByA]) - parseFloat(b[orderByB])
+            : parseFloat(b[orderByB]) - parseFloat(a[orderByA])
+    })
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - investables.length) : 0
@@ -199,24 +186,30 @@ export function InvestmentsView(props: any) {
             <Table aria-label="custom pagination table">
                 <TableHead>
                     <TableRow className={classes.head}>
-                        {headCells.map((headCell) => {
-                            const label: any = `plugin_furucombo_${headCell.label}`
-                            return (
-                                <TableCell className={classes.cell} key={headCell.id}>
-                                    {headCell.id === 'apy' || headCell.id === 'liquidity' ? (
-                                        <TableSortLabel
-                                            className={classes.sort}
-                                            active={orderBy === headCell.id}
-                                            onClick={(e) => handleRequestSort(e, headCell.id)}
-                                            direction={orderBy === headCell.id ? order : 'asc'}>
-                                            {t(label)}
-                                        </TableSortLabel>
-                                    ) : (
-                                        t(label)
-                                    )}
-                                </TableCell>
-                            )
-                        })}
+                        <TableCell className={classes.cell} key="pools">
+                            {t('plugin_furucombo_tablehead_pools')}
+                        </TableCell>
+                        <TableCell className={classes.cell} key="apy">
+                            <TableSortLabel
+                                className={classes.sort}
+                                active={orderBy === 'apy'}
+                                onClick={(e) => handleRequestSort(e, 'apy')}
+                                direction={orderBy === 'apy' ? order : 'asc'}>
+                                {t('plugin_furucombo_apy')}
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell className={classes.cell} key="liquidity">
+                            <TableSortLabel
+                                className={classes.sort}
+                                active={orderBy === 'liquidity'}
+                                onClick={(e) => handleRequestSort(e, 'liquidity')}
+                                direction={orderBy === 'liquidity' ? order : 'asc'}>
+                                {t('plugin_furucombo_liquidity')}
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell className={classes.cell} key="action">
+                            {t('plugin_furucombo_tablehead_action')}
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

@@ -77,11 +77,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface InvestableProps {
+interface PoolProps {
     investable: Investable
 }
 
-export function Poolview(props: InvestableProps) {
+export function Poolview(props: PoolProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const {
