@@ -19,6 +19,7 @@ import { Result } from 'ts-results'
 import { addWallet } from '../../../plugins/Wallet/services/wallet/database'
 import { RelationRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
 import { createNewRelation } from '../IdentityService'
+import { restoreRelations } from './restoreRelations'
 
 /**
  * Restore the backup
@@ -71,9 +72,14 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
             await createOrUpdatePostDB(PostRecordFromJSONFormat(x), 'append')
         }
 
-        for (const x of data.relations) {
-            const relation = RelationRecordFromJSONFormat(x)
-            await createNewRelation(relation.profile, relation.linked, relation.favor)
+        if (data.relations?.length) {
+            for (const x of data.relations) {
+                const relation = RelationRecordFromJSONFormat(x)
+                await createNewRelation(relation.profile, relation.linked, relation.favor)
+            }
+        } else {
+            // For 1.x backups
+            restoreRelations(data)
         }
 
         const plugins = [...activatedPluginsWorker]
