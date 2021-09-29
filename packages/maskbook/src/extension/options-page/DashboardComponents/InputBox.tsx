@@ -51,7 +51,7 @@ export function InputBox(props: InputBoxProps) {
                     {label}
                 </Typography>
             ) : null}
-            <Paper component="form" className={classes.search} elevation={0}>
+            <Paper className={classes.search} elevation={0}>
                 <IconButton size="large" className={classes.iconButton} aria-label="label">
                     {children}
                 </IconButton>

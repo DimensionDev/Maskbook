@@ -1,4 +1,4 @@
-import Web3 from 'web3'
+import MaskWallet from 'web3'
 import type { HttpProvider } from 'web3-core'
 import { ChainId, getChainRPC } from '@masknet/web3-shared'
 import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
@@ -10,7 +10,7 @@ const providerPool = new Map<string, HttpProvider>()
 export function createProvider(url: string) {
     const provider =
         providerPool.get(url) ??
-        new Web3.providers.HttpProvider(url, {
+        new MaskWallet.providers.HttpProvider(url, {
             timeout: 5000, // ms
             // @ts-ignore
             clientConfig: {
@@ -30,14 +30,14 @@ export function createProvider(url: string) {
 //#endregion
 
 //#region web3 instances
-const instancePool = new Map<string, Web3>()
+const instancePool = new Map<string, MaskWallet>()
 const SEED = Math.floor(Math.random() * 4)
 
 function createWeb3Instance(provider: HttpProvider) {
     return (
         instancePool.get(provider.host) ??
         (() => {
-            const newInstance = new Web3(provider)
+            const newInstance = new MaskWallet(provider)
             instancePool.set(provider.host, newInstance)
             return newInstance
         })()

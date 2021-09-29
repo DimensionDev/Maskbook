@@ -29,6 +29,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         //#region Get gas now from debank
         const { value: gasNow, loading: getGasNowLoading } = useAsync(async () => {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+            if (!response) return { slow: 0, standard: 0, fast: 0 }
             return {
                 slow: response.data.slow.price,
                 standard: response.data.normal.price,
@@ -125,7 +126,10 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                             <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
                             <Typography className={classes.gasUSD}>
                                 {t('popups_wallet_gas_fee_settings_usd', {
-                                    usd: formatWeiToEther(gasPrice).times(nativeTokenPrice).times(21000).toPrecision(3),
+                                    usd: formatWeiToEther(gasPrice)
+                                        .times(nativeTokenPrice)
+                                        .times(inputGasLimit || '1')
+                                        .toPrecision(3),
                                 })}
                             </Typography>
                         </div>

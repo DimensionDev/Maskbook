@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import type { NFTInPostProps, TokenDetails } from '../types'
 import { parseNftUrl } from '../utils'
 import NFTCardUI from './NFTCardUI'
@@ -35,8 +35,8 @@ export default function NFTInPost(props: NFTInPostProps) {
     )
 
     return !tokenDetailsResponse.loading && !tokenDetailsResponse.error && tokenDetailsResponse.value?.imageUrl ? (
-        <MaskbookPluginWrapper width={400} pluginName="NFT">
+        <MaskPluginWrapper width={400} pluginName="NFT">
             <NFTCardUI {...tokenDetailsResponse.value} />
-        </MaskbookPluginWrapper>
+        </MaskPluginWrapper>
     ) : null
 }

@@ -15,11 +15,7 @@ import { collectNodeText } from '../../../utils'
 
 /**
  * @example
- * parseNameArea("TheMirror\n(●'◡'●)@1\n@MisakaMirror")
- * >>> {
- *      name: "TheMirror(●'◡'●)@1",
- *      handle: "MisakaMirror"
- * }
+ * parseNameArea("nickname@handle")
  */
 const parseNameArea = (nameArea: string) => {
     const atIndex = nameArea.lastIndexOf('@')
@@ -40,24 +36,6 @@ const parseId = (t: string) => {
     return regexMatch(t, /status\/(\d+)/, 1)!
 }
 
-const parseEmojiFragment = (fragment: string) => {
-    return String.fromCodePoint(...fragment.split('-').map((code) => Number.parseInt(code, 16)))
-}
-
-export const serializeToText = (node: ChildNode): string => {
-    const snippets: string[] = []
-    for (const childNode of Array.from(node.childNodes)) {
-        if (childNode.nodeType === Node.TEXT_NODE) {
-            if (childNode.nodeValue) snippets.push(childNode.nodeValue)
-        } else if (childNode.nodeName === 'IMG') {
-            const img = childNode as HTMLImageElement
-            const matched = (img.getAttribute('src') ?? '').match(/emoji\/v2\/svg\/([\w-]+)\.svg/) ?? []
-            if (matched[1]) snippets.push(parseEmojiFragment(matched[1]))
-        } else if (childNode.childNodes.length) snippets.push(serializeToText(childNode))
-    }
-    return snippets.join('')
-}
-
 export const postIdParser = (node: HTMLElement) => {
     const idNode = defaultTo(
         node.children[1]?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
@@ -74,26 +52,14 @@ export const postIdParser = (node: HTMLElement) => {
 
 export const postNameParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
+    const nameElement = collectNodeText(tweetElement.querySelector<HTMLElement>('a[role] div[id]'))
 
-    // type 1:
-    // normal tweet
-    const anchorElement = tweetElement.querySelectorAll<HTMLAnchorElement>('a[role="link"]')[1]
-    const nameInUniqueAnchorTweet = collectNodeText(anchorElement)
-
-    // type 2:
-    const nameInDoubleAnchorsTweet = Array.from(
-        tweetElement.children[1]?.querySelectorAll<HTMLAnchorElement>('a[data-focusable="true"]') ?? [],
-    )
-        .map(serializeToText)
-        .join('')
-
-    // type 3:
-    // parse name in quoted tweet
     const nameElementInQuoted = nthChild(tweetElement, 0, 0, 0, 0, 0)
-    const nameInQuoteTweet = nameElementInQuoted ? serializeToText(nameElementInQuoted) : ''
+    const nameInQuoteTweet = nameElementInQuoted ? collectNodeText(nameElementInQuoted) : ''
+
     return (
-        [nameInUniqueAnchorTweet, nameInDoubleAnchorsTweet, nameInQuoteTweet]
-            .filter(Boolean)
+        [nameElement, nameInQuoteTweet]
+            .filter((x) => x?.includes('@'))
             .map(parseNameArea)
             .find((r) => r.name && r.handle) ?? {
             name: '',

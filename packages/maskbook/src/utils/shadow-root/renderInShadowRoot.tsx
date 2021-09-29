@@ -1,7 +1,7 @@
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 import { applyMaskColorVars } from '@masknet/theme'
 import { appearanceSettings } from '../../settings/settings'
-import { getMaskbookTheme } from '../theme'
+import { getMaskTheme } from '../theme'
 import { createReactRootShadowedPartial, setupPortalShadowRoot } from '@masknet/theme'
 import { untilDomLoaded } from '../dom'
 import { Flags } from '../flags'
@@ -30,7 +30,7 @@ const createReactRootShadowed_raw = createReactRootShadowedPartial({
     onHeadCreate(head) {
         const themeCSSVars = head.appendChild(document.createElement('style'))
         function updateThemeVars() {
-            applyMaskColorVars(themeCSSVars, getMaskbookTheme().palette.mode)
+            applyMaskColorVars(themeCSSVars, getMaskTheme().palette.mode)
         }
         updateThemeVars()
         appearanceSettings.addListener(updateThemeVars)

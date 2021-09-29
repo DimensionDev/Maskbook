@@ -64,7 +64,8 @@ function config(opts: {
     if (disableHMR) disableReactHMR = true
 
     /** On iOS, eval is async (it is hooked by webextension-shim). */
-    const sourceMapKind: Configuration['devtool'] = target.iOS || isManifestV3 || noEval ? false : 'eval-source-map'
+    const sourceMapKind: Configuration['devtool'] =
+        target.iOS || isManifestV3 || noEval ? false : 'eval-cheap-source-map'
     const config: Configuration = {
         name,
         mode,

@@ -5,7 +5,7 @@ import type { PostInfo } from '../../../social-network/PostInfo'
 import { postIdParser } from '../utils/fetch'
 import { memoize } from 'lodash-es'
 import Services from '../../../extension/service'
-import { injectMaskIconToPostTwitter } from '../injection/MaskbookIcon'
+import { injectMaskIconToPostTwitter } from '../injection/MaskIcon'
 import { postsImageSelector } from '../utils/selector'
 import { ProfileIdentifier } from '../../../database/type'
 import { postParser, postImagesParser } from '../utils/fetch'
@@ -47,6 +47,10 @@ function registerPostCollectorInner(
         if (isCardNode && hasTextNode) return null
 
         return root
+    }
+
+    const getParentTweetNode = (node: HTMLElement) => {
+        return node.closest<HTMLElement>('[data-testid="tweet"]')
     }
 
     const getCurrentIdentifier = () => {
@@ -105,10 +109,11 @@ function registerPostCollectorInner(
         })
         .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
-            const isQuotedTweet = tweetNode?.getAttribute('role') === 'link'
-            return tweetNode
-                ? `${isQuotedTweet ? 'QUOTED' : ''}${postIdParser(tweetNode)}${node.innerText.replace(/\s/gm, '')}`
-                : node.innerText
+            const parentTweetNode = tweetNode?.getAttribute('role') === 'link' ? getParentTweetNode(tweetNode) : null
+            if (!tweetNode) return node.innerText
+            const parentTweetId = parentTweetNode ? postIdParser(parentTweetNode) : ''
+            const tweetId = postIdParser(tweetNode)
+            return `${parentTweetId}/${tweetId}`
         })
     watcher.startWatch(250)
     cancel.addEventListener('abort', () => watcher.stopWatch())

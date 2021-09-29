@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core'
 import { useStylesExtends } from '@masknet/shared'
 import { Image } from '../shared/Image'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { DraggableDiv } from '../shared/DraggableDiv'
 import Download from '@material-ui/icons/CloudDownload'
 import CloseIcon from '@material-ui/icons/Close'
@@ -38,11 +38,11 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const [url, setURL] = useState('')
     const classes = useStylesExtends(useStyles(), props)
     const { onClose, data } = props
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const [, copy] = useCopyToClipboard()
     const isMobile = useMatchXS()
     const permission = useQueryNavigatorPermission(true, 'clipboard-write')
-    const fileName = `maskbook-encrypted-${formatDateTime(Date.now(), 'yyyyMMddHHmmss')}.png`
+    const fileName = `masknetwork-encrypted-${formatDateTime(Date.now(), 'yyyyMMddHHmmss')}.png`
 
     return (
         <DraggableDiv>
@@ -69,7 +69,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 variant="contained"
                                 onClick={() => {
                                     copy(data.text)
-                                    enqueueSnackbar(t('copy_success_of_text'), {
+                                    showSnackbar(t('copy_success_of_text'), {
                                         variant: 'success',
                                         preventDuplicate: true,
                                         anchorOrigin: {
@@ -106,7 +106,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                     await navigator.clipboard.write([
                                         new ClipboardItem({ [data.image.type]: data.image }),
                                     ])
-                                    enqueueSnackbar(t('copy_success_of_image'), {
+                                    showSnackbar(t('copy_success_of_image'), {
                                         variant: 'success',
                                         preventDuplicate: true,
                                         anchorOrigin: {
