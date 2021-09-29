@@ -497,10 +497,10 @@ export async function deleteProfileDB(id: ProfileIdentifier, t: ProfileTransacti
 export async function createRelationDB(
     record: Omit<RelationRecord, 'network'>,
     t: RelationTransaction<'readwrite'>,
-    sendEvent = true,
+    silent = false,
 ): Promise<void> {
     await t.objectStore('relations').add(relationRecordToDB(record))
-    if (sendEvent)
+    if (!silent)
         MaskMessage.events.relationsChanged.sendToAll([{ of: record.profile, reason: 'update', favor: record.favor }])
 }
 
@@ -567,12 +567,12 @@ export async function queryRelationsPagedDB(
  * Update a relation
  * @param updating
  * @param t
- * @param sendEvent
+ * @param silent
  */
 export async function updateRelationDB(
     updating: Omit<RelationRecord, 'network'>,
     t: RelationTransaction<'readwrite'>,
-    sendEvent = true,
+    silent = false,
 ): Promise<void> {
     const old = await t
         .objectStore('relations')
@@ -586,7 +586,7 @@ export async function updateRelationDB(
     })
 
     await t.objectStore('relations').put(nextRecord)
-    if (sendEvent) {
+    if (!silent) {
         MaskMessage.events.relationsChanged.sendToAll([
             { of: updating.profile, favor: updating.favor, reason: 'update' },
         ])

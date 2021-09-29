@@ -245,26 +245,26 @@ export async function queryPagedPostHistory(
 //#endregion
 
 //#region Relation
-export async function createOrUpdateNewRelation(
-    profile: ProfileIdentifier,
-    linked: PersonaIdentifier,
-    favor: 0 | 1 = 0,
-    sendEvent = true,
+export async function patchCreateOrUpdateRelation(
+    profiles: ProfileIdentifier[],
+    personas: PersonaIdentifier[],
+    defaultFavor: 0 | 1 = 1,
 ) {
     await consistentPersonaDBWriteAccess(async (t) => {
-        const relationInDb = await t.objectStore('relations').get([linked.toText(), profile.toText()])
-        if (relationInDb) return updateRelation(profile, linked, favor, sendEvent)
-        return createRelationDB({ profile, linked, favor }, t, sendEvent)
+        for (const persona of personas) {
+            for (const profile of profiles) {
+                const relationInDB = await t.objectStore('relations').get([persona.toText(), profile.toText()])
+                if (relationInDB)
+                    await updateRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
+                await createRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
+            }
+        }
     })
+    return
 }
 
-export async function createNewRelation(
-    profile: ProfileIdentifier,
-    linked: PersonaIdentifier,
-    favor: 0 | 1 = 0,
-    sendEvent = true,
-) {
-    await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked, favor }, t, sendEvent))
+export async function createNewRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: 0 | 1 = 0) {
+    await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked, favor }, t))
 }
 
 export async function queryRelationPaged(
@@ -282,12 +282,7 @@ export async function queryRelationPaged(
     return []
 }
 
-export async function updateRelation(
-    profile: ProfileIdentifier,
-    linked: PersonaIdentifier,
-    favor: 0 | 1,
-    sendEvent = true,
-) {
+export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: 0 | 1) {
     await consistentPersonaDBWriteAccess((t) =>
         updateRelationDB(
             {
@@ -296,7 +291,6 @@ export async function updateRelation(
                 favor,
             },
             t,
-            sendEvent,
         ),
     )
 }

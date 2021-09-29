@@ -1,5 +1,5 @@
-import type { ProfileIdentifier } from '../../../database/type'
-import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import type { ProfileIdentifier } from '@masknet/shared-base'
+import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils'
 import {
     attachProfileDB,
     createOrUpdatePersonaDB,
@@ -9,8 +9,8 @@ import {
 import { PersonaRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
-import { createOrUpdatePostDB } from '../../../database/post'
-import { i18n } from '../../../utils/i18n-next'
+import { createOrUpdatePostDB } from '../../../database'
+import { i18n } from '../../../utils'
 import { currentImportingBackup } from '../../../settings/settings'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { recoverWalletFromMnemonic, recoverWalletFromPrivateKey } from '../../../plugins/Wallet/services'
@@ -18,8 +18,7 @@ import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-inf
 import { Result } from 'ts-results'
 import { addWallet } from '../../../plugins/Wallet/services/wallet/database'
 import { RelationRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
-import { createOrUpdateNewRelation } from '../IdentityService'
-import { restoreRelations } from './restoreRelations'
+import { patchCreateOrUpdateRelation } from '../IdentityService'
 
 /**
  * Restore the backup
@@ -73,13 +72,18 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
         }
 
         if (data.relations?.length) {
-            for (const x of data.relations) {
-                const relation = RelationRecordFromJSONFormat(x)
-                await createOrUpdateNewRelation(relation.profile, relation.linked, relation.favor, false)
-            }
+            const relations = data.relations.map(RelationRecordFromJSONFormat)
+            const personas = relations.map((x) => x.linked)
+            const profiles = relations.map((x) => x.profile)
+            await patchCreateOrUpdateRelation(profiles, personas, 0)
         } else {
             // For 1.x backups
-            restoreRelations(data)
+            const personas = data.personas
+                .map(PersonaRecordFromJSONFormat)
+                .filter((x) => x.privateKey)
+                .map((x) => x.identifier)
+            const profiles = data.profiles.map(ProfileRecordFromJSONFormat).map((x) => x.identifier)
+            await patchCreateOrUpdateRelation(profiles, personas, 0)
         }
 
         const plugins = [...activatedPluginsWorker]
