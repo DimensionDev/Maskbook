@@ -88,9 +88,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const lastStep = useValueRef(lastStepRef)
 
     useEffect(() => {
-        if (+lastStep === step) {
-            setOpen(true)
-        }
+        setOpen(+lastStep === step)
     }, [lastStep])
 
     const resetOverflow = () => {
