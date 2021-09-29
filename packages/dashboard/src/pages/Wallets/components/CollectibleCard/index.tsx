@@ -1,6 +1,6 @@
 import { ERC721TokenDetailed, ChainId, CollectibleProvider, resolveCollectibleLink } from '@masknet/web3-shared'
 import { memo } from 'react'
-import { Link, Typography } from '@material-ui/core'
+import { Box, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
@@ -34,9 +34,10 @@ export interface CollectibleCardProps {
     chainId: ChainId
     provider: CollectibleProvider
     token: ERC721TokenDetailed
+    onSend(): void
 }
 
-export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, token }) => {
+export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, token, onSend }) => {
     const { classes } = useStyles()
     return token.info.image ? (
         <div className={classes.card}>
@@ -46,12 +47,14 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
                 </div>
             </Link>
             <div className={classes.description}>
-                <Typography className={classes.name} color="textPrimary" variant="body2">
+                <Typography className={classes.name} color="textPrimary" variant="body2" onClick={onSend}>
                     {token.info.name}
                 </Typography>
             </div>
         </div>
     ) : (
-        <CollectiblePlaceholder />
+        <Box onClick={onSend}>
+            <CollectiblePlaceholder />
+        </Box>
     )
 })

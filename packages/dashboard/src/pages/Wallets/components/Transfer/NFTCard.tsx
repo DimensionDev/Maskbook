@@ -77,6 +77,7 @@ export const NFTCard = memo<NFTCardProps>(({ token, selected, onSelect }) => {
             )}
             <Box className={classes.checkbox}>
                 <Checkbox
+                    defaultChecked={selected === token.tokenId}
                     value={checked}
                     size="small"
                     disabled={isDisabled}

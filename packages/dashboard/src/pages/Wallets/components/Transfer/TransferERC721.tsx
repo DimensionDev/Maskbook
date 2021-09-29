@@ -4,6 +4,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import {
     ERC721ContractDetailed,
+    ERC721TokenDetailed,
     EthereumTokenType,
     formatWeiToEther,
     TransactionStateType,
@@ -30,6 +31,9 @@ import { useNativeTokenPrice } from './useNativeTokenPrice'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 import { useGasConfig } from '../../hooks/useGasConfig'
+import { useLocation } from 'react-router-dom'
+import { TransferTab } from './index'
+import { unionBy } from 'lodash-es'
 
 type FormInputs = {
     recipient: string
@@ -39,6 +43,10 @@ type FormInputs = {
 
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
+    const { state } = useLocation() as {
+        state: { erc721Token?: ERC721TokenDetailed; type?: TransferTab } | null
+    }
+    const [defaultToken, setDefaultToken] = useState<ERC721TokenDetailed | null>(null)
     const navigate = useNavigate()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
     const [offset, setOffset] = useState(0)
@@ -63,6 +71,16 @@ export const TransferERC721 = memo(() => {
         resolver: zodResolver(schema),
         defaultValues: { recipient: '', contract: '', tokenId: '' },
     })
+
+    useEffect(() => {
+        if (!state) return
+        if (!state.erc721Token || state.type !== TransferTab.Collectibles) return
+
+        setContract(state.erc721Token.contractDetailed)
+        setValue('contract', state.erc721Token.contractDetailed.name)
+        setValue('tokenId', state.erc721Token.tokenId)
+        setDefaultToken(state.erc721Token)
+    }, [state])
 
     const allFormFields = watch()
 
@@ -191,7 +209,11 @@ export const TransferERC721 = memo(() => {
                                     <SelectNFTList
                                         onScroll={addOffset}
                                         onSelect={(value) => setValue('tokenId', value)}
-                                        list={tokenDetailedOwnerList}
+                                        list={
+                                            defaultToken
+                                                ? unionBy([defaultToken, ...tokenDetailedOwnerList], 'tokenId')
+                                                : tokenDetailedOwnerList
+                                        }
                                         selected={field.field.value}
                                         loading={loadingOwnerList}
                                         loadMore={loadMore}

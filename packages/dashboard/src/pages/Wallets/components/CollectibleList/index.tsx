@@ -1,4 +1,4 @@
-import { Dispatch, memo, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, memo, SetStateAction, useCallback, useEffect, useState } from 'react'
 import { Box, TablePagination } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -18,6 +18,9 @@ import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
 import { PluginMessages } from '../../../../API'
+import { useNavigate } from 'react-router'
+import { RoutePaths } from '../../../../type'
+import { TransferTab } from '../Transfer'
 
 const useStyles = makeStyles()({
     container: {
@@ -43,10 +46,22 @@ const useStyles = makeStyles()({
 
 export const CollectibleList = memo(() => {
     const [page, setPage] = useState(0)
+    const navigate = useNavigate()
     const chainId = useChainId()
     const wallet = useWallet()
     const account = useAccount()
     const provider = useCurrentCollectibleDataProvider()
+
+    const onSend = useCallback(
+        (detail: ERC721TokenDetailed) =>
+            navigate(RoutePaths.WalletsTransfer, {
+                state: {
+                    type: TransferTab.Collectibles,
+                    erc721Token: detail,
+                },
+            }),
+        [],
+    )
 
     const {
         value = { collectibles: [], hasNextPage: false },
@@ -84,6 +99,7 @@ export const CollectibleList = memo(() => {
             dataSource={dataSource}
             chainId={chainId}
             provider={provider}
+            onSend={onSend}
         />
     )
 })
@@ -98,12 +114,25 @@ export interface CollectibleListUIProps {
     chainId: ChainId
     provider: CollectibleProvider
     dataSource: ERC721TokenDetailed[]
+    onSend(detail: ERC721TokenDetailed): void
 }
 
 export const CollectibleListUI = memo<CollectibleListUIProps>(
-    ({ page, onPageChange, isLoading, isEmpty, hasNextPage, showPagination, chainId, provider, dataSource }) => {
+    ({
+        page,
+        onPageChange,
+        isLoading,
+        isEmpty,
+        hasNextPage,
+        showPagination,
+        chainId,
+        provider,
+        dataSource,
+        onSend,
+    }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
+
         return (
             <>
                 <Box className={classes.container}>
@@ -115,7 +144,12 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                         <div className={classes.root}>
                             {dataSource.map((x) => (
                                 <div className={classes.card} key={x.tokenId}>
-                                    <CollectibleCard chainId={chainId} provider={provider} token={x} />
+                                    <CollectibleCard
+                                        chainId={chainId}
+                                        provider={provider}
+                                        token={x}
+                                        onSend={() => onSend(x)}
+                                    />
                                 </div>
                             ))}
                         </div>
