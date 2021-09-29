@@ -100,7 +100,6 @@ export function createWeb3Context(
         getTransactionList: hub.PluginServices.Wallet.getTransactionList,
         fetchERC20TokensFromTokenLists: hub.MaskServices.Ethereum.fetchERC20TokensFromTokenLists,
         createMnemonicWords: hub.PluginServices.Wallet.createMnemonicWords,
-        getNonce: hub.MaskServices.Ethereum.getNonce,
     }
 }
 

@@ -75,7 +75,6 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
         getTransactionList: WalletRPC.getTransactionList,
         createMnemonicWords: WalletRPC.createMnemonicWords,
-        getNonce: Services.Ethereum.getNonce,
     }
 }
 
