@@ -167,7 +167,7 @@ const countUp = (setter: any, speed: number, value: number) => {
     } else setter(value)
 }
 
-const colorChange = (setter: any, speed: number, cvalue: string) => {
+const colorChange = (setter: (r: number, g: number, b: number) => void, speed: number, cvalue: string) => {
     const targetr = parseInt(cvalue.split(',')[0], 10),
         targetg = parseInt(cvalue.split(',')[1], 10),
         targetb = parseInt(cvalue.split(',')[2], 10)
