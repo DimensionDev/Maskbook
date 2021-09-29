@@ -7,7 +7,7 @@ type DepositDialogUpdated =
           open: true
           poolId: string
           choose: string
-          token: ERC20TokenDetailed
+          token: ERC20TokenDetailed | undefined
           chainId: number
       }
     | {

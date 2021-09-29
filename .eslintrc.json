@@ -31,12 +31,6 @@
         "prefer-const": "warn",
         "use-isnan": "error",
         "unused-imports/no-unused-imports-ts": "error",
-        "lodash/import-scope": ["error", "member"],
-        "prettier/prettier": [
-            "error",
-            {
-                "endOfLine": "auto"
-            }
-        ]
+        "lodash/import-scope": ["error", "member"]
     }
 }

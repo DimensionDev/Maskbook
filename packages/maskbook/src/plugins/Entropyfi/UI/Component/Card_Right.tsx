@@ -5,9 +5,8 @@ import { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
 import { useChainId, useERC20TokenDetailed } from '@masknet/web3-shared'
 
-import useToggle from '../../hooks/useToggle'
+import useToggle from 'react-use/lib/useToggle'
 import { getSlicePoolId } from '../../utils'
-// import { usePoolState } from '../../hooks/usePoolData'
 
 import { InfoIcon } from '../../constants/assets/global_info'
 import { DownarrowIcon } from '../../constants/assets/global_downarrow'
@@ -182,11 +181,6 @@ export function CardRight(props: any) {
     const poolStatus = usePoolStatus(chainId, props.poolId)
     const isLocked = Number(poolStatus) !== PoolStatus.Accepting
     const TOKEN_MAP = tokenMap[chainId][props.poolId]
-    // console.log(' ************************')
-    // console.log(props.poolId, ' usePoolStatus ?: ', poolStatus)
-    // console.log(props.poolId, ' PoolStatus.Accepting ?: ', PoolStatus.Accepting)
-    // console.log(props.poolId, ' isLocked?: ', isLocked)
-    // console.log(' *************************')
 
     //#region pool token
     const {
@@ -197,10 +191,16 @@ export function CardRight(props: any) {
     } = useERC20TokenDetailed(TOKEN_MAP?.principalToken.address)
     //#endregion
 
+    // console.log(' ************************')
+    // console.log(props.poolId, ' token ?: ', token)
+    // console.log(props.poolId, ' address ?: ', TOKEN_MAP?.principalToken.address)
+    // console.log(props.poolId, ' isLocked?: ', isLocked)
+    // console.log(' *************************')
+
     //#region the deposit dialog
     const { setDialog: openDepositDialog } = useRemoteControlledDialog(PluginEntropyfiMessages.DepositDialogUpdated)
     const onDepositLong = useCallback(() => {
-        if (!props.poolId || !token) return
+        if (!props.poolId) return
         openDepositDialog({
             open: true,
             poolId: props.poolId,
@@ -211,7 +211,7 @@ export function CardRight(props: any) {
     }, [props.poolId, openDepositDialog])
 
     const onDepositShort = useCallback(() => {
-        if (!props.poolId || !token) return
+        if (!props.poolId) return
         openDepositDialog({
             open: true,
             poolId: props.poolId,
@@ -225,7 +225,7 @@ export function CardRight(props: any) {
         <Grid item container direction="column" className={classes.metaDeposit}>
             <Grid item className={classes.info}>
                 <nav>
-                    <InfoIcon onMouseEnter={() => toggle()} onMouseLeave={() => toggle()} />
+                    <InfoIcon onMouseEnter={() => toggle(true)} onMouseLeave={() => toggle(false)} />
                     <span>{isLocked ? 'Result Countdown' : 'Deposit Countdown'}</span>
                 </nav>
             </Grid>

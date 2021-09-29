@@ -12,7 +12,7 @@ export const base: Plugin.Shared.Definition = {
     icon: ENTROPYFI_PLUGIN_ICON,
     name: { fallback: ENTROPYFI_PLUGIN_NAME },
     description: { fallback: ENTROPYFI_PLUGIN_DESCRIPTION },
-    publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
+    publisher: { name: { fallback: 'Entropyfi' }, link: 'https://entropyfi.com/' },
     enableRequirement: {
         architecture: { app: false, web: true },
         networks: { type: 'opt-out', networks: {} },

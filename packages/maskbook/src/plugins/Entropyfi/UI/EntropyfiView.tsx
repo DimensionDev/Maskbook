@@ -5,14 +5,7 @@ import React, { useState } from 'react'
 import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
 import { EntropyfiIcon } from '../../../resources/EntropyfiIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
-// import { usePool, usePools } from '../hooks/usePools'
-// import type { Pool } from '../types'
 import { PoolsView } from './PoolsView'
-
-const backgroundImage_1 = new URL('../constants/assets/image_2.jpg', import.meta.url).toString()
-
-// import { getAssetAsBlobURL, useI18N } from '../../../../src/utils/'
-// const backgroundImageMain = getAssetAsBlobURL(new URL('../constants/assets/image_2.jpg', import.meta.url))
 
 const useStyles = makeStyles()((theme) => ({
     root: {

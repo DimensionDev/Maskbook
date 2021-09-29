@@ -151,43 +151,43 @@ export function CardLeft(props: any) {
     )
 }
 
-//=> Functions
-const countUp = (setter: any, speed: number, value: number) => {
-    if (value > 0) {
-        let num = 0
-        const timer = setInterval(() => {
-            const increment = num === 0 ? 25 : num / 5
-            num += increment === 0 ? 1 : Math.floor(increment)
-            setter(num)
-            if (num >= value) {
-                clearInterval(timer)
-                setter(value)
-            }
-        }, speed)
-    } else setter(value)
-}
+// //=> Functions
+// const countUp = (setter: any, speed: number, value: number) => {
+//     if (value > 0) {
+//         let num = 0
+//         const timer = setInterval(() => {
+//             const increment = num === 0 ? 25 : num / 5
+//             num += increment === 0 ? 1 : Math.floor(increment)
+//             setter(num)
+//             if (num >= value) {
+//                 clearInterval(timer)
+//                 setter(value)
+//             }
+//         }, speed)
+//     } else setter(value)
+// }
 
-const colorChange = (setter: (r: number, g: number, b: number) => void, speed: number, cvalue: string) => {
-    const targetr = parseInt(cvalue.split(',')[0], 10),
-        targetg = parseInt(cvalue.split(',')[1], 10),
-        targetb = parseInt(cvalue.split(',')[2], 10)
-    let r = 180,
-        g = 144,
-        b = 202
-    const timer = setInterval(() => {
-        const incrementr = r === 180 ? 1 : Math.abs(targetr - r) / 30.0
-        const incrementg = g === 144 ? 1 : Math.abs(targetg - g) / 50.0
-        const incrementb = b === 202 ? 1 : Math.abs(targetb - b) / 80.0
-        if (r > 255) r -= 255
-        if (g > 255) g -= 255
-        if (b > 255) b -= 255
-        r -= r === targetr ? 0 : incrementr
-        g += g === targetg ? 0 : incrementg
-        b += b === targetb ? 0 : incrementb
-        setter(`${r},${g},${b}`)
-        if (r === targetr && g === targetg && b === targetb) {
-            clearInterval(timer)
-            setter(cvalue)
-        }
-    }, speed)
-}
+// const colorChange = (setter: (r: number, g: number, b: number) => void, speed: number, cvalue: string) => {
+//     const targetr = parseInt(cvalue.split(',')[0], 10),
+//         targetg = parseInt(cvalue.split(',')[1], 10),
+//         targetb = parseInt(cvalue.split(',')[2], 10)
+//     let r = 180,
+//         g = 144,
+//         b = 202
+//     const timer = setInterval(() => {
+//         const incrementr = r === 180 ? 1 : Math.abs(targetr - r) / 30.0
+//         const incrementg = g === 144 ? 1 : Math.abs(targetg - g) / 50.0
+//         const incrementb = b === 202 ? 1 : Math.abs(targetb - b) / 80.0
+//         if (r > 255) r -= 255
+//         if (g > 255) g -= 255
+//         if (b > 255) b -= 255
+//         r -= r === targetr ? 0 : incrementr
+//         g += g === targetg ? 0 : incrementg
+//         b += b === targetb ? 0 : incrementb
+//         setter(`${r},${g},${b}`)
+//         if (r === targetr && g === targetg && b === targetb) {
+//             clearInterval(timer)
+//             setter(cvalue)
+//         }
+//     }, speed)
+// }

@@ -1,7 +1,6 @@
 import { ChainId, getChainDetailed, getNetworkTypeFromChainId } from '@masknet/web3-shared'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
 import { NetworkIcon } from '../../../components/shared/NetworkIcon'
 import { getNetworkColor } from '../utils'
 
@@ -22,7 +21,7 @@ interface NetworkViewProps {
 }
 
 export const NetworkView = (props: NetworkViewProps) => {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
     const { chainId = ChainId.Mainnet } = props
 
     const selectedNetwork = getNetworkTypeFromChainId(chainId)

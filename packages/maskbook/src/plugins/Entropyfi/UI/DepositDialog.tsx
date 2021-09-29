@@ -109,8 +109,8 @@ export function DepositDialog() {
     }, [closeDialog])
     //#endregion
 
-    const openSwap = () => {
-        //open uniswap to buy coin
+    const openGetTestNetTokenHelp = () => {
+        window.open('https://docs.entropyfi.com/user-guide/getting-testnet-tokens')
         return ''
     }
 
@@ -124,6 +124,7 @@ export function DepositDialog() {
     // useEffect(() => {
     //     console.log('rawAmount value change', depositAmount)
     //     console.log('balance', tokenBalance)
+    //     console.log('chainId', chainId)
     //     console.log('pid', poolId)
     //     console.log('poolAddress', poolAddress)
     //     console.log('formattedAmount', formattedAmount)
@@ -221,7 +222,7 @@ export function DepositDialog() {
                             <ActionButton
                                 className={classes.button}
                                 fullWidth
-                                onClick={openSwap}
+                                onClick={openGetTestNetTokenHelp}
                                 variant="contained"
                                 loading={loadingTokenBalance}>
                                 Please get some {coinName} test Coin before playing the game
