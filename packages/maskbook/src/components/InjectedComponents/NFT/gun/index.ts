@@ -1,65 +1,52 @@
-import type { AvatarMetaDB } from '../types'
-import { getNFT } from '../utils'
+import { delay } from '@masknet/shared-base'
+import { first } from 'lodash-es'
+import { AvatarMetaDB, NFT_AVATAR_JSON_SERVER } from '../types'
 
-const NFTAvatarCache = new Map<string, AvatarMetaDB>()
-async function getAvatarGun() {
-    // TODO: do not call gun in SNS adaptor.
-    const { gun2 } = await import('../../../../network/gun/version.2')
-    return { gun2 }
+const EXPIRED_TIME = 5 * 60 * 1000
+const cache = new Map<'avatar', [number, Promise<AvatarMetaDB[]>]>()
+
+async function fetchData() {
+    const response = await fetch(NFT_AVATAR_JSON_SERVER)
+    if (!response.ok) return []
+    const json = (await response.json()) as AvatarMetaDB[]
+    return json
+}
+
+async function _fetch() {
+    const c = cache.get('avatar')
+    let f, json
+    if (c) {
+        f = c[1]
+        if (!f) {
+            f = fetchData()
+            cache.set('avatar', [Date.now(), f])
+        }
+        if (Date.now() - c[0] >= EXPIRED_TIME) {
+            json = await f
+            f = fetchData()
+            cache.set('avatar', [Date.now(), f])
+            return json
+        }
+    } else {
+        f = fetchData()
+        cache.set('avatar', [Date.now(), f])
+    }
+
+    json = await f
+    return json
 }
 
 export async function getNFTAvatar(userId: string) {
-    if (NFTAvatarCache.has(userId)) return NFTAvatarCache.get(userId)
-    const avatarDB = await (
-        await getAvatarGun()
-    ).gun2
-        .get('com.maskbook.nft.avatar')
-        // @ts-expect-error
-        .get(userId).then!()
-
-    NFTAvatarCache.set(userId, avatarDB)
-    return avatarDB as AvatarMetaDB
-}
-
-export async function setOrClearAvatar(userId: string, avatar?: AvatarMetaDB) {
-    await (
-        await getAvatarGun()
-    ).gun2
-        .get('com.maskbook.nft.avatar')
-        // @ts-expect-error
-        .get(userId)
-        // @ts-expect-error
-        .put(avatar ? avatar : null).then!()
-}
-
-export async function getNFTAvatars() {
-    const NFTAvatarNodes =
-        (await (
-            await getAvatarGun()
-        ).gun2 //@ts-expect-error
-            .get('com.maskbook.nft.avatar').then!()) || []
-    const NFTAvatarKeys = Object.keys(NFTAvatarNodes).filter((x) => x !== '_')
-    const resultPromise = NFTAvatarKeys.map((key) => getNFTAvatar(key))
-    const result = (await Promise.all(resultPromise)).filter((x) => x) as AvatarMetaDB[]
-
-    return result
+    const db = (await _fetch()).filter((x) => x.userId === userId)
+    return first(db)
 }
 
 export async function saveNFTAvatar(userId: string, avatarId: string, address: string, tokenId: string) {
-    const { name, symbol, amount, image } = await getNFT(address, tokenId)
-    const avatarMeta: AvatarMetaDB = {
-        name,
-        amount,
-        symbol,
-        image,
+    await delay(500)
+    return {
         userId,
+        avatarId,
         address,
         tokenId,
-        avatarId,
     }
-
-    await setOrClearAvatar(userId)
-
-    await setOrClearAvatar(userId, avatarMeta)
-    return avatarMeta
 }
