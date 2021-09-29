@@ -9,9 +9,11 @@ import {
 import type { Transaction } from 'web3-core'
 import { useAsync } from 'react-use'
 import { useState, useEffect } from 'react'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import { Interface, Fragment, JsonFragment } from '@ethersproject/abi'
 import type { Options } from 'web3-eth-contract'
 import urlcat from 'urlcat'
+import { WalletRPC } from '../../../plugins/Wallet/messages'
 
 export function useSpeedUpTransaction(
     state: TransactionState,
@@ -38,6 +40,7 @@ export function useSpeedUpTransaction(
     useAsync(async () => {
         if (
             (state.type !== TransactionStateType.HASH && state.type !== TransactionStateType.WAIT_FOR_CONFIRMING) ||
+            !state.hash ||
             !contractData ||
             !interFace ||
             !EXPLORER_API ||
@@ -81,7 +84,17 @@ export function useSpeedUpTransaction(
                         }
                     }) ?? null
 
-                setSpeedUpTx(_speedUpTx)
+                if (_speedUpTx) {
+                    setSpeedUpTx(_speedUpTx)
+                    // Update recent transactions list
+                    const originalTx = await WalletRPC.getRecentTransaction(from, state.hash ?? '')
+                    await WalletRPC.removeRecentTransaction(from, state.hash ?? '')
+                    await WalletRPC.addRecentTransaction(
+                        _speedUpTx.from,
+                        _speedUpTx.hash,
+                        originalTx?.payload ?? ({} as JsonRpcPayload),
+                    )
+                }
             }, TIME_INTERVAL_TO_QUERY_API),
         )
 

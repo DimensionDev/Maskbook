@@ -27,6 +27,10 @@ export async function addRecentTransaction(address: string, hash: string, payloa
     await database.addRecentTransaction(address, hash, payload)
 }
 
+export async function getRecentTransaction(address: string, hash: string) {
+    return database.getRecentTransaction(address, hash)
+}
+
 export async function removeRecentTransaction(address: string, hash: string) {
     watcher.unwatchTransaction(hash)
     await database.removeRecentTransaction(address, hash)
