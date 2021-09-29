@@ -537,8 +537,6 @@ export async function queryRelationsPagedDB(
         if (cursor.value.network !== options.network) continue
 
         if (firstRecord && options.after && options.after.profile.toText() !== cursor?.value.profile) {
-            // @ts-ignore
-            // WARNING: Please pass string or string array to continue
             cursor.continue([
                 options.after.linked.toText(),
                 options.after.profile.toText(),
@@ -679,7 +677,7 @@ export interface PersonaDB extends DBSchema {
         key: IDBValidKey[]
         value: RelationRecordDB
         indexes: {
-            'linked, profile, favor': string
+            'linked, profile, favor': string[]
         }
     }
 }
