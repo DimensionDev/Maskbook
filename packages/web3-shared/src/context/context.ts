@@ -1,26 +1,23 @@
 import { noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { provider as Web3Provider } from 'web3-core'
-import type { MaskMessage } from '../../../maskbook/dist/utils/messages'
+import type { MaskMessages } from '../../../maskbook/dist/utils/messages'
 import type { Services as MaskServices } from '../../../maskbook/dist/extension/service'
 import { ChainId, NetworkType, PortfolioProvider, ProviderType } from '..'
 import type { Web3ProviderType } from '.'
 
 export interface PluginServices {
     Wallet: typeof import('../../../maskbook/dist/plugins/Wallet/messages').WalletRPC
-    Swap: typeof import('../../../maskbook/dist/plugins/Trader/messages').PluginTraderRPC
 }
 export interface PluginMessages {
     Wallet: typeof import('../../../plugins/Wallet/dist/messages').WalletMessages
-    Transak: typeof import('../../../maskbook/dist/plugins/Transak/messages').PluginTransakMessages
-    Swap: typeof import('../../../maskbook/dist/plugins/Trader/messages').PluginTraderMessages
 }
 
 export function createWeb3Context(
     provider: Web3Provider,
     hub: {
         MaskServices: typeof MaskServices
-        MaskMessages: typeof MaskMessage
+        MaskMessages: typeof MaskMessages
         PluginServices: PluginServices
         PluginMessages: PluginMessages
     },

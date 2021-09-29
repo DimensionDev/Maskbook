@@ -4,6 +4,8 @@ import { useSubscription } from 'use-subscription'
 import type { Web3ProviderType } from './type'
 import { getChainDetailed, isChainIdValid } from '../utils'
 
+export * from './context'
+
 export type { Web3ProviderType } from './type'
 
 export const Web3ProviderContext = createContext<Web3ProviderType>(null!)
