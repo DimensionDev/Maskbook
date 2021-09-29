@@ -19,6 +19,8 @@ import Fuse from 'fuse.js'
 import { useERC721ContractDetailed } from '@masknet/web3-shared'
 import classNames from 'classnames'
 import { useNFTscanFindAssets } from '../hooks/useNFTscanFindAssets'
+import { useERC721TokensFromDB } from '../hooks/useERC721Tokens'
+import { unionBy } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -119,7 +121,17 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const [keyword, setKeyword] = useState('')
     const account = useAccount()
     const { value: assets } = useNFTscanFindAssets(account)
-    const contractList = chainId === ChainId.Mainnet && assets ? assets : []
+
+    const erc721InDb = useERC721TokensFromDB()
+    const allContractsInDb = unionBy(
+        erc721InDb.map((x) => x.contractDetailed),
+        'address',
+    ).map((x) => ({ contractDetailed: x, balance: undefined }))
+
+    const contractList =
+        chainId === ChainId.Mainnet && assets
+            ? unionBy([...assets, ...allContractsInDb], 'contractDetailed.address')
+            : allContractsInDb
 
     //#region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
