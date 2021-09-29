@@ -19,6 +19,7 @@ import { pasteImageToCompositionDefault } from '../../social-network/defaults/au
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
+import { PaletteModeProviderFacebook, useThemeFacebookVariant } from './customization/custom'
 import { currentSelectedIdentity } from '../../settings/settings'
 import { unreachable } from '@dimensiondev/kit'
 import { ProfileIdentifier } from '@masknet/shared'
@@ -59,7 +60,10 @@ const facebookUI: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderFacebook,
         postsProvider: PostProviderFacebook,
     },
-    customization: {},
+    customization: {
+        paletteMode: PaletteModeProviderFacebook,
+        useTheme: useThemeFacebookVariant,
+    },
     init(signal) {
         const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
