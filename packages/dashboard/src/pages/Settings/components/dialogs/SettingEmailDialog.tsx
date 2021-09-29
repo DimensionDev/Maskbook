@@ -15,7 +15,7 @@ import {
     VerifyCodeRequest,
 } from '../../api'
 import { emailRegexp } from '../../regexp'
-import { CountdownButton, MaskTextField, useSnackbar } from '@masknet/theme'
+import { CountdownButton, MaskTextField, useCustomSnackbar } from '@masknet/theme'
 import { Locale, Scenario, AccountType } from '../../type'
 import { decryptBackup, encryptBackup } from '@masknet/backup-format'
 import { encode } from '@msgpack/msgpack'
@@ -35,7 +35,7 @@ interface SettingEmailDialogProps {
 
 export default function SettingEmailDialog({ open, onClose }: SettingEmailDialogProps) {
     const language = useLanguage()
-    const snackbar = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const { user, updateUser } = useContext(UserContext)
@@ -97,7 +97,7 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
 
     const onSuccess = () => {
         const msg = user.email ? t.settings_alert_email_updated() : t.settings_alert_email_set()
-        snackbar.enqueueSnackbar(msg, { variant: 'success' })
+        showSnackbar(msg, { variant: 'success' })
 
         updateUser({ email })
         onClose()
@@ -154,11 +154,11 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
             scenario: user.email ? Scenario.change : Scenario.create,
             locale: language.includes('zh') ? Locale.zh : Locale.en,
         }).catch((error) => {
-            snackbar.enqueueSnackbar(error.message, { variant: 'error' })
+            showSnackbar(error.message, { variant: 'error' })
         })
 
         if (res) {
-            snackbar.enqueueSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
+            showSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
         }
     }
 
