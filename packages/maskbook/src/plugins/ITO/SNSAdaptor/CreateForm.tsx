@@ -58,6 +58,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.secondary,
     },
     button: {
+        color: '#fff',
         marginTop: theme.spacing(1.5),
     },
     date: {
