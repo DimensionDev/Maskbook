@@ -151,12 +151,12 @@ export const Prior1559GasSetting = memo(() => {
         return zod.object({
             gasLimit: zod
                 .string()
-                .min(1, t('wallet_transfer_error_gasLimit_absence'))
+                .min(1, t('wallet_transfer_error_gas_limit_absence'))
                 .refine(
                     (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit ?? 0),
                     t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
                 ),
-            gasPrice: zod.string().min(1, t('wallet_transfer_error_gasPrice_absence')),
+            gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
         })
     }, [minGasLimit])
 
