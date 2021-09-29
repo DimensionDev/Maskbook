@@ -18,7 +18,7 @@ const useStyles = makeStyles()({
         borderRadius: 8,
         width: 140,
         height: 215,
-        backgroundColor: MaskColorVar.lightBackground,
+        backgroundColor: MaskColorVar.lineLight,
         display: 'flex',
         flexDirection: 'column',
     },
@@ -28,14 +28,9 @@ const useStyles = makeStyles()({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: MaskColorVar.primaryBackground,
-        [`* path`]: {
-            fill: MaskColorVar.lineLight,
-        },
     },
     description: {
         flex: 1,
-        backgroundColor: MaskColorVar.infoBackground,
     },
     disabled: {
         filter: 'opacity(0.5)',
@@ -61,7 +56,7 @@ export const NFTCard = memo<NFTCardProps>(({ token, selected, onSelect }) => {
             {loadFailed || !token.info.image ? (
                 <div className={classes.container}>
                     <div className={classes.placeholder}>
-                        <MiniMaskIcon viewBox="0 0 48 48" sx={{ fontSize: 48, opacity: 0.5 }} />
+                        <MiniMaskIcon viewBox="0 0 48 48" sx={{ fontSize: 48 }} />
                     </div>
                     <div className={classes.description} />
                 </div>
