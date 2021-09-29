@@ -536,20 +536,19 @@ export async function queryRelationsPagedDB(
         if (cursor.value.linked !== linked.toText()) continue
         if (cursor.value.network !== options.network) continue
 
-        if (
-            firstRecord &&
-            options.after &&
-            options.after.linked.toText() !== cursor?.value.linked &&
-            options.after.profile.toText() !== cursor?.value.profile
-        ) {
-            // @ts-ignore
-            cursor.continue([options.after.linked, options.after.profile, options.after.favor])
+        if (firstRecord && options.after && options.after.profile.toText() !== cursor?.value.profile) {
+            cursor.continue([
+                options.after.linked.toText(),
+                options.after.profile.toText(),
+                String(options.after.favor),
+            ])
             firstRecord = false
             continue
         }
 
         firstRecord = false
 
+        //after this record
         if (
             options.after?.linked.toText() === cursor?.value.linked &&
             options.after?.profile.toText() === cursor?.value.profile
@@ -678,7 +677,7 @@ export interface PersonaDB extends DBSchema {
         key: IDBValidKey[]
         value: RelationRecordDB
         indexes: {
-            'linked, profile, favor': string
+            'linked, profile, favor': string[]
         }
     }
 }
