@@ -248,8 +248,6 @@
     "settings_post_replacement_desc": "crwdns4449:0crwdne4449:0",
     "settings_title_general": "crwdns4451:0crwdne4451:0",
     "settings_title_advanced_options": "crwdns4453:0crwdne4453:0",
-    "settings_title_bind_nft_avatar": "crwdns8185:0crwdne8185:0",
-    "bind_nft_avatar": "crwdns8187:0crwdne8187:0",
     "settings_title_database_management": "crwdns4455:0crwdne4455:0",
     "settings_launch_page": "crwdns4457:0crwdne4457:0",
     "settings_launch_page_secondary": "crwdns4459:0crwdne4459:0",
@@ -318,10 +316,10 @@
     "wallet_transfer_error_address_absence": "crwdns4545:0crwdne4545:0",
     "wallet_transfer_error_invalid_address": "crwdns4547:0crwdne4547:0",
     "wallet_transfer_error_insufficient_balance": "crwdns7961:0{{symbol}}crwdne7961:0",
-    "wallet_transfer_error_gasPrice_absence": "crwdns8035:0crwdne8035:0",
-    "wallet_transfer_error_gasLimit_absence": "crwdns8037:0crwdne8037:0",
-    "wallet_transfer_error_maxFee_absence": "crwdns8039:0crwdne8039:0",
-    "wallet_transfer_error_maxPriority_fee_absence": "crwdns8041:0crwdne8041:0",
+    "wallet_transfer_error_gas_price_absence": "crwdns9051:0crwdne9051:0",
+    "wallet_transfer_error_gas_limit_absence": "crwdns9053:0crwdne9053:0",
+    "wallet_transfer_error_max_fee_absence": "crwdns9055:0crwdne9055:0",
+    "wallet_transfer_error_max_priority_fee_absence": "crwdns9057:0crwdne9057:0",
     "wallet_transfer_error_max_fee_too_low": "crwdns8043:0crwdne8043:0",
     "wallet_transfer_error_max_fee_too_high": "crwdns8045:0crwdne8045:0",
     "wallet_transfer_error_max_priority_gas_fee_positive": "crwdns8047:0crwdne8047:0",
@@ -923,8 +921,5 @@
     "popups_password_do_not_match": "crwdns8983:0crwdne8983:0",
     "popups_backup_password": "crwdns8985:0crwdne8985:0",
     "popups_rename_error_tip": "crwdns8987:0{{length}}crwdne8987:0",
-    "profile_nft_avatar_set": "crwdns8189:0crwdne8189:0",
-    "settings_nft_avatar_whitelist": "crwdns8197:0crwdne8197:0",
-    "unbind_nft_avatar": "crwdns8199:0crwdne8199:0",
-    "delete_nft_avatar": "crwdns8201:0{{userId}}crwdne8201:0"
+    "profile_nft_avatar_set": "crwdns8189:0crwdne8189:0"
 }
