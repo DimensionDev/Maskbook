@@ -5,4 +5,9 @@ import { CollectiblePlaceholder as C } from '../../../src/pages/Wallets/componen
 const { meta, of } = story(C)
 
 export default meta({ title: 'Pages/Wallet/Collectible Placeholder' })
-export const CollectiblePlaceholder = of({})
+export const CollectiblePlaceholder = of({
+    args: {
+        onSend: () => {},
+        isHovering: true,
+    },
+})

@@ -29,12 +29,12 @@ const useStyles = makeStyles()({
     },
 })
 
-interface PlaceHolderProps {
+export interface CollectiblePlaceHolderProps {
     onSend(): void
     isHovering: boolean
 }
 
-export const CollectiblePlaceholder = memo<PlaceHolderProps>(({ onSend, isHovering }) => {
+export const CollectiblePlaceholder = memo<CollectiblePlaceHolderProps>(({ onSend, isHovering }) => {
     const { classes } = useStyles()
     const t = useDashboardI18N()
 
