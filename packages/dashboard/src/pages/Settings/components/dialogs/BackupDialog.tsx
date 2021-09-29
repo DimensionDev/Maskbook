@@ -3,7 +3,7 @@ import { PluginServices, Services } from '../../../../API'
 import { useAsync, useAsyncFn } from 'react-use'
 import BackupContentSelector, { BackupContentCheckedStatus } from '../BackupContentSelector'
 import { useDashboardI18N } from '../../../../locales'
-import { MaskDialog, useSnackbar } from '@masknet/theme'
+import { MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { Box } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import LoadingButton from '@material-ui/lab/LoadingButton'
@@ -24,7 +24,7 @@ export interface BackupDialogProps {
 }
 
 export default function BackupDialog({ local = true, params, open, merged, onClose }: BackupDialogProps) {
-    const snackbar = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const t = useDashboardI18N()
     const [backupPassword, setBackupPassword] = useState('')
     const [paymentPassword, setPaymentPassword] = useState('')
@@ -76,7 +76,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
                 const encrypted = await encryptBackup(encode(params.account + backupPassword), encode(fileJson))
 
                 uploadBackupValue(uploadUrl, encrypted).then(() => {
-                    snackbar.enqueueSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
+                    showSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
                 })
             }
 
@@ -87,7 +87,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
 
             onClose()
         } catch {
-            snackbar.enqueueSnackbar(t.settings_alert_backup_fail(), { variant: 'error' })
+            showSnackbar(t.settings_alert_backup_fail(), { variant: 'error' })
         }
     }, [backupPassword, paymentPassword])
 

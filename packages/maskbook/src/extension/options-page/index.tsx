@@ -36,7 +36,6 @@ import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
 import { MaskUIRoot } from '../../UIRoot'
 import { createInjectHooksRenderer, startPluginDashboard, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
-import { DashboardNFTAvatarsRouter } from './DashboardRouters/NFTAvatarList'
 
 const useStyles = makeStyles()((theme) => {
     const dark = theme.palette.mode === 'dark'
@@ -195,7 +194,6 @@ function DashboardUI() {
                 <Route path={DashboardRoute.Plugins} children={RenderWithErrorBoundary(DashboardPluginsRouter)} />
                 <Route path={DashboardRoute.Settings} children={RenderWithErrorBoundary(DashboardSettingsRouter)} />
                 <Route path={DashboardRoute.Setup} children={RenderWithErrorBoundary(DashboardSetupRouter)} />
-                <Route path={DashboardRoute.NFTAvatars} children={RenderWithErrorBoundary(DashboardNFTAvatarsRouter)} />
                 <Redirect
                     path="*"
                     to={Flags.has_no_browser_tab_ui && xsMatched ? DashboardRoute.Nav : DashboardRoute.Personas}
