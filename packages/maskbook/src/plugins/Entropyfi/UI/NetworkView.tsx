@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NetworkViewProps extends withClasses<never> {
+interface NetworkViewProps {
     chainId?: ChainId
 }
 
