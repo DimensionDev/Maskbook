@@ -89,7 +89,6 @@ export function RedPacket(props: RedPacketProps) {
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
-        (ev) => undefined,
     )
 
     // open the transaction dialog
