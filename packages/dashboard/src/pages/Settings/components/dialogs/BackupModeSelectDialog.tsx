@@ -2,9 +2,10 @@ import { MaskColorVar, MaskDialog } from '@masknet/theme'
 import { Box, DialogContent, Tooltip, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { LocalBackupIcon, CloudBackupIcon } from '@masknet/icons'
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
+import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -26,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
-        '&:hover': {
+        '&:not(.disabled):hover': {
             background: MaskColorVar.primaryBackground,
             boxShadow: '3px 6px 15px rgba(28, 104, 243, 0.1)',
         },
@@ -59,6 +60,11 @@ export default function BackupModeSelectDialog({ open, onClose, onSelect }: Back
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const { user } = useContext(UserContext)
+
+    const cloudDisabled = useMemo(() => {
+        return !user.email && !user.phone
+    }, [user.email, user.phone])
+
     return (
         <MaskDialog title={t.settings_button_backup()} open={open} onClose={onClose}>
             <DialogContent>
@@ -67,8 +73,8 @@ export default function BackupModeSelectDialog({ open, onClose, onSelect }: Back
                         <LocalBackupIcon className={classes.icon} />
                         <Typography className={classes.label}>Local Backup</Typography>
                     </Box>
-                    <Box className={classes.mode}>
-                        {!(user.email || user.phone) ? (
+                    <Box className={classNames(classes.mode, cloudDisabled && 'disabled')}>
+                        {cloudDisabled ? (
                             <Tooltip title={t.settings_dialogs_bind_email_or_phone()} placement="top" arrow>
                                 <div className={classes.mask} />
                             </Tooltip>
