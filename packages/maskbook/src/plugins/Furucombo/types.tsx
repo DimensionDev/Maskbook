@@ -38,10 +38,3 @@ export enum InvestableType {
     farm = 'farm',
     pool = 'pool',
 }
-
-export interface Token {
-    address: string
-    symbol: string
-    decimals: number
-    name: string
-}

@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { useChainId } from '@masknet/web3-shared'
+import { isSameAddress, useChainId } from '@masknet/web3-shared'
 import { Card, CardContent, CardActions, Tabs, Tab, Typography, Link, Paper } from '@material-ui/core'
 import { useState } from 'react'
 import { FurucomboIcon } from '../../../resources/FurucomboIcon'
@@ -8,7 +8,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useFetchPools } from '../hooks/usePool'
 import type { Investable } from '../types'
 import { InvestmentsView } from './InvestmentsView'
-import { Poolview } from './PoolView'
+import { PoolView } from './PoolView'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -25,16 +25,6 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         justifyContent: 'space-around',
         padding: '0 !important',
-    },
-    body: {
-        // flex: 1,
-        // overflow: 'auto',
-        // maxHeight: 350,
-        // borderRadius: 0,
-        // scrollbarWidth: 'none',
-        // '&::-webkit-scrollbar': {
-        //     display: 'none',
-        // },
     },
     tabs: {
         borderTop: `solid 1px ${theme.palette.divider}`,
@@ -83,21 +73,25 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface PoolViewProps {
-    category: string
-    chainId: string
     address: string
+    category: string
 }
 
 export function FurucomboView(props: PoolViewProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const currentChaindId = useChainId()
     const [tabIndex, setTabIndex] = useState(0)
+    const currentChainId = useChainId()
 
     const { value: investablesData = {}, loading, error } = useFetchPools()
     const { investables = [] } = investablesData
 
-    const investable = investables.find((investable: Investable) => investable.token.address === props.address)
+    const investable = investables.find(
+        (investable: Investable) =>
+            isSameAddress(investable.token.address, props.address) &&
+            investable.chainId === currentChainId &&
+            investable.category === props.category,
+    )
 
     if (loading) return <Typography align="center">Loading...</Typography>
 
@@ -128,8 +122,8 @@ export function FurucomboView(props: PoolViewProps) {
                     <Tab value={0} className={classes.tab} key={0} label={t('plugin_furucombo_tab_pool')} />,
                     <Tab value={1} className={classes.tab} key={1} label={t('plugin_furucombo_tab_investments')} />,
                 </Tabs>
-                <Paper className={classes.body}>
-                    {tabIndex === 0 ? <Poolview investable={investable} /> : null}
+                <Paper>
+                    {tabIndex === 0 ? <PoolView investable={investable} /> : null}
                     {tabIndex === 1 ? <InvestmentsView investables={investables} /> : null}
                 </Paper>
             </CardContent>

@@ -195,7 +195,7 @@ export function InvestmentsView(props: InvestmentsProps) {
                                 active={orderBy === 'apy'}
                                 onClick={(e) => handleRequestSort(e, 'apy')}
                                 direction={orderBy === 'apy' ? order : 'asc'}>
-                                {t('plugin_furucombo_apy')}
+                                {t('plugin_furucombo_annual_percentage_yield')}
                             </TableSortLabel>
                         </TableCell>
                         <TableCell className={classes.cell} key="liquidity">

@@ -81,7 +81,7 @@ interface PoolProps {
     investable: Investable
 }
 
-export function Poolview(props: PoolProps) {
+export function PoolView(props: PoolProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const {
@@ -136,7 +136,9 @@ export function Poolview(props: PoolProps) {
                 </Grid>
                 <Grid container item direction="column" alignItems="center">
                     <Grid item>
-                        <Typography className={classes.title}>{t('plugin_furucombo_apy')}</Typography>
+                        <Typography className={classes.title}>
+                            {t('plugin_furucombo_annual_percentage_yield')}
+                        </Typography>
                     </Grid>
                     <Grid item>
                         <Typography className={classes.value}>{apyFormatter(apy)}</Typography>

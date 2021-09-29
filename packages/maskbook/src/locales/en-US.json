@@ -865,7 +865,7 @@
     "plugin_furucombo_tab_pool": "Pool",
     "plugin_furucombo_tab_investments": "All investments",
     "plugin_furucombo_liquidity": "Liquidity",
-    "plugin_furucombo_apy": "Apy",
+    "plugin_furucombo_annual_percentage_yield": "Apy",
     "plugin_furucombo_rewards": "Rewards",
     "plugin_furucombo_invest": "Invest",
     "plugin_furucombo_pool_not_found": "Invalid pool address.",

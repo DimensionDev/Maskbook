@@ -6,8 +6,9 @@ import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 import { parseURL } from '../../../utils/utils'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { FurucomboView } from '../UI/FurucomboView'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
-const matchLink = /^https:\/\/furucombo.app\/invest\/(pool|farm)\/(137|1)\/(0x[\dA-Fa-f]+)/
+const matchLink = /^https:\/\/furucombo.app\/invest\/(pool|farm)\/(137|1)\/(0x\w+)/
 const isFurucomboLink = (link: string): boolean => matchLink.test(link)
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -36,7 +37,9 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     return (
         <MaskPluginWrapper pluginName="Furucombo">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <FurucomboView chainId={chainId} category={category} address={address} />
+                <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
+                    <FurucomboView category={category} address={address} />
+                </EthereumChainBoundary>
             </Suspense>
         </MaskPluginWrapper>
     )
