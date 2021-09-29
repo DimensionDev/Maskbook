@@ -4,7 +4,7 @@ import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShad
 import { Composition } from '../../../components/CompositionDialog/Composition'
 import { isMobileFacebook } from '../utils/isMobile'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
 let composeBox: LiveSelector<Element>
 if (isMobileFacebook) {
@@ -25,7 +25,7 @@ export function injectCompositionFacebook(signal: AbortSignal) {
 }
 function UI() {
     const onHintButtonClicked = useCallback(
-        () => MaskMessage.events.requestComposition.sendToLocal({ reason: 'popup', open: true }),
+        () => MaskMessages.events.requestComposition.sendToLocal({ reason: 'popup', open: true }),
         [],
     )
     return (

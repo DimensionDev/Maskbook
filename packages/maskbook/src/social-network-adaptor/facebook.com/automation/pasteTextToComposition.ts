@@ -3,7 +3,7 @@ import { delay, timeout } from '../../../utils/utils'
 import { isMobileFacebook } from '../utils/isMobile'
 import type { SocialNetworkUI } from '../../../social-network/types'
 import { untilDocumentReady } from '../../../utils/dom'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import { inputText, pasteText } from '@masknet/injected-script'
 
 async function openPostDialogFacebook() {
@@ -101,6 +101,6 @@ export async function pasteTextToCompositionFacebook(
     scrollBack()
     function copyFailed(error: unknown) {
         console.warn('Text not pasted to the text area', error)
-        if (recover) MaskMessage.events.autoPasteFailed.sendToLocal({ text })
+        if (recover) MaskMessages.events.autoPasteFailed.sendToLocal({ text })
     }
 }

@@ -1,7 +1,7 @@
 import { makeTypedMessageText, TypedMessage } from '../../../protocols/typed-message'
 import { untilDocumentReady } from '../../../utils/dom'
 import { i18n } from '../../../utils/i18n-next'
-import { MaskMessage, CompositionRequest } from '../../../utils/messages'
+import { MaskMessages, CompositionRequest } from '../../../utils/messages'
 import { delay } from '../../../utils/utils'
 import { composeButtonSelector, composeDialogIndicatorSelector, composeTextareaSelector } from '../utils/selector'
 
@@ -24,7 +24,7 @@ export async function openComposeBoxMinds(content: string | TypedMessage, option
     }
 
     await delay(800)
-    MaskMessage.events.requestComposition.sendToLocal({
+    MaskMessages.events.requestComposition.sendToLocal({
         reason: 'popup',
         open: true,
         content: typeof content === 'string' ? makeTypedMessageText(content) : content,

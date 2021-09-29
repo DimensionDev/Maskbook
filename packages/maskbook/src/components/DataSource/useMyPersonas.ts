@@ -2,7 +2,7 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared'
 import Services from '../../extension/service'
 import { PersonaArrayComparer } from '../../utils/comparer'
-import { MaskMessage } from '../../utils/messages'
+import { MaskMessages } from '../../utils/messages'
 import type { Persona } from '../../database'
 import { debounce } from 'lodash-es'
 
@@ -29,7 +29,7 @@ const independentRef = {
     const debounceQuery = debounce(query, 500, { trailing: true })
 
     isLoading = query()
-    MaskMessage.events.ownPersonaChanged.on(debounceQuery)
+    MaskMessages.events.ownPersonaChanged.on(debounceQuery)
 }
 
 export function useMyPersonas() {

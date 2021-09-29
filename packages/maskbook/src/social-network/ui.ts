@@ -15,7 +15,7 @@ import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
-import { MaskMessage } from '../utils/messages'
+import { MaskMessages } from '../utils/messages'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -165,7 +165,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         if (!plugin) return
 
         await delay(500)
-        MaskMessage.events.requestComposition.sendToLocal({
+        MaskMessages.events.requestComposition.sendToLocal({
             open: true,
             reason: 'timeline',
             options: plugin === 'none' ? {} : { startupPlugin: plugin },

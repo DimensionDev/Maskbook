@@ -6,7 +6,7 @@ import { Emitter } from '@servie/events'
 import { currentPluginEnabledStatus } from '../settings/settings'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 // Do not export from '../utils/' to prevent initialization failure
-import { MaskMessage } from '../utils/messages'
+import { MaskMessages } from '../utils/messages'
 import i18nNextInstance from '../utils/i18n-next'
 import { createI18NBundle } from '@masknet/shared'
 
@@ -23,8 +23,8 @@ export function createPluginHost(signal?: AbortSignal): Plugin.__Host.Host {
                 // TODO: move it elsewhere.
                 if (isEnvironment(Environment.ManifestBackground)) {
                     status.addListener((newVal) => {
-                        if (newVal) MaskMessage.events.pluginEnabled.sendToAll(id)
-                        else MaskMessage.events.pluginDisabled.sendToAll(id)
+                        if (newVal) MaskMessages.events.pluginEnabled.sendToAll(id)
+                        else MaskMessages.events.pluginDisabled.sendToAll(id)
                     })
                 }
             }

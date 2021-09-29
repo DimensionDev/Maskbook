@@ -45,7 +45,7 @@ import { decompressBackupFile } from '../../utils/type-transform/BackupFileShort
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { EC_JsonWebKey, EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared'
 import { getCurrentPersonaIdentifier } from './SettingsService'
-import { MaskMessage } from '../../utils'
+import { MaskMessages } from '../../utils'
 import type { PostIVIdentifier } from '@masknet/shared-base'
 import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 import { first, orderBy } from 'lodash-es'
@@ -314,7 +314,7 @@ export const updateCurrentPersonaAvatar = async (avatar: Blob) => {
 
     if (identifier) {
         await storeAvatar(identifier, await blobToArrayBuffer(avatar))
-        MaskMessage.events.ownPersonaChanged.sendToAll(undefined)
+        MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     }
 }
 

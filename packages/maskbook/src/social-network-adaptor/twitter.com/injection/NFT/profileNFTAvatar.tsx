@@ -7,7 +7,7 @@ import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { useNFTAvatar } from '../../../../components/InjectedComponents/NFT/hooks'
 import { NFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
 import { activatedSocialNetworkUI } from '../../../../social-network'
-import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
+import { createReactRootShadowed, Flags, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
 import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector'
 import { getAvatar, getAvatarId, getTwitterId } from '../../utils/user'
 
@@ -62,7 +62,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
 
     const handler = () => {
         if (!avatarEvent) return
-        MaskMessage.events.NFTAvatarUpdated.sendToLocal(avatarEvent)
+        MaskMessages.events.NFTAvatarUpdated.sendToLocal(avatarEvent)
     }
 
     useEffect(() => {

@@ -20,7 +20,7 @@ import { decodeImageUrl } from '../SteganographyService'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import stringify from 'json-stable-stringify'
 import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
 import { Err, Ok, Result } from 'ts-results'
 import { decodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
@@ -368,7 +368,7 @@ async function* findAuthorPublicKey(
                     undo()
                     reject()
                 })
-                const undo = MaskMessage.events.profilesChanged.on((data) => {
+                const undo = MaskMessages.events.profilesChanged.on((data) => {
                     for (const x of data) {
                         if (x.reason === 'delete') continue
                         if (x.of.equals(by)) {

@@ -1,4 +1,4 @@
-import { createReactRootShadowed, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
+import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
 import { searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -61,7 +61,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     )
 
     useEffect(() => {
-        return MaskMessage.events.NFTAvatarUpdated.on((data) => {
+        return MaskMessages.events.NFTAvatarUpdated.on((data) => {
             onUpdate(data)
         })
     }, [onUpdate])

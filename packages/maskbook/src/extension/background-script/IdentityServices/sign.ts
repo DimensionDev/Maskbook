@@ -8,7 +8,7 @@ import {
     publicToAddress,
     ECDSASignature,
 } from 'ethereumjs-util'
-import { MaskMessage } from '../../../utils'
+import { MaskMessages } from '../../../utils'
 import { Convert } from 'pvtsutils'
 import { stringToBuffer } from 'arweave/web/lib/utils'
 import { constructSignRequestURL } from '../../popups'
@@ -49,7 +49,7 @@ export async function signWithPersona({ message, method }: SignRequest): Promise
         browser.tabs.onRemoved.addListener(listener)
         // reject this request after 3 mins
         delay(1000 * 60 * 3).then(() => reject(new Error('Timeout')))
-        const removeListener = MaskMessage.events.signRequestApproved.on((approval) => {
+        const removeListener = MaskMessages.events.signRequestApproved.on((approval) => {
             if (approval.requestID !== requestID) return
             resolve(approval.selectedPersona)
         })

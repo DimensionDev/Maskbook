@@ -6,7 +6,7 @@ import { base } from '../base'
 import { ThirdPartyPluginCompositionEntry } from '../components/CompositionEntry'
 import { ExternalPluginMessages } from '../messages'
 import { isLocalContext } from '../sns-context'
-import { MaskMessage } from '../../../utils'
+import { MaskMessages } from '../../../utils'
 import { makeTypedMessageText } from '@masknet/shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -20,7 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             if (!isLocalContext(data.context)) return
 
             // TODO: should ask for user.
-            MaskMessage.events.replaceComposition.sendToLocal(makeTypedMessageText(data.appendText, data.payload))
+            MaskMessages.events.replaceComposition.sendToLocal(makeTypedMessageText(data.appendText, data.payload))
         })
         signal.addEventListener('abort', a)
         signal.addEventListener('abort', b)

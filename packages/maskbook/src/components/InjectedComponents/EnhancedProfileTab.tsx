@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core'
 import classnames from 'classnames'
 import { ReactElement, useCallback, useEffect, useState } from 'react'
 
-import { MaskMessage } from '../../utils'
+import { MaskMessages } from '../../utils'
 
 export interface EnhancedProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {
     clear(): void
@@ -18,16 +18,16 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
 
     const onClose = () => {
         setActive(false)
-        MaskMessage.events.profileNFTsPageUpdated.sendToLocal({ show: false })
+        MaskMessages.events.profileNFTsPageUpdated.sendToLocal({ show: false })
         reset()
     }
     const onOpen = () => {
-        MaskMessage.events.profileNFTsPageUpdated.sendToLocal({ show: true })
+        MaskMessages.events.profileNFTsPageUpdated.sendToLocal({ show: true })
         setActive(true)
     }
 
     useEffect(() => {
-        return MaskMessage.events.profileNFTsTabUpdated.on(onClose)
+        return MaskMessages.events.profileNFTsTabUpdated.on(onClose)
     }, [])
 
     const onClick = useCallback(() => {

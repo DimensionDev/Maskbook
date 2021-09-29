@@ -16,7 +16,7 @@ import {
     currentMaskWalletAccountWalletSettings,
     currentMaskWalletBalanceSettings,
 } from '../plugins/Wallet/settings'
-import { Flags } from '../utils'
+import { Flags, MaskMessages } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
 import { createExternalProvider } from './helpers'
 import Services from '../extension/service'
@@ -145,6 +145,7 @@ function createStaticSubscription<T>(getter: () => T) {
         subscribe: () => noop,
     }
 }
+
 function createSubscriptionFromAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,

@@ -23,7 +23,7 @@ import stringify from 'json-stable-stringify'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { noop } from 'lodash-es'
 import { useValueRef } from '@masknet/shared'
-import { useI18N, MaskMessage, useMatchXS, extendsTheme } from '../../utils'
+import { useI18N, MaskMessages, useMatchXS, extendsTheme } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
@@ -611,7 +611,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         )
         if (!persona_.hasPrivateKey) throw new Error('invalid persona')
         await Services.Identity.setupPersona(persona_.identifier)
-        MaskMessage.events.ownPersonaChanged.sendToAll(undefined)
+        MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     }
     const onCreate = async () => {
         const content = t('setup_guide_say_hello_content')
