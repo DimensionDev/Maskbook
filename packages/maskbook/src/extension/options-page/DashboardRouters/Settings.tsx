@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { useHistory } from 'react-router'
 import { Typography, Card, List, Paper, ListItemText, ListItemIcon } from '@material-ui/core'
 import ListItemButton from '@material-ui/core/ListItemButton'
 import { ThemeProvider, useTheme } from '@material-ui/core/styles'
@@ -7,6 +8,7 @@ import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { getEnumAsObject } from '@masknet/shared'
 import { getChainName, ChainId, ProviderType, useAccount, PortfolioProvider } from '@masknet/web3-shared'
+import { safeUnreachable } from '@dimensiondev/kit'
 
 import { useMatchXS, extendsTheme, useI18N, Flags, useValueRef } from '../../../utils'
 import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
@@ -49,10 +51,6 @@ import { useAvailableDataProviders } from '../../../plugins/Trader/trending/useA
 import { useCurrentTradeProvider } from '../../../plugins/Trader/trending/useCurrentTradeProvider'
 import { useCurrentDataProvider } from '../../../plugins/Trader/trending/useCurrentDataProvider'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
-import { safeUnreachable } from '@dimensiondev/kit'
-import StorageIcon from '@material-ui/icons/Storage'
-import { useHistory } from 'react-router'
-import { DashboardRoute } from '../Route'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -287,25 +285,6 @@ export default function DashboardSettingsRouter() {
                             </List>
                         </Card>
                     </Paper>
-
-                    {Flags.nft_avatar_enabled ? (
-                        <Paper component="section" className={classes.section} elevation={elevation}>
-                            <Typography className={classes.title} variant="h6" color="textPrimary">
-                                {t('settings_title_bind_nft_avatar')}
-                            </Typography>
-                            <Card elevation={0}>
-                                <List className={classes.list} disablePadding>
-                                    <SettingsUIDummy
-                                        classes={listStyle}
-                                        icon={<StorageIcon />}
-                                        primary="Bind NFT Avatar"
-                                        secondary=""
-                                        onClick={() => history.push(DashboardRoute.NFTAvatars)}
-                                    />
-                                </List>
-                            </Card>
-                        </Paper>
-                    ) : null}
 
                     <Paper component="section" className={classes.section} elevation={elevation}>
                         <Typography className={classes.title} variant="h6" color="textPrimary">
