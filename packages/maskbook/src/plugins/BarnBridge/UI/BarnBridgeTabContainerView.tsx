@@ -25,7 +25,9 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import {
     COLOR_BARNBRIDGE_ORANGE,
     COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+    COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
     COLOR_BARNBRIDGE_BACKGROUND_DARK,
+    COLOR_BARNBRIDGE_BACKGROUND_LIGHT,
 } from '../constants'
 import { SmartYieldPoolsView } from './SmartYieldPoolsView'
 import { YieldFarmingView } from './YieldFarmingView'
@@ -35,7 +37,10 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: 'none',
         border: `solid 1px ${theme.palette.divider}`,
         padding: 0,
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK
+                : COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
         textAlign: 'center',
     },
     content: {
@@ -56,7 +61,8 @@ const useStyles = makeStyles()((theme) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark' ? COLOR_BARNBRIDGE_BACKGROUND_DARK : COLOR_BARNBRIDGE_BACKGROUND_LIGHT,
     },
     tabs: {
         borderTop: `solid 1px ${theme.palette.divider}`,

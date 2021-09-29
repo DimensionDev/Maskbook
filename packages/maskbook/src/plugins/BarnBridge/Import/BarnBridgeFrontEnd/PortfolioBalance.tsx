@@ -1,9 +1,14 @@
 import { makeStyles } from '@masknet/theme'
 
-import { Typography, Divider, LinearProgress } from '@material-ui/core'
+import { Typography, Divider, LinearProgress, useTheme } from '@material-ui/core'
 import { formatUSDValue } from './web3/utils'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { COLOR_SY_SENIOR_TEXT, COLOR_SY_JUNIOR_TEXT } from '../../constants'
+import {
+    COLOR_SY_SENIOR_TEXT,
+    COLOR_SY_JUNIOR_TEXT,
+    COLOR_BARNBRIDGE_TEXT_LIGHT,
+    COLOR_BARNBRIDGE_TEXT_DARK,
+} from '../../constants'
 
 const useStyles = makeStyles()((theme) => ({
     progress: {
@@ -55,17 +60,18 @@ const PortfolioBalance: React.FC<Props> = (props: Props) => {
     } = props
 
     const progress = ((value1 ?? 0) * 100) / ((value1 ?? 0) + (value2 ?? 0))
+    const textColor = useTheme().palette.mode === 'dark' ? COLOR_BARNBRIDGE_TEXT_DARK : COLOR_BARNBRIDGE_TEXT_LIGHT
 
     return (
         <div>
             <div>
-                <Typography variant="body1" color="#fff">
+                <Typography variant="body1" color={textColor}>
                     {t('plugin_barnbridge_sy_portfolio_balance')}
                 </Typography>
             </div>
             <div>
                 <div>
-                    <Typography variant="h2" color="#fff">
+                    <Typography variant="h2" color={textColor}>
                         {formatUSDValue(total)}
                     </Typography>
                 </div>
@@ -82,7 +88,7 @@ const PortfolioBalance: React.FC<Props> = (props: Props) => {
                     <Typography variant="subtitle1" color={COLOR_SY_SENIOR_TEXT}>
                         {label1}
                     </Typography>
-                    <Typography variant="body1" color="#fff">
+                    <Typography variant="body1" color={textColor}>
                         {formatUSDValue(value1)}
                     </Typography>
                 </div>
@@ -90,7 +96,7 @@ const PortfolioBalance: React.FC<Props> = (props: Props) => {
                     <Typography variant="subtitle1" color={COLOR_SY_JUNIOR_TEXT}>
                         {label2}
                     </Typography>
-                    <Typography variant="body1" color="#fff">
+                    <Typography variant="body1" color={textColor}>
                         {formatUSDValue(value2)}
                     </Typography>
                 </div>

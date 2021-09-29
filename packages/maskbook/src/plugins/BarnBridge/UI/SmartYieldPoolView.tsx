@@ -7,7 +7,11 @@ import {
     COLOR_SY_JUNIOR_TEXT,
     COLOR_BARNBRIDGE_ORANGE,
     COLOR_BARNBRIDGE_BACKGROUND_DARK,
+    COLOR_BARNBRIDGE_BACKGROUND_LIGHT,
     COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+    COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
+    COLOR_BARNBRIDGE_TEXT_DARK,
+    COLOR_BARNBRIDGE_TEXT_LIGHT,
 } from '../constants'
 import {
     BarnBridgeSmartYieldCompoundToken,
@@ -20,7 +24,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1, 2),
         maxWidth: 455,
         alignItems: 'stretch',
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK
+                : COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
         margin: theme.spacing(1, 1),
         borderRadius: theme.spacing(1),
         fontSize: 14,
@@ -34,14 +41,15 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     headerText: {
-        color: '#fff',
+        color: theme.palette.mode === 'dark' ? COLOR_BARNBRIDGE_TEXT_DARK : COLOR_BARNBRIDGE_TEXT_LIGHT,
         margin: theme.spacing(0, 1),
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark' ? COLOR_BARNBRIDGE_BACKGROUND_DARK : COLOR_BARNBRIDGE_BACKGROUND_LIGHT,
         borderRadius: theme.spacing(2),
         padding: theme.spacing(0.5, 0.5),
     },
     coinText: {
-        color: '#fff',
+        color: theme.palette.mode === 'dark' ? COLOR_BARNBRIDGE_TEXT_DARK : COLOR_BARNBRIDGE_TEXT_LIGHT,
         margin: theme.spacing(0, 2),
         padding: theme.spacing(0, 0.5),
     },
@@ -64,7 +72,8 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1),
         padding: theme.spacing(1),
         borderRadius: theme.spacing(1),
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark' ? COLOR_BARNBRIDGE_BACKGROUND_DARK : COLOR_BARNBRIDGE_BACKGROUND_LIGHT,
         justifyContent: 'flex-start',
         alignItems: 'center',
         maxWidth: '50%',

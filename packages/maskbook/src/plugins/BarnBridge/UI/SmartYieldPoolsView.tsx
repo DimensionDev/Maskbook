@@ -18,7 +18,11 @@ import { BarnBridgeSmartYieldBarChart, BarnBridgeSmartYieldWallet } from '../Bar
 import {
     COLOR_BARNBRIDGE_ORANGE,
     COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+    COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
     COLOR_BARNBRIDGE_BACKGROUND_DARK,
+    COLOR_BARNBRIDGE_BACKGROUND_LIGHT,
+    COLOR_BARNBRIDGE_TEXT_LIGHT,
+    COLOR_BARNBRIDGE_TEXT_DARK,
 } from '../constants'
 
 const useStyles = makeStyles()((theme) => ({
@@ -29,10 +33,13 @@ const useStyles = makeStyles()((theme) => ({
         padding: '0 !important',
     },
     tabs: {
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK
+                : COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
         borderBottom: `solid 1px ${theme.palette.divider}`,
         borderLeft: `solid 1px ${theme.palette.divider}`,
-        color: '#fff',
+        color: theme.palette.mode === 'dark' ? COLOR_BARNBRIDGE_TEXT_DARK : COLOR_BARNBRIDGE_TEXT_LIGHT,
     },
     indicator: {
         display: 'flex',
@@ -53,7 +60,8 @@ const useStyles = makeStyles()((theme) => ({
         color: COLOR_BARNBRIDGE_ORANGE,
     },
     paper: {
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark' ? COLOR_BARNBRIDGE_BACKGROUND_DARK : COLOR_BARNBRIDGE_BACKGROUND_LIGHT,
         paddingTop: 10,
     },
     progress: {

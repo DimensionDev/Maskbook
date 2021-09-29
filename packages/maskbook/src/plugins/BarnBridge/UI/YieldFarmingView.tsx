@@ -5,7 +5,10 @@ import { BondTokenIconCircle } from '../BarnBridgeIcon'
 import {
     COLOR_BARNBRIDGE_ORANGE,
     COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+    COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
     COLOR_BARNBRIDGE_BACKGROUND_DARK,
+    COLOR_BARNBRIDGE_TEXT_DARK,
+    COLOR_BARNBRIDGE_TEXT_LIGHT,
 } from '../constants'
 
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -18,10 +21,13 @@ const useStyles = makeStyles()((theme) => ({
         padding: '0 !important',
     },
     tabs: {
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK
+                : COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
         borderBottom: `solid 1px ${theme.palette.divider}`,
         borderLeft: `solid 1px ${theme.palette.divider}`,
-        color: '#fff',
+        color: theme.palette.mode === 'dark' ? COLOR_BARNBRIDGE_TEXT_DARK : COLOR_BARNBRIDGE_TEXT_LIGHT,
     },
     indicator: {
         backgroundColor: COLOR_BARNBRIDGE_ORANGE,
@@ -36,7 +42,8 @@ const useStyles = makeStyles()((theme) => ({
         color: COLOR_BARNBRIDGE_ORANGE,
     },
     contentContainer: {
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark' ? COLOR_BARNBRIDGE_BACKGROUND_DARK : COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
         display: 'flex',
         flexDirection: 'column',
     },
@@ -47,10 +54,16 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'row',
         height: 53,
         borderRadius: 0,
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK
+                : COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
     },
     topBarCell: {
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK
+                : COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
         display: 'flex',
         flexDirection: 'column',
         paddingLeft: 20,
@@ -61,7 +74,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     tapBarCellRow: {
         paddingTop: 3,
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK
+                : COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
         display: 'flex',
         justifyContent: 'space-evenly',
         flexDirection: 'row',
@@ -86,10 +102,16 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'row',
         borderRadius: 0,
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK
+                : COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
     },
     myRewards: {
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK
+                : COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
         color: COLOR_BARNBRIDGE_ORANGE,
         flexDirection: 'row',
         display: 'flex,',
@@ -102,7 +124,10 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
     },
     gridPaper: {
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK
+                : COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
         padding: theme.spacing(2),
         textAlign: 'center',
         display: 'flex',
@@ -111,15 +136,21 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.secondary,
     },
     gridCellTitle: {
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK
+                : COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
         color: COLOR_BARNBRIDGE_ORANGE,
         display: 'flex',
         paddingBottom: 15,
     },
     gridCellValue: {
-        backgroundColor: COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK,
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? COLOR_BARNBRIDGE_BACKGROUND_CARD_DARK
+                : COLOR_BARNBRIDGE_BACKGROUND_CARD_LIGHT,
         display: 'flex',
-        color: '#fff',
+        color: theme.palette.mode === 'dark' ? COLOR_BARNBRIDGE_TEXT_DARK : COLOR_BARNBRIDGE_TEXT_LIGHT,
     },
 }))
 
