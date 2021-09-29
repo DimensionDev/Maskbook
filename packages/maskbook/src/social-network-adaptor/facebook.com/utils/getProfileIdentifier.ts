@@ -1,6 +1,7 @@
 import { ProfileIdentifier } from '../../../database/type'
 import Services from '../../../extension/service'
 import type { Profile } from '../../../database'
+import { getCurrentIdentifier } from '../../utils'
 
 type link = HTMLAnchorElement | null | undefined
 
@@ -32,12 +33,16 @@ export function getProfileIdentifierAtFacebook(
         const { dom, id, nickname } = result[0] || {}
         if (id) {
             const result = new ProfileIdentifier('facebook.com', id)
+            const currentProfile = getCurrentIdentifier()
             let avatar: string | null = null
             try {
                 const image = dom!.closest('.clearfix')!.parentElement!.querySelector('img')!
                 avatar = image.src
                 if (allowCollectInfo && image.getAttribute('aria-label') === nickname && nickname) {
                     Services.Identity.updateProfileInfo(result, { nickname, avatarURL: image.src })
+                    if (currentProfile?.linkedPersona) {
+                        Services.Identity.createNewRelation(result, currentProfile.linkedPersona.identifier)
+                    }
                 }
             } catch {}
             try {

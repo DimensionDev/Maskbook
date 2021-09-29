@@ -16,6 +16,8 @@ import { mindsBase } from '../base'
 import { mindsShared } from '../shared'
 import { postParser } from '../utils/fetch'
 import { postContentSelector } from '../utils/selector'
+import { getCurrentIdentifier } from '../../utils'
+import Services from '../../../extension/service'
 
 export const PostProviderMinds: Next.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
@@ -63,6 +65,15 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
                 if (!info.postBy.value.equals(postBy)) info.postBy.value = postBy
                 info.nickname.value = name
                 info.avatarURL.value = avatar || null
+
+                const currentProfile = getCurrentIdentifier()
+
+                Services.Identity.updateProfileInfo(postBy, {
+                    nickname: name,
+                    avatarURL: avatar,
+                })
+                if (currentProfile?.linkedPersona)
+                    Services.Identity.createNewRelation(postBy, currentProfile.linkedPersona.identifier)
 
                 // decode steganographic image
                 // don't add await on this
