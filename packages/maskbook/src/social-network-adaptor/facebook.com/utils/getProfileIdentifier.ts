@@ -28,7 +28,7 @@ export function getProfileIdentifierAtFacebook(
         if (!Array.isArray(links)) links = [links]
         const result = links
             .filter((x) => x)
-            .map((x) => ({ nickname: x!.innerText, id: getUserID(x!.href), dom: x }))
+            .map((x) => ({ nickname: x!.ariaLabel, id: getUserID(x!.href), dom: x }))
             .filter((x) => x.id)
         const { dom, id, nickname } = result[0] || {}
         if (id) {
@@ -50,11 +50,20 @@ export function getProfileIdentifierAtFacebook(
                 avatar = image.src
                 if (allowCollectInfo && avatar) {
                     Services.Identity.updateProfileInfo(result, { nickname, avatarURL: image.src })
+                    if (currentProfile?.linkedPersona) {
+                        Services.Identity.createNewRelation(result, currentProfile.linkedPersona.identifier)
+                    }
                 }
             } catch {}
             try {
                 const image = dom!.querySelector('image')!
                 avatar = image.getAttribute('xlink:href')
+                if (allowCollectInfo && avatar) {
+                    Services.Identity.updateProfileInfo(result, { nickname, avatarURL: avatar })
+                    if (currentProfile?.linkedPersona) {
+                        Services.Identity.createNewRelation(result, currentProfile.linkedPersona.identifier)
+                    }
+                }
             } catch {}
             return {
                 identifier: result,
