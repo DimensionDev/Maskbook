@@ -1,7 +1,7 @@
-import { omit, noop } from 'lodash-es'
+import { noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { ChainId, PortfolioProvider, ProviderType } from '@masknet/web3-shared'
-import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Web3ProviderType } from '@masknet/web3-shared'
+import { NetworkType, Web3ProviderType } from '@masknet/web3-shared'
 import { Messages, PluginMessages, PluginServices, Services } from '../API'
 
 const Web3Provider = createExternalProvider()
@@ -45,9 +45,21 @@ export const Web3Context: Web3ProviderType = {
         NetworkType.Ethereum,
         Messages.events.currentNetworkSettings.on,
     ),
-    walletPrimary: createSubscriptionFromAsync(getWalletPrimary, null, PluginMessages.Wallet.events.walletsUpdated.on),
-    wallets: createSubscriptionFromAsync(getWallets, [], PluginMessages.Wallet.events.walletsUpdated.on),
-    erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], PluginMessages.Wallet.events.erc20TokensUpdated.on),
+    walletPrimary: createSubscriptionFromAsync(
+        PluginServices.Wallet.getWalletPrimary,
+        null,
+        PluginMessages.Wallet.events.walletsUpdated.on,
+    ),
+    wallets: createSubscriptionFromAsync(
+        PluginServices.Wallet.getWallets,
+        [],
+        PluginMessages.Wallet.events.walletsUpdated.on,
+    ),
+    erc20Tokens: createSubscriptionFromAsync(
+        PluginServices.Wallet.getERC20Tokens,
+        [],
+        PluginMessages.Wallet.events.erc20TokensUpdated.on,
+    ),
     addERC20Token: PluginServices.Wallet.addERC20Token,
     trustERC20Token: PluginServices.Wallet.trustERC20Token,
     erc20TokensCount: createSubscriptionFromAsync(
@@ -55,7 +67,8 @@ export const Web3Context: Web3ProviderType = {
         0,
         PluginMessages.Wallet.events.erc20TokensUpdated.on,
     ),
-    getERC20TokensPaged,
+    getERC20TokensPaged: PluginServices.Wallet.getERC20TokensPaged,
+    getERC721TokensPaged: PluginServices.Wallet.getERC721TokensPaged,
     portfolioProvider: createSubscriptionFromAsync(
         Services.Settings.getCurrentPortfolioDataProvider,
         PortfolioProvider.DEBANK,
@@ -64,7 +77,6 @@ export const Web3Context: Web3ProviderType = {
     getAssetsList: PluginServices.Wallet.getAssetsList,
     getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
-    getERC721TokensPaged,
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
     createMnemonicWords: PluginServices.Wallet.createMnemonicWords,
@@ -81,45 +93,6 @@ export function createExternalProvider() {
         send: Services.Ethereum.requestSend,
         sendAsync: Services.Ethereum.requestSend,
     }
-}
-
-async function getWallets() {
-    const wallets = await PluginServices.Wallet.getWallets()
-    return wallets.map((x) => ({
-        ...omit(x, 'derivationPath', 'storedKeyInfo'),
-        hasStoredKeyInfo: !!x.storedKeyInfo,
-        hasDerivationPath: !!x.derivationPath,
-    }))
-}
-
-export async function getWalletPrimary() {
-    const wallet = await PluginServices.Wallet.getWalletPrimary()
-    if (!wallet) return null
-    return {
-        ...omit(wallet, 'derivationPath', 'storedKeyInfo'),
-        hasStoredKeyInfo: !!wallet.storedKeyInfo,
-        hasDerivationPath: !!wallet.derivationPath,
-    }
-}
-
-async function getERC20Tokens() {
-    const raw = await PluginServices.Wallet.getERC20Tokens()
-    return raw.map<ERC20TokenDetailed>((x) => ({
-        type: EthereumTokenType.ERC20,
-        ...x,
-    }))
-}
-
-async function getERC20TokensPaged(index: number, count: number, query?: string) {
-    const raw = await PluginServices.Wallet.getERC20TokensPaged(index, count, query)
-    return raw.map<ERC20TokenDetailed>((x) => ({
-        type: EthereumTokenType.ERC20,
-        ...x,
-    }))
-}
-
-async function getERC721TokensPaged(index: number, count: number, query?: string) {
-    return PluginServices.Wallet.getERC721TokensPaged(index, count, query)
 }
 
 // double check

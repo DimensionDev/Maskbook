@@ -20,7 +20,7 @@ import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
 import { useMenu } from '../../utils/hooks/useMenu'
 import { forwardRef, useRef, useCallback } from 'react'
-import { MaskMessage } from '../../utils/messages'
+import { MaskMessages } from '../../utils/messages'
 import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
 import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
@@ -153,7 +153,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
         (id?: string) =>
-            MaskMessage.events.requestComposition.sendToLocal({
+            MaskMessages.events.requestComposition.sendToLocal({
                 reason: 'timeline',
                 open: true,
                 options: {

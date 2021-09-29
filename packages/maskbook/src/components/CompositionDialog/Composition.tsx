@@ -2,7 +2,7 @@ import { DialogContent } from '@material-ui/core'
 import { useRef } from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
-import { MaskMessage, useI18N } from '../../utils'
+import { MaskMessages, useI18N } from '../../utils'
 import { useFriendsList as useRecipientsList } from '../DataSource/useActivatedUI'
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { CompositionDialogUI, CompositionRef } from './CompositionUI'
@@ -24,7 +24,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         UI.current?.reset()
     }, [])
     useEffect(() => {
-        return MaskMessage.events.requestComposition.on(({ reason, open, content, options }) => {
+        return MaskMessages.events.requestComposition.on(({ reason, open, content, options }) => {
             if (reason !== type || globalUIState.profiles.value.length <= 0) return
             setOpen(open)
             if (content) UI.current?.setMessage(content)
@@ -41,7 +41,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [type])
     useEffect(() => {
         if (!open) return
-        return MaskMessage.events.replaceComposition.on((message) => {
+        return MaskMessages.events.replaceComposition.on((message) => {
             const ui = UI.current
             if (!ui) return
             UI.current.setMessage(message)

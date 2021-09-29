@@ -1,6 +1,6 @@
 import type { SocialNetworkUI } from '../../../social-network'
 import { untilElementAvailable } from '../../../utils/dom'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import { delay, selectElementContents } from '../../../utils/utils'
 import { inputText } from '@masknet/injected-script'
 import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox'
@@ -49,7 +49,7 @@ export const pasteTextToCompositionMinds: SocialNetworkUI.AutomationCapabilities
         }
 
         const fail = (e: Error) => {
-            if (opt?.recover) MaskMessage.events.autoPasteFailed.sendToLocal({ text })
+            if (opt?.recover) MaskMessages.events.autoPasteFailed.sendToLocal({ text })
             throw e
         }
 

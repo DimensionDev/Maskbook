@@ -4,11 +4,11 @@
 
 import type { DashboardPluginMessages, DashboardPluginServices } from '@masknet/shared'
 import type { Services as ServiceType } from '../../maskbook/dist/extension/service'
-import type { MaskMessage } from '../../maskbook/dist/utils/messages'
+import type { MaskMessages } from '../../maskbook/dist/utils/messages'
 import type { WalletMessages } from '@masknet/plugin-wallet'
 
 export let Services: typeof ServiceType = null!
-export let Messages: typeof MaskMessage = null!
+export let Messages: typeof MaskMessages = null!
 export let PluginServices: PluginServices = null!
 export let PluginMessages: PluginMessages = null!
 export interface PluginServices extends DashboardPluginServices {

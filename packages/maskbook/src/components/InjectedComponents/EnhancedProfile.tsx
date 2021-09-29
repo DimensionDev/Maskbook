@@ -6,7 +6,7 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { useState, useEffect } from 'react'
 import { CollectibleListAddress } from '../../extension/options-page/DashboardComponents/CollectibleList'
 import { useEthereumAddress } from '../../social-network-adaptor/twitter.com/injection/useEthereumName'
-import { MaskMessage, useI18N } from '../../utils'
+import { MaskMessages, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 
 const RULE_TIP = [
@@ -49,11 +49,11 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const { t } = useI18N()
 
     useLocationChange(() => {
-        MaskMessage.events.profileNFTsTabUpdated.sendToLocal('reset')
+        MaskMessages.events.profileNFTsTabUpdated.sendToLocal('reset')
     })
 
     useEffect(() => {
-        return MaskMessage.events.profileNFTsPageUpdated.on((data) => {
+        return MaskMessages.events.profileNFTsPageUpdated.on((data) => {
             setShow(data.show)
         })
     }, [])

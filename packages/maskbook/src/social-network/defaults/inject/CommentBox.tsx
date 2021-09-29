@@ -7,7 +7,7 @@ import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShad
 import { makeStyles } from '@masknet/theme'
 import { usePostInfoDetails, usePostInfo, PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-es'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
 import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 
@@ -16,7 +16,7 @@ const defaultOnPasteToCommentBox = async (
     _current: PostInfo,
     _realCurrent: HTMLElement | null,
 ) => {
-    MaskMessage.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
+    MaskMessages.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
 }
 
 // TODO: should not rely on onPasteToCommentBoxFacebook.
