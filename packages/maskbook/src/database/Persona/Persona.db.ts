@@ -157,7 +157,7 @@ export async function consistentPersonaDBWriteAccess(
             // If the consistency check throws, we drop all pending events
             resumeProfile(() => [])
             resumePersona(() => [])
-            resumePersona(() => [])
+            resumeRelation(() => [])
         }
     }
 }
@@ -567,10 +567,12 @@ export async function queryRelationsPagedDB(
  * Update a relation
  * @param updating
  * @param t
+ * @param sendEvent
  */
 export async function updateRelationDB(
     updating: Omit<RelationRecord, 'network'>,
     t: RelationTransaction<'readwrite'>,
+    sendEvent = true,
 ): Promise<void> {
     const old = await t
         .objectStore('relations')
@@ -584,7 +586,11 @@ export async function updateRelationDB(
     })
 
     await t.objectStore('relations').put(nextRecord)
-    MaskMessage.events.relationsChanged.sendToAll([{ of: updating.profile, favor: updating.favor, reason: 'update' }])
+    if (sendEvent) {
+        MaskMessage.events.relationsChanged.sendToAll([
+            { of: updating.profile, favor: updating.favor, reason: 'update' },
+        ])
+    }
 }
 
 //#endregion

@@ -245,6 +245,19 @@ export async function queryPagedPostHistory(
 //#endregion
 
 //#region Relation
+export async function createOrUpdateNewRelation(
+    profile: ProfileIdentifier,
+    linked: PersonaIdentifier,
+    favor: 0 | 1 = 0,
+    sendEvent = true,
+) {
+    await consistentPersonaDBWriteAccess(async (t) => {
+        const relationInDb = await t.objectStore('relations').get([linked.toText(), profile.toText()])
+        if (relationInDb) return updateRelation(profile, linked, favor, sendEvent)
+        return createRelationDB({ profile, linked, favor }, t, sendEvent)
+    })
+}
+
 export async function createNewRelation(
     profile: ProfileIdentifier,
     linked: PersonaIdentifier,
@@ -269,7 +282,12 @@ export async function queryRelationPaged(
     return []
 }
 
-export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: 0 | 1) {
+export async function updateRelation(
+    profile: ProfileIdentifier,
+    linked: PersonaIdentifier,
+    favor: 0 | 1,
+    sendEvent = true,
+) {
     await consistentPersonaDBWriteAccess((t) =>
         updateRelationDB(
             {
@@ -278,6 +296,7 @@ export async function updateRelation(profile: ProfileIdentifier, linked: Persona
                 favor,
             },
             t,
+            sendEvent,
         ),
     )
 }
