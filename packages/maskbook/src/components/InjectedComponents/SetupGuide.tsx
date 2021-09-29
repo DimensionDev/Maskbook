@@ -572,6 +572,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 if (!userGuideCompleted) {
                     onClose()
                     currentSetupGuideStatus[ui.networkIdentifier].value = '1'
+                    localStorage.setItem('username', username)
                 } else {
                     currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
                         status: SetupGuideStep.SayHelloWorld,

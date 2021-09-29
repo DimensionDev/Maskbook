@@ -1,11 +1,12 @@
 import { useValueRef } from '@masknet/shared'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Box, Portal, Typography, styled } from '@mui/material'
+import { Box, Portal, Typography, styled, InputAdornment, TextField, Theme, ThemeProvider } from '@mui/material'
 import classNames from 'classnames'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { useI18N } from '../../utils'
+import { extendsTheme, useI18N } from '../../utils'
+import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -68,6 +69,78 @@ const NextButton = styled(ActionButton)({
     color: '#fff',
     background: '#1C68F3',
 })
+
+const usernameTheme = extendsTheme((theme: Theme) => {
+    const color = theme.palette.mode === 'light' ? '#fff' : '#0f1419'
+
+    return {
+        components: {
+            MuiInputLabel: {
+                styleOverrides: {
+                    root: {
+                        color,
+                        '&.Mui-disabled': { color },
+                    },
+                },
+            },
+            MuiInputAdornment: {
+                styleOverrides: {
+                    root: {
+                        color,
+                    },
+                },
+            },
+            MuiOutlinedInput: {
+                styleOverrides: {
+                    input: {
+                        color,
+                        ':disabled': { color, '-webkit-text-fill-color': color },
+                    },
+                },
+            },
+            MuiTextField: {
+                styleOverrides: {
+                    root: {
+                        color,
+                        fieldset: {
+                            borderColor: `${color} !important`,
+                        },
+                    },
+                },
+            },
+        },
+    }
+})
+
+const FindUsername = () => {
+    const { t } = useI18N()
+    const username = localStorage.getItem('username')
+
+    return (
+        <>
+            <Typography variant="h3" sx={{ fontSize: '18px' }}>
+                {t('setup_guide_find_username_title')}
+            </Typography>
+            <ThemeProvider theme={usernameTheme}>
+                <TextField
+                    disabled
+                    fullWidth
+                    label={t('username')}
+                    value={username}
+                    sx={{ margin: '24px 0 16px' }}
+                    InputProps={{
+                        size: 'small',
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <AlternateEmailIcon sx={{ fontSize: '16px' }} />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </ThemeProvider>
+        </>
+    )
+}
 
 export interface GuideStepProps extends PropsWithChildren<{}> {
     total: number
@@ -167,6 +240,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                                                 <span style={{ color: '#1C68F3' }}>{step}</span>/{total}
                                             </Typography>
                                         </div>
+                                        {step === 1 ? <FindUsername /> : null}
                                         <div>
                                             <Typography>{tip}</Typography>
                                         </div>
