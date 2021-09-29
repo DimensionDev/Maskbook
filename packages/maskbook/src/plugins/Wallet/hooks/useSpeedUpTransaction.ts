@@ -2,6 +2,7 @@ import {
     TransactionState,
     TransactionStateType,
     useChainId,
+    useAccount,
     useChainConstants,
     useWeb3,
     isSameAddress,
@@ -25,6 +26,7 @@ export function useSpeedUpTransaction(
 ) {
     const web3 = useWeb3()
     const chainId = useChainId()
+    const account = useAccount()
 
     const [speedUpTx, setSpeedUpTx] = useState<Transaction | null>(null)
     const { EXPLORER_API, EXPLORER_API_KEY, TIME_INTERVAL_TO_QUERY_API } = useChainConstants()
@@ -34,8 +36,19 @@ export function useSpeedUpTransaction(
         : null
 
     useEffect(() => {
-        if (speedUpTx && openTimer) clearInterval(openTimer as NodeJS.Timer)
+        if (speedUpTx && openTimer) {
+            clearInterval(openTimer as NodeJS.Timer)
+            setOpenTimer(null)
+        }
     }, [speedUpTx, openTimer])
+
+    useEffect(() => {
+        setSpeedUpTx(null)
+        setOpenTimer(null)
+        if (openTimer) {
+            clearInterval(openTimer as NodeJS.Timer)
+        }
+    }, [chainId, account])
 
     useAsync(async () => {
         if (
@@ -44,8 +57,7 @@ export function useSpeedUpTransaction(
             !contractData ||
             !interFace ||
             !EXPLORER_API ||
-            !TIME_INTERVAL_TO_QUERY_API ||
-            openTimer
+            !TIME_INTERVAL_TO_QUERY_API
         ) {
             return
         }
@@ -99,7 +111,7 @@ export function useSpeedUpTransaction(
         )
 
         return
-    }, [state, from, openTimer, contractData, chainId, originalTxBlockNumber, web3])
+    }, [state, from, account, contractData, chainId, originalTxBlockNumber, web3])
 
     return speedUpTx
 }
