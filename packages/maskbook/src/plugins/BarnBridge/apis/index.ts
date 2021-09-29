@@ -105,14 +105,10 @@ function ConstructRedirectUrl(protocolName: string, coin: string) {
 }
 
 function PrettifyLiquidity(liquidity: string) {
-    const intLiquidity = Number.parseInt(liquidity, 10)
-    if (intLiquidity >= 1000000) {
-        return Math.round(intLiquidity / 1000000).toString() + 'M'
-    }
-    if (intLiquidity >= 1000) {
-        return Math.round(intLiquidity / 1000).toString() + 'K'
-    }
-    return Math.round(intLiquidity).toString()
+    const value = Number.parseInt(liquidity, 10)
+    const unit = Math.max(Math.round(Math.log(value) / Math.log(10000)), 0)
+    const symbols = ['', 'k', 'M', 'G', 'T'] // see https://en.wikipedia.org/wiki/Metric_prefix
+    return (value / Math.pow(1000, unit)).toFixed(1) + symbols[unit]
 }
 
 export async function SYGetPortfolio(chainId: ChainId, walletAddress: string) {
