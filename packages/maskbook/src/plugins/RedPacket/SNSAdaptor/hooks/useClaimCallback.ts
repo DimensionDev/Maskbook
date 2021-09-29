@@ -3,14 +3,9 @@ import Web3Utils from 'web3-utils'
 import { useAsync } from 'react-use'
 import { useRedPacketContract } from './useRedPacketContract'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    useTransactionState,
-    TransactionStateType,
-    TransactionEventType,
-    useSpeedUpTransaction,
-    useBlockNumber,
-} from '@masknet/web3-shared'
+import { useTransactionState, TransactionStateType, TransactionEventType, useBlockNumber } from '@masknet/web3-shared'
 import type { TransactionReceipt } from 'web3-core'
+import { useSpeedUpTransaction } from '../../../Wallet/hooks/useSpeedUpTransaction'
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 

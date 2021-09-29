@@ -12,10 +12,10 @@ import {
     useChainId,
     useTokenConstants,
     useTransactionState,
-    useSpeedUpTransaction,
     useBlockNumber,
     isSameAddress,
 } from '@masknet/web3-shared'
+import { useSpeedUpTransaction } from '../../../Wallet/hooks/useSpeedUpTransaction'
 import { omit } from 'lodash-es'
 import { useAsync } from 'react-use'
 import BigNumber from 'bignumber.js'

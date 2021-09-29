@@ -77,6 +77,11 @@ export async function getRecentTransactions(address: string) {
     return chunk?.transactions ?? []
 }
 
+export async function getRecentTransaction(address: string, hash: string) {
+    const transactions = await getRecentTransactions(address)
+    return transactions.find((x) => x.hash === hash)
+}
+
 export async function clearRecentTransactions(address: string) {
     const recordId = getRecordId(address)
     await PluginDB.remove('recent-transactions', recordId)

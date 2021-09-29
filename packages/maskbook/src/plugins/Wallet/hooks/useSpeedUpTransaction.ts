@@ -1,4 +1,11 @@
-import { TransactionState, TransactionStateType, useChainId, useChainConstants, useWeb3, isSameAddress } from '..'
+import {
+    TransactionState,
+    TransactionStateType,
+    useChainId,
+    useChainConstants,
+    useWeb3,
+    isSameAddress,
+} from '@masknet/web3-shared'
 import type { Transaction } from 'web3-core'
 import { useAsync } from 'react-use'
 import { useState, useEffect } from 'react'
