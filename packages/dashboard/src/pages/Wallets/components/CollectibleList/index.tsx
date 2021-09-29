@@ -79,6 +79,8 @@ export const CollectibleList = memo(() => {
     const { collectibles = [], hasNextPage } = value
 
     const dataSource = collectibles.filter((x) => {
+        if (x.contractDetailed.chainId !== chainId) return false
+
         const key = `${formatEthereumAddress(x.contractDetailed.address)}_${x.tokenId}`
         switch (x.contractDetailed.type) {
             case EthereumTokenType.ERC721:

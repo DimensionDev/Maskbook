@@ -9,6 +9,7 @@ import {
     formatWeiToEther,
     TransactionStateType,
     useAccount,
+    useChainId,
     useERC721TokenDetailedOwnerList,
     useGasLimit,
     useGasPrice,
@@ -43,6 +44,7 @@ type FormInputs = {
 
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
+    const chainId = useChainId()
     const { state } = useLocation() as {
         state: { erc721Token?: ERC721TokenDetailed; type?: TransferTab } | null
     }
@@ -75,6 +77,7 @@ export const TransferERC721 = memo(() => {
     useEffect(() => {
         if (!state) return
         if (!state.erc721Token || state.type !== TransferTab.Collectibles) return
+        if (state.erc721Token.contractDetailed.chainId !== chainId) return
 
         setContract(state.erc721Token.contractDetailed)
         setValue('contract', state.erc721Token.contractDetailed.name)
