@@ -1,6 +1,17 @@
-import { CircularProgress, MenuItem, MenuItemProps, Typography } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
+import {
+    CircularProgress,
+    MenuItem,
+    MenuItemProps,
+    ListItemButtonProps,
+    ListItemIconProps,
+    ListItemTextProps,
+    TypographyProps,
+    Typography as MuiTypography,
+    ListItemButton as MuiListItemButton,
+    ListItemIcon as MuiListItemIcon,
+    ListItemText as MuiListItemText,
+    Box,
+} from '@mui/material'
 import {
     useAccount,
     useChainColor,
@@ -14,130 +25,136 @@ import {
     useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-import { MaskSharpIconOfSize, WalletSharp } from '../../resources/MaskIcon'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
-import { useMenu } from '../../utils/hooks/useMenu'
 import { forwardRef, useRef, useCallback } from 'react'
-import { MaskMessages } from '../../utils/messages'
+import { MaskMessage } from '../../utils/messages'
 import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
 import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags } from '../../utils/flags'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
-import { WalletIcon } from '../shared/WalletIcon'
-import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
+import { hasNativeAPI, nativeAPI, useI18N, useMenu } from '../../utils'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
+import { WalletIcon } from '../shared/WalletIcon'
+import { MaskIcon, MaskSharpIconOfSize, WalletSharp } from '../../resources/MaskIcon'
+import { makeStyles } from '@masknet/theme'
+import classNames from 'classnames'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 
-import { activatedSocialNetworkUI } from '../../social-network'
-import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
+const useStyles = makeStyles()((theme) => ({
+    font: {
+        color: theme.palette.mode === 'dark' ? theme.palette.text.primary : 'rgb(15, 20, 25)',
+    },
+    paper: {
+        borderRadius: 4,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
+                : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px',
+        backgroundImage: 'none',
+    },
+    menu: {
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
+    menuItem: {
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
+    },
+    menuText: {
+        marginLeft: 12,
+        fontSize: 15,
+        color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
+        paddingRight: theme.spacing(2),
+    },
+    chainIcon: {
+        fontSize: 18,
+        width: 18,
+        height: 18,
+        marginLeft: theme.spacing(0.5),
+    },
+}))
+export interface ToolboxHintProps {
+    Container?: React.ComponentType<React.PropsWithChildren<{}>>
+    ListItemButton?: React.ComponentType<Pick<ListItemButtonProps, 'onClick' | 'children'>>
+    ListItemText?: React.ComponentType<Pick<ListItemTextProps, 'primary'>>
+    ListItemIcon?: React.ComponentType<Pick<ListItemIconProps, 'children'>>
+    Typography?: React.ComponentType<Pick<TypographyProps, 'children' | 'className'>>
+    icon?: 'mono' | 'colorful'
+    iconSize?: number
+}
+export function ToolboxHintUnstyled(props: ToolboxHintProps) {
+    const {
+        ListItemButton = MuiListItemButton,
+        ListItemText = MuiListItemText,
+        ListItemIcon = MuiListItemIcon,
+        Container = 'div',
+        Typography = MuiTypography,
+        icon = 'mono',
+        iconSize = 24,
+    } = props
+    const { classes } = useStyles()
+    const {
+        openWallet,
+        isWalletValid,
+        ClaimDialogJSX,
+        walletTitle,
+        menu,
+        openMenu,
+        chainColor,
+        shouldDisplayChainIndicator,
+    } = useToolbox()
 
-interface StyleProps {
-    snsId: string
+    const walletJSX =
+        typeof walletTitle === 'string' ? <Typography className={classes.font}>{walletTitle}</Typography> : walletTitle
+    return (
+        <>
+            <Container>
+                <ListItemButton onClick={openMenu}>
+                    <ListItemIcon>
+                        {icon === 'mono' ? <MaskSharpIconOfSize size={iconSize} /> : <MaskIcon size={iconSize} />}
+                    </ListItemIcon>
+                    <ListItemText primary={<Typography className={classes.font}>Mask Network</Typography>} />
+                </ListItemButton>
+            </Container>
+            {menu}
+            <Container>
+                <ListItemButton onClick={openWallet}>
+                    <ListItemIcon>
+                        {isWalletValid ? <WalletIcon size={iconSize} /> : <WalletSharp size={iconSize} />}
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                {walletJSX}
+                                {shouldDisplayChainIndicator ? (
+                                    <FiberManualRecordIcon
+                                        className={classes.chainIcon}
+                                        style={{
+                                            color: chainColor,
+                                        }}
+                                    />
+                                ) : null}
+                            </Box>
+                        }
+                    />
+                </ListItemButton>
+            </Container>
+            {ClaimDialogJSX}
+        </>
+    )
 }
 
-const useStyles = makeStyles<StyleProps>()(({ palette, breakpoints, spacing }, { snsId }) => {
-    const isDark = palette.mode === 'dark'
-    return {
-        paper: {
-            borderRadius: 4,
-            boxShadow: `${
-                isDark
-                    ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
-                    : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
-            }`,
-            backgroundImage: 'none',
-        },
-        menu: {
-            paddingTop: 0,
-            paddingBottom: 0,
-        },
-        wrapper: {
-            display: 'flex',
-            alignItems: 'center',
-            width: '100%',
-            cursor: 'pointer',
-            [breakpoints.down('lg')]: {
-                justifyContent: snsId === MINDS_ID ? 'left' : 'center',
-            },
-            [breakpoints.down(snsId === MINDS_ID ? 1220 : 1265)]: {
-                transform: 'translateX(0px)',
-                justifyContent: 'center !important',
-            },
-            '&:hover': {
-                '& $title': {
-                    color: palette.primary.main,
-                },
-                '& $icon': {
-                    color: palette.primary.main,
-                },
-            },
-        },
-        button: {
-            display: 'flex',
-            padding: `12px 26px 12px ${snsId === MINDS_ID ? '0px' : '14px'}`,
-            borderRadius: 50,
-            justifyContent: 'center',
-            alignItems: 'center',
-            [breakpoints.down(snsId === MINDS_ID ? 1220 : 1265)]: {
-                transform: 'translateX(0px)',
-                padding: 14,
-            },
-        },
-        title: {
-            display: 'flex',
-            alignItems: 'center',
-            color: isDark ? palette.text.primary : 'rgb(15, 20, 25)',
-            fontSize: 20,
-            marginLeft: 22,
-            lineHeight: 1.35,
-            [breakpoints.down(snsId === MINDS_ID ? 1220 : 1265)]: {
-                display: 'none',
-            },
-        },
-        menuItem: {},
-        text: {
-            color: isDark ? palette.text.primary : 'rgb(15, 20, 25)',
-            marginLeft: 22,
-        },
-        iconWrapper: {
-            position: 'relative',
-            height: 24,
-            width: 24,
-        },
-        icon: {
-            color: isDark ? palette.text.primary : 'rgb(15, 20, 25)',
-            width: 24,
-            height: 24,
-            fontSize: 24,
-        },
-        mask: {
-            color: isDark ? palette.text.primary : 'rgb(15, 20, 25)',
-            width: 22,
-            height: 22,
-            fontSize: 22,
-        },
-        chainIcon: {
-            fontSize: 18,
-            width: 18,
-            height: 18,
-            marginLeft: spacing(0.5),
-        },
-    }
-})
-
-interface ToolboxHintProps extends withClasses<'wrapper' | 'menuItem' | 'title' | 'text' | 'button' | 'icon'> {}
-
-export function ToolboxHint(props: ToolboxHintProps) {
+function useToolbox() {
+    const { classes } = useStyles()
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }), props)
     const account = useAccount()
     const selectedWallet = useWallet()
     const chainColor = useChainColor()
@@ -152,7 +169,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
         (id?: string) =>
-            MaskMessages.events.requestComposition.sendToLocal({
+            MaskMessage.events.requestComposition.sendToLocal({
                 reason: 'timeline',
                 open: true,
                 options: {
@@ -242,7 +259,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
         items
             .filter((x) => x.hide !== true)
             .sort((a, b) => b.priority - a.priority)
-            .map((desc) => <ToolboxItem className={classes.menuItem} {...desc} />),
+            .map((desc) => <ToolboxItem {...desc} />),
         false,
         {
             paperProps: {
@@ -272,46 +289,28 @@ export function ToolboxHint(props: ToolboxHintProps) {
         )
     }
 
-    return (
-        <>
-            <div className={classes.wrapper} onClick={openMenu}>
-                <div className={classes.button}>
-                    <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
-                    <Typography className={classes.title}>Mask Network</Typography>
-                </div>
-            </div>
-            {menu}
+    const openWallet = useCallback(() => {
+        if (hasNativeAPI) return nativeAPI?.api.misc_openCreateWalletView()
+        if (isWalletValid) return openWalletStatusDialog()
+        else return openSelectWalletDialog()
+    }, [openWalletStatusDialog, openSelectWalletDialog])
 
-            <div
-                className={classes.wrapper}
-                onClick={() => {
-                    hasNativeAPI
-                        ? nativeAPI?.api.misc_openCreateWalletView()
-                        : isWalletValid
-                        ? openWalletStatusDialog()
-                        : openSelectWalletDialog()
-                }}>
-                <div className={classes.button}>
-                    {isWalletValid ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} size={24} />}
+    const walletTitle = renderButtonText()
 
-                    <Typography className={classes.title}>
-                        {renderButtonText()}
-                        {account && chainIdValid && chainDetailed?.network !== 'mainnet' ? (
-                            <FiberManualRecordIcon
-                                className={classes.chainIcon}
-                                style={{
-                                    color: chainColor,
-                                }}
-                            />
-                        ) : null}
-                    </Typography>
-                </div>
-            </div>
-            {isClaimAllDialogOpen ? (
-                <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
-            ) : null}
-        </>
-    )
+    const ClaimDialogJSX = isClaimAllDialogOpen ? (
+        <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
+    ) : null
+    const shouldDisplayChainIndicator = account && chainIdValid && chainDetailed?.network !== 'mainnet'
+    return {
+        openWallet,
+        isWalletValid,
+        ClaimDialogJSX,
+        walletTitle,
+        menu,
+        openMenu,
+        shouldDisplayChainIndicator,
+        chainColor,
+    }
 }
 
 interface ToolboxItemDescriptor {
@@ -325,15 +324,14 @@ interface ToolboxItemDescriptor {
 // TODO: this should be rendered in the ErrorBoundary
 const ToolboxItem = forwardRef<any, MenuItemProps & ToolboxItemDescriptor>((props, ref) => {
     const { image, label, hide, priority, useShouldDisplay, ...rest } = props
-    const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const shouldDisplay = useRef(useShouldDisplay || (() => true)).current() && !hide
-
+    const { classes } = useStyles()
     if (!shouldDisplay) return null
 
     return (
-        <MenuItem ref={ref} {...rest}>
+        <MenuItem className={classes.menuItem} ref={ref} {...rest}>
             <Image src={image} width={19} height={19} />
-            <Typography className={classes.text}>{label}</Typography>
+            <MuiTypography className={classes.menuText}>{label}</MuiTypography>
         </MenuItem>
     )
 })

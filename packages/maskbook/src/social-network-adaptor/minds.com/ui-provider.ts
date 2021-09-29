@@ -61,7 +61,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         return { friends, profiles }
     },
     injection: {
-        toolBoxInNavBar: injectToolboxHintAtMinds,
+        toolbox: injectToolboxHintAtMinds,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtMinds,
         enhancedPostRenderer: injectPostReplacerAtMinds,
