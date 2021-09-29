@@ -99,6 +99,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         setOpen(false)
         resetOverflow()
         currentSetupGuideStatus[ui.networkIdentifier].value = ''
+        localStorage.setItem('userGuideCompleted', 'true')
     }
 
     const onNext = () => {

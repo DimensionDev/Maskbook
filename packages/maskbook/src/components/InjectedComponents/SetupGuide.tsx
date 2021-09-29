@@ -18,7 +18,6 @@ import classNames from 'classnames'
 import { ArrowRight } from 'react-feather'
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
 import CloseIcon from '@material-ui/icons/Close'
-import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 import stringify from 'json-stable-stringify'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { noop } from 'lodash-es'
@@ -37,6 +36,9 @@ export enum SetupGuideStep {
     FindUsername = 'find-username',
     SayHelloWorld = 'say-hello-world',
 }
+
+const userGuideCompleted = localStorage.getItem('userGuideCompleted')
+
 //#region wizard dialog
 const wizardTheme = extendsTheme((theme: Theme) => ({
     components: {
@@ -300,11 +302,6 @@ function WizardDialog(props: WizardDialogProps) {
                             value={completion}
                         />
                     ) : null}
-                    {onBack ? (
-                        <IconButton className={classes.back} size="small" onClick={onBack}>
-                            <ArrowBackIosOutlinedIcon cursor="pointer" />
-                        </IconButton>
-                    ) : null}
                     {onClose ? (
                         <IconButton className={classes.close} size="small" onClick={onClose}>
                             <CloseIcon cursor="pointer" />
@@ -426,7 +423,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     failed={t('setup_guide_connect_failed')}
                     executor={onConnect}
                     completeOnClick={onDone}
-                    autoComplete
+                    autoComplete={!userGuideCompleted}
                     disabled={!username}
                     completeIcon={null}
                     failIcon={null}
@@ -477,7 +474,10 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                     <Typography className={classNames(classes.tip, sayHelloWorldClasses.primary)} variant="body2">
                         {t('setup_guide_say_hello_primary')}
                     </Typography>
-                    <Typography className={classNames(classes.tip, sayHelloWorldClasses.secondary)} variant="body2">
+                    <Typography
+                        className={classNames(classes.tip, sayHelloWorldClasses.secondary)}
+                        variant="body2"
+                        sx={{ paddingBottom: '16px' }}>
                         {t('setup_guide_say_hello_secondary')}
                     </Typography>
                 </form>
@@ -569,8 +569,22 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const onNext = async () => {
         switch (step) {
             case SetupGuideStep.FindUsername:
-                onClose()
-                currentSetupGuideStatus[ui.networkIdentifier].value = '1'
+                if (!userGuideCompleted) {
+                    onClose()
+                    currentSetupGuideStatus[ui.networkIdentifier].value = '1'
+                } else {
+                    currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
+                        status: SetupGuideStep.SayHelloWorld,
+                        username,
+                        persona: persona.toText(),
+                    } as SetupGuideCrossContextStatus)
+                    if (activatedSocialNetworkUI.configuration.setupWizard?.disableSayHello) {
+                        onConnect().then(onClose)
+                    } else {
+                        ui.automation.redirect?.newsFeed?.()
+                        setStep(SetupGuideStep.SayHelloWorld)
+                    }
+                }
                 break
             case SetupGuideStep.SayHelloWorld:
                 onClose()
