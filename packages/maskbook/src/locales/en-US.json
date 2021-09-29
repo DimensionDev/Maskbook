@@ -252,8 +252,6 @@
     "settings_post_replacement_desc": "All posts on the web-pages will be rendered by Mask, including those not created by Mask.",
     "settings_title_general": "General",
     "settings_title_advanced_options": "Advanced",
-    "settings_title_bind_nft_avatar": "Bind NFT Avatar",
-    "bind_nft_avatar": "Bind NFT Avatar",
     "settings_title_database_management": "Database Management",
     "settings_launch_page": "Launch Page",
     "settings_launch_page_secondary": "Select the default page to open when launch the app",
@@ -324,10 +322,10 @@
     "wallet_transfer_error_address_absence": "Enter recipient address",
     "wallet_transfer_error_invalid_address": "Invalid recipient address",
     "wallet_transfer_error_insufficient_balance": "Insufficient {{symbol}} balance",
-    "wallet_transfer_error_gasPrice_absence": "Enter a gas price",
-    "wallet_transfer_error_gasLimit_absence": "Enter a gas limit",
-    "wallet_transfer_error_maxFee_absence": "Enter a max fee",
-    "wallet_transfer_error_maxPriority_fee_absence": "Enter a max priority fee",
+    "wallet_transfer_error_gas_price_absence": "Enter a gas price",
+    "wallet_transfer_error_gas_limit_absence": "Enter a gas limit",
+    "wallet_transfer_error_max_fee_absence": "Enter a max fee",
+    "wallet_transfer_error_max_priority_fee_absence": "Enter a max priority fee",
     "wallet_transfer_error_max_fee_too_low": "Max fee is too low for network conditions.",
     "wallet_transfer_error_max_fee_too_high": "Max fee is higher than necessary",
     "wallet_transfer_error_max_priority_gas_fee_positive": "Max priority fee must be greater than 0 GWEI",
@@ -929,8 +927,5 @@
     "popups_password_do_not_match": "Incorrect backup password",
     "popups_backup_password": "Backup Password",
     "popups_rename_error_tip": "Maximum length is {{length}} characters long.",
-    "profile_nft_avatar_set": "Set NFT Avatar",
-    "settings_nft_avatar_whitelist": "NFT Avatar Whitelist",
-    "unbind_nft_avatar": "Delete NFT Avatar",
-    "delete_nft_avatar": "Do you want to delete <strong>{{userId}}</strong>? This operation cannot be reverted."
+    "profile_nft_avatar_set": "Set NFT Avatar"
 }

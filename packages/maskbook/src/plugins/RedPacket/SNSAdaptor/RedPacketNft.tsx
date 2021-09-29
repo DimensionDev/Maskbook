@@ -1,6 +1,6 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { makeStyles, useSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import {
     useAccount,
     resolveAddressLinkOnExplorer,
@@ -250,7 +250,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const { classes } = useStyles()
     const web3 = useWeb3()
     const account = useAccount()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const {
         value: availability,
@@ -311,12 +311,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         }
 
         if (claimState.type === TransactionStateType.FAILED) {
-            enqueueSnackbar(claimState.error.message, {
+            showSnackbar(claimState.error.message, {
                 variant: 'error',
                 anchorOrigin: { horizontal: 'right', vertical: 'top' },
             })
         } else if (claimState.type === TransactionStateType.CONFIRMED && claimState.no === 0) {
-            enqueueSnackbar(
+            showSnackbar(
                 <div className={classes.snackBar}>
                     <Typography className={classes.snackBarText}>
                         {t('plugin_red_packet_claim_successfully')}

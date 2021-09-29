@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import {
     Box,
     Card,
@@ -71,7 +71,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const account = useAccount()
 
@@ -127,7 +127,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
             })
         } catch (error) {
             if (error instanceof Error) {
-                enqueueSnackbar(error.message, { variant: 'error', preventDuplicate: true })
+                showSnackbar(error.message, { variant: 'error', preventDuplicate: true })
             }
             throw error
         }
@@ -143,7 +143,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         endingPriceChecked,
         futureTimeChecked,
         privacyChecked,
-        enqueueSnackbar,
+        showSnackbar,
     ])
 
     useEffect(() => {

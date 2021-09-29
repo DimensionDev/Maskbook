@@ -13,7 +13,7 @@ import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
 import { WalletMessages, WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
 import { useLocation } from 'react-router-dom'
@@ -98,7 +98,7 @@ enum ImportWalletTab {
 
 const ImportWallet = memo(() => {
     const { t } = useI18N()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const history = useHistory()
     const location = useLocation()
     const { classes } = useStyles()
@@ -198,7 +198,7 @@ const ImportWallet = memo(() => {
                             privateKey,
                         )
                         if (!privateKeyValid) {
-                            enqueueSnackbar(t('import_failed'), { variant: 'error' })
+                            showSnackbar(t('import_failed'), { variant: 'error' })
                             return
                         }
                         await WalletRPC.importNewWallet(
