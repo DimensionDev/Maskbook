@@ -23,6 +23,7 @@ import { currentSelectedIdentity } from '../../settings/settings'
 import { unreachable } from '@dimensiondev/kit'
 import { ProfileIdentifier } from '@masknet/shared'
 import { globalUIState } from '../../social-network'
+import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar'
 
 const facebookUI: SocialNetworkUI.Definition = {
     ...facebookBase,
@@ -86,11 +87,22 @@ const facebookUI: SocialNetworkUI.Definition = {
         setupPrompt: injectSetupPromptFacebook,
         commentComposition: {
             compositionBox: injectPostCommentsDefault(),
-            commentInspector: injectCommentBoxDefaultFactory(pasteToCommentBoxFacebook),
+            commentInspector: injectCommentBoxDefaultFactory(
+                pasteToCommentBoxFacebook,
+                undefined,
+                undefined,
+                (node) => {
+                    setTimeout(() => {
+                        node.after.style.flexBasis = '100%'
+                        node.current.parentElement!.style.flexWrap = 'wrap'
+                    })
+                },
+            ),
         },
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),
         setupWizard: createTaskStartSetupGuideDefault(facebookBase.networkIdentifier),
+        toolbox: injectToolboxAtFacebook,
     },
     configuration: {
         steganography: {

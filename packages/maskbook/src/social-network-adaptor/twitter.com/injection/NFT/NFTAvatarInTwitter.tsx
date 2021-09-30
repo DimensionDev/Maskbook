@@ -1,7 +1,7 @@
 import { createReactRootShadowed, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
 import { searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles, useSnackbar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 
@@ -12,6 +12,7 @@ import type { AvatarMetaDB } from '../../../../components/InjectedComponents/NFT
 import { saveNFTAvatar } from '../../../../components/InjectedComponents/NFT/gun'
 import { useWallet } from '@masknet/web3-shared'
 import { usePersona } from '../../../../components/InjectedComponents/NFT/hooks/usePersona'
+import { useSnackbar } from '@masknet/theme'
 
 const RETRIES_NUMBER = 10
 

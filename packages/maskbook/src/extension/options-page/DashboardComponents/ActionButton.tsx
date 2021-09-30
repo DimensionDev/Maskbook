@@ -92,6 +92,7 @@ interface ActionButtonPromiseProps extends ButtonProps {
     failedOnClick?: 'use executor' | (() => void)
     completeIcon?: React.ReactNode
     failIcon?: React.ReactNode
+    autoComplete?: boolean
 }
 type ActionButtonPromiseState = 'init' | 'complete' | 'wait' | 'fail'
 export function ActionButtonPromise(props: ActionButtonPromiseProps) {
@@ -102,6 +103,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
         failed,
         waiting,
         init,
+        autoComplete = false,
         completeOnClick,
         waitingOnClick,
         failedOnClick,
@@ -117,7 +119,10 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     const run = () => {
         setState('wait')
         executor().then(
-            () => setState('complete'),
+            () => {
+                setState('complete')
+                if (autoComplete) completeClick?.()
+            },
             () => setState('fail'),
         )
     }

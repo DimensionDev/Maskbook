@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { flatten, uniq } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
-import { getMaskColor, useSnackbar, VariantType, SnackbarProvider } from '@masknet/theme'
+import { getMaskColor, useCustomSnackbar, VariantType, SnackbarProvider } from '@masknet/theme'
 import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
@@ -231,10 +231,10 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     // Todo: Remove the code after the period that old ITO is being used and continues to be used for a while
     const { value: swappedTokensOld, loading: loadingOld, retry: retryOld } = useClaimablePools(chainId, true)
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const popEnqueueSnackbar = useCallback(
         (variant: VariantType) =>
-            enqueueSnackbar(t('plugin_ito_claim_all_title'), {
+            showSnackbar(t('plugin_ito_claim_all_title'), {
                 variant,
                 preventDuplicate: true,
                 anchorOrigin: {
@@ -242,7 +242,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                     horizontal: 'right',
                 },
             }),
-        [enqueueSnackbar],
+        [showSnackbar],
     )
     const claimablePids = uniq(flatten(swappedTokens?.filter((t) => t.isClaimable).map((t) => t.pids)))
     const claimablePidsOld = uniq(flatten(swappedTokensOld?.filter((t) => t.isClaimable).map((t) => t.pids)))

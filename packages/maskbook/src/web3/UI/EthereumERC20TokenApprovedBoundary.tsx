@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -46,7 +46,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
 
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
         useERC20TokenApproveCallback(token?.address ?? '', amount, spender)
@@ -61,8 +61,8 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
 
     useEffect(() => {
         if (transactionState.type === TransactionStateType.FAILED)
-            enqueueSnackbar(transactionState.error.message, { variant: 'error' })
-    }, [transactionState.type, enqueueSnackbar])
+            showSnackbar(transactionState.error.message, { variant: 'error' })
+    }, [transactionState.type, showSnackbar])
 
     // not a valid erc20 token, please given token as undefined
     if (!token) return <Grid container>{children}</Grid>

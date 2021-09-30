@@ -1,4 +1,4 @@
-import { forwardRef, useRef, memo } from 'react'
+import { forwardRef, useRef, memo, useCallback } from 'react'
 import { keyframes } from 'tss-react'
 import {
     SnackbarProvider,
@@ -8,11 +8,12 @@ import {
     VariantType,
     SnackbarMessage,
     SnackbarContent,
+    SnackbarAction,
+    OptionsObject,
 } from 'notistack'
-import { Link, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { IconButton } from '@mui/material'
 import classnames from 'classnames'
-import LaunchIcon from '@material-ui/icons/Launch'
 import { Close as CloseIcon } from '@mui/icons-material'
 import WarningIcon from '@material-ui/icons/Warning'
 import InfoIcon from '@material-ui/icons/Info'
@@ -25,6 +26,8 @@ export { SnackbarProvider, useSnackbar } from 'notistack'
 export type { VariantType, OptionsObject, SnackbarKey } from 'notistack'
 
 const useStyles = makeStyles()((theme, _, createRef) => {
+    const { palette } = theme
+    const isDark = palette.mode === 'dark'
     const spinningAnimationKeyFrames = keyframes`
 to {
   transform: rotate(360deg)
@@ -33,18 +36,28 @@ to {
     const title = {
         ref: createRef(),
         color: MaskColorVar.textPrimary,
+        fontWeight: 400,
         fontSize: 14,
+        lineHeight: '20px',
     } as const
     const message = {
         ref: createRef(),
         color: MaskColorVar.textSecondary,
+        fontWeight: 400,
         display: 'flex',
         alignItems: 'center',
         fontSize: 12,
     } as const
+    const defaultVariant = {
+        background: isDark ? '#17191D' : '#F7F9FA',
+        color: isDark ? '#D9D9D9' : '#0F1419',
+        [`& .${title.ref}`]: {
+            color: isDark ? '#D9D9D9' : palette.grey['800'],
+        },
+    }
     const success = {
-        background: MaskColorVar.greenMain,
-        color: MaskColorVar.lightestBackground,
+        backgroundColor: '#60DFAB',
+        color: '#ffffff',
         [`& .${title.ref}`]: {
             color: 'inherit',
         },
@@ -54,8 +67,8 @@ to {
     } as const
 
     const error = {
-        background: MaskColorVar.redMain,
-        color: MaskColorVar.lightestBackground,
+        background: '#FF5F5F',
+        color: '#ffffff',
         [`& .${title.ref}`]: {
             color: 'inherit',
         },
@@ -65,15 +78,26 @@ to {
     } as const
 
     const info = {
-        ref: createRef(),
-        background: MaskColorVar.secondaryInfoText,
-        color: MaskColorVar.lightestBackground,
-    } as const
+        background: '#8CA3C7',
+        color: '#ffffff',
+        [`& .${title.ref}`]: {
+            color: 'inherit',
+        },
+        [`& .${message.ref}`]: {
+            color: 'inherit',
+        },
+    }
 
     const warning = {
         ref: createRef(),
-        background: MaskColorVar.warning,
-        color: MaskColorVar.lightestBackground,
+        backgroundColor: '#FFB915',
+        color: '#ffffff',
+        [`& .${title.ref}`]: {
+            color: 'inherit',
+        },
+        [`& .${message.ref}`]: {
+            color: 'inherit',
+        },
     } as const
 
     return {
@@ -82,31 +106,12 @@ to {
             color: MaskColorVar.textLight,
             pointerEvents: 'inherit',
         },
-        success,
-        error,
-        default: {
-            background: MaskColorVar.secondaryInfoText,
-            color: MaskColorVar.lightestBackground,
-        },
-        info,
-        warning,
-        icon: {},
-        spinning: {
-            display: 'flex',
-            animation: `${spinningAnimationKeyFrames} 2s infinite linear`,
-        },
-        action: {
-            marginLeft: 'auto',
-            width: 50,
-            height: 50,
-            color: 'inherit',
-        },
         content: {
             alignItems: 'center',
-            backgroundColor: MaskColorVar.primaryBackground,
             padding: theme.spacing(1.5, 2),
             borderRadius: 12,
             width: 380,
+            flexWrap: 'nowrap !important' as 'nowrap',
             [`&.${success.ref}`]: {
                 background: MaskColorVar.greenMain,
                 color: MaskColorVar.lightestBackground,
@@ -119,12 +124,31 @@ to {
                 },
             },
             [`&.${info.ref}`]: {
-                background: MaskColorVar.secondaryInfoText,
                 color: MaskColorVar.lightestBackground,
             },
             [`&.${warning.ref}`]: {
-                color: MaskColorVar.textPrimary,
+                color: '#ffffff',
             },
+        },
+        default: defaultVariant,
+        success,
+        error,
+        info,
+        warning,
+        icon: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        spinning: {
+            display: 'flex',
+            animation: `${spinningAnimationKeyFrames} 2s infinite linear`,
+        },
+        action: {
+            marginLeft: 'auto',
+        },
+        closeButton: {
+            color: 'inherit',
         },
         texts: {
             marginLeft: theme.spacing(2),
@@ -141,21 +165,18 @@ to {
 export interface CustomSnackbarContentProps {
     id: SnackbarKey
     title: SnackbarMessage
-    message?: string
+    message?: string | React.ReactNode
     icon?: React.ReactNode
     processing?: boolean
     variant?: VariantType
     link?: string
+    action?: SnackbarAction
 }
 const IconMap: Record<VariantType, React.ReactNode> = {
     default: <InfoIcon color="inherit" />,
     success: <DoneIcon color="inherit" />,
     error: <RiskIcon />,
-    warning: (
-        <span style={{ color: MaskColorVar.warning }}>
-            <WarningIcon />
-        </span>
-    ),
+    warning: <WarningIcon color="inherit" />,
     info: <InfoIcon color="inherit" />,
 }
 
@@ -164,6 +185,14 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
     const snackbar = useSnackbar()
     const loadingIcon = <LoadingIcon color="inherit" className={classes.spinning} />
     const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
+    let renderedAction = (
+        <IconButton className={classes.closeButton} onClick={() => snackbar.closeSnackbar(props.id)}>
+            <CloseIcon />
+        </IconButton>
+    )
+    if (props.action) {
+        renderedAction = typeof props.action === 'function' ? props.action(props.id) : props.action
+    }
     return (
         <SnackbarContent ref={ref} className={classnames(classes.content, classes[props.variant!])}>
             {variantIcon && <div className={classes.icon}>{variantIcon}</div>}
@@ -174,21 +203,10 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
                 {props.message && (
                     <Typography className={classes.message} variant="body1">
                         {props.message}
-                        <Link
-                            color="inherit"
-                            className={classes.link}
-                            href={props.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={stop}>
-                            <LaunchIcon color="inherit" fontSize="inherit" />
-                        </Link>
                     </Typography>
                 )}
             </div>
-            <IconButton className={classes.action} onClick={() => snackbar.closeSnackbar(props.id)}>
-                <CloseIcon />
-            </IconButton>
+            <div className={classes.action}>{renderedAction}</div>
         </SnackbarContent>
     )
 })
@@ -207,7 +225,9 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps>((props) => {
             disableWindowBlurListener
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             hideIconVariant
-            content={(key, title) => <CustomSnackbarContent id={key} variant={props.variant} title={title} />}
+            content={(key, title) => (
+                <CustomSnackbarContent id={key} variant={props.variant ?? 'default'} title={title} />
+            )}
             action={(key) => (
                 <IconButton size="large" onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
                     <CloseIcon color="inherit" />
@@ -224,3 +244,38 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps>((props) => {
         />
     )
 })
+
+interface Options extends OptionsObject, Pick<CustomSnackbarContentProps, 'message' | 'processing' | 'icon'> {}
+
+export function useCustomSnackbar() {
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const showSnackbar = useCallback(
+        (
+            text: SnackbarMessage,
+            options: Options = {
+                variant: 'default',
+            },
+        ) => {
+            const { processing, message, variant, ...rest } = options
+            return enqueueSnackbar(text, {
+                variant: options.variant,
+                content: (key, title) => {
+                    return (
+                        <CustomSnackbarContent
+                            variant={variant ?? 'default'}
+                            id={key}
+                            title={title}
+                            message={message}
+                            processing={processing}
+                            action={rest.action}
+                        />
+                    )
+                },
+                ...rest,
+            })
+        },
+        [enqueueSnackbar],
+    )
+
+    return { showSnackbar, closeSnackbar }
+}

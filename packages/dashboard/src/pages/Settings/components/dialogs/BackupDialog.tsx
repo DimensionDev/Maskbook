@@ -3,7 +3,7 @@ import { PluginServices, Services } from '../../../../API'
 import { useAsync, useAsyncFn } from 'react-use'
 import BackupContentSelector, { BackupContentCheckedStatus } from '../BackupContentSelector'
 import { useDashboardI18N } from '../../../../locales'
-import { MaskDialog, useSnackbar } from '@masknet/theme'
+import { MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { Box } from '@material-ui/core'
 import { UserContext } from '../../hooks/UserContext'
 import LoadingButton from '@material-ui/lab/LoadingButton'
@@ -13,16 +13,18 @@ import { LoadingCard } from '../../../../components/Restore/steps/LoadingCard'
 import { encryptBackup } from '@masknet/backup-format'
 import { encode } from '@msgpack/msgpack'
 import PasswordFiled from '../../../../components/PasswordField'
+import { MaskAlert } from '../../../../components/MaskAlert'
 
 export interface BackupDialogProps {
     local?: boolean
     params?: VerifyCodeRequest
     open: boolean
+    merged?: boolean
     onClose(): void
 }
 
-export default function BackupDialog({ local = true, params, open, onClose }: BackupDialogProps) {
-    const snackbar = useSnackbar()
+export default function BackupDialog({ local = true, params, open, merged, onClose }: BackupDialogProps) {
+    const { showSnackbar } = useCustomSnackbar()
     const t = useDashboardI18N()
     const [backupPassword, setBackupPassword] = useState('')
     const [paymentPassword, setPaymentPassword] = useState('')
@@ -76,7 +78,7 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
                 const encrypted = await encryptBackup(encode(params.account + backupPassword), encode(fileJson))
 
                 uploadBackupValue(uploadUrl, encrypted).then(() => {
-                    snackbar.enqueueSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
+                    showSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
                 })
             }
 
@@ -87,7 +89,7 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
 
             onClose()
         } catch {
-            snackbar.enqueueSnackbar(t.settings_alert_backup_fail(), { variant: 'error' })
+            showSnackbar(t.settings_alert_backup_fail(), { variant: 'error' })
         }
     }, [backupPassword, paymentPassword])
 
@@ -118,6 +120,12 @@ export default function BackupDialog({ local = true, params, open, onClose }: Ba
                 </Box>
             ) : (
                 <Box sx={{ padding: '0 24px 24px' }}>
+                    {merged ? (
+                        <Box sx={{ marginBottom: '16px' }}>
+                            <MaskAlert description={t.settings_dialogs_backup_merged_tip()} type="success" />
+                        </Box>
+                    ) : null}
+
                     {previewInfo ? <BackupContentSelector json={previewInfo} onChange={handleContentChange} /> : null}
 
                     <PasswordFiled

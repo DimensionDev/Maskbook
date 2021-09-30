@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import type { PostInfo } from '../../PostInfo'
-import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CommentBox, CommentBoxProps } from '../../../components/InjectedComponents/CommentBox'
 import Services from '../../../extension/service'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
@@ -25,6 +25,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
     onPasteToCommentBox = defaultOnPasteToCommentBox,
     additionPropsToCommentBox: (classes: Record<T, string>) => Partial<CommentBoxProps> = () => ({}),
     useCustomStyles: (props?: any) => { classes: Record<T, string> } = makeStyles()({}) as any,
+    mountPointCallback?: (node: DOMProxy<HTMLElement, HTMLSpanElement, HTMLSpanElement>) => void,
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
         const info = usePostInfo()
@@ -52,6 +53,9 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
             current.commentBoxSelector.clone(),
             current.rootNode || void 0,
         ).useForeach((node, key, meta) => {
+            try {
+                mountPointCallback?.(meta)
+            } catch {}
             const root = createReactRootShadowed(meta.afterShadow, { signal })
             root.render(
                 <PostInfoProvider post={current}>

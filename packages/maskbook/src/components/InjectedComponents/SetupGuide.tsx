@@ -18,7 +18,6 @@ import classNames from 'classnames'
 import { ArrowRight } from 'react-feather'
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
 import CloseIcon from '@material-ui/icons/Close'
-import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 import stringify from 'json-stable-stringify'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { noop } from 'lodash-es'
@@ -37,18 +36,21 @@ export enum SetupGuideStep {
     FindUsername = 'find-username',
     SayHelloWorld = 'say-hello-world',
 }
+
+const userGuideCompleted = localStorage.getItem('userGuideCompleted')
+
 //#region wizard dialog
 const wizardTheme = extendsTheme((theme: Theme) => ({
     components: {
         MuiOutlinedInput: {
             styleOverrides: {
                 input: {
-                    paddingTop: 10.5,
-                    paddingBottom: 10.5,
+                    paddingTop: 8,
+                    paddingBottom: 8,
                 },
                 multiline: {
-                    paddingTop: 10.5,
-                    paddingBottom: 10.5,
+                    paddingTop: 8,
+                    paddingBottom: 8,
                 },
             },
         },
@@ -91,11 +93,11 @@ const wizardTheme = extendsTheme((theme: Theme) => ({
 
 const useWizardDialogStyles = makeStyles()((theme) => ({
     root: {
-        padding: '56px 20px 48px',
+        padding: '12px 16px 20px',
         position: 'relative',
         boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
         border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
-        borderRadius: 12,
+        borderRadius: 20,
         [theme.breakpoints.down('sm')]: {
             padding: '35px 20px 16px',
             position: 'fixed',
@@ -110,12 +112,13 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         },
         userSelect: 'none',
         boxSizing: 'border-box',
-        width: 320,
+        width: 260,
         overflow: 'hidden',
     },
     button: {
-        width: 200,
-        height: 40,
+        width: '100%',
+        height: 32,
+        minHeight: 32,
         marginLeft: 0,
         marginTop: 0,
         [theme.breakpoints.down('sm')]: {
@@ -140,9 +143,9 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         top: 10,
     },
     primary: {
-        fontSize: 30,
-        fontWeight: 500,
-        lineHeight: '37px',
+        fontSize: 18,
+        fontWeight: 600,
+        lineHeight: '30px',
     },
     secondary: {
         fontSize: 14,
@@ -154,9 +157,10 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         marginTop: 16,
     },
     tip: {
-        fontSize: 16,
-        lineHeight: 1.75,
-        marginBottom: 24,
+        fontSize: 14,
+        fontWeight: 600,
+        lineHeight: '20px',
+        paddingTop: 16,
     },
     textButton: {
         fontSize: 14,
@@ -181,9 +185,7 @@ const useStyles = makeStyles()({
     root: {
         alignItems: 'center',
     },
-    content: {
-        marginRight: 16,
-    },
+    content: {},
     footer: {
         marginLeft: 0,
         marginTop: 0,
@@ -282,7 +284,7 @@ function WizardDialog(props: WizardDialogProps) {
                 }}>
                 <Paper className={classes.root}>
                     <header className={classes.header}>
-                        <Typography className={classes.primary} color="textPrimary" variant="h1">
+                        <Typography className={classes.primary} color="textPrimary" variant="h3">
                             {title}
                         </Typography>
                         {optional ? (
@@ -300,11 +302,6 @@ function WizardDialog(props: WizardDialogProps) {
                             value={completion}
                         />
                     ) : null}
-                    {onBack ? (
-                        <IconButton className={classes.back} size="small" onClick={onBack}>
-                            <ArrowBackIosOutlinedIcon cursor="pointer" />
-                        </IconButton>
-                    ) : null}
                     {onClose ? (
                         <IconButton className={classes.close} size="small" onClick={onClose}>
                             <CloseIcon cursor="pointer" />
@@ -320,8 +317,8 @@ function WizardDialog(props: WizardDialogProps) {
 //#region find username
 const useFindUsernameStyles = makeStyles()((theme) => ({
     input: {
-        marginTop: '45px !important',
-        marginBottom: 24,
+        marginTop: '30px !important',
+        marginBottom: 16,
     },
     inputFocus: {
         '& svg': {
@@ -333,6 +330,7 @@ const useFindUsernameStyles = makeStyles()((theme) => ({
     },
     icon: {
         color: 'inherit',
+        fontSize: 16,
     },
 }))
 
@@ -425,6 +423,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     failed={t('setup_guide_connect_failed')}
                     executor={onConnect}
                     completeOnClick={onDone}
+                    autoComplete={!userGuideCompleted}
                     disabled={!username}
                     completeIcon={null}
                     failIcon={null}
@@ -475,7 +474,10 @@ function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayH
                     <Typography className={classNames(classes.tip, sayHelloWorldClasses.primary)} variant="body2">
                         {t('setup_guide_say_hello_primary')}
                     </Typography>
-                    <Typography className={classNames(classes.tip, sayHelloWorldClasses.secondary)} variant="body2">
+                    <Typography
+                        className={classNames(classes.tip, sayHelloWorldClasses.secondary)}
+                        variant="body2"
+                        sx={{ paddingBottom: '16px' }}>
                         {t('setup_guide_say_hello_secondary')}
                     </Typography>
                 </form>
@@ -567,16 +569,22 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const onNext = async () => {
         switch (step) {
             case SetupGuideStep.FindUsername:
-                currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
-                    status: SetupGuideStep.SayHelloWorld,
-                    username,
-                    persona: persona.toText(),
-                } as SetupGuideCrossContextStatus)
-                if (activatedSocialNetworkUI.configuration.setupWizard?.disableSayHello) {
-                    onConnect().then(onClose)
+                if (!userGuideCompleted) {
+                    onClose()
+                    currentSetupGuideStatus[ui.networkIdentifier].value = '1'
+                    localStorage.setItem('username', username)
                 } else {
-                    ui.automation.redirect?.newsFeed?.()
-                    setStep(SetupGuideStep.SayHelloWorld)
+                    currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
+                        status: SetupGuideStep.SayHelloWorld,
+                        username,
+                        persona: persona.toText(),
+                    } as SetupGuideCrossContextStatus)
+                    if (activatedSocialNetworkUI.configuration.setupWizard?.disableSayHello) {
+                        onConnect().then(onClose)
+                    } else {
+                        ui.automation.redirect?.newsFeed?.()
+                        setStep(SetupGuideStep.SayHelloWorld)
+                    }
                 }
                 break
             case SetupGuideStep.SayHelloWorld:
