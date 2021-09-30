@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button'
 import Close from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
-import { useMatchXS, MaskMessage, useI18N } from '../../utils'
+import { useMatchXS, MaskMessages, useI18N } from '../../utils'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => x.GlobalInjection)
@@ -16,7 +16,7 @@ export function PageInspector(props: PageInspectorProps) {
     const xsMatched = useMatchXS()
     useEffect(
         () =>
-            MaskMessage.events.autoPasteFailed.on((data) => {
+            MaskMessages.events.autoPasteFailed.on((data) => {
                 const key = data.image ? Math.random() : data.text
                 const close = () => closeSnackbar(key)
                 const timeout = setTimeout(() => {

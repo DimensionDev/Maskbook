@@ -4,7 +4,7 @@ import { ECKeyIdentifier, Identifier, PersonaIdentifier, ProfileIdentifier } fro
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
-import { MaskMessage } from '../../utils/messages'
+import { MaskMessages } from '../../utils/messages'
 import { createDBAccessWithAsyncUpgrade, createTransaction, IDBPSafeTransaction } from '../helpers/openDB'
 import { assertPersonaDBConsistency } from './consistency'
 import type {
@@ -136,9 +136,9 @@ export async function consistentPersonaDBWriteAccess(
     t.addEventListener('error', finish)
 
     // Pause those events when patching write access
-    const resumeProfile = MaskMessage.events.profilesChanged.pause()
-    const resumePersona = MaskMessage.events.ownPersonaChanged.pause()
-    const resumeRelation = MaskMessage.events.relationsChanged.pause()
+    const resumeProfile = MaskMessages.events.profilesChanged.pause()
+    const resumePersona = MaskMessages.events.ownPersonaChanged.pause()
+    const resumeRelation = MaskMessages.events.relationsChanged.pause()
     try {
         await action(t)
     } finally {
@@ -166,7 +166,7 @@ export async function consistentPersonaDBWriteAccess(
 /** Create a new Persona. */
 export async function createPersonaDB(record: PersonaRecord, t: PersonasTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('personas').add(personaRecordToDB(record))
-    record.privateKey && MaskMessage.events.ownPersonaChanged.sendToAll(undefined)
+    record.privateKey && MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 
 export async function queryPersonaByProfileDB(
@@ -268,7 +268,7 @@ export async function updatePersonaDB(
         updatedAt: nextRecord.updatedAt ?? new Date(),
     })
     await t.objectStore('personas').put(next)
-    ;(next.privateKey || old.privateKey) && MaskMessage.events.ownPersonaChanged.sendToAll(undefined)
+    ;(next.privateKey || old.privateKey) && MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 
 export async function createOrUpdatePersonaDB(
@@ -302,7 +302,7 @@ export async function deletePersonaDB(
     if (confirm !== 'delete even with private' && r.privateKey)
         throw new TypeError('Cannot delete a persona with a private key')
     await t.objectStore('personas').delete(id.toText())
-    r.privateKey && MaskMessage.events.ownPersonaChanged.sendToAll()
+    r.privateKey && MaskMessages.events.ownPersonaChanged.sendToAll()
 }
 /**
  * Delete a Persona
@@ -326,7 +326,7 @@ export async function safeDeletePersonaDB(
  */
 export async function createProfileDB(record: ProfileRecord, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').add(profileToDB(record))
-    MaskMessage.events.profilesChanged.sendToAll([{ of: record.identifier, reason: 'update' }])
+    MaskMessages.events.profilesChanged.sendToAll([{ of: record.identifier, reason: 'update' }])
 }
 
 /**
@@ -421,7 +421,7 @@ export async function updateProfileDB(
         ...updating,
     })
     await t.objectStore('profiles').put(nextRecord)
-    MaskMessage.events.profilesChanged.sendToAll([{ reason: 'update', of: updating.identifier }])
+    MaskMessages.events.profilesChanged.sendToAll([{ reason: 'update', of: updating.identifier }])
 }
 export async function createOrUpdateProfileDB(rec: ProfileRecord, t: ProfileTransaction<'readwrite'>) {
     if (await queryProfileDB(rec.identifier, t)) return updateProfileDB(rec, t)
@@ -447,7 +447,7 @@ export async function detachProfileDB(
 
     if (persona) {
         await updatePersonaDB(persona, { linkedProfiles: 'replace', explicitUndefinedField: 'delete field' }, t)
-        if (persona.privateKey) MaskMessage.events.ownPersonaChanged.sendToAll(undefined)
+        if (persona.privateKey) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     }
     profile.linkedPersona = undefined
     await updateProfileDB(profile, t)
@@ -480,7 +480,7 @@ export async function attachProfileDB(
     await updatePersonaDB(persona, { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' }, t)
     await updateProfileDB(profile, t)
 
-    if (persona.privateKey) MaskMessage.events.ownPersonaChanged.sendToAll(undefined)
+    if (persona.privateKey) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 
 /**
@@ -488,7 +488,7 @@ export async function attachProfileDB(
  */
 export async function deleteProfileDB(id: ProfileIdentifier, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').delete(id.toText())
-    MaskMessage.events.profilesChanged.sendToAll([{ reason: 'delete', of: id }])
+    MaskMessages.events.profilesChanged.sendToAll([{ reason: 'delete', of: id }])
 }
 
 /**
@@ -501,7 +501,7 @@ export async function createRelationDB(
 ): Promise<void> {
     await t.objectStore('relations').add(relationRecordToDB(record))
     if (!silent)
-        MaskMessage.events.relationsChanged.sendToAll([{ of: record.profile, reason: 'update', favor: record.favor }])
+        MaskMessages.events.relationsChanged.sendToAll([{ of: record.profile, reason: 'update', favor: record.favor }])
 }
 
 export async function queryRelations(query: (record: RelationRecord) => boolean, t?: RelationTransaction<'readonly'>) {
@@ -537,11 +537,7 @@ export async function queryRelationsPagedDB(
         if (cursor.value.network !== options.network) continue
 
         if (firstRecord && options.after && options.after.profile.toText() !== cursor?.value.profile) {
-            cursor.continue([
-                options.after.linked.toText(),
-                options.after.profile.toText(),
-                String(options.after.favor),
-            ])
+            cursor.continue([options.after.linked.toText(), options.after.profile.toText(), options.after.favor])
             firstRecord = false
             continue
         }
@@ -587,7 +583,7 @@ export async function updateRelationDB(
 
     await t.objectStore('relations').put(nextRecord)
     if (!silent) {
-        MaskMessage.events.relationsChanged.sendToAll([
+        MaskMessages.events.relationsChanged.sendToAll([
             { of: updating.profile, favor: updating.favor, reason: 'update' },
         ])
     }
@@ -683,7 +679,7 @@ export interface PersonaDB extends DBSchema {
         key: IDBValidKey[]
         value: RelationRecordDB
         indexes: {
-            'linked, profile, favor': string[]
+            'linked, profile, favor': [string, string, number]
         }
     }
 }

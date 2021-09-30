@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { MaskColorVar, MaskDialog, useSnackbar } from '@masknet/theme'
+import { MaskColorVar, MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import {
     Box,
     FormControlLabel,
@@ -45,7 +45,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
     const [backupPassword, setBackupPassword] = useState('')
     const [incorrectBackupPassword, setIncorrectBackupPassword] = useState(false)
     const t = useDashboardI18N()
-    const snackbar = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const [{ loading }, handleMerge] = useAsyncFn(async () => {
         try {
@@ -67,7 +67,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
             }
 
             onMerged(true)
-            snackbar.enqueueSnackbar(t.settings_alert_merge_success(), { variant: 'success' })
+            showSnackbar(t.settings_alert_merge_success(), { variant: 'success' })
         } catch (error) {
             setIncorrectBackupPassword(true)
         }

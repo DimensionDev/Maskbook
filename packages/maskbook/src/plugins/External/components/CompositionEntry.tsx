@@ -3,13 +3,13 @@ import { usePortalShadowRoot } from '@masknet/theme'
 import { MaskDialog } from '@masknet/theme'
 import { DialogContent } from '@material-ui/core'
 import { useEffect } from 'react'
-import { MaskMessage } from '../../../utils'
+import { MaskMessages } from '../../../utils'
 import { PluginLoader } from './PluginLoader'
 
 export function ThirdPartyPluginCompositionEntry(props: Plugin.SNSAdaptor.CompositionDialogEntry_DialogProps) {
     useEffect(
         () =>
-            MaskMessage.events.replaceComposition.on(() => {
+            MaskMessages.events.replaceComposition.on(() => {
                 props.onClose()
             }),
         [props.onClose],

@@ -38,8 +38,6 @@ export interface ProfileNFTsPageEvent {
 export interface NFTAvatarEvent {
     userId: string
     tokenId: string
-    image?: string
-    amount: string
     address: string
     avatarId: string
 }
@@ -77,6 +75,6 @@ export interface MaskMessages extends SettingsEvents {
     NFTAvatarUpdated: NFTAvatarEvent
     maskSDKHotModuleReload: void
 }
-export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
-Object.assign(globalThis, { MaskMessage })
-MaskMessage.serialization = Serialization
+export const MaskMessages = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
+Object.assign(globalThis, { MaskMessage: MaskMessages })
+MaskMessages.serialization = Serialization

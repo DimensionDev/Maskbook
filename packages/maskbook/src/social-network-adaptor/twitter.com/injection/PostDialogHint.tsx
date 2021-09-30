@@ -3,7 +3,7 @@ import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-k
 import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../utils/selector'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import { hasEditor, isCompose } from '../utils/postBox'
 import { startWatch } from '../../../utils/watcher'
 
@@ -28,7 +28,7 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
 
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const onHintButtonClicked = useCallback(
-        () => MaskMessage.events.requestComposition.sendToLocal({ reason, open: true }),
+        () => MaskMessages.events.requestComposition.sendToLocal({ reason, open: true }),
         [reason],
     )
     return <PostDialogHint onHintButtonClicked={onHintButtonClicked} />

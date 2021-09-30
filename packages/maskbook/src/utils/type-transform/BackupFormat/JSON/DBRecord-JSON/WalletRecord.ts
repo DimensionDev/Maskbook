@@ -6,7 +6,7 @@ import { JWKToKey, keyToJWK } from '../../..'
 type WalletBackup = BackupJSONFileLatest['wallets'][0]
 
 export function WalletRecordToJSONFormat(
-    wallet: WalletRecord & {
+    wallet: Omit<WalletRecord, 'type'> & {
         mnemonic?: string
         privateKey?: string
     },
@@ -15,7 +15,6 @@ export function WalletRecordToJSONFormat(
         ...omit(
             wallet,
             'id',
-            'type',
             'erc20_token_whitelist',
             'erc20_token_blacklist',
             'erc721_token_whitelist',

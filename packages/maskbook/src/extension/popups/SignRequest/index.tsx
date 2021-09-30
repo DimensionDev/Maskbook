@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
-import { MaskMessage } from '../../../utils'
+import { MaskMessages } from '../../../utils'
 import { MissingParameter } from '../MissingParameter'
 import type { SignRequest } from './utils'
 
@@ -38,7 +38,7 @@ function SignRequestHandler(props: SignRequest) {
         setSelected(personas[0].identifier.toText())
     }, [selected, personas])
     const onSign = () => {
-        MaskMessage.events.signRequestApproved.sendToBackgroundPage({
+        MaskMessages.events.signRequestApproved.sendToBackgroundPage({
             requestID: props.requestID,
             selectedPersona: Identifier.fromString<ECKeyIdentifier>(selected, ECKeyIdentifier).unwrap(),
         })

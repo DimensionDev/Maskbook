@@ -1,6 +1,6 @@
 import { ValueRef, isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import Services from '../extension/service'
-import { MaskMessage } from '../utils/messages'
+import { MaskMessages } from '../utils/messages'
 import { defer } from '../utils/utils'
 
 export interface SettingsTexts {
@@ -21,7 +21,7 @@ const cached: Map<string, InternalSettings<any>> = new Map()
 const lastEventId: Map<string, number> = new Map()
 
 if (isEnvironment(Environment.ManifestBackground)) {
-    MaskMessage.events.createInternalSettingsChanged.on(async (payload) => {
+    MaskMessages.events.createInternalSettingsChanged.on(async (payload) => {
         const { id, key, value, initial } = payload
 
         const stored = await Services.Helper.getStorage(key)
@@ -29,7 +29,7 @@ if (isEnvironment(Environment.ManifestBackground)) {
 
         const updated = await Services.Helper.getStorage(key)
         if (typeof updated === 'undefined') return
-        MaskMessage.events.createInternalSettingsUpdated.sendToAll({
+        MaskMessages.events.createInternalSettingsUpdated.sendToAll({
             id,
             key,
             value: updated,
@@ -38,7 +38,7 @@ if (isEnvironment(Environment.ManifestBackground)) {
     })
 }
 
-MaskMessage.events.createInternalSettingsUpdated.on(async (payload) => {
+MaskMessages.events.createInternalSettingsUpdated.on(async (payload) => {
     const { id, key, value } = payload
     const settings = cached.get(key)
     if (!settings) return
@@ -71,7 +71,7 @@ export function createInternalSettings<T extends browser.storage.StorageValue>(
     const id = Date.now()
     cached.set(key, settings)
     lastEventId.set(key, id)
-    MaskMessage.events.createInternalSettingsChanged.sendToAll({
+    MaskMessages.events.createInternalSettingsChanged.sendToAll({
         id,
         key,
         value,
@@ -80,7 +80,7 @@ export function createInternalSettings<T extends browser.storage.StorageValue>(
     settings.addListener((newVal) => {
         const id = Date.now()
         lastEventId.set(key, id)
-        MaskMessage.events.createInternalSettingsChanged.sendToAll({
+        MaskMessages.events.createInternalSettingsChanged.sendToAll({
             id,
             key,
             value: newVal,
@@ -107,7 +107,7 @@ export interface NetworkSettings<T> {
 
 export function createNetworkSettings<T extends browser.storage.StorageValue>(settingsKey: string, defaultValue: T) {
     const cached: NetworkSettings<T> = {}
-    MaskMessage.events.createNetworkSettingsReady.on((networkKey) => {
+    MaskMessages.events.createNetworkSettingsReady.on((networkKey) => {
         if (networkKey.startsWith('plugin:') || settingsKey === 'pluginsEnabled') return
         if (!(networkKey in cached))
             cached[networkKey] = createInternalSettings(`${networkKey}+${settingsKey}`, defaultValue)
@@ -117,7 +117,7 @@ export function createNetworkSettings<T extends browser.storage.StorageValue>(se
             if (!(networkKey in target)) {
                 const settings = createInternalSettings(`${networkKey}+${settingsKey}`, defaultValue)
                 target[networkKey] = settings
-                settings.readyPromise.then(() => MaskMessage.events.createNetworkSettingsReady.sendToAll(networkKey))
+                settings.readyPromise.then(() => MaskMessages.events.createNetworkSettingsReady.sendToAll(networkKey))
             }
             return target[networkKey]
         },

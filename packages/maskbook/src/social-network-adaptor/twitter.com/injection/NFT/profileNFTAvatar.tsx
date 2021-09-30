@@ -7,13 +7,8 @@ import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { useNFTAvatar } from '../../../../components/InjectedComponents/NFT/hooks'
 import { NFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
 import { activatedSocialNetworkUI } from '../../../../social-network'
-import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
-import {
-    searchProfileAvatarParentSelector,
-    searchProfileAvatarSelector,
-    searchProfileSaveSelector,
-} from '../../utils/selector'
-import { updateAvatarImage } from '../../utils/updateAvatarImage'
+import { createReactRootShadowed, Flags, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
+import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector'
 import { getAvatar, getAvatarId, getTwitterId } from '../../utils/user'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
@@ -56,32 +51,23 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent>({} as NFTAvatarEvent)
 
     const onChange = useCallback(async (token: ERC721TokenDetailed) => {
-        const parent = searchProfileAvatarParentSelector()
-        if (!parent) return
-
         const avatarId = getAvatarId(getAvatar())
         setAvatarEvent({
             userId: twitterId,
             tokenId: token.tokenId,
             address: token.contractDetailed.address,
-            image: token.info.image ?? '',
             avatarId,
-            amount: '0',
         })
-
-        updateAvatarImage(parent, token.info.image)
     }, [])
 
     const handler = () => {
         if (!avatarEvent) return
-        MaskMessage.events.NFTAvatarUpdated.sendToLocal(avatarEvent)
+        MaskMessages.events.NFTAvatarUpdated.sendToLocal(avatarEvent)
     }
 
     useEffect(() => {
         if (!Flags.nft_avatar_enabled) return
         setTwitterId(getTwitterId())
-        const parent = searchProfileAvatarParentSelector()
-        if (parent && avatar) updateAvatarImage(parent, avatar.image)
     }, [avatar])
 
     useEffect(() => {

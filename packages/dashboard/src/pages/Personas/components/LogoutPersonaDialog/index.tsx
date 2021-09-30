@@ -37,11 +37,13 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
 
         if (lastCreatedPersona) {
             await changeCurrentPersona(lastCreatedPersona.identifier)
+            onClose()
         } else {
             enqueueSnackbar(t.personas_setup_tip(), { variant: 'warning' })
+            onClose()
             navigate(RoutePaths.Setup)
         }
-    }, [identifier])
+    }, [identifier, onClose])
 
     return (
         <MaskDialog open={open} title={t.personas_logout()} onClose={onClose} maxWidth="xs">
@@ -56,10 +58,10 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
                 </Typography>
             </DialogContent>
             <DialogActions>
-                <Button color="secondary" onClick={onClose}>
+                <Button color="secondary" onClick={onClose} sx={{ minWidth: 150 }}>
                     {t.personas_cancel()}
                 </Button>
-                <LoadingButton color="error" onClick={handleLogout}>
+                <LoadingButton color="error" onClick={handleLogout} sx={{ minWidth: 150 }}>
                     {t.personas_logout()}
                 </LoadingButton>
             </DialogActions>

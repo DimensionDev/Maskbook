@@ -10,7 +10,7 @@ import {
 } from '@masknet/web3-shared'
 import { StartUp } from './StartUp'
 import { TokenAssets } from './components/TokenAssets'
-import { Route, Routes, useNavigate } from 'react-router-dom'
+import { Route, Routes, useMatch, useNavigate } from 'react-router-dom'
 import { Balance } from './components/Balance'
 import { Transfer } from './components/Transfer'
 import { History } from './components/History'
@@ -30,6 +30,10 @@ function Wallets() {
     const chain = useChainDetailed()
     const t = useDashboardI18N()
 
+    const isWalletPath = useMatch(RoutePaths.Wallets)
+    const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
+    const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
+
     const [receiveOpen, setReceiveOpen] = useState(false)
 
     const erc20Tokens = useTrustedERC20Tokens()
@@ -48,11 +52,18 @@ function Wallets() {
             .toNumber()
     }, [detailedTokens])
 
+    const pateTitle = useMemo(() => {
+        if (wallets.length === 0) return t.create_wallet_form_title()
+
+        if (isWalletPath) return t.wallets_assets()
+        if (isWalletTransferPath) return t.wallets_transfer()
+        if (isWalletHistoryPath) return t.wallets_history()
+
+        return t.wallets()
+    }, [isWalletTransferPath, isWalletHistoryPath, isWalletPath, wallets.length])
+
     return (
-        <PageFrame
-            title={wallets.length === 0 ? t.create_wallet_form_title() : t.wallets()}
-            noBackgroundFill
-            primaryAction={<WalletStateBar />}>
+        <PageFrame title={pateTitle} noBackgroundFill primaryAction={<WalletStateBar />}>
             {!wallet ? (
                 <StartUp />
             ) : (

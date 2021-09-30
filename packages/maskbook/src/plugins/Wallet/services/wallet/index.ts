@@ -31,10 +31,12 @@ export function createMnemonicWords() {
 }
 
 export async function getWalletPrimary() {
-    return first(
-        (await database.getWallets(ProviderType.MaskWallet))
-            .filter((x) => x.storedKeyInfo?.type === api.StoredKeyType.Mnemonic)
-            .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime()),
+    return (
+        first(
+            (await database.getWallets(ProviderType.MaskWallet))
+                .filter((x) => x.storedKeyInfo?.type === api.StoredKeyType.Mnemonic)
+                .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime()),
+        ) ?? null
     )
 }
 

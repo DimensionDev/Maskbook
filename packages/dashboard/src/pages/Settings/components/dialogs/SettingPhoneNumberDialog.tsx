@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
 import { phoneRegexp } from '../../regexp'
-import { CountdownButton, MaskTextField, useSnackbar } from '@masknet/theme'
+import { CountdownButton, MaskTextField, useCustomSnackbar } from '@masknet/theme'
 import { Scenario, Locale, AccountType } from '../../type'
 import {
     fetchBackupValue,
@@ -35,7 +35,7 @@ interface SettingPhoneNumberDialogProps {
 
 export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhoneNumberDialogProps) {
     const language = useLanguage()
-    const snackbar = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const { user, updateUser } = useContext(UserContext)
@@ -105,7 +105,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
 
     const onSuccess = () => {
         const msg = user.phone ? t.settings_alert_phone_number_updated() : t.settings_alert_phone_number_set()
-        snackbar.enqueueSnackbar(msg, { variant: 'success' })
+        showSnackbar(msg, { variant: 'success' })
 
         updateUser({ phone: `${countryCode} ${phone}` })
         onClose()
@@ -163,10 +163,10 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
             locale: language.includes('zh') ? Locale.zh : Locale.en,
         })
             .then(() => {
-                snackbar.enqueueSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
+                showSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
             })
             .catch((error) => {
-                snackbar.enqueueSnackbar(error.message, { variant: 'error' })
+                showSnackbar(error.message, { variant: 'error' })
             })
     }
 
