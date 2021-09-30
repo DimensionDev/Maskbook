@@ -161,7 +161,12 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const lastStep = useValueRef(lastStepRef)
 
     useEffect(() => {
-        setOpen(+lastStep === step)
+        const open = +lastStep === step
+        setOpen(open)
+
+        if (open) {
+            document.body.style.overflow = 'hidden'
+        }
     }, [lastStep])
 
     const resetOverflow = () => {
@@ -200,8 +205,6 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         }
 
         onResize()
-
-        document.body.style.overflow = 'hidden'
 
         window.addEventListener('resize', onResize)
 
