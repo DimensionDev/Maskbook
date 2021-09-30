@@ -176,11 +176,7 @@ const IconMap: Record<VariantType, React.ReactNode> = {
     default: <InfoIcon color="inherit" />,
     success: <DoneIcon color="inherit" />,
     error: <RiskIcon />,
-    warning: (
-        <span style={{ color: MaskColorVar.warning }}>
-            <WarningIcon />
-        </span>
-    ),
+    warning: <WarningIcon color="inherit" />,
     info: <InfoIcon color="inherit" />,
 }
 
