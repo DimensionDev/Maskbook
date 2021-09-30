@@ -12,5 +12,5 @@ export function useNFTAvatar(userId: string) {
         if (!persona) return
         const avatar = await getNFTAvatar(persona, web3)
         return avatar
-    }, [userId]).value
+    }, [userId, web3, persona]).value
 }
