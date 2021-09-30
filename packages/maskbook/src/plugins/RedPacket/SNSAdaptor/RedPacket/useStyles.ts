@@ -1,5 +1,4 @@
-import { makeStyles } from '@masknet/theme'
-import { keyframes } from 'tss-react'
+import { makeStyles, keyframes } from '@masknet/theme'
 import { IconURLs } from '../IconURL'
 
 export const useStyles = makeStyles()((theme) => {
