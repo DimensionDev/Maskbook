@@ -41,11 +41,24 @@ const InfoAlert = styled(Alert)(({ theme }) => ({
     [`&.${alertClasses.standardError} .${alertClasses.message}`]: {
         color: `${getMaskColor(theme).redMain}`,
     },
+    // success
+    [`&.${alertClasses.standardSuccess}`]: {
+        backgroundColor: `${MaskColorVar.greenMain.alpha(0.1)}`,
+    },
+    [`&.${alertClasses.standardSuccess} .${alertClasses.icon}`]: {
+        color: `${getMaskColor(theme).greenMain}`,
+    },
+    [`&.${alertClasses.standardSuccess} .${alertClasses.action}`]: {
+        color: `${getMaskColor(theme).greenMain}`,
+    },
+    [`&.${alertClasses.standardSuccess} .${alertClasses.message}`]: {
+        color: `${getMaskColor(theme).greenMain}`,
+    },
 }))
 
 export interface MaskAlertProps {
     description: string
-    type?: 'error' | 'info'
+    type?: 'error' | 'info' | 'success'
 }
 
 export const MaskAlert = memo(({ description, type = 'info' }: MaskAlertProps) => {

@@ -29,6 +29,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         //#region Get gas now from debank
         const { value: gasNow, loading: getGasNowLoading } = useAsync(async () => {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+            if (!response) return { slow: 0, standard: 0, fast: 0 }
             return {
                 slow: response.data.slow.price,
                 standard: response.data.normal.price,
@@ -65,12 +66,12 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             return zod.object({
                 gasLimit: zod
                     .string()
-                    .min(1, t('wallet_transfer_error_gasLimit_absence'))
+                    .min(1, t('wallet_transfer_error_gas_limit_absence'))
                     .refine(
                         (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit ?? 0),
                         t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
                     ),
-                gasPrice: zod.string().min(1, t('wallet_transfer_error_gasPrice_absence')),
+                gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
             })
         }, [minGasLimit])
 
@@ -125,7 +126,10 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                             <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
                             <Typography className={classes.gasUSD}>
                                 {t('popups_wallet_gas_fee_settings_usd', {
-                                    usd: formatWeiToEther(gasPrice).times(nativeTokenPrice).times(21000).toPrecision(3),
+                                    usd: formatWeiToEther(gasPrice)
+                                        .times(nativeTokenPrice)
+                                        .times(inputGasLimit || '1')
+                                        .toPrecision(3),
                                 })}
                             </Typography>
                         </div>

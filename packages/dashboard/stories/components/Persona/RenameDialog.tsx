@@ -11,7 +11,7 @@ export default meta({
 export const RenameDialog = of({
     args: {
         open: true,
-        nickname: 'maskbook',
+        nickname: 'mask',
         onClose: action('onClose'),
         onConfirm: action('onConfirm'),
     },

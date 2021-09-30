@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { DialogContent, Typography } from '@material-ui/core'
 import { InjectedDialog, InjectedDialogProps } from '../shared/InjectedDialog'
 import { makeStyles } from '@masknet/theme'
-import { MaskbookIcon } from '../../resources/MaskbookIcon'
+import { MaskIcon } from '../../resources/MaskIcon'
 import { FormattedBalance, useStylesExtends } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
 import { ITO_Card } from '../../plugins/ITO/SNSAdaptor/ITO_Card'
@@ -70,7 +70,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogPaper }}
             titleBarIconStyle="close">
             <DialogContent className={classes.content}>
-                <MaskbookIcon classes={{ root: classes.logo }} />
+                <MaskIcon classes={{ root: classes.logo }} />
                 <Typography className={classes.amount}>
                     <FormattedBalance
                         value={new BigNumber(amount).plus(balance)}

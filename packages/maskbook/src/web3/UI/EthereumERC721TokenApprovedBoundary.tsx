@@ -7,7 +7,7 @@ import {
 } from '@masknet/web3-shared'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { useI18N } from '../../utils'
-import { makeStyles, useSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Typography, Link } from '@material-ui/core'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import { useMemo, useEffect } from 'react'
@@ -53,11 +53,11 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         operator,
         true,
     )
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     useEffect(() => {
         if (approveState.type === TransactionStateType.CONFIRMED && approveState.no === 0) {
-            enqueueSnackbar(
+            showSnackbar(
                 <div className={classes.snackBar}>
                     <Typography className={classes.snackBarText}>
                         {t('plugin_wallet_approve_all_nft_successfully', { symbol: contract?.symbol })}
@@ -78,7 +78,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             resetCallback()
             retry()
         } else if (approveState.type === TransactionStateType.FAILED) {
-            enqueueSnackbar(approveState.error.message, {
+            showSnackbar(approveState.error.message, {
                 variant: 'error',
             })
             resetCallback()

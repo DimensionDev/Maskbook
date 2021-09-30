@@ -1,7 +1,7 @@
 import { Typography, ThemeProvider, SnackbarContent } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../social-network'
-import { MaskbookIcon } from '../resources/MaskbookIcon'
+import { MaskIcon } from '../resources/MaskIcon'
 import { Suspense, useRef } from 'react'
 import { isTwitter } from '../social-network-adaptor/twitter.com/base'
 
@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export default function MaskbookPluginWrapper(props: PluginWrapperProps) {
+export default function MaskPluginWrapper(props: PluginWrapperProps) {
     const { classes } = useStyles()
     const { pluginName, children } = props
     const useStableTheme = useRef(activatedSocialNetworkUI.customization.useTheme).current
@@ -58,7 +58,7 @@ export default function MaskbookPluginWrapper(props: PluginWrapperProps) {
     const inner = (
         <div className={classes.card} onClick={(ev) => ev.stopPropagation()}>
             <div className={classes.header}>
-                <MaskbookIcon className={classes.icon} />
+                <MaskIcon className={classes.icon} />
                 <div className={classes.title}>
                     <Typography variant="overline">Mask Plugin</Typography>
                     <Typography variant="h6">{pluginName}</Typography>

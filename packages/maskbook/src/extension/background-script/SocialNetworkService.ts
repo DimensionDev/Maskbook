@@ -19,7 +19,6 @@ export async function connectSocialNetwork(identifier: PersonaIdentifier, networ
     const ui = await loadSocialNetworkUI(network)
     const home = ui.utils.getHomePage?.()
     if (!Flags.no_web_extension_dynamic_permission_request) {
-        // TODO: requesting permission need a popup in Firefox.
         if (!(await requestSNSAdaptorPermission(ui))) return
     }
     currentSetupGuideStatus[network].value = stringify({

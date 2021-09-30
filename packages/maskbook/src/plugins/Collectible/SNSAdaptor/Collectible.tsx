@@ -32,7 +32,7 @@ import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { PluginSkeleton } from './PluginSkeleton'
 import { CollectibleProvider, CollectibleTab } from '../types'
 import { currentCollectibleProviderSettings } from '../settings'
-import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
+import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
@@ -118,7 +118,7 @@ const useStyles = makeStyles()((theme) => {
         footName: {
             marginLeft: theme.spacing(0.5),
         },
-        maskbook: {
+        mask: {
             width: 40,
             height: 10,
         },
@@ -280,7 +280,7 @@ export function Collectible(props: CollectibleProps) {
                             rel="noopener noreferrer"
                             title="Mask"
                             href="https://mask.io">
-                            <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
+                            <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
                         </Link>
                     </Typography>
                     <div className={classes.footMenu}>

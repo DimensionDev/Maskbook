@@ -165,7 +165,17 @@ const facebookUI: SocialNetworkUI.Definition = {
         setupPrompt: injectSetupPromptFacebook,
         commentComposition: {
             compositionBox: injectPostCommentsDefault(),
-            commentInspector: injectCommentBoxDefaultFactory(pasteToCommentBoxFacebook),
+            commentInspector: injectCommentBoxDefaultFactory(
+                pasteToCommentBoxFacebook,
+                undefined,
+                undefined,
+                (node) => {
+                    setTimeout(() => {
+                        node.after.style.flexBasis = '100%'
+                        node.current.parentElement!.style.flexWrap = 'wrap'
+                    })
+                },
+            ),
         },
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),

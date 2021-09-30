@@ -223,7 +223,7 @@ const ContractInteraction = memo(() => {
         } else if (!gasPrice) {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
             return {
-                gasPrice: response.data.normal.price,
+                gasPrice: response?.data.normal.price ?? 0,
             }
         }
         return {}

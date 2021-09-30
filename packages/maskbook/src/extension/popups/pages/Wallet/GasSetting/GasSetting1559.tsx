@@ -173,19 +173,19 @@ export const GasSetting1559 = memo(() => {
             .object({
                 gasLimit: zod
                     .string()
-                    .min(1, t('wallet_transfer_error_gasLimit_absence'))
+                    .min(1, t('wallet_transfer_error_gas_limit_absence'))
                     .refine(
                         (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimit ?? 0),
                         t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
                     ),
                 maxPriorityFeePerGas: zod
                     .string()
-                    .min(1, t('wallet_transfer_error_maxPriority_fee_absence'))
+                    .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
                     .refine(
                         (value) => new BigNumber(value).isPositive(),
                         t('wallet_transfer_error_max_priority_gas_fee_positive'),
                     ),
-                maxFeePerGas: zod.string().min(1, t('wallet_transfer_error_maxFee_absence')),
+                maxFeePerGas: zod.string().min(1, t('wallet_transfer_error_max_fee_absence')),
             })
             .refine((data) => new BigNumber(data.maxPriorityFeePerGas).isLessThanOrEqualTo(data.maxFeePerGas), {
                 message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),

@@ -1,7 +1,7 @@
 import { Button, DialogActions, DialogContent } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-es'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
@@ -31,7 +31,7 @@ const useStyles = makeStyles()({
 const FileServiceDialog: React.FC<Props> = (props) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const snackbar = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const [uploading, setUploading] = useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = useState<FileInfo | null>(null)
     const { attachMetadata, dropMetadata } = useCompositionContext()
@@ -51,7 +51,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
             props.onClose()
             return
         }
-        snackbar.enqueueSnackbar(t('plugin_file_service_uploading_on_cancel'))
+        showSnackbar(t('plugin_file_service_uploading_on_cancel'))
     }
     return (
         <InjectedDialog open={props.open} title={t('plugin_file_service_display_name')} onClose={onDecline}>

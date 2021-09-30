@@ -1,4 +1,3 @@
-// import { TextField } from '@dimensiondev/maskbook-theme/src/component-changes'
 import { useAccount, useChainId } from '@masknet/web3-shared'
 import { DialogActions, DialogContent, DialogProps, Chip, Button, InputBase } from '@material-ui/core'
 import { useEffect } from 'react'

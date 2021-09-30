@@ -21,7 +21,7 @@ function renderPostDialogIconTo<T>(ls: LiveSelector<T, true>, signal: AbortSigna
 
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<PostDialogIconAtTwitter />)
 }
-const useTwitterMaskbookIcon = makeStyles()((theme) => ({
+const useTwitterMaskIcon = makeStyles()((theme) => ({
     root: {
         width: 38,
         height: 38,
@@ -31,7 +31,7 @@ const useTwitterMaskbookIcon = makeStyles()((theme) => ({
 }))
 
 function PostDialogIconAtTwitter() {
-    const { classes } = useTwitterMaskbookIcon()
+    const { classes } = useTwitterMaskIcon()
     const onIconClicked = () => MaskMessage.events.requestComposition.sendToLocal({ reason: 'timeline', open: true })
     return <PostDialogIcon classes={classes} onClick={onIconClicked} />
 }
