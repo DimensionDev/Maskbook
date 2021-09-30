@@ -25,7 +25,11 @@ import { MaskColorVar } from '../../constants'
 export { SnackbarProvider, useSnackbar } from 'notistack'
 export type { VariantType, OptionsObject, SnackbarKey } from 'notistack'
 
-const useStyles = makeStyles()((theme, _, createRef) => {
+interface StyleProps {
+    isFacebook?: boolean
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, { isFacebook }, createRef) => {
     const { palette } = theme
     const isDark = palette.mode === 'dark'
     const spinningAnimationKeyFrames = keyframes`
@@ -101,6 +105,7 @@ to {
     return {
         root: {
             zIndex: 9999,
+            transform: isFacebook ? 'translateY(100px)' : 'none',
             color: MaskColorVar.textLight,
             pointerEvents: 'inherit',
         },
@@ -168,6 +173,7 @@ export interface CustomSnackbarContentProps {
     variant?: VariantType
     link?: string
     action?: SnackbarAction
+    isFacebook?: boolean
 }
 const IconMap: Record<VariantType, React.ReactNode> = {
     default: <InfoIcon color="inherit" />,
@@ -182,7 +188,7 @@ const IconMap: Record<VariantType, React.ReactNode> = {
 }
 
 export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarContentProps>((props, ref) => {
-    const { classes } = useStyles()
+    const { classes } = useStyles({ isFacebook: props.isFacebook })
     const snackbar = useSnackbar()
     const loadingIcon = <LoadingIcon color="inherit" className={classes.spinning} />
     const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
@@ -212,9 +218,9 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
     )
 })
 
-export const CustomSnackbarProvider = memo<SnackbarProviderProps>((props) => {
+export const CustomSnackbarProvider = memo<SnackbarProviderProps & { isFacebook?: boolean }>((props) => {
     const ref = useRef<SnackbarProvider>(null)
-    const { classes } = useStyles()
+    const { classes } = useStyles({ isFacebook: props.isFacebook })
     const onDismiss = (key: string | number) => () => {
         ref.current?.closeSnackbar(key)
     }
@@ -227,7 +233,12 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps>((props) => {
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             hideIconVariant
             content={(key, title) => (
-                <CustomSnackbarContent id={key} variant={props.variant ?? 'default'} title={title} />
+                <CustomSnackbarContent
+                    id={key}
+                    variant={props.variant ?? 'default'}
+                    title={title}
+                    isFacebook={props.isFacebook}
+                />
             )}
             action={(key) => (
                 <IconButton size="large" onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
