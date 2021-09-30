@@ -87,6 +87,7 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
             page={page}
             onPageChange={setPage}
             showPagination={!loading && !error && !!value?.length}
+            onReset={() => setPage(0)}
         />
     )
 })
@@ -98,10 +99,11 @@ export interface ContactsTableUIProps extends ContactsTableProps {
     page: number
     onPageChange: Dispatch<SetStateAction<number>>
     showPagination: boolean
+    onReset: () => void
 }
 
 export const ContactsTableUI = memo<ContactsTableUIProps>(
-    ({ showPagination, page, onPageChange, network, dataSource, isEmpty, isLoading }) => {
+    ({ showPagination, page, onPageChange, network, dataSource, isEmpty, isLoading, onReset }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
         return (
@@ -121,6 +123,7 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
                                             contact={item}
                                             index={page * PageSize + index + 1}
                                             network={network}
+                                            onReset={onReset}
                                         />
                                     ))}
                                 </TableBody>

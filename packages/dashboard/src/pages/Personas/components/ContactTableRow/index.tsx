@@ -49,9 +49,10 @@ export interface ContactTableRowProps {
     contact: RelationProfile
     index: number
     network: string
+    onReset: () => void
 }
 
-export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, index }) => {
+export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, index, onReset }) => {
     const t = useDashboardI18N()
     const { currentPersona } = PersonaContext.useContainer()
     const [, addContactToFavorite] = useAddContactToFavorite()
@@ -59,13 +60,14 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
 
     const theme = useTheme().palette.mode
 
-    const handleClickStar = useCallback(() => {
+    const handleClickStar = useCallback(async () => {
         if (currentPersona) {
             contact.favorite
-                ? removeContactFromFavorite(contact.identifier, currentPersona)
-                : addContactToFavorite(contact.identifier, currentPersona)
+                ? await removeContactFromFavorite(contact.identifier, currentPersona)
+                : await addContactToFavorite(contact.identifier, currentPersona)
+            onReset()
         }
-    }, [contact, currentPersona])
+    }, [contact, currentPersona, onReset])
 
     const [{ loading }, handleClickInvite] = useAsyncFn(async () => {
         return Services.Helper.createNewWindowAndPasteShareContent(
@@ -86,7 +88,9 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
     )
 })
 
-export interface ContactTableRowUIProps extends Omit<ContactTableRowProps, 'network'> {
+export interface ContactTableRowUIProps {
+    contact: RelationProfile
+    index: number
     handleClickInvite(): void
     handleClickStar(): void
     loading: boolean
