@@ -31,14 +31,22 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
         background:
             theme.palette.mode === 'dark' ? getMaskColor(theme).lightBackground : getMaskColor(theme).normalBackground,
-        fontSize: 12,
+        fontSize: 13,
         lineHeight: '16px',
         borderRadius: 6,
-        border: `1px solid ${theme.palette.mode === 'dark' ? '#3D4166' : MaskColorVar.lineLighter}`,
+        border: theme.palette.mode === 'dark' ? `1px solid #3D4166` : 'none',
         [`&.${formHelperTextClasses.error}`]: {
             boxShadow: `0 0 0 ${theme.spacing(0.5)} ${MaskColorVar.redMain.alpha(0.2)}`,
             border: `1px solid ${MaskColorVar.redMain.alpha(0.8)}`,
         },
+    },
+    inputDisabled: {
+        opacity: 0.5,
+    },
+    inputFocused: {
+        background: MaskColorVar.primaryBackground,
+        border: `1px solid ${theme.palette.mode === 'dark' ? '#3D4166' : MaskColorVar.lineLighter}`,
+        padding: 7,
     },
 }))
 
@@ -67,7 +75,12 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 classes={{ root: classes.field }}
                 variant="standard"
                 required={required}
-                InputProps={{ ...inputProps, disableUnderline: true, className: classes.input }}
+                InputProps={{
+                    ...inputProps,
+                    disableUnderline: true,
+                    className: classes.input,
+                    classes: { ...inputProps.classes, disabled: classes.inputDisabled, focused: classes.inputFocused },
+                }}
             />
         </Box>
     )

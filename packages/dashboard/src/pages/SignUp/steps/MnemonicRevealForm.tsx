@@ -68,7 +68,11 @@ export const MnemonicRevealForm = memo(() => {
                         </Stack>
                         <MnemonicReveal words={words} />
                         <ButtonContainer>
-                            <Button variant="rounded" color="primary" onClick={() => setStep(CreateWalletStep.Verify)}>
+                            <Button
+                                size="large"
+                                variant="rounded"
+                                color="primary"
+                                onClick={() => setStep(CreateWalletStep.Verify)}>
                                 {t.verify()}
                             </Button>
                         </ButtonContainer>
@@ -78,13 +82,14 @@ export const MnemonicRevealForm = memo(() => {
                     <>
                         <DesktopMnemonicConfirm indexes={indexes} puzzleWords={puzzleWords} onChange={answerCallback} />
                         <ButtonContainer>
-                            <Button variant="rounded" color="secondary" onClick={onBack}>
+                            <Button variant="rounded" size="large" color="secondary" onClick={onBack}>
                                 {t.back()}
                             </Button>
                             <Button
                                 sx={{ width: '224px' }}
                                 variant="rounded"
                                 color="primary"
+                                size="large"
                                 disabled={some(puzzleWords, (word) => !word)}
                                 onClick={onSubmit}>
                                 {t.confirm()}

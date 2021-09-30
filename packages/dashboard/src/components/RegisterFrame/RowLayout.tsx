@@ -3,6 +3,7 @@ import { styled } from '@material-ui/core/styles'
 import { memo } from 'react'
 import { LightColor } from '@masknet/theme/constants'
 import { Container } from '@material-ui/core'
+import { MaskColorVar } from '@masknet/theme'
 
 const LayoutContainer = styled('div')(
     ({ theme }) => `
@@ -10,6 +11,7 @@ const LayoutContainer = styled('div')(
     position: absolute;
     height: 100%;
     width: 100%;
+    background: ${MaskColorVar.primaryBackground}
 `,
 )
 

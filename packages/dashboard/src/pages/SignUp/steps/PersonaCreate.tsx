@@ -84,7 +84,12 @@ export const PersonaCreate = () => {
                         helperText={error}
                     />
                     <ButtonContainer>
-                        <LoadingButton variant="rounded" color="primary" onClick={create} disabled={!personaName}>
+                        <LoadingButton
+                            size="large"
+                            variant="rounded"
+                            color="primary"
+                            onClick={create}
+                            disabled={!personaName}>
                             {t.next()}
                         </LoadingButton>
                     </ButtonContainer>

@@ -31,13 +31,15 @@ const Subtitle = styled(Typography)(
 `,
 )
 
-const Action = styled(Button)(
-    ({ theme }) => `
-    color: ${theme.palette.mode === 'dark' ? MaskColorVar.textPrimary : MaskColorVar.primary};
-    font-weight: bold;
-    min-width: 150px;
-`,
-)
+const Action = styled(Button)(({ theme }) => ({
+    display: 'inline-block',
+    color: theme.palette.mode === 'dark' ? MaskColorVar.textPrimary : MaskColorVar.primary,
+    fontWeight: 'bold',
+    textAlign: 'right',
+    '&:hover': {
+        background: 'transparent',
+    },
+}))
 
 export interface HeaderProps {
     title: string
