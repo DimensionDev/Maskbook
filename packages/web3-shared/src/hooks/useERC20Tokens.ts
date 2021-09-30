@@ -5,11 +5,11 @@ import { useChainId } from './useChainId'
 
 export function useERC20Tokens() {
     const chainId = useChainId()
-    const erc20Tokens = useWeb3State().erc20Tokens
     const wallet = useWallet()
+    const erc20Tokens = useWeb3State().erc20Tokens
 
     return useMemo(() => {
         if (!wallet) return []
         return erc20Tokens.filter((x) => x.chainId === chainId)
-    }, [wallet, erc20Tokens])
+    }, [chainId, wallet, erc20Tokens])
 }

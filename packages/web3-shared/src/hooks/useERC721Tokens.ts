@@ -5,11 +5,11 @@ import { useChainId } from './useChainId'
 
 export function useERC721Tokens() {
     const chainId = useChainId()
-    const erc721Tokens = useWeb3State().erc721Tokens
     const wallet = useWallet()
+    const erc721Tokens = useWeb3State().erc721Tokens
 
     return useMemo(() => {
         if (!wallet) return []
         return erc721Tokens.filter((x) => x.contractDetailed.chainId === chainId)
-    }, [wallet, erc721Tokens])
+    }, [chainId, wallet, erc721Tokens])
 }
