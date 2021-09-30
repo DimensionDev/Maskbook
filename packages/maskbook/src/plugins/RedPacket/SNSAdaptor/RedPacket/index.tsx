@@ -18,6 +18,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { useI18N } from '../../../../utils'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { WalletMessages } from '../../../Wallet/messages'
@@ -61,13 +62,14 @@ export function RedPacket(props: RedPacketProps) {
         .getShareLinkURL?.(
             canClaim
                 ? t(
-                      isTwitter(activatedSocialNetworkUI)
-                          ? 'plugin_red_packet_share_message'
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                          ? 'plugin_red_packet_share_message_official_account'
                           : 'plugin_red_packet_share_message_not_twitter',
                       {
                           sender: payload.sender.name,
                           payload: postLink,
                           network: resolveNetworkName(networkType),
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
                       },
                   ).trim()
                 : '',

@@ -45,6 +45,8 @@ import { SwapGuide, SwapStatus } from './SwapGuide'
 import urlcat from 'urlcat'
 import { startCase } from 'lodash-es'
 import { FACEBOOK_ID } from '../../../social-network-adaptor/facebook.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 export interface IconProps {
     size?: number
@@ -291,11 +293,17 @@ export function ITO(props: ITO_Props) {
 
     const shareSuccessLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            t('plugin_ito_claim_success_share', {
-                user: sellerName,
-                link: postLink,
-                symbol: token.symbol,
-            }),
+            t(
+                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                    ? 'plugin_ito_claim_success_share'
+                    : 'plugin_ito_claim_success_share_no_official_account',
+                {
+                    user: sellerName,
+                    link: postLink,
+                    symbol: token.symbol,
+                    account: isFacebook(activatedSocialNetworkUI) ? t('facebook_account') : t('twitter_account'),
+                },
+            ),
         )
         .toString()
     const canWithdraw = useMemo(
@@ -356,11 +364,17 @@ export function ITO(props: ITO_Props) {
 
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            t('plugin_ito_claim_foreshow_share', {
-                link: postLink,
-                name: token.name,
-                symbol: token.symbol ?? 'token',
-            }),
+            t(
+                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                    ? 'plugin_ito_claim_foreshow_share'
+                    : 'plugin_ito_claim_foreshow_share_no_official_account',
+                {
+                    link: postLink,
+                    name: token.name,
+                    symbol: token.symbol ?? 'token',
+                    account: isFacebook(activatedSocialNetworkUI) ? t('facebook_account') : t('twitter_account'),
+                },
+            ),
         )
         .toString()
     const onShare = useCallback(async () => {

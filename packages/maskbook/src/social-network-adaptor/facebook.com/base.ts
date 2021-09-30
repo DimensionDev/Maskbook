@@ -11,6 +11,10 @@ export const facebookBase: SocialNetwork.Base = {
     },
 }
 
+export function isFacebook(ui: SocialNetwork.Base) {
+    return ui.networkIdentifier === FACEBOOK_ID
+}
+
 export const facebookWorkerBase: SocialNetworkWorker.WorkerBase & SocialNetwork.Base = {
     ...facebookBase,
     gunNetworkHint: '',
