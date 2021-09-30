@@ -57,7 +57,9 @@ export default function BackupSetting() {
 
     return (
         <>
-            <SettingButton onClick={onBackup}>{t.settings_button_backup()}</SettingButton>
+            <SettingButton size="large" onClick={onBackup}>
+                {t.settings_button_backup()}
+            </SettingButton>
             {showDialog.backup ? (
                 <BackupDialog
                     local={localMode}
