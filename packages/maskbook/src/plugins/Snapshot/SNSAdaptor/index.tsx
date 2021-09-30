@@ -8,6 +8,8 @@ import { PostInspector } from './PostInspector'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 import { parseURL } from '@masknet/shared'
+import { FACEBOOK_ID } from '../../../social-network-adaptor/facebook.com/base'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -57,10 +59,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component(): JSX.Element | null {
-        const link = usePostInfoDetails
+        const isFacebookLink = activatedSocialNetworkUI.networkIdentifier === FACEBOOK_ID
+        const links = usePostInfoDetails
             .postMetadataMentionedLinks()
             .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isSnapshotURL)
+            .map((v) => {
+                return !isFacebookLink ? v : v.replace(/\?fbclid=[\S\s]*#/, '#')
+            })
+        const link = links.find(isSnapshotURL)
         if (!link) return null
         return <Renderer url={link} />
     },
