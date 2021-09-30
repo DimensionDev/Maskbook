@@ -66,15 +66,16 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
                 info.nickname.value = name
                 info.avatarURL.value = avatar || null
 
-                const currentProfile = getCurrentIdentifier()
+                if (name) {
+                    const currentProfile = getCurrentIdentifier()
 
-                Services.Identity.updateProfileInfo(postBy, {
-                    nickname: name,
-                    avatarURL: avatar,
-                })
-                if (currentProfile?.linkedPersona)
-                    Services.Identity.createNewRelation(postBy, currentProfile.linkedPersona.identifier)
-
+                    Services.Identity.updateProfileInfo(postBy, {
+                        nickname: name,
+                        avatarURL: avatar,
+                    })
+                    if (currentProfile?.linkedPersona)
+                        Services.Identity.createNewRelation(postBy, currentProfile.linkedPersona.identifier)
+                }
                 // decode steganographic image
                 // don't add await on this
                 const images = untilElementAvailable(
