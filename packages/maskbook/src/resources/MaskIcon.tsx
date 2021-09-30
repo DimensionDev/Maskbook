@@ -104,5 +104,5 @@ export function WalletSharp(props: SvgIconPropsWithSize) {
 }
 
 interface SvgIconPropsWithSize extends SvgIconProps {
-    size: number
+    size?: number
 }

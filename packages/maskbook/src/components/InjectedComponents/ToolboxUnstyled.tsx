@@ -28,7 +28,7 @@ import {
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
 import { forwardRef, useRef, useCallback } from 'react'
-import { MaskMessage } from '../../utils/messages'
+import { MaskMessages } from '../../utils/messages'
 import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
 import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
@@ -89,6 +89,7 @@ export interface ToolboxHintProps {
     Typography?: React.ComponentType<Pick<TypographyProps, 'children' | 'className'>>
     icon?: 'mono' | 'colorful'
     iconSize?: number
+    mini?: boolean
 }
 export function ToolboxHintUnstyled(props: ToolboxHintProps) {
     const {
@@ -99,6 +100,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
         Typography = MuiTypography,
         icon = 'mono',
         iconSize = 24,
+        mini,
     } = props
     const { classes } = useStyles()
     const {
@@ -121,7 +123,9 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                     <ListItemIcon>
                         {icon === 'mono' ? <MaskSharpIconOfSize size={iconSize} /> : <MaskIcon size={iconSize} />}
                     </ListItemIcon>
-                    <ListItemText primary={<Typography className={classes.font}>Mask Network</Typography>} />
+                    {mini ? null : (
+                        <ListItemText primary={<Typography className={classes.font}>Mask Network</Typography>} />
+                    )}
                 </ListItemButton>
             </Container>
             {menu}
@@ -130,21 +134,23 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                     <ListItemIcon>
                         {isWalletValid ? <WalletIcon size={iconSize} /> : <WalletSharp size={iconSize} />}
                     </ListItemIcon>
-                    <ListItemText
-                        primary={
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                {walletJSX}
-                                {shouldDisplayChainIndicator ? (
-                                    <FiberManualRecordIcon
-                                        className={classes.chainIcon}
-                                        style={{
-                                            color: chainColor,
-                                        }}
-                                    />
-                                ) : null}
-                            </Box>
-                        }
-                    />
+                    {mini ? null : (
+                        <ListItemText
+                            primary={
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    {walletJSX}
+                                    {shouldDisplayChainIndicator ? (
+                                        <FiberManualRecordIcon
+                                            className={classes.chainIcon}
+                                            style={{
+                                                color: chainColor,
+                                            }}
+                                        />
+                                    ) : null}
+                                </Box>
+                            }
+                        />
+                    )}
                 </ListItemButton>
             </Container>
             {ClaimDialogJSX}
@@ -169,7 +175,7 @@ function useToolbox() {
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
         (id?: string) =>
-            MaskMessage.events.requestComposition.sendToLocal({
+            MaskMessages.events.requestComposition.sendToLocal({
                 reason: 'timeline',
                 open: true,
                 options: {
