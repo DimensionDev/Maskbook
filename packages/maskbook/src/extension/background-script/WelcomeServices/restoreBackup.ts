@@ -18,7 +18,7 @@ import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-inf
 import { Result } from 'ts-results'
 import { addWallet } from '../../../plugins/Wallet/services/wallet/database'
 import { RelationRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
-import { patchCreateOrUpdateRelation } from '../IdentityService'
+import { patchCreateNewRelation, patchCreateOrUpdateRelation } from '../IdentityService'
 
 /**
  * Restore the backup
@@ -73,9 +73,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
 
         if (data.relations?.length) {
             const relations = data.relations.map(RelationRecordFromJSONFormat)
-            const personas = relations.map((x) => x.linked)
-            const profiles = relations.map((x) => x.profile)
-            await patchCreateOrUpdateRelation(profiles, personas, 1)
+            await patchCreateNewRelation(relations)
         } else {
             // For 1.x backups
             const personas = data.personas

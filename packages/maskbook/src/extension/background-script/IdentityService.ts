@@ -265,6 +265,15 @@ export async function patchCreateOrUpdateRelation(
     return
 }
 
+export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'network'>[]) {
+    await consistentPersonaDBWriteAccess(async (t) => {
+        for (const relation of relations) {
+            createRelationDB(relation, t)
+        }
+    })
+    return
+}
+
 export async function createNewRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: 0 | 1 = 1) {
     await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked, favor }, t))
 }

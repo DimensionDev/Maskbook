@@ -84,6 +84,16 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                         transaction
                             .objectStore('relations')
                             .createIndex('favor, profile, linked', ['favor', 'profile', 'linked'], { unique: true })
+                        const relation = transaction.objectStore('relations')
+
+                        await update(relation)
+                        async function update(q: typeof relation) {
+                            for await (const rec of relation) {
+                                rec.value.favor = rec.value.favor === 0 ? 1 : 0
+
+                                await rec.update(rec.value)
+                            }
+                        }
                     } catch {}
                 }
                 if (oldVersion < 1) v0_v1()
