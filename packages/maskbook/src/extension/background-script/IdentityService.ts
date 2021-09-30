@@ -263,7 +263,7 @@ export async function patchCreateOrUpdateRelation(
     return
 }
 
-export async function createNewRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: 0 | 1 = 0) {
+export async function createNewRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: 0 | 1 = 1) {
     await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked, favor }, t))
 }
 

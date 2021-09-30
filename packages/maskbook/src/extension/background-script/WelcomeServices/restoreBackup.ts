@@ -75,7 +75,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
             const relations = data.relations.map(RelationRecordFromJSONFormat)
             const personas = relations.map((x) => x.linked)
             const profiles = relations.map((x) => x.profile)
-            await patchCreateOrUpdateRelation(profiles, personas, 0)
+            await patchCreateOrUpdateRelation(profiles, personas, 1)
         } else {
             // For 1.x backups
             const personas = data.personas
@@ -83,7 +83,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
                 .filter((x) => x.privateKey)
                 .map((x) => x.identifier)
             const profiles = data.profiles.map(ProfileRecordFromJSONFormat).map((x) => x.identifier)
-            await patchCreateOrUpdateRelation(profiles, personas, 0)
+            await patchCreateOrUpdateRelation(profiles, personas, 1)
         }
 
         const plugins = [...activatedPluginsWorker]

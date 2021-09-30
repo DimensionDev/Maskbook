@@ -38,7 +38,7 @@ import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-Json
 
 const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
     1,
-    3,
+    4,
     (currentOpenVersion, knowledge) => {
         return openDB<PersonaDB>('maskbook-persona', currentOpenVersion, {
             upgrade(db, oldVersion, newVersion, transaction) {
@@ -71,14 +71,27 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                     }
                 }
                 async function v2_v3() {
-                    db.createObjectStore('relations', { keyPath: ['linked', 'profile'] })
-                    transaction
-                        .objectStore('relations')
-                        .createIndex('linked, profile, favor', ['linked', 'profile', 'favor'], { unique: true })
+                    try {
+                        debugger
+                        db.createObjectStore('relations', { keyPath: ['linked', 'profile'] })
+                        transaction
+                            .objectStore('relations')
+                            .createIndex('linked, profile, favor', ['linked', 'profile', 'favor'], { unique: true })
+                    } catch {}
                 }
-                if (oldVersion < 1) return v0_v1()
+                async function v3_v4() {
+                    try {
+                        debugger
+                        transaction.objectStore('relations').deleteIndex('linked, profile, favor')
+                        transaction
+                            .objectStore('relations')
+                            .createIndex('favor, profile, linked', ['favor', 'profile', 'linked'], { unique: true })
+                    } catch {}
+                }
+                if (oldVersion < 1) v0_v1()
                 if (oldVersion < 2) v1_v2()
                 if (oldVersion < 3) v2_v3()
+                if (oldVersion < 4) v3_v4()
             },
         })
     },
@@ -532,12 +545,12 @@ export async function queryRelationsPagedDB(
 
     const data: RelationRecord[] = []
 
-    for await (const cursor of t.objectStore('relations').index('linked, profile, favor').iterate()) {
+    for await (const cursor of t.objectStore('relations').index('favor, profile, linked').iterate()) {
         if (cursor.value.linked !== linked.toText()) continue
         if (cursor.value.network !== options.network) continue
 
         if (firstRecord && options.after && options.after.profile.toText() !== cursor?.value.profile) {
-            cursor.continue([options.after.linked.toText(), options.after.profile.toText(), options.after.favor])
+            cursor.continue([options.after.favor, options.after.linked.toText(), options.after.profile.toText()])
             firstRecord = false
             continue
         }
@@ -633,6 +646,7 @@ export interface RelationRecord {
     profile: ProfileIdentifier
     linked: PersonaIdentifier
     network: string
+    // collected: 0, uncollected: 1. Just for db sort
     favor: 0 | 1
 }
 
@@ -680,6 +694,7 @@ export interface PersonaDB extends DBSchema {
         value: RelationRecordDB
         indexes: {
             'linked, profile, favor': [string, string, number]
+            'favor, profile, linked': [number, string, string]
         }
     }
 }
