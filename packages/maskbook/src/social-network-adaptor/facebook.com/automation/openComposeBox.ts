@@ -40,14 +40,14 @@ export async function taskOpenComposeBoxFacebook(
     options?: CompositionRequest['options'],
 ) {
     await untilDocumentReady()
-    await delay(800)
+    await delay(200)
 
     // active the compose dialog
     const composeTextarea = nativeComposeTextareaSelector().evaluate()
     const composeButton = nativeComposeButtonSelector().evaluate()
     if (composeTextarea) composeTextarea.focus()
     if (composeButton) composeButton.click()
-    await delay(800)
+    await delay(200)
 
     // the indicator only available when compose dialog opened successfully
     const composeIndicator = nativeComposeDialogIndicatorSelector().evaluate()
@@ -56,7 +56,7 @@ export async function taskOpenComposeBoxFacebook(
         return
     }
 
-    await delay(800)
+    await delay(200)
     MaskMessages.events.requestComposition.sendToLocal({
         reason: 'popup',
         open: true,
