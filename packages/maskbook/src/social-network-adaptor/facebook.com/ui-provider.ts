@@ -23,6 +23,7 @@ import { currentSelectedIdentity } from '../../settings/settings'
 import { unreachable } from '@dimensiondev/kit'
 import { ProfileIdentifier } from '@masknet/shared'
 import { globalUIState } from '../../social-network'
+import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar'
 
 const facebookUI: SocialNetworkUI.Definition = {
     ...facebookBase,
@@ -101,6 +102,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),
         setupWizard: createTaskStartSetupGuideDefault(facebookBase.networkIdentifier),
+        toolbox: injectToolboxAtFacebook,
     },
     configuration: {
         steganography: {
