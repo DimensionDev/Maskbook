@@ -7,7 +7,7 @@ const Container = styled('div')``
 const Item = styled(ListItemButton)`
     border-radius: 8px;
     padding: 4px 12px 4px 0;
-    color: #72727c;
+    color: ${({ theme }) => (theme.palette.mode === 'dark' ? '#b8c1ca' : '#72727c')};
     &:hover {
         background: unset;
         color: rgb(48, 153, 242);

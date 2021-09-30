@@ -23,12 +23,12 @@ const MaskSmileFaceSharpSVG = ({ size = 20 }: { size?: number }) => (
     </svg>
 )
 
-const WalletSharpSVG = ({ size = 20 }: { size?: number }) => (
+const WalletSharpSVG = ({ size }: { size?: number }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={size}
         height={size}
-        viewBox="0 0 24 24"
+        viewBox={`0 0 ${size} ${size}`}
         fill="none"
         stroke="currentColor"
         strokeWidth="2"
@@ -96,9 +96,10 @@ export function MaskSharpIconOfSize(props: SvgIconPropsWithSize) {
     )
 }
 export function WalletSharp(props: SvgIconPropsWithSize) {
+    const { size = 20 } = props
     return (
-        <SvgIcon {...props}>
-            <WalletSharpSVG size={props.size} />
+        <SvgIcon {...props} style={{ width: size, height: size }}>
+            <WalletSharpSVG size={size} />
         </SvgIcon>
     )
 }

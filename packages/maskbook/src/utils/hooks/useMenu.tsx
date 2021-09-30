@@ -1,4 +1,4 @@
-import { SyntheticEvent, cloneElement, isValidElement, useCallback, useRef, useState, createElement } from 'react'
+import { SyntheticEvent, cloneElement, isValidElement, useCallback, useState, createElement } from 'react'
 import { Menu } from '@material-ui/core'
 import type { MenuListProps, PaperProps } from '@material-ui/core'
 import { ShadowRootMenu } from '../shadow-root/ShadowRootComponents'
