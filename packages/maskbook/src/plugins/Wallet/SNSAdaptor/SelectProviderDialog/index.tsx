@@ -82,9 +82,6 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         margin: theme.spacing(2, 0, 0),
     },
-    providerIcon: {
-        fontSize: 45,
-    },
     tip: {
         fontSize: 12,
     },
@@ -222,7 +219,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                         rowHeight={151}>
                         <ImageListItem>
                             <Provider
-                                logo={<MaskIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
+                                logo={<MaskIcon size={45} />}
                                 name="Mask Network"
                                 onClick={() => onConnectProvider(ProviderType.MaskWallet)}
                             />
