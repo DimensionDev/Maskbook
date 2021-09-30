@@ -14,6 +14,9 @@ const useStyles = makeStyles()((theme) => ({
             marginRight: theme.spacing(1.5),
         },
     },
+    link: {
+        height: 28,
+    },
 }))
 export interface UnconnectedPersonaLineProps {
     onConnect: () => void
@@ -27,6 +30,7 @@ export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onCon
         <Box className={classes.connect} sx={{ display: 'flex', alignItems: 'center' }}>
             <Link
                 underline="none"
+                classes={{ button: classes.link }}
                 onClick={(e: MouseEvent) => {
                     e.stopPropagation()
                     onConnect()
@@ -38,7 +42,7 @@ export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onCon
                 }}>
                 {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
                 <Typography variant="caption">
-                    <Button variant="text" sx={{ fontSize: 13, p: 0 }}>
+                    <Button variant="text" size="small" sx={{ fontSize: 13, p: 0 }}>
                         {t.personas_connect_to({ internalName: networkIdentifier })}
                     </Button>
                 </Typography>
@@ -93,6 +97,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                         <Box>
                             <Link
                                 component="button"
+                                classes={{ button: classes.link }}
                                 variant="caption"
                                 sx={{ mr: 1 }}
                                 onClick={(e: MouseEvent) => {
@@ -104,6 +109,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                             <Link
                                 sx={{ color: (theme) => getMaskColor(theme).redMain }}
                                 component="button"
+                                classes={{ button: classes.link }}
                                 variant="caption"
                                 onClick={() => setOpenDisconnectDialog(true)}>
                                 {t.personas_disconnect()}
