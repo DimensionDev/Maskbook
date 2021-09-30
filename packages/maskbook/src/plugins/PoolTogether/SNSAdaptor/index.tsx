@@ -9,6 +9,8 @@ import { DepositDialog } from '../UI/DepositDialog'
 import { URL_PATTERN } from '../constants'
 import { PoolTogetherView } from '../UI/PoolTogetherView'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { FACEBOOK_ID } from '../../../social-network-adaptor/facebook.com/base'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 const isPoolTogetherUrl = (url: string) => URL_PATTERN.test(url)
 
@@ -23,10 +25,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
-        const link = usePostInfoDetails
+        const isFacebookLink = activatedSocialNetworkUI.networkIdentifier === FACEBOOK_ID
+
+        const links = usePostInfoDetails
             .postMetadataMentionedLinks()
             .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isPoolTogetherUrl)
+            .map((v) => {
+                return !isFacebookLink ? v : v.replace(/\?fbclid=[\S\s]*#/, '#')
+            })
+
+        const link = links.find(isPoolTogetherUrl)
 
         if (!link) return null
         return <Renderer url={link} />
