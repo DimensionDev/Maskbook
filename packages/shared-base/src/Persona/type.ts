@@ -16,7 +16,7 @@ export interface ProfileInformation {
     identifier: ProfileIdentifier
 }
 export interface RelationProfile {
-    favorite?: number
+    favorite?: boolean
     avatar?: string
     name: string
     fingerprint?: string

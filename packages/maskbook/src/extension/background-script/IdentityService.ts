@@ -254,8 +254,10 @@ export async function patchCreateOrUpdateRelation(
         for (const persona of personas) {
             for (const profile of profiles) {
                 const relationInDB = await t.objectStore('relations').get([persona.toText(), profile.toText()])
-                if (relationInDB)
+                if (relationInDB) {
                     await updateRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
+                    continue
+                }
                 await createRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
             }
         }

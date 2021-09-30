@@ -72,7 +72,6 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                 }
                 async function v2_v3() {
                     try {
-                        debugger
                         db.createObjectStore('relations', { keyPath: ['linked', 'profile'] })
                         transaction
                             .objectStore('relations')
@@ -81,7 +80,6 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                 }
                 async function v3_v4() {
                     try {
-                        debugger
                         transaction.objectStore('relations').deleteIndex('linked, profile, favor')
                         transaction
                             .objectStore('relations')
@@ -550,7 +548,7 @@ export async function queryRelationsPagedDB(
         if (cursor.value.network !== options.network) continue
 
         if (firstRecord && options.after && options.after.profile.toText() !== cursor?.value.profile) {
-            cursor.continue([options.after.favor, options.after.linked.toText(), options.after.profile.toText()])
+            cursor.continue([options.after.favor, options.after.profile.toText(), options.after.linked.toText()])
             firstRecord = false
             continue
         }
