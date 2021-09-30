@@ -72,6 +72,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
             </TableCell>
             <TableCell sx={{ minWidth: '200px' }} className={classes.cell} align="center" variant="body">
                 <Button
+                    size="small"
                     variant="outlined"
                     color="secondary"
                     sx={{ marginRight: 1 }}
@@ -79,7 +80,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
                     onClick={onSend}>
                     {t.wallets_balance_Send()}
                 </Button>
-                <Button variant="outlined" color="secondary" onClick={onSwap} className={classes.button}>
+                <Button size="small" variant="outlined" color="secondary" onClick={onSwap} className={classes.button}>
                     {t.wallets_balance_Swap()}
                 </Button>
             </TableCell>

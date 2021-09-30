@@ -28,9 +28,6 @@ import { useCollectibleOwners } from '../../hooks/useCollectibleOwners'
 const useStyles = makeStyles()({
     container: {
         padding: '24px 26px 0px',
-        height: 'calc(100% - 58px)',
-        maxHeight: 'calc(100% - 58px)',
-        overflow: 'auto',
     },
     root: {
         display: 'flex',
@@ -153,9 +150,13 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
             <>
                 <Box className={classes.container}>
                     {isLoading ? (
-                        <LoadingPlaceholder />
+                        <Box mt={8}>
+                            <LoadingPlaceholder />
+                        </Box>
                     ) : isEmpty ? (
-                        <EmptyPlaceholder children={t.wallets_empty_collectible_tip()} />
+                        <Box mt={8}>
+                            <EmptyPlaceholder children={t.wallets_empty_collectible_tip()} />
+                        </Box>
                     ) : (
                         <div className={classes.root}>
                             {dataSource.map((x) => (

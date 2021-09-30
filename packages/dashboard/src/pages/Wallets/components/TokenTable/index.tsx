@@ -21,10 +21,8 @@ import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        height: 'calc(100% - 58px)',
         display: 'flex',
         flexDirection: 'column',
-        maxHeight: 'calc(100% - 58px)',
     },
     header: {
         color: MaskColorVar.normalText,

@@ -96,16 +96,17 @@ export const Balance = memo<BalanceCardProps>(({ balance, chainName, onSend, onB
                 </BalanceDisplayContainer>
             </Box>
             <ButtonGroup>
-                <Button onClick={onSend} endIcon={<SendIcon fontSize="inherit" />}>
+                <Button size="small" onClick={onSend} endIcon={<SendIcon fontSize="inherit" />}>
                     {t.wallets_balance_Send()}
                 </Button>
-                <Button onClick={onBuy} endIcon={<CardIcon fill="none" fontSize="inherit" />}>
+                <Button size="small" onClick={onBuy} endIcon={<CardIcon fill="none" fontSize="inherit" />}>
                     {t.wallets_balance_Buy()}
                 </Button>
-                <Button onClick={onSwap} endIcon={<SwapIcon fontSize="inherit" />}>
+                <Button size="small" onClick={onSwap} endIcon={<SwapIcon fontSize="inherit" />}>
                     {t.wallets_balance_Swap()}
                 </Button>
                 <Button
+                    size="small"
                     color="secondary"
                     onClick={onReceive}
                     endIcon={<DownloadIcon fontSize="inherit" style={{ stroke: MaskColorVar.textLink }} />}>
