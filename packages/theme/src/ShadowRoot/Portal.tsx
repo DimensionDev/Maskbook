@@ -39,7 +39,7 @@ export const NoEffectUsePortalShadowRootContext = createContext(false)
  *      />
  * ))
  */
-export function usePortalShadowRoot(renderer: (container: HTMLDivElement | undefined) => JSX.Element) {
+export function usePortalShadowRoot(renderer: (container: HTMLDivElement | undefined) => null | JSX.Element) {
     // we ignore the changes on this property during multiple render
     // so we can violates the React hooks rule and still be safe.
     const disabled = useRef(useContext(NoEffectUsePortalShadowRootContext)).current

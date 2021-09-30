@@ -35,6 +35,7 @@ import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
+import GuideStep from '../GuideStep'
 
 import { activatedSocialNetworkUI } from '../../social-network'
 import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
@@ -276,10 +277,15 @@ export function ToolboxHint(props: ToolboxHintProps) {
     return (
         <>
             <div className={classes.wrapper} onClick={openMenu}>
-                <div className={classes.button}>
-                    <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
-                    <Typography className={classes.title}>Mask Network</Typography>
-                </div>
+                <GuideStep step={1} total={4} arrow={false} tip={t('user_guide_tip_1')}>
+                    <span />
+                </GuideStep>
+                <GuideStep step={2} total={4} tip={t('user_guide_tip_2')}>
+                    <div className={classes.button}>
+                        <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
+                        <Typography className={classes.title}>Mask Network</Typography>
+                    </div>
+                </GuideStep>
             </div>
             {menu}
 
@@ -292,21 +298,23 @@ export function ToolboxHint(props: ToolboxHintProps) {
                         ? openWalletStatusDialog()
                         : openSelectWalletDialog()
                 }}>
-                <div className={classes.button}>
-                    {isWalletValid ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} size={24} />}
+                <GuideStep step={3} total={4} tip={t('user_guide_tip_3')}>
+                    <div className={classes.button}>
+                        {isWalletValid ? <WalletIcon /> : <WalletSharp classes={{ root: classes.icon }} size={24} />}
 
-                    <Typography className={classes.title}>
-                        {renderButtonText()}
-                        {account && chainIdValid && chainDetailed?.network !== 'mainnet' ? (
-                            <FiberManualRecordIcon
-                                className={classes.chainIcon}
-                                style={{
-                                    color: chainColor,
-                                }}
-                            />
-                        ) : null}
-                    </Typography>
-                </div>
+                        <Typography className={classes.title}>
+                            {renderButtonText()}
+                            {account && chainIdValid && chainDetailed?.network !== 'mainnet' ? (
+                                <FiberManualRecordIcon
+                                    className={classes.chainIcon}
+                                    style={{
+                                        color: chainColor,
+                                    }}
+                                />
+                            ) : null}
+                        </Typography>
+                    </div>
+                </GuideStep>
             </div>
             {isClaimAllDialogOpen ? (
                 <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
