@@ -18,6 +18,7 @@ export function useCollectibles(
 }> {
     const { getAssetsListNFT } = useWeb3Context()
     const erc721Tokens = useERC721Tokens()
+
     return useAsyncRetry(async () => {
         if (!address) {
             return {
