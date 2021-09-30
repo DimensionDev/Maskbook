@@ -27,7 +27,7 @@ export function injectCompositionFacebook(signal: AbortSignal) {
 
     signal.addEventListener(
         'abort',
-        MaskMessage.events.requestComposition.on((data) => {
+        MaskMessages.events.requestComposition.on((data) => {
             if (data.reason === 'popup') return
             if (data.open === false) return
             taskOpenComposeBoxFacebook(data.content || '', data.options)
