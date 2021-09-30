@@ -1,10 +1,4 @@
-import {
-    ShowSnackbarOptions,
-    ShowSnackbarOptions,
-    SnackbarKey,
-    SnackbarMessage,
-    useCustomSnackbar,
-} from '@masknet/theme'
+import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { makeStyles } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
@@ -212,7 +206,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
 
         // estimate gas and compose transaction
         const value = new BigNumber(token.type === EthereumTokenType.Native ? paramsObj.total : '0').toFixed()
-        const formatedValue = formatBalance(
+        const formattedValue = formatBalance(
             new BigNumber(token.type === EthereumTokenType.Native ? paramsObj.total : '0'),
             token.decimals,
         )
@@ -269,7 +263,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     message: (
                         <TransactionLink txHash={receipt.transactionHash}>
                             {t('plugin_red_packet_success', {
-                                value: formatedValue,
+                                value: formattedValue,
                                 symbol: token.symbol,
                             })}
                         </TransactionLink>

@@ -26,7 +26,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
-import { RedPacketSettings } from './hooks/useCreateCallback'
+import type { RedPacketSettings } from './hooks/useCreateCallback'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
