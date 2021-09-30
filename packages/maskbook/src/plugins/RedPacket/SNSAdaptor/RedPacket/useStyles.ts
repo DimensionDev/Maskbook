@@ -40,12 +40,25 @@ to {
             display: 'flex',
             gap: theme.spacing(2),
             justifyContent: 'center',
+            '& button': {
+                flexBasis: 'auto',
+            },
+        },
+        myStatus: {
+            position: 'absolute',
+            fontSize: '14px',
+            left: '26px',
+            bottom: '20px',
+            color: '#FAD85A',
+            fontWeight: 'bold',
         },
         from: {
             position: 'absolute',
             fontSize: '14px',
             right: '26px',
             bottom: '20px',
+            color: '#FFFFFF',
+            fontWeight: 'bold',
         },
         label: {
             borderRadius: theme.spacing(1),
@@ -57,7 +70,8 @@ to {
             top: 27,
         },
         words: {
-            color: '#FAF2BF',
+            color: '#FAD85A',
+            fontSize: 20,
             whiteSpace: 'pre',
             textOverflow: 'ellipsis',
             overflow: 'hidden',

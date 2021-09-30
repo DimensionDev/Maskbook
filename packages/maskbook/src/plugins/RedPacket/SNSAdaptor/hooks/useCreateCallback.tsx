@@ -1,8 +1,16 @@
-import { useCustomSnackbar } from '@masknet/theme'
+import {
+    ShowSnackbarOptions,
+    ShowSnackbarOptions,
+    SnackbarKey,
+    SnackbarMessage,
+    useCustomSnackbar,
+} from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
+    formatBalance,
     FungibleTokenDetailed,
     isLessThan,
     resolveTransactionLinkOnExplorer,
@@ -14,14 +22,23 @@ import {
     useTokenConstants,
     useTransactionState,
 } from '@masknet/web3-shared'
+import { Link } from '@material-ui/core'
+import LaunchIcon from '@material-ui/icons/Launch'
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-es'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { FC, memo, useCallback, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useRedPacketContract } from './useRedPacketContract'
+
+const useStyles = makeStyles()({
+    link: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+})
 
 export interface RedPacketSettings {
     publicKey: string
@@ -84,6 +101,7 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
     const redPacketContract = useRedPacketContract(version)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const account = useAccount()
+    const { classes } = useStyles()
     return useAsync(async () => {
         if (!redPacketSettings || !redPacketContract) return null
         const { duration, isRandom, message, name, shares, total, token, publicKey } = redPacketSettings
@@ -125,6 +143,21 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
     }, [redPacketSettings, account, redPacketContract]).value
 }
 
+const TransactionLink: FC<{ txHash?: string }> = memo(({ children, txHash }) => {
+    const { classes } = useStyles()
+    const chainId = useChainId()
+    if (!txHash) {
+        return null
+    }
+    const link = resolveTransactionLinkOnExplorer(chainId, txHash)
+    return (
+        <Link className={classes.link} color="inherit" href={link} target="_blank" rel="noopener noreferrer">
+            {children}
+            <LaunchIcon fontSize="inherit" />
+        </Link>
+    )
+})
+
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number) {
     const account = useAccount()
     const chainId = useChainId()
@@ -134,7 +167,20 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
     const paramResult = useCreateParams(redPacketSettings, version)
 
-    const { showSnackbar } = useCustomSnackbar()
+    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
+    const snackbarKeyRef = useRef<SnackbarKey>()
+    const showSingletonSnackbar = useCallback(
+        (title: SnackbarMessage, options: ShowSnackbarOptions) => {
+            if (snackbarKeyRef.current !== undefined) closeSnackbar(snackbarKeyRef.current)
+            snackbarKeyRef.current = showSnackbar(title, options)
+            return () => {
+                closeSnackbar(snackbarKeyRef.current)
+            }
+        },
+        [showSnackbar, closeSnackbar],
+    )
+
+    const transactionHashRef = useRef<string>()
 
     const createCallback = useCallback(async () => {
         const { token } = redPacketSettings
@@ -167,6 +213,10 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
 
         // estimate gas and compose transaction
         const value = new BigNumber(token.type === EthereumTokenType.Native ? paramsObj.total : '0').toFixed()
+        const formatedValue = formatBalance(
+            new BigNumber(token.type === EthereumTokenType.Native ? paramsObj.total : '0'),
+            token.decimals,
+        )
         const config = {
             from: account,
             value,
@@ -181,8 +231,12 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     type: TransactionStateType.WAIT_FOR_CONFIRMING,
                     hash,
                 })
-                showSnackbar(t('plugin_red_packet_transaction_submitted'), {
+                transactionHashRef.current = hash
+                showSingletonSnackbar('Create a Red Packet', {
                     processing: true,
+                    message: (
+                        <TransactionLink txHash={hash}>{t('plugin_red_packet_transaction_submitted')}</TransactionLink>
+                    ),
                 })
             })
             promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
@@ -191,17 +245,15 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     no: 0,
                     receipt,
                 })
-                showSnackbar(
-                    t('plugin_red_packet_success', {
-                        value,
-                        symbol: token.symbol,
-                    }),
-                    {
-                        persist: false,
-                        variant: 'success',
-                        message: <a href="https://link"> TODO: link</a>,
-                    },
-                )
+                transactionHashRef.current = receipt.transactionHash
+                showSingletonSnackbar('Create a Red Packet', {
+                    variant: 'success',
+                    message: (
+                        <TransactionLink txHash={receipt.transactionHash}>
+                            {t('plugin_red_packet_transaction_submitted')}
+                        </TransactionLink>
+                    ),
+                })
             })
 
             promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
@@ -210,11 +262,19 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     no,
                     receipt,
                 })
-                showSnackbar(t('plugin_red_packet_transaction_submitted'), {
-                    processing: true,
-                    message: <a href="https://link"> TODO: link</a>,
-                })
+                transactionHashRef.current = receipt.transactionHash
                 resolve()
+                showSingletonSnackbar('Create a Red Packet', {
+                    variant: 'success',
+                    message: (
+                        <TransactionLink txHash={receipt.transactionHash}>
+                            {t('plugin_red_packet_success', {
+                                value: formatedValue,
+                                symbol: token.symbol,
+                            })}
+                        </TransactionLink>
+                    ),
+                })
             })
 
             promiEvent.once(TransactionEventType.ERROR, (error: Error) => {
@@ -223,13 +283,17 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     error,
                 })
                 reject(error)
-                showSnackbar(t('plugin_red_packet_transaction_rejected'), {
+                showSingletonSnackbar('Create a Red Packet', {
                     variant: 'error',
-                    message: <a href="https://link"> TODO: link</a>,
+                    message: (
+                        <TransactionLink txHash={transactionHashRef.current}>
+                            {t('plugin_red_packet_transaction_rejected')}
+                        </TransactionLink>
+                    ),
                 })
             })
         })
-    }, [account, redPacketContract, redPacketSettings, chainId, paramResult])
+    }, [account, redPacketContract, redPacketSettings, chainId, paramResult, showSingletonSnackbar])
 
     const resetCallback = useCallback(() => {
         setCreateState({

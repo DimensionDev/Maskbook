@@ -23,7 +23,7 @@ import { makeStyles } from '../../makeStyles'
 import { MaskColorVar } from '../../constants'
 
 export { SnackbarProvider, useSnackbar } from 'notistack'
-export type { VariantType, OptionsObject, SnackbarKey } from 'notistack'
+export type { VariantType, OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack'
 
 const useStyles = makeStyles()((theme, _, createRef) => {
     const { palette } = theme
@@ -244,14 +244,16 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps>((props) => {
     )
 })
 
-interface Options extends OptionsObject, Pick<CustomSnackbarContentProps, 'message' | 'processing' | 'icon'> {}
+export interface ShowSnackbarOptions
+    extends OptionsObject,
+        Pick<CustomSnackbarContentProps, 'message' | 'processing' | 'icon'> {}
 
 export function useCustomSnackbar() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const showSnackbar = useCallback(
         (
             text: SnackbarMessage,
-            options: Options = {
+            options: ShowSnackbarOptions = {
                 variant: 'default',
             },
         ) => {
@@ -259,7 +261,6 @@ export function useCustomSnackbar() {
             return enqueueSnackbar(text, {
                 variant: options.variant,
                 content: (key, title) => {
-                    debugger
                     return (
                         <CustomSnackbarContent
                             variant={variant ?? 'default'}
