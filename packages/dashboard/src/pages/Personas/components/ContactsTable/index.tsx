@@ -13,6 +13,7 @@ import { Messages } from '../../../../API'
 import { useContainer } from 'unstated-next'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useUpdateEffect } from 'react-use'
+import { RelationFavor } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -64,7 +65,7 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
         if (!value) return []
         return sortBy(
             value.map<RelationProfile>((profile) => ({
-                favorite: !profile.favor,
+                favorite: profile.favor === RelationFavor.COLLECTED,
                 name: profile.nickname || profile.identifier.userId || '',
                 fingerprint: profile.linkedPersona?.fingerprint,
                 identifier: profile.identifier,

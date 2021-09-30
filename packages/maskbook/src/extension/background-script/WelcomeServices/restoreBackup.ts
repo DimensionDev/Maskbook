@@ -1,16 +1,16 @@
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils'
+import { RelationFavor } from '@masknet/shared-base'
+import { BackupJSONFileLatest, i18n, UpgradeBackupJSONFile } from '../../../utils'
 import {
     attachProfileDB,
+    consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
     createOrUpdateProfileDB,
-    consistentPersonaDBWriteAccess,
 } from '../../../database/Persona/Persona.db'
 import { PersonaRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
 import { createOrUpdatePostDB } from '../../../database'
-import { i18n } from '../../../utils'
 import { currentImportingBackup } from '../../../settings/settings'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { recoverWalletFromMnemonic, recoverWalletFromPrivateKey } from '../../../plugins/Wallet/services'
@@ -81,7 +81,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
                 .filter((x) => x.privateKey)
                 .map((x) => x.identifier)
             const profiles = data.profiles.map(ProfileRecordFromJSONFormat).map((x) => x.identifier)
-            await patchCreateOrUpdateRelation(profiles, personas, 1)
+            await patchCreateOrUpdateRelation(profiles, personas, RelationFavor.UNCOLLECTED)
         }
 
         const plugins = [...activatedPluginsWorker]

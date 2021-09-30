@@ -13,6 +13,7 @@ import type {
     EC_Public_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { RelationFavor } from '@masknet/shared-base'
 
 /**
  * Database structure:
@@ -89,7 +90,10 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                         await update(relation)
                         async function update(q: typeof relation) {
                             for await (const rec of relation) {
-                                rec.value.favor = rec.value.favor === 0 ? 1 : 0
+                                rec.value.favor =
+                                    rec.value.favor === RelationFavor.DEPRECATED
+                                        ? RelationFavor.UNCOLLECTED
+                                        : RelationFavor.COLLECTED
 
                                 await rec.update(rec.value)
                             }
@@ -654,8 +658,7 @@ export interface RelationRecord {
     profile: ProfileIdentifier
     linked: PersonaIdentifier
     network: string
-    // collected: 0, uncollected: 1. Just for db sort
-    favor: 0 | 1
+    favor: RelationFavor
 }
 
 type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey'> & {

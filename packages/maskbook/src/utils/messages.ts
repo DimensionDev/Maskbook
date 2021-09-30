@@ -1,4 +1,6 @@
 // This file should be free of side effects
+import type { RelationFavor } from '@masknet/shared-base'
+
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
@@ -59,7 +61,7 @@ export interface MaskMessages extends SettingsEvents {
     replaceComposition: TypedMessage
     ownPersonaChanged: void
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
-    relationsChanged: (UpdateEvent<ProfileIdentifier> & { favor: 0 | 1 })[]
+    relationsChanged: (UpdateEvent<ProfileIdentifier> & { favor: RelationFavor })[]
     pluginEnabled: string
     pluginDisabled: string
 

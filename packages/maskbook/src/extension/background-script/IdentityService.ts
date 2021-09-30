@@ -51,6 +51,7 @@ import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorit
 import { first, orderBy } from 'lodash-es'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { validateMnemonic } from 'bip39'
+import { RelationFavor } from '@masknet/shared-base'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -248,7 +249,7 @@ export async function queryPagedPostHistory(
 export async function patchCreateOrUpdateRelation(
     profiles: ProfileIdentifier[],
     personas: PersonaIdentifier[],
-    defaultFavor: 0 | 1 = 1,
+    defaultFavor = RelationFavor.UNCOLLECTED,
 ) {
     await consistentPersonaDBWriteAccess(async (t) => {
         for (const persona of personas) {
@@ -268,13 +269,23 @@ export async function patchCreateOrUpdateRelation(
 export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'network'>[]) {
     await consistentPersonaDBWriteAccess(async (t) => {
         for (const relation of relations) {
-            createRelationDB(relation, t)
+            createRelationDB(
+                {
+                    ...relation,
+                    favor: relation.favor === RelationFavor.DEPRECATED ? RelationFavor.UNCOLLECTED : relation.favor,
+                },
+                t,
+            )
         }
     })
     return
 }
 
-export async function createNewRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: 0 | 1 = 1) {
+export async function createNewRelation(
+    profile: ProfileIdentifier,
+    linked: PersonaIdentifier,
+    favor = RelationFavor.UNCOLLECTED,
+) {
     await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked, favor }, t))
 }
 
@@ -293,7 +304,7 @@ export async function queryRelationPaged(
     return []
 }
 
-export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: 0 | 1) {
+export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: RelationFavor) {
     await consistentPersonaDBWriteAccess((t) =>
         updateRelationDB(
             {
