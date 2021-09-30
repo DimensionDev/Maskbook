@@ -36,12 +36,14 @@ to {
     const title = {
         ref: createRef(),
         color: MaskColorVar.textPrimary,
+        fontWeight: 400,
         fontSize: 14,
         lineHeight: '20px',
     } as const
     const message = {
         ref: createRef(),
         color: MaskColorVar.textSecondary,
+        fontWeight: 400,
         display: 'flex',
         alignItems: 'center',
         fontSize: 12,
@@ -54,7 +56,7 @@ to {
         },
     }
     const success = {
-        backgroundColor: '#77E0B5',
+        backgroundColor: '#60DFAB',
         color: '#ffffff',
         [`& .${title.ref}`]: {
             color: 'inherit',
@@ -65,7 +67,7 @@ to {
     } as const
 
     const error = {
-        background: MaskColorVar.redMain,
+        background: '#FF5F5F',
         color: '#ffffff',
         [`& .${title.ref}`]: {
             color: 'inherit',
@@ -76,7 +78,7 @@ to {
     } as const
 
     const info = {
-        background: '#B9CDF0',
+        background: '#8CA3C7',
         color: '#ffffff',
         [`& .${title.ref}`]: {
             color: 'inherit',
@@ -88,7 +90,7 @@ to {
 
     const warning = {
         ref: createRef(),
-        backgroundColor: '#FFB110',
+        backgroundColor: '#FFB915',
         color: '#ffffff',
         [`& .${title.ref}`]: {
             color: 'inherit',
@@ -133,19 +135,20 @@ to {
         error,
         info,
         warning,
-        icon: {},
+        icon: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
         spinning: {
             display: 'flex',
             animation: `${spinningAnimationKeyFrames} 2s infinite linear`,
         },
         action: {
             marginLeft: 'auto',
-            padding: theme.spacing(0, 1),
         },
         closeButton: {
             color: 'inherit',
-            width: 50,
-            height: 50,
         },
         texts: {
             marginLeft: theme.spacing(2),
