@@ -113,9 +113,6 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(
                                     <TableCell key="Value" align="center" variant="head" className={classes.header}>
                                         {t.wallets_history_value()}
                                     </TableCell>
-                                    <TableCell key="Time" align="center" variant="head" className={classes.header}>
-                                        {t.wallets_history_time()}
-                                    </TableCell>
                                     <TableCell key="Receiver" align="center" variant="head" className={classes.header}>
                                         {t.wallets_history_receiver()}
                                     </TableCell>

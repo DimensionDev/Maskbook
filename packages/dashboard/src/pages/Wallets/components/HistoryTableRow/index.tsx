@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import formatDateTime from 'date-fns/format'
 import type { Transaction } from '@masknet/web3-shared'
-import { Box, TableCell, TableRow, Typography, Link } from '@material-ui/core'
+import { Box, TableCell, TableRow, Typography, Link, Stack } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
@@ -18,7 +18,6 @@ import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
-        marginLeft: 14,
         maxWidth: '240px',
         textOverflow: 'ellipsis',
         textTransform: 'capitalize',
@@ -26,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
     },
     cell: {
-        padding: '16px 28px',
+        padding: `${theme.spacing(1.25)} ${theme.spacing(2.5)}`,
         border: 'none',
         fontSize: theme.typography.pxToRem(14),
     },
@@ -39,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     linkIcon: {
         fill: 'none',
-        fontSize: 20,
+        fontSize: 16,
         marginLeft: 10,
     },
     pair: {
@@ -75,7 +74,14 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                         address={transaction.toAddress}
                         failed={transaction.failed}
                     />
-                    <Typography className={classes.type}>{(transaction.type ?? '').replace(/_/g, ' ')}</Typography>
+                    <Stack pl={2}>
+                        <Typography textAlign="left" className={classes.type} variant="body2">
+                            {(transaction.type ?? '').replace(/_/g, ' ')}
+                        </Typography>
+                        <Typography fontSize={12} color={MaskColorVar.textSecondary}>
+                            {formatDateTime(transaction.timeAt, 'yyyy-MM-dd HH:mm')}
+                        </Typography>
+                    </Stack>
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center">
@@ -84,20 +90,29 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                         pair.direction === DebankTransactionDirection.SEND ||
                         pair.direction === ZerionTransactionDirection.OUT
                     return (
-                        <div key={index} className={classNames(classes.pair, { [classes.send]: direction })}>
-                            <span>{direction ? '-' : '+'}</span>
-                            <span>{pair.amount.toFixed(pair.amount < 1 ? 6 : 2)}</span>
-                            <span style={{ color: MaskColorVar.textPrimary, marginLeft: 10 }}>{pair.symbol}</span>
-                        </div>
+                        <Stack
+                            key={index}
+                            className={classNames(classes.pair, { [classes.send]: direction })}
+                            justifyContent="center"
+                            gap={2}
+                            direction="row">
+                            <Box width="50%" flexGrow={0} flexShrink={0} textAlign="right">
+                                <span>{direction ? '-' : '+'}</span>
+                                <span>{pair.amount.toFixed(pair.amount < 1 ? 6 : 2)}</span>
+                            </Box>
+                            <Box width="50%" flexGrow={0} flexShrink={0} textAlign="left">
+                                <Typography variant="body2" color={MaskColorVar.textPrimary}>
+                                    {pair.symbol}
+                                </Typography>
+                            </Box>
+                        </Stack>
                     )
                 })}
             </TableCell>
-            <TableCell className={classes.cell} align="center">
-                <Typography fontSize="inherit">{formatDateTime(transaction.timeAt, 'yyyy-MM-dd HH:mm')}</Typography>
-            </TableCell>
+            {/*<TableCell className={classes.cell} align="center"></TableCell>*/}
             <TableCell className={classes.cell} align="center">
                 <Box className={classes.link}>
-                    <span>{formatEthereumAddress(transaction.toAddress, 5)}</span>
+                    <Typography variant="body2">{formatEthereumAddress(transaction.toAddress, 4)}</Typography>
                     <Link
                         sx={{ height: 21 }}
                         href={resolveTransactionLinkOnExplorer(chainId, transaction.id)}
