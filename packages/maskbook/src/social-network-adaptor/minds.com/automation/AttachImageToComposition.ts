@@ -1,5 +1,5 @@
 import type { SocialNetworkUI } from '../../../social-network'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import { downloadUrl } from '../../../utils/utils'
 import { composerModalTextAreaSelector, composerPreviewSelector } from '../utils/selector'
 import { pasteTextToCompositionMinds } from './pasteTextToComposition'
@@ -24,7 +24,7 @@ export function pasteImageToCompositionMinds() {
             // clear clipboard
             return navigator.clipboard.writeText('')
         } else if (recover) {
-            MaskMessage.events.autoPasteFailed.sendToLocal({ text: relatedTextPayload || '', image })
+            MaskMessages.events.autoPasteFailed.sendToLocal({ text: relatedTextPayload || '', image })
         }
     }
 }

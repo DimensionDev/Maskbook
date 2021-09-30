@@ -1,7 +1,8 @@
+import { omit } from 'lodash-es'
+import { EthereumAddress } from 'wallet.ts'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { currySameAddress, formatEthereumAddress, isSameAddress, ProviderType } from '@masknet/web3-shared'
-import { EthereumAddress } from 'wallet.ts'
 import { asyncIteratorToArray } from '../../../../../utils'
 import { PluginDB } from '../../../database/Plugin.db'
 import {
@@ -11,10 +12,19 @@ import {
 } from '../../../settings'
 import type { WalletRecord } from '../type'
 
+function WalletRecordOutDB(record: WalletRecord) {
+    return {
+        ...omit(record, 'type'),
+        hasStoredKeyInfo: !!record.storedKeyInfo,
+        hasDerivationPath: !!record.derivationPath,
+    }
+}
+
 export async function getWallet(address = currentMaskWalletAccountWalletSettings.value) {
     if (!address) return null
     if (!EthereumAddress.isValid(address)) throw new Error('Not a valid address.')
-    return (await PluginDB.get('wallet', formatEthereumAddress(address))) ?? null
+    const wallet = (await PluginDB.get('wallet', formatEthereumAddress(address))) ?? null
+    return wallet ? WalletRecordOutDB(wallet) : null
 }
 
 export async function getWalletRequired(address: string) {
@@ -61,10 +71,11 @@ export async function getWallets(provider?: ProviderType) {
         if (a.createdAt < z.createdAt) return 1
         return 0
     })
-    if (provider === ProviderType.MaskWallet) return wallets.filter((x) => x.storedKeyInfo)
-    if (provider === currentProviderSettings.value) return wallets.filter(currySameAddress(address))
+    if (provider === ProviderType.MaskWallet) return wallets.filter((x) => x.storedKeyInfo).map(WalletRecordOutDB)
+    if (provider === currentProviderSettings.value)
+        return wallets.filter(currySameAddress(address)).map(WalletRecordOutDB)
     if (provider) return []
-    return wallets
+    return wallets.map(WalletRecordOutDB)
 }
 
 export async function addWallet(

@@ -1,12 +1,12 @@
 import { selectElementContents, delay } from '../../../utils/utils'
 import { isMobileFacebook } from '../utils/isMobile'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { inputText, pasteText } from '@masknet/injected-script'
 
 export async function pasteToCommentBoxFacebook(encryptedComment: string, current: PostInfo, dom: HTMLElement | null) {
     const fail = () => {
-        MaskMessage.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
+        MaskMessages.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
     }
     if (isMobileFacebook) {
         const root = dom || current.commentBoxSelector!.evaluate()[0]

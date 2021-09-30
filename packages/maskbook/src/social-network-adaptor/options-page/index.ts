@@ -2,7 +2,7 @@ import { defineSocialNetworkUI, SocialNetworkUI, SocialNetwork } from '../../soc
 import { isEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentifierMap } from '../../database/IdentifierMap'
 import Services from '../../extension/service'
-import { MaskMessage } from '../../utils/messages'
+import { MaskMessages } from '../../utils/messages'
 import { currentImportingBackup } from '../../settings/settings'
 
 const base: SocialNetwork.Base = {
@@ -39,7 +39,7 @@ const define: SocialNetworkUI.Definition = {
             if (signal.aborted) return
             state.profiles.value = x
         }
-        signal.addEventListener('abort', MaskMessage.events.profilesChanged.on(load))
+        signal.addEventListener('abort', MaskMessages.events.profilesChanged.on(load))
         await load()
         return state
     },

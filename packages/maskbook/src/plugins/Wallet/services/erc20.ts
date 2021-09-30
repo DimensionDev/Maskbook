@@ -4,9 +4,9 @@ import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
-import { ERC20TokenRecordIntoDB, getWalletByAddress, LegacyWalletRecordIntoDB } from './helpers'
+import { ERC20TokenRecordIntoDB, ERC20TokenRecordOutDB, getWalletByAddress, LegacyWalletRecordIntoDB } from './helpers'
 import type { ERC20TokenRecord } from '../database/types'
-import { ERC20TokenDetailed, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared'
 import { queryTransactionPaged } from '../../../database/helpers/pagination'
 
 export async function getERC20TokensCount() {
@@ -16,7 +16,13 @@ export async function getERC20TokensCount() {
 
 export async function getERC20Tokens() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token', 'Wallet')
-    return t.objectStore('ERC20Token').getAll()
+    const tokens = await t.objectStore('ERC20Token').getAll()
+    return tokens.map(ERC20TokenRecordOutDB).map(
+        (x): ERC20TokenDetailed => ({
+            type: EthereumTokenType.ERC20,
+            ...x,
+        }),
+    )
 }
 
 const fuse = new Fuse([] as ERC20TokenRecord[], {
@@ -31,7 +37,7 @@ const fuse = new Fuse([] as ERC20TokenRecord[], {
 
 export async function getERC20TokensPaged(index: number, count: number, query?: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('ERC20Token')
-    return queryTransactionPaged(t, 'ERC20Token', {
+    const tokens = await queryTransactionPaged(t, 'ERC20Token', {
         skip: index * count,
         count,
         predicate: (record) => {
@@ -41,6 +47,12 @@ export async function getERC20TokensPaged(index: number, count: number, query?: 
             return !!fuse.search(query).length
         },
     })
+    return tokens.map(ERC20TokenRecordOutDB).map(
+        (x): ERC20TokenDetailed => ({
+            type: EthereumTokenType.ERC20,
+            ...x,
+        }),
+    )
 }
 
 export async function addERC20Token(token: ERC20TokenDetailed) {

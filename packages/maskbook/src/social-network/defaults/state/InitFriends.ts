@@ -2,7 +2,7 @@ import { IdentifierMap, ProfileIdentifier } from '@masknet/shared'
 import produce from 'immer'
 import type { Profile } from '../../../database'
 import Services from '../../../extension/service'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import type { SocialNetworkUI } from '../../types'
 
 function hasFingerprint(x: Profile) {
@@ -24,7 +24,7 @@ export function InitAutonomousStateFriends(
     })
     signal.addEventListener(
         'abort',
-        MaskMessage.events.profilesChanged.on(async (events) => {
+        MaskMessages.events.profilesChanged.on(async (events) => {
             // eslint-disable-next-line @typescript-eslint/await-thenable
             const newVal = await produce(ref.value, async (draft) => {
                 for (const event of events) {

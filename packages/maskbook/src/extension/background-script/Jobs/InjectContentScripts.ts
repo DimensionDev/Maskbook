@@ -1,5 +1,5 @@
 import { noop } from 'lodash-es'
-import { MaskMessage } from '../../../utils'
+import { MaskMessages } from '../../../utils'
 import { Flags } from '../../../utils/flags'
 
 type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never
@@ -52,7 +52,7 @@ export default function (signal: AbortSignal) {
     if (process.env.NODE_ENV === 'development' && Flags.mask_SDK_ready) {
         signal.addEventListener(
             'abort',
-            MaskMessage.events.maskSDKHotModuleReload.on(async () => {
+            MaskMessages.events.maskSDKHotModuleReload.on(async () => {
                 const code = (await fetchUserScript(maskSDK_URL)) + `\n;console.log("[@masknet/sdk] SDK reloaded.")`
                 for (const tab of await browser.tabs.query({})) {
                     browser.tabs.executeScript(tab.id!, { code }).then(noop)
