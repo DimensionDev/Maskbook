@@ -10,6 +10,9 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { sortBy } from 'lodash-es'
 import { useDashboardI18N } from '../../../../locales'
 import { Messages } from '../../../../API'
+import { useContainer } from 'unstated-next'
+import { PersonaContext } from '../../hooks/usePersonaContext'
+import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -53,6 +56,7 @@ const PageSize = 20
 
 export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
     const [page, setPage] = useState(0)
+    const { currentPersona } = useContainer(PersonaContext)
 
     const { value, error, loading, retry } = useContacts(network, page, PageSize)
 
@@ -77,6 +81,10 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
     useEffect(() => {
         return Messages.events.relationsChanged.on(retry)
     }, [retry])
+
+    useUpdateEffect(() => {
+        setPage(0)
+    }, [currentPersona])
 
     return (
         <ContactsTableUI
