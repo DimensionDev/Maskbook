@@ -101,7 +101,6 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
     const redPacketContract = useRedPacketContract(version)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const account = useAccount()
-    const { classes } = useStyles()
     return useAsync(async () => {
         if (!redPacketSettings || !redPacketContract) return null
         const { duration, isRandom, message, name, shares, total, token, publicKey } = redPacketSettings
@@ -226,13 +225,14 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = redPacketContract.methods.create_red_packet(...params).send(config as PayableTx)
+            const snackbarTitle = t('plugin_red_packet_create_title')
             promiEvent.once(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
                 setCreateState({
                     type: TransactionStateType.WAIT_FOR_CONFIRMING,
                     hash,
                 })
                 transactionHashRef.current = hash
-                showSingletonSnackbar('Create a Red Packet', {
+                showSingletonSnackbar(snackbarTitle, {
                     processing: true,
                     message: (
                         <TransactionLink txHash={hash}>{t('plugin_red_packet_transaction_submitted')}</TransactionLink>
@@ -246,7 +246,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     receipt,
                 })
                 transactionHashRef.current = receipt.transactionHash
-                showSingletonSnackbar('Create a Red Packet', {
+                showSingletonSnackbar(snackbarTitle, {
                     variant: 'success',
                     message: (
                         <TransactionLink txHash={receipt.transactionHash}>
@@ -264,7 +264,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                 })
                 transactionHashRef.current = receipt.transactionHash
                 resolve()
-                showSingletonSnackbar('Create a Red Packet', {
+                showSingletonSnackbar(snackbarTitle, {
                     variant: 'success',
                     message: (
                         <TransactionLink txHash={receipt.transactionHash}>
@@ -283,7 +283,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     error,
                 })
                 reject(error)
-                showSingletonSnackbar('Create a Red Packet', {
+                showSingletonSnackbar(snackbarTitle, {
                     variant: 'error',
                     message: (
                         <TransactionLink txHash={transactionHashRef.current}>

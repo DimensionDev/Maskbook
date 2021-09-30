@@ -479,6 +479,7 @@
     "plugin_red_packet_completed": "Completed",
     "plugin_red_packet_expired": "Expired",
     "plugin_nft_red_packet_data_broken": "The red packet can’t be sent due to data damage.",
+    "plugin_red_packet_create_title": "Create a Red Packet",
     "plugin_red_packet_transaction_submitted": "Transaction submitted!",
     "plugin_red_packet_transaction_rejected": "Transaction rejected!",
     "plugin_red_packet_success": "Sent {{value}}{{symbol}}.",
