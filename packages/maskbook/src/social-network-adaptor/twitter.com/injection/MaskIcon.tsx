@@ -12,9 +12,8 @@ import { startWatch } from '../../../utils/watcher'
 function Icon(props: { size: number }) {
     return (
         <MaskIcon
+            size={props.size}
             style={{
-                width: props.size,
-                height: props.size,
                 verticalAlign: 'text-bottom',
                 marginLeft: 6,
             }}

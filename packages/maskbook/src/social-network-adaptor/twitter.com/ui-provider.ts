@@ -143,7 +143,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         return { friends, profiles }
     },
     injection: {
-        toolBoxInNavBar: injectToolboxHintAtTwitter,
+        toolbox: injectToolboxHintAtTwitter,
         searchResult: injectSearchResultBoxAtTwitter,
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),

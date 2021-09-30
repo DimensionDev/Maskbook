@@ -24,10 +24,6 @@ const useStyles = makeStyles()((theme) => ({
         color: '#fff',
         borderBottom: 'none !important',
     },
-    logo: {
-        width: 96,
-        height: 96,
-    },
     amount: {
         fontSize: 32,
         marginTop: theme.spacing(5),
@@ -70,7 +66,7 @@ function BreakdownDialogUI(props: BreakdownDialogUIProps) {
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogPaper }}
             titleBarIconStyle="close">
             <DialogContent className={classes.content}>
-                <MaskIcon classes={{ root: classes.logo }} />
+                <MaskIcon size={96} />
                 <Typography className={classes.amount}>
                     <FormattedBalance
                         value={new BigNumber(amount).plus(balance)}
