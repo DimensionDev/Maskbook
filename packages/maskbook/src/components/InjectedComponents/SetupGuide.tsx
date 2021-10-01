@@ -24,7 +24,7 @@ import { noop } from 'lodash-es'
 import { useValueRef } from '@masknet/shared'
 import { useI18N, MaskMessage, useMatchXS, extendsTheme } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { currentSetupGuideStatus } from '../../settings/settings'
+import { currentSetupGuideStatus, userGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
@@ -36,8 +36,6 @@ export enum SetupGuideStep {
     FindUsername = 'find-username',
     SayHelloWorld = 'say-hello-world',
 }
-
-const userGuideCompleted = localStorage.getItem('userGuideCompleted')
 
 //#region wizard dialog
 const wizardTheme = extendsTheme((theme: Theme) => ({
@@ -423,7 +421,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     failed={t('setup_guide_connect_failed')}
                     executor={onConnect}
                     completeOnClick={onDone}
-                    autoComplete={!userGuideCompleted}
+                    autoComplete={userGuideStatus[ui.networkIdentifier].value !== 'completed'}
                     disabled={!username}
                     completeIcon={null}
                     failIcon={null}
@@ -569,10 +567,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const onNext = async () => {
         switch (step) {
             case SetupGuideStep.FindUsername:
-                if (!userGuideCompleted) {
+                if (userGuideStatus[ui.networkIdentifier].value !== 'completed') {
                     onClose()
                     currentSetupGuideStatus[ui.networkIdentifier].value = '1'
-                    localStorage.setItem('username', username)
+                    userGuideStatus[ui.networkIdentifier].value = username
                 } else {
                     currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
                         status: SetupGuideStep.SayHelloWorld,
