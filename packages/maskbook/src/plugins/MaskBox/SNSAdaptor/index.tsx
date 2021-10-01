@@ -7,6 +7,7 @@ import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { PreviewCard } from './components/PreviewCard'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
+import { Context } from '../hooks/useContext'
 
 const isMaskBox = (x: string) => /^https:\/\/box\.mask\.io/.test(x)
 
@@ -41,7 +42,9 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
         <MaskPluginWrapper pluginName="MaskBox">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
-                    <PreviewCard id={boxId} />
+                    <Context.Provider initialState={{ boxId }}>
+                        <PreviewCard />
+                    </Context.Provider>
                 </EthereumChainBoundary>
             </Suspense>
         </MaskPluginWrapper>

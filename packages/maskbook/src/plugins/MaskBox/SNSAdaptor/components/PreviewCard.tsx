@@ -2,16 +2,15 @@ import { useState } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { makeStyles } from '@masknet/theme'
-import { useChainId } from '@masknet/web3-shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { DrawDialog } from './DrawDialog'
-
-enum CardTab {
-    Articles = 1,
-    Details = 2,
-}
+import { useContainer } from 'unstated-next'
+import { Context } from '../../hooks/useContext'
+import { CardTab } from '../../type'
+import { ArticlesTab } from './ArticlesTab'
+import { DetailsTab } from './DetailsTab'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {
@@ -40,56 +39,48 @@ const useTabsStyles = makeStyles()((theme) => ({
     },
 }))
 
-const useStyles = makeStyles()((theme) => ({
-    focusTab: {
-        backgroundColor: theme.palette.mode === 'light' ? 'rgba(247, 249, 250, 1)' : 'rgba(255, 255, 255, 0.08)',
-    },
-    tabPaper: {
-        position: 'sticky',
-        top: 0,
-        zIndex: 5000,
-    },
-}))
-
-export interface PreviewCardProps {
-    id: string
-}
+export interface PreviewCardProps {}
 
 export function PreviewCard(props: PreviewCardProps) {
-    const { classes } = useStyles()
     const { classes: tabClasses } = useTabsStyles()
     const state = useState(CardTab.Articles)
-
-    const chainId = useChainId()
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
+
+    const { boxId, setBoxId, boxState, boxInfoResult } = useContainer(Context)
+    const { value: boxInfo, loading: loadingBoxInfo, error: errorBoxInfo } = boxInfoResult
 
     const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: 'Articles',
-                children: <Typography color="textPrimary">Articles</Typography>,
+                children: boxInfo ? <ArticlesTab boxInfo={boxInfo} /> : null,
                 sx: { p: 0 },
             },
             {
                 label: 'Details',
-                children: <Typography color="textPrimary">Details</Typography>,
+                children: boxInfo ? <DetailsTab boxInfo={boxInfo} /> : null,
                 sx: { p: 0 },
             },
         ],
         state,
         classes: tabClasses,
     }
+
+    if (loadingBoxInfo) return <Typography color="textPrimary">Loading...</Typography>
+    if (errorBoxInfo) return <Typography color="textPrimary">Something went wrong.</Typography>
+    if (!boxInfo) return <Typography color="textPrimary">Failed to load Box.</Typography>
+
     return (
         <Box>
             <AbstractTab height="" {...tabProps}></AbstractTab>
-            <EthereumWalletConnectedBoundary>
-                <EthereumERC20TokenApprovedBoundary amount="0">
+            <EthereumWalletConnectedBoundary ActionButtonProps={{ size: 'medium' }}>
+                <EthereumERC20TokenApprovedBoundary amount="0" ActionButtonProps={{ size: 'medium' }}>
                     <ActionButton size="medium" fullWidth variant="contained" onClick={() => setOpenDrawDialog(true)}>
-                        Draw
+                        Draw (20.00 USDT / Box) - {boxState}
                     </ActionButton>
                 </EthereumERC20TokenApprovedBoundary>
             </EthereumWalletConnectedBoundary>
-            <DrawDialog open={openDrawDialog} onClose={() => setOpenDrawDialog(false)} />
+            <DrawDialog boxInfo={boxInfo} open={openDrawDialog} onClose={() => setOpenDrawDialog(false)} />
         </Box>
     )
 }
