@@ -51,8 +51,7 @@ export async function saveNFTAvatarFromRSS(persona: Persona, wallet: Wallet, nft
         },
     })
 
-    rss.files.set(file)
+    rss.files.set(f)
     await rss.files.sync()
-
     return nft
 }
