@@ -11,7 +11,6 @@ import { useNFTAvatar } from '../../../../components/InjectedComponents/NFT/hook
 import type { AvatarMetaDB } from '../../../../components/InjectedComponents/NFT/types'
 import { saveNFTAvatar } from '../../../../components/InjectedComponents/NFT/gun'
 import { useWallet } from '@masknet/web3-shared'
-import { usePersona } from '../../../../components/InjectedComponents/NFT/hooks/usePersona'
 import { useSnackbar } from '@masknet/theme'
 
 const RETRIES_NUMBER = 10
@@ -46,7 +45,6 @@ interface NFTAvatarInTwitterProps {}
 function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const { classes } = useStyles()
     const identity = useCurrentVisitingIdentity()
-    const persona = usePersona(identity.identifier.userId)
     const wallet = useWallet()
 
     const _avatar = useNFTAvatar(identity.identifier.userId)
@@ -83,10 +81,9 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
 
     useEffect(() => {
         if (!NFTEvent) return
-        if (!persona) return
         if (!wallet) return
 
-        saveNFTAvatar(persona, wallet, NFTEvent as AvatarMetaDB)
+        saveNFTAvatar(wallet.address, NFTEvent as AvatarMetaDB)
             .then((avatar: AvatarMetaDB | undefined) => {
                 if (!avatar) throw new Error('Not Found')
                 setAvatar(avatar)

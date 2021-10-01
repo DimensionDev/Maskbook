@@ -1,23 +1,25 @@
-import type { Wallet } from '@masknet/web3-shared'
 import type Web3 from 'web3'
-import type { Persona } from '../../../../database'
 import type { AvatarMetaDB } from '../types'
-import { getProfileIdentifierFromPersona } from '../utils/getProfileIdentifierFromPersona'
 import { getNFTAvatarFromJSON } from './db'
+import { getUserAddress, setUserAddress } from './gun'
 import { getNFTAvatarFromRSS, saveNFTAvatarFromRSS } from './rss'
 
-export async function getNFTAvatar(persona: Persona, web3: Web3) {
-    const a = await getNFTAvatarFromRSS(persona, web3)
-    if (a) return a
+export async function getNFTAvatar(userId: string, web3: Web3) {
+    console.log(userId)
+    const address = await getUserAddress(userId)
+    console.log(address)
+    if (!address) return
 
-    const identifier = getProfileIdentifierFromPersona(persona)
-    if (!identifier) return
-
-    const b = await getNFTAvatarFromJSON(identifier?.userId)
-    return b
+    console.log(address)
+    let result = await getNFTAvatarFromRSS(address, web3)
+    if (!result) {
+        result = await getNFTAvatarFromJSON(userId)
+    }
+    return result
 }
 
-export async function saveNFTAvatar(persona: Persona, wallet: Wallet, nft: AvatarMetaDB) {
-    const avatar = await saveNFTAvatarFromRSS(persona, wallet, nft)
+export async function saveNFTAvatar(address: string, nft: AvatarMetaDB) {
+    await setUserAddress(nft.userId, address)
+    const avatar = await saveNFTAvatarFromRSS(address, nft)
     return avatar
 }

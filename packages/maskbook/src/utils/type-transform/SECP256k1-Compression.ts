@@ -10,7 +10,7 @@ import { Buffer } from 'buffer'
 /**
  * Compress x & y into a single x
  */
-function compressSecp256k1Point(x: string, y: string): Uint8Array {
+export function compressSecp256k1Point(x: string, y: string): Uint8Array {
     const xb = Convert.FromBase64Url(x)
     const yb = Convert.FromBase64Url(y)
     const point = Buffer.from(combine(new Uint8Array([0x04]), xb, yb))
@@ -23,7 +23,7 @@ function compressSecp256k1Point(x: string, y: string): Uint8Array {
 /**
  * Decompress x into x & y
  */
-function decompressSecp256k1Point(point: ArrayBuffer): { x: string; y: string } {
+export function decompressSecp256k1Point(point: ArrayBuffer): { x: string; y: string } {
     const p = Buffer.from(point)
     if (!secp256k1.isPoint(p)) throw new TypeError('Not a point on secp256k1!')
     const uncompressed: Uint8Array = secp256k1.isPointCompressed(p) ? secp256k1.pointCompress(p, false) : p
