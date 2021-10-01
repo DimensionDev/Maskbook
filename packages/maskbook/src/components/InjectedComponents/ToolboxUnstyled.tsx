@@ -42,6 +42,7 @@ import { hasNativeAPI, nativeAPI, useI18N, useMenu } from '../../utils'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
+import GuideStep from '../GuideStep'
 import { WalletIcon } from '../shared/WalletIcon'
 import { MaskIcon, MaskSharpIconOfSize, WalletSharp } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
@@ -92,6 +93,7 @@ export interface ToolboxHintProps {
     mini?: boolean
 }
 export function ToolboxHintUnstyled(props: ToolboxHintProps) {
+    const { t } = useI18N()
     const {
         ListItemButton = MuiListItemButton,
         ListItemText = MuiListItemText,
@@ -118,41 +120,50 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
         typeof walletTitle === 'string' ? <Typography className={classes.font}>{walletTitle}</Typography> : walletTitle
     return (
         <>
-            <Container>
-                <ListItemButton onClick={openMenu}>
-                    <ListItemIcon>
-                        {icon === 'mono' ? <MaskSharpIconOfSize size={iconSize} /> : <MaskIcon size={iconSize} />}
-                    </ListItemIcon>
-                    {mini ? null : (
-                        <ListItemText primary={<Typography className={classes.font}>Mask Network</Typography>} />
-                    )}
-                </ListItemButton>
-            </Container>
+            <GuideStep step={1} total={4} arrow={false} tip={t('user_guide_tip_1')}>
+                <span />
+            </GuideStep>
+
+            <GuideStep step={2} total={4} tip={t('user_guide_tip_2')}>
+                <Container>
+                    <ListItemButton onClick={openMenu}>
+                        <ListItemIcon>
+                            {icon === 'mono' ? <MaskSharpIconOfSize size={iconSize} /> : <MaskIcon size={iconSize} />}
+                        </ListItemIcon>
+                        {mini ? null : (
+                            <ListItemText primary={<Typography className={classes.font}>Mask Network</Typography>} />
+                        )}
+                    </ListItemButton>
+                </Container>
+            </GuideStep>
             {menu}
-            <Container>
-                <ListItemButton onClick={openWallet}>
-                    <ListItemIcon>
-                        {isWalletValid ? <WalletIcon size={iconSize} /> : <WalletSharp size={iconSize} />}
-                    </ListItemIcon>
-                    {mini ? null : (
-                        <ListItemText
-                            primary={
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    {walletJSX}
-                                    {shouldDisplayChainIndicator ? (
-                                        <FiberManualRecordIcon
-                                            className={classes.chainIcon}
-                                            style={{
-                                                color: chainColor,
-                                            }}
-                                        />
-                                    ) : null}
-                                </Box>
-                            }
-                        />
-                    )}
-                </ListItemButton>
-            </Container>
+            <GuideStep step={3} total={4} tip={t('user_guide_tip_3')}>
+                <Container>
+                    <ListItemButton onClick={openWallet}>
+                        <ListItemIcon>
+                            {isWalletValid ? <WalletIcon size={iconSize} /> : <WalletSharp size={iconSize} />}
+                        </ListItemIcon>
+                        {mini ? null : (
+                            <ListItemText
+                                primary={
+                                    <Box
+                                        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        {walletJSX}
+                                        {shouldDisplayChainIndicator ? (
+                                            <FiberManualRecordIcon
+                                                className={classes.chainIcon}
+                                                style={{
+                                                    color: chainColor,
+                                                }}
+                                            />
+                                        ) : null}
+                                    </Box>
+                                }
+                            />
+                        )}
+                    </ListItemButton>
+                </Container>
+            </GuideStep>
             {ClaimDialogJSX}
         </>
     )

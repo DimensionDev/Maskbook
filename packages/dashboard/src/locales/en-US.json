@@ -278,7 +278,7 @@
     "settings_label_backup_password_cloud": "Backup passwords for files in the cloud",
     "settings_label_payment_password": "Payment Password",
     "settings_label_re_enter": "Re-enter",
-    "settings_alert_password_set": "Backup password set",
+    "settings_alert_password_set": "Backup password set up successfully.",
     "settings_alert_password_updated": "Backup password updated",
     "settings_alert_email_set": "Email set",
     "settings_alert_email_updated": "Email updated",
