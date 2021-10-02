@@ -54,6 +54,24 @@ export async function addRecentTransaction(address: string, hash: string, payloa
     WalletMessages.events.recentTransactionsUpdated.sendToAll()
 }
 
+export async function replaceRecentTransaction(address: string, oldHash: string, newHash: string) {
+    const now = new Date()
+    const recordId = getRecordId(address)
+    const chunk = await PluginDB.get('recent-transactions', recordId)
+    const transaction = chunk?.transactions.find((x) => x.hash === oldHash)
+    if (!transaction) throw new Error('Failed to find the old transaction.')
+    transaction.hash = newHash
+    await PluginDB.add({
+        type: 'recent-transactions',
+        id: getRecordId(address),
+        chainId: currentChainIdSettings.value,
+        address: formatEthereumAddress(address),
+        transactions: chunk?.transactions ?? [],
+        createdAt: chunk?.createdAt ?? now,
+        updatedAt: now,
+    })
+}
+
 export async function removeRecentTransaction(address: string, hash: string) {
     const now = new Date()
     const recordId = getRecordId(address)
