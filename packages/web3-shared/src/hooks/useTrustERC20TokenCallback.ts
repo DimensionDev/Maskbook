@@ -3,9 +3,12 @@ import { useAsyncFn } from 'react-use'
 import type { ERC20TokenDetailed } from '..'
 
 export function useTrustERC20TokenCallback() {
-    const { trustERC20Token } = useWeb3Context()
+    const { trustToken } = useWeb3Context()
 
-    return useAsyncFn(async (address: string, token: ERC20TokenDetailed) => {
-        await trustERC20Token(address, token)
-    }, [])
+    return useAsyncFn(
+        async (address: string, token: ERC20TokenDetailed) => {
+            await trustToken(address, token)
+        },
+        [trustToken],
+    )
 }

@@ -1,8 +1,18 @@
-import { omit } from 'lodash-es'
-import { EthereumAddress } from 'wallet.ts'
+import { omit, pick } from 'lodash-es'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { currySameAddress, formatEthereumAddress, isSameAddress, ProviderType } from '@masknet/web3-shared'
+import {
+    currySameAddress,
+    NonFungibleTokenDetailed,
+    ERC1155TokenDetailed,
+    ERC20TokenDetailed,
+    ERC721TokenDetailed,
+    EthereumTokenType,
+    formatEthereumAddress,
+    isSameAddress,
+    ProviderType,
+} from '@masknet/web3-shared'
+import { EthereumAddress } from 'wallet.ts'
 import { asyncIteratorToArray } from '../../../../../utils'
 import { PluginDB } from '../../../database/Plugin.db'
 import {
@@ -113,23 +123,7 @@ export async function addWallet(
 
 export async function updateWallet(
     address: string,
-    updates: Partial<
-        Omit<
-            WalletRecord,
-            | 'id'
-            | 'type'
-            | 'address'
-            | 'createdAt'
-            | 'updatedAt'
-            | 'storedKeyInfo'
-            | 'erc20_token_whitelist'
-            | 'erc20_token_blacklist'
-            | 'erc721_token_whitelist'
-            | 'erc721_token_blacklist'
-            | 'erc1155_token_whitelist'
-            | 'erc1155_token_blacklist'
-        >
-    >,
+    updates: Partial<Omit<WalletRecord, 'id' | 'type' | 'address' | 'createdAt' | 'updatedAt' | 'storedKeyInfo'>>,
 ) {
     const wallet = await getWallet(address)
     const now = new Date()
@@ -155,5 +149,64 @@ export async function updateWallet(
 
 export async function deleteWallet(address: string) {
     await PluginDB.remove('wallet', address)
+    WalletMessages.events.walletsUpdated.sendToAll(undefined)
+}
+
+export async function updateWalletToken(
+    address: string,
+    token: ERC20TokenDetailed | NonFungibleTokenDetailed,
+    { strategy }: { strategy: 'block' | 'trust' },
+) {
+    const wallet = await getWalletRequired(address)
+    const tokenAddress =
+        (token as ERC20TokenDetailed | ERC1155TokenDetailed).address ||
+        (token as ERC721TokenDetailed).contractDetailed.address
+    const tokenAddressChecksummed = formatEthereumAddress(tokenAddress)
+    const tokenType =
+        (token as ERC20TokenDetailed | ERC1155TokenDetailed).type ||
+        (token as ERC721TokenDetailed).contractDetailed.type
+
+    const operationMap: Record<
+        EthereumTokenType.ERC20 | EthereumTokenType.ERC721 | EthereumTokenType.ERC1155,
+        Record<'block' | 'trust', Set<string>>
+    > = {
+        [EthereumTokenType.ERC20]: {
+            block: wallet.erc20_token_blacklist,
+            trust: wallet.erc20_token_whitelist,
+        },
+        [EthereumTokenType.ERC721]: {
+            block: wallet.erc721_token_blacklist,
+            trust: wallet.erc721_token_whitelist,
+        },
+        [EthereumTokenType.ERC1155]: {
+            block: wallet.erc1155_token_blacklist,
+            trust: wallet.erc1155_token_whitelist,
+        },
+    }
+
+    const set = operationMap[tokenType][strategy]
+    const reverseSet = operationMap[tokenType][strategy === 'block' ? 'trust' : 'block']
+
+    let updated = false
+    if (!set.has(tokenAddressChecksummed)) {
+        set.add(tokenAddressChecksummed)
+        updated = true
+    }
+    if (reverseSet.has(tokenAddressChecksummed)) {
+        set.delete(tokenAddressChecksummed)
+        updated = true
+    }
+    if (!updated) return
+    await updateWallet(
+        address,
+        pick(wallet, [
+            'erc20_token_blacklist',
+            'erc20_token_whitelist',
+            'erc721_token_blacklist',
+            'erc721_token_whitelist',
+            'erc1155_token_blacklist',
+            'erc1155_token_whitelist',
+        ]),
+    )
     WalletMessages.events.walletsUpdated.sendToAll(undefined)
 }

@@ -1,8 +1,14 @@
 import { noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ChainId, PortfolioProvider, ProviderType } from '@masknet/web3-shared'
-import { NetworkType, Web3ProviderType } from '@masknet/web3-shared'
-import { Messages, PluginMessages, PluginServices, Services } from '../API'
+import {
+    ChainId,
+    ERC1155TokenDetailed,
+    ERC721TokenDetailed,
+    PortfolioProvider,
+    ProviderType,
+} from '@masknet/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Web3ProviderType } from '@masknet/web3-shared'
+import { Services, Messages, PluginServices, PluginMessages } from '../API'
 
 const Web3Provider = createExternalProvider()
 
@@ -56,24 +62,31 @@ export const Web3Context: Web3ProviderType = {
         PluginMessages.Wallet.events.walletsUpdated.on,
     ),
     erc20Tokens: createSubscriptionFromAsync(
-        PluginServices.Wallet.getERC20Tokens,
+        () => PluginServices.Wallet.getTokens<ERC20TokenDetailed>(EthereumTokenType.ERC20),
         [],
         PluginMessages.Wallet.events.erc20TokensUpdated.on,
     ),
-    addERC20Token: PluginServices.Wallet.addERC20Token,
-    trustERC20Token: PluginServices.Wallet.trustERC20Token,
-    erc20TokensCount: createSubscriptionFromAsync(
-        PluginServices.Wallet.getERC20TokensCount,
-        0,
-        PluginMessages.Wallet.events.erc20TokensUpdated.on,
+    erc721Tokens: createSubscriptionFromAsync(
+        () => PluginServices.Wallet.getTokens<ERC721TokenDetailed>(EthereumTokenType.ERC721),
+        [],
+        PluginMessages.Wallet.events.erc721TokensUpdated.on,
     ),
-    getERC20TokensPaged: PluginServices.Wallet.getERC20TokensPaged,
-    getERC721TokensPaged: PluginServices.Wallet.getERC721TokensPaged,
+    erc1155Tokens: createSubscriptionFromAsync(
+        () => PluginServices.Wallet.getTokens<ERC1155TokenDetailed>(EthereumTokenType.ERC1155),
+        [],
+        PluginMessages.Wallet.events.erc1155TokensUpdated.on,
+    ),
     portfolioProvider: createSubscriptionFromAsync(
         Services.Settings.getCurrentPortfolioDataProvider,
         PortfolioProvider.DEBANK,
         Messages.events.currentPortfolioDataProviderSettings.on,
     ),
+
+    addToken: PluginServices.Wallet.addToken,
+    removeToken: PluginServices.Wallet.removeToken,
+    trustToken: PluginServices.Wallet.trustToken,
+    blockToken: PluginServices.Wallet.blockToken,
+
     getAssetsList: PluginServices.Wallet.getAssetsList,
     getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,
     getAddressNamesList: PluginServices.Wallet.getAddressNames,

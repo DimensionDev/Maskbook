@@ -35,9 +35,11 @@ export function DashboardWalletHideTokenConfirmDialog(
                 case EthereumTokenType.Native:
                     throw new Error('Unable to hide the native token.')
                 case EthereumTokenType.ERC20:
-                    return WalletRPC.blockERC20Token(wallet.address, token as ERC20TokenDetailed)
+                    return WalletRPC.updateWalletToken(wallet.address, token as ERC20TokenDetailed, {
+                        strategy: 'block',
+                    })
                 case EthereumTokenType.ERC721:
-                    return WalletRPC.removeERC721Token(token as ERC721TokenDetailed)
+                    return WalletRPC.removeToken(token as ERC721TokenDetailed)
                 default:
                     unreachable(type)
             }

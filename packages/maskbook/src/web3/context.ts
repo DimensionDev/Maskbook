@@ -1,6 +1,13 @@
 import { noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ProviderType, Web3ProviderType } from '@masknet/web3-shared'
+import {
+    ERC20TokenDetailed,
+    ERC721TokenDetailed,
+    ERC1155TokenDetailed,
+    EthereumTokenType,
+    ProviderType,
+    Web3ProviderType,
+} from '@masknet/web3-shared'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
@@ -42,6 +49,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             }
         },
     )
+
     return {
         provider: createStaticSubscription(() => Web3Provider),
         allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
@@ -63,20 +71,27 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             : createSubscriptionFromSettings(currentProviderSettings),
         networkType: createSubscriptionFromSettings(isMask ? currentMaskWalletNetworkSettings : currentNetworkSettings),
         erc20Tokens: createSubscriptionFromAsync(
-            WalletRPC.getERC20Tokens,
+            () => WalletRPC.getTokens<ERC20TokenDetailed>(EthereumTokenType.ERC20),
             [],
             WalletMessages.events.erc20TokensUpdated.on,
         ),
-        erc20TokensCount: createSubscriptionFromAsync(
-            WalletRPC.getERC20TokensCount,
-            0,
-            WalletMessages.events.erc20TokensUpdated.on,
+        erc721Tokens: createSubscriptionFromAsync(
+            () => WalletRPC.getTokens<ERC721TokenDetailed>(EthereumTokenType.ERC721),
+            [],
+            WalletMessages.events.erc721TokensUpdated.on,
+        ),
+        erc1155Tokens: createSubscriptionFromAsync(
+            () => WalletRPC.getTokens<ERC1155TokenDetailed>(EthereumTokenType.ERC1155),
+            [],
+            WalletMessages.events.erc1155TokensUpdated.on,
         ),
         portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
-        addERC20Token: WalletRPC.addERC20Token,
-        trustERC20Token: WalletRPC.trustERC20Token,
-        getERC20TokensPaged: WalletRPC.getERC20TokensPaged,
-        getERC721TokensPaged: WalletRPC.getERC721TokensPaged,
+
+        addToken: WalletRPC.addToken,
+        removeToken: WalletRPC.removeToken,
+        trustToken: WalletRPC.trustToken,
+        blockToken: WalletRPC.blockToken,
+
         getAssetsList: WalletRPC.getAssetsList,
         getAssetsListNFT: WalletRPC.getAssetsListNFT,
         getAddressNamesList: WalletRPC.getAddressNames,

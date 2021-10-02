@@ -29,7 +29,8 @@ export function useWeb3State() {
     const chainId = useSubscription(_.chainId)
     const chainDetailed = useMemo(() => getChainDetailed(chainId), [chainId])
     const erc20Tokens = useSubscription(_.erc20Tokens)
-    const erc20TokensCount = useSubscription(_.erc20TokensCount)
+    const erc721Tokens = useSubscription(_.erc721Tokens)
+    const erc1155Tokens = useSubscription(_.erc1155Tokens)
     const portfolioProvider = useSubscription(_.portfolioProvider)
     return {
         allowTestnet,
@@ -44,7 +45,8 @@ export function useWeb3State() {
         chainId,
         chainDetailed,
         erc20Tokens,
-        erc20TokensCount,
+        erc721Tokens,
+        erc1155Tokens,
         portfolioProvider,
         chainIdValid: !account || isChainIdValid(chainId, allowTestnet),
     }

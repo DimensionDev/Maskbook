@@ -2,6 +2,7 @@ import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { Box, Button, DialogActions, DialogContent } from '@material-ui/core'
 import {
+    EthereumTokenType,
     isSameAddress,
     useERC721ContractDetailed,
     useERC721TokenDetailedCallback,
@@ -38,7 +39,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     const onSubmit = useCallback(async () => {
         if (contractDetailLoading || !wallet) return
 
-        const tokenInDB = await PluginServices.Wallet.getERC721Token(address, tokenId)
+        const tokenInDB = await PluginServices.Wallet.getToken(EthereumTokenType.ERC721, address, tokenId)
         if (tokenInDB) throw new Error(FormErrorType.Added)
 
         const tokenDetailed = await erc721TokenDetailedCallback()
@@ -50,7 +51,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
         ) {
             throw new Error(FormErrorType.NotExist)
         } else {
-            await PluginServices.Wallet.addERC721Token(tokenDetailed)
+            await PluginServices.Wallet.addToken(tokenDetailed)
             onClose()
         }
     }, [contractDetailLoading, wallet, address, tokenId, erc721TokenDetailedCallback])
