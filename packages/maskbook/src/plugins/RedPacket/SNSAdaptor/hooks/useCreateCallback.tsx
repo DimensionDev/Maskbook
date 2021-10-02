@@ -228,12 +228,13 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                 transactionHashRef.current = hash
                 showSingletonSnackbar(snackbarTitle, {
                     processing: true,
+                    persist: true,
                     message: (
                         <TransactionLink txHash={hash}>{t('plugin_red_packet_transaction_submitted')}</TransactionLink>
                     ),
                 })
             })
-            promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+            promiEvent.once(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                 setCreateState({
                     type: TransactionStateType.CONFIRMED,
                     no: 0,
@@ -271,7 +272,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                 })
             })
 
-            promiEvent.once(TransactionEventType.ERROR, (error: Error) => {
+            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
                 setCreateState({
                     type: TransactionStateType.FAILED,
                     error,
