@@ -5,6 +5,7 @@ import { ProfileIdentifier, ECKeyIdentifierFromJsonWebKey } from '../../../../da
 import type { AESJsonWebKey, EC_Public_JsonWebKey, EC_Private_JsonWebKey } from '@masknet/shared-base'
 import { twitterBase } from '../../../../social-network-adaptor/twitter.com/base'
 import { facebookBase } from '../../../../social-network-adaptor/facebook.com/base'
+import type { RelationFavor } from '@masknet/shared-base'
 
 export type RecipientReasonJSON = (
     | { type: 'auto-share' }
@@ -52,7 +53,7 @@ export interface BackupJSONFileVersion2 {
     relations: Array<{
         profile: string // ProfileIdentifier.toText()
         persona: string // PersonaIdentifier.toText()
-        favor: 0 | 1
+        favor: RelationFavor
     }>
     /** @deprecated */
     userGroups: never[]

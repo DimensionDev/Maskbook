@@ -13,6 +13,7 @@ import type {
     EC_Public_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { RelationFavor } from '@masknet/shared-base'
 
 /**
  * Database structure:
@@ -38,7 +39,7 @@ import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-Json
 
 const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
     1,
-    3,
+    4,
     (currentOpenVersion, knowledge) => {
         return openDB<PersonaDB>('maskbook-persona', currentOpenVersion, {
             upgrade(db, oldVersion, newVersion, transaction) {
@@ -71,14 +72,38 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                     }
                 }
                 async function v2_v3() {
-                    db.createObjectStore('relations', { keyPath: ['linked', 'profile'] })
-                    transaction
-                        .objectStore('relations')
-                        .createIndex('linked, profile, favor', ['linked', 'profile', 'favor'], { unique: true })
+                    try {
+                        db.createObjectStore('relations', { keyPath: ['linked', 'profile'] })
+                        transaction
+                            .objectStore('relations')
+                            .createIndex('linked, profile, favor', ['linked', 'profile', 'favor'], { unique: true })
+                    } catch {}
                 }
-                if (oldVersion < 1) return v0_v1()
+                async function v3_v4() {
+                    try {
+                        transaction.objectStore('relations').deleteIndex('linked, profile, favor')
+                        transaction
+                            .objectStore('relations')
+                            .createIndex('favor, profile, linked', ['favor', 'profile', 'linked'], { unique: true })
+                        const relation = transaction.objectStore('relations')
+
+                        await update(relation)
+                        async function update(q: typeof relation) {
+                            for await (const rec of relation) {
+                                rec.value.favor =
+                                    rec.value.favor === RelationFavor.DEPRECATED
+                                        ? RelationFavor.UNCOLLECTED
+                                        : RelationFavor.COLLECTED
+
+                                await rec.update(rec.value)
+                            }
+                        }
+                    } catch {}
+                }
+                if (oldVersion < 1) v0_v1()
                 if (oldVersion < 2) v1_v2()
                 if (oldVersion < 3) v2_v3()
+                if (oldVersion < 4) v3_v4()
             },
         })
     },
@@ -157,7 +182,7 @@ export async function consistentPersonaDBWriteAccess(
             // If the consistency check throws, we drop all pending events
             resumeProfile(() => [])
             resumePersona(() => [])
-            resumePersona(() => [])
+            resumeRelation(() => [])
         }
     }
 }
@@ -497,10 +522,10 @@ export async function deleteProfileDB(id: ProfileIdentifier, t: ProfileTransacti
 export async function createRelationDB(
     record: Omit<RelationRecord, 'network'>,
     t: RelationTransaction<'readwrite'>,
-    sendEvent = true,
+    silent = false,
 ): Promise<void> {
     await t.objectStore('relations').add(relationRecordToDB(record))
-    if (sendEvent)
+    if (!silent)
         MaskMessages.events.relationsChanged.sendToAll([{ of: record.profile, reason: 'update', favor: record.favor }])
 }
 
@@ -532,12 +557,12 @@ export async function queryRelationsPagedDB(
 
     const data: RelationRecord[] = []
 
-    for await (const cursor of t.objectStore('relations').index('linked, profile, favor').iterate()) {
+    for await (const cursor of t.objectStore('relations').index('favor, profile, linked').iterate()) {
         if (cursor.value.linked !== linked.toText()) continue
         if (cursor.value.network !== options.network) continue
 
         if (firstRecord && options.after && options.after.profile.toText() !== cursor?.value.profile) {
-            cursor.continue([options.after.linked.toText(), options.after.profile.toText(), options.after.favor])
+            cursor.continue([options.after.favor, options.after.profile.toText(), options.after.linked.toText()])
             firstRecord = false
             continue
         }
@@ -563,10 +588,12 @@ export async function queryRelationsPagedDB(
  * Update a relation
  * @param updating
  * @param t
+ * @param silent
  */
 export async function updateRelationDB(
     updating: Omit<RelationRecord, 'network'>,
     t: RelationTransaction<'readwrite'>,
+    silent = false,
 ): Promise<void> {
     const old = await t
         .objectStore('relations')
@@ -580,7 +607,11 @@ export async function updateRelationDB(
     })
 
     await t.objectStore('relations').put(nextRecord)
-    MaskMessages.events.relationsChanged.sendToAll([{ of: updating.profile, favor: updating.favor, reason: 'update' }])
+    if (!silent) {
+        MaskMessages.events.relationsChanged.sendToAll([
+            { of: updating.profile, favor: updating.favor, reason: 'update' },
+        ])
+    }
 }
 
 //#endregion
@@ -627,7 +658,7 @@ export interface RelationRecord {
     profile: ProfileIdentifier
     linked: PersonaIdentifier
     network: string
-    favor: 0 | 1
+    favor: RelationFavor
 }
 
 type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey'> & {
@@ -674,6 +705,7 @@ export interface PersonaDB extends DBSchema {
         value: RelationRecordDB
         indexes: {
             'linked, profile, favor': [string, string, number]
+            'favor, profile, linked': [number, string, string]
         }
     }
 }

@@ -10,6 +10,10 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { sortBy } from 'lodash-es'
 import { useDashboardI18N } from '../../../../locales'
 import { Messages } from '../../../../API'
+import { useContainer } from 'unstated-next'
+import { PersonaContext } from '../../hooks/usePersonaContext'
+import { useUpdateEffect } from 'react-use'
+import { RelationFavor } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -53,6 +57,7 @@ const PageSize = 20
 
 export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
     const [page, setPage] = useState(0)
+    const { currentPersona } = useContainer(PersonaContext)
 
     const { value, error, loading, retry } = useContacts(network, page, PageSize)
 
@@ -60,7 +65,7 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
         if (!value) return []
         return sortBy(
             value.map<RelationProfile>((profile) => ({
-                favorite: profile.favor,
+                favorite: profile.favor === RelationFavor.COLLECTED,
                 name: profile.nickname || profile.identifier.userId || '',
                 fingerprint: profile.linkedPersona?.fingerprint,
                 identifier: profile.identifier,
@@ -78,6 +83,10 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
         return Messages.events.relationsChanged.on(retry)
     }, [retry])
 
+    useUpdateEffect(() => {
+        setPage(0)
+    }, [currentPersona])
+
     return (
         <ContactsTableUI
             isEmpty={!!error || !dataSource.length}
@@ -87,6 +96,7 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
             page={page}
             onPageChange={setPage}
             showPagination={!loading && !error && !!value?.length}
+            onReset={() => setPage(0)}
         />
     )
 })
@@ -98,10 +108,11 @@ export interface ContactsTableUIProps extends ContactsTableProps {
     page: number
     onPageChange: Dispatch<SetStateAction<number>>
     showPagination: boolean
+    onReset: () => void
 }
 
 export const ContactsTableUI = memo<ContactsTableUIProps>(
-    ({ showPagination, page, onPageChange, network, dataSource, isEmpty, isLoading }) => {
+    ({ showPagination, page, onPageChange, network, dataSource, isEmpty, isLoading, onReset }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
         return (
@@ -121,6 +132,7 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
                                             contact={item}
                                             index={page * PageSize + index + 1}
                                             network={network}
+                                            onReset={onReset}
                                         />
                                     ))}
                                 </TableBody>
