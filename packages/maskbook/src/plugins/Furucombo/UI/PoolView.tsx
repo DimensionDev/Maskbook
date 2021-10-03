@@ -151,21 +151,17 @@ export function PoolView(props: PoolProps) {
                         </Grid>
                         <Grid container item direction="row" justifyContent="center">
                             {angels.map((angel: Angel) => {
-                                if (angel.rewardToken.symbol === 'WMATIC')
-                                    return (
-                                        <Grid item>
-                                            <WmaticIcon />
-                                        </Grid>
-                                    )
-                                if (angel.rewardToken.symbol === 'COMBO')
-                                    return (
-                                        <Grid item>
-                                            <FurucomboIcon className={classes.icons} />
-                                        </Grid>
+                                const icon =
+                                    angel.rewardToken.symbol === 'WMATIC' ? (
+                                        <WmaticIcon />
+                                    ) : angel.rewardToken.symbol === 'COMBO' ? (
+                                        <FurucomboIcon className={classes.icons} />
+                                    ) : (
+                                        <UnknownIcon className={classes.unknown} />
                                     )
                                 return (
-                                    <Grid item>
-                                        <UnknownIcon className={classes.unknown} />
+                                    <Grid item key={angel.address}>
+                                        {icon}
                                     </Grid>
                                 )
                             })}

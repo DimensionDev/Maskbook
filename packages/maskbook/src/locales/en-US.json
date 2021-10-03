@@ -871,7 +871,7 @@
     "plugin_furucombo_pool_not_found": "Invalid pool address.",
     "plugin_furucombo_smt_wrong": "Something went wrong!",
     "plugin_furucombo_tablehead_pools": "Pools",
-    "plugin_furucombo_tablehead_action": "Action",
+    "plugin_furucombo_head_action": "Action",
     "popups_welcome": "Welcome",
     "popups_wallet_token": "Token",
     "popups_wallet_go_back": "Go back",

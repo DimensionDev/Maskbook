@@ -208,7 +208,7 @@ export function InvestmentsView(props: InvestmentsProps) {
                             </TableSortLabel>
                         </TableCell>
                         <TableCell className={classes.cell} key="action">
-                            {t('plugin_furucombo_tablehead_action')}
+                            {t('plugin_furucombo_head_action')}
                         </TableCell>
                     </TableRow>
                 </TableHead>
