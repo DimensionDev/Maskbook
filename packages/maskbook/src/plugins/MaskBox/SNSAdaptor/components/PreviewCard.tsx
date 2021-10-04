@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, Typography } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { makeStyles } from '@masknet/theme'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -11,6 +11,7 @@ import { Context } from '../../hooks/useContext'
 import { CardTab } from '../../type'
 import { ArticlesTab } from './ArticlesTab'
 import { DetailsTab } from './DetailsTab'
+import { Placeholder } from './Placeholder'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {
@@ -49,6 +50,10 @@ export function PreviewCard(props: PreviewCardProps) {
     const { boxId, setBoxId, boxState, boxInfoResult } = useContainer(Context)
     const { value: boxInfo, loading: loadingBoxInfo, error: errorBoxInfo } = boxInfoResult
 
+    if (loadingBoxInfo) return <Placeholder>Loading...</Placeholder>
+    if (errorBoxInfo) return <Placeholder>Something went wrong.</Placeholder>
+    if (!boxInfo) return <Placeholder>Failed to load Box.</Placeholder>
+
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -65,10 +70,6 @@ export function PreviewCard(props: PreviewCardProps) {
         state,
         classes: tabClasses,
     }
-
-    if (loadingBoxInfo) return <Typography color="textPrimary">Loading...</Typography>
-    if (errorBoxInfo) return <Typography color="textPrimary">Something went wrong.</Typography>
-    if (!boxInfo) return <Typography color="textPrimary">Failed to load Box.</Typography>
 
     return (
         <Box>
