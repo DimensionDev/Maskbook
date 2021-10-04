@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Box } from '@material-ui/core'
-import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { makeStyles } from '@masknet/theme'
+import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
@@ -47,7 +47,8 @@ export function PreviewCard(props: PreviewCardProps) {
     const state = useState(CardTab.Articles)
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
 
-    const { boxId, setBoxId, boxState, boxInfoResult } = useContainer(Context)
+    const { boxId, setBoxId, boxState, boxInfoResult, paymentTokenAmount, paymentTokenBalance, paymentTokenDetailed } =
+        useContainer(Context)
     const { value: boxInfo, loading: loadingBoxInfo, error: errorBoxInfo } = boxInfoResult
 
     if (loadingBoxInfo) return <Placeholder>Loading...</Placeholder>
@@ -73,7 +74,7 @@ export function PreviewCard(props: PreviewCardProps) {
 
     return (
         <Box>
-            <AbstractTab height="" {...tabProps}></AbstractTab>
+            <AbstractTab height="" {...tabProps} state={state} />
             <EthereumWalletConnectedBoundary ActionButtonProps={{ size: 'medium' }}>
                 <EthereumERC20TokenApprovedBoundary amount="0" ActionButtonProps={{ size: 'medium' }}>
                     <ActionButton size="medium" fullWidth variant="contained" onClick={() => setOpenDrawDialog(true)}>
@@ -81,7 +82,14 @@ export function PreviewCard(props: PreviewCardProps) {
                     </ActionButton>
                 </EthereumERC20TokenApprovedBoundary>
             </EthereumWalletConnectedBoundary>
-            <DrawDialog boxInfo={boxInfo} open={openDrawDialog} onClose={() => setOpenDrawDialog(false)} />
+            <DrawDialog
+                open={openDrawDialog}
+                boxInfo={boxInfo}
+                paymentTokenAmount={paymentTokenAmount}
+                paymentTokenBalance={paymentTokenBalance.value ?? '0'}
+                paymentTokenDetailed={paymentTokenDetailed.value ?? null}
+                onClose={() => setOpenDrawDialog(false)}
+            />
         </Box>
     )
 }

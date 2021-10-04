@@ -1,8 +1,8 @@
 import type { ERC721TokenDetailed } from '@masknet/web3-shared'
 
 export enum CardTab {
-    Articles = 1,
-    Details = 2,
+    Articles = 0,
+    Details = 1,
 }
 
 export enum BoxState {
@@ -34,7 +34,7 @@ export interface BoxInfo {
     creator: string
     name: string
     sellAll: boolean
-    personalLimit: string
+    personalLimit: number
     payments: PaymentInfo[]
     remaining: string
     total: string

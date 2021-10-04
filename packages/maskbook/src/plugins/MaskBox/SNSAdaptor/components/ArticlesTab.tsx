@@ -17,6 +17,8 @@ const useStyles = makeStyles()((theme) => ({
     hero: {
         display: 'block',
         width: '100%',
+        maxHeight: 360,
+        minHeight: 360,
     },
     name: {
         whiteSpace: 'nowrap',
