@@ -5,7 +5,7 @@ import { useI18N } from '../../../utils'
 import { BASE_URL } from '../constants'
 import { UnknownIcon } from '../resources/UnknownIcon'
 import { WmaticIcon } from '../resources/wmatic'
-import type { Angel, Investable } from '../types'
+import type { Angel, Investable, Token } from '../types'
 import { apyFormatter, liquidityFormatter } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({
@@ -95,6 +95,13 @@ export function PoolView(props: PoolProps) {
         angels,
     } = props.investable
 
+    const displayRewardIcon = (rewardToken: Token) => {
+        if (rewardToken.symbol === 'WMATIC') return <WmaticIcon />
+        if (rewardToken.symbol === 'COMBO') return <FurucomboIcon className={classes.icons} />
+
+        return <UnknownIcon className={classes.unknown} />
+    }
+
     return (
         <div className={classes.root}>
             <Container>
@@ -150,21 +157,11 @@ export function PoolView(props: PoolProps) {
                             <Typography className={classes.title}>{t('plugin_furucombo_rewards')}</Typography>
                         </Grid>
                         <Grid container item direction="row" justifyContent="center">
-                            {angels.map((angel: Angel) => {
-                                const icon =
-                                    angel.rewardToken.symbol === 'WMATIC' ? (
-                                        <WmaticIcon />
-                                    ) : angel.rewardToken.symbol === 'COMBO' ? (
-                                        <FurucomboIcon className={classes.icons} />
-                                    ) : (
-                                        <UnknownIcon className={classes.unknown} />
-                                    )
-                                return (
-                                    <Grid item key={angel.address}>
-                                        {icon}
-                                    </Grid>
-                                )
-                            })}
+                            {angels.map((angel: Angel) => (
+                                <Grid item key={angel.address}>
+                                    {displayRewardIcon(angel.rewardToken)}
+                                </Grid>
+                            ))}
                         </Grid>
                     </Grid>
                 ) : null}
