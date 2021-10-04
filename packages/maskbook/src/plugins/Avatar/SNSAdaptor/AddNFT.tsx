@@ -2,10 +2,10 @@ import { makeStyles } from '@masknet/theme'
 import { ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared'
 import { Button, DialogContent, Typography } from '@material-ui/core'
 import { useCallback, useState } from 'react'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { InputBox } from '../../../extension/options-page/DashboardComponents/InputBox'
 import { useI18N } from '../../../utils'
-import { InjectedDialog } from '../../shared/InjectedDialog'
-import { createNFT } from './utils'
+import { createNFT } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},

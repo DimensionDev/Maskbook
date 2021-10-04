@@ -1,6 +1,6 @@
-import type { ProfileIdentifier } from '@masknet/shared-base'
-import type { Persona } from '../../../../database'
-import { useMyPersonas } from '../../../DataSource/useMyPersonas'
+import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
+import type { Persona } from '../../../database'
+import type { ProfileIdentifier } from '../../../database/type'
 import { getProfileIdentifierFromPersona } from '../utils/getProfileIdentifierFromPersona'
 
 export function useCurrentProfileIdentifier(): { userId?: string; identifier?: ProfileIdentifier } | undefined {

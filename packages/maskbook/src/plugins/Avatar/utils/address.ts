@@ -1,6 +1,6 @@
 import { ECKeyIdentifier } from '@masknet/shared-base'
 import { EthereumAddress } from 'wallet.ts'
-import { compressSecp256k1Point, decompressSecp256k1Key } from '../../../../utils'
+import { compressSecp256k1Point, decompressSecp256k1Key } from '../../../utils'
 import { ec as EC } from 'elliptic'
 
 export async function ethAddrFrom(identifier: string) {

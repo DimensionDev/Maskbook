@@ -3,15 +3,15 @@ import { searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
-import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 
-import { getAvatarId } from '../../utils/user'
-import { NFTBadge } from '../../../../components/InjectedComponents/NFT/NFTBadge'
-import { useNFTAvatar } from '../../../../components/InjectedComponents/NFT/hooks'
-import type { AvatarMetaDB } from '../../../../components/InjectedComponents/NFT/types'
-import { saveNFTAvatar } from '../../../../components/InjectedComponents/NFT/gun'
-import { useWallet } from '@masknet/web3-shared'
 import { useSnackbar } from '@masknet/theme'
+import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
+import { useWallet, useWeb3 } from '@masknet/web3-shared'
+import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
+import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
+import { getAvatarId } from '../../utils/user'
+import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
+import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 
 const RETRIES_NUMBER = 10
 
@@ -46,6 +46,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const { classes } = useStyles()
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet()
+    const web3 = useWeb3()
 
     const _avatar = useNFTAvatar(identity.identifier.userId)
     const { enqueueSnackbar } = useSnackbar()
@@ -83,7 +84,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         if (!NFTEvent) return
         if (!wallet) return
 
-        saveNFTAvatar(wallet.address, NFTEvent as AvatarMetaDB)
+        PluginNFTAvatarRPC.saveNFTAvatar(web3, wallet.address, NFTEvent as AvatarMetaDB)
             .then((avatar: AvatarMetaDB | undefined) => {
                 if (!avatar) throw new Error('Not Found')
                 setAvatar(avatar)
@@ -92,7 +93,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                 enqueueSnackbar(error.message, { variant: 'error' })
             })
         setAvatarId(NFTEvent.avatarId)
-    }, [NFTEvent, saveNFTAvatar])
+    }, [NFTEvent, PluginNFTAvatarRPC])
 
     useEffect(() => {
         setAvatar(_avatar)

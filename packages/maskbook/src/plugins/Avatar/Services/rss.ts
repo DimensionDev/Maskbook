@@ -1,8 +1,8 @@
 import RSS3 from 'rss3-next'
 import type Web3 from 'web3'
 import { hexToString } from 'web3-utils'
-import Services from '../../../../extension/service'
-import { AvatarMetaDB, RSS3_APP } from '../types'
+import { RSS3_APP } from '../constants'
+import type { AvatarMetaDB } from '../types'
 
 interface NFTRSSNode {
     address: string
@@ -11,7 +11,7 @@ interface NFTRSSNode {
     nft: AvatarMetaDB
 }
 
-export async function createRSS(address: string) {
+export async function createRSS(address: string, web3: Web3) {
     return new RSS3({
         endpoint: RSS3_APP,
         address,
@@ -20,7 +20,7 @@ export async function createRSS(address: string) {
 
 export async function getNFTAvatarFromRSS(address: string, web3: Web3) {
     console.log('addr:', address)
-    const rss = await createRSS(address)
+    const rss = await createRSS(address, web3)
     if (!rss) return
     const file = await rss.files.get(rss.account.address)
     console.log(file)
@@ -35,13 +35,8 @@ export async function getNFTAvatarFromRSS(address: string, web3: Web3) {
     return data.nft
 }
 
-export async function saveNFTAvatarFromRSS(address: string, nft: AvatarMetaDB) {
-    const result = await Services.Identity.signWithPersona({ message: address, method: 'eth' })
-
-    console.log('address:', address)
-    console.log('sign:', result.signature.signature)
-
-    const rss = await createRSS(address)
+export async function saveNFTAvatarFromRSS(web3: Web3, address: string, nft: AvatarMetaDB) {
+    const rss = await createRSS(address, web3)
     if (!rss) return
 
     const file = await rss.files.get(rss.account.address)
@@ -51,8 +46,6 @@ export async function saveNFTAvatarFromRSS(address: string, nft: AvatarMetaDB) {
 
     const f = Object.assign(file, {
         _nft: {
-            signature: result.signature.signature,
-            messagehex: result.messageHex,
             nft: nft,
         },
     })

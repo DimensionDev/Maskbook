@@ -377,7 +377,7 @@ importers:
       react-virtualized-auto-sizer: ^1.0.6
       react-window: ^1.8.6
       remarkable: ^2.0.1
-      rss3-next: ^0.6.15
+      rss3-next: ^0.6.17
       safari-14-idb-fix: ^2.0.3
       scrypt-js: ^3.0.1
       socket.io-client: 2.4.0
@@ -511,7 +511,7 @@ importers:
       react-virtualized-auto-sizer: 1.0.6_f991c289939c8299bed5e4a6a5a79a62
       react-window: 1.8.6_f991c289939c8299bed5e4a6a5a79a62
       remarkable: 2.0.1
-      rss3-next: 0.6.15_typescript@4.4.3
+      rss3-next: 0.6.17_typescript@4.4.3
       safari-14-idb-fix: 2.0.3
       scrypt-js: 3.0.1
       socket.io-client: 2.4.0
@@ -21061,10 +21061,11 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /rss3-next/0.6.15_typescript@4.4.3:
-    resolution: {integrity: sha512-eZiZl0SVuEyEXBmbQ7qednld3H/mDkx9b/AJpmAPtHTz70OOVIOX3bY/DSrdA+8q/UIMzRVBHPIymL+NzL9pTA==}
+  /rss3-next/0.6.17_typescript@4.4.3:
+    resolution: {integrity: sha512-UEVpr9somInaz8kreZjUjVmo0cay/Q24CQSo8QJogChlphUpFyMAJSXtC7xS2p67ZSXL9CWPtzoPZtQ4wh0hBg==}
     dependencies:
       axios: 0.21.1
+      buffer: 6.0.3
       crypto-js: 4.1.1
       ethers: 5.4.1
       js-cookie: 3.0.1

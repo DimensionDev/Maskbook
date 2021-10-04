@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { useNFTAvatar } from './hooks'
+import { useNFTAvatar } from '../hooks'
 import { NFTBadge } from './NFTBadge'
 
 const useStyles = makeStyles()((theme) => ({

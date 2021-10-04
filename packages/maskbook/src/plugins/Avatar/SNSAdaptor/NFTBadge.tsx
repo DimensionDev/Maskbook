@@ -5,8 +5,8 @@ import { resolveOpenSeaLink } from '@masknet/web3-shared'
 import { CircularProgress, Link, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
-import { useNFT } from './hooks'
-import type { AvatarMetaDB } from './types'
+import { useNFT } from '../hooks'
+import type { AvatarMetaDB } from '../types'
 
 const useStyles = makeStyles()({
     root: {

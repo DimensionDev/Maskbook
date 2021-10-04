@@ -2,7 +2,6 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useEffect, useState } from 'react'
 import { blobToArrayBuffer } from '@dimensiondev/kit'
-import { NFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
 import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
 import {
     searchAvatarOpenFileSelector,
@@ -12,9 +11,10 @@ import {
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
-import { toPng } from '../../../../components/InjectedComponents/NFT/utils'
+import { toPng } from '../../../../plugins/Avatar/utils'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared'
-import { useCurrentProfileIdentifier } from '../../../../components/InjectedComponents/NFT/hooks/useCrrentUserInfo'
+import { useCurrentProfileIdentifier } from '../../../../plugins/Avatar/hooks/useCrrentUserInfo'
+import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())

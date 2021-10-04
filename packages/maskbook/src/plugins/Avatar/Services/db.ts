@@ -1,5 +1,6 @@
 import { first } from 'lodash-es'
-import { AvatarMetaDB, NFT_AVATAR_JSON_SERVER } from '../types'
+import { NFT_AVATAR_JSON_SERVER } from '../constants'
+import type { AvatarMetaDB } from '../types'
 
 const EXPIRED_TIME = 5 * 60 * 1000
 const cache = new Map<'avatar', [number, Promise<AvatarMetaDB[]>]>()

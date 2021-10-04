@@ -18,8 +18,8 @@ export async function getNFTAvatar(userId: string, web3: Web3) {
     return result
 }
 
-export async function saveNFTAvatar(address: string, nft: AvatarMetaDB) {
+export async function saveNFTAvatar(web3: Web3, address: string, nft: AvatarMetaDB) {
     await setUserAddress(nft.userId, address)
-    const avatar = await saveNFTAvatarFromRSS(address, nft)
+    const avatar = await saveNFTAvatarFromRSS(web3, address, nft)
     return avatar
 }
