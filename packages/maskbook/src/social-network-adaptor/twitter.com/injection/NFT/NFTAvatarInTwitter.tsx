@@ -84,7 +84,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         if (!NFTEvent) return
         if (!wallet) return
 
-        PluginNFTAvatarRPC.saveNFTAvatar(web3, wallet.address, NFTEvent as AvatarMetaDB)
+        PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, NFTEvent as AvatarMetaDB)
             .then((avatar: AvatarMetaDB | undefined) => {
                 if (!avatar) throw new Error('Not Found')
                 setAvatar(avatar)

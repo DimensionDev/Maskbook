@@ -8,7 +8,7 @@ export function useNFTAvatar(userId: string) {
     return useAsync(async () => {
         if (!userId) return
         console.log(userId)
-        const avatar = await PluginNFTAvatarRPC.getNFTAvatar(userId, web3)
+        const avatar = await PluginNFTAvatarRPC.getNFTAvatar(userId)
         return avatar
     }, [userId, web3]).value
 }
