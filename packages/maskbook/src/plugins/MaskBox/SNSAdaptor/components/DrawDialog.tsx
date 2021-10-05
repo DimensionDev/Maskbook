@@ -1,10 +1,17 @@
-import { clamp } from 'lodash-es'
-import { useState, useCallback } from 'react'
-import { Box, Button, DialogContent, TextField, Typography } from '@material-ui/core'
+import { useCallback } from 'react'
+import BigNumber from 'bignumber.js'
 import { makeStyles } from '@masknet/theme'
 import { Add, Remove } from '@material-ui/icons'
-import { FormattedAddress, FormattedCurrency, ProviderIcon } from '@masknet/shared'
-import { formatBalance, useAccount, useProviderType, FungibleTokenDetailed, useChainId } from '@masknet/web3-shared'
+import { FormattedAddress, FormattedBalance, ProviderIcon } from '@masknet/shared'
+import { Box, Button, DialogContent, TextField, Typography } from '@material-ui/core'
+import {
+    formatBalance,
+    useAccount,
+    useProviderType,
+    useChainId,
+    useMaskBoxConstants,
+    EthereumTokenType,
+} from '@masknet/web3-shared'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -12,10 +19,13 @@ import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWal
 import type { BoxInfo } from '../../type'
 import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
+import { useContainer } from 'unstated-next'
+import { Context } from '../../hooks/useContext'
+import { EthereumERC721TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC721TokenApprovedBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
-        padding: theme.spacing(2.5),
+        padding: `${theme.spacing(2.5)} !important`,
     },
     caption: {
         textAlign: 'center',
@@ -76,34 +86,36 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DrawDialogProps {
+    boxInfo: BoxInfo
     open: boolean
     onClose: () => void
-    boxInfo: BoxInfo
-    paymentTokenAmount: string
-    paymentTokenBalance: string
-    paymentTokenDetailed: FungibleTokenDetailed | null
+    onSubmit: () => Promise<void>
 }
 
 export function DrawDialog(props: DrawDialogProps) {
     const { classes } = useStyles()
-    const { open, onClose, boxInfo, paymentTokenAmount, paymentTokenBalance, paymentTokenDetailed } = props
+    const { boxInfo, open, onClose, onSubmit } = props
+
+    const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
+
+    const {
+        contractDetailed,
+        paymentCount,
+        setPaymentCount,
+        paymentTokenPrice,
+        paymentTokenBalance,
+        paymentTokenDetailed,
+    } = useContainer(Context)
 
     const account = useAccount()
     const chainId = useChainId()
     const providerType = useProviderType()
-    const [count, setCount] = useState(1)
 
-    const onChange = useCallback(
-        (count: number) => {
-            setCount(clamp(count || 1, 1, boxInfo.personalLimit))
-        },
-        [boxInfo.personalLimit],
-    )
     const onCount = useCallback(
         (step: number) => {
-            onChange(count + step)
+            setPaymentCount(paymentCount + step)
         },
-        [count, onChange],
+        [paymentCount],
     )
 
     return (
@@ -113,7 +125,12 @@ export function DrawDialog(props: DrawDialogProps) {
                     <Box className={classes.caption}>
                         <Typography color="textPrimary">
                             <span className={classes.value}>
-                                {<FormattedCurrency symbol={''} value={paymentTokenAmount} />}
+                                <FormattedBalance
+                                    symbol={''}
+                                    value={new BigNumber(paymentTokenPrice).multipliedBy(paymentCount)}
+                                    decimals={paymentTokenDetailed?.decimals ?? 0}
+                                    significant={6}
+                                />
                             </span>
                             <span>{paymentTokenDetailed?.symbol}</span>
                         </Typography>
@@ -122,8 +139,8 @@ export function DrawDialog(props: DrawDialogProps) {
                                 <span>≈</span>
                                 <TokenPrice
                                     chainId={chainId}
+                                    amount={paymentTokenPrice}
                                     contractAddress={paymentTokenDetailed.address}
-                                    amount={paymentTokenAmount}
                                 />
                             </Typography>
                         ) : null}
@@ -138,7 +155,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                     className={classes.field}
                                     variant="outlined"
                                     color="inherit"
-                                    disabled={count <= 1}
+                                    disabled={paymentCount <= 1}
                                     onClick={() => onCount(-1)}>
                                     <Remove color="inherit" />
                                 </Button>
@@ -147,8 +164,8 @@ export function DrawDialog(props: DrawDialogProps) {
                                     type="number"
                                     size="small"
                                     sx={{ marginLeft: 1, marginRight: 1 }}
-                                    value={count}
-                                    onChange={(ev) => onChange(Number.parseInt(ev.target.value, 10))}
+                                    value={paymentCount}
+                                    onChange={(ev) => setPaymentCount(Number.parseInt(ev.target.value, 10))}
                                     InputProps={{
                                         classes: {
                                             root: classes.field,
@@ -172,7 +189,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                     className={classes.field}
                                     variant="outlined"
                                     color="inherit"
-                                    disabled={count >= boxInfo.personalLimit}
+                                    disabled={paymentCount >= boxInfo.personalLimit}
                                     onClick={() => onCount(1)}>
                                     <Add color="inherit" />
                                 </Button>
@@ -184,6 +201,9 @@ export function DrawDialog(props: DrawDialogProps) {
                             </Typography>
                             <Typography className={classes.content} color="textPrimary">
                                 {boxInfo.personalLimit}
+                                {boxInfo.tokenIdsPurchased.length
+                                    ? ` (${boxInfo.personalLimit - boxInfo.tokenIdsPurchased.length} remaining)`
+                                    : ''}
                             </Typography>
                         </Box>
                         <Box className={classes.section} display="flex" alignItems="center">
@@ -203,7 +223,8 @@ export function DrawDialog(props: DrawDialogProps) {
                             </Typography>
                             <Box className={classes.content}>
                                 <Typography color="textPrimary">
-                                    {(formatBalance(paymentTokenBalance), 6)} {paymentTokenDetailed?.symbol}
+                                    {formatBalance(paymentTokenBalance, paymentTokenDetailed?.decimals ?? 0, 6)}{' '}
+                                    {paymentTokenDetailed?.symbol}
                                 </Typography>
                             </Box>
                         </Box>
@@ -219,11 +240,30 @@ export function DrawDialog(props: DrawDialogProps) {
                 </Box>
 
                 <EthereumWalletConnectedBoundary>
-                    <EthereumERC20TokenApprovedBoundary amount="0">
-                        <ActionButton size="medium" fullWidth variant="contained">
-                            Draw
-                        </ActionButton>
-                    </EthereumERC20TokenApprovedBoundary>
+                    <EthereumERC721TokenApprovedBoundary
+                        owner={account}
+                        contractDetailed={contractDetailed}
+                        operator={MASK_BOX_CONTRACT_ADDRESS}
+                        ActionButtonProps={{ size: 'medium', sx: { marginTop: 2 } }}>
+                        <EthereumERC20TokenApprovedBoundary
+                            amount={new BigNumber(paymentTokenPrice).multipliedBy(paymentCount).toFixed()}
+                            spender={MASK_BOX_CONTRACT_ADDRESS}
+                            token={
+                                paymentTokenDetailed?.type === EthereumTokenType.ERC20
+                                    ? paymentTokenDetailed
+                                    : undefined
+                            }
+                            ActionButtonProps={{ size: 'medium', sx: { marginTop: 2 } }}>
+                            <ActionButton
+                                size="medium"
+                                fullWidth
+                                variant="contained"
+                                sx={{ marginTop: 2 }}
+                                onClick={onSubmit}>
+                                Draw
+                            </ActionButton>
+                        </EthereumERC20TokenApprovedBoundary>
+                    </EthereumERC721TokenApprovedBoundary>
                 </EthereumWalletConnectedBoundary>
             </DialogContent>
         </InjectedDialog>

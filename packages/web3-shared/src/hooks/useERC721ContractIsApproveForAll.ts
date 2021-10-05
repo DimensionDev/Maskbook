@@ -3,7 +3,7 @@ import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { safeNonPayableTransactionCall } from '../utils'
 
 /**
- * @param contractAddress Nft contract address.
+ * @param contractAddress NFT contract address.
  * @param owner The address that owns the NFTs.
  * @param operator The address that acts on behalf of the owner.
  * @return True if `operator` is an approved operator for `owner`, false otherwise.

@@ -1,4 +1,3 @@
-import type { ArticleTabProps } from '../../../Collectible/SNSAdaptor/ArticleTab'
 import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import type { BoxInfo } from '../../type'
@@ -38,10 +37,10 @@ export function DetailsTab(props: DetailsTabProps) {
     const { boxInfo } = props
     const { classes } = useStyles()
 
-    const deifinitions = [
+    const definitions = [
         {
             title: 'Rule Introduction',
-            content: `Life is full of surprises in all forms of vibrant and luscious splendours. This year My Neighbour Alice brings an NFT festival referencing the real-world Midsummer celebrations during the summer solstice in Scandinavia. This Special Mystery Basket is hand-picked by Alice for you and your loved ones to celebrate the hottest season of the year - Midsummer. The Midsummer with Alice is a time of merriment and festivities. Festival bonfires are lit around all of Alice's farms and villages to celebrate this special occasion.`,
+            content: `A novel is a relatively long work of narrative fiction, typically written in prose and published as a book. The present English word for a long work of prose fiction derives from the Italian: novella for "new", "news", or "short story of something new", itself from the Latin: novella, a singular noun use of the neuter plural of novellus, diminutive of novus, meaning "new".`,
         },
     ]
 
@@ -52,7 +51,7 @@ export function DetailsTab(props: DetailsTabProps) {
                     Draw Probability
                 </Typography>
             </section>
-            {deifinitions.map((x, i) => (
+            {definitions.map((x, i) => (
                 <section className={classes.section} key={i}>
                     <Typography className={classes.title} color="textPrimary" variant="h3">
                         {x.title}

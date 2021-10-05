@@ -9,7 +9,7 @@ import { PreviewCard } from './components/PreviewCard'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { Context } from '../hooks/useContext'
 
-const isMaskBox = (x: string) => /^https:\/\/box\.mask\.io/.test(x)
+const isMaskBox = (x: string) => x.startsWith('https://box.mask.io')
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -34,7 +34,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
 export default sns
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
-    const [, chainId, boxId] = props.url.match(/(\d+)\/(0x\w+)/) ?? []
+    const [, chainId, boxId] = props.url.match(/(\d+)\/(\d+)/) ?? []
 
     if (!chainId || !boxId) return null
 

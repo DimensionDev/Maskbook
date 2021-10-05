@@ -1,106 +1,206 @@
-import { first } from 'lodash-es'
+import { useEffect, useMemo, useState, useCallback } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { clamp, first } from 'lodash-es'
+import BigNumber from 'bignumber.js'
+import { createContainer } from 'unstated-next'
+import { unreachable } from '@dimensiondev/kit'
 import {
     ChainId,
     isSameAddress,
     useERC20TokenBalance,
     useNativeTokenBalance,
-    useNativeTokenDetailed,
-    useERC20TokenDetailed,
     useTokenConstants,
+    useFungibleTokensDetailed,
+    EthereumTokenType,
+    useChainId,
+    useAccount,
+    useERC721ContractDetailed,
 } from '@masknet/web3-shared'
-import BigNumber from 'bignumber.js'
-import { useMemo, useState } from 'react'
-import { useAsyncRetry } from 'react-use'
-import { createContainer } from 'unstated-next'
 import { BoxInfo, BoxState } from '../type'
+import { useMaskBoxInfo } from './useMaskBoxInfo'
+import { useMaskBoxCreationEvent } from './useMaskBoxCreationEvent'
+import { useMaskBoxTokensForSale } from './useMaskBoxTokensForSale'
+import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
+import { useHeartBit } from './useHeartBit'
+import { formatCountdown } from '../helpers/formatCountdown'
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 function useContext(initialState?: { boxId: string }) {
-    const now = new Date()
+    const heartBit = useHeartBit()
+
+    const account = useAccount()
+    const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
 
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
 
-    //#region the payment token balance
-    const paymentNativeTokenBalance = useNativeTokenBalance()
-    const paymentERC20TokenBalance = useERC20TokenBalance(
-        isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS) ? '' : paymentTokenAddress,
+    //#region the box info
+    const { value: maskBoxInfo = null } = useMaskBoxInfo(boxId)
+    const { value: maskBoxCreationEvent = null } = useMaskBoxCreationEvent(
+        maskBoxInfo?.creator ?? '',
+        maskBoxInfo?.nft_address ?? '',
+        boxId,
     )
-    //#endregion
-
-    //#region the payment token detailed
-    const paymentNativeTokenDetailed = useNativeTokenDetailed()
-    const paymentERC20TokenDetailed = useERC20TokenDetailed(
-        isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS) ? '' : paymentTokenAddress,
+    const { value: paymentTokens = [] } = useFungibleTokensDetailed(
+        maskBoxInfo?.payment?.map(([address]) => {
+            return {
+                type: isSameAddress(address, ZERO_ADDRESS) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                address,
+            }
+        }) ?? [],
+        chainId,
     )
-    //#endregion
+    const { value: allTokens = [] } = useMaskBoxTokensForSale(boxId)
+    const { value: purchasedTokens = [] } = useMaskBoxPurchasedTokens(boxId, account)
 
-    const boxInfoResult = useAsyncRetry<BoxInfo>(async () => {
+    const boxInfo = useAsyncRetry<BoxInfo | null>(async () => {
+        if (!maskBoxInfo || !maskBoxCreationEvent) return null
         const info: BoxInfo = {
             boxId,
-            creator: '',
-            name: 'Big Fat Sexy Mystery Box.',
-            sellAll: false,
-            personalLimit: 5,
-            remaining: '10',
-            total: '100',
-            startAt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1),
-            endAt: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1),
-            tokenIds: [],
-            tokenIdsPurchased: [],
-            payments: [
-                {
-                    price: '10',
-                    receivableAmount: '10',
-                    tokenAddress: ZERO_ADDRESS,
-                },
-            ],
-            tokenAddress: '',
+            creator: maskBoxInfo.creator,
+            name: maskBoxInfo.name,
+            sellAll: maskBoxCreationEvent.returnValues.sell_all,
+            personalLimit: Number.parseInt(maskBoxInfo.personal_limit, 10),
+            remaining: maskBoxInfo.remaining,
+            startAt: new Date(Number.parseInt(maskBoxCreationEvent.returnValues.start_time, 10) * 1000),
+            endAt: new Date(Number.parseInt(maskBoxCreationEvent.returnValues.end_time, 10) * 1000),
+            total: new BigNumber(allTokens?.length ?? 0).toFixed(),
+            tokenIds: allTokens,
+            tokenIdsPurchased: purchasedTokens,
+            payments: paymentTokens.map((token, i) => {
+                return {
+                    token: token,
+                    price: maskBoxInfo.payment[i][1],
+                    receivableAmount: maskBoxInfo.payment[i][2],
+                }
+            }),
+            tokenAddress: maskBoxInfo.nft_address,
             heroImageURL:
                 'https://lh3.googleusercontent.com/J734DD96jgdCHK95vKF1lb1sGn2qyxRIo2wF7pDYN3rEoQqZSBTHH2tRecaxgFCux-oIZcJAZSsVYY9xaGhSIZwpkQlh3R6YHf8w=w600',
-            qualificationAddress: ZERO_ADDRESS,
+            qualificationAddress: maskBoxInfo.qualification,
         }
-        if (paymentTokenAddress === '') setPaymentTokenAddress(first(info.payments)?.tokenAddress ?? '')
         return Promise.resolve(info)
-    }, [boxId])
+    }, [
+        allTokens.join(),
+        purchasedTokens.join(),
+        paymentTokens?.map((x) => x.address).join(),
+        maskBoxInfo,
+        maskBoxCreationEvent,
+    ])
 
     const boxState = useMemo(() => {
-        if (boxInfoResult.error) return BoxState.ERROR
-        const { value: info, loading } = boxInfoResult
+        const { value: info, loading, error } = boxInfo
         if (loading) return BoxState.UNKNOWN
-        if (!info) return BoxState.ERROR
+        if (error || !info) return BoxState.ERROR
         const now = new Date()
         if (new BigNumber(info.tokenIdsPurchased.length).isGreaterThanOrEqualTo(info.personalLimit))
             return BoxState.DRAWED_OUT
         if (new BigNumber(info.remaining).isLessThanOrEqualTo(0)) return BoxState.SOLD_OUT
         if (info.startAt > now) return BoxState.NOT_READY
-        if (info.endAt < now) return BoxState.EXPIRED
+        if (info.endAt < now || maskBoxInfo?.expired) return BoxState.EXPIRED
         return BoxState.READY
-    }, [boxInfoResult])
+    }, [boxInfo, maskBoxInfo, heartBit])
+
+    const boxStateMessage = useMemo(() => {
+        switch (boxState) {
+            case BoxState.UNKNOWN:
+                return 'Loading...'
+            case BoxState.READY:
+                return 'Draw'
+            case BoxState.EXPIRED:
+                return 'Ended'
+            case BoxState.NOT_READY:
+                const now = Date.now()
+                const startAt = boxInfo?.value?.startAt.getTime() ?? 0
+                if (startAt <= now) return 'Loading...'
+                const countdown = formatCountdown(startAt - now)
+                return countdown ? `Start sale in ${countdown}` : 'Loading...'
+            case BoxState.SOLD_OUT:
+                return 'Sold Out'
+            case BoxState.DRAWED_OUT:
+                return 'Drawed Out'
+            case BoxState.ERROR:
+                return 'Failed to load box info.'
+            default:
+                unreachable(boxState)
+        }
+    }, [boxState, heartBit])
+    //#endregion
+
+    //#region the erc721 contract detailed
+    const { value: contractDetailed } = useERC721ContractDetailed(maskBoxInfo?.nft_address)
+    //#endregion
+
+    //#region the payment count
+    const [paymentCount, setPaymentCount] = useState(1)
+    const setPaymentCount_ = useCallback(
+        (count: number) => {
+            setPaymentCount(clamp(count || 1, 1, boxInfo.value?.personalLimit ?? 1))
+        },
+        [boxInfo.value?.personalLimit],
+    )
+    //#endregion
+
+    //#region the payment token
+    const { value: paymentNativeTokenBalance = '0' } = useNativeTokenBalance()
+    const { value: paymentERC20TokenBalance = '0' } = useERC20TokenBalance(
+        isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS) ? '' : paymentTokenAddress,
+    )
+    const paymentTokenInfo = boxInfo.value?.payments.find((x) => isSameAddress(x.token.address, paymentTokenAddress))
+
+    useEffect(() => {
+        const firstPaymentTokenAddress = first(boxInfo.value?.payments)?.token.address
+        if (paymentTokenAddress === '' && firstPaymentTokenAddress) setPaymentTokenAddress(firstPaymentTokenAddress)
+    }, [paymentTokenAddress, boxInfo.value?.payments.map((x) => x.token.address).join()])
+    //#endregion
+
+    console.log({
+        allTokens,
+        purchasedTokens,
+        maskBoxInfo,
+        maskBoxCreationEvent,
+        boxInfo,
+        boxState,
+        paymentNativeTokenBalance,
+        paymentERC20TokenBalance,
+    })
 
     return {
+        // box id
         boxId,
         setBoxId,
 
-        paymentTokenAmount: '10000',
-        paymentTokenAddress,
+        // box info
+        boxInfo,
+
+        // box state
+        boxState,
+        boxStateMessage,
+
+        // erc721 contract detailed
+        contractDetailed,
+
+        // payment count
+        paymentCount,
+        setPaymentCount: setPaymentCount_,
+
+        // payment address
+        paymentTokenAddress: paymentTokenAddress || (first(boxInfo.value?.payments)?.token.address ?? ''),
         setPaymentTokenAddress: (address: string) => {
-            if (boxInfoResult.value?.payments.some((x) => isSameAddress(x.tokenAddress, address)))
+            if (boxInfo.value?.payments.some((x) => isSameAddress(x.token.address ?? '', address)))
                 setPaymentTokenAddress(address)
         },
 
+        // payment token
+        paymentTokenPrice: paymentTokenInfo?.price ?? '0',
+        paymentTokenIndex:
+            boxInfo.value?.payments.findIndex((x) => isSameAddress(x.token.address ?? '', paymentTokenAddress)) ?? -1,
         paymentTokenBalance: isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS)
             ? paymentNativeTokenBalance
             : paymentERC20TokenBalance,
-        paymentTokenDetailed: isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS)
-            ? paymentNativeTokenDetailed
-            : paymentERC20TokenDetailed,
-
-        boxState,
-
-        boxInfoResult,
+        paymentTokenDetailed: paymentTokenInfo?.token ?? null,
     }
 }
 

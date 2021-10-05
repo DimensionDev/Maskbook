@@ -67,7 +67,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
                 <TokenPrice chainId={chainId} contractAddress={nativeTokenDetailed?.address ?? ''} amount={gasFee} />
             </Typography>
             <IconButton size="small" onClick={onOpenGasSettingDialog}>
-                <Tune fontSize="small" />
+                <Tune fontSize="small" color="inherit" />
             </IconButton>
         </Box>
     )

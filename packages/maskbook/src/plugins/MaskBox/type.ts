@@ -1,4 +1,4 @@
-import type { ERC721TokenDetailed } from '@masknet/web3-shared'
+import type { ERC721TokenDetailed, FungibleTokenDetailed } from '@masknet/web3-shared'
 
 export enum CardTab {
     Articles = 0,
@@ -24,7 +24,7 @@ export interface PaymentOption {
 }
 
 export interface PaymentInfo {
-    tokenAddress: string
+    token: FungibleTokenDetailed
     price: string
     receivableAmount: string
 }

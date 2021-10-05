@@ -1,4 +1,3 @@
-import type { ArticleTabProps } from '../../../Collectible/SNSAdaptor/ArticleTab'
 import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import type { BoxInfo } from '../../type'
