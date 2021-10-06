@@ -13,7 +13,7 @@ import { useCurrentVisitingIdentity } from '../../../../components/DataSource/us
 import { getAvatarId } from '../../utils/user'
 import { toPNG } from '../../../../plugins/Avatar/utils'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared'
-import { useCurrentProfileIdentifier } from '../../../../plugins/Avatar/hooks/useCrrentUserInfo'
+import { useCurrentProfileIdentifier } from '../../../../plugins/Avatar/hooks/useCurrentUserInfo'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
