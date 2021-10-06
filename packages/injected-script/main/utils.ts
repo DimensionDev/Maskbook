@@ -1,4 +1,13 @@
-import { error, _XPCNativeWrapper, no_xray_Proxy, no_xray_DataTransfer } from './intrinsic'
+import { CustomEventId, encodeEvent, InternalEvents } from '../shared'
+import {
+    error,
+    _XPCNativeWrapper,
+    no_xray_Proxy,
+    no_xray_DataTransfer,
+    no_xray_CustomEvent,
+    apply,
+    dispatchEvent,
+} from './intrinsic'
 
 const { Blob: no_xray_Blob, File: no_xray_File } = globalThis.window
 const EventTargetPrototype = globalThis.window.EventTarget.prototype
@@ -83,4 +92,18 @@ export function constructXrayUnwrappedFilesFromUintLike(
         type: format,
     })
     return file
+}
+export async function handlePromise(id: number, promise: () => any) {
+    try {
+        const data = await promise()
+        sendEvent('resolvePromise', id, data)
+    } catch (error: unknown) {
+        // TODO:
+        sendEvent('rejectPromise', id, {})
+    }
+}
+
+export function sendEvent<T extends keyof InternalEvents>(event: T, ...args: InternalEvents[T]) {
+    const detail = encodeEvent(event, args)
+    apply(dispatchEvent, document, [new no_xray_CustomEvent(CustomEventId, { detail })])
 }

@@ -3,7 +3,7 @@ import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Portal, Typography, styled, InputAdornment, TextField, Theme, ThemeProvider } from '@mui/material'
 import classNames from 'classnames'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
-import { currentSetupGuideStatus } from '../../settings/settings'
+import { currentSetupGuideStatus, userGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { extendsTheme, useI18N } from '../../utils'
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
@@ -114,7 +114,8 @@ const usernameTheme = extendsTheme((theme: Theme) => {
 
 const FindUsername = () => {
     const { t } = useI18N()
-    const username = localStorage.getItem('username')
+    const ui = activatedSocialNetworkUI
+    const username = userGuideStatus[ui.networkIdentifier].value
 
     return (
         <>
@@ -161,7 +162,12 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const lastStep = useValueRef(lastStepRef)
 
     useEffect(() => {
-        setOpen(+lastStep === step)
+        const open = +lastStep === step
+        setOpen(open)
+
+        if (open) {
+            document.body.style.overflow = 'hidden'
+        }
     }, [lastStep])
 
     const resetOverflow = () => {
@@ -172,7 +178,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         setOpen(false)
         resetOverflow()
         currentSetupGuideStatus[ui.networkIdentifier].value = ''
-        localStorage.setItem('userGuideCompleted', 'true')
+        userGuideStatus[ui.networkIdentifier].value = 'completed'
     }
 
     const onNext = () => {
@@ -200,8 +206,6 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         }
 
         onResize()
-
-        document.body.style.overflow = 'hidden'
 
         window.addEventListener('resize', onResize)
 
