@@ -223,7 +223,8 @@
         "Swither",
         "nftscan",
         "apikey",
-        "tokenid"
+        "tokenid",
+        "NFTRSS"
     ],
     "ignoreWords": [
         "cryptopunks",
