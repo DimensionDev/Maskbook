@@ -47,7 +47,7 @@ export async function createNFT(address: string, tokenId: string) {
     return { account: asset.owner.address, token }
 }
 
-export function toPng(image: string) {
+export function toPNG(image: string) {
     return new Promise<Blob | null>((resolve, reject) => {
         const img = new Image()
         img.src = image
