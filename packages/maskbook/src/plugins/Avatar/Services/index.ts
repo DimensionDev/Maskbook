@@ -4,12 +4,8 @@ import { getUserAddress, setUserAddress } from './gun'
 import { getNFTAvatarFromRSS, saveNFTAvatarFromRSS } from './rss'
 
 export async function getNFTAvatar(userId: string) {
-    console.log(userId)
     const address = await getUserAddress(userId)
-    console.log(address)
     if (!address) return
-
-    console.log(address)
     let result = await getNFTAvatarFromRSS(address)
     if (!result) {
         result = await getNFTAvatarFromJSON(userId)
