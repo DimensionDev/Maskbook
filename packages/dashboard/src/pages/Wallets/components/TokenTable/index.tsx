@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
@@ -23,6 +23,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
+        minHeight: '100%',
     },
     header: {
         color: MaskColorVar.normalText,
@@ -110,10 +111,10 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
     return (
         <TableContainer className={classes.container}>
             {isLoading || isEmpty ? (
-                <Box flex={1}>
+                <>
                     {isLoading ? <LoadingPlaceholder /> : null}
                     {isEmpty ? <EmptyPlaceholder children={t.wallets_empty_tokens_tip()} /> : null}
-                </Box>
+                </>
             ) : (
                 <Table stickyHeader sx={{ padding: '0 44px' }}>
                     <TableHead>
