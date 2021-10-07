@@ -1,0 +1,30 @@
+{
+    "MARKET_ADDRESS": {
+        "Mainnet": "0xcDA72070E455bb31C7690a170224Ce43623d0B6f",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "0xeB1bD095061bbDb1aD065524628812cae63e4222",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    },
+    "NFT_ADDRESS": {
+        "Mainnet": "0x3b3ee1931dc30c1957379fac9aba94d1c48a5405",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "0x44458837ac4036337e5ce46ce28a744e05e02016",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    }
+}

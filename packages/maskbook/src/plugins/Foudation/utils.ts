@@ -1,17 +1,14 @@
 import { parseURL } from '../../utils/utils'
 import { foundationPathnameRegexMatcher } from './constants'
 import { ChainId } from '@masknet/web3-shared'
-import type { GraphData, Metadata, MostRecentAuction } from './types'
+import type { MostRecentAuction, GraphData, Metadata } from './types'
 import { querySubgaphs, getMetadata } from './apis'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
     const _url = new URL(url.startsWith(protocol) ? url : protocol + url)
     if (url.includes('foundation.app/@')) {
-        if (/-(\d+)|(\d+)$/.test(url)) {
-            return true
-        }
-        return false
+        return /-(\d+)|(\d+)$/.test(url)
     }
     return false
 }
@@ -50,13 +47,8 @@ export function sliceAddress(address: string | undefined) {
 }
 
 export function convertDate(unix: string) {
-    const date = new Date(Number(unix) * 1000)
-    const humanDateFormat = date.toLocaleString()
-    return humanDateFormat
-}
-
-export function shortAddress(address: string) {
-    return `${address.slice(0, 6)}...${address.slice(-4)}`
+    const date = new Date(Number.parseInt(unix, 10) * 1000)
+    return date.toLocaleString()
 }
 
 export function CurrentPrice(t: any, mostRecentAuction: MostRecentAuction) {
@@ -71,17 +63,14 @@ export function CurrentPrice(t: any, mostRecentAuction: MostRecentAuction) {
 
 export function getTokenId(link: string) {
     if (link.includes('/~/')) {
-        return link.split('/').at(-1)
+        return link.split('/')
     }
-    return link.split('-').at(-1)
+    return link.split('-')
 }
 
 export async function fetchApi(link: string, chainId: ChainId) {
     const tokenId = getTokenId(link)
-    if (tokenId) {
-        const graph: GraphData = await querySubgaphs(tokenId, chainId)
-        const metadata: Metadata = await getMetadata(graph.data.nfts[0].tokenIPFSPath.split('/')[0])
-        return { graph, metadata }
-    }
-    return
+    const graph: GraphData = await querySubgaphs(tokenId[tokenId.length - 1], chainId)
+    const metadata: Metadata = await getMetadata(graph.data.nfts[0].tokenIPFSPath.split('/')[0])
+    return { graph, metadata }
 }

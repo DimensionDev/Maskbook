@@ -2,7 +2,7 @@ import { Paper, Typography, Grid, Link, Box, Divider } from '@material-ui/core'
 import { useAccount } from '@masknet/web3-shared'
 import { useI18N } from '../../../utils'
 import type { NftHistory } from '../types'
-import { convertDate, shortAddress } from '../utils'
+import { convertDate } from '../utils'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 
 interface Props extends React.PropsWithChildren<{}> {
@@ -24,37 +24,37 @@ function FoudationProvenances(props: Props) {
     return (
         <Paper>
             {props.histories.map((history: NftHistory) => (
-                <>
-                    <Grid container spacing={0}>
-                        <Grid item xs={8}>
+                <Grid container spacing={0}>
+                    <Grid item xs={8}>
+                        <Box>
+                            <Typography variant="h6">
+                                {`${history.event} ${t('plugin_foundation_placed_by')}placed by `}
+                                <Link
+                                    href={`https://etherscan.io/address/${history.txOrigin.id}`}
+                                    color="inherit"
+                                    target="_blank">
+                                    {account === history.txOrigin.id ? (
+                                        <span>{t('plugin_foundation_you_address')}</span>
+                                    ) : (
+                                        <span>{`${history.txOrigin.id.slice(0, 6)}...${history.txOrigin.id.slice(
+                                            -4,
+                                        )}`}</span>
+                                    )}
+                                </Link>
+                            </Typography>
+                            <Typography variant="caption" display="block" gutterBottom>
+                                {convertDate(history.date)}
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={4}>
+                        {history.amountInETH && (
                             <Box>
-                                <Typography variant="h6">
-                                    {`${history.event} ${t('plugin_foundation_placed_by')}placed by `}
-                                    <Link
-                                        href={`https://etherscan.io/address/${history.txOrigin.id}`}
-                                        color="inherit"
-                                        target="_blank">
-                                        {account === history.txOrigin.id ? (
-                                            <span>{t('plugin_foundation_you_address')}</span>
-                                        ) : (
-                                            shortAddress(history.txOrigin.id)
-                                        )}
-                                    </Link>
-                                </Typography>
-                                <Typography variant="caption" display="block" gutterBottom>
-                                    {convertDate(history.date)}
+                                <Typography align="right" variant="h6">
+                                    &nbsp;ETH {history.amountInETH}
                                 </Typography>
                             </Box>
-                        </Grid>
-                        <Grid item xs={4}>
-                            {history.amountInETH && (
-                                <Box>
-                                    <Typography align="right" variant="h6">
-                                        &nbsp;ETH {history.amountInETH}
-                                    </Typography>
-                                </Box>
-                            )}
-                        </Grid>
+                        )}
                     </Grid>
                     <Divider>
                         <Link
@@ -64,7 +64,7 @@ function FoudationProvenances(props: Props) {
                             <OpenInNewIcon />
                         </Link>
                     </Divider>
-                </>
+                </Grid>
             ))}
         </Paper>
     )

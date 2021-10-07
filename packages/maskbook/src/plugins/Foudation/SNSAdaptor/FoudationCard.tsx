@@ -1,14 +1,12 @@
 import { fetchApi } from '../utils'
 import { makeStyles } from '@masknet/theme'
-import React, { useState, useEffect } from 'react'
-import type { nftData } from '../types'
 import type { ChainId } from '@masknet/web3-shared'
 import { Card, Link, Typography, CardActions } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 import FoudationContent from './FoudationContent'
 import FoundationPlaceBid from './FoundationPlaceBid'
 import FoudationHeader from './FoudationHeader'
-import { MaskTextIcon } from '../../../resources/MaskIcon'
+import { useAsync } from 'react-use'
 
 interface Props extends React.PropsWithChildren<{}> {
     link: string
@@ -39,6 +37,9 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'hidden',
             wordBreak: 'break-word',
         },
+        error: {
+            color: 'red',
+        },
         footnote: {
             fontSize: 10,
             marginRight: theme.spacing(1),
@@ -60,40 +61,77 @@ const useStyles = makeStyles()((theme) => {
 function FoudationCard(props: Props) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const [nftData, setNftData] = useState<nftData>()
-    useEffect(() => {
-        async function fetch() {
-            const result = await fetchApi(props.link, props.chainId)
-            if (result) {
-                setNftData({ graph: result.graph, metadata: result.metadata, link: props.link, chainId: props.chainId })
-            }
-        }
-        fetch()
-    }, [fetch])
-    if (nftData) {
-        return (
-            <Card className={classes.root} elevation={0}>
-                <FoudationHeader nftData={nftData} />
-                <FoudationContent nft={nftData.graph.data.nfts[0]} metadata={nftData.metadata} />
-                <FoundationPlaceBid nftData={nftData} />
-                <CardActions className={classes.footer}>
-                    <Typography className={classes.footnote} variant="subtitle2">
-                        <span>{t('plugin_powered_by')} </span>
-                        <Link
-                            className={classes.footLink}
-                            color="textSecondary"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="Mask"
-                            href="https://mask.io">
-                            <MaskTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
-                        </Link>
-                    </Typography>
-                </CardActions>
-            </Card>
-        )
-    }
-    return <></>
+    const nftData = useAsync(async () => {
+        const result = await fetchApi(props.link, props.chainId)
+        return result
+    }, [props.link, props.chainId])
+    return (
+        <Card className={classes.root} elevation={0}>
+            {nftData.loading ? (
+                <Typography variant="h6" align="center">
+                    Loading...
+                </Typography>
+            ) : nftData.error ? (
+                <Typography className={classes.error} variant="h6" align="center">
+                    Error: {nftData.error.message}
+                </Typography>
+            ) : typeof nftData.value === 'undefined' ? (
+                <Typography className={classes.error} variant="h6" align="center">
+                    {t('plugin_foundation_error_metadata')}
+                </Typography>
+            ) : (
+                <div>
+                    <FoudationHeader
+                        nft={nftData.value?.graph.data.nfts}
+                        metadata={nftData.value?.metadata}
+                        link={props.link}
+                    />
+                    <FoudationContent nft={nftData.value?.graph.data.nfts[0]} metadata={nftData.value?.metadata} />
+                    <FoundationPlaceBid
+                        chainId={props.chainId}
+                        nft={nftData.value?.graph.data.nfts[0]}
+                        metadata={nftData.value?.metadata}
+                    />
+                    <CardActions className={classes.footer}>
+                        <Typography className={classes.footnote} variant="subtitle2">
+                            <span>{t('plugin_powered_by')} </span>
+                            <Link
+                                className={classes.footLink}
+                                color="textSecondary"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title="Mask"
+                                href="https://mask.io"
+                            />
+                        </Typography>
+                    </CardActions>
+                </div>
+            )}
+        </Card>
+    )
+    // if (nftData.loading) {
+    //     return (
+    //         <Card className={classes.root} elevation={0}>
+    //             <FoudationHeader nftData={nftData} />
+    //             <FoudationContent nft={nftData.graph.data.nfts[0]} metadata={nftData.metadata} />
+    //             <FoundationPlaceBid nftData={nftData} />
+    //             <CardActions className={classes.footer}>
+    //                 <Typography className={classes.footnote} variant="subtitle2">
+    //                     <span>{t('plugin_powered_by')} </span>
+    //                     <Link
+    //                         className={classes.footLink}
+    //                         color="textSecondary"
+    //                         target="_blank"
+    //                         rel="noopener noreferrer"
+    //                         title="Mask"
+    //                         href="https://mask.io">
+    //                         <MaskTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
+    //                     </Link>
+    //                 </Typography>
+    //             </CardActions>
+    //         </Card>
+    //     )
+    // }
 }
 
 export default FoudationCard

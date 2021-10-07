@@ -15,6 +15,7 @@ import GoodGhosting from '@masknet/web3-constants/data/good-ghosting.json'
 import SpaceStationGalaxy from '@masknet/web3-constants/data/space-station-galaxy.json'
 import OpenseaAPI from '@masknet/web3-constants/data/opensea-api.json'
 import Chain from '@masknet/web3-constants/data/chain.json'
+import Foundation from '@masknet/web3-constants/data/foundation.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
 export const getAirdropConstants = transform(Airdrop)
@@ -70,6 +71,9 @@ export const useChainConstants = hookTransform(getChainConstants)
 
 export const getNftRedPacketConstants = transform(NftRedPacket)
 export const useNftRedPacketConstants = hookTransform(getNftRedPacketConstants)
+
+export const getFoundationConstants = transform(Foundation)
+export const useFoundationConstants = hookTransform(getFoundationConstants)
 
 // for estimate gas
 export const FAKE_SIGN_PASSWORD = '0x75466cc969717b172b14253aaeebdc958f2b5037a852c1337650ed4978242dd9'

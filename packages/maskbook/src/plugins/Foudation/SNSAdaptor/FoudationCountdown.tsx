@@ -27,24 +27,24 @@ function FoudationCountdown(props: Props) {
     const [currentCount, setCount] = useState<CountdownDate>()
     const { classes } = useStyles()
     const { t } = useI18N()
-    const timer = () => {
-        const now = Date.now()
-        const distance = NftdateEnding - now
-        setCount({
-            hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-            minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-            seconds: Math.floor((distance % (1000 * 60)) / 1000),
-        })
-    }
     const NftdateEnding = new Date(Number(props.auctions.at(-1)?.dateEnding) * 1000).getTime()
     useEffect(() => {
-        if (NftdateEnding > Date.now()) {
-            setInterval(timer, 1000)
+        const timer = setInterval(() => {
+            const now = Date.now()
+            const distance = NftdateEnding - now
+            setCount({
+                hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+                seconds: Math.floor((distance % (1000 * 60)) / 1000),
+            })
+        }, 1000)
+        return () => {
+            clearTimeout(timer)
         }
-    }, [])
-    if (NftdateEnding > Date.now()) {
-        return (
-            <Grid item xs={12}>
+    }, [currentCount])
+    return (
+        <Grid item xs={12}>
+            {NftdateEnding > Date.now() && (
                 <Typography
                     style={{ width: '100%' }}
                     variant="h4"
@@ -55,9 +55,8 @@ function FoudationCountdown(props: Props) {
                         currentCount?.seconds
                     } s`}
                 </Typography>
-            </Grid>
-        )
-    }
-    return <></>
+            )}
+        </Grid>
+    )
 }
 export default FoudationCountdown

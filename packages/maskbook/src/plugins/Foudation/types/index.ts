@@ -40,7 +40,6 @@ export interface NftHistory {
     date: string
     event: string
     id: string
-    tokenAddress?: any
     txOrigin: TxOrigin
 }
 

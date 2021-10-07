@@ -27,7 +27,6 @@ query {
             id
             contractAddress
             amountInETH
-            tokenAddress
             date
             txOrigin {
             id

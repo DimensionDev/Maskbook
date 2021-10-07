@@ -6,11 +6,9 @@ interface Props extends React.PropsWithChildren<{}> {
 
 function FoudationDescription(props: Props) {
     return (
-        <>
-            <Typography variant="body1" gutterBottom>
-                {props.description}
-            </Typography>
-        </>
+        <Typography variant="body1" gutterBottom>
+            {props.description}
+        </Typography>
     )
 }
 
