@@ -4,15 +4,15 @@ import { Button, Typography } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
 
 const HeaderContainer = styled('header')(({ theme }) => ({
-    flex: '5 1',
     width: '78%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    maxHeight: '30%',
-    minHeight: '15%',
+    flexBasis: '350px',
+
     [theme.breakpoints.down('md')]: {
         width: '95%',
+        flexBasis: '180px',
     },
 }))
 
