@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '16px',
         background: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 0.8)' : '#fff',
         color: theme.palette.mode === 'light' ? '#fff' : '#111432',
-        '&.arrow:after': {
+        '&.arrow-top:after': {
             content: '""',
             display: 'inline-block',
             width: 0,
@@ -43,6 +43,19 @@ const useStyles = makeStyles()((theme) => ({
             borderTopWidth: 0,
             position: 'absolute',
             top: '-13px',
+            left: '24px',
+        },
+        '&.arrow-bottom:after': {
+            content: '""',
+            display: 'inline-block',
+            width: 0,
+            height: 0,
+            border: 'solid 8px transparent',
+            borderTopColor: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 0.8)' : '#fff',
+            borderTopWidth: '13px',
+            borderBottomWidth: 0,
+            position: 'absolute',
+            bottom: '-13px',
             left: '24px',
         },
     },
@@ -157,6 +170,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const childrenRef = useRef<HTMLElement>()
     const [clientRect, setClientRect] = useState<any>({})
     const [open, setOpen] = useState(false)
+    const [bottomAvailable, setBottomAvailable] = useState(true)
     const ui = activatedSocialNetworkUI
     const lastStepRef = currentSetupGuideStatus[ui.networkIdentifier]
     const lastStep = useValueRef(lastStepRef)
@@ -164,26 +178,20 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     useEffect(() => {
         const open = +lastStep === step
         setOpen(open)
-
-        if (open) {
-            document.body.style.overflow = 'hidden'
-        }
     }, [lastStep])
 
-    const resetOverflow = () => {
-        document.body.style.overflow = ''
-    }
+    useEffect(() => {
+        document.body.style.overflow = open ? 'hidden' : ''
+    }, [open])
 
     const onSkip = () => {
         setOpen(false)
-        resetOverflow()
         currentSetupGuideStatus[ui.networkIdentifier].value = ''
         userGuideStatus[ui.networkIdentifier].value = 'completed'
     }
 
     const onNext = () => {
         setOpen(false)
-        resetOverflow()
         if (step !== total) {
             currentSetupGuideStatus[ui.networkIdentifier].value = String(step + 1)
         }
@@ -198,8 +206,14 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         const onResize = () => {
             const cr = childrenRef.current?.getBoundingClientRect()
 
-            if (cr && !cr.width) {
-                setClientRect({ ...cr, top: 30, left: 'calc(100vw - 300px)' })
+            if (cr) {
+                const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
+                setBottomAvailable(bottomAvailable)
+                if (!cr.width) {
+                    setClientRect({ ...cr, top: 30, left: 'calc(100vw - 300px)' })
+                } else {
+                    setClientRect(cr)
+                }
             } else {
                 setClientRect(cr)
             }
@@ -235,9 +249,12 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                                         height: clientRect.height,
                                     }}>
                                     <div
-                                        className={classNames(classes.card, arrow ? 'arrow' : '')}
+                                        className={classNames(
+                                            classes.card,
+                                            arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
+                                        )}
                                         style={{
-                                            top: clientRect.height + 16,
+                                            [bottomAvailable ? 'top' : 'bottom']: clientRect.height + 16,
                                         }}>
                                         <div style={{ paddingBottom: '16px' }}>
                                             <Typography sx={{ fontSize: 20 }}>
