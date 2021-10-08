@@ -169,7 +169,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                 open: true,
                 state: refundState,
                 summary: availability
-                    ? `Refunding red packet for ${formatBalance(
+                    ? `Refunding lucky drop for ${formatBalance(
                           new BigNumber(availability.balance),
                           history.token.decimals ?? 0,
                           history.token.decimals ?? 0,
