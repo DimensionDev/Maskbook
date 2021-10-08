@@ -21,7 +21,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     DecryptedInspector(props) {
         if (RedPacketMetadataReader(props.message.meta).ok)
             return (
-                <MaskPluginWrapper pluginName="Red Packet">
+                <MaskPluginWrapper pluginName="Lucky Drop">
                     {renderWithRedPacketMetadata(props.message.meta, (r) => (
                         <RedPacketInPost payload={r} />
                     ))}
@@ -30,7 +30,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
         if (RedPacketNftMetadataReader(props.message.meta).ok)
             return (
-                <MaskPluginWrapper pluginName="Red Packet NFT">
+                <MaskPluginWrapper pluginName="Lucky Drop NFT">
                     {renderWithRedPacketNftMetadata(props.message.meta, (r) => (
                         <RedPacketNftInPost payload={r} />
                     ))}
@@ -47,7 +47,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 const chainDetailed = getChainDetailed(chainId)
                 const tokenDetailed =
                     payload.token_type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token
-                return `🧧 A Red Packet with ${formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $${
+                return `🧧 A Lucky Drop with ${formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $${
                     tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
                 } from ${payload.sender.name}`
             },
@@ -56,13 +56,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RedPacketNftMetaKey,
             (_payload) => {
                 const payload = _payload as RedPacketNftJSONPayload
-                return payload.message ? `🧧 ${payload.message}` : '🧧 An NFT Red Packet'
+                return payload.message ? `🧧 ${payload.message}` : '🧧 An NFT Lucky Drop'
             },
         ],
     ]),
     CompositionDialogEntry: {
         dialog: RedPacketDialog,
-        label: { fallback: '💰 Red Packet' },
+        label: { fallback: '💰 Lucky Drop' },
     },
     ToolbarEntry: {
         ...ToolIconURLs.redpacket,
