@@ -17,7 +17,6 @@ export enum TransferTab {
 const assetTabs = [TransferTab.Token, TransferTab.Collectibles] as const
 
 export const Transfer = memo(() => {
-    // todo: token and chain
     const t = useDashboardI18N()
     const { state } = useLocation() as {
         state: { token?: FungibleTokenDetailed; erc721Token?: ERC721TokenDetailed; type?: TransferTab } | null

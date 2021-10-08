@@ -8,45 +8,52 @@ import { ImageListItem, Stack } from '@material-ui/core'
 interface SelectNFTListProps {
     onScroll(): void
     list: ERC721TokenDetailed[]
-    selected: string
+    selectedTokenId: string
     loading: boolean
     loadMore: boolean
     onSelect(tokenId: string): void
 }
 
-export const SelectNFTList = memo<SelectNFTListProps>(({ list, onSelect, selected, onScroll, loading, loadMore }) => {
-    const containerRef = useRef<HTMLUListElement>(null)
-    useScrollBottomEvent(containerRef, onScroll)
+export const SelectNFTList = memo<SelectNFTListProps>(
+    ({ list, onSelect, selectedTokenId, onScroll, loading, loadMore }) => {
+        const containerRef = useRef<HTMLUListElement>(null)
+        useScrollBottomEvent(containerRef, onScroll)
 
-    const renderStatus = useMemo(() => {
-        if (loading) return <LoadingAnimation />
-        if (!loadMore)
-            return (
-                <Typography component="span" variant="body2">
-                    Load end
-                </Typography>
-            )
-        return null
-    }, [loading, loadMore])
+        const renderStatus = useMemo(() => {
+            if (loading) return <LoadingAnimation />
+            if (!loadMore)
+                return (
+                    <Typography component="span" variant="body2">
+                        Load end
+                    </Typography>
+                )
+            return null
+        }, [loading, loadMore])
 
-    return (
-        <Box>
-            <ImageList
-                ref={containerRef}
-                variant="quilted"
-                cols={4}
-                gap={12}
-                rowHeight={200}
-                sx={{ width: '100%', maxWidth: 640, height: 'auto', maxHeight: '400px' }}>
-                {list.map((token) => (
-                    <NFTCard key={token.tokenId} token={token} selected={selected} onSelect={onSelect} />
-                ))}
-                <ImageListItem sx={{ height: '30px !important' }} cols={4}>
-                    <Stack direction="row" justifyContent="center">
-                        {renderStatus}
-                    </Stack>
-                </ImageListItem>
-            </ImageList>
-        </Box>
-    )
-})
+        return (
+            <Box>
+                <ImageList
+                    ref={containerRef}
+                    variant="quilted"
+                    cols={4}
+                    gap={12}
+                    rowHeight={200}
+                    sx={{ width: '100%', maxWidth: 640, height: 'auto', maxHeight: '400px' }}>
+                    {list.map((token) => (
+                        <NFTCard
+                            key={token.tokenId}
+                            token={token}
+                            selectedTokenId={selectedTokenId}
+                            onSelect={onSelect}
+                        />
+                    ))}
+                    <ImageListItem sx={{ height: '30px !important' }} cols={4}>
+                        <Stack direction="row" justifyContent="center">
+                            {renderStatus}
+                        </Stack>
+                    </ImageListItem>
+                </ImageList>
+            </Box>
+        )
+    },
+)

@@ -217,7 +217,7 @@ export const TransferERC721 = memo(() => {
                                                 ? unionBy([defaultToken, ...tokenDetailedOwnerList], 'tokenId')
                                                 : tokenDetailedOwnerList
                                         }
-                                        selected={field.field.value}
+                                        selectedTokenId={field.field.value}
                                         loading={loadingOwnerList}
                                         loadMore={loadMore}
                                     />

@@ -40,16 +40,19 @@ const useStyles = makeStyles()({
 
 export interface NFTCardProps {
     token: ERC721TokenDetailed
-    selected: string
+    selectedTokenId: string
     onSelect(tokenId: string): void
 }
 
-export const NFTCard = memo<NFTCardProps>(({ token, selected, onSelect }) => {
+export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect }) => {
     const { classes } = useStyles()
     const [loadFailed, setLoadFailed] = useState(false)
-    const [checked, setChecked] = useState(!!selected && selected === token.tokenId)
+    const [checked, setChecked] = useState(!!selectedTokenId && selectedTokenId === token.tokenId)
 
-    const isDisabled = useMemo(() => !!selected && selected !== token.tokenId, [selected, token.tokenId])
+    const isDisabled = useMemo(
+        () => !!selectedTokenId && selectedTokenId !== token.tokenId,
+        [selectedTokenId, token.tokenId],
+    )
 
     return (
         <ImageListItem sx={{ height: 186, width: 144, mb: 4 }} className={isDisabled ? classes.disabled : ''}>
@@ -72,7 +75,7 @@ export const NFTCard = memo<NFTCardProps>(({ token, selected, onSelect }) => {
             )}
             <Box className={classes.checkbox}>
                 <Checkbox
-                    defaultChecked={selected === token.tokenId}
+                    defaultChecked={selectedTokenId === token.tokenId}
                     value={checked}
                     size="small"
                     disabled={isDisabled}
