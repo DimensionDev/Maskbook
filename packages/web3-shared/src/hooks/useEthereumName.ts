@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import { ENSTypeName } from '../constants'
 import { useAddressNames } from './useAddressNames'
 import { useResolveENS } from './useResolveENS'
 import { useResolveUNS } from './useResolveUNS'
@@ -49,7 +50,7 @@ export function useEthereumAddress(nickname: string, twitterId: string, bio: str
         value: isLoading
             ? undefined
             : {
-                  type: addressENS ? 'ENS' : addressUNS ? 'UNS' : 'address',
+                  type: addressENS ? ENSTypeName.ENS_TYPE : addressUNS ? ENSTypeName.UNS_TYPE : ENSTypeName.DEFAULT,
                   name: addressENS || addressUNS ? name : '',
                   address: isLoading ? '' : addressENS ?? addressUNS ?? ownerAddress ?? '',
               },
