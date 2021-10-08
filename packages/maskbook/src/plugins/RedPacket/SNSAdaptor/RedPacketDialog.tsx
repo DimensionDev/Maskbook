@@ -39,9 +39,6 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
         position: 'absolute',
     },
-    focusTab: {
-        backgroundColor: theme.palette.mode === 'light' ? 'rgba(247, 249, 250, 1)' : 'rgba(255, 255, 255, 0.08)',
-    },
     dialogContent: {
         padding: 0,
     },
@@ -255,7 +252,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         ],
         state,
         classes: {
-            focusTab: classes.focusTab,
+            // focusTab: classes.focusTab,
             tabPaper: classes.tabPaper,
         },
     }
