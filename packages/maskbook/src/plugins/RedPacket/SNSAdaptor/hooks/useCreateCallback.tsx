@@ -67,7 +67,7 @@ function checkParams(
     if (isLessThan(paramsObj.total, paramsObj.shares)) {
         setCreateState?.({
             type: TransactionStateType.FAILED,
-            error: new Error('At least [number of red packets] tokens to your red packet.'),
+            error: new Error('At least [number of lucky drops] tokens to your lucky drop.'),
         })
         return false
     }
@@ -75,7 +75,7 @@ function checkParams(
     if (paramsObj.shares <= 0) {
         setCreateState?.({
             type: TransactionStateType.FAILED,
-            error: new Error('At least 1 person should be able to claim the red packet.'),
+            error: new Error('At least 1 person should be able to claim the lucky drop.'),
         })
         return false
     }
