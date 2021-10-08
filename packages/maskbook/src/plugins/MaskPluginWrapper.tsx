@@ -38,10 +38,6 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             paddingLeft: theme.spacing(1),
         },
-        icon: {
-            width: '3em',
-            height: '3em',
-        },
         body: {
             margin: theme.spacing(2),
         },
@@ -58,7 +54,7 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
     const inner = (
         <div className={classes.card} onClick={(ev) => ev.stopPropagation()}>
             <div className={classes.header}>
-                <MaskIcon className={classes.icon} />
+                <MaskIcon size={48} />
                 <div className={classes.title}>
                     <Typography variant="overline">Mask Plugin</Typography>
                     <Typography variant="h6">{pluginName}</Typography>
