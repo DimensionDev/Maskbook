@@ -56,6 +56,7 @@ export function AddNFT(props: AddNFTProps) {
                     setMessage(t('nft_owner_hint'))
                     return
                 }
+
                 onAddClick(value.token)
                 handleClose()
             })

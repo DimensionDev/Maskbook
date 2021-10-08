@@ -35,13 +35,11 @@ async function changeImageToActiveElements(image: File | Blob): Promise<void> {
     }, 50)
 }
 
-interface NFTAvatarInTwitterProps {}
-
-function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
+function NFTAvatarInTwitter() {
     const { classes } = useStyles()
     const currentIdentifier = useCurrentProfileIdentifier()
     const identity = useCurrentVisitingIdentity()
-    const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent>({} as NFTAvatarEvent)
+    const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent | undefined>()
 
     const onChange = useCallback(async (token: ERC721TokenDetailed) => {
         if (!token.info.image) return

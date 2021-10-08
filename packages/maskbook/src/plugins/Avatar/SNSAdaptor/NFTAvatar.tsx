@@ -44,7 +44,6 @@ const useStyles = makeStyles()((theme) => ({
         flexFlow: 'row wrap',
         height: 150,
         overflowY: 'auto',
-        justifyContent: 'center',
     },
     image: {
         width: 97,
@@ -81,6 +80,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        margin: 'auto',
     },
     changeButton: {
         fontSize: 14,
@@ -114,6 +114,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     //0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
 
     const { collectibles, hasNextPage } = value
+    console.log(collectibles)
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
@@ -172,9 +173,12 @@ export function NFTAvatar(props: NFTAvatarProps) {
                         <Box className={classes.NFTImage}>
                             {loading
                                 ? LoadStatus
-                                : error || collectibles.length === 0
+                                : error || (collectibles.length === 0 && collectibles_.length === 0)
                                 ? Retry
-                                : collectibles
+                                : uniqBy(
+                                      [...collectibles_, ...collectibles],
+                                      (x) => x.contractDetailed.address && x.tokenId,
+                                  )
                                       .filter(
                                           (token: ERC721TokenDetailed) =>
                                               token.info.image &&
@@ -196,7 +200,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                       ))}
                         </Box>
 
-                        {!(page === 0 && collectibles.length === 0) ? (
+                        {hasNextPage || page > 0 ? (
                             <TablePagination
                                 count={-1}
                                 component="div"

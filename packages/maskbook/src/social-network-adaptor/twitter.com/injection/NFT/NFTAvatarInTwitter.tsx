@@ -4,7 +4,6 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
 
-import { useSnackbar } from '@masknet/theme'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { useWallet, useWeb3 } from '@masknet/web3-shared'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
@@ -49,7 +48,6 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const web3 = useWeb3()
 
     const _avatar = useNFTAvatar(identity.identifier.userId)
-    const { enqueueSnackbar } = useSnackbar()
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const [avatarId, setAvatarId] = useState('')
     const [retries, setRetries] = useState(RETRIES_NUMBER)
@@ -64,6 +62,8 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                 const imgNode = getProfileImageSelector().evaluate()
                 const avatarId = getAvatarId(imgNode?.getAttribute('src') ?? '')
                 if ((oldAvatarId && avatarId && oldAvatarId !== avatarId) || retries <= 0) {
+                    console.log(oldAvatarId)
+                    console.log(avatarId)
                     clearInterval(timer)
                     setNFTEvent({
                         ...data,
@@ -84,14 +84,13 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         if (!NFTEvent) return
         if (!wallet) return
 
-        PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, NFTEvent as AvatarMetaDB)
-            .then((avatar: AvatarMetaDB | undefined) => {
+        PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, NFTEvent as AvatarMetaDB).then(
+            (avatar: AvatarMetaDB | undefined) => {
                 if (!avatar) throw new Error('Not Found')
                 setAvatar(avatar)
-            })
-            .catch((error: Error) => {
-                enqueueSnackbar(error.message, { variant: 'error' })
-            })
+            },
+        )
+
         setAvatarId(NFTEvent.avatarId)
     }, [NFTEvent, PluginNFTAvatarRPC])
 

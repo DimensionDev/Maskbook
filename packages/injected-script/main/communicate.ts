@@ -12,6 +12,7 @@ import {
     ethBridgeWatchEvent,
     untilEthereumOnline,
 } from './EthBridge/methods'
+import { hookInputUploadOnce } from './EventListenerPatch/hookInputUploadOnce'
 
 document.addEventListener(CustomEventId, (e) => {
     const r = decodeEvent(getCustomEventDetail(e as CustomEvent))
@@ -27,6 +28,8 @@ document.addEventListener(CustomEventId, (e) => {
             return apply(instagramUpload, null, r[1])
         case 'pasteImage':
             return apply(dispatchPasteImage, null, r[1])
+        case 'hookInputUploadOnce':
+            return apply(hookInputUploadOnce, null, r[1])
         case 'ethBridgeRequestListen':
             return apply(ethBridgeWatchEvent, null, r[1])
         case 'ethBridgeSendRequest':
