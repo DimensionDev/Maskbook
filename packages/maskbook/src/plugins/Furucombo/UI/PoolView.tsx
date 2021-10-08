@@ -3,8 +3,10 @@ import { Button, Divider, Grid, Typography, Container } from '@material-ui/core'
 import { FurucomboIcon } from '../../../resources/FurucomboIcon'
 import { useI18N } from '../../../utils'
 import { BASE_URL } from '../constants'
+import { QuickIcon } from '../resources/QuickIcon'
 import { UnknownIcon } from '../resources/UnknownIcon'
-import { WmaticIcon } from '../resources/wmatic'
+import { WmaticIcon } from '../resources/WmaticIcon'
+
 import type { Angel, Investable, Token } from '../types'
 import { apyFormatter, liquidityFormatter } from '../utils'
 
@@ -98,6 +100,7 @@ export function PoolView(props: PoolProps) {
     const displayRewardIcon = (rewardToken: Token) => {
         if (rewardToken.symbol === 'WMATIC') return <WmaticIcon />
         if (rewardToken.symbol === 'COMBO') return <FurucomboIcon className={classes.icons} />
+        if (rewardToken.symbol === 'QUICK') return <QuickIcon className={classes.icons} />
 
         return <UnknownIcon className={classes.unknown} />
     }
