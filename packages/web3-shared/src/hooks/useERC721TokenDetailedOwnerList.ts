@@ -6,7 +6,7 @@ import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import { safeNonPayableTransactionCall } from '../utils'
 import { ERC721ContractDetailed, ERC721TokenDetailed, EthereumTokenType, ChainId } from '../types'
 import { getERC721TokenDetailedFromChain } from './useERC721TokenDetailed'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { min, uniqBy } from 'lodash-es'
 import urlcat from 'urlcat'
 import { useChainId } from '../index'
@@ -22,6 +22,11 @@ export function useERC721TokenDetailedOwnerList(
     const chainId = useChainId()
     const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
     const allListRef = useRef<ERC721TokenDetailed[]>([])
+
+    useEffect(() => {
+        clearTokenDetailedOwnerList()
+    }, [owner])
+
     const asyncRetry = useAsyncRetry(async () => {
         if (
             !erc721TokenContract ||
