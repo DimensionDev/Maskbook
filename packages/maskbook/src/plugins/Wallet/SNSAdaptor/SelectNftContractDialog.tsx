@@ -7,6 +7,7 @@ import {
     resolveAddressLinkOnExplorer,
     useChainId,
     useAccount,
+    useERC721Tokens,
 } from '@masknet/web3-shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
@@ -19,7 +20,6 @@ import Fuse from 'fuse.js'
 import { useERC721ContractDetailed } from '@masknet/web3-shared'
 import classNames from 'classnames'
 import { useNFTscanFindAssets } from '../hooks/useNFTscanFindAssets'
-import { useERC721TokensFromDB } from '../hooks/useERC721Tokens'
 import { unionBy } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
@@ -122,7 +122,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const account = useAccount()
     const { value: assets } = useNFTscanFindAssets(account)
 
-    const erc721InDb = useERC721TokensFromDB()
+    const erc721InDb = useERC721Tokens()
     const allContractsInDb = unionBy(
         erc721InDb.map((x) => x.contractDetailed),
         'address',

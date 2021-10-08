@@ -7,9 +7,11 @@ import {
     ERC721TokenDetailed,
     EthereumTokenType,
     formatEthereumAddress,
+    isSameAddress,
     useAccount,
     useChainId,
     useCollectibles,
+    useERC721Tokens,
     useWallet,
 } from '@masknet/web3-shared'
 import { useCurrentCollectibleDataProvider } from '../../api'
@@ -17,10 +19,11 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
-import { PluginMessages } from '../../../../API'
+import { PluginMessages, PluginServices } from '../../../../API'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 import { TransferTab } from '../Transfer'
+import { useCollectibleOwners } from '../../hooks/useCollectibleOwners'
 
 const useStyles = makeStyles()({
     container: {
@@ -51,6 +54,8 @@ export const CollectibleList = memo(() => {
     const wallet = useWallet()
     const account = useAccount()
     const provider = useCurrentCollectibleDataProvider()
+    const erc721Tokens = useERC721Tokens()
+    const { value: erc721TokensOwners = [], loading: loadingERC721Owners } = useCollectibleOwners(erc721Tokens)
 
     const onSend = useCallback(
         (detail: ERC721TokenDetailed) =>
@@ -81,6 +86,14 @@ export const CollectibleList = memo(() => {
     const dataSource = collectibles.filter((x) => {
         if (x.contractDetailed.chainId !== chainId) return false
 
+        const owner = erc721TokensOwners.find(
+            (e) => e?.contractDetailed.address === x.contractDetailed.address && x.tokenId === e?.tokenId,
+        )
+        if (owner && !isSameAddress(owner.info.owner, account)) {
+            PluginServices.Wallet.removeToken(x)
+            return false
+        }
+
         const key = `${formatEthereumAddress(x.contractDetailed.address)}_${x.tokenId}`
         switch (x.contractDetailed.type) {
             case EthereumTokenType.ERC721:
@@ -92,8 +105,8 @@ export const CollectibleList = memo(() => {
 
     return (
         <CollectibleListUI
-            isLoading={collectiblesLoading}
-            isEmpty={!!collectiblesError || collectibles.length === 0}
+            isLoading={collectiblesLoading || loadingERC721Owners}
+            isEmpty={!!collectiblesError || dataSource.length === 0}
             page={page}
             onPageChange={setPage}
             hasNextPage={hasNextPage}
